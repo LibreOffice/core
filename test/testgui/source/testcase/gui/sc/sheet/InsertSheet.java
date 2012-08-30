@@ -27,11 +27,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import testlib.gui.Log;
+import org.openoffice.test.common.Logger;
 
 /**
- * Before running the testing class, you need specify the AOO location firstly with system property openoffice.home.
+ * Before running the testing class, you need specify the AOO location firstly
+ * with system property openoffice.home.
  *
  *
  */
@@ -39,7 +39,7 @@ import testlib.gui.Log;
 public class InsertSheet {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -55,17 +55,18 @@ public class InsertSheet {
 
     /**
      * Insert one sheet in different place
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertMultipleSheet(){
-        //Open Insert Sheet dialog via main menu Insert-> Sheet
+    public void testInsertMultipleSheet() {
+        // Open Insert Sheet dialog via main menu Insert-> Sheet
         app.dispatch(".uno:Insert");
-        //Change new sheet number into 3 to insert 3 new sheet one time
+        // Change new sheet number into 3 to insert 3 new sheet one time
         SCSheetNumber.setText("3");
-        //Click OK button to create sheet with default setting
+        // Click OK button to create sheet with default setting
         SCInsertSheetDlg.ok();
-        //Verify new sheets have been inserted before Sheet1
+        // Verify new sheets have been inserted before Sheet1
         app.dispatch(".uno:SelectTables");
         // To support multi-language, just verify the number in the sheet name
         assertTrue(SCSheetsList.getItemsText()[0].contains("4"));
@@ -79,15 +80,16 @@ public class InsertSheet {
 
     /**
      * Insert one sheet in different place
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertOneSheet(){
-        //Open Insert Sheet dialog via main menu Insert-> Sheet
+    public void testInsertOneSheet() {
+        // Open Insert Sheet dialog via main menu Insert-> Sheet
         app.dispatch(".uno:Insert");
-        //Click OK button to create sheet with default setting
+        // Click OK button to create sheet with default setting
         SCInsertSheetDlg.ok();
-        //Verify new sheet has been inserted before Sheet1
+        // Verify new sheet has been inserted before Sheet1
         app.dispatch(".uno:SelectTables");
         // To support multi-language, just verify the number in the sheet name
         assertTrue(SCSheetsList.getItemsText()[0].contains("4"));

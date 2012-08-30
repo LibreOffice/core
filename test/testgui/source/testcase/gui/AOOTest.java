@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 package testcase.gui;
 
 import static org.junit.Assert.*;
@@ -31,39 +29,40 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openoffice.test.common.Logger;
 
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
 
 /**
- * If AOO is not installed in the default directory, please specify the system property in your command line. <br/>
- * -Dopenoffice.home="Your OpenOffice installation directory which contains soffice.bin"
+ * If AOO is not installed in the default directory, please specify the system
+ * property in your command line. <br/>
+ * -Dopenoffice.home=
+ * "Your OpenOffice installation directory which contains soffice.bin"
  *
  */
 public class AOOTest {
 
     /**
-     * Add Log to enable the following capabilities.
-     * 1. Take a screenshot when failure occurs.
-     * 2. Collect extra data when OpenOffice crashes.
-     * 3. Log any detail information.
+     * Add Log to enable the following capabilities. 1. Take a screenshot when
+     * failure occurs. 2. Log any detail information.
      */
     @Rule
-    public Log LOG = new Log();
-
+    public Logger log = Logger.getLogger(this);
 
     /**
      * Do some setup task before running test
+     *
      * @throws Exception
      */
     @Before
     public void setUp() throws Exception {
-        //Start OpenOffice with a clean user profile
+        // Start OpenOffice with a clean user profile
         app.start(true);
     }
 
     /**
      * Clean task after testing
+     *
      * @throws Exception
      */
     @After

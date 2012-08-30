@@ -24,68 +24,11 @@
  */
 package testcase.gui.bvt;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.openoffice.test.common.Testspace.getPath;
-import static org.openoffice.test.common.Testspace.prepareData;
-import static org.openoffice.test.vcl.Tester.sleep;
-import static testlib.gui.AppUtil.submitOpenDlg;
-import static testlib.gui.AppUtil.submitSaveDlg;
-import static testlib.gui.AppUtil.typeKeys;
-import static testlib.gui.UIMap.AboutDialog;
-import static testlib.gui.UIMap.Chart_Wizard;
-import static testlib.gui.UIMap.FileSave;
-import static testlib.gui.UIMap.FileSave_FileType;
-import static testlib.gui.UIMap.File_PrintDlg;
-import static testlib.gui.UIMap.FillSeriesDlg;
-import static testlib.gui.UIMap.FindDlg;
-import static testlib.gui.UIMap.FindDlg_Find;
-import static testlib.gui.UIMap.FindDlg_FindAll;
-import static testlib.gui.UIMap.FindDlg_For;
-import static testlib.gui.UIMap.FindDlg_ReplaceAll;
-import static testlib.gui.UIMap.FindDlg_ReplaceWith;
-import static testlib.gui.UIMap.InsertTable;
-import static testlib.gui.UIMap.MacroDialogsPage;
-import static testlib.gui.UIMap.PDFGeneralPage;
-import static testlib.gui.UIMap.PresentationWizard;
-import static testlib.gui.UIMap.SC_FunctionWizardDlg;
-import static testlib.gui.UIMap.SC_FunctionWizardDlg_Edit1;
-import static testlib.gui.UIMap.SC_FunctionWizardDlg_FunctionList;
-import static testlib.gui.UIMap.SC_FunctionWizardDlg_Next;
-import static testlib.gui.UIMap.SC_InputBar_Input;
-import static testlib.gui.UIMap.SC_InputBar_Sum;
-import static testlib.gui.UIMap.SlideShow;
-import static testlib.gui.UIMap.SortOptionsPage;
-import static testlib.gui.UIMap.SortOptionsPage_CustomSortOrder;
-import static testlib.gui.UIMap.SortOptionsPage_CustomSortOrderList;
-import static testlib.gui.UIMap.SortOptionsPage_RangeContainsColumnLabels;
-import static testlib.gui.UIMap.SortPage;
-import static testlib.gui.UIMap.SortPage_Ascending3;
-import static testlib.gui.UIMap.SortPage_By1;
-import static testlib.gui.UIMap.SortPage_By2;
-import static testlib.gui.UIMap.SortPage_By3;
-import static testlib.gui.UIMap.SortPage_Descending1;
-import static testlib.gui.UIMap.SortPage_Descending2;
-import static testlib.gui.UIMap.SortPage_Descending3;
-import static testlib.gui.UIMap.SortWarningDlg_Current;
-import static testlib.gui.UIMap.Table_Toolbar;
-import static testlib.gui.UIMap.Wizards_AgendaDialog;
-import static testlib.gui.UIMap.Wizards_AgendaDialog_FinishButton;
-import static testlib.gui.UIMap.app;
-import static testlib.gui.UIMap.button;
-import static testlib.gui.UIMap.calc;
-import static testlib.gui.UIMap.chart;
-import static testlib.gui.UIMap.draw;
-import static testlib.gui.UIMap.impress;
-import static testlib.gui.UIMap.msgbox;
-import static testlib.gui.UIMap.oo;
-import static testlib.gui.UIMap.toolbox;
-import static testlib.gui.UIMap.writer;
-import static testlib.gui.UIMap.writer_InsertTable;
+import static org.junit.Assert.*;
+import static org.openoffice.test.common.Testspace.*;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 
 import java.awt.Rectangle;
 import java.io.File;
@@ -96,9 +39,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.GraphicsUtil;
+import org.openoffice.test.common.Logger;
 
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
 
 /**
  *
@@ -106,7 +49,7 @@ import testlib.gui.Log;
 public class BasicFunctionTest {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -133,8 +76,7 @@ public class BasicFunctionTest {
         assertTrue("PDF is exported?", new File(exportTo).exists());
         assertTrue(toolbox(".HelpId:standardbar").exists(5));
         button(".uno:ExportDirectToPDF").click();
-        assertEquals("PDF - Portable Document Format (.pdf)",
-                FileSave_FileType.getSelText());
+        assertEquals("PDF - Portable Document Format (.pdf)", FileSave_FileType.getSelText());
         FileSave.cancel();
     }
 
@@ -162,8 +104,7 @@ public class BasicFunctionTest {
         // Create a new text document and launch a Wizards dialog which need JVM
         // work correctly.
         app.dispatch("private:factory/swriter");
-        File tempfile = new File(oo.getUserInstallation(),
-                "user/template/myAgendaTemplate.ott");
+        File tempfile = new File(oo.getUserInstallation(), "user/template/myAgendaTemplate.ott");
         FileUtil.deleteFile(tempfile);
         sleep(3);
         app.dispatch("service:com.sun.star.wizards.agenda.CallWizard?start");
@@ -226,8 +167,7 @@ public class BasicFunctionTest {
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(
-                writer.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(writer.getScreenRectangle(), 0xFF00FF00);
 
         assertNotNull("Green rectangle: " + rectangle, rectangle);
 
@@ -238,8 +178,7 @@ public class BasicFunctionTest {
         writer.click(0.5, 0.5);
         sleep(1);
         // Verify if the picture is inserted successfully
-        rectangle = GraphicsUtil.findRectangle(writer.getScreenRectangle(),
-                0xFFFF0000);
+        rectangle = GraphicsUtil.findRectangle(writer.getScreenRectangle(), 0xFFFF0000);
         assertNotNull("Red rectangle: " + rectangle, rectangle);
     }
 
@@ -260,8 +199,7 @@ public class BasicFunctionTest {
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(
-                calc.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(calc.getScreenRectangle(), 0xFF00FF00);
 
         assertNotNull("Green rectangle: " + rectangle, rectangle);
         // assertEquals(new Rectangle(0,0,64,64), rectangle);
@@ -273,8 +211,7 @@ public class BasicFunctionTest {
         calc.click(0.5, 0.5);
         sleep(1);
         // Verify if the picture is inserted successfully
-        rectangle = GraphicsUtil.findRectangle(calc.getScreenRectangle(),
-                0xFFFF0000);
+        rectangle = GraphicsUtil.findRectangle(calc.getScreenRectangle(), 0xFFFF0000);
         assertNotNull("Red rectangle: " + rectangle, rectangle);
     }
 
@@ -296,8 +233,7 @@ public class BasicFunctionTest {
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(
-                impress.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(impress.getScreenRectangle(), 0xFF00FF00);
 
         assertNotNull("Green rectangle: " + rectangle, rectangle);
         // assertEquals(new Rectangle(0,0,64,64), rectangle);
@@ -309,8 +245,7 @@ public class BasicFunctionTest {
         impress.click(1, 1);
         sleep(1);
         // Verify if the picture is inserted successfully
-        rectangle = GraphicsUtil.findRectangle(impress.getScreenRectangle(),
-                0xFFFF0000);
+        rectangle = GraphicsUtil.findRectangle(impress.getScreenRectangle(), 0xFFFF0000);
         assertNotNull("Red rectangle: " + rectangle, rectangle);
     }
 
@@ -322,23 +257,19 @@ public class BasicFunctionTest {
         impress.waitForExistence(10, 2);
         app.dispatch(".uno:Presentation");
         sleep(3);
-        Rectangle rectangle = GraphicsUtil.findRectangle(
-                SlideShow.getScreenRectangle(), 0xFFFF0000);
+        Rectangle rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFFFF0000);
         assertNotNull("1st slide appears", rectangle);
         SlideShow.click(0.5, 0.5);
         sleep(2);
-        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(),
-                0xFF00FF00);
+        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFF00FF00);
         assertNotNull("2nd slide appears", rectangle);
         typeKeys("<enter>");
         sleep(2);
-        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(),
-                0xFF0000FF);
+        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFF0000FF);
         assertNotNull("3rd slide appears", rectangle);
         SlideShow.click(0.5, 0.5);
         sleep(2);
-        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(),
-                0xFF0000FF);
+        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFF0000FF);
         assertNull("The end", rectangle);
         SlideShow.click(0.5, 0.5);
         sleep(3);
@@ -378,20 +309,15 @@ public class BasicFunctionTest {
 
     @Test
     public void testFillInSpreadsheet() {
-        String[][] expected1 = new String[][] { { "1" }, { "1" }, { "1" },
-                { "1" }, { "1" }, { "1" }, };
-        String[][] expected2 = new String[][] { { "2" }, { "2" }, { "2" },
-                { "2" }, { "2" }, { "2" }, };
+        String[][] expected1 = new String[][] { { "1" }, { "1" }, { "1" }, { "1" }, { "1" }, { "1" }, };
+        String[][] expected2 = new String[][] { { "2" }, { "2" }, { "2" }, { "2" }, { "2" }, { "2" }, };
 
-        String[][] expected3 = new String[][] { { "Hi friends", "Hi friends",
-                "Hi friends", "Hi friends" } };
+        String[][] expected3 = new String[][] { { "Hi friends", "Hi friends", "Hi friends", "Hi friends" } };
 
-        String[][] expected4 = new String[][] { { "99999.999", "99999.999",
-                "99999.999", "99999.999" } };
+        String[][] expected4 = new String[][] { { "99999.999", "99999.999", "99999.999", "99999.999" } };
         String[][] expected5 = new String[][] {
 
-        { "99999.999", "-10" }, { "100000.999", "-9" }, { "100001.999", "-8" },
-                { "100002.999", "-7" }, { "100003.999", "-6" }
+        { "99999.999", "-10" }, { "100000.999", "-9" }, { "100001.999", "-8" }, { "100002.999", "-7" }, { "100003.999", "-6" }
 
         };
         // Create a new text document
@@ -402,29 +328,25 @@ public class BasicFunctionTest {
         typeKeys("1<enter>");
         CalcUtil.selectRange("C5:C10");
         app.dispatch(".uno:FillDown");
-        assertArrayEquals("Fill Down:", expected1,
-                CalcUtil.getCellTexts("C5:C10"));
+        assertArrayEquals("Fill Down:", expected1, CalcUtil.getCellTexts("C5:C10"));
 
         CalcUtil.selectRange("D10");
         typeKeys("2<enter>");
         CalcUtil.selectRange("D5:D10");
         app.dispatch(".uno:FillUp");
-        assertArrayEquals("Fill Up:", expected2,
-                CalcUtil.getCellTexts("D5:D10"));
+        assertArrayEquals("Fill Up:", expected2, CalcUtil.getCellTexts("D5:D10"));
 
         CalcUtil.selectRange("A1");
         typeKeys("Hi friends<enter>");
         CalcUtil.selectRange("A1:D1");
         app.dispatch(".uno:FillRight");
-        assertArrayEquals("Fill Right:", expected3,
-                CalcUtil.getCellTexts("A1:D1"));
+        assertArrayEquals("Fill Right:", expected3, CalcUtil.getCellTexts("A1:D1"));
 
         CalcUtil.selectRange("D2");
         typeKeys("99999.999<enter>");
         CalcUtil.selectRange("A2:D2");
         app.dispatch(".uno:FillLeft");
-        assertArrayEquals("Fill left:", expected4,
-                CalcUtil.getCellTexts("A2:D2"));
+        assertArrayEquals("Fill left:", expected4, CalcUtil.getCellTexts("A2:D2"));
 
         CalcUtil.selectRange("E1");
         typeKeys("99999.999<tab>-10<enter>");
@@ -433,34 +355,25 @@ public class BasicFunctionTest {
         app.dispatch(".uno:FillSeries");
         FillSeriesDlg.ok();
         sleep(1);
-        assertArrayEquals("Fill series..", expected5,
-                CalcUtil.getCellTexts("E1:F5"));
+        assertArrayEquals("Fill series..", expected5, CalcUtil.getCellTexts("E1:F5"));
     }
 
     @Test
     public void testSort() {
-        String[][] expected1 = new String[][] { { "-9999999" }, { "-1.1" },
-                { "-1.1" }, { "0" }, { "0" }, { "0.1" }, { "10" }, { "12" },
-                { "9999999" }, { "9999999" },
+        String[][] expected1 = new String[][] { { "-9999999" }, { "-1.1" }, { "-1.1" }, { "0" }, { "0" }, { "0.1" }, { "10" }, { "12" }, { "9999999" }, { "9999999" },
 
         };
-        String[][] expected2 = new String[][] { { "TRUE", "Oracle" },
-                { "TRUE", "OpenOffice" }, { "FALSE", "OpenOffice" },
-                { "TRUE", "IBM" }, { "FALSE", "IBM" }, { "TRUE", "Google" },
-                { "FALSE", "facebook " }, { "TRUE", "Apache" },
-                { "TRUE", "!yahoo" }, { "TRUE", "" },
+        String[][] expected2 = new String[][] { { "TRUE", "Oracle" }, { "TRUE", "OpenOffice" }, { "FALSE", "OpenOffice" }, { "TRUE", "IBM" }, { "FALSE", "IBM" },
+                { "TRUE", "Google" }, { "FALSE", "facebook " }, { "TRUE", "Apache" }, { "TRUE", "!yahoo" }, { "TRUE", "" },
 
         };
 
-        String[][] expected3 = new String[][] { { "Sunday" }, { "Monday" },
-                { "Tuesday" }, { "Wednesday" }, { "Thursday" }, { "Friday" },
-                { "Saturday" },
+        String[][] expected3 = new String[][] { { "Sunday" }, { "Monday" }, { "Tuesday" }, { "Wednesday" }, { "Thursday" }, { "Friday" }, { "Saturday" },
 
         };
 
-        String[][] expected4 = new String[][] { { "-$10.00" }, { "$0.00" },
-                { "$0.00" }, { "$1.00" }, { "$3.00" }, { "$9.00" },
-                { "$123.00" }, { "$200.00" }, { "$400.00" }, { "$10,000.00" },
+        String[][] expected4 = new String[][] { { "-$10.00" }, { "$0.00" }, { "$0.00" }, { "$1.00" }, { "$3.00" }, { "$9.00" }, { "$123.00" }, { "$200.00" }, { "$400.00" },
+                { "$10,000.00" },
 
         };
         String file = prepareData("sort.ods");
@@ -473,8 +386,7 @@ public class BasicFunctionTest {
         assertEquals(1, SortPage_By1.getSelIndex());
         SortPage.ok();
         sleep(1);
-        assertArrayEquals("Sorted Data", expected1,
-                CalcUtil.getCellTexts("A1:A10"));
+        assertArrayEquals("Sorted Data", expected1, CalcUtil.getCellTexts("A1:A10"));
         CalcUtil.selectRange("B1:C10");
         app.dispatch(".uno:DataSort");
 
@@ -496,28 +408,24 @@ public class BasicFunctionTest {
         SortPage.ok();
         sleep(1);
 
-        assertArrayEquals("Sorted Data", expected2,
-                CalcUtil.getCellTexts("B1:C10"));
+        assertArrayEquals("Sorted Data", expected2, CalcUtil.getCellTexts("B1:C10"));
         CalcUtil.selectRange("D1:D7");
         app.dispatch(".uno:DataSort");
         SortWarningDlg_Current.click();
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.uncheck();
         SortOptionsPage_CustomSortOrder.check();
-        SortOptionsPage_CustomSortOrderList
-                .select("Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
+        SortOptionsPage_CustomSortOrderList.select("Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
         SortOptionsPage.ok();
         sleep(1);
-        assertArrayEquals("Sorted Data", expected3,
-                CalcUtil.getCellTexts("D1:D7"));
+        assertArrayEquals("Sorted Data", expected3, CalcUtil.getCellTexts("D1:D7"));
 
         CalcUtil.selectRange("E1:E10");
         app.dispatch(".uno:DataSort");
         SortWarningDlg_Current.click();
         SortPage.ok();
         sleep(1);
-        assertArrayEquals("Sorted Data", expected4,
-                CalcUtil.getCellTexts("E1:E10"));
+        assertArrayEquals("Sorted Data", expected4, CalcUtil.getCellTexts("E1:E10"));
     }
 
     /**
@@ -637,7 +545,8 @@ public class BasicFunctionTest {
         sleep(3);
 
         // Verify if the table toolbar is active
-        typeKeys("123");    // Insert text to focus on table, to avoid Bug 120171 on linux
+        typeKeys("123"); // Insert text to focus on table, to avoid Bug 120171
+                            // on linux
         assertTrue(Table_Toolbar.exists(3));
 
         // Focus on edit pane
@@ -695,7 +604,8 @@ public class BasicFunctionTest {
         sleep(3);
 
         // Verify if the table toolbar is active
-        typeKeys("123");    // Insert text to focus on table, to avoid Bug 120171 on linux
+        typeKeys("123"); // Insert text to focus on table, to avoid Bug 120171
+                            // on linux
         assertTrue(Table_Toolbar.exists(3));
 
         // // Check the statusbar to verify if the table is inserted
@@ -735,8 +645,7 @@ public class BasicFunctionTest {
         typeKeys("<enter>");
 
         // Verify if the calculated result is equal to the expected result
-        assertEquals("The calculated result", expectedResult,
-                CalcUtil.getCellText("C1"));
+        assertEquals("The calculated result", expectedResult, CalcUtil.getCellText("C1"));
     }
 
     /**
@@ -765,8 +674,7 @@ public class BasicFunctionTest {
         typeKeys("<enter>");
 
         // Verify if the calculated result is equal to the expected result
-        assertEquals("The calculated result", expectedResult,
-                CalcUtil.getCellText("D1"));
+        assertEquals("The calculated result", expectedResult, CalcUtil.getCellText("D1"));
     }
 
     /**
@@ -793,15 +701,14 @@ public class BasicFunctionTest {
         // Insert a function via Function Wizard Dialog: ABS
         CalcUtil.selectRange("B1");
         app.dispatch(".uno:FunctionDialog");
-//      SC_FunctionWizardDlg_FunctionList.doubleClick(5, 5);
+        // SC_FunctionWizardDlg_FunctionList.doubleClick(5, 5);
         SC_FunctionWizardDlg_FunctionList.select("ABS");
-        SC_FunctionWizardDlg_Next.click();  // Use "Next" button
+        SC_FunctionWizardDlg_Next.click(); // Use "Next" button
 
         SC_FunctionWizardDlg_Edit1.inputKeys("A1");
         SC_FunctionWizardDlg.ok();
 
         // Verify if the calculated result is equal to the expected result
-        assertEquals("The calculated result", expectedResult,
-                CalcUtil.getCellText("B1"));
+        assertEquals("The calculated result", expectedResult, CalcUtil.getCellText("B1"));
     }
 }

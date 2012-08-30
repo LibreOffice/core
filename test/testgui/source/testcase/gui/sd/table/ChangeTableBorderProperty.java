@@ -21,21 +21,19 @@
 
 package testcase.gui.sd.table;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.openoffice.test.vcl.Tester.sleep;
+import static org.junit.Assert.*;
+import static org.openoffice.test.vcl.Tester.*;
 import static testlib.gui.UIMap.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import testlib.gui.Log;
+import org.openoffice.test.common.Logger;
 
 public class ChangeTableBorderProperty {
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -77,26 +75,26 @@ public class ChangeTableBorderProperty {
 
         // select Line
         Area_Border_LineStyle.select(1);
-        assertEquals("Area_Border_LineStyle is first item",Area_Border_LineStyle.getSelText(), Area_Border_LineStyle.getItemText(1));
+        assertEquals("Area_Border_LineStyle is first item", Area_Border_LineStyle.getSelText(), Area_Border_LineStyle.getItemText(1));
 
         Area_Border_LineColor.select(1);
-        assertEquals("Area_Border_LineColor is first item",Area_Border_LineColor.getSelText(), Area_Border_LineColor.getItemText(1));
+        assertEquals("Area_Border_LineColor is first item", Area_Border_LineColor.getSelText(), Area_Border_LineColor.getItemText(1));
 
         // select Spacing to Contents
         Area_Border_Sync.check();
-        assertTrue("Area_Border_Sync is checked",Area_Border_Sync.isChecked());
+        assertTrue("Area_Border_Sync is checked", Area_Border_Sync.isChecked());
 
         Area_Border_Mf_Left.setText("0.5");
-        assertTrue("Area_Border_Mf_Left is 0.5",Area_Border_Mf_Left.getText().startsWith("0.5"));
+        assertTrue("Area_Border_Mf_Left is 0.5", Area_Border_Mf_Left.getText().startsWith("0.5"));
 
         Area_Border_Mf_Right.setText("0.5");
-        assertTrue("Area_Border_Mf_Right is 0.5",Area_Border_Mf_Right.getText().startsWith("0.5"));
+        assertTrue("Area_Border_Mf_Right is 0.5", Area_Border_Mf_Right.getText().startsWith("0.5"));
 
         Area_Border_Mf_Top.setText("0.5");
-        assertTrue("Area_Border_Mf_Top is 0.5",Area_Border_Mf_Top.getText().startsWith("0.5"));
+        assertTrue("Area_Border_Mf_Top is 0.5", Area_Border_Mf_Top.getText().startsWith("0.5"));
 
         Area_Border_Mf_Bottom.setText("0.5");
-        assertTrue("Area_Border_Mf_Bottom is 0.5",Area_Border_Mf_Bottom.getText().startsWith("0.5"));
+        assertTrue("Area_Border_Mf_Bottom is 0.5", Area_Border_Mf_Bottom.getText().startsWith("0.5"));
 
         Area_Border_page.ok();
 

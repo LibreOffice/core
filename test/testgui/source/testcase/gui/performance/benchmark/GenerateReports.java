@@ -19,42 +19,32 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 
 package testcase.gui.performance.benchmark;
 
-import java.io.File;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
-import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.lang.Math;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
 
 import testlib.gui.CalcUtil;
 
-import static org.openoffice.test.vcl.Tester.sleep;
-import static org.openoffice.test.vcl.Tester.typeKeys;
-import static testlib.gui.AppUtil.*;
-import static testlib.gui.CalcUtil.*;
-import static testlib.gui.UIMap.*;
-
 public class GenerateReports {
-    static public void computeResults(String resultDir)
-    {
+    static public void computeResults(String resultDir) {
         try {
             Map<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
             BufferedReader in = new BufferedReader(new FileReader(resultDir));
@@ -62,86 +52,72 @@ public class GenerateReports {
             String testScenario;
             String testResult;
 
-            while((line = in.readLine())!= null)
-            {
+            while ((line = in.readLine()) != null) {
                 String temp = line.substring(9);
                 testScenario = temp.substring(0, temp.indexOf(":"));
                 testResult = temp.substring(temp.indexOf(":") + 2);
                 System.out.println(testScenario + " " + testResult);
-                if(map.containsKey(testScenario))
-                {
+                if (map.containsKey(testScenario)) {
                     map.get(testScenario).add(testResult);
-                }
-                else
-                {
-                    ArrayList <String> array = new ArrayList<String>();
+                } else {
+                    ArrayList<String> array = new ArrayList<String>();
                     array.add(testResult);
                     map.put(testScenario, array);
                 }
-//              line = in.readLine();
+                // line = in.readLine();
             }
 
-
             Iterator iter = map.keySet().iterator();
-            while(iter.hasNext())
-            {
-                String key = (String)iter.next();
-                ArrayList<String> val = (ArrayList<String>)map.get(key);
+            while (iter.hasNext()) {
+                String key = (String) iter.next();
+                ArrayList<String> val = map.get(key);
 
-                if(val.size() < 8)
-                {
+                if (val.size() < 8) {
                     continue;
                 }
 
-                //Remove the first round result;
+                // Remove the first round result;
                 val.remove(0);
                 val.trimToSize();
 
-                //Find the min and max value;
+                // Find the min and max value;
                 Iterator iter1 = val.listIterator();
                 int min_index = 0, max_index = 0, curr_index = 0;
                 long min, max, curr_value;
-                min = max = Long.parseLong((String)iter1.next());
-                while(iter1.hasNext())
-                {
+                min = max = Long.parseLong((String) iter1.next());
+                while (iter1.hasNext()) {
                     curr_index++;
-                    curr_value = Long.parseLong((String)iter1.next());
-                    if(curr_value <= min)
-                    {
+                    curr_value = Long.parseLong((String) iter1.next());
+                    if (curr_value <= min) {
                         min = curr_value;
                         min_index = curr_index;
                     }
 
-                    if(curr_value > max)
-                    {
+                    if (curr_value > max) {
                         max = curr_value;
                         max_index = curr_index;
                     }
                 }
 
-                if(min_index > max_index)
-                {
+                if (min_index > max_index) {
                     val.remove(min_index);
                     val.remove(max_index);
-                }
-                else
-                {
+                } else {
                     val.remove(max_index);
                     val.remove(min_index);
                 }
-
 
                 System.out.println("Map removed value: ");
-                System.out.println("Key: " + key + " ;Value: " + (ArrayList<String>)map.get(key));
+                System.out.println("Key: " + key + " ;Value: " + map.get(key));
 
-                //Compute the average and standard deviation value of the 5 left round result
+                // Compute the average and standard deviation value of the 5
+                // left round result
                 Iterator iter2 = val.listIterator();
                 double average = 0;
                 long sum = 0;
-                while(iter2.hasNext())
-                {
-//                  System.out.println("Result: " + (String)iter2.next());
-                    sum += Long.parseLong((String)iter2.next());
+                while (iter2.hasNext()) {
+                    // System.out.println("Result: " + (String)iter2.next());
+                    sum += Long.parseLong((String) iter2.next());
                 }
 
                 average = sum / 5;
@@ -149,9 +125,8 @@ public class GenerateReports {
                 Iterator iter3 = val.listIterator();
                 double stdev = 0;
                 sum = 0;
-                while(iter3.hasNext())
-                {
-                    long curr_result = Long.parseLong((String)iter3.next());
+                while (iter3.hasNext()) {
+                    long curr_result = Long.parseLong((String) iter3.next());
                     sum += (curr_result - average) * (curr_result - average);
                 }
 
@@ -175,24 +150,22 @@ public class GenerateReports {
             e.printStackTrace();
         }
 
-
     }
 
-    static void writeResultToFile(Map<String, ArrayList<String>> m, String report_dir)
-    {
-//      initApp();
+    static void writeResultToFile(Map<String, ArrayList<String>> m, String report_dir) {
+        // initApp();
         startcenter.menuItem("File->Open...").select();
         submitOpenDlg(report_dir);
         sleep(10);
 
         CalcUtil.selectRange("Spread.F1");
         calc.menuItem("Insert->Columns").select();
-//      SC_InsertColumnsRowsdialog.ok();
+        // SC_InsertColumnsRowsdialog.ok();
         sleep(1);
 
-//      fillReport(m, "Spread.F13", "New Document Result");
-//      fillReport(m, "Spread.F15", "New Presentation Result");
-//      fillReport(m, "Spread.F17", "New Spreadsheet Result");
+        // fillReport(m, "Spread.F13", "New Document Result");
+        // fillReport(m, "Spread.F15", "New Presentation Result");
+        // fillReport(m, "Spread.F17", "New Spreadsheet Result");
         fillReport(m, "Spread.F3", "Plain ODT Load Show Result");
         fillReport(m, "Spread.F4", "Complex ODT Load Show Result");
         fillReport(m, "Spread.F5", "Plain ODT Load Finish Result");
@@ -225,57 +198,54 @@ public class GenerateReports {
         fillReport(m, "Spread.F32", "Complex ODS Save Result");
         fillReport(m, "Spread.F33", "Plain XLS Save Result");
         fillReport(m, "Spread.F34", "Complex XLS Save Result");
-//      fillReport(m, "Spread.F51", "SD-SShow Complex odp Slider Show Result");
+        // fillReport(m, "Spread.F51",
+        // "SD-SShow Complex odp Slider Show Result");
 
-        //Save the text document
+        // Save the text document
         calc.menuItem("File->Save As...").select();
         String saveTo = new File(System.getProperty("testspace", "../testspace")).getAbsolutePath() + "/output/output_start_1.ods";
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-//      if (dialog("33388").exists(3))
-//          dialog("33388").ok();
+        // if (dialog("33388").exists(3))
+        // dialog("33388").ok();
         sleep(2);
         calc.menuItem("File->Exit").select();
 
     }
 
-    static void fillReport(Map<String, ArrayList<String>> m, String cell, String scenario)
-    {
-        ArrayList <String> raw_data = m.get(scenario);
+    static void fillReport(Map<String, ArrayList<String>> m, String cell, String scenario) {
+        ArrayList<String> raw_data = m.get(scenario);
 
-//      Iterator iter1 = raw_data.listIterator();
-//      while(iter1.hasNext())
-//      {
-//          System.out.println(iter1.next());
-//      }
+        // Iterator iter1 = raw_data.listIterator();
+        // while(iter1.hasNext())
+        // {
+        // System.out.println(iter1.next());
+        // }
 
-//      NumberFormat nbf = NumberFormat.getInstance();
-//      nbf.setMinimumFractionDigits(2);
-//      nbf.setMaximumFractionDigits(2);
+        // NumberFormat nbf = NumberFormat.getInstance();
+        // nbf.setMinimumFractionDigits(2);
+        // nbf.setMaximumFractionDigits(2);
         String result;
-        if(raw_data.size() == 1)
-        {
+        if (raw_data.size() == 1) {
             System.out.println("alsdjf");
             result = raw_data.get(0);
-        }
-        else
-        {
-//          result = " " + nbf.format(raw_data.get(raw_data.size() - 2)) + "/ " + nbf.format(raw_data.get(raw_data.size() - 1));
-            result = new java.text.DecimalFormat("0.00").format(Double.parseDouble(raw_data.get(raw_data.size() - 2))).toString() + "/ " + new java.text.DecimalFormat("0.00").format(Double.parseDouble(raw_data.get(raw_data.size() - 1))).toString();
-//          result = raw_data.get(raw_data.size() - 2) + "/ " + raw_data.get(raw_data.size() - 1);
+        } else {
+            // result = " " + nbf.format(raw_data.get(raw_data.size() - 2)) +
+            // "/ " + nbf.format(raw_data.get(raw_data.size() - 1));
+            result = new java.text.DecimalFormat("0.00").format(Double.parseDouble(raw_data.get(raw_data.size() - 2))).toString() + "/ "
+                    + new java.text.DecimalFormat("0.00").format(Double.parseDouble(raw_data.get(raw_data.size() - 1))).toString();
+            // result = raw_data.get(raw_data.size() - 2) + "/ " +
+            // raw_data.get(raw_data.size() - 1);
         }
         CalcUtil.selectRange(cell);
         typeKeys(result + "<enter>");
     }
 
-    static void printMap(Map<String, ArrayList<String>> m)
-    {
+    static void printMap(Map<String, ArrayList<String>> m) {
         Iterator iter = m.keySet().iterator();
-        while(iter.hasNext())
-        {
-            String key = (String)iter.next();
+        while (iter.hasNext()) {
+            String key = (String) iter.next();
             System.out.println("Key: " + key + "; Value: " + m.get(key));
         }
     }
 }
-

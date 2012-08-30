@@ -19,25 +19,21 @@
  *
  *************************************************************/
 
-
-
 package testcase.gui.sc.validity;
 
+import static org.junit.Assert.*;
 import static testlib.gui.UIMap.*;
 
 import org.junit.After;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import testlib.gui.Log;
-
+import org.openoffice.test.common.Logger;
 
 public class ValidityDialogDefaultValue {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -62,13 +58,13 @@ public class ValidityDialogDefaultValue {
         SC_ValidityCriteriaTabpage.select();
         SC_ValidityCriteriaAllowList.select(5); // "Cell range"
 
-        assertEquals(true,SC_ValidityAllowBlankCells.isChecked());
-        assertEquals(true,SC_ValidityShowSelectionList.isChecked());
-        assertEquals(false,SC_ValiditySortEntriesAscending.isChecked());
-        assertEquals(true,SC_ValidityAllowBlankCells.isEnabled());
-        assertEquals(true,SC_ValiditySortEntriesAscending.isEnabled());
-        assertEquals(true,SC_ValiditySortEntriesAscending.isEnabled());
-        assertEquals(true,SC_ValiditySourcePicker.isEnabled());
+        assertEquals(true, SC_ValidityAllowBlankCells.isChecked());
+        assertEquals(true, SC_ValidityShowSelectionList.isChecked());
+        assertEquals(false, SC_ValiditySortEntriesAscending.isChecked());
+        assertEquals(true, SC_ValidityAllowBlankCells.isEnabled());
+        assertEquals(true, SC_ValiditySortEntriesAscending.isEnabled());
+        assertEquals(true, SC_ValiditySortEntriesAscending.isEnabled());
+        assertEquals(true, SC_ValiditySourcePicker.isEnabled());
     }
 
     /**
@@ -78,15 +74,15 @@ public class ValidityDialogDefaultValue {
     public void testValidityUIErrorAlert() {
 
         SC_ValidityErrorAlertTabPage.select();
-        assertEquals(true,SC_ValidityErrorAlertActionList.isEnabled());
-//      assertEquals("Stop",SC_ValidityErrorAlertActionList.getSelText());  // Do not test this. Do it in GVT.
-        assertEquals(true,SC_ValidityErrorMessageTitle.isEnabled());
-        assertEquals("",SC_ValidityErrorMessageTitle.getText());
-        assertEquals(true,SC_ValidityErrorMessage.isEnabled());
-        assertEquals("",SC_ValidityErrorMessage.getText());
-        SC_ValidityErrorAlertActionList.select(3);  // "Macro"
-        assertEquals(true,SC_ValidityErrorBrowseButton.isEnabled());
+        assertEquals(true, SC_ValidityErrorAlertActionList.isEnabled());
+        // assertEquals("Stop",SC_ValidityErrorAlertActionList.getSelText()); //
+        // Do not test this. Do it in GVT.
+        assertEquals(true, SC_ValidityErrorMessageTitle.isEnabled());
+        assertEquals("", SC_ValidityErrorMessageTitle.getText());
+        assertEquals(true, SC_ValidityErrorMessage.isEnabled());
+        assertEquals("", SC_ValidityErrorMessage.getText());
+        SC_ValidityErrorAlertActionList.select(3); // "Macro"
+        assertEquals(true, SC_ValidityErrorBrowseButton.isEnabled());
     }
 
 }
-

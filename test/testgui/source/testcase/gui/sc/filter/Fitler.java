@@ -19,25 +19,22 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 package testcase.gui.sc.filter;
 
+import static org.junit.Assert.*;
 import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
 
 import org.junit.After;
-import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
+import org.openoffice.test.common.Logger;
 
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
 
 /**
  * Test cases about Data->Filter in spreadsheet
@@ -45,7 +42,7 @@ import testlib.gui.Log;
 public class Fitler {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -66,9 +63,9 @@ public class Fitler {
      */
     @Ignore("Bug 120076")
     public void testAutoFilterWithPlusSign() {
-        String expect ="2+";
+        String expect = "2+";
         CalcUtil.selectRange("A1");
         typeKeys(expect + "<enter>");
-        assertEquals(expect,CalcUtil.getCellText("A1"));
+        assertEquals(expect, CalcUtil.getCellText("A1"));
     }
 }

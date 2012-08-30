@@ -19,22 +19,19 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 package testcase.gui.sc.chart;
 
+import static org.junit.Assert.*;
 import static testlib.gui.UIMap.*;
 
 import org.junit.After;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import testlib.gui.Log;
+import org.openoffice.test.common.Logger;
 
 /**
  * Test the setting about chart dialog in spreadsheet
@@ -42,7 +39,7 @@ import testlib.gui.Log;
 public class ChartDialogSetting {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {

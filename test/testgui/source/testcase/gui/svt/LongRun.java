@@ -20,29 +20,12 @@
  *************************************************************/
 
 package testcase.gui.svt;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.openoffice.test.common.Testspace.getPath;
-import static org.openoffice.test.common.Testspace.prepareData;
-import static org.openoffice.test.vcl.Tester.sleep;
-import static org.openoffice.test.vcl.Tester.typeText;
-import static testlib.gui.AppUtil.submitOpenDlg;
-import static testlib.gui.AppUtil.submitSaveDlg;
-import static testlib.gui.AppUtil.typeKeys;
-import static testlib.gui.UIMap.AlienFormatDlg;
-import static testlib.gui.UIMap.EffectsPage;
-import static testlib.gui.UIMap.EffectsPage_Color;
-import static testlib.gui.UIMap.PresentationWizard;
-import static testlib.gui.UIMap.app;
-import static testlib.gui.UIMap.calc;
-import static testlib.gui.UIMap.draw;
-import static testlib.gui.UIMap.impress;
-import static testlib.gui.UIMap.math_EditWindow;
-import static testlib.gui.UIMap.math_ElementsWindow;
-import static testlib.gui.UIMap.menuItem;
-import static testlib.gui.UIMap.startcenter;
-import static testlib.gui.UIMap.writer;
+
+import static org.junit.Assert.*;
+import static org.openoffice.test.common.Testspace.*;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -58,16 +41,16 @@ import org.junit.Test;
 import org.openoffice.test.common.Condition;
 import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.GraphicsUtil;
+import org.openoffice.test.common.Logger;
 import org.openoffice.test.common.SystemUtil;
 import org.openoffice.test.common.Testspace;
 
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
 
 public class LongRun {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     private PrintStream result = null;
 
@@ -81,9 +64,9 @@ public class LongRun {
         app.start(true);
         result = new PrintStream(new FileOutputStream(Testspace.getFile("output/longrun.csv")));
         HashMap<String, Object> proccessInfo = SystemUtil.findProcess(".*(soffice\\.bin|soffice.*-env).*");
-        pid = (String)proccessInfo.get("pid");
+        pid = (String) proccessInfo.get("pid");
         result.println("Iterator,Time,Memory(KB),CPU(%)");
-        LOG.info("Result will be saved to " + Testspace.getPath("output/longrun.csv"));
+        log.info("Result will be saved to " + Testspace.getPath("output/longrun.csv"));
     }
 
     @After
@@ -97,8 +80,8 @@ public class LongRun {
         @Override
         public boolean value() {
             BufferedImage image = GraphicsUtil.screenshot(rect);
-            for (int x = 0; x < image.getWidth();x++) {
-                for (int y = 0; y < image.getHeight();y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                for (int y = 0; y < image.getHeight(); y++) {
                     if (image.getRGB(x, y) == 0xFF000000) {
                         return true;
                     }
@@ -118,7 +101,7 @@ public class LongRun {
     public void testLongRun() throws Exception {
         startcenter.menuItem("File->New->Text Document").select();
         writer.typeKeys("Long-running test...");
-        for(int i = 0 ; i < 1000; i++){
+        for (int i = 0; i < 1000; i++) {
             saveNewDocument("helloworld_saveas.odt");
             saveNewDocument("helloworld_saveas.ott");
             saveNewDocument("helloworld_saveas.sxw");
@@ -144,7 +127,7 @@ public class LongRun {
             saveNewDrawing("draw_saveas.std");
             HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
             String record = i + "," + System.currentTimeMillis() + "," + perfData.get("rss") + "," + perfData.get("pcpu");
-            LOG.info("Record: " + record);
+            log.info("Record: " + record);
             result.println(record);
             result.flush();
         }
@@ -168,8 +151,7 @@ public class LongRun {
         sleep(1);
 
         // Verify the text via system clip board
-        Assert.assertEquals("The typed text into writer", text,
-                app.getClipboard());
+        Assert.assertEquals("The typed text into writer", text, app.getClipboard());
 
         // Set the text style
         writer.openContextMenu();
@@ -188,7 +170,7 @@ public class LongRun {
 
         // Close it by clicking main menu
         writer.menuItem("File->Close").select();
-//      openStartcenter();
+        // openStartcenter();
         // Reopen the saved file
         writer.menuItem("File->Open...").select();
         submitOpenDlg(saveTo);
@@ -199,8 +181,7 @@ public class LongRun {
         typeKeys("<$copy>");
         sleep(1);
         // Verify if the text still exists in the file
-        Assert.assertEquals("The typed text into writer is saved!", text,
-                app.getClipboard());
+        Assert.assertEquals("The typed text into writer is saved!", text, app.getClipboard());
         writer.menuItem("File->Close").select();
     }
 
@@ -218,13 +199,12 @@ public class LongRun {
             AlienFormatDlg.ok();
         // Close it by clicking main menu
         calc.menuItem("File->Close").select();
-//      openStartcenter();
+        // openStartcenter();
         // Reopen the saved file
         writer.menuItem("File->Open...").select();
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
-        Assert.assertEquals("The typed text is saved!", text,
-                CalcUtil.getCellText("A65536"));
+        Assert.assertEquals("The typed text is saved!", text, CalcUtil.getCellText("A65536"));
         calc.menuItem("File->Close").select();
     }
 
@@ -247,7 +227,7 @@ public class LongRun {
             AlienFormatDlg.ok();
         // Close it by clicking main menu
         impress.menuItem("File->Close").select();
-//      openStartcenter();
+        // openStartcenter();
         // Reopen the saved file
         sleep(2);
         writer.menuItem("File->Open...").select();
@@ -260,11 +240,9 @@ public class LongRun {
         // app.setClipboard(".wrong");
         typeKeys("<$copy>");
         sleep(1);
-        Assert.assertEquals("The typed text is saved!", text,
-                app.getClipboard());
+        Assert.assertEquals("The typed text is saved!", text, app.getClipboard());
         impress.menuItem("File->Close").select();
     }
-
 
     /**
      * New/Save a draw document 1. New a draw document 2. Insert a picture 3.
@@ -292,8 +270,7 @@ public class LongRun {
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(
-                draw.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(draw.getScreenRectangle(), 0xFF00FF00);
         assertNotNull("Green rectangle: " + rectangle, rectangle);
 
         // Save the drawing
@@ -307,7 +284,7 @@ public class LongRun {
 
         // Close it by clicking main menu
         draw.menuItem("File->Close").select();
-//      openStartcenter();
+        // openStartcenter();
 
         // Reopen the saved file
         writer.menuItem("File->Open...").select();
@@ -316,12 +293,10 @@ public class LongRun {
         draw.click(5, 5);
         sleep(1);
         // Verify if the picture still exists in the file
-        Rectangle rectangle1 = GraphicsUtil.findRectangle(
-                draw.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle1 = GraphicsUtil.findRectangle(draw.getScreenRectangle(), 0xFF00FF00);
         assertNotNull("Green rectangle: " + rectangle1, rectangle1);
         draw.menuItem("File->Close").select();
     }
-
 
     /**
      * New/Save a math 1. New a math 2. Insert a formula 3. Save it as the input
@@ -362,7 +337,7 @@ public class LongRun {
 
         // Close it by clicking main menu
         math_EditWindow.menuItem("File->Close").select();
-//      openStartcenter();
+        // openStartcenter();
 
         // Reopen the saved file
         writer.menuItem("File->Open...").select();
@@ -373,8 +348,7 @@ public class LongRun {
         math_EditWindow.menuItem("Edit->Select All").select();
         typeKeys("<$copy>");
         sleep(1);
-        assertEquals("The typed formula into math is saved", text,
-                app.getClipboard());
+        assertEquals("The typed formula into math is saved", text, app.getClipboard());
 
         // Close the file to avoid the app closing the Elements window
         // automatically

@@ -25,10 +25,9 @@
 
 package testcase.gui.svt.sd;
 
-import static testlib.gui.AppUtil.submitSaveDlg;
-import static testlib.gui.UIMap.PresentationWizard;
-import static testlib.gui.UIMap.app;
-import static testlib.gui.UIMap.startcenter;
+import static org.openoffice.test.common.Testspace.*;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
 
 import java.io.FileOutputStream;
@@ -41,17 +40,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.OpenOffice;
 import org.openoffice.test.common.FileUtil;
+import org.openoffice.test.common.Logger;
 import org.openoffice.test.common.SystemUtil;
 import org.openoffice.test.common.Testspace;
 
-import static org.openoffice.test.common.Testspace.prepareData;
-import static org.openoffice.test.vcl.Tester.*;
-
-import testlib.gui.Log;
-
 public class OperationOnNewSD {
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     private PrintStream result = null;
 
@@ -66,9 +61,9 @@ public class OperationOnNewSD {
         app.start();
         result = new PrintStream(new FileOutputStream(Testspace.getFile("output/svt_sd_new.csv")));
         HashMap<String, Object> proccessInfo = SystemUtil.findProcess(".*(soffice\\.bin|soffice.*-env).*");
-        pid = (String)proccessInfo.get("pid");
+        pid = (String) proccessInfo.get("pid");
         result.println("Iterator,Time,Memory(KB),CPU(%)");
-        LOG.info("Result will be saved to " + Testspace.getPath("output/svt_sd_new.csv"));
+        log.info("Result will be saved to " + Testspace.getPath("output/svt_sd_new.csv"));
     }
 
     @After
@@ -81,18 +76,17 @@ public class OperationOnNewSD {
     public void operationOnNewSW() throws Exception {
         String externalFile = prepareData("svt/sd_plain_50p.odp");
         String pic = prepareData("svt/Sunset.jpg");
-        for(int i = 0; i < 1000; i++)
-        {
-//          Create a new SD
+        for (int i = 0; i < 1000; i++) {
+            // Create a new SD
             app.dispatch("private:factory/simpress?slot=6686");
             PresentationWizard.ok();
             sleep(2);
 
-//          Create a new slide
+            // Create a new slide
             impress.menuItem("Insert->Slide").select();
             sleep(2);
 
-//          Insert a table
+            // Insert a table
             app.dispatch(".uno:InsertTable", 3);
             sleep(2);
             NumberofCol.setText("5");
@@ -108,7 +102,7 @@ public class OperationOnNewSD {
             impress.typeKeys("2");
             sleep(2);
 
-//          Insert a picture
+            // Insert a picture
             impress.menuItem("Insert->Slide").select();
             sleep(2);
             impress.menuItem("Insert->Picture->From File...").select();
@@ -120,7 +114,7 @@ public class OperationOnNewSD {
             impress.typeKeys("<esc>");
             sleep(2);
 
-//          Insert Slides from External Sample files
+            // Insert Slides from External Sample files
             impress.menuItem("Insert->File...").select();
             sleep(2);
             FilePicker_Path.setText(externalFile);
@@ -131,7 +125,7 @@ public class OperationOnNewSD {
             ActiveMsgBox.yes();
             sleep(20);
 
-//          Slide Screen Show Settings
+            // Slide Screen Show Settings
             impress.menuItem("Slide Show->Slide Transition...").select();
             sleep(2);
             ImpressSlideTransitions.select("Uncover Up");
@@ -147,13 +141,12 @@ public class OperationOnNewSD {
             impress.typeKeys("<esc>");
             sleep(5);
 
-//          Save file and close
+            // Save file and close
             String saveTo = "tempSD" + i + ".odp";
             impress.menuItem("File->Save As...").select();
             FileUtil.deleteFile(saveTo);
             submitSaveDlg(saveTo);
-            if(ActiveMsgBox.exists())
-            {
+            if (ActiveMsgBox.exists()) {
                 ActiveMsgBox.yes();
                 sleep(2);
             }
@@ -161,7 +154,7 @@ public class OperationOnNewSD {
 
             HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
             String record = i + "," + System.currentTimeMillis() + "," + perfData.get("rss") + "," + perfData.get("pcpu");
-            LOG.info("Record: " + record);
+            log.info("Record: " + record);
             result.println(record);
             result.flush();
 

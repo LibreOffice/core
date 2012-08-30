@@ -19,41 +19,41 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 package testcase.gui.sd.headerandfooter;
+
+import static org.junit.Assert.*;
 import static org.openoffice.test.common.Testspace.*;
+import static org.openoffice.test.vcl.Tester.*;
 import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
-import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
+import org.openoffice.test.common.Logger;
 
 import testlib.gui.ImpressUtil;
-import testlib.gui.Log;
 
-public class HeaderAndFooterSetting{
+public class HeaderAndFooterSetting {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
-        app.start(true);    // Bug 120476
+        app.start(true); // Bug 120476
 
         // New a impress, insert some slides
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
         impress.waitForExistence(10, 2);
 
-        for(int i=0; i<5;i++){
+        for (int i = 0; i < 5; i++) {
             SD_InsertPageButtonOnToolbar.click();
         }
         // Pop up navigator panel
@@ -69,12 +69,13 @@ public class HeaderAndFooterSetting{
 
     /**
      * Test Copy slide with Apply Footer to same file and different file
+     *
      * @throws Exception
      */
     @Test
-    public void testCopySlideWithApplyFooter() throws Exception{
+    public void testCopySlideWithApplyFooter() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
 
         SD_DateAndTimeFooterOnSlide.check();
@@ -93,7 +94,7 @@ public class HeaderAndFooterSetting{
         SD_SlideNumAsFooterOnSlide.uncheck();
         SD_ApplyButtonOnSlideFooter.click();
 
-        //paste to the same file
+        // paste to the same file
         ImpressSlideSorter.focus();
         app.dispatch(".uno:Copy");
         app.dispatch(".uno:Paste");
@@ -104,7 +105,7 @@ public class HeaderAndFooterSetting{
         assertEquals(false, SD_SlideNumAsFooterOnSlide.isChecked());
         SD_HeaderAndFooterDlgSlideTab.cancel();
 
-        //paste to different file
+        // paste to different file
         impress.focus();
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
@@ -121,12 +122,13 @@ public class HeaderAndFooterSetting{
 
     /**
      * Test Copy slide with Apply to all Footer to same file and different file
+     *
      * @throws Exception
      */
     @Test
-    public void testCopySlideWithApplyToAllFooter() throws Exception{
+    public void testCopySlideWithApplyToAllFooter() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
 
         SD_DateAndTimeFooterOnSlide.check();
@@ -138,14 +140,14 @@ public class HeaderAndFooterSetting{
         SD_ApplyToAllButtonOnSlideFooter.click();
 
         ImpressSlideSorter.focus();
-        for(int j=0; j<=2;j++){
+        for (int j = 0; j <= 2; j++) {
             typeKeys("<up>");
         }
         app.dispatch(".uno:HeaderAndFooter");
         SD_SlideNumAsFooterOnSlide.uncheck();
         SD_ApplyButtonOnSlideFooter.click();
 
-        //paste to the same file
+        // paste to the same file
         ImpressSlideSorter.focus();
         typeKeys("<up>");
         app.dispatch(".uno:Copy");
@@ -153,12 +155,12 @@ public class HeaderAndFooterSetting{
         app.dispatch(".uno:Paste");
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
         SD_HeaderAndFooterDlgSlideTab.cancel();
 
-        //paste to different file
+        // paste to different file
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
         app.dispatch(".uno:Paste");
@@ -167,19 +169,20 @@ public class HeaderAndFooterSetting{
         sleep(1); // If no sleep, error occur
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
     }
 
     /**
      * Test Copy slide with Notes Footer to same file and different file
+     *
      * @throws Exception
      */
     @Test
-    public void testCopySlideWithNotesHeaderFooter() throws Exception{
+    public void testCopySlideWithNotesHeaderFooter() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
         SD_HeaderTextOnNotes.check();
@@ -192,7 +195,7 @@ public class HeaderAndFooterSetting{
         SD_SlideNumAsFooterOnSlide.check();
         SD_ApplyToAllButtonOnSlideFooter.click();
 
-        //paste to the same file
+        // paste to the same file
         ImpressSlideSorter.focus();
         typeKeys("<up>");
         app.dispatch(".uno:Copy");
@@ -201,13 +204,13 @@ public class HeaderAndFooterSetting{
 
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
-        assertEquals("Header Test",SD_HeaderTextOnNotesInput.getText());
-        assertEquals("Fix Date: 20120329",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Header Test", SD_HeaderTextOnNotesInput.getText());
+        assertEquals("Fix Date: 20120329", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
         SD_HeaderAndFooterOnNotesTabPage.cancel();
 
-        //paste to different file
+        // paste to different file
         impress.focus();
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
@@ -217,20 +220,21 @@ public class HeaderAndFooterSetting{
         ImpressUtil.getCurView().activate();
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
-        assertEquals("Header Test",SD_HeaderTextOnNotesInput.getText());
-        assertEquals("Fix Date: 20120329",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Header Test", SD_HeaderTextOnNotesInput.getText());
+        assertEquals("Fix Date: 20120329", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
     }
 
     /**
      * Test duplicate slide with Apply to all Footer to same file
+     *
      * @throws Exception
      */
     @Test
-    public void testDuplicateSlideWithApplyToAllFooter() throws Exception{
+    public void testDuplicateSlideWithApplyToAllFooter() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
 
         SD_DateAndTimeFooterOnSlide.check();
@@ -241,26 +245,26 @@ public class HeaderAndFooterSetting{
         SD_SlideNumAsFooterOnSlide.check();
         SD_ApplyToAllButtonOnSlideFooter.click();
 
-
         ImpressSlideSorter.focus();
-        for(int j=0; j<=2;j++){
+        for (int j = 0; j <= 2; j++) {
             typeKeys("<up>");
         }
         app.dispatch(".uno:DuplicatePage");
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
     }
 
     /**
      * Test footer not show on the first slide.
+     *
      * @throws Exception
      */
     @Test
-    public void testFooterNotShowOn1stSlide() throws Exception{
+    public void testFooterNotShowOn1stSlide() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
         SD_FooterTextOnSlide.check();
         SD_FooterTextOnSlideInput.setText("Footer Test");
@@ -269,26 +273,27 @@ public class HeaderAndFooterSetting{
 
         // Check slide 1
         ImpressSlideSorter.focus();
-//      typeKeys("<up><up><up><up><up>");   // Not stable on ubuntu10.04
-//      sleep(1);   // If no sleep, error occur
-        for (int i=0; i<5; i++) {
+        // typeKeys("<up><up><up><up><up>"); // Not stable on ubuntu10.04
+        // sleep(1); // If no sleep, error occur
+        for (int i = 0; i < 5; i++) {
             typeKeys("<up>");
             sleep(1);
         }
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(true,SD_FooterNotShowOn1stSlide.isChecked());
-        assertEquals(false,SD_FooterTextOnSlide.isChecked());
+        assertEquals(true, SD_FooterNotShowOn1stSlide.isChecked());
+        assertEquals(false, SD_FooterTextOnSlide.isChecked());
     }
 
     /**
      * Test Insert Footer to focus slide.
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertApplyFooterOnSlide() throws Exception{
+    public void testInsertApplyFooterOnSlide() throws Exception {
 
-        //add header and footer to focus slide.
+        // add header and footer to focus slide.
         app.dispatch(".uno:HeaderAndFooter");
 
         SD_DateAndTimeFooterOnSlide.check();
@@ -300,47 +305,48 @@ public class HeaderAndFooterSetting{
         SD_ApplyButtonOnSlideFooter.click();
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals(true,SD_FixedDateAndTimeFooterOnSlide.isChecked());
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
-        //close header and footer dialog.
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals(true, SD_FixedDateAndTimeFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
+        // close header and footer dialog.
         SD_ApplyButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
-        //end close
+        // end close
 
         ImpressSlideSorter.focus();
         typeKeys("<up>");
-        sleep(1);   // If no sleep, error occur
+        sleep(1); // If no sleep, error occur
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals("",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("",SD_FooterTextOnSlideInput.getText());
-        assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
-        //close header and footer dialog.
+        assertEquals("", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("", SD_FooterTextOnSlideInput.getText());
+        assertEquals(false, SD_SlideNumAsFooterOnSlide.isChecked());
+        // close header and footer dialog.
         SD_ApplyButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
-        //end close
+        // end close
 
         SD_InsertPageButtonOnToolbar.click();
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals("",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("",SD_FooterTextOnSlideInput.getText());
-        assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("", SD_FooterTextOnSlideInput.getText());
+        assertEquals(false, SD_SlideNumAsFooterOnSlide.isChecked());
     }
 
     /**
      * Test Insert Footer to Notes View
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertApplyToAllFooterOnNotes() throws Exception{
+    public void testInsertApplyToAllFooterOnNotes() throws Exception {
 
-        //add header and footer to focus slide.
+        // add header and footer to focus slide.
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
         SD_HeaderTextOnNotes.check();
@@ -355,60 +361,61 @@ public class HeaderAndFooterSetting{
 
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
-        assertEquals(true,SD_HeaderTextOnNotes.isChecked());
-        assertEquals("Header Test",SD_HeaderTextOnNotesInput.getText());
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals(true,SD_FixedDateAndTimeFooterOnSlide.isChecked());
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
-        //close header and footer dialog.
+        assertEquals(true, SD_HeaderTextOnNotes.isChecked());
+        assertEquals("Header Test", SD_HeaderTextOnNotesInput.getText());
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals(true, SD_FixedDateAndTimeFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
+        // close header and footer dialog.
         SD_ApplyToAllButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
-        //end close
+        // end close
 
         ImpressSlideSorter.focus();
         typeKeys("<up>");
 
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
-        assertEquals(true,SD_HeaderTextOnNotes.isChecked());
-        assertEquals("Header Test",SD_HeaderTextOnNotesInput.getText());
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals(true,SD_FixedDateAndTimeFooterOnSlide.isChecked());
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
-        //close header and footer dialog.
+        assertEquals(true, SD_HeaderTextOnNotes.isChecked());
+        assertEquals("Header Test", SD_HeaderTextOnNotesInput.getText());
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals(true, SD_FixedDateAndTimeFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
+        // close header and footer dialog.
         SD_ApplyToAllButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
-        //end close
+        // end close
 
         SD_InsertPageButtonOnToolbar.click();
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
-        assertEquals(true,SD_HeaderTextOnNotes.isChecked());
-        assertEquals("Header Test",SD_HeaderTextOnNotesInput.getText());
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals(true,SD_FixedDateAndTimeFooterOnSlide.isChecked());
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals(true, SD_HeaderTextOnNotes.isChecked());
+        assertEquals("Header Test", SD_HeaderTextOnNotesInput.getText());
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals(true, SD_FixedDateAndTimeFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
     }
 
     /**
      * Test Insert Footer to Slide, use Apply to All
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertApplyToAllFooterOnSlide() throws Exception{
+    public void testInsertApplyToAllFooterOnSlide() throws Exception {
 
-        //add header and footer to focus slide.
+        // add header and footer to focus slide.
         app.dispatch(".uno:HeaderAndFooter");
 
         SD_DateAndTimeFooterOnSlide.check();
@@ -420,95 +427,97 @@ public class HeaderAndFooterSetting{
         SD_ApplyToAllButtonOnSlideFooter.click();
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals(true,SD_FixedDateAndTimeFooterOnSlide.isChecked());
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
-        //close header and footer dialog.
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals(true, SD_FixedDateAndTimeFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
+        // close header and footer dialog.
         SD_ApplyButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
-        //end close
+        // end close
 
         ImpressSlideSorter.focus();
         typeKeys("<up>");
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals(true,SD_FixedDateAndTimeFooterOnSlide.isChecked());
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
-        //close header and footer dialog.
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals(true, SD_FixedDateAndTimeFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
+        // close header and footer dialog.
         SD_ApplyButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
-        //end close
+        // end close
 
         SD_InsertPageButtonOnToolbar.click();
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals(true,SD_FixedDateAndTimeFooterOnSlide.isChecked());
-        assertEquals("Fix Date: 20120323",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals(true, SD_FixedDateAndTimeFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120323", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
     }
 
     /**
      * Test Insert update automatically time footer to slides.
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertAutoUpdateTimeFooter() throws Exception{
+    public void testInsertAutoUpdateTimeFooter() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
         SD_AutoUpdateTimeFooter.check();
         SD_AutoUpdateTimeFooterType.select(7);
-        String currentTime=SD_AutoUpdateTimeFooterType.getItemText(7);
+        String currentTime = SD_AutoUpdateTimeFooterType.getItemText(7);
         SD_ApplyToAllButtonOnSlideFooter.click();
         sleep(1); // Wait some time to check the time update
 
         app.dispatch(".uno:HeaderAndFooter");
-        String updatedTime=SD_AutoUpdateTimeFooterType.getItemText(7);
+        String updatedTime = SD_AutoUpdateTimeFooterType.getItemText(7);
         assertNotSame("Time can not update", currentTime, updatedTime);
     }
 
     /**
      * Test Insert update automatically time footer to Notes view.
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertAutoUpdateTimeFooterOnNotes() throws Exception{
+    public void testInsertAutoUpdateTimeFooterOnNotes() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
         SD_AutoUpdateTimeFooter.check();
-        String currentTime=SD_AutoUpdateTimeFooterType.getItemText(7);
+        String currentTime = SD_AutoUpdateTimeFooterType.getItemText(7);
         SD_ApplyToAllButtonOnSlideFooter.click();
         sleep(1); // Wait some time to check the time update
 
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
-        String updatedTime=SD_AutoUpdateTimeFooterType.getItemText(7);
+        String updatedTime = SD_AutoUpdateTimeFooterType.getItemText(7);
 
         assertNotSame("Time can not update", currentTime, updatedTime);
     }
 
     /**
-     * Test Insert Header and Footer to Notes view.
-     * Save and ReOpen
+     * Test Insert Header and Footer to Notes view. Save and ReOpen
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertHeaderFooterOnNotes() throws Exception{
+    public void testInsertHeaderFooterOnNotes() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
         SD_HeaderTextOnNotes.check();
@@ -526,43 +535,43 @@ public class HeaderAndFooterSetting{
 
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
-        assertEquals("Header Test",SD_HeaderTextOnNotesInput.getText());
-        assertEquals("Fix Date: 20120329",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Header Test", SD_HeaderTextOnNotesInput.getText());
+        assertEquals("Fix Date: 20120329", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
         SD_HeaderAndFooterOnNotesTabPage.cancel();
 
-        //save this file
+        // save this file
         app.dispatch(".uno:SaveAs");
         String saveTo = getPath("temp/" + "hello.odp");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         app.dispatch(".uno:CloseDoc");
 
-        //Reopen this file
+        // Reopen this file
         openStartcenter();
         app.dispatch(".uno:Open");
-        String openFrom=getPath("temp/" + "hello.odp");
+        String openFrom = getPath("temp/" + "hello.odp");
         submitOpenDlg(openFrom);
 
-        //check after reopen
+        // check after reopen
         app.dispatch(".uno:HeaderAndFooter");
         SD_HeaderAndFooterOnNotesTabPage.select();
-        assertEquals("Header Test",SD_HeaderTextOnNotesInput.getText());
-        assertEquals("Fix Date: 20120329",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Header Test", SD_HeaderTextOnNotesInput.getText());
+        assertEquals("Fix Date: 20120329", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
     }
 
     /**
-     * Test Insert Header and Footer to Slide
-     * Save and Reopen
+     * Test Insert Header and Footer to Slide Save and Reopen
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertHeaderFooterOnSlide() throws Exception{
+    public void testInsertHeaderFooterOnSlide() throws Exception {
 
-        //add header and footer
+        // add header and footer
         app.dispatch(".uno:HeaderAndFooter");
         SD_DateAndTimeFooterOnSlide.check();
         SD_FixedDateAndTimeFooterOnSlide.check();
@@ -576,32 +585,32 @@ public class HeaderAndFooterSetting{
         typeKeys("<up>");
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals("Fix Date: 20120329",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120329", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
 
-        //close header and footer dialog.
+        // close header and footer dialog.
         SD_ApplyButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
 
-        //save this file
+        // save this file
         app.dispatch(".uno:SaveAs");
         String saveTo = getPath("temp/" + "hello.odp");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         app.dispatch(".uno:CloseDoc");
 
-        //Reopen this file
+        // Reopen this file
         openStartcenter();
         app.dispatch(".uno:Open");
-        String openFrom=getPath("temp/" + "hello.odp");
+        String openFrom = getPath("temp/" + "hello.odp");
         submitOpenDlg(openFrom);
 
-        //check after reopen
+        // check after reopen
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals("Fix Date: 20120329",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals("Footer Test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals("Fix Date: 20120329", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals("Footer Test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
     }
 }

@@ -19,12 +19,9 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
-
 
 package testcase.gui.performance.benchmark;
 
@@ -36,72 +33,63 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.openoffice.test.OpenOffice;
-import org.openoffice.test.common.Testspace;
-import org.openoffice.test.common.SystemUtil;
-
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.openoffice.test.OpenOffice;
+import org.openoffice.test.common.SystemUtil;
+import org.openoffice.test.common.Testspace;
+
 public class Filter {
-//  @Rule
+    // @Rule
 
     public String counterOutput = null;
     private String pid = null;
     private Timer timer = new Timer();
 
     @Before
-    public void setUp() throws FileNotFoundException{
+    public void setUp() throws FileNotFoundException {
 
         OpenOffice.killAll();
         app.start();
         String processSoffice = null;
-        if(SystemUtil.isWindows())
-        {
+        if (SystemUtil.isWindows()) {
             processSoffice = ".*soffice\\.exe.*";
-        }
-        else
-        {
+        } else {
             processSoffice = ".*soffice\\.bin.*";
         }
         HashMap<String, Object> proccessInfo = SystemUtil.findProcess(processSoffice);
-        pid = (String)proccessInfo.get("pid");
+        pid = (String) proccessInfo.get("pid");
     }
 
     @Test
-    public void pvtFilter()
-    {
+    public void pvtFilter() {
         String counterOutput = Testspace.getPath("output/output_perfmon");
         String pvt_result_path = Testspace.getPath("output/pvt_filter_results.txt");
         Testspace.prepareData("pvt_benchmark/output_start.ods", "output/output_start.ods");
 
-
         try {
-            if(SystemUtil.isWindows())
-            {
-                String counterLists =  Testspace.getPath("data/pvt_benchmark/perfmon/counterlist.txt");
+            if (SystemUtil.isWindows()) {
+                String counterLists = Testspace.getPath("data/pvt_benchmark/perfmon/counterlist.txt");
                 String createCounters = Testspace.getPath("data/pvt_benchmark/perfmon/createCounters.bat");
 
                 Testspace.prepareData("pvt_benchmark/perfmon/counterlist.txt");
                 Testspace.prepareData("pvt_benchmark/perfmon/createCounters.bat");
 
-                String []cmdargs_start = {"cmd.exe", "/C", "start", createCounters, counterOutput, counterLists};
+                String[] cmdargs_start = { "cmd.exe", "/C", "start", createCounters, counterOutput, counterLists };
                 java.lang.Runtime.getRuntime().exec(cmdargs_start);
                 sleep(5);
-            }
-            else
-            {
+            } else {
                 final FileWriter counterOut = new FileWriter(counterOutput);
                 counterOut.write("Time,Memory(KB),CPU(%)");
 
-                timer.schedule(new TimerTask(){
-                    public void run(){
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
                         HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
                         String record = System.currentTimeMillis() + "," + perfData.get("rss") + "," + perfData.get("pcpu");
                         try {
@@ -120,15 +108,18 @@ public class Filter {
 
             HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
 
-            for(int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 System.out.println("This is the " + i + " time");
-//              out.write("New Document Result: " + perfNew("Text Document") + System.getProperty("line.separator"));
-//              out.flush();
-//              out.write("New Presentation Result: " + perfNew("Presentation") + System.getProperty("line.separator"));
-//              out.flush();
-//              out.write("New Spreadsheet Result: " + perfNew("Spreadsheet") + System.getProperty("line.separator"));
-//              out.flush();
+                // out.write("New Document Result: " + perfNew("Text Document")
+                // + System.getProperty("line.separator"));
+                // out.flush();
+                // out.write("New Presentation Result: " +
+                // perfNew("Presentation") +
+                // System.getProperty("line.separator"));
+                // out.flush();
+                // out.write("New Spreadsheet Result: " + perfNew("Spreadsheet")
+                // + System.getProperty("line.separator"));
+                // out.flush();
 
                 out.write(getTime() + "," + "Plain ODT Load Show Result: " + perfLoadShow("pvt_benchmark/sw_plain_120p_odf1.2.odt") + System.getProperty("line.separator"));
                 out.flush();
@@ -146,11 +137,13 @@ public class Filter {
                 out.flush();
                 out.write(getTime() + "," + "Complex PPT Load Show Result: " + perfLoadShow("pvt_benchmark/sd_complex_51p.ppt") + System.getProperty("line.separator"));
                 out.flush();
-                out.write(getTime() + "," + "Plain ODS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_plain_4sh_5kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain ODS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_plain_4sh_5kcell_new_odf1.2.ods")
+                        + System.getProperty("line.separator"));
                 out.flush();
                 out.write(getTime() + "," + "Plain XLS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_plain_4sh_5kcell.xls") + System.getProperty("line.separator"));
                 out.flush();
-                out.write(getTime() + "," + "Complex ODS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_complex_13sh_4kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_complex_13sh_4kcell_new_odf1.2.ods")
+                        + System.getProperty("line.separator"));
                 out.flush();
                 out.write(getTime() + "," + "Complex XLS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_complex_13sh_4kcell.xls") + System.getProperty("line.separator"));
                 out.flush();
@@ -159,7 +152,8 @@ public class Filter {
                 out.flush();
                 out.write(getTime() + "," + "Plain DOC Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p.doc", 100) + System.getProperty("line.separator"));
                 out.flush();
-                out.write(getTime() + "," + "Complex ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_complex_100p_odf1.2.odt", 100) + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_complex_100p_odf1.2.odt", 100)
+                        + System.getProperty("line.separator"));
                 out.flush();
                 out.write(getTime() + "," + "Complex DOC Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_complex_100p.doc", 95) + System.getProperty("line.separator"));
                 out.flush();
@@ -167,7 +161,8 @@ public class Filter {
                 out.flush();
                 out.write(getTime() + "," + "Plain PPT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_plain_50p.ppt", 50) + System.getProperty("line.separator"));
                 out.flush();
-                out.write(getTime() + "," + "Complex ODP Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_complex_51p_odf1.2.odp", 51) + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODP Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_complex_51p_odf1.2.odp", 51)
+                        + System.getProperty("line.separator"));
                 out.flush();
                 sleep(5);
                 out.write(getTime() + "," + "Complex PPT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_complex_51p.ppt", 51) + System.getProperty("line.separator"));
@@ -200,15 +195,12 @@ public class Filter {
                 out.flush();
             }
             out.close();
-            if(SystemUtil.isWindows())
-            {
+            if (SystemUtil.isWindows()) {
                 String stopCounters = Testspace.getPath("data/pvt_benchmark/perfmon/stopCounters.bat");
                 Testspace.prepareData("pvt_benchmark/perfmon/stopCounters.bat");
-                String []cmdargs_end = {"cmd.exe", "/C", "start", stopCounters};
+                String[] cmdargs_end = { "cmd.exe", "/C", "start", stopCounters };
                 java.lang.Runtime.getRuntime().exec(cmdargs_end);
-            }
-            else
-            {
+            } else {
                 timer.cancel();
             }
 
@@ -217,113 +209,94 @@ public class Filter {
             e.printStackTrace();
         }
 
-
         GenerateReports genReport = new GenerateReports();
-        genReport.computeResults(pvt_result_path);
+        GenerateReports.computeResults(pvt_result_path);
 
     }
 
     public String getTime() {
 
-        Date d=new Date();
+        Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        String date=sdf.format(d);
+        String date = sdf.format(d);
         return date;
     }
 
-    public long perfNew(String fileType)
-    {
+    public long perfNew(String fileType) {
         System.out.println("New " + fileType);
         startcenter.menuItem("File->New->" + fileType).select();
-//      startcenter.menuItem("File->New->Spreadsheet").select();
+        // startcenter.menuItem("File->New->Spreadsheet").select();
         long tr = System.currentTimeMillis();
-//      System.out.println("1: " + tr);
-        while(true)
-        {
-            if(fileType.equals("Text Document"))
-            {
-                if(writer.exists())
-                {
+        // System.out.println("1: " + tr);
+        while (true) {
+            if (fileType.equals("Text Document")) {
+                if (writer.exists()) {
                     break;
                 }
             }
 
-//          else{
-                if(fileType.equals("Presentation"))
-                {
-//                  System.out.println("2: " + System.currentTimeMillis());
-                    if(impress.exists())
-                    {
-//                      System.out.println("3: " + System.currentTimeMillis());
-                        break;
-                    }
+            // else{
+            if (fileType.equals("Presentation")) {
+                // System.out.println("2: " + System.currentTimeMillis());
+                if (impress.exists()) {
+                    // System.out.println("3: " + System.currentTimeMillis());
+                    break;
                 }
-//              else
-//              {
-                    if(calc.exists())
-                    {
-                        break;
-                    }
-//              }
-//          }
+            }
+            // else
+            // {
+            if (calc.exists()) {
+                break;
+            }
+            // }
+            // }
 
         }
-//      System.out.println("4: " + System.currentTimeMillis());
+        // System.out.println("4: " + System.currentTimeMillis());
         tr = System.currentTimeMillis() - tr;
 
-        if(fileType.equals("Text Document"))
-        {
+        if (fileType.equals("Text Document")) {
             writer.menuItem("File->Close").select();
         }
 
-        if(fileType.equals("Presentation"))
-        {
+        if (fileType.equals("Presentation")) {
             impress.menuItem("File->Close").select();
         }
 
-        if(fileType.equals("Spreadsheet"))
-        {
+        if (fileType.equals("Spreadsheet")) {
             calc.menuItem("File->Close").select();
         }
 
         return tr;
     }
 
-    public long perfLoadShow(String fileName)
-    {
+    public long perfLoadShow(String fileName) {
         System.out.println(fileName + " Load Show");
         long tr = 0;
         String file = Testspace.prepareData(fileName);
         startcenter.menuItem("File->Open...").select();
         FilePicker_Path.setText(file);
         FilePicker_Open.click();
-//      submitOpenDlg(file);
+        // submitOpenDlg(file);
         tr = System.currentTimeMillis();
-        while(true)
-        {
-            if(fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx"))
-            {
-                if(writer.exists())
-                {
-//                  writer.menuItem("File->Close").select();
+        while (true) {
+            if (fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx")) {
+                if (writer.exists()) {
+                    // writer.menuItem("File->Close").select();
                     break;
                 }
             }
 
-            if(fileName.contains("odp") || fileName.contains("ppt") || fileName.contains("pptx"))
-            {
-                if(impress.exists())
-                {
-//                  impress.menuItem("File->Close").select();
+            if (fileName.contains("odp") || fileName.contains("ppt") || fileName.contains("pptx")) {
+                if (impress.exists()) {
+                    // impress.menuItem("File->Close").select();
                     break;
                 }
             }
 
-            if(fileName.contains("ods") || fileName.contains("xls") || fileName.contains("xlsx"))
-            {
-                if(calc.exists())
-                {
-//                  calc.menuItem("File->Close").select();
+            if (fileName.contains("ods") || fileName.contains("xls") || fileName.contains("xlsx")) {
+                if (calc.exists()) {
+                    // calc.menuItem("File->Close").select();
                     break;
                 }
             }
@@ -331,99 +304,85 @@ public class Filter {
         tr = System.currentTimeMillis() - tr;
         sleep(2);
 
-        if(fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx"))
-        {
+        if (fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx")) {
             writer.menuItem("File->Close").select();
         }
 
-        if(fileName.contains("odp") || fileName.contains("ppt") || fileName.contains("pptx"))
-        {
+        if (fileName.contains("odp") || fileName.contains("ppt") || fileName.contains("pptx")) {
             impress.menuItem("File->Close").select();
         }
 
-        if(fileName.contains("ods") || fileName.contains("xls") || fileName.contains("xlsx"))
-        {
+        if (fileName.contains("ods") || fileName.contains("xls") || fileName.contains("xlsx")) {
             calc.menuItem("File->Close").select();
         }
 
         return tr;
     }
 
-    public long perfLoadFinish(String fileName, int destPage)
-    {
+    public long perfLoadFinish(String fileName, int destPage) {
         System.out.println(fileName + " Load Finish");
         long tr = 0;
         String file = Testspace.prepareData(fileName);
         startcenter.menuItem("File->Open...").select();
-//      submitOpenDlg(file);
+        // submitOpenDlg(file);
         FilePicker_Path.setText(file);
         FilePicker_Open.click();
         tr = System.currentTimeMillis();
-        while(true)
-        {
-            while(!statusbar("FWK_HID_STATUSBAR").exists())
-            {
+        while (true) {
+            while (!statusbar("FWK_HID_STATUSBAR").exists()) {
                 ;
             }
-            if(getLoadedPage(fileName) >= destPage)
-            {
+            if (getLoadedPage(fileName) >= destPage) {
                 break;
             }
         }
         tr = System.currentTimeMillis() - tr;
         sleep(5);
-//      System.out.println("Load Finish Time: " + tr);
+        // System.out.println("Load Finish Time: " + tr);
 
-        if(fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx"))
-        {
+        if (fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx")) {
             writer.menuItem("File->Close").select();
         }
 
-        if(fileName.contains("odp") || fileName.contains("ppt") || fileName.contains("pptx"))
-        {
+        if (fileName.contains("odp") || fileName.contains("ppt") || fileName.contains("pptx")) {
             impress.menuItem("File->Close").select();
         }
 
-        if(fileName.contains("ods") || fileName.contains("xls") || fileName.contains("xlsx"))
-        {
+        if (fileName.contains("ods") || fileName.contains("xls") || fileName.contains("xlsx")) {
             calc.menuItem("File->Close").select();
         }
         return tr;
     }
 
-    public static int getLoadedPage(String docName)
-    {
+    public static int getLoadedPage(String docName) {
         String tmp = "";
-        if(docName.endsWith("odt") || docName.endsWith("doc") || docName.endsWith("docx"))
-        {
+        if (docName.endsWith("odt") || docName.endsWith("doc") || docName.endsWith("docx")) {
             tmp = statusbar("FWK_HID_STATUSBAR").getItemText(0);
         }
-        if(docName.endsWith("odp") || docName.endsWith("ppt") || docName.endsWith("pptx"))
-        {
+        if (docName.endsWith("odp") || docName.endsWith("ppt") || docName.endsWith("pptx")) {
             tmp = statusbar("FWK_HID_STATUSBAR").getItemText(4);
         }
-        //System.out.println(tmp);
-        String s[]= tmp.split("/");
-//      System.out.println(Integer.parseInt(s[1].trim()));
+        // System.out.println(tmp);
+        String s[] = tmp.split("/");
+        // System.out.println(Integer.parseInt(s[1].trim()));
         return Integer.parseInt(s[1].trim());
     }
 
-    public long perfSave(String fileName_i)
-    {
+    public long perfSave(String fileName_i) {
         System.out.println(fileName_i + " Save");
         String fileName = fileName_i.substring(14);
-//      System.out.println(fileName);
+        // System.out.println(fileName);
         long tr = 0;
         sleep(2);
         String file = Testspace.prepareData(fileName_i);
         startcenter.menuItem("File->Open...").select();
         submitOpenDlg(file);
         sleep(8);
-        if(fileName.startsWith("sw")){
-            if(fileName.startsWith("sw_complex")){
+        if (fileName.startsWith("sw")) {
+            if (fileName.startsWith("sw_complex")) {
                 typeKeys("<ctrl Home>");
-                if(fileName.endsWith("odt")){
-//                  writer.click(180,300);
+                if (fileName.endsWith("odt")) {
+                    // writer.click(180,300);
                     typeKeys("<PageDown>");
                     sleep(2);
                     typeKeys("<PageDown>");
@@ -433,44 +392,43 @@ public class Filter {
                     typeKeys("<Enter>");
                     sleep(2);
                     typeKeys("<delete>");
-                }else{
-//                  writer.click(180,300);
-//                  org.vclauto.Tester.typeKeys("<PGDN pgdn pgdn pgdn pgdn>");
-//                  org.vclauto.Tester.typeKeys("<DOWN down>");
+                } else {
+                    // writer.click(180,300);
+                    // org.vclauto.Tester.typeKeys("<PGDN pgdn pgdn pgdn pgdn>");
+                    // org.vclauto.Tester.typeKeys("<DOWN down>");
                     typeKeys("<Enter>");
                     sleep(2);
-//                  System.out.println("Enter");
+                    // System.out.println("Enter");
                     typeKeys("<backspace>");
-//                  System.out.println("backspace");
+                    // System.out.println("backspace");
                 }
-            }else{
-//              writer.click(180,300);
-//              writer.click();
+            } else {
+                // writer.click(180,300);
+                // writer.click();
                 typeKeys("<enter>");
                 typeKeys("<backspace>");
             }
-        }
-        else if(fileName.startsWith("sd")){
-//          writer.click(436, 326);
-//          presenter.click();
-//          sleep(2);
-//          org.vclauto.Tester.typeKeys("<Enter>");
-//          sleep(1);
-//          org.vclauto.Tester.typeKeys("<BACKSPACE>");
-//          sleep(1);
-//          org.vclauto.Tester.typeKeys("<ESC>");
-//          sleep(1);
-//          org.vclauto.Tester.typeKeys("<ESC>");
-//          System.out.println("SD");
+        } else if (fileName.startsWith("sd")) {
+            // writer.click(436, 326);
+            // presenter.click();
+            // sleep(2);
+            // org.vclauto.Tester.typeKeys("<Enter>");
+            // sleep(1);
+            // org.vclauto.Tester.typeKeys("<BACKSPACE>");
+            // sleep(1);
+            // org.vclauto.Tester.typeKeys("<ESC>");
+            // sleep(1);
+            // org.vclauto.Tester.typeKeys("<ESC>");
+            // System.out.println("SD");
             impress.menuItem("Insert->Slide").select();
-//          System.out.println("Insert slide");
+            // System.out.println("Insert slide");
             sleep(5);
             impress.menuItem("Edit->Delete Slide").select();
-//          System.out.println("Delete slide");
+            // System.out.println("Delete slide");
             sleep(5);
 
-        }else{
-//          writer.click(100, 220);
+        } else {
+            // writer.click(100, 220);
             typeKeys("1");
             typeKeys("<BACKSPACE>");
             typeKeys("<Enter>");
@@ -478,28 +436,23 @@ public class Filter {
         }
         sleep(5);
 
-//      typeKeys("<ctrl s>");
+        // typeKeys("<ctrl s>");
         app.dispatch(".uno:Save");
         tr = System.currentTimeMillis();
 
         int index = 0;
-        if(fileName.endsWith("odt") || fileName.endsWith("doc") || fileName.endsWith("docx"))
-        {
+        if (fileName.endsWith("odt") || fileName.endsWith("doc") || fileName.endsWith("docx")) {
             index = 5;
         }
-        if(fileName.endsWith("odp") || fileName.endsWith("ppt") || fileName.endsWith("pptx"))
-        {
+        if (fileName.endsWith("odp") || fileName.endsWith("ppt") || fileName.endsWith("pptx")) {
             index = 2;
         }
-        if(fileName.endsWith("ods") || fileName.endsWith("xls") || fileName.endsWith("xlsx"))
-        {
+        if (fileName.endsWith("ods") || fileName.endsWith("xls") || fileName.endsWith("xlsx")) {
             index = 4;
         }
-        while(true)
-        {
-//          System.out.println(statusbar("FWK_HID_STATUSBAR").getItemText(index));
-            if(statusbar("FWK_HID_STATUSBAR").getItemText(index).equals(" "))
-            {
+        while (true) {
+            // System.out.println(statusbar("FWK_HID_STATUSBAR").getItemText(index));
+            if (statusbar("FWK_HID_STATUSBAR").getItemText(index).equals(" ")) {
                 break;
             }
         }
@@ -507,18 +460,15 @@ public class Filter {
 
         sleep(2);
 
-        if(fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx"))
-        {
+        if (fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx")) {
             writer.menuItem("File->Close").select();
         }
 
-        if(fileName.contains("odp") || fileName.contains("ppt") || fileName.contains("pptx"))
-        {
+        if (fileName.contains("odp") || fileName.contains("ppt") || fileName.contains("pptx")) {
             impress.menuItem("File->Close").select();
         }
 
-        if(fileName.contains("ods") || fileName.contains("xls") || fileName.contains("xlsx"))
-        {
+        if (fileName.contains("ods") || fileName.contains("xls") || fileName.contains("xlsx")) {
             calc.menuItem("File->Close").select();
         }
         return tr;

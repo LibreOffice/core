@@ -21,21 +21,21 @@
 package testcase.gui.sc.rowcolumn;
 
 import static org.junit.Assert.*;
-import static testlib.gui.AppUtil.typeKeys;
+import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openoffice.test.common.Logger;
 
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
 
 public class InsertRowAndColumn {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -51,49 +51,40 @@ public class InsertRowAndColumn {
 
     /**
      * Insert new entire row and column
+     *
      * @throws Exception
      */
 
     @Test
-    public void testInsertEntireRowColumn(){
+    public void testInsertEntireRowColumn() {
 
-        //insert data in cell A2 and B2
+        // insert data in cell A2 and B2
         CalcUtil.selectRange("Sheet1.A2");
         typeKeys("123");
         CalcUtil.selectRange("Sheet1.B2");
         typeKeys("456");
 
-        //Set expected result after executing insert one row
-        String[][] expectedInsertRowResult = new String[][] {
-                {"",""},
-                {"",""},
-                {"123","456"},
-        };
+        // Set expected result after executing insert one row
+        String[][] expectedInsertRowResult = new String[][] { { "", "" }, { "", "" }, { "123", "456" }, };
 
-        //Select Cell A2
+        // Select Cell A2
         CalcUtil.selectRange("Sheet1.A2");
 
-
-
-        //Insert one entire Row via menu
+        // Insert one entire Row via menu
         calc.menuItem("Insert->Rows").select();
 
-        //Verify results after inserting one row
+        // Verify results after inserting one row
         assertArrayEquals("Verify results after inserting one row", expectedInsertRowResult, CalcUtil.getCellTexts("A1:B3"));
 
-        //Set expected result after executing insert column
-        String[][] expectedInsertColumnResult = new String[][] {
-                {"","",""},
-                {"","",""},
-                {"","123","456"},
-        };
-        //Select Cell A3
+        // Set expected result after executing insert column
+        String[][] expectedInsertColumnResult = new String[][] { { "", "", "" }, { "", "", "" }, { "", "123", "456" }, };
+        // Select Cell A3
         CalcUtil.selectRange("Sheet1.A3");
 
-        //Insert one entire Column via menu
+        // Insert one entire Column via menu
         calc.menuItem("Insert->Columns").select();
 
-        //Verify results after inserting one column
+        // Verify results after inserting one column
         assertArrayEquals("Verify results after inserting one column", expectedInsertColumnResult, CalcUtil.getCellTexts("A1:C3"));
 
     }

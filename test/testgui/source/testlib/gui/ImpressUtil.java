@@ -19,18 +19,17 @@
  *
  *************************************************************/
 
-
-
 package testlib.gui;
+
+import static testlib.gui.UIMap.*;
 
 import org.openoffice.test.vcl.widgets.VclWindow;
 
-import static testlib.gui.UIMap.*;
 public class ImpressUtil {
 
     public static VclWindow getCurView() {
-        VclWindow[] views = new VclWindow[]{impress, ImpressOutline, ImpressSlideSorter, ImpressHandout};
-        for(VclWindow w : views) {
+        VclWindow[] views = new VclWindow[] { impress, ImpressOutline, ImpressSlideSorter, ImpressHandout };
+        for (VclWindow w : views) {
             if (w.exists()) {
                 return w;
             }

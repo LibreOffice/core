@@ -21,20 +21,18 @@
 
 package testcase.gui.sd.table;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static testlib.gui.UIMap.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import testlib.gui.Log;
+import org.openoffice.test.common.Logger;
 
 public class ChangeTableFontEffectsProperty {
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -64,48 +62,48 @@ public class ChangeTableFontEffectsProperty {
         InsertTable.ok();
 
         // Verify if the table toolbar is active
-        assertTrue("Table Toolbar exist",Table_Toolbar.exists(3));
+        assertTrue("Table Toolbar exist", Table_Toolbar.exists(3));
 
         // open Table Properties Dialog
         app.dispatch(".uno:TableDialog", 3);
         EffectsPage.select();
         // select Font color
         EffectsPage_Color.select(1);
-        assertEquals("EffectsPage_Color is black",EffectsPage_Color.getSelText(), "Black");
+        assertEquals("EffectsPage_Color is black", EffectsPage_Color.getSelText(), "Black");
 
         // select Relief
         EffectsPage_Relief.select(0);
-        assertEquals("EffectsPage_Relief is no",EffectsPage_Relief.getSelText(), "(Without)");
+        assertEquals("EffectsPage_Relief is no", EffectsPage_Relief.getSelText(), "(Without)");
         EffectsPage_Outline.check();
-        assertTrue("EffectsPage_Outline is checked",EffectsPage_Outline.isChecked());
+        assertTrue("EffectsPage_Outline is checked", EffectsPage_Outline.isChecked());
         EffectsPage_Shadow.check();
-        assertTrue("EffectsPage_Shadow is checked",EffectsPage_Shadow.isChecked());
+        assertTrue("EffectsPage_Shadow is checked", EffectsPage_Shadow.isChecked());
 
         // select Overlining
         EffectsPage_Overline.select(1);
-        assertEquals("EffectsPage_Overline is first item",EffectsPage_Overline.getSelText(), EffectsPage_Overline.getItemText(1));
+        assertEquals("EffectsPage_Overline is first item", EffectsPage_Overline.getSelText(), EffectsPage_Overline.getItemText(1));
         EffectsPage_Overline_Color.select(1);
-        assertEquals("EffectsPage_Overline_Color is first item",EffectsPage_Overline_Color.getSelText(), EffectsPage_Overline_Color.getItemText(1));
+        assertEquals("EffectsPage_Overline_Color is first item", EffectsPage_Overline_Color.getSelText(), EffectsPage_Overline_Color.getItemText(1));
 
         // select Strikethrough
         EffectsPage_Strikeout.select(1);
-        assertEquals("EffectsPage_Strikeout is first item",EffectsPage_Strikeout.getSelText(), EffectsPage_Strikeout.getItemText(1));
+        assertEquals("EffectsPage_Strikeout is first item", EffectsPage_Strikeout.getSelText(), EffectsPage_Strikeout.getItemText(1));
 
         // select Underlining
         EffectsPage_Underline.select(1);
-        assertEquals("EffectsPage_Underline is first item",EffectsPage_Underline.getSelText(), EffectsPage_Underline.getItemText(1));
+        assertEquals("EffectsPage_Underline is first item", EffectsPage_Underline.getSelText(), EffectsPage_Underline.getItemText(1));
         EffectsPage_Underline_Color.select(1);
-        assertEquals("EffectsPage_Underline_Color is first item",EffectsPage_Underline_Color.getSelText(), EffectsPage_Underline_Color.getItemText(1));
+        assertEquals("EffectsPage_Underline_Color is first item", EffectsPage_Underline_Color.getSelText(), EffectsPage_Underline_Color.getItemText(1));
 
         // select individual workds
         EffectsPage_InvidiualWords.check();
-        assertTrue("EffectsPage_InvidiualWords is checked",EffectsPage_InvidiualWords.isChecked());
+        assertTrue("EffectsPage_InvidiualWords is checked", EffectsPage_InvidiualWords.isChecked());
 
         // select Emphasis Mark
-        //EffectsPage_Emphasis.select(1);
-        //assertEquals(EffectsPage_Emphasis.getSelText(), "Dot");
-        //EffectsPage_Position.select(1);
-        //assertEquals(EffectsPage_Position.getSelText(), "Below text");
+        // EffectsPage_Emphasis.select(1);
+        // assertEquals(EffectsPage_Emphasis.getSelText(), "Dot");
+        // EffectsPage_Position.select(1);
+        // assertEquals(EffectsPage_Position.getSelText(), "Below text");
         EffectsPage.ok();
 
     }

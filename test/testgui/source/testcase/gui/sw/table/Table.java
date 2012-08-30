@@ -19,23 +19,22 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 package testcase.gui.sw.table;
 
+import static org.junit.Assert.*;
+import static org.openoffice.test.vcl.Tester.*;
 import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
-import static org.junit.Assert.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openoffice.test.common.Logger;
 import org.openoffice.test.common.SystemUtil;
-
-import testlib.gui.Log;
 
 /**
  *
@@ -43,7 +42,7 @@ import testlib.gui.Log;
 public class Table {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -57,12 +56,13 @@ public class Table {
 
     /**
      * Test convert table to text in text document
+     *
      * @throws Exception
      */
     @Test
-    public void testConvertTableToText() throws Exception{
+    public void testConvertTableToText() throws Exception {
 
-        //Create a new text document
+        // Create a new text document
         app.dispatch("private:factory/swriter");
 
         // Insert a table and input some data
@@ -75,14 +75,18 @@ public class Table {
         // Convert table to text
         app.dispatch(".uno:ConvertTableToText");
         assertTrue("Convert Table to Text dialog pop up", writer_ConvertTableToTextDlg.exists());
-//      typeKeys("<enter>");
-        writer_ConvertTableToTextDlg.ok();  // "Enter" does not work on linux
+        // typeKeys("<enter>");
+        writer_ConvertTableToTextDlg.ok(); // "Enter" does not work on linux
 
         // Verify if text is converted successfully
         app.dispatch(".uno:SelectAll");
         app.dispatch(".uno:Copy");
         if (SystemUtil.isWindows())
-            assertEquals("Converted text", "1\t2\r\n3\t4\r\n", app.getClipboard()); // in windows, \n is \r\n
+            assertEquals("Converted text", "1\t2\r\n3\t4\r\n", app.getClipboard()); // in
+                                                                                    // windows,
+                                                                                    // \n
+                                                                                    // is
+                                                                                    // \r\n
         else
             assertEquals("Converted text", "1\t2\n3\t4\n", app.getClipboard());
     }

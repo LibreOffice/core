@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 package testsuite.gui;
 
 import java.util.ArrayList;
@@ -36,19 +34,16 @@ import testcase.gui.TestSample;
 import testsuite.gui.TestSampleAsOriginal.SetParams;
 
 @RunWith(Suite.class)
-@SuiteClasses({SetParams.class, TestSample.class })
+@SuiteClasses({ SetParams.class, TestSample.class })
 public class TestSampleAsOriginal {
 
     @RunWith(Parameterized.class)
     public static class SetParams {
         @Parameters
-        public static Collection<Object[]>  data() {
+        public static Collection<Object[]> data() {
             TestSample.repos = "../samples";
-            TestSample.params = new String[][]{
-                {".*\\.((odt)|(ott)|(sxw)|(stw)|(doc)|(dot))$", null, "writer"},
-                {".*\\.((ods)|(ots)|(sxc)|(stc)|(xls)|(xlt))$", null, "calc"},
-                {".*\\.((odp)|(otp)|(sxi)|(sti)|(ppt)|(pot))$", null, "impress"}
-            };
+            TestSample.params = new String[][] { { ".*\\.((odt)|(ott)|(sxw)|(stw)|(doc)|(dot))$", null, "writer" },
+                    { ".*\\.((ods)|(ots)|(sxc)|(stc)|(xls)|(xlt))$", null, "calc" }, { ".*\\.((odp)|(otp)|(sxi)|(sti)|(ppt)|(pot))$", null, "impress" } };
             return new ArrayList<Object[]>();
         }
     }

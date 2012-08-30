@@ -19,17 +19,13 @@
  *
  *************************************************************/
 
-
-
 package testcase.gui.bvt;
 
-import static org.junit.Assert.assertTrue;
-import static org.openoffice.test.common.FileUtil.readFileAsString;
-import static org.openoffice.test.common.Testspace.prepareData;
-import static testlib.gui.AppUtil.submitOpenDlg;
-import static testlib.gui.UIMap.app;
-import static testlib.gui.UIMap.oo;
-import static testlib.gui.UIMap.writer;
+import static org.junit.Assert.*;
+import static org.openoffice.test.common.FileUtil.*;
+import static org.openoffice.test.common.Testspace.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 
 import java.io.File;
 
@@ -37,21 +33,20 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import testlib.gui.Log;
+import org.openoffice.test.common.Logger;
 
 public class SmokeTest {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     File smoketestOutput;
 
     @Before
     public void setUp() throws Exception {
-//      app.getOpenOffice().cleanUserInstallation();
-//      app.start();
-        app.start(true);    // Default to clean user installation
+        // app.getOpenOffice().cleanUserInstallation();
+        // app.start();
+        app.start(true); // Default to clean user installation
         smoketestOutput = new File(oo.getUserInstallation(), "user/temp");
     }
 
@@ -72,7 +67,7 @@ public class SmokeTest {
         app.dispatch("vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?language=Basic&location=document", 120);
         String smoketestlog = readFileAsString(new File(smoketestOutput, "smoketest.log"));
         String testclosurelog = readFileAsString(new File(smoketestOutput, "testclosure.log"));
-        LOG.info(smoketestlog + "\n" + testclosurelog);
+        log.info(smoketestlog + "\n" + testclosurelog);
         assertTrue("No Error", !smoketestlog.contains("error") && !testclosurelog.contains("error"));
 
     }

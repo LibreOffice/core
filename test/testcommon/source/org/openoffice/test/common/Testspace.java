@@ -32,9 +32,22 @@ import java.io.InputStream;
  */
 public class Testspace {
 
-    private static final File testspace = new File(System.getProperty("testspace", "../testspace"));
+    private static final File testspace = initTestspace();
 
     private static final File testdata = new File(System.getProperty("testdata", "data"));
+
+    private static File initTestspace() {
+        String v = System.getProperty("testspace");
+        File file = null;
+        if (v == null) {
+            file = new File("../testspace");
+            System.setProperty("testspace", file.getAbsolutePath());
+        } else {
+            file = new File(v);
+        }
+
+        return file;
+    }
 
     public static String getPath() {
         return testspace.getAbsolutePath();
@@ -61,7 +74,7 @@ public class Testspace {
     }
 
     public static String prepareData(String dataFilePath) {
-        return prepareData(dataFilePath, "data/" + dataFilePath);
+        return prepareData(dataFilePath, "temp/" + dataFilePath);
     }
 
     public static String prepareData(String dataFilePath, String to) {

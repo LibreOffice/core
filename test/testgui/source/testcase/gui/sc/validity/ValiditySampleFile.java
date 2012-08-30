@@ -19,27 +19,25 @@
  *
  *************************************************************/
 
-
-
 package testcase.gui.sc.validity;
 
-import static testlib.gui.AppUtil.*;
-import static testlib.gui.UIMap.*;
 import static org.junit.Assert.*;
 import static org.openoffice.test.common.Testspace.*;
-import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openoffice.test.common.Logger;
 
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
 
 public class ValiditySampleFile {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -57,7 +55,7 @@ public class ValiditySampleFile {
      * @throws Exception
      */
     @Test
-    public void testFFCIgnoreBlank() throws Exception{
+    public void testFFCIgnoreBlank() throws Exception {
         // Open sample file
         String file = prepareData("sc/FFC252FFCSC_XML_Datarange0235.xls");
         app.dispatch(".uno:Open", 3);
@@ -66,11 +64,11 @@ public class ValiditySampleFile {
 
         CalcUtil.selectRange("D5");
         SC_InputBar_Input.activate();
-        for(int i=1;i<=10;i++)
+        for (int i = 1; i <= 10; i++)
             typeKeys("<backspace>");
         typeKeys("<enter>");
 
-        assertEquals("",CalcUtil.getCellText("D5"));
+        assertEquals("", CalcUtil.getCellText("D5"));
     }
 
     /**
@@ -79,8 +77,8 @@ public class ValiditySampleFile {
      * @throws Exception
      */
     @Test
-    public void testFFCNotIgnoreBlank() throws Exception{
-        //open sample file
+    public void testFFCNotIgnoreBlank() throws Exception {
+        // open sample file
         String file = prepareData("sc/FFC252FFCSC_XML_Datarange0205.xls");
         app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
@@ -91,7 +89,7 @@ public class ValiditySampleFile {
         typeKeys("<backspace><enter>");
 
         ActiveMsgBox.ok();
-        assertEquals("8",CalcUtil.getCellText("F5"));
+        assertEquals("8", CalcUtil.getCellText("F5"));
     }
 
     /**
@@ -99,7 +97,7 @@ public class ValiditySampleFile {
      */
     @Test
     public void testNotLockCellFromValidityCell() {
-        //open sample file on data path
+        // open sample file on data path
         String file = prepareData("sc/sampledata.ods");
         app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
@@ -110,6 +108,6 @@ public class ValiditySampleFile {
         CalcUtil.selectRange("F17");
         typeKeys("Test<enter>");
 
-        assertEquals("Test",CalcUtil.getCellText("F17"));
+        assertEquals("Test", CalcUtil.getCellText("F17"));
     }
 }

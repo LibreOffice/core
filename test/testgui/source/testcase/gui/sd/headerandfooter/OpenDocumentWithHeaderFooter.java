@@ -19,33 +19,31 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 package testcase.gui.sd.headerandfooter;
+
+import static org.junit.Assert.*;
 import static org.openoffice.test.common.Testspace.*;
 import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
-import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
-
-import testlib.gui.Log;
+import org.openoffice.test.common.Logger;
 
 public class OpenDocumentWithHeaderFooter {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
-        app.start(true);    // Bug 120476
+        app.start(true); // Bug 120476
     }
 
     @After
@@ -54,30 +52,31 @@ public class OpenDocumentWithHeaderFooter {
     }
 
     /**
-     * Test open AOO3.4 presentation with header and footer.
-     * edit and save to ODP
+     * Test open AOO3.4 presentation with header and footer. edit and save to
+     * ODP
+     *
      * @throws Exception
      */
     @Test
-    public void testOpenAOO34WithHeaderFooter() throws Exception{
-        //open sample file
+    public void testOpenAOO34WithHeaderFooter() throws Exception {
+        // open sample file
         String file = prepareData("sd/AOO3.4HeaderFooter.odp");
         app.dispatch(".uno:Open");
         submitOpenDlg(file);
         impress.waitForExistence(10, 2);
 
-        //check after reopen
+        // check after reopen
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals("fixed date",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("footer test",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals("fixed date", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("footer test", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
 
         SD_SlideNumAsFooterOnSlide.uncheck();
         SD_ApplyToAllButtonOnSlideFooter.click();
 
-        //save to odp and reopen
+        // save to odp and reopen
         app.dispatch(".uno:SaveAs");
         String saveTo2 = getPath("temp/" + "AOO3.4HeaderFooter.odp");
         FileUtil.deleteFile(saveTo2);
@@ -86,39 +85,39 @@ public class OpenDocumentWithHeaderFooter {
 
         openStartcenter();
         app.dispatch(".uno:Open");
-        String openFrom2=getPath("temp/" + "AOO3.4HeaderFooter.odp");
+        String openFrom2 = getPath("temp/" + "AOO3.4HeaderFooter.odp");
         submitOpenDlg(openFrom2);
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
-        //end-save to odp and reopen
+        assertEquals(false, SD_SlideNumAsFooterOnSlide.isChecked());
+        // end-save to odp and reopen
     }
 
     /**
-     * Test open ppt file with header and footer.
-     * edit and save to PPT/ODP
+     * Test open ppt file with header and footer. edit and save to PPT/ODP
+     *
      * @throws Exception
      */
     @Test
-    public void testOpenPPTWithHeaderFooter() throws Exception{
-        //open sample file
+    public void testOpenPPTWithHeaderFooter() throws Exception {
+        // open sample file
         String file = prepareData("sd/gfdd.ppt");
         app.dispatch(".uno:Open");
         submitOpenDlg(file);
         impress.waitForExistence(10, 2);
 
-        //check after reopen
+        // check after reopen
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
-        assertEquals("testdte",SD_FixedDateAndTimeOnSlideInput.getText());
-        assertEquals(true,SD_FooterTextOnSlide.isChecked());
-        assertEquals("yesy",SD_FooterTextOnSlideInput.getText());
-        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+        assertEquals(true, SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals("testdte", SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true, SD_FooterTextOnSlide.isChecked());
+        assertEquals("yesy", SD_FooterTextOnSlideInput.getText());
+        assertEquals(true, SD_SlideNumAsFooterOnSlide.isChecked());
 
         SD_SlideNumAsFooterOnSlide.uncheck();
         SD_ApplyToAllButtonOnSlideFooter.click();
 
-        //save to ppt and reopen
+        // save to ppt and reopen
         app.dispatch(".uno:SaveAs");
         String saveTo = getPath("temp/" + "gfdd.ppt");
         FileUtil.deleteFile(saveTo);
@@ -129,20 +128,20 @@ public class OpenDocumentWithHeaderFooter {
 
         openStartcenter();
         app.dispatch(".uno:Open");
-        String openFrom=getPath("temp/" + "gfdd.ppt");
+        String openFrom = getPath("temp/" + "gfdd.ppt");
         submitOpenDlg(openFrom);
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
-        //end-save to ppt and reopen
+        assertEquals(false, SD_SlideNumAsFooterOnSlide.isChecked());
+        // end-save to ppt and reopen
 
-        //close Header and Footer dialog.
+        // close Header and Footer dialog.
         SD_ApplyButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
-        //end
+        // end
 
-        //save to odp and reopen
+        // save to odp and reopen
         app.dispatch(".uno:SaveAs");
         String saveTo2 = getPath("temp/" + "gfdd.odp");
         FileUtil.deleteFile(saveTo2);
@@ -151,11 +150,11 @@ public class OpenDocumentWithHeaderFooter {
 
         openStartcenter();
         app.dispatch(".uno:Open");
-        String openFrom2=getPath("temp/" + "gfdd.odp");
+        String openFrom2 = getPath("temp/" + "gfdd.odp");
         submitOpenDlg(openFrom2);
 
         app.dispatch(".uno:HeaderAndFooter");
-        assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
-        //end-save to odp and reopen
+        assertEquals(false, SD_SlideNumAsFooterOnSlide.isChecked());
+        // end-save to odp and reopen
     }
 }

@@ -19,36 +19,30 @@
  *
  *************************************************************/
 
-
-
 package testcase.gui.sc.validity;
 
+import static org.junit.Assert.*;
 import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
 
 import java.io.File;
 
 import org.junit.After;
-import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openoffice.test.common.Logger;
 import org.openoffice.test.vcl.IDList;
 import org.openoffice.test.vcl.widgets.VclMessageBox;
 
-
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
-
 
 public class ValidityDateSupport1024Columns {
     private static IDList idList = new IDList(new File("./ids"));
     public static final VclMessageBox ActiveMsgBox = new VclMessageBox(idList.getId("UID_ACTIVE"), "Message on message box.");
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -61,7 +55,8 @@ public class ValidityDateSupport1024Columns {
     }
 
     /**
-     * test Allow Greater than or equal to Date type in Validity, support 1024 columns.
+     * test Allow Greater than or equal to Date type in Validity, support 1024
+     * columns.
      */
     @Test
     public void testValidityDateSupport1024Columns() {
@@ -71,7 +66,7 @@ public class ValidityDateSupport1024Columns {
 
         SC_ValidityCriteriaTabpage.select();
         SC_ValidityCriteriaAllowList.select(3); // "Date"
-        SC_ValidityDecimalCompareOperator.select(2);    // "greater than"
+        SC_ValidityDecimalCompareOperator.select(2); // "greater than"
         SC_ValiditySourceInput.setText("01/01/08");
         SC_ValidityErrorAlertTabPage.select();
         SC_ValidityShowErrorMessage.check();
@@ -82,26 +77,25 @@ public class ValidityDateSupport1024Columns {
         CalcUtil.selectRange("ALM1001");
         SC_InputBar_Input.activate();
         typeKeys("02/01/08<enter>");
-        assertEquals("02/01/08",CalcUtil.getCellText("ALM1001"));
+        assertEquals("02/01/08", CalcUtil.getCellText("ALM1001"));
 
         CalcUtil.selectRange("ALM1002");
         SC_InputBar_Input.activate();
         typeKeys("01/02/08<enter>");
-        assertEquals("01/02/08",CalcUtil.getCellText("ALM1002"));
+        assertEquals("01/02/08", CalcUtil.getCellText("ALM1002"));
 
         CalcUtil.selectRange("ALM1003");
         SC_InputBar_Input.activate();
         typeKeys("01/01/08<enter>");
-        assertEquals("Invalid value",ActiveMsgBox.getMessage());
+        assertEquals("Invalid value", ActiveMsgBox.getMessage());
         ActiveMsgBox.ok();
-        assertEquals("",CalcUtil.getCellText("ALM1003"));
+        assertEquals("", CalcUtil.getCellText("ALM1003"));
 
         CalcUtil.selectRange("AML1003");
         SC_InputBar_Input.activate();
         typeKeys("12/31/07<enter>");
-        assertEquals("Invalid value",ActiveMsgBox.getMessage());
+        assertEquals("Invalid value", ActiveMsgBox.getMessage());
         ActiveMsgBox.ok();
-        assertEquals("",CalcUtil.getCellText("AML1003"));
+        assertEquals("", CalcUtil.getCellText("AML1003"));
     }
 }
-

@@ -32,7 +32,7 @@
     <property name="junit.home" value="${env.JUNIT_HOME}" />
     <property name="testspace" value="${env.TESTSPACE}" />
     <property name="classes" value="${testspace}/class" />
-    <property name="dist" value="${testspace}/dist" />
+    <property name="dist" value="." />
     <property name="test.classes" value="testcase/gui/bvt/*.class" />
     <property name="test.output" value="${testspace}/output" />
     <property name="test.result" value="${test.output}/result" />
@@ -54,9 +54,12 @@
         </copy>
     </target>
 
-    <target name="testcommon.compile" depends="testcommon.init">
+    <target name="testcommon.compile" depends="testcommon.init, prepare.junit">
         <javac destdir="${classes}" debug="on" source="1.6" includeantruntime="false">
             <src path="testcommon/source"/>
+            <classpath>
+                <path refid="junit.classpath"/>
+            </classpath>
         </javac>
     </target>
 
@@ -94,7 +97,7 @@
         </copy>
     </target>
 
-    <target name="testuno.compile" depends="testuno.init, prepare.junit">
+    <target name="testuno.compile" depends="testuno.init">
         <path id="uno.classpath">
             <fileset dir="${openoffice.home}" erroronmissingdir="false">
                 <include name="**/juh.jar" />
@@ -132,9 +135,11 @@
     <target name="compile" depends="testcommon.init, testcommon.compile, testgui.init, testgui.compile, testuno.init, testuno.compile" description="Compile source code">
     </target>
 
-    <target name="dist" depends="compile">
+    <target name="dist">
         <tstamp />
         <property name="dist.archive" value="aoo_test_${DSTAMP}.zip" />
+        <zip destfile="${dist}/${dist.archive}" basedir="." update="true" includes="testcommon/**,testgui/**,testuno/**,build.xml,build.example.properties,external/**,reportstyle/**" excludes="**/bin/**">
+        </zip>
     </target>
 
     <target name="check.build" description="Check the build context">

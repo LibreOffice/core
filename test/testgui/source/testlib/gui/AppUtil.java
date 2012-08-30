@@ -19,9 +19,8 @@
  *
  *************************************************************/
 
-
-
 package testlib.gui;
+
 import static testlib.gui.UIMap.*;
 
 import org.openoffice.test.common.Condition;
@@ -72,13 +71,11 @@ public class AppUtil extends Tester {
 
     }
 
-
     public static void submitOpenDlg(String path) {
         FilePicker_Path.setText(path);
         FilePicker_Open.click();
         sleep(1);
     }
-
 
     public static void submitSaveDlg(String path) {
         FileSave_Path.setText(path);
@@ -141,7 +138,7 @@ public class AppUtil extends Tester {
 
                 boolean shown = false;
 
-                for(VclWindow w : windows) {
+                for (VclWindow w : windows) {
                     if (w.exists()) {
                         shown = true;
                         break;
@@ -165,6 +162,6 @@ public class AppUtil extends Tester {
                 return true;
             }
 
-        }.waitForTrue("Time out wait window to be active.",  120, 2);
+        }.waitForTrue("Time out wait window to be active.", 120, 2);
     }
 }

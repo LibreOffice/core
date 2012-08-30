@@ -24,10 +24,9 @@
  */
 package testcase.gui.svt.sw;
 
-import static org.openoffice.test.common.Testspace.prepareData;
-import static testlib.gui.AppUtil.submitOpenDlg;
-import static testlib.gui.UIMap.app;
-import static testlib.gui.UIMap.writer;
+import static org.openoffice.test.common.Testspace.*;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
 
 import java.io.FileOutputStream;
@@ -39,16 +38,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.OpenOffice;
+import org.openoffice.test.common.Logger;
 import org.openoffice.test.common.SystemUtil;
 import org.openoffice.test.common.Testspace;
-import static org.openoffice.test.vcl.Tester.*;
-
-import testlib.gui.Log;
 
 public class OperationOnSample1 {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     private PrintStream result = null;
 
@@ -63,18 +60,15 @@ public class OperationOnSample1 {
         app.start();
         result = new PrintStream(new FileOutputStream(Testspace.getFile("output/svt_sw_sample1.csv")));
         String processSoffice = null;
-        if(SystemUtil.isWindows())
-        {
+        if (SystemUtil.isWindows()) {
             processSoffice = ".*soffice\\.exe.*";
-        }
-        else
-        {
+        } else {
             processSoffice = ".*soffice\\.bin.*";
         }
         HashMap<String, Object> proccessInfo = SystemUtil.findProcess(processSoffice);
-        pid = (String)proccessInfo.get("pid");
+        pid = (String) proccessInfo.get("pid");
         result.println("Iterator,Time,Memory(KB),CPU(%)");
-        LOG.info("Result will be saved to " + Testspace.getPath("output/svt_sw_sample1.csv"));
+        log.info("Result will be saved to " + Testspace.getPath("output/svt_sw_sample1.csv"));
     }
 
     @After
@@ -84,10 +78,9 @@ public class OperationOnSample1 {
     }
 
     @Test
-    public void operationOnSample1() throws Exception{
+    public void operationOnSample1() throws Exception {
         String file = prepareData("svt/ScenarioDesign.odt");
-        for(int i = 0; i < 1000; i++)
-        {
+        for (int i = 0; i < 1000; i++) {
             System.out.println("This is the " + i + " round");
             app.dispatch(".uno:Open");
             submitOpenDlg(file);
@@ -111,7 +104,7 @@ public class OperationOnSample1 {
             sleep(2);
 
             writer.typeKeys("<enter>");
-//          writer.menuItem("Table->Insert->Rows...").select();
+            // writer.menuItem("Table->Insert->Rows...").select();
             app.dispatch(".uno:InsertRowDialog");
             Writer_InsertRowsDlg.ok();
             sleep(2);
@@ -132,7 +125,7 @@ public class OperationOnSample1 {
 
             HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
             String record = i + "," + System.currentTimeMillis() + "," + perfData.get("rss") + "," + perfData.get("pcpu");
-            LOG.info("Record: " + record);
+            log.info("Record: " + record);
             result.println(record);
             result.flush();
 

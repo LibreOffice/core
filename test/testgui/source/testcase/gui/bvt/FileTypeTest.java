@@ -24,28 +24,11 @@
  */
 package testcase.gui.bvt;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.openoffice.test.common.Testspace.getPath;
-import static org.openoffice.test.common.Testspace.prepareData;
-import static org.openoffice.test.vcl.Tester.sleep;
-import static org.openoffice.test.vcl.Tester.typeText;
-import static testlib.gui.AppUtil.openStartcenter;
-import static testlib.gui.AppUtil.submitOpenDlg;
-import static testlib.gui.AppUtil.submitSaveDlg;
-import static testlib.gui.AppUtil.typeKeys;
-import static testlib.gui.UIMap.AlienFormatDlg;
-import static testlib.gui.UIMap.EffectsPage;
-import static testlib.gui.UIMap.EffectsPage_Color;
-import static testlib.gui.UIMap.PresentationWizard;
-import static testlib.gui.UIMap.app;
-import static testlib.gui.UIMap.calc;
-import static testlib.gui.UIMap.draw;
-import static testlib.gui.UIMap.impress;
-import static testlib.gui.UIMap.math_EditWindow;
-import static testlib.gui.UIMap.math_ElementsWindow;
-import static testlib.gui.UIMap.writer;
+import static org.junit.Assert.*;
+import static org.openoffice.test.common.Testspace.*;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 
 import java.awt.Rectangle;
 
@@ -56,9 +39,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.GraphicsUtil;
+import org.openoffice.test.common.Logger;
 
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
 
 /**
  *
@@ -66,7 +49,7 @@ import testlib.gui.Log;
 public class FileTypeTest {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -131,8 +114,7 @@ public class FileTypeTest {
         sleep(1);
 
         // Verify the text via system clip board
-        Assert.assertEquals("The typed text into writer", text,
-                app.getClipboard());
+        Assert.assertEquals("The typed text into writer", text, app.getClipboard());
 
         // Set the text style
         writer.openContextMenu();
@@ -163,8 +145,7 @@ public class FileTypeTest {
         typeKeys("<$copy>");
         sleep(1);
         // Verify if the text still exists in the file
-        Assert.assertEquals("The typed text into writer is saved!", text,
-                app.getClipboard());
+        Assert.assertEquals("The typed text into writer is saved!", text, app.getClipboard());
     }
 
     @Test
@@ -216,8 +197,7 @@ public class FileTypeTest {
         app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
-        Assert.assertEquals("The typed text is saved!", text,
-                CalcUtil.getCellText("A65536"));
+        Assert.assertEquals("The typed text is saved!", text, CalcUtil.getCellText("A65536"));
     }
 
     @Test
@@ -256,11 +236,10 @@ public class FileTypeTest {
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
         impress.waitForExistence(10, 2);
+        sleep(2);
         impress.click(0.01, 0.01);
         typeKeys(text);
-        sleep(2);
         impress.doubleClick(0.1, 0.5);
-
         app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
@@ -279,8 +258,7 @@ public class FileTypeTest {
         // app.setClipboard(".wrong");
         typeKeys("<$copy>");
         sleep(1);
-        Assert.assertEquals("The typed text is saved!", text, app
-                .getClipboard().trim());
+        Assert.assertEquals("The typed text is saved!", text, app.getClipboard().trim());
     }
 
     // drawing
@@ -343,8 +321,7 @@ public class FileTypeTest {
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(
-                draw.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(draw.getScreenRectangle(), 0xFF00FF00);
         assertNotNull("Green rectangle: " + rectangle, rectangle);
 
         // Save the drawing
@@ -366,8 +343,7 @@ public class FileTypeTest {
         draw.waitForExistence(10, 2);
 
         // Verify if the picture still exists in the file
-        Rectangle rectangle1 = GraphicsUtil.findRectangle(
-                draw.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle1 = GraphicsUtil.findRectangle(draw.getScreenRectangle(), 0xFF00FF00);
         assertNotNull("Green rectangle: " + rectangle1, rectangle1);
     }
 
@@ -406,14 +382,10 @@ public class FileTypeTest {
      */
     public void saveNewMath(String filename) {
         String saveTo = getPath("temp/" + filename);
-
         // Create a new math
         app.dispatch("private:factory/smath");
         math_EditWindow.waitForExistence(10, 2);
-
-        // Verify if the Elements window is active
-        assertTrue(math_ElementsWindow.exists(3));
-
+        sleep(2);
         // Insert a formula
         String text = "5 times 3 = 15";
         typeText(text);
@@ -446,8 +418,7 @@ public class FileTypeTest {
         app.dispatch(".uno:Select");
         typeKeys("<$copy>");
         sleep(1);
-        assertEquals("The typed formula into math is saved", text,
-                app.getClipboard());
+        assertEquals("The typed formula into math is saved", text, app.getClipboard());
 
         // Close the file to avoid the app closing the Elements window
         // automatically

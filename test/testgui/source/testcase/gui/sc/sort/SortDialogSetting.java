@@ -19,27 +19,26 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 package testcase.gui.sc.sort;
 
-import static testlib.gui.AppUtil.*;
-import static testlib.gui.UIMap.*;
 import static org.junit.Assert.*;
 import static org.openoffice.test.common.Testspace.*;
 import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
+import org.openoffice.test.common.Logger;
 
 import testlib.gui.CalcUtil;
-import testlib.gui.Log;
 
 /**
  * Test Data->Sort dialog setting
@@ -47,7 +46,7 @@ import testlib.gui.Log;
 public class SortDialogSetting {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     @Before
     public void setUp() throws Exception {
@@ -65,30 +64,20 @@ public class SortDialogSetting {
 
     /**
      * Test sort with options setting: case sensitive
+     *
      * @throws Exception
      */
     @Test
-    public void testSortOptionsCaseSensitive() throws Exception{
+    public void testSortOptionsCaseSensitive() throws Exception {
 
         // Input some data: A1~A6: 1ColumnName,D,C,B,A,a
-        String[][] data = new String[][] {
-                {"D"},
-                {"C"},
-                {"B"},
-                {"A"},
-                {"a"},
-        };
-        String[][] expectedSortedResult = new String[][] {
-                {"a"},
-                {"A"},
-                {"B"},
-                {"C"},
-                {"D"},
-        };
+        String[][] data = new String[][] { { "D" }, { "C" }, { "B" }, { "A" }, { "a" }, };
+        String[][] expectedSortedResult = new String[][] { { "a" }, { "A" }, { "B" }, { "C" }, { "D" }, };
         CalcUtil.selectRange("A1");
         typeKeys("1ColumnName<down>D<down>C<down>B<down>A<down>a<down>");
         CalcUtil.selectRange("A6");
-        app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first letter automatically
+        app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first
+                                                // letter automatically
 
         // "Data->Sort...", choose "Ascending", check "Case sensitive"
         app.dispatch(".uno:DataSort");
@@ -122,28 +111,22 @@ public class SortDialogSetting {
 
     /**
      * Test sort with options setting: copy sort result to
+     *
      * @throws Exception
      */
     @Ignore("Bug 119035")
-    public void testSortOptionsCopyResultTo() throws Exception{
+    public void testSortOptionsCopyResultTo() throws Exception {
 
         // Input some data
-        //      String[][] data = new String[][] {
-        //              {"3", "D"},
-        //              {"5", "FLK"},
-        //              {"4", "E"},
-        //              {"2", "BC"},
-        //              {"6", "GE"},
-        //              {"1", "AB"},
-        //      };
-        String[][] expectedSortedResult = new String[][] {
-                {"1", "AB"},
-                {"2", "BC"},
-                {"3", "D"},
-                {"4", "E"},
-                {"5", "FLK"},
-                {"6", "GE"},
-        };
+        // String[][] data = new String[][] {
+        // {"3", "D"},
+        // {"5", "FLK"},
+        // {"4", "E"},
+        // {"2", "BC"},
+        // {"6", "GE"},
+        // {"1", "AB"},
+        // };
+        String[][] expectedSortedResult = new String[][] { { "1", "AB" }, { "2", "BC" }, { "3", "D" }, { "4", "E" }, { "5", "FLK" }, { "6", "GE" }, };
         CalcUtil.selectRange("A1");
         typeKeys("3<down>5<down>4<down>2<down>6<down>1");
         CalcUtil.selectRange("B1");
@@ -165,7 +148,8 @@ public class SortDialogSetting {
         app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResult, CalcUtil.getCellTexts("$Sheet3.$A4:$B9"));
 
-        // Move focus to sheet2 then select a cell range, Insert->Names->Define...
+        // Move focus to sheet2 then select a cell range,
+        // Insert->Names->Define...
         CalcUtil.selectRange("$Sheet2.$A1:$B3");
         app.dispatch(".uno:DefineName");
         DefineNamesDlg_NameEdit.setText("cellRange");
@@ -206,36 +190,16 @@ public class SortDialogSetting {
 
     /**
      * Test sort criteria: sort first by
+     *
      * @throws Exception
      */
     @Test
-    public void testSortCriteriaSortFirstBy() throws Exception{
+    public void testSortCriteriaSortFirstBy() throws Exception {
 
         // Input some data
-        String[][] data = new String[][] {
-                {"3", "D"},
-                {"5", "FLK"},
-                {"4", "E"},
-                {"2", "BC"},
-                {"6", "GE"},
-                {"1", "AB"},
-        };
-        String[][] expectedResultSortByColumnBAscending = new String[][] {
-                {"1", "AB"},
-                {"2", "BC"},
-                {"3", "D"},
-                {"4", "E"},
-                {"5", "FLK"},
-                {"6", "GE"},
-        };
-        String[][] expectedResultSortByColumnADescending = new String[][] {
-                {"6", "GE"},
-                {"5", "FLK"},
-                {"4", "E"},
-                {"3", "D"},
-                {"2", "BC"},
-                {"1", "AB"},
-        };
+        String[][] data = new String[][] { { "3", "D" }, { "5", "FLK" }, { "4", "E" }, { "2", "BC" }, { "6", "GE" }, { "1", "AB" }, };
+        String[][] expectedResultSortByColumnBAscending = new String[][] { { "1", "AB" }, { "2", "BC" }, { "3", "D" }, { "4", "E" }, { "5", "FLK" }, { "6", "GE" }, };
+        String[][] expectedResultSortByColumnADescending = new String[][] { { "6", "GE" }, { "5", "FLK" }, { "4", "E" }, { "3", "D" }, { "2", "BC" }, { "1", "AB" }, };
         CalcUtil.selectRange("A1");
         typeKeys("3<down>5<down>4<down>2<down>6<down>1");
         CalcUtil.selectRange("B1");
@@ -280,36 +244,16 @@ public class SortDialogSetting {
 
     /**
      * Test sort criteria: sort second by
+     *
      * @throws Exception
      */
     @Test
-    public void testSortCriteriaSortSecondBy() throws Exception{
+    public void testSortCriteriaSortSecondBy() throws Exception {
 
         // Input some data
-        String[][] data = new String[][] {
-                {"3", "D"},
-                {"5", "FLK"},
-                {"4", "E"},
-                {"1", "AB"},
-                {"6", "GE"},
-                {"2", "AB"},
-        };
-        String[][] expectedResultSortFirstByB = new String[][] {
-                {"1", "AB"},
-                {"2", "AB"},
-                {"3", "D"},
-                {"4", "E"},
-                {"5", "FLK"},
-                {"6", "GE"},
-        };
-        String[][] expectedResultSortSecondByA= new String[][] {
-                {"2", "AB"},
-                {"1", "AB"},
-                {"3", "D"},
-                {"4", "E"},
-                {"5", "FLK"},
-                {"6", "GE"},
-        };
+        String[][] data = new String[][] { { "3", "D" }, { "5", "FLK" }, { "4", "E" }, { "1", "AB" }, { "6", "GE" }, { "2", "AB" }, };
+        String[][] expectedResultSortFirstByB = new String[][] { { "1", "AB" }, { "2", "AB" }, { "3", "D" }, { "4", "E" }, { "5", "FLK" }, { "6", "GE" }, };
+        String[][] expectedResultSortSecondByA = new String[][] { { "2", "AB" }, { "1", "AB" }, { "3", "D" }, { "4", "E" }, { "5", "FLK" }, { "6", "GE" }, };
         CalcUtil.selectRange("A1");
         typeKeys("3<down>5<down>4<down>1<down>6<down>2");
         CalcUtil.selectRange("B1");
@@ -339,7 +283,8 @@ public class SortDialogSetting {
         app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
-        // Reopen, "Data->Sort...", sort first by Column B "Ascending", sort second by Column A "Descending"
+        // Reopen, "Data->Sort...", sort first by Column B "Ascending", sort
+        // second by Column A "Descending"
         app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
@@ -356,56 +301,21 @@ public class SortDialogSetting {
 
     /**
      * Test sort criteria: sort third by
+     *
      * @throws Exception
      */
     @Test
-    public void testSortCriteriaSortThirdBy() throws Exception{
+    public void testSortCriteriaSortThirdBy() throws Exception {
 
         // Input some data
-        String[][] data = new String[][] {
-                {"3", "AB", "2"},
-                {"8", "FLK", "5"},
-                {"6", "E", "4"},
-                {"1", "AB", "1"},
-                {"9", "GE", "6"},
-                {"2", "AB", "2"},
-                {"7", "EFYU", "7"},
-                {"5", "DS", "8"},
-                {"4", "AB", "1"},
-        };
-        String[][] expectedResultSortFirstByB = new String[][] {
-                {"3", "AB", "2"},
-                {"1", "AB", "1"},
-                {"2", "AB", "2"},
-                {"4", "AB", "1"},
-                {"5", "DS", "8"},
-                {"6", "E", "4"},
-                {"7", "EFYU", "7"},
-                {"8", "FLK", "5"},
-                {"9", "GE", "6"},
-        };
-        String[][] expectedResultSortSecondByC= new String[][] {
-                {"3", "AB", "2"},
-                {"2", "AB", "2"},
-                {"1", "AB", "1"},
-                {"4", "AB", "1"},
-                {"5", "DS", "8"},
-                {"6", "E", "4"},
-                {"7", "EFYU", "7"},
-                {"8", "FLK", "5"},
-                {"9", "GE", "6"},
-        };
-        String[][] expectedResultSortThirdByA= new String[][] {
-                {"3", "AB", "2"},
-                {"2", "AB", "2"},
-                {"4", "AB", "1"},
-                {"1", "AB", "1"},
-                {"5", "DS", "8"},
-                {"6", "E", "4"},
-                {"7", "EFYU", "7"},
-                {"8", "FLK", "5"},
-                {"9", "GE", "6"},
-        };
+        String[][] data = new String[][] { { "3", "AB", "2" }, { "8", "FLK", "5" }, { "6", "E", "4" }, { "1", "AB", "1" }, { "9", "GE", "6" }, { "2", "AB", "2" },
+                { "7", "EFYU", "7" }, { "5", "DS", "8" }, { "4", "AB", "1" }, };
+        String[][] expectedResultSortFirstByB = new String[][] { { "3", "AB", "2" }, { "1", "AB", "1" }, { "2", "AB", "2" }, { "4", "AB", "1" }, { "5", "DS", "8" },
+                { "6", "E", "4" }, { "7", "EFYU", "7" }, { "8", "FLK", "5" }, { "9", "GE", "6" }, };
+        String[][] expectedResultSortSecondByC = new String[][] { { "3", "AB", "2" }, { "2", "AB", "2" }, { "1", "AB", "1" }, { "4", "AB", "1" }, { "5", "DS", "8" },
+                { "6", "E", "4" }, { "7", "EFYU", "7" }, { "8", "FLK", "5" }, { "9", "GE", "6" }, };
+        String[][] expectedResultSortThirdByA = new String[][] { { "3", "AB", "2" }, { "2", "AB", "2" }, { "4", "AB", "1" }, { "1", "AB", "1" }, { "5", "DS", "8" },
+                { "6", "E", "4" }, { "7", "EFYU", "7" }, { "8", "FLK", "5" }, { "9", "GE", "6" }, };
         CalcUtil.selectRange("A1");
         typeKeys("3<down>8<down>6<down>1<down>9<down>2<down>7<down>5<down>4");
         CalcUtil.selectRange("B1");
@@ -437,7 +347,8 @@ public class SortDialogSetting {
         app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
-        // Reopen, "Data->Sort...", sort first by Column B "Ascending", sort second by Column C "Descending"
+        // Reopen, "Data->Sort...", sort first by Column B "Ascending", sort
+        // second by Column C "Descending"
         app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
@@ -451,7 +362,8 @@ public class SortDialogSetting {
         // Verify sorted result
         assertArrayEquals("Sorted result", expectedResultSortSecondByC, CalcUtil.getCellTexts("A1:C9"));
 
-        // "Data->Sort...", sort first by Column B "Ascending", sort second by Column C "Descending", sort third by Column A "Descending"
+        // "Data->Sort...", sort first by Column B "Ascending", sort second by
+        // Column C "Descending", sort third by Column A "Descending"
         app.dispatch(".uno:DataSort");
         SortPage_By1.select(2); // "Column B"
         SortPage_Ascending1.check();
@@ -486,32 +398,36 @@ public class SortDialogSetting {
     }
 
     /**
-     * Test sort options: custom sort order, predefined in preferences from copy list
+     * Test sort options: custom sort order, predefined in preferences from copy
+     * list
+     *
      * @throws Exception
      */
     @Test
-    public void testSortOptionsCustomSortOrderPredefineFromCopyList() throws Exception{
+    public void testSortOptionsCustomSortOrderPredefineFromCopyList() throws Exception {
 
         // Dependencies start
         CalcUtil.selectRange("A1");
         typeKeys("red<down>yellow<down>blue<down>green<down>white<down>black");
         CalcUtil.selectRange("A1:A6");
-        app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first letter automatically
+        app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first
+                                                // letter automatically
 
-        // Select the cell range, "Tools->Options...->OpenOffice.org Spreadsheets->Sort Lists"
+        // Select the cell range,
+        // "Tools->Options...->OpenOffice.org Spreadsheets->Sort Lists"
         CalcUtil.selectRange("A1:A6");
         app.dispatch(".uno:OptionsTreeDialog");
         OptionsDlgList.collapseAll();
-//      // Select "Sort Lists": start. Shrink the tree list and select
-//      OptionsDlgList.select(0);
-//      typeKeys("<left>");
-//      for (int i=0; i<6; i++) {
-//          typeKeys("<down><left>");
-//      }
+        // // Select "Sort Lists": start. Shrink the tree list and select
+        // OptionsDlgList.select(0);
+        // typeKeys("<left>");
+        // for (int i=0; i<6; i++) {
+        // typeKeys("<down><left>");
+        // }
         OptionsDlgList.expand(3);
-//      typeKeys("<right>");
+        // typeKeys("<right>");
         OptionsDlgList.select(7);
-//      // Select "Sort Lists": end
+        // // Select "Sort Lists": end
 
         // Click "Copy" button, "OK", close the document
         OptionsDlg_SortListsTabCopy.click();
@@ -524,39 +440,17 @@ public class SortDialogSetting {
         app.dispatch("private:factory/scalc");
 
         // Input some data
-        String[][] data = new String[][] {
-                {"Color"},
-                {"black"},
-                {"yellow"},
-                {"blue"},
-                {"black"},
-                {"white"},
-                {"red"},
-        };
-        String[][] expectedResultNoCustomSortOrder = new String[][] {
-                {"Color"},
-                {"black"},
-                {"black"},
-                {"blue"},
-                {"red"},
-                {"white"},
-                {"yellow"},
-        };
-        String[][] expectedResultCustomSortOrder = new String[][] {
-                {"Color"},
-                {"red"},
-                {"yellow"},
-                {"blue"},
-                {"white"},
-                {"black"},
-                {"black"},
-        };
+        String[][] data = new String[][] { { "Color" }, { "black" }, { "yellow" }, { "blue" }, { "black" }, { "white" }, { "red" }, };
+        String[][] expectedResultNoCustomSortOrder = new String[][] { { "Color" }, { "black" }, { "black" }, { "blue" }, { "red" }, { "white" }, { "yellow" }, };
+        String[][] expectedResultCustomSortOrder = new String[][] { { "Color" }, { "red" }, { "yellow" }, { "blue" }, { "white" }, { "black" }, { "black" }, };
         CalcUtil.selectRange("A1");
         typeKeys("Color<down>black<down>yellow<down>blue<down>black<down>white<down>red");
         CalcUtil.selectRange("A2:A7");
-        app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first letter automatically
+        app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first
+                                                // letter automatically
 
-        // "Data->Sort...", "Options" tab, check "Range contains column labels", no custom sort order, "Ascending", sort first by Color
+        // "Data->Sort...", "Options" tab, check "Range contains column labels",
+        // no custom sort order, "Ascending", sort first by Color
         CalcUtil.selectRange("A1:A7");
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
@@ -585,7 +479,8 @@ public class SortDialogSetting {
         SCSelectSheetsDlg.ok();
         app.dispatch(".uno:Paste");
 
-        // "Data->Sort...", "Options" tab, check "Range contains column labels", choose custom sort order, "Ascending", sort first by Color
+        // "Data->Sort...", "Options" tab, check "Range contains column labels",
+        // choose custom sort order, "Ascending", sort first by Color
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
@@ -628,11 +523,13 @@ public class SortDialogSetting {
     }
 
     /**
-     * Test sort options: custom sort order, predefined in preferences from new list
+     * Test sort options: custom sort order, predefined in preferences from new
+     * list
+     *
      * @throws Exception
      */
     @Test
-    public void testSortOptionsCustomSortOrderPredefineFromNewList() throws Exception{
+    public void testSortOptionsCustomSortOrderPredefineFromNewList() throws Exception {
 
         // Dependencies start
         // "Tools->Options...->OpenOffice.org Spreadsheets->Sort Lists"
@@ -640,7 +537,7 @@ public class SortDialogSetting {
         // Select "Sort Lists": start. Shrink the tree list and select
         OptionsDlgList.select(0);
         typeKeys("<left>");
-        for (int i=0; i<6; i++) {
+        for (int i = 0; i < 6; i++) {
             typeKeys("<down><left>");
         }
         OptionsDlgList.select(3);
@@ -648,7 +545,8 @@ public class SortDialogSetting {
         OptionsDlgList.select(7);
         // Select "Sort Lists": end
 
-        // Click "New" button, input "white,red,yellow,blue,green,black", press "Add" and "OK", close the document
+        // Click "New" button, input "white,red,yellow,blue,green,black", press
+        // "Add" and "OK", close the document
         OptionsDlg_SortListsTabNew.click();
         typeKeys("white,red,yellow,blue,green,black");
         OptionsDlg_SortListsTabAdd.click();
@@ -660,39 +558,17 @@ public class SortDialogSetting {
         app.dispatch("private:factory/scalc");
 
         // Input some data
-        String[][] data = new String[][] {
-                {"Color"},
-                {"black"},
-                {"yellow"},
-                {"blue"},
-                {"black"},
-                {"white"},
-                {"red"},
-        };
-        String[][] expectedResultNoCustomSortOrder = new String[][] {
-                {"Color"},
-                {"black"},
-                {"black"},
-                {"blue"},
-                {"red"},
-                {"white"},
-                {"yellow"},
-        };
-        String[][] expectedResultCustomSortOrder = new String[][] {
-                {"Color"},
-                {"white"},
-                {"red"},
-                {"yellow"},
-                {"blue"},
-                {"black"},
-                {"black"},
-        };
+        String[][] data = new String[][] { { "Color" }, { "black" }, { "yellow" }, { "blue" }, { "black" }, { "white" }, { "red" }, };
+        String[][] expectedResultNoCustomSortOrder = new String[][] { { "Color" }, { "black" }, { "black" }, { "blue" }, { "red" }, { "white" }, { "yellow" }, };
+        String[][] expectedResultCustomSortOrder = new String[][] { { "Color" }, { "white" }, { "red" }, { "yellow" }, { "blue" }, { "black" }, { "black" }, };
         CalcUtil.selectRange("A1");
         typeKeys("Color<down>black<down>yellow<down>blue<down>black<down>white<down>red");
         CalcUtil.selectRange("A2:A7");
-        app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first letter automatically
+        app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first
+                                                // letter automatically
 
-        // "Data->Sort...", "Options" tab, check "Range contains column labels", no custom sort order, "Ascending", sort first by Color
+        // "Data->Sort...", "Options" tab, check "Range contains column labels",
+        // no custom sort order, "Ascending", sort first by Color
         CalcUtil.selectRange("A1:A7");
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
@@ -721,7 +597,8 @@ public class SortDialogSetting {
         SCSelectSheetsDlg.ok();
         app.dispatch(".uno:Paste");
 
-        // "Data->Sort...", "Options" tab, check "Range contains column labels", choose custom sort order, "Ascending", sort first by Color
+        // "Data->Sort...", "Options" tab, check "Range contains column labels",
+        // choose custom sort order, "Ascending", sort first by Color
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
@@ -763,26 +640,23 @@ public class SortDialogSetting {
         assertArrayEquals("Saved sorted result", expectedResultCustomSortOrder, CalcUtil.getCellTexts("$A1:$A7"));
     }
 
-
     /**
      * Test sort options: sort columns, direction "Left to right"
+     *
      * @throws Exception
      */
     @Test
-    public void testSortOptionsDirectionSortColumns() throws Exception{
+    public void testSortOptionsDirectionSortColumns() throws Exception {
 
         // Input some data
-        String[][] data = new String[][] {
-                {"Units", "7", "27", "4", "12", "3", "6"},
-        };
-        String[][] expectedSortedResult = new String[][] {
-                {"Units", "3", "4", "6", "7", "12", "27"},
-        };
+        String[][] data = new String[][] { { "Units", "7", "27", "4", "12", "3", "6" }, };
+        String[][] expectedSortedResult = new String[][] { { "Units", "3", "4", "6", "7", "12", "27" }, };
         CalcUtil.selectRange("A1");
         typeKeys("Units<right>7<right>27<right>4<right>12<right>3<right>6");
-        sleep(1);   // If no sleep, some strings lost
+        sleep(1); // If no sleep, some strings lost
 
-        // "Data->Sort...", check "Range contains column labels", "Left to right", sort first by"Units", "Ascending"
+        // "Data->Sort...", check "Range contains column labels",
+        // "Left to right", sort first by"Units", "Ascending"
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
@@ -818,38 +692,18 @@ public class SortDialogSetting {
 
     /**
      * Test sort options: "Include formats"
+     *
      * @throws Exception
      */
     @Test
-    public void testSortOptionsIncludeFormats() throws Exception{
+    public void testSortOptionsIncludeFormats() throws Exception {
 
-        String[][] dataWithCurrencyFormats = new String[][] {
-                {"Units"},
-                {"$32.00"},
-                {"57.00 \u20ac"},
-                {"\u20a4 74"},
-                {"R$ 50.00"},
-                {"\u062c.\u0645. 27"},
-                {"7.00 \u0440\u0443\u0431"},
-        };
-        String[][] expectedSortedResultIncludeFormat = new String[][] {
-                {"Units"},
-                {"7.00 \u0440\u0443\u0431"},
-                {"\u062c.\u0645. 27"},
-                {"$32.00"},
-                {"R$ 50.00"},
-                {"57.00 \u20ac"},
-                {"\u20a4 74"},
-        };
-        String[][] expectedSortedResultExcludeFormat = new String[][] {
-                {"Units"},
-                {"$7.00"},
-                {"27.00 \u20ac"},
-                {"\u20a4 32"},
-                {"R$ 50.00"},
-                {"\u062c.\u0645. 57"},
-                {"74.00 \u0440\u0443\u0431"},
-        };
+        String[][] dataWithCurrencyFormats = new String[][] { { "Units" }, { "$32.00" }, { "57.00 \u20ac" }, { "\u20a4 74" }, { "R$ 50.00" }, { "\u062c.\u0645. 27" },
+                { "7.00 \u0440\u0443\u0431" }, };
+        String[][] expectedSortedResultIncludeFormat = new String[][] { { "Units" }, { "7.00 \u0440\u0443\u0431" }, { "\u062c.\u0645. 27" }, { "$32.00" }, { "R$ 50.00" },
+                { "57.00 \u20ac" }, { "\u20a4 74" }, };
+        String[][] expectedSortedResultExcludeFormat = new String[][] { { "Units" }, { "$7.00" }, { "27.00 \u20ac" }, { "\u20a4 32" }, { "R$ 50.00" }, { "\u062c.\u0645. 57" },
+                { "74.00 \u0440\u0443\u0431" }, };
 
         // Open sample file to get source data
         String file = prepareData("sc/SortOptionsIncludeFormats.ods");
@@ -859,7 +713,8 @@ public class SortDialogSetting {
 
         assertArrayEquals("source", dataWithCurrencyFormats, CalcUtil.getCellTexts("A1:A7"));
 
-        // "Data->Sort...", check "Range contains column labels", check "Include formats", sort first by "Units", "Ascending"
+        // "Data->Sort...", check "Range contains column labels", check
+        // "Include formats", sort first by "Units", "Ascending"
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
@@ -885,7 +740,8 @@ public class SortDialogSetting {
         CalcUtil.selectRange("Sheet2.A1");
         app.dispatch(".uno:Paste");
 
-        // "Data->Sort...", check "Range contains column labels", uncheck "Include formats", sort first by "Units", "Ascending"
+        // "Data->Sort...", check "Range contains column labels", uncheck
+        // "Include formats", sort first by "Units", "Ascending"
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
@@ -922,48 +778,23 @@ public class SortDialogSetting {
 
     /**
      * Test sort options: multiple sort, data overlap
+     *
      * @throws Exception
      */
     @Test
-    public void testSortOptionsMultipleSortDataOverlap() throws Exception{
+    public void testSortOptionsMultipleSortDataOverlap() throws Exception {
 
         // Input some data
-        String[][] data1 = new String[][] {
-                {"D"},
-                {"C"},
-                {"B"},
-                {"A"},
-                {"E"},
-        };
-        String[][] expectedSortedResult1 = new String[][] {
-                {"A"},
-                {"B"},
-                {"C"},
-                {"D"},
-                {"E"},
-        };
-        String[][] data2 = new String[][] {
-                {"4"},
-                {"2"},
-                {"5"},
-                {"1"},
-                {"3"},
-        };
-        String[][] expectedSortedResultDataOverlap = new String[][] {
-                {"A"},
-                {"B"},
-                {"C"},
-                {"1"},
-                {"2"},
-                {"3"},
-                {"4"},
-                {"5"},
-        };
+        String[][] data1 = new String[][] { { "D" }, { "C" }, { "B" }, { "A" }, { "E" }, };
+        String[][] expectedSortedResult1 = new String[][] { { "A" }, { "B" }, { "C" }, { "D" }, { "E" }, };
+        String[][] data2 = new String[][] { { "4" }, { "2" }, { "5" }, { "1" }, { "3" }, };
+        String[][] expectedSortedResultDataOverlap = new String[][] { { "A" }, { "B" }, { "C" }, { "1" }, { "2" }, { "3" }, { "4" }, { "5" }, };
         CalcUtil.selectRange("A1");
         typeKeys("D<down>C<down>B<down>A<down>E");
-        sleep(1);   // If no sleep, some strings lost
+        sleep(1); // If no sleep, some strings lost
 
-        // "Data->Sort...", uncheck "Range contains column labels", sort first by "Column A", "Ascending"
+        // "Data->Sort...", uncheck "Range contains column labels", sort first
+        // by "Column A", "Ascending"
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.uncheck();
@@ -985,7 +816,8 @@ public class SortDialogSetting {
         CalcUtil.selectRange("G10");
         typeKeys("4<down>2<down>5<down>1<down>3");
 
-        // Focus on data2, "Data->Sort...", "Copy result to" partially overlap with data1, sort first by "Column G", "Ascending"
+        // Focus on data2, "Data->Sort...", "Copy result to" partially overlap
+        // with data1, sort first by "Column G", "Ascending"
         CalcUtil.selectRange("G10");
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
@@ -1017,48 +849,26 @@ public class SortDialogSetting {
     }
 
     /**
-     * Test sort options: multiple sort, no data overlap, sort parameter saved correctly
+     * Test sort options: multiple sort, no data overlap, sort parameter saved
+     * correctly
+     *
      * @throws Exception
      */
     @Test
-    public void testSortOptionsMultipleSortSortParameterSaved() throws Exception{
+    public void testSortOptionsMultipleSortSortParameterSaved() throws Exception {
 
         // Input some data
-        String[][] data1 = new String[][] {
-                {"D"},
-                {"C"},
-                {"B"},
-                {"A"},
-                {"E"},
-        };
-        String[][] expectedSortedResult1 = new String[][] {
-                {"A"},
-                {"B"},
-                {"C"},
-                {"D"},
-                {"E"},
-        };
-        String[][] data2 = new String[][] {
-                {"Numbers"},
-                {"4"},
-                {"2"},
-                {"5"},
-                {"1"},
-                {"3"},
-        };
-        String[][] expectedSortedResult2 = new String[][] {
-                {"Numbers"},
-                {"1"},
-                {"2"},
-                {"3"},
-                {"4"},
-                {"5"},
-        };
+        String[][] data1 = new String[][] { { "D" }, { "C" }, { "B" }, { "A" }, { "E" }, };
+        String[][] expectedSortedResult1 = new String[][] { { "A" }, { "B" }, { "C" }, { "D" }, { "E" }, };
+        String[][] data2 = new String[][] { { "Numbers" }, { "4" }, { "2" }, { "5" }, { "1" }, { "3" }, };
+        String[][] expectedSortedResult2 = new String[][] { { "Numbers" }, { "1" }, { "2" }, { "3" }, { "4" }, { "5" }, };
         CalcUtil.selectRange("A1");
         typeKeys("D<down>C<down>B<down>A<down>E");
-        sleep(1);   // If no sleep, some strings lost
+        sleep(1); // If no sleep, some strings lost
 
-        // "Data->Sort...", uncheck "Range contains column labels", check "Case sensitive" and "Include formats", sort first by "Column A", "Ascending"
+        // "Data->Sort...", uncheck "Range contains column labels", check
+        // "Case sensitive" and "Include formats", sort first by "Column A",
+        // "Ascending"
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.uncheck();
@@ -1082,7 +892,9 @@ public class SortDialogSetting {
         CalcUtil.selectRange("G10");
         typeKeys("Numbers<down>4<down>2<down>5<down>1<down>3");
 
-        // Focus on data2, "Data->Sort...", check "Range contains column labels", uncheck "Case sensitive" and "Include formats", sort first by "Numbers", "Ascending"
+        // Focus on data2, "Data->Sort...", check
+        // "Range contains column labels", uncheck "Case sensitive" and
+        // "Include formats", sort first by "Numbers", "Ascending"
         CalcUtil.selectRange("G10");
         app.dispatch(".uno:DataSort");
         SortOptionsPage.select();

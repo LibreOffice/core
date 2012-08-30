@@ -24,19 +24,9 @@
  */
 package testcase.gui.svt.sw;
 
-import static org.openoffice.test.vcl.Tester.sleep;
-import static testlib.gui.AppUtil.submitSaveDlg;
-import static testlib.gui.UIMap.ActiveMsgBox;
-import static testlib.gui.UIMap.Bullet;
-import static testlib.gui.UIMap.Change;
-import static testlib.gui.UIMap.InsertIndexDlg;
-import static testlib.gui.UIMap.StyleAndFormattingDlg;
-import static testlib.gui.UIMap.StyleAndFormattingList;
-import static testlib.gui.UIMap.SuggestionList;
-import static testlib.gui.UIMap.app;
-import static testlib.gui.UIMap.startcenter;
-import static testlib.gui.UIMap.writer;
-import static testlib.gui.UIMap.writer_FrameDlg;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -47,14 +37,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
+import org.openoffice.test.common.Logger;
 import org.openoffice.test.common.SystemUtil;
 import org.openoffice.test.common.Testspace;
 
-import testlib.gui.Log;
-
 public class OperationOnNewSW {
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     private PrintStream result = null;
 
@@ -68,9 +57,9 @@ public class OperationOnNewSW {
         app.start(true);
         result = new PrintStream(new FileOutputStream(Testspace.getFile("output/svt_sw_new.csv")));
         HashMap<String, Object> proccessInfo = SystemUtil.findProcess(".*(soffice\\.bin|soffice.*-env).*");
-        pid = (String)proccessInfo.get("pid");
+        pid = (String) proccessInfo.get("pid");
         result.println("Iterator,Time,Memory(KB),CPU(%)");
-        LOG.info("Result will be saved to " + Testspace.getPath("output/longrun.csv"));
+        log.info("Result will be saved to " + Testspace.getPath("output/longrun.csv"));
     }
 
     @After
@@ -81,11 +70,10 @@ public class OperationOnNewSW {
 
     @Test
     public void operationOnNewSW() throws Exception {
-        for(int i = 0; i < 1000; i++)
-        {
+        for (int i = 0; i < 1000; i++) {
             startcenter.menuItem("File->New->Text Document").select();
 
-//  Input words (Duplicate Formatting) and set numbering and bullet.
+            // Input words (Duplicate Formatting) and set numbering and bullet.
             writer.typeKeys("this is a wonderful world");
             writer.typeKeys("<enter>");
             sleep(3);
@@ -102,7 +90,7 @@ public class OperationOnNewSW {
             writer.typeKeys("<enter>");
             sleep(2);
 
-// Word Spell Check
+            // Word Spell Check
             writer.typeKeys("goood");
             sleep(2);
             writer.menuItem("Tools->Spelling and Grammar...").select();
@@ -113,8 +101,7 @@ public class OperationOnNewSW {
             ActiveMsgBox.no();
             sleep(2);
 
-
-//  Create Header and Footer
+            // Create Header and Footer
             writer.menuItem("Insert->Header->Default").select();
             sleep(2);
             writer.typeKeys("Header");
@@ -128,7 +115,7 @@ public class OperationOnNewSW {
             writer.typeKeys("<enter>");
             sleep(2);
 
-//  Insert Frame and change anchor
+            // Insert Frame and change anchor
             writer.menuItem("Insert->Frame...").select();
             sleep(2);
             writer_FrameDlg.ok();
@@ -145,19 +132,16 @@ public class OperationOnNewSW {
             writer.typeKeys("<enter>");
             sleep(2);
 
-//  Insert TOC
-            for(int j = 0; j < 6; j++)
-            {
+            // Insert TOC
+            for (int j = 0; j < 6; j++) {
                 writer.typeKeys(String.valueOf(j + 1));
                 writer.typeKeys("<enter>");
             }
             writer.typeKeys("<ctrl home>");
-            for(int k = 0; k < 2; k++)
-            {
+            for (int k = 0; k < 2; k++) {
                 writer.typeKeys("<shift down>");
             }
-            if(!StyleAndFormattingDlg.exists())
-            {
+            if (!StyleAndFormattingDlg.exists()) {
                 app.dispatch(".uno:DesignerDialog");
                 sleep(2);
             }
@@ -167,8 +151,7 @@ public class OperationOnNewSW {
             writer.typeKeys("<down>");
             writer.typeKeys("<right>");
             writer.typeKeys("<left>");
-            for(int k = 0; k < 2; k++)
-            {
+            for (int k = 0; k < 2; k++) {
                 writer.typeKeys("<shift down>");
             }
             StyleAndFormattingList.doubleClick(0.5, 0.3);
@@ -181,14 +164,12 @@ public class OperationOnNewSW {
             sleep(2);
             writer.typeKeys("<ctrl end>");
 
-
-// Save File and close
+            // Save File and close
             String saveTo = "temp" + i + ".odt";
             writer.menuItem("File->Save As...").select();
             FileUtil.deleteFile(saveTo);
             submitSaveDlg(saveTo);
-            if(ActiveMsgBox.exists())
-            {
+            if (ActiveMsgBox.exists()) {
                 ActiveMsgBox.yes();
                 sleep(2);
             }
@@ -197,13 +178,12 @@ public class OperationOnNewSW {
 
             HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
             String record = i + "," + System.currentTimeMillis() + "," + perfData.get("rss") + "," + perfData.get("pcpu");
-            LOG.info("Record: " + record);
+            log.info("Record: " + record);
             result.println(record);
             result.flush();
 
             sleep(3);
         }
-
 
     }
 }

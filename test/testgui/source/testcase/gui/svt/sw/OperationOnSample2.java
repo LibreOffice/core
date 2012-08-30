@@ -24,10 +24,9 @@
  */
 package testcase.gui.svt.sw;
 
-import static org.openoffice.test.common.Testspace.prepareData;
-import static testlib.gui.AppUtil.submitOpenDlg;
-import static testlib.gui.UIMap.app;
-import static testlib.gui.UIMap.writer;
+import static org.openoffice.test.common.Testspace.*;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
 
 import java.io.FileOutputStream;
@@ -39,16 +38,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.OpenOffice;
+import org.openoffice.test.common.Logger;
 import org.openoffice.test.common.SystemUtil;
 import org.openoffice.test.common.Testspace;
-import static org.openoffice.test.vcl.Tester.*;
-
-import testlib.gui.Log;
 
 public class OperationOnSample2 {
 
     @Rule
-    public Log LOG = new Log();
+    public Logger log = Logger.getLogger(this);
 
     private PrintStream result = null;
 
@@ -63,18 +60,15 @@ public class OperationOnSample2 {
         app.start();
         result = new PrintStream(new FileOutputStream(Testspace.getFile("output/svt_sw_sample2.csv")));
         String processSoffice = null;
-        if(SystemUtil.isWindows())
-        {
+        if (SystemUtil.isWindows()) {
             processSoffice = ".*soffice\\.exe.*";
-        }
-        else
-        {
+        } else {
             processSoffice = ".*soffice\\.bin.*";
         }
         HashMap<String, Object> proccessInfo = SystemUtil.findProcess(processSoffice);
-        pid = (String)proccessInfo.get("pid");
+        pid = (String) proccessInfo.get("pid");
         result.println("Iterator,Time,Memory(KB),CPU(%)");
-        LOG.info("Result will be saved to " + Testspace.getPath("output/svt_sw_sample2.csv"));
+        log.info("Result will be saved to " + Testspace.getPath("output/svt_sw_sample2.csv"));
     }
 
     @After
@@ -88,14 +82,13 @@ public class OperationOnSample2 {
         String file = prepareData("svt/complex.odt");
         String pic = prepareData("svt/Sunset.jpg");
 
-        for(int i = 0; i < 1000; i++)
-        {
+        for (int i = 0; i < 1000; i++) {
             System.out.println("This is the " + i + " round");
             app.dispatch(".uno:Open");
             submitOpenDlg(file);
             writer.waitForExistence(20, 2);
 
-//  Set Paragraph properties
+            // Set Paragraph properties
             app.dispatch(".uno:SelectAll");
             sleep(2);
             writer.menuItem("Format->Paragraph...").select();
@@ -109,7 +102,7 @@ public class OperationOnSample2 {
             writer.typeKeys("<ctrl end>");
             sleep(5);
 
-// Insert Picture from file
+            // Insert Picture from file
             writer.menuItem("Insert->Picture->From File...").select();
             sleep(2);
             FilePicker_Path.setText(pic);
@@ -119,9 +112,9 @@ public class OperationOnSample2 {
             writer.typeKeys("<esc>");
             sleep(2);
 
-// Insert OLE Object
-//          writer.menuItem("Insert->Object->OLE Object...").select();
-//          sleep(2);
+            // Insert OLE Object
+            // writer.menuItem("Insert->Object->OLE Object...").select();
+            // sleep(2);
             app.dispatch(".uno:InsertObject");
             sleep(2);
             InsertObject.ok();
@@ -131,7 +124,7 @@ public class OperationOnSample2 {
             typeKeys("<esc>");
             sleep(5);
 
-// Insert Chart
+            // Insert Chart
             writer.menuItem("Insert->Object->Chart...").select();
             sleep(5);
             typeKeys("<esc>");
@@ -141,14 +134,14 @@ public class OperationOnSample2 {
             typeKeys("<esc>");
             sleep(5);
 
-// Close file
+            // Close file
             writer.menuItem("File->Close").select();
             ActiveMsgBox.no();
             sleep(2);
 
             HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
             String record = i + "," + System.currentTimeMillis() + "," + perfData.get("rss") + "," + perfData.get("pcpu");
-            LOG.info("Record: " + record);
+            log.info("Record: " + record);
             result.println(record);
             result.flush();
 
