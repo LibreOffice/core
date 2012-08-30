@@ -46,44 +46,16 @@ class SdrObject;
 class SvdProgressInfo;
 
 //************************************************************
-// Helper Class SdrObjRefList
-//************************************************************
-
-class SdrObjRefList
-{
-    std::vector<SdrObject*>            aList;
-public:
-
-    SdrObjRefList()
-    :   aList()
-    {}
-
-    void Clear() { aList.clear(); }
-    sal_uLong GetObjCount() const { return aList.size(); }
-    SdrObject* GetObj(sal_uLong nNum) const { return aList[nNum]; }
-    SdrObject* operator[](sal_uLong nNum) const { return aList[nNum]; }
-    void InsertObject(SdrObject* pObj) { aList.push_back(pObj); }
-    void InsertObject(SdrObject* pObj, sal_uLong nPos)
-    {
-        if(nPos==CONTAINER_APPEND)
-            aList.push_back(pObj);
-        else
-            aList.insert(aList.begin() + nPos, pObj);
-    }
-    void RemoveObject(sal_uLong nPos) { aList.erase(aList.begin()+nPos); }
-};
-
-//************************************************************
 // Helper Class ImpSdrGDIMetaFileImport
 //************************************************************
 
 class ImpSdrGDIMetaFileImport
 {
 protected:
-    SdrObjRefList               aTmpList;
+    std::vector<SdrObject*>     aTmpList;
     VirtualDevice               aVD;
     Rectangle                   aScaleRect;
-    sal_uLong                       nMapScalingOfs; // from here on, not edited with MapScaling
+    size_t                      nMapScalingOfs; // from here on, not edited with MapScaling
     SfxItemSet*                 pLineAttr;
     SfxItemSet*                 pFillAttr;
     SfxItemSet*                 pTextAttr;

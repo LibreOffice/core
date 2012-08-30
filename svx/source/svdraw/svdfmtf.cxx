@@ -219,7 +219,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // MapMode scaling
     MapScaling();
     // scale objects to predetermined rectangle
-    sal_uIntPtr nAnz=aTmpList.GetObjCount();
+    size_t nAnz=aTmpList.size();
 
     // To calculate the progress meter, we use GetActionSize()*3.
     // However, aTmpList has a lower entry count limit than GetActionSize(),
@@ -238,9 +238,9 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // insert all objects cached in aTmpList now into rOL from nInsPos
     if (nInsPos>rOL.GetObjCount()) nInsPos=rOL.GetObjCount();
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
-    for (sal_uIntPtr i=0; i<nAnz; i++)
+    for (size_t i=0; i<nAnz; i++)
     {
-         SdrObject* pObj=aTmpList.GetObj(i);
+         SdrObject* pObj=aTmpList[i];
          rOL.NbcInsertObject(pObj,nInsPos,&aReason);
          nInsPos++;
 
@@ -264,7 +264,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             pProgrInfo->ReportError();
     }
 
-    return aTmpList.GetObjCount();
+    return aTmpList.size();
 }
 
 void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
@@ -427,7 +427,7 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
     }
     else
     {
-        aTmpList.InsertObject( pObj );
+        aTmpList.push_back( pObj );
         if ( HAS_BASE( SdrPathObj, pObj ) )
         {
             bool bClosed=pObj->IsClosedObj();
@@ -563,9 +563,9 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
     }
 
     // #i73407# reformulation to use new B2DPolygon classes
-    if(bLastObjWasLine && (aOldLineColor == aVD.GetLineColor()) && rSrcPoly.count())
+    if(bLastObjWasLine && (aOldLineColor == aVD.GetLineColor()) && rSrcPoly.count() && !aTmpList.empty())
     {
-        SdrObject* pTmpObj = aTmpList.GetObj(aTmpList.GetObjCount() - 1);
+        SdrObject* pTmpObj = aTmpList.back();
         SdrPathObj* pLastPoly = PTR_CAST(SdrPathObj, pTmpObj);
 
         if(pLastPoly)
@@ -629,9 +629,9 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
 bool ImpSdrGDIMetaFileImport::CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon & rPolyPolygon)
 {
     // #i73407# reformulation to use new B2DPolygon classes
-    if(bLastObjWasPolyWithoutLine)
+    if(bLastObjWasPolyWithoutLine && !aTmpList.empty())
     {
-        SdrObject* pTmpObj = aTmpList.GetObj(aTmpList.GetObjCount() - 1);
+        SdrObject* pTmpObj = aTmpList.back();
         SdrPathObj* pLastPoly = PTR_CAST(SdrPathObj, pTmpObj);
 
         if(pLastPoly)
@@ -929,7 +929,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 
 void ImpSdrGDIMetaFileImport::MapScaling()
 {
-    sal_uInt32 i, nAnz = aTmpList.GetObjCount();
+    size_t i, nAnz = aTmpList.size();
     const MapMode& rMap = aVD.GetMapMode();
     Point aMapOrg( rMap.GetOrigin() );
     sal_Bool bMov2 = aMapOrg.X() != 0 || aMapOrg.Y() != 0;
@@ -937,7 +937,7 @@ void ImpSdrGDIMetaFileImport::MapScaling()
     {
         for ( i = nMapScalingOfs; i < nAnz; i++ )
         {
-            SdrObject* pObj = aTmpList.GetObj(i);
+            SdrObject* pObj = aTmpList[i];
             if ( bMov2 )
                 pObj->NbcMove( Size( aMapOrg.X(), aMapOrg.Y() ) );
         }
