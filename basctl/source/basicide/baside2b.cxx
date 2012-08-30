@@ -464,28 +464,23 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
-        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
-            bDone = true;
-        else
+        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_TAB ) && !rKEvt.GetKeyCode().IsMod1() &&
+              !rKEvt.GetKeyCode().IsMod2() && !GetEditView()->IsReadOnly() )
         {
-            if ( ( rKEvt.GetKeyCode().GetCode() == KEY_TAB ) && !rKEvt.GetKeyCode().IsMod1() &&
-                  !rKEvt.GetKeyCode().IsMod2() && !GetEditView()->IsReadOnly() )
+            TextSelection aSel( pEditView->GetSelection() );
+            if ( aSel.GetStart().GetPara() != aSel.GetEnd().GetPara() )
             {
-                TextSelection aSel( pEditView->GetSelection() );
-                if ( aSel.GetStart().GetPara() != aSel.GetEnd().GetPara() )
-                {
-                    bDelayHighlight = false;
-                    if ( !rKEvt.GetKeyCode().IsShift() )
-                        pEditView->IndentBlock();
-                    else
-                        pEditView->UnindentBlock();
-                    bDelayHighlight = true;
-                    bDone = true;
-                }
+                bDelayHighlight = false;
+                if ( !rKEvt.GetKeyCode().IsShift() )
+                    pEditView->IndentBlock();
+                else
+                    pEditView->UnindentBlock();
+                bDelayHighlight = true;
+                bDone = true;
             }
-            if ( !bDone )
-                bDone = pEditView->KeyInput( rKEvt );
         }
+        if ( !bDone )
+            bDone = pEditView->KeyInput( rKEvt );
     }
     if ( !bDone )
     {
