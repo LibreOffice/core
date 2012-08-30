@@ -589,6 +589,10 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     if( !mxView.is() )
     return false;
 
+#if OSL_DEBUG_LEVEL > 1
+    TimerContext aTimerContext("initWindowFromSlideShowView");
+#endif
+
     /// take the XSlideShowView and extract the parent window from it. see viewmediashape.cxx
     uno::Reference< rendering::XCanvas > xCanvas(mxView->getCanvas(), uno::UNO_QUERY_THROW);
     uno::Sequence< uno::Any > aDeviceParams;
