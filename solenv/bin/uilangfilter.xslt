@@ -7,7 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+  xmlns:str="http://exslt.org/strings">
   <xsl:output method="xml" encoding="UTF-8"/>
 
 <xsl:template match="/">
@@ -19,7 +20,7 @@
 
 <xsl:template match="*/*[not(self::col)][@translatable]">
   <xsl:text> </xsl:text>
-  <t r="string" g="{substring-before(../@id,':')}" l="{@name}">
+  <t r="string" g="{str:tokenize(../@id,':')[1]}" l="{@name}">
   <xsl:copy-of select="text()" />
   </t><xsl:text>&#10;</xsl:text>
 </xsl:template>
@@ -27,7 +28,7 @@
 <xsl:template match="col">
   <xsl:text> </xsl:text>
   <xsl:variable name="groupid" select="../../../@id"/>
-  <t r="stringlist" g="{substring-before($groupid,':')}" l="{count(preceding::col[../../../@id=$groupid])}">
+  <t r="stringlist" g="{str:tokenize($groupid,':')[1]}" l="{count(preceding::col[../../../@id=$groupid])}">
   <xsl:copy-of select="text()" />
   </t><xsl:text>&#10;</xsl:text>
 </xsl:template>
