@@ -464,17 +464,25 @@ sub add_installationobject_to_variables
 
 #####################################################################################
 # Adding all variables, that must be defined, but are not defined until now.
-# List of this varibles: @installer::globals::forced_properties
 #####################################################################################
 
 sub add_forced_properties
 {
     my ($allvariables) = @_;
 
-    my $property;
-    foreach $property ( @installer::globals::forced_properties )
+    my @forced_properties = qw(
+        SERVICETAG_PRODUCTNAME
+        SERVICETAG_PRODUCTVERSION
+        SERVICETAG_PARENTNAME
+        SERVICETAG_SOURCE
+        SERVICETAG_URN
+    );
+
+    for my $property (@forced_properties)
     {
-        if ( ! exists($allvariables->{$property}) ) { $allvariables->{$property} = ""; }
+        if ( ! exists($allvariables->{$property}) ) {
+            $allvariables->{$property} = "";
+        }
     }
 }
 
