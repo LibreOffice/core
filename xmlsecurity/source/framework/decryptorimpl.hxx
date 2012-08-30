@@ -51,18 +51,6 @@ class DecryptorImpl : public cppu::ImplInheritanceHelper3
  ******************************************************************************/
 {
 private:
-    /*
-     * the Id of the encryption, which is used for the result listener to
-     * identify the encryption.
-     */
-    sal_Int32 m_nEncryptionId;
-
-    /*
-     * the decryption result,
-     * remembers whether the decryption succeeds.
-     */
-    bool      m_bDecryptionSucceed;
-
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XXMLSecurityContext > m_xXMLSecurityContext;
 

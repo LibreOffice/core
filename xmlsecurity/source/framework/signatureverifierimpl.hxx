@@ -51,17 +51,6 @@ class SignatureVerifierImpl : public cppu::ImplInheritanceHelper3
  ******************************************************************************/
 {
 private:
-    /*
-     * the Id of the signature, which is used for the result listener to
-     * identify the signature.
-     */
-    sal_Int32 m_nSignatureId;
-
-    /*
-     * the verify result
-     */
-    bool      m_bVerifySucceed;
-
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XXMLSecurityContext > m_xXMLSecurityContext;
 

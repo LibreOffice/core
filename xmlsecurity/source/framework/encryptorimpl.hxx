@@ -54,21 +54,9 @@ class EncryptorImpl : public cppu::ImplInheritanceHelper4
 {
 private:
     /*
-     * the Id of the encryption, which is used for the result listener to
-     * identify the encryption.
-     */
-    sal_Int32 m_nEncryptionId;
-
-    /*
      * the Id of the element to be encrypted.
      */
     sal_Int32 m_nReferenceId;
-
-    /*
-     * the decryption result,
-     * remembers whether the encryption succeeds.
-     */
-    bool      m_bEncryptionSucceed;
 
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;
