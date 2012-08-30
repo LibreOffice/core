@@ -712,6 +712,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 {
     sal_Int32 nTopMargin = m_nTopMargin;
+    sal_Int32 nHeaderTop = m_nHeaderTop;
     if(HasHeader(bFirstPage))
     {
         m_nTopMargin = m_nHeaderTop;
@@ -745,6 +746,7 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     }
 
     sal_Int32 nBottomMargin = m_nBottomMargin;
+    sal_Int32 nHeaderBottom = m_nHeaderBottom;
     if( HasFooter( bFirstPage ) )
     {
         m_nBottomMargin = m_nHeaderBottom;
@@ -779,6 +781,8 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 
     // Restore original top margin, so we don't end up with a smaller margin in case we have to produce two page styles from one Word section.
     m_nTopMargin = nTopMargin;
+    m_nHeaderTop = nHeaderTop;
+    m_nHeaderBottom = nHeaderBottom;
 }
 
 uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection, DomainMapper_Impl& rDM_Impl, uno::Reference<text::XTextRange> xStartingRange)
