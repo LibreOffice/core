@@ -2868,11 +2868,9 @@ void Edit::SetSubEdit( Edit* pEdit )
     }
 }
 
-// -----------------------------------------------------------------------
-
-Size Edit::CalcMinimumSize() const
+Size Edit::CalcMinimumSizeForText(const rtl::OUString &rString) const
 {
-    Size aSize ( GetTextWidth( GetText() ), GetTextHeight() );
+    Size aSize ( GetTextWidth( rString ), GetTextHeight() );
     // do not create edit fields in which one cannot enter anything
     // a default minimum width should exist for at least 3 characters
     Size aMinSize ( CalcSize( 3 ) );
@@ -2895,6 +2893,11 @@ Size Edit::CalcMinimumSize() const
             aSize.Height() = aBound.GetHeight();
     }
     return aSize;
+}
+
+Size Edit::CalcMinimumSize() const
+{
+    return CalcMinimumSizeForText(GetText());
 }
 
 Size Edit::GetMinimumEditSize()

@@ -933,6 +933,35 @@ void NumericField::Last()
     SpinField::Last();
 }
 
+namespace
+{
+    Size calcMinimumSize(const SpinField &rSpinField, const NumericFormatter &rFormatter)
+    {
+        rtl::OUStringBuffer aBuf;
+        sal_Int32 nTextLen;
+
+        nTextLen = rtl::OUString::valueOf(rFormatter.GetMin()).getLength();
+        comphelper::string::padToLength(aBuf, nTextLen, '9');
+        Size aMinTextSize = rSpinField.CalcMinimumSizeForText(
+            rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
+
+        nTextLen = rtl::OUString::valueOf(rFormatter.GetMax()).getLength();
+        comphelper::string::padToLength(aBuf, nTextLen, '9');
+        Size aMaxTextSize = rSpinField.CalcMinimumSizeForText(
+            rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
+
+        Size aRet(std::max(aMinTextSize.Width(), aMaxTextSize.Width()),
+                  std::max(aMinTextSize.Height(), aMaxTextSize.Height()));
+
+        return aRet;
+    }
+}
+
+Size NumericField::CalcMinimumSize() const
+{
+    return calcMinimumSize(*this, *this);
+}
+
 // -----------------------------------------------------------------------
 
 NumericBox::NumericBox( Window* pParent, WinBits nWinStyle ) :
@@ -1686,6 +1715,11 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
+}
+
+Size MetricField::CalcMinimumSize() const
+{
+    return calcMinimumSize(*this, *this);
 }
 
 void MetricFormatter::take_properties(MetricFormatter &rOtherField)

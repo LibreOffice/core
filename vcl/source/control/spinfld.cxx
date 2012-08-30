@@ -990,11 +990,9 @@ sal_Bool SpinField::ShowDropDown( sal_Bool )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
-Size SpinField::CalcMinimumSize() const
+Size SpinField::CalcMinimumSizeForText(const rtl::OUString &rString) const
 {
-    Size aSz = Edit::CalcMinimumSize();
+    Size aSz = Edit::CalcMinimumSizeForText(rString);
 
     if ( GetStyle() & WB_DROPDOWN )
         aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -1002,6 +1000,12 @@ Size SpinField::CalcMinimumSize() const
         aSz.Width() += maUpperRect.GetWidth();
 
     return aSz;
+}
+
+Size SpinField::CalcMinimumSize() const
+{
+    fprintf(stderr, "SpinField::CalcMinimumSize\n");
+    return CalcMinimumSizeForText(GetText());
 }
 
 // -----------------------------------------------------------------------

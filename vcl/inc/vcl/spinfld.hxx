@@ -101,6 +101,7 @@ public:
     const Link&     GetLastHdl() const { return maLastHdlLink; }
 
     virtual Size    CalcMinimumSize() const;
+    virtual Size    CalcMinimumSizeForText(const rtl::OUString &rString) const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     virtual Size    CalcSize( sal_uInt16 nChars ) const;
     virtual void    take_properties(Window &rOther);

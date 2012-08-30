@@ -171,8 +171,6 @@ protected:
 protected:
                             NumericFormatter();
 
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
-
     void                    FieldUp();
     void                    FieldDown();
     void                    FieldFirst();
@@ -213,6 +211,7 @@ public:
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
+    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
     sal_Bool                    IsValueModified() const;
     sal_Int64               GetCorrectedValue() const { return mnCorrectedValue; }
 
@@ -240,8 +239,6 @@ protected:
 
 protected:
                             MetricFormatter();
-
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE sal_Bool     ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr );
@@ -275,6 +272,7 @@ public:
     void                    SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const;
     virtual sal_Int64       GetValue() const;
+    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
     using NumericFormatter::GetCorrectedValue;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
@@ -296,7 +294,6 @@ private:
 
 protected:
                             CurrencyFormatter();
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
     SAL_DLLPRIVATE sal_Bool     ImplCurrencyReformat( const XubString& rStr, XubString& rOutStr );
 
 public:
@@ -308,6 +305,7 @@ public:
 
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
+    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
 };
 
 
@@ -523,6 +521,8 @@ public:
     virtual long            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
+    virtual Size            CalcMinimumSize() const;
+
     virtual void            Modify();
 
     virtual void            Up();
@@ -549,6 +549,8 @@ public:
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+
+    virtual Size            CalcMinimumSize() const;
 
     virtual void            Modify();
 
