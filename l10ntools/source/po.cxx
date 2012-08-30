@@ -1,30 +1,11 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
 #include "po.hxx"
 #include <ctime>
@@ -60,9 +41,9 @@ OString ImplEscapeText(const OString& rText,
     if(rEscaped.getLength()!=2*rUnEscaped.getLength()) throw;
     OString sResult = rText;
     int nCount = 0;
-    for(int nIndex=0; nIndex<rText.getLength(); ++nIndex)
+    for(sal_Int32 nIndex=0; nIndex<rText.getLength(); ++nIndex)
     {
-        int nActChar = rUnEscaped.indexOf(rText[nIndex]);
+        sal_Int32 nActChar = rUnEscaped.indexOf(rText[nIndex]);
         if(nActChar!=-1)
             sResult = sResult.replaceAt((nIndex)+(nCount++),1,
                                         rEscaped.copy(2*nActChar,2));
@@ -78,9 +59,9 @@ OString ImplUnEscapeText(const OString& rText,
     if(rEscaped.getLength()!=2*rUnEscaped.getLength()) throw;
     OString sResult = rText;
     int nCount = 0;
-    for(int nIndex=0; nIndex<rText.getLength()-1; ++nIndex)
+    for(sal_Int32 nIndex=0; nIndex<rText.getLength()-1; ++nIndex)
     {
-        int nActChar = rEscaped.indexOf(rText.copy(nIndex,2));
+        sal_Int32 nActChar = rEscaped.indexOf(rText.copy(nIndex,2));
         if(nActChar % 2 == 0)
             sResult = sResult.replaceAt((nIndex++)-(nCount++),2,
                                         rUnEscaped.copy(nActChar/2,1));
@@ -95,7 +76,7 @@ OString ImplGenMsgString(const OString& rSource)
         return "\"\"";
 
     OString sResult = "\"" + rSource + "\"";
-    int nIndex = 0;
+    sal_Int32 nIndex = 0;
     while((nIndex=sResult.indexOf("\\n",nIndex))!=-1)
     {
         if( sResult.copy(nIndex-1,3) != "\\\\n" )
@@ -160,12 +141,12 @@ void GenPoEntry::writeToFile(std::ofstream& io_rOFStream)
 //Class PoEntry
 
 //Split string at the delimiter char
-void ImplSplitAt(const OString& rSource, const char nDelimiter,
+void ImplSplitAt(const OString& rSource, const sal_Char nDelimiter,
                  std::vector<OString>& o_vParts)
 {
     o_vParts.resize( 0 );
-    int nActIndex( 0 );
-    int nLastSplit( 0 );
+    sal_Int32 nActIndex = 0;
+    sal_Int32 nLastSplit = 0;
     while( nActIndex < rSource.getLength() )
     {
         if ( rSource[nActIndex] == nDelimiter )
@@ -257,8 +238,8 @@ void PoEntry::setTransStr(const OString& rTransStr)
 //Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
 OString ImplGetTime()
 {
-    time_t aNow(time(NULL));
-    struct tm* pNow(localtime(&aNow));
+    time_t aNow = time(NULL);
+    struct tm* pNow = localtime(&aNow);
     char pBuff[50];
     strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
     return pBuff;
