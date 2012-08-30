@@ -69,8 +69,8 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     sIntervalName += rtl::OUString(")");
     m_pDivIntervalNF->SetAccessibleName(sIntervalName);
 
-    Window *pNumIntervalFT = m_pUIBuilder->get<Window>("interval");
-    Window *pNumRowsFT = m_pUIBuilder->get<Window>("intervallines");
+    Window *pNumIntervalFT = get<Window>("interval");
+    Window *pNumRowsFT = get<Window>("intervallines");
     sIntervalName = pNumIntervalFT->GetAccessibleName();
     sIntervalName += rtl::OUString("(");
     sIntervalName += pNumRowsFT->GetAccessibleName();
@@ -133,7 +133,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     ModifyHdl();
     LineOnOffHdl();
 
-    PushButton *pOkPB = m_pUIBuilder->get<PushButton>("ok");
+    PushButton *pOkPB = get<PushButton>("ok");
     pOkPB->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
