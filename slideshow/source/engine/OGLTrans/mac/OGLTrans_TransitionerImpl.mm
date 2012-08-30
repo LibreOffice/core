@@ -233,8 +233,6 @@ private:
     bool mbRestoreSync;
     bool mbUseLeavingPixmap;
     bool mbUseEnteringPixmap;
-    bool mbFreeLeavingPixmap;
-    bool mbFreeEnteringPixmap;
 //    unx::Pixmap maLeavingPixmap;
 //    unx::Pixmap maEnteringPixmap;
     

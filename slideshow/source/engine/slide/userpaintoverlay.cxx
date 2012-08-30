@@ -31,7 +31,6 @@
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include "activity.hxx"
-#include "activitiesqueue.hxx"
 #include "slideshowcontext.hxx"
 #include "userpaintoverlay.hxx"
 #include "mouseeventhandler.hxx"
@@ -57,13 +56,11 @@ namespace slideshow
         public:
             PaintOverlayHandler( const RGBColor&          rStrokeColor,
                                  double                   nStrokeWidth,
-                                 ActivitiesQueue&         rActivitiesQueue,
                                  ScreenUpdater&           rScreenUpdater,
                                  const UnoViewContainer&  rViews,
                                  Slide&                   rSlide,
                                  const PolyPolygonVector& rPolygons,
                                  bool                     bActive ) :
-                mrActivitiesQueue( rActivitiesQueue ),
                 mrScreenUpdater( rScreenUpdater ),
                 maViews(),
                 maPolygons( rPolygons ),
@@ -458,7 +455,6 @@ namespace slideshow
             }
 
         private:
-            ActivitiesQueue&        mrActivitiesQueue;
             ScreenUpdater&          mrScreenUpdater;
             UnoViewVector           maViews;
             PolyPolygonVector       maPolygons;
@@ -498,7 +494,6 @@ namespace slideshow
                                             bool                     bActive ) :
             mpHandler( new PaintOverlayHandler( rStrokeColor,
                                                 nStrokeWidth,
-                                                rContext.mrActivitiesQueue,
                                                 rContext.mrScreenUpdater,
                                                 rContext.mrViewContainer,
                                                 //adding a link to Slide

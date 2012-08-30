@@ -52,7 +52,6 @@ private:
     ExternalMediaShapeSharedPtr mpShape;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XCommand > mxCommandNode;
-    bool                                       mbIsPaused;
 };
 
 } // namespace internal
