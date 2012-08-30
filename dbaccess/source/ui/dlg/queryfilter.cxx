@@ -358,7 +358,9 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
     if ( SQLFilterOperator::SQLNULL != _rFilter.Handle && _rFilter.Handle != SQLFilterOperator::NOT_SQLNULL )
     {
         String sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), sal_False );
-        ::Replace_OS_PlaceHolder( sPredicateValue );
+        if ( _rFilter.Handle == SQLFilterOperator::LIKE ||
+             _rFilter.Handle == SQLFilterOperator::NOT_LIKE )
+            ::Replace_OS_PlaceHolder( sPredicateValue );
         _rFilter.Value <<= ::rtl::OUString(sPredicateValue);
     }
     return bHaving;
@@ -469,7 +471,9 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     ::rtl::OUString aCondition;
     _rItem.Value >>= aCondition;
     String aStr = aCondition;
-    ::Replace_SQL_PlaceHolder(aStr);
+    if ( _rItem.Handle == SQLFilterOperator::LIKE ||
+         _rItem.Handle == SQLFilterOperator::NOT_LIKE )
+        ::Replace_SQL_PlaceHolder(aStr);
     aStr = comphelper::string::stripEnd(aStr, ' ');
 
     Reference< XPropertySet > xColumn = getColumn( _rItem.Name );
