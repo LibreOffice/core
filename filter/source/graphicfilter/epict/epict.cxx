@@ -93,13 +93,13 @@ private:
     PictWriterAttrStackMember * pAttrStack;
 
     // current attributes in the target-metafile and whether they are valid
-    sal_Bool        bDstBkPatVisible;   sal_Bool bDstBkPatValid;
+    sal_Bool bDstBkPatValid;
     sal_uInt8        nDstTxFace;            sal_Bool bDstTxFaceValid;
     RasterOp    eDstTxMode;         sal_Bool bDstTxModeValid;
     sal_uInt16      nDstPnSize;         sal_Bool bDstPnSizeValid;
     RasterOp    eDstPnMode;         sal_Bool bDstPnModeValid;
     PictPattern aDstPnPat;          sal_Bool bDstPnPatValid;
-    sal_Bool        bDstFillPatVisible; sal_Bool bDstFillPatValid;
+    sal_Bool bDstFillPatValid;
     sal_uInt16      nDstTxSize;         sal_Bool bDstTxSizeValid;
     Color       aDstFgCol;          sal_Bool bDstFgColValid;
     Color       aDstBkCol;          sal_Bool bDstBkColValid;

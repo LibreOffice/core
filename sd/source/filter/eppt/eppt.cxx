@@ -1499,7 +1499,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI ExportPPT( const std::v
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
 {
     SvStorageRef xDest( new SvStorage( new SvMemoryStream(), sal_True ) );
-    SvxImportMSVBasic aMSVBas( rDocShell, *xDest, sal_False, sal_False );
+    SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
     aMSVBas.SaveOrDelMSVBAStorage( sal_True, rtl::OUString( "_MS_VBA_Overhead" ) );
 
     SvStorageRef xOverhead = xDest->OpenSotStorage( rtl::OUString( "_MS_VBA_Overhead") );

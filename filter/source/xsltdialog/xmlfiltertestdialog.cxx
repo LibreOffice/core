@@ -146,7 +146,6 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
 XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF ) :
     ModalDialog( pParent, ResId( DLG_XML_FILTER_TEST_DIALOG, rResMgr ) ),
     mxMSF( rxMSF ),
-    mrResMgr( rResMgr ),
 
     maFLExport( this, ResId( FL_EXPORT, rResMgr ) ),
     maFTExportXSLT( this, ResId( FT_EXPORT_XSLT, rResMgr ) ),

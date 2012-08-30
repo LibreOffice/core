@@ -102,7 +102,6 @@ private:
     sal_Bool                mbCanExtractForAccessibility;
 
     SvtGraphicFill          maCacheFill;
-    sal_Int32               mnCachePatternId;
 
 //--->i56629
     sal_Bool                mbExportRelativeFsysLinks;

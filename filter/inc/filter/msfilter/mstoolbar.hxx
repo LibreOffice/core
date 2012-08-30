@@ -177,7 +177,6 @@ class MSFILTER_DLLPUBLIC TBCBitMap : public TBBase
 friend class TBCBSpecific; // #FIXME hacky access, need to fix
     sal_Int32 cbDIB;
     Bitmap mBitMap;
-    int size;
 public:
     TBCBitMap();
     ~TBCBitMap();

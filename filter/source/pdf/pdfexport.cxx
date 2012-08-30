@@ -148,8 +148,6 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbCanCopyOrExtract          ( sal_True ),
     mbCanExtractForAccessibility( sal_True ),
 
-    mnCachePatternId            ( -1 ),
-
 //--->i56629
     mbExportRelativeFsysLinks       ( sal_False ),
     mnDefaultLinkAction         ( 0 ),

@@ -713,7 +713,7 @@ void TBCCDData::Print( FILE* fp)
     indent_printf(fp,"  wstrEdit %s", rtl::OUStringToOString( wstrEdit.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-TBCBitMap::TBCBitMap() : cbDIB( 0 ), size( 0 )
+TBCBitMap::TBCBitMap() : cbDIB( 0 )
 {
 }
 
