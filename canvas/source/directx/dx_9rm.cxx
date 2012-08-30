@@ -713,7 +713,7 @@ namespace dxcanvas
             maSize.setY(static_cast<sal_Int32>(rSizePixel.Height()));
 
             // let the child window cover the same size as the parent window.
-            mpWindow->SetPosSizePixel(0,0,maSize.getX(),maSize.getY());
+            mpWindow->setPosSizePixel(0,0,maSize.getX(),maSize.getY());
 
             // TODO(F2): since we would like to share precious hardware
             // resources, the direct3d9 object should be global. each new
@@ -1020,7 +1020,7 @@ namespace dxcanvas
             maSize.setX(static_cast<sal_Int32>(rect.getWidth()));
             maSize.setY(static_cast<sal_Int32>(rect.getHeight()));
 
-            mpWindow->SetPosSizePixel(0,0,maSize.getX(),maSize.getY());
+            mpWindow->setPosSizePixel(0,0,maSize.getX(),maSize.getY());
 
             // resize back buffer, if necessary
             // -------------------------------------------------------------
