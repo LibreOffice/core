@@ -39,13 +39,6 @@ namespace dbaccess
     class OContainerMediator :   public ::comphelper::OBaseMutex
                                 ,public ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener >
     {
-    public:
-        enum ContainerType
-        {
-            eColumns,
-            eTables
-        };
-
     private:
         typedef ::rtl::Reference< OPropertyForward >                TPropertyForward;
         typedef ::std::map< ::rtl::OUString, TPropertyForward >     PropertyForwardList;
@@ -53,7 +46,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xSettings;    // can not be weak
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >     m_xContainer;   // can not be weak
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_aConnection;
-        ContainerType                                                                   m_eType;
 
     protected:
         virtual ~OContainerMediator();
@@ -62,8 +54,7 @@ namespace dbaccess
         OContainerMediator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xSettings,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            ContainerType _eType
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
        );
 
         virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);

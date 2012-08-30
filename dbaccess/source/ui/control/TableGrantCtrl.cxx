@@ -54,7 +54,6 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
     ,m_pCheckCell( NULL )
     ,m_pEdit( NULL )
     ,m_nDataPos( 0 )
-    ,m_bEnable(sal_True)
     ,m_nDeactivateEvent(0)
 {
     DBG_CTOR(OTableGrantControl,NULL);

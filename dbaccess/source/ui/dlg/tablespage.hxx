@@ -47,7 +47,6 @@ namespace dbaui
         FixedText               m_aExplanation;
 
         ::rtl::OUString         m_sCatalogSeparator;
-        sal_Bool                m_bCheckedAll : 1;
         sal_Bool                m_bCatalogAtStart : 1;
 
         ::osl::Mutex            m_aNotifierMutex;

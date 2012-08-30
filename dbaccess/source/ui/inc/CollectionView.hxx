@@ -50,7 +50,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
         Size            m_aDlgSize;
         Size            m_a6Size;
-        sal_Int32       m_nFixDeltaHeight;
         sal_Bool        m_bCreateForm;
 
         DECL_LINK(Up_Click,void*);

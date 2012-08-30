@@ -453,7 +453,6 @@ namespace dbaui
     AdvancedSettingsDialog::AdvancedSettingsDialog( Window* _pParent, SfxItemSet* _pItems,
         const Reference< XMultiServiceFactory >& _rxORB, const Any& _aDataSourceName )
         :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADVANCED), _pItems)
-        ,m_pItemSet(_pItems)
     {
         m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);

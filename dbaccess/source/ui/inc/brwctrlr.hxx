@@ -115,7 +115,6 @@ namespace dbaui
         sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
 
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
-        sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
         bool                    m_bCannotSelectUnfiltered : 1;  // recieved an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:

@@ -44,11 +44,10 @@ namespace dbaccess
 
 DBG_NAME(OContainerMediator)
 OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer, const Reference< XNameAccess >& _xSettings,
-    const Reference< XConnection >& _rxConnection, ContainerType _eType )
+    const Reference< XConnection >& _rxConnection )
     : m_xSettings( _xSettings )
     , m_xContainer( _xContainer )
     , m_aConnection( _rxConnection )
-    , m_eType( _eType )
 {
     DBG_CTOR(OContainerMediator,NULL);
 

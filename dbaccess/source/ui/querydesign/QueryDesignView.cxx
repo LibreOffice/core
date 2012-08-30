@@ -2507,7 +2507,6 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     :OQueryView( _pParent, _rController, _rFactory )
     ,m_aSplitter( this )
     ,m_eChildFocus(NONE)
-    ,m_bInKeyEvent(sal_False)
     ,m_bInSplitHandler( sal_False )
 {
     DBG_CTOR(OQueryDesignView,NULL);

@@ -62,7 +62,6 @@ namespace dbaui
         OJoinDropData               m_aDropInfo;
 
         sal_Bool                        m_bReallyScrolled : 1;
-        sal_Bool                        m_bDragSource : 1;
 
     protected:
         virtual void LoseFocus();

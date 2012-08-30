@@ -1543,7 +1543,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         m_pInterceptor = NULL;
     }
 
-    m_pInterceptor = new OInterceptor( this ,_bReadOnly);
+    m_pInterceptor = new OInterceptor( this );
     m_pInterceptor->acquire();
     Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
 

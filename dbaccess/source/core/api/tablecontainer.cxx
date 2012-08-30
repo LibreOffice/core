@@ -240,7 +240,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
 
         if ( !m_pTableMediator.is() )
             m_pTableMediator = new OContainerMediator(
-                    this, m_xTableDefinitions.get(), m_xConnection, OContainerMediator::eTables );
+                    this, m_xTableDefinitions.get(), m_xConnection );
         if ( m_pTableMediator.is() )
             m_pTableMediator->notifyElementCreated(_rName,xDest);
     }

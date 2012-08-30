@@ -72,7 +72,6 @@ namespace dbaui
 
         OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
         ChildFocusState                     m_eChildFocus;
-        sal_Bool                            m_bInKeyEvent;
         sal_Bool                            m_bInSplitHandler;
 
     public:

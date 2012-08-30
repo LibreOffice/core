@@ -53,7 +53,6 @@ class OTableGrantControl : public ::svt::EditBrowseBox
     ::svt::CheckBoxControl*     m_pCheckCell;
     Edit*                       m_pEdit;
     long                        m_nDataPos;
-    sal_Bool                        m_bEnable;
     sal_uLong                       m_nDeactivateEvent;
 
 public:

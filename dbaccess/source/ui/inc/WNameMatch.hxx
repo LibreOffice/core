@@ -67,8 +67,6 @@ namespace dbaui
         String              m_sSourceText;
         String              m_sDestText;
 
-        sal_Bool            m_bAttrsChanged;
-
         DECL_LINK( ButtonClickHdl, Button * );
         DECL_LINK( RightButtonClickHdl, Button * );
         DECL_LINK( AllNoneClickHdl, Button * );

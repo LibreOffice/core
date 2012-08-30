@@ -619,7 +619,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_nPendingLoadFinished(0)
     ,m_nFormActionNestingLevel(0)
     ,m_bLoadCanceled( sal_False )
-    ,m_bClosingKillOpen( sal_False )
     ,m_bCannotSelectUnfiltered( true )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::SbaXDataBrowserController" );
