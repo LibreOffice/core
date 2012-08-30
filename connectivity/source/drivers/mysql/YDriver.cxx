@@ -55,7 +55,6 @@ namespace connectivity
     ODriverDelegator::ODriverDelegator(const Reference< XMultiServiceFactory >& _rxFactory)
         : ODriverDelegator_BASE(m_aMutex)
         ,m_xFactory(_rxFactory)
-        ,m_eDriverType(D_ODBC)
     {
     }
 
@@ -95,6 +94,13 @@ namespace connectivity
 
     namespace
     {
+        typedef enum
+        {
+            D_ODBC,
+            D_JDBC,
+            D_NATIVE
+        } T_DRIVERTYPE;
+
         sal_Bool isOdbcUrl(const ::rtl::OUString& _sUrl)
         {
             return _sUrl.copy(0,16) == "sdbc:mysql:odbc:";
