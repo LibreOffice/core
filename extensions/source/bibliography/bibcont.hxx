@@ -30,8 +30,6 @@
 #define TOP_WINDOW                          1
 #define BOTTOM_WINDOW                       2
 
-class BibDataManager;
-
 class BibWindowContainer : public BibWindow     //Window
 {
     private:
@@ -70,10 +68,8 @@ class BibBookContainer: public BibSplitWindow
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xTopPeerRef;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xBottomPeerRef;
 
-        BibDataManager*         pDatMan;
         BibWindowContainer*     pTopWin;
         BibWindowContainer*     pBottomWin;
-        sal_Bool                    bFirstTime;
         HdlBibModul             pBibMod;
         Timer                   aTimer;
 
@@ -87,7 +83,7 @@ class BibBookContainer: public BibSplitWindow
 
     public:
 
-        BibBookContainer(Window* pParent,BibDataManager*, WinBits nStyle = WB_3DLOOK );
+        BibBookContainer(Window* pParent, WinBits nStyle = WB_3DLOOK );
         ~BibBookContainer();
 
         inline BibWindow*       GetTopWin() {return pTopWin;}

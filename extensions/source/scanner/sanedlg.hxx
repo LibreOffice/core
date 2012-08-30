@@ -53,7 +53,6 @@ private:
     sal_Bool            mbDragEnable;
     sal_Bool            mbIsDragging;
     bool            mbScanEnabled;
-    int             mnDragMode;
     sal_Bool            mbDragDrawn;
     DragDirection   meDragDirection;
 

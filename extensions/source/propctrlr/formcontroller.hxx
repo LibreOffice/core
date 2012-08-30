@@ -61,7 +61,6 @@ namespace pcr
         ServiceDescriptor           m_aServiceDescriptor;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     m_xCurrentInspectee;
-        bool                        m_bUseFormComponentHandlers;
     public:
         FormController(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
