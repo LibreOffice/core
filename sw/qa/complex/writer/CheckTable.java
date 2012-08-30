@@ -12,16 +12,9 @@ package complex.writer;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.XEnumeration;
-import com.sun.star.util.XCloseable;
 import com.sun.star.text.XText;
-import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextRange;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextTable;
 import com.sun.star.table.TableBorder;
@@ -38,9 +31,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
-import java.util.Set;
-import java.util.HashSet;
 
 
 public class CheckTable

@@ -27,8 +27,6 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
 import java.io.PrintWriter;
-import java.util.Hashtable;
-
 import com.sun.star.lang.*;
 import com.sun.star.beans.*;
 import com.sun.star.frame.*;
@@ -40,7 +38,6 @@ import com.sun.star.util.XCloseable;
 import com.sun.star.util.CloseVetoException;
 
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.comp.helper.ComponentContext;
 
 /**
  * The following Complex Test will test the

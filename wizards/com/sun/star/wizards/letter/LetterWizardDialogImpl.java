@@ -19,9 +19,6 @@ package com.sun.star.wizards.letter;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
@@ -36,7 +33,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextFrame;
-import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.RuntimeException;
@@ -66,12 +62,10 @@ import com.sun.star.util.XSearchable;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.*;
-import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.TextElement;
 import com.sun.star.wizards.common.PlaceholderTextElement;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.uno.XInterface;
 
 public class LetterWizardDialogImpl extends LetterWizardDialog
 {

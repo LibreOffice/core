@@ -22,8 +22,6 @@
 
 package net.adaptivebox.global;
 
-import java.util.*;
-
 public class RandomGenerator {
 
 /**This function returns a random integer number between the lowLimit and upLimit.

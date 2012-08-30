@@ -20,7 +20,6 @@ package complex.tdoc;
 
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XPropertySetInfo;
-import lib.MultiMethodTest;
 import lib.StatusException;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -30,7 +29,6 @@ import com.sun.star.ucb.CommandInfo;
 import com.sun.star.ucb.GlobalTransferCommandArgument;
 import com.sun.star.ucb.NameClash;
 import com.sun.star.ucb.TransferCommandOperation;
-import com.sun.star.ucb.UnsupportedCommandException;
 import com.sun.star.ucb.XCommandInfo;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.uno.Exception;

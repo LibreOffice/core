@@ -30,7 +30,6 @@ import com.sun.star.awt.XKeyHandler;
 import com.sun.star.awt.XMouseClickHandler;
 import com.sun.star.awt.XUserInputInterception;
 import com.sun.star.awt.XWindow;
-import com.sun.star.chart.XChartDocument;
 import com.sun.star.frame.*;
 import com.sun.star.lang.*;
 import com.sun.star.lang.EventObject;
@@ -45,8 +44,6 @@ import java.awt.event.InputEvent;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 
-// ---------- junit imports -----------------
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

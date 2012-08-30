@@ -22,7 +22,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.UnoRuntime;
 
 import helper.URLHelper;

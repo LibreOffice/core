@@ -23,8 +23,6 @@ import com.sun.star.report.pentaho.parser.rpt.DetailRootTableReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.ReportReadHandler;
 import com.sun.star.report.pentaho.parser.text.TextContentReadHandler;
 
-import java.lang.Object;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -31,8 +31,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import util.FormTools;
 import util.SOfficeFactory;
 import util.ValueChanger;

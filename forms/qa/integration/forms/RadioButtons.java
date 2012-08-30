@@ -28,11 +28,6 @@ import integration.forms.dbfTools;
 import integration.forms.DocumentHelper;
 import integration.forms.SpreadsheetDocument;
 
-import util.utils;
-import java.util.*;
-import java.io.*;
-import java.lang.*;
-
 public class RadioButtons extends complexlib.ComplexTestCase
 {
     private DocumentHelper          m_document;         /// our current test document

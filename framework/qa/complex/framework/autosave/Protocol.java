@@ -20,33 +20,9 @@ package complex.framework.autosave;
 
 // __________ Imports __________
 
-// structs, const, ...
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.bridge.XUnoUrlResolver;
-
-// exceptions
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
-import java.io.IOException;
-import java.lang.InterruptedException;
-import java.net.ConnectException;
-
-// interfaces
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Any;
-
-// helper
-import com.sun.star.uno.IBridge;
-import com.sun.star.uno.UnoRuntime;
-
 // others
 import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.*;
-import java.lang.*;
 import java.io.*;
-import java.util.*;
 import java.sql.*;
 
 // __________ Implementation __________

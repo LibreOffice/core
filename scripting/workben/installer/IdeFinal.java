@@ -20,7 +20,6 @@ package installer;
 
 import java.awt.event.*;
 import java.util.*;
-import java.net.*;
 import javax.swing.*;
 
 public class IdeFinal extends javax.swing.JPanel implements ActionListener, InstallListener {

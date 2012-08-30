@@ -18,27 +18,7 @@
 
 package com.sun.star.comp.helper;
 
-import com.sun.star.comp.loader.JavaLoader;
-
-import com.sun.star.comp.servicemanager.ServiceManager;
-import com.sun.star.uno.UnoRuntime;
-
-import com.sun.star.container.XSet;
-import com.sun.star.container.XContentEnumerationAccess;
-import com.sun.star.container.XEnumeration;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XElementAccess;
-
-import com.sun.star.lang.XComponent;
-
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.XInitialization;
-
-import com.sun.star.loader.XImplementationLoader;
-
-import com.sun.star.registry.XSimpleRegistry;
 
 public class RegistryServiceFactory_Test {
 

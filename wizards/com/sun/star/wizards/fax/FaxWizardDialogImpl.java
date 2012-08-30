@@ -60,13 +60,11 @@ import com.sun.star.util.XSearchable;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.*;
-import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.TextElement;
 import com.sun.star.wizards.common.PlaceholderTextElement;
 
 import java.util.List;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.uno.XInterface;
 
 public class FaxWizardDialogImpl extends FaxWizardDialog
 {

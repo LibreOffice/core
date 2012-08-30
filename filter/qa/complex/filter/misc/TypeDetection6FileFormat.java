@@ -30,8 +30,6 @@ import com.sun.star.uno.XInterface;
 
 import util.utils;
 
-// ---------- junit imports -----------------
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

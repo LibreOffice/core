@@ -24,14 +24,11 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.ui.*;
 
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XSearchable;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.*;
-import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.TextElement;
 import com.sun.star.wizards.common.PlaceholderTextElement;
 import java.util.List;

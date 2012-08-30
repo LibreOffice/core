@@ -19,10 +19,6 @@
 package installer;
 
 import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.*;
-import java.awt.*;
 
 public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
 

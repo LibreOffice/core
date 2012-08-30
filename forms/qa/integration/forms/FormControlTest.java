@@ -30,7 +30,6 @@ import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.SQLErrorEvent;
 import com.sun.star.sdb.XSQLErrorBroadcaster;
 import com.sun.star.sdb.XSQLErrorListener;
-import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XResultSetUpdate;

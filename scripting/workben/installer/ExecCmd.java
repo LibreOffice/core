@@ -17,7 +17,6 @@
  */
 
 package installer;
-import java.util.*;
 import java.io.*;
 public class ExecCmd
 {

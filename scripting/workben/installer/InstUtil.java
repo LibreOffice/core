@@ -21,10 +21,6 @@ package installer;
 import java.net.URLDecoder;
 import java.io.*;
 import java.util.*;
-import java.util.zip.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 import java.net.*;
 
 public class InstUtil {

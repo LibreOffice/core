@@ -18,7 +18,6 @@
 
 package integration.extensions;
 
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 
 public class TestSkeleton extends complexlib.ComplexTestCase

@@ -24,13 +24,8 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.Exception;
@@ -40,11 +35,8 @@ import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.util.XChangesBatch;
 
 /** A handler which supports multiple options pages which all

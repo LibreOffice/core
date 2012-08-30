@@ -18,15 +18,9 @@
 
 package complex.writer;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.XNamed;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import complexlib.ComplexTestCase;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.ArrayList;
 import org.junit.After;

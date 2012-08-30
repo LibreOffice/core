@@ -23,11 +23,7 @@
 
 package org.openoffice.xforms;
 
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.xforms.XFormsUIHelper1;
 import com.sun.star.xforms.XModel;

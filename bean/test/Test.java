@@ -18,14 +18,9 @@
 package test;
 
 
-import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import com.sun.star.comp.beans.OOoBean;
-import com.sun.star.uno.UnoRuntime;
-
-
-import java.awt.*;
 
 public class Test
 {

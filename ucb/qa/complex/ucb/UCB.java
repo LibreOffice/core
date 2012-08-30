@@ -40,9 +40,7 @@ import com.sun.star.uno.UnoRuntime;
 // import com.sun.star.lang.XMultiComponentFactory;
 // import com.sun.star.beans.XPropertySet;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;

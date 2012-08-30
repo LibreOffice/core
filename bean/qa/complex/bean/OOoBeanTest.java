@@ -18,8 +18,6 @@
 package complex.bean;
 
 
-// import complexlib.ComplexTestCase;
-import com.sun.star.lang.XMultiServiceFactory;
 import java.awt.event.*;
 import java.awt.event.KeyEvent;
 import com.sun.star.comp.beans.OOoBean;

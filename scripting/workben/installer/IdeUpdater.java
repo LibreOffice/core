@@ -20,12 +20,6 @@ package installer;
 
 import java.io.*;
 import java.util.*;
-import java.util.jar.*;
-//import org.xml.sax.*;
-//import org.w3c.dom.*;
-//import javax.xml.parsers.*;
-import java.net.URL;
-import java.net.JarURLConnection;
 //import javax.xml.parsers.*;
 import javax.swing.*;
 

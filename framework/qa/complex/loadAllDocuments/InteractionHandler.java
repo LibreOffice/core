@@ -17,16 +17,7 @@
  */
 package complex.loadAllDocuments;
 
-import com.sun.star.beans.PropertyValue;
-
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
-
 import com.sun.star.task.XInteractionHandler;
-import com.sun.star.task.XInteractionAbort;
-import com.sun.star.task.XInteractionRetry;
-
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 
 

@@ -18,9 +18,6 @@
 
 package complex.tdoc;
 
-import lib.MultiMethodTest;
-import lib.Status;
-
 import com.sun.star.container.XChild;
 import com.sun.star.container.XNamed;
 import com.sun.star.uno.UnoRuntime;

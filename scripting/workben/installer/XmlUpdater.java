@@ -20,9 +20,7 @@ package installer;
 
 import java.io.*;
 import java.util.*;
-import java.util.jar.*;
 import java.net.URL;
-import java.net.JarURLConnection;
 import javax.swing.*;
 
 /**

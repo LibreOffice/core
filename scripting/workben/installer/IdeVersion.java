@@ -25,7 +25,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
-import javax.swing.SwingUtilities.*;
 
 public class IdeVersion extends javax.swing.JPanel implements ActionListener, TableModelListener {
 

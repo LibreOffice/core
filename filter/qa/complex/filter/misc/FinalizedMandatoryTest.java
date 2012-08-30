@@ -32,8 +32,6 @@ import com.sun.star.util.XFlushable;
 // import complexlib.ComplexTestCase;
 // import util.utils;
 
-// ---------- junit imports -----------------
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

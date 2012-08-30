@@ -19,7 +19,6 @@ package integration.forms;
 
 import com.sun.star.uno.UnoRuntime;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XText;
@@ -28,7 +27,6 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.form.binding.XValueBinding;
 import com.sun.star.form.binding.XBindableValue;
 
-import integration.forms.DocumentHelper;
 import integration.forms.TableCellTextBinding;
 
 public class ValueBinding extends integration.forms.TestCase

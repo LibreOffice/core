@@ -19,9 +19,6 @@
 package complex.tdoc;
 
 import com.sun.star.container.XNameContainer;
-import lib.MultiMethodTest;
-
-import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;

@@ -18,10 +18,8 @@
 package complex.path_settings;
 
 import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XFastPropertySet;
-import com.sun.star.beans.XMultiPropertySet;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertiesChangeListener;
 import com.sun.star.beans.XPropertyChangeListener;
@@ -34,9 +32,6 @@ import com.sun.star.uno.AnyConverter;
 // ---------- junit imports -----------------
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

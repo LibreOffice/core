@@ -22,10 +22,8 @@ import com.sun.star.lang.DisposedException;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.XWeak;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
@@ -35,8 +33,6 @@ import com.sun.star.beans.PropertyChangeEvent;
 import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XPropertiesChangeListener;
-
-import java.util.Arrays;
 
 public class PropertySet_Test
 {
