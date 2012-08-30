@@ -97,7 +97,6 @@ private:
     CancelButton        m_aCancelBtn;
     HelpButton          m_aHelpBtn;
 
-    bool                m_bIsDefaultMode;
     boost::shared_ptr<LocalizationMgr> m_pLocalizationMgr;
 
     void                FillLanguageBox();
