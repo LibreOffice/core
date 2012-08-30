@@ -381,6 +381,30 @@ void OGLTransitionerImpl::impl_initializeOnce( bool const bGLXPresent )
     }
 }
 
+#if defined( UNX )
+SystemEnvData const*
+lcl_createSystemWindow(
+        unx::XVisualInfo* const pXVisual,
+        Window* const pParentWindow,
+        SystemChildWindow** const pChildWindow )
+{
+    assert(pChildWindow);
+
+    SystemWindowData winData;
+    winData.nSize = sizeof(winData);
+    SAL_INFO("slideshow.opengl", "using VisualID " << pXVisual->visualid);
+    winData.pVisual = (void*)(pXVisual->visual);
+    SystemChildWindow* pWindow = new SystemChildWindow(pParentWindow, 0, &winData, sal_False);
+    SystemEnvData const* const pChildSysData = pWindow->GetSystemData();
+    if( !pChildSysData ) {
+        delete pWindow, pWindow=NULL;
+    }
+
+    *pChildWindow = pWindow;
+    return pChildSysData;
+}
+#endif
+
 bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 {
     const SystemEnvData* sysData(pPWindow->GetSystemData());
@@ -509,31 +533,22 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
                 break;
             }
 
-            if( i != nfbconfigs || ( firstVisual && pAttributeTable[1] == NULL ) ) {
-                if( i != nfbconfigs ) {
-                    vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
-                    mbHasTFPVisual = true;
-                    SAL_INFO("slideshow.opengl", "found visual suitable for texture_from_pixmap");
-                } else {
-                    vi = firstVisual;
-                    mbHasTFPVisual = false;
-                    SAL_INFO("slideshow.opengl", "did not find visual suitable for texture_from_pixmap, using " << vi->visualid);
-                }
-#endif
-            SystemWindowData winData;
-            winData.nSize = sizeof(winData);
-            SAL_INFO("slideshow.opengl", "using VisualID " << vi->visualid);
-            winData.pVisual = (void*)(vi->visual);
-            pWindow=new SystemChildWindow(pPWindow, 0, &winData, sal_False);
-            pChildSysData = pWindow->GetSystemData();
-            if( pChildSysData ) {
-                break;
-            } else {
-                delete pWindow, pWindow=NULL;
+            if( i != nfbconfigs ) {
+                vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
+                mbHasTFPVisual = true;
+                pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
+                SAL_INFO("slideshow.opengl", "found visual suitable for texture_from_pixmap");
+            } else if( firstVisual && pAttributeTable[1] == NULL ) {
+                vi = firstVisual;
+                mbHasTFPVisual = false;
+                pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
+                SAL_INFO("slideshow.opengl", "did not find visual suitable for texture_from_pixmap, using " << vi->visualid);
             }
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-        }
+#else
+            pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
 #endif
+            if ( pChildSysData )
+                break;
         }
 
         ++pAttributeTable;
