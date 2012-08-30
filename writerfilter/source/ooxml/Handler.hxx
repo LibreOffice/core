@@ -97,11 +97,10 @@ public:
 
 class OOXMLBreakHandler : public Properties
 {
-    OOXMLFastContextHandler * mpFastContext;
     sal_Int32 mnType, mnClear;
     Stream & mrStream;
 public:
-    OOXMLBreakHandler(Stream & rStream, OOXMLFastContextHandler * pContext);
+    OOXMLBreakHandler(Stream & rStream);
     virtual ~OOXMLBreakHandler();
     virtual void attribute(Id name, Value & val);
     virtual void sprm(Sprm & sprm);

@@ -204,9 +204,8 @@ void OOXMLHeaderHandler::sprm(Sprm & /*sprm*/)
 /*
   class OOXMLBreakHandler
  */
-OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream,
-                                     OOXMLFastContextHandler * pContext)
-: mpFastContext(pContext), mnType(0), mnClear(0),
+OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream)
+: mnType(0), mnClear(0),
   mrStream(rStream)
 {
 }

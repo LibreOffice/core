@@ -1435,7 +1435,7 @@ void OOXMLFastContextHandlerProperties::handleBreak()
     debug_logger->element("handleBreak");
 #endif
 
-    OOXMLBreakHandler aBreakHandler(*mpStream, this);
+    OOXMLBreakHandler aBreakHandler(*mpStream);
     getPropertySet()->resolve(aBreakHandler);
 }
 
