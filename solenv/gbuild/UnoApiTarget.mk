@@ -56,11 +56,12 @@ define gb_UnoApiPartTarget__command
 	$(call gb_Output_announce,$(2),$(true),IDL,2)
 	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3)))) && \
+	$(gb_UnoApiPartTarget_IDLCCOMMAND) \
 		$(INCLUDE) \
 		-M $(basename $(call gb_UnoApiPartTarget_get_dep_target,$(dir $(2)))) \
 		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose \
-		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3)))) && \
-	$(gb_UnoApiPartTarget_IDLCCOMMAND) @$${RESPONSEFILE} > /dev/null && \
+		@$${RESPONSEFILE} > /dev/null && \
 	rm -f $${RESPONSEFILE} && \
 	touch $(1)
 
@@ -276,12 +277,14 @@ gb_UnoApiHeadersTarget_CPPUMAKERTARGET := $(call gb_Executable_get_target_for_bu
 gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
 
 define gb_UnoApiHeadersTarget__command
-RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
-	-Gc $(4) -BUCR \
-	-O$(3) $(call gb_UnoApiTarget_get_target,$(2)) $(UNOAPI_DEPS)) && \
-$(gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND) @$${RESPONSEFILE} && \
-rm -f $${RESPONSEFILE} && \
-touch $(1)
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
+		$(UNOAPI_DEPS)) && \
+	$(gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND) \
+		-Gc $(4) -BUCR \
+		-O$(3) $(call gb_UnoApiTarget_get_target,$(2)) \
+		@$${RESPONSEFILE} && \
+	rm -f $${RESPONSEFILE} && \
+	touch $(1)
 
 endef
 
