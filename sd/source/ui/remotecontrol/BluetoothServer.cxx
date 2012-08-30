@@ -9,7 +9,7 @@
 #include "BluetoothServer.hxx"
 #include <stdio.h>
 
-#ifdef LINUX
+#if defined(LINUX) && defined(ENABLE_GIO) && defined(ENABLE_DBUS)
 #include <glib.h>
 #include <gio/gio.h>
 #include <sys/unistd.h>
@@ -53,7 +53,7 @@ struct oslSocketImpl {
 
 void BluetoothServer::execute()
 {
-#ifdef LINUX
+#if defined(LINUX) && defined(ENABLE_GIO) && defined(ENABLE_DBUS)
 #ifdef GLIB_VERSION_2_26
     g_type_init();
     GError* aError = NULL;

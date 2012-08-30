@@ -1117,6 +1117,7 @@ endef
 
 endif # SYSTEM_LPSOLVE
 
+ifeq ($(ENABLE_GIO),TRUE)
 
 define gb_LinkTarget__use_gio
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1124,9 +1125,21 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(GIO_CFLAGS) \
 )
 
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DENABLE_GIO \
+)
+
 $(call gb_LinkTarget_add_libs,$(1),$(GIO_LIBS))
 
 endef
+
+else # ENABLE_GIO
+
+define gb_LinkTarget__use_gio
+
+endef
+
+endif # ENABLE_GIO
 
 define gb_LinkTarget__use_gtk
 $(call gb_LinkTarget_set_include,$(1),\

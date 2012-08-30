@@ -108,13 +108,8 @@ $(eval $(call gb_Library_use_libraries,sd,\
 
 $(eval $(call gb_Library_use_externals,sd,\
  libxml2 \
-))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_externals,sd,\
  gio \
 ))
-endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_libraries,sd,\
