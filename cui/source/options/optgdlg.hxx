@@ -140,7 +140,6 @@ private:
 
     sal_uInt16          nSizeLB_InitialSelection;
     sal_uInt16          nStyleLB_InitialSelection;
-    sal_Bool            bSfxSymbolsAuto;
 
     // item ID for the given icon theme
     // might be zero when the theme is not installed and the item is removed

@@ -72,7 +72,6 @@ private:
     SvxHlmarkTreeLBox maLbTree;
 
     sal_Bool            mbUserMoved;
-    sal_Bool            mbFirst;
 
     SvxHyperlinkTabPageBase* mpParent;
 

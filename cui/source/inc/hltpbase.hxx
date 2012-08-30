@@ -66,9 +66,6 @@ public:
 /// ComboBox-Control for URL's with History and Autocompletion
 class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 {
-private:
-    sal_Bool   mbAccessAddress;
-
 protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
@@ -79,7 +76,7 @@ protected:
     virtual long        PreNotify( NotifyEvent& rNEvt );
 
 public:
-    SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE, sal_Bool bAddresses = sal_False );
+    SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE );
 
 };
 

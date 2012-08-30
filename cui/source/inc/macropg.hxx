@@ -132,8 +132,6 @@ public:
     void                SetTabPage( SfxTabPage* pTabPage );
 
 private:
-    SfxViewFrame*       pFrame;
-
     FixedLine*          pFixedLine;
 
     OKButton*           pOKBtn;

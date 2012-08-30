@@ -55,7 +55,6 @@ private:
     sal_uInt16          nDlgType;
     sal_uInt16          nPosDashLb;
     sal_uInt16          nPosLineEndLb;
-    sal_uInt16          mnPos;
     sal_Bool            mbAreaTP;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );

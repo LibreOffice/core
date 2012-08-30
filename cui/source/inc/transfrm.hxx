@@ -218,7 +218,6 @@ private:
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eDlgUnit;
-    MapUnit             eMapUnit;
     //------------------------------------
 #if _SOLAR__PRIVATE
     DECL_LINK( ModifiedHdl, void * );
@@ -268,7 +267,6 @@ private:
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eDlgUnit;
-    MapUnit             eMapUnit;
     //------------------------------------
 public:
          SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  );

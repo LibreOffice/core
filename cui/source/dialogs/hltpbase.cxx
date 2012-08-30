@@ -96,10 +96,9 @@ SvxFramesComboBox::~SvxFramesComboBox ()
 |*
 |************************************************************************/
 
-SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart, sal_Bool bAddresses )
+SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart )
 : SvtURLBox         ( pParent, eSmart ),
-  DropTargetHelper  ( this ),
-  mbAccessAddress   (bAddresses)
+  DropTargetHelper  ( this )
 {
 }
 

@@ -335,7 +335,6 @@ private:
     ChangeType*         pnColorListState;
     sal_uInt16              nPageType;
     sal_uInt16              nDlgType;
-    sal_uInt16*             pPos;
     sal_Bool*               pbAreaTP;
 
     sal_Bool                bDisable;
@@ -488,7 +487,6 @@ private:
     ImageButton         aBtnSave;
 
     const SfxItemSet&   rOutAttrs;
-    RECT_POINT          eRP;
 
     XColorListRef         pColorList;
     XHatchListRef         pHatchingList;

@@ -256,8 +256,7 @@ SpellDialog::SpellDialog(
     aDialogUndoLink( LINK (this, SpellDialog, DialogUndoHdl)),
     bModified( false ),
     bFocusLocked( true ),
-    rParent         ( *pChildWindow ),
-    nOldLang        ( LANGUAGE_NONE )
+    rParent         ( *pChildWindow )
 {
     FreeResource();
     xSpell = LinguMgr::GetSpellChecker();

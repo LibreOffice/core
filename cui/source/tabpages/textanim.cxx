@@ -59,7 +59,6 @@ SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
                                 const SfxItemSet* pAttr,
                                 const SdrView* pSdrView ) :
         SfxTabDialog        ( pParent, CUI_RES( RID_SVXDLG_TEXT ), pAttr ),
-        rOutAttrs           ( *pAttr ),
         pView               ( pSdrView )
 {
     FreeResource();

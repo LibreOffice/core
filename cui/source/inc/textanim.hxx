@@ -109,7 +109,6 @@ public:
 class SvxTextTabDialog : public SfxTabDialog
 {
 private:
-    const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );

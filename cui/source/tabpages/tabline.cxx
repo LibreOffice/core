@@ -72,7 +72,6 @@ SvxLineTabDialog::SvxLineTabDialog
     nDlgType( 0 ),
     nPosDashLb( 0 ),
     nPosLineEndLb( 0 ),
-    mnPos( 0 ),
     mbAreaTP( sal_False )
 {
     FreeResource();

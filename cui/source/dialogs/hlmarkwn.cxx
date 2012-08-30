@@ -131,7 +131,6 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
     maBtClose( this, CUI_RES (BT_CLOSE) ),
     maLbTree ( this, CUI_RES (TLB_MARK) ),
     mbUserMoved ( sal_False ),
-    mbFirst     ( sal_True ),
     mpParent    ( pParent ),
     mnError     ( LERR_NOERROR )
 {

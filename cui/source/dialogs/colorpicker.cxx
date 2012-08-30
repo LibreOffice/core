@@ -378,7 +378,6 @@ private:
     std::vector< sal_uInt16 > maPercent_Horiz;
     std::vector< sal_uInt8 > maRGB_Vert;
     std::vector< sal_uInt16 > maPercent_Vert;
-    bool mbInit;
 };
 
 // -----------------------------------------------------------------------
@@ -389,7 +388,6 @@ ColorFieldControl::ColorFieldControl( Window* pParent, const ResId& rResId )
 , mdX( -1.0 )
 , mdY( -1.0 )
 , mpBitmap( 0 )
-, mbInit( false )
 {
     SetControlBackground();
 }

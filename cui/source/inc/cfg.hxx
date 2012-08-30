@@ -238,8 +238,6 @@ private:
     bool                        bStrEdited;
     bool                        bIsUserDefined;
     bool                        bIsMain;
-    bool                        bIsDeletable;
-    bool                        bIsMovable;
     bool                        bIsParentData;
 
     /// toolbar specific properties
