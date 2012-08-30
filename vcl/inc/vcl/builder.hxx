@@ -62,7 +62,8 @@ private:
 
     struct ListStore
     {
-        std::vector<rtl::OString> m_aEntries;
+        typedef std::vector<rtl::OString> row;
+        std::vector<row> m_aEntries;
     };
 
     struct ModelAndId
@@ -189,6 +190,7 @@ private:
     void collectProperty(xmlreader::XmlReader &reader, const rtl::OString &rID, stringmap &rVec);
 
     void handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID);
+    void handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID, sal_Int32 nRowIndex);
     void handleAdjustment(const rtl::OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
 

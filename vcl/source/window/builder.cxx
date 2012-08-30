@@ -536,7 +536,10 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
         if (pCurrentChild->IsDialog())
             pCurrentChild->SetStyle(pCurrentChild->GetStyle() | WB_SIZEMOVE | WB_3DLOOK);
         if (pCurrentChild->GetHelpId().isEmpty())
+        {
             pCurrentChild->SetHelpId(m_sHelpRoot + m_sID);
+            fprintf(stderr, "for toplevel dialog %p %s, set helpid %s\n", this, rID.getStr(), pCurrentChild->GetHelpId().getStr());
+        }
     }
     else
     {
@@ -782,12 +785,13 @@ void VclBuilder::handleAdjustment(const rtl::OString &rID, stringmap &rPropertie
     m_pParserState->m_aAdjustments.push_back(AdjustmentAndId(rID, rProperties));
 }
 
-void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID)
+void VclBuilder::handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID, sal_Int32 nRowIndex)
 {
-    m_pParserState->m_aModels.push_back(ModelAndId(rID, new ListStore));
-
     int nLevel = 1;
-    sal_Int32 nIndex = 0;
+
+    fprintf(stderr, "handleRow for %s\n", rID.getStr());
+
+    ListStore::row aRow;
 
     while(1)
     {
@@ -807,12 +811,18 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
             {
                 bool bTranslated = false;
                 rtl::OString sProperty, sValue;
+                sal_uInt32 nId = 0;
 
                 while (reader.nextAttribute(&nsId, &name))
                 {
-                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
+                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
                     {
-                        sValue = getTranslation(rID, rtl::OString::valueOf(nIndex));
+                        name = reader.getAttributeValue(false);
+                        nId = rtl::OString(name.begin, name.length).toInt32();
+                    }
+                    else if (nId == 0 && name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
+                    {
+                        sValue = getTranslation(rID, rtl::OString::valueOf(nRowIndex));
                         bTranslated = !sValue.isEmpty();
                     }
                 }
@@ -823,10 +833,49 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
                 if (!bTranslated)
                     sValue = rtl::OString(name.begin, name.length);
 
-                m_pParserState->m_aModels.back().m_pModel->m_aEntries.push_back(sValue);
-
-                ++nIndex;
+                if (aRow.size() < nId+1)
+                    aRow.resize(nId+1);
+                aRow[nId] = sValue;
             }
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+
+    if (!aRow.empty())
+        m_pParserState->m_aModels.back().m_pModel->m_aEntries.push_back(aRow);
+}
+
+void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID)
+{
+    m_pParserState->m_aModels.push_back(ModelAndId(rID, new ListStore));
+
+    int nLevel = 1;
+    sal_Int32 nRowIndex = 0;
+
+    while(1)
+    {
+        xmlreader::Span name;
+        int nsId;
+
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("row")))
+                handleRow(reader, rID, nRowIndex++);
+            else
+                ++nLevel;
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
@@ -1188,10 +1237,16 @@ bool VclBuilder::replace(rtl::OString sID, Window &rReplacement)
 
 void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
 {
-    for (std::vector<rtl::OString>::iterator aI = rStore.m_aEntries.begin(), aEnd = rStore.m_aEntries.end();
+    for (std::vector<ListStore::row>::iterator aI = rStore.m_aEntries.begin(), aEnd = rStore.m_aEntries.end();
         aI != aEnd; ++aI)
     {
-        rTarget.InsertEntry(rtl::OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
+        const ListStore::row &rRow = *aI;
+        sal_uInt16 nEntry = rTarget.InsertEntry(rtl::OStringToOUString(rRow[0], RTL_TEXTENCODING_UTF8));
+        if (rRow.size() > 1)
+        {
+            sal_IntPtr nValue = rRow[1].toInt32();
+            rTarget.SetEntryData(nEntry, (void*)nValue);
+        }
     }
     if (!rStore.m_aEntries.empty())
         rTarget.SelectEntryPos(0);

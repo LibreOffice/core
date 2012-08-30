@@ -14,7 +14,7 @@
 <xsl:template match="/">
   <l><xsl:text>&#10;</xsl:text>
   <xsl:apply-templates select="//*[*[not(self::col)]/@translatable='yes']" />
-  <xsl:apply-templates select="interface/object[data/row/col[@translatable='yes']]" />
+  <xsl:apply-templates select="interface/object[data/row/col[@id='0'][@translatable='yes']]" />
   </l>
 </xsl:template>
 
@@ -25,10 +25,10 @@
   </t><xsl:text>&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="col">
+<xsl:template match="col[@id='0']">
   <xsl:text> </xsl:text>
   <xsl:variable name="groupid" select="../../../@id"/>
-  <t r="stringlist" g="{str:tokenize($groupid,':')[1]}" l="{count(preceding::col[../../../@id=$groupid])}">
+  <t r="stringlist" g="{str:tokenize($groupid,':')[1]}" l="{count(preceding::col[@id='0'][../../../@id=$groupid])}">
   <xsl:copy-of select="text()" />
   </t><xsl:text>&#10;</xsl:text>
 </xsl:template>
