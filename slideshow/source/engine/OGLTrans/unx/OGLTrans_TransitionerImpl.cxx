@@ -469,8 +469,8 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
                                    GLWin.screen,
                                    *pAttributeTable );
 
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
         if( vi ) {
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
             if( !firstVisual )
                 firstVisual = vi;
             SAL_INFO("slideshow.opengl", "trying VisualID " << vi->visualid);
@@ -516,9 +516,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
                     vi = firstVisual;
                     mbHasTFPVisual = false;
                     SAL_INFO("slideshow.opengl", "did not find visual suitable for texture_from_pixmap, using " << vi->visualid);
-            }
-#else
-        if( vi ) {
+                }
 #endif
             SystemWindowData winData;
             winData.nSize = sizeof(winData);
@@ -531,10 +529,10 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
             } else {
                 delete pWindow, pWindow=NULL;
             }
-        }
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    }
+        }
 #endif
+        }
 
         ++pAttributeTable;
     }
