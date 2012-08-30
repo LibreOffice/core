@@ -369,7 +369,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
-        sal_IntPtr nPtr = NULL;
+        sal_IntPtr nPtr = 0;
         aArguments[0] >>= nPtr;
         NSView* pParentView = reinterpret_cast< NSView * >(nPtr);
 
