@@ -12719,8 +12719,10 @@ else
         pathmunge "$MSPDB_PATH" "before"
         if test "$BITNESS_OVERRIDE" = 64; then
             pathmunge "$COMPATH/bin/amd64" "before"
+			pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
         else
             pathmunge "$COMPATH/bin" "before"
+			pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
         fi
         if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
             if test -d "$JAVA_HOME/jre/bin/client"; then
