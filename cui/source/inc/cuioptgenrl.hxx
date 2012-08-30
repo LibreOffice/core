@@ -45,10 +45,10 @@ private:
     // the "Use data for document properties" checkbox (but where is it?)
     CheckBox            aUseDataCB;
     // rows
-    class Row;
+    struct Row;
     std::vector<boost::shared_ptr<Row> > vRows;
     // fields
-    class Field;
+    struct Field;
     std::vector<boost::shared_ptr<Field> > vFields;
     // "name" fields
     unsigned nNameRow;
