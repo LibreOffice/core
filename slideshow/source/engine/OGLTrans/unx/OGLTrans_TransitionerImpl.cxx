@@ -82,9 +82,6 @@ namespace unx
 #include <boost/date_time/posix_time/posix_time.hpp>
 using namespace ::boost::posix_time;
 
-static ptime t1;
-static ptime t2;
-
 #endif
 
 using namespace ::com::sun::star;
@@ -99,6 +96,26 @@ namespace
 {
 
 typedef cppu::WeakComponentImplHelper1<presentation::XTransition> OGLTransitionerImplBase;
+
+#if OSL_DEBUG_LEVEL > 1
+class TimerContext
+{
+public:
+    explicit TimerContext(rtl::OUString const& rWhat)
+        : m_aWhat(rWhat)
+        , m_aStartTime(microsec_clock::local_time())
+    {
+    }
+    ~TimerContext()
+    {
+        time_duration const aDuration(microsec_clock::local_time() - m_aStartTime);
+        SAL_INFO("slideshow.opengl", m_aWhat << " took: " << aDuration);
+    }
+private:
+    rtl::OUString const m_aWhat;
+    ptime const m_aStartTime;
+};
+#endif
 
 namespace
 {
@@ -733,10 +750,6 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     XSync(GLWin.dpy, false);
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
-    t1 = microsec_clock::local_time();
-#endif
-
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
 
@@ -1071,6 +1084,10 @@ void OGLTransitionerImpl::GLInitSlides()
     if (isDisposed() || pTransition->mnRequiredGLVersion > cnGLVersion)
         return;
 
+#if OSL_DEBUG_LEVEL > 1
+    TimerContext aTimerContext("texture creation");
+#endif
+
     prepareEnvironment();
 
     const OGLFormat* pFormat = NULL;
@@ -1098,11 +1115,6 @@ void OGLTransitionerImpl::GLInitSlides()
 #ifdef UNX
     unx::glXWaitGL();
     XSync(GLWin.dpy, false);
-#endif
-
-#if OSL_DEBUG_LEVEL > 1
-    t2 = microsec_clock::local_time();
-    SAL_INFO("slideshow.opengl", "textures created in: " << ( t2 - t1 ));
 #endif
 }
 
