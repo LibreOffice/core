@@ -12108,7 +12108,7 @@ fi
 # ===================================================================
 AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
-if test $enable_mergelibs = yes; then
+if test "$enable_mergelibs" = "yes" ; then
     if test $WITH_BINFILTER = YES; then
         add_warning "--enable-mergelibs conflicts with --enable-binfilter. Disabling mergelibs."
         AC_MSG_RESULT([no])
