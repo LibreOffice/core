@@ -1781,8 +1781,7 @@ void Window::queue_resize()
 
     if (!pDialog || pDialog == this)
         return;
-    if (pDialog->isLayoutEnabled())
-        pDialog->Resize();
+    pDialog->queue_layout();
 }
 
 //We deliberately do not overwrite our maHelpId here
