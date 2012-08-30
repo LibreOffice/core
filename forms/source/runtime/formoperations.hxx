@@ -301,13 +301,13 @@ namespace frm
         /** calls a (member) function, catches SQLExceptions, extends them with additional context information,
             and rethrows them
 
-            @param Action
+            @param f
                 a fuctionoid with no arguments to do the work
             @param _nErrorResourceId
                 the id of the resources string to use as error message
         */
         template < typename FunctObj >
-        void        impl_doActionInSQLContext_throw( FunctObj Action, sal_uInt16 _nErrorResourceId ) const;
+        void        impl_doActionInSQLContext_throw( FunctObj f, sal_uInt16 _nErrorResourceId ) const;
 
         // functionoid to call appendOrderByColumn
         class impl_appendOrderByColumn_throw
