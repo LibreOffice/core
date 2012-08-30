@@ -74,9 +74,6 @@ namespace accessibility
                                         ,public AccessibleTextHelper_BASE
                                         ,public ::comphelper::OCommonAccessibleText
     {
-    private:
-        sal_Int32   m_nOffset;
-
     protected:
         // OCommonAccessibleText
         virtual ::rtl::OUString                 implGetText();
