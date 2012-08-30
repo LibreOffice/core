@@ -205,7 +205,6 @@ DataPointItemConverter::DataPointItemConverter(
     const uno::Reference< XDataSeries > & xSeries,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    NumberFormatterWrapper * pNumFormatter,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
     GraphicPropertyItemConverter::eGraphicObjectType eMapTo /* = FILL_PROPERTIES */,
     ::std::auto_ptr< awt::Size > pRefSize /* = NULL */,
@@ -217,7 +216,6 @@ DataPointItemConverter::DataPointItemConverter(
     sal_Int32 nPercentNumberFormat
     ) :
         ItemConverter( rPropertySet, rItemPool ),
-        m_pNumberFormatterWrapper( pNumFormatter ),
         m_bDataSeries( bDataSeries ),
         m_bOverwriteLabelsForAttributedDataPointsAlso(m_bDataSeries && bOverwriteLabelsForAttributedDataPointsAlso),
         m_bUseSpecialFillColor(bUseSpecialFillColor),

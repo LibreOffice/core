@@ -80,7 +80,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     , const uno::Reference< frame::XModel > & xChartModel
     , const uno::Reference< uno::XComponentContext > & xContext
     , SdrModel & rDrawModel
-    , NumberFormatterWrapper * pNumberFormatterWrapper = NULL
     , ExplicitValueProvider * pExplicitValueProvider = NULL
     , ::std::auto_ptr< ReferenceSizeProvider > pRefSizeProvider =
           ::std::auto_ptr< ReferenceSizeProvider >()
@@ -231,7 +230,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
-                                        pNumberFormatterWrapper,
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
                                         eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor, false,
                                         nNumberFormat, nPercentNumberFormat );
@@ -730,8 +728,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
     }
     try
     {
-        NumberFormatterWrapper aNumberFormatterWrapper( uno::Reference< util::XNumberFormatsSupplier >(getModel(), uno::UNO_QUERY) );
-
         //-------------------------------------------------------------
         //get type of object
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
@@ -754,7 +750,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
         ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
             createItemConverter( rObjectCID, getModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
-                                 &aNumberFormatterWrapper,
                                  ExplicitValueProvider::getExplicitValueProvider(m_xChartView),
                                  pRefSizeProv ));
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -787,7 +782,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
                                         , xObjectProperties, ObjectIdentifier::getDataSeriesForCID( rObjectCID, getModel() )
                                         , m_pDrawModelWrapper->getSdrModel().GetItemPool()
                                         , m_pDrawModelWrapper->getSdrModel()
-                                        , &aNumberFormatterWrapper
                                         , uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY )
                                         , wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT );
 

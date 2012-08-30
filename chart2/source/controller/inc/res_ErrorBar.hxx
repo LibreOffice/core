@@ -105,7 +105,6 @@ private:
 
     SvxChartKindError    m_eErrorKind;
     SvxChartIndicate     m_eIndicate;
-    SvxChartRegress      m_eTrendLineType;
 
     bool                 m_bErrorKindUnique;
     bool                 m_bIndicatorUnique;

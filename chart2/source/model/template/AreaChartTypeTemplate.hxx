@@ -86,7 +86,6 @@ protected:
 
 private:
     StackMode          m_eStackMode;
-    sal_Int32          m_nDim;
 };
 
 } //  namespace chart
