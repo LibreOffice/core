@@ -402,7 +402,7 @@ void Connection::setCatalog( const ::rtl::OUString& )
 ::rtl::OUString Connection::getCatalog() throw (SQLException, RuntimeException)
 {
     OUString ret;
-    MutexGuard ( m_refMutex->mutex );
+    MutexGuard guard( m_refMutex->mutex );
     if( m_settings.pConnection == 0 )
     {
         throw SQLException( ASCII_STR( "pq_connection: connection is closed" ), *this,
