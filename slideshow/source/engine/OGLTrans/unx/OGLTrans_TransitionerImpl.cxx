@@ -851,7 +851,7 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
 #endif
     GLInitSlides();
 
-    OSL_ENSURE(SlideBitmapLayout.PlaneStride == 0,"only handle no plane stride now");
+    SAL_WARN_IF(SlideBitmapLayout.PlaneStride != 0, "slideshow.opengl","only handle no plane stride now");
 
 #ifdef UNX
     /* flush & sync */
@@ -946,7 +946,7 @@ void OGLTransitionerImpl::createTexture( unsigned int* texID,
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
     }
 #endif
-    OSL_ENSURE(glIsTexture(*texID), "Can't generate Leaving slide textures in OpenGL");
+    SAL_WARN_IF(!glIsTexture(*texID), "slideshow.opengl", "Can't generate Leaving slide textures in OpenGL");
 }
 
 void OGLTransitionerImpl::prepareEnvironment()
