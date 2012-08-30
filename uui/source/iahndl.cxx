@@ -60,6 +60,7 @@
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
 #include "com/sun/star/loader/CannotActivateFactoryException.hpp"
 
+#include <rtl/strbuf.hxx>
 #include "osl/conditn.hxx"
 #include "tools/rcid.h" // RSC_STRING
 #include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
@@ -342,10 +343,10 @@ namespace
         if ( !pTypeDesc || !pTypeDesc->pWeakRef )
         {
 #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OUStringBuffer aMessage;
-            aMessage.appendAscii( "no type found for '" );
-            aMessage.append( i_rTypeName );
-            aMessage.appendAscii( "'" );
+            ::rtl::OStringBuffer aMessage;
+            aMessage.append( "no type found for '" );
+            aMessage.append( ::rtl::OUStringToOString( i_rTypeName, RTL_TEXTENCODING_UTF8 ) );
+            aMessage.append( "'" );
             OSL_FAIL( aMessage.makeStringAndClear().getStr() );
 #endif
             return false;
