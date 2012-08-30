@@ -27,6 +27,8 @@
 #*************************************************************************
 
 $(eval $(call gb_Helper_register_executables,NONE, \
+    HelpIndexer \
+    HelpLinker \
     bestreversemap \
     bmp \
     bmpsum \
@@ -85,8 +87,6 @@ endif
 
 $(eval $(call gb_Helper_register_executables,OOO, \
     gnome-open-url.bin \
-    HelpLinker \
-    HelpIndexer \
     spadmin.bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \
 		tdefilepicker \
