@@ -172,10 +172,10 @@ int oglErrorHandler( unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/ )
 class OGLTransitionerImpl : private cppu::BaseMutex, private boost::noncopyable, public OGLTransitionerImplBase
 {
 public:
-    explicit OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition);
-    bool initWindowFromSlideShowView( const uno::Reference< presentation::XSlideShowView >& xView );
+    OGLTransitionerImpl();
     void setSlides( const Reference< rendering::XBitmap >& xLeavingSlide , const uno::Reference< rendering::XBitmap >& xEnteringSlide );
-    static bool initialize( const Reference< presentation::XSlideShowView >& xView );
+    void setTransition( OGLTransitionImpl* pOGLTransition );
+    bool initialize( const Reference< presentation::XSlideShowView >& xView );
 
     // XTransition
     virtual void SAL_CALL update( double nTime )
@@ -210,6 +210,9 @@ protected:
     const OGLFormat* chooseFormats();
 
 private:
+    static void impl_initializeOnce( bool const bGLXPresent );
+
+    bool initWindowFromSlideShowView( const uno::Reference< presentation::XSlideShowView >& xView );
     /** After the window has been created, and the slides have been set, we'll initialize the slides with OpenGL.
     */
     void GLInitSlides();
@@ -342,15 +345,21 @@ bool OGLTransitionerImpl::cbGLXPresent;
 
 bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowView >& xView )
 {
+
+    bool const bGLXPresent( initWindowFromSlideShowView( xView ) );
+    impl_initializeOnce( bGLXPresent );
+
+    return cbGLXPresent;
+}
+
+void OGLTransitionerImpl::impl_initializeOnce( bool const bGLXPresent )
+{
     // not thread safe
     static bool initialized = false;
 
     if( !initialized ) {
-        OGLTransitionerImpl *instance;
-
-        instance = new OGLTransitionerImpl( NULL );
-        if( instance->initWindowFromSlideShowView( xView ) ) {
-
+        cbGLXPresent = bGLXPresent;
+        if ( bGLXPresent ) {
             const GLubyte* version = glGetString( GL_VERSION );
             if( version && version[0] ) {
                 cnGLVersion = version[0] - '0';
@@ -367,16 +376,9 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
             /* TODO: check for version once the bug in fglrx driver is fixed */
             cbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
 
-            instance->disposing();
-            cbGLXPresent = true;
-        } else
-            cbGLXPresent = false;
-
-        delete instance;
+        }
         initialized = true;
     }
-
-    return cbGLXPresent;
 }
 
 bool OGLTransitionerImpl::createWindow( Window* pPWindow )
@@ -711,12 +713,6 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
 
-    if( LeavingBytes.hasElements() && EnteringBytes.hasElements())
-        GLInitSlides();//we already have uninitialized slides, let's initialize
-
-    if( pTransition && pTransition->mnRequiredGLVersion <= cnGLVersion )
-        pTransition->prepare( GLleavingSlide, GLenteringSlide );
-
     return true;
 }
 
@@ -853,6 +849,14 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     XSynchronize( GLWin.dpy, true );
     mbRestoreSync = true;
 #endif
+}
+
+void OGLTransitionerImpl::setTransition( OGLTransitionImpl* const pNewTransition )
+{
+    pTransition = pNewTransition;
+
+    if( pTransition && pTransition->mnRequiredGLVersion <= cnGLVersion )
+        pTransition->prepare( GLleavingSlide, GLenteringSlide );
 }
 
 void OGLTransitionerImpl::createTexture( unsigned int* texID,
@@ -1306,7 +1310,7 @@ void OGLTransitionerImpl::disposing()
     mxView.clear();
 }
 
-OGLTransitionerImpl::OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition) :
+OGLTransitionerImpl::OGLTransitionerImpl() :
     OGLTransitionerImplBase(m_aMutex),
     GLWin(),
     GLleavingSlide( 0 ),
@@ -1320,7 +1324,7 @@ OGLTransitionerImpl::OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition) :
     mbUseEnteringPixmap( false ),
     SlideBitmapLayout(),
     SlideSize(),
-    pTransition(pOGLTransition)
+    pTransition( 0 )
 {
 #if defined( WNT )
     GLWin.hWnd = 0;
@@ -1390,14 +1394,15 @@ public:
         if( !hasTransition( transitionType, transitionSubType ) )
             return uno::Reference< presentation::XTransition >();
 
-        bool bGLXPresent = OGLTransitionerImpl::initialize( view );
+        rtl::Reference< OGLTransitionerImpl > xRes( new OGLTransitionerImpl() );
+        if ( !xRes->initialize( view ) )
+            return uno::Reference< presentation::XTransition >();
 
         if( OGLTransitionerImpl::cbMesa && (
             ( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) ||
             ( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::FADEOVERCOLOR ) ||
             ( transitionType == animations::TransitionType::IRISWIPE && transitionSubType == animations::TransitionSubType::DIAMOND ) ) )
             return uno::Reference< presentation::XTransition >();
-
 
         OGLTransitionImpl* pTransition = NULL;
 
@@ -1462,13 +1467,11 @@ public:
             pTransition->makeNewsflash();
         }
 
-        rtl::Reference<OGLTransitionerImpl> xRes(
-            new OGLTransitionerImpl(pTransition) );
-        if( bGLXPresent ) {
-            if( !xRes->initWindowFromSlideShowView(view))
-                return uno::Reference< presentation::XTransition >();
-            xRes->setSlides(leavingBitmap,enteringBitmap);
-        }
+        if ( !pTransition )
+            return uno::Reference< presentation::XTransition >();
+
+        xRes->setTransition( pTransition );
+        xRes->setSlides(leavingBitmap,enteringBitmap);
 
         return uno::Reference<presentation::XTransition>(xRes.get());
     }
