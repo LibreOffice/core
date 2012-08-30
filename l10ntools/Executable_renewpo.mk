@@ -1,18 +1,13 @@
-# for the specific language governing rights and limitations under the
-# License.
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
-# Major Contributor(s):
-# Copyright (C) 2012 David Ostrovsky <d.ostrovsky@gmx.de> (initial developer)
+# This file is part of the LibreOffice project.
 #
-# All Rights Reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# For minor contributions see the git repository.
+# convert old po to new po
 #
-# Alternatively, the contents of this file may be used under the terms of
-# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
-# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
-# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
-# instead of those above.
 
 $(eval $(call gb_Executable_Executable,renewpo))
 
@@ -33,4 +28,4 @@ $(eval $(call gb_Executable_add_exception_objects,renewpo,\
     l10ntools/source/renewpo \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set noet sw=4 ts=4:
