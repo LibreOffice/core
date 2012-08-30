@@ -71,11 +71,9 @@ class LwpSdwFileLoader
 {
 private:
     SvStream* m_pStream;
-    IXFStream* m_pOutputStream;
     LwpGraphicObject* m_pGraphicObj;
 public:
-    LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj,
-        IXFStream* pOutputStream=NULL);
+    LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj);
     ~LwpSdwFileLoader(void);
 public:
 //  void LoadObjectList(void);

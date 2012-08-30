@@ -63,10 +63,8 @@
 
 #include "xfilter/xfframe.hxx"
 
-LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj,
-    IXFStream* pOutputStream)
+LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj)
     : m_pStream(pStream)
-    , m_pOutputStream(pOutputStream)
     , m_pGraphicObj(pGraphicObj)
 {
     pStream->Seek(0);
@@ -97,7 +95,7 @@ void LwpSdwFileLoader::CreateDrawObjects(vector <XFFrame*>* pDrawObjVector)
         }
         if (nVersion>=0x0102)
         {
-            LwpSdwGroupLoaderV0102 sdwGroupLoader(m_pStream, m_pGraphicObj, m_pOutputStream);
+            LwpSdwGroupLoaderV0102 sdwGroupLoader(m_pStream, m_pGraphicObj);
             sdwGroupLoader.BeginDrawObjects(pDrawObjVector);
         }
     }

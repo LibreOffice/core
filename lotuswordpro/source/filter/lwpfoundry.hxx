@@ -142,7 +142,6 @@ private:
     LwpObjectID m_EnumHead;
     LwpObjectID m_EnumTail;
     LwpObjectID m_OleObjCount;
-    sal_uInt32 m_oldOleObjCount;
 
     LwpObjectID m_GrapHead;
     LwpObjectID m_GrapTail;

@@ -75,8 +75,6 @@ public:
     void Read(LwpObjectStream *pStrm);
 private:
     sal_Int16 m_nRotation;  //angle
-    sal_uInt16 m_nSin;
-    sal_uInt16 m_nCos;
 };
 
 class LwpLayoutGeometry : public LwpVirtualPiece

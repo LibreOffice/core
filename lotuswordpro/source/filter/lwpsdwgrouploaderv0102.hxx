@@ -61,7 +61,6 @@
 #include <tools/stream.hxx>
 #include "lwpheader.hxx"
 #include "assert.h"
-#include "xfilter/ixfstream.hxx"
 #include "lwpsdwdrawheader.hxx"
 
 class XFFrame;
@@ -71,15 +70,13 @@ class LwpSdwGroupLoaderV0102
 {
 private:
     SvStream* m_pStream;
-    IXFStream* m_pOutputStream;
     LwpGraphicObject* m_pGraphicObj;
     std::vector <XFFrame*>* m_pDrawObjVector;
 
     DrawingOffsetAndScale m_aTransformData;
 
 public:
-    LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj,
-        IXFStream* pOutputStream);
+    LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj);
     ~LwpSdwGroupLoaderV0102(void);
 public:
 //  void LoadDrawGroupObject(void);
