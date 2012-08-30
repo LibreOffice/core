@@ -791,8 +791,8 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
     aTbxIMapDlg1.EnableItem( TBI_POLYDELETE, !bDrawEnabled && pView->IsDeleteMarkedPointsPossible() );
 
     // Undo/Redo
-    aTbxIMapDlg1.EnableItem( TBI_UNDO, pModel->GetUndoActionCount() > 0 );
-    aTbxIMapDlg1.EnableItem( TBI_REDO, pModel->GetRedoActionCount() > 0 );
+    aTbxIMapDlg1.EnableItem( TBI_UNDO, pModel->HasUndoActions() );
+    aTbxIMapDlg1.EnableItem( TBI_REDO, pModel->HasRedoActions() );
 
     if ( bPolyEdit )
     {
