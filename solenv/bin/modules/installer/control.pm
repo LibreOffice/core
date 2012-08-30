@@ -478,26 +478,6 @@ sub check_oxtfiles
     }
 }
 
-####################################################################
-# Setting global variable "$installer::globals::addchildprojects"
-####################################################################
-
-sub set_addchildprojects
-{
-    my ($allvariables) = @_;
-
-    if (( $allvariables->{'UREPRODUCT'} ) ||
-        ( $allvariables->{'ADDREQUIREDPACKAGES'} )) { $installer::globals::addchildprojects = 1; }
-
-    if ( $installer::globals::patch )
-    {
-        $installer::globals::addchildprojects = 0;  # no child projects for patches
-    }
-
-    my $infoline = "Value of \$installer::globals::addchildprojects: $installer::globals::addchildprojects\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-}
-
 #######################################################################
 # Setting global variable "$installer::globals::addsystemintegration"
 #######################################################################

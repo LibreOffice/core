@@ -2699,43 +2699,6 @@ sub unpack_tar_gz_file
 }
 
 ######################################################
-# Copying files of child projects.
-######################################################
-
-sub copy_childproject_files
-{
-    my ($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, $subdir, $includepatharrayref, $use_sopackpath) = @_;
-
-    for ( my $i = 0; $i <= $#{$allmodules}; $i++ )
-    {
-        my $localdestdir = $destdir;
-        my $onemodule = ${$allmodules}[$i];
-        my $packagename = $onemodule->{'PackageName'};
-        my $sourcefile = "";
-        if ( $use_sopackpath )
-        {
-            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . $subdir . $installer::globals::separator . $packagename;
-        }
-        else
-        {
-            my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packagename, $includepatharrayref, 1);
-            $sourcefile = $$sourcepathref;
-        }
-
-        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile ($packagename) !", "copy_childproject_files"); }
-        if ( $onemodule->{'Subdir'} )
-        {
-            $localdestdir = $localdestdir . $installer::globals::separator . $onemodule->{'Subdir'};
-            if ( ! -d $localdestdir ) { installer::systemactions::create_directory($localdestdir); }
-        }
-        installer::systemactions::copy_one_file($sourcefile, $localdestdir);
-        # Solaris: unpacking tar.gz files and setting new packagename
-        if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $localdestdir); }
-    }
-
-}
-
-######################################################
 # Copying files for system integration.
 ######################################################
 
@@ -2745,45 +2708,6 @@ sub copy_and_unpack_tar_gz_files
 
     my $systemcall = "cd $destdir; cat $sourcefile | gunzip | tar -xf -";
     make_systemcall($systemcall);
-}
-
-######################################################
-# Including child packages into the
-# installation set.
-######################################################
-
-sub put_childprojects_into_installset
-{
-    my ($newdir, $allvariables, $modulesarrayref, $includepatharrayref) = @_;
-
-    my $infoline = "";
-
-    my $sopackpath = "";
-    if ( $ENV{'SO_PACK'} ) { $sopackpath  = $ENV{'SO_PACK'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "put_childprojects_into_installset"); }
-
-    my $destdir = "$newdir";
-
-    # adding Java
-
-    my $sourcefile = "";
-
-    # Adding additional required packages (freetype).
-    # This package names are stored in global array @installer::globals::requiredpackages
-
-    if ( $allvariables->{'ADDREQUIREDPACKAGES'} )
-    {
-        # Collect all modules with flag "REQUIREDPACKAGEMODULE"
-        my $allmodules = collect_modules_with_style("REQUIREDPACKAGEMODULE", $modulesarrayref);
-        $allmodules = remove_modules_without_package($allmodules);
-        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "requiredpackages", $includepatharrayref, 1);
-    }
-
-    # Collect all modules with flag "USERLANDMODULE"
-    my $alluserlandmodules = collect_modules_with_style("USERLANDMODULE", $modulesarrayref);
-    $alluserlandmodules = remove_modules_without_package($alluserlandmodules);
-    copy_childproject_files($alluserlandmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "", $includepatharrayref, 0);
-
 }
 
 ######################################################

@@ -262,7 +262,6 @@ BEGIN
     $is_copy_only_project = 0;
     $is_simple_packager_project = 0;
     $patch_user_dir = 0;
-    $addchildprojects = 0;
     $languagepack = 0;
     $helppack = 0;
     $patch = 0;

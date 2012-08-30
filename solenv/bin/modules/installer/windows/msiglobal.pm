@@ -1212,27 +1212,6 @@ sub copy_merge_modules_into_installset
 }
 
 #################################################################
-# Copying the child projects into the
-# installation set
-#################################################################
-
-sub copy_child_projects_into_installset
-{
-    my ($installdir, $allvariables) = @_;
-
-    my $sourcefile = "";
-    my $destdir = "";
-
-    if ( $allvariables->{'UREPRODUCT'} )
-    {
-        $sourcefile = $installer::globals::urefile->{'sourcepath'};
-        $destdir = $installdir . $installer::globals::separator . $installer::globals::urefile->{'Subdir'};
-        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
-    }
-}
-
-#################################################################
 # Getting a list of GUID using uuidgen.exe.
 # This works only on Windows
 #################################################################

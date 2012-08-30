@@ -240,7 +240,6 @@ sub main {
     # setting global variables
     ####################################################################
 
-    installer::control::set_addchildprojects($allvariableshashref);
     installer::control::set_addsystemintegration($allvariableshashref);
 
     ########################################################
@@ -514,7 +513,6 @@ sub main {
 
         if ( $installer::globals::languagepack )
         {
-            $installer::globals::addchildprojects = 0;
             $installer::globals::addsystemintegration = 0;
             $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
@@ -522,7 +520,6 @@ sub main {
 
         if ( $installer::globals::helppack )
         {
-            $installer::globals::addchildprojects = 0;
             $installer::globals::addsystemintegration = 0;
             $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
@@ -1359,9 +1356,6 @@ sub main {
                 # Adding license and readme into installation set
                 if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
-                # Adding child projects to installation dynamically
-                if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::epmoutpath, $allvariableshashref, $modulesinproductarrayref, $includepatharrayref); }
-
                 # Adding license file into setup
                 if ( $allvariableshashref->{'PUT_LICENSE_INTO_SETUP'} ) { installer::worker::put_license_into_setup(".", $includepatharrayref); }
 
@@ -1683,14 +1677,6 @@ sub main {
 
                 installer::windows::idtglobal::addcustomactions($languageidtdir, $windowscustomactionsarrayref, $filesinproductlanguageresolvedarrayref);
 
-                # Adding child projects if specified
-
-                if ($installer::globals::addchildprojects)
-                {
-                    # Adding child projects to installation dynamically (also in feature table)
-                    installer::windows::idtglobal::add_childprojects($languageidtdir, $filesinproductlanguageresolvedarrayref, $allvariableshashref);
-                }
-
                 # Then the language specific msi database can be created
 
                 if ( $installer::globals::iswin || $installer::globals::packageformat eq 'msi' )
@@ -1745,13 +1731,6 @@ sub main {
             # ... copying MergeModules into installation set
 
             if ( ! $installer::globals::fix_number_of_cab_files ) { installer::windows::msiglobal::copy_merge_modules_into_installset($installdir); }
-
-            # ... copying the child projects
-
-            if ($installer::globals::addchildprojects)
-            {
-                installer::windows::msiglobal::copy_child_projects_into_installset($installdir, $allvariableshashref);
-            }
 
             installer::logger::print_message( "... creating ddf files ...\n" );
 

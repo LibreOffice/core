@@ -252,8 +252,7 @@ sub check_sourcedir_addon
 {
     my ( $onedir, $allvariableshashref ) = @_;
 
-    if (($installer::globals::addchildprojects) ||
-        ($installer::globals::patch) ||
+    if (($installer::globals::patch) ||
         ($installer::globals::languagepack) ||
         ($installer::globals::helppack) ||
         ($allvariableshashref->{'CHANGETARGETDIR'}))
