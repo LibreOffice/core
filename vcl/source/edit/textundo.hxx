@@ -29,8 +29,13 @@
 #define _TEXTUNDO_HXX
 
 #include <svl/undo.hxx>
+#include <vcl/texteng.hxx>
 
 class TextEngine;
+class TextView;
+class TextSelection;
+class TextDoc;
+class TEParaPortions;
 
 class TextUndoManager : public SfxUndoManager
 {
