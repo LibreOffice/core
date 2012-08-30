@@ -143,7 +143,7 @@ namespace slideshow
                 return ParametricPolyPolygonSharedPtr(
                     new SnakeWipe(
                         // elements:
-                        64 * 64,
+                        8 * 8,
                         // diagonal:
                         nSubType == TOPLEFTDIAGONAL ||
                         nSubType == TOPRIGHTDIAGONAL ||
@@ -158,7 +158,7 @@ namespace slideshow
                 return ParametricPolyPolygonSharedPtr(
                     new ParallelSnakesWipe(
                         // elements:
-                        64 * 64,
+                        8 * 8,
                         // diagonal:
                         nSubType == DIAGONALBOTTOMLEFTOPPOSITE ||
                         nSubType == DIAGONALTOPLEFTOPPOSITE,
@@ -178,7 +178,7 @@ namespace slideshow
                 return ParametricPolyPolygonSharedPtr(
                     new SpiralWipe(
                         // elements:
-                        64 * 64,
+                        8 * 8,
                         // flipOnYAxis:
                         nSubType == TOPLEFTCOUNTERCLOCKWISE ||
                         nSubType == TOPRIGHTCOUNTERCLOCKWISE ||
@@ -188,7 +188,7 @@ namespace slideshow
                 return ParametricPolyPolygonSharedPtr(
                     new BoxSnakesWipe(
                         // elements:
-                        64 * 64,
+                        8 * 8,
                         // fourBox:
                         nSubType == FOURBOXVERTICAL ||
                         nSubType == FOURBOXHORIZONTAL ) );
