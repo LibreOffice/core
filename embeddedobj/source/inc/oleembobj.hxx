@@ -46,8 +46,6 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <cppuhelper/implbase5.hxx>
 
-#include <osl/thread.h>
-
 namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
 }
@@ -58,8 +56,6 @@ class VerbExecutionController
     ::osl::Mutex    m_aVerbExecutionMutex;
 
     sal_Bool m_bVerbExecutionInProgress;
-    oslThreadIdentifier m_nVerbExecutionThreadIdentifier;
-    sal_Bool m_bChangedOnVerbExecution;
 
     sal_Bool m_bWasEverActive;
     sal_Int32 m_nNotificationLock;
@@ -68,8 +64,6 @@ public:
 
     VerbExecutionController()
     : m_bVerbExecutionInProgress( sal_False )
-    , m_nVerbExecutionThreadIdentifier( 0 )
-    , m_bChangedOnVerbExecution( sal_False )
     , m_bWasEverActive( sal_False )
     , m_nNotificationLock( 0 )
     {}
