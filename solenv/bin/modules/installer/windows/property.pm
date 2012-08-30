@@ -523,7 +523,6 @@ sub update_property_table
 ####################################################################################
 # Setting language specific Properties in file Property.idt dynamically
 # Adding:
-# is1033 = 1
 # isMulti = 1
 ####################################################################################
 
@@ -533,13 +532,6 @@ sub set_languages_in_property_table
 
     my $properyfilename = $basedir . $installer::globals::separator . "Property.idt";
     my $propertyfile = installer::files::read_file($properyfilename);
-
-    # Setting the component properties saved in %installer::globals::languageproperties
-    foreach my $localproperty ( keys %installer::globals::languageproperties )
-    {
-        $onepropertyline =  $localproperty . "\t" . $installer::globals::languageproperties{$localproperty} . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
 
     # Setting the info about multilingual installation in property "isMulti"
 

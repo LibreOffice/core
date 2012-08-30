@@ -992,32 +992,6 @@ sub create_files_table
             }
         }
 
-        # Collecting all language specific conditions
-        if ( $onefile->{'ismultilingual'} )
-        {
-            if ( $onefile->{'ComponentCondition'} ) { installer::exiter::exit_program("ERROR: Cannot set language condition. There is already another component condition for file $onefile->{'gid'}: \"$onefile->{'ComponentCondition'}\" !", "create_files_table"); }
-
-            if ( $onefile->{'specificlanguage'} eq "" ) { installer::exiter::exit_program("ERROR: There is no specific language for file at language module: $onefile->{'gid'} !", "create_files_table"); }
-            my $locallanguage = $onefile->{'specificlanguage'};
-            my $property = "IS" . $file{'Language'};
-            my $value = 1;
-            my $condition = $property . "=" . $value;
-
-            $onefile->{'ComponentCondition'} = $condition;
-
-            if ( exists($installer::globals::componentcondition{$file{'Component_'}}))
-            {
-                if ( $installer::globals::componentcondition{$file{'Component_'}} ne $condition ) { installer::exiter::exit_program("ERROR: There is already another component condition for file $onefile->{'gid'}: \"$installer::globals::componentcondition{$file{'Component_'}}\" and \"$condition\" !", "create_files_table"); }
-            }
-            else
-            {
-                $installer::globals::componentcondition{$file{'Component_'}} = $condition;
-            }
-
-            # collecting all properties for table Property
-            if ( ! exists($installer::globals::languageproperties{$property}) ) { $installer::globals::languageproperties{$property} = $value; }
-        }
-
         unless ( $file{'Version'} )
         {
             my $path = $onefile->{'sourcepath'};

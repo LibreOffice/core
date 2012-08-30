@@ -347,7 +347,6 @@ BEGIN
     %componentcondition = ();
     %componentid = ();
     %comparecomponentname = ();
-    %languageproperties = ();
     %allcabinets = ();
     %allcabinetassigns = ();
     %cabfilecounter = ();
