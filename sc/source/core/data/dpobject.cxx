@@ -859,26 +859,27 @@ void ScDPObject::BuildAllDimensionMembers()
     pSaveData->BuildAllDimensionMembers(GetTableData());
 }
 
-void ScDPObject::SyncAllDimensionMembers()
+bool ScDPObject::SyncAllDimensionMembers()
 {
     if (!pSaveData)
-        return;
+        return false;
 
     // #i111857# don't always create empty mpTableData for external service.
     // Ideally, xSource should be used instead of mpTableData.
     if (pServDesc)
-        return;
+        return false;
 
     ScDPTableData* pData = GetTableData();
     if (!pData)
         // No table data exists.  This can happen when refreshing from an
         // external source which doesn't exist.
-        return;
+        return false;
 
     // Refresh the cache wrapper since the cache may have changed.
     pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
     pData->ReloadCacheTable();
     pSaveData->SyncAllDimensionMembers(pData);
+    return true;
 }
 
 bool ScDPObject::GetMemberNames( sal_Int32 nDim, Sequence<OUString>& rNames )

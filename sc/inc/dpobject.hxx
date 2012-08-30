@@ -243,7 +243,7 @@ public:
      * Remove in the save data entries for members that don't exist anymore.
      * This is called during pivot table refresh.
      */
-    void SyncAllDimensionMembers();
+    bool SyncAllDimensionMembers();
 
     static bool         HasRegisteredSources();
     static com::sun::star::uno::Sequence<rtl::OUString> GetRegisteredSources();
