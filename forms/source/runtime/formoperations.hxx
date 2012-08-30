@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 
 #include <comphelper/componentcontext.hxx>
 
@@ -300,34 +301,51 @@ namespace frm
         /// typedef for member method of this class
         typedef void (FormOperations::*Action)( const void* ) const;
 
-        /** calls a member function, catches SQLExceptions, extends them with additional context information,
+        /** calls a (member) function, catches SQLExceptions, extends them with additional context information,
             and rethrows them
 
-            @param _pAction
-                the member function to call
-            @param _pParam
-                the parameters to pass to the member function
+            @param Action
+                a fuctionoid with no arguments to do the work
             @param _nErrorResourceId
                 the id of the resources string to use as error message
         */
-        void        impl_doActionInSQLContext_throw( Action _pAction, const void* _pParam, sal_uInt16 _nErrorResourceId ) const;
+        template < typename FunctObj >
+        void        impl_doActionInSQLContext_throw( FunctObj Action, sal_uInt16 _nErrorResourceId ) const;
 
-        // parameter structure for appendOrderByColumn
-        struct param_appendOrderByColumn
+        // functionoid to call appendOrderByColumn
+        class impl_appendOrderByColumn_throw
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        xField;
-            bool        bUp;
-        };
-        void        impl_appendOrderByColumn_throw( const void* _pActionParam ) const;
+        public:
+            impl_appendOrderByColumn_throw(const FormOperations *pFO,
+                                           ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xField,
+                                           bool bUp)
+                : m_pFO(pFO)
+                , m_xField(xField)
+                , m_bUp(bUp)
+            {};
 
-        // parameter structure for appendFilterByColumn
-        struct param_appendFilterByColumn
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        xField;
+            void operator()() { m_pFO->m_xParser->appendOrderByColumn(m_xField, m_bUp); }
+        private:
+            const FormOperations *m_pFO;
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xField;
+            bool m_bUp;
         };
-        void        impl_appendFilterByColumn_throw( const void* _pActionParam ) const;
+
+        // functionoid to call appendFilterByColumn
+        class impl_appendFilterByColumn_throw
+        {
+        public:
+            impl_appendFilterByColumn_throw(const FormOperations *pFO,
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xField)
+                : m_pFO(pFO)
+                , m_xField(xField)
+            {};
+
+            void operator()() { m_pFO->m_xParser->appendFilterByColumn( m_xField, sal_True, ::com::sun::star::sdb::SQLFilterOperator::EQUAL ); }
+        private:
+            const FormOperations *m_pFO;
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xField;
+        };
 
     private:
         FormOperations();                                   // never implemented
