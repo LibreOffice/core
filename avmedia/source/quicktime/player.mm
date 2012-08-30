@@ -49,13 +49,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mnUnmutedVolume( 0 ),
     mnStopTime( DBL_MAX ),  //max double
     mbMuted( false ),
-    mbLooping( false ),
     mbInitialized( false ),
-    mnWindowID( 0 ),
-    mnDuration( 0 ),
-    mnWidth( 0 ),
-    mnHeight( 0 ),
-    mnVersion( 0 ),
     maSizeCondition( osl_createCondition() )
 {
     OSErr result;
@@ -63,8 +57,9 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     NSApplicationLoad();
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     // check the version of QuickTime installed
-    result = Gestalt(gestaltQuickTime,&mnVersion);
-    if ((result == noErr) && (mnVersion >= QT701))
+    long nVersion;
+    result = Gestalt(gestaltQuickTime,&nVersion);
+    if ((result == noErr) && (nVersion >= QT701))
     {
       // we have version 7.01 or later, initialize
       mbInitialized = true;

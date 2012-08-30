@@ -87,15 +87,8 @@ private:
     double                  mnStopTime;
 
     sal_Bool                mbMuted;
-    sal_Bool                mbLooping;
     sal_Bool                mbInitialized;
 
-    long                    mnWindowID;
-    long                    mnDuration;
-    int                     mnWidth;
-    int                     mnHeight;
-
-    long                    mnVersion;
     oslCondition            maSizeCondition;
 };
 
