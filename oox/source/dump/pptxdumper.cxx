@@ -36,7 +36,6 @@ using namespace ::com::sun::star::io;
 //using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 using ::rtl::OUString;
 
@@ -122,8 +121,7 @@ Dumper::Dumper( const Reference< XComponentContext >& rxContext, const Reference
     if( rxContext.is() && rxInStrm.is() )
     {
         StorageRef xStrg( new ZipStorage( rxContext, rxInStrm ) );
-        MediaDescriptor aMediaDesc;
-        ConfigRef xCfg( new Config( DUMP_PPTX_CONFIG_ENVVAR, rxContext, xStrg, rSysFileName, aMediaDesc ) );
+        ConfigRef xCfg( new Config( DUMP_PPTX_CONFIG_ENVVAR, rxContext, xStrg, rSysFileName ) );
         DumperBase::construct( xCfg );
     }
 }
