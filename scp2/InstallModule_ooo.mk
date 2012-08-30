@@ -35,6 +35,7 @@ $(eval $(call gb_InstallModule_use_packages,scp2/ooo,\
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	DISABLE_ATL \
 	DISABLE_NEON \
+	ENABLE_CAIRO_CANVAS \
 	ENABLE_DIRECTX \
 	ENABLE_EVOAB2 \
 	ENABLE_GTK \
@@ -143,9 +144,6 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	$(if $(filter MACOSX,$(OS)),\
-		-DENABLE_CAIROCANVAS \
-	) \
 	$(if $(filter INTERNAL,$(ENABLE_LIBRSVG)),\
 		-DENABLE_LIBRSVG \
 	) \

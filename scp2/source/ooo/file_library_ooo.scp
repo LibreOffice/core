@@ -569,7 +569,10 @@ End
 
 #ifndef LIBO_HEADLESS
 
-#ifndef SYSTEM_CAIRO
+#if !defined SYSTEM_CAIRO \
+    && (defined ENABLE_CAIRO_CANVAS \
+        || (ENABLE_LIBRSVG && !defined SYSTEM_LIBRSVG) \
+        || (defined WNT && !defined ENABLE_DIRECTX))
 
 File gid_File_Lib_Cairo
     LIB_FILE_BODY;
