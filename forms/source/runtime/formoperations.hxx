@@ -298,9 +298,6 @@ namespace frm
         void        impl_executeFilterOrSort_throw( bool _bFilter ) const;
 
     private:
-        /// typedef for member method of this class
-        typedef void (FormOperations::*Action)( const void* ) const;
-
         /** calls a (member) function, catches SQLExceptions, extends them with additional context information,
             and rethrows them
 
