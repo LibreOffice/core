@@ -314,10 +314,6 @@ class REGEXP_DLLPUBLIC Regexpr
         pattern when it is compiled and to a string when it is matched.  */
     int translate;
 
-    sal_uInt32 failure_id;
-    sal_uInt32 nfailure_points_pushed;
-    sal_uInt32 nfailure_points_popped;
-    sal_uInt32 num_regs_pushed;  ///< Counts the total number of registers pushed.
     sal_uInt32 re_max_failures;
     sal_Unicode reg_unset_dummy; ///< Registers are set to a sentinel when they haven't yet matched.
 
