@@ -880,6 +880,7 @@ void CondFormat::importCondFormatting( SequenceInputStream& rStrm )
     rStrm.skip( 8 );
     rStrm >> aRanges;
     getAddressConverter().convertToCellRangeList( maModel.maRanges, aRanges, getSheetIndex(), true );
+    mpFormat = new ScConditionalFormat(0, &getScDocument());
 }
 
 void CondFormat::importCfRule( SequenceInputStream& rStrm )
