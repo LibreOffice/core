@@ -12115,7 +12115,7 @@ AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
 if test $enable_mergelibs = yes; then
     if test $WITH_BINFILTER = YES; then
-        add_warining "--enable-mergelibs conflicts with --enable-binfilter. Disabling mergelibs."
+        add_warning "--enable-mergelibs conflicts with --enable-binfilter. Disabling mergelibs."
         AC_MSG_RESULT([no])
     else
         if test $_os != Linux -a $_os != Android; then
