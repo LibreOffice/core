@@ -342,10 +342,10 @@ namespace
         if ( !pTypeDesc || !pTypeDesc->pWeakRef )
         {
 #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OStringBuffer aMessage;
-            aMessage.append( "no type found for '" );
-            aMessage.append( ::rtl::OUStringToOString( i_rTypeName, RTL_TEXTENCODING_UTF8 ) );
-            aMessage.append( "'" );
+            ::rtl::OUStringBuffer aMessage;
+            aMessage.appendAscii( "no type found for '" );
+            aMessage.append( i_rTypeName );
+            aMessage.appendAscii( "'" );
             OSL_FAIL( aMessage.makeStringAndClear().getStr() );
 #endif
             return false;
