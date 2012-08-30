@@ -2216,22 +2216,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
             sal_Bool bParserSuccess = sal_False;
 
-            sal_Int32 nOp = SQLFilterOperator::EQUAL;
-            if ( xField.is() )
-            {
-                sal_Int32 nType = 0;
-                xField->getPropertyValue(PROPERTY_TYPE) >>= nType;
-                switch(nType)
-                {
-                    case DataType::VARCHAR:
-                    case DataType::CHAR:
-                    case DataType::LONGVARCHAR:
-                        nOp = SQLFilterOperator::LIKE;
-                        break;
-                    default:
-                        nOp = SQLFilterOperator::EQUAL;
-                }
-            }
+            const sal_Int32 nOp = SQLFilterOperator::EQUAL;
 
             if ( bHaving )
             {

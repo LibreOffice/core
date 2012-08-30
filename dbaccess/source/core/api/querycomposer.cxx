@@ -225,23 +225,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
 
     m_xComposerHelper->setQuery(getQuery());
     m_xComposerHelper->setFilter(::rtl::OUString());
-    sal_Int32 nOp = SQLFilterOperator::EQUAL;
-    if ( column.is() )
-    {
-        sal_Int32 nType = 0;
-        column->getPropertyValue(PROPERTY_TYPE) >>= nType;
-        switch(nType)
-        {
-            case DataType::VARCHAR:
-            case DataType::CHAR:
-            case DataType::LONGVARCHAR:
-                nOp = SQLFilterOperator::LIKE;
-                break;
-            default:
-                nOp = SQLFilterOperator::EQUAL;
-        }
-    }
-    m_xComposerHelper->appendFilterByColumn(column,sal_True,nOp);
+    m_xComposerHelper->appendFilterByColumn(column, sal_True, SQLFilterOperator::EQUAL);
 
     FilterCreator aFilterCreator;
     aFilterCreator.append(getFilter());

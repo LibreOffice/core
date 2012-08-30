@@ -1685,23 +1685,7 @@ namespace frm
     void FormOperations::impl_appendFilterByColumn_throw( const void* _pActionParam ) const
     {
         const param_appendFilterByColumn* pParam = static_cast< const param_appendFilterByColumn* >( _pActionParam );
-        sal_Int32 nOp = SQLFilterOperator::EQUAL;
-        if ( pParam->xField.is() )
-        {
-            sal_Int32 nType = 0;
-            pParam->xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nType;
-            switch(nType)
-            {
-                case DataType::VARCHAR:
-                case DataType::CHAR:
-                case DataType::LONGVARCHAR:
-                    nOp = SQLFilterOperator::LIKE;
-                    break;
-                default:
-                    nOp = SQLFilterOperator::EQUAL;
-            }
-        }
-        m_xParser->appendFilterByColumn( pParam->xField, sal_True,nOp );
+        m_xParser->appendFilterByColumn( pParam->xField, sal_True, SQLFilterOperator::EQUAL );
     }
 
     //------------------------------------------------------------------------------
