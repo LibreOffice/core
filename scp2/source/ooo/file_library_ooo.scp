@@ -1708,22 +1708,9 @@ STD_LIB_FILE(gid_File_Lib_Unordf, unordf)
 STD_LIB_FILE( gid_File_Lib_For, for)
 STD_LIB_FILE( gid_File_Lib_Forui, forui)
 
-// RSVG and dependencies
-#if ENABLE_LIBRSVG
-#if ! defined (SYSTEM_GETTEXT)
-File gid_File_Lib_Intl
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    #ifdef MACOSX
-    Name = "libintl.8.dylib";
-    #elif defined WNT
-    Name = "intl.dll";
-    #endif
-End
-#endif
-
-#if ! defined SYSTEM_GLIB
+#if !defined SYSTEM_GLIB \
+    && ((defined ENABLE_LIBLANGTAG && !defined SYSTEM_LIBLANGTAG) \
+        || (ENABLE_LIBRSVG && !defined SYSTEM_LIBRSVG))
 File gid_File_Lib_Glib
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -1772,6 +1759,21 @@ File gid_File_Lib_Gmodule
     Name = "libgmodule-2.0.0.dylib";
     #elif defined WNT
     Name = "gmodulelo.dll";
+    #endif
+End
+#endif
+
+// RSVG and dependencies
+#if ENABLE_LIBRSVG
+#if ! defined (SYSTEM_GETTEXT)
+File gid_File_Lib_Intl
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libintl.8.dylib";
+    #elif defined WNT
+    Name = "intl.dll";
     #endif
 End
 #endif
