@@ -1664,11 +1664,11 @@ namespace frm
 
     //------------------------------------------------------------------------------
     template < typename FunctObj >
-    void FormOperations::impl_doActionInSQLContext_throw( FunctObj Action, sal_uInt16 _nErrorResourceId ) const
+    void FormOperations::impl_doActionInSQLContext_throw( FunctObj f, sal_uInt16 _nErrorResourceId ) const
     {
         try
         {
-            Action();
+            f();
         }
         catch( const SQLException& e )
         {
