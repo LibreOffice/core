@@ -358,6 +358,7 @@ SwDoc::SwDoc()
     mbTabOverflow                           = true;
     mbUnbreakableNumberings                 = false;
     mbFloattableNomargins                   = false;
+    mbClippedPictures                       = false;
 
     //
     // COMPATIBILITY FLAGS END

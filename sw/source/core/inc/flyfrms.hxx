@@ -47,6 +47,8 @@ class SwFlyFreeFrm : public SwFlyFrm
     // #i37068# - flag to prevent move in method <CheckClip(..)>
     bool mbNoMoveOnCheckClip;
 
+    SwRect maUnclippedFrm;
+
     void CheckClip( const SwFmtFrmSize &rSz );  //'Emergency' Clipping.
 
     /** determines, if direct environment of fly frame has 'auto' size
@@ -104,6 +106,14 @@ public:
         {
             return false;
         }
+    }
+
+    inline const SwRect& GetUnclippedFrm( ) const
+    {
+        if ( maUnclippedFrm.HasArea( ) )
+            return maUnclippedFrm;
+        else
+            return Frm();
     }
 
     /** method to determine, if a format on the Writer fly frame is possible

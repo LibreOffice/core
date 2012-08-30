@@ -127,7 +127,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_TAB_OVERFLOW,
     HANDLE_UNBREAKABLE_NUMBERINGS,
     HANDLE_STYLES_NODEFAULT,
-    HANDLE_FLOATTABLE_NOMARGINS
+    HANDLE_FLOATTABLE_NOMARGINS,
+    HANDLE_CLIPPED_PICTURES
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -192,6 +193,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UnbreakableNumberings"), HANDLE_UNBREAKABLE_NUMBERINGS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("StylesNoDefault"), HANDLE_STYLES_NODEFAULT, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("FloattableNomargins"), HANDLE_FLOATTABLE_NOMARGINS, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("ClippedPictures"), HANDLE_CLIPPED_PICTURES, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -763,6 +765,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::FLOATTABLE_NOMARGINS, bTmp);
         }
         break;
+        case HANDLE_CLIPPED_PICTURES:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::CLIPPED_PICTURES, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1144,6 +1152,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_FLOATTABLE_NOMARGINS:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::FLOATTABLE_NOMARGINS );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_CLIPPED_PICTURES:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::CLIPPED_PICTURES );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

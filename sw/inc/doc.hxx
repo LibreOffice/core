@@ -589,6 +589,7 @@ private:
     bool mbSmallCapsPercentage66;
     bool mbTabOverflow;
     bool mbUnbreakableNumberings;
+    bool mbClippedPictures;
 
     bool mbLastBrowseMode                           : 1;
 

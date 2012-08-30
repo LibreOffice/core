@@ -178,6 +178,7 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    xSettings->setPropertyValue( "StylesNoDefault", uno::makeAny( sal_True ) );
 
    xSettings->setPropertyValue("FloattableNomargins", uno::makeAny( sal_True ));
+   xSettings->setPropertyValue( "ClippedPictures", uno::makeAny( sal_True ) );
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )

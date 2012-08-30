@@ -74,7 +74,8 @@ SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#
-    mbNoMoveOnCheckClip( false )
+    mbNoMoveOnCheckClip( false ),
+    maUnclippedFrm( )
 {
 }
 
@@ -447,6 +448,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             // otherwise we'll end up with unwanted side-effects
             const long nPrtHeightDiff = Frm().Height() - Prt().Height();
             const long nPrtWidthDiff  = Frm().Width()  - Prt().Width();
+            maUnclippedFrm = SwRect( Frm() );
             Frm().Height( aFrmRect.Height() );
             Frm().Width ( Max( long(MINLAY), aFrmRect.Width() ) );
             if ( Lower() && Lower()->IsColumnFrm() )
