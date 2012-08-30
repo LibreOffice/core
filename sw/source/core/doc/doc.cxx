@@ -200,6 +200,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case TAB_OVERFLOW: return mbTabOverflow;
         case UNBREAKABLE_NUMBERINGS: return mbUnbreakableNumberings;
         case BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
+        case CLIPPED_PICTURES: return mbClippedPictures;
 
         case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the ViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
@@ -345,6 +346,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
         case BACKGROUND_PARA_OVER_DRAWINGS:
             mbBackgroundParaOverDrawings = value;
+
+        case CLIPPED_PICTURES:
+            mbClippedPictures = value;
             break;
 
          // COMPATIBILITY FLAGS END
