@@ -62,7 +62,7 @@ public:
             if( sResourceUrl.indexOf( "private:resource/toolbar/" ) != -1 )
             {
                 uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
-                uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, sal_False, sal_False ) );
+                uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, sal_False ) );
              }
              else
                 return nextElement();
@@ -144,7 +144,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
     if( !sResourceUrl.isEmpty() )
     {
         xBarSettings = m_pCBarHelper->getSettings( sResourceUrl );
-        aRet <<= uno::Reference< XCommandBar >( new ScVbaCommandBar( this, mxContext, m_pCBarHelper, xBarSettings, sResourceUrl, bMenu, sal_False ) );
+        aRet <<= uno::Reference< XCommandBar >( new ScVbaCommandBar( this, mxContext, m_pCBarHelper, xBarSettings, sResourceUrl, bMenu ) );
     }
 
     if( !aRet.hasValue() )
@@ -155,7 +155,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
 
 // XCommandBars
 uno::Reference< XCommandBar > SAL_CALL
-ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Position*/, const css::uno::Any& /*MenuBar*/, const css::uno::Any& Temporary ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Position*/, const css::uno::Any& /*MenuBar*/, const css::uno::Any& /*Temporary*/ ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     // FIXME: only support to add Toolbar
     // Position - MsoBar MenuBar - sal_Bool
@@ -176,13 +176,9 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
         sName = rtl::OUString( "Custom1" );
     }
 
-    sal_Bool bTemporary = sal_False;
-    if( Temporary.hasValue() )
-        Temporary >>= bTemporary;
-
     sResourceUrl = VbaCommandBarHelper::generateCustomURL();
     uno::Reference< container::XIndexAccess > xBarSettings( m_pCBarHelper->getSettings( sResourceUrl ), uno::UNO_QUERY_THROW );
-    uno::Reference< XCommandBar > xCBar( new ScVbaCommandBar( this, mxContext, m_pCBarHelper, xBarSettings, sResourceUrl, sal_False, bTemporary ) );
+    uno::Reference< XCommandBar > xCBar( new ScVbaCommandBar( this, mxContext, m_pCBarHelper, xBarSettings, sResourceUrl, sal_False ) );
     xCBar->setName( sName );
     return xCBar;
 }

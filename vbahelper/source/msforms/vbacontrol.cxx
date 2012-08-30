@@ -621,7 +621,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
             xVBAControl.set( new ScVbaButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     }
     else if ( xServiceInfo->supportsService( rtl::OUString( "com.sun.star.awt.UnoControlComboBoxModel" ) ) )
-        xVBAControl.set( new ScVbaComboBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), true ) );
+        xVBAControl.set( new ScVbaComboBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( "com.sun.star.awt.UnoControlListBoxModel" ) ) )
         xVBAControl.set( new ScVbaListBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( "com.sun.star.awt.UnoControlFixedTextModel" ) ) )

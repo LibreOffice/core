@@ -37,10 +37,9 @@ class ScVbaComboBox : public ComboBoxImpl_BASE
     std::auto_ptr< ListControlHelper > mpListHelper;
     rtl::OUString sSourceName;
     rtl::OUString msDftPropName;
-    bool mbDialogType;
 
 public:
-    ScVbaComboBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper, bool bDialogType = false );
+    ScVbaComboBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper );
 
     // Attributes
     virtual css::uno::Any SAL_CALL getListIndex() throw (css::uno::RuntimeException);
