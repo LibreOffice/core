@@ -722,7 +722,6 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
     m_bProgressChanged(     false ),
     m_bStartProgress(       false ),
     m_bStopProgress(        false ),
-    m_bUpdateWarning(       false ),
     m_bEnableWarning(       false ),
     m_bDisableWarning(      false ),
     m_bDeleteWarning(       false ),

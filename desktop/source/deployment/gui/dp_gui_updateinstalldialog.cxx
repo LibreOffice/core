@@ -135,14 +135,12 @@ class UpdateCommandEnv
 {
     friend class UpdateInstallDialog::Thread;
 
-    UpdateInstallDialog & m_updateDialog;
     ::rtl::Reference<UpdateInstallDialog::Thread> m_installThread;
     cssu::Reference< cssu::XComponentContext > m_xContext;
 
 public:
     virtual ~UpdateCommandEnv();
     UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
-        UpdateInstallDialog & updateDialog,
         ::rtl::Reference<UpdateInstallDialog::Thread>const & thread);
 
     // XCommandEnvironment
@@ -173,7 +171,7 @@ UpdateInstallDialog::Thread::Thread(
     m_dialog(dialog),
     m_xComponentContext(xCtx),
     m_aVecUpdateData(aVecUpdateData),
-    m_updateCmdEnv(new UpdateCommandEnv(xCtx, m_dialog, this)),
+    m_updateCmdEnv(new UpdateCommandEnv(xCtx, this)),
     m_stop(false)
 {}
 
@@ -638,10 +636,8 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
 // -------------------------------------------------------------------------------------------------------
 
 UpdateCommandEnv::UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
-    UpdateInstallDialog & updateDialog,
     ::rtl::Reference<UpdateInstallDialog::Thread>const & thread)
-    : m_updateDialog( updateDialog ),
-    m_installThread(thread),
+    : m_installThread(thread),
     m_xContext(xCtx)
 {
 }

@@ -125,7 +125,6 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     bool            m_bHasScrollBar;
     bool            m_bHasActive;
     bool            m_bNeedsRecalc;
-    bool            m_bHasNew;
     bool            m_bInCheckMode;
     bool            m_bAdjustActive;
     bool            m_bInDelete;

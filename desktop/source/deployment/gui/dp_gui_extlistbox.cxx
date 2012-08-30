@@ -173,7 +173,6 @@ ExtensionBox_Impl::ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pMan
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
     m_bNeedsRecalc( true ),
-    m_bHasNew( false ),
     m_bInCheckMode( false ),
     m_bAdjustActive( false ),
     m_bInDelete( false ),
