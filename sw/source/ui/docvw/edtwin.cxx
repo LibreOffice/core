@@ -521,7 +521,10 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                                 (rSh.IsObjSelected() || rSh.IsFrmSelected()) &&
                                 (!rSh.IsSelObjProtected(FLYPROTECT_POS));
 
-                            eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
+                            SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
+                            // Don't update pointer if this is a background image only.
+                            if (pSelectableObj->GetLayer() != rSh.GetDoc()->GetHellId())
+                                eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
                             aActHitType = SDRHIT_OBJECT;
                         }
                     }

@@ -262,6 +262,8 @@ public:
     // The following two methods return enum SdrHdlKind.
     // Declared as int in order to spare including SVDRAW.HXX.
     bool IsObjSelectable( const Point& rPt );
+    /// Same as IsObjSelectable(), but return the object as well.
+    SdrObject* GetObjAt(const Point& rPt);
     int IsInsideSelectedObj( const Point& rPt );    //!! returns enum values
 
     // Test if there is a draw object at that position and if it should be selected.
