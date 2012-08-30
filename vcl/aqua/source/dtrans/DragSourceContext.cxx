@@ -28,9 +28,8 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace com::sun::star::uno;
 using namespace cppu;
 
-DragSourceContext::DragSourceContext( DragSource* pSource) :
-        WeakComponentImplHelper1<XDragSourceContext>(m_aMutex),
-        m_pDragSource( pSource)
+DragSourceContext::DragSourceContext() :
+        WeakComponentImplHelper1<XDragSourceContext>(m_aMutex)
 {
 }
 

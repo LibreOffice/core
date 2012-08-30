@@ -9,26 +9,28 @@ class RGBAColor
 public:
     RGBAColor( SalColor );
     RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha ); //NOTUSEDYET
-    const float* AsArray() const { return &m_fRed; }
-    bool IsVisible() const { return m_fAlpha > 0; }
-    void SetAlpha( float fAlpha ) { m_fAlpha = fAlpha; }
+    const float* AsArray() const { return m_fRGBA; }
+    bool IsVisible() const { return m_fRGBA[3] > 0; }
+    void SetAlpha( float fAlpha ) { m_fRGBA[3] = fAlpha; }
 private:
-    float m_fRed, m_fGreen, m_fBlue, m_fAlpha;
+    float m_fRGBA[4]; // red, green, blue, alpha
 };
 
 inline RGBAColor::RGBAColor( SalColor nSalColor )
-:   m_fRed( SALCOLOR_RED(nSalColor) * (1.0/255))
-,   m_fGreen( SALCOLOR_GREEN(nSalColor) * (1.0/255))
-,   m_fBlue( SALCOLOR_BLUE(nSalColor) * (1.0/255))
-,   m_fAlpha( 1.0 )  // opaque
-{}
+{
+    m_fRGBA[0] = SALCOLOR_RED(nSalColor) * (1.0/255);
+    m_fRGBA[1] = SALCOLOR_GREEN(nSalColor) * (1.0/255);
+    m_fRGBA[2] = SALCOLOR_BLUE(nSalColor) * (1.0/255);
+    m_fRGBA[3] = 1.0; // opaque
+}
 
 inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha )
-:   m_fRed( fRed )
-,   m_fGreen( fGreen )
-,   m_fBlue( fBlue )
-,   m_fAlpha( fAlpha )
-{}
+{
+    m_fRGBA[0] = fRed;
+    m_fRGBA[1] = fGreen;
+    m_fRGBA[2] = fBlue;
+    m_fRGBA[3] = fAlpha;
+}
 
 class XorEmulation
 {
