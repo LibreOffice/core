@@ -18,18 +18,17 @@
 
 #include "hsqlui.hrc"
 
-/*  Note:
-    The resource file built here (hsqldb.res, finally) is *not* included
-    in the final OOo installation. Instead, it is only built to ensure that
-    the image below is included in the application-wide image repository
-    (images.zip). This way, they can be accessed at runtime, but without the
-    indirection via a resource file - the GraphicProvider service supports
-    a "private:imagerepository/*" protocol meanwhile, which allows this.
-
-    If there were another possibility to ensure that the images are
-    put into the repository, instead of creating a resource file for them,
-    then we would use this other way ...
-*/
+// Note:
+// The resource file built here (hsqldb.res, finally) is *not* included
+// in the final OOo installation. Instead, it is only built to ensure that
+// the image below is included in the application-wide image repository
+// (images.zip). This way, they can be accessed at runtime, but without the
+// indirection via a resource file - the GraphicProvider service supports
+// a "private:imagerepository/*" protocol meanwhile, which allows this.
+//
+// If there were another possibility to ensure that the images are
+// put into the repository, instead of creating a resource file for them,
+// then we would use this other way ...
 
 Image 1000
 {
