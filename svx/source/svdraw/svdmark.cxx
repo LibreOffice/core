@@ -356,7 +356,7 @@ void SdrMarkList::operator=(const SdrMarkList& rLst)
     mbSorted = rLst.mbSorted;
 }
 
-SdrMark* GetMark(sal_uLong nNum) const
+SdrMark* SdrMarkList::GetMark(sal_uLong nNum) const
 {
     return (nNum < maList.size()) ? maList[nNum] : NULL;
 }
