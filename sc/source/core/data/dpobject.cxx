@@ -870,6 +870,11 @@ void ScDPObject::SyncAllDimensionMembers()
         return;
 
     ScDPTableData* pData = GetTableData();
+    if (!pData)
+        // No table data exists.  This can happen when refreshing from an
+        // external source which doesn't exist.
+        return;
+
     // Refresh the cache wrapper since the cache may have changed.
     pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
     pData->ReloadCacheTable();
