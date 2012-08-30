@@ -117,46 +117,43 @@ private:
 };
 #endif
 
-namespace
+struct OGLFormat
 {
-    struct OGLFormat
+    GLint  nInternalFormat;
+    GLenum eFormat;
+    GLenum eType;
+};
+
+/* channel ordering: (0:rgba, 1:bgra, 2:argb, 3:abgr)
+ */
+int calcComponentOrderIndex(const uno::Sequence<sal_Int8>& rTags)
+{
+    using namespace rendering::ColorComponentTag;
+
+    static const sal_Int8 aOrderTable[] =
     {
-        GLint  nInternalFormat;
-        GLenum eFormat;
-        GLenum eType;
+        RGB_RED, RGB_GREEN, RGB_BLUE, ALPHA,
+        RGB_BLUE, RGB_GREEN, RGB_RED, ALPHA,
+        ALPHA, RGB_RED, RGB_GREEN, RGB_BLUE,
+        ALPHA, RGB_BLUE, RGB_GREEN, RGB_RED,
     };
 
-    /* channel ordering: (0:rgba, 1:bgra, 2:argb, 3:abgr)
-    */
-    int calcComponentOrderIndex(const uno::Sequence<sal_Int8>& rTags)
+    const sal_Int32 nNumComps(rTags.getLength());
+    const sal_Int8* pLine=aOrderTable;
+    for(int i=0; i<4; ++i)
     {
-        using namespace rendering::ColorComponentTag;
+        int j=0;
+        while( j<4 && j<nNumComps && pLine[j] == rTags[j] )
+            ++j;
 
-        static const sal_Int8 aOrderTable[] =
-        {
-            RGB_RED, RGB_GREEN, RGB_BLUE, ALPHA,
-            RGB_BLUE, RGB_GREEN, RGB_RED, ALPHA,
-            ALPHA, RGB_RED, RGB_GREEN, RGB_BLUE,
-            ALPHA, RGB_BLUE, RGB_GREEN, RGB_RED,
-        };
+        // all of the line passed, this is a match!
+        if( j==nNumComps )
+            return i;
 
-        const sal_Int32 nNumComps(rTags.getLength());
-        const sal_Int8* pLine=aOrderTable;
-        for(int i=0; i<4; ++i)
-        {
-            int j=0;
-            while( j<4 && j<nNumComps && pLine[j] == rTags[j] )
-                ++j;
-
-            // all of the line passed, this is a match!
-            if( j==nNumComps )
-                return i;
-
-            pLine+=4;
-        }
-
-        return -1;
+        pLine+=4;
     }
+
+    return -1;
 }
 
 // not thread safe
