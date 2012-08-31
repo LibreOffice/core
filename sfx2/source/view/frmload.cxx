@@ -519,8 +519,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     ::comphelper::NamedValueCollection aDescriptor( rArgs );
 
-    bool bLoadWithOrcus = aDescriptor.getOrDefault<OUString>("FilterProvider", OUString()) == "orcus";
-
     // ensure the descriptor contains a referrer
     if ( !aDescriptor.has( "Referer" ) )
         aDescriptor.put( "Referer", ::rtl::OUString() );
@@ -572,10 +570,14 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         // no model passed from outside? => create one from scratch
         if ( !xModel.is() )
         {
-            // beforehand, determine the filter to use, and update the descriptor with its information
-            if ( !bInitNewModel && !bLoadWithOrcus )
+            bool bInternalFilter = aDescriptor.getOrDefault<OUString>("FilterProvider", OUString()).isEmpty();
+
+            if (bInternalFilter && !bInitNewModel)
             {
-                impl_determineFilter( aDescriptor );
+                // Ensure that the current SfxFilter instance is loaded before
+                // going further.  We don't need to do this for external
+                // filter providers.
+                impl_determineFilter(aDescriptor);
             }
 
             // create the new doc
