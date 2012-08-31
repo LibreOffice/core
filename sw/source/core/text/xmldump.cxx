@@ -322,6 +322,8 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
             xmlTextWriterEndElement( writer );
         }
 
+        xmlTextWriterWriteElement( writer, BAD_CAST( "typeid" ), BAD_CAST( typeid( *this ).name() ) );
+
         // Dump the children
         if ( IsTxtFrm(  ) )
         {
