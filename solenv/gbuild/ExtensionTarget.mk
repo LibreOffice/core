@@ -41,6 +41,14 @@ gb_ExtensionTarget_PROPMERGECOMMAND := \
 gb_ExtensionTarget_HELPEXTARGET := $(call gb_Executable_get_target_for_build,helpex)
 gb_ExtensionTarget_HELPEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_HELPEXTARGET)
+gb_ExtensionTarget_HELPINDEXERTARGET := \
+    $(call gb_Executable_get_target_for_build,HelpIndexer)
+gb_ExtensionTarget_HELPINDEXERCOMMAND := \
+	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_HELPINDEXERTARGET)
+gb_ExtensionTarget_HELPLINKERTARGET := \
+    $(call gb_Executable_get_target_for_build,HelpLinker)
+gb_ExtensionTarget_HELPLINKERCOMMAND := \
+	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_HELPLINKERTARGET)
 # does not contain en-US because it is special cased in gb_ExtensionTarget_ExtensionTarget
 gb_ExtensionTarget_TRANS_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 gb_ExtensionTarget_ALL_LANGS := en-US $(gb_ExtensionTarget_TRANS_LANGS)
@@ -282,8 +290,8 @@ endef
 #     gb_ExtensionTarget_add_helpfile)
 define gb_ExtensionTarget__compile_help_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(2).done : \
-        $(call gb_Executable_get_target_for_build,HelpIndexer) \
-        $(call gb_Executable_get_target_for_build,HelpLinker) \
+        $(gb_ExtensionTarget_HELPINDEXERTARGET) \
+        $(gb_ExtensionTarget_HELPLINKERTARGET) \
         $(OUTDIR_FOR_BUILD)/bin/embed.xsl \
         $(OUTDIR_FOR_BUILD)/bin/idxcaption.xsl \
         $(OUTDIR_FOR_BUILD)/bin/idxcontent.xsl | \
@@ -292,7 +300,7 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(2).done : \
 	$$(call gb_Helper_abbreviate_dirs, \
         rm -rf $$(basename $$@) && \
         mkdir $$(basename $$@) && \
-        $(call gb_Executable_get_target_for_build,HelpLinker) -mod help \
+        $(gb_ExtensionTarget_HELPLINKERCOMMAND) -mod help \
             -extlangsrc $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(2) \
             -sty $(OUTDIR_FOR_BUILD)/bin/embed.xsl \
             -extlangdest $$(basename $$@) \
@@ -302,8 +310,8 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(2).done : \
         (cd $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(2) && \
             $(gb_ExtensionTarget_ZIPCOMMAND) -r $$(basename $$@)/help.jar \
             $$(HELPFILES)) && \
-        $(call gb_Executable_get_target_for_build,HelpIndexer) -lang $(2) \
-            -mod help -dir $$(basename $$@) && \
+        $(gb_ExtensionTarget_HELPINDEXERCOMMAND) -lang $(2) -mod help \
+            -dir $$(basename $$@) && \
         touch $$@)
 
 endef
