@@ -3185,12 +3185,15 @@ if test "$_os" = "WINNT"; then
             if test "$CCNUMVER" -ge "001700000000"; then
                 COMEX=14
                 MSVSVER=2012
+				VCVER=110
             elif test "$CCNUMVER" -ge "001600000000"; then
                 COMEX=13
                 MSVSVER=2010
+				VCVER=100
             elif test "$CCNUMVER" -ge "001500000000"; then
                 COMEX=12
                 MSVSVER=2008
+				VCVER=90
             else
                 AC_MSG_ERROR([Compiler too old. Use Microsoft Visual Studio 2008 or 2010.])
             fi
@@ -3270,6 +3273,7 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 AC_SUBST(COMEX)
+AC_SUBST(VCVER)
 PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
 AC_SUBST(SHOWINCLUDES_PREFIX)
@@ -5675,10 +5679,10 @@ fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
 if test $_os = "WINNT"; then
-    AC_MSG_CHECKING([for Microsoft_VC100_CRT_x86.msm])
-    if ./oowintool --msvc-find-msms-vc100; then
+    AC_MSG_CHECKING([for Microsoft_VC"$VCVER"_CRT_x86.msm])
+    if ./oowintool --msvc-find-msms; then
         AC_MSG_RESULT([yes])
-        SCPDEFS="$SCPDEFS -DWITH_VC100_REDIST"
+        SCPDEFS="$SCPDEFS -DWITH_VC"$VCVER"_REDIST"
     else
         AC_MSG_RESULT([no])
     fi
