@@ -669,6 +669,12 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
             if (aOldIdToNewId.find(nId) == aOldIdToNewId.end())
             {
                 ScConditionalFormat* pFormat = pOldCondFormatList->GetFormat(nId);
+                if(!pFormat)
+                {
+                    // may happen in some strange circumstances where cell storage and
+                    // cond format storage are not in sync
+                    continue;
+                }
                 ScConditionalFormat* pNewFormat = pFormat->Clone(pDocument);
                 pNewFormat->SetKey(0);
                 //not in list => create entries in both maps and new format
