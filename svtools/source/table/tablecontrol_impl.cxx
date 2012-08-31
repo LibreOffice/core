@@ -541,20 +541,6 @@ namespace svt { namespace table
                 makeAny( AccessibleTableModelChange( AccessibleTableModelChangeType::INSERT, i_first, i_last, 0, m_pModel->getColumnCount() ) ),
                 Any()
             );
-            impl_commitAccessibleEvent( AccessibleEventId::CHILD,
-                 makeAny( m_pAccessibleTable->getTableHeader( TCTYPE_ROWHEADERBAR ) ),
-                Any()
-            );
-
-//          for ( sal_Int32 i = 0 ; i <= m_pModel->getColumnCount(); ++i )
-//          {
-//              impl_commitAccessibleEvent(
-//                    CHILD,
-//                  makeAny( m_pAccessibleTable->getTable() ),
-//                  Any());
-//          }
-            // Huh? What's that? We're notifying |columnCount| CHILD events here, claiming the *table* itself
-            // has been inserted. Doesn't make much sense, does it?
         }
 
         // schedule repaint
@@ -612,7 +598,7 @@ namespace svt { namespace table
         // notify A11Y events
         if ( impl_isAccessibleAlive() )
         {
-            impl_commitAccessibleEvent(
+            commitTableEvent(
                 AccessibleEventId::TABLE_MODEL_CHANGED,
                 makeAny( AccessibleTableModelChange(
                     AccessibleTableModelChangeType::DELETE,
@@ -2500,6 +2486,28 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
+    void TableControl_Impl::commitAccessibleEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
+    {
+        impl_commitAccessibleEvent( i_eventID, i_newValue, i_oldValue );
+    }
+
+    //--------------------------------------------------------------------
+    void TableControl_Impl::commitCellEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
+    {
+        DBG_CHECK_ME();
+        if ( impl_isAccessibleAlive() )
+             m_pAccessibleTable->commitCellEvent( i_eventID, i_newValue, i_oldValue );
+    }
+
+    //--------------------------------------------------------------------
+    void TableControl_Impl::commitTableEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
+    {
+        DBG_CHECK_ME();
+        if ( impl_isAccessibleAlive() )
+             m_pAccessibleTable->commitTableEvent( i_eventID, i_newValue, i_oldValue );
+    }
+
+    //--------------------------------------------------------------------
     Rectangle TableControl_Impl::calcHeaderRect(bool bColHeader)
     {
         Rectangle const aRectTableWithHeaders( impl_getAllVisibleCellsArea() );
@@ -2511,9 +2519,29 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
+    Rectangle TableControl_Impl::calcHeaderCellRect( bool bColHeader, sal_Int32 nPos )
+    {
+        Rectangle const aHeaderRect = calcHeaderRect( bColHeader );
+        TableCellGeometry const aGeometry(
+            *this, aHeaderRect,
+            bColHeader ? nPos : COL_ROW_HEADERS,
+            bColHeader ? ROW_COL_HEADERS : nPos
+        );
+        return aGeometry.getRect();
+    }
+
+    //--------------------------------------------------------------------
     Rectangle TableControl_Impl::calcTableRect()
     {
         return impl_getAllVisibleDataCellArea();
+    }
+
+    //--------------------------------------------------------------------
+    Rectangle TableControl_Impl::calcCellRect( sal_Int32 nRow, sal_Int32 nCol )
+    {
+        Rectangle aCellRect;
+        impl_getCellRect( nRow, nCol, aCellRect );
+        return aCellRect;
     }
 
     //--------------------------------------------------------------------
