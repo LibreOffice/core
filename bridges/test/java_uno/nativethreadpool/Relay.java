@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package test.javauno.nativethreadpool;
+package test.java_uno.nativethreadpool;
 
 import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridgeFactory;

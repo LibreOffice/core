@@ -16,33 +16,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package com.sun.star.lib.uno.bridges.java_remote;
+package test.java_remote;
 
 import com.sun.star.bridge.XInstanceProvider;
-import com.sun.star.lib.TestBed;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
+import test.lib.TestBed;
 
-/**
- * Test case for bug #111153#.
- *
- * <P>Bug #111153# "jni_uno bridge sometimes fails to map objects
- * correctly" describes that mapping a local object out with type XDerived and
- * then mapping it back in with type XBase produces a proxy, instead of
- * short-cutting to the local object.</P>
- */
-public final class Bug111153_Test extends ComplexTestCase {
+public final class Bug92174_Test extends ComplexTestCase {
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
 
     public void test() throws Exception {
-        assure("test", new TestBed().execute(new Provider(), false,
-                                             Client.class, 0));
+        assure("test",
+               new TestBed().execute(new Provider(), false, Client.class, 0));
     }
 
     public static final class Client extends TestBed.Client {
@@ -53,21 +45,23 @@ public final class Bug111153_Test extends ComplexTestCase {
         protected boolean run(XComponentContext context) throws Throwable {
             XTransport t = UnoRuntime.queryInterface(
                 XTransport.class, getBridge(context).getInstance("Transport"));
-            XDerived d = new XDerived() {};
-            t.setDerived(d);
-            return t.getBase() == d;
+            t.setDerived(new XDerived() {
+                    public void fn() {}
+                });
+            t.getBase().fn();
+            return true;
         }
     }
 
     private static final class Provider implements XInstanceProvider {
         public Object getInstance(String instanceName) {
             return new XTransport() {
-                    public synchronized void setDerived(XDerived derived) {
-                        this.derived = derived;
+                    public XBase getBase() {
+                        return derived;
                     }
 
-                    public synchronized XBase getBase() {
-                        return this.derived;
+                    public synchronized void setDerived(XDerived derived) {
+                        this.derived = derived;
                     }
 
                     private XDerived derived = null;
@@ -76,7 +70,9 @@ public final class Bug111153_Test extends ComplexTestCase {
     }
 
     public interface XBase extends XInterface {
-        TypeInfo[] UNOTYPEINFO = null;
+        void fn();
+
+        TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("fn", 0, 0) };
     }
 
     public interface XDerived extends XBase {
@@ -84,11 +80,11 @@ public final class Bug111153_Test extends ComplexTestCase {
     }
 
     public interface XTransport extends XInterface {
-        void setDerived(XDerived derived);
-
         XBase getBase();
 
-        TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("setDerived", 0, 0),
-                                   new MethodTypeInfo("getBase", 1, 0) };
+        void setDerived(XDerived derived);
+
+        TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("getBase", 0, 0),
+                                   new MethodTypeInfo("setDerived", 1, 0) };
     }
 }

@@ -29,7 +29,7 @@ PRJ := ..$/..$/..
 PRJNAME := bridges
 
 TARGET := test_javauno_nativethreadpool
-PACKAGE := test$/javauno$/nativethreadpool
+PACKAGE := test$/java_uno$/nativethreadpool
 
 ENABLE_EXCEPTIONS := TRUE
 

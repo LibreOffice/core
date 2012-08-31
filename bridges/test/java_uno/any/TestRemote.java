@@ -16,12 +16,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package test.java_uno.anytest;
+package test.java_uno.any;
 
 import com.sun.star.bridge.XInstanceProvider;
-import com.sun.star.lib.TestBed;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import test.lib.TestBed;
+
+//"any" is a reserved word in IDL, so we need to use a different packagename
+import test.java_uno.anytest.*;
 
 public final class TestRemote {
     public static void main(String[] args) throws Exception {

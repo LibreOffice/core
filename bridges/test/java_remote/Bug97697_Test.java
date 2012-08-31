@@ -16,33 +16,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package com.sun.star.lib.uno.bridges.java_remote;
+package test.java_remote;
 
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.lang.DisposedException;
-import com.sun.star.lib.TestBed;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
+import test.lib.TestBed;
 
-/* This test has to detect whether the spawned client process hangs, which can
- * not be done reliably.  As an approximation, it waits for 10 sec and considers
- * the process hanging if it has not terminated by then.
+/**
+ * Test case for bug #97697#.
+ *
+ * <p>Bug #97697# "GPF in java-uno bridge in bugdoc scenario" shows that sending
+ * a plain <code>Object</code> as an <code>Any</code> over the URP bridge lead
+ * to a <code>StackOverflowError</code> on the writer thread, which was silently
+ * discarded (and the bridge was not disposed).</p>
+ *
+ * <p>This test has to detect whether the spawned client process indeed hangs,
+ * which can not be done reliably.  As an approximation, it waits for 10 sec and
+ * considers the process hanging if it has not completed by then.</p>
  */
-public final class StopMessageDispatcherTest extends ComplexTestCase {
-    public StopMessageDispatcherTest() {}
+public final class Bug97697_Test extends ComplexTestCase {
+    public String getTestObjectName() {
+        return getClass().getName();
+    }
 
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
 
     public void test() throws Exception {
-        assure(
-            "test",
-            new TestBed().execute(new Provider(), false, Client.class, 10000));
+        TestBed t = new TestBed();
+        assure("test", t.execute(new Provider(t), true, Client.class, 10000));
     }
 
     public static final class Client extends TestBed.Client {
@@ -51,49 +60,37 @@ public final class StopMessageDispatcherTest extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTest test = UnoRuntime.queryInterface(
-                XTest.class, getBridge(context).getInstance("Test"));
-            Thread[] threads = new Thread[101];
-            int n = Thread.enumerate(threads);
-            if (n > 100) {
-                System.err.println("ERROR: too many threads");
-                return false;
-            }
-            boolean stopped = false;
-            for (int i = 0; i < n; ++i) {
-                if (threads[i].getName().equals("MessageDispatcher")) {
-                    threads[i].stop();
-                    stopped = true;
-                    break;
-                }
-            }
-            if (!stopped) {
-                System.err.println("ERROR: thread not found");
-                return false;
-            }
+            XTransport transport = UnoRuntime.queryInterface(
+                XTransport.class, getBridge(context).getInstance("Transport"));
             try {
-                test.call();
-                System.err.println("ERROR: no DisposedException");
-                return false;
+                transport.getAny();
             } catch (DisposedException e) {
                 return true;
             }
+            return false;
         }
-
-        private Client() {}
     }
 
     private static final class Provider implements XInstanceProvider {
+        public Provider(TestBed testBed) {
+            this.testBed = testBed;
+        }
+
         public Object getInstance(String instanceName) {
-            return new XTest() {
-                    public void call() {}
+            return new XTransport() {
+                    public Object getAny() {
+                        testBed.serverDone(true);
+                        return new Object();
+                    }
                 };
         }
+
+        private final TestBed testBed;
     }
 
-    public interface XTest extends XInterface {
-        void call();
+    public interface XTransport extends XInterface {
+        Object getAny();
 
-        TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("call", 0, 0) };
+        TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("getAny", 0, 0) };
     }
 }

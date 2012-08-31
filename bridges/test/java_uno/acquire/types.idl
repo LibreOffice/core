@@ -18,7 +18,7 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-module test { module javauno { module acquire {
+module test { module java_uno { module acquire {
 
 interface XBase: com::sun::star::uno::XInterface {};
 

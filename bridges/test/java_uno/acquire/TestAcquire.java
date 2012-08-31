@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package test.javauno.acquire;
+package test.java_uno.acquire;
 
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XBridgeFactory;

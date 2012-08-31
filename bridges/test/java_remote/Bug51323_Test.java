@@ -16,25 +16,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package com.sun.star.lib.uno.bridges.java_remote;
+package test.java_remote;
 
+import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
-import com.sun.star.lib.TestBed;
+import com.sun.star.connection.Connector;
+import com.sun.star.connection.XConnection;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 import util.WaitUnreachable;
+import test.lib.TestBed;
 
 /**
- * Test case for bug #114133#.
+ * Test case for bug #i51323#.
  *
- * <p>Bug #114133# "Java UNO: UnoRuntime.getBride and disposed bridges."  The
- * client calls UnoRuntime.getBridge to get a bridge to the server, uses the
- * bridge, waits until it terminates itself (when all bridged objects have been
- * garbage-collected), then calls UnoRuntime.getBridge again.  This must return
- * a fresh, unterminated bridge.</p>
+ * <p>Bug #i51323# "jurt: BridgeFactory.createBridge creates bridge names."
+ * Make sure that multiple calls to BridgeFactory.getBridge with empty names
+ * create different bridges.</p>
  */
-public final class Bug114133_Test extends ComplexTestCase {
+public final class Bug51323_Test extends ComplexTestCase {
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -51,11 +53,17 @@ public final class Bug114133_Test extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            new WaitUnreachable(getBridge(context).getInstance("Test")).
-                waitUnreachable();
-            new WaitUnreachable(getBridge(context).getInstance("Test")).
-                waitUnreachable();
-            return true;
+            XConnection connection =
+                Connector.create(context).connect(getConnectionDescription());
+            XBridgeFactory factory = UnoRuntime.queryInterface(
+                XBridgeFactory.class,
+                context.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.bridge.BridgeFactory", context));
+            return !UnoRuntime.areSame(
+                factory.createBridge(
+                    "", getProtocolDescription(), connection, null),
+                factory.createBridge(
+                    "", getProtocolDescription(), connection, null));
         }
     }
 

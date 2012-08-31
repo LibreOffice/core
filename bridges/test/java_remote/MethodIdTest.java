@@ -16,16 +16,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package com.sun.star.lib.uno.bridges.java_remote;
+package test.java_remote;
 
 import com.sun.star.bridge.XInstanceProvider;
-import com.sun.star.lib.TestBed;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
+import test.lib.TestBed;
 
 /**
  * Test case for bug #111153#.

@@ -20,7 +20,7 @@ PRJ := ..$/..$/..$/..$/..$/..$/..$/..
 PRJNAME := bridges
 TARGET := test_com_sun_star_lib_uno_bridges_javaremote
 
-PACKAGE := com$/sun$/star$/lib$/uno$/bridges$/javaremote
+PACKAGE := test$/javaremote
 JAVATESTFILES := \
     Bug51323_Test.java \
     Bug92174_Test.java \

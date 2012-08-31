@@ -20,7 +20,7 @@ PRJ := ..$/..$/..$/..$/..
 PRJNAME := bridges
 TARGET := test_com_sun_star_lib
 
-PACKAGE := com$/sun$/star$/lib
+PACKAGE := test$/lib
 JAVAFILES := TestBed.java
 JARFILES := juh.jar jurt.jar ridl.jar
 
