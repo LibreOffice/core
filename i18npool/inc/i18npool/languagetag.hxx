@@ -13,6 +13,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include <i18npool/i18npooldllapi.h>
 #include <i18npool/lang.h>
 
 
@@ -23,7 +24,7 @@
     const methods. Getter methods return either the original value or matching
     converted values.
  */
-class LanguageTag
+class I18NISOLANG_DLLPUBLIC LanguageTag
 {
 public:
 
