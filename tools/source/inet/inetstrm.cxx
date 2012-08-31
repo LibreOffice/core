@@ -1573,7 +1573,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
              * Single part message.
              * Remove any ContentTransferEncoding.
              */
-            if (pMsg->GetContentType().Len() == 0)
+            if (pMsg->GetContentType().isEmpty())
             {
                 pMsg->SetContentType(pMsg->GetDefaultContentType());
             }
