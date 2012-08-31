@@ -93,7 +93,7 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
         {
             pMenu->SetNativeItemCommand( nSection, nItemPos, pSalMenuItem, aNativeCommand );
             pMenu->SetNativeEnableItem( aNativeCommand, bEnabled );
-//            pMenu->CheckItem( nItem, itemChecked );
+            pMenu->NativeCheckItem( nSection, nItemPos, pSalMenuItem, bChecked );
         }
 
         g_free( aNativeCommand );
@@ -269,7 +269,7 @@ GtkSalMenu::~GtkSalMenu()
 
 sal_Bool GtkSalMenu::VisibleMenuBar()
 {
-    return sal_False;
+    return sal_True;
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
@@ -427,6 +427,45 @@ void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 
 //    if ( aCommand )
 //        g_free( aCommand );
+}
+
+void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, gboolean bCheck )
+{
+    gchar* aCommand = g_lo_menu_get_command_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
+
+    if ( aCommand == NULL && g_strcmp0( aCommand, "" ) != 0 )
+    {
+        if ( mpActionGroup != NULL )
+        {
+            GVariant *pCheckValue = NULL;
+
+            // FIXME: Why pItem->mnBits differs from GetItemBits value?
+            MenuItemBits bits = pItem->mpVCLMenu->GetItemBits( pItem->mnId );
+
+            if ( bits & MIB_CHECKABLE ) {
+                GVariant* pState = g_action_group_get_action_state( mpActionGroup, aCommand );
+                gboolean bCurrentState = g_variant_get_boolean( pState );
+
+                if ( bCurrentState != bCheck )
+                    pCheckValue = g_variant_new_boolean( bCheck );
+            }
+            else if ( bits & MIB_RADIOCHECK )
+            {
+                GVariant* pState = g_action_group_get_action_state( mpActionGroup, aCommand );
+                gchar* aCurrentState = (gchar*) g_variant_get_string( pState, NULL );
+                gboolean bCurrentState = g_strcmp0( aCurrentState, "" ) != 0;
+
+                if ( bCurrentState != bCheck )
+                    pCheckValue = ( bCheck == TRUE ) ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
+            }
+
+            if ( pCheckValue )
+                g_action_group_change_action_state( mpActionGroup, aCommand, pCheckValue );
+        }
+    }
+
+    if ( aCommand )
+        g_free( aCommand );
 }
 
 void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
