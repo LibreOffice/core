@@ -1882,21 +1882,3 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Lomenubar, lomenubar.uno )
 STD_LIB_FILE( gid_File_Lib_Tubes , tubes)
 #endif
 
-#ifndef SYSTEM_LIBORCUS
-
-File gid_File_Lib_Liborcus
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT3(liborcus-0.2,0,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT3(liborcus-0.2,UNXSUFFIX,.0));
-    #endif
-  #elif defined(WNT)
-       Name = "liborcus-0.2.dll";
-  #endif
-End
-
-#endif

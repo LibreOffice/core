@@ -1869,10 +1869,13 @@ endef
 
 else # !SYSTEM_LIBORCUS
 
-define gb_LinkTarget__use_orcus
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	orcus-0.2 \
+))
 
-$(call gb_LinkTarget_add_libs,$(1),\
-	-lorcus-0.2 \
+define gb_LinkTarget__use_orcus
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	orcus-0.2 \
 )
 
 endef
