@@ -34,6 +34,8 @@ $(eval $(call gb_Library_set_include,scfilt,\
 
 $(eval $(call gb_Library_use_sdk_api,scfilt))
 
+$(eval $(call gb_Library_use_external,scfilt,mdds_headers))
+
 $(eval $(call gb_Library_use_libraries,scfilt,\
 	basegfx \
 	comphelper \

@@ -33,6 +33,8 @@ $(eval $(call gb_Library_set_include,scui,\
 
 $(eval $(call gb_Library_use_sdk_api,scui))
 
+$(eval $(call gb_Library_use_external,scui,mdds_headers))
+
 $(eval $(call gb_Library_use_libraries,scui,\
 	comphelper \
 	cppu \
