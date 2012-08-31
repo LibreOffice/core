@@ -39,8 +39,6 @@
 #include "compiler.hxx"
 #include "stlalgorithm.hxx"
 
-#include <iostream>
-
 using ::std::vector;
 using ::std::advance;
 using ::std::find_if;
@@ -739,12 +737,12 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         // r.aStart.X() <= p.aStart.X() && r.aEnd.X() >= p.aEnd.X()
         // && ( r.aStart.Y() <= p.aStart.Y() || r.aEnd.Y() >= r.aEnd.Y() )
         if(handleOneRange( aRange, *itr ))
-            std::cout << "handled 1 Range case" << std::endl;
+            continue;
 
         // getting two ranges
         // r.aStart.X()
         else if(handleTwoRanges( aRange, *itr, aNewRanges ))
-            std::cout << "handled 2 Ranges " << std::endl;
+            continue;
 
         // getting 3 ranges
         // r.aStart.X() > p.aStart.X() && r.aEnd.X() >= p.aEnd.X()
@@ -753,13 +751,13 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         // r.aStart.X() <= p.aStart.X() && r.aEnd.X() < p.aEnd.X()
         // && r.aStart.Y() > p.aStart.Y() && r.aEnd.Y() < p.aEnd.Y()
         else if(handleThreeRanges( aRange, *itr, aNewRanges ))
-            std::cout << "handled 3 Ranges" << std::endl;
+            continue;
 
         // getting 4 ranges
         // r.aStart.X() > p.aStart.X() && r.aEnd().X() < p.aEnd.X()
         // && r.aStart.Y() > p.aStart.Y() && r.aEnd().Y() < p.aEnd.Y()
         else if(handleFourRanges( aRange, *itr, aNewRanges ))
-            std::cout << "handle 4 Ranges" << std::endl;
+            continue;
     }
     for(vector<ScRange>::iterator itr = aNewRanges.begin(); itr != aNewRanges.end(); ++itr)
         Join( *itr, false);
