@@ -90,7 +90,7 @@ public class StateSetView
                     StateSetAllView.class);
                 break;
         }
-        aContainer.SetObject (mxContext);
+        maContainer.SetObject (mxContext);
     }
 
 
@@ -123,13 +123,13 @@ public class StateSetView
     public void mousePressed (MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
 
-    private static int mnViewMode = SHOW_ALL_STATES;
     private final static int SHOW_SET_STATES = 0;
     private final static int SHOW_ALL_STATES = 1;
+    private static int mnViewMode = SHOW_ALL_STATES;
 
 
 
-public class StateSetAllView
+public static class StateSetAllView
     extends StateSetView
 {
     /** Create a FocusView when the given object supports the
@@ -222,7 +222,7 @@ public class StateSetAllView
 }
 
 
-public class StateSetSetView
+public static class StateSetSetView
     extends StateSetView
 {
     static public ObjectView Create (
