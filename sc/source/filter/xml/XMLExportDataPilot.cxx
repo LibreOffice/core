@@ -46,6 +46,7 @@
 #include "dpsdbtab.hxx"
 #include "dpdimsave.hxx"
 #include "dpgroup.hxx"
+#include "dputil.hxx"
 #include "rangeutl.hxx"
 #include "queryentry.hxx"
 #include <com/sun/star/sheet/DataImportMode.hpp>
@@ -608,8 +609,9 @@ void ScXMLExportDataPilot::WriteGroupDimAttributes(const ScDPSaveGroupDimension*
 {
     if (pGroupDim)
     {
+        OUString aSrcFieldName = ScDPUtil::getSourceDimensionName(pGroupDim->GetSourceDimName());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_GROUP_FIELD, XML_TRUE);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, pGroupDim->GetSourceDimName());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcFieldName);
         if (pGroupDim->GetDatePart())
         {
             WriteDatePart(pGroupDim->GetDatePart());
@@ -682,7 +684,8 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
 
 void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
 {
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, rtl::OUString(pDim->GetName()));
+    OUString aSrcDimName = ScDPUtil::getSourceDimensionName(pDim->GetName());
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcDimName);
     if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
     {
         // Export display names only for ODF 1.2 extended or later.
