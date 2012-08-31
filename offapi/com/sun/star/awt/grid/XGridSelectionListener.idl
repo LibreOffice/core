@@ -36,13 +36,10 @@
 module com {  module sun {  module star {  module awt { module grid {
 
 
-/** An instance of this interface is used by the <type>XGridSelection</type> to
+/** An instance of this interface is used by the <type>XGridRowSelection</type> to
     get notifications about selection changes.
-
-    <p>Usually you must not implement this interface yourself, but you must notify it correctly if
-    you implement the <type>XGridSelection</type> yourself</p>.
  */
-interface XGridSelectionListener: com::sun::star::lang::XEventListener
+published interface XGridSelectionListener: com::sun::star::lang::XEventListener
 {
     /** Invoked after a selection was changed.
      */

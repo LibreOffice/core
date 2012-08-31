@@ -1840,14 +1840,13 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/grid,\
 	GridInvalidDataException \
 	GridInvalidModelException \
 	GridSelectionEvent \
-	SelectionEventType \
 	XGridColumn \
 	XGridColumnListener \
 	XGridColumnModel \
 	XGridControl \
 	XGridDataListener \
 	XGridDataModel \
-	XGridSelection \
+	XGridRowSelection \
 	XGridSelectionListener \
 	XMutableGridDataModel \
 	XMutableGridDataModel \
@@ -2872,7 +2871,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/presentation,\
 	XTransitionFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/qa,\
-    	XDumper \
+	XDumper \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/rdf,\
 	FileFormat \

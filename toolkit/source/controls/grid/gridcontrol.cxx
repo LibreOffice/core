@@ -302,8 +302,8 @@ void SAL_CALL UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > 
 {
     UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
-    const Reference< XGridControl >  xGrid( getPeer(), UNO_QUERY_THROW );
-    xGrid->addSelectionListener(&m_aSelectionListeners);
+    const Reference< XGridRowSelection > xGrid( getPeer(), UNO_QUERY_THROW );
+    xGrid->addSelectionListener( &m_aSelectionListeners );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -385,45 +385,45 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException )
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectRow( i_rowIndex );
+    Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->selectRow( i_rowIndex );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL UnoGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectAllRows();
+    Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->selectAllRows();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException )
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->deselectRow( i_rowIndex );
+    Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->deselectRow( i_rowIndex );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL UnoGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->deselectAllRows();
+    Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->deselectAllRows();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelection() throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelectedRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getSelection();
+    return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->getSelectedRows();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Bool SAL_CALL UnoGridControl::isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL UnoGridControl::hasSelectedRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->isSelectionEmpty();
+    return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->hasSelectedRows();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Bool SAL_CALL UnoGridControl::isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->isSelectedIndex( index );
+    return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->isRowSelected( index );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

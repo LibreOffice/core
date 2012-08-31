@@ -49,19 +49,46 @@
 
 #include <vcl/svapp.hxx>
 
-using namespace ::svt::table;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt::grid;
-using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::accessibility;
+/** === begin UNO using === **/
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::awt::grid::XGridSelectionListener;
+using ::com::sun::star::style::VerticalAlignment;
+using ::com::sun::star::style::VerticalAlignment_TOP;
+using ::com::sun::star::view::SelectionType;
+using ::com::sun::star::view::SelectionType_NONE;
+using ::com::sun::star::view::SelectionType_RANGE;
+using ::com::sun::star::view::SelectionType_SINGLE;
+using ::com::sun::star::view::SelectionType_MULTI;
+using ::com::sun::star::awt::grid::XGridDataModel;
+using ::com::sun::star::awt::grid::GridInvalidDataException;
+using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::lang::IndexOutOfBoundsException;
+using ::com::sun::star::awt::grid::XGridColumnModel;
+using ::com::sun::star::awt::grid::GridSelectionEvent;
+using ::com::sun::star::awt::grid::XGridColumn;
+using ::com::sun::star::container::ContainerEvent;
+using ::com::sun::star::awt::grid::GridDataEvent;
+using ::com::sun::star::awt::grid::GridInvalidModelException;
+/** === end UNO using === **/
 
+namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
+namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
 
+using ::svt::table::TableControl;
+
+typedef ::com::sun::star::util::Color   UnoColor;
+
+// ---------------------------------------------------------------------------------------------------------------------
 SVTXGridControl::SVTXGridControl()
     :m_pTableModel( new UnoControlTableModel() )
     ,m_bTableModelInitCompleted( false )
-    ,m_nSelectedRowCount( 0 )
     ,m_aSelectionListeners( *this )
 {
 }
@@ -79,7 +106,7 @@ void SVTXGridControl::SetWindow( Window* pWindow )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -91,7 +118,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) 
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -127,13 +154,13 @@ sal_Int32 SAL_CALL SVTXGridControl::getCurrentRow(  ) throw (RuntimeException)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SVTXGridControl::addSelectionListener(const Reference< XGridSelectionListener > & listener) throw (RuntimeException)
 {
     m_aSelectionListeners.addInterface(listener);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SVTXGridControl::removeSelectionListener(const Reference< XGridSelectionListener > & listener) throw (RuntimeException)
 {
     m_aSelectionListeners.removeInterface(listener);
 }
@@ -481,7 +508,7 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
             aPropertyValue.clear();
         else
         {
-            Sequence< ::com::sun::star::util::Color > aAPIColors( aColors->size() );
+            Sequence< UnoColor > aAPIColors( aColors->size() );
             for ( size_t i=0; i<aColors->size(); ++i )
             {
                 aAPIColors[i] = aColors->at(i).GetColor();
@@ -594,24 +621,27 @@ void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& i_event ) 
 
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SVTXGridControl::disposing( const EventObject& Source ) throw(RuntimeException)
 {
     VCLXWindow::disposing( Source );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException )
 {
     SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::selectRow: no control (anymore)!" );
 
+    if ( ( i_rowIndex < 0 ) || ( i_rowIndex >= pTable->GetRowCount() ) )
+        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
     pTable->SelectRow( i_rowIndex, true );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SVTXGridControl::selectAllRows() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -622,18 +652,21 @@ void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::Run
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException )
 {
     SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::deselectRow: no control (anymore)!" );
 
+    if ( ( i_rowIndex < 0 ) || ( i_rowIndex >= pTable->GetRowCount() ) )
+        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
     pTable->SelectRow( i_rowIndex, false );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SVTXGridControl::deselectAllRows() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -644,12 +677,12 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelection() throw (::com::sun::star::uno::RuntimeException)
+Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelectedRows() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN( pTable, "SVTXGridControl::getSelection: no control (anymore)!", Sequence< sal_Int32 >() );
+    ENSURE_OR_RETURN( pTable, "SVTXGridControl::getSelectedRows: no control (anymore)!", Sequence< sal_Int32 >() );
 
     sal_Int32 selectionCount = pTable->GetSelectedRowCount();
     Sequence< sal_Int32 > selectedRows( selectionCount );
@@ -659,31 +692,31 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Bool SAL_CALL SVTXGridControl::isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL SVTXGridControl::hasSelectedRows() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN( pTable, "SVTXGridControl::getSelection: no control (anymore)!", sal_True );
+    ENSURE_OR_RETURN( pTable, "SVTXGridControl::hasSelectedRows: no control (anymore)!", sal_True );
 
     return pTable->GetSelectedRowCount() > 0;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Bool SAL_CALL SVTXGridControl::isSelectedIndex( ::sal_Int32 index ) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL SVTXGridControl::isRowSelected( ::sal_Int32 index ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN( pTable, "SVTXGridControl::isSelectedIndex: no control (anymore)!", sal_False );
+    ENSURE_OR_RETURN( pTable, "SVTXGridControl::isRowSelected: no control (anymore)!", sal_False );
 
     return pTable->IsRowSelected( index );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SVTXGridControl::dispose() throw(::com::sun::star::uno::RuntimeException)
+void SVTXGridControl::dispose() throw(RuntimeException)
 {
-    ::com::sun::star::lang::EventObject aObj;
+    EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
     m_aSelectionListeners.disposeAndClear( aObj );
     VCLXWindow::dispose();
@@ -694,7 +727,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+    Reference< XWindow > xKeepAlive( this );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::ProcessWindowEvent: no control (anymore)!" );
@@ -774,42 +807,13 @@ void SVTXGridControl::ImplCallItemListeners()
 
     if ( m_aSelectionListeners.getLength() )
     {
-        sal_Int32 const actSelRowCount = pTable->GetSelectedRowCount();
-        ::com::sun::star::awt::grid::GridSelectionEvent aEvent;
+        GridSelectionEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.Column = 0;
-        sal_Int32 diff = actSelRowCount - m_nSelectedRowCount;
-        //row added to selection
-        if(diff >= 1)
-        {
-            aEvent.Action = com::sun::star::awt::grid::SelectionEventType(0);
-            aEvent.Row = pTable->GetSelectedRowIndex( actSelRowCount - 1 );
-            aEvent.Range = diff;
-        }
-        //selected row changed
-        else if(diff == 0 && actSelRowCount != 0)
-        {
-            aEvent.Row = pTable->GetSelectedRowIndex( actSelRowCount - 1 );
-            aEvent.Action = com::sun::star::awt::grid::SelectionEventType(2);
-            aEvent.Range = 0;
-        }
-        else
-        {
-            //selection changed: multiple row deselected, only 1 row is selected
-            if(actSelRowCount == 1)
-            {
-                aEvent.Row = pTable->GetSelectedRowIndex( actSelRowCount - 1 );
-                aEvent.Action = com::sun::star::awt::grid::SelectionEventType(2);
-            }
-            //row is deselected
-            else
-            {
-                aEvent.Row = pTable->GetCurrentRow();
-                aEvent.Action = com::sun::star::awt::grid::SelectionEventType(1);
-            }
-            aEvent.Range = 0;
-        }
-        m_nSelectedRowCount=actSelRowCount;
+
+        sal_Int32 const nSelectedRowCount( pTable->GetSelectedRowCount() );
+        aEvent.SelectedRowIndexes.realloc( nSelectedRowCount );
+        for ( sal_Int32 i=0; i<nSelectedRowCount; ++i )
+            aEvent.SelectedRowIndexes[i] = pTable->GetSelectedRowIndex( i );
         m_aSelectionListeners.selectionChanged( aEvent );
     }
 }
