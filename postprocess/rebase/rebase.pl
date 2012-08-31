@@ -179,7 +179,13 @@ sub rebase_again
     my $newfiles_ref = shift;
     my @grownfiles;
     my $solarbin ="$ENV{SOLARVERSION}/$ENV{INPATH}/bin$ENV{UPDMINOREXT}";
-    my $command = "rebase " . $options_string;
+    my $command;
+    if ( $ENV{REBASE} eq "download" ) {
+        $command = $ENV{OUTDIR}."/bin/rebase " . $options_string;
+    }
+    else {
+        $command = "rebase " . $options_string;
+    }
     if ( $ENV{WRAPCMD} ) {
         $command = $ENV{WRAPCMD} . " " . $command;
     }
@@ -241,7 +247,13 @@ sub rebase_again
 sub rebase_initially
 {
     my ($files_ref, $start_address) = @_;
-    my $command = "rebase ";
+    my $command;
+    if ( $ENV{REBASE} eq "download" ) {
+        $command = $ENV{OUTDIR}."/bin/rebase " . $options_string;
+    }
+    else {
+        $command = "rebase " . $options_string;
+    }
     if ( $ENV{WRAPCMD} ) {
         $command = $ENV{WRAPCMD} . " " . $command;
     }
