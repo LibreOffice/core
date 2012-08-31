@@ -289,6 +289,7 @@ public:
     void            CompileXML();
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
     void            RenameCellStyle( const String& rOld, const String& rNew );
 
@@ -344,6 +345,7 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void    RenameCellStyle( const String& rOld, const String& rNew );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void    DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void    SourceChanged( const ScAddress& rAddr );
 
