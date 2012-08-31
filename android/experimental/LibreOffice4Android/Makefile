@@ -116,6 +116,8 @@ copy-stuff:
 #
 	mkdir -p assets/bin/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
 	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
+	cp $(OUTDIR)/bin/offapi.rdb assets/bin
+	cp $(OUTDIR)/bin/oovbaapi.rdb assets/bin
 	cp $(OUTDIR)/bin/types.rdb assets/bin
 	cp $(OUTDIR)/bin/ure/types.rdb assets/bin/ure
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
@@ -156,7 +158,7 @@ copy-stuff:
 	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
-	echo 'URE_MORE_TYPES=file:///assets/bin/ure/types.rdb file:///assets/bin/types.rdb' >> assets/program/fundamentalrc
+	echo 'URE_MORE_TYPES=file:///assets/bin/ure/types.rdb file:///assets/bin/types.rdb file:///assets/bin/offapi.rdb file:///assets/bin/oovbaapi.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES=file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
 #
 # Set up unorc
