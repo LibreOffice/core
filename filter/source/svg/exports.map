@@ -1,8 +1,0 @@
-UDK_3_0_0 {
-        global:
-                component_getFactory;
-                GraphicImport;
-
-        local:
-                *;
-};
