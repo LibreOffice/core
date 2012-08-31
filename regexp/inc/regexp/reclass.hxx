@@ -357,6 +357,9 @@ class REGEXP_DLLPUBLIC Regexpr
     sal_Bool iswordend(const sal_Unicode *d, sal_Unicode *string, sal_Int32 ssize);
     void set_list_bit(sal_Unicode c, sal_Unicode *b);
 
+    Regexpr(const Regexpr&);
+    Regexpr& operator=(const Regexpr&);
+
 public:
     // constructors
     Regexpr( const ::com::sun::star::util::SearchOptions & rOptions,
