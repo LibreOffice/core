@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///pk\u003d",
+        "filename": "l10ntools/source/po.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-08-31T05:08:47Z",
+      "side": 1,
+      "message": "that looks pretty insane to me...\ninstantiate a OString for 1 char 4 time.. convert int to double then to int again with a float division and a multiplication along the way.\n\ncompare to:\n\nhave a static char[256] mapping array m; (0-255 -\u003e 33-126)\n\nhave a char[5] temp variable t;\n\nt[0] \u003d m[crc\u0026255];\n\nt[1] \u003d m[(crc\u003e\u003e8) \u0026 255];\n\nt[2] \u003d m[crc\u003e\u003e16] \u0026 255];\n\nt[3] \u003d m[crc\u003e\u003e24 ] ;\n\nt[4] \u003d 0;\n\nOString sKeyId(t);",
+      "revId": "6c03bb4ab1e954e246c57db6f474c56e10763d9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
