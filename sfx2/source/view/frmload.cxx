@@ -525,12 +525,6 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     if ( !aDescriptor.has( "Referer" ) )
         aDescriptor.put( "Referer", ::rtl::OUString() );
 
-    // TODO: is this needed? finally, when loading is successfull, then there should be no need for this item,
-    // as the document can always obtain its frame. In particular, there might be situations where this frame
-    // is accessed, but already disposed: Imagine the user loading a document, opening a second view on it, and
-    // then closing the first view/frame.
-    aDescriptor.put( "Frame", _rTargetFrame );
-
     // did the caller already pass a model?
     Reference< XModel2 > xModel = aDescriptor.getOrDefault( "Model", Reference< XModel2 >() );
     const bool bExternalModel = xModel.is();
