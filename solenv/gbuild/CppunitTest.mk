@@ -59,6 +59,7 @@ gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filen
 
 define gb_CppunitTest__make_args
 --headless \
+"-env:LIBLANGTAG_SHARE=$(call gb_Helper_make_url,$(OUTDIR))" \
 $(if $(URE),\
     $(if $(strip $(CONFIGURATION_LAYERS)),\
 	    "-env:CONFIGURATION_LAYERS=$(strip $(CONFIGURATION_LAYERS))") \
