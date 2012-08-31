@@ -75,13 +75,31 @@ ModelessDialog RID_SCDLG_NAMES
         Size = MAP_APPFONT ( 154 , 8 ) ;
         Text [ en-US ] = "Name" ;
     };
+/*
     ComboBox ED_NAME
     {
-        HelpID = "sc:ComboBox:RID_SCDLG_NAMES:ED_NAME";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 145 , 92 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
+        Sort = TRUE ;
+    };
+*/
+        Edit ED_NAME
+    {
+    Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 145 , 11 ) ;
+    };
+
+    ListBox LB_NAMES
+    {
+    Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 145 , 84 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        AutoHScroll = TRUE ;
         Sort = TRUE ;
     };
     FixedLine FL_ASSIGN

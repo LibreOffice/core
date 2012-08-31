@@ -44,6 +44,7 @@
 #include "rangeutl.hxx"
 #include "externalrefmgr.hxx"
 #include "sheetdata.hxx"
+#include "xmlnexpi.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -322,6 +323,13 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
             GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
             bStartFormPage = sal_True;
             pContext = GetScImport().GetFormImport()->createOfficeFormsContext( GetScImport(), nPrefix, rLName );
+        }
+        break;
+    case XML_TOK_TABLE_NAMED_EXPRESSIONS:
+        {
+            SCTAB nCurrentSheet = static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet());
+            pContext = new ScXMLNamedExpressionsContext ( GetScImport(), nPrefix, rLName, xAttrList );//worksheetname
+            static_cast<ScXMLNamedExpressionsContext*>(pContext)->SetScope( nCurrentSheet );
         }
         break;
     case XML_TOK_TABLE_EVENT_LISTENERS:

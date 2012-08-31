@@ -834,6 +834,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
         if (nNewPos == nMaxTableNumber)
         {
             pTab[nMaxTableNumber] = new ScTable(this, nMaxTableNumber, aName);
+            pRangeName->UpdateTabRef(nNewPos, 4, nOldPos);//. 4 - copy table
             ++nMaxTableNumber;
         }
         else
@@ -845,7 +846,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
                 ScRange aRange( 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
-                pRangeName->UpdateTabRef(nNewPos, 1);
+                pRangeName->UpdateTabRef(nNewPos, 4, nOldPos);//  4 - copy table
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
                 if (pDPCollection)

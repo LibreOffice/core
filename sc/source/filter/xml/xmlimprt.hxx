@@ -171,6 +171,7 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_SCENARIO,
     XML_TOK_TABLE_SHAPES,
     XML_TOK_TABLE_FORMS,
+    XML_TOK_TABLE_NAMED_EXPRESSIONS,
     XML_TOK_TABLE_EVENT_LISTENERS,
     XML_TOK_TABLE_EVENT_LISTENERS_EXT
 };
@@ -614,6 +615,7 @@ struct ScMyNamedExpression
     rtl::OUString      sRangeType;
     formula::FormulaGrammar::Grammar eGrammar;
     sal_Bool           bIsExpression;
+   SCTAB nNameScope;
 };
 
 typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;

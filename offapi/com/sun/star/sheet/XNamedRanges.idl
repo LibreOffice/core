@@ -44,6 +44,26 @@
 
 module com {  module sun {  module star {  module sheet {
 
+
+published struct RangeScopeName
+{
+    //-------------------------------------------------------------------------
+
+    /** is the OpCode of the token.
+
+        @see com::sun::star::sheet::XFormulaOpCodeMapper
+     */
+    string ScopeName;
+
+    //-------------------------------------------------------------------------
+
+    /** is additional data in the token, depending on the OpCode.
+
+        @see com::sun::star::sheet::NamedRange::TokenIndex
+        @see com::sun::star::sheet::DatabaseRange::TokenIndex
+     */
+    string RangeName;
+};
 //=============================================================================
 
 /** provides access to the members in a collection of named ranges and to
@@ -127,6 +147,23 @@ published interface XNamedRanges: com::sun::star::container::XNameAccess
             specifies the top left cell of the output range.
      */
     void outputList( [in] com::sun::star::table::CellAddress aOutputPosition );
+
+    void addNewByScopeName(
+            [in] string aScopeName,
+            [in] string aRangeName,
+            [in] string aContent,
+            [in] com::sun::star::table::CellAddress aPosition,
+            [in] long nType );
+
+    void removeByScopeName( [in] string aScopeName, [in] string aRangeName );
+
+    boolean hasByScopeName( [in] string aScopeName, [in] string aRangeName );
+
+    any getByScopeName( [in] string aScopeName, [in] string aRangeName )
+            raises( com::sun::star::container::NoSuchElementException,
+                    com::sun::star::lang::WrappedTargetException );
+
+        sequence<RangeScopeName> getElementScopeNames();
 
 };
 

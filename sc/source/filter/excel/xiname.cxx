@@ -140,8 +140,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     String aOrigName( maScName );
     sal_Int32 nCounter = 0;
     sal_uInt16 nDummy;
-    while( rRangeNames.SearchName( maScName, nDummy ) )
-        maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
+    //while( rRangeNames.SearchName( maScName, nDummy ) )
+        //maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
 
     // 3) *** convert the name definition formula *** -------------------------
 
@@ -212,6 +212,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     {
         // create the Calc name data
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
+     pData->SetRangeScope(nXclTab == EXC_NAME_GLOBAL ?  MAXTABCOUNT : mnScTab);
         pData->GuessPosition();             // calculate base position for relative refs
         pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
         rRangeNames.Insert( pData );        // takes ownership of pData

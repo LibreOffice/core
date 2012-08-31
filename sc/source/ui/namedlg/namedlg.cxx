@@ -54,6 +54,7 @@
 #define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
+const sal_uInt16  SHEETNAMEPOS = 33;
 
 //============================================================================
 // Hilfsklasse: Merken der aktuellen Bereichsoptionen,
@@ -119,6 +120,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         //
         aFlName         ( this, ScResId( FL_NAME ) ),
         aEdName         ( this, ScResId( ED_NAME ) ),
+        aLBNames        ( this, ScResId( LB_NAMES ) ),
         //
         aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
         aEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
@@ -145,7 +147,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) ),
-        theCursorPos    ( aCursorPos )  // zum Berechnen der Referenzen
+        theCursorPos    ( aCursorPos ),  // zum Berechnen der Referenzen
+        aSelectedRangeScope(MAXTABCOUNT)
 {
     pSaveObj = new SaveData;
     Init();
@@ -179,7 +182,7 @@ void __EXPORT ScNameDlg::Init()
     aEdAssign.SetGetFocusHdl( LINK( this, ScNameDlg, AssignGetFocusHdl ) );
     aEdAssign.SetModifyHdl  ( LINK( this, ScNameDlg, EdModifyHdl ) );
     aEdName.SetModifyHdl    ( LINK( this, ScNameDlg, EdModifyHdl ) );
-    aEdName.SetSelectHdl    ( LINK( this, ScNameDlg, NameSelectHdl ) );
+    aLBNames.SetSelectHdl   ( LINK( this, ScNameDlg, NameSelectHdl ) );
 
     aBtnCriteria .Hide();
     aBtnPrintArea.Hide();
@@ -206,7 +209,8 @@ void __EXPORT ScNameDlg::Init()
 
     aBtnAdd.Disable();
     aBtnRemove.Disable();
-    if ( aEdName.GetEntryCount() > 0 )
+    //if ( aEdName.GetEntryCount() > 0 )
+    if ( aLBNames.GetEntryCount() > 0 )
         aBtnAdd.SetText( aStrAdd );
     UpdateChecks();
     EdModifyHdl( 0 );
@@ -270,7 +274,7 @@ void __EXPORT ScNameDlg::UpdateChecks()
 {
     sal_uInt16       nCurPos=0;
 
-    if(aLocalRangeName.SearchName( aEdName.GetText(), nCurPos))
+    if(aLocalRangeName.SearchName( aEdName.GetText(), nCurPos, aSelectedRangeScope))
     {
         ScRangeData* pData=(ScRangeData*)(aLocalRangeName.At( nCurPos ));
         aBtnCriteria .Check( pData->HasType( RT_CRITERIA ) );
@@ -285,26 +289,26 @@ void __EXPORT ScNameDlg::UpdateChecks()
     {
         if ( !aFlType.IsEnabled() )
         {
-            aFlType      .Enable();
+            aFlType.Enable();
             aBtnCriteria .Enable();
             aBtnPrintArea.Enable();
             aBtnColHeader.Enable();
             aBtnRowHeader.Enable();
-            aFlAssign    .Enable();
-            aEdAssign    .Enable();
-            aRbAssign    .Enable();
+                        aFlAssign.Enable();
+            aEdAssign.Enable();
+            aRbAssign.Enable();
         }
     }
     else if ( aFlType.IsEnabled() )
     {
-        aFlType      .Disable();
-        aBtnCriteria .Disable();
+        aFlType.Disable();
+        aBtnCriteria.Disable();
         aBtnPrintArea.Disable();
         aBtnColHeader.Disable();
         aBtnRowHeader.Disable();
-        aFlAssign    .Disable();
-        aEdAssign    .Disable();
-        aRbAssign    .Disable();
+                aFlAssign.Disable();
+        aEdAssign.Disable();
+        aRbAssign.Disable();
     }
 }
 
@@ -315,10 +319,13 @@ void __EXPORT ScNameDlg::UpdateNames()
 {
     sal_uInt16  nRangeCount = aLocalRangeName.GetCount();
 
-    aEdName.SetUpdateMode( sal_False );
+    //aEdName.SetUpdateMode( FALSE );
+    aLBNames.SetUpdateMode( false );
     //-----------------------------------------------------------
-    sal_uInt16  nNamePos = aEdName.GetTopEntry();
-    aEdName.Clear();
+    //USHORT  nNamePos = aEdName.GetTopEntry();
+    //aEdName.Clear();
+    sal_uInt16  nNamePos = aLBNames.GetTopEntry();
+    aLBNames.Clear();
 
     aEdAssign.SetText( EMPTY_STRING );
 
@@ -326,6 +333,7 @@ void __EXPORT ScNameDlg::UpdateNames()
     {
         ScRangeData*    pRangeData = NULL;
         String          aString;
+                SCTAB tabIndex = 0;
 
         for ( sal_uInt16 i=0; i<nRangeCount; i++ )
         {
@@ -336,7 +344,21 @@ void __EXPORT ScNameDlg::UpdateNames()
                     && !pRangeData->HasType( RT_SHARED ) )
                 {
                     pRangeData->GetName( aString );
-                    aEdName.InsertEntry( aString );
+                    if ( (tabIndex = pRangeData->GetRangeScope() ) != MAXTABCOUNT)
+                    {
+                                                 String tabName;
+                            pDoc->GetName(tabIndex,tabName);
+                            if (aString.Len() < SHEETNAMEPOS)
+                                aString.Expand(SHEETNAMEPOS);
+                            else
+                                aString.AppendAscii( " ");
+                            aString.AppendAscii( "(");
+                            aString += tabName;
+                            aString.AppendAscii( ")");
+                    }
+
+                    //aEdName.InsertEntry( aString );
+                                   aLBNames.InsertEntry( aString );
                 }
             }
         }
@@ -348,9 +370,12 @@ void __EXPORT ScNameDlg::UpdateNames()
         aBtnRemove.Disable();
     }
     //-----------------------------------------------------------
-    aEdName.SetUpdateMode( sal_True );
-    aEdName.SetTopEntry(nNamePos);
-    aEdName.Invalidate();
+    //aEdName.SetUpdateMode( TRUE );
+    //aEdName.SetTopEntry(nNamePos);
+    //aEdName.Invalidate();
+    aLBNames.SetUpdateMode( true );
+    aLBNames.SetTopEntry(nNamePos);
+    aLBNames.Invalidate();
 }
 
 
@@ -409,7 +434,8 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
 {
     sal_Bool    bAdded    = sal_False;
     String  aNewEntry = aEdName.GetText();
-    sal_uInt16  nNamePos = aEdName.GetTopEntry();
+    //USHORT  nNamePos = aEdName.GetTopEntry();
+        sal_uInt16  nNamePos = aLBNames.GetTopEntry();
     aNewEntry.EraseLeadingChars( ' ' );
     aNewEntry.EraseTrailingChars( ' ' );
 
@@ -431,6 +457,10 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                                              theSymbol,
                                              theCursorPos,
                                              nType );
+                if (aBtnAdd.GetText() == aStrModify)
+                    pNewEntry->SetRangeScope(aSelectedRangeScope);
+                else
+                    aSelectedRangeScope = MAXTABCOUNT;
                 if (pNewEntry)
                 {
                     nType = nType
@@ -447,7 +477,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                 if ( 0 == pNewEntry->GetErrCode() )
                 {
                     // Eintrag bereits vorhanden? Dann vorher entfernen (=Aendern)
-                    if ( aLocalRangeName.SearchName( aNewEntry, nFoundAt ) )
+                    if ( aLocalRangeName.SearchName( aNewEntry, nFoundAt, aSelectedRangeScope ) )
                     {                                   // alten Index uebernehmen
                         pNewEntry->SetIndex(
                             ((ScRangeData*)(aLocalRangeName.At(nFoundAt)))->GetIndex() );
@@ -491,7 +521,8 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
         }
     }
 
-    aEdName.SetTopEntry(nNamePos);
+    //aEdName.SetTopEntry(nNamePos);
+    aLBNames.SetTopEntry(nNamePos);
     return bAdded;
 }
 
@@ -503,7 +534,7 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
     sal_uInt16       nRemoveAt = 0;
     const String aStrEntry = aEdName.GetText();
 
-    if ( aLocalRangeName.SearchName( aStrEntry, nRemoveAt ) )
+    if ( aLocalRangeName.SearchName( aStrEntry, nRemoveAt, aSelectedRangeScope ) )
     {
         String aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
         String aMsg       = aStrDelMsg.GetToken( 0, '#' );
@@ -520,6 +551,7 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
             bSaved=sal_False;
             RESTORE_DATA()
             theCurSel = Selection( 0, SELECTION_MAX );
+            aEdName.SetText(EMPTY_STRING);
             aBtnAdd.SetText( aStrAdd );
             aBtnAdd.Disable();
             aBtnRemove.Disable();
@@ -534,8 +566,21 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
 {
     sal_uInt16 nAtPos;
+       String rangeName = aLBNames.GetSelectEntry();
+       if ( ')' == rangeName.GetChar(rangeName.Len()-1) )
+       {
+            xub_StrLen sheetNamePos = rangeName.Search('(');
+         String sheetName(rangeName, sheetNamePos+1, rangeName.Len()-2-sheetNamePos);
+            pDoc->GetTable(sheetName,aSelectedRangeScope);
+         rangeName.Erase(sheetNamePos);
+         rangeName.EraseTrailingChars();
 
-    if ( aLocalRangeName.SearchName( aEdName.GetText(), nAtPos ) )
+    }
+    else
+           aSelectedRangeScope = MAXTABCOUNT;
+
+    //if ( aLocalRangeName.SearchName( aEdName.GetText(), nAtPos ) )
+    if ( aLocalRangeName.SearchName( rangeName, nAtPos, aSelectedRangeScope ) )
     {
         String       aSymbol;
         ScRangeData* pData  = (ScRangeData*)(aLocalRangeName.At( nAtPos ));
@@ -546,7 +591,11 @@ IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
             CalcCurTableAssign( aSymbol, nAtPos );
             aEdAssign.SetText( aSymbol );
             aBtnAdd.SetText( aStrModify );
+            aEdName.SetText(rangeName);
             theCurSel = Selection( 0, SELECTION_MAX );
+            aBtnAdd.SetText( aStrModify );
+            aBtnAdd.Enable();
+            aBtnRemove.Enable();
         }
     }
     UpdateChecks();
@@ -560,8 +609,8 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
 {
     String  theName     = aEdName.GetText();
     String  theSymbol   = aEdAssign.GetText();
-    sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
-                           != aEdName.GetEntryPos( theName ));
+ bool   bNameFound  = (LISTBOX_ENTRY_NOTFOUND
+                           != aLBNames.GetEntryPos( theName ));
 
     if ( pEd == &aEdName )
     {
@@ -579,6 +628,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
         }
         else
         {
+         /*
             if ( bNameFound )
             {
                 if ( aBtnAdd.GetText() != aStrModify )
@@ -588,7 +638,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
 
                 if(!bSaved)
                 {
-                    bSaved=sal_True;
+                    bSaved=TRUE;
                     SAVE_DATA()
                 }
                 NameSelectHdl( 0 );
@@ -599,9 +649,13 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
                     aBtnAdd.SetText( aStrAdd );
                 aBtnRemove.Disable();
 
-                bSaved=sal_False;
+                bSaved=FALSE;
                 RESTORE_DATA()
             }
+            */
+
+               if ( aBtnAdd.GetText() != aStrAdd )
+                aBtnAdd.SetText( aStrAdd );
             theSymbol = aEdAssign.GetText();
 
             if ( theSymbol.Len() > 0 )
@@ -612,6 +666,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aFlAssign.Enable();
             aEdAssign.Enable();
             aRbAssign.Enable();
+            aBtnRemove.Disable();
             //@BugID 54702 raus mit dem Sch.
             //SFX_APPWINDOW->Enable();
         }

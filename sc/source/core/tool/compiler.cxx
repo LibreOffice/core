@@ -2964,6 +2964,14 @@ sal_Bool ScCompiler::IsNamedRange( const String& rUpperName )
 
     sal_uInt16 n;
     ScRangeName* pRangeName = pDoc->GetRangeName();
+    if (pRangeName->SearchNameUpper( rUpperName, n, aPos.Tab() ) )
+    {
+        ScRangeData* pData = (*pRangeName)[n];
+        ScRawToken aToken;
+        aToken.SetName( pData->GetIndex() );
+        pRawToken = aToken.Clone();
+        return sal_True;
+    }
     if (pRangeName->SearchNameUpper( rUpperName, n ) )
     {
         ScRangeData* pData = (*pRangeName)[n];
@@ -4847,7 +4855,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
 
 // aPos.Tab() must be already adjusted!
 ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
-        sal_Bool bIsName )
+       bool bIsName, bool bOnlyUpdateOwnTab /*= FALSE*/)
 {
     ScRangeData* pRangeData = NULL;
     SCsTAB nTab;
@@ -4904,7 +4912,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                     nTab = rRef1.nTab;
                 if ( nTab == nOldTab )
                     rRef1.nTab = nNewTab;
-                else if ( nStart <= nTab && nTab <= nEnd )
+                else if ( nStart <= nTab && nTab <= nEnd && !bOnlyUpdateOwnTab)
                     rRef1.nTab = nTab + nDir;
                 rRef1.nRelTab = rRef1.nTab - nPosTab;
             }
@@ -4921,7 +4929,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                         nTab = rRef2.nTab;
                     if ( nTab == nOldTab )
                         rRef2.nTab = nNewTab;
-                    else if ( nStart <= nTab && nTab <= nEnd )
+                    else if ( nStart <= nTab && nTab <= nEnd && !bOnlyUpdateOwnTab)
                         rRef2.nTab = nTab + nDir;
                     rRef2.nRelTab = rRef2.nTab - nPosTab;
                 }

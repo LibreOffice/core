@@ -133,7 +133,7 @@ public:
     /** Returns the specified cell or page style from the Calc document. */
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
-    Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
+    Reference< XNamedRange > createNamedRangeObject( OUString& orScope, OUString& orName, sal_Int32 nNameFlags ) const;
     /** Creates and returns a database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
@@ -348,7 +348,7 @@ Reference< XStyle > WorkbookGlobals::getStyleObject( const OUString& rStyleName,
     return xStyle;
 }
 
-Reference< XNamedRange > WorkbookGlobals::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
+Reference< XNamedRange > WorkbookGlobals::createNamedRangeObject( OUString& orScope, OUString& orName, sal_Int32 nNameFlags ) const
 {
     // create the name and insert it into the Calc document
     Reference< XNamedRange > xNamedRange;
@@ -360,8 +360,8 @@ Reference< XNamedRange > WorkbookGlobals::createNamedRangeObject( OUString& orNa
         Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY_THROW );
         orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
         // create the named range
-        xNamedRanges->addNewByName( orName, OUString(), CellAddress( 0, 0, 0 ), nNameFlags );
-        xNamedRange.set( xNamedRanges->getByName( orName ), UNO_QUERY );
+        xNamedRanges->addNewByScopeName( orScope, orName, OUString(), CellAddress( 0, 0, 0 ), nNameFlags );
+        xNamedRange.set( xNamedRanges->getByScopeName( orScope, orName ), UNO_QUERY );
     }
     catch( Exception& )
     {
@@ -738,9 +738,10 @@ Reference< XStyle > WorkbookHelper::getStyleObject( const OUString& rStyleName, 
     return mrBookGlob.getStyleObject( rStyleName, bPageStyle );
 }
 
-Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
+Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orName, sal_Int32 nSheetId, sal_Int32 nNameFlags ) const
 {
-    return mrBookGlob.createNamedRangeObject( orName, nNameFlags );
+    OUString orScope = nSheetId >= 0? getWorksheets().getCalcSheetName(nSheetId) : OUString();
+    return mrBookGlob.createNamedRangeObject( orScope, orName, nNameFlags );
 }
 
 Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const

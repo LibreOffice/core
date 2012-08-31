@@ -192,6 +192,7 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_BODY_NAMED_EXPRESSIONS:
         pContext = new ScXMLNamedExpressionsContext ( GetScImport(), nPrefix, rLocalName,
                                                         xAttrList );
+        static_cast<ScXMLNamedExpressionsContext*>(pContext)->SetScope( MAXTABCOUNT );//workbookname
         break;
     case XML_TOK_BODY_DATABASE_RANGES:
         pContext = new ScXMLDatabaseRangesContext ( GetScImport(), nPrefix, rLocalName,

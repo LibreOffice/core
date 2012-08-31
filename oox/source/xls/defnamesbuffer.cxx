@@ -502,7 +502,7 @@ void DefinedName::createNameObject()
     }
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
-    mxNamedRange = createNamedRangeObject( maCalcName, nNameFlags );
+    mxNamedRange = createNamedRangeObject( maCalcName, maModel.mnSheet, nNameFlags );
     // index of this defined name used in formula token arrays
     PropertySet aPropSet( mxNamedRange );
     aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex );

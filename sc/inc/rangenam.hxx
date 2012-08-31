@@ -77,6 +77,7 @@ private:
     // application's default.
     SCROW           mnMaxRow;
     SCCOL           mnMaxCol;
+    SCTAB       aRangeNameScope;        // table index reference as range name scope. 0 -  sheet1, 1- sheet2.  MAXTABCOUNT - Global
 
     friend class ScRangeName;
     ScRangeData( sal_uInt16 nIndex );
@@ -110,6 +111,9 @@ public:
     void            GetName( String& rName ) const  { rName = aName; }
     const String&   GetName( void ) const           { return aName; }
     const String&   GetUpperName( void ) const      { return aUpperName; }
+    SC_DLLPUBLIC  bool          SetRangeScope( SCTAB Scope );   // 0 - sheet1, 1 - sheet2, MAXTABCOUNT - global
+    SCTAB           GetRangeScope() const { return aRangeNameScope; }
+        String  GetScopeSheetName( void ) const;
     ScAddress       GetPos() const                  { return aPos; }
     // Der Index muss eindeutig sein. Ist er 0, wird ein neuer Index vergeben
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
@@ -200,9 +204,14 @@ public:
 //UNUSED2009-05 ScRangeData*            GetRangeAtCursor( const ScAddress&, sal_Bool bStartOnly ) const;
     SC_DLLPUBLIC ScRangeData*           GetRangeAtBlock( const ScRange& ) const;
 
-    SC_DLLPUBLIC sal_Bool                   SearchName( const String& rName, sal_uInt16& rPos ) const;
+    SC_DLLPUBLIC bool                   SearchName( const String& rName, sal_uInt16& rPos, SCTAB Scope=MAXTABCOUNT) const;
                             // SearchNameUpper must be called with an upper-case search string
-    sal_Bool                    SearchNameUpper( const String& rUpperName, sal_uInt16& rPos ) const;
+    bool                    SearchNameUpper( const String& rUpperName, sal_uInt16& rPos, SCTAB Scope=MAXTABCOUNT ) const;
+    /* added by  for scope support */
+    bool                HasRangeinSheetScope( SCTAB Scope );
+    bool                RemoveRangeinScope(SCTAB Scope);
+    bool                CopyRangeinScope(SCTAB oldScope, SCTAB newScope);
+    /* end add */
     void                    UpdateReference(UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange,
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz );

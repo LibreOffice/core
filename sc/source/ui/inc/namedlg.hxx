@@ -34,6 +34,8 @@
 #include <vcl/group.hxx>
 #endif
 #include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/edit.hxx>
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 
@@ -47,7 +49,9 @@ class ScNameDlg : public ScAnyRefDlg
 {
 private:
     FixedLine       aFlName;
-    ComboBox        aEdName;
+    //ComboBox      aEdName;
+    Edit                       aEdName;
+    ListBox     aLBNames;
 
     FixedLine       aFlAssign;
     formula::RefEdit        aEdAssign;
@@ -76,6 +80,7 @@ private:
     ScRangeName     aLocalRangeName;
     const ScAddress theCursorPos;
     Selection       theCurSel;
+    SCTAB           aSelectedRangeScope;
 
 #ifdef _NAMEDLG_CXX
 private:

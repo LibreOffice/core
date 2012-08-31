@@ -25,6 +25,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
+#include "address.hxx"
 
 class ScXMLImport;
 
@@ -32,7 +33,7 @@ class ScXMLNamedExpressionsContext : public SvXMLImportContext
 {
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
+    SCTAB nScopeOfNameRange;
 public:
 
     ScXMLNamedExpressionsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -48,6 +49,9 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
+    void SetScope( SCTAB n ){ nScopeOfNameRange = n;}
+    SCTAB GetScope(){ return nScopeOfNameRange;}
+
 };
 
 class ScXMLNamedRangeContext : public SvXMLImportContext
@@ -60,7 +64,7 @@ public:
     ScXMLNamedRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,SCTAB nScopeOfNameRange);
 
     virtual ~ScXMLNamedRangeContext();
 
@@ -82,7 +86,7 @@ public:
     ScXMLNamedExpressionContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,SCTAB nScopeOfNameRange);
 
     virtual ~ScXMLNamedExpressionContext();
 

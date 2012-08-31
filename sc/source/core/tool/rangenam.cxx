@@ -52,7 +52,7 @@ using namespace formula;
 // Interner ctor fuer das Suchen nach einem Index
 
 ScRangeData::ScRangeData( sal_uInt16 n )
-           : pCode( NULL ), nIndex( n ), bModified( sal_False ), mnMaxRow(-1), mnMaxCol(-1)
+           : pCode( NULL ), nIndex( n ), bModified( sal_False ), mnMaxRow(-1), mnMaxCol(-1), aRangeNameScope( MAXTABCOUNT )
 {}
 
 ScRangeData::ScRangeData( ScDocument* pDok,
@@ -70,7 +70,8 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 nIndex      ( 0 ),
                 bModified   ( sal_False ),
                 mnMaxRow    (-1),
-                mnMaxCol    (-1)
+                mnMaxCol    (-1),
+                aRangeNameScope( MAXTABCOUNT )
 {
     if (rSymbol.Len() > 0)
     {
@@ -118,7 +119,8 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 nIndex      ( 0 ),
                 bModified   ( sal_False ),
                 mnMaxRow    (-1),
-                mnMaxCol    (-1)
+                mnMaxCol    (-1),
+                aRangeNameScope( MAXTABCOUNT )
 {
     if( !pCode->GetCodeError() )
     {
@@ -155,7 +157,8 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 nIndex      ( 0 ),
                 bModified   ( sal_False ),
                 mnMaxRow    (-1),
-                mnMaxCol    (-1)
+                mnMaxCol    (-1),
+                aRangeNameScope( MAXTABCOUNT )
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress( rTarget );
@@ -179,7 +182,8 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
     nIndex      (rScRangeData.nIndex),
     bModified   (rScRangeData.bModified),
     mnMaxRow    (rScRangeData.mnMaxRow),
-    mnMaxCol    (rScRangeData.mnMaxCol)
+    mnMaxCol    (rScRangeData.mnMaxCol),
+    aRangeNameScope (rScRangeData.aRangeNameScope)
 {}
 
 ScRangeData::~ScRangeData()
@@ -340,7 +344,7 @@ sal_Bool ScRangeData::operator== (const ScRangeData& rData) const       // fuer 
     if ( nIndex != rData.nIndex ||
          aName  != rData.aName  ||
          aPos   != rData.aPos   ||
-         eType  != rData.eType     ) return sal_False;
+         eType  != rData.eType   || aRangeNameScope  != rData.aRangeNameScope  ) return sal_False;
 
     sal_uInt16 nLen = pCode->GetLen();
     if ( nLen != rData.pCode->GetLen() ) return sal_False;
@@ -408,6 +412,7 @@ sal_Bool ScRangeData::IsValidReference( ScRange& rRange ) const
     return sal_False;
 }
 
+/* modification to update named range scope */
 void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable)
 {
     pCode->Reset();
@@ -420,16 +425,40 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTabl
         switch (nFlag)
         {
             case 1:                                     // einfache InsertTab (doc.cxx)
-                pRangeData = aComp.UpdateInsertTab(nOldTable, sal_True );   // und CopyTab (doc2.cxx)
+            case 4:
+                   pRangeData = aComp.UpdateInsertTab(nOldTable, true );    // und CopyTab (doc2.cxx)
+                if ( (aRangeNameScope != MAXTABCOUNT) && ( aRangeNameScope >= nOldTable) && ( aRangeNameScope != MAXTAB ) )
+                    aRangeNameScope ++;
                 break;
             case 2:                                     // einfaches delete (doc.cxx)
-                pRangeData = aComp.UpdateDeleteTab(nOldTable, sal_False, sal_True, bChanged);
+                pRangeData = aComp.UpdateDeleteTab(nOldTable, false, true, bChanged);
+                if  ( aRangeNameScope != MAXTABCOUNT && aRangeNameScope > nOldTable )
+                                    aRangeNameScope --;
                 break;
             case 3:                                     // move (doc2.cxx)
             {
-                pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, sal_True );
+                pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, true );
+                if ( aRangeNameScope != MAXTABCOUNT )
+                {
+                    if ( aRangeNameScope == nOldTable )
+                        aRangeNameScope = nNewTable;
+                    else if ( (aRangeNameScope > nOldTable) && (aRangeNameScope <= nNewTable) )
+                        aRangeNameScope--;
+                    else if ( (aRangeNameScope >= nNewTable) && (aRangeNameScope < nOldTable) )
+                        aRangeNameScope++;
+                }
             }
-                break;
+            break;
+            case 5:
+            {
+                                //when copying a sheet, this will be invoked to update the new name range's address in the new sheet
+                                //only need to update the address if the address's tab same as the range scope. because if they are different, the address's tab have been updated in ScRangeName::UpdateTabRef()
+                                //for example, in sheet5(scope is sheet5), there are two name range, one address is sheet5, the other is sheet4, if copy sheet5 to sheet1
+                                //only need to change the first one's address to sheet1
+                pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, true , true);
+                aRangeNameScope = nNewTable;
+            }
+            break;
             default:
             {
                 DBG_ERROR("ScRangeName::UpdateTabRef: Unknown Flag");
@@ -535,6 +564,33 @@ SCCOL ScRangeData::GetMaxCol() const
 {
     return mnMaxCol >= 0 ? mnMaxCol : MAXCOL;
 }
+
+/* MAXTABCOUNT - Global, 0 - sheet1, 1 - sheet2, ...        */
+/*  MAXTABCOUNT -- Global               */
+/*  return value: FALSE -- set fail         */
+/*                TRUE  -- set successfully */
+bool ScRangeData::SetRangeScope( SCTAB Scope )
+{
+     if ( Scope <= MAXTABCOUNT && Scope >=0 )
+     {
+        aRangeNameScope = Scope;
+            return true;
+     }
+         return false;
+
+}
+
+ String ScRangeData::GetScopeSheetName() const
+{
+    if ( aRangeNameScope != MAXTABCOUNT )
+    {
+            String aTableName;
+            pDoc->GetName( aRangeNameScope, aTableName );
+            return aTableName;
+    }
+        return EMPTY_STRING;
+}
+/* end add */
 
 
 sal_uInt16 ScRangeData::GetErrCode()
@@ -700,29 +756,86 @@ short ScRangeName::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
     return (short) i1 - (short) i2;
 }
 
-sal_Bool ScRangeName::SearchNameUpper( const String& rUpperName, sal_uInt16& rIndex ) const
+/* added  for scope support */
+bool ScRangeName::HasRangeinSheetScope(SCTAB Scope)
+{
+    for (sal_uInt16 i = 0; i < nCount; i++)
+        if  (((*this)[i])->GetRangeScope() == Scope)
+            return true;
+
+    return false;
+}
+/* if Scope is global, no range will be removed */
+/* if no range is removed, return value is false */
+bool ScRangeName::RemoveRangeinScope(SCTAB Scope)
+{
+     bool bRemoved = false;
+
+     if ( Scope == MAXTABCOUNT )
+         return bRemoved;
+
+     sal_uInt16 i = 0;
+     while (i < nCount)
+     {
+          if  (((*this)[i])->GetRangeScope() == Scope)
+          {
+               Free( (*this)[i] );
+               bRemoved = true;
+          }
+          else
+               i++;
+     }
+
+     return bRemoved;
+}
+/* it's designed for "Copy Sheet" action. So no name conflict check when copy range to new scope */
+/* if the old scope or the new scope is global, no range will be copied */
+/* if no range is copied, the return value is false */
+bool ScRangeName::CopyRangeinScope(SCTAB oldScope, SCTAB newScope)
+{
+       bool bCopied = false;
+
+       if ( (oldScope == MAXTABCOUNT)||(newScope ==MAXTABCOUNT) )
+           return bCopied;
+
+       sal_uInt16 originalCount = nCount;
+       for ( sal_uInt16 i = 0; i < originalCount; i++)
+           if ( ((*this)[i])->GetRangeScope() == oldScope)
+           {
+                 ScRangeData * aCopiedRange = (ScRangeData *)(*this)[i]->Clone();
+                 aCopiedRange->UpdateTabRef(oldScope, 5 , newScope);
+                 aCopiedRange->SetIndex(GetEntryIndex());
+                 Insert( aCopiedRange );
+                 bCopied = true;
+           }
+
+       return bCopied;
+}
+/* end add */
+bool ScRangeName::SearchNameUpper( const String& rUpperName, sal_uInt16& rIndex, SCTAB Scope ) const
 {
     // SearchNameUpper must be called with an upper-case search string
 
     sal_uInt16 i = 0;
     while (i < nCount)
     {
-        if ( ((*this)[i])->GetUpperName() == rUpperName )
+        if ( (((*this)[i])->GetUpperName() == rUpperName)
+            && (((*this)[i])->GetRangeScope() == Scope ))
         {
             rIndex = i;
-            return sal_True;
+            return true;
         }
         i++;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool ScRangeName::SearchName( const String& rName, sal_uInt16& rIndex ) const
+bool ScRangeName::SearchName( const String& rName, sal_uInt16& rIndex, SCTAB Scope ) const
 {
     if ( nCount > 0 )
-        return SearchNameUpper( ScGlobal::pCharClass->upper( rName ), rIndex );
+        return SearchNameUpper( ScGlobal::pCharClass->upper( rName ), rIndex, Scope );
     else
-        return sal_False;
+        return false;
 }
 
 void ScRangeName::UpdateReference(  UpdateRefMode eUpdateRefMode,
@@ -811,10 +924,18 @@ ScRangeData* ScRangeName::GetRangeAtBlock( const ScRange& rBlock ) const
 
 void ScRangeName::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable)
 {
-    for (sal_uInt16 i=0; i<nCount; i++)
-        ((ScRangeData*)pItems[i])->UpdateTabRef(nOldTable, nFlag, nNewTable);
-}
+       if (nFlag == 2)
+           RemoveRangeinScope( nOldTable );
 
+       for (sal_uInt16 i=0; i<nCount; i++)
+            ((ScRangeData*)pItems[i])->UpdateTabRef(nOldTable, nFlag, nNewTable);
+
+       if (nFlag ==4)
+       {
+            SCTAB copyScope = nOldTable > nNewTable ? nNewTable : nNewTable+1;
+            CopyRangeinScope( copyScope, nOldTable);
+       }
+}
 
 
 

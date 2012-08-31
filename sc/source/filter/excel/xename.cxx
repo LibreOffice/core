@@ -87,6 +87,9 @@ public:
     inline bool         IsGlobal() const { return mnXclTab == EXC_NAME_GLOBAL; }
     /** Returns the Calc sheet of a local defined name. */
     inline SCTAB        GetScTab() const { return mnScTab; }
+    //
+    /** Set name range flag value */
+    void                SetScTab( sal_uInt16 nXclTab ) { mnXclTab = nXclTab; }
 
     /** Returns true, if this defined name is volatile. */
     bool                IsVolatile() const;
@@ -548,6 +551,8 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( const ScRangeData& rRangeData )
     size_t nOldListSize = maNameList.GetSize();
     XclExpNameRef xName( new XclExpName( GetRoot(), rName ) );
     sal_uInt16 nNameIdx = Append( xName );
+    //
+    xName->SetScTab( rRangeData.GetRangeScope() == MAXTABCOUNT ? EXC_NAME_GLOBAL : rRangeData.GetRangeScope()+1 );
     // store the index of the NAME record in the lookup map
     maNameMap[ rRangeData.GetIndex() ] = nNameIdx;
 

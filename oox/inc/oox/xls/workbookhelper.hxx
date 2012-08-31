@@ -185,6 +185,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
                         createNamedRangeObject(
                             ::rtl::OUString& orName,
+                            sal_Int32 nSheetId = -1, //Add scope for name range
                             sal_Int32 nNameFlags = 0 ) const;
 
     /** Creates and returns a database range on-the-fly in the Calc document.

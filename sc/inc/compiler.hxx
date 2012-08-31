@@ -443,7 +443,8 @@ public:
 
     ScRangeData* UpdateInsertTab(SCTAB nTable, sal_Bool bIsName );
     ScRangeData* UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove, sal_Bool bIsName, sal_Bool& bCompile);
-    ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, sal_Bool bIsName );
+    // the last parameter is true only when copying a sheet, to update the range name's address
+    ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, bool bIsName, bool bOnlyUpdateOwnTab = false );
 
     sal_Bool HasModifiedRange();
 

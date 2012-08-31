@@ -49,7 +49,8 @@ ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext( ScXMLImport& rImport
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    nScopeOfNameRange( MAXTABCOUNT )    //aRangeNameScope( MAXTABCOUNT )
 {
 /*  sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -86,13 +87,13 @@ SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( sal_uInt16
     {
     case XML_TOK_NAMED_EXPRESSIONS_NAMED_RANGE:
         pContext = new ScXMLNamedRangeContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
+                                                      rLName, xAttrList,nScopeOfNameRange//,
                                                       //this
                                                       );
         break;
     case XML_TOK_NAMED_EXPRESSIONS_NAMED_EXPRESSION:
         pContext = new ScXMLNamedExpressionContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
+                                                      rLName, xAttrList, nScopeOfNameRange//,
                                                       //this
                                                       );
         break;
@@ -114,10 +115,11 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList, SCTAB nScopeOfNameRange) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
+    pNamedExpression->nNameScope = nScopeOfNameRange;
     // A simple table:cell-range-address is not a formula expression, stored
     // without [] brackets but with dot, .A1
     pNamedExpression->eGrammar = formula::FormulaGrammar::mergeToGrammar(
@@ -185,10 +187,11 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList, SCTAB nScopeOfNameRange) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
+    pNamedExpression->nNameScope = nScopeOfNameRange;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetNamedExpressionAttrTokenMap());
     for( sal_Int16 i=0; i < nAttrCount; ++i )
