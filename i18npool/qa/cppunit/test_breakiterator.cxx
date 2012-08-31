@@ -61,6 +61,7 @@ public:
     void testNorthernThai();
 #endif
     void testKhmer();
+    void testJapanese();
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
@@ -75,6 +76,7 @@ public:
     CPPUNIT_TEST(testWordBoundaries);
     CPPUNIT_TEST(testKhmer);
 #endif
+    CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
@@ -820,9 +822,9 @@ void TestBreakIterator::testKhmer()
     aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("km"));
     aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KH"));
 
-    const sal_Unicode KHMER1[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
+    const sal_Unicode KHMER[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
 
-    rtl::OUString aTest(KHMER1, SAL_N_ELEMENTS(KHMER1));
+    rtl::OUString aTest(KHMER, SAL_N_ELEMENTS(KHMER));
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 
@@ -834,6 +836,21 @@ void TestBreakIterator::testKhmer()
     CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 5);
 }
 #endif
+
+void TestBreakIterator::testJapanese()
+{
+    lang::Locale aLocale;
+    aLocale.Language = OUString("ja");
+    aLocale.Country = OUString("JP");
+
+    const sal_Unicode JAPANESE[] = { 0x30B7, 0x30E3, 0x30C3, 0x30C8, 0x30C0, 0x30A6, 0x30F3 };
+
+    rtl::OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
+    i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
+        i18n::WordType::DICTIONARY_WORD, true);
+
+    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
+}
 
 void TestBreakIterator::setUp()
 {
