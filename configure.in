@@ -8599,18 +8599,18 @@ dnl ===================================================================
 AC_MSG_CHECKING([which orcus library to use])
 if test "$with_system_orcus" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_ORCUS=YES
-    ORCUS_CFLAGS="`$PKG_CONFIG --cflags liborcus-0.2`"
-    ORCUS_LIBS="`$PKG_CONFIG --libs liborcus-0.2`"
+    SYSTEM_LIBORCUS=YES
+    LIBORCUS_CFLAGS="`$PKG_CONFIG --cflags liborcus-0.2`"
+    LIBORCUS_LIBS="`$PKG_CONFIG --libs liborcus-0.2`"
     PKG_CHECK_MODULES(ORCUS, orcus >= 0.1.0)
 else
     AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE ORCUS"
-    SYSTEM_ORCUS=NO
+    BUILD_TYPE="$BUILD_TYPE LIBORCUS"
+    SYSTEM_LIBORCUS=NO
 fi
-AC_SUBST(SYSTEM_ORCUS)
-AC_SUBST(ORCUS_CFLAGS)
-AC_SUBST(ORCUS_LIBS)
+AC_SUBST(SYSTEM_LIBORCUS)
+AC_SUBST(LIBORCUS_CFLAGS)
+AC_SUBST(LIBORCUS_LIBS)
 
 dnl ===================================================================
 dnl Check for system hunspell

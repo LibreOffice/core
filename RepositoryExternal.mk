@@ -1856,31 +1856,28 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 
 endif # SYSTEM_PYTHON
 
-ifeq ($(SYSTEM_ORCUS),YES)
+ifeq ($(SYSTEM_LIBORCUS),YES)
 
 define gb_LinkTarget__use_orcus
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-    $(ORCUS_CFLAGS) \
+    $(LIBORCUS_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(ORCUS_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(LIBORCUS_LIBS))
 
 endef
 
-else # !SYSTEM_ORCUS
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	orcuslib \
-))
+else # !SYSTEM_LIBORCUS
 
 define gb_LinkTarget__use_orcus
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	orcuslib \
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lorcus-0.2 \
 )
 
 endef
 
-endif # SYSTEM_ORCUS
+endif # SYSTEM_LIBORCUS
 
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)

@@ -31,20 +31,20 @@
 
 #include "tools/urlobj.hxx"
 
-#include <orcus/model/interface.hpp>
+#include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-using orcus::model::row_t;
-using orcus::model::col_t;
-using orcus::model::formula_grammar_t;
+using orcus::spreadsheet::row_t;
+using orcus::spreadsheet::col_t;
+using orcus::spreadsheet::formula_grammar_t;
 
 namespace {
 
 class ScOrcusSheet;
 
-class ScOrcusFactory : public orcus::model::iface::factory
+class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 {
     ScDocument& mrDoc;
     boost::ptr_vector<ScOrcusSheet> maSheets;
@@ -52,12 +52,13 @@ class ScOrcusFactory : public orcus::model::iface::factory
 public:
     ScOrcusFactory(ScDocument& rDoc);
 
-    virtual orcus::model::iface::sheet* append_sheet(const char *sheet_name, size_t sheet_name_length);
-    virtual orcus::model::iface::shared_strings* get_shared_strings();
-    virtual orcus::model::iface::styles* get_styles();
+    virtual orcus::spreadsheet::iface::import_sheet* append_sheet(const char *sheet_name, size_t sheet_name_length);
+    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length);
+    virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings();
+    virtual orcus::spreadsheet::iface::import_styles* get_styles();
 };
 
-class ScOrcusSheet : public orcus::model::iface::sheet
+class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 {
     ScDocument& mrDoc;
     SCTAB mnTab;
@@ -78,7 +79,7 @@ public:
 
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc) : mrDoc(rDoc) {}
 
-orcus::model::iface::sheet* ScOrcusFactory::append_sheet(const char* sheet_name, size_t sheet_name_length)
+orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char* sheet_name, size_t sheet_name_length)
 {
     OUString aTabName(sheet_name, sheet_name_length, RTL_TEXTENCODING_UTF8);
     if (!mrDoc.InsertTab(SC_TAB_APPEND, aTabName))
@@ -89,13 +90,19 @@ orcus::model::iface::sheet* ScOrcusFactory::append_sheet(const char* sheet_name,
     return &maSheets.back();
 }
 
-orcus::model::iface::shared_strings* ScOrcusFactory::get_shared_strings()
+orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* /*sheet_name*/, size_t /*sheet_name_length*/)
+{
+    // TODO: Implement this.
+    return NULL;
+}
+
+orcus::spreadsheet::iface::import_shared_strings* ScOrcusFactory::get_shared_strings()
 {
     // We don't support it yet.
     return NULL;
 }
 
-orcus::model::iface::styles* ScOrcusFactory::get_styles()
+orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
 {
     // We don't support it yet.
     return NULL;
