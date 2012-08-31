@@ -1,1 +1,0 @@
-logman stop pvt
