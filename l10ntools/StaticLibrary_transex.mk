@@ -32,6 +32,8 @@ $(eval $(call gb_StaticLibrary_set_include,transex,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_StaticLibrary_use_sdk_api,transex))
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,transex,\
     l10ntools/source/export2 \
     l10ntools/source/merge \

@@ -63,7 +63,7 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
     //Generate and open sdf
     cout << "Process start with language: " <<  LangEntryName.getStr() << endl;
     system( (rpo2loPath +
-            " -i " + rPath.getStr() + LangEntryName +
+            " -i " + rPath + "/" + LangEntryName +
             " -o " + SDFFileName +
             " -l " + LangEntryName +
             " -t " + rSDFPath).getStr());
@@ -77,7 +77,7 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
     while(!aSDFInput.eof())
     {
         OString sActUnTrans = sLine;
-        OString sPath = rPath + LangEntryName;
+        OString sPath = rPath + "/"+ LangEntryName;
         OString sActSourcePath = GetPath(sPath,sActUnTrans);
         //Make new po file, copy header with some changes
         if (!aOutPut.is_open())

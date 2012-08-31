@@ -31,6 +31,14 @@ public:
                         GenPoEntry();
     virtual             ~GenPoEntry();
 
+    virtual OString     getWhiteSpace() const   { return m_sWhiteSpace; }
+    virtual OString     getExtractCom() const   { return m_sExtractCom; }
+    virtual OString     getReference() const    { return m_sReference; }
+    virtual OString     getContext() const      { return m_sContext; }
+    virtual OString     getUnTransStr() const   { return m_sUnTransStr; }
+    virtual OString     getTransStr() const     { return m_sTransStr; }
+    virtual bool        getFuzzy() const        { return m_bFuzzy; }
+
     virtual void        setWhiteSpace(const OString& rWhiteSpace)
                         { m_sWhiteSpace = rWhiteSpace; }
     virtual void        setExtractCom(const OString& rExtractCom)
@@ -46,7 +54,9 @@ public:
     virtual void        setFuzzy(bool bFuzzy)
                         { m_bFuzzy = bFuzzy; }
     virtual void        genKeyId();
-    virtual void        writeToFile(std::ofstream& io_rOFStream);
+
+    virtual void        writeToFile(std::ofstream& rOFStream);
+    virtual void        readFromFile(std::ifstream& rIFStream);
 };
 
 class PoEntry: public GenPoEntry
@@ -67,12 +77,18 @@ private:
 
 public:
 
+                        PoEntry();
                         PoEntry(const OString& i_rSDFLine,
-                            const TYPE eType = TTEXT);
+                                const TYPE eType = TTEXT);
     virtual             ~PoEntry();
 
+    virtual OString     getUnTransStr() const;
+    virtual OString     getTransStr() const;
     virtual void        setUnTransStr(const OString& rUnTransStr);
     virtual void        setTransStr(const OString& rTransStr);
+
+    virtual void        writeToFile(std::ofstream& rOFStream);
+    virtual void        readFromFile(std::ifstream& rIFStream);
 
 };
 

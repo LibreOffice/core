@@ -7,10 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "po.hxx"
+#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/i18n/XExtendedTransliteration.hpp>
+#include <regexp/reclass.hxx>
+#include <rtl/ustring.hxx>
+
+#include <string>
+#include <cstring>
 #include <ctime>
 #include <vector>
 #include <boost/crc.hpp>
+
+#include "po.hxx"
 
 #define POESCAPED OString("\\n\\t\\r\\\\\\\"")
 #define POUNESCAPED OString("\n\t\r\\\"")
@@ -69,17 +78,17 @@ OString ImplUnEscapeText(const OString& rText,
     return sResult;
 }
 
-//Generate msgctxt, msgid and msgstr strings
-OString ImplGenMsgString(const OString& rSource)
+//Convert a normal string to msg/po output string
+OString ImplGenMsgString(const OString& rString)
 {
-    if ( rSource.isEmpty() )
+    if ( rString.isEmpty() )
         return "\"\"";
 
-    OString sResult = "\"" + rSource + "\"";
+    OString sResult = "\"" + ImplEscapeText(rString) + "\"";
     sal_Int32 nIndex = 0;
     while((nIndex=sResult.indexOf("\\n",nIndex))!=-1)
     {
-        if( sResult.copy(nIndex-1,3) != "\\\\n" )
+        if(sResult.copy(nIndex-1,3)!="\\\\n" && nIndex!=sResult.getLength()-3)
            sResult = sResult.replaceAt(nIndex,2,"\\n\"\n\"");
         ++nIndex;
     }
@@ -88,6 +97,18 @@ OString ImplGenMsgString(const OString& rSource)
         return "\"\"\n" +  sResult;
 
     return sResult;
+}
+
+//Convert msg string to normal form
+OString ImplGenNormString(const OString& rString)
+{
+    return ImplUnEscapeText(rString.copy(1,rString.getLength()-2));
+}
+
+//Decide whether a string starts with an other string
+bool ImplStartsWith(const OString& rString,const OString& rStart)
+{
+    return rString.copy(0,rStart.getLength())==rStart;
 }
 
 //Default constructor
@@ -115,28 +136,78 @@ void GenPoEntry::genKeyId()
 }
 
 //Write to file
-void GenPoEntry::writeToFile(std::ofstream& io_rOFStream)
+void GenPoEntry::writeToFile(std::ofstream& rOFStream)
 {
     if ( !m_sWhiteSpace.isEmpty() )
-        io_rOFStream << m_sWhiteSpace.getStr();
+        rOFStream << m_sWhiteSpace.getStr();
     if ( !m_sExtractCom.isEmpty() )
-        io_rOFStream << "#. " << m_sExtractCom.getStr() << std::endl;
+        rOFStream << "#. " << m_sExtractCom.getStr() << std::endl;
     if ( !m_sKeyId.isEmpty() )
-        io_rOFStream << "#. " << m_sKeyId.getStr() << std::endl;
+        rOFStream << "#. " << m_sKeyId.getStr() << std::endl;
     if ( !m_sReference.isEmpty() )
-        io_rOFStream << "#: " << m_sReference.getStr() << std::endl;
+        rOFStream << "#: " << m_sReference.getStr() << std::endl;
     if ( m_bFuzzy )
-        io_rOFStream << "#, fuzzy" << std::endl;
+        rOFStream << "#, fuzzy" << std::endl;
     if ( !m_sContext.isEmpty() )
-        io_rOFStream << "msgctxt "
-                     << ImplGenMsgString(m_sContext).getStr() << std::endl;
-    io_rOFStream << "msgid "
-                 << ImplGenMsgString(ImplEscapeText(m_sUnTransStr)).getStr()
-                 << std::endl;
-    io_rOFStream << "msgstr "
-                 << ImplGenMsgString(ImplEscapeText(m_sTransStr)).getStr()
-                 << std::endl;
+        rOFStream << "msgctxt "
+                  << ImplGenMsgString(m_sContext).getStr() << std::endl;
+    rOFStream << "msgid "
+              << ImplGenMsgString(m_sUnTransStr).getStr() << std::endl;
+    rOFStream << "msgstr "
+              << ImplGenMsgString(m_sTransStr).getStr() << std::endl;
 }
+
+//Read from file
+void GenPoEntry::readFromFile(std::ifstream& rIFStream)
+{
+    m_sWhiteSpace = "\n";
+    OString* pLastMsg = 0;
+    std::string sTemp;
+    getline(rIFStream,sTemp);
+    while(!rIFStream.eof())
+    {
+        OString sLine = OString(sTemp.data(),sTemp.length());
+        if (ImplStartsWith(sLine,"#. "))
+        {
+            if (sLine.getLength()==7)
+                m_sKeyId = sLine.copy(3);
+            else
+                m_sExtractCom = sLine.copy(3);
+        }
+        else if (ImplStartsWith(sLine,"#: "))
+        {
+            m_sReference = sLine.copy(3);
+        }
+        else if (ImplStartsWith(sLine,"#, fuzzy"))
+        {
+            m_bFuzzy = true;
+        }
+        else if (ImplStartsWith(sLine,"msgctxt "))
+        {
+            m_sContext = ImplGenNormString(sLine.copy(8));
+            pLastMsg = &m_sContext;
+        }
+        else if (ImplStartsWith(sLine,"msgid "))
+        {
+            m_sUnTransStr = ImplGenNormString(sLine.copy(6));
+            pLastMsg = &m_sUnTransStr;
+        }
+        else if (ImplStartsWith(sLine,"msgstr "))
+        {
+            m_sTransStr = ImplGenNormString(sLine.copy(7));
+            pLastMsg = &m_sTransStr;
+        }
+        else if (ImplStartsWith(sLine,"\"") && pLastMsg)
+        {
+            *pLastMsg += ImplGenNormString(sLine);
+        }
+        else
+            break;
+        getline(rIFStream,sTemp);
+    }
+    if (m_sKeyId.isEmpty())
+        genKeyId();
+ }
 
 //Class PoEntry
 
@@ -159,7 +230,121 @@ void ImplSplitAt(const OString& rSource, const sal_Char nDelimiter,
     o_vParts.push_back(rSource.copy(nLastSplit));
 }
 
+//Unescape sdf string
+OString ImplUnEscapeSDFText(const OString& rText,const bool bHelpText = false)
+{
+    if ( bHelpText )
+        return ImplUnEscapeText(rText,"\\<\\>\\\"\\\\","<>\"\\");
+    else
+        return ImplUnEscapeText(rText,"\\n\\t\\r","\n\t\r");
+}
 
+//Miminize the length of the regular expression result
+void ImplMinimize(const OUString& rText, Regexpr& io_rRegExp, re_registers& io_rRegs)
+{
+    re_registers aPrevRegs;
+    const sal_Int32 nStart = io_rRegs.start[0];
+    do
+    {
+        const OUString sTemp = rText.copy(0,io_rRegs.end[0]-1);
+        memcpy(static_cast<void*>(&aPrevRegs), static_cast<void*>(&io_rRegs),
+               sizeof(re_registers));
+        memset(static_cast<void*>(&io_rRegs), 0, sizeof(re_registers));
+        io_rRegExp.set_line(sTemp.getStr(),sTemp.getLength());
+        io_rRegExp.re_search(&io_rRegs,nStart);
+    } while(io_rRegs.num_of_match);
+
+    memcpy(static_cast<void*>(&io_rRegs),static_cast<void*>(&aPrevRegs),
+           sizeof(re_registers));
+    io_rRegExp.set_line(rText.getStr(),rText.getLength());
+}
+
+//Find all special tag in a string using a regular expression
+void ImplFindAllTag(const OString& rText,std::vector<OString>& o_vFoundTags)
+{
+    ::com::sun::star::util::SearchOptions aOptions;
+    aOptions.algorithmType = ::com::sun::star::util::SearchAlgorithms_REGEXP;
+    aOptions.searchFlag = ::com::sun::star::util::SearchFlags::NORM_WORD_ONLY;
+    aOptions.searchString = "<[/]?[a-z_\\-]+(| +[a-z]+=\".*\") *[/]?>";
+    ::com::sun::star::uno::Reference<
+         ::com::sun::star::i18n::XExtendedTransliteration > xTrans;
+
+    Regexpr aRegExp(aOptions,xTrans);
+    const OUString sTemp(OStringToOUString(rText,RTL_TEXTENCODING_UTF8));
+    aRegExp.set_line(sTemp.getStr(),sTemp.getLength());
+
+    re_registers aRegs;
+    memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
+    sal_Int32 nStart = 0;
+    o_vFoundTags.resize(0);
+    aRegExp.re_search(&aRegs,nStart);
+    while(aRegs.num_of_match)
+    {
+        ImplMinimize(sTemp,aRegExp,aRegs);
+        o_vFoundTags.push_back(
+                rText.copy(aRegs.start[0],aRegs.end[0]-aRegs.start[0]));
+        nStart = aRegs.end[0];
+        memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
+        aRegExp.re_search(&aRegs,nStart);
+    }
+}
+
+//Escape special tags
+OString ImplEscapeTags(const OString& rText)
+{
+    typedef std::vector<OString> StrVec;
+    const StrVec vTagsForEscape =
+                  { "ahelp", "link", "item", "emph", "defaultinline",
+                    "switchinline", "caseinline", "variable",
+                    "bookmark_value", "image", "embedvar", "alt" };
+    StrVec vFoundTags;
+    ImplFindAllTag(rText,vFoundTags);
+    OString sResult = rText;
+    for(StrVec::const_iterator pFound  = vFoundTags.begin();
+        pFound != vFoundTags.end(); ++pFound)
+    {
+        bool bEscapeThis = false;
+        for(StrVec::const_iterator pEscape = vTagsForEscape.begin();
+            pEscape != vTagsForEscape.end(); ++pEscape)
+        {
+            if (ImplStartsWith(*pFound,"<" + *pEscape) ||
+                *pFound == "</" + *pEscape + ">")
+            {
+                bEscapeThis = true;
+                break;
+            }
+        }
+        if (bEscapeThis || *pFound=="<br/>" || *pFound =="<help-id-missing/>")
+        {
+            OString sToReplace = "\\<" + pFound->copy(1,pFound->getLength()-2).
+                                           replaceAll("\"","\\\"") + "\\>";
+            sResult = sResult.replaceAll(*pFound, sToReplace);
+        }
+    }
+    return sResult;
+}
+
+//Escape to get sdf/merge string
+OString ImplEscapeSDFText(const OString& rText,const bool bHelpText = false)
+{
+    if ( bHelpText )
+        return ImplEscapeTags(rText.replaceAll("\\","\\\\"));
+    else
+        return ImplEscapeText(rText,"\n\t\r","\\n\\t\\r");
+}
+
+
+//Default constructor
+PoEntry::PoEntry()
+    : GenPoEntry()
+    , m_sSourceFile( OString() )
+    , m_sGroupId( OString() )
+    , m_sLocalId( OString() )
+    , m_sResourceType( OString() )
+    , m_eType( TTEXT )
+    , m_sHelpText( OString() )
+{
+}
 
 //Construct PoEntry from sdfline
 PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
@@ -168,25 +353,69 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     , m_sLocalId( OString() )
     , m_sResourceType(OString() )
     , m_eType( TTEXT )
+    , m_sHelpText( OString() )
 {
-    setWhiteSpace("\n");
     std::vector<OString> vParts;
     ImplSplitAt(rSDFLine,'\t',vParts);
     if(vParts.size()!=15) throw;
 
     m_sSourceFile = vParts[SOURCEFILE].
                         copy(vParts[SOURCEFILE].lastIndexOf("\\")+1);
-    setReference(m_sSourceFile);
+    m_sResourceType = vParts[RESOURCETYPE];
     m_sGroupId = vParts[GROUPID];
     m_sLocalId = vParts[LOCALID];
-    m_sResourceType = vParts[RESOURCETYPE];
     m_eType = eType;
     m_sHelpText = vParts[HELPTEXT];
+    setUnTransStr(vParts[eType]);
+}
 
-    OString sContext = m_sGroupId + "\\n" +
-                       (m_sLocalId.isEmpty() ? "" : m_sLocalId + "\\n") +
+//Destructor
+PoEntry::~PoEntry()
+{
+}
+
+//Get translation string in sdf/merge format
+OString PoEntry::getUnTransStr() const
+{
+    return ImplEscapeSDFText(GenPoEntry::getUnTransStr(),
+                             m_sSourceFile.endsWith(".xhp"));
+}
+
+//Get translated string in sdf/merge format
+OString PoEntry::getTransStr() const
+{
+    return ImplEscapeSDFText(GenPoEntry::getTransStr(),
+                             m_sSourceFile.endsWith(".xhp"));
+
+}
+
+//Set translation string when input is in sdf format
+void PoEntry::setUnTransStr(const OString& rUnTransStr)
+{
+    GenPoEntry::setUnTransStr(
+                    ImplUnEscapeSDFText(
+                        rUnTransStr,m_sSourceFile.endsWith(".xhp")));
+}
+
+//Set translated string when input is in sdf format
+void PoEntry::setTransStr(const OString& rTransStr)
+{
+    GenPoEntry::setTransStr(
+                    ImplUnEscapeSDFText(
+                        rTransStr,m_sSourceFile.endsWith(".xhp")));
+}
+
+//Write to file
+void PoEntry::writeToFile(std::ofstream& rOFStream)
+{
+    setWhiteSpace("\n");
+    setExtractCom(m_sHelpText);
+    setReference(m_sSourceFile);
+
+    OString sContext = m_sGroupId + "\n" +
+                       (m_sLocalId.isEmpty() ? "" : m_sLocalId + "\n") +
                        m_sResourceType;
-    switch(eType){
+    switch(m_eType){
     case TTEXT:
         sContext += ".text"; break;
     case TQUICKHELPTEXT:
@@ -197,40 +426,37 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
         throw; break;
     }
     setContext(sContext);
-    setExtractCom(m_sHelpText);
-
-    setUnTransStr(vParts[eType]);
     genKeyId();
+    GenPoEntry::writeToFile(rOFStream);
 }
 
-//Destructor
-PoEntry::~PoEntry()
-{
-}
 
-//Unescape sdf text
-OString ImplUnEscapeSDFText(const OString& rText,const bool bHelpText = false)
+//Read from file
+void PoEntry::readFromFile(std::ifstream& rIFStream)
 {
-    if ( bHelpText )
-        return ImplUnEscapeText(rText,"\\<\\>\\\"\\\\","<>\"\\");
+    GenPoEntry::readFromFile(rIFStream);
+    m_sSourceFile = getReference();
+
+    OString sContext =  getContext();
+    m_sGroupId = sContext.getToken(0,'\n');
+
+    if (sContext.indexOf('\n')==sContext.lastIndexOf('\n'))
+        m_sResourceType = sContext.getToken(1,'\n').getToken(0,'.');
     else
-        return ImplUnEscapeText(rText,"\\n\\t\\r","\n\t\r");
-}
+    {
+        m_sLocalId = sContext.getToken(1,'\n');
+        m_sResourceType = sContext.getToken(2,'\n').getToken(0,'.');
+    }
+    if (sContext.endsWith(".text"))
+        m_eType = TTEXT;
+    else if (sContext.endsWith(".quickhelptext"))
+        m_eType = TQUICKHELPTEXT;
+    else if (sContext.endsWith(".title"))
+        m_eType = TTITLE;
+    else
+        throw;
 
-//Set translation text when input is in sdf format
-void PoEntry::setUnTransStr(const OString& rUnTransStr)
-{
-    GenPoEntry::setUnTransStr(
-                    ImplUnEscapeSDFText(
-                        rUnTransStr,m_sSourceFile.endsWith(".xhp")));
-}
-
-//Set translated text when input is in sdf format
-void PoEntry::setTransStr(const OString& rTransStr)
-{
-    GenPoEntry::setTransStr(
-                    ImplUnEscapeSDFText(
-                        rTransStr,m_sSourceFile.endsWith(".xhp")));
+    m_sHelpText = getExtractCom();
 }
 
 //Class PoHeader
