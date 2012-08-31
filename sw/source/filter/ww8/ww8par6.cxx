@@ -1338,7 +1338,7 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
                 eCodeIdx = WW8_BordersSO::single0;//   1 Twip for us
             else if( nLineThickness < 20)
                 eCodeIdx = WW8_BordersSO::single5;//   10 Twips for us
-            else if (nLineThickness < 50)
+            else if (nLineThickness < 45) //Modified for i120716
                 eCodeIdx = WW8_BordersSO::single1;//  20 Twips
             else if (nLineThickness < 80)
                 eCodeIdx = WW8_BordersSO::single2;//  50
