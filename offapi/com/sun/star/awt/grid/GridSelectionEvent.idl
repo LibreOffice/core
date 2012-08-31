@@ -30,32 +30,24 @@
 
 #include <com/sun/star/lang/EventObject.idl>
 
-#include <com/sun/star/awt/grid/SelectionEventType.idl>
-
 
 module com {  module sun {  module star {  module awt { module grid {
 
 
-/** An event used by a <type>XGridControl</type> to notify changes in the selection.
+/** An event used by a <type>XGridControl</type> to notify changes in its row selection.
 
-    @see XGridControl
+    @see XGridRowSelection
     @see XGridSelectionListener
  */
-struct GridSelectionEvent: com::sun::star::lang::EventObject
+published struct GridSelectionEvent: com::sun::star::lang::EventObject
 {
+    /** denotes the indexes of the rows being selected at the time the event was fired.
+    */
+    sequence< long > SelectedRowIndexes;
 
-    /** the selected row*/
-    long Row;
-
-    /** the selected column*/
-    long Column;
-
-    /**number of selected rows, if multiple rows selected*/
-    long Range;
-
-    /** Contains the action <type>SelectionEventType</types> that was performed **/
-    SelectionEventType Action;
-
+    /** denotes the indexes of the columns being selected at the time the event was fired.
+    */
+    sequence< long > SelectedColumnIndexes;
 };
 
 

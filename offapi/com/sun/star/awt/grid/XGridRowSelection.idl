@@ -28,17 +28,18 @@
 #ifndef __com_sun_star_awt_grid_XGridSelection_idl__
 #define __com_sun_star_awt_grid_XGridSelection_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/grid/XGridSelectionListener.idl>
-#include <com/sun/star/view/SelectionType.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
 
 module com {  module sun {  module star {  module awt { module grid {
 
 
 /** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>.
+
+    @since OpenOffice.org 3.4
  */
-interface XGridSelection
+published interface XGridRowSelection
 {
     /** Selects all rows.
     */
@@ -48,8 +49,12 @@ interface XGridSelection
 
         @param RowIndex
             denotes the index of the row to select
+
+        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>RowIndex</code> does not denote a valid row index
     */
-    void selectRow( [in] long RowIndex );
+    void selectRow( [in] long RowIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** Deselects all selected rows.
     */
@@ -60,27 +65,31 @@ interface XGridSelection
         @param RowIndex
             denotes the index of the row to deselect
     */
-    void deselectRow( [in] long RowIndex );
+    void deselectRow( [in] long RowIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** Returns the indices of all selected rows.
         @returns
             a sequence of indices.
     */
-    sequence< long > getSelection();
+    sequence< long > getSelectedRows();
 
     /** Returns whether rows are selected.
         @returns
-            <true/> if rows are selected otherwise <false/>.
+            <true/> if and only if at least one row is selected.
     */
-    boolean isSelectionEmpty();
+    boolean hasSelectedRows();
 
     /** Returns whether a specific row is selected.
-        @param
-            the index of a row.
+
+        @param RowIndex
+            the index of a row. If the value does not denote a valid row index, i.e. is smaller than <code>0</code>
+            or greater than the number of rows, this is silently ignored, and <false/> is returned.
+
         @returns
-            <true/> if row are selected otherwise <false/>.
+            <true/> if and only if there is a row with the given index, and it is selected currently.
     */
-    boolean isSelectedIndex( [in] long index);
+    boolean isRowSelected( [in] long RowIndex );
 
     /** Adds a listener for the <type>GridSelectionEvent</type> posted after the grid changes.
         @param listener
@@ -88,14 +97,11 @@ interface XGridSelection
     */
     void addSelectionListener( [in] XGridSelectionListener  listener);
 
-
     /** Removes a listener previously added with <method>addSelectionListener()</method>.
         @param listener
             the listener to remove.
     */
     void removeSelectionListener( [in] XGridSelectionListener listener);
-
-
 };
 
 
