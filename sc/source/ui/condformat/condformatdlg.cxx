@@ -836,7 +836,7 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, TypeListHdl)
     SetHeight();
     return 0;
 }
-
+#include <iostream>
 IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 {
     rtl::OUString aFormula = pEdit->GetText();
@@ -845,7 +845,7 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
     boost::scoped_ptr<ScTokenArray> mpCode(aComp.CompileString(aFormula));
     if(mpCode->GetCodeError())
     {
-        pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        pEdit->SetControlBackground(COL_RED);
     }
     else
     {
