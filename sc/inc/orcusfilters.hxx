@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_ORCUSHANDLER_HXX__
-#define __SC_ORCUSHANDLER_HXX__
+#ifndef __SC_ORCUSFILTERS_HXX__
+#define __SC_ORCUSFILTERS_HXX__
 
 #include "rtl/ustring.hxx"
 

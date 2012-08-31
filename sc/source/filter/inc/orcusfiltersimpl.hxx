@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef __SCFILT_ORCUSFILTERSIMPL_HXX__
+#define __SCFILT_ORCUSFILTERSIMPL_HXX__
+
 #include "orcusfilters.hxx"
 
 class ScOrcusFiltersImpl : public ScOrcusFilters
@@ -14,5 +17,7 @@ class ScOrcusFiltersImpl : public ScOrcusFilters
 public:
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
