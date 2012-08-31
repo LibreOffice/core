@@ -112,7 +112,7 @@
 #include "cellsuno.hxx"
 #include "dpobject.hxx"
 #include "markdata.hxx"
-#include "orcushandler.hxx"
+#include "orcusfilters.hxx"
 
 #ifdef ENABLE_TELEPATHY
 #include "sccollaboration.hxx"
@@ -1503,7 +1503,11 @@ bool ScDocShell::LoadExternal(SfxMedium& rMed, const OUString& rProvider)
 {
     if (rProvider == "orcus")
     {
-        if (!ScOrcusFilters::importCSV(aDocument, rMed.GetName()))
+        ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+        if (!pOrcus)
+            return false;
+
+        if (!pOrcus->importCSV(aDocument, rMed.GetName()))
             return false;
 
         FinishedLoading(SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES);

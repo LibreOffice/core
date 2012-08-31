@@ -90,10 +90,6 @@ $(eval $(call gb_Library_use_libraries,sc,\
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_use_externals,sc,\
-	orcus \
-))
-
 $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/attarray \
 	sc/source/core/data/attrib \
@@ -214,7 +210,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/navicfg \
 	sc/source/core/tool/odffmap \
 	sc/source/core/tool/optutil \
-	sc/source/core/tool/orcushandler \
 	sc/source/core/tool/parclass \
 	sc/source/core/tool/printopt \
 	sc/source/core/tool/prnsave \

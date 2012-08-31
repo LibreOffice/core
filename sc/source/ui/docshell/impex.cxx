@@ -2229,6 +2229,8 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScExportHTML( SvStream&, const String&, ScDocument*, const ScRange&, const CharSet, bool,
                   const String&, String& ) RETURN_ERROR
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const CharSet ) RETURN_ERROR
+
+    virtual ScOrcusFilters* GetOrcusFilters() { return NULL; }
 };
 
 extern "C" { static void SAL_CALL thisModule() {} }

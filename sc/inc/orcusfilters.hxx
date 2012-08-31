@@ -39,7 +39,7 @@ class ScDocument;
 class ScOrcusFilters
 {
 public:
-    static bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath);
+    virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
 };
 
 #endif

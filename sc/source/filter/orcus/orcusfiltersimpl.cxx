@@ -26,10 +26,11 @@
  * instead of those above.
  */
 
-#include "orcushandler.hxx"
 #include "document.hxx"
 
 #include "tools/urlobj.hxx"
+
+#include "orcusfiltersimpl.hxx"
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
@@ -150,7 +151,7 @@ void ScOrcusSheet::set_value(row_t /*row*/, col_t /*col*/, double /*value*/)
 
 } // anonymous namespace
 
-bool ScOrcusFilters::importCSV(ScDocument& rDoc, const OUString& rPath)
+bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) const
 {
     ScOrcusFactory aFactory(rDoc);
     INetURLObject aURL(rPath);

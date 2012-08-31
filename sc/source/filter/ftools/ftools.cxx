@@ -41,6 +41,7 @@
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 #include "compiler.hxx"
+#include "orcusfiltersimpl.hxx"
 
 #include <stdio.h>
 
@@ -358,10 +359,13 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
     return rName.Len() > 0;
 }
 
-// ============================================================================
+ScFormatFilterPluginImpl::ScFormatFilterPluginImpl() {}
+ScFormatFilterPluginImpl::~ScFormatFilterPluginImpl() {}
 
-ScFormatFilterPluginImpl::ScFormatFilterPluginImpl()
+ScOrcusFilters* ScFormatFilterPluginImpl::GetOrcusFilters()
 {
+    static ScOrcusFiltersImpl aImpl;
+    return &aImpl;
 }
 
 SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
