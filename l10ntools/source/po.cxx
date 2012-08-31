@@ -32,14 +32,15 @@ OString ImplGenKeyId(const OString& rGenerator)
     boost::crc_32_type aCRC32;
     aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
     sal_uInt32 nCRC = aCRC32.checksum();
-    OString sKeyId = "";
-    while ( sKeyId.getLength() < 4 )
+    char sKeyId[5];
+    for(int nIndex = 0; nIndex < 4; ++nIndex)
     {
-        //Concat a char from the [33,126] interval of ASCII
-        sKeyId += OString(char(int(double(nCRC & 255)/255*93)+33));
+        //Get a char from the [33,126] interval of ASCII
+        sKeyId[nIndex] = static_cast<char>((nCRC & 255) % 93 + 33);
         nCRC >>= 8;
     }
-    return sKeyId;
+    sKeyId[4] = 0;
+    return OString(sKeyId);
 }
 
 //Escape text
