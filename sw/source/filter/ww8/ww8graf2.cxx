@@ -622,11 +622,14 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
                         aAttrSet.Put(aFlySet);
                     }
-
-                    Rectangle aInnerDist(   pRecord->nDxTextLeft,
+            //Modified for i120716,for graf importing from MS Word 2003 binary format,
+            //there is no border distance.
+                    /*Rectangle aInnerDist(   pRecord->nDxTextLeft,
                         pRecord->nDyTextTop, pRecord->nDxTextRight,
-                        pRecord->nDyTextBottom  );
+                        pRecord->nDyTextBottom  );*/
 
+            Rectangle aInnerDist(0,0,0,0);
+            //End
                     MatchSdrItemsIntoFlySet( pObject, aAttrSet,
                         pRecord->eLineStyle, pRecord->eShapeType,
                         aInnerDist );
