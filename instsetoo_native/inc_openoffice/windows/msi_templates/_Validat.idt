@@ -1,7 +1,6 @@
 Table	Column	Nullable	MinValue	MaxValue	KeyTable	KeyColumn	Category	Set	Description
 s32	s32	s4	I4	I4	S255	I2	S32	S255	S255
 _Validation	Table	Column
-_Validation	Category	Y						Text;Formatted;Template;Condition;Guid;Path;Version;Language;Identifier;Binary;UpperCase;LowerCase;Filename;Paths;AnyPath;WildCardFilename;RegPath;KeyFormatted;CustomSource;Property;Cabinet;Shortcut;URL	String category
 _Validation	Column	N					Identifier		Name of column
 _Validation	Description	Y					Text		Description of column
 _Validation	KeyColumn	Y	1	32					Column to which foreign key connects

@@ -47,10 +47,10 @@ dnl ===================================================================
 dnl Windows builds - use oowintool to copy VC redist merge modules
 dnl ===================================================================
 if test "$COM" = "MSC"; then
-    if ! ./oowintool --msvc-copy-msms ./external/msm90 ; then
+    if ! ./oowintool --msvc-copy-msms ./external/msm"$VCVER" ; then
        AC_MSG_ERROR([oowintool failed to copy merge modules])
     fi
-    if ! ./oowintool --msvc-copy-msms-64 ./external/msm90 ; then
+    if ! ./oowintool --msvc-copy-msms-64 ./external/msm"$VCVER" ; then
        AC_MSG_WARN([oowintool failed to copy x64 merge modules, installation
 will lack the 64-bit Explorer extension])
     fi
