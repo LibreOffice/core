@@ -277,6 +277,10 @@ namespace svt { namespace table
         void        setSelectHandler( Link const & i_selectHandler ) { m_aSelectHdl = i_selectHandler; }
         Link const& getSelectHandler() const { return m_aSelectHdl; }
 
+        void commitAccessibleEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
+        void commitCellEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
+        void commitTableEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
+
         // ITableControl
         virtual void                hideCursor();
         virtual void                showCursor();
@@ -306,13 +310,17 @@ namespace svt { namespace table
         ScrollBar* getHorzScrollbar();
         ScrollBar* getVertScrollbar();
 
-        Rectangle calcHeaderRect(bool bColHeader);
+        Rectangle calcHeaderRect( bool bColHeader );
+        Rectangle calcHeaderCellRect( bool bColHeader, sal_Int32 nPos );
         Rectangle calcTableRect();
+        Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol );
 
         // A11Y
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         getAccessible( Window& i_parentWindow );
         void            disposeAccessible();
+
+        inline bool     isAccessibleAlive() const { return impl_isAccessibleAlive(); }
 
         // ITableModelListener
         virtual void    rowsInserted( RowPos first, RowPos last );

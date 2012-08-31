@@ -29,6 +29,9 @@
 #include "accessibility/extended/AccessibleGridControl.hxx"
 #include "accessibility/extended/AccessibleGridControlTable.hxx"
 #include "accessibility/extended/AccessibleGridControlHeader.hxx"
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <svtools/accessibletable.hxx>
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -68,6 +71,12 @@ public:
     Reference<
         ::com::sun::star::accessibility::XAccessible >          m_xColumnHeaderBar;
     AccessibleGridControlHeader*                m_pColumnHeaderBar;
+
+    /** The table cell child. */
+    Reference<
+        ::com::sun::star::accessibility::XAccessible >          m_xCell;
+    AccessibleGridControlTableCell*             m_pCell;
+
 };
 
 AccessibleGridControl::AccessibleGridControl(
@@ -92,6 +101,7 @@ void SAL_CALL AccessibleGridControl::disposing()
     m_pImpl->m_pTable       = NULL;
     m_pImpl->m_pColumnHeaderBar = NULL;
     m_pImpl->m_pRowHeaderBar    = NULL;
+    m_pImpl->m_pCell            = NULL;
     m_pImpl->m_aCreator         = Reference< XAccessible >();
 
     Reference< XAccessible >  xTable = m_pImpl->m_xTable;
@@ -101,7 +111,16 @@ void SAL_CALL AccessibleGridControl::disposing()
     {
         xComp->dispose();
     }
+    Reference< XAccessible >  xCell = m_pImpl->m_xCell;
 
+    Reference< XComponent > xCellComp( m_pImpl->m_xCell, UNO_QUERY );
+    if ( xCellComp.is() )
+    {
+        xCellComp->dispose();
+    }
+
+    ::comphelper::disposeComponent(m_pImpl->m_xRowHeaderBar);
+    ::comphelper::disposeComponent(m_pImpl->m_xColumnHeaderBar);
     AccessibleGridControlBase::disposing();
 }
 // -----------------------------------------------------------------------------
@@ -151,8 +170,12 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
         }
         else
         {
+            if(!m_pImpl->m_xTable.is())
+            {
             AccessibleGridControlTable* pTable = new AccessibleGridControlTable(m_pImpl->m_aCreator, m_aTable, svt::table::TCTYPE_TABLE);
             m_pImpl->m_xTable = pTable;
+                m_pImpl->m_pTable = pTable;
+            }
             xChild = m_pImpl->m_xTable;
         }
     }
@@ -310,6 +333,66 @@ AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
         OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
     return new AccessibleGridControlTable( xCreator, m_aTable, TCTYPE_TABLE );
+}
+// -----------------------------------------------------------------------------
+void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
+{
+    sal_Int32 nChildCount = getAccessibleChildCount();
+    if(nChildCount != 0)
+    {
+        for(sal_Int32 i=0;i<nChildCount;i++)
+        {
+            Reference< XAccessible > xAccessible = getAccessibleChild(i);
+            com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessibleContext > xAccessibleChild = xAccessible->getAccessibleContext();
+            if(m_pImpl->m_xTable == xAccessible)
+            {
+                std::vector< AccessibleGridControlTableCell* > xCellCont = m_pImpl->m_pTable->getCellVector();
+                int nIndex = m_aTable.GetCurrentRow()*m_aTable.GetColumnCount()+m_aTable.GetCurrentColumn();
+                if(!xCellCont.empty() && xCellCont[nIndex])
+                {
+                    m_pImpl->m_pCell = xCellCont[nIndex];
+                    m_pImpl->m_pCell->commitEvent( _nEventId, _rNewValue, _rOldValue );
+                }
+            }
+        }
+    }
+    else
+    {
+        if ( m_pImpl->m_xTable.is() )
+            m_pImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+    }
+}
+
+void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
+{
+    if ( m_pImpl->m_xTable.is() )
+    {
+        if(_nEventId == AccessibleEventId::ACTIVE_DESCENDANT_CHANGED)
+        {
+            Reference< XAccessible > xChild = m_pImpl->m_pTable->getAccessibleChild(m_aTable.GetCurrentRow()*m_aTable.GetColumnCount()+m_aTable.GetCurrentColumn());
+            m_pImpl->m_pTable->commitEvent(_nEventId, makeAny(xChild),_rOldValue);
+        }
+        else if(_nEventId == AccessibleEventId::TABLE_MODEL_CHANGED)
+        {
+            AccessibleTableModelChange aChange;
+            if(_rNewValue >>= aChange)
+            {
+                if(aChange.Type == AccessibleTableModelChangeType::DELETE)
+                {
+                    std::vector< AccessibleGridControlTableCell* >::iterator m_pCell = m_pImpl->m_pTable->getCellVector().begin();
+                    std::vector< Reference< XAccessible > >::iterator m_xAccessibleVector = m_pImpl->m_pTable->getAccessibleCellVector().begin();
+                    int nColCount = m_aTable.GetColumnCount();
+                    m_pImpl->m_pTable->getCellVector().erase(m_pCell+nColCount*aChange.FirstRow, m_pCell+nColCount*aChange.LastRow );
+                    m_pImpl->m_pTable->getAccessibleCellVector().erase(m_xAccessibleVector+nColCount*aChange.FirstRow, m_xAccessibleVector+nColCount*aChange.LastRow);
+                    m_pImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+                }
+                else
+                    m_pImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+            }
+        }
+        else
+            m_pImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+    }
 }
 // ============================================================================
 // = AccessibleGridControlAccess

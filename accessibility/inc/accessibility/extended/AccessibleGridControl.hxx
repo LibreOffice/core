@@ -35,7 +35,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <svtools/accessibletable.hxx>
 
-
 #include <memory>
 
 using namespace ::svt::table;
@@ -112,6 +111,28 @@ protected:
 
 public:
     // helper functions
+
+     /** commitCellEvent commit the event at all listeners of the table
+         @param nEventId
+             the event id
+         @param rNewValue
+             the new value
+         @param rOldValue
+             the old value
+     */
+     void commitCellEvent(sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue,
+             const ::com::sun::star::uno::Any& rOldValue);
+
+     /** commitTableEvent commit the event at all listeners of the table
+         @param nEventId
+             the event id
+         @param rNewValue
+             the new value
+         @param rOldValue
+             the old value
+     */
+     void commitTableEvent(sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue,
+             const ::com::sun::star::uno::Any& rOldValue);
     /** returns the accessible object for the row or the column header bar
     */
     inline ::com::sun::star::uno::Reference<
@@ -242,6 +263,20 @@ protected:
         if ( pContext )
             xAccessible = pContext->getTable();
         return xAccessible;
+    }
+    virtual void commitCellEvent( sal_Int16 nEventId,
+         const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue )
+    {
+         AccessibleGridControl* pContext( getContext() );
+         if ( pContext )
+            pContext->commitCellEvent( nEventId, rNewValue, rOldValue );
+    }
+    virtual void commitTableEvent( sal_Int16 nEventId,
+         const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue )
+    {
+         AccessibleGridControl* pContext( getContext() );
+         if ( pContext )
+            pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
         const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue )

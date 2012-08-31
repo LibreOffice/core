@@ -33,6 +33,7 @@
 #include "accessibility/extended/AccessibleGridControlTableBase.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <accessibility/extended/AccessibleGridControlTableCell.hxx>
 
 // ============================================================================
 
@@ -56,7 +57,9 @@ public:
 
 protected:
     virtual ~AccessibleGridControlTable();
-
+private:
+    std::vector< AccessibleGridControlTableCell* > m_pCellVector;
+    std::vector< com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible> > m_pAccessCellVector;
 public:
     // XAccessibleContext -----------------------------------------------------
 
@@ -196,6 +199,11 @@ public:
     /** @return  The name of this class. */
     virtual OUString SAL_CALL getImplementationName()
         throw ( ::com::sun::star::uno::RuntimeException );
+
+    /**@return m_pCellVector*/
+    std::vector< AccessibleGridControlTableCell* >& getCellVector();
+    /**@return m_xAccessCellVector*/
+    std::vector< com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible > >& getAccessibleCellVector();
 
 protected:
     // internal virtual methods -----------------------------------------------

@@ -145,13 +145,28 @@ OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
 // -----------------------------------------------------------------------------
 Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
 {
-    return Rectangle(Point(0,0),Point(0,0));//To Do - return headercell rectangle
+    Window* pParent = m_aTable.GetAccessibleParentWindow();
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
+    sal_Int32 nIndex = getAccessibleIndexInParent();
+    Rectangle aCellRect;
+    if(m_eObjType == TCTYPE_COLUMNHEADERCELL)
+        aCellRect = m_aTable.calcHeaderCellRect(true, nIndex);
+    else
+        aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);
+    return Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
 // -----------------------------------------------------------------------------
 
 Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
 {
-    return Rectangle(Point(0,0),Point(0,0));//To Do - return headercell rectangle
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( NULL ) );
+    sal_Int32 nIndex = getAccessibleIndexInParent();
+    Rectangle aCellRect;
+    if(m_eObjType == TCTYPE_COLUMNHEADERCELL)
+        aCellRect = m_aTable.calcHeaderCellRect(true, nIndex);
+    else
+        aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);
+    return Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()

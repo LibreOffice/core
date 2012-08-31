@@ -51,6 +51,8 @@ AccessibleGridControlTable::AccessibleGridControlTable(
         IAccessibleTable& rTable,
         AccessibleTableControlObjType _eType) :
     AccessibleGridControlTableBase( rxParent, rTable, _eType )
+        ,m_pCellVector( )
+        ,m_pAccessCellVector( )
 {
 }
 
@@ -68,7 +70,19 @@ AccessibleGridControlTable::getAccessibleChild( sal_Int32 nChildIndex )
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
-    return new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount(), TCTYPE_TABLECELL);
+    sal_Int32 nCount = getAccessibleChildCount();
+    if(m_pAccessCellVector.size() == 0 || m_pAccessCellVector.size() != (unsigned)nCount)
+    {
+        m_pAccessCellVector.resize(nCount);
+        m_pCellVector.resize(nCount);
+    }
+    if(!m_pAccessCellVector[nChildIndex].is())
+    {
+        AccessibleGridControlTableCell* pCell = new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount(), TCTYPE_TABLECELL);
+        m_pCellVector[nChildIndex] = pCell;
+        m_pAccessCellVector[nChildIndex] = pCell;
+    }
+    return m_pAccessCellVector[nChildIndex];
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
@@ -98,7 +112,6 @@ AccessibleGridControlTable::getAccessibleAtPoint( const awt::Point& rPoint )
     sal_Int32 nColumnPos = 0;
     if( m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) ) )
         xChild = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumnPos, TCTYPE_TABLECELL);
-
     return xChild;
 }
 
@@ -214,7 +227,20 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTable::getAccessibleCellA
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumn, TCTYPE_TABLECELL);
+    sal_Int32 nCount = getAccessibleChildCount();
+    sal_Int32 nChildIndex = nRow*m_aTable.GetColumnCount() + nColumn;
+    if(m_pAccessCellVector.size() == 0 || m_pAccessCellVector.size() != (unsigned)nCount)
+    {
+        m_pAccessCellVector.resize(nCount);
+        m_pCellVector.resize(nCount);
+    }
+    if(!m_pAccessCellVector[nChildIndex].is())
+    {
+        AccessibleGridControlTableCell* pCell = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumn, TCTYPE_TABLECELL);
+        m_pCellVector[nChildIndex] = pCell;
+        m_pAccessCellVector[nChildIndex] = pCell;
+    }
+    return m_pAccessCellVector[nChildIndex];
 }
 
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleSelected(
@@ -332,12 +358,28 @@ OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
 
 Rectangle AccessibleGridControlTable::implGetBoundingBox()
 {
-    return m_aTable.calcTableRect();
+    Window* pParent = m_aTable.GetAccessibleParentWindow();
+    DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ));
+    Rectangle aTableRect( m_aTable.calcTableRect() );
+    long nX = aGridRect.Left() + aTableRect.Left();
+    long nY = aGridRect.Top() + aTableRect.Top();
+    long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
+    long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
+    Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
+    return aTable;
 }
 
 Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 {
-    return m_aTable.calcTableRect();
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( NULL ));
+    Rectangle aTableRect( m_aTable.calcTableRect() );
+    long nX = aGridRect.Left() + aTableRect.Left();
+    long nY = aGridRect.Top() + aTableRect.Top();
+    long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
+    long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
+    Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
+    return aTable;
 }
 // internal helper methods ----------------------------------------------------
 Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
@@ -361,6 +403,15 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
     return Reference< XAccessibleTable >( xRet, uno::UNO_QUERY );
 }
 
+std::vector< AccessibleGridControlTableCell* >& AccessibleGridControlTable::getCellVector()
+{
+    return m_pCellVector;
+}
+
+std::vector< Reference< XAccessible > >& AccessibleGridControlTable::getAccessibleCellVector()
+{
+    return m_pAccessCellVector;
+}
 // ============================================================================
 
 } // namespace accessibility

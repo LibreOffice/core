@@ -174,6 +174,14 @@ public:
 protected:
     // internal helper methods ------------------------------------------------
 
+//    /** @attention  This method requires locked mutex's and a living object.
+//        @param nColumn
+//            the position of the column in the Accessible world
+//        @return
+//            the position of the column in VCL the Accessible world
+//    */
+//    sal_uInt16 implToVCLColumnPos( sal_Int32 nColumn ) const;
+
     /** @attention  This method requires locked mutex's and a living object.
         @return  The number of cells of the table. */
     sal_Int32 implGetChildCount() const;

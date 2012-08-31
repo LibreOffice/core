@@ -42,6 +42,8 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/grid/GridInvalidDataException.hpp>
 #include <com/sun/star/awt/grid/GridInvalidModelException.hpp>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
@@ -693,26 +695,75 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
     SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+
+    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::ProcessWindowEvent: no control (anymore)!" );
+
+    bool handled = false;
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_TABLEROW_SELECT:
         {
-            TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-            if ( !pTable )
-            {
-                SAL_WARN( "svtools.uno", "SVTXGridControl::ProcessWindowEvent: no control (anymore)!" );
-                break;
-            }
-
             if ( m_aSelectionListeners.getLength() )
                 ImplCallItemListeners();
+            handled = true;
         }
         break;
 
-        default:
-            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
-            break;
+        case VCLEVENT_CONTROL_GETFOCUS:
+        {
+            // TODO: this doesn't belong here. It belongs into the TableControl/_Impl, so A11Y also
+            // works when the control is used outside the UNO context
+             if ( pTable->GetRowCount()>0 )
+             {
+                pTable->commitCellEventIfAccessibleAlive(
+                    AccessibleEventId::STATE_CHANGED,
+                    makeAny( AccessibleStateType::FOCUSED ),
+                    Any()
+                );
+                pTable->commitTableEventIfAccessibleAlive(
+                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                    Any(),
+                    Any()
+                );
+            }
+            else
+            {
+                pTable->commitTableEventIfAccessibleAlive(
+                    AccessibleEventId::STATE_CHANGED,
+                    makeAny( AccessibleStateType::FOCUSED ),
+                    Any()
+                );
+             }
+        }
+        break;
+
+        case VCLEVENT_CONTROL_LOSEFOCUS:
+        {
+            // TODO: this doesn't belong here. It belongs into the TableControl/_Impl, so A11Y also
+            // works when the control is used outside the UNO context
+            if ( pTable->GetRowCount()>0 )
+            {
+                pTable->commitCellEventIfAccessibleAlive(
+                    AccessibleEventId::STATE_CHANGED,
+                    Any(),
+                    makeAny( AccessibleStateType::FOCUSED )
+                );
+            }
+            else
+            {
+                pTable->commitTableEventIfAccessibleAlive(
+                    AccessibleEventId::STATE_CHANGED,
+                    Any(),
+                    makeAny( AccessibleStateType::FOCUSED )
+                );
+            }
+        }
+        break;
     }
+
+    if ( !handled )
+        VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

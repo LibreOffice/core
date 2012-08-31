@@ -81,7 +81,16 @@ AccessibleGridControlBase::~AccessibleGridControlBase()
 void SAL_CALL AccessibleGridControlBase::disposing()
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
+
+    if ( getClientId( ) )
+    {
+        AccessibleEventNotifier::TClientId nId( getClientId( ) );
+        setClientId( 0 );
+        AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
+    }
+
     m_xParent = NULL;
+    //m_aTable = NULL;
 }
 
 // XAccessibleContext ---------------------------------------------------------
