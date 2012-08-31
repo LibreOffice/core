@@ -32,65 +32,6 @@
 
 using namespace std;
 
-//Some menus are special, this is the list of them
-//gboolean
-//isSpecialSubmenu (OUString command)
-//{
-//    const gchar * specialSubmenus[11] = {".uno:CharFontName",
-//                                         ".uno:FontHeight",
-//                                         ".uno:ObjectMenue",
-//                                         ".uno:InsertPageHeader",
-//                                         ".uno:InsertPageFooter",
-//                                         ".uno:ChangeControlType",
-//                                         ".uno:AvailableToolbars",
-//                                         ".uno:ScriptOrganizer",
-//                                         ".uno:RecentFileList",
-//                                         ".uno:AddDirect",
-//                                         ".uno:AutoPilotMenu"};
-
-//    for (gint i = 0; i < 11; i++)
-//    {
-//        if (command.equals (OUString::createFromAscii (specialSubmenus[i])))
-//            return TRUE;
-//    }
-//    return FALSE;
-//}
-
-//static void UpdateNativeMenu( GtkSalMenu* pMenu ) {
-//    if ( pMenu == NULL )
-//        return;
-
-//    Menu* pVCLMenu = pMenu->GetMenu();
-
-//    for ( sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++ ) {
-//        GtkSalMenuItem *pSalMenuItem = pMenu->GetItemAtPos( i );
-//        sal_uInt16 nId = pSalMenuItem->mnId;
-
-//        if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
-//            continue;
-
-//        String aText = pVCLMenu->GetItemText( nId );
-//        String aCommand = pVCLMenu->GetItemCommand( nId );
-//        sal_Bool itemEnabled = pVCLMenu->IsItemEnabled( nId );
-//        KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
-//        sal_Bool itemChecked = pVCLMenu->IsItemChecked( nId );
-
-//        // Force updating of native menu labels.
-//        pMenu->SetItemCommand( i, pSalMenuItem, aCommand );
-//        pMenu->SetItemText( i, pSalMenuItem, aText );
-//        pMenu->EnableItem( i, itemEnabled );
-//        pMenu->SetAccelerator( i, pSalMenuItem, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
-//        pMenu->CheckItem( i, itemChecked );
-
-//        GtkSalMenu* pSubmenu = pSalMenuItem->mpSubMenu;
-
-//        if ( pSubmenu && pSubmenu->GetMenu() ) {
-//            pSubmenu->GetMenu()->Activate();
-//            pSubmenu->GetMenu()->Deactivate();
-//            UpdateNativeMenu( pSubmenu );
-//        }
-//    }
-//}
 
 static void UpdateNativeMenu( GtkSalMenu* pMenu )
 {
@@ -592,7 +533,6 @@ void GtkSalMenu::SetNativeItemCommand( unsigned nSection, unsigned nItemPos, Gtk
 
     if ( aCurrentCommand == NULL || g_strcmp0( aCurrentCommand, aCommand ) != 0 )
     {
-        cout << __FUNCTION__ << endl;
         g_lo_menu_set_command_to_item_in_section( pMenu, nSection, nItemPos, aCommand );
 
         gchar* aItemCommand = g_strconcat("win.", aCommand, NULL );

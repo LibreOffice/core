@@ -24,8 +24,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <unx/gtk/gtksalmenu.hxx>
-
 #include <unx/gtk/glomenu.h>
 
 struct _GLOMenu
