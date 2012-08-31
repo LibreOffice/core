@@ -33,7 +33,7 @@ TARGET=orcus
 .ENDIF
 
 TARFILE_NAME=liborcus_0.1.0
-TARFILE_MD5=17cfc0065e7d250af3e5754cee97e652
+TARFILE_MD5=3c9d8bd223637b9bca77bcf90d4366aa
 
 PATCH_FILES=
 
@@ -41,6 +41,7 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=./autogen.sh \
 	--with-mdds-include-path=$(OUTDIR)/inc \
 	--disable-libzip \
+	--disable-debug \
 	--disable-spreadsheet-model
 
 BUILD_ACTION=make
