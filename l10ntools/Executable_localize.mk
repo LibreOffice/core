@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_set_include,localize,\
 
 $(eval $(call gb_Executable_use_libraries,localize,\
     sal \
+    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,localize,\

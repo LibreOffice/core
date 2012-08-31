@@ -18,6 +18,7 @@ $(eval $(call gb_Executable_set_include,renewpo,\
 
 $(eval $(call gb_Executable_use_libraries,renewpo,\
     sal \
+    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,renewpo,\
