@@ -3279,6 +3279,14 @@ MSPDB_PATH="$formatted_path"
 AC_SUBST(SHOWINCLUDES_PREFIX)
 
 #
+# dbghelp.dll
+#
+if test "$_os" == "WINNT"; then
+    DBGHELP_DLL="13fbc2e8b37ddf28181dd6d8081c2b8e-dbghelp.dll"
+fi
+AC_SUBST(DBGHELP_DLL)
+
+#
 # prefix C with ccache if needed
 #
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
