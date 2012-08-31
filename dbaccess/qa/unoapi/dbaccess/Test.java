@@ -23,7 +23,7 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-package org.openoffice.dbaccess.qa.unoapi;
+package unoapi.dbaccess;
 
 import org.openoffice.Runner;
 import org.openoffice.test.OfficeConnection;
