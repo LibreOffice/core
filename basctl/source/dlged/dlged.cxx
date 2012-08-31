@@ -174,7 +174,10 @@ bool DlgEditor::RemarkDialog()
 }
 
 
-DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel )
+DlgEditor::DlgEditor (
+    com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel,
+    PropBrw& rPropertyBrowser_
+)
     :pHScroll(NULL)
     ,pVScroll(NULL)
     ,pDlgEdModel(NULL)
@@ -187,6 +190,7 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
     ,pObjFac(NULL)
     ,pWindow(NULL)
     ,pFunc(NULL)
+    ,rPropertyBrowser(rPropertyBrowser_)
     ,eMode( DlgEditor::SELECT )
     ,eActObj( OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(false)
@@ -608,14 +612,7 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
 
 IMPL_LINK_NOARG(DlgEditor, MarkTimeout)
 {
-    Shell* pShell = GetShell();
-    SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : NULL;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SHOW_PROPERTYBROWSER ) : NULL;
-    if ( !pChildWin )
-        return 0L;
-
-    ((PropBrw*)(pChildWin->GetWindow()))->Update(pShell);
-
+    rPropertyBrowser.Update(GetShell());
     return 1;
 }
 
@@ -1128,10 +1125,7 @@ bool DlgEditor::IsPasteAllowed()
 
 void DlgEditor::ShowProperties()
 {
-    Shell* pShell = GetShell();
-    SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : NULL;
-    if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) )
-        pViewFrame->ToggleChildWindow( SID_SHOW_PROPERTYBROWSER );
+    rPropertyBrowser.Show(!rPropertyBrowser.IsVisible());
 }
 
 

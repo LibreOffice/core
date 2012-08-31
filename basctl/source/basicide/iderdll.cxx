@@ -142,8 +142,6 @@ Dll::Dll () :
     DocShell::RegisterInterface( pMod );
     Shell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );
     Shell::RegisterInterface( pMod );
-
-    PropBrwMgr::RegisterChildWindow();
 }
 
 ExtraData* Dll::GetExtraData ()

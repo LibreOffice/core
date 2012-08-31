@@ -1533,6 +1533,10 @@ void ModulWindowLayout::GetState (SfxItemSet &rSet, unsigned nWhich)
 {
     switch (nWhich)
     {
+        case SID_SHOW_PROPERTYBROWSER:
+            rSet.Put(SfxVisibilityItem(nWhich, false));
+            break;
+
         case SID_BASICIDE_CHOOSEMACRO:
             rSet.Put(SfxVisibilityItem(nWhich, true));
             break;

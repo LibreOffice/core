@@ -49,6 +49,7 @@ public:
 
     virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
+    virtual void ExecuteGlobal (SfxRequest&) { }
     virtual void GetState (SfxItemSet&, unsigned nWhich) = 0;
     virtual void UpdateDebug (bool bBasicStopped ) = 0;
 

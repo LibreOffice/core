@@ -86,7 +86,7 @@ DialogWindow::DialogWindow (
 {
     InitSettings( true, true, true );
 
-    pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
+    pEditor = new DlgEditor(rDocument.isDocument() ? rDocument.getDocument() : Reference<frame::XModel>(), rLayout.aPropertyBrowser);
     pEditor->SetWindow( this );
     pEditor->SetDialog( xDialogModel );
 
@@ -683,20 +683,12 @@ bool DialogWindow::RenameDialog( const ::rtl::OUString& rNewName )
 
 void DialogWindow::DisableBrowser()
 {
-    Shell* pShell = GetShell();
-    SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : 0;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : 0;
-    if( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update( NULL );
+    rLayout.aPropertyBrowser.Update(0);
 }
 
 void DialogWindow::UpdateBrowser()
 {
-    Shell* pShell = GetShell();
-    SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : 0;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : 0;
-    if( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update( pShell );
+    rLayout.aPropertyBrowser.Update(GetShell());
 }
 
 static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
@@ -1440,7 +1432,8 @@ ItemType DialogWindow::GetType () const
 DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(0),
-    rObjectCatalog(rObjectCatalog_)
+    rObjectCatalog(rObjectCatalog_),
+    aPropertyBrowser(*this)
 { }
 
 void DialogWindowLayout::Activating (BaseWindow& rChild)
@@ -1450,6 +1443,7 @@ void DialogWindowLayout::Activating (BaseWindow& rChild)
     rObjectCatalog.SetLayoutWindow(this);
     rObjectCatalog.UpdateEntries();
     rObjectCatalog.Show();
+    aPropertyBrowser.Show();
     Layout::Activating(rChild);
 }
 
@@ -1457,13 +1451,33 @@ void DialogWindowLayout::Deactivating ()
 {
     Layout::Deactivating();
     rObjectCatalog.Hide();
+    aPropertyBrowser.Hide();
     pChild = 0;
+}
+
+void DialogWindowLayout::ExecuteGlobal (SfxRequest& rReq)
+{
+    switch (rReq.GetSlot())
+    {
+        case SID_SHOW_PROPERTYBROWSER:
+            // toggling property browser
+            aPropertyBrowser.Show(!aPropertyBrowser.IsVisible());
+            ArrangeWindows();
+            // refresh the button state
+            if (SfxBindings* pBindings = GetBindingsPtr())
+                pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
+            break;
+    }
 }
 
 void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
 {
     switch (nWhich)
     {
+        case SID_SHOW_PROPERTYBROWSER:
+            rSet.Put(SfxBoolItem(nWhich, aPropertyBrowser.IsVisible()));
+            break;
+
         case SID_BASICIDE_CHOOSEMACRO:
             rSet.Put(SfxVisibilityItem(nWhich, false));
             break;
@@ -1472,7 +1486,8 @@ void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
 
 void DialogWindowLayout::OnFirstSize (int const nWidth, int const nHeight)
 {
-    AddToLeft(&rObjectCatalog, Size(nWidth * 0.2, nHeight));
+    AddToLeft(&rObjectCatalog,   Size(nWidth * 0.25, nHeight * 0.35));
+    AddToLeft(&aPropertyBrowser, Size(nWidth * 0.25, nHeight * 0.65));
 }
 
 
