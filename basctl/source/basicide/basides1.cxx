@@ -560,12 +560,6 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             pTabBar->MakeVisible( pTabBar->GetCurPageId() );
         }
         break;
-        case SID_SHOW_PROPERTYBROWSER:
-        {
-            GetViewFrame()->ChildWindowExecute( rReq );
-            rReq.Done();
-        }
-        break;
         case SID_BASICIDE_SHOWWINDOW:
         {
             ::std::auto_ptr< ScriptDocument > pDocument;
@@ -694,6 +688,8 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
 
         default:
+            if (pLayout)
+                pLayout->ExecuteGlobal(rReq);
             if (pCurWin)
                 pCurWin->ExecuteGlobal(rReq);
             break;
@@ -908,15 +904,6 @@ void Shell::GetState(SfxItemSet &rSet)
                     GetViewFrame()->GetSlotState( nWh, NULL, &rSet );
             }
             break;
-            case SID_SHOW_PROPERTYBROWSER:
-            {
-                if ( GetViewFrame()->KnowsChildWindow( nWh ) )
-                    rSet.Put( SfxBoolItem( nWh, GetViewFrame()->HasChildWindow( nWh ) ) );
-                else
-                    rSet.DisableItem( nWh );
-            }
-            break;
-
             case SID_BASICIDE_CURRENT_LANG:
             {
                 if( (pCurWin && pCurWin->IsReadOnly()) || GetCurLibName().isEmpty() )

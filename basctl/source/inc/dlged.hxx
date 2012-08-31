@@ -40,6 +40,8 @@ class Window;
 namespace basctl
 {
 
+class PropBrw;
+
 #define DLGED_PAGE_WIDTH_MIN    1280
 #define DLGED_PAGE_HEIGHT_MIN   1024
 
@@ -102,7 +104,7 @@ private:
 
     void Print( Printer* pPrinter, const ::rtl::OUString& rTitle );
 
-protected:
+private:
     ScrollBar*          pHScroll;
     ScrollBar*          pVScroll;
     DlgEdModel*         pDlgEdModel;
@@ -117,6 +119,7 @@ protected:
     DlgEdFactory*       pObjFac;
     Window*             pWindow;
     DlgEdFunc*          pFunc;
+    PropBrw&            rPropertyBrowser;
     Mode                eMode;
     sal_uInt16          eActObj;
     bool                bFirstDraw;
@@ -133,7 +136,7 @@ protected:
 
     DlgEditor(); // not implemented
 public:
-    DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    DlgEditor (com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel, PropBrw&);
     ~DlgEditor();
 
     void            SetWindow( Window* pWindow );

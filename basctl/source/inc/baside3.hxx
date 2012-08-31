@@ -21,7 +21,9 @@
 #define BASCTL_BASIDE3_HXX
 
 #include "../basicide/layout.hxx"
-#include <bastypes.hxx>
+#include "bastypes.hxx"
+#include "propbrw.hxx"
+
 #include <svl/undo.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -126,6 +128,7 @@ public:
     // Layout:
     virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
+    virtual void ExecuteGlobal (SfxRequest&);
     virtual void GetState (SfxItemSet&, unsigned nWhich);
     virtual void UpdateDebug (bool){};
 protected:
@@ -137,7 +140,11 @@ private:
     DialogWindow* pChild;
     // dockable windows
     ObjectCatalog& rObjectCatalog;
-    // TODO property browser
+    // property browser
+    PropBrw aPropertyBrowser;
+
+private:
+    friend class DialogWindow;
 };
 
 

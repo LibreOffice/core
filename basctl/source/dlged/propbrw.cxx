@@ -18,10 +18,10 @@
  */
 
 
+#include "propbrw.hxx"
 #include "basidesh.hxx"
 #include "dlgedobj.hxx"
 #include "iderid.hxx"
-#include "propbrw.hxx"
 
 #include "dlgresid.hrc"
 #include <svx/svxids.hrc>
@@ -47,28 +47,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::comphelper;
-
-SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
-
-PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
-                        SfxBindings *pBindings, SfxChildWinInfo* pInfo)
-              :SfxChildWindow( _pParent, nId )
-{
-    // set current selection
-    SfxViewShell* pShell = SfxViewShell::Current();
-    pWindow = new PropBrw(
-        ::comphelper::getProcessServiceFactory(),
-        pBindings,
-        this,
-        _pParent,
-        pShell ? pShell->GetCurrentDocument() : Reference< XModel >()
-        );
-
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxDockingWindow*)pWindow)->Initialize( pInfo );
-
-    ((PropBrw*)pWindow)->Update( pShell );
-}
 
 
 void PropBrw::Update( const SfxViewShell* pShell )
@@ -101,13 +79,12 @@ const long WIN_BORDER = 2;
 DBG_NAME(PropBrw)
 
 
-PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings, PropBrwMgr* _pMgr, Window* _pParent,
-            const Reference< XModel >& _rxContextDocument )
-    :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits( WB_DOCKABLE | WB_STDMODELESS | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE ) )
-    ,m_bInitialStateChange(true)
-    ,m_xORB(_xORB)
-    ,m_xContextDocument( _rxContextDocument )
-    ,pView( NULL )
+PropBrw::PropBrw (Layout& rLayout):
+    DockingWindow(&rLayout),
+    m_bInitialStateChange(true),
+    m_xORB(comphelper::getProcessServiceFactory()),
+    m_xContextDocument(SfxViewShell::Current() ? SfxViewShell::Current()->GetCurrentDocument() : Reference<XModel>()),
+    pView(0)
 {
     DBG_CTOR(PropBrw,NULL);
 
@@ -260,7 +237,7 @@ sal_Bool PropBrw::Close()
     if( IsRollUp() )
         RollDown();
 
-    return SfxDockingWindow::Close();
+    return DockingWindow::Close();
 }
 
 
@@ -450,15 +427,9 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 }
 
 
-void PropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
-{
-    rInfo.bVisible = false;
-}
-
-
 void PropBrw::Resize()
 {
-    SfxDockingWindow::Resize();
+    DockingWindow::Resize();
 
     // adjust size
     Size aSize_ = GetOutputSizePixel();
