@@ -58,7 +58,7 @@ public class Dispatch extends TestCase {
         URL dispatchURL = null;
         try {
 
-            XMultiServiceFactory xMSF = tParam.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
             SOfficeFactory SOF = null;
             SOF = SOfficeFactory.getFactory( xMSF );
             String docPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
@@ -70,7 +70,7 @@ public class Dispatch extends TestCase {
 
             XURLTransformer xParser=(XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-                    tParam.getMSF().createInstance
+                    ((XMultiServiceFactory)tParam.getMSF()).createInstance
                         ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.
