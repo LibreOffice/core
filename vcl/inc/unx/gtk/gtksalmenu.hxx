@@ -86,10 +86,11 @@ public:
     virtual void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
 
-    void                        SetNativeItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText );
-    void                        SetNativeItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommandStr );
-    void                        SetNativeEnableItem( gchar* aCommand, gboolean bEnable );
+    void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText );
+    void                        NativeSetItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommandStr );
+    void                        NativeSetEnableItem( gchar* aCommand, gboolean bEnable );
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, gboolean bCheck );
+    void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
 };
 
 class GtkSalMenuItem : public SalMenuItem

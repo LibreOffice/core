@@ -86,13 +86,13 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
         gchar* aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
 
         // Force updating of native menu labels.
-        pMenu->SetNativeItemText( nSection, nItemPos, aText );
+        pMenu->NativeSetItemText( nSection, nItemPos, aText );
         pMenu->SetAccelerator( nItem, pSalMenuItem, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpVCLMenu->GetPopupMenu( nId ) == NULL )
         {
-            pMenu->SetNativeItemCommand( nSection, nItemPos, pSalMenuItem, aNativeCommand );
-            pMenu->SetNativeEnableItem( aNativeCommand, bEnabled );
+            pMenu->NativeSetItemCommand( nSection, nItemPos, pSalMenuItem, aNativeCommand );
+            pMenu->NativeSetEnableItem( aNativeCommand, bEnabled );
             pMenu->NativeCheckItem( nSection, nItemPos, pSalMenuItem, bChecked );
         }
 
@@ -380,53 +380,6 @@ const GtkSalFrame* GtkSalMenu::GetFrame() const
 
 void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
-//    GtkSalMenuItem* pItem = maItems[ nPos ];
-
-//    if ( pItem->mpSubMenu )
-//        return;
-
-//    unsigned nSection, nItemPos;
-//    GetItemSectionAndPosition( nPos, &nSection, &nItemPos );
-
-//    gchar* aCommand = g_lo_menu_get_command_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
-
-//    if ( aCommand == NULL && g_strcmp0( aCommand, "" ) != 0 )
-//    {
-//        GActionGroup* pActionGroup = GetActionGroupFromMenubar( this );
-
-//        if ( pActionGroup != NULL )
-//        {
-
-//            GVariant *pCheckValue = NULL;
-//            gboolean bCheckedValue = ( bCheck == sal_True ) ? TRUE : FALSE;
-
-//            // FIXME: Why pItem->mnBits differs from GetItemBits value?
-//            MenuItemBits bits = pItem->mpVCLMenu->GetItemBits( pItem->mnId );
-
-//            if ( bits & MIB_CHECKABLE ) {
-//                GVariant* pState = g_action_group_get_action_state( pActionGroup, aCommand );
-//                gboolean bCurrentState = g_variant_get_boolean( pState );
-
-//                if ( bCurrentState != bCheck )
-//                    pCheckValue = g_variant_new_boolean( bCheckedValue );
-//            }
-//            else if ( bits & MIB_RADIOCHECK )
-//            {
-//                GVariant* pState = g_action_group_get_action_state( pActionGroup, aCommand );
-//                gchar* aCurrentState = (gchar*) g_variant_get_string( pState, NULL );
-//                gboolean bCurrentState = g_strcmp0( aCurrentState, "" ) != 0;
-
-//                if ( bCurrentState != bCheck )
-//                    pCheckValue = (bCheckedValue) ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
-//            }
-
-//            if ( pCheckValue )
-//                g_action_group_change_action_state( pActionGroup, aCommand, pCheckValue );
-//        }
-//    }
-
-//    if ( aCommand )
-//        g_free( aCommand );
 }
 
 void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, gboolean bCheck )
@@ -472,7 +425,7 @@ void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 {
 }
 
-void GtkSalMenu::SetNativeEnableItem( gchar* aCommand, gboolean bEnable )
+void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
 {
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
@@ -484,7 +437,7 @@ void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rt
 {
 }
 
-void GtkSalMenu::SetNativeItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText )
+void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText )
 {
     // Replace the "~" character with "_".
     rtl::OUString aText = rText.replace( '~', '_' );
@@ -523,11 +476,27 @@ void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
 //        g_free( aCurrentAccel );
 }
 
+void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
+{
+    if ( rKeyName.isEmpty() )
+        return;
+
+    rtl::OString aAccelerator = rtl::OUStringToOString( GetGtkKeyName( rKeyName ), RTL_TEXTENCODING_UTF8 );
+
+    gchar* aCurrentAccel = g_lo_menu_get_accelerator_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
+
+    if ( aCurrentAccel == NULL && g_strcmp0( aCurrentAccel, aAccelerator.getStr() ) != 0 )
+        g_lo_menu_set_accelerator_to_item_in_section ( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aAccelerator.getStr() );
+
+    if ( aCurrentAccel )
+        g_free( aCurrentAccel );
+}
+
 void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr )
 {
 }
 
-void GtkSalMenu::SetNativeItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommand )
+void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommand )
 {
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
