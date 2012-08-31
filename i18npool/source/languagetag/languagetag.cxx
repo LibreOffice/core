@@ -249,8 +249,6 @@ LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
 
 LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
 {
-    theDataRef.incRef();
-
     maLocale            = rLanguageTag.maLocale;
     maBcp47             = rLanguageTag.maBcp47;
     maCachedLanguage    = rLanguageTag.maCachedLanguage;
