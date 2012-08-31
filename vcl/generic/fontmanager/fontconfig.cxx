@@ -32,7 +32,7 @@
 #include "vcl/fontmanager.hxx"
 #include "vcl/vclenum.hxx"
 #include "outfont.hxx"
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 using namespace psp;
 
@@ -777,6 +777,37 @@ static void addtopattern(FcPattern *pPattern,
     }
 }
 
+namespace
+{
+    //Someday fontconfig will hopefully use bcp47, see fdo#19869
+    //In the meantime try something that will fit to workaround fdo#35118
+    OString mapToFontConfigLangTag(const LanguageTag &rLangTag)
+    {
+        FcStrSet *pLangSet = FcGetLangs();
+        OString sLangAttrib;
+
+        sLangAttrib = OUStringToOString(rLangTag.getBcp47(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+        if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+            return sLangAttrib;
+
+        sLangAttrib = OUStringToOString(rLangTag.getLanguageAndScript(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+        if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+            return sLangAttrib;
+
+        OString sLang = OUStringToOString(rLangTag.getLanguage(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+        OString sRegion = OUStringToOString(rLangTag.getCountry(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+
+        sLangAttrib = sLang + OString('-') + sRegion;
+        if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+            return sLangAttrib;
+
+        if (FcStrSetMember(pLangSet, (const FcChar8*)sLang.getStr()))
+            return sLangAttrib;
+
+        return OString();
+    }
+}
+
 bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes )
 {
     bool bRet = false;
@@ -793,16 +824,10 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
     const FcChar8* pTargetNameUtf8 = (FcChar8*)aTargetName.getStr();
     FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
-    const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString(rPattern.meLanguage);
-    if( !aLangAttrib.isEmpty() )
-    {
-        const FcChar8* pLangAttribUtf8;
-        if (aLangAttrib.equalsIgnoreAsciiCase(OString(RTL_CONSTASCII_STRINGPARAM("pa-in"))))
-            pLangAttribUtf8 = (FcChar8*)"pa";
-        else
-            pLangAttribUtf8 = (FcChar8*)aLangAttrib.getStr();
-        FcPatternAddString(pPattern, FC_LANG, pLangAttribUtf8);
-    }
+    const LanguageTag aLangTag(rPattern.meLanguage);
+    const rtl::OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
+    if (!aLangAttrib.isEmpty())
+        FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
 
     // Add required Unicode characters, if any
     if ( !rMissingCodes.isEmpty() )
@@ -1040,20 +1065,10 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
     FcConfig* pConfig = FcConfigGetCurrent();
     FcPattern* pPattern = FcPatternCreate();
 
-    OString aLangAttrib;
     // populate pattern with font characteristics
-    if( !rLocale.Language.isEmpty() )
-    {
-        OUStringBuffer aLang(6);
-        aLang.append( rLocale.Language );
-        if( !rLocale.Country.isEmpty() )
-        {
-            aLang.append( sal_Unicode('-') );
-            aLang.append( rLocale.Country );
-        }
-        aLangAttrib = OUStringToOString( aLang.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
-    }
-    if( !aLangAttrib.isEmpty() )
+    const LanguageTag aLangTag(rLocale);
+    const rtl::OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
+    if (!aLangAttrib.isEmpty())
         FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
 
     OString aFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
