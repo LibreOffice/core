@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Extension_minimizer \
     Library_minimizer \
     Rdb_minimizer \
-    Zip_minimizer \
 ))
 endif
 
@@ -61,7 +60,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Extension_presenter \
     Library_presenter \
     Rdb_presenter \
-    Zip_presenter \
 ))
 endif
 
