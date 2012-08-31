@@ -385,7 +385,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
 
 VclGrid::array_type VclGrid::assembleGrid() const
 {
-    array_type A;
+    ext_array_type A;
 
     for (Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
@@ -410,9 +410,23 @@ VclGrid::array_type VclGrid::assembleGrid() const
             A.resize(boost::extents[nCurrentMaxXPos+1][nCurrentMaxYPos+1]);
         }
 
-        A[nLeftAttach][nTopAttach] = pChild;
-    }
+        ExtendedGridEntry &rEntry = A[nLeftAttach][nTopAttach];
+        rEntry.pChild = pChild;
+        rEntry.nSpanWidth = nWidth;
+        rEntry.nSpanHeight = nHeight;
+        rEntry.x = nLeftAttach;
+        rEntry.y = nTopAttach;
 
+        for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+        {
+            for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+            {
+                ExtendedGridEntry &rSpan = A[nLeftAttach+nSpanX][nTopAttach+nSpanY];
+                rSpan.x = nLeftAttach;
+                rSpan.y = nTopAttach;
+            }
+        }
+    }
 
     //see if we have any empty rows/cols
     sal_Int32 nMaxX = A.shape()[0];
@@ -425,16 +439,12 @@ VclGrid::array_type VclGrid::assembleGrid() const
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
-            const Window *pChild = A[x][y];
-            if (pChild)
+            const GridEntry &rEntry = A[x][y];
+            const Window *pChild = rEntry.pChild;
+            if (pChild && pChild->IsVisible())
             {
-                sal_Int32 nWidth = pChild->get_grid_width();
-                for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
-                    aNonEmptyCols[x+nSpanX] = true;
-
-                sal_Int32 nHeight = pChild->get_grid_height();
-                for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
-                    aNonEmptyRows[y+nSpanY] = true;
+                aNonEmptyCols[x] = true;
+                aNonEmptyRows[y] = true;
             }
         }
     }
@@ -442,9 +452,19 @@ VclGrid::array_type VclGrid::assembleGrid() const
     sal_Int32 nNonEmptyCols = std::count(aNonEmptyCols.begin(), aNonEmptyCols.end(), true);
     sal_Int32 nNonEmptyRows = std::count(aNonEmptyRows.begin(), aNonEmptyRows.end(), true);
 
-    //no empty rows or cols
-    if (nNonEmptyCols == nMaxX && nNonEmptyRows == nMaxY)
-        return A;
+    //reduce the spans of elements that span empty rows or columns
+    for (sal_Int32 x = 0; x < nMaxX; ++x)
+    {
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+        {
+            ExtendedGridEntry &rSpan = A[x][y];
+            ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
+            if (!aNonEmptyCols[x])
+                --rEntry.nSpanWidth;
+            if (!aNonEmptyRows[y])
+                --rEntry.nSpanHeight;
+        }
+    }
 
     //make new grid without empty rows and columns
     array_type B(boost::extents[nNonEmptyCols][nNonEmptyRows]);
@@ -456,7 +476,8 @@ VclGrid::array_type VclGrid::assembleGrid() const
         {
             if (aNonEmptyRows[y] == false)
                 continue;
-            B[x2][y2++] = A[x][y];
+            GridEntry &rEntry = A[x][y];
+            B[x2][y2++] = rEntry;
         }
         ++x2;
     }
@@ -486,19 +507,20 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
-            const Window *pChild = A[x][y];
+            const GridEntry &rEntry = A[x][y];
+            const Window *pChild = rEntry.pChild;
             if (!pChild)
                 continue;
             Size aChildSize = getLayoutRequisition(*pChild);
 
-            sal_Int32 nWidth = pChild->get_grid_width();
+            sal_Int32 nWidth = rEntry.nSpanWidth;
             for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
             {
                 rWidths[x+nSpanX].m_nValue = std::max(rWidths[x+nSpanX].m_nValue, aChildSize.Width()/nWidth);
                 rWidths[x+nSpanX].m_bExpand = rWidths[x+nSpanX].m_bExpand | pChild->get_hexpand();
             }
 
-            sal_Int32 nHeight = pChild->get_grid_height();
+            sal_Int32 nHeight = rEntry.nSpanHeight;
             for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
             {
                 rHeights[y+nSpanY].m_nValue = std::max(rHeights[y+nSpanY].m_nValue, aChildSize.Height()/nHeight);
@@ -641,17 +663,18 @@ void VclGrid::setAllocation(const Size& rAllocation)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
-            Window *pChild = A[x][y];
+            GridEntry &rEntry = A[x][y];
+            Window *pChild = rEntry.pChild;
             if (pChild)
             {
                 Size aChildAlloc(0, 0);
 
-                sal_Int32 nWidth = pChild->get_grid_width();
+                sal_Int32 nWidth = rEntry.nSpanWidth;
                 for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
                     aChildAlloc.Width() += aWidths[x+nSpanX].m_nValue;
                 aChildAlloc.Width() += get_column_spacing()*(nWidth-1);
 
-                sal_Int32 nHeight = pChild->get_grid_height();
+                sal_Int32 nHeight = rEntry.nSpanHeight;
                 for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
                     aChildAlloc.Height() += aHeights[y+nSpanY].m_nValue;
                 aChildAlloc.Height() += get_row_spacing()*(nHeight-1);

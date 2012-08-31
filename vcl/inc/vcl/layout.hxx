@@ -313,7 +313,29 @@ private:
     bool m_bColumnHomogeneous;
     int m_nRowSpacing;
     int m_nColumnSpacing;
-    typedef boost::multi_array<Window*, 2> array_type;
+
+    struct GridEntry
+    {
+        Window *pChild;
+        sal_Int32 nSpanWidth;
+        sal_Int32 nSpanHeight;
+        GridEntry()
+            : pChild(0)
+            , nSpanWidth(0)
+            , nSpanHeight(0)
+        {
+        }
+    };
+
+    typedef boost::multi_array<GridEntry, 2> array_type;
+
+    struct ExtendedGridEntry : GridEntry
+    {
+        int x;
+        int y;
+    };
+
+    typedef boost::multi_array<ExtendedGridEntry, 2> ext_array_type;
 
     array_type assembleGrid() const;
     bool isNullGrid(const array_type& A) const;
