@@ -1471,6 +1471,12 @@ void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
         itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 }
 
+void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    SCTAB nTab = maRanges[0]->aStart.Tab();
+    maRanges.DeleteArea( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+}
+
 void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew)
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
@@ -1624,6 +1630,22 @@ void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     for( iterator itr = begin(); itr != end(); ++itr)
         itr->UpdateMoveTab( nOldPos, nNewPos );
+}
+
+void ScConditionalFormatList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
+
+    // need to check which must be deleted
+    iterator itr = begin();
+    while(itr != end())
+    {
+        if(itr->GetRange().empty())
+            maConditionalFormats.erase(itr++);
+        else
+            ++itr;
+    }
 }
 
 void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )

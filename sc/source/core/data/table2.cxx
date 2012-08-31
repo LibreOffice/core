@@ -533,6 +533,8 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
             aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
+
+        mpCondFormatList->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
     }
 
     if (nDelFlag & IDF_NOTE)
@@ -561,6 +563,9 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
         ScRange* pRange = aRangeList[i];
         if (nDelFlag & IDF_NOTE && pRange)
             maNotes.erase(pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row(), true);
+
+        if(pRange && pRange->aStart.Tab() == nTab)
+            mpCondFormatList->DeleteArea( pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row() );
     }
 
         //
