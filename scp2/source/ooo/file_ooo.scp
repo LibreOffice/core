@@ -1291,6 +1291,15 @@ File gid_File_ImagesTango_Zip
 End
 #endif
 
+#ifdef THEME_TANGO_TESTING
+File gid_File_ImagesTangoTesting_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "images_tango_testing.zip";
+    Styles = (PACKED);
+End
+#endif
+
 #ifdef THEME_HUMAN
 File gid_File_ImagesHuman_Zip
     TXT_FILE_BODY;

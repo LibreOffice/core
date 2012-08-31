@@ -1153,7 +1153,7 @@ AC_ARG_WITH(vba-package-format,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *crystal, *default (galaxy), *hicontrast, human, industrial, *oxygen, *tango.]),
+         Possible choices: *crystal, *default (galaxy), *hicontrast, human, industrial, *oxygen, *tango, *tango_testing.]),
 ,)
 
 AC_ARG_WITH(helppack-integration,
@@ -2073,6 +2073,19 @@ AC_ARG_WITH(check-jobs,
         [Maximum number of jobs that will be issued at the same time during 'make subsequenttest'.
          Default value is the same as 'max-jobs'. Useful because the subsequent tests are very lighweight.]),
 ,)
+
+dnl ===================================================================
+dnl Test whether build target is Release Build
+dnl ===================================================================
+AC_MSG_CHECKING([whether build target is Release Build])
+if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
+    AC_MSG_RESULT([no])
+    ENABLE_RELEASE_BUILD="FALSE"
+else
+    AC_MSG_RESULT([yes])
+    ENABLE_RELEASE_BUILD="TRUE"
+fi
+AC_SUBST(ENABLE_RELEASE_BUILD)
 
 dnl ===================================================================
 dnl MacOSX build and runtime environment options
@@ -10396,12 +10409,13 @@ AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
     with_theme="crystal default hicontrast oxygen tango"
+    test "$ENABLE_RELEASE_BUILD" = "FALSE" && with_theme="$with_theme tango_testing"
 fi
 
 WITH_THEMES=""
 for theme in $with_theme; do
     case $theme in
-        crystal|default|galaxy|hicontrast|human|industrial|oxygen|tango) : ;;
+        crystal|default|galaxy|hicontrast|human|industrial|oxygen|tango|tango_testing) : ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
     esac
     WITH_THEMES="$WITH_THEMES $theme"
@@ -10861,19 +10875,6 @@ else
     fi
 fi
 AC_SUBST(ENABLE_ONLINE_UPDATE)
-
-dnl ===================================================================
-dnl Test whether build target is Release Build
-dnl ===================================================================
-AC_MSG_CHECKING([whether build target is Release Build])
-if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_RELEASE_BUILD="FALSE"
-else
-    AC_MSG_RESULT([yes])
-    ENABLE_RELEASE_BUILD="TRUE"
-fi
-AC_SUBST(ENABLE_RELEASE_BUILD)
 
 dnl ===================================================================
 dnl Test whether to create MSI with LIMITUI=1 (silent install)

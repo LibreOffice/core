@@ -375,8 +375,9 @@ private:
 #define STYLE_SYMBOLS_TANGO         ((sal_uLong)5)
 #define STYLE_SYMBOLS_OXYGEN        ((sal_uLong)6)
 #define STYLE_SYMBOLS_CLASSIC       ((sal_uLong)7)
-#define STYLE_SYMBOLS_HUMAN     ((sal_uLong)8)
-#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)9)
+#define STYLE_SYMBOLS_HUMAN         ((sal_uLong)8)
+#define STYLE_SYMBOLS_TANGO_TESTING ((sal_uLong)9)
+#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)10)
 
 #define STYLE_MENUIMAGES_OFF  ((sal_uInt16)0)
 #define STYLE_MENUIMAGES_ON   ((sal_uInt16)1)
