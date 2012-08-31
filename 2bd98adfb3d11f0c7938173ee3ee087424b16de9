@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///pM\u003d",
+        "filename": "sw/inc/fesh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-08-31T06:19:57Z",
+      "side": 1,
+      "message": "arent\u0027t the above supposed to be //\u003c instead ?",
+      "revId": "2bd98adfb3d11f0c7938173ee3ee087424b16de9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAN3///pI\u003d",
+        "filename": "sw/inc/fesh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-08-31T06:19:57Z",
+      "side": 1,
+      "message": "should be /**\u003c no ?",
+      "revId": "2bd98adfb3d11f0c7938173ee3ee087424b16de9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
