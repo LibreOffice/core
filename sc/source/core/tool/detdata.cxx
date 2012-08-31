@@ -87,12 +87,12 @@ void ScDetOpList::Append( ScDetOpData* pDetOpData )
 
 sal_Bool ScDetOpList::operator==( const ScDetOpList& r ) const
 {
-    // fuer Ref-Undo
+    // for Ref-Undo
 
     size_t nCount = Count();
     sal_Bool bEqual = ( nCount == r.Count() );
-    for (size_t i=0; i<nCount && bEqual; i++)       // Reihenfolge muss auch gleich sein
-        if ( !(aDetOpDataVector[i] == r.aDetOpDataVector[i]) )    // Eintraege unterschiedlich ?
+    for (size_t i=0; i<nCount && bEqual; i++)       // order has to be the same
+        if ( !(aDetOpDataVector[i] == r.aDetOpDataVector[i]) )    // entries are different ?
             bEqual = false;
 
     return bEqual;
