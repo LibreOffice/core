@@ -935,8 +935,8 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     bAutoEnd(false),
     mbHasHiddenMember(false)
 {
-    sal_Bool bHasName(false);
-    sal_Bool bDataLayout(false);
+    bool bHasName = false;
+    bool bDataLayout = false;
     OUString aDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotFieldAttrTokenMap();
@@ -953,7 +953,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME :
             {
                 sName = sValue;
-                bHasName = sal_True;
+                bHasName = true;
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME:
@@ -980,7 +980,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE :
             {
                 sSelectedPage = sValue;
-                bSelectedPage = sal_True;
+                bSelectedPage = true;
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY :
@@ -992,7 +992,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     }
     if (bHasName)
     {
-        pDim = new ScDPSaveDimension(String(sName), bDataLayout);
+        pDim = new ScDPSaveDimension(sName, bDataLayout);
         if (!aDisplayName.isEmpty())
             pDim->SetLayoutName(aDisplayName);
     }
