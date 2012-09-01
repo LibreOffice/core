@@ -15,7 +15,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,boostdatetime,boost))
 
 $(eval $(call gb_StaticLibrary_set_cxx_suffix,boostdatetime,cpp))
 
-$(eval $(call gb_StaticLibrary_add_generated_cxxobjects,boostdatetime,\
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,boostdatetime,\
 	UnpackedTarball/boost/libs/date_time/src/gregorian/date_generators \
 	UnpackedTarball/boost/libs/date_time/src/gregorian/gregorian_types \
 	UnpackedTarball/boost/libs/date_time/src/gregorian/greg_month \
