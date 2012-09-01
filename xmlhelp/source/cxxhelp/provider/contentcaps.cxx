@@ -48,129 +48,107 @@ uno::Sequence< beans::Property > Content::getProperties(
     sal_Int32 idx = 0;
     props[idx++] =
         beans::Property(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+            "ContentType",
             -1,
-            getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-            beans::PropertyAttribute::BOUND
-            | beans::PropertyAttribute::READONLY );
+            getCppuType( static_cast< const OUString * >( 0 ) ),
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
         beans::Property(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+            "IsReadOnly",
             -1,
             getCppuBooleanType(),
-            beans::PropertyAttribute::BOUND
-            | beans::PropertyAttribute::READONLY );
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
         beans::Property(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsErrorDocument" ) ),
+            "IsErrorDocument",
             -1,
             getCppuBooleanType(),
-            beans::PropertyAttribute::BOUND
-            | beans::PropertyAttribute::READONLY );
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
         beans::Property(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+            "IsDocument",
             -1,
             getCppuBooleanType(),
-            beans::PropertyAttribute::BOUND
-            | beans::PropertyAttribute::READONLY );
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
         beans::Property(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+            "IsFolder",
             -1,
             getCppuBooleanType(),
-            beans::PropertyAttribute::BOUND
-            | beans::PropertyAttribute::READONLY );
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
         beans::Property(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            "Title",
             -1,
-            getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-            beans::PropertyAttribute::BOUND
-            | beans::PropertyAttribute::READONLY );
+            getCppuType( static_cast< const OUString * >( 0 ) ),
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     if( withMediaType )
         props[idx++] =
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                "MediaType",
                 -1,
-                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-                beans::PropertyAttribute::BOUND
-                | beans::PropertyAttribute::READONLY );
+                getCppuType( static_cast< const OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     if( isModule )
     {
         props[idx++] =
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Order" ) ),
+                "Order",
                 -1,
                 getCppuType( static_cast< sal_Int32* >( 0 ) ),
-                beans::PropertyAttribute::BOUND
-                | beans::PropertyAttribute::READONLY );
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeywordList" ) ),
+                "KeywordList",
                 -1,
-                getCppuType(
-                    static_cast< const uno::Sequence< rtl::OUString >* >(
-                        0 ) ),
-                beans::PropertyAttribute::BOUND
-                | beans::PropertyAttribute::READONLY );
+                getCppuType( static_cast< const uno::Sequence< OUString >* >( 0 ) ),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeywordRef" ) ),
+                "KeywordRef",
                 -1,
-                getCppuType(
-                    static_cast< const uno::Sequence< uno::Sequence< rtl::OUString > >* >( 0 ) ),
-                beans::PropertyAttribute::BOUND
-                | beans::PropertyAttribute::READONLY );
+                getCppuType( static_cast< const uno::Sequence< uno::Sequence< OUString > >* >( 0 ) ),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "KeywordTitleForRef" ) ),
+                "KeywordTitleForRef",
                 -1,
-                getCppuType(
-                    static_cast< const uno::Sequence< uno::Sequence< rtl::OUString > >* >( 0 ) ),
-                beans::PropertyAttribute::BOUND
-                | beans::PropertyAttribute::READONLY );
+                getCppuType( static_cast< const uno::Sequence< uno::Sequence< OUString > >* >( 0 ) ),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "KeywordAnchorForRef" ) ),
+                "KeywordAnchorForRef",
                 -1,
-                getCppuType(
-                    static_cast< const uno::Sequence< uno::Sequence< rtl::OUString > >* >( 0 ) ),
-                beans::PropertyAttribute::BOUND
-                | beans::PropertyAttribute::READONLY );
+                getCppuType( static_cast< const uno::Sequence< uno::Sequence< OUString > >* >( 0 ) ),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SearchScopes" ) ),
+                "SearchScopes",
                 -1,
-                getCppuType(
-                    static_cast< const uno::Sequence< rtl::OUString >* >( 0 ) ),
-                beans::PropertyAttribute::BOUND
-                | beans::PropertyAttribute::READONLY );
+                getCppuType( static_cast< const uno::Sequence< OUString >* >( 0 ) ),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
     }
 
     if( isFile )
     {
         props[idx++] =
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AnchorName" ) ),
+                "AnchorName",
                 -1,
-                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-                beans::PropertyAttribute::BOUND
-                | beans::PropertyAttribute::READONLY );
+                getCppuType( static_cast< const OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
     }
 
     return props;
@@ -197,35 +175,29 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
         // Required commands
         ///////////////////////////////////////////////////////////////
         star::ucb::CommandInfo(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+            "getCommandInfo",
             -1,
             getCppuVoidType()
         ),
         star::ucb::CommandInfo(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+            "getPropertySetInfo",
             -1,
             getCppuVoidType()
         ),
         star::ucb::CommandInfo(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+            "getPropertyValues",
             -1,
-            getCppuType(
-                static_cast< uno::Sequence< beans::Property > * >( 0 ) )
+            getCppuType( static_cast< uno::Sequence< beans::Property > * >( 0 ) )
         ),
         star::ucb::CommandInfo(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+            "setPropertyValues",
             -1,
-            getCppuType(
-                static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
+            getCppuType( static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
         ),
         star::ucb::CommandInfo(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+            "open",
             -1,
-            getCppuType(
-                static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+            getCppuType( static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
         )
     };
 

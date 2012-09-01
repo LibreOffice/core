@@ -68,17 +68,17 @@ namespace treeview {
 
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getImplementationName(
             void )
             throw( com::sun::star::uno::RuntimeException );
 
         virtual sal_Bool SAL_CALL
         supportsService(
-            const rtl::OUString& ServiceName )
+            const OUString& ServiceName )
             throw(com::sun::star::uno::RuntimeException );
 
-        virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames(
             void )
             throw( com::sun::star::uno::RuntimeException );
@@ -87,26 +87,26 @@ namespace treeview {
 
         virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
         createInstance(
-            const rtl::OUString& aServiceSpecifier )
+            const OUString& aServiceSpecifier )
             throw( com::sun::star::uno::Exception,
                    com::sun::star::uno::RuntimeException );
 
         virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
-            const rtl::OUString& ServiceSpecifier,
+            const OUString& ServiceSpecifier,
             const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& Arguments )
             throw( com::sun::star::uno::Exception,
                    com::sun::star::uno::RuntimeException);
 
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames( )
             throw( com::sun::star::uno::RuntimeException );
 
         // Other
 
-        static rtl::OUString SAL_CALL getImplementationName_static();
+        static OUString SAL_CALL getImplementationName_static();
 
-        static com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+        static com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
 
         static com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > SAL_CALL
         createServiceFactory(

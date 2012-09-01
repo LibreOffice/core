@@ -145,7 +145,7 @@ namespace chelp {
 
         osl::Mutex     m_aMutex;
         bool           isInitialized;
-        rtl::OUString  m_aScheme;
+        OUString  m_aScheme;
         Databases*     m_pDatabases;
         com::sun::star::uno::Reference<com::sun::star::container::XContainer> m_xContainer;
 
@@ -160,7 +160,7 @@ namespace chelp {
         getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& sProvider,
                        const char* file ) const;
 
-        ::rtl::OUString
+        OUString
         getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                 const char* key ) const;
 
@@ -170,7 +170,7 @@ namespace chelp {
                     ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                     const char* key) const;
 
-      void subst( rtl::OUString& instpath ) const;
+      void subst( OUString& instpath ) const;
     };
 
 }

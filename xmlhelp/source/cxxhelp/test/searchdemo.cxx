@@ -50,7 +50,7 @@ extern RandomAccessStream* theFile();
 
 
 
-void print_rtl_OUString( const rtl::OUString bla )
+void print_rtl_OUString( const OUString bla )
 {
     rtl::OString bluber = rtl::OString( bla.getStr(),bla.getLength(),RTL_TEXTENCODING_UTF8 );
     char* bluberChr = new char[ 1+bluber.getLength() ];
@@ -76,21 +76,21 @@ int main( int argc,char* argv[] )
 
     try
     {
-        rtl::OUString installDir("//./e|/index/");
+        OUString installDir("//./e|/index/");
         QueryProcessor queryProcessor( installDir );
 
-        std::vector<rtl::OUString> Query(2);
-        Query[0] = rtl::OUString( "text*" );
-        Query[1] = rtl::OUString( "abbildung" );
-        rtl::OUString Scope = rtl::OUString( "headingheading" );
+        std::vector<OUString> Query(2);
+        Query[0] = "text*";
+        Query[1] = "abbildung";
+        OUString Scope = "headingheading";
         int HitCount = 40;
 
          QueryStatement queryStatement( HitCount,Query,Scope );
         queryResults = queryProcessor.processQuery( queryStatement );
 
-        rtl::OUString translations[2];
-        translations[0] = rtl::OUString( "#HLP#" );
-        translations[1] = rtl::OUString( "vnd.sun.star.help://" );
+        OUString translations[2];
+        translations[0] = "#HLP#";
+        translations[1] = "vnd.sun.star.help://";
 
         PrefixTranslator* translator =  PrefixTranslator::makePrefixTranslator( translations,2 );
 
