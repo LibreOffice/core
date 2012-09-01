@@ -33,8 +33,6 @@ package installer::globals;
 
 BEGIN
 {
-    $prog="make_installer.pl";
-
     @noMSLocaleLangs = (
         "br",
         "bs",

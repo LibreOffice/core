@@ -43,7 +43,6 @@ sub usage
 {
     print <<Ende;
 --------------------------------------------------------------------------------
-$installer::globals::prog
 The following parameter are needed:
 -f: Path to the product list (required)
 -s: Path to the setup script (optional, if defined in product list)
@@ -534,7 +533,6 @@ sub outputparameter
     my @output = ();
 
     push(@output, "\n########################################################\n");
-    push(@output, "$installer::globals::prog, version 1.0\n");
     push(@output, "Product list file: $installer::globals::ziplistname\n");
     if (!($installer::globals::setupscript_defined_in_productlist))
     {
