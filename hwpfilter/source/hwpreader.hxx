@@ -331,7 +331,7 @@ Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void *  )
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL hwp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void *  )
     {
         void * pRet = 0;
 
