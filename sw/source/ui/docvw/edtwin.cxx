@@ -5739,19 +5739,6 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
     }
 }
 
-void SwEditWin::ShowHeaderFooterSeparator( bool bShowHeader, bool bShowFooter )
-{
-    SwWrtShell& rSh = rView.GetWrtShell();
-
-    if ( ( rSh.IsShowHeaderFooterSeparator( Header ) != bShowHeader ) ||
-         ( rSh.IsShowHeaderFooterSeparator( Footer ) != bShowFooter ) )
-    {
-        rSh.SetShowHeaderFooterSeparator( Header, bShowHeader );
-        rSh.SetShowHeaderFooterSeparator( Footer, bShowFooter );
-        Invalidate();
-    }
-}
-
 bool SwEditWin::IsInHeaderFooter( const Point &rDocPt, FrameControlType &rControl ) const
 {
     SwWrtShell &rSh = rView.GetWrtShell();
