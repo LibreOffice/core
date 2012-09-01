@@ -523,13 +523,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNam
     return aRet;
 }
 
-
-//------------------------------------------------------------------
-//
-//  function implementation starts here
-//
-//------------------------------------------------------------------
-
+namespace {
 // auxiliary functions
 
 sal_Bool IsLeapYear( sal_uInt16 nYear )
@@ -660,6 +654,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
     throw uno::RuntimeException();
 }
 
+}
 // XDateFunctions
 
 /**
