@@ -31,12 +31,12 @@ namespace xmlsearch {
         {
         public:
 
-            XmlSearchException( const rtl::OUString& message )
+            XmlSearchException( const OUString& message )
                 : _message( message )
             {
             }
 
-            rtl::OUString getMessage() const
+            OUString getMessage() const
             {
                 return _message;
             }
@@ -44,7 +44,7 @@ namespace xmlsearch {
 
         private:
 
-            rtl::OUString _message;
+            OUString _message;
         };
 
 
@@ -53,7 +53,7 @@ namespace xmlsearch {
         {
         public:
 
-            IOException( const rtl::OUString& message )
+            IOException( const OUString& message )
                 : XmlSearchException( message )
             {
             }
@@ -64,7 +64,7 @@ namespace xmlsearch {
             : public virtual XmlSearchException
         {
         public:
-            NoFactoryException( const rtl::OUString& message )
+            NoFactoryException( const OUString& message )
                 : XmlSearchException( message )
             {
             }
@@ -75,7 +75,7 @@ namespace xmlsearch {
             : public virtual XmlSearchException
         {
         public:
-            NoSuchBlock( const rtl::OUString& message )
+            NoSuchBlock( const OUString& message )
                 : XmlSearchException( message )
             {
             }
@@ -86,7 +86,7 @@ namespace xmlsearch {
             : public virtual XmlSearchException
         {
         public:
-            IllegalIndexException( const rtl::OUString& message )
+            IllegalIndexException( const OUString& message )
                 : XmlSearchException( message )
             {
             }

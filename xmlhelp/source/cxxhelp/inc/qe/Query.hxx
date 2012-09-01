@@ -121,14 +121,14 @@ namespace xmlsearch {
         {
         public:
 
-            QueryHitData( double penalty,const rtl::OUString& document, rtl::OUString* terms )
+            QueryHitData( double penalty,const OUString& document, OUString* terms )
                 : penalty_( penalty ),
                   document_( document ),
                   terms_( terms )      { }
 
             ~QueryHitData() { delete[] terms_; }
 
-            rtl::OUString getDocument() const { return document_; }
+            OUString getDocument() const { return document_; }
 
             double getPenalty() const { return penalty_; }
 
@@ -137,9 +137,9 @@ namespace xmlsearch {
 
             double        penalty_;
 
-            const rtl::OUString document_;
+            const OUString document_;
 
-            rtl::OUString* terms_;
+            OUString* terms_;
 
         };  // end class QueryHitData
 
@@ -148,7 +148,7 @@ namespace xmlsearch {
         {
         public:
 
-            static PrefixTranslator* makePrefixTranslator( const rtl::OUString*,sal_Int32 )
+            static PrefixTranslator* makePrefixTranslator( const OUString*,sal_Int32 )
             {
                 return 0;
             }

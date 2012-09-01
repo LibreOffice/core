@@ -104,7 +104,7 @@ namespace chelp {
             return m_nWasNull;
         }
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getString(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
@@ -113,7 +113,7 @@ namespace chelp {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getString( columnIndex );
             else
-                return rtl::OUString();
+                return OUString();
         }
 
         virtual sal_Bool SAL_CALL
@@ -456,7 +456,7 @@ namespace chelp {
 
         // XContentAccess
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         queryContentIdentifierString(
             void )
             throw( com::sun::star::uno::RuntimeException );
@@ -485,7 +485,7 @@ namespace chelp {
             throw( com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL setPropertyValue(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::beans::PropertyVetoException,
@@ -495,14 +495,14 @@ namespace chelp {
 
         virtual com::sun::star::uno::Any SAL_CALL
         getPropertyValue(
-            const rtl::OUString& PropertyName )
+            const OUString& PropertyName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL
         addPropertyChangeListener(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -510,7 +510,7 @@ namespace chelp {
 
         virtual void SAL_CALL
         removePropertyChangeListener(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -518,14 +518,14 @@ namespace chelp {
 
         virtual void SAL_CALL
         addVetoableChangeListener(
-            const rtl::OUString& PropertyName,
+            const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL removeVetoableChangeListener(
-            const rtl::OUString& PropertyName,
+            const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -542,7 +542,7 @@ namespace chelp {
 
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > >              ItemSet;
-        typedef std::vector< rtl::OUString >                                                             PathSet;
+        typedef std::vector< OUString >                                                             PathSet;
 
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;
