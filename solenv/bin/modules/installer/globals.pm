@@ -96,7 +96,6 @@ BEGIN
         "tk",
         "ky-CN"
     );
-    @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @rtllanguages = ("ar", "fa", "he", "ug", "ky-CN");
 
     $ziplistname = "";

@@ -2406,8 +2406,8 @@ sub resolve_assigned_modules
 
             # Currently no merging of Files, Dirs, ...
             # This has to be included here, if it is required
-            my $item;
-            foreach $item (@installer::globals::items_at_modules)
+            my @items_at_modules = ("Files", "Dirs", "Unixlinks");
+            for my $item (@items_at_modules)
             {
                 if ( exists($directaccess{$templategid}->{$item}) ) { $onefeature->{$item} = $directaccess{$templategid}->{$item}; }
             }
