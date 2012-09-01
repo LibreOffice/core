@@ -376,7 +376,7 @@ sub setglobalvariables
         elsif ( $ENV{'TEMP'} )  { $installer::globals::temppath = $ENV{'TEMP'}; }
         elsif ( $ENV{'TMPDIR'} )  { $installer::globals::temppath = $ENV{'TMPDIR'}; }
         $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
-        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::globaltempdirname;
+        $installer::globals::temppath .= $installer::globals::separator . 'ooopackaging';
         installer::systemactions::create_directory_with_privileges($installer::globals::temppath, "777");
         my $dirsave = $installer::globals::temppath;
 

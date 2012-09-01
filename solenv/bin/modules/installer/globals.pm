@@ -93,7 +93,6 @@ BEGIN
     $msilanguage = "";  # hash reference for msi languages LCID
     $sofficeiconadded = 0;
     $temppath = "";
-    $globaltempdirname = "ooopackaging";
     $cyg_temppath = "";
     $temppathdefined = 0;
     $packageversion = 1;
