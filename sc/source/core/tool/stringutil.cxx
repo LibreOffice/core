@@ -197,7 +197,7 @@ xub_StrLen ScStringUtil::GetQuotedTokenCount(const UniString &rIn, const UniStri
     assert( !(rQuotedPairs.Len()%2) );
     assert( rQuotedPairs.Search(cTok) );
 
-    // Leerer String: TokenCount per Definition 0
+    // empty string: TokenCount is 0 per definition
     if ( !rIn.Len() )
         return 0;
 
@@ -213,13 +213,13 @@ xub_StrLen ScStringUtil::GetQuotedTokenCount(const UniString &rIn, const UniStri
         sal_Unicode c = *pStr;
         if ( cQuotedEndChar )
         {
-            // Ende des Quotes erreicht ?
+            // reached end of the quote ?
             if ( c == cQuotedEndChar )
                 cQuotedEndChar = 0;
         }
         else
         {
-            // Ist das Zeichen ein Quote-Anfang-Zeichen ?
+            // Is the char a quote-beginn char ?
             xub_StrLen nQuoteIndex = 0;
             while ( nQuoteIndex < nQuotedLen )
             {
@@ -232,7 +232,7 @@ xub_StrLen ScStringUtil::GetQuotedTokenCount(const UniString &rIn, const UniStri
                     nQuoteIndex += 2;
             }
 
-            // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+            // If the token-char matches then increase TokCount
             if ( c == cTok )
                 ++nTokCount;
         }
@@ -259,20 +259,20 @@ UniString ScStringUtil::GetQuotedToken(const UniString &rIn, xub_StrLen nToken, 
     xub_StrLen      nFirstChar      = rIndex;
     xub_StrLen      i               = nFirstChar;
 
-    // Bestimme die Token-Position und Laenge
+    // detect token position and length
     pStr += i;
     while ( i < nLen )
     {
         sal_Unicode c = *pStr;
         if ( cQuotedEndChar )
         {
-            // Ende des Quotes erreicht ?
+            // end of the quote reached ?
             if ( c == cQuotedEndChar )
                 cQuotedEndChar = 0;
         }
         else
         {
-            // Ist das Zeichen ein Quote-Anfang-Zeichen ?
+            // Is the char a quote-begin char ?
             xub_StrLen nQuoteIndex = 0;
             while ( nQuoteIndex < nQuotedLen )
             {
@@ -285,7 +285,7 @@ UniString ScStringUtil::GetQuotedToken(const UniString &rIn, xub_StrLen nToken, 
                     nQuoteIndex += 2;
             }
 
-            // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+            // If the token-char matches then increase TokCount
             if ( c == cTok )
             {
                 ++nTok;
