@@ -1563,7 +1563,8 @@ sub main {
                 my $onelanguage = ${$languagesarrayref}[$m];
 
                 my $is_rtl = 0;
-                if ( grep {$_ eq $onelanguage} @installer::globals::rtllanguages ) { $is_rtl = 1; }
+                my @rtllanguages = ("ar", "fa", "he", "ug", "ky-CN");
+                if ( grep {$_ eq $onelanguage} @rtllanguages ) { $is_rtl = 1; }
 
                 my $languageidtdir = $idtdirbase . $installer::globals::separator . $onelanguage;
                 if ( -d $languageidtdir ) { installer::systemactions::remove_complete_directory($languageidtdir, 1); }

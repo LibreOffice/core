@@ -96,7 +96,6 @@ BEGIN
         "tk",
         "ky-CN"
     );
-    @rtllanguages = ("ar", "fa", "he", "ug", "ky-CN");
 
     $ziplistname = "";
     $pathfilename = "";
