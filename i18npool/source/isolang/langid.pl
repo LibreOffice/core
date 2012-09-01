@@ -30,7 +30,7 @@ sub Usage()
         "\n",
         "langid - a hackish utility to lookup lang.h language defines and LangIDs,\n",
         "isolang.cxx ISO639/ISO3166 mapping, locale data files, langtab.src language\n",
-        "listbox entries, langlist.mk, file_ooo.scp registry name, globals.pm and\n",
+        "listbox entries, langlist.mk, file_ooo.scp registry name, languages.pm and\n",
         "msi-encodinglist.txt\n\n",
 
         "Usage: $0 [--single] {language string} | {LangID} | {primarylanguage sublanguage} | {language-country}\n\n",
@@ -400,7 +400,7 @@ sub main()
             # @noMSLocaleLangs = ( "br", "bs", ... )
             grepFile(
                 '^\s*@noMSLocaleLangs\s*=\s*\(\s*(\s*"([a-z]{2,3})(-[A-Z][A-Z])?"\s*,?)*' . $langcoun . '',
-                "$SRC_ROOT", "solenv", "bin/modules/installer/globals.pm",
+                "$SRC_ROOT", "solenv", "bin/modules/installer/languages.pm",
                 ('^\s*@noMSLocaleLangs\s*=', '\)\s*$', '"' . $langcoun . '"'));
 
             # af    1252  1078   # Afrikaans
