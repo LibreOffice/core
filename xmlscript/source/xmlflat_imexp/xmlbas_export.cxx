@@ -41,15 +41,15 @@ namespace xmlscript
     // component operations
     // =============================================================================
 
-    ::rtl::OUString getImplementationName_XMLBasicExporter()
+    OUString getImplementationName_XMLBasicExporter()
     {
-        static ::rtl::OUString* pImplName = 0;
+        static OUString* pImplName = 0;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.xmlscript.XMLBasicExporter" ) );
+                static OUString aImplName( "com.sun.star.comp.xmlscript.XMLBasicExporter" );
                 pImplName = &aImplName;
             }
         }
@@ -58,16 +58,16 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > getSupportedServiceNames_XMLBasicExporter()
+    Sequence< OUString > getSupportedServiceNames_XMLBasicExporter()
     {
-        static Sequence< ::rtl::OUString >* pNames = 0;
+        static Sequence< OUString >* pNames = 0;
         if ( !pNames )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(1);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLBasicExporter" ) );
+                static Sequence< OUString > aNames(1);
+                aNames.getArray()[0] = "com.sun.star.document.XMLBasicExporter";
                 pNames = &aNames;
             }
         }
@@ -76,15 +76,15 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString getImplementationName_XMLOasisBasicExporter()
+    OUString getImplementationName_XMLOasisBasicExporter()
     {
-        static ::rtl::OUString* pImplName = 0;
+        static OUString* pImplName = 0;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.xmlscript.XMLOasisBasicExporter" ) );
+                static OUString aImplName( "com.sun.star.comp.xmlscript.XMLOasisBasicExporter" );
                 pImplName = &aImplName;
             }
         }
@@ -93,16 +93,16 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > getSupportedServiceNames_XMLOasisBasicExporter()
+    Sequence< OUString > getSupportedServiceNames_XMLOasisBasicExporter()
     {
-        static Sequence< ::rtl::OUString >* pNames = 0;
+        static Sequence< OUString >* pNames = 0;
         if ( !pNames )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(1);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLOasisBasicExporter" ) );
+                static Sequence< OUString > aNames(1);
+                aNames.getArray()[0] = "com.sun.star.document.XMLOasisBasicExporter";
                 pNames = &aNames;
             }
         }
@@ -130,11 +130,11 @@ namespace xmlscript
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    sal_Bool XMLBasicExporterBase::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+        Sequence< OUString > aNames( getSupportedServiceNames() );
+        const OUString* pNames = aNames.getConstArray();
+        const OUString* pEnd = pNames + aNames.getLength();
         for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
             ;
 
@@ -155,16 +155,12 @@ namespace xmlscript
 
             if ( !m_xHandler.is() )
             {
-                throw RuntimeException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLBasicExporterBase::initialize: invalid argument format!" ) ),
-                    Reference< XInterface >() );
+                throw RuntimeException( "XMLBasicExporterBase::initialize: invalid argument format!", Reference< XInterface >() );
             }
         }
         else
         {
-            throw RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLBasicExporterBase::initialize: invalid number of arguments!" ) ),
-                Reference< XInterface >() );
+            throw RuntimeException( "XMLBasicExporterBase::initialize: invalid number of arguments!", Reference< XInterface >() );
         }
     }
 
@@ -181,9 +177,7 @@ namespace xmlscript
 
         if ( !m_xModel.is() )
         {
-            throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLBasicExporter::setSourceDocument: no document model!" ) ),
-                Reference< XInterface >(), 1 );
+            throw IllegalArgumentException( "XMLBasicExporter::setSourceDocument: no document model!", Reference< XInterface >(), 1 );
         }
     }
 
@@ -205,35 +199,33 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                 m_xHandler->startDocument();
 
                 // ooo/script prefix and URI
-                ::rtl::OUString aPrefix;
-                ::rtl::OUString aURI;
+                OUString aPrefix;
+                OUString aURI;
                 if ( m_bOasis )
                 {
-                    aPrefix = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_OOO_PREFIX ) );
-                    aURI = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_OOO_URI ) );
+                    aPrefix = XMLNS_OOO_PREFIX;
+                    aURI = XMLNS_OOO_URI;
                 }
                 else
                 {
-                    aPrefix = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_SCRIPT_PREFIX ) );
-                    aURI = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_SCRIPT_URI ) );
+                    aPrefix = XMLNS_SCRIPT_PREFIX;
+                    aURI = XMLNS_SCRIPT_URI;
                 }
 
                 // ooo/script:libraries element
-                ::rtl::OUString aLibContElementName( aPrefix );
-                aLibContElementName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":libraries" ) );
+                OUString aLibContElementName( aPrefix );
+                aLibContElementName += ":libraries";
                 XMLElement* pLibContElement = new XMLElement( aLibContElementName );
                 Reference< xml::sax::XAttributeList > xLibContAttribs( pLibContElement );
 
                 // ooo/script namespace attribute
-                pLibContElement->addAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:" ) ) + aPrefix,
-                    aURI );
+                pLibContElement->addAttribute( "xmlns:" + aPrefix, aURI );
 
                 // xlink namespace attribute
-                pLibContElement->addAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:" XMLNS_XLINK_PREFIX ) ),
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_URI ) ) );
+                pLibContElement->addAttribute( "xmlns:" XMLNS_XLINK_PREFIX, XMLNS_XLINK_URI );
 
                 // <ooo/script:libraries...
-                m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                m_xHandler->ignorableWhitespace( OUString() );
                 m_xHandler->startElement( aLibContElementName, xLibContAttribs );
 
                 Reference< script::XLibraryContainer2 > xLibContainer;
@@ -248,82 +240,76 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                     // try the "BasicLibraries" property (old-style, for compatibility)
                     Reference< beans::XPropertySet > xPSet( m_xModel, UNO_QUERY );
                     if ( xPSet.is() )
-                        xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ) >>= xLibContainer;
+                        xPSet->getPropertyValue("BasicLibraries" ) >>= xLibContainer;
                 }
 
                 OSL_ENSURE( xLibContainer.is(), "XMLBasicExporterBase::filter: nowhere to export to!" );
 
                 if ( xLibContainer.is() )
                 {
-                    Sequence< ::rtl::OUString > aLibNames = xLibContainer->getElementNames();
+                    Sequence< OUString > aLibNames = xLibContainer->getElementNames();
                     sal_Int32 nLibCount = aLibNames.getLength();
-                    const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+                    const OUString* pLibNames = aLibNames.getConstArray();
                     for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
                     {
-                        ::rtl::OUString aLibName( pLibNames[i] );
+                        OUString aLibName( pLibNames[i] );
 
                         if ( xLibContainer->hasByName( aLibName ) )
                         {
-                            ::rtl::OUString aTrueStr( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+                            OUString aTrueStr( "true" );
 
                             if ( xLibContainer->isLibraryLink( aLibName ) )
                             {
                                 // ooo/script:library-linked element
-                                ::rtl::OUString aLibElementName( aPrefix );
-                                aLibElementName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":library-linked" ) );
+                                OUString aLibElementName( aPrefix );
+                                aLibElementName +=  ":library-linked";
                                 XMLElement* pLibElement = new XMLElement( aLibElementName );
                                 Reference< xml::sax::XAttributeList > xLibAttribs;
                                 xLibAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
                                 // ooo/script:name attribute
-                                pLibElement->addAttribute( aPrefix + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":name" ) ),
-                                    aLibName );
+                                pLibElement->addAttribute( aPrefix + ":name", aLibName );
 
-                                ::rtl::OUString aLinkURL( xLibContainer->getLibraryLinkURL( aLibName ) );
+                                OUString aLinkURL( xLibContainer->getLibraryLinkURL( aLibName ) );
                                 if ( !aLinkURL.isEmpty() )
                                 {
                                     // xlink:href attribute
-                                    pLibElement->addAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ":href" ) ),
-                                        aLinkURL );
+                                    pLibElement->addAttribute( XMLNS_XLINK_PREFIX ":href", aLinkURL );
 
                                     // xlink:type attribute
-                                    pLibElement->addAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ":type" ) ),
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "simple" ) ) );
+                                    pLibElement->addAttribute( XMLNS_XLINK_PREFIX ":type", "simple" );
                                 }
 
                                 if ( xLibContainer->isLibraryReadOnly( aLibName ) )
                                 {
                                     // ooo/script:readonly attribute
-                                    pLibElement->addAttribute( aPrefix + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":readonly" ) ),
-                                        aTrueStr );
+                                    pLibElement->addAttribute( aPrefix + ":readonly", aTrueStr );
                                 }
 
                                 // <ooo/script:library-linked...
-                                m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                                m_xHandler->ignorableWhitespace( OUString() );
                                 m_xHandler->startElement( aLibElementName, xLibAttribs );
 
                                 // ...ooo/script:library-linked>
-                                m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                                m_xHandler->ignorableWhitespace( OUString() );
                                 m_xHandler->endElement( aLibElementName );
                             }
                             else
                             {
                                 // ooo/script:library-embedded element
-                                ::rtl::OUString aLibElementName( aPrefix );
-                                aLibElementName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":library-embedded" ) );
+                                OUString aLibElementName( aPrefix );
+                                aLibElementName += ":library-embedded";
                                 XMLElement* pLibElement = new XMLElement( aLibElementName );
                                 Reference< xml::sax::XAttributeList > xLibAttribs;
                                 xLibAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
                                 // ooo/script:name attribute
-                                pLibElement->addAttribute( aPrefix + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":name" ) ),
-                                    aLibName );
+                                pLibElement->addAttribute( aPrefix + ":name", aLibName );
 
                                 if ( xLibContainer->isLibraryReadOnly( aLibName ) )
                                 {
                                     // ooo/script:readonly attribute
-                                    pLibElement->addAttribute( aPrefix + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":readonly" ) ),
-                                        aTrueStr );
+                                    pLibElement->addAttribute( aPrefix + ":readonly", aTrueStr );
                                 }
 
                                 // TODO: password protected libraries
@@ -332,7 +318,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                                     continue;
 
                                 // <ooo/script:library-embedded...
-                                m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                                m_xHandler->ignorableWhitespace( OUString() );
                                 m_xHandler->startElement( aLibElementName, xLibAttribs );
 
                                 if ( !xLibContainer->isLibraryLoaded( aLibName ) )
@@ -343,61 +329,60 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                                 if ( xLib.is() )
                                 {
-                                    Sequence< ::rtl::OUString > aModNames = xLib->getElementNames();
+                                    Sequence< OUString > aModNames = xLib->getElementNames();
                                     sal_Int32 nModCount = aModNames.getLength();
-                                    const ::rtl::OUString* pModNames = aModNames.getConstArray();
+                                    const OUString* pModNames = aModNames.getConstArray();
                                     for ( sal_Int32 j = 0 ; j < nModCount ; ++j )
                                     {
-                                        ::rtl::OUString aModName( pModNames[j] );
+                                        OUString aModName( pModNames[j] );
                                         if ( xLib->hasByName( aModName ) )
                                         {
                                             // ooo/script:module element
-                                            ::rtl::OUString aModElementName( aPrefix );
-                                            aModElementName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":module" ) );
+                                            OUString aModElementName( aPrefix );
+                                            aModElementName += ":module";
                                             XMLElement* pModElement = new XMLElement( aModElementName );
                                             Reference< xml::sax::XAttributeList > xModAttribs;
                                             xModAttribs = static_cast< xml::sax::XAttributeList* >( pModElement );
 
                                             // ooo/script:name attribute
-                                            pModElement->addAttribute( aPrefix + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":name" ) ),
-                                                aModName );
+                                            pModElement->addAttribute( aPrefix + ":name", aModName );
 
                                             // <ooo/script:module...
-                                            m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                                            m_xHandler->ignorableWhitespace( OUString() );
                                             m_xHandler->startElement( aModElementName, xModAttribs );
 
                                             // ooo/script:source-code element
-                                            ::rtl::OUString aSourceElementName( aPrefix );
-                                            aSourceElementName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":source-code" ) );
+                                            OUString aSourceElementName( aPrefix );
+                                            aSourceElementName += ":source-code";
                                             XMLElement* pSourceElement = new XMLElement( aSourceElementName );
                                             Reference< xml::sax::XAttributeList > xSourceAttribs;
                                             xSourceAttribs = static_cast< xml::sax::XAttributeList* >( pSourceElement );
 
                                             // <ooo/script:source-code...
-                                            m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                                            m_xHandler->ignorableWhitespace( OUString() );
                                             m_xHandler->startElement( aSourceElementName, xSourceAttribs );
 
                                             // module data
                                             // TODO: write encrypted data for password protected libraries
-                                            ::rtl::OUString aSource;
+                                            OUString aSource;
                                             xLib->getByName( aModName ) >>= aSource;
                                             m_xHandler->characters( aSource );
 
                                             // TODO: <ooo/script:byte-code>
 
                                             // ...ooo/script:source-code>
-                                            m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                                            m_xHandler->ignorableWhitespace( OUString() );
                                             m_xHandler->endElement( aSourceElementName );
 
                                             // ...ooo/script:module>
-                                            m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                                            m_xHandler->ignorableWhitespace( OUString() );
                                             m_xHandler->endElement( aModElementName );
                                         }
                                     }
                                 }
 
                                 // ...ooo/script:library-embedded>
-                                m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                                m_xHandler->ignorableWhitespace( OUString() );
                                 m_xHandler->endElement( aLibElementName );
                             }
                         }
@@ -405,7 +390,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                 }
 
                 // ...ooo/script:libraries>
-                m_xHandler->ignorableWhitespace( ::rtl::OUString() );
+                m_xHandler->ignorableWhitespace( OUString() );
                 m_xHandler->endElement( aLibContElementName );
 
                 m_xHandler->endDocument();
@@ -414,25 +399,25 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         catch ( const container::NoSuchElementException& e )
         {
             OSL_TRACE( "XMLBasicExporterBase::filter: caught NoSuchElementException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             bReturn = sal_False;
         }
         catch ( const lang::IllegalArgumentException& e )
         {
             OSL_TRACE( "XMLBasicExporterBase::filter: caught IllegalArgumentException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             bReturn = sal_False;
         }
         catch ( const lang::WrappedTargetException& e )
         {
             OSL_TRACE( "XMLBasicExporterBase::filter: caught WrappedTargetException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             bReturn = sal_False;
         }
         catch ( const xml::sax::SAXException& e )
         {
             OSL_TRACE( "XMLBasicExporterBase::filter: caught SAXException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             bReturn = sal_False;
         }
 
@@ -469,14 +454,14 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString XMLBasicExporter::getImplementationName(  ) throw (RuntimeException)
+    OUString XMLBasicExporter::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_XMLBasicExporter();
     }
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > XMLBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_XMLBasicExporter();
     }
@@ -501,14 +486,14 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString XMLOasisBasicExporter::getImplementationName(  ) throw (RuntimeException)
+    OUString XMLOasisBasicExporter::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_XMLOasisBasicExporter();
     }
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > XMLOasisBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_XMLOasisBasicExporter();
     }

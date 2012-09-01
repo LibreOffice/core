@@ -53,7 +53,7 @@ struct Style
     short _all;
     short _set;
 
-    ::rtl::OUString _id;
+    OUString _id;
 
     inline Style( short all_ ) SAL_THROW(())
         : _fontRelief( css::awt::FontRelief::NONE )
@@ -71,7 +71,7 @@ class StyleBag
 public:
     ~StyleBag() SAL_THROW(());
 
-    ::rtl::OUString getStyleId( Style const & rStyle ) SAL_THROW(());
+    OUString getStyleId( Style const & rStyle ) SAL_THROW(());
 
     void dump( css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >
                const & xOut );
@@ -88,7 +88,7 @@ public:
     inline ElementDescriptor(
         css::uno::Reference< css::beans::XPropertySet > const & xProps,
         css::uno::Reference< css::beans::XPropertyState > const & xPropState,
-        ::rtl::OUString const & name, css::uno::Reference< css::frame::XModel > const & xDocument )
+        OUString const & name, css::uno::Reference< css::frame::XModel > const & xDocument )
         SAL_THROW(())
         : XMLElement( name )
         , _xProps( xProps )
@@ -96,65 +96,65 @@ public:
         , _xDocument( xDocument )
         {}
     inline ElementDescriptor(
-        ::rtl::OUString const & name )
+        OUString const & name )
         SAL_THROW(())
         : XMLElement( name )
         {}
 
     template<typename T>
     inline void read(
-        ::rtl::OUString const & propName, ::rtl::OUString const & attrName,
+        OUString const & propName, OUString const & attrName,
         bool forceAttribute = false );
 
     template<typename T>
-    inline bool readProp( T * ret, ::rtl::OUString const & rPropName );
-    css::uno::Any readProp( ::rtl::OUString const & rPropName );
+    inline bool readProp( T * ret, OUString const & rPropName );
+    css::uno::Any readProp( OUString const & rPropName );
     void readDefaults( bool supportPrintable = true, bool supportVisible = true );
     void readStringAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     inline void readDoubleAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName )
+        OUString const & rPropName, OUString const & rAttrName )
         { read<double>( rPropName, rAttrName ); }
     inline void readLongAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
+        OUString const & rPropName, OUString const & rAttrName,
         bool forceAttribute = false )
         { read<sal_Int32>( rPropName, rAttrName, forceAttribute ); }
     void readHexLongAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     inline void readShortAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName )
+        OUString const & rPropName, OUString const & rAttrName )
         { read<sal_Int32>( rPropName, rAttrName ); }
     inline void readBoolAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName )
+        OUString const & rPropName, OUString const & rAttrName )
         { read<sal_Bool>( rPropName, rAttrName ); }
 
     void readAlignAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readVerticalAlignAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readImageURLAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readImageAlignAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readImagePositionAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readDateFormatAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readTimeFormatAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readOrientationAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readButtonTypeAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readLineEndFormatAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readSelectionTypeAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+        OUString const & rPropName, OUString const & rAttrName );
     void readDataAwareAttr(
-        ::rtl::OUString const & rAttrName );
+        OUString const & rAttrName );
     inline void addBoolAttr(
-        ::rtl::OUString const & rAttrName, sal_Bool bValue )
-        { addAttribute( rAttrName, ::rtl::OUString::valueOf(bValue) ); }
+        OUString const & rAttrName, sal_Bool bValue )
+        { addAttribute( rAttrName, OUString::valueOf(bValue) ); }
     void addNumberFormatAttr(
         css::uno::Reference< css::beans::XPropertySet >
         const & xFormatProperties );
@@ -218,7 +218,7 @@ public:
 
 template<typename T>
 inline void ElementDescriptor::read(
-    ::rtl::OUString const & propName, ::rtl::OUString const & attrName,
+    OUString const & propName, OUString const & attrName,
     bool forceAttribute )
 {
     if (forceAttribute ||
@@ -228,7 +228,7 @@ inline void ElementDescriptor::read(
         css::uno::Any a( _xProps->getPropertyValue( propName ) );
         T v = T();
         if (a >>= v)
-            addAttribute( attrName, ::rtl::OUString::valueOf(v) );
+            addAttribute( attrName, OUString::valueOf(v) );
         else
             OSL_FAIL( "### unexpected property type!" );
     }
@@ -236,7 +236,7 @@ inline void ElementDescriptor::read(
 
 template<typename T>
 inline bool ElementDescriptor::readProp(
-    T * ret, ::rtl::OUString const & rPropName )
+    T * ret, OUString const & rPropName )
 {
     _xProps->getPropertyValue( rPropName ) >>= *ret;
     return css::beans::PropertyState_DEFAULT_VALUE !=

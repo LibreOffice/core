@@ -45,15 +45,13 @@ const sal_Int32 UID_UNKNOWN = -1;
 
 Sequence< OUString > getSupportedServiceNames_DocumentHandlerImpl()
 {
-    OUString name( RTL_CONSTASCII_USTRINGPARAM(
-                       "com.sun.star.xml.input.SaxDocumentHandler") );
+    OUString name( "com.sun.star.xml.input.SaxDocumentHandler" );
     return Sequence< OUString >( &name, 1 );
 }
 
 OUString getImplementationName_DocumentHandlerImpl()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.xml.input.SaxDocumentHandler") );
+    return OUString( "com.sun.star.comp.xml.input.SaxDocumentHandler" );
 }
 
 typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
@@ -191,14 +189,12 @@ DocumentHandlerImpl::DocumentHandlerImpl(
     bool bSingleThreadedUse )
     : m_xRoot( xRoot ),
       m_uid_count( 0 ),
-      m_sXMLNS_PREFIX_UNKNOWN(
-          RTL_CONSTASCII_USTRINGPARAM("<<< unknown prefix >>>") ),
-      m_sXMLNS( RTL_CONSTASCII_USTRINGPARAM("xmlns") ),
+      m_sXMLNS_PREFIX_UNKNOWN( "<<< unknown prefix >>>" ),
+      m_sXMLNS( "xmlns" ),
       m_nLastURI_lookup( UID_UNKNOWN ),
-      m_aLastURI_lookup( RTL_CONSTASCII_USTRINGPARAM("<<< unknown URI >>>") ),
+      m_aLastURI_lookup( "<<< unknown URI >>>" ),
       m_nLastPrefix_lookup( UID_UNKNOWN ),
-      m_aLastPrefix_lookup(
-          RTL_CONSTASCII_USTRINGPARAM("<<< unknown URI >>>") ),
+      m_aLastPrefix_lookup( "<<< unknown URI >>>" ),
       m_nSkipElements( 0 ),
       m_pMutex( 0 )
 {
@@ -473,10 +469,7 @@ void DocumentHandlerImpl::initialize(
     }
     else
     {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                          "missing root instance!") ),
-            Reference< XInterface >() );
+        throw RuntimeException( "missing root instance!", Reference< XInterface >() );
     }
 }
 
@@ -504,9 +497,7 @@ OUString DocumentHandlerImpl::getUriByUid( sal_Int32 Uid )
         if (iPos->second == Uid)
             return iPos->first;
     }
-    throw container::NoSuchElementException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("no such xmlns uid!") ),
-        static_cast< OWeakObject * >(this) );
+    throw container::NoSuchElementException( "no such xmlns uid!" , static_cast< OWeakObject * >(this) );
 }
 
 
@@ -516,8 +507,7 @@ OUString DocumentHandlerImpl::getUriByUid( sal_Int32 Uid )
 void DocumentHandlerImpl::startDocument()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    m_xRoot->startDocument(
-        static_cast< xml::input::XNamespaceMapping * >( this ) );
+    m_xRoot->startDocument( static_cast< xml::input::XNamespaceMapping * >( this ) );
 }
 
 //______________________________________________________________________________
@@ -606,8 +596,7 @@ void DocumentHandlerImpl::startElement(
         {
             OUString const & rQAttributeName = pQNames[ nPos ];
             OSL_ENSURE(
-                rQAttributeName.compareToAscii(
-                    RTL_CONSTASCII_STRINGPARAM("xmlns:") ) != 0,
+                rQAttributeName.compareToAscii( "xmlns:" ) != 0,
                 "### unexpected xmlns!" );
 
             // collect attribute's uid and current prefix

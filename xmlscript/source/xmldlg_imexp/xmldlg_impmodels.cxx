@@ -45,12 +45,11 @@ Reference< xml::input::XElement > Frame::startChildElement(
         throw (xml::sax::SAXException, RuntimeException)
 {
     if ( !m_xContainer.is() )
-        m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( rtl::OUString( "com.sun.star.awt.UnoFrameModel" ) ), UNO_QUERY );
+        m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoFrameModel" ), UNO_QUERY );
     // event
     if (_pImport->isEventElement( nUid, rLocalName ))
     {
-       return new EventElement(
-            nUid, rLocalName, xAttributes, this, _pImport );
+       return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else if ( rLocalName == "bulletinboard" )
     {
@@ -61,21 +60,14 @@ Reference< xml::input::XElement > Frame::startChildElement(
     }
     else if ( rLocalName == "title" )
     {
-        getStringAttr( &_label,
-            OUString( "value" ),
-            xAttributes,
-            _pImport->XMLNS_DIALOGS_UID );
+        getStringAttr( &_label, "value", xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
-        return new ElementBase(
-            _pImport->XMLNS_DIALOGS_UID,
-            rLocalName, xAttributes, this, _pImport );
+        return new ElementBase( _pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
         OSL_TRACE("****** ARGGGGG!!!! **********");
-        throw     xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw     xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -84,7 +76,7 @@ void Frame::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
         if ( !m_xContainer.is() )
-            m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( rtl::OUString( "com.sun.star.awt.UnoFrameModel" ) ), UNO_QUERY );
+            m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoFrameModel" ), UNO_QUERY );
         Reference< beans::XPropertySet > xProps( m_xContainer, UNO_QUERY_THROW );
         // _pImport is what we need to add to ( e.g. the dialog in this case )
     ControlImportContext ctx( _pImport, xProps,   getControlId( _xAttributes ) );
@@ -103,8 +95,7 @@ void Frame::endElement()
     ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
     if (!_label.isEmpty())
     {
-        xControlModel->setPropertyValue( OUString( "Label" ),
-                                         makeAny( _label ) );
+        xControlModel->setPropertyValue( "Label" , makeAny( _label ) );
     }
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -135,9 +126,7 @@ Reference< xml::input::XElement > MultiPage::startChildElement(
     else
     {
 
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -162,13 +151,8 @@ void MultiPage::endElement()
     }
 
     ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
-    ctx.importLongProperty( OUString( "MultiPageValue" ),
-                            OUString( "value" ),
-                            _xAttributes );
-        ctx.importBooleanProperty(
-            OUString( "Decoration" ),
-            OUString( "withtabs" ),
-        _xAttributes );
+    ctx.importLongProperty("MultiPageValue" , "value",  _xAttributes );
+        ctx.importBooleanProperty( "Decoration", "withtabs",  _xAttributes) ;
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -196,9 +180,7 @@ Reference< xml::input::XElement > Page::startChildElement(
     else
     {
 
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -254,9 +236,7 @@ Reference< xml::input::XElement > ProgressBarElement::startChildElement(
 void ProgressBarElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlProgressBarModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlProgressBarModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -269,15 +249,9 @@ void ProgressBarElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importLongProperty( OUString( "ProgressValue" ),
-                            OUString( "value" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "ProgressValueMin" ),
-                            OUString( "value-min" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "ProgressValueMax" ),
-                            OUString( "value-max" ),
-                            _xAttributes );
+    ctx.importLongProperty( "ProgressValue", "value", _xAttributes );
+    ctx.importLongProperty( "ProgressValueMin", "value-min", _xAttributes );
+    ctx.importLongProperty( "ProgressValueMax", "value-max", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -300,18 +274,14 @@ Reference< xml::input::XElement > ScrollBarElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void ScrollBarElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        getControlModelName( OUString( "com.sun.star.awt.UnoControlScrollBarModel" ), _xAttributes ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlScrollBarModel" , _xAttributes ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -323,39 +293,19 @@ void ScrollBarElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importOrientationProperty( OUString( "Orientation" ),
-                                   OUString( "align" ),
-                                   _xAttributes );
-    ctx.importLongProperty( OUString( "BlockIncrement" ),
-                            OUString( "pageincrement" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "LineIncrement" ),
-                            OUString( "increment" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "ScrollValue" ),
-                            OUString( "curpos" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "ScrollValueMax" ),
-                            OUString( "maxpos" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUSTR("ScrollValueMin"), OUSTR("minpos"),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "VisibleSize" ),
-                            OUString( "visible-size" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
-                            _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "LiveScroll" ),
-                               OUString( "live-scroll" ),
-                               _xAttributes );
-    ctx.importHexLongProperty( OUString( "SymbolColor" ),
-                               OUString( "symbol-color" ),
-                               _xAttributes );
+    ctx.importOrientationProperty( "Orientation" , "align", _xAttributes );
+    ctx.importLongProperty( "BlockIncrement" , "pageincrement" , _xAttributes );
+    ctx.importLongProperty( "LineIncrement" , "increment" , _xAttributes );
+    ctx.importLongProperty( "ScrollValue" ,"curpos", _xAttributes );
+    ctx.importLongProperty( "ScrollValueMax" , "maxpos" , _xAttributes );
+    ctx.importLongProperty( "ScrollValueMin","minpos", _xAttributes );
+    ctx.importLongProperty( "VisibleSize", "visible-size", _xAttributes );
+    ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop" , _xAttributes );
+    ctx.importBooleanProperty( "LiveScroll", "live-scroll", _xAttributes );
+    ctx.importHexLongProperty( "SymbolColor", "symbol-color", _xAttributes );
 
-    ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
+    ctx.importDataAwareProperty( "linked-cell" , _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -378,18 +328,14 @@ Reference< xml::input::XElement > SpinButtonElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void SpinButtonElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-                            _pImport, getControlId( _xAttributes ),
-                            getControlModelName( OUString( "com.sun.star.awt.UnoControlSpinButtonModel" ), _xAttributes ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlSpinButtonModel", _xAttributes ) );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -401,26 +347,16 @@ void SpinButtonElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importOrientationProperty( OUString( "Orientation" ),
-    OUString( "align" ),
-         _xAttributes );
-    ctx.importLongProperty( OUString( "SpinIncrement" ),
-        OUString( "increment" ),
-        _xAttributes );
-    ctx.importLongProperty( OUString( "SpinValue" ),
-    OUString( "curval" ),_xAttributes );
-    ctx.importLongProperty( OUString( "SpinValueMax" ),
-    OUString( "maxval" ), _xAttributes );
-    ctx.importLongProperty( OUSTR("SpinValueMin"), OUSTR("minval"),
-        _xAttributes );
-    ctx.importLongProperty( OUSTR("Repeat"), OUSTR("repeat"), _xAttributes );
-    ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat-delay"),
-_xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-    OUString( "tabstop" ), _xAttributes );
-    ctx.importHexLongProperty( OUString( "SymbolColor" ),
-    OUString( "symbol-color" ), _xAttributes );
-    ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
+    ctx.importOrientationProperty( "Orientation", "align", _xAttributes );
+    ctx.importLongProperty("SpinIncrement", "increment", _xAttributes );
+    ctx.importLongProperty("SpinValue", "curval" ,_xAttributes );
+    ctx.importLongProperty("SpinValueMax", "maxval", _xAttributes );
+    ctx.importLongProperty( "SpinValueMin","minval",_xAttributes );
+    ctx.importLongProperty( "Repeat", "repeat", _xAttributes );
+    ctx.importLongProperty( "RepeatDelay", "repeat-delay",_xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importHexLongProperty( "SymbolColor", "symbol-color" , _xAttributes );
+    ctx.importDataAwareProperty( "linked-cell" , _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -443,18 +379,14 @@ Reference< xml::input::XElement > FixedLineElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void FixedLineElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlFixedLineModel" ) );
+    ControlImportContext ctx(_pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFixedLineModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -467,12 +399,8 @@ void FixedLineElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importStringProperty( OUString( "Label" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importOrientationProperty( OUString( "Orientation" ),
-                                   OUString( "align" ),
-                                   _xAttributes );
+    ctx.importStringProperty( "Label", "value", _xAttributes );
+    ctx.importOrientationProperty( "Orientation", "align", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -495,18 +423,14 @@ Reference< xml::input::XElement > PatternFieldElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void PatternFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlPatternFieldModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlPatternFieldModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -521,30 +445,14 @@ void PatternFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "StrictFormat" ),
-                               OUString( "strict-format" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importStringProperty( OUString( "Text" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importShortProperty( OUString( "MaxTextLen" ),
-                             OUString( "maxlength" ),
-                             _xAttributes );
-    ctx.importStringProperty( OUString( "EditMask" ),
-                              OUString( "edit-mask" ),
-                              _xAttributes );
-    ctx.importStringProperty( OUString( "LiteralMask" ),
-                              OUString( "literal-mask" ),
-                              _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly" , _xAttributes );
+    ctx.importBooleanProperty( "StrictFormat", "strict-format", _xAttributes );
+    ctx.importBooleanProperty( "HideInactiveSelection", "hide-inactive-selection", _xAttributes );
+    ctx.importStringProperty( "Text", "value", _xAttributes );
+    ctx.importShortProperty( "MaxTextLen", "maxlength", _xAttributes );
+    ctx.importStringProperty( "EditMask", "edit-mask", _xAttributes );
+    ctx.importStringProperty( "LiteralMask", "literal-mask", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -567,18 +475,14 @@ Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void FormattedFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlFormattedFieldModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFormattedFieldModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -593,84 +497,43 @@ void FormattedFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "StrictFormat" ),
-                               OUString( "strict-format" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importAlignProperty( OUString( "Align" ),
-                             OUString( "align" ),
-                             _xAttributes );
-    ctx.importDoubleProperty( OUString( "EffectiveMin" ),
-                              OUString( "value-min" ),
-                              _xAttributes );
-    ctx.importDoubleProperty( OUString( "EffectiveMax" ),
-                              OUString( "value-max" ),
-                              _xAttributes );
-    ctx.importDoubleProperty( OUString( "EffectiveValue" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importStringProperty( OUString( "Text" ),
-                              OUString( "text" ),
-                              _xAttributes );
-    ctx.importShortProperty( OUString( "MaxTextLen" ),
-                             OUString( "maxlength" ),
-                             _xAttributes );
-    ctx.importBooleanProperty( OUString( "Spin" ),
-                               OUString( "spin" ),
-                               _xAttributes );
-    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
-                                _xAttributes ))
-        ctx.getControlModel()->setPropertyValue(
-            OUSTR("Repeat"), makeAny(true) );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly" , _xAttributes );
+    ctx.importBooleanProperty( "StrictFormat", "strict-format" , _xAttributes );
+    ctx.importBooleanProperty( "HideInactiveSelection", "hide-inactive-selection", _xAttributes );
+    ctx.importAlignProperty( "Align" , "align" , _xAttributes );
+    ctx.importDoubleProperty( "EffectiveMin", "value-min" , _xAttributes );
+    ctx.importDoubleProperty( "EffectiveMax", "value-max", _xAttributes);
+    ctx.importDoubleProperty( "EffectiveValue", "value", _xAttributes );
+    ctx.importStringProperty( "Text", "text", _xAttributes );
+    ctx.importShortProperty( "MaxTextLen", "maxlength", _xAttributes );
+    ctx.importBooleanProperty( "Spin",  "spin", _xAttributes );
+    if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
+        ctx.getControlModel()->setPropertyValue( "Repeat" , makeAny(true) );
 
-    OUString sDefault(
-        _xAttributes->getValueByUidName(
-            _pImport->XMLNS_DIALOGS_UID,
-            OUString( "value-default" ) ) );
+    OUString sDefault(_xAttributes->getValueByUidName(_pImport->XMLNS_DIALOGS_UID, "value-default") );
     if (!sDefault.isEmpty())
     {
         double d = sDefault.toDouble();
-        if (d != 0.0 ||
-            sDefault.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("0") ) ||
-            sDefault.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("0.0") ))
+        if (d != 0.0 || sDefault == "0" || sDefault == "0.0" )
         {
-            ctx.getControlModel()->setPropertyValue(
-                OUString( "EffectiveDefault" ),
-                makeAny( d ) );
+            ctx.getControlModel()->setPropertyValue( "EffectiveDefault", makeAny( d ) );
         }
         else // treat as string
         {
-            ctx.getControlModel()->setPropertyValue(
-                OUString( "EffectiveDefault" ),
-                makeAny( sDefault ) );
+            ctx.getControlModel()->setPropertyValue( "EffectiveDefault", makeAny( sDefault ) );
         }
     }
 
     // format spec
-    ctx.getControlModel()->setPropertyValue(
-        OUString( "FormatsSupplier" ),
-        makeAny( _pImport->getNumberFormatsSupplier() ) );
+    ctx.getControlModel()->setPropertyValue("FormatsSupplier", makeAny( _pImport->getNumberFormatsSupplier() ) );
 
-    OUString sFormat(
-        _xAttributes->getValueByUidName(
-            _pImport->XMLNS_DIALOGS_UID,
-            OUString( "format-code" ) ) );
+    OUString sFormat( _xAttributes->getValueByUidName(_pImport->XMLNS_DIALOGS_UID, "format-code" ) );
     if (!sFormat.isEmpty())
     {
         lang::Locale locale;
 
-        OUString sLocale(
-            _xAttributes->getValueByUidName(
-                _pImport->XMLNS_DIALOGS_UID,
-                OUString( "format-locale" ) ) );
+        OUString sLocale( _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "format-locale" ) );
         if (!sLocale.isEmpty())
         {
             // split locale
@@ -705,8 +568,7 @@ void FormattedFieldElement::endElement()
             {
                 nKey = xFormats->addNew( sFormat, locale );
             }
-            ctx.getControlModel()->setPropertyValue(
-                OUString( "FormatKey" ), makeAny( nKey ) );
+            ctx.getControlModel()->setPropertyValue("FormatKey", makeAny( nKey ) );
         }
         catch (const util::MalformedNumberFormatException & exc)
         {
@@ -715,15 +577,10 @@ void FormattedFieldElement::endElement()
             throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
         }
     }
-    ctx.importBooleanProperty(
-        OUString( "TreatAsNumber" ),
-        OUString( "treat-as-number" ),
-        _xAttributes );
-    ctx.importBooleanProperty( OUString( "EnforceFormat" ),
-                               OUString( "enforce-format" ),
-                               _xAttributes );
+    ctx.importBooleanProperty("TreatAsNumber", "treat-as-number" , _xAttributes );
+    ctx.importBooleanProperty("EnforceFormat", "enforce-format", _xAttributes );
 
-    ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
+    ctx.importDataAwareProperty( "linked-cell" , _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -746,18 +603,14 @@ Reference< xml::input::XElement > TimeFieldElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void TimeFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlTimeFieldModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlTimeFieldModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -772,43 +625,19 @@ void TimeFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "StrictFormat" ),
-                               OUString( "strict-format" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importTimeFormatProperty( OUString( "TimeFormat" ),
-                                  OUString( "time-format" ),
-                                  _xAttributes );
-    ctx.importLongProperty( OUString( "Time" ),
-                            OUString( "value" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "TimeMin" ),
-                            OUString( "value-min" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "TimeMax" ),
-                            OUString( "value-max" ),
-                            _xAttributes );
-    ctx.importBooleanProperty( OUString( "Spin" ),
-                               OUString( "spin" ),
-                               _xAttributes );
-    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
-                                _xAttributes ))
-        ctx.getControlModel()->setPropertyValue(
-            OUSTR("Repeat"), makeAny(true) );
-    ctx.importStringProperty( OUString( "Text" ),
-                              OUString( "text" ),
-                              _xAttributes );
-    ctx.importBooleanProperty( OUString( "EnforceFormat" ),
-                               OUString( "enforce-format" ),
-                               _xAttributes );
+    ctx.importBooleanProperty("Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty("ReadOnly", "readonly", _xAttributes );
+    ctx.importBooleanProperty( "StrictFormat", "strict-format", _xAttributes );
+    ctx.importBooleanProperty("HideInactiveSelection","hide-inactive-selection", _xAttributes );
+    ctx.importTimeFormatProperty( "TimeFormat", "time-format", _xAttributes );
+    ctx.importLongProperty( "Time", "value", _xAttributes );
+    ctx.importLongProperty( "TimeMin", "value-min", _xAttributes );
+    ctx.importLongProperty( "TimeMax", "value-max", _xAttributes );
+    ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
+    if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
+        ctx.getControlModel()->setPropertyValue("Repeat", makeAny(true) );
+    ctx.importStringProperty( "Text", "text" , _xAttributes );
+    ctx.importBooleanProperty( "EnforceFormat", "enforce-format" , _xAttributes );
 
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -832,18 +661,14 @@ Reference< xml::input::XElement > NumericFieldElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void NumericFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlNumericFieldModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlNumericFieldModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -858,46 +683,20 @@ void NumericFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "StrictFormat" ),
-                               OUString( "strict-format" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importShortProperty( OUString( "DecimalAccuracy" ),
-                               OUString( "decimal-accuracy" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ShowThousandsSeparator" ),
-                               OUString( "thousands-separator" ),
-                               _xAttributes );
-    ctx.importDoubleProperty( OUString( "Value" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importDoubleProperty( OUString( "ValueMin" ),
-                              OUString( "value-min" ),
-                              _xAttributes );
-    ctx.importDoubleProperty( OUString( "ValueMax" ),
-                              OUString( "value-max" ),
-                              _xAttributes );
-    ctx.importDoubleProperty( OUString( "ValueStep" ),
-                              OUString( "value-step" ),
-                              _xAttributes );
-    ctx.importBooleanProperty( OUString( "Spin" ),
-                               OUString( "spin" ),
-                               _xAttributes );
-    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
-                                _xAttributes ))
-        ctx.getControlModel()->setPropertyValue(
-            OUSTR("Repeat"), makeAny(true) );
-    ctx.importBooleanProperty( OUString( "EnforceFormat" ),
-                               OUString( "enforce-format" ),
-                               _xAttributes );
+    ctx.importBooleanProperty( "Tabstop","tabstop",_xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly",_xAttributes );
+    ctx.importBooleanProperty( "StrictFormat", "strict-format", _xAttributes );
+    ctx.importBooleanProperty( "HideInactiveSelection", "hide-inactive-selection", _xAttributes );
+    ctx.importShortProperty( "DecimalAccuracy", "decimal-accuracy", _xAttributes );
+    ctx.importBooleanProperty( "ShowThousandsSeparator", "thousands-separator", _xAttributes );
+    ctx.importDoubleProperty( "Value", "value", _xAttributes );
+    ctx.importDoubleProperty( "ValueMin", "value-min", _xAttributes );
+    ctx.importDoubleProperty( "ValueMax", "value-max", _xAttributes );
+    ctx.importDoubleProperty( "ValueStep", "value-step", _xAttributes );
+    ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
+    if (ctx.importLongProperty( "RepeatDelay", "repeat",  _xAttributes ))
+        ctx.getControlModel()->setPropertyValue("Repeat", makeAny(true) );
+    ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -920,18 +719,14 @@ Reference< xml::input::XElement > DateFieldElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void DateFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlDateFieldModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlDateFieldModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -946,49 +741,21 @@ void DateFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "StrictFormat" ),
-                               OUString( "strict-format" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importDateFormatProperty( OUString( "DateFormat" ),
-                                  OUString( "date-format" ),
-                                  _xAttributes );
-    ctx.importBooleanProperty( OUString( "DateShowCentury" ),
-                               OUString( "show-century" ),
-                               _xAttributes );
-    ctx.importLongProperty( OUString( "Date" ),
-                            OUString( "value" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "DateMin" ),
-                            OUString( "value-min" ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( "DateMax" ),
-                            OUString( "value-max" ),
-                            _xAttributes );
-    ctx.importBooleanProperty( OUString( "Spin" ),
-                               OUString( "spin" ),
-                               _xAttributes );
-    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
-                                _xAttributes ))
-        ctx.getControlModel()->setPropertyValue(
-            OUSTR("Repeat"), makeAny(true) );
-    ctx.importBooleanProperty( OUString( "Dropdown" ),
-                               OUString( "dropdown" ),
-                               _xAttributes );
-    ctx.importStringProperty( OUString( "Text" ),
-                              OUString( "text" ),
-                              _xAttributes );
-    ctx.importBooleanProperty( OUString( "EnforceFormat" ),
-                               OUString( "enforce-format" ),
-                               _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly", _xAttributes );
+    ctx.importBooleanProperty( "StrictFormat", "strict-format", _xAttributes );
+    ctx.importBooleanProperty( "HideInactiveSelection", "hide-inactive-selection", _xAttributes );
+    ctx.importDateFormatProperty( "DateFormat", "date-format", _xAttributes );
+    ctx.importBooleanProperty( "DateShowCentury", "show-century", _xAttributes );
+    ctx.importLongProperty( "Date", "value", _xAttributes );
+    ctx.importLongProperty( "DateMin", "value-min", _xAttributes );
+    ctx.importLongProperty( "DateMax", "value-max", _xAttributes );
+    ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
+    if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
+        ctx.getControlModel()->setPropertyValue( "Repeat", makeAny(true) );
+    ctx.importBooleanProperty( "Dropdown", "dropdown", _xAttributes );
+    ctx.importStringProperty( "Text", "text", _xAttributes );
+    ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1011,18 +778,14 @@ Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void CurrencyFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlCurrencyFieldModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlCurrencyFieldModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1037,52 +800,22 @@ void CurrencyFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "StrictFormat" ),
-                               OUString( "strict-format" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importStringProperty( OUString( "CurrencySymbol" ),
-                              OUString( "currency-symbol" ),
-                              _xAttributes );
-    ctx.importShortProperty( OUString( "DecimalAccuracy" ),
-                               OUString( "decimal-accuracy" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ShowThousandsSeparator" ),
-                               OUString( "thousands-separator" ),
-                               _xAttributes );
-    ctx.importDoubleProperty( OUString( "Value" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importDoubleProperty( OUString( "ValueMin" ),
-                              OUString( "value-min" ),
-                              _xAttributes );
-    ctx.importDoubleProperty( OUString( "ValueMax" ),
-                              OUString( "value-max" ),
-                              _xAttributes );
-    ctx.importDoubleProperty( OUString( "ValueStep" ),
-                              OUString( "value-step" ),
-                              _xAttributes );
-    ctx.importBooleanProperty( OUString( "Spin" ),
-                               OUString( "spin" ),
-                               _xAttributes );
-    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
-                                _xAttributes ))
-        ctx.getControlModel()->setPropertyValue(
-            OUSTR("Repeat"), makeAny(true) );
-    ctx.importBooleanProperty( OUString( "PrependCurrencySymbol" ),
-                               OUString( "prepend-symbol" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "EnforceFormat" ),
-                               OUString( "enforce-format" ),
-                               _xAttributes );
+    ctx.importBooleanProperty("Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly" , _xAttributes );
+    ctx.importBooleanProperty( "StrictFormat", "strict-format", _xAttributes );
+    ctx.importBooleanProperty( "HideInactiveSelection", "hide-inactive-selection", _xAttributes );
+    ctx.importStringProperty( "CurrencySymbol", "currency-symbol", _xAttributes );
+    ctx.importShortProperty( "DecimalAccuracy", "decimal-accuracy", _xAttributes );
+    ctx.importBooleanProperty( "ShowThousandsSeparator", "thousands-separator", _xAttributes );
+    ctx.importDoubleProperty( "Value", "value", _xAttributes );
+    ctx.importDoubleProperty( "ValueMin", "value-min", _xAttributes );
+    ctx.importDoubleProperty( "ValueMax", "value-max", _xAttributes );
+    ctx.importDoubleProperty( "ValueStep", "value-step", _xAttributes );
+    ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
+    if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
+        ctx.getControlModel()->setPropertyValue( "Repeat", makeAny(true) );
+    ctx.importBooleanProperty( "PrependCurrencySymbol", "prepend-symbol", _xAttributes );
+    ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1105,18 +838,14 @@ Reference< xml::input::XElement > FileControlElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void FileControlElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlFileControlModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFileControlModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1131,18 +860,10 @@ void FileControlElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importStringProperty( OUString( "Text" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty("HideInactiveSelection","hide-inactive-selection", _xAttributes );
+    ctx.importStringProperty( "Text", "value", _xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1164,18 +885,14 @@ Reference< xml::input::XElement > TreeControlElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void TreeControlElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.tree.TreeControlModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.tree.TreeControlModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1187,30 +904,14 @@ void TreeControlElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importSelectionTypeProperty( OUString( "SelectionType" ),
-                              OUString( "selectiontype" ),
-                              _xAttributes );
-    ctx.importBooleanProperty( OUString( "RootDisplayed" ),
-                               OUString( "rootdisplayed" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ShowsHandles" ),
-                               OUString( "showshandles" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ShowsRootHandles" ),
-                               OUString( "showsroothandles" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "Editable" ),
-                               OUString( "editable" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "RowHeight" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "InvokesStopNodeEditing" ),
-                             OUString( "invokesstopnodeediting" ),
-                             _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importSelectionTypeProperty( "SelectionType", "selectiontype", _xAttributes );
+    ctx.importBooleanProperty( "RootDisplayed", "rootdisplayed", _xAttributes );
+    ctx.importBooleanProperty( "ShowsHandles", "showshandles", _xAttributes );
+    ctx.importBooleanProperty( "ShowsRootHandles", "showsroothandles" ,_xAttributes );
+    ctx.importBooleanProperty( "Editable", "editable", _xAttributes );
+    ctx.importBooleanProperty( "RowHeight", "readonly", _xAttributes );
+    ctx.importBooleanProperty( "InvokesStopNodeEditing", "invokesstopnodeediting", _xAttributes );
 
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -1234,18 +935,14 @@ Reference< xml::input::XElement > ImageControlElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void ImageControlElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlImageControlModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlImageControlModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1257,16 +954,12 @@ void ImageControlElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "ScaleImage" ),
-                               OUString( "scale-image" ),
-                               _xAttributes );
-    rtl::OUString sURL = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, OUSTR( "src" ) );
+    ctx.importBooleanProperty( "ScaleImage", "scale-image", _xAttributes );
+    OUString sURL = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID,  "src" );
     Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
 
-    ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "src" ), _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
+    ctx.importImageURLProperty( "ImageURL" , "src" , _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1289,18 +982,14 @@ Reference< xml::input::XElement > TextElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void TextElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlFixedTextModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFixedTextModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1315,24 +1004,12 @@ void TextElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importStringProperty( OUString( "Label" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importAlignProperty( OUString( "Align" ),
-                             OUString( "align" ),
-                             _xAttributes );
-    ctx.importVerticalAlignProperty( OUString( "VerticalAlign" ),
-                                     OUString( "valign" ),
-                                     _xAttributes );
-    ctx.importBooleanProperty( OUString( "MultiLine" ),
-                               OUString( "multiline" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "NoLabel" ),
-                               OUString( "nolabel" ),
-                               _xAttributes );
+    ctx.importStringProperty( "Label", "value", _xAttributes );
+    ctx.importAlignProperty( "Align", "align", _xAttributes );
+    ctx.importVerticalAlignProperty( "VerticalAlign", "valign", _xAttributes );
+    ctx.importBooleanProperty( "MultiLine", "multiline" ,_xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty( "NoLabel", "nolabel", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1354,18 +1031,14 @@ Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void FixedHyperLinkElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFixedHyperlinkModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -1380,31 +1053,15 @@ void FixedHyperLinkElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importStringProperty( OUString( "Label" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importStringProperty( OUString( "URL" ),
-                              OUString( "url" ),
-                              _xAttributes );
-    ctx.importStringProperty( OUString( "Description" ),
-                              OUString( "description" ),
-                              _xAttributes );
+    ctx.importStringProperty( "Label", "value", _xAttributes );
+    ctx.importStringProperty( "URL", "url", _xAttributes );
+    ctx.importStringProperty( "Description", "description", _xAttributes );
 
-    ctx.importAlignProperty( OUString( "Align" ),
-                             OUString( "align" ),
-                             _xAttributes );
-    ctx.importVerticalAlignProperty( OUString( "VerticalAlign" ),
-                                     OUString( "valign" ),
-                                     _xAttributes );
-    ctx.importBooleanProperty( OUString( "MultiLine" ),
-                               OUString( "multiline" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "NoLabel" ),
-                               OUString( "nolabel" ),
-                               _xAttributes );
+    ctx.importAlignProperty( "Align", "align" ,_xAttributes );
+    ctx.importVerticalAlignProperty( "VerticalAlign", "valign", _xAttributes );
+    ctx.importBooleanProperty( "MultiLine", "multiline", _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty( "NoLabel", "nolabel", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1427,18 +1084,14 @@ Reference< xml::input::XElement > TextFieldElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void TextFieldElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlEditModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlEditModel" );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -1453,50 +1106,23 @@ void TextFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importAlignProperty( OUString( "Align" ),
-                             OUString( "align" ),
-                             _xAttributes );
-    ctx.importBooleanProperty( OUString( "HardLineBreaks" ),
-                               OUString( "hard-linebreaks" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "HScroll" ),
-                               OUString( "hscroll" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "VScroll" ),
-                               OUString( "vscroll" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importShortProperty( OUString( "MaxTextLen" ),
-                             OUString( "maxlength" ),
-                             _xAttributes );
-    ctx.importBooleanProperty( OUString( "MultiLine" ),
-                               OUString( "multiline" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importStringProperty( OUString( "Text" ),
-                                  OUString( "value" ),
-                                  _xAttributes );
-    ctx.importLineEndFormatProperty( OUString( "LineEndFormat" ),
-                                     OUString( "lineend-format" ),
-                                     _xAttributes );
+    ctx.importBooleanProperty("Tabstop", "tabstop", _xAttributes );
+    ctx.importAlignProperty( "Align", "align", _xAttributes );
+    ctx.importBooleanProperty( "HardLineBreaks", "hard-linebreaks", _xAttributes );
+    ctx.importBooleanProperty( "HScroll", "hscroll" ,_xAttributes );
+    ctx.importBooleanProperty( "VScroll", "vscroll", _xAttributes );
+    ctx.importBooleanProperty("HideInactiveSelection", "hide-inactive-selection", _xAttributes );
+    ctx.importShortProperty( "MaxTextLen", "maxlength", _xAttributes );
+    ctx.importBooleanProperty( "MultiLine", "multiline", _xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly", _xAttributes );
+    ctx.importStringProperty( "Text", "value", _xAttributes );
+    ctx.importLineEndFormatProperty( "LineEndFormat", "lineend-format", _xAttributes );
     OUString aValue;
-    if (getStringAttr( &aValue,
-                       OUString( "echochar" ),
-                       _xAttributes,
-                       _pImport->XMLNS_DIALOGS_UID ) &&
-                       !aValue.isEmpty() )
+    if (getStringAttr( &aValue, "echochar", _xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !aValue.isEmpty() )
     {
         OSL_ENSURE( aValue.getLength() == 1, "### more than one character given for echochar!" );
         sal_Int16 nChar = (sal_Int16)aValue[ 0 ];
-        xControlModel->setPropertyValue( OUString( "EchoChar" ),
-                                         makeAny( nChar ) );
+        xControlModel->setPropertyValue( "EchoChar", makeAny( nChar ) );
     }
 
     ctx.importEvents( _events );
@@ -1521,21 +1147,14 @@ Reference< xml::input::XElement > TitledBoxElement::startChildElement(
     }
     else if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( "illegal namespace!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // title
     else if ( rLocalName == "title" )
     {
-        getStringAttr( &_label,
-                       OUString( "value" ),
-                       xAttributes,
-                       _pImport->XMLNS_DIALOGS_UID );
+        getStringAttr( &_label, "value", xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
-        return new ElementBase(
-            _pImport->XMLNS_DIALOGS_UID,
-            rLocalName, xAttributes, this, _pImport );
+        return new ElementBase( _pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, this, _pImport );
     }
     // radio
     else if ( rLocalName == "radio" )
@@ -1562,9 +1181,7 @@ void TitledBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlGroupBoxModel" ) );
+    ControlImportContext ctx(_pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlGroupBoxModel" );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -1580,8 +1197,7 @@ void TitledBoxElement::endElement()
 
     if (!_label.isEmpty())
     {
-        xControlModel->setPropertyValue( OUString( "Label" ),
-                                         makeAny( _label ) );
+        xControlModel->setPropertyValue( "Label", makeAny( _label ) );
     }
 
     ctx.importEvents( _events );
@@ -1594,12 +1210,9 @@ void TitledBoxElement::endElement()
     for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
     {
         Reference< xml::input::XElement > xRadio( _radios[ nPos ] );
-        Reference< xml::input::XAttributes > xAttributes(
-            xRadio->getAttributes() );
+        Reference< xml::input::XAttributes > xAttributes( xRadio->getAttributes() );
 
-        ControlImportContext ctx(
-            _pImport, getControlId( xAttributes ),
-            getControlModelName( OUString( "com.sun.star.awt.UnoControlRadioButtonModel" ), xAttributes ) );
+        ControlImportContext ctx( _pImport, getControlId( xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlRadioButtonModel", xAttributes ) );
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
         Reference< xml::input::XElement > xStyle( getStyle( xAttributes ) );
@@ -1614,42 +1227,23 @@ void TitledBoxElement::endElement()
         }
 
         ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
-        ctx.importBooleanProperty( OUString( "Tabstop" ),
-                                   OUString( "tabstop" ),
-                                   xAttributes );
-        ctx.importStringProperty( OUString( "Label" ),
-                                  OUString( "value" ),
-                                  xAttributes );
-        ctx.importAlignProperty( OUString( "Align" ),
-                                 OUString( "align" ),
-                                 xAttributes );
-        ctx.importVerticalAlignProperty( OUString( "VerticalAlign" ),
-                                         OUString( "valign" ),
-                                         xAttributes );
-        ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), _xAttributes );
-        ctx.importImagePositionProperty( OUString( "ImagePosition" ),
-                                         OUString( "image-position" ),
-                                         xAttributes );
-        ctx.importBooleanProperty( OUString( "MultiLine" ),
-                                   OUString( "multiline" ),
-                                   xAttributes );
-        ctx.importStringProperty( OUString( "GroupName" ),
-                                  OUString( "group-name" ),
-                                  xAttributes );
+        ctx.importBooleanProperty( "Tabstop", "tabstop", xAttributes );
+        ctx.importStringProperty( "Label", "value", xAttributes );
+        ctx.importAlignProperty( "Align", "align", xAttributes );
+        ctx.importVerticalAlignProperty( "VerticalAlign", "valign", xAttributes );
+        ctx.importImageURLProperty( "ImageURL" ,  "image-src" , _xAttributes );
+        ctx.importImagePositionProperty( "ImagePosition", "image-position", xAttributes );
+        ctx.importBooleanProperty( "MultiLine", "multiline", xAttributes );
+        ctx.importStringProperty( "GroupName", "group-name", xAttributes );
 
         sal_Int16 nVal = 0;
         sal_Bool bChecked = sal_False;
-        if (getBoolAttr( &bChecked,
-                         OUString( "checked" ),
-                         xAttributes,
-                         _pImport->XMLNS_DIALOGS_UID ) &&
-            bChecked)
+        if (getBoolAttr( &bChecked, "checked", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bChecked)
         {
             nVal = 1;
         }
-        xControlModel->setPropertyValue( OUString( "State" ),
-                                         makeAny( nVal ) );
-        ctx.importDataAwareProperty( OUSTR("linked-cell" ), xAttributes );
+        xControlModel->setPropertyValue( "State", makeAny( nVal ) );
+        ctx.importDataAwareProperty( "linked-cell" , xAttributes );
         ::std::vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
@@ -1678,9 +1272,7 @@ Reference< xml::input::XElement > RadioElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
 }
 
@@ -1695,9 +1287,7 @@ Reference< xml::input::XElement > RadioGroupElement::startChildElement(
 {
     if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( "illegal namespace!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // radio
     else if ( rLocalName == "radio" )
@@ -1711,9 +1301,7 @@ Reference< xml::input::XElement > RadioGroupElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected radio element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected radio element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -1726,9 +1314,7 @@ void RadioGroupElement::endElement()
         Reference< xml::input::XAttributes > xAttributes(
             xRadio->getAttributes() );
 
-        ControlImportContext ctx(
-            _pImport, getControlId( xAttributes ),
-            getControlModelName( OUString( "com.sun.star.awt.UnoControlRadioButtonModel" ), xAttributes ) );
+        ControlImportContext ctx( _pImport, getControlId( xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlRadioButtonModel", xAttributes ) );
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
         Reference< xml::input::XElement > xStyle( getStyle( xAttributes ) );
@@ -1743,42 +1329,23 @@ void RadioGroupElement::endElement()
         }
 
         ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
-        ctx.importBooleanProperty( OUString( "Tabstop" ),
-                                   OUString( "tabstop" ),
-                                   xAttributes );
-        ctx.importStringProperty( OUString( "Label" ),
-                                  OUString( "value" ),
-                                  xAttributes );
-        ctx.importAlignProperty( OUString( "Align" ),
-                                 OUString( "align" ),
-                                 xAttributes );
-        ctx.importVerticalAlignProperty( OUString( "VerticalAlign" ),
-                                         OUString( "valign" ),
-                                         xAttributes );
-        ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), xAttributes );
-        ctx.importImagePositionProperty( OUString( "ImagePosition" ),
-                                         OUString( "image-position" ),
-                                         xAttributes );
-        ctx.importBooleanProperty( OUString( "MultiLine" ),
-                                   OUString( "multiline" ),
-                                   xAttributes );
-        ctx.importStringProperty( OUString( "GroupName" ),
-                                  OUString( "group-name" ),
-                                  xAttributes );
+        ctx.importBooleanProperty("Tabstop", "tabstop", xAttributes );
+        ctx.importStringProperty( "Label", "value", xAttributes );
+        ctx.importAlignProperty( "Align", "align", xAttributes );
+        ctx.importVerticalAlignProperty( "VerticalAlign", "valign", xAttributes );
+        ctx.importImageURLProperty( "ImageURL" , "image-src" , xAttributes );
+        ctx.importImagePositionProperty( "ImagePosition", "image-position", xAttributes );
+        ctx.importBooleanProperty( "MultiLine", "multiline", xAttributes );
+        ctx.importStringProperty( "GroupName", "group-name", xAttributes );
         sal_Int16 nVal = 0;
         sal_Bool bChecked = sal_False;
-        if (getBoolAttr( &bChecked,
-                         OUString( "checked" ),
-                         xAttributes,
-                         _pImport->XMLNS_DIALOGS_UID ) &&
-            bChecked)
+        if (getBoolAttr( &bChecked, "checked", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bChecked)
         {
             nVal = 1;
         }
-        xControlModel->setPropertyValue( OUString( "State" ),
-                                         makeAny( nVal ) );
+        xControlModel->setPropertyValue( "State", makeAny( nVal ) );
 
-        ctx.importDataAwareProperty( OUSTR("linked-cell" ), xAttributes );
+        ctx.importDataAwareProperty( "linked-cell", xAttributes );
 
         ::std::vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
@@ -1803,41 +1370,28 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
 {
     if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( "illegal namespace!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // menuitem
     else if ( rLocalName == "menuitem" )
     {
-        OUString aValue(
-            xAttributes->getValueByUidName(
-                _pImport->XMLNS_DIALOGS_UID,
-                OUString( "value" ) ) );
+        OUString aValue( xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID,"value" ) );
         OSL_ENSURE( !aValue.isEmpty(), "### menuitem has no value?" );
         if (!aValue.isEmpty())
         {
             _itemValues.push_back( aValue );
 
-            OUString aSel(
-                xAttributes->getValueByUidName(
-                    _pImport->XMLNS_DIALOGS_UID,
-                    OUString( "selected" ) ) );
-            if (!aSel.isEmpty() && aSel.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
+            OUString aSel( xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "selected" ) );
+            if (!aSel.isEmpty() && aSel == "true")
             {
-                _itemSelected.push_back(
-                    static_cast<sal_Int16>(_itemValues.size()) -1 );
+                _itemSelected.push_back( static_cast<sal_Int16>(_itemValues.size()) -1 );
             }
         }
-        return new ElementBase(
-            _pImport->XMLNS_DIALOGS_UID,
-            rLocalName, xAttributes, this, _pImport );
+        return new ElementBase( _pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected menuitem!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("expected menuitem!" , Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -1879,9 +1433,7 @@ Reference< xml::input::XElement > MenuListElement::startChildElement(
     }
     else if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( "illegal namespace!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // menupopup
     else if ( rLocalName == "menupopup" )
@@ -1891,19 +1443,14 @@ Reference< xml::input::XElement > MenuListElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event or menupopup element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event or menupopup element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void MenuListElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-
-    getControlModelName( OUString( "com.sun.star.awt.UnoControlListBoxModel" ), _xAttributes  ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlListBoxModel", _xAttributes  ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -1918,33 +1465,21 @@ void MenuListElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "MultiSelection" ),
-                               OUString( "multiselection" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "Dropdown" ),
-                               OUString( "spin" ),
-                               _xAttributes );
-    ctx.importShortProperty( OUString( "LineCount" ),
-                             OUString( "linecount" ),
-                             _xAttributes );
-    ctx.importAlignProperty( OUString( "Align" ),
-                             OUString( "align" ),
-                             _xAttributes );
-    bool bHasLinkedCell = ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
-    bool bHasSrcRange = ctx.importDataAwareProperty( OUSTR("source-cell-range" ), _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty( "MultiSelection", "multiselection", _xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly", _xAttributes );
+    ctx.importBooleanProperty( "Dropdown", "spin", _xAttributes );
+    ctx.importShortProperty( "LineCount", "linecount", _xAttributes );
+    ctx.importAlignProperty( "Align", "align", _xAttributes );
+    bool bHasLinkedCell = ctx.importDataAwareProperty( "linked-cell" , _xAttributes );
+    bool bHasSrcRange = ctx.importDataAwareProperty( "source-cell-range" , _xAttributes );
     if (_popup.is())
     {
         MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
         if ( !bHasSrcRange )
-            xControlModel->setPropertyValue( OUString( "StringItemList" ), makeAny( p->getItemValues() ) );
+            xControlModel->setPropertyValue( "StringItemList", makeAny( p->getItemValues() ) );
         if ( !bHasLinkedCell )
-            xControlModel->setPropertyValue( OUString( "SelectedItems" ), makeAny( p->getSelectedItems() ) );
+            xControlModel->setPropertyValue( "SelectedItems", makeAny( p->getSelectedItems() ) );
 
     }
     ctx.importEvents( _events );
@@ -1969,9 +1504,7 @@ Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     }
     else if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( "illegal namespace!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // menupopup
     else if ( rLocalName == "menupopup" )
@@ -1981,18 +1514,14 @@ Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event or menupopup element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event or menupopup element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void ComboBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        getControlModelName( OUString( "com.sun.star.awt.UnoControlComboBoxModel" ), _xAttributes ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlComboBoxModel", _xAttributes ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -2007,40 +1536,21 @@ void ComboBoxElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "ReadOnly" ),
-                               OUString( "readonly" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "Autocomplete" ),
-                               OUString( "autocomplete" ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "Dropdown" ),
-                               OUString( "spin" ),
-                               _xAttributes );
-    ctx.importBooleanProperty(
-        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
-        _xAttributes );
-    ctx.importShortProperty( OUString( "MaxTextLen" ),
-                             OUString( "maxlength" ),
-                             _xAttributes );
-    ctx.importShortProperty( OUString( "LineCount" ),
-                             OUString( "linecount" ),
-                             _xAttributes );
-    ctx.importStringProperty( OUString( "Text" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importAlignProperty( OUString( "Align" ),
-                             OUString( "align" ),
-                             _xAttributes );
-    ctx.importDataAwareProperty( OUSTR("linked-cell" ), _xAttributes );
-    bool bHasSrcRange = ctx.importDataAwareProperty( OUSTR("source-cell-range" ), _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importBooleanProperty( "ReadOnly", "readonly", _xAttributes );
+    ctx.importBooleanProperty( "Autocomplete", "autocomplete", _xAttributes );
+    ctx.importBooleanProperty( "Dropdown", "spin", _xAttributes );
+    ctx.importBooleanProperty( "HideInactiveSelection", "hide-inactive-selection", _xAttributes );
+    ctx.importShortProperty( "MaxTextLen", "maxlength" ,_xAttributes );
+    ctx.importShortProperty( "LineCount", "linecount" ,_xAttributes );
+    ctx.importStringProperty( "Text", "value", _xAttributes );
+    ctx.importAlignProperty( "Align", "align", _xAttributes );
+    ctx.importDataAwareProperty( "linked-cell" , _xAttributes );
+    bool bHasSrcRange = ctx.importDataAwareProperty( "source-cell-range" , _xAttributes );
     if (_popup.is() && !bHasSrcRange )
     {
         MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
-        xControlModel->setPropertyValue( OUString( "StringItemList" ),
-                                         makeAny( p->getItemValues() ) );
+        xControlModel->setPropertyValue( "StringItemList", makeAny( p->getItemValues() ) );
     }
 
     ctx.importEvents( _events );
@@ -2065,18 +1575,14 @@ Reference< xml::input::XElement > CheckBoxElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void CheckBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlCheckBoxModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlCheckBoxModel" );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
@@ -2091,52 +1597,31 @@ void CheckBoxElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importStringProperty( OUString( "Label" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importAlignProperty( OUString( "Align" ),
-                             OUString( "align" ),
-                             _xAttributes );
-    ctx.importVerticalAlignProperty( OUString( "VerticalAlign" ),
-                                     OUString( "valign" ),
-                                     _xAttributes );
-    ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), _xAttributes );
-    ctx.importImagePositionProperty( OUString( "ImagePosition" ),
-                                     OUString( "image-position" ),
-                                     _xAttributes );
-    ctx.importBooleanProperty( OUString( "MultiLine" ),
-                               OUString( "multiline" ),
-                               _xAttributes );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importStringProperty( "Label", "value", _xAttributes );
+    ctx.importAlignProperty( "Align", "align", _xAttributes );
+    ctx.importVerticalAlignProperty( "VerticalAlign", "valign", _xAttributes );
+    ctx.importImageURLProperty( "ImageURL" ,  "image-src" , _xAttributes );
+    ctx.importImagePositionProperty( "ImagePosition", "image-position", _xAttributes );
+    ctx.importBooleanProperty( "MultiLine", "multiline", _xAttributes );
 
 
     sal_Bool bTriState = sal_False;
-    if (getBoolAttr( &bTriState,
-                     OUString( "tristate" ),
-                     _xAttributes,
-                     _pImport->XMLNS_DIALOGS_UID ))
+    if (getBoolAttr( &bTriState, "tristate", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        xControlModel->setPropertyValue( OUString( "TriState" ),
-                                         makeAny( bTriState ) );
+        xControlModel->setPropertyValue( "TriState", makeAny( bTriState ) );
     }
     sal_Bool bChecked = sal_False;
-    if (getBoolAttr( &bChecked,
-                     OUString( "checked" ),
-                     _xAttributes,
-                     _pImport->XMLNS_DIALOGS_UID ))
+    if (getBoolAttr( &bChecked, "checked", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         // has "checked" attribute
         sal_Int16 nVal = (bChecked ? 1 : 0);
-        xControlModel->setPropertyValue( OUString( "State" ),
-                                         makeAny( nVal ) );
+        xControlModel->setPropertyValue( "State", makeAny( nVal ) );
     }
     else
     {
         sal_Int16 nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => dont know!
-        xControlModel->setPropertyValue( OUString( "State" ),
-                                         makeAny( nVal ) );
+        xControlModel->setPropertyValue( "State", makeAny( nVal ) );
     }
 
     ctx.importEvents( _events );
@@ -2161,18 +1646,14 @@ Reference< xml::input::XElement > ButtonElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!",  Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
 void ButtonElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    ControlImportContext ctx(
-        _pImport, getControlId( _xAttributes ),
-        OUString( "com.sun.star.awt.UnoControlButtonModel" ) );
+    ControlImportContext ctx( _pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlButtonModel" );
 
     Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
@@ -2186,56 +1667,28 @@ void ButtonElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-    ctx.importBooleanProperty( OUString( "Tabstop" ),
-                               OUString( "tabstop" ),
-                               _xAttributes );
-    ctx.importStringProperty( OUString( "Label" ),
-                              OUString( "value" ),
-                              _xAttributes );
-    ctx.importAlignProperty( OUString( "Align" ),
-                             OUString( "align" ),
-                             _xAttributes );
-    ctx.importVerticalAlignProperty( OUString( "VerticalAlign" ),
-                                     OUString( "valign" ),
-                                     _xAttributes );
-    ctx.importBooleanProperty( OUString( "DefaultButton" ),
-                               OUString( "default" ),
-                               _xAttributes );
-    ctx.importButtonTypeProperty( OUString( "PushButtonType" ),
-                                  OUString( "button-type" ),
-                                  _xAttributes );
-    ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), _xAttributes );
-    ctx.importImagePositionProperty( OUString( "ImagePosition" ),
-                                     OUString( "image-position" ),
-                                     _xAttributes );
-    ctx.importImageAlignProperty( OUString( "ImageAlign" ),
-                                  OUString( "image-align" ),
-                                  _xAttributes );
-    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
-                                _xAttributes ))
-        ctx.getControlModel()->setPropertyValue(
-            OUSTR("Repeat"), makeAny(true) );
+    ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
+    ctx.importStringProperty( "Label", "value", _xAttributes );
+    ctx.importAlignProperty( "Align", "align", _xAttributes );
+    ctx.importVerticalAlignProperty( "VerticalAlign", "valign", _xAttributes );
+    ctx.importBooleanProperty( "DefaultButton", "default", _xAttributes );
+    ctx.importButtonTypeProperty( "PushButtonType", "button-type", _xAttributes );
+    ctx.importImageURLProperty( "ImageURL" , "image-src" , _xAttributes );
+    ctx.importImagePositionProperty( "ImagePosition", "image-position", _xAttributes );
+    ctx.importImageAlignProperty( "ImageAlign", "image-align", _xAttributes );
+    if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
+        ctx.getControlModel()->setPropertyValue( "Repeat", makeAny(true) );
     sal_Int32 toggled = 0;
-    if (getLongAttr( &toggled, OUSTR("toggled"), _xAttributes,
-                     _pImport->XMLNS_DIALOGS_UID ) && toggled == 1)
-        ctx.getControlModel()->setPropertyValue(OUSTR("Toggle"), makeAny(true));
-    ctx.importBooleanProperty( OUSTR("FocusOnClick"), OUSTR("grab-focus"),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( "MultiLine" ),
-                               OUString( "multiline" ),
-                               _xAttributes );
+    if (getLongAttr( &toggled, "toggled", _xAttributes, _pImport->XMLNS_DIALOGS_UID ) && toggled == 1)
+        ctx.getControlModel()->setPropertyValue( "Toggle" , makeAny(true));
+    ctx.importBooleanProperty( "FocusOnClick", "grab-focus", _xAttributes );
+    ctx.importBooleanProperty( "MultiLine", "multiline", _xAttributes );
     // State
     sal_Bool bChecked = sal_False;
-    if (getBoolAttr(
-            &bChecked,
-            OUString( "checked" ),
-            _xAttributes,
-            _pImport->XMLNS_DIALOGS_UID ) &&
-        bChecked)
+    if (getBoolAttr( &bChecked, "checked", _xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bChecked)
     {
         sal_Int16 nVal = 1;
-        ctx.getControlModel()->setPropertyValue(
-            OUString( "State" ), makeAny( nVal ) );
+        ctx.getControlModel()->setPropertyValue( "State" , makeAny( nVal ) );
     }
 
     ctx.importEvents( _events );
@@ -2255,9 +1708,7 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
 {
     if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( "illegal namespace!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("illegal namespace!", Reference< XInterface >(), Any() );
     }
     // button
     else if ( rLocalName == "button" )
@@ -2387,9 +1838,7 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected styles, bulletinboard or bulletinboard element, not: " ) + rLocalName,
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected styles, bulletinboard or bulletinboard element, not: " + rLocalName, Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -2400,17 +1849,12 @@ BulletinBoardElement::BulletinBoardElement(
     SAL_THROW(())
     : ControlElement( rLocalName, xAttributes, pParent, pImport )
 {
-    OUString aValue(
-        _xAttributes->getValueByUidName(
-            _pImport->XMLNS_DIALOGS_UID,
-            OUString( "left" ) ) );
+    OUString aValue( _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "left" ) );
     if (!aValue.isEmpty())
     {
         _nBasePosX += toInt32( aValue );
     }
-    aValue = _xAttributes->getValueByUidName(
-        _pImport->XMLNS_DIALOGS_UID,
-        OUString( "top" ) );
+    aValue = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "top" );
     if (!aValue.isEmpty())
     {
         _nBasePosY += toInt32( aValue );
@@ -2426,28 +1870,21 @@ Reference< xml::input::XElement > StyleElement::startChildElement(
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    throw xml::sax::SAXException(
-        OUString( "unexpected sub elements of style!" ),
-        Reference< XInterface >(), Any() );
+    throw xml::sax::SAXException( "unexpected sub elements of style!", Reference< XInterface >(), Any() );
 }
 //__________________________________________________________________________________________________
 void StyleElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     Reference< xml::input::XAttributes > xStyle;
-    OUString aStyleId(
-        _xAttributes->getValueByUidName(
-            _pImport->XMLNS_DIALOGS_UID,
-            OUString( "style-id" ) ) );
+    OUString aStyleId( _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "style-id" ) );
     if (!aStyleId.isEmpty())
     {
         _pImport->addStyle( aStyleId, this );
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "missing style-id attribute!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "missing style-id attribute!", Reference< XInterface >(), Any() );
     }
 }
 
@@ -2462,9 +1899,7 @@ Reference< xml::input::XElement > StylesElement::startChildElement(
 {
     if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( "illegal namespace!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // style
     else if ( rLocalName == "style" )
@@ -2473,9 +1908,7 @@ Reference< xml::input::XElement > StylesElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected style element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected style element!", Reference< XInterface >(), Any() );
     }
 }
 
@@ -2495,9 +1928,7 @@ Reference< xml::input::XElement > WindowElement::startChildElement(
     }
     else if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( "illegal namespace!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // styles
     else if ( rLocalName == "styles" )
@@ -2511,9 +1942,7 @@ Reference< xml::input::XElement > WindowElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected styles ot bulletinboard element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected styles ot bulletinboard element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -2535,27 +1964,12 @@ void WindowElement::endElement()
     }
 
     ctx.importDefaults( 0, 0, _xAttributes, false );
-    ctx.importBooleanProperty(
-        OUString( "Closeable" ),
-        OUString( "closeable" ),
-        _xAttributes );
-    ctx.importBooleanProperty(
-        OUString( "Moveable" ),
-        OUString( "moveable" ),
-        _xAttributes );
-    ctx.importBooleanProperty(
-        OUString( "Sizeable" ),
-        OUString( "resizeable" ),
-        _xAttributes );
-    ctx.importStringProperty(
-        OUString( "Title" ),
-        OUString( "title" ),
-        _xAttributes );
-    ctx.importBooleanProperty(
-        OUString( "Decoration" ),
-        OUString( "withtitlebar" ),
-        _xAttributes );
-        ctx.importImageURLProperty( OUSTR( "ImageURL" ), OUSTR( "image-src" ), _xAttributes );
+    ctx.importBooleanProperty( "Closeable", "closeable", _xAttributes );
+    ctx.importBooleanProperty( "Moveable", "moveable", _xAttributes );
+    ctx.importBooleanProperty("Sizeable", "resizeable", _xAttributes );
+    ctx.importStringProperty("Title", "title", _xAttributes );
+    ctx.importBooleanProperty("Decoration", "withtitlebar", _xAttributes );
+        ctx.importImageURLProperty( "ImageURL" , "image-src" , _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)

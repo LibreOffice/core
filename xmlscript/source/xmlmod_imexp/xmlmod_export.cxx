@@ -24,7 +24,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 namespace xmlscript
 {
@@ -39,26 +38,22 @@ SAL_CALL exportScriptModule(
 {
     xOut->startDocument();
 
-    OUString aDocTypeStr( RTL_CONSTASCII_USTRINGPARAM(
+    OUString aDocTypeStr(
         "<!DOCTYPE script:module PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
-        " \"module.dtd\">" ) );
+        " \"module.dtd\">");
     xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
 
-    OUString aModuleName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":module") );
+    OUString aModuleName( XMLNS_SCRIPT_PREFIX ":module" );
     XMLElement* pModElement = new XMLElement( aModuleName );
     Reference< xml::sax::XAttributeList > xAttributes( pModElement );
 
-    pModElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_SCRIPT_PREFIX) ),
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_URI) ) );
+    pModElement->addAttribute( "xmlns:" XMLNS_SCRIPT_PREFIX, XMLNS_SCRIPT_URI );
 
-    pModElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":name") ),
-                                rMod.aName );
-    pModElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":language") ),
-                                rMod.aLanguage );
+    pModElement->addAttribute( XMLNS_SCRIPT_PREFIX ":name", rMod.aName );
+    pModElement->addAttribute( XMLNS_SCRIPT_PREFIX ":language", rMod.aLanguage );
     if( !rMod.aModuleType.isEmpty() )
-        pModElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":moduleType") ),
-                                    rMod.aModuleType );
+        pModElement->addAttribute( XMLNS_SCRIPT_PREFIX ":moduleType", rMod.aModuleType );
 
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aModuleName, xAttributes );

@@ -80,9 +80,7 @@ Reference< xml::input::XElement > LibElementBase::startChildElement(
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    throw xml::sax::SAXException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected element!") ),
-        Reference< XInterface >(), Any() );
+    throw xml::sax::SAXException("unexpected element!", Reference< XInterface >(), Any() );
 }
 
 //__________________________________________________________________________________________________
@@ -129,10 +127,8 @@ void LibraryImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri(
-        OUSTR(XMLNS_LIBRARY_URI) );
-    XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri(
-        OUSTR(XMLNS_XLINK_URI) );
+    XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri( XMLNS_LIBRARY_URI );
+    XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri( XMLNS_XLINK_URI );
 }
 //__________________________________________________________________________________________________
 void LibraryImport::endDocument()
@@ -159,9 +155,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
 {
     if (XMLNS_LIBRARY_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     else if ( mpLibArray && rLocalName == "libraries" )
     {
@@ -172,28 +166,16 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
         LibDescriptor& aDesc = *mpLibDesc;
         aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = sal_False;
 
-        aDesc.aName = xAttributes->getValueByUidName(
-            XMLNS_LIBRARY_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
-        getBoolAttr(
-            &aDesc.bReadOnly,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ), xAttributes,
-            XMLNS_LIBRARY_UID );
-        getBoolAttr(
-            &aDesc.bPasswordProtected,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("passwordprotected") ),
-            xAttributes, XMLNS_LIBRARY_UID );
-        getBoolAttr(
-            &aDesc.bPreload,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("preload") ),
-            xAttributes, XMLNS_LIBRARY_UID );
+        aDesc.aName = xAttributes->getValueByUidName(XMLNS_LIBRARY_UID, "name" );
+        getBoolAttr( &aDesc.bReadOnly, "readonly", xAttributes, XMLNS_LIBRARY_UID );
+        getBoolAttr( &aDesc.bPasswordProtected, "passwordprotected", xAttributes, XMLNS_LIBRARY_UID );
+        getBoolAttr( &aDesc.bPreload, "preload", xAttributes, XMLNS_LIBRARY_UID );
 
         return new LibraryElement( rLocalName, xAttributes, 0, this );
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal root element (expected libraries) given: ") ) +
-            rLocalName, Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal root element (expected libraries) given: " + rLocalName, Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -217,9 +199,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
 {
     if (_pImport->XMLNS_LIBRARY_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // library
     else if ( rLocalName == "library" )
@@ -227,33 +207,18 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
         LibDescriptor aDesc;
         aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = sal_False;
 
-        aDesc.aName = xAttributes->getValueByUidName(
-            _pImport->XMLNS_LIBRARY_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
-        aDesc.aStorageURL = xAttributes->getValueByUidName(
-            _pImport->XMLNS_XLINK_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("href") ) );
-        getBoolAttr(
-            &aDesc.bLink,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("link") ),
-            xAttributes, _pImport->XMLNS_LIBRARY_UID );
-        getBoolAttr(
-            &aDesc.bReadOnly,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
-            xAttributes, _pImport->XMLNS_LIBRARY_UID );
-        getBoolAttr(
-            &aDesc.bPasswordProtected,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("passwordprotected") ),
-            xAttributes, _pImport->XMLNS_LIBRARY_UID );
+        aDesc.aName = xAttributes->getValueByUidName(_pImport->XMLNS_LIBRARY_UID, "name" );
+        aDesc.aStorageURL = xAttributes->getValueByUidName( _pImport->XMLNS_XLINK_UID, "href" );
+        getBoolAttr(&aDesc.bLink, "link", xAttributes, _pImport->XMLNS_LIBRARY_UID );
+        getBoolAttr(&aDesc.bReadOnly, "readonly", xAttributes, _pImport->XMLNS_LIBRARY_UID );
+        getBoolAttr(&aDesc.bPasswordProtected, "passwordprotected", xAttributes, _pImport->XMLNS_LIBRARY_UID );
 
         mLibDescriptors.push_back( aDesc );
         return new LibraryElement( rLocalName, xAttributes, this, _pImport );
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("expected styles ot bulletinboard element!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected styles ot bulletinboard element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -279,16 +244,12 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
 {
     if (_pImport->XMLNS_LIBRARY_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // library
     else if ( rLocalName == "element" )
     {
-        OUString aValue( xAttributes->getValueByUidName(
-            _pImport->XMLNS_LIBRARY_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) ) );
+        OUString aValue( xAttributes->getValueByUidName(_pImport->XMLNS_LIBRARY_UID, "name" ) );
         if (!aValue.isEmpty())
             mElements.push_back( aValue );
 
@@ -296,9 +257,7 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("expected styles ot bulletinboard element!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected styles ot bulletinboard element!", Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
