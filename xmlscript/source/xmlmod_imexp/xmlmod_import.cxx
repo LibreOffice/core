@@ -80,9 +80,7 @@ Reference< xml::input::XElement > ModuleElement::startChildElement(
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    throw xml::sax::SAXException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected element!") ),
-        Reference< XInterface >(), Any() );
+    throw xml::sax::SAXException("unexpected element!", Reference< XInterface >(), Any() );
 }
 
 //__________________________________________________________________________________________________
@@ -129,12 +127,9 @@ void ModuleImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri(
-        OUSTR(XMLNS_SCRIPT_URI) );
-    XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri(
-        OUSTR(XMLNS_LIBRARY_URI) );
-    XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri(
-        OUSTR(XMLNS_XLINK_URI) );
+    XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri( XMLNS_SCRIPT_URI );
+    XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri( XMLNS_LIBRARY_URI );
+    XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri( XMLNS_XLINK_URI );
 }
 
 //__________________________________________________________________________________________________
@@ -163,31 +158,20 @@ Reference< xml::input::XElement > ModuleImport::startRootElement(
 {
     if (XMLNS_SCRIPT_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // window
     else if ( rLocalName == "module" )
     {
-        mrModuleDesc.aName = xAttributes->getValueByUidName(
-            XMLNS_SCRIPT_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
-        mrModuleDesc.aLanguage = xAttributes->getValueByUidName(
-            XMLNS_SCRIPT_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("language") ) );
-        mrModuleDesc.aModuleType = xAttributes->getValueByUidName(
-            XMLNS_SCRIPT_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("moduleType") ) );
+        mrModuleDesc.aName = xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, "name" );
+        mrModuleDesc.aLanguage = xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, "language" );
+        mrModuleDesc.aModuleType = xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, "moduleType" );
 
         return new ModuleElement( rLocalName, xAttributes, 0, this );
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                          "illegal root element (expected module) given: ") ) +
-            rLocalName, Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("illegal root element (expected module) given: " + rLocalName, Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________

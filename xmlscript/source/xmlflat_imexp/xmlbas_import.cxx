@@ -40,7 +40,7 @@ namespace xmlscript
     // BasicElementBase
     // =============================================================================
 
-    BasicElementBase::BasicElementBase( const ::rtl::OUString& rLocalName,
+    BasicElementBase::BasicElementBase( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport )
         :m_pImport( pImport )
@@ -66,13 +66,13 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    bool BasicElementBase::getBoolAttr( sal_Bool* pRet, const ::rtl::OUString& rAttrName,
+    bool BasicElementBase::getBoolAttr( sal_Bool* pRet, const OUString& rAttrName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
         sal_Int32 nUid )
     {
         if ( xAttributes.is() )
         {
-            ::rtl::OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
+            OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
             if ( !aValue.isEmpty() )
             {
                 if ( aValue == "true" )
@@ -87,9 +87,7 @@ namespace xmlscript
                 }
                 else
                 {
-                    throw xml::sax::SAXException(
-                        rAttrName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": no boolean value (true|false)!" ) ),
-                        Reference< XInterface >(), Any() );
+                    throw xml::sax::SAXException(rAttrName + ": no boolean value (true|false)!", Reference< XInterface >(), Any() );
                 }
             }
         }
@@ -108,7 +106,7 @@ namespace xmlscript
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString BasicElementBase::getLocalName()
+    OUString BasicElementBase::getLocalName()
         throw (RuntimeException)
     {
         return m_aLocalName;
@@ -136,18 +134,16 @@ namespace xmlscript
     // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicElementBase::startChildElement(
-        sal_Int32 /*nUid*/, const ::rtl::OUString& /*rLocalName*/,
+        sal_Int32 /*nUid*/, const OUString& /*rLocalName*/,
         const Reference< xml::input::XAttributes >& /*xAttributes*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
-        throw xml::sax::SAXException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unexpected element!" ) ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException("unexpected element!", Reference< XInterface >(), Any() );
     }
 
     // -----------------------------------------------------------------------------
 
-void BasicElementBase::characters( const ::rtl::OUString& /*rChars*/ )
+void BasicElementBase::characters( const OUString& /*rChars*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
         // not used, all characters ignored
@@ -155,14 +151,14 @@ void BasicElementBase::characters( const ::rtl::OUString& /*rChars*/ )
 
     // -----------------------------------------------------------------------------
 
-void BasicElementBase::ignorableWhitespace( const ::rtl::OUString& /*rWhitespaces*/ )
+void BasicElementBase::ignorableWhitespace( const OUString& /*rWhitespaces*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
 
     // -----------------------------------------------------------------------------
 
-void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/, const ::rtl::OUString& /*rData*/ )
+void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
@@ -179,7 +175,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     // BasicLibrariesElement
     // =============================================================================
 
-    BasicLibrariesElement::BasicLibrariesElement( const ::rtl::OUString& rLocalName,
+    BasicLibrariesElement::BasicLibrariesElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport,
             const Reference< script::XLibraryContainer2 >& rxLibContainer )
@@ -193,7 +189,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicLibrariesElement::startChildElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+            sal_Int32 nUid, const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -201,26 +197,18 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
 
         if ( nUid != m_pImport->XMLNS_UID )
         {
-            throw xml::sax::SAXException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal namespace!" ) ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
         }
         else if ( rLocalName == "library-linked" )
         {
             if ( xAttributes.is() )
             {
-                ::rtl::OUString aName = xAttributes->getValueByUidName(
-                    m_pImport->XMLNS_UID,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ) ) );
+                OUString aName = xAttributes->getValueByUidName( m_pImport->XMLNS_UID, "name" );
 
-                ::rtl::OUString aStorageURL = xAttributes->getValueByUidName(
-                    m_pImport->XMLNS_XLINK_UID,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "href" ) ) );
+                OUString aStorageURL = xAttributes->getValueByUidName(m_pImport->XMLNS_XLINK_UID, "href" );
 
                 sal_Bool bReadOnly = sal_False;
-                getBoolAttr( &bReadOnly,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "readonly" ) ),
-                    xAttributes, m_pImport->XMLNS_UID );
+                getBoolAttr( &bReadOnly,"readonly", xAttributes, m_pImport->XMLNS_UID );
 
                 if ( m_xLibContainer.is() )
                 {
@@ -234,12 +222,12 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                     catch ( const container::ElementExistException& e )
                     {
                         OSL_TRACE( "BasicLibrariesElement::startChildElement: caught ElementExceptionExist reason %s",
-                            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                            OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                     }
                     catch ( const lang::IllegalArgumentException& e )
                     {
                         OSL_TRACE( "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason %s",
-                            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                            OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                     }
                 }
             }
@@ -250,14 +238,10 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
 
             if ( xAttributes.is() )
             {
-                ::rtl::OUString aName = xAttributes->getValueByUidName(
-                    m_pImport->XMLNS_UID,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ) ) );
+                OUString aName = xAttributes->getValueByUidName( m_pImport->XMLNS_UID, "name" );
 
                 sal_Bool bReadOnly = sal_False;
-                getBoolAttr( &bReadOnly,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "readonly" ) ),
-                    xAttributes, m_pImport->XMLNS_UID );
+                getBoolAttr( &bReadOnly, "readonly", xAttributes, m_pImport->XMLNS_UID );
 
                 if ( m_xLibContainer.is() )
                 {
@@ -280,16 +264,14 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                     catch ( const lang::IllegalArgumentException& e )
                     {
                         OSL_TRACE( "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason %s",
-                            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                            OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                     }
                 }
             }
         }
         else
         {
-            throw xml::sax::SAXException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "expected library-linked or library-embedded element!" ) ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "expected library-linked or library-embedded element!", Reference< XInterface >(), Any() );
         }
 
         return xElement;
@@ -307,11 +289,11 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     // BasicEmbeddedLibraryElement
     // =============================================================================
 
-    BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement( const ::rtl::OUString& rLocalName,
+    BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport,
             const Reference< script::XLibraryContainer2 >& rxLibContainer,
-            const ::rtl::OUString& rLibName, bool bReadOnly )
+            const OUString& rLibName, bool bReadOnly )
         :BasicElementBase( rLocalName, xAttributes, pParent, pImport )
         ,m_xLibContainer( rxLibContainer )
         ,m_aLibName( rLibName )
@@ -325,7 +307,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
         catch ( const lang::WrappedTargetException& e )
         {
             OSL_TRACE( "BasicEmbeddedLibraryElement CTOR: caught WrappedTargetException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
 
@@ -334,7 +316,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicEmbeddedLibraryElement::startChildElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+            sal_Int32 nUid, const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -342,17 +324,13 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
 
         if ( nUid != m_pImport->XMLNS_UID )
         {
-            throw xml::sax::SAXException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal namespace!" ) ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
         }
         else if ( rLocalName == "module" )
         {
             if ( xAttributes.is() )
             {
-                ::rtl::OUString aName = xAttributes->getValueByUidName(
-                    m_pImport->XMLNS_UID,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ) ) );
+                OUString aName = xAttributes->getValueByUidName(m_pImport->XMLNS_UID, "name" );
 
                 if ( m_xLib.is() && !aName.isEmpty() )
                     xElement.set( new BasicModuleElement( rLocalName, xAttributes, this, m_pImport, m_xLib, aName ) );
@@ -360,9 +338,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
         }
         else
         {
-            throw xml::sax::SAXException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "expected module element!" ) ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "expected module element!", Reference< XInterface >(), Any() );
         }
 
         return xElement;
@@ -382,10 +358,10 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     // BasicModuleElement
     // =============================================================================
 
-    BasicModuleElement::BasicModuleElement( const ::rtl::OUString& rLocalName,
+    BasicModuleElement::BasicModuleElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport,
-            const Reference< container::XNameContainer >& rxLib, const ::rtl::OUString& rName )
+            const Reference< container::XNameContainer >& rxLib, const OUString& rName )
         :BasicElementBase( rLocalName, xAttributes, pParent, pImport )
         ,m_xLib( rxLib )
         ,m_aName( rName )
@@ -397,7 +373,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicModuleElement::startChildElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+            sal_Int32 nUid, const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -407,9 +383,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
 
         if ( nUid != m_pImport->XMLNS_UID )
         {
-            throw xml::sax::SAXException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal namespace!" ) ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
         }
         else if ( rLocalName == "source-code" )
         {
@@ -423,9 +397,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
         }
         else
         {
-            throw xml::sax::SAXException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "expected source-code element!" ) ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "expected source-code element!", Reference< XInterface >(), Any() );
         }
 
         return xElement;
@@ -443,10 +415,10 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     // BasicSourceCodeElement
     // =============================================================================
 
-    BasicSourceCodeElement::BasicSourceCodeElement( const ::rtl::OUString& rLocalName,
+    BasicSourceCodeElement::BasicSourceCodeElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport,
-            const Reference< container::XNameContainer >& rxLib, const ::rtl::OUString& rName )
+            const Reference< container::XNameContainer >& rxLib, const OUString& rName )
         :BasicElementBase( rLocalName, xAttributes, pParent, pImport )
         ,m_xLib( rxLib )
         ,m_aName( rName )
@@ -457,7 +429,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     // XElement
     // -----------------------------------------------------------------------------
 
-    void BasicSourceCodeElement::characters( const ::rtl::OUString& rChars )
+    void BasicSourceCodeElement::characters( const OUString& rChars )
         throw (xml::sax::SAXException, RuntimeException)
     {
         m_aBuffer.append( rChars );
@@ -480,17 +452,17 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
         catch ( const container::ElementExistException& e )
         {
             OSL_TRACE( "BasicSourceCodeElement::endElement: caught ElementExceptionExist reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
         catch ( const lang::IllegalArgumentException& e )
         {
             OSL_TRACE( "BasicSourceCodeElement::endElement: caught IllegalArgumentException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
         catch ( const lang::WrappedTargetException& e )
         {
             OSL_TRACE( "BasicSourceCodeElement::endElement: caught WrappedTargetException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
 
@@ -520,13 +492,13 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
     {
         if ( xNamespaceMapping.is() )
         {
-            ::rtl::OUString aURI;
+            OUString aURI;
             if ( m_bOasis )
-                aURI = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_OOO_URI ) );
+                aURI = XMLNS_OOO_URI;
             else
-                aURI = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_SCRIPT_URI ) );
+                aURI = XMLNS_SCRIPT_URI;
             XMLNS_UID = xNamespaceMapping->getUidByUri( aURI );
-            XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_URI ) ) );
+            XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri( XMLNS_XLINK_URI );
         }
     }
 
@@ -539,7 +511,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
 
     // -----------------------------------------------------------------------------
 
-void BasicImport::processingInstruction( const ::rtl::OUString& /*rTarget*/, const ::rtl::OUString& /*rData*/ )
+void BasicImport::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
@@ -553,7 +525,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    Reference< xml::input::XElement > BasicImport::startRootElement( sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+    Reference< xml::input::XElement > BasicImport::startRootElement( sal_Int32 nUid, const OUString& rLocalName,
             Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -561,9 +533,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
         if ( nUid != XMLNS_UID )
         {
-            throw xml::sax::SAXException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal namespace!" ) ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
         }
         else if ( rLocalName == "libraries" )
         {
@@ -579,7 +549,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
                 // try the "BasicLibraries" property (old-style, for compatibility)
                 Reference< beans::XPropertySet > xPSet( m_xModel, UNO_QUERY );
                 if ( xPSet.is() )
-                    xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ) >>= xLibContainer;
+                    xPSet->getPropertyValue("BasicLibraries" ) >>= xLibContainer;
             }
 
             OSL_ENSURE( xLibContainer.is(), "BasicImport::startRootElement: nowhere to import to!" );
@@ -591,9 +561,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         }
         else
         {
-            throw xml::sax::SAXException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal root element (expected libraries) given: " ) ) +
-                rLocalName, Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException("illegal root element (expected libraries) given: " + rLocalName, Reference< XInterface >(), Any() );
         }
 
         return xElement;
@@ -604,15 +572,15 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     // component operations
     // =============================================================================
 
-    ::rtl::OUString getImplementationName_XMLBasicImporter()
+    OUString getImplementationName_XMLBasicImporter()
     {
-        static ::rtl::OUString* pImplName = 0;
+        static OUString* pImplName = 0;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.xmlscript.XMLBasicImporter" ) );
+                static OUString aImplName( "com.sun.star.comp.xmlscript.XMLBasicImporter" );
                 pImplName = &aImplName;
             }
         }
@@ -621,16 +589,16 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > getSupportedServiceNames_XMLBasicImporter()
+    Sequence< OUString > getSupportedServiceNames_XMLBasicImporter()
     {
-        static Sequence< ::rtl::OUString >* pNames = 0;
+        static Sequence< OUString >* pNames = 0;
         if ( !pNames )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(1);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLBasicImporter" ) );
+                static Sequence< OUString > aNames(1);
+                aNames.getArray()[0] = "com.sun.star.document.XMLBasicImporter";
                 pNames = &aNames;
             }
         }
@@ -639,15 +607,15 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString getImplementationName_XMLOasisBasicImporter()
+    OUString getImplementationName_XMLOasisBasicImporter()
     {
-        static ::rtl::OUString* pImplName = 0;
+        static OUString* pImplName = 0;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.xmlscript.XMLOasisBasicImporter" ) );
+                static OUString aImplName( "com.sun.star.comp.xmlscript.XMLOasisBasicImporter" );
                 pImplName = &aImplName;
             }
         }
@@ -656,16 +624,16 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > getSupportedServiceNames_XMLOasisBasicImporter()
+    Sequence< OUString > getSupportedServiceNames_XMLOasisBasicImporter()
     {
-        static Sequence< ::rtl::OUString >* pNames = 0;
+        static Sequence< OUString >* pNames = 0;
         if ( !pNames )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(1);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLOasisBasicImporter" ) );
+                static Sequence< OUString > aNames(1);
+                aNames.getArray()[0] = "com.sun.star.document.XMLOasisBasicImporter";
                 pNames = &aNames;
             }
         }
@@ -693,11 +661,11 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    sal_Bool XMLBasicImporterBase::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool XMLBasicImporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+        Sequence< OUString > aNames( getSupportedServiceNames() );
+        const OUString* pNames = aNames.getConstArray();
+        const OUString* pEnd = pNames + aNames.getLength();
         for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
             ;
 
@@ -717,9 +685,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
         if ( !m_xModel.is() )
         {
-            throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLBasicExporter::setTargetDocument: no document model!" ) ),
-                Reference< XInterface >(), 1 );
+            throw IllegalArgumentException( "XMLBasicExporter::setTargetDocument: no document model!", Reference< XInterface >(), 1 );
         }
 
         if ( m_xContext.is() )
@@ -730,9 +696,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
                 Reference < xml::input::XRoot > xRoot( new BasicImport( m_xModel, m_bOasis ) );
                 Sequence < Any > aArgs( 1 );
                 aArgs[0] <<= xRoot;
-                m_xHandler.set( xSMgr->createInstanceWithArgumentsAndContext(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.input.SaxDocumentHandler" ) ),
-                    aArgs, m_xContext ), UNO_QUERY );
+                m_xHandler.set( xSMgr->createInstanceWithArgumentsAndContext("com.sun.star.xml.input.SaxDocumentHandler", aArgs, m_xContext ), UNO_QUERY );
             }
         }
     }
@@ -763,7 +727,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    void XMLBasicImporterBase::startElement( const ::rtl::OUString& aName,
+    void XMLBasicImporterBase::startElement( const OUString& aName,
             const Reference< xml::sax::XAttributeList >& xAttribs )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -775,7 +739,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    void XMLBasicImporterBase::endElement( const ::rtl::OUString& aName )
+    void XMLBasicImporterBase::endElement( const OUString& aName )
         throw (xml::sax::SAXException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -786,7 +750,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    void XMLBasicImporterBase::characters( const ::rtl::OUString& aChars )
+    void XMLBasicImporterBase::characters( const OUString& aChars )
         throw (xml::sax::SAXException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -797,7 +761,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    void XMLBasicImporterBase::ignorableWhitespace( const ::rtl::OUString& aWhitespaces )
+    void XMLBasicImporterBase::ignorableWhitespace( const OUString& aWhitespaces )
         throw (xml::sax::SAXException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -808,8 +772,8 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    void XMLBasicImporterBase::processingInstruction( const ::rtl::OUString& aTarget,
-            const ::rtl::OUString& aData )
+    void XMLBasicImporterBase::processingInstruction( const OUString& aTarget,
+            const OUString& aData )
         throw (xml::sax::SAXException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -849,14 +813,14 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString XMLBasicImporter::getImplementationName(  ) throw (RuntimeException)
+    OUString XMLBasicImporter::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_XMLBasicImporter();
     }
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > XMLBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > XMLBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_XMLBasicImporter();
     }
@@ -881,14 +845,14 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString XMLOasisBasicImporter::getImplementationName(  ) throw (RuntimeException)
+    OUString XMLOasisBasicImporter::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_XMLOasisBasicImporter();
     }
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > XMLOasisBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > XMLOasisBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_XMLOasisBasicImporter();
     }

@@ -35,12 +35,12 @@ namespace xmlscript
 // functionality from xmlscript
 struct XMLSCRIPT_DLLPUBLIC LibDescriptor
 {
-    ::rtl::OUString aName;
-    ::rtl::OUString aStorageURL;
+    OUString aName;
+    OUString aStorageURL;
     sal_Bool bLink;
     sal_Bool bReadOnly;
     sal_Bool bPasswordProtected;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aElementNames;
+    ::com::sun::star::uno::Sequence< OUString > aElementNames;
     sal_Bool bPreload;
 };
 
