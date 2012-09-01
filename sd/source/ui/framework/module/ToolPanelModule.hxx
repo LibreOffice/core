@@ -17,22 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
-#define SD_FRAMEWORK_TOOL_PANEL_MODULE_HXX
+#ifndef SD_FRAMEWORK_TOOLPANEL_MODULE_HXX
+#define SD_FRAMEWORK_TOOLPANEL_MODULE_HXX
 
 #include "ResourceManager.hxx"
 
-#include <rtl/ref.hxx>
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <com/sun/star/drawing/framework/XTabBar.hpp>
+
+namespace css = ::com::sun::star;
 
 namespace sd { namespace framework {
 
-/** This module is responsible for showing the task pane.
+/** This module is responsible for showing the toolpanel bar.
 */
 class ToolPanelModule
+    : public ResourceManager
 {
 public:
-    static void Initialize (
-        const ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
+    ToolPanelModule (
+        const css::uno::Reference<css::frame::XController>& rxController,
+        const ::rtl::OUString& rsRightPaneURL);
+    virtual ~ToolPanelModule (void);
+
+    virtual void SaveResourceState (void);
+    // XConfigurationChangeListener
+
+    virtual void SAL_CALL notifyConfigurationChange (
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (css::uno::RuntimeException);
+
+private:
+    css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
 };
 
 } } // end of namespace sd::framework
