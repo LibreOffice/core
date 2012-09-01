@@ -292,9 +292,7 @@ BEGIN
     @removedirs = ();
     @removefiletable = ();
 
-    $plat = $^O;
-
-    if ( $plat =~ /cygwin/i )
+    if ( $^O =~ /cygwin/i )
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $separator = "/";

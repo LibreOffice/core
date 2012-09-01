@@ -207,7 +207,7 @@ sub create_profiles
         # Sorting the array @onefile
         my $onefileref = sorting_profile(\@onefile);
 
-        if ( $installer::globals::iswin && $installer::globals::plat =~ /cygwin/i)      # Windows line ends only for Cygwin
+        if ( $installer::globals::iswin && $^O =~ /cygwin/i)      # Windows line ends only for Cygwin
         {
             include_windows_lineends($onefileref);
         }
