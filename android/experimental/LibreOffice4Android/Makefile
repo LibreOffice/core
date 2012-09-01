@@ -20,24 +20,16 @@ copy-stuff:
 # them.
 #
 	for F in $(strip \
-		   analysislo \
 		   basegfxlo \
 		   bootstrap.uno \
 		   chartcontrollerlo \
 		   chartcorelo \
 		   comphelpgcc3 \
-		   cppcanvaslo \
-		   ctllo \
-		   datelo \
 		   dbaxmllo \
 		   dbtoolslo \
-		   embobj \
-		   evtattlo \
 		   expwrap.uno \
-		   fastsax.uno \
 		   frmlo \
 		   gcc3_uno \
-		   hwplo \
 		   i18nisolang1gcc3 \
 		   icudatalo \
 		   icui18nlo \

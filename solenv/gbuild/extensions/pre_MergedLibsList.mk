@@ -70,11 +70,18 @@ gb_MERGEDLIBS += $(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes)
 
 ifeq ($(OS),ANDROID)
 gb_MERGEDLIBS += \
+	analysis \
+	ctl \
+	date \
+	embobj \
+	evtatt \
+	fastsax \
 	fileacc \
 	for \
 	forui \
 	fwl \
 	fwm \
+	hwp \
 	hyphen \
 	lnth \
 	spell \

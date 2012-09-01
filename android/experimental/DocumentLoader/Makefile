@@ -51,20 +51,14 @@ copy-stuff:
 # them.
 #
 	for F in $(strip \
-		   analysislo \
 		   basegfxlo \
 		   bootstrap.uno \
 		   comphelpgcc3 \
-		   ctllo \
-		   datelo \
 		   dbaxmllo \
 		   dbtoolslo \
-		   evtattlo \
 		   expwrap.uno \
-		   fastsax.uno \
 		   frmlo \
 		   gcc3_uno \
-		   hwplo \
 		   i18nisolang1gcc3 \
 		   icudatalo \
 		   icui18nlo \
