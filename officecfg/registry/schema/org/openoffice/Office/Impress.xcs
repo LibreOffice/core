@@ -1393,6 +1393,42 @@
           <desc>Options that control the tool panel.</desc>
           <label>Tool Panel Options</label>
         </info>
+        <group oor:name="Visible">
+          <info>
+            <desc>Options that control the visibility of the ToolPanel.</desc>
+            <label>ToolPanel Visibility</label>
+          </info>
+          <prop oor:name="ImpressView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the Impress view.</desc>
+              <label>ToolPanel Visibility ImpressView</label>
+            </info>
+          </prop>
+          <prop oor:name="OutlineView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the Outline view.</desc>
+              <label>ToolPanel Visibility OutlineView</label>
+            </info>
+          </prop>
+          <prop oor:name="NotesView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the Notes view.</desc>
+              <label>ToolPanel Visibility NotesView</label>
+            </info>
+          </prop>
+          <prop oor:name="HandoutView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the HandOut view.</desc>
+              <label>ToolPanel Visibility HandOutView</label>
+            </info>
+          </prop>
+          <prop oor:name="SlideSorterView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the SlideSorter view.</desc>
+              <label>ToolPanel Visibility SlideSorterView</label>
+            </info>
+          </prop>
+        </group>
         <set oor:name="RecentlyUsedMasterPages" oor:node-type="MasterPageDescriptor">
           <info>
             <desc>List of the URLs of the most recently used master pages.</desc>
