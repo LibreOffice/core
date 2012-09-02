@@ -40,16 +40,16 @@
 struct SwPosition;
 class IntlWrapper;
 
-// FlyAnchors
+/// FlyAnchors
 class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
 {
-    ::boost::scoped_ptr<SwPosition> m_pCntntAnchor; // 0 for page-bound frames.
-                                // Index for paragraph-bound frames.
-                                // Position for character-bound frames.
+    ::boost::scoped_ptr<SwPosition> m_pCntntAnchor; /**< 0 for page-bound frames.
+                                                     Index for paragraph-bound frames.
+                                                     Position for character-bound frames. */
     RndStdIds  nAnchorId;
-    sal_uInt16     nPageNum;        // Page number for page-bound frames.
+    sal_uInt16     nPageNum;        ///< Page number for page-bound frames.
 
-    // #i28701# - getting anchor positions ordered
+    /// #i28701# - getting anchor positions ordered
     sal_uInt32 mnOrder;
     static sal_uInt32 mnOrderCounter;
 
@@ -60,7 +60,7 @@ public:
 
     SwFmtAnchor &operator=( const SwFmtAnchor& );
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

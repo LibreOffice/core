@@ -87,8 +87,8 @@ class SwFmtMeta
     : public SfxPoolItem
 {
 private:
-    friend class SwTxtMeta; // needs SetTxtAttr, DoCopy
-    friend class ::sw::Meta; // needs m_pTxtAttr
+    friend class SwTxtMeta; ///< needs SetTxtAttr, DoCopy
+    friend class ::sw::Meta; ///< needs m_pTxtAttr
 
     ::boost::shared_ptr< ::sw::Meta > m_pMeta;
     SwTxtMeta * m_pTxtAttr;
@@ -103,12 +103,12 @@ private:
     explicit SwFmtMeta( const sal_uInt16 i_nWhich );
 
 public:
-    // takes ownership
+    /// takes ownership
     explicit SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
                         const sal_uInt16 i_nWhich );
     virtual ~SwFmtMeta();
 
-    // SfxPoolItem
+    /// SfxPoolItem
     virtual int              operator==( const SfxPoolItem & ) const;
     virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -128,8 +128,8 @@ class Meta
     , public SwModify
 {
 protected:
-    friend class ::SwFmtMeta; // SetFmtMeta, NotifyChangeTxtNode
-    friend class ::SwXMeta; // GetTxtNode, GetTxtAttr, Get/SetXMeta
+    friend class ::SwFmtMeta; ///< SetFmtMeta, NotifyChangeTxtNode
+    friend class ::SwXMeta;   ///< GetTxtNode, GetTxtAttr, Get/SetXMeta
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::rdf::XMetadatable> m_wXMeta;
@@ -138,7 +138,7 @@ protected:
     SwTxtNode * m_pTxtNode;
 
     SwTxtMeta * GetTxtAttr() const;
-    SwTxtNode * GetTxtNode() const; // returns 0 if not in document (undo)
+    SwTxtNode * GetTxtNode() const; ///< @return 0 if not in document (undo)
 
     SwFmtMeta * GetFmtMeta() const { return m_pFmt; }
     void SetFmtMeta( SwFmtMeta * const i_pFmt ) { m_pFmt = i_pFmt; };
@@ -153,14 +153,14 @@ protected:
                     ::com::sun::star::rdf::XMetadatable> const& xMeta)
             { m_wXMeta = xMeta; }
 
-    // SwClient
+    /// SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 public:
     explicit Meta(SwFmtMeta * const i_pFmt = 0);
     virtual ~Meta();
 
-    // sfx2::Metadatable
+    /// sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry();
     virtual bool IsInClipboard() const;
     virtual bool IsInUndo() const;
@@ -195,7 +195,7 @@ public:
         ::rtl::OUString *const o_pPrefix, ::rtl::OUString *const o_pSuffix);
 };
 
-/** knows all meta-fields in the document. */
+    /// knows all meta-fields in the document.
 class MetaFieldManager
     : private ::boost::noncopyable
 {

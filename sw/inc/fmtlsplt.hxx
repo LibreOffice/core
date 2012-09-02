@@ -40,7 +40,7 @@ class SW_DLLPUBLIC SwFmtLayoutSplit : public SfxBoolItem
 public:
     SwFmtLayoutSplit( sal_Bool bSplit = sal_True ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit ) {}
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

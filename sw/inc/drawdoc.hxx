@@ -50,11 +50,11 @@ public:
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::embed::XStorage> GetDocumentStorage() const;
 
-    // For saving of rectangles as control-replacement for versions < 5.0.
+    /// For saving of rectangles as control-replacement for versions < 5.0.
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
 protected:
-    // overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
+    /// overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
 };
 
