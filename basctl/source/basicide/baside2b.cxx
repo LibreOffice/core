@@ -45,6 +45,8 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 
+#include <vector>
+
 namespace basctl
 {
 
@@ -53,6 +55,8 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
+
+sal_uInt16 const NoMarker = 0xFFFF;
 
 long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 long nHeaderBarHeight;
@@ -72,13 +76,14 @@ Image GetImage (unsigned nId)
     return aImagesNormal.GetImage(nId);
 }
 
+int const nScrollLine = 12;
+int const nScrollPage = 60;
+int const DWBORDER = 3;
+
+char const cSuffixes[] = "%&!#@$";
+
 } // namespace
 
-#define SCROLL_LINE     12
-#define SCROLL_PAGE     60
-#define DWBORDER        3
-
-static const char cSuffixes[] = "%&!#@$";
 
 /**
  * Helper functions to get/set text in TextEngine using
@@ -86,27 +91,27 @@ static const char cSuffixes[] = "%&!#@$";
  *
  * get/setText() only supports tools Strings limited to 64K).
  */
-::rtl::OUString getTextEngineText( ExtTextEngine* pEngine )
+rtl::OUString getTextEngineText (ExtTextEngine& rEngine)
 {
     SvMemoryStream aMemStream;
     aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     aMemStream.SetLineDelimiter( LINEEND_LF );
-    pEngine->Write( aMemStream );
+    rEngine.Write( aMemStream );
     sal_uLong nSize = aMemStream.Tell();
     ::rtl::OUString aText( (const sal_Char*)aMemStream.GetData(),
         nSize, RTL_TEXTENCODING_UTF8 );
     return aText;
 }
 
-void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr )
+void setTextEngineText (ExtTextEngine& rEngine, rtl::OUString const& aStr)
 {
-    pEngine->SetText( String() );
+    rEngine.SetText(String());
     ::rtl::OString aUTF8Str = ::rtl::OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
     SvMemoryStream aMemStream( (void*)aUTF8Str.getStr(), aUTF8Str.getLength(),
         STREAM_READ | STREAM_SEEK_TO_BEGIN );
     aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     aMemStream.SetLineDelimiter( LINEEND_LF );
-    pEngine->Read( aMemStream );
+    rEngine.Read(aMemStream);
 }
 
 namespace
@@ -193,13 +198,29 @@ private:
     EditorWindow & editor_;
 };
 
+class EditorWindow::ProgressInfo : public SfxProgress
+{
+public:
+    ProgressInfo (SfxObjectShell* pObjSh, String const& rText, sal_uLong nRange) :
+        SfxProgress(pObjSh, rText, nRange),
+        nCurState(0)
+    { }
+
+    void StepProgress ()
+    {
+        SetState(++nCurState);
+    }
+
+private:
+    sal_uLong nCurState;
+};
+
 EditorWindow::EditorWindow (Window* pParent, ModulWindow* pModulWindow) :
     Window(pParent, WB_BORDER),
     pEditView(0),
     pEditEngine(0),
     rModulWindow(*pModulWindow),
     nCurTextWidth(0),
-    pProgress(0),
     bHighlightning(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true)
@@ -239,9 +260,7 @@ EditorWindow::~EditorWindow()
     if ( pEditEngine )
     {
         EndListening( *pEditEngine );
-        pEditEngine->RemoveView( pEditView );
-        delete pEditView;
-        delete pEditEngine;
+        pEditEngine->RemoveView(pEditView.get());
     }
 }
 
@@ -558,11 +577,11 @@ void EditorWindow::CreateEditEngine()
     if ( pEditEngine )
         return;
 
-    pEditEngine = new ExtTextEngine;
-    pEditView = new ExtTextView( pEditEngine, this );
+    pEditEngine.reset(new ExtTextEngine);
+    pEditView.reset(new ExtTextView(pEditEngine.get(), this));
     pEditView->SetAutoIndentMode(true);
     pEditEngine->SetUpdateMode(false);
-    pEditEngine->InsertView( pEditView );
+    pEditEngine->InsertView(pEditView.get());
 
     ImplSetFont();
 
@@ -586,12 +605,12 @@ void EditorWindow::CreateEditEngine()
     // nLines*4: SetText+Formatting+DoHighlight+Formatting
     // it could be cut down on one formatting but you would wait even longer
     // for the text then if the source code is long...
-    pProgress = new ProgressInfo(
+    pProgress.reset(new ProgressInfo(
         GetShell()->GetViewFrame()->GetObjectShell(),
         String(IDEResId(RID_STR_GENERATESOURCE)),
         nLines*4
-    );
-    setTextEngineText( pEditEngine, aOUSource );
+    ));
+    setTextEngineText(*pEditEngine, aOUSource);
 
     pEditView->SetStartDocPos( Point( 0, 0 ) );
     pEditView->SetSelection( TextSelection() );
@@ -612,7 +631,7 @@ void EditorWindow::CreateEditEngine()
         aSyntaxLineTable.insert( nLine );
     ForceSyntaxTimeout();
 
-    DELETEZ( pProgress );
+    pProgress.reset();
 
     pEditView->EraseVirtualDevice();
     pEditEngine->SetModified( false );
@@ -924,22 +943,22 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
 void EditorWindow::CreateProgress( const String& rText, sal_uLong nRange )
 {
     DBG_ASSERT( !pProgress, "ProgressInfo existiert schon" );
-    pProgress = new ProgressInfo(
+    pProgress.reset(new ProgressInfo(
         GetShell()->GetViewFrame()->GetObjectShell(),
         rText,
         nRange
-    );
+    ));
 }
 
 void EditorWindow::DestroyProgress()
 {
-    DELETEZ( pProgress );
+    pProgress.reset();
 }
 
 void EditorWindow::ForceSyntaxTimeout()
 {
     aSyntaxIdleTimer.Stop();
-    ((Link&)aSyntaxIdleTimer.GetTimeoutHdl()).Call( &aSyntaxIdleTimer );
+    aSyntaxIdleTimer.GetTimeoutHdl().Call(&aSyntaxIdleTimer);
 }
 
 
@@ -952,7 +971,7 @@ BreakPointWindow::BreakPointWindow (Window* pParent, ModulWindow* pModulWindow) 
     Window(pParent, WB_BORDER),
     rModulWindow(*pModulWindow),
     nCurYOffset(0), // memorize nCurYOffset and not take it from EditEngine
-    nMarkerPos(MARKER_NOMARKER)
+    nMarkerPos(NoMarker)
 {
     setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
     SetHelpId(HID_BASICIDE_BREAKPOINTWINDOW);
@@ -960,13 +979,6 @@ BreakPointWindow::BreakPointWindow (Window* pParent, ModulWindow* pModulWindow) 
 
 BreakPointWindow::~BreakPointWindow()
 {
-}
-
-
-
-void BreakPointWindow::Resize()
-{
-/// Invalidate();
 }
 
 
@@ -1017,9 +1029,14 @@ void BreakPointWindow::SetMarkerPos( sal_uInt16 nLine, bool bError )
     ShowMarker( true );
 }
 
+void BreakPointWindow::SetNoMarker ()
+{
+    SetMarkerPos(NoMarker);
+}
+
 void BreakPointWindow::ShowMarker( bool bShow )
 {
-    if ( nMarkerPos == MARKER_NOMARKER )
+    if ( nMarkerPos == NoMarker )
         return;
 
     Size const aOutSz = GetOutputSize();
@@ -1287,78 +1304,30 @@ void WatchWindow::Resize()
     Invalidate();
 }
 
-struct MemberList
-{
-    String*         mpMemberNames;
-    int             mnMemberCount;
-
-    MemberList( void )
-        : mpMemberNames( NULL )
-        , mnMemberCount( 0 )
-    {}
-    ~MemberList()
-    {
-        clear();
-    }
-
-    void clear( void );
-    void allocList( int nCount );
-};
-
-void MemberList::clear( void )
-{
-    if( mnMemberCount )
-    {
-        delete[] mpMemberNames;
-        mnMemberCount = 0;
-    }
-}
-
-void MemberList::allocList( int nCount )
-{
-    clear();
-    if( nCount > 0 )
-    {
-        mnMemberCount = nCount;
-        mpMemberNames = new String[ mnMemberCount ];
-    }
-}
-
 struct WatchItem
 {
     String          maName;
     String          maDisplayName;
     SbxObjectRef    mpObject;
-    MemberList      maMemberList;
+    std::vector<String> maMemberList;
 
     SbxDimArrayRef  mpArray;
     int             nDimLevel;  // 0 = Root
     int             nDimCount;
-    short*          pIndices;
+    std::vector<short> vIndices;
 
     WatchItem*      mpArrayParentItem;
 
-    WatchItem( void )
-        : nDimLevel( 0 )
-        , nDimCount( 0 )
-        , pIndices( NULL )
-        , mpArrayParentItem( NULL )
-    {}
-    ~WatchItem()
-        { clearWatchItem(); }
+    WatchItem (String const& rName):
+        maName(rName),
+        nDimLevel(0),
+        nDimCount(0),
+        mpArrayParentItem(0)
+    { }
 
-    void clearWatchItem( bool bIncludeArrayData=true )
+    void clearWatchItem ()
     {
-        mpObject = NULL;
         maMemberList.clear();
-        if( bIncludeArrayData )
-        {
-            mpArray = NULL;
-            nDimLevel = 0;
-            nDimCount = 0;
-            delete[] pIndices;
-            pIndices = NULL;
-        }
     }
 
     WatchItem* GetRootItem( void );
@@ -1388,10 +1357,9 @@ SbxDimArray* WatchItem::GetRootArray( void )
 
 void WatchWindow::AddWatch( const String& rVName )
 {
-    WatchItem* pWatchItem = new WatchItem;
     String aVar, aIndex;
     lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
-    pWatchItem->maName = aVar;
+    WatchItem* pWatchItem = new WatchItem(aVar);
 
     String aWatchStr_( aVar );
     aWatchStr_ += String( RTL_CONSTASCII_USTRINGPARAM( "\t\t" ) );
@@ -1652,8 +1620,8 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aEdtWindow.Show();
     aBrkWindow.Show();
 
-    aEWVScrollBar.SetLineSize( SCROLL_LINE );
-    aEWVScrollBar.SetPageSize( SCROLL_PAGE );
+    aEWVScrollBar.SetLineSize(nScrollLine);
+    aEWVScrollBar.SetPageSize(nScrollPage);
     aEWVScrollBar.SetScrollHdl( LINK( this, ComplexEditorWindow, ScrollHdl ) );
     aEWVScrollBar.Show();
 }
@@ -1786,7 +1754,7 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
     if( GetChildCount( pParent ) > 0 )
         return;
 
-    SvLBoxEntry * pEntry = pParent;
+    SvLBoxEntry* pEntry = pParent;
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
     SbxDimArray* pArray = pItem->mpArray;
@@ -1802,20 +1770,18 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
     if( pObj )
     {
         createAllObjectProperties( pObj );
-         SbxArray* pProps = pObj->GetProperties();
+        SbxArray* pProps = pObj->GetProperties();
         sal_uInt16 nPropCount = pProps->Count();
-        pItem->maMemberList.allocList( nPropCount );
+        pItem->maMemberList.reserve(nPropCount);
 
         for( sal_uInt16 i = 0 ; i < nPropCount - 3 ; i++ )
         {
             SbxVariable* pVar = pProps->Get( i );
 
-            String aName( pVar->GetName() );
-            pItem->maMemberList.mpMemberNames[i] = aName;
-            SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( aName, pEntry );
-            WatchItem* pChildItem = new WatchItem();
-            pChildItem->maName = aName;
-            pChildEntry->SetUserData( pChildItem );
+            pItem->maMemberList.push_back(String(pVar->GetName()));
+            String const& rName = pItem->maMemberList.back();
+            SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( rName, pEntry );
+            pChildEntry->SetUserData(new WatchItem(rName));
         }
         if( nPropCount > 0 )
         {
@@ -1833,25 +1799,23 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
         pArray->GetDim32( nThisLevel, nMin, nMax );
         for( sal_Int32 i = nMin ; i <= nMax ; i++ )
         {
-            WatchItem* pChildItem = new WatchItem();
+            WatchItem* pChildItem = new WatchItem(pItem->maName);
 
             // Copy data and create name
-            String aBaseName( pItem->maName );
-            pChildItem->maName = aBaseName;
 
             String aIndexStr = String( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
             pChildItem->mpArrayParentItem = pItem;
             pChildItem->nDimLevel = nThisLevel;
             pChildItem->nDimCount = pItem->nDimCount;
-            pChildItem->pIndices = new short[ pChildItem->nDimCount ];
+            pChildItem->vIndices.resize(pChildItem->nDimCount);
             sal_uInt16 j;
             for( j = 0 ; j < nParentLevel ; j++ )
             {
-                short n = pChildItem->pIndices[j] = pItem->pIndices[j];
+                short n = pChildItem->vIndices[j] = pItem->vIndices[j];
                 aIndexStr += String::CreateFromInt32( n );
                 aIndexStr += String( RTL_CONSTASCII_USTRINGPARAM( "," ) );
             }
-            pChildItem->pIndices[ nParentLevel ] = sal::static_int_cast<short>( i );
+            pChildItem->vIndices[nParentLevel] = sal::static_int_cast<short>( i );
             aIndexStr += String::CreateFromInt32( i );
             aIndexStr += String( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
 
@@ -1860,7 +1824,7 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
             if( pArrayRootItem && pArrayRootItem->mpArrayParentItem )
                 aDisplayName = pItem->maDisplayName;
             else
-                aDisplayName = aBaseName;
+                aDisplayName = pItem->maName;
             aDisplayName += aIndexStr;
             pChildItem->maDisplayName = aDisplayName;
 
@@ -1905,7 +1869,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
         {
             rbArrayElement = true;
             if( pParentItem->nDimLevel + 1 == pParentItem->nDimCount )
-                pSBX = pArray->Get( pItem->pIndices );
+                pSBX = pArray->Get(pItem->vIndices.empty() ? 0 : &*pItem->vIndices.begin());
         }
     }
     else
@@ -1986,7 +1950,10 @@ bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& 
 }
 
 
-static void implCollapseModifiedObjectEntry( SvLBoxEntry* pParent, WatchTreeListBox* pThis )
+namespace
+{
+
+void implCollapseModifiedObjectEntry( SvLBoxEntry* pParent, WatchTreeListBox* pThis )
 {
     pThis->Collapse( pParent );
 
@@ -1996,13 +1963,12 @@ static void implCollapseModifiedObjectEntry( SvLBoxEntry* pParent, WatchTreeList
     {
         implCollapseModifiedObjectEntry( pDeleteEntry, pThis );
 
-        WatchItem* pItem = (WatchItem*)pDeleteEntry->GetUserData();
-        delete pItem;
+        delete (WatchItem*)pDeleteEntry->GetUserData();
         pModel->Remove( pDeleteEntry );
     }
 }
 
-static String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
+String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
 {
     String aRetStr = getBasicTypeName( eType );
 
@@ -2032,7 +1998,6 @@ static String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eTy
     return aRetStr;
 }
 
-
 void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
 {
     if( bEnable )
@@ -2048,6 +2013,8 @@ void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
             (pEntry->GetFlags() & ~(SV_ENTRYFLAG_CHILDREN_ON_DEMAND)) );
     }
 }
+
+} // namespace
 
 void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 {
@@ -2127,7 +2094,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         // #i37227 Clear always and replace array
                         if( pNewArray != pOldArray )
                         {
-                            pItem->clearWatchItem( false );
+                            pItem->clearWatchItem();
                             if( pNewArray )
                             {
                                 implEnableChildren( pEntry, true );
@@ -2152,7 +2119,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     {
                         // Check if member list has changed
                         bool bObjChanged = false;
-                        if( pItem->mpObject != NULL && pItem->maMemberList.mpMemberNames != NULL )
+                        if (pItem->mpObject && !pItem->maMemberList.empty())
                         {
                             SbxArray* pProps = pObj->GetProperties();
                             sal_uInt16 nPropCount = pProps->Count();
@@ -2160,7 +2127,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             {
                                 SbxVariable* pVar_ = pProps->Get( i );
                                 String aName( pVar_->GetName() );
-                                if( pItem->maMemberList.mpMemberNames[i] != aName )
+                                if( pItem->maMemberList[i] != aName )
                                 {
                                     bObjChanged = true;
                                     break;
@@ -2180,7 +2147,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         if( pItem->mpObject != NULL )
                         {
                             bCollapse = true;
-                            pItem->clearWatchItem( false );
+                            pItem->clearWatchItem();
 
                             implEnableChildren( pEntry, false );
                         }
@@ -2191,7 +2158,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     if( pItem->mpObject != NULL )
                     {
                         bCollapse = true;
-                        pItem->clearWatchItem( false );
+                        pItem->clearWatchItem();
 
                         implEnableChildren( pEntry, false );
                     }

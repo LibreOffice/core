@@ -25,6 +25,8 @@
 #include <sfx2/objsh.hxx>
 #include <svx/ifaceids.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 class SfxPrinter;
 
 namespace basctl
@@ -32,7 +34,7 @@ namespace basctl
 
 class DocShell: public SfxObjectShell
 {
-    SfxPrinter*         pPrinter;
+    boost::scoped_ptr<SfxPrinter> pPrinter;
 
 protected:
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,

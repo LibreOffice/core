@@ -37,6 +37,8 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 namespace basctl
 {
 
@@ -252,10 +254,10 @@ Sequence< Reference< XInterface > >
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 
-        SdrObjListIter* pGroupIterator = NULL;
+        boost::scoped_ptr<SdrObjListIter> pGroupIterator;
         if (pCurrent->IsGroupObject())
         {
-            pGroupIterator = new SdrObjListIter(*pCurrent->GetSubList());
+            pGroupIterator.reset(new SdrObjListIter(*pCurrent->GetSubList()));
             pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
 
@@ -271,7 +273,6 @@ Sequence< Reference< XInterface > >
             // next element
             pCurrent = pGroupIterator && pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
-        delete pGroupIterator;
     }
 
     sal_Int32 nCount = aInterfaces.size();

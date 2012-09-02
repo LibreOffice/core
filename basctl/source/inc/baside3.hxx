@@ -32,6 +32,8 @@
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 class Printer;
 class StarBASIC;
 class SfxItemSet;
@@ -52,8 +54,8 @@ class DialogWindow: public BaseWindow
 {
 private:
     DialogWindowLayout& rLayout;
-    DlgEditor*          pEditor;
-    SfxUndoManager*     pUndoMgr;
+    boost::scoped_ptr<DlgEditor> pEditor; // never nullptr
+    boost::scoped_ptr<SfxUndoManager> pUndoMgr; // never nullptr
     Link                aOldNotifyUndoActionHdl;
     ::rtl::OUString     aCurPath;
 
@@ -82,11 +84,11 @@ public:
 
     virtual void        ExecuteCommand( SfxRequest& rReq );
     virtual void        GetState( SfxItemSet& );
-    DlgEditor*          GetEditor() const   { return pEditor; }
+    DlgEditor&          GetEditor() const   { return *pEditor; }
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const;
-    DlgEdModel*         GetModel() const;
-    DlgEdPage*          GetPage() const;
-    DlgEdView*          GetView() const;
+    DlgEdModel&         GetModel() const;
+    DlgEdPage&          GetPage() const;
+    DlgEdView&          GetView() const;
     bool                RenameDialog( const ::rtl::OUString& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();

@@ -51,9 +51,12 @@ enum EntryType
     OBJ_TYPE_CLASS_MODULES
 };
 
-#define BROWSEMODE_MODULES      0x01
-#define BROWSEMODE_SUBS         0x02
-#define BROWSEMODE_DIALOGS      0x04
+enum
+{
+    BROWSEMODE_MODULES  = 0x01,
+    BROWSEMODE_SUBS     = 0x02,
+    BROWSEMODE_DIALOGS  = 0x04,
+};
 
 class Entry
 {

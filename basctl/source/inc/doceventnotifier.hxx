@@ -55,7 +55,6 @@ namespace basctl
     //====================================================================
     //= DocumentEventNotifier
     //====================================================================
-    class DocumentEventNotifier_Impl;
     /** allows registering at the GlobalEventBroadcaster for global document events
     */
     class DocumentEventNotifier
@@ -63,12 +62,11 @@ namespace basctl
     public:
         /** create a notifier instance which notifies about events of all documents in the whole application
         */
-        DocumentEventNotifier( DocumentEventListener& _rListener );
+        DocumentEventNotifier (DocumentEventListener&);
 
         /** creates a notifier instance which notifies about events at a single document
         */
-        DocumentEventNotifier( DocumentEventListener& _rListener,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
+        DocumentEventNotifier (DocumentEventListener&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& rxDocument);
 
         ~DocumentEventNotifier();
 
@@ -76,7 +74,8 @@ namespace basctl
         void    dispose();
 
     private:
-        ::rtl::Reference< DocumentEventNotifier_Impl >  m_pImpl;
+        class Impl;
+        rtl::Reference<Impl> m_pImpl;
     };
 
 //........................................................................

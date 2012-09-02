@@ -41,7 +41,6 @@ public:
     TYPEINFO();
 
     DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
-    DlgEdPage( const DlgEdPage& );
     virtual ~DlgEdPage();
 
     using SdrPage::Clone;

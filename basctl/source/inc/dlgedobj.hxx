@@ -55,7 +55,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>  m_xContainerListener;
 
 private:
-    DlgEditor* GetDialogEditor ();
+    DlgEditor& GetDialogEditor ();
 
 protected:
     DlgEdObj();
@@ -143,15 +143,15 @@ class DlgEdForm: public DlgEdObj
     friend class DlgEdFactory;
 
 private:
-    DlgEditor* pDlgEditor;
+    DlgEditor& rDlgEditor;
     ::std::vector<DlgEdObj*> pChildren;
 
     mutable ::boost::optional< ::com::sun::star::awt::DeviceInfo >   mpDeviceInfo;
 
+private:
+    explicit DlgEdForm (DlgEditor&);
 
 protected:
-    DlgEdForm();
-
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
@@ -161,12 +161,11 @@ public:
 
     virtual ~DlgEdForm();
 
-    virtual void SetDlgEditor( DlgEditor* pEditor );
-    virtual DlgEditor* GetDlgEditor() const { return pDlgEditor; }
+    virtual DlgEditor& GetDlgEditor () const { return rDlgEditor; }
 
     virtual void AddChild( DlgEdObj* pDlgEdObj );
     virtual void RemoveChild( DlgEdObj* pDlgEdObj );
-    virtual ::std::vector<DlgEdObj*> GetChildren() const { return pChildren; }
+    virtual std::vector<DlgEdObj*> const& GetChildren() const { return pChildren; }
 
     virtual void UpdateStep();
 

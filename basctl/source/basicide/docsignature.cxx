@@ -38,25 +38,25 @@ namespace basctl
     /** === end UNO using === **/
 
     //====================================================================
-    //= DocumentSignature_Data
+    //= DocumentSignature::Impl
     //====================================================================
-    struct DocumentSignature_Data
+    struct DocumentSignature::Impl
     {
-        SfxObjectShell*   pShell;
+        SfxObjectShell* pShell;
 
-        DocumentSignature_Data() : pShell( NULL ) { }
+        Impl () : pShell(0) { }
     };
 
     //====================================================================
     //= DocumentSignature
     //====================================================================
     //--------------------------------------------------------------------
-    DocumentSignature::DocumentSignature( const ScriptDocument& _rDocument )
-        :m_pData( new DocumentSignature_Data )
+    DocumentSignature::DocumentSignature (ScriptDocument const& rDocument) :
+        m_pImpl(new Impl)
     {
-        if ( _rDocument.isDocument() )
+        if (rDocument.isDocument())
         {
-            Reference< XModel > xDocument( _rDocument.getDocument() );
+            Reference<XModel> xDocument(rDocument.getDocument());
             // find object shell for document
             SfxObjectShell* pShell = SfxObjectShell::GetFirst();
             while ( pShell )
@@ -65,7 +65,7 @@ namespace basctl
                     break;
                 pShell = SfxObjectShell::GetNext( *pShell );
             }
-            m_pData->pShell = pShell;
+            m_pImpl->pShell = pShell;
         }
     }
 
@@ -77,22 +77,22 @@ namespace basctl
     //--------------------------------------------------------------------
     bool DocumentSignature::supportsSignatures() const
     {
-        return ( m_pData->pShell != NULL );
+        return ( m_pImpl->pShell != NULL );
     }
 
     //--------------------------------------------------------------------
     void DocumentSignature::signScriptingContent() const
     {
         OSL_PRECOND( supportsSignatures(), "DocumentSignature::signScriptingContent: signatures not supported by this document!" );
-        if ( m_pData->pShell )
-            m_pData->pShell->SignScriptingContent();
+        if ( m_pImpl->pShell )
+            m_pImpl->pShell->SignScriptingContent();
     }
 
     //--------------------------------------------------------------------
     sal_uInt16 DocumentSignature::getScriptingSignatureState() const
     {
-        if ( m_pData->pShell )
-            return m_pData->pShell->GetScriptingSignatureState();
+        if ( m_pImpl->pShell )
+            return m_pImpl->pShell->GetScriptingSignatureState();
         return SIGNATURESTATE_NOSIGNATURES;
     }
 

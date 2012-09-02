@@ -48,31 +48,27 @@ SFX_IMPL_INTERFACE( basctl_DocShell, SfxObjectShell, IDEResId( 0 ) )
 DocShell::DocShell()
     :SfxObjectShell( SFXMODEL_DISABLE_EMBEDDED_SCRIPTS | SFXMODEL_DISABLE_DOCUMENT_RECOVERY )
 {
-    pPrinter = 0;
     SetPool( &SFX_APP()->GetPool() );
     SetBaseModel( new SIDEModel(this) );
 }
 
 DocShell::~DocShell()
-{
-    delete pPrinter;
-}
+{ }
 
 SfxPrinter* DocShell::GetPrinter( bool bCreate )
 {
     if ( !pPrinter && bCreate )
-        pPrinter = new SfxPrinter( new SfxItemSet( GetPool(), SID_PRINTER_NOTFOUND_WARN , SID_PRINTER_NOTFOUND_WARN ) );
+        pPrinter.reset(new SfxPrinter(new SfxItemSet(
+            GetPool(), SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN
+        )));
 
-    return pPrinter;
+    return pPrinter.get();
 }
 
 void DocShell::SetPrinter( SfxPrinter* pPr )
 {
-    if ( pPr != pPrinter )
-    {
-        delete pPrinter;
-        pPrinter = pPr;
-    }
+    if (pPr != pPrinter.get())
+        pPrinter.reset(pPr);
 }
 
 void DocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, String*, sal_Int32, sal_Bool bTemplate) const

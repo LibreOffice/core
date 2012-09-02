@@ -837,19 +837,19 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
     do
     {
         // password dialog
-        SfxPasswordDialog* pDlg = new SfxPasswordDialog( Application::GetDefDialogParent() );
-        pDlg->SetMinLen( 1 );
+        SfxPasswordDialog aDlg(Application::GetDefDialogParent());
+        aDlg.SetMinLen( 1 );
 
         // set new title
         if ( bNewTitle )
         {
             ::rtl::OUString aTitle(IDE_RESSTR(RID_STR_ENTERPASSWORD));
             aTitle = aTitle.replaceAll("XX", rLibName);
-            pDlg->SetText( aTitle );
+            aDlg.SetText( aTitle );
         }
 
         // execute dialog
-        nRet = pDlg->Execute();
+        nRet = aDlg.Execute();
 
         // verify password
         if ( nRet == RET_OK )
@@ -859,7 +859,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
                 Reference< script::XLibraryContainerPassword > xPasswd( xLibContainer, UNO_QUERY );
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( rLibName ) && !xPasswd->isLibraryPasswordVerified( rLibName ) )
                 {
-                    rPassword = pDlg->GetPassword();
+                    rPassword = aDlg.GetPassword();
                     //                    ::rtl::OUString aOUPassword( rPassword );
                     bOK = xPasswd->verifyLibraryPassword( rLibName, rPassword );
 
@@ -871,8 +871,6 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
                 }
             }
         }
-
-        delete pDlg;
     }
     while ( bRepeat && !bOK && nRet == RET_OK );
 

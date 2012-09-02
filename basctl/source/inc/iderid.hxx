@@ -31,7 +31,10 @@ public:
     IDEResId( sal_uInt16 nId );
 };
 
-#define IDE_RESSTR(x) IDEResId(x).toString()
+inline rtl::OUString IDE_RESSTR (sal_uInt16 nId)
+{
+    return IDEResId(nId).toString();
+}
 
 } // namespace basctl
 

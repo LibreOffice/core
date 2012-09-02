@@ -38,36 +38,38 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::resource;
 
-static ::rtl::OUString aDot( RTL_CONSTASCII_USTRINGPARAM( "." ));
-static ::rtl::OUString aEsc( RTL_CONSTASCII_USTRINGPARAM( "&" ));
-static ::rtl::OUString aSemi( RTL_CONSTASCII_USTRINGPARAM( ";" ));
-
-
-LocalizationMgr::LocalizationMgr( Shell* pShell,
-    const ScriptDocument& rDocument, ::rtl::OUString aLibName,
-    const Reference< XStringResourceManager >& xStringResourceManager )
-        : m_xStringResourceManager( xStringResourceManager )
-        , m_pShell( pShell )
-        , m_aDocument( rDocument )
-        , m_aLibName( aLibName )
+namespace
 {
+
+rtl::OUString const aDot(".");
+rtl::OUString const aEsc("&");
+rtl::OUString const aSemi(";");
+
+} // namespace
+
+LocalizationMgr::LocalizationMgr(
+    Shell* pShell,
+    ScriptDocument const& rDocument,
+    rtl::OUString const& aLibName,
+    Reference<XStringResourceManager> const& xStringResourceManager
+) :
+    m_xStringResourceManager(xStringResourceManager),
+    m_pShell(pShell),
+    m_aDocument(rDocument),
+    m_aLibName(aLibName)
+{ }
+
+bool LocalizationMgr::isLibraryLocalized ()
+{
+    if (m_xStringResourceManager.is())
+        return m_xStringResourceManager->getLocales().getLength() > 0;
+    return false;
 }
 
-bool LocalizationMgr::isLibraryLocalized( void )
+void LocalizationMgr::handleTranslationbar ()
 {
-    bool bRet = false;
-    if( m_xStringResourceManager.is() )
-    {
-        Sequence< Locale > aLocaleSeq = m_xStringResourceManager->getLocales();
-        bRet = ( aLocaleSeq.getLength() > 0 );
-    }
-    return bRet;
-}
-
-void LocalizationMgr::handleTranslationbar( void )
-{
-    static ::rtl::OUString aLayoutManagerName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
-    static ::rtl::OUString aToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/translationbar" ));
+    static rtl::OUString const aLayoutManagerName("LayoutManager");
+    static rtl::OUString const aToolBarResName("private:resource/toolbar/translationbar");
 
     Reference< beans::XPropertySet > xFrameProps
         ( m_pShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
@@ -94,38 +96,34 @@ void LocalizationMgr::handleTranslationbar( void )
 
 // TODO: -> export from toolkit
 
-struct LanguageDependentProp
+namespace
 {
-    const char* pPropName;
-    sal_Int32   nPropNameLength;
-};
 
-static LanguageDependentProp aLanguageDependentProp[] =
-{
-    { "Text",            4 },
-    { "Label",           5 },
-    { "Title",           5 },
-    { "HelpText",        8 },
-    { "CurrencySymbol", 14 },
-    { "StringItemList", 14 },
-    { 0, 0                 }
-};
+
+}
 
 bool isLanguageDependentProperty( ::rtl::OUString aName )
 {
-    bool bRet = false;
-
-    LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
-    while( pLangDepProp->pPropName != 0 )
+    static struct Prop
     {
-        if( aName.equalsAsciiL( pLangDepProp->pPropName, pLangDepProp->nPropNameLength ))
-        {
-            bRet = true;
-            break;
-        }
-        pLangDepProp++;
+        const char* sName;
+        sal_Int32 nNameLength;
     }
-    return bRet;
+    const vProp[] =
+    {
+        { "Text",            4 },
+        { "Label",           5 },
+        { "Title",           5 },
+        { "HelpText",        8 },
+        { "CurrencySymbol", 14 },
+        { "StringItemList", 14 },
+        { 0, 0                 }
+    };
+
+    for (Prop const* pProp = vProp; pProp->sName; ++pProp)
+        if (aName.equalsAsciiL(pProp->sName, pProp->nNameLength))
+            return true;
+    return false;
 }
 
 
@@ -779,8 +777,7 @@ void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLo
 
         if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(m_pShell->GetCurWindow()))
             if (!pDlgWin->IsSuspended())
-                if (DlgEditor* pWinEditor = pDlgWin->GetEditor())
-                    pWinEditor->UpdatePropertyBrowserDelayed();
+                pDlgWin->GetEditor().UpdatePropertyBrowserDelayed();
     }
 }
 
@@ -812,8 +809,7 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
         if (!pWin->IsSuspended())
             if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(pWin))
             {
-                DlgEditor* pWinEditor = pDlgWin->GetEditor();
-                if( pWinEditor == pEditor )
+                if (&pDlgWin->GetEditor() == pEditor)
                     return pDlgWin;
             }
     }

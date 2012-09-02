@@ -38,10 +38,10 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListene
 class DlgEdPropListenerImpl: public PropertyChangeListenerHelper
 {
 private:
-    DlgEdObj*       pDlgEdObj;
+    DlgEdObj& rDlgEdObj;
 
 public:
-    DlgEdPropListenerImpl(DlgEdObj* pObj);
+    explicit DlgEdPropListenerImpl (DlgEdObj&);
     virtual ~DlgEdPropListenerImpl();
 
     // XEventListener
@@ -61,10 +61,10 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener
 class DlgEdEvtContListenerImpl: public ContainerListenerHelper
 {
 private:
-    DlgEdObj*       pDlgEdObj;
+    DlgEdObj& rDlgEdObj;
 
 public:
-    DlgEdEvtContListenerImpl(DlgEdObj* pObj);
+    explicit DlgEdEvtContListenerImpl (DlgEdObj&);
     virtual ~DlgEdEvtContListenerImpl();
 
     // XEventListener

@@ -117,31 +117,25 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
 
     if ( m_pDialogWindow )
     {
-        SdrPage* pSdrPage = m_pDialogWindow->GetPage();
-        if ( pSdrPage )
-        {
-            sal_uLong nCount = pSdrPage->GetObjCount();
+        SdrPage& rPage = m_pDialogWindow->GetPage();
+        sal_uLong nCount = rPage.GetObjCount();
 
-            for ( sal_uLong i = 0; i < nCount; ++i )
+        for ( sal_uLong i = 0; i < nCount; ++i )
+        {
+            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rPage.GetObj(i)))
             {
-                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i)))
-                {
-                    ChildDescriptor aDesc( pDlgEdObj );
-                    if ( IsChildVisible( aDesc ) )
-                        m_aAccessibleChildren.push_back( aDesc );
-                }
+                ChildDescriptor aDesc( pDlgEdObj );
+                if ( IsChildVisible( aDesc ) )
+                    m_aAccessibleChildren.push_back( aDesc );
             }
         }
 
         m_pDialogWindow->AddEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
 
-        m_pDlgEditor = m_pDialogWindow->GetEditor();
-        if ( m_pDlgEditor )
-            StartListening( *m_pDlgEditor );
+        StartListening(m_pDialogWindow->GetEditor());
 
-        m_pDlgEdModel = m_pDialogWindow->GetModel();
-        if ( m_pDlgEdModel )
-            StartListening( *m_pDlgEdModel );
+        m_pDlgEdModel = &m_pDialogWindow->GetModel();
+        StartListening(*m_pDlgEdModel);
     }
 }
 
@@ -222,37 +216,33 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
     if ( m_pDialogWindow )
     {
         // first check, if the shape is in a visible layer
-        SdrModel* pSdrModel = m_pDialogWindow->GetModel();
-        if ( pSdrModel )
+        SdrLayerAdmin& rLayerAdmin = m_pDialogWindow->GetModel().GetLayerAdmin();
+        DlgEdObj* pDlgEdObj = rDesc.pDlgEdObj;
+        if ( pDlgEdObj )
         {
-            SdrLayerAdmin& rLayerAdmin = pSdrModel->GetLayerAdmin();
-            DlgEdObj* pDlgEdObj = rDesc.pDlgEdObj;
-            if ( pDlgEdObj )
+            SdrLayerID nLayerId = pDlgEdObj->GetLayer();
+            const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
+            if ( pSdrLayer )
             {
-                SdrLayerID nLayerId = pDlgEdObj->GetLayer();
-                const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
-                if ( pSdrLayer )
+                ::rtl::OUString aLayerName = pSdrLayer->GetName();
+                SdrView& rView = m_pDialogWindow->GetView();
+                if (rView.IsLayerVisible(aLayerName))
                 {
-                    ::rtl::OUString aLayerName = pSdrLayer->GetName();
-                    SdrView* pSdrView = m_pDialogWindow->GetView();
-                    if ( pSdrView && pSdrView->IsLayerVisible( aLayerName ) )
-                    {
-                        // get the bounding box of the shape in logic units
-                        Rectangle aRect = pDlgEdObj->GetSnapRect();
+                    // get the bounding box of the shape in logic units
+                    Rectangle aRect = pDlgEdObj->GetSnapRect();
 
-                        // transform coordinates relative to the parent
-                        MapMode aMap = m_pDialogWindow->GetMapMode();
-                        Point aOrg = aMap.GetOrigin();
-                        aRect.Move( aOrg.X(), aOrg.Y() );
+                    // transform coordinates relative to the parent
+                    MapMode aMap = m_pDialogWindow->GetMapMode();
+                    Point aOrg = aMap.GetOrigin();
+                    aRect.Move( aOrg.X(), aOrg.Y() );
 
-                        // convert logic units to pixel
-                        aRect = m_pDialogWindow->LogicToPixel( aRect, MapMode(MAP_100TH_MM) );
+                    // convert logic units to pixel
+                    aRect = m_pDialogWindow->LogicToPixel( aRect, MapMode(MAP_100TH_MM) );
 
-                        // check, if the shape's bounding box intersects with the bounding box of its parent
-                        Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
-                        if ( aParentRect.IsOver( aRect ) )
-                            bVisible = true;
-                    }
+                    // check, if the shape's bounding box intersects with the bounding box of its parent
+                    Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
+                    if ( aParentRect.IsOver( aRect ) )
+                        bVisible = true;
                 }
             }
         }
@@ -342,12 +332,10 @@ void AccessibleDialogWindow::UpdateChildren()
 {
     if ( m_pDialogWindow )
     {
-        if (SdrPage* pSdrPage = m_pDialogWindow->GetPage())
-        {
-            for ( sal_uLong i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
-                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i)))
-                    UpdateChild( ChildDescriptor( pDlgEdObj ) );
-        }
+        SdrPage& rPage = m_pDialogWindow->GetPage();
+        for ( sal_uLong i = 0, nCount = rPage.GetObjCount(); i < nCount; ++i )
+            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rPage.GetObj(i)))
+                UpdateChild( ChildDescriptor( pDlgEdObj ) );
     }
 }
 
@@ -963,16 +951,11 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
 
     if ( m_pDialogWindow )
     {
-        DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj;
-        if ( pDlgEdObj )
+        if (DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj)
         {
-            SdrView* pSdrView = m_pDialogWindow->GetView();
-            if ( pSdrView )
-            {
-                SdrPageView* pPgView = pSdrView->GetSdrPageView();
-                if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView );
-            }
+            SdrView& rView = m_pDialogWindow->GetView();
+            if (SdrPageView* pPgView = rView.GetSdrPageView())
+                rView.MarkObj(pDlgEdObj, pPgView);
         }
     }
 }
@@ -986,19 +969,10 @@ sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildInde
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
-    bool bSelected = false;
-    if ( m_pDialogWindow )
-    {
-        DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj;
-        if ( pDlgEdObj )
-        {
-            SdrView* pSdrView = m_pDialogWindow->GetView();
-            if ( pSdrView )
-                bSelected = pSdrView->IsObjMarked( pDlgEdObj );
-        }
-    }
-
-    return bSelected;
+    if (m_pDialogWindow)
+        if (DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj)
+            return m_pDialogWindow->GetView().IsObjMarked(pDlgEdObj);
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -1008,11 +982,7 @@ void AccessibleDialogWindow::clearAccessibleSelection(  ) throw (RuntimeExceptio
     OExternalLockGuard aGuard( this );
 
     if ( m_pDialogWindow )
-    {
-        SdrView* pSdrView = m_pDialogWindow->GetView();
-        if ( pSdrView )
-            pSdrView->UnmarkAll();
-    }
+        m_pDialogWindow->GetView().UnmarkAll();
 }
 
 // -----------------------------------------------------------------------------
@@ -1022,11 +992,7 @@ void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeExcep
     OExternalLockGuard aGuard( this );
 
     if ( m_pDialogWindow )
-    {
-        SdrView* pSdrView = m_pDialogWindow->GetView();
-        if ( pSdrView )
-            pSdrView->MarkAll();
-    }
+        m_pDialogWindow->GetView().MarkAll();
 }
 
 // -----------------------------------------------------------------------------
@@ -1080,16 +1046,12 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
 
     if ( m_pDialogWindow )
     {
-        DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj;
-        if ( pDlgEdObj )
+        if (DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj)
         {
-            SdrView* pSdrView = m_pDialogWindow->GetView();
-            if ( pSdrView )
-            {
-                SdrPageView* pPgView = pSdrView->GetSdrPageView();
-                if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView, true );
-            }
+            SdrView& rView = m_pDialogWindow->GetView();
+            SdrPageView* pPgView = rView.GetSdrPageView();
+            if (pPgView)
+                rView.MarkObj( pDlgEdObj, pPgView, true );
         }
     }
 }

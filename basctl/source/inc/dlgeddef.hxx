@@ -30,57 +30,59 @@ const sal_uInt32 DlgInventor = sal_uInt32('D')*0x00000001+
                            sal_uInt32('G')*0x00010000+
                            sal_uInt32('1')*0x01000000;
 
+enum
+{
+    OBJ_DLG_CONTROL         =  1,
+    OBJ_DLG_DIALOG          =  2,
+    OBJ_DLG_PUSHBUTTON      =  3,
+    OBJ_DLG_RADIOBUTTON     =  4,
+    OBJ_DLG_CHECKBOX        =  5,
+    OBJ_DLG_LISTBOX         =  6,
+    OBJ_DLG_COMBOBOX        =  7,
+    OBJ_DLG_GROUPBOX        =  8,
+    OBJ_DLG_EDIT            =  9,
+    OBJ_DLG_FIXEDTEXT       = 10,
+    OBJ_DLG_IMAGECONTROL    = 11,
+    OBJ_DLG_PROGRESSBAR     = 12,
+    OBJ_DLG_HSCROLLBAR      = 13,
+    OBJ_DLG_VSCROLLBAR      = 14,
+    OBJ_DLG_HFIXEDLINE      = 15,
+    OBJ_DLG_VFIXEDLINE      = 16,
+    OBJ_DLG_DATEFIELD       = 17,
+    OBJ_DLG_TIMEFIELD       = 18,
+    OBJ_DLG_NUMERICFIELD    = 19,
+    OBJ_DLG_CURRENCYFIELD   = 20,
+    OBJ_DLG_FORMATTEDFIELD  = 21,
+    OBJ_DLG_PATTERNFIELD    = 22,
+    OBJ_DLG_FILECONTROL     = 23,
+    OBJ_DLG_TREECONTROL     = 24,
+    OBJ_DLG_SPINBUTTON      = 25,
 
-#define OBJ_DLG_CONTROL         ((sal_uInt16) 1)
-#define OBJ_DLG_DIALOG          ((sal_uInt16) 2)
-#define OBJ_DLG_PUSHBUTTON      ((sal_uInt16) 3)
-#define OBJ_DLG_RADIOBUTTON     ((sal_uInt16) 4)
-#define OBJ_DLG_CHECKBOX        ((sal_uInt16) 5)
-#define OBJ_DLG_LISTBOX         ((sal_uInt16) 6)
-#define OBJ_DLG_COMBOBOX        ((sal_uInt16) 7)
-#define OBJ_DLG_GROUPBOX        ((sal_uInt16) 8)
-#define OBJ_DLG_EDIT            ((sal_uInt16) 9)
-#define OBJ_DLG_FIXEDTEXT       ((sal_uInt16)10)
-#define OBJ_DLG_IMAGECONTROL    ((sal_uInt16)11)
-#define OBJ_DLG_PROGRESSBAR     ((sal_uInt16)12)
-#define OBJ_DLG_HSCROLLBAR      ((sal_uInt16)13)
-#define OBJ_DLG_VSCROLLBAR      ((sal_uInt16)14)
-#define OBJ_DLG_HFIXEDLINE      ((sal_uInt16)15)
-#define OBJ_DLG_VFIXEDLINE      ((sal_uInt16)16)
-#define OBJ_DLG_DATEFIELD       ((sal_uInt16)17)
-#define OBJ_DLG_TIMEFIELD       ((sal_uInt16)18)
-#define OBJ_DLG_NUMERICFIELD    ((sal_uInt16)19)
-#define OBJ_DLG_CURRENCYFIELD   ((sal_uInt16)20)
-#define OBJ_DLG_FORMATTEDFIELD  ((sal_uInt16)21)
-#define OBJ_DLG_PATTERNFIELD    ((sal_uInt16)22)
-#define OBJ_DLG_FILECONTROL     ((sal_uInt16)23)
-#define OBJ_DLG_TREECONTROL     ((sal_uInt16)24)
-#define OBJ_DLG_SPINBUTTON      ((sal_uInt16)25)
-
-#define OBJ_DLG_FORMRADIO       ((sal_uInt16)26)
-#define OBJ_DLG_FORMCHECK       ((sal_uInt16)27)
-#define OBJ_DLG_FORMLIST        ((sal_uInt16)28)
-#define OBJ_DLG_FORMCOMBO       ((sal_uInt16)29)
-#define OBJ_DLG_FORMSPIN        ((sal_uInt16)30)
-#define OBJ_DLG_FORMVSCROLL     ((sal_uInt16)31)
-#define OBJ_DLG_FORMHSCROLL     ((sal_uInt16)32)
+    OBJ_DLG_FORMRADIO       = 26,
+    OBJ_DLG_FORMCHECK       = 27,
+    OBJ_DLG_FORMLIST        = 28,
+    OBJ_DLG_FORMCOMBO       = 29,
+    OBJ_DLG_FORMSPIN        = 30,
+    OBJ_DLG_FORMVSCROLL     = 31,
+    OBJ_DLG_FORMHSCROLL     = 32,
+};
 
 // control properties
-#define DLGED_PROP_BACKGROUNDCOLOR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) )
-#define DLGED_PROP_DROPDOWN             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dropdown" ) )
-#define DLGED_PROP_FORMATSSUPPLIER      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormatsSupplier" ) )
-#define DLGED_PROP_HEIGHT               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) )
-#define DLGED_PROP_LABEL                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ) )
-#define DLGED_PROP_NAME                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
-#define DLGED_PROP_ORIENTATION          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Orientation" ) )
-#define DLGED_PROP_POSITIONX            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) )
-#define DLGED_PROP_POSITIONY            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) )
-#define DLGED_PROP_STEP                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Step" ) )
-#define DLGED_PROP_TABINDEX             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) )
-#define DLGED_PROP_TEXTCOLOR            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) )
-#define DLGED_PROP_TEXTLINECOLOR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextLineColor" ) )
-#define DLGED_PROP_WIDTH                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) )
-#define DLGED_PROP_DECORATION           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Decoration" ) )
+#define DLGED_PROP_BACKGROUNDCOLOR   rtl::OUString("BackgroundColor")
+#define DLGED_PROP_DROPDOWN          rtl::OUString("Dropdown")
+#define DLGED_PROP_FORMATSSUPPLIER   rtl::OUString("FormatsSupplier")
+#define DLGED_PROP_HEIGHT            rtl::OUString("Height")
+#define DLGED_PROP_LABEL             rtl::OUString("Label")
+#define DLGED_PROP_NAME              rtl::OUString("Name")
+#define DLGED_PROP_ORIENTATION       rtl::OUString("Orientation")
+#define DLGED_PROP_POSITIONX         rtl::OUString("PositionX")
+#define DLGED_PROP_POSITIONY         rtl::OUString("PositionY")
+#define DLGED_PROP_STEP              rtl::OUString("Step")
+#define DLGED_PROP_TABINDEX          rtl::OUString("TabIndex")
+#define DLGED_PROP_TEXTCOLOR         rtl::OUString("TextColor")
+#define DLGED_PROP_TEXTLINECOLOR     rtl::OUString("TextLineColor")
+#define DLGED_PROP_WIDTH             rtl::OUString("Width")
+#define DLGED_PROP_DECORATION        rtl::OUString("Decoration")
 
 
 } // namespace basctl

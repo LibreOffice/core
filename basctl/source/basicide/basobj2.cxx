@@ -273,11 +273,11 @@ namespace
 
     ::std::auto_ptr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
-        pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
+        pChooser->SetMode(MacroChooser::ChooseOnly);
 
     if ( !bChooseOnly && rxLimitToDocument.is() )
         // Hack!
-        pChooser->SetMode( MACROCHOOSER_RECORDING );
+        pChooser->SetMode(MacroChooser::Recording);
 
     short nRetValue = pChooser->Execute();
 
@@ -285,10 +285,10 @@ namespace
 
     switch ( nRetValue )
     {
-        case MACRO_OK_RUN:
+        case Macro_OkRun:
         {
             pMethod = pChooser->GetMacro();
-            if ( !pMethod && pChooser->GetMode() == MACROCHOOSER_RECORDING )
+            if ( !pMethod && pChooser->GetMode() == MacroChooser::Recording )
                 pMethod = pChooser->CreateMacro();
 
             if ( !pMethod )

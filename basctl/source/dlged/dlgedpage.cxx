@@ -36,14 +36,6 @@ DlgEdPage::DlgEdPage( DlgEdModel& rModel, bool bMasterPage )
 
 //----------------------------------------------------------------------------
 
-DlgEdPage::DlgEdPage( const DlgEdPage& rPage )
-    :SdrPage( rPage )
-{
-    pDlgEdForm = rPage.pDlgEdForm;
-}
-
-//----------------------------------------------------------------------------
-
 DlgEdPage::~DlgEdPage()
 {
     Clear();
@@ -64,11 +56,7 @@ SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum
 
     DlgEdHint aHint( DlgEdHint::OBJORDERCHANGED );
     if ( pDlgEdForm )
-    {
-        DlgEditor* pDlgEditor = pDlgEdForm->GetDlgEditor();
-        if ( pDlgEditor )
-            pDlgEditor->Broadcast( aHint );
-    }
+        pDlgEdForm->GetDlgEditor().Broadcast( aHint );
 
     return pObj;
 }
