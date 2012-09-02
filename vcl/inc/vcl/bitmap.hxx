@@ -415,12 +415,12 @@ public:
                                                 double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount );
 public:
 
-                            Bitmap();
-                            Bitmap( const Bitmap& rBitmap );
-                            Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = NULL );
-                            Bitmap( const ResId& rResId );
-                            Bitmap( SalBitmap* pSalBitmap );
-                            ~Bitmap();
+    Bitmap();
+    Bitmap( const Bitmap& rBitmap );
+    Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = NULL );
+    Bitmap( const ResId& rResId );
+    Bitmap( SalBitmap* pSalBitmap );
+    ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
     inline sal_Bool             operator!() const;
@@ -447,7 +447,6 @@ public:
      * e.g. when the image reader has its preview mode enabled.
      */
     void                    SetSourceSizePixel( const Size& );
-
 
     sal_uInt16                  GetBitCount() const;
     inline sal_uLong            GetColorCount() const;
@@ -649,11 +648,6 @@ public:
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
-
-    /** Scale, crop and rotate the bitmap */
-    sal_Bool                    ScaleCropRotate(
-        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
-        const Color& rFillColor, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Rotate bitmap by the specified angle
 

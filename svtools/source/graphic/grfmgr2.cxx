@@ -46,6 +46,7 @@
 
 #define WATERMARK_LUM_OFFSET        50
 #define WATERMARK_CON_OFFSET        -70
+#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<20L)+nFrac*((long)(cVal1)-(cVal0)))>>20L))
 
 // ------------------
 // - GraphicManager -
@@ -264,172 +265,659 @@ sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
     return bRet;
 }
 
-sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
-                                       const Point& rPoint, const Size& rSize,
-                                       const BitmapEx& rBitmapEx, const GraphicAttr& rAttributes,
-                                       const sal_uLong nFlags, BitmapEx* pResultBitmapEx )
+sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttributes,
+                                sal_uInt16 nRot10, const Size& rUnrotatedSzPix,
+                                long nStartX, long nEndX, long nStartY, long nEndY,
+                                BitmapEx& rOutBmpEx )
 {
-    bool        bRet = false;
+    const long  aUnrotatedWidth  = rUnrotatedSzPix.Width();
+    const long  aUnrotatedHeight = rUnrotatedSzPix.Height();
+    const long  aBitmapWidth  = rBmpEx.GetSizePixel().Width();
+    const long  aBitmapHeight = rBmpEx.GetSizePixel().Height();
 
-    Point       aUnrotatedPointInPixels( pOutputDevice->LogicToPixel( rPoint ) );
-    Size        aUnrotatedSizeInPixels(  pOutputDevice->LogicToPixel( rSize ) );
+    long    nX, nY, nTmpX, nTmpY, nTmpFX, nTmpFY, nTmp;
+    double  fTmp;
 
-    if( aUnrotatedSizeInPixels.Width() <= 0  || aUnrotatedSizeInPixels.Height() <= 0)
-        return false;
+    bool    bHMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
+    bool    bVMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
 
-    Point       aOutPointInPixels;
-    Size        aOutSizeInPixels;
-    BitmapEx    aBitmapEx( rBitmapEx );
-    int         nRotation = rAttributes.GetRotation() % 3600;
+    long*   pMapIX = new long[ aUnrotatedWidth ];
+    long*   pMapFX = new long[ aUnrotatedWidth ];
+    long*   pMapIY = new long[ aUnrotatedHeight ];
+    long*   pMapFY = new long[ aUnrotatedHeight ];
 
-    if( nRotation != 0 )
+    const double fScaleX = ( aUnrotatedWidth  - 1 ) / (double) ( aBitmapWidth  - 1 );
+    const double fScaleY = ( aUnrotatedHeight - 1 ) / (double) ( aBitmapHeight - 1 );
+
+    const double fRevScaleX = 1.0 / fScaleX;
+    const double fRevScaleY = 1.0 / fScaleY;
+
+    int x,y;
+
+    // create horizontal mapping table
+    for( x = 0, nTmpX = aBitmapWidth - 1L, nTmp = aBitmapWidth - 2L; x < aUnrotatedWidth; x++ )
     {
-        Polygon aPoly( Rectangle( rPoint, rSize ) );
-        aPoly.Rotate( rPoint, nRotation );
-        const Rectangle aRotationBoundRect( aPoly.GetBoundRect() );
-        aOutPointInPixels = pOutputDevice->LogicToPixel( aRotationBoundRect.TopLeft() );
-        aOutSizeInPixels  = pOutputDevice->LogicToPixel( aRotationBoundRect.GetSize() );
+        fTmp = x * fRevScaleX;
+
+        if( bHMirr )
+            fTmp = nTmpX - fTmp;
+
+        pMapIX[ x ] = MinMax( fTmp, 0, nTmp );
+        pMapFX[ x ] = (long) ( ( fTmp - pMapIX[ x ] ) * 1048576.0 );
     }
-    else
+
+    // create vertical mapping table
+    for( y = 0, nTmpY = aBitmapHeight - 1L, nTmp = aBitmapHeight - 2L; y < aUnrotatedHeight; y++ )
     {
-        aOutPointInPixels = aUnrotatedPointInPixels;
-        aOutSizeInPixels  = aUnrotatedSizeInPixels;
+        fTmp = y * fRevScaleY;
+
+        if( bVMirr )
+            fTmp = nTmpY - fTmp;
+
+        pMapIY[ y ] = MinMax( fTmp, 0, nTmp );
+        pMapFY[ y ] = (long) ( ( fTmp - pMapIY[ y ] ) * 1048576.0 );
     }
 
-    Point       aOutPoint;
-    Size        aOutSize;
 
-    const Size& rBitmapSizePixels = rBitmapEx.GetSizePixel();
-    Rectangle   aCropRectangle(0, 0, 0, 0);
+    Bitmap              aBmp( rBmpEx.GetBitmap() );
+    Bitmap              aOutBmp;
+    BitmapReadAccess*   pReadAccess = aBmp.AcquireReadAccess();
+    BitmapWriteAccess*  pWriteAccess;
 
-    bool        isHorizontalMirrored = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
-    bool        isVerticalMirrored   = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
+    const double        fCosAngle = cos( nRot10 * F_PI1800 );
+    const double        fSinAngle = sin( nRot10 * F_PI1800 );
+    const long          aTargetWidth  = nEndX - nStartX + 1L;
+    const long          aTargetHeight = nEndY - nStartY + 1L;
+    long*               pCosX = new long[ aTargetWidth ];
+    long*               pSinX = new long[ aTargetWidth ];
+    long*               pCosY = new long[ aTargetHeight ];
+    long*               pSinY = new long[ aTargetHeight ];
+    long                nUnRotX, nUnRotY, nSinY, nCosY;
+    sal_uInt8           cR0, cG0, cB0, cR1, cG1, cB1;
+    bool                bRet = false;
 
-    // calculate output sizes
-    if( true || !pResultBitmapEx )
+    Polygon             aPoly( Rectangle( Point(), rUnrotatedSzPix ) );
+    aPoly.Rotate( Point(), nRot10 );
+    Rectangle           aNewBound( aPoly.GetBoundRect() );
+
+    bool                scaleByAveraging = fScaleX < 0.6 || fScaleY < 0.6;
+
+    // create horizontal mapping table
+    for( x = 0, nTmpX = aNewBound.Left() + nStartX; x < aTargetWidth; x++ )
     {
-        Rectangle aBitmapRectangle( aOutPointInPixels, aOutSizeInPixels );
-        Rectangle aOutRect( Point(), pOutputDevice->GetOutputSizePixel() );
+        pCosX[ x ] = FRound( fCosAngle * ( fTmp = nTmpX++ << 8 ) );
+        pSinX[ x ] = FRound( fSinAngle * fTmp );
+    }
 
-        if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )
+    // create vertical mapping table
+    for( y = 0, nTmpY = aNewBound.Top() + nStartY; y < aTargetHeight; y++ )
+    {
+        pCosY[ y ] = FRound( fCosAngle * ( fTmp = nTmpY++ << 8 ) );
+        pSinY[ y ] = FRound( fSinAngle * fTmp );
+    }
+
+    if( pReadAccess )
+    {
+        aOutBmp = Bitmap( Size( aTargetWidth, aTargetHeight ), 24 );
+        pWriteAccess = aOutBmp.AcquireWriteAccess();
+
+        if( pWriteAccess )
         {
-            const Region aPaintRegion( ( (Window*) pOutputDevice )->GetPaintRegion() );
+            BitmapColor aColRes;
 
-            if( !aPaintRegion.IsNull() )
-                aOutRect.Intersection( pOutputDevice->LogicToPixel( aPaintRegion.GetBoundRect() ) );
+            if ( !scaleByAveraging )
+            {
+                if( pReadAccess->HasPalette() )
+                {
+                    for( y = 0; y < aTargetHeight; y++ )
+                    {
+                        nSinY = pSinY[ y ];
+                        nCosY = pCosY[ y ];
+
+                        for( x = 0; x < aTargetWidth; x++ )
+                        {
+                            nUnRotX = ( pCosX[ x ] - nSinY ) >> 8;
+                            nUnRotY = ( pSinX[ x ] + nCosY ) >> 8;
+
+                            if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                            {
+                                nTmpX = pMapIX[ nUnRotX ]; nTmpFX = pMapFX[ nUnRotX ];
+                                nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
+
+                                const BitmapColor& rCol0 = pReadAccess->GetPaletteColor( pReadAccess->GetPixel( nTmpY, nTmpX ) );
+                                const BitmapColor& rCol1 = pReadAccess->GetPaletteColor( pReadAccess->GetPixel( nTmpY, ++nTmpX ) );
+                                cR0 = MAP( rCol0.GetRed(), rCol1.GetRed(), nTmpFX );
+                                cG0 = MAP( rCol0.GetGreen(), rCol1.GetGreen(), nTmpFX );
+                                cB0 = MAP( rCol0.GetBlue(), rCol1.GetBlue(), nTmpFX );
+
+                                const BitmapColor& rCol3 = pReadAccess->GetPaletteColor( pReadAccess->GetPixel( ++nTmpY, nTmpX ) );
+                                const BitmapColor& rCol2 = pReadAccess->GetPaletteColor( pReadAccess->GetPixel( nTmpY, --nTmpX ) );
+                                cR1 = MAP( rCol2.GetRed(), rCol3.GetRed(), nTmpFX );
+                                cG1 = MAP( rCol2.GetGreen(), rCol3.GetGreen(), nTmpFX );
+                                cB1 = MAP( rCol2.GetBlue(), rCol3.GetBlue(), nTmpFX );
+
+                                aColRes.SetRed( MAP( cR0, cR1, nTmpFY ) );
+                                aColRes.SetGreen( MAP( cG0, cG1, nTmpFY ) );
+                                aColRes.SetBlue( MAP( cB0, cB1, nTmpFY ) );
+                                pWriteAccess->SetPixel( y, x, aColRes );
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    BitmapColor aCol0, aCol1;
+
+                    for( y = 0; y < aTargetHeight; y++ )
+                    {
+                        nSinY = pSinY[ y ];
+                        nCosY = pCosY[ y ];
+
+                        for( x = 0; x < aTargetWidth; x++ )
+                        {
+                            nUnRotX = ( pCosX[ x ] - nSinY ) >> 8;
+                            nUnRotY = ( pSinX[ x ] + nCosY ) >> 8;
+
+                            if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                            {
+                                nTmpX = pMapIX[ nUnRotX ]; nTmpFX = pMapFX[ nUnRotX ];
+                                nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
+
+                                aCol0 = pReadAccess->GetPixel( nTmpY, nTmpX );
+                                aCol1 = pReadAccess->GetPixel( nTmpY, ++nTmpX );
+                                cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTmpFX );
+                                cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTmpFX );
+                                cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTmpFX );
+
+                                aCol1 = pReadAccess->GetPixel( ++nTmpY, nTmpX );
+                                aCol0 = pReadAccess->GetPixel( nTmpY, --nTmpX );
+                                cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTmpFX );
+                                cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTmpFX );
+                                cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTmpFX );
+
+                                aColRes.SetRed( MAP( cR0, cR1, nTmpFY ) );
+                                aColRes.SetGreen( MAP( cG0, cG1, nTmpFY ) );
+                                aColRes.SetBlue( MAP( cB0, cB1, nTmpFY ) );
+                                pWriteAccess->SetPixel( y, x, aColRes );
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                double aSumRed, aSumGreen, aSumBlue, aCount;
+                BitmapColor aColor;
+                BitmapColor aResultColor;
+
+                for( y = 0; y < aTargetHeight; y++ )
+                {
+                    nSinY = pSinY[ y ];
+                    nCosY = pCosY[ y ];
+
+                    for( x = 0; x < aTargetWidth; x++ )
+                    {
+                        double aUnrotatedX = ( pCosX[ x ] - nSinY ) / 256.0;
+                        double aUnrotatedY = ( pSinX[ x ] + nCosY ) / 256.0;
+
+                        if( ( aUnrotatedX >= 0 ) && ( aUnrotatedX < aUnrotatedWidth ) &&
+                            ( aUnrotatedY >= 0 ) && ( aUnrotatedY < aUnrotatedHeight ) )
+                        {
+                            double dYStart = ((aUnrotatedY + 0.5) * fRevScaleY) - 0.5;
+                            double dYEnd   = ((aUnrotatedY + 1.5) * fRevScaleY) - 0.5;
+
+                            int yStart = MinMax( dYStart, 0, aBitmapHeight - 1);
+                            int yEnd   = MinMax( dYEnd,   0, aBitmapHeight - 1);
+
+                            double dXStart = ((aUnrotatedX + 0.5) * fRevScaleX) - 0.5;
+                            double dXEnd   = ((aUnrotatedX + 1.5) * fRevScaleX) - 0.5;
+
+                            int xStart = MinMax( dXStart, 0, aBitmapWidth - 1);
+                            int xEnd   = MinMax( dXEnd,   0, aBitmapWidth - 1);
+
+                            aSumRed = aSumGreen = aSumBlue = 0.0;
+                            aCount = 0;
+
+                            for (int yIn = yStart; yIn <= yEnd; yIn++)
+                            {
+                                for (int xIn = xStart; xIn <= xEnd; xIn++)
+                                {
+                                    aColor = pReadAccess->GetPixel( yIn, xIn );
+
+                                    if( pReadAccess->HasPalette() )
+                                        aColor = pReadAccess->GetPaletteColor( aColor );
+
+                                    aSumRed   += aColor.GetRed();
+                                    aSumGreen += aColor.GetGreen();
+                                    aSumBlue  += aColor.GetBlue();
+
+                                    aCount++;
+                                }
+                            }
+
+                            aResultColor.SetRed(   MinMax( aSumRed   / aCount, 0, 255) );
+                            aResultColor.SetGreen( MinMax( aSumGreen / aCount, 0, 255) );
+                            aResultColor.SetBlue(  MinMax( aSumBlue  / aCount, 0, 255) );
+
+                            pWriteAccess->SetPixel( y, x, aResultColor );
+                        }
+                    }
+                }
+            }
+
+            aOutBmp.ReleaseAccess( pWriteAccess );
+            bRet = true;
         }
-        aOutRect.Intersection( aBitmapRectangle );
 
-        if( !aOutRect.IsEmpty() )
-        {
-            aOutPoint = pOutputDevice->PixelToLogic( aOutRect.TopLeft() );
-            aOutSize =  pOutputDevice->PixelToLogic( aOutRect.GetSize() );
-
-            aCropRectangle = Rectangle(
-                aOutRect.Left()   - aBitmapRectangle.Left(),
-                aOutRect.Top()    - aBitmapRectangle.Top(),
-                aOutRect.Right()  - aBitmapRectangle.Left(),
-                aOutRect.Bottom() - aBitmapRectangle.Top() );
-        }
-    }
-    else
-    {
-        aOutPoint = pOutputDevice->PixelToLogic( aOutPointInPixels );
-        aOutSize =  pOutputDevice->PixelToLogic( aOutSizeInPixels );
-
-        aCropRectangle = Rectangle(
-            0, 0,
-            aOutSizeInPixels.Width()  - 1,
-            aOutSizeInPixels.Height() - 1 );
+        aBmp.ReleaseAccess( pReadAccess );
     }
 
-
-    if( aCropRectangle.GetWidth() <= 0 && aCropRectangle.GetHeight() <= 0 )
-        return false;
-
-    // do transformation
-    if( !isHorizontalMirrored &&
-        !isVerticalMirrored &&
-        !nRotation &&
-        aOutSizeInPixels == rBitmapSizePixels)
+    // mask processing
+    if( bRet && ( rBmpEx.IsTransparent() || ( nRot10 != 0 && nRot10 != 900 && nRot10 != 1800 && nRot10 != 2700 ) ) )
     {
-        // simple copy thorugh
-        aOutPoint = pOutputDevice->PixelToLogic( aOutPointInPixels );
-        aOutSize = pOutputDevice->PixelToLogic( aOutSizeInPixels );
-        bRet = true;
-    }
-    else
-    {
-        // mirror the image - this should not impact the picture dimenstions
-        if( isHorizontalMirrored || isVerticalMirrored )
-            bRet = aBitmapEx.Mirror( rAttributes.GetMirrorFlags() );
+        bRet = false;
 
-        // prepare rotation if needed
-        if (nRotation != 0)
+        if( rBmpEx.IsAlpha() )
         {
-            Polygon aPoly( Rectangle( Point(), aUnrotatedSizeInPixels) );
-            aPoly.Rotate( Point(), nRotation );
-            Rectangle aNewBound( aPoly.GetBoundRect() );
+            AlphaMask   aAlpha( rBmpEx.GetAlpha() );
+            AlphaMask   aOutAlpha;
 
-            aCropRectangle = Rectangle (
-                                aCropRectangle.Left()   + aNewBound.Left(),
-                                aCropRectangle.Top()    + aNewBound.Top(),
-                                aCropRectangle.Right()  + aNewBound.Left(),
-                                aCropRectangle.Bottom() + aNewBound.Top() );
-        }
+            pReadAccess = aAlpha.AcquireReadAccess();
 
-        // calculate scaling factors
-        double fScaleX = aUnrotatedSizeInPixels.Width()  / (double) rBitmapSizePixels.Width();
-        double fScaleY = aUnrotatedSizeInPixels.Height() / (double) rBitmapSizePixels.Height();
+            if( pReadAccess )
+            {
+                aOutAlpha = AlphaMask( Size( aTargetWidth, aTargetHeight ) );
+                pWriteAccess = aOutAlpha.AcquireWriteAccess();
 
-        if( nFlags & GRFMGR_DRAW_SMOOTHSCALE )
-        {
-            bRet = aBitmapEx.ScaleCropRotate( fScaleX, fScaleY, aCropRectangle, nRotation, COL_TRANSPARENT );
+                if( pWriteAccess )
+                {
+                    if( pReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL &&
+                        pWriteAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                    {
+                        if ( !scaleByAveraging )
+                        {
+                            Scanline pLine0, pLine1, pLineW;
+
+                            for( nY = 0; nY < aTargetHeight; nY++ )
+                            {
+                                nSinY = pSinY[ nY ], nCosY = pCosY[ nY ];
+                                pLineW = pWriteAccess->GetScanline( nY );
+
+                                for( nX = 0; nX < aTargetWidth; nX++ )
+                                {
+                                    nUnRotX = ( pCosX[ nX ] - nSinY ) >> 8;
+                                    nUnRotY = ( pSinX[ nX ] + nCosY ) >> 8;
+
+                                    if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                        ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                                    {
+                                        nTmpX = pMapIX[ nUnRotX ], nTmpFX = pMapFX[ nUnRotX ];
+                                        nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
+
+                                        pLine0 = pReadAccess->GetScanline( nTmpY++ );
+                                        pLine1 = pReadAccess->GetScanline( nTmpY );
+
+                                        const long  nAlpha0 = pLine0[ nTmpX ];
+                                        const long  nAlpha2 = pLine1[ nTmpX++ ];
+                                        const long  nAlpha1 = pLine0[ nTmpX ];
+                                        const long  nAlpha3 = pLine1[ nTmpX ];
+                                        const long  n0 = MAP( nAlpha0, nAlpha1, nTmpFX );
+                                        const long  n1 = MAP( nAlpha2, nAlpha3, nTmpFX );
+
+                                        *pLineW++ = MAP( n0, n1, nTmpFY );
+                                    }
+                                    else
+                                        *pLineW++ = 255;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                            BitmapColor         aResultColor( 0 );
+                            double aSum, aCount;
+
+                            for( y = 0; y < aTargetHeight; y++ )
+                            {
+                                nSinY = pSinY[ y ];
+                                nCosY = pCosY[ y ];
+
+                                for( x = 0; x < aTargetWidth; x++ )
+                                {
+
+                                    double aUnrotatedX = ( pCosX[ x ] - nSinY ) / 256.0;
+                                    double aUnrotatedY = ( pSinX[ x ] + nCosY ) / 256.0;
+
+                                    if( ( aUnrotatedX >= 0 ) && ( aUnrotatedX < aUnrotatedWidth ) &&
+                                        ( aUnrotatedY >= 0 ) && ( aUnrotatedY < aUnrotatedHeight ) )
+                                    {
+                                        double dYStart = ((aUnrotatedY + 0.5) * fRevScaleY) - 0.5;
+                                        double dYEnd   = ((aUnrotatedY + 1.5) * fRevScaleY) - 0.5;
+
+                                        int yStart = MinMax( dYStart, 0, aBitmapHeight - 1);
+                                        int yEnd   = MinMax( dYEnd,   0, aBitmapHeight - 1);
+
+                                        double dXStart = ((aUnrotatedX + 0.5) * fRevScaleX) - 0.5;
+                                        double dXEnd   = ((aUnrotatedX + 1.5) * fRevScaleX) - 0.5;
+
+                                        int xStart = MinMax( dXStart, 0, aBitmapWidth - 1);
+                                        int xEnd   = MinMax( dXEnd,   0, aBitmapWidth - 1);
+
+                                        aSum = 0.0;
+                                        aCount = 0;
+
+                                        for (int yIn = yStart; yIn <= yEnd; yIn++)
+                                        {
+                                            for (int xIn = xStart; xIn <= xEnd; xIn++)
+                                            {
+                                                aSum += pReadAccess->GetPixel( yIn, xIn ).GetIndex();
+                                                aCount++;
+                                            }
+                                        }
+                                        aResultColor.SetIndex( MinMax( aSum  / aCount, 0, 255) );
+                                        pWriteAccess->SetPixel( y, x, aResultColor );
+                                    }
+                                    else
+                                    {
+                                        pWriteAccess->SetPixel( y, x, aTrans );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                        BitmapColor         aAlphaVal( 0 );
+
+                        for( nY = 0; nY < aTargetHeight; nY++ )
+                        {
+                            nSinY = pSinY[ nY ], nCosY = pCosY[ nY ];
+
+                            for( nX = 0; nX < aTargetWidth; nX++ )
+                            {
+                                nUnRotX = ( pCosX[ nX ] - nSinY ) >> 8;
+                                nUnRotY = ( pSinX[ nX ] + nCosY ) >> 8;
+
+                                if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                    ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                                {
+                                    nTmpX = pMapIX[ nUnRotX ]; nTmpFX = pMapFX[ nUnRotX ];
+                                    nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
+
+                                    const long  nAlpha0 = pReadAccess->GetPixel( nTmpY, nTmpX ).GetIndex();
+                                    const long  nAlpha1 = pReadAccess->GetPixel( nTmpY, ++nTmpX ).GetIndex();
+                                    const long  nAlpha3 = pReadAccess->GetPixel( ++nTmpY, nTmpX ).GetIndex();
+                                    const long  nAlpha2 = pReadAccess->GetPixel( nTmpY, --nTmpX ).GetIndex();
+                                    const long  n0 = MAP( nAlpha0, nAlpha1, nTmpFX );
+                                    const long  n1 = MAP( nAlpha2, nAlpha3, nTmpFX );
+
+                                    aAlphaVal.SetIndex( MAP( n0, n1, nTmpFY ) );
+                                    pWriteAccess->SetPixel( nY, nX, aAlphaVal );
+                                }
+                                else
+                                    pWriteAccess->SetPixel( nY, nX, aTrans );
+                            }
+                        }
+                    }
+
+                    aOutAlpha.ReleaseAccess( pWriteAccess );
+                    bRet = sal_True;
+                }
+
+                aAlpha.ReleaseAccess( pReadAccess );
+            }
+
+            if( bRet )
+                rOutBmpEx = BitmapEx( aOutBmp, aOutAlpha );
         }
         else
         {
-            aCropRectangle = Rectangle (
-                                aCropRectangle.Left()   / fScaleX,
-                                aCropRectangle.Top()    / fScaleY,
-                                aCropRectangle.Right()  / fScaleX,
-                                aCropRectangle.Bottom() / fScaleY );
+            Bitmap aOutMsk( Size( aTargetWidth, aTargetHeight ), 1 );
+            pWriteAccess = aOutMsk.AcquireWriteAccess();
 
-            bRet = aBitmapEx.Crop( aCropRectangle );
-            if ( bRet )
-                bRet = aBitmapEx.Scale( fScaleX, fScaleY );
+            if( pWriteAccess )
+            {
+                Bitmap              aMsk( rBmpEx.GetMask() );
+                const BitmapColor   aB( pWriteAccess->GetBestMatchingColor( Color( COL_BLACK ) ) );
+                const BitmapColor   aW( pWriteAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                BitmapReadAccess*   pMAcc = NULL;
+
+                if( !aMsk || ( ( pMAcc = aMsk.AcquireReadAccess() ) != NULL ) )
+                {
+                    long*       pMapLX = new long[ aUnrotatedWidth ];
+                    long*       pMapLY = new long[ aUnrotatedHeight ];
+                    BitmapColor aTestB;
+
+                    if( pMAcc )
+                        aTestB = pMAcc->GetBestMatchingColor( Color( COL_BLACK ) );
+
+                    // create new horizontal mapping table
+                    for( nX = 0UL; nX < aUnrotatedWidth; nX++ )
+                        pMapLX[ nX ] = FRound( (double) pMapIX[ nX ] + pMapFX[ nX ] / 1048576. );
+
+                    // create new vertical mapping table
+                    for( nY = 0UL; nY < aUnrotatedHeight; nY++ )
+                        pMapLY[ nY ] = FRound( (double) pMapIY[ nY ] + pMapFY[ nY ] / 1048576. );
+
+                    // do mask rotation
+                    for( nY = 0; nY < aTargetHeight; nY++ )
+                    {
+                        nSinY = pSinY[ nY ];
+                        nCosY = pCosY[ nY ];
+
+                        for( nX = 0; nX < aTargetWidth; nX++ )
+                        {
+                            nUnRotX = ( pCosX[ nX ] - nSinY ) >> 8;
+                            nUnRotY = ( pSinX[ nX ] + nCosY ) >> 8;
+
+                            if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                            {
+                                if( pMAcc )
+                                {
+                                    if( pMAcc->GetPixel( pMapLY[ nUnRotY ], pMapLX[ nUnRotX ] ) == aTestB )
+                                        pWriteAccess->SetPixel( nY, nX, aB );
+                                    else
+                                        pWriteAccess->SetPixel( nY, nX, aW );
+                                }
+                                else
+                                    pWriteAccess->SetPixel( nY, nX, aB );
+                            }
+                            else
+                                pWriteAccess->SetPixel( nY, nX, aW );
+                        }
+                    }
+
+                    delete[] pMapLX;
+                    delete[] pMapLY;
+
+                    if( pMAcc )
+                        aMsk.ReleaseAccess( pMAcc );
+
+                    bRet = sal_True;
+                }
+
+                aOutMsk.ReleaseAccess( pWriteAccess );
+            }
+
+            if( bRet )
+                rOutBmpEx = BitmapEx( aOutBmp, aOutMsk );
         }
+
+        if( !bRet )
+            rOutBmpEx = aOutBmp;
+    }
+    else
+        rOutBmpEx = aOutBmp;
+
+    delete[] pSinX;
+    delete[] pCosX;
+    delete[] pSinY;
+    delete[] pCosY;
+
+    delete[] pMapIX;
+    delete[] pMapFX;
+    delete[] pMapIY;
+    delete[] pMapFY;
+
+    return bRet;
+}
+
+sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
+                                       const Point& rPoint, const Size& rSize,
+                                       const BitmapEx& rBitmapEx, const GraphicAttr& rAttributes,
+                                       const sal_uLong /*nFlags*/, BitmapEx* pBmpEx )
+{
+    sal_uInt16  nRot10 = rAttributes.GetRotation() % 3600;
+
+    Point   aOutputPointPix;
+    Size    aOutputSizePix;
+    Point   aUnrotatedPointPix( pOutputDevice->LogicToPixel( rPoint ) );
+    Size    aUnrotatedSizePix(  pOutputDevice->LogicToPixel( rSize ) );
+
+    bool    bRet = false;
+
+    if( nRot10 )
+    {
+        Polygon aPoly( Rectangle( rPoint, rSize ) );
+        aPoly.Rotate( rPoint, nRot10 );
+        const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+        aOutputPointPix = pOutputDevice->LogicToPixel( aRotBoundRect.TopLeft() );
+        aOutputSizePix  = pOutputDevice->LogicToPixel( aRotBoundRect.GetSize() );
+    }
+    else
+    {
+        aOutputPointPix = aUnrotatedPointPix;
+        aOutputSizePix  = aUnrotatedSizePix;
     }
 
-    if( bRet )
+    if( aUnrotatedSizePix.Width() && aUnrotatedSizePix.Height() )
     {
-        // attribute adjustment if neccessary
-        if(  rAttributes.IsSpecialDrawMode()
-          || rAttributes.IsAdjusted()
-          || rAttributes.IsTransparent() )
+        BitmapEx        aBmpEx( rBitmapEx );
+        BitmapEx        aOutBmpEx;
+        Point           aOutPoint;
+        Size            aOutSize;
+        const Size&     rBmpSzPix = rBitmapEx.GetSizePixel();
+        const long      nW = rBmpSzPix.Width();
+        const long      nH = rBmpSzPix.Height();
+        long            nStartX = -1, nStartY = -1, nEndX = -1, nEndY = -1;
+        bool            bHMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
+        bool            bVMirr = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
+
+        // calculate output sizes
+        if( !pBmpEx )
         {
-            ImplAdjust( aBitmapEx, rAttributes, ADJUSTMENT_DRAWMODE | ADJUSTMENT_COLORS | ADJUSTMENT_TRANSPARENCY );
+            Point       aPt;
+            Rectangle   aOutRect( aPt, pOutputDevice->GetOutputSizePixel() );
+            Rectangle   aBmpRect( aOutputPointPix, aOutputSizePix );
+
+            if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )
+            {
+                const Region aPaintRgn( ( (Window*) pOutputDevice )->GetPaintRegion() );
+                if( !aPaintRgn.IsNull() )
+                    aOutRect.Intersection( pOutputDevice->LogicToPixel( aPaintRgn.GetBoundRect() ) );
+            }
+
+            aOutRect.Intersection( aBmpRect );
+
+            if( !aOutRect.IsEmpty() )
+            {
+                aOutPoint = pOutputDevice->PixelToLogic( aOutRect.TopLeft() );
+                aOutSize = pOutputDevice->PixelToLogic( aOutRect.GetSize() );
+                nStartX = aOutRect.Left() - aBmpRect.Left();
+                nStartY = aOutRect.Top() - aBmpRect.Top();
+                nEndX = aOutRect.Right() - aBmpRect.Left();
+                nEndY = aOutRect.Bottom() - aBmpRect.Top();
+            }
+            else
+            {
+                nStartX = -1L; // invalid
+            }
+        }
+        else
+        {
+            aOutPoint = pOutputDevice->PixelToLogic( aOutputPointPix );
+            aOutSize = pOutputDevice->PixelToLogic( aOutputSizePix );
+            nStartX = nStartY = 0;
+            nEndX = aOutputSizePix.Width() - 1L;
+            nEndY = aOutputSizePix.Height() - 1L;
         }
 
-        // OutDev adjustment if neccessary
-        if(   pOutputDevice->GetOutDevType() != OUTDEV_PRINTER
-          &&  pOutputDevice->GetBitCount() <= 8
-          &&  aBitmapEx.GetBitCount() >= 8 )
+        // do transformation
+        if( nStartX >= 0L )
         {
-            aBitmapEx.Dither( BMP_DITHER_MATRIX );
-        }
-    }
+            const bool bSimple = ( 1 == nW || 1 == nH );
 
-    // create output
-    if( bRet )
-    {
-        if( pResultBitmapEx )
+            if( nRot10 )
+            {
+                if( bSimple )
+                {
+                    bRet = ( aOutBmpEx = aBmpEx ).Scale( aUnrotatedSizePix );
+
+                    if( bRet )
+                        aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
+                }
+                else
+                {
+                    bRet = ImplCreateRotatedScaled( aBmpEx, rAttributes,
+                                                    nRot10, aUnrotatedSizePix,
+                                                    nStartX, nEndX, nStartY, nEndY,
+                                                    aOutBmpEx );
+                }
+            }
+            else
+            {
+                if( !bHMirr && !bVMirr && aOutputSizePix == rBmpSzPix )
+                {
+                    aOutPoint = pOutputDevice->PixelToLogic( aOutputPointPix );
+                    aOutSize  = pOutputDevice->PixelToLogic( aOutputSizePix );
+                    aOutBmpEx = aBmpEx;
+                    bRet      = true;
+                }
+                else
+                {
+                    if( bSimple )
+                    {
+                        bRet = ( aOutBmpEx = aBmpEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
+                    }
+                    else
+                    {
+                        bRet = ImplCreateRotatedScaled( aBmpEx, rAttributes,
+                                                    nRot10, aUnrotatedSizePix,
+                                                    nStartX, nEndX, nStartY, nEndY,
+                                                    aOutBmpEx );
+                    }
+                }
+            }
+
+            if( bRet )
+            {
+                // Attribute adjustment if neccessary
+                if( rAttributes.IsSpecialDrawMode() || rAttributes.IsAdjusted() || rAttributes.IsTransparent() )
+                    ImplAdjust( aOutBmpEx, rAttributes, ADJUSTMENT_DRAWMODE | ADJUSTMENT_COLORS | ADJUSTMENT_TRANSPARENCY );
+
+                // OutDev adjustment if neccessary
+                if( pOutputDevice->GetOutDevType() != OUTDEV_PRINTER && pOutputDevice->GetBitCount() <= 8 && aOutBmpEx.GetBitCount() >= 8 )
+                    aOutBmpEx.Dither( BMP_DITHER_MATRIX );
+            }
+        }
+
+        // Create output
+        if( bRet )
         {
-            if( !rAttributes.IsTransparent() && !aBitmapEx.IsAlpha() )
-                aBitmapEx = BitmapEx( aBitmapEx.GetBitmap().CreateDisplayBitmap( pOutputDevice ), aBitmapEx.GetMask() );
+            if( !pBmpEx )
+                pOutputDevice->DrawBitmapEx( aOutPoint, aOutSize, aOutBmpEx );
+            else
+            {
+                if( !rAttributes.IsTransparent() && !aOutBmpEx.IsAlpha() )
+                    aOutBmpEx = BitmapEx( aOutBmpEx.GetBitmap().CreateDisplayBitmap( pOutputDevice ), aOutBmpEx.GetMask() );
 
-            *pResultBitmapEx = aBitmapEx;
+                pOutputDevice->DrawBitmapEx( aOutPoint, aOutSize, *pBmpEx = aOutBmpEx );
+            }
         }
-        pOutputDevice->DrawBitmapEx( aOutPoint, aOutSize, aBitmapEx);
     }
 
     return bRet;

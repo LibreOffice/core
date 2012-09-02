@@ -389,62 +389,6 @@ sal_Bool BitmapEx::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
     return bRet;
 }
 
-sal_Bool BitmapEx::ScaleCropRotate(
-        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel,
-        long nAngle10, const Color& rFillColor, sal_uLong nScaleFlag )
-{
-    bool bReturn = false;
-
-    if( !!aBitmap )
-    {
-        // If fill color is transpatent
-        const bool bTransparentRotation = Color( COL_TRANSPARENT ) == rFillColor;
-
-        // If angle is 0, 90, 180 or 270 degreees, then we don't need to create an alpha bitmap.
-        const bool bRightAngleRotation = (nAngle10 == 0 || nAngle10 == 900 || nAngle10 == 1800 || nAngle10 == 2700);
-
-        if( !bRightAngleRotation && bTransparentRotation )
-        {
-            if( eTransparent == TRANSPARENT_COLOR )
-            {
-                bReturn = aBitmap.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, aTransparentColor, nScaleFlag );
-            }
-            else if( eTransparent == TRANSPARENT_NONE )
-            {
-                bReturn = aBitmap.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_BLACK, nScaleFlag );
-                if ( bReturn )
-                {
-                    aMask = Bitmap( aBitmapSize, 1 );
-                    aMask.Erase( COL_BLACK );
-                    aMask.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_WHITE, nScaleFlag );
-                    eTransparent = TRANSPARENT_BITMAP;
-                }
-            } else {
-                bReturn = aBitmap.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_BLACK, nScaleFlag );
-                if( bReturn && !!aMask )
-                {
-                    aMask.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_WHITE, nScaleFlag );
-                    aMask.Convert( BMP_CONVERSION_8BIT_GREYS );
-                }
-            }
-        }
-        else
-        {
-            bReturn = aBitmap.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, rFillColor, nScaleFlag );
-            if( eTransparent == TRANSPARENT_BITMAP  && !!aMask )
-            {
-                 bReturn = aMask.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_WHITE, nScaleFlag );
-                 aMask.Convert( BMP_CONVERSION_8BIT_GREYS );
-            }
-        }
-    }
-
-    if ( bReturn )
-        aBitmapSize = aBitmap.GetSizePixel();
-
-    return bReturn;
-}
-
 sal_Bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
 {
     sal_Bool bRet = sal_False;
