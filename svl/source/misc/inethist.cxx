@@ -20,10 +20,10 @@
 #include <svl/inethist.hxx>
 
 #include <algorithm>
+#include <string.h>
 
 #include "rtl/instance.hxx"
 #include "rtl/crc.h"
-#include "rtl/memory.h"
 #include <tools/solar.h>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
@@ -273,7 +273,7 @@ void INetURLHistory_Impl::move (sal_uInt16 nSI, sal_uInt16 nDI)
     if (nSI < nDI)
     {
         // shift left.
-        rtl_moveMemory (
+        memmove (
             &m_pHash[nSI    ],
             &m_pHash[nSI + 1],
             (nDI - nSI) * sizeof(hash_entry));
@@ -281,7 +281,7 @@ void INetURLHistory_Impl::move (sal_uInt16 nSI, sal_uInt16 nDI)
     if (nSI > nDI)
     {
         // shift right.
-        rtl_moveMemory (
+        memmove (
             &m_pHash[nDI + 1],
             &m_pHash[nDI    ],
             (nSI - nDI) * sizeof(hash_entry));

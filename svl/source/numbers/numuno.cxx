@@ -106,7 +106,7 @@ sal_Int64 SAL_CALL SvNumberFormatsSupplierObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
 {
     if ( rId.getLength() == 16 &&
-          0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+          0 == memcmp( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
