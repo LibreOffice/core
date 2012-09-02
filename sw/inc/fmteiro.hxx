@@ -42,7 +42,7 @@ public:
     SwFmtEditInReadonly( sal_uInt16 nId = RES_EDIT_IN_READONLY,
                      sal_Bool bPrt = sal_False ) : SfxBoolItem( nId, bPrt ) {}
 
-    // "pure virtual methos" of SfxPoolItem
+    /// "pure virtual methos" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

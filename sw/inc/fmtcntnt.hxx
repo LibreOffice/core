@@ -36,19 +36,19 @@ class SwNodeIndex;
 class SwStartNode;
 
 
-// Cntnt, content of frame (header, footer, fly).
+/// Cntnt, content of frame (header, footer, fly).
 class SW_DLLPUBLIC SwFmtCntnt: public SfxPoolItem
 {
     SwNodeIndex *pStartNode;
 
-    SwFmtCntnt &operator=( const SwFmtCntnt & ); // Copying not allowed.
+    SwFmtCntnt &operator=( const SwFmtCntnt & ); ///< Copying not allowed.
 
 public:
     SwFmtCntnt( const SwStartNode* pStartNode = 0 );
     SwFmtCntnt( const SwFmtCntnt &rCpy );
     ~SwFmtCntnt();
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

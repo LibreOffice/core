@@ -37,12 +37,12 @@ class SwFrmFmt;
 class IntlWrapper;
 class SwFmt;
 
-//Header, for PageFormats
-//Client of FrmFmt discribing the header.
+ /** Header, for PageFormats
+ Client of FrmFmt discribing the header. */
 
 class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
 {
-    sal_Bool bActive;       // Only for controlling (creation of content).
+    sal_Bool bActive;       ///< Only for controlling (creation of content).
 
 public:
     SwFmtHeader( sal_Bool bOn = sal_False );
@@ -53,7 +53,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -70,8 +70,8 @@ public:
     void SetActive( sal_Bool bNew = sal_True ) { bActive = bNew; }
 };
 
-//Footer, for pageformats
-//Client of FrmFmt describing the footer
+ /**Footer, for pageformats
+ Client of FrmFmt describing the footer */
 
 class SW_DLLPUBLIC SwFmtFooter: public SfxPoolItem, public SwClient
 {
@@ -86,7 +86,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

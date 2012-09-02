@@ -40,12 +40,12 @@ class SwTxtFtn;
 class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
-    SwTxtFtn* pTxtAttr;     // My TextAttribute.
-    String  aNumber;        // User-defined 'Number'.
-    sal_uInt16  nNumber;        //Automatische Nummerierung
-    bool    m_bEndNote;     // Is it an End note?
+    SwTxtFtn* pTxtAttr;     ///< My TextAttribute.
+    String  aNumber;        ///< User-defined 'Number'.
+    sal_uInt16  nNumber;    ///< Automatische Nummerierung
+    bool    m_bEndNote;     ///< Is it an End note?
 
-    // Protected CopyCtor.
+    /// Protected CopyCtor.
     SwFmtFtn& operator=(const SwFmtFtn& rFtn);
     SwFmtFtn( const SwFmtFtn& );
 
@@ -53,7 +53,7 @@ public:
     SwFmtFtn( bool bEndNote = false );
     virtual ~SwFmtFtn();
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -73,7 +73,7 @@ public:
 
     void GetFtnText( String& rStr ) const;
 
-    // Returns string to be displayed of footnote / endnote.
+    /// Returns string to be displayed of footnote / endnote.
     String GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
 };
 

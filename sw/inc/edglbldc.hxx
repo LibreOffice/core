@@ -54,7 +54,7 @@ public:
     SwGlblDocContent( const SwTOXBaseSection* pTOX );
     SwGlblDocContent( const SwSection* pSect );
 
-    // Query contents.
+    /// Query contents.
     GlobalDocContentType GetType() const { return eType; }
     const SwSection* GetSection() const
                             { return GLBLDOC_SECTION == eType ? PTR.pSect : 0; }
@@ -62,7 +62,7 @@ public:
                             { return GLBLDOC_TOXBASE == eType ? PTR.pTOX : 0; }
     sal_uLong GetDocPos() const { return nDocPos; }
 
-    // For sorting.
+    /// For sorting.
     inline int operator==( const SwGlblDocContent& rCmp ) const
         {   return GetDocPos() == rCmp.GetDocPos(); }
     inline int operator<( const SwGlblDocContent& rCmp ) const

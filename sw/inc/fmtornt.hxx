@@ -42,7 +42,7 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
 {
-    SwTwips         nYPos;  // Contains *always* the current RelPos.
+    SwTwips         nYPos;  ///< Contains *always* the current RelPos.
     sal_Int16       eOrient;
     sal_Int16       eRelation;
 public:
@@ -51,7 +51,7 @@ public:
                      sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -77,17 +77,17 @@ public:
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {
-    SwTwips         nXPos;  // Contains *always* the current RelPos.
+    SwTwips         nXPos;              ///< Contains *always* the current RelPos.
     sal_Int16       eOrient;
     sal_Int16       eRelation;
-    sal_Bool            bPosToggle : 1; // Flip position on even pages.
+    sal_Bool            bPosToggle : 1; ///< Flip position on even pages.
 public:
     TYPEINFO();
     SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
         sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, sal_Bool bPos = sal_False );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

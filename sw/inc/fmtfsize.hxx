@@ -41,10 +41,10 @@ class IntlWrapper;
 
 enum SwFrmSize
 {
-    ATT_VAR_SIZE,       // Frame is variable in Var-direction.
-    ATT_FIX_SIZE,       // Frame cannot be moved in Var-direction.
-    ATT_MIN_SIZE        // Value in Var-direction gives minimum
-                        // (can be exceeded but not be less).
+    ATT_VAR_SIZE,       ///< Frame is variable in Var-direction.
+    ATT_FIX_SIZE,       ///< Frame cannot be moved in Var-direction.
+    ATT_MIN_SIZE        /**< Value in Var-direction gives minimum
+                         (can be exceeded but not be less). */
 };
 
 class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
@@ -73,7 +73,7 @@ public:
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
     SwFmtFrmSize& operator=( const SwFmtFrmSize& rCpy );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
