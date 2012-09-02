@@ -314,7 +314,9 @@ struct QuickHelpData
         if( 0 == nCurArrPos-- )
             nCurArrPos = (bEndLess && !m_bIsAutoText ) ? m_aHelpStrings.size()-1 : 0;
     }
-    void FillStrArr( SwWrtShell& rSh, const String& rWord );
+
+    // Fills internal structures with hopefully helpful information.
+    void FillStrArr( SwWrtShell& rSh, const String& rWord, sal_Bool bIgnoreCurrentPos );
     void SortAndFilter();
 };
 
@@ -1519,6 +1521,19 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     sal_Bool bStopKeyInputTimer = sal_True;
     String sFmlEntry;
 
+    enum SW_AutoCompleteAction { ACA_NoOp,            // No maintenance operation required for AutoComplete tree
+                                 ACA_ReturnToRoot,    // Input of a char marking the end of a word, like '.', ' ', etc.
+                                 ACA_SingleCharInput,
+                                 ACA_SingleBackspace,
+                                 ACA_Refresh };       // Refresh AutoComplete information completely.
+
+    // Do refresh by default to gracefully handle all unimplemented special cases.
+    SW_AutoCompleteAction eAutoCompleteAction = ACA_Refresh;
+    // TODO: Make sure eAutoCompleteAction is set to something other than ACA_Refresh to increase performance.
+
+    // Stores input char in case ACA_SingleCharInput is used. Defaults to aCh to avoid compiler warning.
+    sal_Unicode aSingleCharInput = aCh;
+
     enum SW_KeyState { KS_Start,
                        KS_CheckKey, KS_InsChar, KS_InsTab,
                        KS_NoNum, KS_NumOff, KS_NumOrNoNum, KS_NumDown, KS_NumUp,
@@ -1786,9 +1801,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_DELETE:
                     if ( !rSh.HasReadonlySel() )
                     {
-                        if (rSh.IsInFrontOfLabel() &&
-                            rSh.NumOrNoNum(sal_False))
+                        if (rSh.IsInFrontOfLabel() && rSh.NumOrNoNum(sal_False))
                             eKeyState = KS_NumOrNoNum;
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     else
                     {
@@ -1806,6 +1821,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         bTblIsColMode = sal_True;
                         aKeyInputTimer.Start();
                         bStopKeyInputTimer = sal_False;
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     break;
                 case KEY_INSERT | KEY_MOD2:
@@ -1817,6 +1833,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         bTblIsColMode = sal_True;
                         aKeyInputTimer.Start();
                         bStopKeyInputTimer = sal_False;
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     break;
 
@@ -1853,6 +1870,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_AutoFmtByInput;
                         else
                             eNextKeyState = eKeyState, eKeyState = KS_CheckAutoCorrect;
+
+                        eAutoCompleteAction = ACA_ReturnToRoot;
                     }
                     break;
 
@@ -1883,6 +1902,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                ( rSh.IsNoNum() && bOnlyBackspaceKey ) ) )
                         {
                             bDone = rSh.TryRemoveIndent();
+                        }
+
+                        if ( bOnlyBackspaceKey )
+                        {
+                            eAutoCompleteAction = ACA_SingleBackspace;
                         }
 
                         if (bDone)
@@ -2091,10 +2115,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         {
                             eKeyState = KS_InsTab;
                         }
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     break;
 
                     case KEY_TAB | KEY_MOD1 | KEY_SHIFT:
+                    {
                         if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
                             !rSh.HasReadonlySel() )
                         {
@@ -2106,7 +2132,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else if((rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM|
                                         nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF)) &&
                                 rSh.GetDrawView()->AreObjectsMarked())
+                        {
                             eKeyState = KS_EnterDrawHandleMode;
+                        }
+                        eAutoCompleteAction = ACA_NoOp;
+                    }
                     break;
                     case KEY_F2 :
                     if( !rSh.HasReadonlySel() )
@@ -2116,6 +2146,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_GoIntoFly;
                         else if((nSelectionType & nsSelectionType::SEL_DRW))
                             eKeyState = KS_GoIntoDrawing;
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     break;
                 }
@@ -2165,6 +2196,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     break;
                 }
+                eAutoCompleteAction = ACA_NoOp;
             }
             break;
 
@@ -2184,6 +2216,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         FlushInBuffer();
                         break;
                 }
+                eAutoCompleteAction = ACA_NoOp;
             }
             break;
 
@@ -2194,11 +2227,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     !rKeyCode.IsMod2() &&
                     rKeyCode.GetModifier() != (KEY_MOD1) &&
                     rKeyCode.GetModifier() != (KEY_MOD1|KEY_SHIFT) &&
-                                SW_ISPRINTABLE( aCh );
+                    SW_ISPRINTABLE( aCh );
 
-                if (bNormalChar && rSh.IsInFrontOfLabel())
+                if( bNormalChar )
                 {
-                    rSh.NumOrNoNum(sal_False);
+                    eAutoCompleteAction = ACA_SingleCharInput;
+                    aSingleCharInput = aCh;
+                    if ( rSh.IsInFrontOfLabel() )
+                        rSh.NumOrNoNum(sal_False);
                 }
 
                 if( aInBuffer.Len() && ( !bNormalChar || bIsDocReadOnly ))
@@ -2248,17 +2284,23 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             break;
         case KS_LaunchOLEObject:
+        {
             rSh.LaunchOLEObj();
             eKeyState = KS_Ende;
+            eAutoCompleteAction = ACA_NoOp;
+        }
         break;
-        case KS_GoIntoFly :
+        case KS_GoIntoFly:
+        {
             rSh.UnSelectFrm();
             rSh.LeaveSelFrmMode();
             rView.AttrChangedNotify(&rSh);
             rSh.MoveSection( fnSectionCurr, fnSectionEnd );
             eKeyState = KS_Ende;
+            eAutoCompleteAction = ACA_NoOp;
+        }
         break;
-        case KS_GoIntoDrawing :
+        case KS_GoIntoDrawing:
         {
             SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             if(pObj)
@@ -2268,6 +2310,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     ((SwDrawTextShell*)rView.GetCurShell())->Init();
             }
             eKeyState = KS_Ende;
+            eAutoCompleteAction = ACA_NoOp;
         }
         break;
         case KS_EnterDrawHandleMode:
@@ -2277,6 +2320,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
             eKeyState = KS_Ende;
+            eAutoCompleteAction = ACA_NoOp;
         }
         break;
         case KS_InsTab:
@@ -2288,6 +2332,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
             }
             aCh = '\t';
+            eAutoCompleteAction = ACA_ReturnToRoot;
             // no break!
         case KS_InsChar:
             if (rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT)
@@ -2389,6 +2434,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
             }
             eKeyState = eNextKeyState;
+            eAutoCompleteAction = ACA_NoOp;
         }
         break;
 
@@ -2597,29 +2643,64 @@ KEYINPUT_CHECKTABLE_INSDEL:
         bTblInsDelMode = sal_False;
     }
 
+    bool bInsertBufferedChars = bFlushBuffer && aInBuffer.Len();
+    bool bAutoCompleteEnabled = pACfg && pACorr && ( pACfg->IsAutoTextTip() || pACorr->GetSwFlags().bAutoCompleteWords );
+    bool bGotWord = false;
+    String sPrefix;
+
     // in case the buffered characters are inserted
-    if( bFlushBuffer && aInBuffer.Len() )
+    if( bInsertBufferedChars )
     {
         // bFlushCharBuffer was not resetted here
         // why not?
         sal_Bool bSave = bFlushCharBuffer;
         FlushInBuffer();
         bFlushCharBuffer = bSave;
+    }
 
-        // maybe show Tip-Help
-        String sWord;
-        if( bNormalChar && pACfg && pACorr &&
-            ( pACfg->IsAutoTextTip() ||
-              pACorr->GetSwFlags().bAutoCompleteWords ) &&
-            rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
+    // maintain AutoComplete tree
+    if( bAutoCompleteEnabled )
+    {
+        // avoid unnecessary calls to GetPrevAutoCorrWord
+        if( (bInsertBufferedChars && bNormalChar) || eAutoCompleteAction == ACA_Refresh )
         {
-            ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
+            bGotWord = rSh.GetPrevAutoCorrWord( *pACorr, sPrefix );
         }
+
+        SwAutoCompleteWord& rACList = rSh.GetAutoCompleteWords();
+
+        switch( eAutoCompleteAction )
+        {
+            case ACA_NoOp:
+            // do nothing
+            break;
+
+            case ACA_ReturnToRoot:
+            rACList.returnToRoot();
+            break;
+
+            case ACA_SingleCharInput:
+            rACList.advance( aSingleCharInput );
+            break;
+
+            case ACA_SingleBackspace:
+            rACList.goBack();
+            break;
+
+            case ACA_Refresh:
+            rACList.gotoNode( sPrefix );
+            break;
+        }
+    }
+
+    if( bInsertBufferedChars && bNormalChar && bAutoCompleteEnabled && bGotWord )
+    {
+        ShowAutoTextCorrectQuickHelp( sPrefix, pACfg, pACorr );
     }
 
     // get the word count dialog to update itself
     SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
-    if (pWrdCnt)
+    if( pWrdCnt )
         pWrdCnt->UpdateCounts();
 
 }
@@ -5059,10 +5140,13 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
                     SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
                     if( pACorr &&
+                        // If autocompletion required...
                         ( rACfg.IsAutoTextTip() ||
                           pACorr->GetSwFlags().bAutoCompleteWords ) &&
+                        // ... and extraction of last word from text input was successful...
                         rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
                     {
+                        // ... request for auto completion help to be shown.
                         ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, sal_True);
                     }
                 }
@@ -5584,7 +5668,7 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
     ClearCntnt();
 }
 
-void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
+void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord, sal_Bool bIgnoreCurrentPos )
 {
     enum Capitalization { CASE_LOWER, CASE_UPPER, CASE_SENTENCE, CASE_OTHER };
 
@@ -5651,7 +5735,8 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
     // Add matching words from AutoCompleteWord list
     const SwAutoCompleteWord& rACList = rSh.GetAutoCompleteWords();
     std::vector<String> strings;
-    if ( rACList.GetWordsMatching( rWord, strings ) )
+
+    if ( rACList.GetWordsMatching( rWord, strings, bIgnoreCurrentPos ) )
     {
         for (unsigned int i= 0; i<strings.size(); i++)
         {
@@ -5728,7 +5813,8 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
                     !pACorr ||
                     pACorr->GetSwFlags().bAutoCmpltShowAsTip;
 
-        pQuickHlpData->FillStrArr( rSh, rWord );
+        // Get the neccessary data to show help text.
+        pQuickHlpData->FillStrArr( rSh, rWord, bFromIME );
     }
 
 
