@@ -49,6 +49,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 
 #include <boost/scoped_ptr.hpp>
+#include <string.h>
 
 using namespace com::sun::star;
 
@@ -256,7 +257,7 @@ bool FileEmitContext::write( const void* pBuf, unsigned int nLen )
         return false;
 
     uno::Sequence< sal_Int8 > aSeq( nLen );
-    rtl_copyMemory( aSeq.getArray(), pBuf, nLen );
+    memcpy( aSeq.getArray(), pBuf, nLen );
     m_xOut->writeBytes( aSeq );
     return true;
 }
@@ -560,7 +561,7 @@ bool checkDocChecksum( const rtl::OUString& rInPDFFileURL,
 
     // open file and calculate actual checksum up to index nBytes
     sal_uInt8 nActualChecksum[ RTL_DIGEST_LENGTH_MD5 ];
-    rtl_zeroMemory( nActualChecksum, sizeof(nActualChecksum) );
+    memset( nActualChecksum, 0, sizeof(nActualChecksum) );
     rtlDigest aActualDigest = rtl_digest_createMD5();
     oslFileHandle aRead = NULL;
     oslFileError aErr = osl_File_E_None;

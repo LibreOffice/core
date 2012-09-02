@@ -41,7 +41,7 @@
 #include <boost/spirit/include/classic_error_handling.hpp>
 #include <boost/spirit/include/classic_file_iterator.hpp>
 #include <boost/bind.hpp>
-#include <string>
+#include <string.h>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/memory.h>
@@ -79,7 +79,7 @@ class StringEmitContext : public EmitContext
     {
         if( nOrigOffset+nLen < static_cast<unsigned int>(m_aBuf.getLength()) )
         {
-            rtl_copyMemory( pBuf, m_aBuf.getStr()+nOrigOffset, nLen );
+            memcpy( pBuf, m_aBuf.getStr()+nOrigOffset, nLen );
             return nLen;
         }
         return 0;
