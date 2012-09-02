@@ -3435,7 +3435,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     {   // only temporary generate Move-Kontext because otherwise
                         // the query to the content form doesn't work!!!
-                        MV_KONTEXT( &rSh );
+                        SwMvContext aMvContext( &rSh );
                         nTmpSetCrsr = rSh.SetCursor(&aDocPos, bOnlyText);
                         bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
                         bCallBase = sal_False;
@@ -3459,7 +3459,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                          nSelType & nsSelectionType::SEL_GRF ||
                          rSh.IsObjSelectable( aDocPos ) )
                     {
-                        MV_KONTEXT( &rSh );
+                        SwMvContext aMvContext( &rSh );
                         if( !rSh.IsFrmSelected() )
                             rSh.GotoNextFly();
                         rSh.EnterSelFrmMode();
@@ -4210,7 +4210,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     bNoInterrupt = sal_False;
                     {   // create only temporary move context because otherwise
                         // the query to the content form doesn't work!!!
-                        MV_KONTEXT( &rSh );
+                        SwMvContext aMvContext( &rSh );
                         const Point aDocPos( PixelToLogic( aStartPos ) );
                         bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
                     }
@@ -5402,7 +5402,7 @@ sal_Bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     {
         {   // create only temporary move context because otherwise
             // the query against the content form doesn't work!!!
-            MV_KONTEXT( &rSh );
+            SwMvContext aMvContext( &rSh );
             rSh.SetCursor(&aDocPos, false);
             bRet = sal_True;
         }
@@ -5413,7 +5413,7 @@ sal_Bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         if( nSelType == nsSelectionType::SEL_OLE ||
             nSelType == nsSelectionType::SEL_GRF )
         {
-            MV_KONTEXT( &rSh );
+            SwMvContext aMvContext( &rSh );
             if( !rSh.IsFrmSelected() )
                 rSh.GotoNextFly();
             rSh.EnterSelFrmMode();

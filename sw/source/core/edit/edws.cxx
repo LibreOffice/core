@@ -206,31 +206,27 @@ sal_Bool SwEditShell::HasOtherCnt() const
  ******************************************************************************/
 
 
-SwActKontext::SwActKontext(SwEditShell *pShell)
+SwActContext::SwActContext(SwEditShell *pShell)
     : pSh(pShell)
 {
     pSh->StartAction();
 }
 
 
-SwActKontext::~SwActKontext()
+SwActContext::~SwActContext()
 {
     pSh->EndAction();
 }
 
-/******************************************************************************
- *          Klasse fuer den automatisierten Aufruf von Start- und
- *                              EndCrsrMove();
- ******************************************************************************/
 
-
-SwMvKontext::SwMvKontext(SwEditShell *pShell ) : pSh(pShell)
+SwMvContext::SwMvContext(SwEditShell *pShell)
+    : pSh(pShell)
 {
     pSh->SttCrsrMove();
 }
 
 
-SwMvKontext::~SwMvKontext()
+SwMvContext::~SwMvContext()
 {
     pSh->EndCrsrMove();
 }

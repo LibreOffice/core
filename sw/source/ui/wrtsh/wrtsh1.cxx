@@ -176,7 +176,7 @@ void SwWrtShell::Edit()
 
 sal_Bool SwWrtShell::IsEndWrd()
 {
-    MV_KONTEXT(this);
+    SwMvContext aMvContext(this);
     if(IsEndPara() && !IsSttPara())
         return sal_True;
 
@@ -896,7 +896,7 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, sal_uInt16 nPgNum )
     ResetCursorStack();
     if( CanInsert() )
     {
-        ACT_KONTEXT(this);
+        SwActContext aActContext(this);
         StartUndo(UNDO_UI_INSERT_PAGE_BREAK);
 
         if ( !IsCrsrInTbl() )
@@ -951,7 +951,7 @@ void SwWrtShell::InsertLineBreak()
 
 void SwWrtShell::InsertColumnBreak()
 {
-    ACT_KONTEXT(this);
+    SwActContext aActContext(this);
     ResetCursorStack();
     if( CanInsert() )
     {
@@ -1015,7 +1015,7 @@ void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
     ResetCursorStack();
     if( CanInsert() )
     {
-        ACT_KONTEXT(this);
+        SwActContext aActContext(this);
 
         rView.GetEditWin().FlushInBuffer();
         sal_Bool bHasSel = HasSelection();

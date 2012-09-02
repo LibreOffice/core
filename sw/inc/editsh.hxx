@@ -968,25 +968,20 @@ inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
 {   return ((SwEditShell*)this)->GetLinkManager();  }
 
  /// Class for automated call of Start- and EndAction().
-class SwActKontext {
+class SwActContext {
     SwEditShell *pSh;
 public:
-    SwActKontext(SwEditShell *pShell);
-    ~SwActKontext();
+    SwActContext(SwEditShell *pShell);
+    ~SwActContext();
 };
-
-#define ACT_KONTEXT(x)  SwActKontext _aActKontext_(x)
 
  /// Class for automated call of Start- and EndCrsrMove().
-class SwMvKontext {
+class SwMvContext {
     SwEditShell *pSh;
 public:
-    SwMvKontext(SwEditShell *pShell );
-    ~SwMvKontext();
+    SwMvContext(SwEditShell *pShell);
+    ~SwMvContext();
 };
-
-#define MV_KONTEXT(x)   SwMvKontext _aMvKontext_(x)
-
 
 
 #endif

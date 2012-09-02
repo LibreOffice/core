@@ -665,7 +665,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 if (rSh.HasMark())
                 {
-                    MV_KONTEXT(&rSh);
+                    SwMvContext aMvContext(&rSh);
                     if (rSh.IsCrsrPtAtEnd())
                         rSh.SwapPam();
                     rSh.ClearMark();
