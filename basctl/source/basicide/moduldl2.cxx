@@ -62,6 +62,8 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
+#include <cassert>
+
 namespace basctl
 {
 
@@ -162,9 +164,9 @@ void LibLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEn
 
 CheckBox::CheckBox( Window* pParent, const ResId& rResId )
     :SvTabListBox( pParent, rResId )
+    ,eMode(ObjectMode::Module)
     ,m_aDocument( ScriptDocument::getApplicationScriptDocument() )
 {
-    nMode = NEWOBJECTMODE_MOD;
     long aTabs_[] = { 1, 12 };  // TabPos needs at least one...
                                 // 12 because of the CheckBox
     SetTabs( aTabs_ );
@@ -192,7 +194,7 @@ void CheckBox::Init()
 {
     pCheckButton = new SvLBoxButtonData(this);
 
-    if ( nMode == LIBMODE_CHOOSER )
+    if (eMode == ObjectMode::Library)
         EnableCheckButton( pCheckButton );
     else
         EnableCheckButton( 0 );
@@ -202,11 +204,11 @@ void CheckBox::Init()
 
 //----------------------------------------------------------------------------
 
-void CheckBox::SetMode( NewObjectMode n )
+void CheckBox::SetMode (ObjectMode::Mode e)
 {
-    nMode = n;
+    eMode = e;
 
-    if ( nMode == LIBMODE_CHOOSER )
+    if (eMode == ObjectMode::Library)
         EnableCheckButton( pCheckButton );
     else
         EnableCheckButton( 0 );
@@ -262,7 +264,7 @@ void CheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Imag
 {
     SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2, eButtonKind );
 
-    if ( nMode == NEWOBJECTMODE_MOD )
+    if (eMode == ObjectMode::Module)
     {
         // initialize all columns with own string class (column 0 == bitmap)
         sal_uInt16 nCount = pEntry->ItemCount();
@@ -279,7 +281,7 @@ void CheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Imag
 
 sal_Bool CheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
-    if ( nMode != NEWOBJECTMODE_MOD )
+    if (eMode != ObjectMode::Module)
         return false;
 
     DBG_ASSERT( pEntry, "Kein Eintrag?" );
@@ -388,7 +390,7 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
     return 0;
 }
 
-NewObjectDialog::NewObjectDialog(Window * pParent, NewObjectMode nMode,
+NewObjectDialog::NewObjectDialog(Window * pParent, ObjectMode::Mode eMode,
                                  bool bCheckName)
     : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
         aText( this, IDEResId( RID_FT_NEWLIB ) ),
@@ -399,20 +401,22 @@ NewObjectDialog::NewObjectDialog(Window * pParent, NewObjectMode nMode,
     FreeResource();
     aEdit.GrabFocus();
 
-    switch (nMode)
+    switch (eMode)
     {
-    case NEWOBJECTMODE_LIB:
-        SetText( IDE_RESSTR(RID_STR_NEWLIB) );
-        break;
-    case NEWOBJECTMODE_MOD:
-        SetText( IDE_RESSTR(RID_STR_NEWMOD) );
-        break;
-    case NEWOBJECTMODE_METH:
-        SetText( IDE_RESSTR(RID_STR_NEWMETH) );
-        break;
-    default:
-        SetText( IDE_RESSTR(RID_STR_NEWDLG) );
-        break;
+        case ObjectMode::Library:
+            SetText( IDE_RESSTR(RID_STR_NEWLIB) );
+            break;
+        case ObjectMode::Module:
+            SetText( IDE_RESSTR(RID_STR_NEWMOD) );
+            break;
+        case ObjectMode::Method:
+            SetText( IDE_RESSTR(RID_STR_NEWMETH) );
+            break;
+        case ObjectMode::Dialog:
+            SetText( IDE_RESSTR(RID_STR_NEWDLG) );
+            break;
+        default:
+            assert(false);
     }
 
     if (bCheckName)
@@ -523,7 +527,7 @@ LibPage::LibPage( Window * pParent )
 
     aBasicsBox.SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
 
-    aLibBox.SetMode( NEWOBJECTMODE_MOD );
+    aLibBox.SetMode(ObjectMode::Module);
     aLibBox.EnableInplaceEditing(true);
     aLibBox.SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
     aCloseButton.GrabFocus();
@@ -887,7 +891,7 @@ void LibPage::InsertLib()
                 {
                     pLibDlg = new LibDialog( this );
                     pLibDlg->SetStorageName( aURLObj.getName() );
-                    pLibDlg->GetLibBox().SetMode( NEWOBJECTMODE_LIB );
+                    pLibDlg->GetLibBox().SetMode(ObjectMode::Library);
                 }
 
                 // libbox entries
@@ -1178,14 +1182,12 @@ void LibPage::Export( void )
     }
 
 
-    Window* pWin = static_cast<Window*>( this );
-    std::auto_ptr< ExportDialog > xNewDlg( new ExportDialog( pWin ) );
-
-    if ( xNewDlg->Execute() == RET_OK )
+    ExportDialog aNewDlg(this);
+    if (aNewDlg.Execute() == RET_OK)
     {
         try
         {
-            if( xNewDlg->isExportAsPackage() )
+            if (aNewDlg.isExportAsPackage())
                 ExportAsPackage( aLibName );
             else
                 ExportAsBasic( aLibName );
@@ -1595,13 +1597,13 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
         i++;
     }
 
-    std::auto_ptr< NewObjectDialog > xNewDlg( new NewObjectDialog( pWin, NEWOBJECTMODE_LIB ) );
-    xNewDlg->SetObjectName( aLibName );
+    NewObjectDialog aNewDlg(pWin, ObjectMode::Library);
+    aNewDlg.SetObjectName(aLibName);
 
-    if ( xNewDlg->Execute() )
+    if (aNewDlg.Execute())
     {
-        if ( xNewDlg->GetObjectName().Len() )
-            aLibName = xNewDlg->GetObjectName();
+        if (aNewDlg.GetObjectName().Len())
+            aLibName = aNewDlg.GetObjectName();
 
         if ( aLibName.Len() > 30 )
         {

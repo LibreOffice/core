@@ -84,8 +84,8 @@ bool AccessibleDialogControlShape::IsFocused()
     bool bFocused = false;
     if ( m_pDialogWindow )
     {
-        SdrView* pSdrView = m_pDialogWindow->GetView();
-        if ( pSdrView && pSdrView->IsObjMarked( m_pDlgEdObj ) && pSdrView->GetMarkedObjectList().GetMarkCount() == 1 )
+        SdrView& rView = m_pDialogWindow->GetView();
+        if (rView.IsObjMarked(m_pDlgEdObj) && rView.GetMarkedObjectList().GetMarkCount() == 1)
             bFocused = true;
     }
 
@@ -96,15 +96,9 @@ bool AccessibleDialogControlShape::IsFocused()
 
 bool AccessibleDialogControlShape::IsSelected()
 {
-    bool bSelected = false;
     if ( m_pDialogWindow )
-    {
-        SdrView* pSdrView = m_pDialogWindow->GetView();
-        if ( pSdrView )
-            bSelected = pSdrView->IsObjMarked( m_pDlgEdObj );
-    }
-
-    return bSelected;
+        return m_pDialogWindow->GetView().IsObjMarked(m_pDlgEdObj);
+    return false;
 }
 
 // -----------------------------------------------------------------------------

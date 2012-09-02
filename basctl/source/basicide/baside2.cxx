@@ -54,19 +54,27 @@
 namespace basctl
 {
 
-#define LMARGPRN        1700
-#define RMARGPRN         900
-#define TMARGPRN        2000
-#define BMARGPRN        1000
-#define BORDERPRN       300
+namespace
+{
 
-#define VALIDWINDOW     0x1234
+namespace Print
+{
+    int const nLeftMargin = 1700;
+    int const nRightMargin = 900;
+    int const nTopMargin = 2000;
+    int const nBottomMargin = 1000;
+    int const nBorder = 300;
+}
+
+short const ValidWindow = 0x1234;
 
 #if defined(OW) || defined(MTF)
-#define FILTERMASK_ALL "*"
+char const FilterMask_All[] = "*";
 #else
-#define FILTERMASK_ALL "*.*"
+char const FilterMask_All[] = "*.*";
 #endif
+
+} // namespace
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -84,9 +92,7 @@ namespace
 
 void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage, const ::rtl::OUString& rTitle, bool bOutput )
 {
-    short nLeftMargin   = LMARGPRN;
-    Size aSz = pPrinter->GetOutputSize();
-    short nBorder = BORDERPRN;
+    Size const aSz = pPrinter->GetOutputSize();
 
     const Color aOldLineColor( pPrinter->GetLineColor() );
     const Color aOldFillColor( pPrinter->GetFillColor() );
@@ -103,19 +109,20 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
     long nFontHeight = pPrinter->GetTextHeight();
 
     // 1st Border => line, 2+3 Border = free space
-    long nYTop = TMARGPRN-3*nBorder-nFontHeight;
+    long nYTop = Print::nTopMargin - 3*Print::nBorder - nFontHeight;
 
-    long nXLeft = nLeftMargin-nBorder;
-    long nXRight = aSz.Width()-RMARGPRN+nBorder;
+    long nXLeft = Print::nLeftMargin - Print::nBorder;
+    long nXRight = aSz.Width() - Print::nRightMargin + Print::nBorder;
 
     if( bOutput )
-        pPrinter->DrawRect( Rectangle(
-            Point( nXLeft, nYTop ),
-            Size( nXRight-nXLeft, aSz.Height() - nYTop - BMARGPRN + nBorder ) ) );
+        pPrinter->DrawRect(Rectangle(
+            Point(nXLeft, nYTop),
+            Size(nXRight - nXLeft, aSz.Height() - nYTop - Print::nBottomMargin + Print::nBorder)
+        ));
 
 
-    long nY = TMARGPRN-2*nBorder;
-    Point aPos( nLeftMargin, nY );
+    long nY = Print::nTopMargin - 2*Print::nBorder;
+    Point aPos(Print::nLeftMargin, nY);
     if( bOutput )
         pPrinter->DrawText( aPos, rTitle );
     if ( nPages != 1 )
@@ -136,7 +143,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
         }
     }
 
-    nY = TMARGPRN-nBorder;
+    nY = Print::nTopMargin - Print::nBorder;
 
     if( bOutput )
         pPrinter->DrawLine( Point( nXLeft, nY ), Point( nXRight, nY ) );
@@ -187,7 +194,7 @@ ModulWindow::ModulWindow (
 ) :
     BaseWindow(pParent, rDocument, aLibName, aName),
     rLayout(*pParent),
-    nValid(VALIDWINDOW),
+    nValid(ValidWindow),
     aXEditorWindow(this),
     m_aModule(aModule)
 {
@@ -233,7 +240,7 @@ ModulWindow::~ModulWindow()
 
 void ModulWindow::GetFocus()
 {
-    if ( nValid != VALIDWINDOW  )
+    if (nValid != ValidWindow)
         return;
     DBG_CHKTHIS( ModulWindow, 0 );
     aXEditorWindow.GetEdtWindow().GrabFocus();
@@ -261,9 +268,6 @@ void ModulWindow::Resize()
                                     Size( GetOutputSizePixel() ) );
 }
 
-
-// "Import" of baside4.cxx
-void CreateEngineForBasic( StarBASIC* pBasic );
 
 void ModulWindow::CheckCompileBasic()
 {
@@ -446,7 +450,7 @@ bool ModulWindow::LoadBasic()
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FilterMask_All ) ) );
     xFltMgr->setCurrentFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
 
     if( xFP->execute() == RET_OK )
@@ -506,7 +510,7 @@ bool ModulWindow::SaveBasicSource()
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FilterMask_All ) ) );
     xFltMgr->setCurrentFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
 
     if( xFP->execute() == RET_OK )
@@ -535,7 +539,7 @@ bool ModulWindow::SaveBasicSource()
     return bDone;
 }
 
-bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
+extern bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName ); // defined in baside3.cxx
 
 bool ModulWindow::ImportDialog()
 {
@@ -704,7 +708,7 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
         return false;
 
     if ( bMarkError )
-        aXEditorWindow.GetBrkWindow().SetMarkerPos( MARKER_NOMARKER );
+        aXEditorWindow.GetBrkWindow().SetNoMarker();
     return false;
 }
 
@@ -746,7 +750,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
         Application::Yield();
 
     aStatus.bIsInReschedule = false;
-    aXEditorWindow.GetBrkWindow().SetMarkerPos( MARKER_NOMARKER );
+    aXEditorWindow.GetBrkWindow().SetNoMarker();
 
     ClearStatus( BASWIN_INRESCHEDULE );
 
@@ -863,7 +867,7 @@ void ModulWindow::UpdateData()
         if ( GetEditView() )
         {
             TextSelection aSel = GetEditView()->GetSelection();
-            setTextEngineText( GetEditEngine(), xModule->GetSource32() );
+            setTextEngineText(*GetEditEngine(), xModule->GetSource32());
             GetEditView()->SetSelection( aSel );
             GetEditEngine()->SetModified( false );
             MarkDocumentModified( GetDocument() );
@@ -909,8 +913,8 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     sal_uInt16 nParaSpace = 10;
 
     Size aPaperSz = pPrinter->GetOutputSize();
-    aPaperSz.Width() -= (LMARGPRN+RMARGPRN);
-    aPaperSz.Height() -= (TMARGPRN+BMARGPRN);
+    aPaperSz.Width() -= (Print::nLeftMargin + Print::nRightMargin);
+    aPaperSz.Height() -= (Print::nTopMargin + Print::nBottomMargin);
 
     // nLinepPage is not correct if there's a line break
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height()/nLineHeight);
@@ -921,7 +925,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     sal_uInt16 nCurPage = 1;
 
     lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle, nPrintPage == 0 );
-    Point aPos( LMARGPRN, TMARGPRN );
+    Point aPos( Print::nLeftMargin, Print::nTopMargin );
     for ( sal_uLong nPara = 0; nPara < nParas; nPara++ )
     {
         String aLine( GetEditEngine()->GetText( nPara ) );
@@ -931,11 +935,11 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
         {
             String aTmpLine( aLine, nLine*nCharspLine, nCharspLine );
             aPos.Y() += nLineHeight;
-            if ( aPos.Y() > ( aPaperSz.Height()+TMARGPRN ) )
+            if ( aPos.Y() > ( aPaperSz.Height() + Print::nTopMargin ) )
             {
                 nCurPage++;
                 lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle, nCurPage-1 == nPrintPage );
-                aPos = Point( LMARGPRN, TMARGPRN+nLineHeight );
+                aPos = Point(Print::nLeftMargin, Print::nTopMargin + nLineHeight);
             }
             if( nCurPage-1 == nPrintPage )
                 pPrinter->DrawText( aPos, aTmpLine );
@@ -1357,7 +1361,7 @@ void ModulWindow::BasicStarted()
 void ModulWindow::BasicStopped()
 {
     aStatus.bIsRunning = false;
-    GetBreakPointWindow().SetMarkerPos( MARKER_NOMARKER );
+    GetBreakPointWindow().SetNoMarker();
 }
 
 EntryDescriptor ModulWindow::CreateEntryDescriptor()
@@ -1457,7 +1461,7 @@ bool ModulWindow::HasActiveEditor () const
 
 void ModulWindow::UpdateModule ()
 {
-    rtl::OUString const aModule = getTextEngineText(GetEditEngine());
+    rtl::OUString const aModule = getTextEngineText(*GetEditEngine());
 
     // update module in basic
     assert(xModule);

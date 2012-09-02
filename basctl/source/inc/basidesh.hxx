@@ -67,7 +67,7 @@ public:
 private:
     friend class JavaDebuggingListenerImpl;
     friend class LocalizationMgr;
-    friend bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
+    friend bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName ); // defined in baside3.cxx
 
     WindowTable         aWindowTable;
     sal_uInt16          nCurKey;
@@ -79,7 +79,7 @@ private:
     ScrollBar           aHScrollBar;
     ScrollBar           aVScrollBar;
     ScrollBarBox        aScrollBarBox;
-    TabBar*             pTabBar; // basctl::TabBar
+    boost::scoped_ptr<TabBar> pTabBar; // basctl::TabBar
     bool                bTabBarSplitted;
     bool                bCreatingWindow;
     // layout windows
@@ -117,7 +117,7 @@ private:
 
     static unsigned nShellCount;
 
-protected:
+private:
     virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize );
     virtual void        OuterResizePixel( const Point &rPos, const Size &rSize );
     virtual Size        GetOptimalSizePixel() const;

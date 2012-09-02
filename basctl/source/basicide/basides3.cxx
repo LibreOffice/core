@@ -142,7 +142,7 @@ sal_uInt16 Shell::GetWindowId(const BaseWindow* pWin) const
 SdrView* Shell::GetCurDlgView() const
 {
     if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin))
-        return pDCurWin->GetView();
+        return &pDCurWin->GetView();
     else
         return 0;
 }

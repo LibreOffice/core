@@ -35,12 +35,12 @@ class DlgEditor;
 class DlgEdView : public SdrView
 {
 private:
-    DlgEditor* pDlgEditor;
+    DlgEditor& rDlgEditor;
 
 public:
     TYPEINFO();
 
-    DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor );
+    DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor);
     virtual ~DlgEdView();
 
     virtual void MarkListHasChanged();

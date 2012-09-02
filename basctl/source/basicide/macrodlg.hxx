@@ -32,17 +32,22 @@
 namespace basctl
 {
 
-#define MACRO_CLOSE         10
-#define MACRO_OK_RUN        11
-#define MACRO_NEW           12
-#define MACRO_EDIT          14
-
-#define MACROCHOOSER_ALL            1
-#define MACROCHOOSER_CHOOSEONLY     2
-#define MACROCHOOSER_RECORDING      3
+enum MacroExitCode {
+    Macro_Close = 10,
+    Macro_OkRun = 11,
+    Macro_New   = 12,
+    Macro_Edit  = 14,
+};
 
 class MacroChooser : public SfxModalDialog
 {
+public:
+    enum Mode {
+        All = 1,
+        ChooseOnly = 2,
+        Recording = 3,
+    };
+
 private:
     FixedText               aMacroNameTxt;
     Edit                    aMacroNameEdit;
@@ -66,7 +71,7 @@ private:
     bool                    bNewDelIsDel;
     bool                    bForceStoreBasic;
 
-    sal_uInt16              nMode;
+    Mode                    nMode;
 
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK(MacroDoubleClickHdl, void *);
@@ -95,8 +100,8 @@ public:
 
     virtual short       Execute();
 
-    void                SetMode( sal_uInt16 nMode );
-    sal_uInt16          GetMode() const { return nMode; }
+    void                SetMode (Mode);
+    Mode                GetMode () const { return nMode; }
 };
 
 } // namespace basctl

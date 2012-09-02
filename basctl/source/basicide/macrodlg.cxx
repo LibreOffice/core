@@ -60,34 +60,31 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 MacroChooser::MacroChooser( Window* pParnt, bool bCreateEntries ) :
-        SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
-        aMacroNameTxt(      this,   IDEResId( RID_TXT_MACRONAME ) ),
-        aMacroNameEdit(     this,   IDEResId( RID_ED_MACRONAME ) ),
-        aMacroFromTxT(      this,   IDEResId( RID_TXT_MACROFROM ) ),
-        aMacrosSaveInTxt(   this,   IDEResId( RID_TXT_SAVEMACRO ) ),
-        aBasicBox(          this,   IDEResId( RID_CTRL_LIB ) ),
-        aMacrosInTxt(       this,   IDEResId( RID_TXT_MACROSIN ) ),
-        aMacroBox(          this,   IDEResId( RID_CTRL_MACRO ) ),
-        aRunButton(         this,   IDEResId( RID_PB_RUN ) ),
-        aCloseButton(       this,   IDEResId( RID_PB_CLOSE ) ),
-        aAssignButton(      this,   IDEResId( RID_PB_ASSIGN ) ),
-        aEditButton(        this,   IDEResId( RID_PB_EDIT ) ),
-        aNewDelButton(      this,   IDEResId( RID_PB_DEL ) ),
-        aOrganizeButton(    this,   IDEResId( RID_PB_ORG ) ),
-        aHelpButton(        this,   IDEResId( RID_PB_HELP ) ),
-        aNewLibButton(      this,   IDEResId( RID_PB_NEWLIB ) ),
-        aNewModButton(      this,   IDEResId( RID_PB_NEWMOD ) )
-{
-    FreeResource();
-
-    nMode = MACROCHOOSER_ALL;
-    bNewDelIsDel = true;
-
+    SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
+    aMacroNameTxt(      this,   IDEResId( RID_TXT_MACRONAME ) ),
+    aMacroNameEdit(     this,   IDEResId( RID_ED_MACRONAME ) ),
+    aMacroFromTxT(      this,   IDEResId( RID_TXT_MACROFROM ) ),
+    aMacrosSaveInTxt(   this,   IDEResId( RID_TXT_SAVEMACRO ) ),
+    aBasicBox(          this,   IDEResId( RID_CTRL_LIB ) ),
+    aMacrosInTxt(       this,   IDEResId( RID_TXT_MACROSIN ) ),
+    aMacrosInTxtBaseStr(aMacrosInTxt.GetText()),
+    aMacroBox(          this,   IDEResId( RID_CTRL_MACRO ) ),
+    aRunButton(         this,   IDEResId( RID_PB_RUN ) ),
+    aCloseButton(       this,   IDEResId( RID_PB_CLOSE ) ),
+    aAssignButton(      this,   IDEResId( RID_PB_ASSIGN ) ),
+    aEditButton(        this,   IDEResId( RID_PB_EDIT ) ),
+    aNewDelButton(      this,   IDEResId( RID_PB_DEL ) ),
+    aOrganizeButton(    this,   IDEResId( RID_PB_ORG ) ),
+    aHelpButton(        this,   IDEResId( RID_PB_HELP ) ),
+    aNewLibButton(      this,   IDEResId( RID_PB_NEWLIB ) ),
+    aNewModButton(      this,   IDEResId( RID_PB_NEWMOD ) ),
+    bNewDelIsDel(true),
     // the Sfx doesn't aske the BasicManger whether modified or not
     // => start saving in case of a change without a into the BasicIDE.
-    bForceStoreBasic = false;
-
-    aMacrosInTxtBaseStr = aMacrosInTxt.GetText();
+    bForceStoreBasic(false),
+    nMode(All)
+{
+    FreeResource();
 
     aMacroBox.SetSelectionMode( SINGLE_SELECTION );
     aMacroBox.SetHighlightRange(); // select over the whole width
@@ -99,7 +96,7 @@ MacroChooser::MacroChooser( Window* pParnt, bool bCreateEntries ) :
     aNewDelButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aOrganizeButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
 
-    // Buttons only for MACROCHOOSER_RECORDING
+    // Buttons only for MacroChooser::Recording
     aNewLibButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aNewModButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aNewLibButton.Hide();       // default
@@ -252,7 +249,7 @@ void MacroChooser::EnableButton( Button& rButton, bool bEnable )
 {
     if ( bEnable )
     {
-        if ( nMode == MACROCHOOSER_CHOOSEONLY || nMode == MACROCHOOSER_RECORDING )
+        if (nMode == ChooseOnly || nMode == Recording)
             rButton.Enable(&rButton == &aRunButton);
         else
             rButton.Enable();
@@ -418,11 +415,11 @@ void MacroChooser::CheckButtons()
         }
     }
 
-    if ( nMode != MACROCHOOSER_RECORDING )
+    if (nMode != Recording)
     {
         // Run...
         bool bEnable = pMethod ? true : false;
-        if ( ( nMode != MACROCHOOSER_CHOOSEONLY ) && StarBASIC::IsRunning() )
+        if (nMode != ChooseOnly && StarBASIC::IsRunning())
             bEnable = false;
         EnableButton( aRunButton, bEnable );
     }
@@ -436,22 +433,21 @@ void MacroChooser::CheckButtons()
     EnableButton( aEditButton, pMacroEntry ? true : false );
 
     // aOrganizeButton
-    EnableButton( aOrganizeButton, !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ));
+    EnableButton( aOrganizeButton, !StarBASIC::IsRunning() && nMode == All );
 
     // aNewDelButton....
     bool bProtected = aBasicBox.IsEntryProtected( pCurEntry );
     bool bShare = ( aDesc.GetLocation() == LIBRARY_LOCATION_SHARE );
-    EnableButton( aNewDelButton,
-        !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ) && !bProtected && !bReadOnly && !bShare );
+    EnableButton(aNewDelButton, !StarBASIC::IsRunning() && nMode == All && !bProtected && !bReadOnly && !bShare);
     bool bPrev = bNewDelIsDel;
     bNewDelIsDel = pMethod ? true : false;
-    if ( ( bPrev != bNewDelIsDel ) && ( nMode == MACROCHOOSER_ALL ) )
+    if (bPrev != bNewDelIsDel && nMode == All)
     {
         String aBtnText( bNewDelIsDel ? IDEResId( RID_STR_BTNDEL) : IDEResId( RID_STR_BTNNEW ) );
         aNewDelButton.SetText( aBtnText );
     }
 
-    if ( nMode == MACROCHOOSER_RECORDING )
+    if (nMode == Recording)
     {
         // save button
         aRunButton.Enable(!bProtected && !bReadOnly && !bShare);
@@ -467,14 +463,14 @@ void MacroChooser::CheckButtons()
 IMPL_LINK_NOARG_INLINE_START(MacroChooser, MacroDoubleClickHdl)
 {
     StoreMacroDescription();
-    if ( nMode == MACROCHOOSER_RECORDING )
+    if (nMode == Recording)
     {
         SbMethod* pMethod = GetMacro();
         if ( pMethod && !QueryReplaceMacro( pMethod->GetName(), this ) )
             return 0;
     }
 
-    EndDialog( MACRO_OK_RUN );
+    EndDialog(Macro_OkRun);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(MacroChooser, MacroDoubleClickHdl)
@@ -618,7 +614,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         StoreMacroDescription();
 
         // #116444# check security settings before macro execution
-        if ( nMode == MACROCHOOSER_ALL )
+        if (nMode == All)
         {
             SbMethod* pMethod = GetMacro();
             SbModule* pModule = pMethod ? pMethod->GetModule() : NULL;
@@ -634,7 +630,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 }
             }
         }
-        else if ( nMode == MACROCHOOSER_RECORDING )
+        else if (nMode == Recording )
         {
             if ( !IsValidSbxName(aMacroNameEdit.GetText()) )
             {
@@ -649,12 +645,12 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 return 0;
         }
 
-        EndDialog( MACRO_OK_RUN );
+        EndDialog(Macro_OkRun);
     }
     else if ( pButton == &aCloseButton )
     {
         StoreMacroDescription();
-        EndDialog( MACRO_CLOSE );
+        EndDialog(Macro_Close);
     }
     else if ( ( pButton == &aEditButton ) || ( pButton == &aNewDelButton ) )
     {
@@ -687,7 +683,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
             if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
-            EndDialog( MACRO_EDIT );
+            EndDialog(Macro_Edit);
         }
         else
         {
@@ -724,7 +720,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     if (SfxDispatcher* pDispatcher = GetDispatcher())
                         pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
                     StoreMacroDescription();
-                    EndDialog( MACRO_NEW );
+                    EndDialog(Macro_New);
                 }
             }
         }
@@ -780,7 +776,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
         if ( nRet ) // not only closed
         {
-            EndDialog( MACRO_EDIT );
+            EndDialog(Macro_Edit);
             return 0;
         }
 
@@ -805,42 +801,50 @@ void MacroChooser::UpdateFields()
         aMacroNameEdit.SetText( aMacroBox.GetEntryText( pMacroEntry ) );
 }
 
-void MacroChooser::SetMode( sal_uInt16 nM )
+void MacroChooser::SetMode (Mode nM)
 {
     nMode = nM;
-    if ( nMode == MACROCHOOSER_ALL )
+    switch (nMode)
     {
-        aRunButton.SetText( String( IDEResId( RID_STR_RUN ) ) );
-        EnableButton( aNewDelButton, true );
-        EnableButton( aOrganizeButton, true );
-    }
-    else if ( nMode == MACROCHOOSER_CHOOSEONLY )
-    {
-        aRunButton.SetText( String( IDEResId( RID_STR_CHOOSE ) ) );
-        EnableButton( aNewDelButton, false );
-        EnableButton( aOrganizeButton, false );
-    }
-    else if ( nMode == MACROCHOOSER_RECORDING )
-    {
-        aRunButton.SetText( String( IDEResId( RID_STR_RECORD ) ) );
-        EnableButton( aNewDelButton, false );
-        EnableButton( aOrganizeButton, false );
+        case All:
+        {
+            aRunButton.SetText( String( IDEResId( RID_STR_RUN ) ) );
+            EnableButton( aNewDelButton, true );
+            EnableButton( aOrganizeButton, true );
+            break;
+        }
 
-        aAssignButton.Hide();
-        aEditButton.Hide();
-        aNewDelButton.Hide();
-        aOrganizeButton.Hide();
-        aMacroFromTxT.Hide();
+        case ChooseOnly:
+        {
+            aRunButton.SetText( String( IDEResId( RID_STR_CHOOSE ) ) );
+            EnableButton( aNewDelButton, false );
+            EnableButton( aOrganizeButton, false );
+            break;
+        }
 
-        aNewLibButton.Show();
-        aNewModButton.Show();
-        aMacrosSaveInTxt.Show();
+        case Recording:
+        {
+            aRunButton.SetText( String( IDEResId( RID_STR_RECORD ) ) );
+            EnableButton( aNewDelButton, false );
+            EnableButton( aOrganizeButton, false );
 
-        Point aHelpPos = aHelpButton.GetPosPixel();
-        Point aHelpPosLogic = PixelToLogic( aHelpPos, MapMode(MAP_APPFONT) );
-        aHelpPosLogic.Y() -= 34;
-        aHelpPos = LogicToPixel( aHelpPosLogic, MapMode(MAP_APPFONT) );
-        aHelpButton.SetPosPixel( aHelpPos );
+            aAssignButton.Hide();
+            aEditButton.Hide();
+            aNewDelButton.Hide();
+            aOrganizeButton.Hide();
+            aMacroFromTxT.Hide();
+
+            aNewLibButton.Show();
+            aNewModButton.Show();
+            aMacrosSaveInTxt.Show();
+
+            Point aHelpPos = aHelpButton.GetPosPixel();
+            Point aHelpPosLogic = PixelToLogic( aHelpPos, MapMode(MAP_APPFONT) );
+            aHelpPosLogic.Y() -= 34;
+            aHelpPos = LogicToPixel( aHelpPosLogic, MapMode(MAP_APPFONT) );
+            aHelpButton.SetPosPixel( aHelpPos );
+            break;
+        }
     }
     CheckButtons();
 }

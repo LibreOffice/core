@@ -32,9 +32,9 @@ namespace basctl
 IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 {
     (void)pTimer;
-    Window* pWindow = pParent->GetWindow();
-    Point aPos = pWindow->ScreenToOutputPixel( pWindow->GetPointerPosPixel() );
-    aPos = pWindow->PixelToLogic( aPos );
+    Window& rWindow = rParent.GetWindow();
+    Point aPos = rWindow.ScreenToOutputPixel( rWindow.GetPointerPosPixel() );
+    aPos = rWindow.PixelToLogic( aPos );
     ForceScroll( aPos );
     return 0;
 }
@@ -46,14 +46,14 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 {
     aScrollTimer.Stop();
 
-    Window* pWindow  = pParent->GetWindow();
+    Window& rWindow  = rParent.GetWindow();
 
     static Point aDefPoint;
-    Rectangle aOutRect( aDefPoint, pWindow->GetOutputSizePixel() );
-    aOutRect = pWindow->PixelToLogic( aOutRect );
+    Rectangle aOutRect( aDefPoint, rWindow.GetOutputSizePixel() );
+    aOutRect = rWindow.PixelToLogic( aOutRect );
 
-    ScrollBar* pHScroll = pParent->GetHScroll();
-    ScrollBar* pVScroll = pParent->GetVScroll();
+    ScrollBar* pHScroll = rParent.GetHScroll();
+    ScrollBar* pVScroll = rParent.GetVScroll();
     long nDeltaX = pHScroll->GetLineSize();
     long nDeltaY = pVScroll->GetLineSize();
 
@@ -77,9 +77,9 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
             pVScroll->SetThumbPos( pVScroll->GetThumbPos() + nDeltaY );
 
         if( nDeltaX )
-            pParent->DoScroll( pHScroll );
+            rParent.DoScroll( pHScroll );
         if( nDeltaY )
-            pParent->DoScroll( pVScroll );
+            rParent.DoScroll( pVScroll );
     }
 
     aScrollTimer.Start();
@@ -87,9 +87,9 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 
 //----------------------------------------------------------------------------
 
-DlgEdFunc::DlgEdFunc( DlgEditor* pParent_ )
+DlgEdFunc::DlgEdFunc (DlgEditor& rParent_) :
+    rParent(rParent_)
 {
-    DlgEdFunc::pParent = pParent_;
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
@@ -128,8 +128,8 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 {
     bool bReturn = false;
 
-    SdrView* pView = pParent->GetView();
-    Window* pWindow = pParent->GetWindow();
+    SdrView& rView = rParent.GetView();
+    Window& rWindow = rParent.GetWindow();
 
     KeyCode aCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
@@ -138,19 +138,19 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
     {
         case KEY_ESCAPE:
         {
-            if ( pView->IsAction() )
+            if ( rView.IsAction() )
             {
-                pView->BrkAction();
+                rView.BrkAction();
                 bReturn = true;
             }
-            else if ( pView->AreObjectsMarked() )
+            else if ( rView.AreObjectsMarked() )
             {
-                const SdrHdlList& rHdlList = pView->GetHdlList();
+                const SdrHdlList& rHdlList = rView.GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
                 if ( pHdl )
-                    ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                    const_cast<SdrHdlList&>(rHdlList).ResetFocusHdl();
                 else
-                    pView->UnmarkAll();
+                    rView.UnmarkAll();
 
                 bReturn = true;
             }
@@ -161,31 +161,30 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
             if ( !aCode.IsMod1() && !aCode.IsMod2() )
             {
                 // mark next object
-                if ( !pView->MarkNextObj( !aCode.IsShift() ) )
+                if ( !rView.MarkNextObj( !aCode.IsShift() ) )
                 {
                     // if no next object, mark first/last
-                    pView->UnmarkAllObj();
-                    pView->MarkNextObj( !aCode.IsShift() );
+                    rView.UnmarkAllObj();
+                    rView.MarkNextObj( !aCode.IsShift() );
                 }
 
-                if ( pView->AreObjectsMarked() )
-                    pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
+                if ( rView.AreObjectsMarked() )
+                    rView.MakeVisible( rView.GetAllMarkedRect(), rWindow );
 
                 bReturn = true;
             }
             else if ( aCode.IsMod1() )
             {
                 // selected handle
-                const SdrHdlList& rHdlList = pView->GetHdlList();
-                ((SdrHdlList&)rHdlList).TravelFocusHdl( !aCode.IsShift() );
+                const SdrHdlList& rHdlList = rView.GetHdlList();
+                const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl( !aCode.IsShift() );
 
                 // guarantee visibility of focused handle
-                SdrHdl* pHdl = rHdlList.GetFocusHdl();
-                if ( pHdl )
+                if (SdrHdl* pHdl = rHdlList.GetFocusHdl())
                 {
                     Point aHdlPosition( pHdl->GetPos() );
                     Rectangle aVisRect( aHdlPosition - Point( 100, 100 ), Size( 200, 200 ) );
-                    pView->MakeVisible( aVisRect, *pWindow );
+                    rView.MakeVisible( aVisRect, rWindow );
                 }
 
                 bReturn = true;
@@ -225,12 +224,12 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 nY =  0;
             }
 
-            if ( pView->AreObjectsMarked() && !aCode.IsMod1() )
+            if ( rView.AreObjectsMarked() && !aCode.IsMod1() )
             {
                 if ( aCode.IsMod2() )
                 {
                     // move in 1 pixel distance
-                    Size aPixelSize = pWindow ? pWindow->PixelToLogic( Size( 1, 1 ) ) : Size( 100, 100 );
+                    Size aPixelSize = rWindow.PixelToLogic(Size(1, 1));
                     nX *= aPixelSize.Width();
                     nY *= aPixelSize.Height();
                 }
@@ -241,20 +240,20 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     nY *= 100;
                 }
 
-                const SdrHdlList& rHdlList = pView->GetHdlList();
+                const SdrHdlList& rHdlList = rView.GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
                 if ( pHdl == 0 )
                 {
                     // no handle selected
-                    if ( pView->IsMoveAllowed() )
+                    if ( rView.IsMoveAllowed() )
                     {
                         // restrict movement to work area
-                        const Rectangle& rWorkArea = pView->GetWorkArea();
+                        const Rectangle& rWorkArea = rView.GetWorkArea();
 
                         if ( !rWorkArea.IsEmpty() )
                         {
-                            Rectangle aMarkRect( pView->GetMarkedObjRect() );
+                            Rectangle aMarkRect( rView.GetMarkedObjRect() );
                             aMarkRect.Move( nX, nY );
 
                             if ( !rWorkArea.IsInside( aMarkRect ) )
@@ -275,8 +274,8 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
                         if ( nX != 0 || nY != 0 )
                         {
-                            pView->MoveAllMarked( Size( nX, nY ) );
-                            pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
+                            rView.MoveAllMarked( Size( nX, nY ) );
+                            rView.MakeVisible( rView.GetAllMarkedRect(), rWindow );
                         }
                     }
                 }
@@ -287,42 +286,42 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     {
                         Point aStartPoint( pHdl->GetPos() );
                         Point aEndPoint( pHdl->GetPos() + Point( nX, nY ) );
-                        const SdrDragStat& rDragStat = pView->GetDragStat();
+                        const SdrDragStat& rDragStat = rView.GetDragStat();
 
                         // start dragging
-                        pView->BegDragObj( aStartPoint, 0, pHdl, 0 );
+                        rView.BegDragObj( aStartPoint, 0, pHdl, 0 );
 
-                        if ( pView->IsDragObj() )
+                        if ( rView.IsDragObj() )
                         {
                             bool const bWasNoSnap = rDragStat.IsNoSnap();
-                            bool const bWasSnapEnabled = pView->IsSnapEnabled();
+                            bool const bWasSnapEnabled = rView.IsSnapEnabled();
 
                             // switch snapping off
                             if ( !bWasNoSnap )
-                                ((SdrDragStat&)rDragStat).SetNoSnap(true);
+                                const_cast<SdrDragStat&>(rDragStat).SetNoSnap(true);
                             if ( bWasSnapEnabled )
-                                pView->SetSnapEnabled(false);
+                                rView.SetSnapEnabled(false);
 
-                            pView->MovAction( aEndPoint );
-                            pView->EndDragObj();
+                            rView.MovAction( aEndPoint );
+                            rView.EndDragObj();
 
                             // restore snap
                             if ( !bWasNoSnap )
-                                ((SdrDragStat&)rDragStat).SetNoSnap( bWasNoSnap );
+                                const_cast<SdrDragStat&>(rDragStat).SetNoSnap( bWasNoSnap );
                             if ( bWasSnapEnabled )
-                                pView->SetSnapEnabled( bWasSnapEnabled );
+                                rView.SetSnapEnabled( bWasSnapEnabled );
                         }
 
                         // make moved handle visible
                         Rectangle aVisRect( aEndPoint - Point( 100, 100 ), Size( 200, 200 ) );
-                        pView->MakeVisible( aVisRect, *pWindow );
+                        rView.MakeVisible( aVisRect, rWindow );
                     }
                 }
             }
             else
             {
                 // scroll page
-                ScrollBar* pScrollBar = ( nX != 0 ) ? pParent->GetHScroll() : pParent->GetVScroll();
+                ScrollBar* pScrollBar = ( nX != 0 ) ? rParent.GetHScroll() : rParent.GetVScroll();
                 if ( pScrollBar )
                 {
                     long nRangeMin = pScrollBar->GetRangeMin();
@@ -333,7 +332,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     if ( nThumbPos > nRangeMax )
                         nThumbPos = nRangeMax;
                     pScrollBar->SetThumbPos( nThumbPos );
-                    pParent->DoScroll( pScrollBar );
+                    rParent.DoScroll( pScrollBar );
                 }
             }
 
@@ -347,24 +346,24 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
     }
 
     if ( bReturn )
-        pWindow->ReleaseMouse();
+        rWindow.ReleaseMouse();
 
     return bReturn;
 }
 
 //----------------------------------------------------------------------------
 
-DlgEdFuncInsert::DlgEdFuncInsert( DlgEditor* pParent_ ) :
-    DlgEdFunc( pParent_ )
+DlgEdFuncInsert::DlgEdFuncInsert (DlgEditor& rParent_) :
+    DlgEdFunc(rParent_)
 {
-    pParent_->GetView()->SetCreateMode(true);
+    rParent.GetView().SetCreateMode(true);
 }
 
 //----------------------------------------------------------------------------
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    pParent->GetView()->SetEditMode( true );
+    rParent.GetView().SetEditMode( true );
 }
 
 //----------------------------------------------------------------------------
@@ -374,35 +373,35 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     if( !rMEvt.IsLeft() )
         return true;
 
-    SdrView* pView  = pParent->GetView();
-    Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    SdrView& rView  = rParent.GetView();
+    Window& rWindow = rParent.GetWindow();
+    rView.SetActualWin(&rWindow);
 
-    Point aPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    sal_uInt16 nDrgLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    Point aPos = rWindow.PixelToLogic( rMEvt.GetPosPixel() );
+    sal_uInt16 nHitLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
+    sal_uInt16 nDrgLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
 
-    pWindow->CaptureMouse();
+    rWindow.CaptureMouse();
 
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
-        SdrHdl* pHdl = pView->PickHandle(aPos);
+        SdrHdl* pHdl = rView.PickHandle(aPos);
 
         // if selected object was hit, drag object
-        if ( pHdl!=NULL || pView->IsMarkedHit(aPos, nHitLog) )
-            pView->BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-        else if ( pView->AreObjectsMarked() )
-            pView->UnmarkAll();
+        if ( pHdl!=NULL || rView.IsMarkedHit(aPos, nHitLog) )
+            rView.BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+        else if ( rView.AreObjectsMarked() )
+            rView.UnmarkAll();
 
         // if no action, create object
-        if ( !pView->IsAction() )
-            pView->BegCreateObj(aPos);
+        if ( !rView.IsAction() )
+            rView.BegCreateObj(aPos);
     }
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
         // if object was hit, show property browser
-        if ( pView->IsMarkedHit(aPos, nHitLog) && pParent->GetMode() != DlgEditor::READONLY )
-            pParent->ShowProperties();
+        if ( rView.IsMarkedHit(aPos, nHitLog) && rParent.GetMode() != DlgEditor::READONLY )
+            rParent.ShowProperties();
     }
 
     return true;
@@ -414,30 +413,30 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
 
-    SdrView* pView  = pParent->GetView();
-    Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    SdrView& rView  = rParent.GetView();
+    Window& rWindow = rParent.GetWindow();
+    rView.SetActualWin(&rWindow);
 
-    pWindow->ReleaseMouse();
+    rWindow.ReleaseMouse();
 
     // object creation active?
-    if ( pView->IsCreateObj() )
+    if ( rView.IsCreateObj() )
     {
-        pView->EndCreateObj(SDRCREATE_FORCEEND);
+        rView.EndCreateObj(SDRCREATE_FORCEEND);
 
-        if ( !pView->AreObjectsMarked() )
+        if ( !rView.AreObjectsMarked() )
         {
-            sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
-            Point aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-            pView->MarkObj(aPos, nHitLog);
+            sal_uInt16 nHitLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
+            Point aPos( rWindow.PixelToLogic( rMEvt.GetPosPixel() ) );
+            rView.MarkObj(aPos, nHitLog);
         }
 
-        return pView->AreObjectsMarked();
+        return rView.AreObjectsMarked();
     }
     else
     {
-        if ( pView->IsDragObj() )
-             pView->EndDragObj( rMEvt.IsMod1() );
+        if ( rView.IsDragObj() )
+            rView.EndDragObj( rMEvt.IsMod1() );
         return true;
     }
 }
@@ -446,28 +445,28 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 
 bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
-    SdrView* pView  = pParent->GetView();
-    Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    SdrView& rView  = rParent.GetView();
+    Window& rWindow = rParent.GetWindow();
+    rView.SetActualWin(&rWindow);
 
-    Point   aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    Point aPos = rWindow.PixelToLogic(rMEvt.GetPosPixel());
+    sal_uInt16 nHitLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
 
-    if ( pView->IsAction() )
+    if (rView.IsAction())
     {
         ForceScroll(aPos);
-        pView->MovAction(aPos);
+        rView.MovAction(aPos);
     }
 
-    pWindow->SetPointer( pView->GetPreferedPointer( aPos, pWindow, nHitLog ) );
+    rWindow.SetPointer( rView.GetPreferedPointer( aPos, &rWindow, nHitLog ) );
 
     return true;
 }
 
 //----------------------------------------------------------------------------
 
-DlgEdFuncSelect::DlgEdFuncSelect( DlgEditor* pParent_ ) :
-    DlgEdFunc( pParent_ ),
+DlgEdFuncSelect::DlgEdFuncSelect (DlgEditor& rParent_) :
+    DlgEdFunc(rParent_),
     bMarkAction(false)
 {
 }
@@ -483,51 +482,51 @@ DlgEdFuncSelect::~DlgEdFuncSelect()
 bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // get view from parent
-    SdrView* pView   = pParent->GetView();
-    Window*  pWindow = pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    SdrView& rView  = rParent.GetView();
+    Window& rWindow = rParent.GetWindow();
+    rView.SetActualWin(&rWindow);
 
-    sal_uInt16 nDrgLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    Point  aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+    sal_uInt16 nDrgLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
+    sal_uInt16 nHitLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
+    Point aMDPos = rWindow.PixelToLogic(rMEvt.GetPosPixel());
 
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
-        SdrHdl* pHdl = pView->PickHandle(aMDPos);
+        SdrHdl* pHdl = rView.PickHandle(aMDPos);
         SdrObject* pObj;
         SdrPageView* pPV;
 
         // hit selected object?
-        if ( pHdl!=NULL || pView->IsMarkedHit(aMDPos, nHitLog) )
+        if ( pHdl!=NULL || rView.IsMarkedHit(aMDPos, nHitLog) )
         {
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+            rView.BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
         }
         else
         {
             // if not multi selection, unmark all
             if ( !rMEvt.IsShift() )
-                pView->UnmarkAll();
+                rView.UnmarkAll();
             else
             {
-                if( pView->PickObj( aMDPos, nHitLog, pObj, pPV ) )
+                if( rView.PickObj( aMDPos, nHitLog, pObj, pPV ) )
                 {
                     //if (dynamic_cast<DlgEdForm*>(pObj))
-                    //  pView->UnmarkAll();
+                    //  rView.UnmarkAll();
                     //else
-                    //  pParent->UnmarkDialog();
+                    //  rParent.UnmarkDialog();
                 }
             }
 
-            if ( pView->MarkObj(aMDPos, nHitLog) )
+            if ( rView.MarkObj(aMDPos, nHitLog) )
             {
                 // drag object
-                pHdl=pView->PickHandle(aMDPos);
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                pHdl = rView.PickHandle(aMDPos);
+                rView.BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             }
             else
             {
                 // select object
-                pView->BegMarkObj(aMDPos);
+                rView.BegMarkObj(aMDPos);
                 bMarkAction = true;
             }
         }
@@ -535,8 +534,8 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
         // if object was hit, show property browser
-        if ( pView->IsMarkedHit(aMDPos, nHitLog) && pParent->GetMode() != DlgEditor::READONLY )
-            pParent->ShowProperties();
+        if ( rView.IsMarkedHit(aMDPos, nHitLog) && rParent.GetMode() != DlgEditor::READONLY )
+            rParent.ShowProperties();
     }
 
     return true;
@@ -549,32 +548,31 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     DlgEdFunc::MouseButtonUp( rMEvt );
 
     // get view from parent
-    SdrView* pView  = pParent->GetView();
-    Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    SdrView& rView  = rParent.GetView();
+    Window& rWindow = rParent.GetWindow();
+    rView.SetActualWin(&rWindow);
 
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    Point aPnt = rWindow.PixelToLogic(rMEvt.GetPosPixel());
+    sal_uInt16 nHitLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
 
     if ( rMEvt.IsLeft() )
     {
-        if ( pView->IsDragObj() )
+        if (rView.IsDragObj())
         {
             // object was dragged
-            pView->EndDragObj( rMEvt.IsMod1() );
-            pView->ForceMarkedToAnotherPage();
+            rView.EndDragObj( rMEvt.IsMod1() );
+            rView.ForceMarkedToAnotherPage();
         }
-        else
-        if (pView->IsAction() )
+        else if (rView.IsAction())
         {
-            pView->EndAction();
+            rView.EndAction();
         }
     }
 
     bMarkAction = false;
 
-    pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
-    pWindow->ReleaseMouse();
+    rWindow.SetPointer( rView.GetPreferedPointer( aPnt, &rWindow, nHitLog ) );
+    rWindow.ReleaseMouse();
 
     return true;
 }
@@ -583,23 +581,23 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 
 bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
-    SdrView* pView  = pParent->GetView();
-    Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    SdrView& rView  = rParent.GetView();
+    Window& rWindow = rParent.GetWindow();
+    rView.SetActualWin(&rWindow);
 
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    Point aPnt = rWindow.PixelToLogic(rMEvt.GetPosPixel());
+    sal_uInt16 nHitLog = static_cast<sal_uInt16>(rWindow.PixelToLogic(Size(3, 0)).Width());
 
-    if ( pView->IsAction() )
+    if ( rView.IsAction() )
     {
-        Point aPix(rMEvt.GetPosPixel());
-        Point aPnt_(pWindow->PixelToLogic(aPix));
+        Point aPix = rMEvt.GetPosPixel();
+        Point aPnt_ = rWindow.PixelToLogic(aPix);
 
         ForceScroll(aPnt_);
-        pView->MovAction(aPnt_);
+        rView.MovAction(aPnt_);
     }
 
-    pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
+    rWindow.SetPointer( rView.GetPreferedPointer( aPnt, &rWindow, nHitLog ) );
 
     return true;
 }

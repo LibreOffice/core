@@ -35,9 +35,9 @@ TYPEINIT1( DlgEdView, SdrView );
 
 //----------------------------------------------------------------------------
 
-DlgEdView::DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor )
-    :SdrView( pModel, pOut )
-    ,pDlgEditor( pEditor )
+DlgEdView::DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor) :
+    SdrView(&rModel, &rOut),
+    rDlgEditor(rEditor)
 {
     // #114898#
     SetBufferedOutputAllowed(true);
@@ -57,11 +57,8 @@ void DlgEdView::MarkListHasChanged()
     SdrView::MarkListHasChanged();
 
     DlgEdHint aHint( DlgEdHint::SELECTIONCHANGED );
-    if ( pDlgEditor )
-    {
-        pDlgEditor->Broadcast( aHint );
-        pDlgEditor->UpdatePropertyBrowserDelayed();
-    }
+    rDlgEditor.Broadcast( aHint );
+    rDlgEditor.UpdatePropertyBrowserDelayed();
 }
 
 //----------------------------------------------------------------------------
@@ -86,8 +83,8 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         sal_Int32 nVisTop    = aVisRect.Top();
         sal_Int32 nVisBottom = aVisRect.Bottom();
 
-        sal_Int32 nDeltaX = pDlgEditor->GetHScroll()->GetLineSize();
-        sal_Int32 nDeltaY = pDlgEditor->GetVScroll()->GetLineSize();
+        sal_Int32 nDeltaX = rDlgEditor.GetHScroll()->GetLineSize();
+        sal_Int32 nDeltaY = rDlgEditor.GetVScroll()->GetLineSize();
 
         while ( rRect.Right() > nVisRight + nScrollX )
             nScrollX += nDeltaX;
@@ -102,7 +99,7 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
             nScrollY -= nDeltaY;
 
         // don't scroll beyond the page size
-        Size aPageSize = pDlgEditor->GetPage()->GetSize();
+        Size aPageSize = rDlgEditor.GetPage().GetSize();
         sal_Int32 nPageWidth  = aPageSize.Width();
         sal_Int32 nPageHeight = aPageSize.Height();
 
@@ -127,12 +124,10 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         rWin.Invalidate();
 
         // update scroll bars
-        if ( pDlgEditor )
-            pDlgEditor->UpdateScrollBars();
+        rDlgEditor.UpdateScrollBars();
 
         DlgEdHint aHint( DlgEdHint::WINDOWSCROLLED );
-        if ( pDlgEditor )
-            pDlgEditor->Broadcast( aHint );
+        rDlgEditor.Broadcast( aHint );
     }
 }
 

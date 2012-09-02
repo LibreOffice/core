@@ -147,13 +147,18 @@ SFX_IMPL_INTERFACE( basctl_Shell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 
 
 
-#define IDE_VIEWSHELL_FLAGS     (SFX_VIEW_CAN_PRINT|SFX_VIEW_NO_NEWWINDOW)
+namespace
+{
+
+unsigned const ShellFlags = SFX_VIEW_CAN_PRINT | SFX_VIEW_NO_NEWWINDOW;
+
+}
 
 
 unsigned Shell::nShellCount = 0;
 
 Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
-    SfxViewShell( pFrame_, IDE_VIEWSHELL_FLAGS ),
+    SfxViewShell( pFrame_, ShellFlags ),
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
     aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
     aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
@@ -195,7 +200,7 @@ void Shell::Init()
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
     bCreatingWindow = false;
 
-    pTabBar = new TabBar( &GetViewFrame()->GetWindow() );
+    pTabBar.reset(new TabBar(&GetViewFrame()->GetWindow()));
     pTabBar->SetSplitHdl( LINK( this, Shell, TabBarSplitHdl ) );
     bTabBarSplitted = false;
 
@@ -237,8 +242,6 @@ Shell::~Shell()
         // no store; does already happen when the BasicManagers are destroyed
         delete it->second;
     }
-
-    delete pTabBar;
 
     // Destroy all ContainerListeners for Basic Container.
     if (ContainerListenerImpl* pListener = static_cast<ContainerListenerImpl*>(m_xLibListener.get()))

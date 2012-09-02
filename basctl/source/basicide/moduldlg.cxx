@@ -805,13 +805,12 @@ void ObjectPage::NewDialog()
     {
         aDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-        boost::scoped_ptr< NewObjectDialog > xNewDlg(
-            new NewObjectDialog(this, NEWOBJECTMODE_DLG, true));
-        xNewDlg->SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
+        NewObjectDialog aNewDlg(this, ObjectMode::Dialog, true);
+        aNewDlg.SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
 
-        if (xNewDlg->Execute() != 0)
+        if (aNewDlg.Execute() != 0)
         {
-            ::rtl::OUString aDlgName( xNewDlg->GetObjectName() );
+            rtl::OUString aDlgName = aNewDlg.GetObjectName();
             if (aDlgName.isEmpty())
                 aDlgName = aDocument.createObjectName( E_DIALOGS, aLibName);
 
@@ -961,14 +960,13 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
     if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
-    boost::scoped_ptr< NewObjectDialog > xNewDlg(
-        new NewObjectDialog( pWin, NEWOBJECTMODE_MOD, true ) );
-    xNewDlg->SetObjectName( aModName );
+    NewObjectDialog aNewDlg(pWin, ObjectMode::Module, true);
+    aNewDlg.SetObjectName( aModName );
 
-    if (xNewDlg->Execute() != 0)
+    if (aNewDlg.Execute() != 0)
     {
-        if ( xNewDlg->GetObjectName().Len() )
-            aModName = xNewDlg->GetObjectName();
+        if (aNewDlg.GetObjectName().Len() )
+            aModName = aNewDlg.GetObjectName();
 
         try
         {

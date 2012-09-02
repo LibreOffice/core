@@ -196,7 +196,7 @@ bool RenameDialog (
     DialogWindow* pWin = pShell ? pShell->FindDlgWin(rDocument, rLibName, rOldName) : 0;
     Reference< XNameContainer > xExistingDialog;
     if ( pWin )
-        xExistingDialog = pWin->GetEditor()->GetDialog();
+        xExistingDialog = pWin->GetEditor().GetDialog();
 
     if ( xExistingDialog.is() )
         LocalizationMgr::renameStringResourceIDs( rDocument, rLibName, rNewName, xExistingDialog );

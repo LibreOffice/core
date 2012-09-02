@@ -40,13 +40,16 @@ class SvxPasswordDialog;
 namespace basctl
 {
 
-enum NewObjectMode
+namespace ObjectMode
 {
-    NEWOBJECTMODE_LIB  = 1,
-    NEWOBJECTMODE_MOD  = 2,
-    NEWOBJECTMODE_DLG  = 3,
-    NEWOBJECTMODE_METH = 4
-};
+    enum Mode
+    {
+        Library = 1,
+        Module  = 2,
+        Dialog  = 3,
+        Method  = 4,
+    };
+}
 
 class NewObjectDialog : public ModalDialog
 {
@@ -59,8 +62,8 @@ private:
     DECL_LINK(OkButtonHandler, void *);
 
 public:
-    NewObjectDialog(Window * pParent, NewObjectMode nMode, bool bCheckName = false);
-                ~NewObjectDialog();
+    NewObjectDialog (Window* pParent, ObjectMode::Mode, bool bCheckName = false);
+    virtual ~NewObjectDialog ();
 
     String      GetObjectName() const { return aEdit.GetText(); }
     void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
@@ -119,13 +122,10 @@ public:
     ~ExtTreeListBox();
 };
 
-#define LIBMODE_CHOOSER     1
-#define LIBMODE_MANAGER     2
-
 class CheckBox : public SvTabListBox
 {
 private:
-    NewObjectMode       nMode;
+    ObjectMode::Mode    eMode;
     SvLBoxButtonData*   pCheckButton;
     ScriptDocument      m_aDocument;
     void                Init();
@@ -146,8 +146,8 @@ public:
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
-    void            SetMode( NewObjectMode n );
-    NewObjectMode   GetMode() const { return nMode; }
+    void            SetMode (ObjectMode::Mode);
+    ObjectMode::Mode GetMode () const { return eMode; }
 };
 
 class LibDialog: public ModalDialog

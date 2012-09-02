@@ -21,7 +21,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 //........................................................................
 namespace basctl
@@ -32,7 +32,6 @@ namespace basctl
     //====================================================================
     //= DocumentSignature
     //====================================================================
-    struct DocumentSignature_Data;
     /// encapsulates (actions on) the signature/state of a document
     class DocumentSignature
     {
@@ -42,7 +41,7 @@ namespace basctl
             If the given ScriptDocument instance refers to the application, or to a document
             which does not support being signed, the DocumentSignature instance is invalid afterwards.
         */
-        DocumentSignature( const ScriptDocument& _rDocument );
+        explicit DocumentSignature (ScriptDocument const&);
         ~DocumentSignature();
 
         /** determines whether the instance is valid
@@ -69,7 +68,8 @@ namespace basctl
         DocumentSignature();        // not implemented
 
     private:
-        ::std::auto_ptr< DocumentSignature_Data >   m_pData;
+        class Impl;
+        boost::scoped_ptr<Impl> m_pImpl;
     };
 
 //........................................................................

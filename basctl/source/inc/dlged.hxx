@@ -30,6 +30,8 @@
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 class ScrollBar;
 class Printer;
 class KeyEvent;
@@ -107,18 +109,18 @@ private:
 private:
     ScrollBar*          pHScroll;
     ScrollBar*          pVScroll;
-    DlgEdModel*         pDlgEdModel;
-    DlgEdPage*          pDlgEdPage;
-    DlgEdView*          pDlgEdView;
-    DlgEdForm*          pDlgEdForm;
+    boost::scoped_ptr<DlgEdModel> pDlgEdModel; // never nullptr
+    DlgEdPage*          pDlgEdPage;  // never nullptr
+    boost::scoped_ptr<DlgEdView> pDlgEdView; // never nullptr
+    DlgEdForm*          pDlgEdForm; // never nullptr
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >     m_xUnoControlDialogModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xControlContainer;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
-    DlgEdFactory*       pObjFac;
-    Window*             pWindow;
-    DlgEdFunc*          pFunc;
+    boost::scoped_ptr<DlgEdFactory> pObjFac; // never nullptr
+    Window&             rWindow; // DialogWindow
+    boost::scoped_ptr<DlgEdFunc> pFunc;
     DialogWindowLayout& rLayout;
     Mode                eMode;
     sal_uInt16          eActObj;
@@ -134,13 +136,15 @@ private:
     long                mnPaintGuard;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
 
-    DlgEditor(); // not implemented
 public:
-    DlgEditor (com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel, DialogWindowLayout&);
+    DlgEditor (
+        Window&, DialogWindowLayout&,
+        com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel,
+        com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> xDialogModel
+    );
     ~DlgEditor();
 
-    void            SetWindow( Window* pWindow );
-    Window*         GetWindow() const { return pWindow; }
+    Window& GetWindow() const { return rWindow; }
 
     /** returns the control container associated with our window
         @see GetWindow
@@ -149,9 +153,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                     GetWindowControlContainer();
 
-    void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
-    DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
-
     void            SetScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
     void            InitScrollBars();
     ScrollBar*      GetHScroll() const { return pHScroll; }
@@ -159,17 +160,16 @@ public:
     void            DoScroll( ScrollBar* pActScroll );
     void            UpdateScrollBars();
 
-    void            SetDialog( ::com::sun::star::uno::Reference<
-                        ::com::sun::star::container::XNameContainer > xUnoControlDialogModel );
-    void            ResetDialog( void );
+    void            SetDialog (com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> xUnoControlDialogModel);
+    void            ResetDialog ();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const
                         {return m_xUnoControlDialogModel;}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();
 
-    DlgEdModel*     GetModel()      const { return pDlgEdModel; }
-    DlgEdView*      GetView()       const { return pDlgEdView; }
-    DlgEdPage*      GetPage()       const { return pDlgEdPage; }
+    DlgEdModel&     GetModel()      const { return *pDlgEdModel; }
+    DlgEdView&      GetView()       const { return *pDlgEdView; }
+    DlgEdPage&      GetPage()       const { return *pDlgEdPage; }
 
     void            ShowDialog();
 

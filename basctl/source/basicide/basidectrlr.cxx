@@ -34,9 +34,13 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
+namespace
+{
 
-#define PROPERTY_ID_ICONID      1
-#define PROPERTY_ICONID         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IconId" ) )
+int const nPropertyIconId = 1;
+rtl::OUString const sPropertyIconId("IconId");
+
+}
 
 
 //----------------------------------------------------------------------------
@@ -46,7 +50,11 @@ Controller::Controller (Shell* pViewShell)
     ,SfxBaseController( pViewShell )
     ,m_nIconId( ICON_MACROLIBRARY )
 {
-    registerProperty( PROPERTY_ICONID, PROPERTY_ID_ICONID, PropertyAttribute::READONLY, &m_nIconId, ::getCppuType( &m_nIconId ) );
+    registerProperty(
+        sPropertyIconId, nPropertyIconId,
+        PropertyAttribute::READONLY,
+        &m_nIconId, getCppuType(&m_nIconId)
+    );
 }
 
 //----------------------------------------------------------------------------
