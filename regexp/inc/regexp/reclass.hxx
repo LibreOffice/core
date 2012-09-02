@@ -33,6 +33,7 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <sal/types.h>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
+#include <boost/noncopyable.hpp>
 
 #if defined REGEXP_DLLIMPLEMENTATION
 #define REGEXP_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
@@ -295,7 +296,7 @@ typedef union
 } register_info_type;
 
 
-class REGEXP_DLLPUBLIC Regexpr
+class REGEXP_DLLPUBLIC Regexpr: private boost::noncopyable
 {
     ::com::sun::star::uno::Reference<
     ::com::sun::star::i18n::XExtendedTransliteration > translit;
@@ -356,9 +357,6 @@ class REGEXP_DLLPUBLIC Regexpr
     sal_Bool iswordbegin(const sal_Unicode *d, sal_Unicode *string, sal_Int32 ssize);
     sal_Bool iswordend(const sal_Unicode *d, sal_Unicode *string, sal_Int32 ssize);
     void set_list_bit(sal_Unicode c, sal_Unicode *b);
-
-    Regexpr(const Regexpr&);
-    Regexpr& operator=(const Regexpr&);
 
 public:
     // constructors

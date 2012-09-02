@@ -39,27 +39,20 @@ public:
     virtual OString     getTransStr() const     { return m_sTransStr; }
     virtual bool        getFuzzy() const        { return m_bFuzzy; }
 
-    virtual void        setWhiteSpace(const OString& rWhiteSpace)
-                        { m_sWhiteSpace = rWhiteSpace; }
-    virtual void        setExtractCom(const OString& rExtractCom)
-                        { m_sExtractCom = rExtractCom; }
-    virtual void        setReference(const OString& rReference)
-                        { m_sReference = rReference; }
-    virtual void        setContext(const OString& rContext)
-                        { m_sContext = rContext; }
-    virtual void        setUnTransStr(const OString& rUnTransStr)
-                        { m_sUnTransStr = rUnTransStr; }
-    virtual void        setTransStr(const OString& rTransStr)
-                        { m_sTransStr = rTransStr; }
-    virtual void        setFuzzy(bool bFuzzy)
-                        { m_bFuzzy = bFuzzy; }
+    virtual void        setWhiteSpace(const OString& rWhiteSpace);
+    virtual void        setExtractCom(const OString& rExtractCom);
+    virtual void        setReference(const OString& rReference);
+    virtual void        setContext(const OString& rContext);
+    virtual void        setUnTransStr(const OString& rUnTransStr);
+    virtual void        setTransStr(const OString& rTransStr);
+    virtual void        setFuzzy(const bool bFuzzy);
     virtual void        genKeyId();
 
     virtual void        writeToFile(std::ofstream& rOFStream);
     virtual void        readFromFile(std::ifstream& rIFStream);
 };
 
-class PoEntry: public GenPoEntry
+class PoEntry
 {
 public:
     enum SDFPARTS { PROJECT, SOURCEFILE, DUMMY, RESOURCETYPE, GROUPID,
@@ -68,34 +61,43 @@ public:
     enum TYPE { TTEXT=TEXT, TQUICKHELPTEXT=QUICKHELPTEXT, TTITLE=TITLE };
 private:
 
+    GenPoEntry  m_aGenPo;
     OString     m_sSourceFile;
     OString     m_sGroupId;
     OString     m_sLocalId;
     OString     m_sResourceType;
     TYPE        m_eType;
     OString     m_sHelpText;
-
 public:
 
-                        PoEntry();
-                        PoEntry(const OString& i_rSDFLine,
-                                const TYPE eType = TTEXT);
-    virtual             ~PoEntry();
+                    PoEntry();
+                    PoEntry(const OString& i_rSDFLine,
+                            const TYPE eType = TTEXT);
+    virtual         ~PoEntry();
 
-    virtual OString     getUnTransStr() const;
-    virtual OString     getTransStr() const;
-    virtual void        setUnTransStr(const OString& rUnTransStr);
-    virtual void        setTransStr(const OString& rTransStr);
+    OString         getSourceFile() const       { return m_sSourceFile; }
+    OString         getGroupId() const          { return m_sGroupId; }
+    OString         getLocalId() const          { return m_sLocalId; }
+    OString         getResourceType() const     { return m_sResourceType; }
+    TYPE            getType() const             { return m_eType; }
+    OString         getHelpText() const         { return m_sHelpText; }
+    OString         getUnTransStr() const;
+    OString         getTransStr() const;
+    bool            getFuzzy() const            { return m_aGenPo.getFuzzy(); }
+    void            setUnTransStr(const OString& rUnTransStr);
+    void            setTransStr(const OString& rTransStr);
+    void            setFuzzy(const bool bFuzzy);
 
-    virtual void        writeToFile(std::ofstream& rOFStream);
-    virtual void        readFromFile(std::ifstream& rIFStream);
+    void            writeToFile(std::ofstream& rOFStream);
+    void            readFromFile(std::ifstream& rIFStream);
 
 };
 
-class PoHeader: public GenPoEntry
+class PoHeader
 {
 
 private:
+    GenPoEntry m_aGenPo;
     OString    m_sExtractionSource;
     OString    m_sProjectIdVersion;
     OString    m_sReportMsgidBugsTo;
@@ -114,6 +116,7 @@ private:
 public:
                     PoHeader( const OString& rExtSrc );
                     ~PoHeader();
+    void            writeToFile(std::ofstream& rOFStream);
 };
 
 #endif // _PO_INCLUDED
