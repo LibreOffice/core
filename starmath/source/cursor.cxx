@@ -205,18 +205,21 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
         //Line to merge things into, so we can delete pLine
         SmNode* pMergeLine = pLineParent->GetSubNode(nLineOffset-1);
         OSL_ENSURE(pMergeLine, "pMergeLine cannot be NULL!");
+        SmCaretPos PosAfterDelete;
         //Convert first line to list
         SmNodeList *pLineList = NodeToList(pMergeLine);
-        //Find iterator to patch
-        SmNodeList::iterator patchPoint = pLineList->end();
-        --patchPoint;
-        //Convert second line to list
-        NodeToList(pLine, pLineList);
-        //Patch the line list
-        ++patchPoint;
-        SmCaretPos PosAfterDelete = PatchLineList(pLineList, patchPoint);
-        //Parse the line
-        pLine = SmNodeListParser().Parse(pLineList);
+        if(!pLineList->empty()){
+            //Find iterator to patch
+            SmNodeList::iterator patchPoint = pLineList->end();
+            --patchPoint;
+            //Convert second line to list
+            NodeToList(pLine, pLineList);
+            //Patch the line list
+            ++patchPoint;
+            PosAfterDelete = PatchLineList(pLineList, patchPoint);
+            //Parse the line
+            pLine = SmNodeListParser().Parse(pLineList);
+        }
         delete pLineList;
         pLineParent->SetSubNode(nLineOffset-1, pLine);
         //Delete the removed line slot
