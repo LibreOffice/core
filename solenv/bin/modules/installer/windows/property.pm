@@ -399,15 +399,8 @@ sub set_important_properties
     }
 
     # Setting .NET requirements
-    if ( $installer::globals::required_dotnet_version ne "" )
-    {
-        my $onepropertyline = "REQUIRED_DOTNET_VERSION" . "\t" . $installer::globals::required_dotnet_version . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-
-        $onepropertyline = "DOTNET_SUFFICIENT" . "\t" . "1" . "\n"; # default value for found .NET
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
+    push @{$propertyfile}, "REQUIRED_DOTNET_VERSION" . "\t" . "2.0.0.0" . "\n";
+    push @{$propertyfile}, "DOTNET_SUFFICIENT" . "\t" . "1" . "\n"; # default value for found .NET
 }
 
 #######################################################
