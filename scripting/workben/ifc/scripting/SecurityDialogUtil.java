@@ -22,8 +22,8 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
-import drafts.com.sun.star.accessibility.*;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.*;
+import com.sun.star.awt.XExtendedToolkit;
 
 // Jsuite classes
 import util.AccessibilityTools;

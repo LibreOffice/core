@@ -148,7 +148,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             {
                 checkBox = true;
             }
-            new SecurityDialogUtil( tParam.getMSF(), buttonName, checkBox ).start();
+            new SecurityDialogUtil( (XMultiServiceFactory) tParam.getMSF(), buttonName, checkBox ).start();
         }
         // need to set up dialog utils thread first
         int storageId = getStorageId(location);
@@ -203,7 +203,7 @@ public class _XScriptSecurity extends MultiMethodTest {
     {
         String result = "";
         try {
-        Object oProv = tParam.getMSF().createInstance(
+        Object oProv = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
             "com.sun.star.configuration.ConfigurationProvider" );
 
         XMultiServiceFactory xProv = (XMultiServiceFactory)
@@ -245,7 +245,7 @@ public class _XScriptSecurity extends MultiMethodTest {
     {
         boolean success=false;
         try {
-        Object oProv = tParam.getMSF().createInstance(
+        Object oProv = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
             "com.sun.star.configuration.ConfigurationProvider" );
 
         XMultiServiceFactory xProv = (XMultiServiceFactory)
@@ -358,7 +358,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         XSimpleFileAccess access = null;
 
         try {
-            Object fa = tParam.getMSF().createInstance(
+            Object fa = ((XMultiServiceFactory)tParam.getMSF()).createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
             access = (XSimpleFileAccess)
@@ -372,7 +372,7 @@ public class _XScriptSecurity extends MultiMethodTest {
 
     private XModel loadDocument(String name) {
         XModel model = null;
-        SOfficeFactory factory = SOfficeFactory.getFactory(tParam.getMSF());
+        SOfficeFactory factory = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
 
         String fullname = util.utils.getFullTestURL(name);
 

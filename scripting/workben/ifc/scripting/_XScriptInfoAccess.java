@@ -192,7 +192,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         log.println(testdata.get("description"));
 
         Object obj = ScriptingUtils.getDefault().getScriptStorage(
-            tParam.getMSF(), location);
+            (XMultiServiceFactory) tParam.getMSF(), location);
 
         XScriptInfoAccess access = (XScriptInfoAccess)
             UnoRuntime.queryInterface(XScriptInfoAccess.class, obj);

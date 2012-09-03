@@ -163,7 +163,7 @@ public class _XScriptNameResolver extends MultiMethodTest {
         XSimpleFileAccess access = null;
 
         try {
-            Object fa = tParam.getMSF().createInstance(
+            Object fa = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
             access = (XSimpleFileAccess)
