@@ -1205,6 +1205,9 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
                         OSL_ENSURE( sal_False, "Unexpected size is provided!" );
                 }
             }
+            // i113605, to release storge medium
+            if ( SUCCEEDED( hr ) )
+                ::ReleaseStgMedium(&aMedium);
         }
     }
 
@@ -1578,6 +1581,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
                 if ( SUCCEEDED( hr ) )
                 {
                     bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );
+                    ::ReleaseStgMedium(&aMedium);     // i113605, to release storge medium
                     if ( bSupportedFlavor )
                     {
                         // TODO/LATER: bring the optimization back when other aspects are supported
