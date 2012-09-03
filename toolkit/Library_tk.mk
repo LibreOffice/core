@@ -52,12 +52,14 @@ $(eval $(call gb_Library_use_libraries,tk,\
     tl \
     utl \
     vcl \
+    svt \
     $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/asynccallback \
     toolkit/source/awt/stylesettings \
+    toolkit/source/awt/scrollabledialog \
     toolkit/source/awt/vclxaccessiblecomponent \
     toolkit/source/awt/vclxbitmap \
     toolkit/source/awt/vclxcontainer \

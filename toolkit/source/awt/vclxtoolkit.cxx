@@ -129,9 +129,10 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
-
+#include "toolkit/awt/scrollabledialog.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
+#include <toolkit/awt/scrollabledialog.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -786,7 +787,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // Modal/Modeless nur durch Show/Execute
                 if ( (pParent == NULL ) && ( rDescriptor.ParentIndex == -1 ) )
                     pParent = DIALOG_NO_PARENT;
-                pNewWindow = new Dialog( pParent, nWinBits );
+                pNewWindow = new toolkit::ScrollableDialog( pParent, nWinBits | WB_AUTOHSCROLL | WB_AUTOVSCROLL );
                 // #i70217# Don't always create a new component object. It's possible that VCL has called
                 // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
                 // which creates a component object.
@@ -1060,6 +1061,14 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
         if ( pParentComponent )
             pParent = pParentComponent->GetWindow();
+    }
+    // #FIXME inglorious HACK we possibly need to interface at XContainerWindowPeer ?
+    // to allow access to the 'real' parent that we pass to children
+    toolkit::ScrollableDialog* pSrcDialog = dynamic_cast< toolkit::ScrollableDialog* > ( pParent );
+    if ( pSrcDialog )
+    {
+        printf( "found a parent that is a scrollable dialog\n");
+        pParent = pSrcDialog->getContentWindow();
     }
 
     WinBits nWinBits = ImplGetWinBits( rDescriptor.WindowAttributes,
