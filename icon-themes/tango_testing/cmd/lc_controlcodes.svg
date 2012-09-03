@@ -6791,8 +6791,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="-14.562593"
-     inkscape:cy="-50.580279"
+     inkscape:cx="19.657495"
+     inkscape:cy="10.732121"
      inkscape:document-units="px"
      inkscape:current-layer="g5584"
      showgrid="false"
@@ -6800,11 +6800,11 @@
      inkscape:showpageshadow="false"
      borderlayer="false"
      showborder="true"
-     inkscape:window-width="809"
-     inkscape:window-height="436"
-     inkscape:window-x="647"
-     inkscape:window-y="241"
-     inkscape:window-maximized="0">
+     inkscape:window-width="1366"
+     inkscape:window-height="718"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid8783"
@@ -6821,7 +6821,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -6919,7 +6919,7 @@
          id="text8779"
          transform="translate(0,-0.61871844)">
         <path
-           d="m 236.17685,143.51253 -1.9894,0 0,-20.64094 -1.99388,0 0,20.64094 -1.9959,0 0,-9.87437 c -0.49834,0.14468 -1.2101,0.21702 -1.88526,0.21702 -1.73616,0 -3.01416,-0.50236 -3.83401,-1.50708 -0.81181,-1.00471 -1.21772,-2.51581 -1.21772,-4.53329 0,-2.0898 0.43806,-3.6451 1.31417,-4.66591 0.87612,-1.02078 2.24655,-1.53118 4.11131,-1.5312 l 7.49069,0 0,21.89483"
+           d="m 236.17685,143.51253 -1.9894,0 0,-20.64094 -1.99388,0 0,20.64094 -1.9959,0 0,-9.87437 c -0.49834,0.14468 -1.2101,0.21702 -1.88526,0.21702 -1.73616,0 -3.08598,-0.50236 -3.90583,-1.50708 -0.81181,-1.00471 -1.21772,-2.51581 -1.21772,-4.53329 0,-2.0898 0.43806,-3.6451 1.31417,-4.66591 0.87612,-1.02078 2.31837,-1.53118 4.18313,-1.5312 l 7.49069,0 0,21.89483"
            style="font-variant:normal;font-stretch:normal;fill:url(#linearGradient9580);stroke:url(#linearGradient9582);font-family:Open Sans;-inkscape-font-specification:Open Sans"
            id="path9570"
            inkscape:connector-curvature="0"
@@ -6950,8 +6950,8 @@
            inkscape:export-filename="/home/lapo/Desktop/format-text.png"
            id="g5584">
           <path
-             transform="matrix(1.0555986,0,0,0.58498137,-26.554299,-18.797912)"
-             style="opacity:0.6;color:#000000;fill:url(#radialGradient9578);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             transform="matrix(0.80163035,0,0,0.51400715,-23.752712,-17.394978)"
+             style="opacity:0.4;color:#000000;fill:url(#radialGradient9578);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
              sodipodi:type="arc"
              sodipodi:ry="2.6875"
              sodipodi:rx="9.84375"

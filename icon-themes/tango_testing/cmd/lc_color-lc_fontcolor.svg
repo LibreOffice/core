@@ -15,10 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="lc_color.svg"
+   sodipodi:docname="lc_color-lc_fontcolor.svg"
    inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_color.png"
-   inkscape:export-xdpi="137"
-   inkscape:export-ydpi="137">
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs4">
     <radialGradient
@@ -112,18 +112,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="53.784031"
-     inkscape:cy="12.083636"
+     inkscape:zoom="8"
+     inkscape:cx="12.818743"
+     inkscape:cy="12.305908"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
+     inkscape:current-layer="g6159"
+     showgrid="true"
      inkscape:snap-global="false"
-     inkscape:window-width="626"
-     inkscape:window-height="436"
-     inkscape:window-x="20"
-     inkscape:window-y="119"
-     inkscape:window-maximized="0">
+     inkscape:window-width="1366"
+     inkscape:window-height="716"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid3050"
@@ -161,7 +161,7 @@
          transform="translate(-576.52153,586.70452)">
         <g
            id="g9725"
-           transform="translate(-375.38918,738.34674)">
+           transform="translate(-375.38918,735.35626)">
           <path
              transform="translate(-0.25,-0.375)"
              d="m 965.25,-287.26282 c 0,3.31371 -2.68629,6 -6,6 -3.31371,0 -6,-2.68629 -6,-6 0,-3.31371 2.68629,-6 6,-6 3.31371,0 6,2.68629 6,6 z"
@@ -366,7 +366,7 @@
         <g
            id="g16-8"
            style="display:inline;enable-background:new"
-           transform="translate(583.52263,448.16087)">
+           transform="translate(584.52169,445.15574)">
           <g
              id="g5518"
              inkscape:export-filename="/home/lapo/Desktop/format-text.png"
