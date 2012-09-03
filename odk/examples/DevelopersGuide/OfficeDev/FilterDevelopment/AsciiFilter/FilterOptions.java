@@ -32,7 +32,7 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.Filter;
+package FilterDevelopment.AsciiFilter;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.beans.PropertyValue;

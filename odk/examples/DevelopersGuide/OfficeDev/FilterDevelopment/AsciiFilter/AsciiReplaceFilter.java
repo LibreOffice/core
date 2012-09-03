@@ -32,7 +32,7 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.Filter;
+package FilterDevelopment.AsciiFilter;
 
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
