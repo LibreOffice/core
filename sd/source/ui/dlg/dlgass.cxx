@@ -1758,7 +1758,8 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
                 break;
 
             Reference<container::XNameAccess> xNameAccess ( ui::UICommandDescription::create(xContext) );
-            Any a = xNameAccess->getByName( rtl::OUString("com.sun.star.presentation.PresentationDocument") );
+            Any a = xNameAccess->getByName(
+                "com.sun.star.presentation.PresentationDocument");
             a >>= xUICommandLabels;
             if ( ! xUICommandLabels.is())
                 break;
@@ -1814,7 +1815,8 @@ Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
                 ui::ModuleUIConfigurationManagerSupplier::create(xContext));
 
             Reference<com::sun::star::ui::XUIConfigurationManager> xManager (
-                xSupplier->getUIConfigurationManager( rtl::OUString("com.sun.star.presentation.PresentationDocument") ));
+                xSupplier->getUIConfigurationManager(
+                    "com.sun.star.presentation.PresentationDocument"));
             if ( ! xManager.is())
                 break;
 
