@@ -64,6 +64,7 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <rtl/process.h>
 #include <comphelper/componentcontext.hxx>
 
@@ -113,10 +114,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 using com::sun::star::ui::XUIElement;
+using com::sun::star::ui::UICommandDescription;
 using com::sun::star::ui::XUIConfigurationManager;
 using com::sun::star::ui::XUIConfigurationManagerSupplier;
 using com::sun::star::ui::XAcceleratorConfiguration;
 using com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
+using com::sun::star::ui::ModuleUIConfigurationManagerSupplier;
 using com::sun::star::util::URL;
 using com::sun::star::util::XURLTransformer;
 
