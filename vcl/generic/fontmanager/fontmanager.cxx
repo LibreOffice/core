@@ -1018,12 +1018,16 @@ PrintFontManager::PrintFontManager()
             m_aAdobecodeToUnicode.insert( ::boost::unordered_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCodes[i].aAdobeStandardCode, aAdobeCodes[i].aUnicode ) );
         }
     }
+
+    m_aFontInstallerTimer.SetTimeoutHdl(LINK(this, PrintFontManager, autoInstallFontLangSupport));
+    m_aFontInstallerTimer.SetTimeout(5000);
 }
 
 // -------------------------------------------------------------------------
 
 PrintFontManager::~PrintFontManager()
 {
+    m_aFontInstallerTimer.Stop();
     deinitFontconfig();
     for( ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
         delete (*it).second;

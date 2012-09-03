@@ -846,57 +846,6 @@ namespace
         return LanguageTag(OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
     }
 
-    int autoInstallFontLangSupport(const std::vector<OString> &rNewReqs, guint xid)
-    {
-        GError *error = NULL;
-        /* get the DBUS session connection */
-        DBusGConnection *session_connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
-        if (error != NULL)
-        {
-            g_warning ("DBUS cannot connect : %s", error->message);
-            g_error_free (error);
-            return -1;
-        }
-
-        /* get the proxy with gnome-session-manager */
-        DBusGProxy *proxy = dbus_g_proxy_new_for_name(session_connection,
-                                           "org.freedesktop.PackageKit",
-                                           "/org/freedesktop/PackageKit",
-                                           "org.freedesktop.PackageKit.Modify");
-        if (proxy == NULL)
-        {
-            g_warning("Could not get DBUS proxy: org.freedesktop.PackageKit");
-            return -1;
-        }
-
-        gchar **fonts = (gchar**)g_malloc((rNewReqs.size() + 1) * sizeof(gchar*));
-        gchar **font = fonts;
-        for (std::vector<OString>::const_iterator aI = rNewReqs.begin(); aI != rNewReqs.end(); ++aI)
-            *font++ = (gchar*)aI->getStr();
-        *font = NULL;
-        gboolean res = dbus_g_proxy_call(proxy, "InstallFontconfigResources", &error,
-                     G_TYPE_UINT, xid, /* xid */
-                     G_TYPE_STRV, fonts, /* data */
-                     G_TYPE_STRING, "hide-finished", /* interaction */
-                     G_TYPE_INVALID,
-                     G_TYPE_INVALID);
-        /* check the return value */
-        if (!res)
-           g_warning("InstallFontconfigResources method failed");
-
-        /* check the error value */
-        if (error != NULL)
-        {
-            g_warning("InstallFontconfigResources problem : %s", error->message);
-            g_error_free(error);
-        }
-
-        g_free(fonts);
-        g_object_unref(G_OBJECT (proxy));
-
-        return 0;
-    }
-
     guint get_xid_for_dbus()
     {
         const Window *pTopWindow = Application::IsHeadlessModeEnabled() ? NULL : Application::GetActiveTopWindow();
@@ -904,6 +853,64 @@ namespace
         return pEnvData ? pEnvData->aWindow : 0;
     }
 #endif
+}
+
+IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
+{
+    guint xid = get_xid_for_dbus();
+
+    if (!xid)
+        return -1;
+
+#ifdef ENABLE_DBUS
+    GError *error = NULL;
+    /* get the DBUS session connection */
+    DBusGConnection *session_connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
+    if (error != NULL)
+    {
+        g_warning ("DBUS cannot connect : %s", error->message);
+        g_error_free (error);
+        return -1;
+    }
+
+    /* get the proxy with gnome-session-manager */
+    DBusGProxy *proxy = dbus_g_proxy_new_for_name(session_connection,
+                                       "org.freedesktop.PackageKit",
+                                       "/org/freedesktop/PackageKit",
+                                       "org.freedesktop.PackageKit.Modify");
+    if (proxy == NULL)
+    {
+        g_warning("Could not get DBUS proxy: org.freedesktop.PackageKit");
+        return -1;
+    }
+
+    gchar **fonts = (gchar**)g_malloc((m_aCurrentRequests.size() + 1) * sizeof(gchar*));
+    gchar **font = fonts;
+    for (std::vector<OString>::const_iterator aI = m_aCurrentRequests.begin(); aI != m_aCurrentRequests.end(); ++aI)
+        *font++ = (gchar*)aI->getStr();
+    *font = NULL;
+    gboolean res = dbus_g_proxy_call(proxy, "InstallFontconfigResources", &error,
+                 G_TYPE_UINT, xid, /* xid */
+                 G_TYPE_STRV, fonts, /* data */
+                 G_TYPE_STRING, "hide-finished", /* interaction */
+                 G_TYPE_INVALID,
+                 G_TYPE_INVALID);
+    /* check the return value */
+    if (!res)
+       g_warning("InstallFontconfigResources method failed");
+
+    /* check the error value */
+    if (error != NULL)
+    {
+        g_warning("InstallFontconfigResources problem : %s", error->message);
+        g_error_free(error);
+    }
+
+    g_free(fonts);
+    g_object_unref(G_OBJECT (proxy));
+    m_aCurrentRequests.clear();
+#endif
+    return 0;
 }
 
 bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes )
@@ -1050,10 +1057,8 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
                 }
                 OUString sStillMissing(pRemainingCodes, nRemainingLen);
 #ifdef ENABLE_DBUS
-                guint xid = get_xid_for_dbus();
-                if (xid)
+                if (get_xid_for_dbus())
                 {
-                    std::vector<OString> aNewRequests;
                     if (sStillMissing == rMissingCodes) //replaced nothing
                     {
                         //It'd be better if we could ask packagekit using the
@@ -1071,13 +1076,16 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
                             if (!sTag.isEmpty() && m_aPreviousLangSupportRequests.find(sTag) == m_aPreviousLangSupportRequests.end())
                             {
                                 OString sReq = OString(":lang=") + sTag;
-                                aNewRequests.push_back(sReq);
+                                m_aCurrentRequests.push_back(sReq);
                                 m_aPreviousLangSupportRequests.insert(sTag);
                             }
                         }
                     }
-                    if (!aNewRequests.empty())
-                        autoInstallFontLangSupport(aNewRequests, xid);
+                    if (!m_aCurrentRequests.empty())
+                    {
+                        m_aFontInstallerTimer.Stop();
+                        m_aFontInstallerTimer.Start();
+                    }
                 }
 #endif
                 rMissingCodes = sStillMissing;
