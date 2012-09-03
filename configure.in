@@ -708,9 +708,8 @@ AC_ARG_ENABLE(odk,
 )
 
 AC_ARG_ENABLE(mathmldtd,
-    AS_HELP_STRING([--disable-mathmldtd],
-        [Disable mathmldtd (useful for distributions that want to avoid
-         packaging it).])
+    AS_HELP_STRING([--enable-mathmldtd],
+        [Enable bundling of (modified) MathML 1.01 DTD.])
 )
 
 AC_ARG_ENABLE(evolution2,
