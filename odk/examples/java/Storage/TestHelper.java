@@ -130,7 +130,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.ELEMENT_WRITE );
+            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.WRITE );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -158,7 +158,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xStorage.openEncryptedStreamElement( sStreamName, ElementModes.ELEMENT_WRITE, pPass );
+            Object oSubStream = xStorage.openEncryptedStreamElement( sStreamName, ElementModes.WRITE, new String(pPass) );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -186,7 +186,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.ELEMENT_WRITE );
+            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.WRITE );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -231,7 +231,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xStorage.openEncryptedStreamElement( sStreamName, ElementModes.ELEMENT_WRITE, pOldPass );
+            Object oSubStream = xStorage.openEncryptedStreamElement( sStreamName, ElementModes.WRITE, new String(pOldPass) );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -257,7 +257,7 @@ public class TestHelper  {
         }
 
         try {
-            xStreamEncryption.setEncryptionKey( pNewPass );
+            xStreamEncryption.setEncryptionPassword( new String(pNewPass) );
         }
         catch( Exception e )
         {
@@ -301,7 +301,7 @@ public class TestHelper  {
                     bOk = false;
                 }
 
-                if ( ( bIsRoot && ( nPropMode | ElementModes.ELEMENT_READ ) != ( nMode | ElementModes.ELEMENT_READ ) )
+                if ( ( bIsRoot && ( nPropMode | ElementModes.READ ) != ( nMode | ElementModes.READ ) )
                   || ( !bIsRoot && ( nPropMode & nMode ) != nMode ) )
                 {
                     Error( "'OpenMode' property contains wrong value!" );
@@ -350,7 +350,7 @@ public class TestHelper  {
                     bOk = false;
                 }
 
-                if ( ( bIsRoot && ( nPropMode | ElementModes.ELEMENT_READ ) != ( nMode | ElementModes.ELEMENT_READ ) )
+                if ( ( bIsRoot && ( nPropMode | ElementModes.READ ) != ( nMode | ElementModes.READ ) )
                   || ( !bIsRoot && ( nPropMode & nMode ) != nMode ) )
                 {
                     Error( "'OpenMode' property contains wrong value!" );
@@ -469,7 +469,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.ELEMENT_READ );
+            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.READ );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -503,7 +503,7 @@ public class TestHelper  {
 
         try
         {
-            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.ELEMENT_READ );
+            Object oSubStream = xParentStorage.openStreamElement( sName, ElementModes.READ );
             Error( "Encrypted stream '" + sName + "' was opened without password!" );
             return false;
         }
@@ -519,7 +519,7 @@ public class TestHelper  {
         pWrongPass[0] += pPass[0];
         try
         {
-            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.ELEMENT_READ, pWrongPass );
+            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.READ, new String(pWrongPass) );
             Error( "Encrypted stream '" + sName + "' was opened with wrong password!" );
             return false;
         }
@@ -534,7 +534,7 @@ public class TestHelper  {
         XStream xSubStream = null;
         try
         {
-            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.ELEMENT_READ, pPass );
+            Object oSubStream = xParentStorage.openEncryptedStreamElement( sName, ElementModes.READ, new String(pPass) );
             xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
             if ( xSubStream == null )
             {
@@ -842,7 +842,7 @@ public class TestHelper  {
         // try to open an opened substorage, open call must fail
         try
         {
-            Object oDummyStorage = xStorage.openStorageElement( sName, ElementModes.ELEMENT_READ );
+            Object oDummyStorage = xStorage.openStorageElement( sName, ElementModes.READ );
             Error( "The trying to reopen opened substorage '" + sName + "' must fail!" );
         }
         catch( Exception e )

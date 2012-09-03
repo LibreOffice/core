@@ -62,7 +62,7 @@ public class Test03 implements StorageTest {
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_WRITE );
+                                                                        ElementModes.WRITE );
             if ( xTempSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -85,7 +85,7 @@ public class Test03 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "MediaType3",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
@@ -176,7 +176,7 @@ public class Test03 implements StorageTest {
             if ( xResultSubStorage == null )
                 return false;
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType3", false, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType3", false, ElementModes.READ ) )
                 return false;
 
             XNameAccess xChildAccess = (XNameAccess) UnoRuntime.queryInterface( XNameAccess.class, xResultSubStorage );

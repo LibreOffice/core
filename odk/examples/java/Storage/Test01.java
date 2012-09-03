@@ -68,7 +68,7 @@ public class Test01 implements StorageTest {
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_WRITE );
+                                                                        ElementModes.WRITE );
             if ( xTempSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -91,20 +91,20 @@ public class Test01 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType3",
                                                             true,
-                                                            ElementModes.ELEMENT_READWRITE ) )
+                                                            ElementModes.READWRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "MediaType4",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
-            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
+            pArgs[1] = new Integer( ElementModes.WRITE );
 
             Object oTempFileStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempFileStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oTempFileStorage );
@@ -128,7 +128,7 @@ public class Test01 implements StorageTest {
             // ================================================
 
             // the temporary file must not be locked any more after storage disposing
-            pArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+            pArgs[1] = new Integer( ElementModes.READWRITE );
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResultStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResultStorage );
             if ( xResultStorage == null )
@@ -137,20 +137,20 @@ public class Test01 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType3", true, ElementModes.ELEMENT_READWRITE ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType3", true, ElementModes.READWRITE ) )
                 return false;
 
             // open existing substorage
             XStorage xResultSubStorage = m_aTestHelper.openSubStorage( xResultStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_READ );
+                                                                        ElementModes.READ );
             if ( xResultSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType4", false, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType4", false, ElementModes.READ ) )
                 return false;
 
             if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream1", "MediaType1", pBytes1 ) )
