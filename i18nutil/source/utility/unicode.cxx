@@ -494,10 +494,10 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_UNKNOWN:
             sRet = "und";
             break;
-        //This block has no language with an assigned code yet
-        case USCRIPT_NABATAEAN:
-        case USCRIPT_PALMYRENE:
-        case USCRIPT_NUSHU:
+        case USCRIPT_NABATAEAN: //no language with an assigned code yet
+            sRet = "mis";
+            break;
+        case USCRIPT_PALMYRENE: //no language with an assigned code yet
             sRet = "mis";
             break;
         case USCRIPT_ARABIC:
@@ -907,6 +907,7 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_WARANG_CITI:
             sRet = "hoc";
             break;
+#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 8)
         case USCRIPT_AFAKA:
             sRet = "djk";
             break;
@@ -915,6 +916,9 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
             break;
         case USCRIPT_MRO:
             sRet = "cmr";
+            break;
+        case USCRIPT_NUSHU: //no language with an assigned code yet
+            sRet = "mis";
             break;
         case USCRIPT_SHARADA:
             sRet = "sa";
@@ -931,6 +935,7 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_WOLEAI:
             sRet = "woe";
             break;
+#endif
 #if (U_ICU_VERSION_MAJOR_NUM > 4)
         case USCRIPT_ANATOLIAN_HIEROGLYPHS:
             sRet = "hlu";
