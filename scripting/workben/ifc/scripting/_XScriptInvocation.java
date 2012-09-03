@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.runtime;
+package ifc.scripting;
 
 import java.util.HashMap;
 import java.util.Iterator;

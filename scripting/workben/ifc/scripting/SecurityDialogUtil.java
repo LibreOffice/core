@@ -15,7 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-package ifc.script.framework;
+package ifc.scripting;
 
 import com.sun.star.awt.*;
 import com.sun.star.lang.XMultiServiceFactory;

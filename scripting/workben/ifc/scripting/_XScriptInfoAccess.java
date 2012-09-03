@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.storage;
-
-import ifc.script.framework.ScriptingUtils;
+package ifc.scripting;
 
 import drafts.com.sun.star.script.framework.storage.XScriptInfoAccess;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;

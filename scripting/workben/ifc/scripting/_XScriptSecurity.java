@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.security;
+package ifc.scripting;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,8 +36,6 @@ import com.sun.star.frame.XModel;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.util.XChangesBatch;
 import com.sun.star.reflection.InvocationTargetException;
-
-import ifc.script.framework.SecurityDialogUtil;
 
 import lib.MultiMethodTest;
 import lib.StatusException;

@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.provider;
+package ifc.scripting;
 
 import drafts.com.sun.star.script.framework.provider.XFunctionProvider;
 import drafts.com.sun.star.script.framework.provider.XFunction;
