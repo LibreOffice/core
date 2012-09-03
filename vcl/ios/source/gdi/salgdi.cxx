@@ -104,7 +104,7 @@ void IosSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
-void IosSalGraphics::ClearDevFontList()
+void IosSalGraphics::ClearDevFontCache()
 {
     SalData* pSalData = GetSalData();
     delete pSalData->mpFontList;

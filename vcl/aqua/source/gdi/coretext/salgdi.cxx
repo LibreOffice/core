@@ -78,7 +78,7 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
-void AquaSalGraphics::ClearDevFontList()
+void AquaSalGraphics::ClearDevFontCache()
 {
     SalData* pSalData = GetSalData();
     delete pSalData->mpFontList;
