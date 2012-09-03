@@ -54,6 +54,27 @@ ScFormatEntry::ScFormatEntry(ScDocument* pDoc):
 {
 }
 
+bool ScFormatEntry::operator==( const ScFormatEntry& r ) const
+{
+    if(GetType() != r.GetType())
+        return false;
+
+    switch(GetType())
+    {
+        case condformat::CONDITION:
+            return static_cast<const ScCondFormatEntry&>(*this) == static_cast<const ScCondFormatEntry&>(r);
+            break;
+        default:
+            // TODO: implement also this case
+            // actually return false for these cases is not that bad
+            // as soon as databar and color scale are tested we need
+            // to think about the range
+            return false;
+    }
+
+    return true;
+}
+
 bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
 {
     if (pFormula)
@@ -1286,8 +1307,6 @@ int ScCondFormatEntry::operator== ( const ScCondFormatEntry& r ) const
 {
     return ScConditionEntry::operator==( r ) &&
             aStyleName == r.aStyleName;
-
-    //  Range wird nicht verglichen
 }
 
 ScCondFormatEntry::~ScCondFormatEntry()
@@ -1353,13 +1372,14 @@ bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
 
     //! auf gleiche Eintraege in anderer Reihenfolge testen ???
 
-    /*
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        if ( ! (*ppEntries[i] == *r.ppEntries[i]) )
+    for (sal_uInt16 i=0; i<size(); i++)
+        if ( ! (maEntries == r.maEntries ) )
             return false;
-    */
 
-    return maRanges == r.maRanges;
+    // right now don't check for same range
+    // we only use this method to merge same conditional formats from
+    // old ODF data structure
+    return true;
 }
 
 void ScConditionalFormat::AddRange( const ScRangeList& rRanges )

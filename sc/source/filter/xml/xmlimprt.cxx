@@ -2684,11 +2684,13 @@ void ScXMLImport::SetStyleToRanges()
             if (pStyle)
             {
                 pStyle->FillPropertySet(xProperties);
+                // here needs to be the cond format import method
                 sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
                 SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
 
                 // store first cell of first range for each style, once per sheet
                 uno::Sequence<table::CellRangeAddress> aAddresses(xSheetCellRanges->getRangeAddresses());
+                pStyle->ApplyCondFormat(aAddresses);
                 if ( aAddresses.getLength() > 0 )
                 {
                     const table::CellRangeAddress& rRange = aAddresses[0];
