@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package org.openoffice.examples.embedding;
-
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -41,8 +39,6 @@ import java.util.Vector;
 import java.awt.Dimension;
 import java.lang.Integer;
 import org.omg.CORBA.COMM_FAILURE;
-
-import org.openoffice.examples.embedding.EditorFrame;
 
 public final class OwnEmbeddedObject extends WeakBase
    implements com.sun.star.embed.XEmbedPersist,

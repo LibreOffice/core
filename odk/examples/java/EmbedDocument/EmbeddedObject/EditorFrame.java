@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package org.openoffice.examples.embedding;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -25,8 +23,6 @@ import javax.swing.JTextArea;
 import javax.swing.JFrame;
 import java.io.*;
 import javax.imageio.ImageIO;
-
-import org.openoffice.examples.embedding.OwnEmbeddedObject;
 
 public class EditorFrame extends JFrame
 {

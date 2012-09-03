@@ -59,7 +59,7 @@ COMP_UNOPKG_MANIFEST = $(COMP_GEN_OUT)/META-INF/manifest.xml
 COMP_REGISTERFLAG=$(COMP_GEN_OUT)$(PS)java_$(COMP_NAME)_register_component.flag
 COMP_COMPONENTS=$(COMP_NAME).components
 
-PACKAGE = org/openoffice/examples/embedding
+PACKAGE = 
 
 COMP_JAVAFILES  =\
 					OwnEmbeddedObject.java\
