@@ -64,8 +64,6 @@ DiscoveryService::~DiscoveryService()
 
 void DiscoveryService::execute()
 {
-    fprintf( stderr, "Discovery service is listening\n" );;
-
     char aBuffer[BUFFER_SIZE];
 
     while ( true )
@@ -73,9 +71,7 @@ void DiscoveryService::execute()
         memset( aBuffer, 0, sizeof(char) * BUFFER_SIZE );
         sockaddr_in aAddr;
         socklen_t aLen = sizeof( aAddr );
-        fprintf( stderr, "DiscoveryService waiting for packet\n" );
         recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
-        fprintf( stderr, "DiscoveryService received a packet.\n" );
 
         OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
         if ( aString.compareTo( "LOREMOTE_SEARCH" ) == 0 )

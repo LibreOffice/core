@@ -57,10 +57,12 @@ void BluetoothServer::execute()
 #ifdef GLIB_VERSION_2_26
     g_type_init();
     GError* aError = NULL;
+
     GDBusConnection* aConnection = g_bus_get_sync( G_BUS_TYPE_SYSTEM, NULL, &aError );
     if ( aError )
     {
         g_error_free( aError );
+        return; // We can't get a dbus connection
     }
 
     GVariant *aAdapter = g_dbus_connection_call_sync( aConnection,
@@ -68,22 +70,13 @@ void BluetoothServer::execute()
                                 "DefaultAdapter", NULL,
                                 G_VARIANT_TYPE_TUPLE,
                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &aError);
-    GVariant *aAdapterName = g_variant_get_child_value( aAdapter, 0 );
     if ( aError )
     {
         g_error_free( aError );
+        g_object_unref( aConnection );
+        return; // We can't get an adapter -- no bluetooth possible
     }
-//     fprintf( stderr, (const char*) g_variant_get_string( aAdapterName, NULL ) );
-
-
-//     GDBusObjectManager* aManager = g_dbus_object_manager_client_new_sync( aConnection,
-//                     G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE, "org.bluez.Manager", "/org/bluez",
-//                     NULL, NULL, NULL, NULL, &aError );
-//     if ( aError )
-//     {
-//         fprintf( stderr, aError->message );
-//         g_error_free( aError );
-//     }
+    GVariant *aAdapterName = g_variant_get_child_value( aAdapter, 0 );
 
     GVariant *aRecordHandle = g_dbus_connection_call_sync( aConnection,
                                 "org.bluez", g_variant_get_string( aAdapterName, NULL ), "org.bluez.Service",
@@ -92,77 +85,30 @@ void BluetoothServer::execute()
                                             "<?xml version='1.0' encoding= 'UTF-8' ?><record><attribute id='0x0001'><sequence><uuid value='0x1101' /></sequence></attribute><attribute id='0x0004'><sequence><sequence><uuid value='0x0100' /></sequence><sequence><uuid value='0x0003' /><uint8 value='0x05' /></sequence></sequence></attribute><attribute id='0x0005'><sequence><uuid value='0x1002' /></sequence></attribute><attribute id='0x0006'><sequence><uint16 value='0x656e' /><uint16 value='0x006a' /><uint16 value='0x0100' /></sequence></attribute><attribute id='0x0009'><sequence><sequence><uuid value='0x1101' /><uint16 value='0x0100' /></sequence></sequence></attribute><attribute id='0x0100'><text value='Serial Port' /></attribute><attribute id='0x0101'><text value='COM Port' /></attribute></record>"),
                                 G_VARIANT_TYPE_TUPLE,
                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &aError);
+
+    g_variant_unref( aAdapter );
+    g_object_unref( aConnection );
+
     if ( aError )
     {
-        g_error_free( aError );
+        g_object_unref( aAdapter );
+        return; // Couldn't set up the service.
     }
-    (void) aRecordHandle;
-    // Remove handle again at some point
-//     g_variant_unref( aRet );
-//     fprintf( stderr, "Manager gotten\n" );
-//
-//     // Name for default adapter
-//     GVariant *aAdapter = g_dbus_connection_call_sync( aConnection,
-//                                 "org.bluez", "/", "org.bluez.Manager",
-//                                 "DefaultAdapter", NULL,
-//                                 G_VARIANT_TYPE_TUPLE,
-//                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &aError);
-//     GVariant *aAdapterName = g_variant_get_child_value( aAdapter, 0 );
-//     if ( aError )
-//     {
-//         fprintf( stderr, aError->message );
-//         g_error_free( aError );
-//     }
-//     fprintf( stderr, (const char*) g_variant_get_string( aAdapterName, NULL ) );
+    g_variant_unref( aRecordHandle ); // We don't need the handle
+                                      // as the service is automatically
+                                      // deregistered on exit.
 
 
-
-
-//     g_type_init();
-//     GError* aError = NULL;
-//     GDBusConnection* aConnection = g_bus_get_sync( G_BUS_TYPE_SYSTEM, NULL, &aError );
-//     fprintf( stderr, "Connection gotten\n" );
-//     if ( aError )
-//     {
-//         fprintf( stderr, aError->message );
-//         g_error_free( aError );
-//     }
-// //     GDBusObjectManager* aManager = g_dbus_object_manager_client_new_sync( aConnection,
-// //                     G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE, "org.bluez.Manager", "/org/bluez",
-// //                     NULL, NULL, NULL, NULL, &aError );
-// //     if ( aError )
-// //     {
-// //         fprintf( stderr, aError->message );
-// //         g_error_free( aError );
-// //     }
-//     fprintf( stderr, "Manager gotten\n" );
-//
-//     // Name for default adapter
-//     GVariant *aAdapter = g_dbus_connection_call_sync( aConnection,
-//                                 "org.bluez", "/", "org.bluez.Manager",
-//                                 "DefaultAdapter", NULL,
-//                                 G_VARIANT_TYPE_TUPLE,
-//                                 G_DBUS_CALL_FLAGS_NONE, -1, NULL, &aError);
-//     GVariant *aAdapterName = g_variant_get_child_value( aAdapter, 0 );
-//     if ( aError )
-//     {
-//         fprintf( stderr, aError->message );
-//         g_error_free( aError );
-//     }
-//     fprintf( stderr, (const char*) g_variant_get_string( aAdapterName, NULL ) );
-
-
-    // ---------------- DEVICE ADDRESS
+    // ---------------- Socket code
     int aSocket;
     if ( (aSocket = socket( AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM )) < 0 )
     {
-        // Error
         return;
     }
 
     sockaddr_rc aAddr;
     aAddr.rc_family = AF_BLUETOOTH;
-//     aAddr.rc_bdaddr = {{0, 0, 0, 0, 0, 0}}; // BDADDR_ANY is broken
+    // BDADDR_ANY is broken, so use memset to set to 0.
     memset( &aAddr.rc_bdaddr, 0, sizeof( aAddr.rc_bdaddr ) );
     aAddr.rc_channel = 5;
 
@@ -179,18 +125,18 @@ void BluetoothServer::execute()
 
     sockaddr_rc aRemoteAddr;
     socklen_t  aRemoteAddrLen = sizeof(aRemoteAddr);
-    int bSocket;
-    if ( (bSocket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 )
+    while ( true )
     {
-        close( aSocket );
-        return;
-    } else {
-//         fprintf( stderr, "Accepted Bluetooth\n" );
-
-        Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket) );
-        mpCommunicators->push_back( pCommunicator );
-        pCommunicator->launch();
-
+        int bSocket;
+        if ( (bSocket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 )
+        {
+            close( aSocket );
+            return;
+        } else {
+            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket) );
+            mpCommunicators->push_back( pCommunicator );
+            pCommunicator->launch();
+        }
     }
 
 #endif // GLIB_VERSION_2_26
