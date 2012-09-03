@@ -38,7 +38,6 @@ extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 }
 
-
 class ScDocument;
 class ScAddInDocs : public std::set<ScDocument*> {};
 
@@ -56,7 +55,7 @@ private:
     FuncData*       mpFuncData;         // Pointer to files in collection
     sal_uLong       nHandle;            // is casted from double to sal_uLong
     ParamType       meType;             // result of type PTR_DOUBLE or PTR_STRING
-    sal_Bool        bValid;             // is value valid?
+    bool            bValid;             // is value valid?
 
 public:
     // cTor only if ScAddInAsync::Get fails.
@@ -68,7 +67,7 @@ public:
     static ScAddInAsync*    Get( sal_uLong nHandle );
     static void     CallBack( sal_uLong nHandle, void* pData );
     static void     RemoveDocument( ScDocument* pDocument );
-    sal_Bool            IsValid() const         { return bValid; }
+    bool            IsValid() const         { return bValid; }
     ParamType       GetType() const         { return meType; }
     double          GetValue() const        { return nVal; }
     const String&   GetString() const       { return *pStr; }
@@ -88,8 +87,6 @@ struct CompareScAddInAsync
 class ScAddInAsyncs : public std::set<ScAddInAsync*, CompareScAddInAsync> {};
 
 extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
-
-
 
 #endif
 

@@ -46,7 +46,7 @@ TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
-sal_Bool ScDdeLink::bIsInUpdate = false;
+bool ScDdeLink::bIsInUpdate = false;
 
 //------------------------------------------------------------------------
 
@@ -230,8 +230,8 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
 
 void ScDdeLink::ListenersGone()
 {
-    sal_Bool bWas = bIsInUpdate;
-    bIsInUpdate = sal_True;             // Remove() kann Reschedule ausloesen??!?
+    bool bWas = bIsInUpdate;
+    bIsInUpdate = true;             // Remove() kann Reschedule ausloesen??!?
 
     ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
 
@@ -251,7 +251,7 @@ void ScDdeLink::ListenersGone()
 void ScDdeLink::TryUpdate()
 {
     if (bIsInUpdate)
-        bNeedUpdate = sal_True;         // kann jetzt nicht ausgefuehrt werden
+        bNeedUpdate = true;         // kann jetzt nicht ausgefuehrt werden
     else
     {
         bIsInUpdate = true;
@@ -262,6 +262,5 @@ void ScDdeLink::TryUpdate()
         bNeedUpdate = false;
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
