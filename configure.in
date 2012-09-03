@@ -8329,7 +8329,7 @@ dnl Check for nsplugin
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build nsplugin extension])
 ENABLE_NSPLUGIN=NO
-if test $_os = Darwin -o $_os = iOS -o $_os = Android; then
+if test $_os = Darwin -o $_os = iOS -o $_os = Android -o "$enable_headless" = "yes"; then
     enable_gtk=no
 fi
 if test "$enable_nsplugin" != "no"; then
