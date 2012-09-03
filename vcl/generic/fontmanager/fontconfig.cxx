@@ -857,12 +857,12 @@ namespace
 
 IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
 {
+#ifdef ENABLE_DBUS
     guint xid = get_xid_for_dbus();
 
     if (!xid)
         return -1;
 
-#ifdef ENABLE_DBUS
     GError *error = NULL;
     /* get the DBUS session connection */
     DBusGConnection *session_connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
