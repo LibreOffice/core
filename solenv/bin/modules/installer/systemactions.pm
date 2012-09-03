@@ -629,50 +629,6 @@ sub copy_complete_directory
     }
 }
 
-#####################################################################################
-# Copying a complete directory with sub directories, but not the CVS directories.
-#####################################################################################
-
-sub copy_complete_directory_without_cvs
-{
-    my ($sourcedir, $destdir) = @_;
-
-    my @sourcefiles = ();
-
-    $sourcedir =~ s/\Q$installer::globals::separator\E\s*$//;
-    $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
-
-    if ( ! -d $destdir ) { create_directory($destdir); }
-
-    my $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
-    $infoline = "Copying files from directory $sourcedir to directory $destdir (without CVS)\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
-    opendir(DIR, $sourcedir);
-    @sourcefiles = readdir(DIR);
-    closedir(DIR);
-
-    my $onefile;
-
-    foreach $onefile (@sourcefiles)
-    {
-        if ((!($onefile eq ".")) && (!($onefile eq "..")) && (!($onefile eq "CVS")))
-        {
-            my $source = $sourcedir . $installer::globals::separator . $onefile;
-            my $dest = $destdir . $installer::globals::separator . $onefile;
-            if ( -f $source )   # only files, no directories
-            {
-                copy_one_file($source, $dest);
-            }
-            if ( -d $source )   # recursive
-            {
-                copy_complete_directory_without_cvs($source, $dest);
-            }
-        }
-    }
-}
-
 #####################################################
 # Copying all files with a specified file extension
 # from one directory to another directory.
