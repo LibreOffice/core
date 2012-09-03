@@ -39,7 +39,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_unoapi,\
 ))
 
 $(eval $(call gb_JunitTest_add_classes,sfx2_unoapi,\
-    org.openoffice.sfx2.qa.unoapi.Test \
+    unoapi.Test \
 ))
 
 # vim: set noet sw=4 ts=4:

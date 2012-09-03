@@ -21,12 +21,12 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-module testtools { module servicetests {
+module servicetests {
 
 interface XTestService2: com::sun::star::uno::XInterface {
     long fn2();
 };
 
-}; };
+};
 
 #endif

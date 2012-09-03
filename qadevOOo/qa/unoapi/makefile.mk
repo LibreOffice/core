@@ -25,7 +25,7 @@ PRJNAME = qadevOOo
 TARGET = qa_unoapi
 
 .IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = org/openoffice/qadevOOo/qa/unoapi
+PACKAGE = unoapi
 JAVATESTFILES = Test.java
 JAVAFILES = $(JAVATESTFILES)
 JARFILES = OOoRunner.jar ridl.jar test.jar

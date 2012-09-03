@@ -20,7 +20,7 @@ PRJ := ..$/..
 PRJNAME := testtools
 TARGET := testtools_servicetests
 
-PACKAGE := testtools$/servicetests
+PACKAGE := servicetests
 JAVATESTFILES := LocalServiceTest.java RemoteServiceTest.java
 JAVAFILES := TestBase.java TestService.java
 IDLTESTFILES := \

@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package testtools.servicetests;
+package servicetests;
 
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.container.XSet;

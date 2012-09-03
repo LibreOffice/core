@@ -24,7 +24,7 @@
 #include <XTestService3.idl>
 #include <XTestService4.idl>
 
-module testtools { module servicetests {
+module servicetests {
 
 interface TestService2 {
     interface TestService1;
@@ -33,6 +33,6 @@ interface TestService2 {
     /*[optional] interface XTestService4;*/
 };
 
-}; };
+};
 
 #endif

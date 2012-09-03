@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package org.openoffice.qadevOOo.qa.unoapi;
+package unoapi;
 
 import org.openoffice.Runner;
 import org.openoffice.test.OfficeConnection;
