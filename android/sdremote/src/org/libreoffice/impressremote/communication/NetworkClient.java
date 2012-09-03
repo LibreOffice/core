@@ -15,7 +15,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -32,8 +31,9 @@ public class NetworkClient extends Client {
 
     private Socket mSocket;
 
-    public NetworkClient(Server aServer, Context aContext) {
-        super(aContext);
+    public NetworkClient(Server aServer,
+                    CommunicationService aCommunicationService) {
+        super(aServer, aCommunicationService);
         try {
             mSocket = new Socket(aServer.getAddress(), PORT);
             mInputStream = mSocket.getInputStream();
@@ -46,7 +46,8 @@ public class NetworkClient extends Client {
                             CommunicationService.MSG_PAIRING_STARTED);
             aIntent.putExtra("PIN", aPin);
             mPin = aPin;
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+            LocalBroadcastManager.getInstance(mCommunicationService)
+                            .sendBroadcast(aIntent);
             // Send out
             String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
             sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin
@@ -61,8 +62,8 @@ public class NetworkClient extends Client {
             } else {
                 aIntent = new Intent(
                                 CommunicationService.MSG_PAIRING_SUCCESSFUL);
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                                aIntent);
+                LocalBroadcastManager.getInstance(mCommunicationService)
+                                .sendBroadcast(aIntent);
             }
             while (mReader.readLine().length() != 0) {
                 // Get rid of extra lines
@@ -82,9 +83,9 @@ public class NetworkClient extends Client {
 
     private String setupPin(Server aServer) {
         // Get settings
-        SharedPreferences aPreferences = mContext.getSharedPreferences(
-                        "sdremote_authorisedremotes",
-                        android.content.Context.MODE_PRIVATE);
+        SharedPreferences aPreferences = mCommunicationService
+                        .getSharedPreferences("sdremote_authorisedremotes",
+                                        android.content.Context.MODE_PRIVATE);
         if (aPreferences.contains(aServer.getName())) {
             return aPreferences.getString(aServer.getName(), "");
         } else {

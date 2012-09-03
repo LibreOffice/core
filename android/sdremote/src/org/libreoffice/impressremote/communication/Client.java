@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import android.content.Context;
+import android.content.Intent;
 
 /**
  * Generic Client for the remote control. To implement a Client for a specific
@@ -40,10 +40,13 @@ public abstract class Client {
 
     private Receiver mReceiver;
 
-    protected Context mContext;
+    protected Server mServer;
 
-    public Client(Context aContext) {
-        mContext = aContext;
+    protected CommunicationService mCommunicationService;
+
+    protected Client(Server aServer, CommunicationService aCommunicationService) {
+        mServer = aServer;
+        mCommunicationService = aCommunicationService;
         latestInstance = this;
     }
 
@@ -62,25 +65,37 @@ public abstract class Client {
         t.start();
     }
 
-    private void listen() {
+    private final void listen() {
         try {
             while (true) {
                 ArrayList<String> aList = new ArrayList<String>();
                 String aTemp;
                 // read until empty line
-                while ((aTemp = mReader.readLine()).length() != 0) {
+                while ((aTemp = mReader.readLine()) != null
+                                && aTemp.length() != 0) {
                     aList.add(aTemp);
+                }
+                if (aTemp == null) {
+                    mCommunicationService.connectTo(mServer);
+                    Intent aIntent = new Intent(
+                                    mCommunicationService
+                                                    .getApplicationContext(),
+                                    ReconnectionActivity.class);
+                    aIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mCommunicationService.getApplicationContext()
+                                    .startActivity(aIntent);
+                    return;
                 }
                 mReceiver.parseCommand(aList);
             }
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e1) {
             // TODO stream couldn't be opened.
             e1.printStackTrace();
+        } finally {
+            latestInstance = null;
         }
-        latestInstance = null;
 
     }
 
@@ -105,7 +120,8 @@ public abstract class Client {
             throw new Error("Specified network encoding [" + CHARSET
                             + " not available.");
         } catch (IOException e) {
-            // TODO Notify that stream has closed.
+            // I.e. connection closed. This will be dealt with by the listening
+            // loop.
         }
     }
 

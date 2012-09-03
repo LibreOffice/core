@@ -10,13 +10,11 @@ package org.libreoffice.impressremote.communication;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.Socket;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -27,17 +25,13 @@ import android.support.v4.content.LocalBroadcastManager;
  */
 public class BluetoothClient extends Client {
 
-    private static final int PORT = 5;
-
-    private Socket mSocket;
-
-    public BluetoothClient(String bluetoothAddress, Context aContext) {
-        super(aContext);
+    public BluetoothClient(Server aServer,
+                    CommunicationService aCommunicationService) {
+        super(aServer, aCommunicationService);
         try {
             BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
-            System.out.println("Attemtping to connect to:" + bluetoothAddress);
-            BluetoothDevice aDevice = aAdapter
-                            .getRemoteDevice(bluetoothAddress);
+            BluetoothDevice aDevice = aAdapter.getRemoteDevice(aServer
+                            .getAddress());
             aAdapter.cancelDiscovery();
             BluetoothSocket aSocket = aDevice
                             .createRfcommSocketToServiceRecord(UUID
@@ -69,7 +63,8 @@ public class BluetoothClient extends Client {
             }
             Intent aIntent = new Intent(
                             CommunicationService.MSG_PAIRING_SUCCESSFUL);
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+            LocalBroadcastManager.getInstance(mCommunicationService)
+                            .sendBroadcast(aIntent);
             startListening();
             // Pairing.
             //            Random aRandom = new Random();

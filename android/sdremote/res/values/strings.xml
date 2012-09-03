@@ -39,5 +39,6 @@
     <string name="addserver_remember">Remember this server next time</string>
     <string name="addserver_add">Add</string>
     <string name="addserver_cancel">Cancel</string>
-
+    <string name="reconnect_description1">Your connection has been dropped.</string>
+<string name="reconnect_description2">Attempting to reconnect…</string>
 </resources>
