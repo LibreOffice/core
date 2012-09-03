@@ -40,7 +40,6 @@
 #include "externalrefmgr.hxx"
 #include "calcconfig.hxx"
 
-#include <math.h>
 #include <map>
 
 class ScDocument;
@@ -96,7 +95,6 @@ class ScInterpreter
     friend class ScChiSqDistFunction;
 
 public:
-
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 
     static void SetGlobalConfig(const ScCalcConfig& rConfig);
@@ -162,7 +160,6 @@ private:
 
     VolatileType meVolatileType;
 
-//---------------------------------Funktionen in interpre.cxx---------
 // nMust <= nAct <= nMax ? ok : PushError
 inline bool MustHaveParamCount( short nAct, short nMust );
 inline bool MustHaveParamCount( short nAct, short nMust, short nMax );
@@ -309,7 +306,7 @@ inline void MatrixDoubleRefToMatrix();      // if MatrixFormula: PopDoubleRefPus
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
 void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
-//void PushByte(BYTE nVal);
+
 void PushDouble(double nVal);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
@@ -331,7 +328,7 @@ formula::StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
 formula::StackVar GetStackType( sal_uInt8 nParam );
 sal_uInt8 GetByte() { return cPar; }
-// generiert aus DoubleRef positionsabhaengige SingleRef
+// generates a position-dependent SingleRef out of a DoubleRef
 bool DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDoubleFromMatrix(const ScMatrixRef& pMat);
 double GetDouble();
@@ -366,7 +363,6 @@ inline void TreatDoubleError( double& rVal );
 bool LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam ) const;
 
-//---------------------------------Funktionen in interpr1.cxx---------
 void ScIfJump();
 void ScChoseJump();
 
@@ -553,8 +549,6 @@ void ScBitRshift();
 void ScBitLshift();
 void ScTTT();
 
-//----------------Funktionen in interpr2.cxx---------------
-
 /** Obtain the date serial number for a given date.
     @param bStrict
         If FALSE, nYear < 100 takes the two-digit year setting into account,
@@ -656,7 +650,6 @@ void ScNominal();
 void ScMod();
 void ScBackSolver();
 void ScIntercept();
-//-------------------------Funktionen in interpr5.cxx--------------------------
 double ScGetGCD(double fx, double fy);
 void ScGCD();
 void ScLCM();
@@ -695,7 +688,6 @@ bool CheckMatrix(bool _bLOG,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX
 void ScRGP();
 void ScRKP();
 void ScForecast();
-//------------------------- Functions in interpr3.cxx -------------------------
 void ScNoName();
 void ScBadName();
 // Statistics:
@@ -791,9 +783,7 @@ void ScSlope();
 void ScTrend();
 void ScInfo();
 
-//------------------------ Functions in interpr6.cxx -------------------------
-
-static const double fMaxGammaArgument;  // defined in interpr3.cxx
+static const double fMaxGammaArgument;
 
 double GetGammaContFraction(double fA,double fX);
 double GetGammaSeries(double fA,double fX);
@@ -823,7 +813,6 @@ public:
     sal_uLong                   GetRetFormatIndex() const   { return nRetFmtIndex; }
 };
 
-
 inline void ScInterpreter::MatrixDoubleRefToMatrix()
 {
     if ( bMatrixFormula && GetStackType() == formula::svDoubleRef )
@@ -833,7 +822,6 @@ inline void ScInterpreter::MatrixDoubleRefToMatrix()
     }
 }
 
-
 inline bool ScInterpreter::MatrixParameterConversion()
 {
     if ( (bMatrixFormula || pCur->HasForceArray()) && !pJumpMatrix && sp > 0 )
@@ -841,14 +829,12 @@ inline bool ScInterpreter::MatrixParameterConversion()
     return false;
 }
 
-
 inline ScTokenMatrixMap& ScInterpreter::GetTokenMatrixMap()
 {
     if (!pTokenMatrixMap)
         pTokenMatrixMap = CreateTokenMatrixMap();
     return *pTokenMatrixMap;
 }
-
 
 inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust )
 {
@@ -861,7 +847,6 @@ inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust )
     return false;
 }
 
-
 inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust, short nMax )
 {
     if ( nMust <= nAct && nAct <= nMax )
@@ -873,7 +858,6 @@ inline bool ScInterpreter::MustHaveParamCount( short nAct, short nMust, short nM
     return false;
 }
 
-
 inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
 {
     if ( nAct >= nMin )
@@ -881,7 +865,6 @@ inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
     PushParameterExpected();
     return false;
 }
-
 
 inline bool ScInterpreter::CheckStringResultLen( String& rResult, const String& rAdd )
 {
@@ -893,7 +876,6 @@ inline bool ScInterpreter::CheckStringResultLen( String& rResult, const String& 
     }
     return true;
 }
-
 
 inline void ScInterpreter::TreatDoubleError( double& rVal )
 {
@@ -907,7 +889,6 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
         rVal = 0.0;
     }
 }
-
 
 inline double ScInterpreter::div( const double& fNumerator, const double& fDenominator )
 {
