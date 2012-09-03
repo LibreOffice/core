@@ -170,7 +170,9 @@ namespace svt { namespace table
             }
 
             sal_uLong nHorzFlag = TEXT_DRAW_LEFT;
-            HorizontalAlignment const eHorzAlign = i_impl.rModel.getColumnModel( i_columnPos )->getHorizontalAlign();
+            HorizontalAlignment const eHorzAlign = i_impl.rModel.getColumnCount() > 0
+                                                ?  i_impl.rModel.getColumnModel( i_columnPos )->getHorizontalAlign()
+                                                :  HorizontalAlignment_CENTER;
             switch ( eHorzAlign )
             {
             case HorizontalAlignment_CENTER:    nHorzFlag = TEXT_DRAW_CENTER;   break;
