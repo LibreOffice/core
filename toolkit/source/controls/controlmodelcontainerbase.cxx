@@ -824,11 +824,11 @@ void SAL_CALL ControlModelContainerBase::setImageURL( const ::rtl::OUString& _im
 {
     m_sImageURL = _imageurl;
 }
-::rtl::OUString SAL_CALL ControlModelContainerBase::getTooltip() throw (::com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL ControlModelContainerBase::getToolTip() throw (::com::sun::star::uno::RuntimeException)
 {
     return m_sTooltip;
 }
-void SAL_CALL ControlModelContainerBase::setTooltip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ControlModelContainerBase::setToolTip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_sTooltip = _tooltip;
 }

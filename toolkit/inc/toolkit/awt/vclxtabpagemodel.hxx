@@ -73,8 +73,8 @@ public:
     virtual void SAL_CALL setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getImageURL() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setImageURL( const ::rtl::OUString& _imageurl ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTooltip() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTooltip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getToolTip() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setToolTip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException);
 protected:
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 };

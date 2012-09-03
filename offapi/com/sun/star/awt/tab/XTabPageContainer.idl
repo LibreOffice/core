@@ -40,13 +40,13 @@ module com {  module sun {  module star {  module awt { module tab {
 
     @since OOo 3.4
  */
-interface XTabPageContainer
+published interface XTabPageContainer
 {
     /** Returns the number of tab pages.
         @returns
             the number of tab pages.
     */
-    long getTabPageCount();
+    short getTabPageCount();
 
 
     /** Checks whether a tab page is activated.
@@ -81,14 +81,14 @@ interface XTabPageContainer
         @param listener
             the listener to add.
     */
-    [oneway] void addTabPageListener( [in] XTabPageContainerListener  listener);
+    [oneway] void addTabPageContainerListener( [in] XTabPageContainerListener  listener);
 
 
     /** Removes a listener previously added with <method>addTabPageListener()</method>.
         @param listener
             the listener to remove.
     */
-    [oneway] void removeTabPageListener( [in] XTabPageContainerListener listener);
+    [oneway] void removeTabPageContainerListener( [in] XTabPageContainerListener listener);
 
     /** Specifies the ID of the current active tab page.
     */
