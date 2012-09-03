@@ -47,7 +47,9 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextRange;
 
 import com.sun.star.uno.IBridge;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XCurrentContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
 import com.sun.star.container.*;
@@ -121,7 +123,7 @@ public class TestPGP {
             String rootOid = "classic_uno";
               IBridge iBridge = UnoRuntime.getBridgeByName("java", null, "remote", null, new Object[]{"iiop", xConnection, null});
 
-            Object rInitialObject = iBridge.mapInterfaceFrom(rootOid, XInterface.class);
+            Object rInitialObject = iBridge.mapInterfaceFrom(rootOid, new Type(XInterface.class));
 //              Object rInitialObject = xBridge.getInstance("NamingService");
 
             if(rInitialObject != null) {
