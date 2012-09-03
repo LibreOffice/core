@@ -77,6 +77,7 @@ TextRanger::~TextRanger()
     mRangeCache.clear();
     delete mpPolyPolygon;
     delete mpLinePolyPolygon;
+    delete pBound;
 }
 
 /* TextRanger::SetVertical(..)
