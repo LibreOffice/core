@@ -89,9 +89,6 @@ void                g_lo_action_group_remove                (GLOActionGroup     
 
 void                g_lo_action_group_clear                 (GLOActionGroup     *group);
 
-void                g_lo_action_group_merge                 (GLOActionGroup     *input_group,
-                                                             GLOActionGroup     *output_group);
-
 G_END_DECLS
 
 #endif // GLOACTIONGROUP_H

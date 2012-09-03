@@ -418,24 +418,4 @@ g_lo_action_group_clear (GLOActionGroup  *group)
     }
 }
 
-void
-g_lo_action_group_merge (GLOActionGroup *input_group,
-                         GLOActionGroup *output_group)
-{
-    g_return_if_fail (G_IS_LO_ACTION_GROUP (input_group));
-    g_return_if_fail (G_IS_LO_ACTION_GROUP (output_group));
-    g_return_if_fail (input_group != NULL);
-    g_return_if_fail (output_group != NULL);
-
-    GHashTableIter iter;
-    gpointer key, value;
-
-    g_hash_table_iter_init (&iter, input_group->priv->table);
-
-    while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-        g_lo_action_group_insert(output_group, (gchar*) key, value);
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -87,9 +87,9 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
 
         // Force updating of native menu labels.
         pMenu->NativeSetItemText( nSection, nItemPos, aText );
-        pMenu->SetAccelerator( nItem, pSalMenuItem, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
+        pMenu->NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
 
-        if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpVCLMenu->GetPopupMenu( nId ) == NULL )
+        if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == NULL )
         {
             pMenu->NativeSetItemCommand( nSection, nItemPos, pSalMenuItem, aNativeCommand );
             pMenu->NativeSetEnableItem( aNativeCommand, bEnabled );
@@ -459,21 +459,6 @@ void GtkSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const I
 
 void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
 {
-//    if ( rKeyName.isEmpty() )
-//        return;
-
-//    rtl::OString aAccelerator = rtl::OUStringToOString( GetGtkKeyName( rKeyName ), RTL_TEXTENCODING_UTF8 );
-
-//    unsigned nSection, nItemPos;
-//    GetItemSectionAndPosition( nPos, &nSection, &nItemPos );
-
-//    gchar* aCurrentAccel = g_lo_menu_get_accelerator_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
-
-//    if ( aCurrentAccel == NULL && g_strcmp0( aCurrentAccel, aAccelerator.getStr() ) != 0 )
-//        g_lo_menu_set_accelerator_to_item_in_section ( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aAccelerator.getStr() );
-
-//    if ( aCurrentAccel )
-//        g_free( aCurrentAccel );
 }
 
 void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
