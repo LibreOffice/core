@@ -93,8 +93,7 @@ static const char XDG_CONFIG_PART[] = "/.config";
 
     uno::Reference< container::XNameAccess > xUICommands;
     uno::Reference< container::XNameAccess > xNameAccess( ui::UICommandDescription::create(::comphelper::getProcessComponentContext()) );
-    uno::Any a = xNameAccess->getByName( sModuleIdentifier );
-    a >>= xUICommands;
+    xNameAccess->getByName( sModuleIdentifier ) >>= xUICommands;
     if (xUICommands.is())
     {
         if ( !sCommand.isEmpty() )

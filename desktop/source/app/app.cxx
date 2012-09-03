@@ -2145,7 +2145,6 @@ void Desktop::PreloadConfigurationData()
                     rtl::OUString( "com.sun.star.ui.WindowStateConfiguration" )), UNO_QUERY );
     if ( xNameAccess.is() )
     {
-        Any a;
         Reference< XNameAccess > xWindowAccess;
         try
         {
