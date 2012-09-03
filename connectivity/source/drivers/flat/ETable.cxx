@@ -50,7 +50,6 @@ using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace ::cppu;
 using namespace utl;
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
@@ -422,8 +421,8 @@ void OFlatTable::construct()
     aArg[0] <<= aAppLocale;
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString("com.sun.star.util.NumberFormatsSupplier"),aArg),UNO_QUERY);
-    m_xNumberFormatter = Reference< util::XNumberFormatter >(
-          util::NumberFormatter::create(
+    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
+          ::com::sun::star::util::NumberFormatter::create(
              comphelper::ComponentContext(m_pConnection->getDriver()->getFactory()).getUNOContext()),
           UNO_QUERY_THROW);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
