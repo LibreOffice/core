@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt {  module tab {
 
     @since OOo 3.4
  */
-service UnoControlTabPageContainer
+published service UnoControlTabPageContainer
 {
     service com::sun::star::awt::UnoControl;
 

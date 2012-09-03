@@ -124,12 +124,12 @@ void SAL_CALL VCLXTabPageModel::setImageURL( const ::rtl::OUString& /*_imageurl*
 {
     //m_sImageURL = _imageurl;
 }
-::rtl::OUString SAL_CALL VCLXTabPageModel::getTooltip() throw (::com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL VCLXTabPageModel::getToolTip() throw (::com::sun::star::uno::RuntimeException)
 {
     //return m_sTooltip;
     return ::rtl::OUString();
 }
-void SAL_CALL VCLXTabPageModel::setTooltip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabPageModel::setToolTip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
 {
     (void)_tooltip;
 }

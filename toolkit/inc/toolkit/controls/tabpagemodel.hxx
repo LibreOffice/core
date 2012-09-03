@@ -41,10 +41,6 @@
 #include <list>
 #include <cppuhelper/implbase2.hxx>
 
-//  ----------------------------------------------------
-//  class UnoControlTabPageModel
-//  ----------------------------------------------------
-
 class UnoControlTabPageModel :  public ControlModelContainerBase
 {
 protected:
