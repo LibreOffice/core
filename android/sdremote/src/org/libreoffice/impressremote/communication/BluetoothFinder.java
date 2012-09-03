@@ -11,14 +11,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
 public class BluetoothFinder {
 
     // TODO: add removal of cached items
     private Context mContext;
-
-    private static final String CHARSET = "UTF-8";
 
     BluetoothAdapter mAdapter;
 
@@ -64,8 +63,6 @@ public class BluetoothFinder {
         @Override
         public void onReceive(Context context, Intent aIntent) {
             // TODO Auto-generated method stub
-            System.out.print("Received intent<<<");
-            System.out.println(aIntent.getAction());
             if (aIntent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice aDevice = (BluetoothDevice) aIntent.getExtras()
                                 .get(BluetoothDevice.EXTRA_DEVICE);
@@ -79,45 +76,17 @@ public class BluetoothFinder {
                                 CommunicationService.MSG_SERVERLIST_CHANGED);
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(
                                 aNIntent);
-                //                System.out.println("Found " + aDevice.getName());
-                //                try {
-                //                    // "f36d0a20-e876-11e1-aff1-0800200c9a66"
-                //                    BluetoothSocket aSocket = aDevice
-                //                                    .createRfcommSocketToServiceRecord(UUID
-                //                                                    .fromString("00001101-0000-1000-8000-00805F9B34FB"));
-                //                    aSocket.connect();
-                //                } catch (IOException e) {
-                //                    // TODO Auto-generated catch block
-                //                    e.printStackTrace();
-                //                    System.out.println("Fallback");
-                //                    Method m;
-                //                    try {
-                //                        m = aDevice.getClass().getMethod("createRfcommSocket",
-                //                                        new Class[] { int.class });
-                //                        BluetoothSocket aFSocket = (BluetoothSocket) m.invoke(
-                //                                        aDevice, 1);
-                //
-                //                        mAdapter.cancelDiscovery();
-                //                        aFSocket.connect();
-                //                    } catch (NoSuchMethodException e1) {
-                //                        // TODO Auto-generated catch block
-                //                        e1.printStackTrace();
-                //                    } catch (IllegalArgumentException e1) {
-                //                        // TODO Auto-generated catch block
-                //                        e1.printStackTrace();
-                //                    } catch (IllegalAccessException e1) {
-                //                        // TODO Auto-generated catch block
-                //                        e1.printStackTrace();
-                //                    } catch (InvocationTargetException e1) {
-                //                        // TODO Auto-generated catch block
-                //                        e1.printStackTrace();
-                //                    } catch (IOException e1) {
-                //                        // TODO Auto-generated catch block
-                //                        e1.printStackTrace();
-                //                    }
-                //                    System.out.println("Fallback complete");
-                //
-                //                }
+            } else if (aIntent.getAction().equals(
+                            BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+                // Start discovery again after a small delay.
+                Handler aHandler = new Handler();
+                aHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.startDiscovery();
+                    }
+                }, 1000 * 15);
+                ;
             }
 
         }
