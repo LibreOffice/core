@@ -154,7 +154,7 @@ namespace toolkit
             Neither <member>m_currentSortColumn</member> nor <member>m_sortAscending</member> are touched by this method.
             Also, the given column index is not checked, this is the responsibility of the caller.
         */
-        void    impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, sal_Bool const i_sortAscending );
+        bool    impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, sal_Bool const i_sortAscending );
 
         /** translates the given event, obtained from our delegator, to a version which can be broadcasted to our own
             clients.
@@ -182,6 +182,10 @@ namespace toolkit
         /** removes the current sorting, and notifies a change of all data
         */
         void    impl_removeColumnSort( MethodGuard& i_instanceLock );
+
+        /** removes the current sorting, without any broadcast
+        */
+        void    impl_removeColumnSort_noBroadcast();
 
     private:
         ::comphelper::ComponentContext                                                          m_context;
