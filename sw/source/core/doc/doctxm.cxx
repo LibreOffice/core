@@ -757,6 +757,7 @@ SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
 
 SwTOXBaseSection::~SwTOXBaseSection()
 {
+    aSortArr.DeleteAndDestroy( 0, aSortArr.Count() );  // i120680
 }
 
 
