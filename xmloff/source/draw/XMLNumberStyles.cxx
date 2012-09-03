@@ -502,7 +502,7 @@ private:
     sal_Bool mbTextual;
     sal_Bool mbDecimal02;
     OUString maText;
-    SvXMLImportContext* mpSlaveContext;
+    boost::shared_ptr< SvXMLImportContext > mpSlaveContext;
 
 public:
     TYPEINFO();
