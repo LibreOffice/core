@@ -24,7 +24,7 @@ public class ServerFinder {
 
     private static final String CHARSET = "UTF-8";
 
-    private static final long SEARCH_INTERVAL = 1000 * 20;
+    private static final long SEARCH_INTERVAL = 1000 * 15;
 
     private DatagramSocket mSocket = null;
 

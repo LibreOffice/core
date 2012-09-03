@@ -220,8 +220,6 @@ public class SelectorActivity extends SherlockActivity {
             // Bluetooth -- Remove old
             for (Entry<Server, View> aEntry : mBluetoothServers.entrySet()) {
                 if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-                    System.out.println("Removing view "
-                                    + aEntry.getKey().getName());
                     mBluetoothServers.remove(aEntry.getKey());
                     mBluetoothList.removeView((View) aEntry.getValue()
                                     .getParent());
@@ -230,8 +228,7 @@ public class SelectorActivity extends SherlockActivity {
             // Network -- Remove old
             for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
                 if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-                    System.out.println("Removing view");
-                    mNetworkServers.remove(aEntry.getKey().getName());
+                    mNetworkServers.remove(aEntry.getKey());
                     mNetworkList.removeView((View) aEntry.getValue()
                                     .getParent());
                 }
@@ -262,8 +259,8 @@ public class SelectorActivity extends SherlockActivity {
 
             }
         }
-        // Hide as necessary
 
+        // Hide as necessary
         mBluetoothContainer
                         .setVisibility((mBluetoothServers.size() != 0) ? View.VISIBLE
                                         : View.GONE);
