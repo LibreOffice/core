@@ -1,6 +1,0 @@
-mkdir: %_DEST%\inc\libvisio
-..\%__SRC%\misc\build\libvisio*\src\lib\libvisio.h %_DEST%\inc\libvisio
-..\%__SRC%\misc\build\libvisio*\src\lib\VisioDocument.h %_DEST%\inc\libvisio\
-..\%__SRC%\misc\build\libvisio*\src\lib\VSDStringVector.h %_DEST%\inc\libvisio\
-..\%__SRC%\lib\*.a %_DEST%\lib\*.a
-..\%__SRC%\slb\*.lib %_DEST%\lib\*.lib

@@ -86,6 +86,7 @@ jurt\
 jvmaccess\
 jvmfwk\
 l10ntools\
+libvisio\
 lingucomponent\
 linguistic\
 lotuswordpro\
@@ -213,7 +214,6 @@ libmspub\
 liborcus\
 libpng\
 librsvg\
-libvisio\
 libwpd\
 libwpg\
 libwps\

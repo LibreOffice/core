@@ -6660,11 +6660,12 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBVISIO=NO
-    BUILD_TYPE="$BUILD_TYPE LIBVISIO"
+    VISIO_TARBALL=94e7f271e38c976462558b4278590178-libvisio-0.0.19.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBVISIO)
 AC_SUBST(VISIO_CFLAGS)
 AC_SUBST(VISIO_LIBS)
+AC_SUBST(VISIO_TARBALL)
 
 dnl ===================================================================
 dnl Check for system libcmis
