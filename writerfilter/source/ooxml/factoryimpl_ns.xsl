@@ -449,7 +449,8 @@ CreateElementMapPointer </xsl:text>
             @action='handleComment' or 
             @action='handlePicture' or 
             @action='handleBreak' or 
-            @action='handleOLE'">
+            @action='handleOLE' or
+            @action='handleFontRel'">
             <xsl:text>
     dynamic_cast&lt;OOXMLFastContextHandlerProperties*&gt;(pHandler)-&gt;</xsl:text>
             <xsl:value-of select="@action"/>

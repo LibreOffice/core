@@ -95,6 +95,18 @@ public:
     virtual void sprm(Sprm & sprm);
 };
 
+class OOXMLEmbeddedFontHandler : public Properties
+{
+    OOXMLFastContextHandler * mpFastContext;
+
+public:
+    OOXMLEmbeddedFontHandler(OOXMLFastContextHandler * pContext);
+    virtual ~OOXMLEmbeddedFontHandler();
+
+    virtual void attribute(Id name, Value & val);
+    virtual void sprm(Sprm & sprm);
+};
+
 class OOXMLBreakHandler : public Properties
 {
     sal_Int32 mnType, mnClear;

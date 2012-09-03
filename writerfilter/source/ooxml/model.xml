@@ -23511,6 +23511,7 @@
     <resource name="CT_FontRel" resource="Properties" tag="font">
       <attribute name="fontKey" tokenid="ooxml:CT_FontRel_fontKey"/>
       <attribute name="subsetted" tokenid="ooxml:CT_FontRel_subsetted"/>
+      <action name="start" action="handleFontRel"/>
     </resource>
     <resource name="CT_Font" resource="Properties" tag="font">
       <kind name="character"/>

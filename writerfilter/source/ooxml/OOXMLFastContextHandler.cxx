@@ -1133,7 +1133,8 @@ void OOXMLFastContextHandler::resolveFooter
     mpParserState->getDocument()->resolveFooter(*mpStream, type, rId);
 }
 
-void OOXMLFastContextHandler::resolveOLE(const OUString & rId)
+// Add the data pointed to by the reference as another property.
+void OOXMLFastContextHandler::resolveData(const OUString & rId)
 {
     uno::Reference<io::XInputStream> xInputStream
         (mpParserState->getDocument()->getInputStreamForId(rId));
@@ -1447,6 +1448,12 @@ void OOXMLFastContextHandlerProperties::handleOLE()
 
     OOXMLOLEHandler aOLEHandler(this);
     getPropertySet()->resolve(aOLEHandler);
+}
+
+void OOXMLFastContextHandlerProperties::handleFontRel()
+{
+    OOXMLEmbeddedFontHandler handler(this);
+    getPropertySet()->resolve(handler);
 }
 
 void OOXMLFastContextHandlerProperties::setParent
