@@ -107,6 +107,7 @@ TextRanger::~TextRanger()
     delete[] pRangeArr;
     delete mpPolyPolygon;
     delete mpLinePolyPolygon;
+    delete pBound;
 }
 
 /*-----------------17.11.00 09:49-------------------
