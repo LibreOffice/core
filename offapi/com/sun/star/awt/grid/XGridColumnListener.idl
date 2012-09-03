@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @since OOo 3.3
  */
-interface XGridColumnListener : ::com::sun::star::lang::XEventListener
+published interface XGridColumnListener : ::com::sun::star::lang::XEventListener
 {
     /** Invoked after a column was modified.
     */

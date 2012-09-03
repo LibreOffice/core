@@ -37,6 +37,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <boost/bind.hpp>
 
 //......................................................................................................................
 namespace toolkit
@@ -182,7 +183,8 @@ namespace toolkit
         Sequence< Any > resultData( m_nColumnCount );
         RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
 
-        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(), ::std::select1st< CellData >() );
+        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(),
+                          boost::bind(&CellData::first,_1));
         return resultData;
     }
 

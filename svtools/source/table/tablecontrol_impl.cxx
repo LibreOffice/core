@@ -182,6 +182,22 @@ namespace svt { namespace table
         {
             return ::boost::optional< ::Color >();
         }
+        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const
+        {
+            return ::boost::optional< ::Color >();
+        }
+        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const
+        {
+            return ::boost::optional< ::Color >();
+        }
+        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const
+        {
+            return ::boost::optional< ::Color >();
+        }
+        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const
+        {
+            return ::boost::optional< ::Color >();
+        }
         virtual ::boost::optional< ::Color > getTextColor() const
         {
             return ::boost::optional< ::Color >();

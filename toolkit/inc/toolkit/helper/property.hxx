@@ -211,6 +211,10 @@ namespace rtl {
 #define BASEPROPERTY_ROW_HEADER_WIDTH               158
 #define BASEPROPERTY_COLUMN_HEADER_HEIGHT           159
 #define BASEPROPERTY_USE_GRID_LINES                 160
+#define BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR    161
+#define BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR  162
+#define BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR          163
+#define BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR        164
 
 
 // These properties are not bound, they are always extracted from the BASEPROPERTY_FONTDESCRIPTOR property

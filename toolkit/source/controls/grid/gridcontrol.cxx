@@ -110,6 +110,10 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_BACKGROUND );
     ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_TEXT_COLOR );
     ImplRegisterProperty( BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS );
+    ImplRegisterProperty( BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR );
+    ImplRegisterProperty( BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR );
+    ImplRegisterProperty( BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR );
+    ImplRegisterProperty( BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR );
     ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
 }
 
@@ -239,6 +243,10 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         case BASEPROPERTY_GRID_HEADER_TEXT_COLOR:
         case BASEPROPERTY_GRID_LINE_COLOR:
         case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
+        case BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR:
+        case BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR:
+        case BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR:
+        case BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR:
             return Any();
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );

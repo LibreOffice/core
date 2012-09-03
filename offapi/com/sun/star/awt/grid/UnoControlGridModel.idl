@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @since OOo 3.3
  */
-service UnoControlGridModel
+published service UnoControlGridModel
 {
     /** specifies the standard model of an <type scope="com::sun::star::awt">UnoControl</type>. */
     service com::sun::star::awt::UnoControlModel;
@@ -131,14 +131,14 @@ service UnoControlGridModel
 
     /** controls whether or not to paint horizontal and vertical lines between the grid cells.
 
-        @see LineColor
+        @see GridLineColor
     */
     [property] boolean UseGridLines;
 
     /** specifies the color to be used when drawing lines between cells
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
 
         @see UseGridLines
     */
@@ -147,16 +147,46 @@ service UnoControlGridModel
     /** specifies the color to be used when drawing the background of row or column headers
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
     */
     [property, maybevoid] ::com::sun::star::util::Color             HeaderBackgroundColor;
 
     /** specifies the color to be used when drawing the text within row or column headers
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
     */
     [property, maybevoid] ::com::sun::star::util::Color             HeaderTextColor;
+
+    /** specifies the color to be used when drawing the background of selected cells, while the control has the focus.
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the control's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             ActiveSelectionBackgroundColor;
+
+    /** specifies the color to be used when drawing the background of selected cells, while the control does not have
+        the focus.
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the control's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             InactiveSelectionBackgroundColor;
+
+    /** specifies the color to be used when drawing the text of selected cells, while the control has the focus.
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the control's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             ActiveSelectionTextColor;
+
+    /** specifies the color to be used when drawing the text of selected cells, while the control does not have
+        the focus.
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the control's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             InactiveSelectionTextColor;
 
     /** specifies the colors to be used as background for data rows.
 
@@ -166,19 +196,13 @@ service UnoControlGridModel
 
         <p>If this sequence is empty, all rows will use the same background color as the control as whole.</p>
 
-        <p>If this property does not exist at a particular implementation, or is <VOID/>, rows will be painted
+        <p>If this property has a value of <VOID/>, rows will be painted
         in alternating background colors, every second row having a background color derived from the control's
         selection color.</p>
     */
     [property, maybevoid] sequence< ::com::sun::star::util::Color > RowBackgroundColors;
 
     /** specifies the vertical alignment of the content in the control.
-
-        <pre>
-            TOP
-            MIDDLE
-            BOTTOM
-        </pre>
      */
     [property] com::sun::star::style::VerticalAlignment VerticalAlign;
 
@@ -189,14 +213,14 @@ service UnoControlGridModel
     /** specifies the color to be used when drawing cell texts
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
     */
     [property, maybevoid] ::com::sun::star::util::Color             TextColor;
 
     /** specifies the color to be used when drawing text lines (underlining and strikethrough)
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
      */
     [property, maybevoid] com::sun::star::util::Color               TextLineColor;
 
