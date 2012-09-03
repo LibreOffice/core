@@ -309,7 +309,8 @@ ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/glyphs/graphite_serverfont \
 ))
-else
+endif
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_libraries,vcl,\
     version \
 ))
