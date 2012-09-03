@@ -181,7 +181,8 @@ public:
     // write access to mpPreparedPageWindow
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
 
-    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
+    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L,
+                   const Rectangle& rRect =  Rectangle()) const;
     void DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
 
     Rectangle GetPageRect() const;
