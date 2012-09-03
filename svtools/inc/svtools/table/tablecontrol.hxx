@@ -173,9 +173,6 @@ namespace svt { namespace table
         // .............................................................................................................
 
     private:
-        DECL_DLLPRIVATE_LINK( ImplMouseButtonDownHdl, MouseEvent* );
-        DECL_DLLPRIVATE_LINK( ImplMouseButtonUpHdl, MouseEvent* );
-
         DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
     private:
