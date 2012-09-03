@@ -605,6 +605,34 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL SortableGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException, IndexOutOfBoundsException)
+    {
+        MethodGuard aGuard( *this, rBHelper );
+        DBG_CHECK_ME();
+
+        ::sal_Int32 const rowIndex = i_index == getRowCount() ? i_index : impl_getPrivateRowIndex_throw( i_index );
+            // note that |RowCount| is a valid index in this method, but not for impl_getPrivateRowIndex_throw
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->insertRow( i_index, i_heading, i_data );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL SortableGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
+    {
+        MethodGuard aGuard( *this, rBHelper );
+        DBG_CHECK_ME();
+
+        ::sal_Int32 const rowIndex = i_index == getRowCount() ? i_index : impl_getPrivateRowIndex_throw( i_index );
+            // note that |RowCount| is a valid index in this method, but not for impl_getPrivateRowIndex_throw
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        delegator->insertRows( i_index, i_headings, i_data );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL SortableGridDataModel::removeRow( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );

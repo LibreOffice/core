@@ -44,7 +44,7 @@
 
     @since OOo 3.3
  */
-service DefaultGridDataModel : ::com::sun::star::awt::grid::XMutableGridDataModel;
+published service DefaultGridDataModel : ::com::sun::star::awt::grid::XMutableGridDataModel;
 
 
 }; }; }; };};

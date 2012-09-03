@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @since OOo 3.3
  */
-interface XGridDataListener: com::sun::star::lang::XEventListener
+published interface XGridDataListener: com::sun::star::lang::XEventListener
 {
 
     /** is called when one or more rows of data have been inserted into a grid control's data model.
