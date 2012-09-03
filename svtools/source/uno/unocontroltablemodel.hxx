@@ -88,6 +88,10 @@ namespace svt { namespace table
         virtual ::boost::optional< ::Color >    getLineColor() const;
         virtual ::boost::optional< ::Color >    getHeaderBackgroundColor() const;
         virtual ::boost::optional< ::Color >    getHeaderTextColor() const;
+        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const;
+        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const;
+        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const;
+        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const;
         virtual ::boost::optional< ::Color >    getTextColor() const;
         virtual ::boost::optional< ::Color >    getTextLineColor() const;
         virtual ::boost::optional< ::std::vector< ::Color > >
@@ -129,6 +133,10 @@ namespace svt { namespace table
         void    setLineColor( ::com::sun::star::uno::Any const & i_color );
         void    setHeaderBackgroundColor( ::com::sun::star::uno::Any const & i_color );
         void    setHeaderTextColor( ::com::sun::star::uno::Any const & i_color );
+        void    setActiveSelectionBackColor( ::com::sun::star::uno::Any const & i_color );
+        void    setInactiveSelectionBackColor( ::com::sun::star::uno::Any const & i_color );
+        void    setActiveSelectionTextColor( ::com::sun::star::uno::Any const & i_color );
+        void    setInactiveSelectionTextColor( ::com::sun::star::uno::Any const & i_color );
         void    setTextColor( ::com::sun::star::uno::Any const & i_color );
         void    setTextLineColor( ::com::sun::star::uno::Any const & i_color );
         void    setRowBackgroundColors( ::com::sun::star::uno::Any const & i_APIValue );

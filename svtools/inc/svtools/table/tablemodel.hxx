@@ -473,6 +473,30 @@ namespace svt { namespace table
         */
         virtual ::boost::optional< ::Color >    getHeaderTextColor() const = 0;
 
+        /** returns the color to be used for the background of selected cells, when the control has the focus
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const = 0;
+
+        /** returns the color to be used for the background of selected cells, when the control does not have the focus
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const = 0;
+
+        /** returns the color to be used for the text of selected cells, when the control has the focus
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const = 0;
+
+        /** returns the color to be used for the text of selected cells, when the control does not have the focus
+
+            If this value is not set, a default color from the style settings will be used.
+        */
+        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const = 0;
+
         /** returns the color to be used for rendering cell texts.
 
             If this value is not set, a default color from the style settings will be used.

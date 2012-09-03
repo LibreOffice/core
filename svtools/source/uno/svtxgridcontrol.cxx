@@ -332,6 +332,27 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             pTable->Invalidate();
             break;
 
+        case BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR:
+            m_pTableModel->setActiveSelectionBackColor( aValue );
+            pTable->Invalidate();
+            break;
+
+        case BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR:
+            m_pTableModel->setInactiveSelectionBackColor( aValue );
+            pTable->Invalidate();
+            break;
+
+        case BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR:
+            m_pTableModel->setActiveSelectionTextColor( aValue );
+            pTable->Invalidate();
+            break;
+
+        case BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR:
+            m_pTableModel->setInactiveSelectionTextColor( aValue );
+            pTable->Invalidate();
+            break;
+
+
         case BASEPROPERTY_TEXTCOLOR:
             m_pTableModel->setTextColor( aValue );
             pTable->Invalidate();
@@ -528,6 +549,22 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
 
     case BASEPROPERTY_GRID_HEADER_TEXT_COLOR:
         lcl_convertColor( m_pTableModel->getHeaderTextColor(), aPropertyValue );
+        break;
+
+    case BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR:
+        lcl_convertColor( m_pTableModel->getActiveSelectionBackColor(), aPropertyValue );
+        break;
+
+    case BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR:
+        lcl_convertColor( m_pTableModel->getInactiveSelectionBackColor(), aPropertyValue );
+        break;
+
+    case BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR:
+        lcl_convertColor( m_pTableModel->getActiveSelectionTextColor(), aPropertyValue );
+        break;
+
+    case BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR:
+        lcl_convertColor( m_pTableModel->getInactiveSelectionTextColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_TEXTCOLOR:

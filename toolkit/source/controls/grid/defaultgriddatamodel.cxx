@@ -36,7 +36,8 @@
 #include <rtl/ref.hxx>
 
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
+#include <functional>
+#include <boost/bind.hpp>
 
 //......................................................................................................................
 namespace toolkit
@@ -182,7 +183,8 @@ namespace toolkit
         Sequence< Any > resultData( m_nColumnCount );
         RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
 
-        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(), ::o3tl::select1st< CellData >() );
+        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(),
+                          boost::bind(&CellData::first,_1));
         return resultData;
     }
 

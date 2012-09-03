@@ -215,6 +215,10 @@ namespace rtl {
 #define BASEPROPERTY_SCROLLHEIGHT                   162
 #define BASEPROPERTY_SCROLLTOP                      163
 #define BASEPROPERTY_SCROLLLEFT                     164
+#define BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR    165
+#define BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR  166
+#define BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR          167
+#define BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR        168
 
 
 // These properties are not bound, they are always extracted from the BASEPROPERTY_FONTDESCRIPTOR property

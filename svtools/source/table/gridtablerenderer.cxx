@@ -330,13 +330,17 @@ namespace svt { namespace table
 
         ::Color backgroundColor = _rStyle.GetFieldColor();
 
-        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+        ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
         ::Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
 
+        ::Color const activeSelectionBackColor =
+            lcl_getEffectiveColor( m_pImpl->rModel.getActiveSelectionBackColor(), _rStyle, &StyleSettings::GetHighlightColor );
         if ( _bSelected )
         {
             // selected rows use the background color from the style
-            backgroundColor = i_hasControlFocus ? _rStyle.GetHighlightColor() : _rStyle.GetDeactiveColor();
+            backgroundColor = i_hasControlFocus
+                ?   activeSelectionBackColor
+                :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionBackColor(), _rStyle, &StyleSettings::GetDeactiveColor );
             if ( !aLineColor )
                 lineColor = backgroundColor;
         }
@@ -353,7 +357,7 @@ namespace svt { namespace table
                 }
                 else
                 {
-                    Color hilightColor = _rStyle.GetHighlightColor();
+                    Color hilightColor = activeSelectionBackColor;
                     hilightColor.SetRed( 9 * ( fieldColor.GetRed() - hilightColor.GetRed() ) / 10 + hilightColor.GetRed() );
                     hilightColor.SetGreen( 9 * ( fieldColor.GetGreen() - hilightColor.GetGreen() ) / 10 + hilightColor.GetGreen() );
                     hilightColor.SetBlue( 9 * ( fieldColor.GetBlue() - hilightColor.GetBlue() ) / 10 + hilightColor.GetBlue() );
@@ -419,14 +423,16 @@ namespace svt { namespace table
         StyleSettings const &   rStyle;
         ColPos const            nColumn;
         bool const              bSelected;
+        bool const              bHasControlFocus;
 
         CellRenderContext( OutputDevice& i_device, Rectangle const & i_contentArea,
-            StyleSettings const & i_style, ColPos const i_column, bool const i_selected )
+            StyleSettings const & i_style, ColPos const i_column, bool const i_selected, bool const i_hasControlFocus )
             :rDevice( i_device )
             ,aContentArea( i_contentArea )
             ,rStyle( i_style )
             ,nColumn( i_column )
             ,bSelected( i_selected )
+            ,bHasControlFocus( i_hasControlFocus )
         {
         }
     };
@@ -438,7 +444,7 @@ namespace svt { namespace table
         _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
         Rectangle const aContentArea( lcl_getContentArea( *m_pImpl, _rArea ) );
-        CellRenderContext const aRenderContext( _rDevice, aContentArea, _rStyle, i_column, _bSelected );
+        CellRenderContext const aRenderContext( _rDevice, aContentArea, _rStyle, i_column, _bSelected, i_hasControlFocus );
         impl_paintCellContent( aRenderContext );
 
         if ( m_pImpl->bUseGridLines )
@@ -449,7 +455,9 @@ namespace svt { namespace table
             if ( _bSelected && !aLineColor )
             {
                 // if no line color is specified by the model, use the usual selection color for lines in selected cells
-                lineColor = i_hasControlFocus ? _rStyle.GetHighlightColor() : _rStyle.GetDeactiveColor();
+                lineColor = i_hasControlFocus
+                    ?   lcl_getEffectiveColor( m_pImpl->rModel.getActiveSelectionBackColor(), _rStyle, &StyleSettings::GetHighlightColor )
+                    :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionBackColor(), _rStyle, &StyleSettings::GetDeactiveColor );
             }
 
             _rDevice.SetLineColor( lineColor );
@@ -534,7 +542,12 @@ namespace svt { namespace table
     void GridTableRenderer::impl_paintCellText( CellRenderContext const & i_context, ::rtl::OUString const & i_text )
     {
         if ( i_context.bSelected )
-            i_context.rDevice.SetTextColor( i_context.rStyle.GetHighlightTextColor() );
+        {
+            ::Color const textColor = i_context.bHasControlFocus
+                ?   lcl_getEffectiveColor( m_pImpl->rModel.getActiveSelectionTextColor(), i_context.rStyle, &StyleSettings::GetHighlightTextColor )
+                :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionTextColor(), i_context.rStyle, &StyleSettings::GetDeactiveTextColor );
+            i_context.rDevice.SetTextColor( textColor );
+        }
         else
         {
             ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), i_context.rStyle, &StyleSettings::GetFieldTextColor );

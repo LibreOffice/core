@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module view {
 
 /** Specifies a selection type for a view that supports a selection model.
  */
-enum SelectionType
+published enum SelectionType
 {
 
     /** No selection is possible.

@@ -95,6 +95,10 @@ namespace svt { namespace table
         ::boost::optional< ::Color >                    m_aGridLineColor;
         ::boost::optional< ::Color >                    m_aHeaderBackgroundColor;
         ::boost::optional< ::Color >                    m_aHeaderTextColor;
+        ::boost::optional< ::Color >                    m_aActiveSelectionBackColor;
+        ::boost::optional< ::Color >                    m_aInactiveSelectionBackColor;
+        ::boost::optional< ::Color >                    m_aActiveSelectionTextColor;
+        ::boost::optional< ::Color >                    m_aInactiveSelectionTextColor;
         ::boost::optional< ::Color >                    m_aTextColor;
         ::boost::optional< ::Color >                    m_aTextLineColor;
         ::boost::optional< ::std::vector< ::Color > >   m_aRowColors;
@@ -104,23 +108,27 @@ namespace svt { namespace table
         WeakReference< XGridColumnModel >               m_aColumnModel;
 
         UnoControlTableModel_Impl()
-            :aColumns                   ( )
-            ,bHasColumnHeaders          ( true      )
-            ,bHasRowHeaders             ( false     )
-            ,eVScrollMode               ( ScrollbarShowNever )
-            ,eHScrollMode               ( ScrollbarShowNever )
-            ,pRenderer                  ( )
-            ,pInputHandler              ( )
-            ,nRowHeight                 ( 10 )
-            ,nColumnHeaderHeight        ( 10 )
-            ,nRowHeaderWidth            ( 10 )
-            ,m_aGridLineColor           ( )
-            ,m_aHeaderBackgroundColor   ( )
-            ,m_aHeaderTextColor         ( )
-            ,m_aTextColor               ( )
-            ,m_aTextLineColor           ( )
-            ,m_aRowColors               ( )
-            ,m_eVerticalAlign           ( VerticalAlignment_TOP )
+            :aColumns                       ( )
+            ,bHasColumnHeaders              ( true      )
+            ,bHasRowHeaders                 ( false     )
+            ,eVScrollMode                   ( ScrollbarShowNever )
+            ,eHScrollMode                   ( ScrollbarShowNever )
+            ,pRenderer                      ( )
+            ,pInputHandler                  ( )
+            ,nRowHeight                     ( 10 )
+            ,nColumnHeaderHeight            ( 10 )
+            ,nRowHeaderWidth                ( 10 )
+            ,m_aGridLineColor               ( )
+            ,m_aHeaderBackgroundColor       ( )
+            ,m_aHeaderTextColor             ( )
+            ,m_aActiveSelectionBackColor    ( )
+            ,m_aInactiveSelectionBackColor  ( )
+            ,m_aActiveSelectionTextColor    ( )
+            ,m_aInactiveSelectionTextColor  ( )
+            ,m_aTextColor                   ( )
+            ,m_aTextLineColor               ( )
+            ,m_aRowColors                   ( )
+            ,m_eVerticalAlign               ( VerticalAlignment_TOP )
         {
         }
     };
@@ -656,10 +664,66 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< ::Color > UnoControlTableModel::getActiveSelectionBackColor() const
+    {
+        DBG_CHECK_ME();
+        return m_pImpl->m_aActiveSelectionBackColor;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< ::Color > UnoControlTableModel::getInactiveSelectionBackColor() const
+    {
+        DBG_CHECK_ME();
+        return m_pImpl->m_aInactiveSelectionBackColor;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< ::Color > UnoControlTableModel::getActiveSelectionTextColor() const
+    {
+        DBG_CHECK_ME();
+        return m_pImpl->m_aActiveSelectionTextColor;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< ::Color > UnoControlTableModel::getInactiveSelectionTextColor() const
+    {
+        DBG_CHECK_ME();
+        return m_pImpl->m_aInactiveSelectionTextColor;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void UnoControlTableModel::setHeaderTextColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aHeaderTextColor );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::setActiveSelectionBackColor( Any const & i_color )
+    {
+        DBG_CHECK_ME();
+        lcl_setColor( i_color, m_pImpl->m_aActiveSelectionBackColor );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::setInactiveSelectionBackColor( Any const & i_color )
+    {
+        DBG_CHECK_ME();
+        lcl_setColor( i_color, m_pImpl->m_aInactiveSelectionBackColor );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::setActiveSelectionTextColor( Any const & i_color )
+    {
+        DBG_CHECK_ME();
+        lcl_setColor( i_color, m_pImpl->m_aActiveSelectionTextColor );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::setInactiveSelectionTextColor( Any const & i_color )
+    {
+        DBG_CHECK_ME();
+        lcl_setColor( i_color, m_pImpl->m_aInactiveSelectionTextColor );
     }
 
     //------------------------------------------------------------------------------------------------------------------

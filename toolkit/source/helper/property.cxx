@@ -297,6 +297,10 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "UseGridLines",           USE_GRID_LINES,             sal_Bool,               BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_3 ( "MultiPageValue",          MULTIPAGEVALUE,      sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "AllDialogChildren",                USERFORMCONTAINEES,                Reference< ::com::sun::star::container::XNameContainer >,           BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "ActiveSelectionBackgroundColor",     ACTIVE_SEL_BACKGROUND_COLOR,    sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "InactiveSelectionBackgroundColor",   INACTIVE_SEL_BACKGROUND_COLOR,  sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "ActiveSelectionTextColor",           ACTIVE_SEL_TEXT_COLOR,          sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "InactiveSelectionTextColor",         INACTIVE_SEL_TEXT_COLOR,        sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
     };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
