@@ -1237,9 +1237,6 @@ namespace svt { namespace table
             }
         }
 
-        // show or hide the scrollbars as needed
-        impl_ni_positionChildWindows( aDataCellPlayground, bNeedVerticalScrollbar, bNeedHorizontalScrollbar );
-
         // the initial call to impl_ni_calculateColumnWidths assumed that we need a vertical scrollbar. If, by now,
         // we know that this is not the case, re-calculate the column widths.
         if ( !bNeedVerticalScrollbar )
@@ -1293,6 +1290,9 @@ namespace svt { namespace table
                 colPos->move( offsetPixel );
             }
         }
+
+        // show or hide the scrollbars as needed, and position the data window
+        impl_ni_positionChildWindows( aDataCellPlayground, bNeedVerticalScrollbar, bNeedHorizontalScrollbar );
     }
 
     //------------------------------------------------------------------------------------------------------------------
