@@ -426,7 +426,11 @@ sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
         case NS_ooxml::LN_Value_ST_NumberFormat_japaneseCounting:
         case NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCounting:
         case NS_ooxml::LN_Value_ST_NumberFormat_ideographDigital:
+        case NS_ooxml::LN_Value_ST_NumberFormat_chineseCountingThousand:
             nRet = style::NumberingType::NUMBER_LOWER_ZH;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_chineseLegalSimplified:
+            nRet = style::NumberingType::NUMBER_UPPER_ZH;
             break;
         default: nRet = style::NumberingType::ARABIC;
     }
