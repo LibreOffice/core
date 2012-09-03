@@ -141,14 +141,14 @@ throw( com::sun::star::uno::RuntimeException )
     WPXSvInputStream input( xInputStream );
 
     if (libvisio::VisioDocument::isSupported(&input))
-        sTypeName = OUString( "draw_Visio_Document" );
+        sTypeName = "draw_Visio_Document";
 
     if (!sTypeName.isEmpty())
     {
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString( "TypeName" );
+            Descriptor[location].Name = "TypeName";
         }
 
         Descriptor[location].Value <<=sTypeName;
