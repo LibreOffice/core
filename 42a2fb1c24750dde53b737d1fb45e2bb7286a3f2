@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAN3///nY\u003d",
+        "filename": "l10ntools/source/po.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-09-03T14:22:31Z",
+      "side": 1,
+      "message": "ok so that maybe me not being proficient enough in C++ but....\nsetTransStr need a cosnt OUString\u0026 so a reference to an object OUString...\npresumably there is some uato conversion at play to turn the argument into a OUString... but surely that is a local unnamed variable, whose implicit scope is the function... but then we pass a reference to it to setTransStr... reference that become garbage as son as we leave the constructor no ?",
+      "revId": "42a2fb1c24750dde53b737d1fb45e2bb7286a3f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
