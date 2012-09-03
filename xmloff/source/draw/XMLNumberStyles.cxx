@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/shared_ptr.hpp>
 #include <tools/debug.hxx>
 #include <XMLNumberStylesExport.hxx>
 #include <XMLNumberStylesImport.hxx>
@@ -493,7 +494,7 @@ private:
     sal_Bool mbTextual;
     sal_Bool mbDecimal02;
     OUString maText;
-    SvXMLImportContext* mpSlaveContext;
+    boost::shared_ptr< SvXMLImportContext > mpSlaveContext;
 
 public:
     TYPEINFO();
