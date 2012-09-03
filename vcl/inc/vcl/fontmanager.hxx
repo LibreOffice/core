@@ -353,6 +353,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     bool readOverrideMetrics();
 
+    std::set<OString> m_aPreviousLangSupportRequests;
+
     PrintFontManager();
     ~PrintFontManager();
 public:

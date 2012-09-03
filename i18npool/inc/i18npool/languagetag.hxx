@@ -57,7 +57,7 @@ public:
      */
     explicit LanguageTag( const rtl::OUString& rLanguage, const rtl::OUString& rCountry );
 
-    explicit LanguageTag( const LanguageTag & rLanguageTag );
+    LanguageTag( const LanguageTag & rLanguageTag );
     ~LanguageTag();
     LanguageTag& operator=( const LanguageTag & rLanguageTag );
 
