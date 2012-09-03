@@ -44,7 +44,7 @@ public class FunctionProvider extends TestCase {
     log.println("creating test environment");
         try {
 
-            XMultiServiceFactory xMSF = tParam.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
 
             Object xInterface = xMSF.createInstance( "com.sun.star.frame.Desktop" );
             XDesktop dtop = ( XDesktop )UnoRuntime.queryInterface( XDesktop.class,

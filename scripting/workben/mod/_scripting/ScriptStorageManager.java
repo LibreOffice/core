@@ -42,7 +42,7 @@ public class ScriptStorageManager extends TestCase {
     Object oInterface = null;
 
     try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
             XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
                                                 XPropertySet.class, xMSF);
             // get context
