@@ -1573,11 +1573,11 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_EnterCharCell,
                        KS_GotoNextFieldMark,
                        KS_GotoPrevFieldMark,
-                       KS_Ende };
+                       KS_End };
 
     SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
                                            : KS_CheckKey,
-                eNextKeyState = KS_Ende;
+                eNextKeyState = KS_End;
     sal_uInt8 nDir = 0;
 
     if (nKS_NUMDOWN_Count > 0)
@@ -1586,7 +1586,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     if (nKS_NUMINDENTINC_Count > 0)
         nKS_NUMINDENTINC_Count--;
 
-    while( KS_Ende != eKeyState )
+    while( KS_End != eKeyState )
     {
         SW_KeyState eFlyState = KS_KeyToView;
 
@@ -1715,9 +1715,11 @@ KEYINPUT_CHECKTABLE:
                     }
                     break;
 
-//-------
-// Insert/Delete
                 case KEY_LEFT:
+                {
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                // No break;
                 case KEY_LEFT | KEY_MOD1:
                 {
                     sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
@@ -1740,6 +1742,10 @@ KEYINPUT_CHECKTABLE:
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_UP:
+                {
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                // No break;
                 case KEY_UP | KEY_MOD1:
                 {
                     sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
@@ -1756,6 +1762,10 @@ KEYINPUT_CHECKTABLE:
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_DOWN:
+                {
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                // No break;
                 case KEY_DOWN | KEY_MOD1:
                 {
                     sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
@@ -1808,14 +1818,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     else
                     {
                         InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                     }
                     break;
 
                 case KEY_DELETE | KEY_MOD2:
                     if( !rSh.IsTableMode() && rSh.GetTableFmt() )
                     {
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         bTblInsDelMode = sal_True;
                         bTblIsInsMode = sal_False;
                         bTblIsColMode = sal_True;
@@ -1827,7 +1837,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_INSERT | KEY_MOD2:
                     if( !rSh.IsTableMode() && rSh.GetTableFmt() )
                     {
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         bTblInsDelMode = sal_True;
                         bTblIsInsMode = sal_True;
                         bTblIsColMode = sal_True;
@@ -1837,7 +1847,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     break;
 
-                case KEY_RETURN:                // Return
+                case KEY_RETURN:
+                {
                     if( !rSh.HasReadonlySel() )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
@@ -1870,18 +1881,19 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_AutoFmtByInput;
                         else
                             eNextKeyState = eKeyState, eKeyState = KS_CheckAutoCorrect;
-
-                        eAutoCompleteAction = ACA_ReturnToRoot;
                     }
-                    break;
-
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                break;
                 case KEY_RETURN | KEY_MOD2:     // ALT-Return
+                {
                     if( !rSh.HasReadonlySel() && !rSh.IsSttPara() && rSh.GetCurNumRule() )
                         eKeyState = KS_NoNum;
                     else if( rSh.CanSpecialInsert() )
                         eKeyState = KS_SpecialInsert;
-                    break;
-
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                break;
                 case KEY_BACKSPACE:
                 case KEY_BACKSPACE | KEY_SHIFT:
                     if( !rSh.HasReadonlySel() )
@@ -1910,7 +1922,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
 
                         if (bDone)
-                            eKeyState = KS_Ende;
+                            eKeyState = KS_End;
                         else
                         {
                             if (rSh.IsSttPara() &&
@@ -1977,7 +1989,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     else
                     {
                         InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                     }
                     break;
 
@@ -1987,6 +1999,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         nDir = MOVE_RIGHT_BIG;
                         eTblChgMode = nsTblChgWidthHeightType::WH_FLAG_INSDEL | nsTblChgWidthHeightType::WH_COL_RIGHT;
                         nTblChgSize = pModOpt->GetTblVInsert();
+                        eAutoCompleteAction = ACA_ReturnToRoot;
                         goto KEYINPUT_CHECKTABLE_INSDEL;
                     }
                 case KEY_TAB:
@@ -2078,7 +2091,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_PrevObject;
                     else
                     {
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         if( rSh.IsSttOfPara() && !rSh.HasReadonlySel() )
                         {
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
@@ -2160,7 +2173,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     case KEY_TAB:
                     case KEY_TAB | KEY_SHIFT:
                         bNormalChar = sal_False;
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         if ( rSh.GetSelectionType() &
                                 (nsSelectionType::SEL_GRF |
                                     nsSelectionType::SEL_FRM |
@@ -2189,7 +2202,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             {
                                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, sal_True);
                                 bNormalChar = sal_False;
-                                eKeyState = KS_Ende;
+                                eKeyState = KS_End;
                                 rSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
                             }
                         }
@@ -2207,12 +2220,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
                     case KEY_RIGHT | KEY_MOD2:
                         rSh.Right( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         FlushInBuffer();
                         break;
                     case KEY_LEFT | KEY_MOD2:
                         rSh.Left( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         FlushInBuffer();
                         break;
                 }
@@ -2222,19 +2235,16 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
         case KS_KeyToView:
             {
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
                 bNormalChar =
                     !rKeyCode.IsMod2() &&
                     rKeyCode.GetModifier() != (KEY_MOD1) &&
                     rKeyCode.GetModifier() != (KEY_MOD1|KEY_SHIFT) &&
                     SW_ISPRINTABLE( aCh );
 
-                if( bNormalChar )
+                if( bNormalChar && rSh.IsInFrontOfLabel() )
                 {
-                    eAutoCompleteAction = ACA_SingleCharInput;
-                    aSingleCharInput = aCh;
-                    if ( rSh.IsInFrontOfLabel() )
-                        rSh.NumOrNoNum(sal_False);
+                    rSh.NumOrNoNum(sal_False);
                 }
 
                 if( aInBuffer.Len() && ( !bNormalChar || bIsDocReadOnly ))
@@ -2281,12 +2291,24 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         Window::KeyInput( aKeyEvent );
                     }
                 }
+                if( bNormalChar )
+                {
+                    if ( aCh == ' ' )
+                    {
+                        eAutoCompleteAction = ACA_ReturnToRoot;
+                    }
+                    else
+                    {
+                        eAutoCompleteAction = ACA_SingleCharInput;
+                        aSingleCharInput = aCh;
+                    }
+                }
             }
             break;
         case KS_LaunchOLEObject:
         {
             rSh.LaunchOLEObj();
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
             eAutoCompleteAction = ACA_NoOp;
         }
         break;
@@ -2296,7 +2318,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             rSh.LeaveSelFrmMode();
             rView.AttrChangedNotify(&rSh);
             rSh.MoveSection( fnSectionCurr, fnSectionEnd );
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
             eAutoCompleteAction = ACA_NoOp;
         }
         break;
@@ -2309,7 +2331,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if ( rView.GetCurShell()->ISA(SwDrawTextShell) )
                     ((SwDrawTextShell*)rView.GetCurShell())->Init();
             }
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
             eAutoCompleteAction = ACA_NoOp;
         }
         break;
@@ -2319,7 +2341,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             sal_Bool bForward(!aKeyEvent.GetKeyCode().IsShift());
 
             ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
             eAutoCompleteAction = ACA_NoOp;
         }
         break;
@@ -2328,7 +2350,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             {
                 // then it should be passed along
                 Window::KeyInput( aKeyEvent );
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
                 break;
             }
             aCh = '\t';
@@ -2364,7 +2386,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                     }
                 }
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
             }
             else if(!rSh.HasReadonlySel())
             {
@@ -2412,12 +2434,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( bFlushCharBuffer )
                         aKeyInputFlushTimer.Start();
                 }
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
             }
             else
             {
                 InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
             }
         break;
 
@@ -2434,7 +2456,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
             }
             eKeyState = eNextKeyState;
-            eAutoCompleteAction = ACA_NoOp;
+            if ( eAutoCompleteAction == ACA_Refresh )
+                eAutoCompleteAction = ACA_NoOp;
         }
         break;
 
@@ -2483,7 +2506,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_GotoPrevFieldMark:
                 {
                     ::sw::mark::IFieldmark const * const pFieldmark = rSh.GetFieldmarkBefore();
-                    if(pFieldmark) rSh.GotoFieldmark(pFieldmark);
+                    if( pFieldmark )
+                        rSh.GotoFieldmark(pFieldmark);
                 }
                 break;
 
@@ -2555,6 +2579,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             pACorr->GetSwFlags().bAutoCmpltAppendBlanc;
                 }
                 rSh.EndUndo( UNDO_END );
+                eAutoCompleteAction = ACA_ReturnToRoot;
             }
             break;
 
@@ -2625,14 +2650,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_Draw_Change :
                 ChangeDrawing( nDir );
                 break;
-            default:; //prevent warning
+            default:
+                break;
             }
             if( nSlotId && rView.GetViewFrame()->GetBindings().GetRecorder().is() )
             {
                 SfxRequest aReq(rView.GetViewFrame(), nSlotId );
                 aReq.Done();
             }
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
         }
         }
     }
@@ -2672,23 +2698,28 @@ KEYINPUT_CHECKTABLE_INSDEL:
         switch( eAutoCompleteAction )
         {
             case ACA_NoOp:
-            // do nothing
+                // do nothing
             break;
 
             case ACA_ReturnToRoot:
-            rACList.returnToRoot();
+                rACList.returnToRoot();
             break;
 
             case ACA_SingleCharInput:
-            rACList.advance( aSingleCharInput );
+                rACList.advance( aSingleCharInput );
             break;
 
             case ACA_SingleBackspace:
-            rACList.goBack();
+                rACList.goBack();
             break;
 
             case ACA_Refresh:
-            rACList.gotoNode( sPrefix );
+            {
+                if( sPrefix.Len() > 0 )
+                    rACList.gotoNode( sPrefix );
+                else
+                    rACList.returnToRoot();
+            }
             break;
         }
     }
