@@ -877,8 +877,8 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
                     sURL = value.get<rtl::OUString> ();
                     localizeWebserviceURI(sURL);
 
-                    Reference< system::XSystemShellExecute > xSystemShellExecute(
-                        system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
+                    Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                        com::sun::star::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
                     //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
                     xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }

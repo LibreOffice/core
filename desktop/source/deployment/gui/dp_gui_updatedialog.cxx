@@ -1413,10 +1413,10 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
 
     try
     {
-        uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
-            system::SystemShellExecute::create(m_context) );
+        uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+            com::sun::star::system::SystemShellExecute::create(m_context) );
         //throws lang::IllegalArgumentException, system::SystemShellExecuteException
-        xSystemShellExecute->execute( sURL, ::rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY);
+        xSystemShellExecute->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
     }
     catch ( const uno::Exception& )
     {

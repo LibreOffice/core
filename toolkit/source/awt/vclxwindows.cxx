@@ -2961,7 +2961,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
                 if ( pBase )
                     sURL = pBase->GetURL();
-                Reference< system::XSystemShellExecute > xSystemShellExecute( system::SystemShellExecute::create(
+                Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( ::com::sun::star::system::SystemShellExecute::create(
                     ::comphelper::getProcessComponentContext() ) );
                 if ( !sURL.isEmpty() )
                 {

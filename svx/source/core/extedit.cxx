@@ -89,8 +89,8 @@ void ExternalToolEdit::threadWorker(void* pThreadData)
     // getting changed
     Application::PostUserEvent( LINK( NULL, ExternalToolEdit, StartListeningEvent ), pThreadData);
 
-    uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
-            system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
+    uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+        com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
     xSystemShellExecute->execute( pData->m_aFileName, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
 }
 

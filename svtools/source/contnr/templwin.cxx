@@ -1682,10 +1682,10 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog, OpenLinkHdl_Impl)
         {
             uno::Reference< uno::XComponentContext > xContext =
                 ::comphelper::getProcessComponentContext();
-            uno::Reference< system::XSystemShellExecute > xSystemShell(
-                system::SystemShellExecute::create(xContext) );
+            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
+                com::sun::star::system::SystemShellExecute::create(xContext) );
             if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, ::rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
+                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             EndDialog( RET_CANCEL );
         }
         catch( const uno::Exception& e )

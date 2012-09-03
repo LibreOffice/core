@@ -851,8 +851,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     {
         try
         {
-            uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
-                system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
+            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
             xSystemShellExecute->execute( sExplanationLink, rtl::OUString(),
                     com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
         }

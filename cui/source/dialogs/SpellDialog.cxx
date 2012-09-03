@@ -2174,9 +2174,9 @@ IMPL_LINK( SpellDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
         return 1;
     try
     {
-        uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
-            system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-        xSystemShellExecute->execute( sURL, rtl::OUString(),  system::SystemShellExecuteFlags::URIS_ONLY );
+        uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+            com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+        xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch ( uno::Exception& )
     {
