@@ -330,13 +330,17 @@ namespace toolkit
         lcl_clear( m_publicToPrivateRowIndex );
         lcl_clear( m_privateToPublicRowIndex );
 
+        // rebuild the index
+        if ( !impl_reIndex_nothrow( m_currentSortColumn, m_sortAscending ) )
+        {
+            impl_removeColumnSort( i_instanceLock );
+            return;
+        }
+
         // broadcast an artificial event, saying that all rows have been removed
         GridDataEvent const aRemovalEvent( *this, -1, -1, -1, -1 );
         impl_broadcast( &XGridDataListener::rowsRemoved, aRemovalEvent, i_instanceLock );
         i_instanceLock.reset();
-
-        // rebuild the index
-        impl_reIndex_nothrow( m_currentSortColumn, m_sortAscending );
 
         // broadcast an artificial event, saying that n rows have been added
         GridDataEvent const aAdditionEvent( *this, -1, -1, 0, m_delegator->getRowCount() - 1 );
@@ -473,7 +477,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SortableGridDataModel::impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, sal_Bool const i_sortAscending )
+    bool SortableGridDataModel::impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, sal_Bool const i_sortAscending )
     {
         ::sal_Int32 const rowCount( getRowCount() );
         ::std::vector< ::sal_Int32 > aPublicToPrivate( rowCount );
@@ -495,7 +499,7 @@ namespace toolkit
 
             // get predicate object
             ::std::auto_ptr< ::comphelper::IKeyPredicateLess > const pPredicate( ::comphelper::getStandardLessPredicate( dataType, m_collator ) );
-            ENSURE_OR_RETURN_VOID( pPredicate.get(), "SortableGridDataModel::impl_reIndex_nothrow: no sortable data found!" );
+            ENSURE_OR_RETURN_FALSE( pPredicate.get(), "SortableGridDataModel::impl_reIndex_nothrow: no sortable data found!" );
 
             // then sort
             CellDataLessComparison const aComparator( aColumnData, *pPredicate, i_sortAscending );
@@ -504,7 +508,7 @@ namespace toolkit
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            return;
+            return false;
         }
 
         // also build the "private to public" mapping
@@ -514,6 +518,8 @@ namespace toolkit
 
         m_publicToPrivateRowIndex.swap( aPublicToPrivate );
         m_privateToPublicRowIndex.swap( aPrivateToPublic );
+
+        return true;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -525,7 +531,8 @@ namespace toolkit
         if ( ( i_columnIndex < 0 ) || ( i_columnIndex >= getColumnCount() ) )
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-        impl_reIndex_nothrow( i_columnIndex, i_sortAscending );
+        if ( !impl_reIndex_nothrow( i_columnIndex, i_sortAscending ) )
+            return;
 
         m_currentSortColumn = i_columnIndex;
         m_sortAscending = i_sortAscending;
@@ -538,14 +545,19 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SortableGridDataModel::impl_removeColumnSort( MethodGuard& i_instanceLock )
+    void SortableGridDataModel::impl_removeColumnSort_noBroadcast()
     {
         lcl_clear( m_publicToPrivateRowIndex );
         lcl_clear( m_privateToPublicRowIndex );
 
         m_currentSortColumn = -1;
         m_sortAscending = sal_True;
+    }
 
+    //------------------------------------------------------------------------------------------------------------------
+    void SortableGridDataModel::impl_removeColumnSort( MethodGuard& i_instanceLock )
+    {
+        impl_removeColumnSort_noBroadcast();
         impl_broadcast(
             &XGridDataListener::dataChanged,
             GridDataEvent( *this, -1, -1, -1, -1 ),
