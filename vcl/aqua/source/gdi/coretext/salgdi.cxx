@@ -78,6 +78,13 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
+void AquaSalGraphics::ClearDevFontList()
+{
+    SalData* pSalData = GetSalData();
+    delete pSalData->mpFontList;
+    pSalData->mpFontList = NULL;
+}
+
 void AquaSalGraphics::GetDevFontSubstList( OutputDevice* )
 {
     // nothing to do since there are no device-specific fonts on Aqua

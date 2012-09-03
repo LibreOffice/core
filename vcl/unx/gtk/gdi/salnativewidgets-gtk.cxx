@@ -3699,6 +3699,17 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     GtkSettings* pSettings = gtk_widget_get_settings( m_pWindow );
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
+    guint latest_fontconfig_timestamp = 0;
+    static guint our_fontconfig_timestamp = 0;
+    g_object_get( pSettings, "gtk-fontconfig-timestamp", &latest_fontconfig_timestamp, (char *)NULL );
+    if (latest_fontconfig_timestamp != our_fontconfig_timestamp)
+    {
+        bool bFirstTime = our_fontconfig_timestamp == 0;
+        our_fontconfig_timestamp = latest_fontconfig_timestamp;
+        if (!bFirstTime)
+            psp::PrintFontManager::get().initialize();
+    }
+
     // get the widgets in place
     NWEnsureGTKMenu( m_nXScreen );
     NWEnsureGTKMenubar( m_nXScreen );

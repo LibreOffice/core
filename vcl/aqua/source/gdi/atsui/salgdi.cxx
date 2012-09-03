@@ -528,6 +528,13 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
+void AquaSalGraphics::ClearDevFontList()
+{
+    SalData* pSalData = GetSalData();
+    delete pSalData->mpFontList;
+    pSalData->mpFontList = NULL;
+}
+
 // -----------------------------------------------------------------------
 
 bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,

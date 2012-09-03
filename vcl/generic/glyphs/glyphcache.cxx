@@ -186,6 +186,13 @@ void GlyphCache::AnnounceFonts( ImplDevFontList* pList ) const
         mpFtManager->AnnounceFonts( pList );
 }
 
+void GlyphCache::ClearFontCache()
+{
+    InvalidateAllGlyphs();
+    if (mpFtManager)
+        mpFtManager->ClearFontList();
+}
+
 // -----------------------------------------------------------------------
 
 ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )

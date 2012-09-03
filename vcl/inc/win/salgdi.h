@@ -305,6 +305,8 @@ public:
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
+    // graphics must drop any cached font info
+    virtual void ClearDevFontCache();
     // graphics should call ImplAddDevFontSubstitute on supplied
     // OutputDevice for all its device specific preferred font substitutions
     virtual void            GetDevFontSubstList( OutputDevice* );

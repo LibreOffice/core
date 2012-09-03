@@ -128,6 +128,8 @@ public:
 
     FcFontSet* getFontSet();
 
+    void clear();
+
 public:
     FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
                                          const char *elementtype, const char *elementlangtype);
@@ -263,8 +265,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
 
 FontCfgWrapper::~FontCfgWrapper()
 {
-    if( m_pOutlineSet )
-        FcFontSetDestroy( m_pOutlineSet );
+    clear();
     //To-Do: get gtk vclplug smoketest to pass
     //FcFini();
 }
@@ -402,12 +403,24 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
     return eElementRes;
 }
 
+void FontCfgWrapper::clear()
+{
+    m_aFontNameToLocalized.clear();
+    m_aLocalizedToCanonical.clear();
+    if( m_pOutlineSet )
+    {
+        FcFontSetDestroy( m_pOutlineSet );
+        m_pOutlineSet = NULL;
+    }
+}
+
 /*
  * PrintFontManager::initFontconfig
  */
 void PrintFontManager::initFontconfig()
 {
-    FontCfgWrapper::get();
+    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
+    rWrapper.clear();
 }
 
 namespace

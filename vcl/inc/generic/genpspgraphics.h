@@ -103,6 +103,8 @@ public:
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     virtual void            GetDevFontList( ImplDevFontList* );
+    // graphics must drop any cached font info
+    virtual void ClearDevFontCache();
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName );
 

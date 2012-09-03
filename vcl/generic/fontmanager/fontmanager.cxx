@@ -1673,7 +1673,9 @@ void PrintFontManager::initialize()
 #endif
     }
 
-    // initialize may be called twice in the future
+    // initialize can be called more than once, e.g.
+    // gtk-fontconfig-timestamp changes to reflect new font installed and
+    // PrintFontManager::initialize called again
     {
         for( ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
             delete (*it).second;

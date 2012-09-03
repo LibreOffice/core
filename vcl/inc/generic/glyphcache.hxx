@@ -87,6 +87,7 @@ public:
 
     ServerFont*                 CacheFont( const FontSelectPattern& );
     void                        UncacheFont( ServerFont& );
+    void                        ClearFontCache();
     void                        InvalidateAllGlyphs();
 
 protected:

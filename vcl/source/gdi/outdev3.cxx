@@ -299,8 +299,12 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
         if ( pFrame )
         {
             if ( pFrame->ImplGetGraphics() )
+            {
                 // MT: Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler.
-                ((OutputDevice*)pFrame)->mpGraphics->GetDevFontList( pFrame->mpWindowImpl->mpFrameData->mpFontList );
+                OutputDevice *pDevice = (OutputDevice*)pFrame;
+                pDevice->mpGraphics->ClearDevFontCache();
+                pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mpFontList);
+            }
         }
     }
 }
