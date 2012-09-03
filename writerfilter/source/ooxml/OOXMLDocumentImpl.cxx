@@ -56,6 +56,8 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
 {
     OOXMLStream::Pointer_t pStream
         (OOXMLDocumentFactory::createStream(mpStream, nType));
+    OOXMLStream::Pointer_t savedStream = mpStream;
+    mpStream = pStream;
 
     uno::Reference< xml::sax::XFastParser > xParser
         (mpStream->getFastParser());
@@ -89,6 +91,8 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
             xInputStream->closeInput();
         }
     }
+
+    mpStream = savedStream;
 }
 
 void OOXMLDocumentImpl::resolveFastSubStreamWithId(Stream & rStream,
