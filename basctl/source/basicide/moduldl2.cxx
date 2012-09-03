@@ -1358,7 +1358,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         // write into pipe:
         Reference<packages::manifest::XManifestWriter> xManifestWriter( xMSF->createInstance
             ( DEFINE_CONST_UNICODE("com.sun.star.packages.manifest.ManifestWriter") ), UNO_QUERY );
-        Reference<io::XOutputStream> xPipe( io::Pipe::create(comphelper::ComponentContext(xMSF).getUNOContext()), UNO_QUERY );
+        Reference<io::XOutputStream> xPipe( io::Pipe::create(comphelper::ComponentContext(xMSF).getUNOContext()), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, Sequence< Sequence<beans::PropertyValue> >(
                 &manifest[ 0 ], manifest.size() ) );

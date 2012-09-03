@@ -43,10 +43,8 @@
 
 CSerializationAppXML::CSerializationAppXML()
     : m_aFactory(comphelper::getProcessServiceFactory())
-    , m_aPipe(CSS::io::Pipe::create(comphelper::getProcessComponentContext()), CSS::uno::UNO_QUERY_THROW)
-{
-    OSL_ENSURE(m_aPipe.is(), "cannot create Pipe");
-}
+    , m_aPipe(CSS::io::Pipe::create(comphelper::getProcessComponentContext()))
+{}
 
 CSS::uno::Reference< CSS::io::XInputStream >
 CSerializationAppXML::getInputStream()

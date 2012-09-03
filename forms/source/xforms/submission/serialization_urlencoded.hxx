@@ -21,8 +21,7 @@
 #define __SERIALIZATION_URLENCODED_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XPipe.hpp>
 
 #include <rtl/strbuf.hxx>
 
@@ -32,7 +31,7 @@ class CSerializationURLEncoded : public CSerialization
 {
 private:
     CSS::uno::Reference< CSS::lang::XMultiServiceFactory > m_aFactory;
-    CSS::uno::Reference< CSS::io::XOutputStream > m_aPipe;
+    CSS::uno::Reference< CSS::io::XPipe > m_aPipe;
 
     sal_Bool is_unreserved(sal_Char);
     void encode_and_append(const rtl::OUString& aString, rtl::OStringBuffer& aBuffer);

@@ -50,7 +50,7 @@ using namespace CSS::xml::dom;
 
 CSerializationURLEncoded::CSerializationURLEncoded()
     : m_aFactory(comphelper::getProcessServiceFactory())
-    , m_aPipe(Pipe::create(comphelper::getProcessComponentContext()), UNO_QUERY_THROW)
+    , m_aPipe(Pipe::create(comphelper::getProcessComponentContext()))
 {
 }
 

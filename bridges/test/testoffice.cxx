@@ -38,8 +38,7 @@
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 
 #include <com/sun/star/uno/XNamingService.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/Pipe.hpp>
 
 #include <com/sun/star/text/XTextDocument.hpp>
 
@@ -84,23 +83,20 @@ void mygetchar()
 
 void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
 {
-    Reference < XOutputStream > rOut( Pipe::create(comphelper::ComponentContext(rSmgr).getUNOContext()), UNO_QUERY_THROW );
-
-    OSL_ASSERT( rOut.is() );
+    Reference < XPipe > rPipe( Pipe::create(comphelper::ComponentContext(rSmgr).getUNOContext()), UNO_QUERY_THROW );
 
     {
         Sequence < sal_Int8 > seq( 10 );
         seq.getArray()[0] = 42;
-        rOut->writeBytes( seq );
+        rPipe->writeBytes( seq );
     }
 
 
     {
         Sequence < sal_Int8 > seq;
-        Reference < XInputStream > rIn( rOut , UNO_QUERY );
-        if( ! ( rIn->available() == 10) )
+        if( ! ( rPipe->available() == 10) )
             printf( "wrong bytes available\n" );
-        if( ! ( rIn->readBytes( seq , 10 ) == 10 ) )
+        if( ! ( rPipe->readBytes( seq , 10 ) == 10 ) )
             printf( "wrong bytes read\n" );
         if( ! ( 42 == seq.getArray()[0] ) )
             printf( "wrong element in sequence\n" );

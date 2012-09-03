@@ -326,9 +326,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/io,\
 	XObjectInputStream \
 	XObjectOutputStream \
 	XOutputStream \
-    XPipe \
 	XPersist \
 	XPersistObject \
+    XPipe \
 	XSeekable \
 	XSeekableInputStream \
 	XSequenceOutputStream \
