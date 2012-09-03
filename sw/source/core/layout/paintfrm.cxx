@@ -3129,7 +3129,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
                                             pPrintData,
-                                            aPaintRect,
+                                            pPage->Frm(),
                                             &aPageBackgrdColor,
                                             (pPage->IsRightToLeft() ? true : false),
                                             &aSwRedirector );
@@ -3176,7 +3176,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                     pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(),
                                             pPrintData,
-                                            aPaintRect,
+                                            pPage->Frm(),
                                             &aPageBackgrdColor,
                                             (pPage->IsRightToLeft() ? true : false),
                                             &aSwRedirector );

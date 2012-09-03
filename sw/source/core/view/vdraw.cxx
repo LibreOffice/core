@@ -166,7 +166,7 @@ void SwViewImp::UnlockPaint()
 // OD 25.06.2003 #108784# - correct type of 1st parameter
 void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
                             SwPrintData const*const pPrintData,
-                            const SwRect& ,
+                            const SwRect& aPaintRect,
                             const Color* _pPageBackgrdColor,
                             const bool _bIsPageRightToLeft,
                             sdr::contact::ViewObjectContactRedirector* pRedirector ) const
@@ -219,7 +219,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
             SdrView &rSdrView = const_cast< SdrView & >(GetPageView()->GetView());
             rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
         }
-        GetPageView()->DrawLayer( _nLayerID, pOutDev, pRedirector );
+        GetPageView()->DrawLayer( _nLayerID, pOutDev, pRedirector, aPaintRect.SVRect() );
         pOutDev->Pop();
 
         // OD 29.08.2002 #102450#

@@ -346,7 +346,7 @@ void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
     mpPreparedPageWindow = pKnownTarget;
 }
 
-void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector, const Rectangle& rRect) const
 {
     if(GetPage())
     {
@@ -374,7 +374,10 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::con
                     // Copy existing paint region to use the same as prepared in BeginDrawLayer
                     SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
                     const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
-                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                    if ( rRect.IsEmpty() )
+                        aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                    else
+                        aTemporaryPaintWindow.SetRedrawRegion(Region(rRect));
 
                     // patch the ExistingPageWindow
                     pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
