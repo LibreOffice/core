@@ -116,11 +116,6 @@ else ifeq ($(OS),IOS)
 
 else ifeq ($(GUIBASE),headless)
 
-$(eval $(call gb_Module_add_targets,desktop,\
-    Executable_oosplash \
-    Library_spl_unx \
-))
-
 else
 
 $(eval $(call gb_Module_add_targets,desktop,\
