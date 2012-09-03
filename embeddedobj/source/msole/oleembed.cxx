@@ -878,9 +878,9 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
                 if (!m_aTempDumpURL.isEmpty())
                 {
-                    uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
-                        system::SystemShellExecute::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
-                    xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), system::SystemShellExecuteFlags::URIS_ONLY);
+                    uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                        ::com::sun::star::system::SystemShellExecute::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+                    xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }
                 else
                     throw embed::UnreachableStateException();
