@@ -33,8 +33,6 @@ import com.sun.star.container.*;
 import com.sun.star.beans.*;
 import com.sun.star.lang.*;
 
-import storagetesting.*;
-
 public class StorageFunctionality  {
 
     public static void main( String args[] )

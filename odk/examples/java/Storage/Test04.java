@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package storagetesting;
-
 import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
@@ -30,9 +28,6 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.container.XNameAccess;
 
 import com.sun.star.embed.*;
-
-import storagetesting.TestHelper;
-import storagetesting.StorageTest;
 
 public class Test04 implements StorageTest {
 
