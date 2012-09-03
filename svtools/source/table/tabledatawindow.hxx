@@ -51,8 +51,6 @@ namespace svt { namespace table
         friend class TableFunctionSet;
     private:
         TableControl_Impl&  m_rTableControl;
-        Link                m_aMouseButtonDownHdl;
-         Link               m_aMouseButtonUpHdl;
         Link                m_aSelectHdl;
         sal_uLong           m_nTipWindowHandle;
 
@@ -60,10 +58,6 @@ namespace svt { namespace table
         TableDataWindow( TableControl_Impl& _rTableControl );
         ~TableDataWindow();
 
-        inline void         SetMouseButtonDownHdl( const Link& rLink )  { m_aMouseButtonDownHdl = rLink; }
-        inline const Link&  GetMouseButtonDownHdl() const               { return m_aMouseButtonDownHdl; }
-        inline void         SetMouseButtonUpHdl( const Link& rLink )    { m_aMouseButtonUpHdl = rLink; }
-        inline const Link&  GetMouseButtonUpHdl() const             { return m_aMouseButtonUpHdl; }
         inline void         SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
         inline const Link&  GetSelectHdl() const                { return m_aSelectHdl; }
 

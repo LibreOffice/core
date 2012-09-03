@@ -205,7 +205,6 @@ namespace svt { namespace table
         {
             m_aSelectHdl.Call( NULL );
         }
-        m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -214,7 +213,6 @@ namespace svt { namespace table
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
 
-        m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GrabFocus();
     }
 
