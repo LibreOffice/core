@@ -1785,10 +1785,13 @@ void SdrPage::SetInserted( bool bIns )
     }
 }
 
+void SdrPage::SetUnoPage(uno::Reference<drawing::XDrawPage> const& xNewPage)
+{
+    mxUnoPage = xNewPage;
+}
 
 uno::Reference< uno::XInterface > SdrPage::getUnoPage()
 {
-    // try weak reference first
     if( !mxUnoPage.is() )
     {
         // create one
