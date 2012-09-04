@@ -844,8 +844,8 @@ AC_ARG_ENABLE(opengl,
 
 AC_ARG_ENABLE(dbus,
     AS_HELP_STRING([--enable-dbus],
-        [Determines whether to enable presentation mode screensaver control
-         under GNOME via DBUS.]),
+        [Determines whether to enable features that depend on dbus.
+         e.g. Presentation mode screensaver control and auto font install under GNOME via DBUS.]),
 ,enable_dbus=no)
 
 AC_ARG_ENABLE(gconf,
