@@ -54,13 +54,14 @@ Window* ScrollableDialog::getContentWindow()
 
 void ScrollableDialog::lcl_Scroll( long nX, long nY )
 {
-    long nXScroll = mnScrollPos.Y() - nX;
-    long nYScroll = mnScrollPos.X() - nY;
-
+    long nXScroll = mnScrollPos.X() - nX;
+    long nYScroll = mnScrollPos.Y() - nY;
+    printf( "ScrollableDialog::lcl_Scroll %d, %d nXScroll %d, nYScroll %d\n", nX, nY, nXScroll, nYScroll );
     mnScrollPos = Point( nX, nY );
 
     Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
     Window::Scroll(nXScroll, nYScroll, aScrollableArea );
+
     // Manually scroll all children ( except the scrollbars )
     for ( int index = 0; index < GetChildCount(); ++index )
     {
@@ -78,9 +79,9 @@ IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB )
 {
     sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
     if( pSB == &maVScrollBar )
-        Scroll(0, nPos );
+        lcl_Scroll(mnScrollPos.X(), nPos );
     else if( pSB == &maHScrollBar )
-        lcl_Scroll(nPos, 0 );
+        lcl_Scroll(nPos, mnScrollPos.Y() );
 #if 0
     sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
     Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
@@ -100,7 +101,7 @@ IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB )
         printf("horizontal scroll %d\n", nPos );
         Size aTmpScroll( nPos, nPos );
         long nScroll =  mnScrollPos.X() - aTmpScroll.Width();
-        Scroll( nScroll, 0, aScrollableArea);
+       Scroll( nScroll, 0, aScrollableArea);
         mnScrollPos.X() = nPos;
         aScroll.X() = nScroll;
     }
@@ -132,13 +133,13 @@ void ScrollableDialog::SetScrollHeight( long nHeight )
 
 void  ScrollableDialog::Paint( const Rectangle& rRect )
 {
-    printf("ScrollableDialog::Paint( %d, %d, %d, %d width %d height %d\n", rRect.Top(), rRect.Left(), rRect.Right(), rRect.Bottom(),GetSizePixel().Width(),  GetSizePixel().Height() );
+//    printf("ScrollableDialog::Paint( %d, %d, %d, %d width %d height %d\n", rRect.Top(), rRect.Left(), rRect.Right(), rRect.Bottom(),GetSizePixel().Width(),  GetSizePixel().Height() );
     Dialog::Paint( rRect );
 }
 
 void ScrollableDialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
-    printf("ScrollableDialog::Draw( ( %d, %d ) h %d, w %d \n", rPos.X(), rPos.Y(), rSize.Height(), rSize.Width() );
+//    printf("ScrollableDialog::Draw( ( %d, %d ) h %d, w %d \n", rPos.X(), rPos.Y(), rSize.Height(), rSize.Width() );
     Dialog::Draw( pDev, rPos, rSize, nFlags );
 }
 
@@ -162,23 +163,24 @@ void ScrollableDialog::Resize()
                 nMaxX = nX;
             if ( nY > nMaxY )
                 nMaxY = nY;
+            printf("%s child[%d] pos (%d,%d)  height %d, width %d\n", rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr(), index, aPos.X(),  aPos.Y(), aSize.Height(), aSize.Width() );
         }
     }
 
-#if 0
+#if 1
     // assume for the moment that we have both hori & vert scroll bars
     Size aContentsSize( aOutSz );
     if ( mbHasVertBar )
     {
         aContentsSize.Width() -= mnScrWidth;
-        nMaxX += nScrWidth;
+        nMaxX += mnScrWidth;
     }
     if ( mbHasHoriBar )
     {
         aContentsSize.Height() -= mnScrWidth;
         nMaxY += mnScrWidth;
     }
-    maContents.SetSizePixel( aContentsSize );
+    maScrollArea = aContentsSize;
 #endif
 
     Point aVPos( aOutSz.Width() - mnScrWidth, 0 );
@@ -186,12 +188,16 @@ void ScrollableDialog::Resize()
 
     maVScrollBar.SetPosSizePixel( aVPos, Size( mnScrWidth,  GetSizePixel().Height() - mnScrWidth ) );
     maHScrollBar.SetPosSizePixel( aHPos, Size(  GetSizePixel().Width() - mnScrWidth, mnScrWidth ) );
-    maHScrollBar.SetRangeMax( maScrollArea.Width() );
+
+    printf("nMaxX is %d nMaxY is %d, scrollarea height %d, width %d\n", nMaxX, nMaxY, maScrollArea.Height(),  maScrollArea.Width() );
+    printf("Width %d Height %d outsize width %d height %d\n", GetSizePixel().Width(),  GetSizePixel().Height(), aOutSz.Width(), aOutSz.Height() );
+    maHScrollBar.SetRangeMax( nMaxX  );
     maHScrollBar.SetVisibleSize( GetSizePixel().Width() );
-    maHScrollBar.SetPageSize( maScrollArea.Width() );
-    maVScrollBar.SetRangeMax( maScrollArea.Height() );
+//    maHScrollBar.SetPageSize( maScrollArea.Height() );
+
+    maVScrollBar.SetRangeMax( nMaxY );
     maVScrollBar.SetVisibleSize( GetSizePixel().Height() );
-    maVScrollBar.SetPageSize( maScrollArea.Height() );
+//    maVScrollBar.SetPageSize( maScrollArea.Width() );
 }
 
 } // toolkit
