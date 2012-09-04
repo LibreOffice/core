@@ -36,10 +36,10 @@
   <implementation name="com.sun.star.comp.svx.ExtrusionSurfaceController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.FontWorkAlignmentController">
+  <implementation name="com.sun.star.comp.svx.FontworkAlignmentController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.FontWorkCharacterSpacingController">
+  <implementation name="com.sun.star.comp.svx.FontworkCharacterSpacingController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
 </component>
