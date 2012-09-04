@@ -45,4 +45,7 @@ $(eval $(call gb_Extension_add_helpfiles,nlpsolver,$(SRCDIR)/nlpsolver/help/en, 
 	com.sun.star.comp.Calc.NLPSolver/Usage.xhp \
 ))
 
+$(eval $(call gb_Extension_add_helptreefile,nlpsolver,$(SRCDIR)/nlpsolver/help/en,/help.tree,com.sun.star.comp.Calc.NLPSolver/help.tree,com.sun.star.comp.Calc.NLPSolver))
+
+
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<tree_view>
+<help_section application="simpress" id="04" title="Presenter Console Keyboard Shortcuts">
+    <node id="0411" title="Presenter Console Keyboard Shortcuts">
+        <topic id="help/com.sun.PresenterScreen/presenter.xhp">Presenter Console Keyboard Shortcuts</topic>
+    </node>
+</help_section>
+</tree_view>

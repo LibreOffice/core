@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<meta>
+    <topic id="tree_stringsxml" indexer="include" status="PUBLISH">
+        <title xml-lang="en-US" id="tit" localize="false">Note to translators:</title>
+        <filename>/source/presenter/help/en-US/com.sun.PresenterScreen/tree_strings.xhp</filename>
+    </topic>
+</meta>
+
+<body>
+    <comment>This file contains extra strings for the contents (*.tree) files. No indexing!</comment>
+    <switch select="sys"> <case select="OS2">
+    <paragraph role="heading" level="1" id="hd_id3150150" xml-lang="en-US" localize="false">File: help.tree</paragraph>
+    <paragraph role="paragraph" id="par_id3160160" xml-lang="en-US">&lt;help_section application=&quot;simpress&quot; id=&quot;04&quot; title=&quot;Presenter Console Keyboard Shortcuts&quot;&gt;</paragraph>
+    <paragraph role="paragraph" id="par_id3170170" xml-lang="en-US">&lt;node id=&quot;0411&quot; title=&quot;Presenter Console Keyboard Shortcuts&quot;&gt;</paragraph>
+    </case> </switch>
+</body>
+
+</helpdocument>

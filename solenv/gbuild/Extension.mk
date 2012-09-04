@@ -116,6 +116,20 @@ $(call gb_ExtensionTarget_add_helpfiles,$(1),$(2),$(3))
 
 endef
 
+# add a help.tree file, to be localized and compiled
+# $(1): extension identifier
+# $(2): absolute path prefix of en-US source file without $(3) (resp. $(4))
+#     suffix
+# $(3): relative path of (target) help.tree file (e.g.,
+#     com.sun.wiki-publisher/help.tree)
+# $(4): optional relative path of source help.tree file, when it differs from $(3)
+#     (i.e., if $(4) is empty the en-US source file is $(2)/$(3), otherwise it
+#     is $(2)/$(4))
+define gb_Extension_add_helptreefile
+$(call gb_ExtensionTarget_add_helptreefile,$(1),$(2),$(3),$(4),$(5))
+
+endef
+
 define gb_Extension_use_package
 $(call gb_ExtensionTarget_use_package,$(1),$(2))
 

@@ -38,6 +38,10 @@ gb_ExtensionTarget_XRMEXCOMMAND := \
 gb_ExtensionTarget_PROPMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/propmerge
 gb_ExtensionTarget_PROPMERGECOMMAND := \
 	$(PERL) $(gb_ExtensionTarget_PROPMERGETARGET)
+
+gb_ExtensionTarget_UPDATETREETARGET := $(SRCDIR)/l10ntools/scripts/update_tree.pl
+gb_ExtensionTarget_UPDATETREECOMMAND := $(PERL) $(gb_ExtensionTarget_UPDATETREETARGET)
+
 gb_ExtensionTarget_HELPEXTARGET := $(call gb_Executable_get_target_for_build,helpex)
 gb_ExtensionTarget_HELPEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_HELPEXTARGET)
@@ -239,6 +243,21 @@ $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
     $(call gb_ExtensionTarget__add_compiled_help_dependency_onelang,$(1),$(lang)))
 endef
 
+# add a help.tree file, to be localized and compiled
+# $(1): extension identifier
+# $(2): absolute path prefix of en-US source file without $(3) (resp. $(4))
+#     suffix
+# $(3): relative path of (target) help.tree file (e.g.,
+#     com.sun.wiki-publisher/help.tree)
+# $(4): optional relative path of source help.tree file, when it differs from $(3)
+#     (i.e., if $(4) is empty the en-US source file is $(2)/$(3), otherwise it
+#     is $(2)/$(4))
+define gb_ExtensionTarget_add_helptreefile
+$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
+    $(call gb_ExtensionTarget__localize_helptreefile_onelang,$(1),$(2),$(3),$(4),$(lang),$(5)) \
+    $(call gb_ExtensionTarget__add_compiled_help_dependency_onelang,$(1),$(lang)))
+endef
+
 # add a list of .xhp help files, to be localized and compiled
 # $(1): extension identifier
 # $(2): absolute path prefix of en-US source files without $(3) suffixes
@@ -282,6 +301,35 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
 
 endef
 
+# localize one help.tree for one language; the result is stored as
+# help/$(4)/$(3) in the extension's workdir; as a special case, if $(4) is
+# "en-US", the source file is just copied, not passed through update_tree.pl
+# $(1): extension identifier
+# $(2): absolute path prefix of en-US source file without $(3) (resp. $(4))
+#     suffix
+# $(3): relative path of (target) help.tree file (see
+#     gb_ExtensionTarget_add_helptreefile)
+# $(4): optional relative path of source help.tree file (see
+#     gb_ExtensionTarget_add_helptreefile)
+# $(5): language
+define gb_ExtensionTarget__localize_helptreefile_onelang
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
+        $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
+        SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : $$(SDF)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
+        $(if $(filter-out en-US,$(WITH_LANG)),$(gb_ExtensionTarget_UPDATETREETARGET)) | \
+        $(2)/$(4)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
+        $(2)/$(or $(4),$(3))
+	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),TRE,3)
+	$$(call gb_Helper_abbreviate_dirs, \
+        mkdir -p $$(dir $$@) && \
+        $(gb_ExtensionTarget_UPDATETREECOMMAND) $$< $(5) $$(SDF) $$@ $(6) )
+
+endef
+
 # compile help for one language; the result is stored as help/$(3)/ in the
 # extension's rootdir and marked for zipping into the .oxt
 # $(1): extension identifier
@@ -298,8 +346,7 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(2).done : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/.dir
 	$$(call gb_Output_announce,$(1) $(2),$(true),XHC,3)
 	$$(call gb_Helper_abbreviate_dirs, \
-        rm -rf $$(basename $$@) && \
-        mkdir $$(basename $$@) && \
+        mkdir -p $$(basename $$@) && \
         $(gb_ExtensionTarget_HELPLINKERCOMMAND) -mod help \
             -extlangsrc $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(2) \
             -sty $(OUTDIR_FOR_BUILD)/bin/embed.xsl \
