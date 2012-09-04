@@ -658,17 +658,17 @@ public:
     const Link& GetIOProgressHdl() const                     { return aIOProgressLink; }
 
     // Zugriffsmethoden fuer Paletten, Listen und Tabellen
-    void            SetColorTable(XColorTable* pTable)       { pColorTable=pTable; }
+    void            SetColorTable(XColorTable* pTable)       ;
     XColorTable*    GetColorTable() const                    { return pColorTable; }
-    void            SetDashList(XDashList* pList)            { pDashList=pList; }
+    void            SetDashList(XDashList* pList)            ;
     XDashList*      GetDashList() const                      { return pDashList; }
-    void            SetLineEndList(XLineEndList* pList)      { pLineEndList=pList; }
+    void            SetLineEndList(XLineEndList* pList)      ;
     XLineEndList*   GetLineEndList() const                   { return pLineEndList; }
-    void            SetHatchList(XHatchList* pList)          { pHatchList=pList; }
+    void            SetHatchList(XHatchList* pList)          ;
     XHatchList*     GetHatchList() const                     { return pHatchList; }
-    void            SetGradientList(XGradientList* pList)    { pGradientList=pList; }
+    void            SetGradientList(XGradientList* pList)    ;
     XGradientList*  GetGradientList() const                  { return pGradientList; }
-    void            SetBitmapList(XBitmapList* pList)        { pBitmapList=pList; }
+    void            SetBitmapList(XBitmapList* pList)        ;
     XBitmapList*    GetBitmapList() const                    { return pBitmapList; }
 
     // Der StyleSheetPool wird der DrawingEngine nur bekanntgemacht.

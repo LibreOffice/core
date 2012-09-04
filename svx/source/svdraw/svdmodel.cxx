@@ -2182,6 +2182,16 @@ void SdrModel::SetDrawingLayerPoolDefaults()
     pItemPool->SetPoolDefaultItem( XLineColorItem(aNullStr,aNullLineCol) );
 }
 
+//
+// i120668, move from the header files, add delete action
+//
+void            SdrModel::SetColorTable(XColorTable* pTable)       { delete pColorTable; pColorTable=pTable; }
+void            SdrModel::SetDashList(XDashList* pList)            { delete pDashList; pDashList=pList; }
+void            SdrModel::SetLineEndList(XLineEndList* pList)      { delete pLineEndList; pLineEndList=pList; }
+void            SdrModel::SetHatchList(XHatchList* pList)          { delete pHatchList; pHatchList=pList; }
+void            SdrModel::SetGradientList(XGradientList* pList)    { delete pGradientList; pGradientList=pList; }
+void            SdrModel::SetBitmapList(XBitmapList* pList)        { delete pBitmapList; pBitmapList=pList; }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrHint,SfxHint);
