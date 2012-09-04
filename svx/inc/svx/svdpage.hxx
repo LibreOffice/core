@@ -42,12 +42,14 @@
 #include <svx/sdrmasterpagedescriptor.hxx>
 #include "svx/svxdllapi.h"
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/svdobj.hxx>
 #include <boost/scoped_ptr.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
+namespace reportdesign { class OSection; }
 namespace sdr { namespace contact { class ViewContact; }}
 class SdrPage;
 class SdrModel;
@@ -427,8 +429,8 @@ public:
     friend class SvxUnoDrawPagesAccess;
 
 // this class uses its own UNO wrapper
-// and thus has to set mxUnoPage
-friend class ChXChartDocument;
+// and thus has to set mxUnoPage (it also relies on mxUnoPage not being WeakRef)
+friend class reportdesign::OSection;
 
     sal_Int32 nWdt;     // Seitengroesse
     sal_Int32 nHgt;     // Seitengroesse
@@ -437,13 +439,11 @@ friend class ChXChartDocument;
     sal_Int32 nBordRgt; // Seitenrand rechts
     sal_Int32 nBordLwr; // Seitenrand unten
 
-    // this is a weak reference to a possible living api wrapper for this page
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
-
 protected:
     SdrLayerAdmin*      pLayerAdmin;
 private:
     SdrPageProperties*  mpSdrPageProperties;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
 
 public:
     SdrPageProperties& getSdrPageProperties() { return *mpSdrPageProperties; }
@@ -466,6 +466,8 @@ protected:
     // #i93597#
     unsigned            mbPageBorderOnlyLeftRight : 1;
 
+    void SetUnoPage(::com::sun::star::uno::Reference<
+                        ::com::sun::star::drawing::XDrawPage> const&);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 
 public:
