@@ -2010,7 +2010,7 @@ awt::Rectangle ExplicitValueProvider::substractAxisTitleSizes(
 
 double lcl_getPageLayoutDistancePercentage()
 {
-    return 0.02;
+    return 0.006;
 }
 
 bool getAvailablePosAndSizeForDiagram(
