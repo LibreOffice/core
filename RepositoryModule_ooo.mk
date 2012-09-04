@@ -83,6 +83,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     jvmfwk \
     l10ntools \
 	libvisio \
+	libwps \
     lingucomponent \
     linguistic \
     lotuswordpro \

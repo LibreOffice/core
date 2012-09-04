@@ -6770,11 +6770,12 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPS=NO
-    BUILD_TYPE="$BUILD_TYPE LIBWPS"
+    WPS_TARBALL=d197bd6211669a2fa4ca648faf04bcb1-libwps-0.2.7.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBWPS)
 AC_SUBST(WPS_CFLAGS)
 AC_SUBST(WPS_LIBS)
+AC_SUBST(WPS_TARBALL)
 
 dnl ===================================================================
 dnl Check for system libwpg

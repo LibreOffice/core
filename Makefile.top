@@ -87,6 +87,7 @@ jvmaccess\
 jvmfwk\
 l10ntools\
 libvisio\
+libwps\
 lingucomponent\
 linguistic\
 lotuswordpro\
@@ -216,7 +217,6 @@ libpng\
 librsvg\
 libwpd\
 libwpg\
-libwps\
 libxml2\
 libxmlsec\
 libxslt\
