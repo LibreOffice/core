@@ -48,13 +48,13 @@ extern OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName();
 extern Reference< XInterface > SAL_CALL ExtrusionSurfaceControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
 extern Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames() throw( RuntimeException );
 
-extern OUString SAL_CALL FontWorkAlignmentControl_getImplementationName();
-extern Reference< XInterface > SAL_CALL FontWorkAlignmentControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
-extern Sequence< OUString > SAL_CALL FontWorkAlignmentControl_getSupportedServiceNames() throw( RuntimeException );
+extern OUString SAL_CALL FontworkAlignmentControl_getImplementationName();
+extern Reference< XInterface > SAL_CALL FontworkAlignmentControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
+extern Sequence< OUString > SAL_CALL FontworkAlignmentControl_getSupportedServiceNames() throw( RuntimeException );
 
-extern OUString SAL_CALL FontWorkCharacterSpacingControl_getImplementationName();
-extern Reference< XInterface > SAL_CALL FontWorkCharacterSpacingControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
-extern Sequence< OUString > SAL_CALL FontWorkCharacterSpacingControl_getSupportedServiceNames() throw( RuntimeException );
+extern OUString SAL_CALL FontworkCharacterSpacingControl_getImplementationName();
+extern Reference< XInterface > SAL_CALL FontworkCharacterSpacingControl_createInstance(const Reference< XMultiServiceFactory > &)  throw( RuntimeException );
+extern Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl_getSupportedServiceNames() throw( RuntimeException );
 }
 
 extern "C"
@@ -100,21 +100,21 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svxcore_component_getFactory (
                 ::svx::ExtrusionSurfaceControl_createInstance,
                 ::svx::ExtrusionSurfaceControl_getSupportedServiceNames() );
         }
-        else if( ::svx::FontWorkAlignmentControl_getImplementationName().equalsAscii( pImplName ) )
+        else if( ::svx::FontworkAlignmentControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                ::svx::FontWorkAlignmentControl_getImplementationName(),
-                ::svx::FontWorkAlignmentControl_createInstance,
-                ::svx::FontWorkAlignmentControl_getSupportedServiceNames() );
+                ::svx::FontworkAlignmentControl_getImplementationName(),
+                ::svx::FontworkAlignmentControl_createInstance,
+                ::svx::FontworkAlignmentControl_getSupportedServiceNames() );
         }
-        else if( ::svx::FontWorkCharacterSpacingControl_getImplementationName().equalsAscii( pImplName ) )
+        else if( ::svx::FontworkCharacterSpacingControl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                ::svx::FontWorkCharacterSpacingControl_getImplementationName(),
-                ::svx::FontWorkCharacterSpacingControl_createInstance,
-                ::svx::FontWorkCharacterSpacingControl_getSupportedServiceNames() );
+                ::svx::FontworkCharacterSpacingControl_getImplementationName(),
+                ::svx::FontworkCharacterSpacingControl_createInstance,
+                ::svx::FontworkCharacterSpacingControl_getSupportedServiceNames() );
         }       if( xFactory.is())
         {
             xFactory->acquire();
