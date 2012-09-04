@@ -3072,6 +3072,7 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
 {
     if (!m_pFontsAttrList)
         m_pFontsAttrList = m_pSerializer->createAttrList();
+    GetExport().GetId( rFont ); // ensure font info is written to fontTable.xml
     OUString sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     m_pFontsAttrList->add(FSNS(XML_w, XML_ascii), sFontNameUtf8);
