@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include "vcl/svapp.hxx"
+
 #include <pagepreviewlayout.hxx>
 #include <prevwpage.hxx>
 
@@ -586,10 +588,19 @@ void SwPagePreviewLayout::_CalcPreviewPages()
 
     // calculate initial paint offset
     Point aInitialPaintOffset;
-    if ( maPaintStartPageOffset != Point( -1, -1 ) )
-        aInitialPaintOffset = Point(0,0) - maPaintStartPageOffset;
-    else
-        aInitialPaintOffset = Point( mnXFree, mnYFree );
+    /// check whether RTL interface or not
+    if(!Application::GetSettings().GetLayoutRTL()){
+        if ( maPaintStartPageOffset != Point( -1, -1 ) )
+            aInitialPaintOffset = Point(0,0) - maPaintStartPageOffset;
+        else
+            aInitialPaintOffset = Point( mnXFree, mnYFree );
+    }
+    else {
+        if ( maPaintStartPageOffset != Point( -1, -1 ) )
+            aInitialPaintOffset = Point(0 + ((SwPagePreviewLayout::mnCols-1)*mnColWidth),0) - maPaintStartPageOffset;
+        else
+            aInitialPaintOffset = Point( mnXFree + ((SwPagePreviewLayout::mnCols-1)*mnColWidth), mnYFree );
+    }
     aInitialPaintOffset += maAdditionalPaintOffset;
 
     // prepare loop data
@@ -635,7 +646,10 @@ void SwPagePreviewLayout::_CalcPreviewPages()
             {
                 // first page in 2nd column
                 // --> continue with increased paint offset and next column
-                aCurrPaintOffset.X() += mnColWidth;
+                /// check whether RTL interface or not
+                if(!Application::GetSettings().GetLayoutRTL())
+                    aCurrPaintOffset.X() += mnColWidth;
+                else aCurrPaintOffset.X() -= mnColWidth;
                 ++nCurrCol;
                 continue;
             }
@@ -658,7 +672,10 @@ void SwPagePreviewLayout::_CalcPreviewPages()
         // prepare data for next loop
         pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
 
-        aCurrPaintOffset.X() += mnColWidth;
+        /// check whether RTL interface or not
+        if(!Application::GetSettings().GetLayoutRTL())
+            aCurrPaintOffset.X() += mnColWidth;
+        else aCurrPaintOffset.X() -= mnColWidth;
         ++nCurrCol;
         if ( nCurrCol > mnCols )
         {
