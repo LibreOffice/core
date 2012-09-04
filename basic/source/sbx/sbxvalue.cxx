@@ -724,15 +724,15 @@ sal_Bool SbxValue::IsFixed() const
 // #41692, implement it for RTL and Basic-Core seperably
 sal_Bool SbxValue::IsNumeric() const
 {
-    return ImpIsNumeric( /*bOnlyIntntl*/sal_False );
+    return ImpIsNumeric( /*bOnlyIntntl*/false );
 }
 
 sal_Bool SbxValue::IsNumericRTL() const
 {
-    return ImpIsNumeric( /*bOnlyIntntl*/sal_True );
+    return ImpIsNumeric( /*bOnlyIntntl*/true );
 }
 
-sal_Bool SbxValue::ImpIsNumeric( sal_Bool bOnlyIntntl ) const
+sal_Bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
 {
 
     if( !CanRead() )
@@ -751,7 +751,7 @@ sal_Bool SbxValue::ImpIsNumeric( sal_Bool bOnlyIntntl ) const
             double n;
             SbxDataType t2;
             sal_uInt16 nLen = 0;
-            if( ImpScan( s, n, t2, &nLen, /*bAllowIntntl*/sal_False, bOnlyIntntl ) == SbxERR_OK )
+            if( ImpScan( s, n, t2, &nLen, /*bAllowIntntl*/false, bOnlyIntntl ) == SbxERR_OK )
                 return sal_Bool( nLen == s.getLength() );
         }
         return sal_False;

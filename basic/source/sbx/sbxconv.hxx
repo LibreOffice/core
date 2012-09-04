@@ -25,13 +25,13 @@
 class SbxArray;
 
 // SBXSCAN.CXX
-extern void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, sal_Bool bCoreString=sal_False );
+extern void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, bool bCoreString=false );
 extern SbxError ImpScan
     ( const ::rtl::OUString& rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen,
-      sal_Bool bAllowIntntl=sal_False, sal_Bool bOnlyIntntl=sal_False );
+      bool bAllowIntntl=false, bool bOnlyIntntl=false );
 
 // with advanced evaluation (International, "TRUE"/"FALSE")
-extern sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType );
+extern bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType );
 
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep );
 
@@ -64,7 +64,7 @@ void    ImpPutSingle( SbxValues*, float );
 // SBXDBL.CXX
 
 double  ImpGetDouble( const SbxValues* );
-void    ImpPutDouble( SbxValues*, double, sal_Bool bCoreString=sal_False );
+void    ImpPutDouble( SbxValues*, double, bool bCoreString=false );
 
 // SBXCURR.CXX
 

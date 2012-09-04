@@ -138,9 +138,9 @@
         aTmp.eType = SbxSTRING;
         aTmp.pOUString = &aRes;
         if( p->eType == SbxDOUBLE )
-            ImpPutDouble( &aTmp, p->nDouble, sal_True );    // true = bCoreString
+            ImpPutDouble( &aTmp, p->nDouble, true );    // true = bCoreString
         else
-            ImpPutDouble( &aTmp, *p->pDouble, sal_True );   // true = bCoreString
+            ImpPutDouble( &aTmp, *p->pDouble, true );   // true = bCoreString
         return aRes;
     }
     else

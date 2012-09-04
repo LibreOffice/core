@@ -59,7 +59,7 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
 // conversion error if data type is fixed and it doesn't fit
 
 SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType,
-                  sal_uInt16* pLen, sal_Bool bAllowIntntl, sal_Bool bOnlyIntntl )
+                  sal_uInt16* pLen, bool bAllowIntntl, bool bOnlyIntntl )
 {
     ::rtl::OString aBStr( ::rtl::OUStringToOString( rWSrc, RTL_TEXTENCODING_ASCII_US ) );
 
@@ -228,12 +228,12 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
 }
 
 // port for CDbl in the Basic
-SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSingle )
+SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, bool bSingle )
 {
     SbxDataType t;
     sal_uInt16 nLen = 0;
     SbxError nRetError = ImpScan( rSrc, nVal, t, &nLen,
-        /*bAllowIntntl*/sal_False, /*bOnlyIntntl*/sal_True );
+        /*bAllowIntntl*/false, /*bOnlyIntntl*/true );
     // read completely?
     if( nRetError == SbxERR_OK && nLen != rSrc.Len() )
         nRetError = SbxERR_CONVERSION;
@@ -373,7 +373,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
 #pragma warning(disable: 4748) // "... because optimizations are disabled ..."
 #endif
 
-void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, sal_Bool bCoreString )
+void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, bool bCoreString )
 {
     char *q;
     char cBuf[ 40 ], *p = cBuf;
@@ -404,9 +404,9 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, sal_Bool bCoreS
 #pragma optimize( "", on )
 #endif
 
-sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
+bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
 {
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
     ::rtl::OUString aNewString;
 
     // only special cases are handled, nothing on default
@@ -430,7 +430,7 @@ sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
                 {
                     sal_Unicode* pStr = (sal_Unicode*)aNewString.getStr();
                     pStr[nPos] = (sal_Unicode)'.';
-                    bChanged = sal_True;
+                    bChanged = true;
                 }
             }
             break;
@@ -442,13 +442,13 @@ sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
             if( rSrc.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
             {
                 aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxTRUE );
-                bChanged = sal_True;
+                bChanged = true;
             }
             else
             if( rSrc.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) )
             {
                 aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxFALSE );
-                bChanged = sal_True;
+                bChanged = true;
             }
             break;
         }
@@ -478,9 +478,9 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
     short   nWidth = 0;             // number range completely
     short   nLen;                   // length of converted number
     bool    bPoint = false;         // true: with 1000 seperators
-    sal_Bool    bTrail = sal_False;         // sal_True, if following minus
-    sal_Bool    bSign  = sal_False;         // sal_True: always with leading sign
-    sal_Bool    bNeg   = sal_False;         // sal_True: number is negative
+    bool    bTrail = false;         // true, if following minus
+    bool    bSign  = false;         // true: always with leading sign
+    bool    bNeg   = false;         // true: number is negative
     char    cBuf [1024];            // number buffer
     char  * p;
     const char* pFmt = rFmt;
@@ -496,7 +496,7 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
         case 0:
             break;
         case '+':
-            bSign = sal_True; nWidth++; break;
+            bSign = true; nWidth++; break;
         case '*':
             nWidth++; cFill = '*';
             if( *pFmt == '$' ) nWidth++, pFmt++, cPre = '$';
@@ -529,11 +529,11 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
         pFmt++, nExpDig++, nWidth++;
     // following minus
     if( !bSign && *pFmt == '-' )
-        pFmt++, bTrail = sal_True;
+        pFmt++, bTrail = true;
 
     // convert number
     if( nPrec > 15 ) nPrec = 15;
-    if( nNum < 0.0 ) nNum = -nNum, bNeg = sal_True;
+    if( nNum < 0.0 ) nNum = -nNum, bNeg = true;
     p = cBuf;
     if( bSign ) *p++ = bNeg ? '-' : '+';
     myftoa( nNum, p, nPrec, nExpDig, bPoint, false );
@@ -922,7 +922,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 // #45355 converting if numeric
                 if( IsNumericRTL() )
                 {
-                    ScanNumIntnl( GetString(), d, /*bSingle*/sal_False );
+                    ScanNumIntnl( GetString(), d, /*bSingle*/false );
                     goto cvt2;
                 }
                 else

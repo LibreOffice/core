@@ -134,7 +134,7 @@ public:
     sal_Bool IspChar()   const { return sal_Bool( GetType() == SbxLPSTR    ); }
     sal_Bool IsNumeric() const;
     sal_Bool IsNumericRTL() const;  // #41692 Interface for Basic
-    sal_Bool ImpIsNumeric( sal_Bool bOnlyIntntl ) const;    // Implementation
+    sal_Bool ImpIsNumeric( bool bOnlyIntntl ) const;    // Implementation
 
     virtual SbxClassType GetClass() const;
     virtual SbxDataType GetType() const;
@@ -194,7 +194,7 @@ public:
     sal_Bool fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
     sal_Bool PutCurrency( const sal_Int64& );
             // Interface for CDbl in Basic
-    static SbxError ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSingle = sal_False );
+    static SbxError ScanNumIntnl( const String& rSrc, double& nVal, bool bSingle = false );
 
     sal_Bool PutObject( SbxBase* );
 
