@@ -1538,7 +1538,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             try
             {
                 // get the ODF version of the new medium
-                ::rtl::OUString aVersion;
+                OUString aVersion;
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( rMedium.GetStorage(), uno::UNO_QUERY_THROW );

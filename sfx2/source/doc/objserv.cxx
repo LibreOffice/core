@@ -1261,7 +1261,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
         {
             if ( !xLocSigner.is() )
             {
-                ::rtl::OUString aVersion;
+                OUString aVersion;
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );

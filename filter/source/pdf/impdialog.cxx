@@ -1711,7 +1711,7 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect )
 
     Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersion(
-            comphelper::getProcessComponentContext(), rtl::OUString("1.2") ) );
+            comphelper::getProcessComponentContext(), "1.2" ) );
 
     maSignCertificate = xSigner->chooseCertificate();
 

@@ -304,7 +304,7 @@ IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
     uno::Reference< security::XDocumentDigitalSignatures > xD(
-        security::DocumentDigitalSignatures::create(comphelper::getProcessComponentContext() );
+        security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() );
     xD->signDocumentContent( xStore, NULL );
 
 
@@ -318,7 +318,7 @@ IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
     uno::Reference< security::XDocumentDigitalSignatures > xD(
-        security::DocumentDigitalSignatures::create(comphelper::getProcessComponentContext()) );
+        security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
     uno::Sequence< security::DocumentSignatureInformation > aInfos = xD->verifyDocumentContentSignatures( xStore, NULL );
     int nInfos = aInfos.getLength();
     for ( int n = 0; n < nInfos; n++ )
