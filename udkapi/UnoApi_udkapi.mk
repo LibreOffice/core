@@ -143,6 +143,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
 	SequenceOutputStream \
 	TempFile \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/reflection,\
+	theCoreReflection \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/registry,\
 	ImplementationRegistration \
 	SimpleRegistry \

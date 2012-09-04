@@ -33,12 +33,14 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <osl/diagnose.h>
 #include <uno/environment.h>
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/factory.hxx>
 // OPTIONAL is a constant in com.sun.star.beans.PropertyAttributes but it must be
 // undef'd in some header files
 #define OPTIONAL OPTIONAL
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
@@ -1491,27 +1493,24 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         }
     case 101:
         {
-        Reference<XIdlReflection> xRefl( m_rFactory->createInstance(L"com.sun.star.reflection.CoreReflection"), UNO_QUERY);
-        if( xRefl.is())
+        Reference<XIdlReflection> xRefl( theCoreReflection::get(comphelper::ComponentContext(m_rFactory).getUNOContext()) );
+        Reference<XIdlClass> xClass= xRefl->forName(L"oletest.SimpleStruct");
+        Any any;
+        if( xClass.is())
+            xClass->createObject( any);
+
+        if( any.getValueTypeClass() == TypeClass_STRUCT)
         {
-            Reference<XIdlClass> xClass= xRefl->forName(L"oletest.SimpleStruct");
-            Any any;
-            if( xClass.is())
-                xClass->createObject( any);
+            SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
+            pStruct->message= OUString(RTL_CONSTASCII_USTRINGPARAM("This struct was created in OleTest"));
 
-            if( any.getValueTypeClass() == TypeClass_STRUCT)
-            {
-                SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-                pStruct->message= OUString(RTL_CONSTASCII_USTRINGPARAM("This struct was created in OleTest"));
-
-                SimpleStruct aStruct;
-                any >>= aStruct;
-                xCallback->inoutStruct( aStruct);
-                // a Struct should now contain a different message
-                MessageBox( NULL, W2T(aStruct.message), _T("OleTest in out parameter"), MB_OK);
-            }
-
+            SimpleStruct aStruct;
+            any >>= aStruct;
+            xCallback->inoutStruct( aStruct);
+            // a Struct should now contain a different message
+            MessageBox( NULL, W2T(aStruct.message), _T("OleTest in out parameter"), MB_OK);
         }
+
         break;
         }
     case 102:

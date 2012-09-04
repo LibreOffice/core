@@ -28,6 +28,7 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 
 // InvocationToAllListenerMapper
@@ -407,8 +408,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception 
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xReflection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.reflection.CoreReflection") ) );
-        m_xReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
+        m_xReflection = theCoreReflection::get(comphelper::ComponentContext(m_xSMgr).getUNOContext());
     }
     return m_xReflection;
 }

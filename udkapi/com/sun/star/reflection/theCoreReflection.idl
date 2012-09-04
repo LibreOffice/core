@@ -16,33 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_reflection_CoreReflection_idl__
-#define __com_sun_star_reflection_CoreReflection_idl__
+#ifndef __com_sun_star_reflection_theCoreReflection_idl__
+#define __com_sun_star_reflection_theCoreReflection_idl__
 
 #include <com/sun/star/reflection/XIdlReflection.idl>
-#include <com/sun/star/lang/XComponent.idl>
 
 
+module com {  module sun {  module star {  module reflection {
 
- module com {  module sun {  module star {  module reflection {
 
+singleton theCoreReflection : com::sun::star::reflection::XIdlReflection;
 
-/** This service is the implementation of the reflection API.
-    You can obtain information about types, modify values of reflected types
-    and call on objects.
-
-    @deprecated Rather use the 'theCoreReflection' singleton.
-*/
-published service CoreReflection
-{
-    /** Interface to reflect types.
-    */
-    interface com::sun::star::reflection::XIdlReflection;
-
-    /** CoreReflection has to be disposed if possible
-     */
-    [optional] interface com::sun::star::lang::XComponent;
-};
 
 }; }; }; };
 
