@@ -68,6 +68,12 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
         //Certiticate store
         HCERTSTORE                          m_hCertStore ;
 
+        // i120675, save the store handles
+        HCERTSTORE                          m_hMySystemStore;
+        HCERTSTORE                          m_hRootSystemStore;
+        HCERTSTORE                          m_hTrustSystemStore;
+        HCERTSTORE                          m_hCaSystemStore;
+
         //Enable default system cryptography setting
         sal_Bool                            m_bEnableDefault ;
 

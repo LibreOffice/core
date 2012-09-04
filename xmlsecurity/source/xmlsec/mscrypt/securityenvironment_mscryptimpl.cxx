@@ -104,7 +104,7 @@ void traceTrustStatus(DWORD err)
     }
 }
 
-SecurityEnvironment_MSCryptImpl :: SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( NULL ) , m_hKeyStore( NULL ), m_hCertStore( NULL ), m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList(), m_xServiceManager( aFactory ), m_bEnableDefault( sal_False ) {
+SecurityEnvironment_MSCryptImpl :: SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( NULL ) , m_hKeyStore( NULL ), m_hCertStore( NULL ), m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList(), m_xServiceManager( aFactory ), m_bEnableDefault( sal_False ), m_hMySystemStore(NULL), m_hRootSystemStore(NULL), m_hTrustSystemStore(NULL), m_hCaSystemStore(NULL){
 
 }
 
@@ -128,6 +128,27 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
     if( m_hKeyStore != NULL ) {
         CertCloseStore( m_hKeyStore, CERT_CLOSE_STORE_FORCE_FLAG ) ;
         m_hKeyStore = NULL ;
+    }
+
+    //i120675, close the store handles
+    if( m_hMySystemStore != NULL ) {
+        CertCloseStore( m_hMySystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        m_hMySystemStore = NULL ;
+    }
+
+    if( m_hRootSystemStore != NULL ) {
+        CertCloseStore( m_hRootSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        m_hRootSystemStore = NULL ;
+    }
+
+    if( m_hTrustSystemStore != NULL ) {
+        CertCloseStore( m_hTrustSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        m_hTrustSystemStore = NULL ;
+    }
+
+    if( m_hCaSystemStore != NULL ) {
+        CertCloseStore( m_hCaSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        m_hCaSystemStore = NULL ;
     }
 
     if( !m_tSymKeyList.empty()  ) {
@@ -1210,40 +1231,42 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl :: createKeysManager() throw( 
      * Adopt system default certificate store.
      */
     if( defaultEnabled() ) {
-        HCERTSTORE hSystemStore ;
-
         //Add system key store into the keys manager.
-        hSystemStore = CertOpenSystemStore( 0, "MY" ) ;
-        if( hSystemStore != NULL ) {
-            if( xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, hSystemStore ) < 0 ) {
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        m_hMySystemStore = CertOpenSystemStore( 0, "MY" ) ;
+        if( m_hMySystemStore != NULL ) {
+            if( xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, m_hMySystemStore ) < 0 ) {
+                CertCloseStore( m_hMySystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                m_hMySystemStore = NULL;
                 throw RuntimeException() ;
             }
         }
 
         //Add system root store into the keys manager.
-        hSystemStore = CertOpenSystemStore( 0, "Root" ) ;
-        if( hSystemStore != NULL ) {
-            if( xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, hSystemStore ) < 0 ) {
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        m_hRootSystemStore = CertOpenSystemStore( 0, "Root" ) ;
+        if( m_hRootSystemStore != NULL ) {
+            if( xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, m_hRootSystemStore ) < 0 ) {
+                CertCloseStore( m_hRootSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                m_hRootSystemStore = NULL;
                 throw RuntimeException() ;
             }
         }
 
         //Add system trusted store into the keys manager.
-        hSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
-        if( hSystemStore != NULL ) {
-            if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, hSystemStore ) < 0 ) {
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        m_hTrustSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
+        if( m_hTrustSystemStore != NULL ) {
+            if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hTrustSystemStore ) < 0 ) {
+                CertCloseStore( m_hTrustSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                m_hTrustSystemStore = NULL;
                 throw RuntimeException() ;
             }
         }
 
         //Add system CA store into the keys manager.
-        hSystemStore = CertOpenSystemStore( 0, "CA" ) ;
-        if( hSystemStore != NULL ) {
-            if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, hSystemStore ) < 0 ) {
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        m_hCaSystemStore = CertOpenSystemStore( 0, "CA" ) ;
+        if( m_hCaSystemStore != NULL ) {
+            if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hCaSystemStore ) < 0 ) {
+                CertCloseStore( m_hCaSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                m_hCaSystemStore = NULL;
                 throw RuntimeException() ;
             }
         }
