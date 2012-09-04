@@ -1856,6 +1856,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 
 endif # SYSTEM_PYTHON
 
+# ORCUS
 ifeq ($(SYSTEM_LIBORCUS),YES)
 
 define gb_LinkTarget__use_orcus
@@ -1870,14 +1871,13 @@ endef
 else # !SYSTEM_LIBORCUS
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	orcus-0.2 \
+	orcus \
 ))
 
 define gb_LinkTarget__use_orcus
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	orcus-0.2 \
+	orcus \
 )
-
 endef
 
 endif # SYSTEM_LIBORCUS

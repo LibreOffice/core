@@ -6,4 +6,4 @@ mkdir: %_DEST%\inc\orcus\spreadsheet
 
 ..\%__SRC%\misc\build\liborcus*\src\liborcus\.libs\liborcus-0.2.a %_DEST%\lib\
 
-..\%__SRC%\slb\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\misc\build\liborcus*\vsprojects\liborcus-static-nozip\Release\orcus.lib %_DEST%\lib\

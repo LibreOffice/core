@@ -33,12 +33,23 @@ TARGET=orcus
 .ENDIF
 
 TARFILE_NAME=liborcus_0.1.0
-TARFILE_MD5=870f887bad82663146676017671efb60
+TARFILE_MD5=9f4fecdd1267a2a685f06de8508c88ff
 
 PATCH_FILES=
 
+.IF "$(GUI)$(COM)"=="WNTMSC"
+
+BUILD_DIR=vsprojects/liborcus-static-nozip
+BUILD_ACTION=export BOOST_INCLUDE_DIR=$(OUTDIR)/inc && \
+	$(COMPATH)$/vcpackages$/vcbuild.exe liborcus-static-nozip.vcproj "Release|Win32"
+
+.ELSE
+
 CONFIGURE_DIR=
-CONFIGURE_ACTION=./autogen.sh \
+CONFIGURE_ACTION=./configure \
+	--with-pic \
+	--enable-static \
+	--disable-shared \
 	--with-mdds-include-path=$(OUTDIR)/inc \
 	--disable-libzip \
 	--disable-debug \
@@ -46,6 +57,8 @@ CONFIGURE_ACTION=./autogen.sh \
 
 BUILD_ACTION=make
 BUILD_DIR=
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

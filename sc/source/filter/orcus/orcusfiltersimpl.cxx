@@ -13,6 +13,8 @@
 
 #include "orcusfiltersimpl.hxx"
 
+#define __ORCUS_STATIC_LIB
+#define BOOST_DISABLE_THREADS
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
 
