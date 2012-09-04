@@ -104,7 +104,7 @@ namespace dbp
         implAnchorShape(Reference< XPropertySet >(_rContext.xObjectShape, UNO_QUERY));
 
         // shape collection (for grouping the shapes)
-        Reference< XShapes > xButtonCollection( ShapeCollection::create(mxContext), UNO_QUERY_THROW );
+        Reference< XShapes > xButtonCollection( ShapeCollection::create(mxContext) );
         // first member : the shape of the control
         xButtonCollection->add(_rContext.xObjectShape.get());
 

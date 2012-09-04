@@ -74,7 +74,7 @@ ScVbaShapeRange::getShapes() throw (uno::RuntimeException)
 {
     if ( !m_xShapes.is() )
     {
-        m_xShapes.set( drawing::ShapeCollection::create(mxContext), uno::UNO_QUERY_THROW );
+        m_xShapes.set( drawing::ShapeCollection::create(mxContext) );
         sal_Int32 nLen = m_xIndexAccess->getCount();
         for ( sal_Int32 index = 0; index < nLen; ++index )
             m_xShapes->add( uno::Reference< drawing::XShape >( m_xIndexAccess->getByIndex( index ), uno::UNO_QUERY_THROW ) );

@@ -869,7 +869,7 @@ SwVbaSelection::ShapeRange( ) throw (uno::RuntimeException)
     if ( !xShapes.is() )
     {
         uno::Reference< drawing::XShape > xShape( mxModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
-        xShapes.set( drawing::ShapeCollection::create(mxContext), uno::UNO_QUERY_THROW );
+        xShapes.set( drawing::ShapeCollection::create(mxContext) );
         xShapes->add( xShape );
     }
 
