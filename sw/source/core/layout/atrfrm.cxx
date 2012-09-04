@@ -751,6 +751,7 @@ SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
     eAdj( rCpy.GetLineAdj() ),
     aColumns( (sal_Int8)rCpy.GetNumCols() ),
     nWidth( rCpy.GetWishWidth() ),
+    aWidthAdjustValue( rCpy.aWidthAdjustValue ),
     bOrtho( rCpy.IsOrtho() )
 {
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
@@ -770,6 +771,7 @@ SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
     nLineHeight = rCpy.GetLineHeight();
     eAdj        = rCpy.GetLineAdj();
     nWidth      = rCpy.GetWishWidth();
+    aWidthAdjustValue = rCpy.aWidthAdjustValue;
     bOrtho      = rCpy.IsOrtho();
 
     if ( !aColumns.empty() )
@@ -790,6 +792,7 @@ SwFmtCol::SwFmtCol()
     nLineHeight( 100 ),
     eAdj( COLADJ_NONE ),
     nWidth( USHRT_MAX ),
+    aWidthAdjustValue( 0 ),
     bOrtho( sal_True )
 {
 }
@@ -805,7 +808,9 @@ int SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
           eAdj               == rCmp.GetLineAdj() &&
           nWidth             == rCmp.GetWishWidth() &&
           bOrtho             == rCmp.IsOrtho() &&
-          aColumns.size() == rCmp.GetNumCols()) )
+          aColumns.size() == rCmp.GetNumCols() &&
+          aWidthAdjustValue == rCmp.GetAdjustValue()
+         ) )
         return 0;
 
     for ( sal_uInt16 i = 0; i < aColumns.size(); ++i )

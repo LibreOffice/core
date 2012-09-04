@@ -79,7 +79,8 @@ class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
     SwColLineAdj eAdj;                      ///< Line will be adjusted top, centered or bottom.
 
     SwColumns   aColumns;                   ///< Information concerning the columns.
-    sal_uInt16      nWidth;                 ///< Total desired width of all columns.
+    sal_uInt16  nWidth;                     ///< Total desired width of all columns.
+    sal_Int16   aWidthAdjustValue;
 
     sal_Bool bOrtho;            /**< Only if this flag is set, the setting of GutterWidth will
                              be accompanied by a "visual rearrangement".
@@ -93,6 +94,9 @@ public:
     SwFmtCol();
     SwFmtCol( const SwFmtCol& );
     ~SwFmtCol();
+    //#i120133#
+    sal_Int16 GetAdjustValue() const { return aWidthAdjustValue; }
+    void SetAdjustValue( const sal_Int16& n ) { aWidthAdjustValue = n; }
 
     SwFmtCol& operator=( const SwFmtCol& );
 

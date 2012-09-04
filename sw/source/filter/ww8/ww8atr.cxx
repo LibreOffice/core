@@ -4450,6 +4450,9 @@ void AttributeOutputBase::FormatColumns( const SwFmtCol& rCol )
             const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
             nPageSize = pFmt->GetFrmSize().GetWidth();
             nPageSize -= rLR.GetLeft() + rLR.GetRight();
+            //i120133: The Section width should consider page indent value.
+            nPageSize -= rCol.GetAdjustValue();
+
         }
 
         // Nachsehen, ob alle Spalten gleich sind

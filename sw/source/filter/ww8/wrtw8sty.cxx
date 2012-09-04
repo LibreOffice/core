@@ -1581,7 +1581,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
             // am Nachkommen NUR  die Spaltigkeit gemaess Sect-Attr.
             // umsetzen
-            aSet.Put( rSepInfo.pSectionFmt->GetFmtAttr( RES_COL ) );
 
             const SvxLRSpaceItem &rSectionLR =
                 ItemGet<SvxLRSpaceItem>( *(rSepInfo.pSectionFmt), RES_LR_SPACE );
@@ -1591,6 +1590,17 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             SvxLRSpaceItem aResultLR( rPageLR.GetLeft() +
                     rSectionLR.GetLeft(), rPageLR.GetRight() +
                     rSectionLR.GetRight(), 0, 0, RES_LR_SPACE );
+            //i120133: The Section width should consider section indent value.
+            if (rSectionLR.GetLeft()+rSectionLR.GetRight()!=0)
+            {
+                const SwFmtCol& rCol = dynamic_cast<const SwFmtCol&>(rSepInfo.pSectionFmt->GetFmtAttr(RES_COL));
+                SwFmtCol aCol(rCol);
+                aCol.SetAdjustValue(rSectionLR.GetLeft()+rSectionLR.GetRight());
+                aSet.Put(aCol);
+            }
+            else
+                aSet.Put(rSepInfo.pSectionFmt->GetFmtAttr(RES_COL));
+
 
             aSet.Put( aResultLR );
 
