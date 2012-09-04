@@ -218,6 +218,7 @@ public class Bootstrap extends NativeActivity
         while (argv.length > 0 &&
                argv[0].matches("[A-Z_]+=.*")) {
             putenv(argv[0]);
+            argv = Arrays.copyOfRange(argv, 1, argv.length-1);
         }
 
         // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
