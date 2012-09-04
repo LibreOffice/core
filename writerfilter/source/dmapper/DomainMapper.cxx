@@ -2216,10 +2216,17 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case 71 : //"sprmCDxaSpace"
     case 96 : //"sprmCDxaSpace"
     case NS_sprm::LN_CDxaSpace:  // sprmCDxaSpace
-        //Kerning half point values
-        //TODO: there are two kerning values -
-        // in ww8par6.cxx NS_sprm::LN_CHpsKern is used as boolean AutoKerning
-        rContext->Insert(PROP_CHAR_CHAR_KERNING, true, uno::makeAny( sal_Int16(ConversionHelper::convertTwipToMM100(sal_Int16(nIntValue))) ) );
+        {
+            //Kerning half point values
+            //TODO: there are two kerning values -
+            // in ww8par6.cxx NS_sprm::LN_CHpsKern is used as boolean AutoKerning
+            sal_Int16 nResult = static_cast<sal_Int16>(ConversionHelper::convertTwipToMM100(nIntValue));
+            if (m_pImpl->IsInComments())
+            {
+                nResult = static_cast<sal_Int16>(nIntValue);
+            }
+            rContext->Insert(PROP_CHAR_CHAR_KERNING, true, uno::makeAny(nResult));
+        }
         break;
     case NS_sprm::LN_CHpsKern:  // sprmCHpsKern    auto kerning is bound to a minimum font size in Word - but not in Writer :-(
         rContext->Insert(PROP_CHAR_AUTO_KERNING, true, uno::makeAny( sal_Bool(nIntValue) ) );

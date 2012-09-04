@@ -363,6 +363,7 @@ private:
     bool                            m_bParaChanged;
     bool                            m_bIsFirstParaInSection;
     bool                            m_bIsLastParaInSection;
+    bool                            m_bIsInComments;
     /// If the current paragraph contains section property definitions.
     bool                            m_bParaSectpr;
     bool                            m_bUsingEnhancedFields;
@@ -634,7 +635,10 @@ public:
     void SetCustomFtnMark(bool bSet) { m_bIsCustomFtnMark = bSet; }
     bool IsCustomFtnMark() const { return m_bIsCustomFtnMark;  }
 
+    bool IsInComments() const { return m_bIsInComments; };
+
     void CheckUnregisteredFrameConversion( );
+
     void RegisterFrameConversion(
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameStartRange,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameEndRange,

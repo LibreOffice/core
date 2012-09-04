@@ -182,6 +182,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
         m_bIsLastParaInSection( false ),
+        m_bIsInComments( false ),
         m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false ),
         m_bSdt(false),
@@ -189,6 +190,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsNewDoc(bIsNewDoc),
         m_bInTableStyleRunProps(false),
         m_pSdtHelper(0)
+
 {
     appendTableManager( );
     GetBodyText();
@@ -1571,6 +1573,7 @@ void DomainMapper_Impl::PushAnnotation()
     try
     {
         PropertyMapPtr pTopContext = GetTopContext();
+        m_bIsInComments = true;
         if (!GetTextFactory().is())
             return;
         m_xAnnotationField = uno::Reference< beans::XPropertySet >( GetTextFactory()->createInstance(
@@ -1600,6 +1603,7 @@ void DomainMapper_Impl::PopAnnotation()
 {
     RemoveLastParagraph();
 
+    m_bIsInComments = false;
     m_aTextAppendStack.pop();
 
     try
