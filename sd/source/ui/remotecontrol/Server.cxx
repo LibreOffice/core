@@ -225,20 +225,23 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
         if (xChild.is())
         {
             // Check whether the client is already saved
+            bool aSaved = false;
             Sequence< OUString > aNames = xConfig->getElementNames();
             for ( int i = 0; i < aNames.getLength(); i++ )
             {
                 if ( aNames[i].equals( apClient->mName ) )
+                {
                     xConfig->replaceByName( apClient->mName, makeAny( xChild ) );
-                else
-                    xConfig->insertByName( apClient->mName, makeAny( xChild ) );
+                    aSaved = true;
+                    break;
+                }
             }
-
+            if ( !aSaved )
+                xConfig->insertByName( apClient->mName, makeAny( xChild ) );
             aValue <<= OUString( apClient->mPin );
             xChild->replaceByName("PIN", aValue);
             aChanges->commit();
         }
-
 
         Communicator* pCommunicator = new Communicator( apClient->mpStreamSocket );
         MutexGuard aGuard( spServer->mDataMutex );
