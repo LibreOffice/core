@@ -56,7 +56,6 @@ $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(OUTDIR)/inc/external/wine) \
-	$(if $(filter NO,$(SYSTEM_LCMS2)),-I$(OUTDIR)/inc/lcms2) \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
