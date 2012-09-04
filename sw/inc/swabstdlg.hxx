@@ -447,8 +447,7 @@ public:
                                                 SwView& rView, sal_Bool bCol = sal_False ) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
                                                 Window * pParent ) = 0; //add for SwInsertGrfRulerDlg
-    virtual AbstractInsTableDlg*        CreateInsTableDlg( int nResId,
-                                                SwView& rView ) = 0; //add for SwInsTableDlg
+    virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView) = 0; //add for SwInsTableDlg
     virtual AbstractJavaEditDialog*     CreateJavaEditDialog( int nResId,
                                                 Window* pParent, SwWrtShell* pWrtSh ) = 0; //add for SwJavaEditDialog
     virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,

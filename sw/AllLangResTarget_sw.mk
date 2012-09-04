@@ -174,7 +174,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/table/chartins.src \
     sw/source/ui/table/colwd.src \
     sw/source/ui/table/convert.src \
-    sw/source/ui/table/instable.src \
     sw/source/ui/table/mergetbl.src \
     sw/source/ui/table/rowht.src \
     sw/source/ui/table/splittbl.src \

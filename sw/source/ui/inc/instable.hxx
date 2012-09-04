@@ -30,8 +30,8 @@
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <actctrl.hxx>
 #include <textcontrolcombo.hxx>
@@ -44,31 +44,21 @@ struct SwInsertTableOptions;
 
 class SwInsTableDlg : public SfxModalDialog
 {
-    FixedText       aNameFT;
-    TableNameEdit   aNameEdit;
+    TableNameEdit*  m_pNameEdit;
 
-    FixedLine       aFL;
-    FixedText       aColLbl;
-    NumericField    aColEdit;
-    FixedText       aRowLbl;
-    NumericField    aRowEdit;
+    NumericField*   m_pColNF;
+    NumericField*   m_pRowNF;
 
-    FixedLine       aOptionsFL;
-    CheckBox        aHeaderCB;
-    CheckBox        aRepeatHeaderCB;
-    FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
-    FixedText       aRepeatHeaderBeforeFT;
-    NumericField    aRepeatHeaderNF;
-    FixedText       aRepeatHeaderAfterFT;
-    TextControlCombo    aRepeatHeaderCombo;
+    CheckBox*       m_pHeaderCB;
+    CheckBox*       m_pRepeatHeaderCB;
+    NumericField*   m_pRepeatHeaderNF;
+    VclContainer*   m_pRepeatGroup;
 
-    CheckBox        aDontSplitCB;
-    CheckBox        aBorderCB;
+    CheckBox*       m_pDontSplitCB;
+    CheckBox*       m_pBorderCB;
 
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    PushButton      aAutoFmtBtn;
+    OKButton*       m_pOkBtn;
+    PushButton*     m_pAutoFmtBtn;
 
     SwWrtShell*     pShell;
     SwTableAutoFmt* pTAutoFmt;

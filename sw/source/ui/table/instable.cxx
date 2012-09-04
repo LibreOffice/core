@@ -56,19 +56,19 @@ void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol
                                 SwTableAutoFmt *& prTAFmt )
 {
     sal_uInt16 nInsMode = 0;
-    rName = aNameEdit.GetText();
-    rRow = (sal_uInt16)aRowEdit.GetValue();
-    rCol = (sal_uInt16)aColEdit.GetValue();
+    rName = m_pNameEdit->GetText();
+    rRow = (sal_uInt16)m_pRowNF->GetValue();
+    rCol = (sal_uInt16)m_pColNF->GetValue();
 
-    if (aBorderCB.IsChecked())
+    if (m_pBorderCB->IsChecked())
         nInsMode |= tabopts::DEFAULT_BORDER;
-    if (aHeaderCB.IsChecked())
+    if (m_pHeaderCB->IsChecked())
         nInsMode |= tabopts::HEADLINE;
-    if (aRepeatHeaderCB.IsEnabled() && aRepeatHeaderCB.IsChecked())
-        rInsTblOpts.mnRowsToRepeat = sal_uInt16( aRepeatHeaderNF.GetValue() );
+    if (m_pRepeatHeaderCB->IsEnabled() && m_pRepeatHeaderCB->IsChecked())
+        rInsTblOpts.mnRowsToRepeat = sal_uInt16( m_pRepeatHeaderNF->GetValue() );
     else
         rInsTblOpts.mnRowsToRepeat = 0;
-    if (!aDontSplitCB.IsChecked())
+    if (!m_pDontSplitCB->IsChecked())
         nInsMode |= tabopts::SPLIT_LAYOUT;
     if( pTAutoFmt )
     {
@@ -83,46 +83,31 @@ void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol
 
 
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
-    : SfxModalDialog( rView.GetWindow(), SW_RES(DLG_INSERT_TABLE) ),
-    aNameFT                 (this, SW_RES(FT_NAME)),
-    aNameEdit               (this, SW_RES(ED_NAME)),
-
-    aFL                     (this, SW_RES(FL_TABLE)),
-    aColLbl                 (this, SW_RES(FT_COL)),
-    aColEdit                (this, SW_RES(ED_COL)),
-    aRowLbl                 (this, SW_RES(FT_ROW)),
-    aRowEdit                (this, SW_RES(ED_ROW)),
-
-    aOptionsFL              (this, SW_RES(FL_OPTIONS)),
-    aHeaderCB               (this, SW_RES(CB_HEADER)),
-    aRepeatHeaderCB         (this, SW_RES(CB_REPEAT_HEADER)),
-    aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER)),
-    aRepeatHeaderBeforeFT   (this),
-    aRepeatHeaderNF         (this, SW_RES(NF_REPEAT_HEADER)),
-    aRepeatHeaderAfterFT    (this),
-    aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
-
-    aDontSplitCB            (this, SW_RES(CB_DONT_SPLIT)),
-    aBorderCB               (this, SW_RES(CB_BORDER)),
-
-    aOkBtn                  (this, SW_RES(BT_OK)),
-    aCancelBtn              (this, SW_RES(BT_CANCEL)),
-    aHelpBtn                (this, SW_RES(BT_HELP)),
-    aAutoFmtBtn             (this, SW_RES(BT_AUTOFORMAT)),
-
-    pShell(&rView.GetWrtShell()),
-    pTAutoFmt( 0 ),
-    nEnteredValRepeatHeaderNF( -1 )
+    : SfxModalDialog(rView.GetWindow(), "InsertTableDialog", "modules/swriter/ui/inserttable.ui")
+    , pShell(&rView.GetWrtShell())
+    , pTAutoFmt(0)
+    , nEnteredValRepeatHeaderNF(-1)
 {
-    FreeResource();
-    aNameEdit.SetText(pShell->GetUniqueTblName());
-    aNameEdit.SetModifyHdl(LINK(this, SwInsTableDlg, ModifyName));
-    aColEdit.SetModifyHdl(LINK(this, SwInsTableDlg, ModifyRowCol));
-    aRowEdit.SetModifyHdl(LINK(this, SwInsTableDlg, ModifyRowCol));
+    get(m_pNameEdit, "nameedit");
+    get(m_pColNF, "colspin");
+    get(m_pRowNF, "rowspin");
+    get(m_pHeaderCB, "headercb");
+    get(m_pRepeatHeaderCB, "repeatcb");
+    get(m_pDontSplitCB, "dontsplitcb");
+    get(m_pBorderCB, "bordercb");
+    get(m_pAutoFmtBtn, "autoformat");
+    get(m_pOkBtn, "ok");
+    get(m_pRepeatGroup, "repeatgroup");
+    get(m_pRepeatHeaderNF, "repeatheaderspin");
 
-    aRowEdit.SetMax(ROW_COL_PROD/aColEdit.GetValue());
-    aColEdit.SetMax(ROW_COL_PROD/aRowEdit.GetValue());
-    aAutoFmtBtn.SetClickHdl(LINK(this, SwInsTableDlg, AutoFmtHdl));
+    m_pNameEdit->SetText(pShell->GetUniqueTblName());
+    m_pNameEdit->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyName));
+    m_pColNF->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyRowCol));
+    m_pRowNF->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyRowCol));
+
+    m_pRowNF->SetMax(ROW_COL_PROD/m_pColNF->GetValue());
+    m_pColNF->SetMax(ROW_COL_PROD/m_pRowNF->GetValue());
+    m_pAutoFmtBtn->SetClickHdl(LINK(this, SwInsTableDlg, AutoFmtHdl));
 
     sal_Bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -130,33 +115,31 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
     sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
 
-    aHeaderCB.Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
-    aRepeatHeaderCB.Check(aInsOpts.mnRowsToRepeat > 0);
+    m_pHeaderCB->Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
+    m_pRepeatHeaderCB->Check(aInsOpts.mnRowsToRepeat > 0);
     if(bHTMLMode)
     {
-        aDontSplitCB.Hide();
-        aBorderCB.SetPosPixel(aDontSplitCB.GetPosPixel());
+        m_pDontSplitCB->Hide();
+        m_pBorderCB->SetPosPixel(m_pDontSplitCB->GetPosPixel());
     }
     else
     {
-        aDontSplitCB.Check( 0 == (nInsTblFlags & tabopts::SPLIT_LAYOUT) );
+        m_pDontSplitCB->Check( 0 == (nInsTblFlags & tabopts::SPLIT_LAYOUT) );
     }
-    aBorderCB.Check( 0 != (nInsTblFlags & tabopts::DEFAULT_BORDER) );
+    m_pBorderCB->Check( 0 != (nInsTblFlags & tabopts::DEFAULT_BORDER) );
 
-    aRepeatHeaderNF.SetModifyHdl( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
-    aHeaderCB.SetClickHdl(LINK(this, SwInsTableDlg, CheckBoxHdl));
-    aRepeatHeaderCB.SetClickHdl(LINK(this, SwInsTableDlg, ReapeatHeaderCheckBoxHdl));
+    m_pRepeatHeaderNF->SetModifyHdl( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
+    m_pHeaderCB->SetClickHdl(LINK(this, SwInsTableDlg, CheckBoxHdl));
+    m_pRepeatHeaderCB->SetClickHdl(LINK(this, SwInsTableDlg, ReapeatHeaderCheckBoxHdl));
     ReapeatHeaderCheckBoxHdl();
     CheckBoxHdl();
 
-    sal_Int64 nMax = aRowEdit.GetValue();
+    sal_Int64 nMax = m_pRowNF->GetValue();
     if( nMax <= 1 )
         nMax = 1;
     else
         --nMax;
-    aRepeatHeaderNF.SetMax( nMax );
-
-    aRepeatHeaderCombo.Arrange( aRepeatHeaderFT );
+    m_pRepeatHeaderNF->SetMax( nMax );
 }
 
 SwInsTableDlg::~SwInsTableDlg()
@@ -173,37 +156,37 @@ IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
         pEdit->SetText(sTblName);
     }
 
-    aOkBtn.Enable(pShell->GetTblStyle( sTblName ) == 0);
+    m_pOkBtn->Enable(pShell->GetTblStyle( sTblName ) == 0);
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsTableDlg, ModifyName, Edit *, pEdit )
 
 IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 {
-    if(pField == &aColEdit)
+    if(pField == m_pColNF)
     {
-        sal_Int64 nCol = aColEdit.GetValue();
+        sal_Int64 nCol = m_pColNF->GetValue();
         if(!nCol)
             nCol = 1;
-        aRowEdit.SetMax(ROW_COL_PROD/nCol);
+        m_pRowNF->SetMax(ROW_COL_PROD/nCol);
     }
     else
     {
-        sal_Int64 nRow = aRowEdit.GetValue();
+        sal_Int64 nRow = m_pRowNF->GetValue();
         if(!nRow)
             nRow = 1;
-        aColEdit.SetMax(ROW_COL_PROD/nRow);
+        m_pColNF->SetMax(ROW_COL_PROD/nRow);
 
         // adjust depending NF for repeated rows
         sal_Int64 nMax = ( nRow == 1 )? 1 : nRow - 1 ;
-        sal_Int64 nActVal = aRepeatHeaderNF.GetValue();
+        sal_Int64 nActVal = m_pRepeatHeaderNF->GetValue();
 
-        aRepeatHeaderNF.SetMax( nMax );
+        m_pRepeatHeaderNF->SetMax( nMax );
 
         if( nActVal > nMax )
-            aRepeatHeaderNF.SetValue( nMax );
+            m_pRepeatHeaderNF->SetValue( nMax );
         else if( nActVal < nEnteredValRepeatHeaderNF )
-            aRepeatHeaderNF.SetValue( ( nEnteredValRepeatHeaderNF < nMax )? nEnteredValRepeatHeaderNF : nMax );
+            m_pRepeatHeaderNF->SetValue( ( nEnteredValRepeatHeaderNF < nMax )? nEnteredValRepeatHeaderNF : nMax );
     }
     return 0;
 }
@@ -223,7 +206,7 @@ IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
 
 IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl)
 {
-    aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
+    m_pRepeatHeaderCB->Enable(m_pHeaderCB->IsChecked());
     ReapeatHeaderCheckBoxHdl();
 
     return 0;
@@ -231,14 +214,14 @@ IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl)
 
 IMPL_LINK_NOARG(SwInsTableDlg, ReapeatHeaderCheckBoxHdl)
 {
-    aRepeatHeaderCombo.Enable(aHeaderCB.IsChecked() && aRepeatHeaderCB.IsChecked());
+    m_pRepeatGroup->Enable(m_pHeaderCB->IsChecked() && m_pRepeatHeaderCB->IsChecked());
 
     return 0;
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl)
 {
-    nEnteredValRepeatHeaderNF = aRepeatHeaderNF.GetValue();
+    nEnteredValRepeatHeaderNF = m_pRepeatHeaderNF->GetValue();
     return 0;
 }
 

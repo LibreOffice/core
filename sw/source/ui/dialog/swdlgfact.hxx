@@ -526,8 +526,7 @@ public:
                                                 SwView& rView, sal_Bool bCol = sal_False ); //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
                                                 Window * pParent ); //add for SwInsertGrfRulerDlg
-    virtual AbstractInsTableDlg*        CreateInsTableDlg( int nResId,
-                                                SwView& rView ); //add for SwInsTableDlg
+    virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView); //add for SwInsTableDlg
     virtual AbstractJavaEditDialog*     CreateJavaEditDialog( int nResId,
                                                 Window* pParent, SwWrtShell* pWrtSh ); //add for SwJavaEditDialog
     virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,

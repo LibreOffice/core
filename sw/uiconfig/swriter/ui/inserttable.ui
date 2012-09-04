@@ -3,21 +3,15 @@
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
-    <property name="upper">100</property>
+    <property name="upper">99</property>
     <property name="value">2</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">1</property>
-    <property name="upper">100</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkDialog" id="dialog1">
+  <object class="GtkDialog" id="InsertTableDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Insert Table</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -29,7 +23,7 @@
             <property name="orientation">vertical</property>
             <property name="layout_style">start</property>
             <child>
-              <object class="GtkButton" id="101">
+              <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -45,7 +39,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="102">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -61,7 +55,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="103">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -97,11 +91,10 @@
                 <property name="row_spacing">4</property>
                 <property name="column_spacing">6</property>
                 <child>
-                  <object class="GtkEntry" id="10">
+                  <object class="swlo:TableNameEdit" id="nameedit">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">Table 1</property>
                     <property name="shadow_type">out</property>
                     <property name="invisible_char_set">True</property>
                   </object>
@@ -118,7 +111,7 @@
                     <property name="can_focus">False</property>
                     <property name="left_padding">4</property>
                     <child>
-                      <object class="GtkLabel" id="2">
+                      <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Name</property>
@@ -183,7 +176,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="10001">
+                          <object class="GtkSpinButton" id="colspin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">•</property>
@@ -191,6 +184,7 @@
                             <property name="invisible_char_set">True</property>
                             <property name="progress_pulse_step">1</property>
                             <property name="adjustment">adjustment1</property>
+                            <property name="climb_rate">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -200,7 +194,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="10002">
+                          <object class="GtkSpinButton" id="rowspin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">•</property>
@@ -208,6 +202,7 @@
                             <property name="invisible_char_set">True</property>
                             <property name="progress_pulse_step">1</property>
                             <property name="adjustment">adjustment1</property>
+                            <property name="climb_rate">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -221,7 +216,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="1">
+                  <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Size</property>
@@ -252,7 +247,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkCheckButton" id="1001">
+                          <object class="GtkCheckButton" id="headercb">
                             <property name="label" translatable="yes">Heading</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
@@ -270,7 +265,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="1002">
+                          <object class="GtkCheckButton" id="repeatcb">
                             <property name="label" translatable="yes">Repeat heading</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
@@ -291,7 +286,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="1004">
+                          <object class="GtkCheckButton" id="bordercb">
                             <property name="label" translatable="yes">Border</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
@@ -310,7 +305,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="1003">
+                          <object class="GtkCheckButton" id="dontsplitcb">
                             <property name="label" translatable="yes">Don't split table</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
@@ -328,12 +323,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkGrid" id="grid5">
+                          <object class="GtkGrid" id="repeatgroup">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">46</property>
                             <child>
-                              <object class="GtkLabel" id="6">
+                              <object class="GtkLabel" id="repeatheaderbefore">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">The first</property>
@@ -346,7 +341,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="7">
+                              <object class="GtkLabel" id="repeatheaderafter">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">rows</property>
@@ -359,13 +354,14 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="10003">
+                              <object class="GtkSpinButton" id="repeatheaderspin">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">•</property>
                                 <property name="invisible_char_set">True</property>
                                 <property name="progress_pulse_step">1</property>
-                                <property name="adjustment">adjustment2</property>
+                                <property name="adjustment">adjustment1</property>
+                                <property name="climb_rate">1</property>
                                 <property name="update_policy">if-valid</property>
                               </object>
                               <packing>
@@ -388,7 +384,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="5">
+                  <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0.47999998927116394</property>
@@ -404,7 +400,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="104">
+              <object class="GtkButton" id="autoformat">
                 <property name="label" translatable="yes">AutoFormat...</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -429,9 +425,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">101</action-widget>
-      <action-widget response="0">102</action-widget>
-      <action-widget response="0">103</action-widget>
+      <action-widget response="0">ok</action-widget>
+      <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">help</action-widget>
     </action-widgets>
   </object>
 </interface>

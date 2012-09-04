@@ -2619,7 +2619,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( DLG_INSERT_TABLE, rTempView );
+                AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg(rTempView);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {

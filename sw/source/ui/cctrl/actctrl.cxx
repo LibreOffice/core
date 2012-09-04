@@ -64,6 +64,12 @@ NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
 {
 }
 
+NoSpaceEdit::NoSpaceEdit(Window* pParent)
+    : Edit(pParent),
+    sForbiddenChars(String::CreateFromAscii(" "))
+{
+}
+
 NoSpaceEdit::~NoSpaceEdit()
 {
 }
@@ -117,6 +123,18 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
     }
     else
         Edit::KeyInput(rEvt);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTableNameEdit(Window *pParent)
+{
+    TableNameEdit* pTableNameEdit = new TableNameEdit(pParent);
+    pTableNameEdit->SetMaxWidthInChars(25);
+    return pTableNameEdit;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNoSpaceEdit(Window *pParent)
+{
+    return new NoSpaceEdit(pParent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

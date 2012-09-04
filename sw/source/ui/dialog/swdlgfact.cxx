@@ -1312,21 +1312,10 @@ AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDl
     return 0;
 }
 
-AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg( int nResId,
-                                            SwView& rView ) //add for SwInsTableDlg
+AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView) //add for SwInsTableDlg
 {
-    SwInsTableDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSERT_TABLE :
-            pDlg = new SwInsTableDlg( rView );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractInsTableDlg_Impl( pDlg );
-    return 0;
+    SwInsTableDlg* pDlg = new SwInsTableDlg(rView);
+    return new AbstractInsTableDlg_Impl( pDlg );
 }
 
 AbstractJavaEditDialog * SwAbstractDialogFactory_Impl::CreateJavaEditDialog( int nResId,
