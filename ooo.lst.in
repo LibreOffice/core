@@ -82,7 +82,7 @@ b63e6340a02ff1cacfeadb2c42286161-JLanguageTool-1.7.0.tar.bz2
 0f63ee487fda8f21fafa767b3c447ac9-ixion-0.2.0.tar.gz
 a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz
 @WPG_TARBALL@
-c01351d7db2b205de755d58769288224-libwpd-0.9.4.tar.bz2
+@WPD_TARBALL@
 @WPS_TARBALL@
 @MDDS_TARBALL@
 @BOOST_TARBALL@

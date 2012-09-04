@@ -1,3 +1,3 @@
-cdr	libcdr	: LIBWPD:libwpd libwpg LCMS2:lcms2 ZLIB:zlib soltools NULL
+cdr	libcdr	: libwpd libwpg LCMS2:lcms2 ZLIB:zlib soltools NULL
 cdr	libcdr	usr1	-	all	cdr_mkout NULL
 cdr	libcdr	nmake	-	all	cdr_libcdr NULL

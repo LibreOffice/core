@@ -6700,11 +6700,12 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPD=NO
-    BUILD_TYPE="$BUILD_TYPE LIBWPD"
+    WPD_TARBALL=c01351d7db2b205de755d58769288224-libwpd-0.9.4.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(WPD_CFLAGS)
 AC_SUBST(WPD_LIBS)
+AC_SUBST(WPD_TARBALL)
 
 dnl ===================================================================
 dnl Check for system lcms2

@@ -89,6 +89,7 @@ l10ntools\
 libcdr\
 libmspub\
 libvisio\
+libwpd\
 libwpg\
 libwps\
 lingucomponent\
@@ -216,7 +217,6 @@ liblangtag\
 liborcus\
 libpng\
 librsvg\
-libwpd\
 libxml2\
 libxmlsec\
 libxslt\

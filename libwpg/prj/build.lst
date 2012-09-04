@@ -1,3 +1,3 @@
-lwpg	libwpg	: LIBWPD:libwpd soltools NULL
+lwpg	libwpg	: libwpd soltools NULL
 lwpg	libwpg	usr1	-	all	lwpg_mkout NULL
 lwpg	libwpg	nmake	-	all	lwpg_libwpg NULL
