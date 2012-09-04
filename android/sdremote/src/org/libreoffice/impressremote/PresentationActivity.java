@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
+import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,7 +41,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
     private FrameLayout mOuterLayout;
     private ThumbnailFragment mThumbnailFragment;
     private PresentationFragment mPresentationFragment;
-    private ActionBarManager mActionBarManager;
+    private static ActionBarManager mActionBarManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,32 +50,22 @@ public class PresentationActivity extends SherlockFragmentActivity {
         bindService(new Intent(this, CommunicationService.class), mConnection,
                         Context.BIND_IMPORTANT);
 
-        setContentView(R.layout.activity_presentation);
-        mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
-        mOuterLayout.removeAllViews();
-        mLayout = new InterceptorLayout(this);
-        mOuterLayout.addView(mLayout);
-        mLayout.setId(R.id.presentation_innerFrame);
-
         //((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
+        setContentView(R.layout.activity_presentation);
         if (savedInstanceState == null) {
-            mThumbnailFragment = new ThumbnailFragment();
+
             mPresentationFragment = new PresentationFragment();
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             FragmentTransaction fragmentTransaction = fragmentManager
                             .beginTransaction();
-            fragmentTransaction.add(R.id.presentation_innerFrame,
+            fragmentTransaction.add(R.id.presentation_interceptor,
                             mPresentationFragment, "fragment_presentation");
             fragmentTransaction.commit();
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("thumbnail_enabled", mThumbnailFragment.isVisible());
+        mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
+        mLayout = (FrameLayout) findViewById(R.id.presentation_interceptor);
     }
 
     @Override
@@ -90,8 +81,10 @@ public class PresentationActivity extends SherlockFragmentActivity {
                         .getDefaultSharedPreferences(this);
         boolean aVolumeSwitching = aPref.getBoolean("option_volumeswitching",
                         false);
-        boolean aRelevantFragmentVisible = mPresentationFragment.isVisible()
-                        || mThumbnailFragment.isVisible();
+        boolean aRelevantFragmentVisible = ((mPresentationFragment != null) && mPresentationFragment
+                        .isVisible())
+                        || ((mThumbnailFragment != null) && mThumbnailFragment
+                                        .isVisible());
         if (aVolumeSwitching && aRelevantFragmentVisible) {
 
             int action = event.getAction();
@@ -119,7 +112,9 @@ public class PresentationActivity extends SherlockFragmentActivity {
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
 
-            mThumbnailFragment.setCommunicationService(mCommunicationService);
+            if (mThumbnailFragment != null)
+                mThumbnailFragment
+                                .setCommunicationService(mCommunicationService);
 
         }
 
@@ -149,8 +144,10 @@ public class PresentationActivity extends SherlockFragmentActivity {
             startActivity(aIntent);
             return true;
         case R.id.actionbar_presentation_submenu_blank:
-            boolean aRelevantFragmentVisible = mPresentationFragment
-                            .isVisible() || mThumbnailFragment.isVisible();
+            boolean aRelevantFragmentVisible = (mPresentationFragment != null && mPresentationFragment
+                            .isVisible())
+                            || (mThumbnailFragment != null && mThumbnailFragment
+                                            .isVisible());
             if (aRelevantFragmentVisible) {
 
                 BlankScreenFragment aFragment = new BlankScreenFragment(
@@ -158,7 +155,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
                 FragmentTransaction ft = getSupportFragmentManager()
                                 .beginTransaction();
-                ft.replace(R.id.presentation_innerFrame, aFragment);
+                ft.replace(R.id.presentation_interceptor, aFragment);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 ft.addToBackStack(null);
                 ft.commit();
@@ -372,10 +369,20 @@ public class PresentationActivity extends SherlockFragmentActivity {
             Timer aTimer = mCommunicationService.getSlideShow().getTimer();
             // --------------------------------- ACTIONBAR BUTTONS -------------
             if (aSource == mThumbnailButton) {
+                if (mThumbnailFragment == null) {
+                    mThumbnailFragment = (ThumbnailFragment) getSupportFragmentManager()
+                                    .findFragmentByTag("ThumbnailFragment");
+                    if (mThumbnailFragment == null) {
+                        mThumbnailFragment = new ThumbnailFragment();
+                        mThumbnailFragment
+                                        .setCommunicationService(mCommunicationService);
+                    }
+                }
                 if (!mThumbnailFragment.isVisible()) {
                     FragmentTransaction ft = getSupportFragmentManager()
                                     .beginTransaction();
-                    ft.replace(R.id.presentation_innerFrame, mThumbnailFragment);
+                    ft.replace(R.id.presentation_interceptor,
+                                    mThumbnailFragment, "ThumbnailFragment");
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.addToBackStack(null);
                     ft.commit();
@@ -480,10 +487,10 @@ public class PresentationActivity extends SherlockFragmentActivity {
      * @author andy
      *
      */
-    private class InterceptorLayout extends FrameLayout {
+    public static class InterceptorLayout extends FrameLayout {
 
-        public InterceptorLayout(Context context) {
-            super(context);
+        public InterceptorLayout(Context context, AttributeSet aAttrs) {
+            super(context, aAttrs);
         }
 
         @Override

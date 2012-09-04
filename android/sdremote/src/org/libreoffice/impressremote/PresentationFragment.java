@@ -59,7 +59,8 @@ public class PresentationFragment extends SherlockFragment {
             if (mTopView != null) {
                 mTopView.setAdapter(new ThumbnailAdapter(mContext,
                                 mCommunicationService.getSlideShow()));
-                mTopView.setSelection(mCommunicationService.getSlideShow().getCurrentSlide(), true);
+                mTopView.setSelection(mCommunicationService.getSlideShow()
+                                .getCurrentSlide(), true);
                 mTopView.setOnItemSelectedListener(new ClickListener());
             }
 
@@ -75,12 +76,13 @@ public class PresentationFragment extends SherlockFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                     Bundle savedInstanceState) {
+        setRetainInstance(true);
         getActivity().bindService(
                         new Intent(getActivity().getApplicationContext(),
                                         CommunicationService.class),
                         mConnection, Context.BIND_IMPORTANT);
         mContext = getActivity().getApplicationContext();
-        container.removeAllViews();
+        //        container.removeAllViews();
         View v = inflater.inflate(R.layout.fragment_presentation, container,
                         false);
 

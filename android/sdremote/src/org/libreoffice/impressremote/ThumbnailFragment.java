@@ -46,7 +46,8 @@ public class ThumbnailFragment extends SherlockFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                     Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        container.removeAllViews();
+        //        container.removeAllViews();
+        setRetainInstance(true);
         View v = inflater
                         .inflate(R.layout.fragment_thumbnail, container, false);
 
