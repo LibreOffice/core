@@ -2862,6 +2862,9 @@ void SwXMLTableContext::MakeTable( SwTableBox *pBox, sal_Int32 nW )
     bRelWidth = GetParentTable()->bRelWidth;
 
     _MakeTable( pBox );
+
+    for( sal_uInt16 i=0; i<pRows->Count(); i++ ) // i113600, to break the cyclic reference to SwXMLTableContext object
+        (*pRows)[i]->Dispose();
 }
 
 const SwStartNode *SwXMLTableContext::InsertTableSection(
