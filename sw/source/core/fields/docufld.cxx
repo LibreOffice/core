@@ -1751,6 +1751,8 @@ SwPostItField::~SwPostItField()
         m_pTextObject->DisposeEditSource();
         m_pTextObject->release();
     }
+
+    delete mpText;
 }
 
 const SwFmtFld* SwPostItField::GetByName(SwDoc* pDoc, const OUString& rName)
