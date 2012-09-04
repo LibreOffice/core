@@ -178,6 +178,12 @@ $(eval $(call gb_Library_use_externals,merged,\
 ))
 endif
 
+ifeq ($(ENABLE_DBUS),TRUE)
+$(eval $(call gb_Library_use_externals,merged,\
+	dbus \
+))
+endif
+
 ifeq ($(ENABLE_LIBLANGTAG),YES)
 $(eval $(call gb_Library_use_externals,merged,\
 	glib \
