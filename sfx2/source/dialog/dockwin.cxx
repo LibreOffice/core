@@ -25,6 +25,7 @@
 #include <vcl/timer.hxx>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/dockwin.hxx>
@@ -43,7 +44,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #define MAX_TOGGLEAREA_WIDTH        20
@@ -181,8 +182,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
             if ( !xModuleManager.is() )
             {
                 xModuleManager = uno::Reference< frame::XModuleManager >(
-                                    xServiceManager->createInstance(
-                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
+                                    frame::ModuleManager::create(comphelper::ComponentContext(xServiceManager).getUNOContext()),
                                     uno::UNO_QUERY );
                 m_xModuleManager = xModuleManager;
             }

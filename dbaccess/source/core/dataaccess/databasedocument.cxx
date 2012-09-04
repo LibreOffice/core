@@ -38,6 +38,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -2078,7 +2079,7 @@ Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
 uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHelper_throw(const uno::Reference< uno::XInterface >& _xComponent)
 {
     if ( !m_xModuleManager.is() )
-        m_xModuleManager.set( m_pImpl->m_aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+        m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext.getUNOContext()), UNO_QUERY_THROW );
 
     ::rtl::OUString sModuleId;
     try

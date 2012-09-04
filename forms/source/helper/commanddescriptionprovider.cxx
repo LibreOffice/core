@@ -21,7 +21,7 @@
 #include "commanddescriptionprovider.hxx"
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/UICommandDescription.hpp>
 
@@ -45,8 +45,10 @@ namespace frm
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::container::XNameAccess;
+    using ::com::sun::star::frame::ModuleManager;
     using ::com::sun::star::frame::XModuleManager;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::ui::UICommandDescription;
@@ -58,9 +60,9 @@ namespace frm
     class DefaultCommandDescriptionProvider : public ICommandDescriptionProvider
     {
     public:
-        DefaultCommandDescriptionProvider( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
+        DefaultCommandDescriptionProvider( const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument )
         {
-            impl_init_nothrow( _rContext, _rxDocument );
+            impl_init_nothrow( _rxContext, _rxDocument );
         }
 
         ~DefaultCommandDescriptionProvider()
@@ -71,7 +73,7 @@ namespace frm
         virtual ::rtl::OUString getCommandDescription( const ::rtl::OUString& _rCommandURL ) const;
 
     private:
-        void    impl_init_nothrow( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument );
+        void    impl_init_nothrow( const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument );
 
     private:
         Reference< XNameAccess >    m_xCommandAccess;
@@ -79,7 +81,7 @@ namespace frm
 
 
     //--------------------------------------------------------------------
-    void DefaultCommandDescriptionProvider::impl_init_nothrow( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
+    void DefaultCommandDescriptionProvider::impl_init_nothrow( const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument )
     {
         OSL_ENSURE( _rxDocument.is(), "DefaultCommandDescriptionProvider::impl_init_nothrow: no document => no command descriptions!" );
         if ( !_rxDocument.is() )
@@ -87,10 +89,10 @@ namespace frm
 
         try
         {
-            Reference< XModuleManager > xModuleManager( _rContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+            Reference< XModuleManager > xModuleManager( ModuleManager::create(_rxContext), UNO_QUERY_THROW );
             ::rtl::OUString sModuleID = xModuleManager->identify( _rxDocument );
 
-            Reference< XNameAccess > xUICommandDescriptions( UICommandDescription::create(_rContext.getUNOContext()) );
+            Reference< XNameAccess > xUICommandDescriptions( UICommandDescription::create(_rxContext) );
             m_xCommandAccess.set( xUICommandDescriptions->getByName( sModuleID ), UNO_QUERY_THROW );
         }
         catch( const Exception& )
@@ -120,9 +122,9 @@ namespace frm
 
     //--------------------------------------------------------------------
     PCommandDescriptionProvider createDocumentCommandDescriptionProvider(
-        const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
+        const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument )
     {
-        PCommandDescriptionProvider pDescriptionProvider( new DefaultCommandDescriptionProvider( _rContext, _rxDocument ) );
+        PCommandDescriptionProvider pDescriptionProvider( new DefaultCommandDescriptionProvider( _rxContext, _rxDocument ) );
         return pDescriptionProvider;
     }
 

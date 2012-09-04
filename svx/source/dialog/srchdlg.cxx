@@ -46,7 +46,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
@@ -711,22 +711,17 @@ void SvxSearchDialog::CalculateDelta_Impl()
     bool bWriterApp = false;
     bool bImpressApp = false;
     const uno::Reference< frame::XFrame > xFrame = rBindings.GetActiveFrame();
-    uno::Reference< frame::XModuleManager > xModuleManager(
-        ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), uno::UNO_QUERY );
-    if ( xModuleManager.is() )
+    uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(::comphelper::getProcessComponentContext()) );
+    try
     {
-        try
-        {
-            ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
-            bCalcApp = aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument";
-            bDrawApp = aModuleIdentifier == "com.sun.star.drawing.DrawingDocument";
-            bImpressApp = aModuleIdentifier == "com.sun.star.presentation.PresentationDocument";
-            bWriterApp = aModuleIdentifier == "com.sun.star.text.TextDocument";
-        }
-        catch ( uno::Exception& )
-        {
-        }
+        ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
+        bCalcApp = aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument";
+        bDrawApp = aModuleIdentifier == "com.sun.star.drawing.DrawingDocument";
+        bImpressApp = aModuleIdentifier == "com.sun.star.presentation.PresentationDocument";
+        bWriterApp = aModuleIdentifier == "com.sun.star.text.TextDocument";
+    }
+    catch ( uno::Exception& )
+    {
     }
 
     if ( pImpl->bDeltaCalculated )

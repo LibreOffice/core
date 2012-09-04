@@ -29,8 +29,7 @@
 #ifndef __com_sun_star_frame_ModuleManager_idl__
 #define __com_sun_star_frame_ModuleManager_idl__
 
-#include <com/sun/star/frame/XModuleManager.idl>
-#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/frame/XModuleManager2.idl>
 
 
 module com { module sun { module star { module frame {
@@ -45,25 +44,7 @@ module com { module sun { module star { module frame {
     @since OOo 2.0
  */
 
-service ModuleManager
-{
-    /** provides functions to identify office modules.
-     */
-    interface XModuleManager;
-
-    /** provides read access to the configuration of office modules.
-
-        <p>
-        Every module is referenced by an unique service name
-        (which is used inside configuration as set node name too)
-        and is further represented by a sequence of elements of type
-        <type scope="com::sun::star::beans">PropertyValue</type>.
-        A list of properties can be gotten from the configuration template
-        org.openoffice.Setup/Factory.
-        </p>
-     */
-    interface ::com::sun::star::container::XNameAccess;
-};
+service ModuleManager : XModuleManager2;
 
 }; }; }; };
 

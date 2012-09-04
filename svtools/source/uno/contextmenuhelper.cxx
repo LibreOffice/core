@@ -33,7 +33,7 @@
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -417,29 +417,23 @@ ContextMenuHelper::associateUIConfigurationManagers()
                 }
             }
 
-            uno::Reference< frame::XModuleManager > xModuleManager(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.frame.ModuleManager" ))),
-                uno::UNO_QUERY );
+            uno::Reference< frame::XModuleManager2 > xModuleManager(
+                frame::ModuleManager::create( ::comphelper::getProcessComponentContext() ) );
 
             uno::Reference< ui::XImageManager > xModuleImageManager;
             rtl::OUString                       aModuleId;
-            if ( xModuleManager.is() )
-            {
-                // retrieve module image manager
-                aModuleId = xModuleManager->identify( xFrame );
+            // retrieve module image manager
+            aModuleId = xModuleManager->identify( xFrame );
 
-                uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-                    ui::ModuleUIConfigurationManagerSupplier::create(
-                        ::comphelper::getProcessComponentContext() ) );
-                uno::Reference< ui::XUIConfigurationManager > xUICfgMgr(
-                    xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));
-                if ( xUICfgMgr.is() )
-                {
-                    m_xModuleImageMgr = uno::Reference< ui::XImageManager >(
-                        xUICfgMgr->getImageManager(), uno::UNO_QUERY );
-                }
+            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
+                ui::ModuleUIConfigurationManagerSupplier::create(
+                    ::comphelper::getProcessComponentContext() ) );
+            uno::Reference< ui::XUIConfigurationManager > xUICfgMgr(
+                xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));
+            if ( xUICfgMgr.is() )
+            {
+                m_xModuleImageMgr = uno::Reference< ui::XImageManager >(
+                    xUICfgMgr->getImageManager(), uno::UNO_QUERY );
             }
 
             uno::Reference< container::XNameAccess > xNameAccess(

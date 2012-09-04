@@ -42,6 +42,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
@@ -284,7 +285,7 @@ namespace frm
             _pParentWindow,
             lcl_getWinBits_nothrow( _rxModel ),
             createDocumentCommandImageProvider( _rxORB, xContextDocument ),
-            createDocumentCommandDescriptionProvider( _rxORB, xContextDocument )
+            createDocumentCommandDescriptionProvider( comphelper::ComponentContext(_rxORB).getUNOContext(), xContextDocument )
         );
 
         // some knittings

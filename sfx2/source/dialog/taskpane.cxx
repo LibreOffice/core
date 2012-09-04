@@ -27,7 +27,7 @@
 #include "sfxlocal.hrc"
 #include "helpid.hrc"
 
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
@@ -71,6 +71,7 @@ namespace sfx2
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::frame::ModuleManager;
     using ::com::sun::star::frame::XModuleManager;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::ui::XToolPanel;
@@ -100,7 +101,7 @@ namespace sfx2
             ::rtl::OUStringBuffer aPathComposer;
             try
             {
-                const Reference< XNameAccess > xModuleAccess( aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+                const Reference< XNameAccess > xModuleAccess( ModuleManager::create(aContext.getUNOContext()), UNO_QUERY_THROW );
                 const ::comphelper::NamedValueCollection aModuleProps( xModuleAccess->getByName( i_rModuleIdentifier ) );
 
                 const ::rtl::OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", ::rtl::OUString() ) );
@@ -127,8 +128,8 @@ namespace sfx2
             ::rtl::OUString sModuleName;
             try
             {
-                const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                const Reference< XModuleManager > xModuleManager( aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+                const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const Reference< XModuleManager > xModuleManager( ModuleManager::create(xContext), UNO_QUERY_THROW );
                 sModuleName = xModuleManager->identify( i_rDocumentFrame );
             }
             catch( const Exception& )

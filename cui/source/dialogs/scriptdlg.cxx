@@ -49,7 +49,7 @@
 #include <com/sun/star/script/provider/ScriptErrorRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
@@ -224,10 +224,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
             if ( xDocumentModel.is() )
             {
-                Reference< ::com::sun::star::frame::XModuleManager >
-                    xModuleManager( xCtx->getServiceManager()->createInstanceWithContext(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager") ), xCtx ),
-                                    UNO_QUERY_THROW );
+                Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
 
                 Reference<container::XNameAccess> xModuleConfig(
                     xModuleManager, UNO_QUERY_THROW );

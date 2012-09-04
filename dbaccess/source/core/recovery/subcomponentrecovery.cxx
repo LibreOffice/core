@@ -26,7 +26,7 @@
 #include "settingsimport.hxx"
 
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -61,7 +61,8 @@ namespace dbaccess
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
     using ::com::sun::star::beans::Pair;
-    using ::com::sun::star::frame::XModuleManager;
+    using ::com::sun::star::frame::ModuleManager;
+    using ::com::sun::star::frame::XModuleManager2;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XController;
@@ -480,7 +481,7 @@ namespace dbaccess
         m_aCompDesc.sName = aComponentIdentity.Second;
 
         // what the controller didn't give us is the information whether this is in edit mode or not ...
-        Reference< XModuleManager > xModuleManager( m_rContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+        Reference< XModuleManager2 > xModuleManager( ModuleManager::create(m_rContext.getUNOContext()) );
         const ::rtl::OUString sModuleIdentifier = xModuleManager->identify( m_xComponent );
 
         switch ( m_eType )

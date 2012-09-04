@@ -35,6 +35,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -45,7 +46,6 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/io/IOException.hpp>
 
 #include "guisaveas.hxx"
@@ -1280,12 +1280,8 @@ uno::Reference< ::com::sun::star::frame::XModuleManager > SfxStoringHelper::GetM
     if ( !m_xModuleManager.is() )
     {
         m_xModuleManager = uno::Reference< ::com::sun::star::frame::XModuleManager >(
-            GetServiceFactory()->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")) ),
-            uno::UNO_QUERY );
-
-        if ( !m_xModuleManager.is() )
-            throw uno::RuntimeException();
+            frame::ModuleManager::create(comphelper::ComponentContext(GetServiceFactory()).getUNOContext()),
+            uno::UNO_QUERY_THROW );
     }
 
     return m_xModuleManager;

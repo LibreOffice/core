@@ -49,7 +49,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
@@ -268,7 +268,7 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
     , m_pDispatchRegistry(new framework::lomenubar::DispatchRegistry(m_xStatusListener))
     , m_xMSF(rServiceManager)
     , m_xTrans(util::URLTransformer::create(comphelper::ComponentContext(m_xMSF).getUNOContext()))
-    , m_xMM(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))),UNO_QUERY)
+    , m_xMM(frame::ModuleManager(comphelper::ComponentContext(m_xMSF).getUNOContext()),UNO_QUERY)
     , m_xPCF(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.PopupMenuControllerFactory"))), UNO_QUERY)
     , m_xFrame(xFrame)
     , m_xdp(xFrame, UNO_QUERY)

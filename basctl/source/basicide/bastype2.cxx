@@ -37,7 +37,7 @@
 #include <svtools/imagemgr.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <sfx2/dispatch.hxx>
@@ -765,34 +765,31 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
     if ( rDocument.isDocument() )
     {
         ::rtl::OUString sFactoryURL;
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        Reference< ::com::sun::star::frame::XModuleManager > xModuleManager;
-        if ( aContext.createComponent( "com.sun.star.frame.ModuleManager", xModuleManager ) )
+        Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
+        try
         {
-            try
+            ::rtl::OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
+            Reference< container::XNameAccess > xModuleConfig( xModuleManager, UNO_QUERY );
+            if ( xModuleConfig.is() )
             {
-                ::rtl::OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
-                Reference< container::XNameAccess > xModuleConfig( xModuleManager, UNO_QUERY );
-                if ( xModuleConfig.is() )
+                Sequence< beans::PropertyValue > aModuleDescr;
+                xModuleConfig->getByName( sModule ) >>= aModuleDescr;
+                sal_Int32 nCount = aModuleDescr.getLength();
+                const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
+                for ( sal_Int32 i = 0; i < nCount; ++i )
                 {
-                    Sequence< beans::PropertyValue > aModuleDescr;
-                    xModuleConfig->getByName( sModule ) >>= aModuleDescr;
-                    sal_Int32 nCount = aModuleDescr.getLength();
-                    const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
-                    for ( sal_Int32 i = 0; i < nCount; ++i )
+                    if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
-                        if ( pModuleDescr[ i ].Name == "ooSetupFactoryEmptyDocumentURL" )
-                        {
-                            pModuleDescr[ i ].Value >>= sFactoryURL;
-                            break;
-                        }
+                        pModuleDescr[ i ].Value >>= sFactoryURL;
+                        break;
                     }
                 }
             }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if ( !sFactoryURL.isEmpty() )

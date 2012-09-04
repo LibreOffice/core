@@ -64,7 +64,7 @@
 #include "com/sun/star/awt/XDevice.hpp"
 #include "com/sun/star/util/MeasureUnit.hpp"
 #include "com/sun/star/frame/XModel.hpp"
-#include "com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/frame/ModuleManager.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/frame/XController.hpp"
 #include "com/sun/star/document/XDocumentProperties.hpp"
@@ -317,10 +317,8 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
     OUString aDocMimetype;
         // get document service name
     Reference< com::sun::star::frame::XStorable > xStore( xDoc, UNO_QUERY );
-    Reference< frame::XModuleManager > xModuleManager(
-        xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ),
-                               uno::UNO_QUERY );
-    if( xModuleManager.is() && xStore.is() )
+    Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(comphelper::getComponentContext( xFactory )) );
+    if( xStore.is() )
     {
         OUString aDocServiceName = xModuleManager->identify( Reference< XInterface >( xStore, uno::UNO_QUERY ) );
         if ( !aDocServiceName.isEmpty() )

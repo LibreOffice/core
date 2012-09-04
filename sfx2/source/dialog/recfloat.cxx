@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/UICommandDescription.hpp>
@@ -26,7 +26,6 @@
 #include <svl/eitem.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
 #include <vcl/msgbox.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "recfloat.hxx"
@@ -46,37 +45,32 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     rtl::OUString aLabel;
     rtl::OUString aModuleIdentifier;
     uno::Reference< container::XNameAccess > xUICommandLabels;
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager;
+    uno::Reference< uno::XComponentContext > xContext;
     uno::Reference< container::XNameAccess > xUICommandDescription;
     uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager;
 
-    static uno::WeakReference< lang::XMultiServiceFactory > xTmpServiceManager;
-    static uno::WeakReference< container::XNameAccess >     xTmpNameAccess;
+    static uno::WeakReference< uno::XComponentContext > xTmpContext;
+    static uno::WeakReference< container::XNameAccess > xTmpNameAccess;
     static uno::WeakReference< ::com::sun::star::frame::XModuleManager > xTmpModuleMgr;
 
-    xServiceManager = xTmpServiceManager;
-    if ( !xServiceManager.is() )
+    xContext = xTmpContext;
+    if ( !xContext.is() )
     {
-        xServiceManager = ::comphelper::getProcessServiceFactory();
-        xTmpServiceManager = xServiceManager;
+        xContext = ::comphelper::getProcessComponentContext();
+        xTmpContext = xContext;
     }
 
     xUICommandDescription = xTmpNameAccess;
     if ( !xUICommandDescription.is() )
     {
-        xUICommandDescription = uno::Reference< container::XNameAccess >(
-                                    ui::UICommandDescription::create(comphelper::ComponentContext(xServiceManager).getUNOContext()) );
+        xUICommandDescription = uno::Reference< container::XNameAccess >( ui::UICommandDescription::create(xContext) );
         xTmpNameAccess = xUICommandDescription;
     }
 
     xModuleManager = xTmpModuleMgr;
     if ( !xModuleManager.is() )
     {
-        xModuleManager = uno::Reference< ::com::sun::star::frame::XModuleManager >(
-            xServiceManager->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.ModuleManager" ))),
-            uno::UNO_QUERY_THROW );
+        xModuleManager = uno::Reference< frame::XModuleManager >( frame::ModuleManager::create(xContext), uno::UNO_QUERY_THROW );
         xTmpModuleMgr = xModuleManager;
     }
 

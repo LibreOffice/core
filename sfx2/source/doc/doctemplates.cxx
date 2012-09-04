@@ -50,7 +50,7 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <svtools/templatefoldercache.hxx>
@@ -1845,8 +1845,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         // get document service name
         uno::Reference< frame::XModuleManager > xModuleManager(
-            xFactory->createInstance(
-                    ::rtl::OUString("com.sun.star.frame.ModuleManager") ),
+            frame::ModuleManager::create(comphelper::ComponentContext(xFactory).getUNOContext()),
             uno::UNO_QUERY_THROW );
         sDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
         if ( sDocServiceName.isEmpty() )

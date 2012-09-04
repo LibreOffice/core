@@ -23,6 +23,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
@@ -383,10 +384,10 @@ String SfxObjectFactory::GetModuleName() const
 {
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
         css::uno::Reference< css::container::XNameAccess > xModuleManager(
-            xSMGR->createInstance("com.sun.star.frame.ModuleManager"),
+            css::frame::ModuleManager::create(xContext),
             css::uno::UNO_QUERY_THROW);
 
         ::rtl::OUString sDocService(GetDocumentServiceName());

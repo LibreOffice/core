@@ -38,7 +38,7 @@
 
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -766,14 +766,7 @@ Image SfxConfigGroupListBox_Impl::GetImage(
             Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, nodeName );
             if ( xDocumentModel.is() )
             {
-                Reference< ::com::sun::star::frame::XModuleManager >
-                    xModuleManager(
-                        xCtx->getServiceManager()
-                            ->createInstanceWithContext(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("" // xxx todo
-                                      "com.sun.star.frame.ModuleManager") ),
-                                xCtx ),
-                            UNO_QUERY_THROW );
+                Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
                 Reference<container::XNameAccess> xModuleConfig(
                     xModuleManager, UNO_QUERY_THROW );
                 // get the long name of the document:

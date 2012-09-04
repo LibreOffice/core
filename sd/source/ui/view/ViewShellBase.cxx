@@ -29,7 +29,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/frame/UnknownModuleException.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/UICommandDescription.hpp>
@@ -1142,7 +1142,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_QUERY_THROW );
 
-        Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+        Reference< XModuleManager > xModuleManager( ModuleManager::create(xContext), UNO_QUERY_THROW );
         Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
 
         ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );

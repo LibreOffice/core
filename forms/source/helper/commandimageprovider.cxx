@@ -31,7 +31,7 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 
 #include <tools/diagnose_ex.h>
@@ -59,6 +59,7 @@ namespace frm
     using ::com::sun::star::ui::XUIConfigurationManager;
     using ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
     using ::com::sun::star::ui::ModuleUIConfigurationManagerSupplier;
+    using ::com::sun::star::frame::ModuleManager;
     using ::com::sun::star::frame::XModuleManager;
     using ::com::sun::star::graphic::XGraphic;
     /** === end UNO using === **/
@@ -111,7 +112,7 @@ namespace frm
         // obtain the image manager or the module
         try
         {
-            Reference< XModuleManager > xModuleManager( _rContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+            Reference< XModuleManager > xModuleManager( ModuleManager::create(_rContext.getUNOContext()), UNO_QUERY_THROW );
             ::rtl::OUString sModuleID = xModuleManager->identify( _rxDocument );
 
             Reference< XModuleUIConfigurationManagerSupplier > xSuppUIConfig(

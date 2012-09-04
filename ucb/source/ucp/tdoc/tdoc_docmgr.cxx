@@ -37,6 +37,7 @@
 #include "rtl/ref.hxx"
 #include "cppuhelper/weak.hxx"
 
+#include "comphelper/componentcontext.hxx"
 #include "comphelper/namedvaluecollection.hxx"
 #include "comphelper/documentinfo.hxx"
 
@@ -45,6 +46,7 @@
 #include "com/sun/star/container/XEnumerationAccess.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
+#include "com/sun/star/frame/ModuleManager.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/util/XCloseBroadcaster.hpp"
 
@@ -700,13 +702,8 @@ bool OfficeDocumentsManager::isBasicIDE(
         {
             try
             {
-                m_xModuleMgr
-                    = uno::Reference<
-                        frame::XModuleManager >(
-                            m_xSMgr->createInstance(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.frame.ModuleManager" ) ) ),
+                m_xModuleMgr = uno::Reference< frame::XModuleManager >(
+                            frame::ModuleManager::create(comphelper::ComponentContext(m_xSMgr).getUNOContext()),
                             uno::UNO_QUERY );
             }
             catch ( uno::Exception const & )

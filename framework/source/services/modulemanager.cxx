@@ -180,7 +180,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     {
         throw css::lang::IllegalArgumentException(
                 ::rtl::OUString("No properties given to replace part of module."),
-                static_cast< css::container::XNameAccess* >(this),
+                static_cast< cppu::OWeakObject * >(this),
                 2);
     }
 
@@ -207,7 +207,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     {
         throw css::uno::RuntimeException(
                 ::rtl::OUString("Was not able to get write access to the requested module entry inside configuration."),
-                static_cast< css::container::XNameAccess* >(this));
+                static_cast< cppu::OWeakObject * >(this));
     }
 
     ::comphelper::SequenceAsHashMap::const_iterator pProp;
@@ -239,7 +239,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
     {
         throw css::uno::RuntimeException(
                 ::rtl::OUString("Was not able to get write access to the requested module entry inside configuration."),
-                static_cast< css::container::XNameAccess* >(this));
+                static_cast< cppu::OWeakObject * >(this));
     }
 
     // convert it to seq< PropertyValue >

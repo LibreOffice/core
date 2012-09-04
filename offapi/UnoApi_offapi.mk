@@ -134,6 +134,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	DispatchRecorderSupplier \
 	DocumentTemplates \
 	MediaTypeDetectionHelper \
+	ModuleManager \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/graphic,\
 	GraphicObject \
@@ -811,7 +812,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	FramesContainer \
 	GlobalEventBroadcaster \
 	LayoutManager \
-	ModuleManager \
 	PopupMenuController \
 	PopupMenuControllerFactory \
 	ProtocolHandler \
@@ -2538,6 +2538,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XModel2 \
 	XModule \
 	XModuleManager \
+	XModuleManager2 \
 	XNotifyingDispatch \
 	XPopupMenuController \
 	XRecordableDispatch \

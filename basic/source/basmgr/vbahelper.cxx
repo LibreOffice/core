@@ -25,7 +25,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -47,8 +47,8 @@ uno::Reference< frame::XModuleManager > lclCreateModuleManager()
     uno::Reference< frame::XModuleManager > xModuleManager;
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xModuleManager.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ), uno::UNO_QUERY );
+        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
+        xModuleManager.set( frame::ModuleManager::create(xContext), uno::UNO_QUERY );
     }
     catch(const uno::Exception& )
     {

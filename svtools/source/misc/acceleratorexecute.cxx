@@ -28,7 +28,7 @@
 
 #include <svtools/acceleratorexecute.hxx>
 
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
@@ -389,7 +389,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     css::uno::Reference< css::frame::XModuleManager > xModuleDetection(
-        xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
+        css::frame::ModuleManager::create(comphelper::ComponentContext(xSMGR).getUNOContext()),
         css::uno::UNO_QUERY_THROW);
 
     ::rtl::OUString sModule;

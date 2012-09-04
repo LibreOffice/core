@@ -69,6 +69,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/ui/UICommandDescription.hpp>
@@ -768,17 +769,17 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER ("com.sun.star.frame.ModuleManager" );
     static ::rtl::OUString SERVICENAME_DESKTOP       ("com.sun.star.frame.Desktop"            );
     static ::rtl::OUString MODULEID_STARTMODULE      ("com.sun.star.frame.StartModule"        );
 
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::uno::XComponentContext > xContext   = ::comphelper::getProcessComponentContext();
         css::uno::Reference< css::frame::XFramesSupplier >     xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XModuleManager >     xMM     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager >      xMM     (css::frame::ModuleManager::create(xContext), css::uno::UNO_QUERY_THROW);
 
-        if (xMM.is() && xFrame.is())
+        if (xFrame.is())
         {
             ::rtl::OUString sModuleId = xMM->identify(xFrame);
             if (
@@ -1664,15 +1665,15 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
 
         m_xFrame = GetFrame();
         OUString aModuleId = GetFrameWithDefaultAndIdentify( m_xFrame );
 
         // replace %MODULENAME in the label with the correct module name
         uno::Reference< css::frame::XModuleManager > xModuleManager(
-            xServiceManager->createInstance(
-                OUString( "com.sun.star.frame.ModuleManager"  ) ),
-            uno::UNO_QUERY_THROW );
+            css::frame::ModuleManager::create( xContext ), uno::UNO_QUERY_THROW);
         OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();
@@ -1687,7 +1688,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         }
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
-            xModuleCfgSupplier( css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(xServiceManager).getUNOContext()) );
+            xModuleCfgSupplier( css::ui::ModuleUIConfigurationManagerSupplier::create(xContext) );
 
         // Set up data for module specific menus
         SaveInData* pModuleData = NULL;
@@ -1914,10 +1915,8 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             return sModuleID;
         }
 
-        uno::Reference< css::frame::XModuleManager > xModuleManager(
-            xServiceManager->createInstance(
-                OUString( "com.sun.star.frame.ModuleManager"  ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< css::frame::XModuleManager2 > xModuleManager(
+                css::frame::ModuleManager::create( comphelper::ComponentContext(xServiceManager).getUNOContext() ) );
 
         try
         {

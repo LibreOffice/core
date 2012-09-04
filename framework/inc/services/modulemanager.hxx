@@ -27,10 +27,10 @@
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XSingleServiceFactory;
@@ -49,9 +49,10 @@ namespace framework
     implements the service com.sun.star.frame.ModuleManager
  */
 class ModuleManager:
-    public cppu::WeakImplHelper4<
-        css::lang::XServiceInfo, css::frame::XModuleManager,
-        css::container::XNameReplace, css::container::XContainerQuery >,
+    public cppu::WeakImplHelper3<
+        css::lang::XServiceInfo,
+        css::frame::XModuleManager2,
+        css::container::XContainerQuery >,
     private ThreadHelpBase, private boost::noncopyable
 {
     //___________________________________________

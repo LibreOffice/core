@@ -55,7 +55,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -92,7 +92,6 @@ using namespace com::sun::star;
 static ::rtl::OUString SERVICE_STORAGEFACTORY           (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"                        ));
 static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"              ));
 static ::rtl::OUString SERVICE_DESKTOP                  (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"                               ));
-static ::rtl::OUString SERVICE_MODULEMANAGER            (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"                  ));
 static ::rtl::OUString SERVICE_GLOBALACCCFG             (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.GlobalAcceleratorConfiguration"      ));
 
 static ::rtl::OUString MODULEPROP_SHORTNAME             (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"                                  ));
@@ -865,7 +864,9 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         }
 
         // identify module
-        css::uno::Reference< css::frame::XModuleManager > xModuleManager    (m_xSMGR->createInstance(SERVICE_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager > xModuleManager(
+                 css::frame::ModuleManager::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()),
+                 css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xModuleManagerCont(xModuleManager                                , css::uno::UNO_QUERY_THROW);
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         ::comphelper::SequenceAsHashMap lModuleProps(xModuleManagerCont->getByName(m_sModuleLongName));

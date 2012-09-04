@@ -30,7 +30,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/UICommandDescription.hpp>
 
 #include "sfx2/sfxhelp.hxx"
@@ -745,8 +745,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     pStyleSheetPool         ( NULL ),
     pTreeBox                ( NULL ),
     pCurObjShell            ( NULL ),
-    xModuleManager          ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY ),
+    xModuleManager          ( frame::ModuleManager::create(::comphelper::getProcessComponentContext()), UNO_QUERY ),
     m_pDeletionWatcher      ( NULL ),
 
     aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH ),

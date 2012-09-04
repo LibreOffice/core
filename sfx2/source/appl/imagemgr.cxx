@@ -20,7 +20,7 @@
 #include "sfx2/imagemgr.hxx"
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -149,9 +149,7 @@ Image SAL_CALL GetImage(
     if ( !xModuleManager.is() )
     {
         xModuleManager = Reference< XModuleManager >(
-                            ::comphelper::getProcessServiceFactory()->createInstance(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.frame.ModuleManager" ))),
+                            ModuleManager::create(::comphelper::getProcessComponentContext()),
                             UNO_QUERY );
         m_xModuleManager = xModuleManager;
     }

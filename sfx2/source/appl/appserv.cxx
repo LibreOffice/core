@@ -75,7 +75,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "frmload.hxx"
@@ -935,7 +935,7 @@ namespace
             Reference < XFramesSupplier > xSupplier( i_rContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
             Reference < XIndexAccess > xContainer( xSupplier->getFrames(), UNO_QUERY_THROW );
 
-            Reference< XModuleManager > xCheck( i_rContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+            Reference< XModuleManager > xCheck( ModuleManager::create(i_rContext.getUNOContext()), UNO_QUERY_THROW );
 
             sal_Int32 nCount = xContainer->getCount();
             for ( sal_Int32 i=0; i<nCount; ++i )

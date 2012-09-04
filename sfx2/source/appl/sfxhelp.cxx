@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/configmgr.hxx>
@@ -415,8 +415,7 @@ SfxHelp::~SfxHelp()
 {
     ::rtl::OUString sIdentifier;
     Reference < XFrame > xCurrentFrame;
-    Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
+    Reference < XModuleManager > xModuleManager( ModuleManager::create(::comphelper::getProcessComponentContext()), UNO_QUERY );
     Reference < XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     if ( xDesktop.is() )
@@ -452,8 +451,7 @@ String SfxHelp::GetHelpModuleName_Impl()
         try
         {
             Reference < XModuleManager > xModuleManager(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
+                ModuleManager::create(::comphelper::getProcessComponentContext()), UNO_QUERY );
             Sequence< PropertyValue > lProps;
             Reference< ::com::sun::star::container::XNameAccess > xCont( xModuleManager, UNO_QUERY);
             if ( xCont.is() )
