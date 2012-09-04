@@ -1,3 +1,3 @@
-mspub	libmspub	: LIBWPD:libwpd LIBWPG:libwpg ZLIB:zlib BOOST:boost soltools NULL
+mspub	libmspub	: LIBWPD:libwpd libwpg ZLIB:zlib BOOST:boost soltools NULL
 mspub	libmspub	usr1	-	all	mspub_mkout NULL
 mspub	libmspub	nmake	-	all	mspub_libmspub NULL

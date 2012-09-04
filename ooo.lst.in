@@ -81,7 +81,7 @@ a2c10c04f396a9ce72894beb18b4e1f9-jpeg-8c.tar.gz
 b63e6340a02ff1cacfeadb2c42286161-JLanguageTool-1.7.0.tar.bz2
 0f63ee487fda8f21fafa767b3c447ac9-ixion-0.2.0.tar.gz
 a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz
-9d283e02441d8cebdcd1e5d9df227d67-libwpg-0.2.1.tar.bz2
+@WPG_TARBALL@
 c01351d7db2b205de755d58769288224-libwpd-0.9.4.tar.bz2
 @WPS_TARBALL@
 @MDDS_TARBALL@

@@ -1,3 +1,3 @@
-wp  writerperfect : LIBWPG:libwpg libwps LIBWPD:libwpd libvisio libcdr libmspub LCMS2:lcms2 ZLIB:zlib sot comphelper xmloff svtools sfx2 LIBXSLT:libxslt NULL
+wp  writerperfect : libwpg libwps LIBWPD:libwpd libvisio libcdr libmspub LCMS2:lcms2 ZLIB:zlib sot comphelper xmloff svtools sfx2 LIBXSLT:libxslt NULL
 wp  writerperfect			usr1	-	all	wp_mkout NULL
 wp  writerperfect\prj		nmake	-	all	wp_prj NULL

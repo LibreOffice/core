@@ -85,6 +85,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	libcdr \
 	libmspub \
 	libvisio \
+	libwpg \
 	libwps \
     lingucomponent \
     linguistic \

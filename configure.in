@@ -6792,11 +6792,12 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPG=NO
-    BUILD_TYPE="$BUILD_TYPE LIBWPG"
+    WPG_TARBALL=9d283e02441d8cebdcd1e5d9df227d67-libwpg-0.2.1.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBWPG)
 AC_SUBST(WPG_CFLAGS)
 AC_SUBST(WPG_LIBS)
+AC_SUBST(WPG_TARBALL)
 
 dnl ===================================================================
 dnl Check whether freetype2 supports emboldening
