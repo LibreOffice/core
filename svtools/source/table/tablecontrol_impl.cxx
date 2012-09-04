@@ -2491,18 +2491,16 @@ namespace svt { namespace table
         if ( i_ordinate < m_nRowHeaderWidthPixel )
             return COL_ROW_HEADERS;
 
-        long const ordinate = i_ordinate - m_nRowHeaderWidthPixel;
-
         ColumnPositions::const_iterator lowerBound = ::std::lower_bound(
             m_aColumnWidths.begin(),
             m_aColumnWidths.end(),
-            MutableColumnMetrics(ordinate+1, ordinate+1),
+            MutableColumnMetrics(i_ordinate+1, i_ordinate+1),
             ColumnInfoPositionLess()
         );
         if ( lowerBound == m_aColumnWidths.end() )
         {
             // point is *behind* the start of the last column ...
-            if ( ordinate < m_aColumnWidths.rbegin()->getEnd() )
+            if ( i_ordinate < m_aColumnWidths.rbegin()->getEnd() )
                 // ... but still before its end
                 return m_nColumnCount - 1;
             return COL_INVALID;
