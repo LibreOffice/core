@@ -76,12 +76,13 @@ using ::com::sun::star::awt::grid::XGridColumn;
 using ::com::sun::star::container::ContainerEvent;
 using ::com::sun::star::awt::grid::GridDataEvent;
 using ::com::sun::star::awt::grid::GridInvalidModelException;
+using ::com::sun::star::util::VetoException;
 /** === end UNO using === **/
 
 namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
 
-using ::svt::table::TableControl;
+using namespace ::svt::table;
 
 typedef ::com::sun::star::util::Color   UnoColor;
 
@@ -103,6 +104,20 @@ void SVTXGridControl::SetWindow( Window* pWindow )
 {
     SVTXGridControl_Base::SetWindow( pWindow );
     impl_checkTableModelInit();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SVTXGridControl::impl_checkColumnIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_columnIndex ) const
+{
+    if ( ( i_columnIndex < 0 ) || ( i_columnIndex >= i_table.GetColumnCount() ) )
+        throw IndexOutOfBoundsException( ::rtl::OUString(), *const_cast< SVTXGridControl* >( this ) );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SVTXGridControl::impl_checkRowIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_rowIndex ) const
+{
+    if ( ( i_rowIndex < 0 ) || ( i_rowIndex >= i_table.GetRowCount() ) )
+        throw IndexOutOfBoundsException( ::rtl::OUString(), *const_cast< SVTXGridControl* >( this ) );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -151,6 +166,20 @@ sal_Int32 SAL_CALL SVTXGridControl::getCurrentRow(  ) throw (RuntimeException)
 
     sal_Int32 const nRow = pTable->GetCurrentRow();
     return ( nRow >= 0 ) ? nRow : -1;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL SVTXGridControl::goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException, VetoException)
+{
+    SolarMutexGuard aGuard;
+
+    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pTable != NULL, "SVTXGridControl::getCurrentRow: no control (anymore)!" );
+
+    impl_checkColumnIndex_throw( *pTable, i_columnIndex );
+    impl_checkRowIndex_throw( *pTable, i_rowIndex );
+
+    pTable->GoTo( i_columnIndex, i_rowIndex );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -671,8 +700,7 @@ void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (Runtim
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::selectRow: no control (anymore)!" );
 
-    if ( ( i_rowIndex < 0 ) || ( i_rowIndex >= pTable->GetRowCount() ) )
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+    impl_checkRowIndex_throw( *pTable, i_rowIndex );
 
     pTable->SelectRow( i_rowIndex, true );
 }
@@ -696,8 +724,7 @@ void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (Runt
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::deselectRow: no control (anymore)!" );
 
-    if ( ( i_rowIndex < 0 ) || ( i_rowIndex >= pTable->GetRowCount() ) )
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+    impl_checkRowIndex_throw( *pTable, i_rowIndex );
 
     pTable->SelectRow( i_rowIndex, false );
 }

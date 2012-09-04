@@ -53,6 +53,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::util;
 
 namespace toolkit
 {
@@ -390,6 +391,13 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 {
     Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
     return xGrid->getCurrentRow();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL UnoGridControl::goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException, VetoException)
+{
+    Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
+    xGrid->goToCell( i_columnIndex, i_rowIndex );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

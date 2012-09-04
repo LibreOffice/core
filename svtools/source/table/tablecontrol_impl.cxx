@@ -651,6 +651,16 @@ namespace svt { namespace table
     void TableControl_Impl::columnRemoved( ColPos const i_colIndex )
     {
         m_nColumnCount = m_pModel->getColumnCount();
+
+        // adjust the current column, if it is larger than the column count now
+        if ( m_nCurColumn >= m_nColumnCount )
+        {
+            if ( m_nColumnCount > 0 )
+                goTo( m_nCurColumn - 1, m_nCurRow );
+            else
+                m_nCurColumn = COL_INVALID;
+        }
+
         impl_ni_relayout();
 
         m_rAntiImpl.Invalidate();

@@ -29,6 +29,8 @@
 #define __com_sun_star_awt_grid_XGridControl_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/util/VetoException.idl>
 
 
 module com {  module sun {  module star {  module awt { module grid {
@@ -77,6 +79,24 @@ published interface XGridControl
         columns, or if grid data model does not contain any rows), then <code>-1</code> is returned.</p>
     */
     long getCurrentRow();
+
+    /** moves the cursor to the given cell
+        @param ColumnIndex
+            the column index of the cell to activate.
+        @param RowIndex
+            the row index of the cell to activate.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if either <code>ColumnIndex</code> or <code>RowIndex</code> are out of range.
+        @throws ::com::sun::star::util::VetoException
+            if moving the cursor to another cell is vetoed.
+    */
+    void    goToCell(
+                [in] long ColumnIndex,
+                [in] long RowIndex
+            )
+            raises  (   ::com::sun::star::lang::IndexOutOfBoundsException
+                    ,   ::com::sun::star::util::VetoException
+                    );
 };
 
 
