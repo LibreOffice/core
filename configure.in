@@ -6620,11 +6620,12 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBCDR=NO
-    BUILD_TYPE="$BUILD_TYPE LIBCDR"
+    CDR_TARBALL=ce5a1def34578b75959ac31210f031f6-libcdr-0.0.8.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBCDR)
 AC_SUBST(CDR_CFLAGS)
 AC_SUBST(CDR_LIBS)
+AC_SUBST(CDR_TARBALL)
 
 dnl ===================================================================
 dnl Check for system libmspub

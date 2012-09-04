@@ -82,6 +82,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     jvmaccess \
     jvmfwk \
     l10ntools \
+	libcdr \
 	libmspub \
 	libvisio \
 	libwps \
