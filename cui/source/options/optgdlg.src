@@ -160,24 +160,6 @@ TabPage OFA_TP_MISC
         Size = MAP_APPFONT( WHOLE_WIDTH - COL6, RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ en-US ] = "and " ;
     };
-    FixedLine FL_EXPERIMENTAL
-    {
-        Pos = MAP_APPFONT( COL0, ROW14 );
-        Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ en-US ] = "Optional (unstable) features" ;
-    };
-    CheckBox CB_EXPERIMENTAL
-    {
-        Pos = MAP_APPFONT( COL1, ROW15 );
-        Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "Enable experimental features";
-    };
-    CheckBox CB_MACRORECORDER
-    {
-        Pos = MAP_APPFONT( COL1, ROW16 );
-        Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "Enable macro recording";
-    };
 };
 
  //****************************************************************************

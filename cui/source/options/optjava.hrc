@@ -28,6 +28,10 @@
 #define LB_JAVA             13
 #define FT_JAVA_PATH        14
 
+#define FL_EXPERIMENTAL     15
+#define CB_EXPERIMENTAL     16
+#define CB_MACRO            17
+
 #define PB_ADD              20
 #define PB_PARAMETER        21
 #define PB_CLASSPATH        22
@@ -69,6 +73,12 @@
 #define PB_PATH_OK          31
 #define PB_PATH_ESC         32
 #define PB_PATH_HLP         33
+
+
+
+
+
+
 
 #endif // #ifndef _SVX_OPTJAVA_HRC
 

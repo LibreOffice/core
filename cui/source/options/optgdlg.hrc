@@ -94,9 +94,6 @@
 #define CB_EXTHELP                  12
 #define CB_HELPAGENT                13
 #define PB_HELPAGENT_RESET          14
-#define FL_EXPERIMENTAL             15
-#define CB_EXPERIMENTAL             16
-#define CB_MACRORECORDER            17
 
 #define FL_TWOFIGURE                40
 #define FT_INTERPRET                41

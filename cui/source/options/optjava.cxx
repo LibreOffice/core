@@ -29,6 +29,8 @@
 #include "optjava.hxx"
 #include <dialmgr.hxx>
 
+#include <svtools/miscopt.hxx>
+
 #include "optjava.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
@@ -115,7 +117,11 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_sAccessibilityText(       CUI_RES( STR_ACCESSIBILITY ) ),
     m_sAddDialogText    (       CUI_RES( STR_ADDDLGTEXT ) ),
 
-    xDialogListener     ( new ::svt::DialogClosedListener() )
+    xDialogListener     ( new ::svt::DialogClosedListener() ),
+
+    m_aExperimental     ( this, CUI_RES( FL_EXPERIMENTAL ) ),
+    m_aExperimentalCB   ( this, CUI_RES( CB_EXPERIMENTAL ) ),
+    m_aMacroCB          ( this, CUI_RES( CB_MACRO ) )
 
 {
     m_aJavaEnableCB.SetClickHdl( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
@@ -614,6 +620,22 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         bModified = sal_True;
     }
 
+    if ( m_aExperimentalCB.IsChecked() != m_aExperimentalCB.GetSavedValue() )
+    {
+        SvtMiscOptions aMiscOpt;
+        aMiscOpt.SetExperimentalMode( m_aExperimentalCB.IsChecked() );
+        bModified = sal_True;
+    }
+
+    if ( m_aMacroCB.IsChecked() != m_aMacroCB.GetSavedValue() )
+    {
+        SvtMiscOptions aMiscOpt;
+        aMiscOpt.SetMacroRecorderMode( m_aMacroCB.IsChecked() );
+        bModified = sal_True;
+    }
+
+
+
     if ( m_pPathDlg )
     {
         ::rtl::OUString sPath( m_pPathDlg->GetClassPath() );
@@ -687,12 +709,19 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
     ClearJavaInfo();
     ClearJavaList();
 
+    SvtMiscOptions aMiscOpt;
+
     sal_Bool bEnabled = sal_False;
     javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
     if ( eErr != JFW_E_NONE )
         bEnabled = sal_False;
     m_aJavaEnableCB.Check( bEnabled );
     EnableHdl_Impl( &m_aJavaEnableCB );
+
+    m_aExperimentalCB.Check( aMiscOpt.IsExperimentalMode() );
+    m_aExperimentalCB.SaveValue();
+    m_aMacroCB.Check( aMiscOpt.IsMacroRecorderMode() );
+    m_aMacroCB.SaveValue();
 
     m_aResetTimer.Start();
 }
@@ -1071,3 +1100,5 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
+

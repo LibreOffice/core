@@ -212,10 +212,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aTwoFigureFL        ( this, CUI_RES( FL_TWOFIGURE ) ),
     aInterpretFT        ( this, CUI_RES( FT_INTERPRET ) ),
     aYearValueField     ( this, CUI_RES( NF_YEARVALUE ) ),
-    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) ),
-    aExperimentalFL     ( this, CUI_RES( FL_EXPERIMENTAL ) ),
-    aExperimentalCB     ( this, CUI_RES( CB_EXPERIMENTAL ) ),
-    aMacroRecorderCB    ( this, CUI_RES( CB_MACRORECORDER ) )
+    aToYearFT           ( this, CUI_RES( FT_TOYEAR ) )
 {
     FreeResource();
 
@@ -245,7 +242,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         Window* pWins[] =
         {
             &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
-            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalFL, &aExperimentalCB, &aMacroRecorderCB
+            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
@@ -266,7 +263,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         Window* pWins[] =
         {
             &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
-            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalFL, &aExperimentalCB, &aMacroRecorderCB
+            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
@@ -292,7 +289,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         Window* pWins[] =
         {
             &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
-            &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalFL, &aExperimentalCB, &aMacroRecorderCB
+            &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
@@ -403,20 +400,6 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = sal_True;
     }
 
-    if ( aExperimentalCB.IsChecked() != aExperimentalCB.GetSavedValue() )
-    {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetExperimentalMode( aExperimentalCB.IsChecked() );
-        bModified = sal_True;
-    }
-
-    if ( aMacroRecorderCB.IsChecked() != aMacroRecorderCB.GetSavedValue() )
-    {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetMacroRecorderMode( aMacroRecorderCB.IsChecked() );
-        bModified = sal_True;
-    }
-
     const SfxUInt16Item* pUInt16Item =
         PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
     sal_uInt16 nNum = (sal_uInt16)aYearValueField.GetText().ToInt32();
@@ -450,10 +433,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     aPrintDlgCB.SaveValue();
     aSaveAlwaysCB.Check( aMiscOpt.IsSaveAlwaysAllowed() );
     aSaveAlwaysCB.SaveValue();
-    aExperimentalCB.Check( aMiscOpt.IsExperimentalMode() );
-    aExperimentalCB.SaveValue();
-    aMacroRecorderCB.Check( aMiscOpt.IsMacroRecorderMode() );
-    aMacroRecorderCB.SaveValue();
 
     aODMADlgCB.Check( aMiscOpt.TryODMADialog() );
     aODMADlgCB.SaveValue();

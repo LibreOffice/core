@@ -74,6 +74,10 @@ private:
     String                  m_sAddDialogText;
     Timer                   m_aResetTimer;
 
+    FixedLine               m_aExperimental;
+    CheckBox                m_aExperimentalCB;
+    CheckBox                m_aMacroCB;
+
     ::std::vector< JavaInfo* >
                             m_aAddedInfos;
 

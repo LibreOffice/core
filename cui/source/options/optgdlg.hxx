@@ -70,10 +70,6 @@ private:
 
     String              aStrDateInfo;
 
-    FixedLine           aExperimentalFL;
-    CheckBox            aExperimentalCB;
-    CheckBox            aMacroRecorderCB;
-
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
     DECL_LINK(HelpCheckHdl_Impl, void *);
