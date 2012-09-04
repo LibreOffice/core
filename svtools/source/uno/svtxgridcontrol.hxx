@@ -47,7 +47,9 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 
-using namespace ::svt::table;
+namespace svt { namespace table {
+    class TableControl;
+} }
 
 typedef ::cppu::ImplInheritanceHelper4  <   VCLXWindow
                                         ,   ::com::sun::star::awt::grid::XGridControl
@@ -58,9 +60,9 @@ typedef ::cppu::ImplInheritanceHelper4  <   VCLXWindow
 class SVTXGridControl : public SVTXGridControl_Base
 {
 private:
-    ::boost::shared_ptr< UnoControlTableModel >     m_pTableModel;
-    bool                                            m_bTableModelInitCompleted;
-    SelectionListenerMultiplexer                    m_aSelectionListeners;
+    ::boost::shared_ptr< ::svt::table::UnoControlTableModel >   m_pTableModel;
+    bool                                                        m_bTableModelInitCompleted;
+    SelectionListenerMultiplexer                                m_aSelectionListeners;
 
 protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
@@ -89,6 +91,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getCurrentColumn(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getCurrentRow(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::util::VetoException);
 
     // XGridRowSelection
     virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException );
@@ -114,6 +117,9 @@ protected:
 private:
     void    impl_updateColumnsFromModel_nothrow();
     void    impl_checkTableModelInit();
+
+    void    impl_checkColumnIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_columnIndex ) const;
+    void    impl_checkRowIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_rowIndex ) const;
 };
 #endif // _SVT_GRIDCONTROL_HXX_
 

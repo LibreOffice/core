@@ -106,6 +106,42 @@ namespace svt { namespace table
         */
         sal_Int32  GetCurrentColumn() const;
 
+        /** activates the cell at the given position
+
+            @return
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
+                failure conditions include some other instance vetoing the move,
+                or impossibility to execute the move at all (for instance because
+                of invalid coordinates).
+        */
+        bool    GoTo( ColPos _nColumnPos, RowPos _nRow);
+
+        /** moves the active cell to the given column, by keeping the active row
+
+            @return
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
+                failure conditions include some other instance vetoing the move,
+                or impossibility to execute the move at all (for instance because
+                of invalid coordinates).
+        */
+        inline  bool    GoToColumn( ColPos _nColumn )
+        {
+            return GoTo( _nColumn, GetCurrentRow() );
+        }
+
+        /** moves the active cell to the given row, by keeping the active column
+
+            @return
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
+                failure conditions include some other instance vetoing the move,
+                or impossibility to execute the move at all (for instance because
+                of invalid coordinates).
+        */
+        bool    GoToRow( RowPos _nRow )
+        {
+            return GoTo( GetCurrentColumn(), _nRow );
+        }
+
         SVT_DLLPRIVATE virtual void Resize();
         virtual void    Select();
 
