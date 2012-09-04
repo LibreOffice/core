@@ -76,8 +76,9 @@ private:
     XubString           maRedoText;
     long                mnXOffset;
     Selection           maSelection;
-    sal_uInt16              mnAlign;
+    sal_uInt16          mnAlign;
     xub_StrLen          mnMaxTextLen;
+    sal_Int32           mnMinWidthInChars;
     AutocompleteAction  meAutocompleteAction;
     xub_Unicode         mcEchoChar;
     sal_Bool                mbModified:1,
@@ -198,6 +199,9 @@ public:
     virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
     virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
 
+    void                SetMaxWidthInChars(sal_Int32 nMinWidthInChars);
+    sal_Int32           GetMinWidthInChars() const { return mnMinWidthInChars; }
+
     virtual void        SetSelection( const Selection& rSelection );
     virtual const Selection&    GetSelection() const;
 
@@ -249,6 +253,7 @@ public:
     virtual rtl::OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
     virtual void take_properties(Window &rOther);
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
     // returns the minimum size a bordered Edit should have given the current
     // global style settings (needed by sc's inputwin.cxx)

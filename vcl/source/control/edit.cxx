@@ -219,6 +219,24 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void Edit::SetMaxWidthInChars(sal_Int32 nMinWidthInChars)
+{
+    if (mnMinWidthInChars != nMinWidthInChars)
+    {
+        mnMinWidthInChars = nMinWidthInChars;
+        queue_resize();
+    }
+}
+
+bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width-chars")))
+        SetMaxWidthInChars(rValue.toInt32());
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
+}
+
 void Edit::take_properties(Window &rOther)
 {
     if (!GetParent())
@@ -238,6 +256,7 @@ void Edit::take_properties(Window &rOther)
     maSelection = rOtherEdit.maSelection;
     mnAlign = rOtherEdit.mnAlign;
     mnMaxTextLen = rOtherEdit.mnMaxTextLen;
+    mnMinWidthInChars = rOtherEdit.mnMinWidthInChars;
     meAutocompleteAction = rOtherEdit.meAutocompleteAction;
     mcEchoChar = rOtherEdit.mcEchoChar;
     mbModified = rOtherEdit.mbModified;
@@ -312,6 +331,7 @@ void Edit::ImplInitEditData()
     mnXOffset               = 0;
     mnAlign                 = EDIT_ALIGN_LEFT;
     mnMaxTextLen            = EDIT_NOLIMIT;
+    mnMinWidthInChars       = 3;
     meAutocompleteAction    = AUTOCOMPLETE_KEYINPUT;
     mbModified              = sal_False;
     mbInternModified        = sal_False;
@@ -2873,7 +2893,7 @@ Size Edit::CalcMinimumSizeForText(const rtl::OUString &rString) const
     Size aSize ( GetTextWidth( rString ), GetTextHeight() );
     // do not create edit fields in which one cannot enter anything
     // a default minimum width should exist for at least 3 characters
-    Size aMinSize ( CalcSize( 3 ) );
+    Size aMinSize ( CalcSize( mnMinWidthInChars ) );
     if( aSize.Width() < aMinSize.Width() )
         aSize.Width() = aMinSize.Width();
     // add some space between text entry and border

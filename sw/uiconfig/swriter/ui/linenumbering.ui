@@ -363,6 +363,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
+                                    <property name="width_chars">3</property>
                                     <property name="invisible_char_set">True</property>
                                   </object>
                                   <packing>

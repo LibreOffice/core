@@ -304,6 +304,14 @@ namespace
 
         return eUnit;
     }
+
+    void ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
+    {
+        rtl::OString sWidthChars(RTL_CONSTASCII_STRINGPARAM("width-chars"));
+        VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
+        if (aFind == rMap.end())
+            rMap[sWidthChars] = "25";
+    }
 }
 
 bool VclBuilder::extractGroup(const rtl::OString &id, stringmap &rMap)
@@ -469,7 +477,10 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
             pWindow = new FixedLine(pParent, WB_HORZ);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
+    {
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+        ensureDefaultWidthChars(rMap);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
         pWindow = new TabControl(pParent, WB_STDTABCONTROL|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDrawingArea")))
