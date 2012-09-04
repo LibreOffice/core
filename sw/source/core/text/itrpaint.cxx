@@ -497,11 +497,13 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
     // If current underline matches the common underline font, we continue
     // to use the common underline font.
+    //Bug 120769:Color of underline display wrongly
+        Color aAutoCo(COL_AUTO);
     if ( GetInfo().GetUnderFnt() &&
-         GetInfo().GetUnderFnt()->GetFont().GetUnderline() ==
-         GetFnt()->GetUnderline() )
-         return;
-
+        GetInfo().GetUnderFnt()->GetFont().GetUnderline() == GetFnt()->GetUnderline() &&
+        GetInfo().GetFont() && GetInfo().GetFont()->GetUnderColor() != aAutoCo )
+        return;
+    //Bug 120769(End)
     // calculate the new common underline font
     SwFont* pUnderlineFnt = 0;
     Point aCommonBaseLine;
