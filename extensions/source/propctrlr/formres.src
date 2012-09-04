@@ -919,6 +919,22 @@ String RID_STR_SCROLLVALUE_MIN
 {
     Text [ en-US ] = "Scroll value min.";
 };
+String RID_STR_SCROLL_WIDTH
+{
+    Text [ en-US ] = "Scroll width";
+};
+String RID_STR_SCROLL_HEIGHT
+{
+    Text [ en-US ] = "Scroll height";
+};
+String RID_STR_SCROLL_TOP
+{
+    Text [ en-US ] = "Scroll top";
+};
+String RID_STR_SCROLL_LEFT
+{
+    Text [ en-US ] = "Scroll left";
+};
 String RID_STR_DEFAULT_SCROLLVALUE
 {
     Text [ en-US ] = "Default scroll value";

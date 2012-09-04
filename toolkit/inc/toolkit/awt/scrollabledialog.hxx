@@ -36,16 +36,35 @@ namespace toolkit
 {
     class ScrollableDialog : public Dialog
     {
-        Window maContents;
         ScrollBar          maHScrollBar;
         ScrollBar          maVScrollBar;
+        Size               maScrollArea;
         bool               mbHasHoriBar;
         bool               mbHasVertBar;
         Point              mnScrollPos;
+        long               mnScrWidth;
+
+    public:
+        enum ScrollBarVisibility { None, Vert, Hori, Both };
+    private:
+        ScrollBarVisibility maScrollVis;
+        void    lcl_Scroll( long nX, long nY );
     public:
         ScrollableDialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
         virtual ~ScrollableDialog();
+        void    SetScrollWidth( long nWidth );
+        long    GetScrollWidth() { return maScrollArea.Width(); }
+        void    SetScrollHeight( long nHeight );
+        long    GetScrollHeight() { return maScrollArea.Height(); }
+        void    SetScrollLeft( long nLeft );
+        long    GetScrollLeft() { return mnScrollPos.X(); }
+        void    SetScrollTop( long Top );
+        long    GetScrollTop() { return mnScrollPos.Y() ; }
         Window*  getContentWindow();
+        ScrollBarVisibility getScrollVisibility() { return maScrollVis; }
+        void setScrollVisibility( ScrollBarVisibility rState );
+        virtual void      Paint( const Rectangle& rRect );
+        virtual void      Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
         DECL_LINK( ScrollBarHdl, ScrollBar* );
         DECL_LINK( ContainerScrolled, void* );
         // Window

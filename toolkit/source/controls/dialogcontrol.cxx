@@ -173,6 +173,8 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XMultiServiceFact
     ImplRegisterProperty( BASEPROPERTY_DIALOGSOURCEURL );
     ImplRegisterProperty( BASEPROPERTY_GRAPHIC );
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
+    ImplRegisterProperty( BASEPROPERTY_HSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_VSCROLL );
 
     Any aBool;
     aBool <<= (sal_Bool) sal_True;
