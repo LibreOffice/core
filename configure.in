@@ -6640,11 +6640,12 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBMSPUB=NO
-    BUILD_TYPE="$BUILD_TYPE LIBMSPUB"
+    MSPUB_TARBALL=b2db54b6e96287ac995d7ed654ace4fc-libmspub-0.0.3.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBMSPUB)
 AC_SUBST(MSPUB_CFLAGS)
 AC_SUBST(MSPUB_LIBS)
+AC_SUBST(MSPUB_TARBALL)
 
 dnl ===================================================================
 dnl Check for system libvisio

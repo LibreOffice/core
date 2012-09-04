@@ -86,6 +86,7 @@ jurt\
 jvmaccess\
 jvmfwk\
 l10ntools\
+libmspub\
 libvisio\
 libwps\
 lingucomponent\
@@ -211,7 +212,6 @@ libcroco\
 libexttextcat\
 libgsf\
 liblangtag\
-libmspub\
 liborcus\
 libpng\
 librsvg\

@@ -1,6 +1,0 @@
-mkdir: %_DEST%\inc\libmspub
-..\%__SRC%\misc\build\libmspub*\src\lib\libmspub.h %_DEST%\inc\libmspub
-..\%__SRC%\misc\build\libmspub*\src\lib\MSPUBDocument.h %_DEST%\inc\libmspub\
-..\%__SRC%\misc\build\libmspub*\src\lib\MSPUBStringVector.h %_DEST%\inc\libmspub\
-..\%__SRC%\lib\*.a %_DEST%\lib\*.a
-..\%__SRC%\slb\*.lib %_DEST%\lib\*.lib
