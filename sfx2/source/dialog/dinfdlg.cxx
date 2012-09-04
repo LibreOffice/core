@@ -33,7 +33,7 @@
 
 #include <comphelper/string.hxx>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -938,26 +938,23 @@ void SfxDocumentPage::ImplUpdateSignatures()
         if ( pMedium && !pMedium->GetName().isEmpty() && pMedium->GetStorage().is() )
         {
             Reference< security::XDocumentDigitalSignatures > xD(
-                comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+                security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
 
-            if ( xD.is() )
+            String s;
+            Sequence< security::DocumentSignatureInformation > aInfos;
+            aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
+                                                            uno::Reference< io::XInputStream >() );
+            if ( aInfos.getLength() > 1 )
+                s = aMultiSignedStr;
+            else if ( aInfos.getLength() == 1 )
             {
-                String s;
-                Sequence< security::DocumentSignatureInformation > aInfos;
-                aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
-                                                                uno::Reference< io::XInputStream >() );
-                if ( aInfos.getLength() > 1 )
-                    s = aMultiSignedStr;
-                else if ( aInfos.getLength() == 1 )
-                {
-                    rtl::OUString aCN_Id("CN");
-                    const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
-                    s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
-                    s.AppendAscii( ", " );
-                    s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
-                }
-                aSignedValFt.SetText( s );
+                rtl::OUString aCN_Id("CN");
+                const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
+                s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
+                s.AppendAscii( ", " );
+                s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
             }
+            aSignedValFt.SetText( s );
         }
     }
 }

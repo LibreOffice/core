@@ -40,7 +40,7 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
@@ -1261,18 +1261,17 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
         {
             if ( !xLocSigner.is() )
             {
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= ::rtl::OUString();
+                ::rtl::OUString aVersion;
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-                    aArgs[0] = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) );
+                    xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) ) >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {
                 }
 
-                xLocSigner.set( comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ), aArgs ), uno::UNO_QUERY_THROW );
+                xLocSigner.set( security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion) );
 
             }
 

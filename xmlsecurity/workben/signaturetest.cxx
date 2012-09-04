@@ -51,7 +51,7 @@
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/biginteger.hxx>
 
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star;
@@ -304,9 +304,8 @@ IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
     uno::Reference< security::XDocumentDigitalSignatures > xD(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
-    if ( xD.is() )
-        xD->signDocumentContent( xStore, NULL );
+        security::DocumentDigitalSignatures::create(comphelper::getProcessComponentContext() );
+    xD->signDocumentContent( xStore, NULL );
 
 
     return 0;
@@ -319,25 +318,20 @@ IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
     uno::Reference< security::XDocumentDigitalSignatures > xD(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
-    if ( xD.is() )
+        security::DocumentDigitalSignatures::create(comphelper::getProcessComponentContext()) );
+    uno::Sequence< security::DocumentSignatureInformation > aInfos = xD->verifyDocumentContentSignatures( xStore, NULL );
+    int nInfos = aInfos.getLength();
+    for ( int n = 0; n < nInfos; n++ )
     {
-        uno::Sequence< security::DocumentSignatureInformation > aInfos = xD->verifyDocumentContentSignatures( xStore, NULL );
-        int nInfos = aInfos.getLength();
-        for ( int n = 0; n < nInfos; n++ )
-        {
-            security::DocumentSignatureInformation& rInf = aInfos[n];
-            String aText( RTL_CONSTASCII_USTRINGPARAM( "The document is signed by\n\n  " ) );
-            aText += String( rInf.Signer->getSubjectName() );
-            aText += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n The signature is " ) );
-            if ( !rInf.SignatureIsValid )
-                aText += String( RTL_CONSTASCII_USTRINGPARAM( "NOT " ) );
-            aText += String( RTL_CONSTASCII_USTRINGPARAM( "valid" ) );
-            InfoBox( this, aText ).Execute();
-        }
-
+        security::DocumentSignatureInformation& rInf = aInfos[n];
+        String aText( RTL_CONSTASCII_USTRINGPARAM( "The document is signed by\n\n  " ) );
+        aText += String( rInf.Signer->getSubjectName() );
+        aText += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n The signature is " ) );
+        if ( !rInf.SignatureIsValid )
+            aText += String( RTL_CONSTASCII_USTRINGPARAM( "NOT " ) );
+        aText += String( RTL_CONSTASCII_USTRINGPARAM( "valid" ) );
+        InfoBox( this, aText ).Execute();
     }
-
 
     return 0;
 }

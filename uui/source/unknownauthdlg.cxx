@@ -22,8 +22,9 @@
 #include <ids.hrc>
 #include <unknownauthdlg.hrc>
 #include <unknownauthdlg.hxx>
+#include <comphelper/componentcontext.hxx>
 
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 // -----------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
     xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
-                    getServiceFactory().get()->createInstance( rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" )), uno::UNO_QUERY );
+                    ::com::sun::star::security::DocumentDigitalSignatures::createDefault(comphelper::ComponentContext(getServiceFactory()).getUNOContext()) );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 

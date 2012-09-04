@@ -33,8 +33,22 @@ module com { module sun { module star { module security {
  * Service of DocumentDigitalSignatures
  */
 
-    service Decryptor {
-    interface XDocumentDigitalSignatures ;
+service DocumentDigitalSignatures : XDocumentDigitalSignatures
+{
+    /* default constructor */
+    createDefault();
+
+    /**
+        @param ODFVersion
+            the version of the signature
+     */
+    createWithVersion([in] string ODFVersion);
+
+    /**
+        @param ODFVersion
+            the version of the signature
+     */
+    createWithVersionAndValidSignature([in] string ODFVersion, [in] boolean HasValidDocumentSignature);
 };
 
 } ; } ; } ; } ;

@@ -19,7 +19,7 @@
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/sequence.hxx>
 #include "comphelper/documentconstants.hxx"
 #include <comphelper/processfactory.hxx>
@@ -116,7 +116,7 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl)
     uno::Sequence< uno::Any > aArgs( 1 );
     aArgs[0] = uno::makeAny( maODFVersion );
     uno::Reference< security::XDocumentDigitalSignatures > xD(
-        comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ), aArgs ), uno::UNO_QUERY );
+        security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
     if( xD.is() )
     {
         if( mxCert.is() )
@@ -135,19 +135,16 @@ IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl)
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[0] = uno::makeAny( maODFVersion );
         uno::Reference< security::XDocumentDigitalSignatures > xD(
-            comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ), aArgs ), uno::UNO_QUERY );
-        if( xD.is() )
+            security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
+        if( mxCert.is() )
+            xD->addAuthorToTrustedSources( mxCert );
+        else if( mxStore.is() )
         {
-            if( mxCert.is() )
-                xD->addAuthorToTrustedSources( mxCert );
-            else if( mxStore.is() )
-            {
-                DBG_ASSERT( mpInfos, "-MacroWarning::EnableBtnHdl(): no infos, search in nirvana..." );
+            DBG_ASSERT( mpInfos, "-MacroWarning::EnableBtnHdl(): no infos, search in nirvana..." );
 
-                sal_Int32   nCnt = mpInfos->getLength();
-                for( sal_Int32 i = 0 ; i < nCnt ; ++i )
-                    xD->addAuthorToTrustedSources( (*mpInfos)[ i ].Signer );
-            }
+            sal_Int32   nCnt = mpInfos->getLength();
+            for( sal_Int32 i = 0 ; i < nCnt ; ++i )
+                xD->addAuthorToTrustedSources( (*mpInfos)[ i ].Signer );
         }
     }
 

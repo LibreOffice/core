@@ -64,7 +64,7 @@
 #include <svx/svxids.hrc> // slot ids, mostly for changetracking
 
 // for security TP
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 #ifdef UNX
 #include <sys/stat.h>
@@ -867,9 +867,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
     try
     {
         Reference< security::XDocumentDigitalSignatures > xD(
-            comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), UNO_QUERY );
-        if ( xD.is() )
-            xD->manageTrustedSources();
+            security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() ) );
+        xD->manageTrustedSources();
     }
     catch (const Exception& e)
     {

@@ -26,7 +26,7 @@
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/script/XLibraryQueryExecutable.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
@@ -56,6 +56,7 @@ namespace sfx2
     using ::com::sun::star::task::DocumentMacroConfirmationRequest;
     using ::com::sun::star::task::ErrorCodeRequest;
     using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::security::DocumentDigitalSignatures;
     using ::com::sun::star::security::XDocumentDigitalSignatures;
     using ::com::sun::star::security::DocumentSignatureInformation;
     using ::com::sun::star::embed::XStorage;
@@ -224,20 +225,16 @@ namespace sfx2
 
             // get document location from medium name and check whether it is a trusted one
             // the service is created ohne document version, since it is not of interest here
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            Reference< XDocumentDigitalSignatures > xSignatures;
-            if ( aContext.createComponent( "com.sun.star.security.DocumentDigitalSignatures", xSignatures ) )
+            Reference< XDocumentDigitalSignatures > xSignatures(DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
+            INetURLObject aURLReferer( sReferrer );
+
+            ::rtl::OUString aLocation;
+            if ( aURLReferer.removeSegment() )
+                aLocation = aURLReferer.GetMainURL( INetURLObject::NO_DECODE );
+
+            if ( !aLocation.isEmpty() && xSignatures->isLocationTrusted( aLocation ) )
             {
-                INetURLObject aURLReferer( sReferrer );
-
-                ::rtl::OUString aLocation;
-                if ( aURLReferer.removeSegment() )
-                    aLocation = aURLReferer.GetMainURL( INetURLObject::NO_DECODE );
-
-                if ( !aLocation.isEmpty() && xSignatures->isLocationTrusted( aLocation ) )
-                {
-                    return allowMacroExecution();
-                }
+                return allowMacroExecution();
             }
 
             // at this point it is clear that the document is not in the secure location

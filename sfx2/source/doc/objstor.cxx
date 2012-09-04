@@ -60,7 +60,7 @@
 #include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 
@@ -1538,23 +1538,17 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             try
             {
                 // get the ODF version of the new medium
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= ::rtl::OUString();
+                ::rtl::OUString aVersion;
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
-                    aArgs[0] = xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) );
+                    xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) ) >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {
                 }
 
-                xDDSigns = uno::Reference< security::XDocumentDigitalSignatures >(
-                    comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                        rtl::OUString(
-                            "com.sun.star.security.DocumentDigitalSignatures"  ),
-                        aArgs ),
-                    uno::UNO_QUERY_THROW );
+                xDDSigns = security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion);
 
                 ::rtl::OUString aScriptSignName = xDDSigns->getScriptingContentSignatureDefaultStreamName();
 

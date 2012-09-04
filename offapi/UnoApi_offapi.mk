@@ -214,6 +214,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/resource,\
 	StringResourceWithLocation \
 	StringResourceWithStorage \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/security,\
+	DocumentDigitalSignatures \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/scanner,\
 	ScannerManager \
 ))
@@ -1045,9 +1048,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbcx,\
 	UserDescriptor \
 	View \
 	ViewDescriptor \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/security,\
-	DocumentDigitalSignatures \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/setup,\
 	ProductRegistration \
