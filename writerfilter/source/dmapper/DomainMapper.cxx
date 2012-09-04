@@ -119,9 +119,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             uno::Reference< io::XInputStream > xInputStream,
                             uno::Reference< lang::XComponent > xModel,
                             SourceDocumentType eDocumentType) :
-LoggedProperties(dmapper_logger, "DomainMapper"),
-LoggedTable(dmapper_logger, "DomainMapper"),
-LoggedStream(dmapper_logger, "DomainMapper"),
+    LoggedProperties(dmapper_logger, "DomainMapper"),
+    LoggedTable(dmapper_logger, "DomainMapper"),
+    LoggedStream(dmapper_logger, "DomainMapper"),
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType )),
     mnBackgroundColor(0), mbIsHighlightSet(false)
 {
@@ -3025,11 +3025,18 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case 71 : //"sprmCDxaSpace"
     case 96 : //"sprmCDxaSpace"
     case NS_sprm::LN_CDxaSpace:  // sprmCDxaSpace
-        /* WRITERFILTERSTATUS: done: 50, planned: 2, spent: 0 */
-        //Kerning half point values
-        //TODO: there are two kerning values -
-        // in ww8par6.cxx NS_sprm::LN_CHpsKern is used as boolean AutoKerning
-        rContext->Insert(PROP_CHAR_CHAR_KERNING, true, uno::makeAny( sal_Int16(ConversionHelper::convertTwipToMM100(sal_Int16(nIntValue))) ) );
+        {
+            /* WRITERFILTERSTATUS: done: 50, planned: 2, spent: 0 */
+            //Kerning half point values
+            //TODO: there are two kerning values -
+            // in ww8par6.cxx NS_sprm::LN_CHpsKern is used as boolean AutoKerning
+            sal_Int16 nResult = static_cast<sal_Int16>(ConversionHelper::convertTwipToMM100(nIntValue));
+            if (m_pImpl->IsInComments())
+            {
+                nResult = static_cast<sal_Int16>(nIntValue);
+            }
+            rContext->Insert(PROP_CHAR_CHAR_KERNING, true, uno::makeAny(nResult));
+        }
         break;
     case NS_sprm::LN_CHpsKern:  // sprmCHpsKern    auto kerning is bound to a minimum font size in Word - but not in Writer :-(
         /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */

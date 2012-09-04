@@ -120,33 +120,34 @@ void FIB::SetData( Id nName, sal_Int32 nValue )
 
   -----------------------------------------------------------------------*/
 DomainMapper_Impl::DomainMapper_Impl(
-            DomainMapper& rDMapper,
-            uno::Reference < uno::XComponentContext >  xContext,
-            uno::Reference< lang::XComponent >  xModel,
-            SourceDocumentType eDocumentType) :
-        m_eDocumentType( eDocumentType ),
-        m_rDMapper( rDMapper ),
-        m_xTextDocument( xModel, uno::UNO_QUERY ),
-        m_xTextFactory( xModel, uno::UNO_QUERY ),
-        m_xComponentContext( xContext ),
-        m_bFieldMode( false ),
-        m_bSetUserFieldContent( false ),
-        m_bIsFirstSection( true ),
-        m_bIsColumnBreakDeferred( false ),
-        m_bIsPageBreakDeferred( false ),
-        m_bIsInShape( false ),
-        m_bShapeContextAdded( false ),
-        m_pLastSectionContext( ),
-        m_nCurrentTabStopIndex( 0 ),
-        m_sCurrentParaStyleId(),
-        m_bInStyleSheetImport( false ),
-        m_bInAnyTableImport( false ),
-        m_bLineNumberingSet( false ),
-        m_bIsInFootnoteProperties( true ),
-        m_bIsCustomFtnMark( false ),
-        m_bIsParaChange( false ),
-        m_bParaChanged( false ),
-        m_bIsLastParaInSection( false )
+    DomainMapper& rDMapper,
+    uno::Reference < uno::XComponentContext >  xContext,
+    uno::Reference< lang::XComponent >  xModel,
+    SourceDocumentType eDocumentType) :
+    m_eDocumentType( eDocumentType ),
+    m_rDMapper( rDMapper ),
+    m_xTextDocument( xModel, uno::UNO_QUERY ),
+    m_xTextFactory( xModel, uno::UNO_QUERY ),
+    m_xComponentContext( xContext ),
+    m_bFieldMode( false ),
+    m_bSetUserFieldContent( false ),
+    m_bIsFirstSection( true ),
+    m_bIsColumnBreakDeferred( false ),
+    m_bIsPageBreakDeferred( false ),
+    m_bIsInShape( false ),
+    m_bShapeContextAdded( false ),
+    m_pLastSectionContext( ),
+    m_nCurrentTabStopIndex( 0 ),
+    m_sCurrentParaStyleId(),
+    m_bInStyleSheetImport( false ),
+    m_bInAnyTableImport( false ),
+    m_bLineNumberingSet( false ),
+    m_bIsInFootnoteProperties( true ),
+    m_bIsCustomFtnMark( false ),
+    m_bIsParaChange( false ),
+    m_bParaChanged( false ),
+    m_bIsLastParaInSection( false ),
+    m_bIsInComments( false )
 {
     appendTableManager( );
     GetBodyText();
@@ -1248,6 +1249,7 @@ void DomainMapper_Impl::PushAnnotation()
     try
     {
         PropertyMapPtr pTopContext = GetTopContext();
+        m_bIsInComments = true;
         m_xAnnotationField = uno::Reference< beans::XPropertySet >( GetTextFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.Annotation") ) ),
             uno::UNO_QUERY_THROW );
@@ -1257,7 +1259,7 @@ void DomainMapper_Impl::PushAnnotation()
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false, "exception in PushFootOrEndnote" );
+        OSL_ENSURE( false, "exception in PushAnnotation" );
     }
 }
 /*-- 24.05.2007 14:22:29---------------------------------------------------
@@ -1272,6 +1274,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopAnnotation()
 {
+    m_bIsInComments = false;
     m_aTextAppendStack.pop();
     uno::Sequence< beans::PropertyValue > aEmptyProperties;
     appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );

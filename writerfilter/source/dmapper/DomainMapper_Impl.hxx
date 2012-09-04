@@ -342,6 +342,7 @@ private:
 
     bool                            m_bParaChanged;
     bool                            m_bIsLastParaInSection;
+    bool                            m_bIsInComments;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
@@ -571,6 +572,8 @@ public:
 
     void SetCustomFtnMark(bool bSet) { m_bIsCustomFtnMark = bSet; }
     bool IsCustomFtnMark() const { return m_bIsCustomFtnMark;  }
+
+    bool IsInComments() const { return m_bIsInComments; };
 
     void RegisterFrameConversion(
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameStartRange,
