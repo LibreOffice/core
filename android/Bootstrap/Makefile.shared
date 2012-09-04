@@ -19,7 +19,7 @@ cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/
 cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
 endef
 
-define COPYSOJAR
+define COPYJAR
 cp $(1) libs
 endef
 

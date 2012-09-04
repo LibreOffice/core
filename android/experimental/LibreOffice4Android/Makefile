@@ -215,7 +215,7 @@ build-ant: copy-stuff properties
 		   unoil \
 		   unoloader \
 		  ); do \
-	    $(call COPYSOJAR,$(OUTDIR)/bin/$${F}.jar); \
+	    $(call COPYJAR,$(OUTDIR)/bin/$${F}.jar); \
 	done
 #
 	unset JAVA_HOME && $(ANT) debug
