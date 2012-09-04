@@ -83,6 +83,7 @@ class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 
     SwColumns   aColumns;   //Informationen fuer die einzelnen Spalten.
     sal_uInt16      nWidth;     //Gesamtwunschbreite aller Spalten.
+    sal_Int16   aWidthAdjustValue;
 
     sal_Bool bOrtho;            //Nur wenn dieses Flag gesetzt ist wird beim setzen
                             //der GutterWidth eine 'optische Verteilung'
@@ -99,6 +100,9 @@ public:
     SwFmtCol();
     SwFmtCol( const SwFmtCol& );
     ~SwFmtCol();
+    //i120133
+    const   sal_Int16 GetAdjustValue() const { return aWidthAdjustValue; }
+    void    SetAdjustValue( const sal_Int16& n ) { aWidthAdjustValue = n; }
 
     SwFmtCol& operator=( const SwFmtCol& );
 
