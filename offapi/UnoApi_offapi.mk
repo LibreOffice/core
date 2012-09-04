@@ -103,6 +103,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
 	OOXMLDocumentPropertiesImporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
+	ShapeCollection \
 	SlideRenderer \
 	SlideSorter \
 ))
@@ -669,7 +670,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing
 	RotationDescriptor \
 	ShadowProperties \
 	Shape \
-	ShapeCollection \
 	Shapes \
 	Text \
 	TextProperties \
