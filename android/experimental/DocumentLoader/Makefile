@@ -221,7 +221,7 @@ copy-stuff:
 
 build-ant: copy-stuff properties
 #
-# Copy jar files we need, and even construct one.
+# Copy jar files we need
 #
 	for F in $(strip \
 		   java_uno \
