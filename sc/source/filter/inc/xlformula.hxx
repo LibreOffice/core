@@ -287,6 +287,7 @@ const size_t EXC_FUNCINFO_PARAMINFO_COUNT   = 5;        /// Number of parameter 
 const sal_uInt8 EXC_FUNCFLAG_VOLATILE       = 0x01;     /// Result is volatile (e.g. NOW() function).
 const sal_uInt8 EXC_FUNCFLAG_IMPORTONLY     = 0x02;     /// Only used in import filter.
 const sal_uInt8 EXC_FUNCFLAG_EXPORTONLY     = 0x04;     /// Only used in export filter.
+const sal_uInt8 EXC_FUNCFLAG_PARAMPAIRS     = 0x08;     /// Optional parameters are expected to appear in pairs.
 
 // selected function IDs
 const sal_uInt16 EXC_FUNCID_IF              = 1;
@@ -317,6 +318,8 @@ struct XclFunctionInfo
 
     /** Returns true, if the function is volatile. */
     inline bool         IsVolatile() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_VOLATILE ); }
+    /** Returns true, if optional parameters are expected to appear in pairs. */
+    inline bool         IsParamPairs() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_PARAMPAIRS ); }
     /** Returns true, if the function parameter count is fixed. */
     inline bool         IsFixedParamCount() const { return (mnXclFunc != EXC_FUNCID_EXTERNCALL) && (mnMinParamCount == mnMaxParamCount); }
     /** Returns true, if the function is simulated by a macro call. */

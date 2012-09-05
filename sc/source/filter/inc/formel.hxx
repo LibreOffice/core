@@ -60,7 +60,8 @@ enum FORMULA_TYPE
 {
     FT_CellFormula,
     FT_RangeName,
-    FT_SharedFormula
+    FT_SharedFormula,
+    FT_Conditional
 };
 
 

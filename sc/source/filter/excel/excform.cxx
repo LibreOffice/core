@@ -202,7 +202,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     TokenId         nMerk0;
     const sal_Bool      bRangeName = eFT == FT_RangeName;
     const sal_Bool      bSharedFormula = eFT == FT_SharedFormula;
-    const sal_Bool      bRNorSF = bRangeName || bSharedFormula;
+    const sal_Bool      bConditional = eFT == FT_Conditional;
+    const sal_Bool      bRNorSF = bRangeName || bSharedFormula || bConditional;
 
     ScSingleRefData     aSRD;
     ScComplexRefData        aCRD;

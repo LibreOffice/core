@@ -210,11 +210,14 @@ void XclExpFuncData::IncParamInfoIdx()
     if( mpParamInfo )
     {
         // move pointer to next entry, if something explicit follows
-        if( (static_cast<size_t>(mpParamInfo - mrFuncInfo.mpParamInfos + 1) < EXC_FUNCINFO_PARAMINFO_COUNT) && (mpParamInfo[ 1 ].meValid != EXC_PARAM_NONE) )
+        if( (static_cast< size_t >( mpParamInfo - mrFuncInfo.mpParamInfos + 1 ) < EXC_FUNCINFO_PARAMINFO_COUNT) && (mpParamInfo[ 1 ].meValid != EXC_PARAM_NONE) )
             ++mpParamInfo;
         // if last parameter type is 'Excel-only' or 'Calc-only', do not repeat it
         else if( IsExcelOnlyParam() || IsCalcOnlyParam() )
             mpParamInfo = 0;
+        // points to last info, but parameter pairs expected, move to previous info
+        else if( mrFuncInfo.IsParamPairs() )
+            --mpParamInfo;
         // otherwise: repeat last parameter class
     }
 }

@@ -359,6 +359,19 @@ static const XclFunctionInfo saFuncTable_8[] =
     { ocEuroConvert,        255,    4,  6,  V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, "EUROCONVERT" }
 };
 
+/** Functions new in OOXML. */
+static const XclFunctionInfo saFuncTable_Oox[] =
+{
+    { ocCountIfs,           NOID,   2,  MX, V, { RO, VR }, EXC_FUNCFLAG_IMPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "COUNTIFS" ) },
+    { ocCountIfs,           255,    3,  MX, V, { RO_E, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "COUNTIFS" ) },
+    { ocSumIfs,             NOID,   3,  MX, V, { RO, RO, VR }, EXC_FUNCFLAG_IMPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "SUMIFS" ) },
+    { ocSumIfs,             255,    4,  MX, V, { RO_E, RO, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "SUMIFS" ) },
+    { ocAverageIf,          NOID,   2,  3,  V, { RO, VR, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "AVERAGEIF" ) },
+    { ocAverageIf,          255,    3,  4,  V, { RO_E, RO, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "AVERAGEIF" ) },
+    { ocAverageIfs,         NOID,   3,  MX, V, { RO, RO, VR }, EXC_FUNCFLAG_IMPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) },
+    { ocAverageIfs,         255,    4,  MX, V, { RO_E, RO, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) }
+};
+
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }, \
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }
@@ -398,7 +411,7 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "SKEWP" ),
     EXC_FUNCENTRY_ODF( ocUnichar,       1,  1,  0,  "UNICHAR" ),
     EXC_FUNCENTRY_ODF( ocUnicode,       1,  1,  0,  "UNICODE" ),
-    EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "XOR" )
+    EXC_FUNCENTRY_ODF( ocXor,           1,  MX, 0,  "XOR" )
 };
 
 #undef EXC_FUNCENTRY_ODF
@@ -424,6 +437,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
         (this->*pFillFunc)( saFuncTable_5, STATIC_ARRAY_END( saFuncTable_5 ) );
     if( eBiff >= EXC_BIFF8 )
         (this->*pFillFunc)( saFuncTable_8, STATIC_ARRAY_END( saFuncTable_8 ) );
+    (this->*pFillFunc)( saFuncTable_Oox, STATIC_ARRAY_END( saFuncTable_Oox ) );
     (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
 }
 
@@ -457,7 +471,8 @@ void XclFunctionProvider::FillXclFuncMap( const XclFunctionInfo* pBeg, const Xcl
     {
         if( !::get_flag( pIt->mnFlags, EXC_FUNCFLAG_EXPORTONLY ) )
         {
-            maXclFuncMap[ pIt->mnXclFunc ] = pIt;
+            if( pIt->mnXclFunc != NOID )
+                maXclFuncMap[ pIt->mnXclFunc ] = pIt;
             if( pIt->IsMacroFunc() )
                 maXclMacroNameMap[ pIt->GetMacroFuncName() ] = pIt;
         }

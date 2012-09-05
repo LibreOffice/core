@@ -614,7 +614,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, false, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, false, FT_Conditional );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
             xTokArr1.reset( pTokArr->Clone() );
@@ -625,7 +625,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, false, FT_RangeName );
+        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, false, FT_Conditional );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
             pTokArr2.reset( pTokArr->Clone() );
@@ -748,7 +748,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         {
             const ScTokenArray* pTokArr = 0;
             rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_Conditional );
             // formula converter owns pTokArr -> create a copy of the token array
             if( pTokArr )
                 xTokArr1.reset( pTokArr->Clone() );
@@ -763,7 +763,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         {
             const ScTokenArray* pTokArr = 0;
             rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_Conditional );
             // formula converter owns pTokArr -> create a copy of the token array
             if( pTokArr )
                 xTokArr2.reset( pTokArr->Clone() );

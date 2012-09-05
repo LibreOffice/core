@@ -724,10 +724,10 @@ static const FunctionData saFuncTableOox[] =
     { 0,                        "CUBESET",              478,    NOID,   2,  5,  V, { VR, RX, VR }, 0 },
     { 0,                        "CUBESETCOUNT",         479,    NOID,   1,  1,  V, { VR }, 0 },
     { 0,                        "IFERROR",              480,    NOID,   2,  2,  V, { VO, RO }, 0 },
-    { 0,                        "COUNTIFS",             481,    NOID,   2,  MX, V, { RO, VR }, FUNCFLAG_PARAMPAIRS },
-    { 0,                        "SUMIFS",               482,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_PARAMPAIRS },
-    { 0,                        "AVERAGEIF",            483,    NOID,   2,  3,  V, { RO, VR, RO }, 0 },
-    { 0,                        "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, 0 }
+    { "COUNTIFS",               "COUNTIFS",             481,    NOID,   2,  MX, V, { RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
+    { "SUMIFS",                 "SUMIFS",               482,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
+    { "AVERAGEIF",              "AVERAGEIF",            483,    NOID,   2,  3,  V, { RO, VR, RO }, FUNCFLAG_MACROCALL },
+    { "AVERAGEIFS",             "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS }
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
@@ -788,8 +788,6 @@ FunctionParamInfoIterator::FunctionParamInfoIterator( const FunctionInfo& rFuncI
     mpParamInfoEnd( rFuncInfo.mpParamInfos + FUNCINFO_PARAMINFOCOUNT ),
     mbParamPairs( rFuncInfo.mbParamPairs )
 {
-    OSL_ENSURE( !mbParamPairs || (mpParamInfo + 1 < mpParamInfoEnd),
-        "FunctionParamInfoIterator::FunctionParamInfoIterator - expecting at least 2 infos for paired parameters" );
 }
 
 const FunctionParamInfo& FunctionParamInfoIterator::getParamInfo() const
@@ -815,12 +813,12 @@ FunctionParamInfoIterator& FunctionParamInfoIterator::operator++()
         // move pointer to next entry, if something explicit follows
         if( (mpParamInfo + 1 < mpParamInfoEnd) && (mpParamInfo[ 1 ].meValid != FUNC_PARAM_NONE) )
             ++mpParamInfo;
-        // points to last info, but parameter pairs expected, move to previous info
-        else if( mbParamPairs )
-            --mpParamInfo;
         // if last parameter type is 'Excel-only' or 'Calc-only', do not repeat it
         else if( isExcelOnlyParam() || isCalcOnlyParam() )
             mpParamInfo = 0;
+        // points to last info, but parameter pairs expected, move to previous info
+        else if( mbParamPairs )
+            --mpParamInfo;
         // otherwise: repeat last parameter class
     }
     return *this;
@@ -886,8 +884,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
         initFuncs( saFuncTableBiff5, STATIC_ARRAY_END( saFuncTableBiff5 ), nMaxParam, bImportFilter );
     if( eBiff >= BIFF8 )
         initFuncs( saFuncTableBiff8, STATIC_ARRAY_END( saFuncTableBiff8 ), nMaxParam, bImportFilter );
-    if( eFilter == FILTER_OOXML )
-        initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter );
+    initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter );
     initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter );
 }
 
