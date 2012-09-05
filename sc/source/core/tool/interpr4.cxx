@@ -3621,6 +3621,7 @@ StackVar ScInterpreter::Interpret()
                 case ocCountEmptyCells  : ScCountEmptyCells();          break;
                 case ocCountIf          : ScCountIf();                  break;
                 case ocSumIf            : ScSumIf();                    break;
+                case ocAverageIf        : ScAverageIf();                break;
                 case ocLookup           : ScLookup();                   break;
                 case ocVLookup          : ScVLookup();                  break;
                 case ocHLookup          : ScHLookup();                  break;

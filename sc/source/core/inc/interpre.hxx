@@ -86,15 +86,22 @@ public:
     formula::FormulaToken* pPointer[ MAXSTACK ];
 };
 
-enum ScIterFunc {
-    ifSUM,                              // Aufsummieren
-    ifSUMSQ,                            // Quadratsummen
-    ifPRODUCT,                          // Multiplizieren
-    ifAVERAGE,                          // Durchschnitt
-    ifCOUNT,                            // Anzahl Werte
-    ifCOUNT2,                           // Anzahl Werte (nichtleer)
-    ifMIN,                              // Minimum
-    ifMAX                               // Maximum
+enum ScIterFunc
+{
+    ifSUM,     // Sum
+    ifSUMSQ,   // Sum squares
+    ifPRODUCT, // Product
+    ifAVERAGE, // Average
+    ifCOUNT,   // Count
+    ifCOUNT2,  // Count non-empty
+    ifMIN,     // Minimum
+    ifMAX      // Maximum
+};
+
+enum ScIterFuncIf
+{
+    ifSUMIF,    // Conditional sum
+    ifAVERAGEIF // Conditional average
 };
 
 struct FormulaTokenRef_less
@@ -470,8 +477,10 @@ void ScColumn();
 void ScRow();
 void ScTable();
 void ScMatch();
+double IterateParametersIf( ScIterFuncIf );
 void ScCountIf();
 void ScSumIf();
+void ScAverageIf();
 void ScCountEmptyCells();
 void ScLookup();
 void ScHLookup();

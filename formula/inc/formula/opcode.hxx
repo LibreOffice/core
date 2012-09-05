@@ -274,6 +274,7 @@ enum OpCodeEnum
         ocCountEmptyCells   = SC_OPCODE_COUNT_EMPTY_CELLS,
         ocCountIf           = SC_OPCODE_COUNT_IF,
         ocSumIf             = SC_OPCODE_SUM_IF,
+        ocAverageIf         = SC_OPCODE_AVERAGE_IF,
         ocLookup            = SC_OPCODE_LOOKUP,
         ocVLookup           = SC_OPCODE_V_LOOKUP,
         ocHLookup           = SC_OPCODE_H_LOOKUP,

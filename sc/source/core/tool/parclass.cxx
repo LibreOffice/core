@@ -173,6 +173,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocSubTotal,        {{ Value, Reference                                     }, true }},
     { ocSum,             {{ Reference                                            }, true }},
     { ocSumIf,           {{ Reference, Value, Reference                          }, false }},
+    { ocAverageIf,       {{ Reference, Value, Reference                          }, false }},
     { ocSumProduct,      {{ ForceArray                                           }, true }},
     { ocSumSQ,           {{ Reference                                            }, true }},
     { ocSumX2MY2,        {{ ForceArray, ForceArray                               }, false }},

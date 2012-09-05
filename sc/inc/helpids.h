@@ -495,6 +495,7 @@
 #define HID_FUNC_QUADRATESUMME                                  "SC_HID_FUNC_QUADRATESUMME"
 #define HID_FUNC_PRODUKT                                        "SC_HID_FUNC_PRODUKT"
 #define HID_FUNC_SUMMEWENN                                      "SC_HID_FUNC_SUMMEWENN"
+#define HID_FUNC_AVERAGEIF                                      "SC_HID_FUNC_AVERAGEIF"
 #define HID_FUNC_ZAEHLENWENN                                    "SC_HID_FUNC_ZAEHLENWENN"
 #define HID_FUNC_WURZEL                                         "SC_HID_FUNC_WURZEL"
 #define HID_FUNC_ZUFALLSZAHL                                    "SC_HID_FUNC_ZUFALLSZAHL"

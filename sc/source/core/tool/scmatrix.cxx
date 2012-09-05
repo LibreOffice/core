@@ -852,4 +852,3 @@ double ScMatrix::Or()
     }
     return bOr;
 }
-
