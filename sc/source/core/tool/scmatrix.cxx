@@ -852,3 +852,32 @@ double ScMatrix::Or()
     }
     return bOr;
 }
+
+// @Author Marina Plakalovic
+// Computes the logical XOR of elements
+double ScMatrix::Xor()
+{
+    SCSIZE n = nColCount * nRowCount;
+    bool bXor = false;
+    if ( mnValType )
+    {
+        for ( SCSIZE j=0; j<n; j++ )
+            if ( !IsValueType( mnValType[j]) )
+            {   // assuming a CompareMat this is an error
+                return CreateDoubleError( errIllegalArgument );
+            }
+            else if ( ::rtl::math::isFinite( pMat[j].fVal))
+                bXor ^= (pMat[j].fVal != 0.0);
+            else
+                return pMat[j].fVal;    // DoubleError
+    }
+    else
+    {
+        for ( SCSIZE j=0; j<n; j++ )
+            if ( ::rtl::math::isFinite( pMat[j].fVal))
+                bXor ^= (pMat[j].fVal != 0.0);
+            else
+                return pMat[j].fVal;    // DoubleError
+    }
+    return bXor;
+}

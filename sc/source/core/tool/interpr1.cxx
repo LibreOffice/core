@@ -1332,6 +1332,106 @@ void ScInterpreter::ScOr()
     }
 }
 
+void ScInterpreter::ScXor()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "makkica", "ScInterpreter::ScXor" );
+    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    short nParamCount = GetByte();
+    if ( MustHaveParamCountMin( nParamCount, 1 ) )
+    {
+        bool bHaveValue = false;
+        short nRes = 0;
+        size_t nRefInList = 0;
+        while( nParamCount-- > 0)
+        {
+            if ( !nGlobalError )
+            {
+                switch ( GetStackType() )
+                {
+                    case svDouble :
+                        bHaveValue = true;
+                        nRes ^= ( PopDouble() != 0.0 );
+                        break;
+                    case svString :
+                        Pop();
+                        SetError( errNoValue );
+                        break;
+                    case svSingleRef :
+                        {
+                            ScAddress aAdr;
+                            PopSingleRef( aAdr );
+                            if ( !nGlobalError )
+                            {
+                                ScBaseCell* pCell = GetCell( aAdr );
+                                if ( HasCellValueData( pCell ) )
+                                {
+                                    bHaveValue = true;
+                                    nRes ^= ( GetCellValue( aAdr, pCell ) != 0.0 );
+                                }
+                                /* TODO: set error? Excel doesn't have XOR, but
+                                 * doesn't set an error in this case for AND and
+                                 * OR. */
+                            }
+                        }
+                        break;
+                    case svDoubleRef:
+                    case svRefList:
+                        {
+                            ScRange aRange;
+                            PopDoubleRef( aRange, nParamCount, nRefInList);
+                            if ( !nGlobalError )
+                            {
+                                double fVal;
+                                sal_uInt16 nErr = 0;
+                                ScValueIterator aValIter( pDok, aRange );
+                                if ( aValIter.GetFirst( fVal, nErr ) )
+                                {
+                                    bHaveValue = true;
+                                    do
+                                    {
+                                        nRes ^= ( fVal != 0.0 );
+                                    } while ( (nErr == 0) &&
+                                            aValIter.GetNext( fVal, nErr ) );
+                                }
+                                SetError( nErr );
+                            }
+                        }
+                        break;
+                    case svMatrix:
+                        {
+                            bHaveValue = true;
+                            ScMatrixRef pMat = GetMatrix();
+                            if ( pMat )
+                            {
+                                bHaveValue = true;
+                                double fVal = pMat->Xor();
+                                sal_uInt16 nErr = GetDoubleErrorValue( fVal );
+                                if ( nErr )
+                                {
+                                    SetError( nErr );
+                                    nRes = 0;
+                                }
+                                else
+                                    nRes ^= (fVal != 0.0);
+                            }
+                            // else: GetMatrix did set errIllegalParameter
+                        }
+                        break;
+                    default:
+                        Pop();
+                        SetError( errIllegalParameter);
+                }
+            }
+            else
+                Pop();
+        }
+        if ( bHaveValue )
+            PushInt( nRes );
+        else
+            PushNoValue();
+    }
+}
+
 
 void ScInterpreter::ScNeg()
 {

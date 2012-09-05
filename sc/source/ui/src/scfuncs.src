@@ -2656,6 +2656,31 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Logical value 1, logical value 2;...are 1 to 30 conditions to be tested and each returns either TRUE or FALSE." ;
         };
     };
+
+    // -=*# Resource for function XOR #*=-
+    Resource SC_OPCODE_XOR
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns TRUE if exactly one of the arguments is TRUE." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_LOGIC;
+            U2S( HID_FUNC_XOR );
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Logical value " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Logical value 1, logical value 2,... are 1 to 30 conditions to be tested and which return either TRUE or FALSE." ;
+        };
+    };
      // -=*# Resource for function ABS #*=-
     Resource SC_OPCODE_ABS
     {

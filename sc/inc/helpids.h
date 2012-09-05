@@ -486,6 +486,7 @@
 #define HID_FUNC_WENN                                           "SC_HID_FUNC_WENN"
 #define HID_FUNC_ODER                                           "SC_HID_FUNC_ODER"
 #define HID_FUNC_UND                                            "SC_HID_FUNC_UND"
+#define HID_FUNC_XOR                                            "SC_HID_FUNC_XOR"
 
 #define HID_FUNC_ABS                                            "SC_HID_FUNC_ABS"
 #define HID_FUNC_POTENZ                                         "SC_HID_FUNC_POTENZ"

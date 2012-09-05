@@ -79,6 +79,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocAveDev,          {{ Reference                                            }, true }},
     { ocAverage,         {{ Reference                                            }, true }},
     { ocAverageA,        {{ Reference                                            }, true }},
+    { ocAverageIf,       {{ Reference, Value, Reference                          }, false }},
     { ocCell,            {{ Value, Reference                                     }, false }},
     { ocColumn,          {{ Reference                                            }, false }},
     { ocColumns,         {{ Reference                                            }, true }},
@@ -173,7 +174,6 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocSubTotal,        {{ Value, Reference                                     }, true }},
     { ocSum,             {{ Reference                                            }, true }},
     { ocSumIf,           {{ Reference, Value, Reference                          }, false }},
-    { ocAverageIf,       {{ Reference, Value, Reference                          }, false }},
     { ocSumProduct,      {{ ForceArray                                           }, true }},
     { ocSumSQ,           {{ Reference                                            }, true }},
     { ocSumX2MY2,        {{ ForceArray, ForceArray                               }, false }},
@@ -189,6 +189,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocVarP,            {{ Reference                                            }, true }},
     { ocVarPA,           {{ Reference                                            }, true }},
     { ocVLookup,         {{ Value, Reference, Value, Value                       }, false }},
+    { ocXor,             {{ Reference                                            }, true }},
     { ocZTest,           {{ Reference, Value, Value                              }, false }},
     // Excel doubts:
     // ocT: Excel says (and handles) Reference, error? This means no position

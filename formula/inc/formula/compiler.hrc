@@ -389,9 +389,10 @@
 #define SC_OPCODE_CHISQ_DIST        393
 #define SC_OPCODE_CHISQ_INV         394
 #define SC_OPCODE_AVERAGE_IF        395
-#define SC_OPCODE_STOP_2_PAR        396
+#define SC_OPCODE_XOR               396
+#define SC_OPCODE_STOP_2_PAR        397
 
-#define SC_OPCODE_LAST_OPCODE_ID    395      /* last OpCode */
+#define SC_OPCODE_LAST_OPCODE_ID    396      /* last OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999

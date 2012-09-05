@@ -386,6 +386,7 @@ void ScLessEqual();
 void ScGreaterEqual();
 void ScAnd();
 void ScOr();
+void ScXor();
 void ScNot();
 void ScNeg();
 void ScPercentSign();

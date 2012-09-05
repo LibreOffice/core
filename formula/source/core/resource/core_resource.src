@@ -52,6 +52,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_GREATER_EQUAL { Text = ">=" ; };
     String SC_OPCODE_AND { Text = "AND" ; };
     String SC_OPCODE_OR { Text = "OR" ; };
+    String SC_OPCODE_XOR { Text = "XOR" ; };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
     String SC_OPCODE_UNION { Text = "~" ; };
     String SC_OPCODE_RANGE { Text = ":" ; };
@@ -381,6 +382,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GREATER_EQUAL { Text = ">=" ; };
     String SC_OPCODE_AND { Text = "AND" ; };
     String SC_OPCODE_OR { Text = "OR" ; };
+    String SC_OPCODE_XOR { Text = "XOR" ; };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
     String SC_OPCODE_UNION { Text = "~" ; };
     String SC_OPCODE_RANGE { Text = ":" ; };
@@ -718,6 +720,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_OR
     {
         Text [ en-US ] = "OR" ;
+    };
+    String SC_OPCODE_XOR
+    {
+        Text [ en-US ] = "XOR" ;
     };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
     String SC_OPCODE_UNION { Text = "~" ; };

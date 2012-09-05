@@ -385,6 +385,7 @@ enum OpCodeEnum
         ocGetPivotData      = SC_OPCODE_GET_PIVOT_DATA,
         ocEuroConvert       = SC_OPCODE_EUROCONVERT,
         ocNumberValue       = SC_OPCODE_NUMBERVALUE,
+        ocXor               = SC_OPCODE_XOR,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,

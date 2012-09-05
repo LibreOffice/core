@@ -426,6 +426,7 @@ public:
 
     double And();       // logical AND of all matrix values, or NAN
     double Or();        // logical OR of all matrix values, or NAN
+    double Xor();       // logical XOR of all matrix values, or NAN
 
     // All other matrix functions  MatMult, MInv, ...  are in ScInterpreter
     // to be numerically safe.
