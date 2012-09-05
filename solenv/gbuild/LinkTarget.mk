@@ -169,13 +169,13 @@ endif
 
 # GenCxxObject class
 
-gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(CXX_SUFFIX)
+gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(2))
 # defined by platform
 #  gb_CxxObject__command
 
 $(call gb_GenCxxObject_get_target,%) :
-	test -f $(call gb_GenCxxObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCxxObject_get_source,$*)" && false)
-	$(call gb_CxxObject__command,$@,$*,$(call gb_GenCxxObject_get_source,$*),$(call gb_GenCxxObject_get_dep_target,$*))
+	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
+	$(call gb_CxxObject__command,$@,$*,$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) :
@@ -494,7 +494,6 @@ $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
-$(call gb_LinkTarget_get_target,$(1)) : $(eval CXX_SUFFIX := cxx)
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_LinkTarget_get_dep_target,$(1))
@@ -518,8 +517,9 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : $(eval CXX_SUFFIX := cxx)
 endif
+
+gb_LinkTarget_CXX_SUFFIX_$(1) := cxx
 
 endef
 
@@ -875,14 +875,15 @@ $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
-$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_GenCxxObject_get_source,$(2))
+$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_GenCxxObject_get_source,$(2),$(1))
 # Often gb_GenCxxObject_get_source does not have its own rule and is only a byproduct.
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
-$(call gb_GenCxxObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
+$(call gb_GenCxxObject_get_source,$(2),$(1)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
+$(call gb_GenCxxObject_get_target,$(2)) : GEN_CXX_SOURCE := $(call gb_GenCxxObject_get_source,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -1130,10 +1131,7 @@ endef
 #
 # gb_LinkTarget_set_cxx_suffix linktarget used-suffix
 define gb_LinkTarget_set_cxx_suffix
-$(call gb_LinkTarget_get_target,$(1)) : $(eval CXX_SUFFIX := $(2))
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : $(eval CXX_SUFFIX := $(2))
-endif
+gb_LinkTarget_CXX_SUFFIX_$(1) := $(2)
 
 endef
 
