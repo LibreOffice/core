@@ -384,7 +384,6 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
             pHelper = ::boost::shared_ptr<FrameworkHelper>(new FrameworkHelper(rBase));
             pHelper->Initialize();
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            SdGlobalResourceContainer::Instance().AddResource(pHelper);
             maInstanceMap[&rBase] = pHelper;
         }
     }
