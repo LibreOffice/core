@@ -250,6 +250,22 @@
 	<span class="emph"><xsl:apply-templates /></span>
 </xsl:template>
 
+<!-- SUB -->
+<xsl:template match="sub">
+	<sub><xsl:apply-templates /></sub>
+</xsl:template>
+<xsl:template match="sub" mode="embedded">
+	<sub><xsl:apply-templates /></sub>
+</xsl:template>
+
+<!-- SUP -->
+<xsl:template match="sup">
+	<sup><xsl:apply-templates /></sup>
+</xsl:template>
+<xsl:template match="sup" mode="embedded">
+	<sup><xsl:apply-templates /></sup>
+</xsl:template>
+
 <!-- FILENAME -->
 <xsl:template match="filename" />
 

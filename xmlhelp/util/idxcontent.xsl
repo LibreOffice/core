@@ -67,6 +67,16 @@
   <xsl:text>&#xA;</xsl:text>
 </xsl:template>
 
+<xsl:template match="sub">
+  <xsl:apply-templates/>
+  <xsl:text>&#xA;</xsl:text>
+</xsl:template>
+
+<xsl:template match="sup">
+  <xsl:apply-templates/>
+  <xsl:text>&#xA;</xsl:text>
+</xsl:template>
+
 <xsl:template match="paragraph">
   <xsl:value-of select="."/>
   <xsl:text>&#xA;</xsl:text>
