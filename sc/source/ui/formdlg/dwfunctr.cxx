@@ -912,10 +912,16 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                 aFirstArgStr.EraseLeadingAndTrailingChars();
                 aFirstArgStr.SearchAndReplaceAll(' ', '_');
                 aArgStr = aFirstArgStr;
-                if ( nArgs != VAR_ARGS )
+                if ( nArgs != VAR_ARGS && nArgs != PAIRED_VAR_ARGS )
                 {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
                     String aArgSep = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
-                    sal_uInt16 nFix = ( nArgs < VAR_ARGS ? nArgs : nArgs - VAR_ARGS + 1 );
+                    sal_uInt16 nFix;
+                    if (nArgs >= PAIRED_VAR_ARGS)
+                        nFix = nArgs - PAIRED_VAR_ARGS + 2;
+                    else if (nArgs >= VAR_ARGS)
+                        nFix = nArgs - VAR_ARGS + 1;
+                    else
+                        nFix = nArgs;
                     for ( sal_uInt16 nArg = 1;
                             nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++ )
                     {

@@ -37,6 +37,7 @@
 #include "helpids.h"
 
 #define VAR_ARGS                30 // variable Parameter in scfuncs.src
+#define PAIRED_VAR_ARGS         (VAR_ARGS + VAR_ARGS)
 
 #define RID_HANDLEBITMAP        10005
 

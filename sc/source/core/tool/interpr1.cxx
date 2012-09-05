@@ -5078,6 +5078,391 @@ void ScInterpreter::ScCountIf()
     }
 }
 
+double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
+{
+    sal_uInt8 nParamCount = GetByte();
+    sal_uInt8 nQueryCount = nParamCount / 2;
+
+    bool bCheck;
+    if ( eFunc == ifCOUNTIFS )
+        bCheck = (nParamCount >= 2) && (nParamCount % 2 == 0);
+    else
+        bCheck = (nParamCount >= 3) && (nParamCount % 2 == 1);
+
+    if ( !bCheck )
+    {
+        SetError( errParameterExpected);
+    }
+    else
+    {
+        ScMatrixRef pResMat;
+        double fVal = 0.0;
+        double fSum = 0.0;
+        double fMem = 0.0;
+        double fRes = 0.0;
+        double fCount = 0.0;
+        short nParam = 1;
+        size_t nRefInList = 0;
+
+        while (nParamCount > 1 && !nGlobalError)
+        {
+            // take criteria
+            String rString;
+            fVal = 0.0;
+            bool bIsString = true;
+            switch ( GetStackType() )
+            {
+                case svDoubleRef :
+                case svSingleRef :
+                    {
+                        ScAddress aAdr;
+                        if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                            return 0;
+
+                        ScBaseCell* pCell = GetCell( aAdr );
+                        switch ( GetCellType( pCell ) )
+                        {
+                            case CELLTYPE_VALUE :
+                                fVal = GetCellValue( aAdr, pCell );
+                                bIsString = false;
+                                break;
+                            case CELLTYPE_FORMULA :
+                                if( ((ScFormulaCell*)pCell)->IsValue() )
+                                {
+                                    fVal = GetCellValue( aAdr, pCell );
+                                    bIsString = false;
+                                }
+                                else
+                                    GetCellString(rString, pCell);
+                                break;
+                            case CELLTYPE_STRING :
+                            case CELLTYPE_EDIT :
+                                GetCellString(rString, pCell);
+                                break;
+                            default:
+                                fVal = 0.0;
+                                bIsString = false;
+                        }
+                    }
+                    break;
+                case svString:
+                    rString = GetString();
+                    break;
+                case svMatrix :
+                    {
+                        ScMatValType nType = GetDoubleOrStringFromMatrix( fVal, rString);
+                        bIsString = ScMatrix::IsNonValueType( nType);
+                    }
+                    break;
+                default:
+                    {
+                        fVal = GetDouble();
+                        bIsString = false;
+                    }
+            }
+
+            // take range
+            nParam = 1;
+            nRefInList = 0;
+            SCCOL nCol1;
+            SCROW nRow1;
+            SCTAB nTab1;
+            SCCOL nCol2;
+            SCROW nRow2;
+            SCTAB nTab2;
+            ScMatrixRef pQueryMatrix;
+            switch ( GetStackType() )
+            {
+                case svRefList :
+                    {
+                        ScRange aRange;
+                        PopDoubleRef( aRange, nParam, nRefInList);
+                        aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                    }
+                    break;
+                case svDoubleRef :
+                    PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                    break;
+                case svSingleRef :
+                    PopSingleRef( nCol1, nRow1, nTab1 );
+                    nCol2 = nCol1;
+                    nRow2 = nRow1;
+                    nTab2 = nTab1;
+                    break;
+                case svMatrix:
+                    {
+                        pQueryMatrix = PopMatrix();
+                        if (!pQueryMatrix)
+                        {
+                            SetError( errIllegalParameter);
+                        }
+                        nCol1 = 0;
+                        nRow1 = 0;
+                        nTab1 = 0;
+                        SCSIZE nC, nR;
+                        pQueryMatrix->GetDimensions( nC, nR);
+                        nCol2 = static_cast<SCCOL>(nC - 1);
+                        nRow2 = static_cast<SCROW>(nR - 1);
+                        nTab2 = 0;
+                    }
+                    break;
+                default:
+                    SetError( errIllegalParameter);
+            }
+            if ( nTab1 != nTab2 )
+            {
+                SetError( errIllegalParameter);
+            }
+            // initialize temporary result matrix
+            if (!pResMat)
+            {
+                SCSIZE nResC, nResR;
+                nResC = nCol2 - nCol1 + 1;
+                nResR = nRow2 - nRow1 + 1;
+                pResMat = GetNewMat(nResC, nResR);
+                if (!pResMat)
+                {
+                    SetError( errIllegalParameter);
+                }
+                else
+                {
+                    pResMat->FillDouble( 0.0, 0, 0, nResC-1, nResR-1);
+                }
+            }
+            // recalculate matrix values
+            if (nGlobalError == 0)
+            {
+                ScQueryParam rParam;
+                rParam.nRow1       = nRow1;
+                rParam.nRow2       = nRow2;
+
+                ScQueryEntry& rEntry = rParam.GetEntry(0);
+                rEntry.bDoQuery = true;
+                if (!bIsString)
+                {
+                    rEntry.bQueryByString = false;
+                    rEntry.nVal = fVal;
+                    rEntry.eOp = SC_EQUAL;
+                }
+                else
+                {
+                    rParam.FillInExcelSyntax(rString, 0);
+                    sal_uInt32 nIndex = 0;
+                    rEntry.bQueryByString =
+                        !(pFormatter->IsNumberFormat(
+                                    *rEntry.pStr, nIndex, rEntry.nVal));
+                    if ( rEntry.bQueryByString )
+                        rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+                }
+                ScAddress aAdr;
+                aAdr.SetTab( nTab1 );
+                rParam.nCol1  = nCol1;
+                rParam.nCol2  = nCol2;
+                rEntry.nField = nCol1;
+                SCsCOL nColDiff = -nCol1;
+                SCsROW nRowDiff = -nRow1;
+                if (pQueryMatrix)
+                {
+                    // Never case-sensitive.
+                    ScCompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
+                    ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
+                    if (nGlobalError || !pResultMatrix)
+                    {
+                        SetError( errIllegalParameter);
+                    }
+
+                    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                    {
+                        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+                        {
+                            if (pResultMatrix->IsValue( nCol, nRow) &&
+                                    pResultMatrix->GetDouble( nCol, nRow))
+                            {
+                                SCSIZE nC = nCol + nColDiff;
+                                SCSIZE nR = nRow + nRowDiff;
+                                pResMat->PutDouble(pResMat->GetDouble(nC, nR)+1.0, nC, nR);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
+                    // Increment Entry.nField in iterator when switching to next column.
+                    aCellIter.SetAdvanceQueryParamEntryField( true );
+                    if ( aCellIter.GetFirst() )
+                    {
+                        do
+                        {
+                            SCSIZE nC = aCellIter.GetCol() + nColDiff;
+                            SCSIZE nR = aCellIter.GetRow() + nRowDiff;
+                            pResMat->PutDouble(pResMat->GetDouble(nC, nR)+1.0, nC, nR);
+                        } while ( aCellIter.GetNext() );
+                    }
+                }
+            }
+            else
+            {
+                SetError( errIllegalParameter);
+            }
+            nParamCount -= 2;
+        }
+
+        // main range - only for AVERAGEIFS and SUMIFS
+        if (nParamCount == 1)
+        {
+            nParam = 1;
+            nRefInList = 0;
+            bool bNull = true;
+            SCCOL nMainCol1;
+            SCROW nMainRow1;
+            SCTAB nMainTab1;
+            SCCOL nMainCol2;
+            SCROW nMainRow2;
+            SCTAB nMainTab2;
+            ScMatrixRef pMainMatrix;
+            switch ( GetStackType() )
+            {
+                case svRefList :
+                    {
+                        ScRange aRange;
+                        PopDoubleRef( aRange, nParam, nRefInList);
+                        aRange.GetVars( nMainCol1, nMainRow1, nMainTab1, nMainCol2, nMainRow2, nMainTab2);
+                    }
+                    break;
+                case svDoubleRef :
+                    PopDoubleRef( nMainCol1, nMainRow1, nMainTab1, nMainCol2, nMainRow2, nMainTab2 );
+                    break;
+                case svSingleRef :
+                    PopSingleRef( nMainCol1, nMainRow1, nMainTab1 );
+                    nMainCol2 = nMainCol1;
+                    nMainRow2 = nMainRow1;
+                    nMainTab2 = nMainTab1;
+                    break;
+                case svMatrix:
+                    {
+                        pMainMatrix = PopMatrix();
+                        if (!pMainMatrix)
+                        {
+                            SetError( errIllegalParameter);
+                        }
+                        nMainCol1 = 0;
+                        nMainRow1 = 0;
+                        nMainTab1 = 0;
+                        SCSIZE nC, nR;
+                        pMainMatrix->GetDimensions( nC, nR);
+                        nMainCol2 = static_cast<SCCOL>(nC - 1);
+                        nMainRow2 = static_cast<SCROW>(nR - 1);
+                        nMainTab2 = 0;
+                    }
+                    break;
+                default:
+                    SetError( errIllegalParameter);
+            }
+            if ( nMainTab1 != nMainTab2 )
+            {
+                SetError( errIllegalParameter);
+            }
+            // end-result calculation
+            ScAddress aAdr;
+            aAdr.SetTab( nMainTab1 );
+            if (pMainMatrix)
+            {
+                SCSIZE nC, nR;
+                pResMat->GetDimensions(nC, nR);
+                for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+                {
+                    for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+                    {
+                        if (pResMat->GetDouble( nCol, nRow) == nQueryCount)
+                        {
+                            if (pMainMatrix->IsValue( nCol, nRow))
+                            {
+                                fVal = pMainMatrix->GetDouble( nCol, nRow);
+                                ++fCount;
+                                if ( bNull && fVal != 0.0 )
+                                {
+                                    bNull = false;
+                                    fMem = fVal;
+                                }
+                                else
+                                    fSum += fVal;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                SCSIZE nC, nR;
+                pResMat->GetDimensions(nC, nR);
+                for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+                {
+                    for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+                    {
+                        if (pResMat->GetDouble( nCol, nRow) == nQueryCount)
+                        {
+                            aAdr.SetCol( nCol + nMainCol1);
+                            aAdr.SetRow( nRow + nMainRow1);
+                            ScBaseCell* pCell = GetCell( aAdr );
+                            if ( HasCellValueData(pCell) )
+                            {
+                                fVal = GetCellValue( aAdr, pCell );
+                                ++fCount;
+                                if ( bNull && fVal != 0.0 )
+                                {
+                                    bNull = false;
+                                    fMem = fVal;
+                                }
+                                else
+                                    fSum += fVal;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            SCSIZE nC, nR;
+            pResMat->GetDimensions(nC, nR);
+            for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+            {
+                for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+                    if (pResMat->GetDouble( nCol, nRow) == nQueryCount)
+                        ++fCount;
+            }
+        }
+        //
+        switch( eFunc )
+        {
+            case ifSUMIFS:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
+            case ifAVERAGEIFS: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
+            case ifCOUNTIFS:   fRes = fCount; break;
+            default: ; // nothing
+        }
+        return fRes;
+    }
+    return 0;
+}
+
+void ScInterpreter::ScSumIfs()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "makkica", "ScInterpreter::ScSumIfs" );
+    PushDouble( IterateParametersIfs( ifSUMIFS));
+}
+
+void ScInterpreter::ScAverageIfs()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "makkica", "ScInterpreter::ScAverageIfs" );
+    PushDouble( IterateParametersIfs( ifAVERAGEIFS));
+}
+
+void ScInterpreter::ScCountIfs()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "makkica", "ScInterpreter::ScCountIfs" );
+    PushDouble( IterateParametersIfs( ifCOUNTIFS));
+}
 
 void ScInterpreter::ScLookup()
 {

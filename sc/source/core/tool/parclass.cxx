@@ -80,6 +80,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocAverage,         {{ Reference                                            }, true }},
     { ocAverageA,        {{ Reference                                            }, true }},
     { ocAverageIf,       {{ Reference, Value, Reference                          }, false }},
+    { ocAverageIfs,      {{ Reference, Reference, Value                          }, true }},
     { ocCell,            {{ Value, Reference                                     }, false }},
     { ocColumn,          {{ Reference                                            }, false }},
     { ocColumns,         {{ Reference                                            }, true }},
@@ -88,6 +89,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocCount2,          {{ Reference                                            }, true }},
     { ocCountEmptyCells, {{ Reference                                            }, false }},
     { ocCountIf,         {{ Reference, Value                                     }, false }},
+    { ocCountIfs,        {{ Reference, Value                                     }, true }},
     { ocCovar,           {{ ForceArray, ForceArray                               }, false }},
     { ocDBAverage,       {{ Reference, Reference, Reference                      }, false }},
     { ocDBCount,         {{ Reference, Reference, Reference                      }, false }},
@@ -174,6 +176,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocSubTotal,        {{ Value, Reference                                     }, true }},
     { ocSum,             {{ Reference                                            }, true }},
     { ocSumIf,           {{ Reference, Value, Reference                          }, false }},
+    { ocSumIfs,          {{ Reference, Reference, Value                          }, true }},
     { ocSumProduct,      {{ ForceArray                                           }, true }},
     { ocSumSQ,           {{ Reference                                            }, true }},
     { ocSumX2MY2,        {{ ForceArray, ForceArray                               }, false }},
@@ -404,7 +407,12 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
 
         RunData* pRun = &pData[ pDesc->nFIndex ];
         sal_uInt16 nArgs = pDesc->GetSuppressedArgCount();
-        if ( nArgs >= VAR_ARGS )
+        if ( nArgs >= PAIRED_VAR_ARGS )
+        {
+            nArgs -= PAIRED_VAR_ARGS - 2;
+            pRun->aData.bRepeatLast = true;
+        }
+        else if ( nArgs >= VAR_ARGS )
         {
             nArgs -= VAR_ARGS - 1;
             pRun->aData.bRepeatLast = true;

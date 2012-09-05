@@ -104,6 +104,13 @@ enum ScIterFuncIf
     ifAVERAGEIF // Conditional average
 };
 
+enum ScIterFuncIfs
+{
+    ifSUMIFS,     // Multi-Conditional sum
+    ifAVERAGEIFS, // Multi-Conditional average
+    ifCOUNTIFS    // Multi-Conditional count
+};
+
 struct FormulaTokenRef_less
 {
     bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
@@ -482,6 +489,10 @@ double IterateParametersIf( ScIterFuncIf );
 void ScCountIf();
 void ScSumIf();
 void ScAverageIf();
+double IterateParametersIfs( ScIterFuncIfs );
+void ScSumIfs();
+void ScAverageIfs();
+void ScCountIfs();
 void ScCountEmptyCells();
 void ScLookup();
 void ScHLookup();

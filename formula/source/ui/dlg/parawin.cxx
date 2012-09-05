@@ -40,6 +40,7 @@
 #include "ForResId.hrc"
 
 #define VAR_ARGS 30
+#define PAIRED_VAR_ARGS (VAR_ARGS + VAR_ARGS)
 namespace formula
 {
 //============================================================================
@@ -126,7 +127,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             aArgName += ' ';
             aArgName += (pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
         }
-        else
+        else if ( nArgs < PAIRED_VAR_ARGS )
         {
             sal_uInt16 nFix = nArgs - VAR_ARGS;
             sal_uInt16 nPos = ( nArg < nFix ? nArg : nFix );
@@ -139,6 +140,24 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             aArgName += ' ';
 
             aArgName += (nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
+        }
+        else
+        {
+            sal_uInt16 nFix = nArgs - PAIRED_VAR_ARGS;
+            sal_uInt16 nPos;
+            if ( nArg < nFix )
+                nPos = nArg;
+            else
+                nPos = nFix + ( (nArg-nFix) % 2);
+            sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
+                    aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
+            aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
+            aArgName  = pFuncDesc->getParameterName(nRealArg);
+            if ( nArg >= nFix )
+                aArgName += String::CreateFromInt32((nArg-nFix)/2 + 1);
+            aArgName += ' ';
+
+            aArgName += (nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
         }
 
         SetArgumentDesc(aArgDesc);
@@ -159,7 +178,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
             SetArgName      (i,pFuncDesc->getParameterName(nRealArg));
         }
     }
-    else
+    else if ( nArgs < PAIRED_VAR_ARGS)
     {
         sal_uInt16 nFix = nArgs - VAR_ARGS;
         sal_uInt16 nPos = ( nArg < nFix ? nArg : nFix );
@@ -172,6 +191,28 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         {
             String aArgName( pFuncDesc->getParameterName(nRealArg) );
             aArgName += String::CreateFromInt32(nArg-nFix+1);
+            SetArgName( i, aArgName );
+        }
+        else
+            SetArgName( i, pFuncDesc->getParameterName(nRealArg) );
+    }
+    else
+    {
+        sal_uInt16 nFix = nArgs - PAIRED_VAR_ARGS;
+        sal_uInt16 nPos;
+            if ( nArg < nFix )
+                nPos = nArg;
+            else
+                nPos = nFix + ( (nArg-nFix) % 2);
+        sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
+                aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
+        SetArgNameFont( i,
+                (nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ?
+                aFntLight : aFntBold );
+        if ( nArg >= nFix )
+        {
+            String aArgName( pFuncDesc->getParameterName(nRealArg) );
+            aArgName += String::CreateFromInt32((nArg-nFix)/2 + 1);
             SetArgName( i, aArgName );
         }
         else
