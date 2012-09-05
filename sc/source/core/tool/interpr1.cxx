@@ -4613,12 +4613,12 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
         size_t nRefInList = 0;
         while (nParam-- > 0)
         {
-            SCCOL nCol1;
-            SCROW nRow1;
-            SCTAB nTab1;
-            SCCOL nCol2;
-            SCROW nRow2;
-            SCTAB nTab2;
+            SCCOL nCol1 = 0;
+            SCROW nRow1 = 0;
+            SCTAB nTab1 = 0;
+            SCCOL nCol2 = 0;
+            SCROW nRow2 = 0;
+            SCTAB nTab2 = 0;
             ScMatrixRef pQueryMatrix;
             switch ( GetStackType() )
             {
@@ -5169,12 +5169,12 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             // take range
             nParam = 1;
             nRefInList = 0;
-            SCCOL nCol1;
-            SCROW nRow1;
-            SCTAB nTab1;
-            SCCOL nCol2;
-            SCROW nRow2;
-            SCTAB nTab2;
+            SCCOL nCol1 = 0;
+            SCROW nRow1 = 0;
+            SCTAB nTab1 = 0;
+            SCCOL nCol2 = 0;
+            SCROW nRow2 = 0;
+            SCTAB nTab2 = 0;
             ScMatrixRef pQueryMatrix;
             switch ( GetStackType() )
             {
@@ -5322,12 +5322,12 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             nParam = 1;
             nRefInList = 0;
             bool bNull = true;
-            SCCOL nMainCol1;
-            SCROW nMainRow1;
-            SCTAB nMainTab1;
-            SCCOL nMainCol2;
-            SCROW nMainRow2;
-            SCTAB nMainTab2;
+            SCCOL nMainCol1 = 0;
+            SCROW nMainRow1 = 0;
+            SCTAB nMainTab1 = 0;
+            SCCOL nMainCol2 = 0;
+            SCROW nMainRow2 = 0;
+            SCTAB nMainTab2 = 0;
             ScMatrixRef pMainMatrix;
             switch ( GetStackType() )
             {
