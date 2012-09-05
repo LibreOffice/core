@@ -56,12 +56,11 @@ void ScrollableDialog::lcl_Scroll( long nX, long nY )
 {
     long nXScroll = mnScrollPos.X() - nX;
     long nYScroll = mnScrollPos.Y() - nY;
-    printf( "ScrollableDialog::lcl_Scroll %d, %d nXScroll %d, nYScroll %d\n", nX, nY, nXScroll, nYScroll );
+    printf( "ScrollableDialog::lcl_Scroll %d, %d resulting in delta nXScroll %d, nYScroll %d for ( %d ) children\n", nX, nY, nXScroll, nYScroll,  GetChildCount() -2 );
     mnScrollPos = Point( nX, nY );
 
     Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
     Window::Scroll(nXScroll, nYScroll, aScrollableArea );
-
     // Manually scroll all children ( except the scrollbars )
     for ( int index = 0; index < GetChildCount(); ++index )
     {
@@ -89,18 +88,20 @@ void ScrollableDialog::SetScrollTop( long nTop )
 {
     printf("ScrollableDialog::SetScrollTop(%d)\n", nTop );
     Point aOld = mnScrollPos;
-    lcl_Scroll( mnScrollPos.X() , nTop );
+    lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop );
     printf("about to set thumb\n");
     maHScrollBar.SetThumbPos( 0 );
+    // new pos is 0,0
     mnScrollPos = aOld;
 }
 void ScrollableDialog::SetScrollLeft( long nLeft )
 {
     printf("ScrollableDialog::SetScrollLeft(%d)\n", nLeft );
     Point aOld = mnScrollPos;
-    lcl_Scroll( nLeft , mnScrollPos.Y() );
+    lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y() );
     printf("about to set thumb\n");
     maVScrollBar.SetThumbPos( 0 );
+    // new pos is 0,0
     mnScrollPos = aOld;
 }
 void ScrollableDialog::SetScrollWidth( long nWidth )
