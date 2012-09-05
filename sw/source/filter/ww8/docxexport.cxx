@@ -624,6 +624,7 @@ void DocxExport::WriteFonts()
 
     pFS->startElementNS( XML_w, XML_fonts,
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
             FSEND );
 
     // switch the serializer to redirect the output to word/styles.xml
@@ -675,7 +676,10 @@ void DocxExport::WriteSettings()
     // Zoom
     rtl::OString aZoom(rtl::OString::valueOf(sal_Int32(pViewShell->GetViewOptions()->GetZoom())));
     pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
-
+    if( pDoc->get( IDocumentSettingAccess::EMBED_FONTS ))
+        pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts, FSEND );
+    if( pDoc->get( IDocumentSettingAccess::EMBED_SYSTEM_FONTS ))
+        pFS->singleElementNS( XML_w, XML_embedSystemFonts, FSEND );
     if( settings.defaultTabStop != 0 )
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             rtl::OString::valueOf( sal_Int32( settings.defaultTabStop )).getStr(), FSEND );

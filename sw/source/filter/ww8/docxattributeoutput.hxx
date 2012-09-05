@@ -240,6 +240,9 @@ public:
     /// Font pitch.
     void FontPitchType( FontPitch ePitch ) const;
 
+    /// Write out the font into the document, if it's an embedded font.
+    void EmbedFont( const OUString& name );
+
     /// Definition of a numbering instance.
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule );
 
@@ -314,6 +317,9 @@ private:
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
 
     void WriteFFData( const FieldInfos& rInfos );
+
+    void EmbedFontStyle( const OUString& name, int tag, const char* style );
+
 protected:
 
     /// Output frames - the implementation.
@@ -605,6 +611,7 @@ private:
     std::vector< const SwPostItField* > m_postitFields;
     unsigned int m_postitFieldsMaxId;
     int m_anchorId;
+    int m_nextFontId;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );

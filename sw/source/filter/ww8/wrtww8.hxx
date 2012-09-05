@@ -294,7 +294,7 @@ public:
     wwFont( const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet, bool bWrtWW8 );
     bool Write( SvStream *pTableStram ) const;
-    void WriteDocx( const DocxAttributeOutput* rAttrOutput ) const;
+    void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;
     void WriteRtf( const RtfAttributeOutput* rAttrOutput ) const;
     rtl::OUString GetFamilyName() const { return rtl::OUString( msFamilyNm ); }
     friend bool operator < (const wwFont &r1, const wwFont &r2);

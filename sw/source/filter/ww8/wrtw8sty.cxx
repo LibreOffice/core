@@ -714,7 +714,7 @@ bool wwFont::Write(SvStream *pTableStrm) const
     return true;
 }
 
-void wwFont::WriteDocx( const DocxAttributeOutput* rAttrOutput ) const
+void wwFont::WriteDocx( DocxAttributeOutput* rAttrOutput ) const
 {
     // no font embedding, panose id, subsetting, ... implemented
 
@@ -725,6 +725,7 @@ void wwFont::WriteDocx( const DocxAttributeOutput* rAttrOutput ) const
     rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ), meChrSet );
     rAttrOutput->FontFamilyType( meFamily );
     rAttrOutput->FontPitchType( mePitch );
+    rAttrOutput->EmbedFont( msFamilyNm );
 
     rAttrOutput->EndFont();
 }

@@ -118,9 +118,11 @@
 #include <txtinet.hxx>
 #include <numrule.hxx>
 
+#include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/fontmanager.hxx>
 
 #include <tools/color.hxx>
 
@@ -130,6 +132,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <IMark.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2809,6 +2812,90 @@ void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
                 FSEND );
 }
 
+void DocxAttributeOutput::EmbedFont( const OUString& name )
+{
+    if( !m_rExport.pDoc->get( IDocumentSettingAccess::EMBED_FONTS ))
+        return; // no font embedding with this document
+    EmbedFontStyle( name, XML_embedRegular, "" );
+    EmbedFontStyle( name, XML_embedBold, "b" );
+    EmbedFontStyle( name, XML_embedItalic, "i" );
+    EmbedFontStyle( name, XML_embedBoldItalic, "bi" );
+}
+
+static inline char toHexChar( int value )
+{
+    return value >= 10 ? value + 'A' - 10 : value + '0';
+}
+
+void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, const char* style )
+{
+    OUString fontUrl = psp::PrintFontManager::get().fileUrlForTemporaryFont( name, style );
+    // If a temporary font file exists for this font, assume it was embedded
+    // and embed it again.
+    // TODO IDocumentSettingAccess::EMBED_SYSTEM_FONTS
+    osl::File file( fontUrl );
+    if( file.open( osl_File_OpenFlag_Write ) != osl::File::E_None )
+        return;
+    uno::Reference< com::sun::star::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
+        OUString( "word/fonts/font" ) + OUString::valueOf( m_nextFontId ) + ".ttf",
+        "application/vnd.openxmlformats-officedocument.obfuscatedFont" );
+    // Not much point in trying hard with the obfuscation key, whoever reads the spec can read the font anyway,
+    // so just alter the first and last part of the key.
+    char fontKeyStr[] = "{00014A78-CABC-4EF0-12AC-5CD89AEFDE00}";
+    sal_uInt8 fontKey[ 16 ] = { 0, 0xDE, 0xEF, 0x9A, 0xD8, 0x5C, 0xAC, 0x12, 0xF0, 0x4E,
+        0xBC, 0xCA, 0x78, 0x4A, 0x01, 0 };
+    fontKey[ 0 ] = fontKey[ 15 ] = m_nextFontId % 256;
+    fontKeyStr[ 1 ] = fontKeyStr[ 35 ] = toHexChar(( m_nextFontId % 256 ) / 16 );
+    fontKeyStr[ 2 ] = fontKeyStr[ 36 ] = toHexChar(( m_nextFontId % 256 ) % 16 );
+    char buffer[ 4096 ];
+    sal_uInt64 readSize;
+    file.read( buffer, 32, readSize );
+    if( readSize < 32 )
+    {
+        SAL_WARN( "sw.ww8", "Font file size too small (" << fontUrl << ")" );
+        xOutStream->closeOutput();
+        return;
+    }
+    for( int i = 0;
+         i < 16;
+         ++i )
+    {
+        buffer[ i ] ^= fontKey[ i ];
+        buffer[ i + 16 ] ^= fontKey[ i ];
+    }
+    xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), 32 ));
+    for(;;)
+    {
+        sal_Bool eof;
+        if( file.isEndOfFile( &eof ) != osl::File::E_None )
+        {
+            SAL_WARN( "sw.ww8", "Error reading font file " << fontUrl );
+            xOutStream->closeOutput();
+            return;
+        }
+        if( eof )
+            break;
+        if( file.read( buffer, 4096, readSize ) != osl::File::E_None )
+        {
+            SAL_WARN( "sw.ww8", "Error reading font file " << fontUrl );
+            xOutStream->closeOutput();
+            return;
+        }
+        if( readSize == 0 )
+            break;
+        xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
+    }
+    xOutStream->closeOutput();
+    OString relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/font",
+        OUString( "fonts/font" ) + OUString::valueOf( m_nextFontId ) + ".ttf" ), RTL_TEXTENCODING_UTF8 );
+    m_pSerializer->singleElementNS( XML_w, tag,
+        FSNS( XML_r, XML_id ), relId.getStr(),
+        FSNS( XML_w, XML_fontKey ), fontKeyStr,
+        FSEND );
+    ++m_nextFontId;
+}
+
 void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule )
 {
     // nId is the same both for abstract numbering definition as well as the
@@ -4415,7 +4502,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postponedGraphic( NULL ),
       m_postponedMath( NULL ),
       m_postitFieldsMaxId( 0 ),
-      m_anchorId( 0 )
+      m_anchorId( 0 ),
+      m_nextFontId( 1 )
 {
 }
 
