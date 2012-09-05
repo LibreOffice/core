@@ -386,9 +386,8 @@ String SfxObjectFactory::GetModuleName() const
     {
         css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-        css::uno::Reference< css::container::XNameAccess > xModuleManager(
-            css::frame::ModuleManager::create(xContext),
-            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
+            css::frame::ModuleManager::create(xContext));
 
         ::rtl::OUString sDocService(GetDocumentServiceName());
         ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(sDocService) );

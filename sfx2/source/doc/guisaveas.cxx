@@ -416,7 +416,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
     if ( !m_pModulePropsHM )
     {
         uno::Sequence< beans::PropertyValue > aModuleProps;
-        m_pOwner->GetNamedModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
+        m_pOwner->GetModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
         if ( !aModuleProps.getLength() )
             throw uno::RuntimeException(); // TODO;
         m_pModulePropsHM = new ::comphelper::SequenceAsHashMap( aModuleProps );
@@ -1275,29 +1275,15 @@ uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
 }
 
 //-------------------------------------------------------------------------
-uno::Reference< ::com::sun::star::frame::XModuleManager > SfxStoringHelper::GetModuleManager()
+uno::Reference< ::com::sun::star::frame::XModuleManager2 > SfxStoringHelper::GetModuleManager()
 {
     if ( !m_xModuleManager.is() )
     {
-        m_xModuleManager = uno::Reference< ::com::sun::star::frame::XModuleManager >(
-            frame::ModuleManager::create(comphelper::ComponentContext(GetServiceFactory()).getUNOContext()),
-            uno::UNO_QUERY_THROW );
+        m_xModuleManager = frame::ModuleManager::create(
+            comphelper::ComponentContext(GetServiceFactory()).getUNOContext());
     }
 
     return m_xModuleManager;
-}
-
-//-------------------------------------------------------------------------
-uno::Reference< container::XNameAccess > SfxStoringHelper::GetNamedModuleManager()
-{
-    if ( !m_xNamedModManager.is() )
-    {
-        m_xNamedModManager = uno::Reference< container::XNameAccess >( GetModuleManager(), uno::UNO_QUERY );
-        if ( !m_xNamedModManager.is() )
-            throw uno::RuntimeException();
-    }
-
-    return m_xNamedModManager;
 }
 
 //-------------------------------------------------------------------------

@@ -42,18 +42,10 @@ namespace {
 
 /** Create an instance of a module manager.
  */
-uno::Reference< frame::XModuleManager > lclCreateModuleManager()
+uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
 {
-    uno::Reference< frame::XModuleManager > xModuleManager;
-    try
-    {
-        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
-        xModuleManager.set( frame::ModuleManager::create(xContext), uno::UNO_QUERY );
-    }
-    catch(const uno::Exception& )
-    {
-    }
-    return xModuleManager;
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
+    return frame::ModuleManager::create(xContext);
 }
 
 // ----------------------------------------------------------------------------
@@ -76,7 +68,7 @@ DocumentsEnumeration::DocumentsEnumeration( const uno::Reference< frame::XModel 
 {
     try
     {
-        uno::Reference< frame::XModuleManager > xModuleManager( lclCreateModuleManager(), uno::UNO_SET_THROW );
+        uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
         ::rtl::OUString aIdentifier = xModuleManager->identify( rxModel );
         uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
         uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ), uno::UNO_QUERY_THROW );
@@ -213,7 +205,7 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
         ::osl::MutexGuard aGuard( rPool.maMutex );
         try
         {
-            uno::Reference< frame::XModuleManager > xModuleManager( lclCreateModuleManager(), uno::UNO_SET_THROW );
+            uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
             ::rtl::OUString aIdentifier = xModuleManager->identify( rxModel );
             if( !aIdentifier.isEmpty() )
                 rPool.maCurrDirs[ aIdentifier ] = rPath;

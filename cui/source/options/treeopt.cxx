@@ -1955,7 +1955,7 @@ rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
             xCurrentFrame = xDesktop->getCurrentFrame();
     }
 
-    if ( xCurrentFrame.is() && xModuleManager.is() )
+    if ( xCurrentFrame.is() )
     {
         try
         {

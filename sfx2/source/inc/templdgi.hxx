@@ -47,7 +47,7 @@ class SfxCommonTemplateDialog_Impl;
 class SfxTemplateDialogWrapper;
 class SfxDockingWindow;
 
-namespace com { namespace sun { namespace star { namespace frame { class XModuleManager; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModuleManager2; } } } }
 
 // class DropListBox_Impl ------------------------------------------------
 
@@ -138,7 +138,7 @@ protected:
     SfxStyleSheetBasePool*      pStyleSheetPool;
     SvTreeListBox*              pTreeBox;
     SfxObjectShell*             pCurObjShell;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >
                                 xModuleManager;
     DeletionWatcher*            m_pDeletionWatcher;
 

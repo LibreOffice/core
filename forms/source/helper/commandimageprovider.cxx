@@ -60,7 +60,7 @@ namespace frm
     using ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
     using ::com::sun::star::ui::ModuleUIConfigurationManagerSupplier;
     using ::com::sun::star::frame::ModuleManager;
-    using ::com::sun::star::frame::XModuleManager;
+    using ::com::sun::star::frame::XModuleManager2;
     using ::com::sun::star::graphic::XGraphic;
     /** === end UNO using === **/
     namespace ImageType = ::com::sun::star::ui::ImageType;
@@ -112,7 +112,7 @@ namespace frm
         // obtain the image manager or the module
         try
         {
-            Reference< XModuleManager > xModuleManager( ModuleManager::create(_rContext.getUNOContext()), UNO_QUERY_THROW );
+            Reference< XModuleManager2 > xModuleManager( ModuleManager::create(_rContext.getUNOContext()) );
             ::rtl::OUString sModuleID = xModuleManager->identify( _rxDocument );
 
             Reference< XModuleUIConfigurationManagerSupplier > xSuppUIConfig(

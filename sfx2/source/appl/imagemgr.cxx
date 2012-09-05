@@ -142,15 +142,13 @@ Image SAL_CALL GetImage(
         }
     }
 
-    static WeakReference< XModuleManager > m_xModuleManager;
+    static WeakReference< XModuleManager2 > m_xModuleManager;
 
-    Reference< XModuleManager > xModuleManager = m_xModuleManager;
+    Reference< XModuleManager2 > xModuleManager = m_xModuleManager;
 
     if ( !xModuleManager.is() )
     {
-        xModuleManager = Reference< XModuleManager >(
-                            ModuleManager::create(::comphelper::getProcessComponentContext()),
-                            UNO_QUERY );
+        xModuleManager = ModuleManager::create(::comphelper::getProcessComponentContext());
         m_xModuleManager = xModuleManager;
     }
 

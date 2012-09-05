@@ -388,9 +388,8 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
-    css::uno::Reference< css::frame::XModuleManager > xModuleDetection(
-        css::frame::ModuleManager::create(comphelper::ComponentContext(xSMGR).getUNOContext()),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleDetection(
+        css::frame::ModuleManager::create(comphelper::ComponentContext(xSMGR).getUNOContext()));
 
     ::rtl::OUString sModule;
     try

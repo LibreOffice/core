@@ -307,7 +307,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     if (!xContext.is())
         return eRet;
 
-    css::uno::Reference< css::frame::XModuleManager > xModuleManager( css::frame::ModuleManager::create(xContext), css::uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( css::frame::ModuleManager::create(xContext) );
 
     rtl::OUString aModule;
     try
@@ -428,18 +428,17 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 if ( !bHasLocation ||  aFilterName.isEmpty())
                 {
                     // Retrieve the user defined default filter
-                    css::uno::Reference< css::container::XNameAccess > xNameAccess( xModuleManager, css::uno::UNO_QUERY );
                     try
                     {
-                        ::comphelper::SequenceAsHashMap aFilterPropsHM( xNameAccess->getByName( aModule ) );
+                        ::comphelper::SequenceAsHashMap aFilterPropsHM( xModuleManager->getByName( aModule ) );
                         aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
                                                     ::rtl::OUString("ooSetupFactoryDefaultFilter"),
                                                     ::rtl::OUString() );
-                        css::uno::Reference< css::container::XNameAccess > xNameAccess2(
+                        css::uno::Reference< css::container::XNameAccess > xNameAccess(
                             xContainerQuery, css::uno::UNO_QUERY );
-                        if ( xNameAccess2.is() )
+                        if ( xNameAccess.is() )
                         {
-                            ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess2->getByName( aFilterName ) );
+                            ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess->getByName( aFilterName ) );
                             aTypeName = aFilterPropsHM2.getUnpackedValueOrDefault(
                                                         ::rtl::OUString("Type"),
                                                         ::rtl::OUString() );

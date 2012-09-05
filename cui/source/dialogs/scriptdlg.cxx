@@ -226,13 +226,11 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             {
                 Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
 
-                Reference<container::XNameAccess> xModuleConfig(
-                    xModuleManager, UNO_QUERY_THROW );
                 // get the long name of the document:
                 Sequence<beans::PropertyValue> moduleDescr;
                 try{
                     ::rtl::OUString appModule = xModuleManager->identify( xDocumentModel );
-                    xModuleConfig->getByName(appModule) >>= moduleDescr;
+                    xModuleManager->getByName(appModule) >>= moduleDescr;
                 } catch(const uno::Exception&)
                     {}
 

@@ -1142,7 +1142,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_QUERY_THROW );
 
-        Reference< XModuleManager > xModuleManager( ModuleManager::create(xContext), UNO_QUERY_THROW );
+        Reference< XModuleManager2 > xModuleManager( ModuleManager::create(xContext) );
         Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
 
         ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );

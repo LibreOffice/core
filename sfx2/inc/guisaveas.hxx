@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -50,15 +50,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xFilterCFG;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > m_xFilterQuery;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xNamedModManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 > m_xModuleManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetFilterConfiguration();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > GetFilterQuery();
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > GetModuleManager();
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetNamedModuleManager();
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 > GetModuleManager();
 
 public:
     SfxStoringHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );

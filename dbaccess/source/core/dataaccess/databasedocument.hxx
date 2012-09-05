@@ -34,7 +34,7 @@
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
@@ -190,7 +190,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ::com::sun::star::uno::WeakReference< ::com::sun::star::script::provider::XScriptProvider > m_xScriptProvider;
 
     /** @short  such module manager is used to classify new opened documents. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >                 m_xModuleManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >                 m_xModuleManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                         m_xTitleHelper;
     TNumberedController                                                                         m_aNumberedControllers;
 

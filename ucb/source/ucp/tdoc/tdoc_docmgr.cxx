@@ -702,9 +702,8 @@ bool OfficeDocumentsManager::isBasicIDE(
         {
             try
             {
-                m_xModuleMgr = uno::Reference< frame::XModuleManager >(
-                            frame::ModuleManager::create(comphelper::ComponentContext(m_xSMgr).getUNOContext()),
-                            uno::UNO_QUERY );
+                m_xModuleMgr = frame::ModuleManager::create(
+                    comphelper::ComponentContext(m_xSMgr).getUNOContext());
             }
             catch ( uno::Exception const & )
             {

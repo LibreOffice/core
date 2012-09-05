@@ -49,7 +49,7 @@ namespace frm
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::frame::ModuleManager;
-    using ::com::sun::star::frame::XModuleManager;
+    using ::com::sun::star::frame::XModuleManager2;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::ui::UICommandDescription;
     /** === end UNO using === **/
@@ -89,7 +89,7 @@ namespace frm
 
         try
         {
-            Reference< XModuleManager > xModuleManager( ModuleManager::create(_rxContext), UNO_QUERY_THROW );
+            Reference< XModuleManager2 > xModuleManager( ModuleManager::create(_rxContext) );
             ::rtl::OUString sModuleID = xModuleManager->identify( _rxDocument );
 
             Reference< XNameAccess > xUICommandDescriptions( UICommandDescription::create(_rxContext) );

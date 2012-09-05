@@ -176,14 +176,12 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
                           uno::UNO_QUERY );
             }
 
-            static uno::WeakReference< frame::XModuleManager >  m_xModuleManager;
+            static uno::WeakReference< frame::XModuleManager2 >  m_xModuleManager;
 
-            uno::Reference< frame::XModuleManager > xModuleManager( m_xModuleManager );
+            uno::Reference< frame::XModuleManager2 > xModuleManager( m_xModuleManager );
             if ( !xModuleManager.is() )
             {
-                xModuleManager = uno::Reference< frame::XModuleManager >(
-                                    frame::ModuleManager::create(comphelper::ComponentContext(xServiceManager).getUNOContext()),
-                                    uno::UNO_QUERY );
+                xModuleManager = frame::ModuleManager::create(comphelper::ComponentContext(xServiceManager).getUNOContext());
                 m_xModuleManager = xModuleManager;
             }
 

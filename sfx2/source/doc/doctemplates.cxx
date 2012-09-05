@@ -1844,9 +1844,8 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         // get document service name
-        uno::Reference< frame::XModuleManager > xModuleManager(
-            frame::ModuleManager::create(comphelper::ComponentContext(xFactory).getUNOContext()),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XModuleManager2 > xModuleManager(
+            frame::ModuleManager::create(comphelper::ComponentContext(xFactory).getUNOContext()) );
         sDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
         if ( sDocServiceName.isEmpty() )
             throw uno::RuntimeException();

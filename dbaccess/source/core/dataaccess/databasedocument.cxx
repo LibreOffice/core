@@ -2079,7 +2079,7 @@ Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
 uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHelper_throw(const uno::Reference< uno::XInterface >& _xComponent)
 {
     if ( !m_xModuleManager.is() )
-        m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext.getUNOContext()), UNO_QUERY_THROW );
+        m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext.getUNOContext()) );
 
     ::rtl::OUString sModuleId;
     try

@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cassert>
 #include <stdlib.h>
 #include <time.h>
 
@@ -447,40 +450,35 @@ OUString GetModuleName( const OUString& aModuleId )
     return ::rtl::OUString();
 }
 
-OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::frame::XModuleManager >& rModuleManager )
+OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::frame::XModuleManager2 >& rModuleManager )
 {
+    assert(rModuleManager.is());
+
     OUString aModuleUIName;
 
-    if ( rModuleManager.is() )
+    try
     {
-        uno::Reference< css::container::XNameAccess > xNameAccess( rModuleManager, uno::UNO_QUERY );
-        if ( xNameAccess.is() )
-        {
-            try
-            {
-                uno::Any a = xNameAccess->getByName( aModuleId );
-                uno::Sequence< beans::PropertyValue > aSeq;
+        uno::Any a = rModuleManager->getByName( aModuleId );
+        uno::Sequence< beans::PropertyValue > aSeq;
 
-                if ( a >>= aSeq )
+        if ( a >>= aSeq )
+        {
+            for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
+            {
+                if ( aSeq[i].Name == "ooSetupFactoryUIName" )
                 {
-                    for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
-                    {
-                        if ( aSeq[i].Name == "ooSetupFactoryUIName" )
-                        {
-                            aSeq[i].Value >>= aModuleUIName;
-                            break;
-                        }
-                    }
+                    aSeq[i].Value >>= aModuleUIName;
+                    break;
                 }
             }
-            catch ( uno::RuntimeException& )
-            {
-                throw;
-            }
-            catch ( uno::Exception& )
-            {
-            }
         }
+    }
+    catch ( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch ( uno::Exception& )
+    {
     }
 
     if ( aModuleUIName.isEmpty() )
@@ -777,7 +775,7 @@ sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFram
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory();
         css::uno::Reference< css::uno::XComponentContext > xContext   = ::comphelper::getProcessComponentContext();
         css::uno::Reference< css::frame::XFramesSupplier >     xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XModuleManager >      xMM     (css::frame::ModuleManager::create(xContext), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 >      xMM     (css::frame::ModuleManager::create(xContext));
 
         if (xFrame.is())
         {
@@ -1672,8 +1670,8 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         OUString aModuleId = GetFrameWithDefaultAndIdentify( m_xFrame );
 
         // replace %MODULENAME in the label with the correct module name
-        uno::Reference< css::frame::XModuleManager > xModuleManager(
-            css::frame::ModuleManager::create( xContext ), uno::UNO_QUERY_THROW);
+        uno::Reference< css::frame::XModuleManager2 > xModuleManager(
+            css::frame::ModuleManager::create( xContext ));
         OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();

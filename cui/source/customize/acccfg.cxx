@@ -864,12 +864,10 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         }
 
         // identify module
-        css::uno::Reference< css::frame::XModuleManager > xModuleManager(
-                 css::frame::ModuleManager::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()),
-                 css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XNameAccess > xModuleManagerCont(xModuleManager                                , css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
+                 css::frame::ModuleManager::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()));
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
-        ::comphelper::SequenceAsHashMap lModuleProps(xModuleManagerCont->getByName(m_sModuleLongName));
+        ::comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
         m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_SHORTNAME, ::rtl::OUString());
         m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , ::rtl::OUString());
 

@@ -767,13 +767,11 @@ Image SfxConfigGroupListBox_Impl::GetImage(
             if ( xDocumentModel.is() )
             {
                 Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
-                Reference<container::XNameAccess> xModuleConfig(
-                    xModuleManager, UNO_QUERY_THROW );
                 // get the long name of the document:
                 ::rtl::OUString appModule( xModuleManager->identify(
                                     xDocumentModel ) );
                 Sequence<beans::PropertyValue> moduleDescr;
-                Any aAny = xModuleConfig->getByName(appModule);
+                Any aAny = xModuleManager->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
                     throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue") ), Reference< XInterface >());

@@ -224,11 +224,11 @@ static ::rtl::OUString RetrieveLabelFromCommand(
     const ::rtl::OUString& rCommandURL,
     const css::uno::Reference< css::frame::XFrame >& rFrame )
 {
-    static css::uno::WeakReference< frame::XModuleManager > s_xModuleManager;
+    static css::uno::WeakReference< frame::XModuleManager2 > s_xModuleManager;
     static css::uno::WeakReference< container::XNameAccess > s_xNameAccess;
 
     ::rtl::OUString aLabel;
-    css::uno::Reference< css::frame::XModuleManager > xModuleManager( s_xModuleManager );
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( s_xModuleManager );
     css::uno::Reference< css::container::XNameAccess > xNameAccess( s_xNameAccess );
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR(
         ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
@@ -239,8 +239,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
     {
         if ( !xModuleManager.is() )
         {
-            xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
-                css::frame::ModuleManager::create(xContext), css::uno::UNO_QUERY_THROW);
+            xModuleManager = css::frame::ModuleManager::create(xContext);
             s_xModuleManager = xModuleManager;
         }
 
@@ -366,7 +365,7 @@ enum ETypeFamily
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR         (::comphelper::getProcessServiceFactory()        , css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::uno::XComponentContext >     xContext      (::comphelper::getProcessComponentContext()        , css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XModuleManager >      xModuleManager(css::frame::ModuleManager::create(xContext), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 >      xModuleManager(css::frame::ModuleManager::create(xContext));
 
         ::rtl::OUString sModule = xModuleManager->identify(xFrame);
         ::rtl::OUString sType   ;
@@ -628,7 +627,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             css::uno::Reference< css::frame::XFrame >         xFrame( pFrame->GetFrame().GetFrameInterface() );
             css::uno::Reference< css::frame::XModel >         xModel;
 
-            css::uno::Reference< css::frame::XModuleManager > xModuleManager( css::frame::ModuleManager::create(xContext), css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( css::frame::ModuleManager::create(xContext) );
 
             rtl::OUString aModule;
             try

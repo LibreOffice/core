@@ -34,7 +34,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -415,13 +414,13 @@ SfxHelp::~SfxHelp()
 {
     ::rtl::OUString sIdentifier;
     Reference < XFrame > xCurrentFrame;
-    Reference < XModuleManager > xModuleManager( ModuleManager::create(::comphelper::getProcessComponentContext()), UNO_QUERY );
+    Reference < XModuleManager2 > xModuleManager( ModuleManager::create(::comphelper::getProcessComponentContext()) );
     Reference < XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     if ( xDesktop.is() )
         xCurrentFrame = xDesktop->getCurrentFrame();
 
-    if ( xCurrentFrame.is() && xModuleManager.is() )
+    if ( xCurrentFrame.is() )
     {
         try
         {
@@ -450,12 +449,10 @@ String SfxHelp::GetHelpModuleName_Impl()
     {
         try
         {
-            Reference < XModuleManager > xModuleManager(
-                ModuleManager::create(::comphelper::getProcessComponentContext()), UNO_QUERY );
+            Reference < XModuleManager2 > xModuleManager(
+                ModuleManager::create(::comphelper::getProcessComponentContext()) );
             Sequence< PropertyValue > lProps;
-            Reference< ::com::sun::star::container::XNameAccess > xCont( xModuleManager, UNO_QUERY);
-            if ( xCont.is() )
-                xCont->getByName( aModuleIdentifier ) >>= lProps;
+            xModuleManager->getByName( aModuleIdentifier ) >>= lProps;
             for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
             {
                 if ( lProps[i].Name == "ooSetupFactoryShortName" )

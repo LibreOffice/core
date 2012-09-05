@@ -47,11 +47,11 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     uno::Reference< container::XNameAccess > xUICommandLabels;
     uno::Reference< uno::XComponentContext > xContext;
     uno::Reference< container::XNameAccess > xUICommandDescription;
-    uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager;
+    uno::Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager;
 
     static uno::WeakReference< uno::XComponentContext > xTmpContext;
     static uno::WeakReference< container::XNameAccess > xTmpNameAccess;
-    static uno::WeakReference< ::com::sun::star::frame::XModuleManager > xTmpModuleMgr;
+    static uno::WeakReference< ::com::sun::star::frame::XModuleManager2 > xTmpModuleMgr;
 
     xContext = xTmpContext;
     if ( !xContext.is() )
@@ -63,14 +63,14 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     xUICommandDescription = xTmpNameAccess;
     if ( !xUICommandDescription.is() )
     {
-        xUICommandDescription = uno::Reference< container::XNameAccess >( ui::UICommandDescription::create(xContext) );
+        xUICommandDescription = ui::UICommandDescription::create(xContext);
         xTmpNameAccess = xUICommandDescription;
     }
 
     xModuleManager = xTmpModuleMgr;
     if ( !xModuleManager.is() )
     {
-        xModuleManager = uno::Reference< frame::XModuleManager >( frame::ModuleManager::create(xContext), uno::UNO_QUERY_THROW );
+        xModuleManager = frame::ModuleManager::create(xContext);
         xTmpModuleMgr = xModuleManager;
     }
 
@@ -85,12 +85,9 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
         {
         }
 
-        if ( xUICommandDescription.is() )
-        {
-            uno::Any a = xUICommandDescription->getByName( aModuleIdentifier );
-            uno::Reference< container::XNameAccess > xUICommands;
-            a >>= xUICommandLabels;
-        }
+        uno::Any a = xUICommandDescription->getByName( aModuleIdentifier );
+        uno::Reference< container::XNameAccess > xUICommands;
+        a >>= xUICommandLabels;
     }
     catch ( uno::Exception& )
     {
