@@ -102,7 +102,7 @@ private:
         const static size_t nMaxParams = 7;
 
         Type        nParam[nMaxParams];
-        bool        bRepeatLast;
+        sal_uInt8   nRepeatLast;
     };
 
     // SUNWS7 needs a forward declared friend, otherwise members of the outer
@@ -163,11 +163,11 @@ private:
                                         return 0;
                                     }
 
-                                /** Whether last parameter type is repeated. */
+                                /** Whether last parameter types are repeated. */
     static  inline  bool        HasRepeatParameters( OpCode eOp)
                                     {
                                         return eOp <= SC_OPCODE_LAST_OPCODE_ID
-                                            && pData[eOp].aData.bRepeatLast;
+                                            && pData[eOp].aData.nRepeatLast > 0;
                                     }
 #endif // OSL_DEBUG_LEVEL
 };

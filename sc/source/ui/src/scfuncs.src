@@ -47,7 +47,9 @@
  *
  *          Number of parameters. VAR_ARGS if variable number, or
  *          VAR_ARGS+number if number of fixed parameters and variable
- *          arguments following.
+ *          arguments following. Or PAIRED_VAR_ARGS if variable number of
+ *          paired parameters, or PAIRED_VAR_ARGS+number if number of fixed
+ *          parameters and variable paired arguments following.
  *
  *          For every parameter:
  *
@@ -2955,7 +2957,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "range" ;
+            Text [ en-US ] = "range " ;
         };
         String 5 // Description of Parameter 2
         {
@@ -2963,7 +2965,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "criteria" ;
+            Text [ en-US ] = "criteria " ;
         };
         String 7 // Description of Parameter 3
         {
@@ -2996,7 +2998,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "range" ;
+            Text [ en-US ] = "range " ;
         };
         String 5 // Description of Parameter 2
         {
@@ -3004,7 +3006,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "criteria" ;
+            Text [ en-US ] = "criteria " ;
         };
         String 7 // Description of Parameter 3
         {
@@ -3029,7 +3031,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "range" ;
+            Text [ en-US ] = "range " ;
         };
         String 3 // Description of Parameter 1
         {
@@ -3037,7 +3039,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "criteria" ;
+            Text [ en-US ] = "criteria " ;
         };
         String 5 // Description of Parameter 2
         {
