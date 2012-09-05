@@ -51,8 +51,7 @@ OutgoingRequest OutgoingRequests::top(rtl::ByteSequence const & tid) {
     Map::iterator i(map_.find(tid));
     if (i == map_.end()) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM("URP: reply for unknown TID")),
+            "URP: reply for unknown TID",
             css::uno::Reference< css::uno::XInterface >());
     }
     OSL_ASSERT(!i->second.empty());

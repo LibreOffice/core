@@ -83,9 +83,7 @@ void writeString(
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "UNO string contains invalid UTF-16 sequence")),
+            "UNO string contains invalid UTF-16 sequence",
             css::uno::Reference< css::uno::XInterface >());
     }
     writeCompressed(buffer, static_cast< sal_uInt32 >(v.getLength()));
