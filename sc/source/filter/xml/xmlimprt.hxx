@@ -852,7 +852,6 @@ class ScXMLImport: public SvXMLImport
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormats> xNumberFormats;
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormatTypes> xNumberFormatTypes;
 
-    ScRangeList maSheetRanges;
     com::sun::star::uno::Reference <com::sun::star::sheet::XSheetCellRangeContainer> xSheetCellRanges;
 
     rtl::OUString           sEmpty;

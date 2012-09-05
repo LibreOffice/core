@@ -143,8 +143,6 @@ public:
 
 private:
     using XMLPropStyleContext::SetStyle;
-
-    ScConditionalFormat* CreateCondFormat();
 };
 
 class XMLTableStylesContext : public SvXMLStylesContext
