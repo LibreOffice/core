@@ -271,16 +271,22 @@ sub check_makecab_version
 sub check_system_environment
 {
     my %variables = ();
-    my $key;
     my $error = 0;
 
-    foreach $key ( @installer::globals::environmentvariables )
-    {
-        my $value = "";
-        if ( $ENV{$key} ) { $value = $ENV{$key}; }
-        $variables{$key} = $value;
+    my @environmentvariables = qw(
+        SOLARVERSION
+        GUI
+        WORK_STAMP
+        OUTPATH
+        LOCAL_OUT
+        LOCAL_COMMON_OUT
+    );
 
-        if ( $value eq "" )
+    for my $key ( @environmentvariables )
+    {
+        $variables{$key} = $ENV{$key} || "";
+
+        if ( $variables{$key} eq "" )
         {
             installer::logger::print_error( "$key not set in environment\n" );
             $error = 1;
