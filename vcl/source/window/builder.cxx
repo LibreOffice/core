@@ -365,7 +365,8 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         //ids and positive numbers for the handleTabChild
         //derived ids
         TabControl *pTabControl = static_cast<TabControl*>(pParent);
-        sal_uInt16 nNewPageId = -(pTabControl->GetPageCount()+1);
+        sal_uInt16 nNewPageCount = pTabControl->GetPageCount()+1;
+        sal_uInt16 nNewPageId = -nNewPageCount;
         pTabControl->InsertPage(nNewPageId, rtl::OUString());
         pTabControl->SetCurPageId(nNewPageId);
 
@@ -373,7 +374,13 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         {
             TabPage* pPage = new TabPage(pTabControl);
             pPage->Show();
-            m_aChildren.push_back(WinAndId(rtl::OString(), pPage));
+
+            //Make up a name for it
+            rtl::OString sTabPageId = get_by_window(pParent) +
+                rtl::OString("-page") +
+                rtl::OString::valueOf(static_cast<sal_Int32>(nNewPageCount));
+            m_aChildren.push_back(WinAndId(sTabPageId, pPage));
+            pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
             //And give the page one container as a child to make it a layout enabled
             //tab page
