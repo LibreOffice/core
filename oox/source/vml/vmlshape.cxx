@@ -384,8 +384,12 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
             rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PAGE);
         }
         else
+        {
             // Map to as-character by default, that fixes vertical position of some textframes.
             rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_CHARACTER);
+        }
+        // Vertical placement relative to margin, because parent style must not modify vertical position
+        rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
     }
     else if( rTypeModel.maPosition == "relative" )
     {   // I'm not very sure this is correct either.
