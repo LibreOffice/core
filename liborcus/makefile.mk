@@ -33,7 +33,7 @@ TARGET=orcus
 .ENDIF
 
 TARFILE_NAME=liborcus_0.1.0
-TARFILE_MD5=9f4fecdd1267a2a685f06de8508c88ff
+TARFILE_MD5=13febcdd79ad25280f199a36b792c5f9
 
 PATCH_FILES=
 
@@ -50,8 +50,7 @@ CONFIGURE_ACTION=./configure \
 	--with-pic \
 	--enable-static \
 	--disable-shared \
-	--with-mdds-include-path=$(OUTDIR)/inc \
-	--disable-libzip \
+	--without-libzip \
 	--disable-debug \
 	--disable-spreadsheet-model
 
