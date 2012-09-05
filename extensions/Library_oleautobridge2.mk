@@ -43,6 +43,7 @@ $(eval $(call gb_Library_set_include,oleautobridge2,\
 ))
 
 $(eval $(call gb_Library_use_libraries,oleautobridge2,\
+	comphelper \
 	cppuhelper \
 	cppu \
 	sal \
