@@ -65,7 +65,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 }
 
 static const char *
-langid_to_string( LANGID langid, int *have_default_lang )
+langid_to_string( LANGID langid )
 {
     /* Map from LANGID to string. The languages below are now in
      * alphabetical order of codes as in
@@ -73,11 +73,6 @@ langid_to_string( LANGID langid, int *have_default_lang )
      * language part is returned in the string.
      */
     switch (PRIMARYLANGID (langid)) {
-    case LANG_ENGLISH:
-        if (have_default_lang != NULL &&
-            langid == MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT))
-            *have_default_lang = 1;
-        return "en";
 #define CASE(name, primary) \
         case LANG_##primary: return #name
     CASE(af, AFRIKAANS);
@@ -94,6 +89,7 @@ langid_to_string( LANGID langid, int *have_default_lang )
     CASE(da, DANISH);
     CASE(de, GERMAN);
     CASE(el, GREEK);
+    CASE(en, ENGLISH);
     CASE(es, SPANISH);
     CASE(et, ESTONIAN);
     CASE(eu, BASQUE);
@@ -191,7 +187,7 @@ enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
     long langid = strtol(language, NULL, 16);
     if (langid > 0xFFFF)
         return TRUE;
-    ui_langs[num_ui_langs] = langid_to_string((LANGID) langid, NULL);
+    ui_langs[num_ui_langs] = langid_to_string((LANGID) langid);
     num_ui_langs++;
     if (num_ui_langs == SAL_N_ELEMENTS(ui_langs) )
         return FALSE;
@@ -285,9 +281,8 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
              * available on the system.
              */
 
-            int have_system_default_lang = 0;
-            const char *system_default_lang = langid_to_string(GetSystemDefaultUILanguage(), &have_system_default_lang);
-            const char *user_locale_lang = langid_to_string(LANGIDFROMLCID(GetThreadLocale()), NULL);
+            const char *system_default_lang = langid_to_string(GetSystemDefaultUILanguage());
+            const char *user_locale_lang = langid_to_string(LANGIDFROMLCID(GetThreadLocale()));
 
             EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
 
@@ -307,27 +302,26 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
              * languages for an unsuspecting user of a Finnish Windows, for
              * instance. Sigh.
              */
+            bool have_system_default_lang = false;
             if (system_default_lang[0]) {
                 for (i = 0; i < nlangs; i++) {
                     if (memcmp (system_default_lang, langs[i], 2) == 0) {
-                        have_system_default_lang = 1;
+                        have_system_default_lang = true;
+                        break;
                     }
                 }
             }
-
             if (!have_system_default_lang) {
                 system_default_lang = "en";
-                have_system_default_lang = 1;
             }
-            if (have_system_default_lang) {
-                for (i = 0; i < nlangs; i++) {
-                    if (memcmp(system_default_lang, langs[i], 2) != 0 &&
-                        memcmp(user_locale_lang, langs[i], 2) != 0 &&
-                        !present_in_ui_langs(langs[i])) {
-                        UINT rc;
-                        sprintf(feature, "gm_Langpack_r_%s", langs[i]);
-                        rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
-                    }
+
+            for (i = 0; i < nlangs; i++) {
+                if (memcmp(system_default_lang, langs[i], 2) != 0 &&
+                    memcmp(user_locale_lang, langs[i], 2) != 0 &&
+                    !present_in_ui_langs(langs[i])) {
+                    UINT rc;
+                    sprintf(feature, "gm_Langpack_r_%s", langs[i]);
+                    rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
                 }
             }
         }
