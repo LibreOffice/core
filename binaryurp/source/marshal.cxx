@@ -76,7 +76,7 @@ void writeString(
     std::vector< unsigned char > * buffer, OUString const & value)
 {
     assert(buffer != 0);
-    rtl::OString v;
+    OString v;
     if (!value.convertToString(
             &v, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |

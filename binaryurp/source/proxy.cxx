@@ -110,8 +110,8 @@ void Proxy::do_dispatch(
         } catch (const std::exception & e) {
             throw css::uno::RuntimeException(
                 ("caught C++ exception: " +
-                rtl::OStringToOUString(
-                    rtl::OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
+                OStringToOUString(
+                    OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
                 css::uno::Reference< css::uno::XInterface >());
                 // best-effort string conversion
         }

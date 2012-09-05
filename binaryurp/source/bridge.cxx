@@ -180,12 +180,8 @@ Bridge::Bridge(
     factory_(factory), name_(name), connection_(connection),
     provider_(provider),
     binaryUno_(UNO_LB_UNO),
-    cppToBinaryMapping_(
-        CPPU_CURRENT_LANGUAGE_BINDING_NAME,
-        UNO_LB_UNO),
-    binaryToCppMapping_(
-        UNO_LB_UNO,
-        CPPU_CURRENT_LANGUAGE_BINDING_NAME),
+    cppToBinaryMapping_(CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_UNO),
+    binaryToCppMapping_(UNO_LB_UNO, CPPU_CURRENT_LANGUAGE_BINDING_NAME),
     protPropTid_(
         reinterpret_cast< sal_Int8 const * >(".UrpProtocolPropertiesTid"),
         RTL_CONSTASCII_LENGTH(".UrpProtocolPropertiesTid")),
@@ -193,10 +189,8 @@ Bridge::Bridge(
     protPropType_(
         cppu::UnoType<
             css::uno::Reference< css::bridge::XProtocolProperties > >::get()),
-    protPropRequest_(
-        "com.sun.star.bridge.XProtocolProperties::requestChange"),
-    protPropCommit_(
-        "com.sun.star.bridge.XProtocolProperties::commitChange"),
+    protPropRequest_("com.sun.star.bridge.XProtocolProperties::requestChange"),
+    protPropCommit_("com.sun.star.bridge.XProtocolProperties::commitChange"),
     state_(STATE_INITIAL), threadPool_(0), currentContextMode_(false),
     proxies_(0), calls_(0), normalCall_(false), activeCalls_(0),
     mode_(MODE_REQUESTED)
@@ -696,8 +690,7 @@ void Bridge::handleRequestChangeReply(
     }
     if (n != exp) {
         throw css::uno::RuntimeException(
-            "URP: requestChange reply with unexpected return value"
-            " received",
+            "URP: requestChange reply with unexpected return value received",
             static_cast< cppu::OWeakObject * >(this));
     }
     decrementCalls();
@@ -797,8 +790,7 @@ void Bridge::handleCommitChangeRequest(
     assert(ok);
     (void) ok; // avoid warnings
     for (sal_Int32 i = 0; i != s.getLength(); ++i) {
-        if ( s[i].Name == "CurrentContext" )
-        {
+        if (s[i].Name == "CurrentContext") {
             ccMode = true;
         } else {
             ccMode = false;
@@ -883,8 +875,8 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     for (sal_Int32 i = 0; i != sInstanceName.getLength(); ++i) {
         if (sInstanceName[i] > 0x7F) {
             throw css::io::IOException(
-                "XBridge::getInstance sInstanceName contains non-ASCII"
-                " character",
+                ("XBridge::getInstance sInstanceName contains non-ASCII"
+                 " character"),
                 css::uno::Reference< css::uno::XInterface >());
         }
     }
@@ -997,8 +989,7 @@ void Bridge::makeReleaseCall(
     AttachThread att(getThreadPool());
     sendRequest(
         att.getTid(), oid, type,
-        css::uno::TypeDescription(
-            "com.sun.star.uno.XInterface::release"),
+        css::uno::TypeDescription("com.sun.star.uno.XInterface::release"),
         std::vector< BinaryAny >());
 }
 

@@ -146,8 +146,7 @@ css::uno::TypeDescription Unmarshal::readType() {
     case typelib_TypeClass_ANY:
         if ((flags & 0x80) != 0) {
             throw css::io::IOException(
-                "binaryurp::Unmarshal: cache flag of simple type is"
-                " set",
+                "binaryurp::Unmarshal: cache flag of simple type is set",
                 css::uno::Reference< css::uno::XInterface >());
         }
         return css::uno::TypeDescription(
@@ -163,8 +162,7 @@ css::uno::TypeDescription Unmarshal::readType() {
             if ((flags & 0x80) == 0) {
                 if (idx == cache::ignore || !state_.typeCache[idx].is()) {
                     throw css::io::IOException(
-                        "binaryurp::Unmarshal: unknown type cache"
-                        " index",
+                        "binaryurp::Unmarshal: unknown type cache index",
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 return state_.typeCache[idx];
@@ -176,8 +174,7 @@ css::uno::TypeDescription Unmarshal::readType() {
                 {
 
                     throw css::io::IOException(
-                        "binaryurp::Unmarshal: type with unknown"
-                        " name: " + str,
+                        "binaryurp::Unmarshal: type with unknown name: " + str,
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 for (css::uno::TypeDescription t2(t);
@@ -189,16 +186,16 @@ css::uno::TypeDescription Unmarshal::readType() {
                             t2.get())->pType);
                     if (!t2.is()) {
                         throw css::io::IOException(
-                            "binaryurp::Unmarshal: sequence type with"
-                            " unknown component type",
+                            ("binaryurp::Unmarshal: sequence type with unknown"
+                             " component type"),
                             css::uno::Reference< css::uno::XInterface >());
                     }
                     switch (t2.get()->eTypeClass) {
                     case typelib_TypeClass_VOID:
                     case typelib_TypeClass_EXCEPTION:
                         throw css::io::IOException(
-                            "binaryurp::Unmarshal: sequence type with"
-                            " bad component type",
+                            ("binaryurp::Unmarshal: sequence type with bad"
+                             " component type"),
                             css::uno::Reference< css::uno::XInterface >());
                     default:
                         break;
@@ -222,8 +219,7 @@ OUString Unmarshal::readOid() {
     for (sal_Int32 i = 0; i != oid.getLength(); ++i) {
         if (oid[i] > 0x7F) {
             throw css::io::IOException(
-                "binaryurp::Unmarshal: OID contains non-ASCII"
-                " character",
+                "binaryurp::Unmarshal: OID contains non-ASCII character",
                 css::uno::Reference< css::uno::XInterface >());
         }
     }

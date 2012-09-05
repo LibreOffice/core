@@ -81,8 +81,8 @@ void IncomingRequest::execute() const {
             } catch (const std::exception & e) {
                 throw css::uno::RuntimeException(
                     ("caught C++ exception: " +
-                     rtl::OStringToOUString(
-                         rtl::OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
+                     OStringToOUString(
+                         OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
                     css::uno::Reference< css::uno::XInterface >());
                     // best-effort string conversion
             }
@@ -156,10 +156,8 @@ bool IncomingRequest::execute_throw(
                     OSL_TRACE(
                         (OSL_LOG_PREFIX "initial element '%s':"
                          " NoSuchElementException '%s'"),
-                        (OUStringToOString(oid_, RTL_TEXTENCODING_UTF8).
-                         getStr()),
-                        (OUStringToOString(
-                            e.Message, RTL_TEXTENCODING_UTF8).
+                        OUStringToOString(oid_, RTL_TEXTENCODING_UTF8).getStr(),
+                        (OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
                          getStr()));
                 }
             }

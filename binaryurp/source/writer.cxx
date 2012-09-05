@@ -163,8 +163,7 @@ void Writer::execute() {
                     (item.oid != "UrpProtocolProperties" &&
                      !item.member.equals(
                          css::uno::TypeDescription(
-                             "com.sun.star.uno.XInterface::"
-                             "release")) &&
+                             "com.sun.star.uno.XInterface::release")) &&
                      bridge_->isCurrentContextMode()),
                     item.currentContext);
             } else {
@@ -431,8 +430,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
         } catch (const css::io::IOException & e) {
             css::uno::Any exc(cppu::getCaughtException());
             throw css::lang::WrappedTargetRuntimeException(
-                ("Binary URP write raised IO exception: " +
-                e.Message),
+                "Binary URP write raised IO exception: " + e.Message,
                 css::uno::Reference< css::uno::XInterface >(), exc);
         }
         n = static_cast< std::vector< unsigned char >::size_type >(n - k);

@@ -52,14 +52,12 @@ css::uno::Reference< css::uno::XInterface > BridgeFactory::static_create(
 }
 
 OUString BridgeFactory::static_getImplementationName() {
-    return OUString(
-        "com.sun.star.comp.bridge.BridgeFactory");
+    return OUString("com.sun.star.comp.bridge.BridgeFactory");
 }
 
 css::uno::Sequence< OUString >
 BridgeFactory::static_getSupportedServiceNames() {
-    OUString name(
-        "com.sun.star.bridge.BridgeFactory");
+    OUString name("com.sun.star.bridge.BridgeFactory");
     return css::uno::Sequence< OUString >(&name, 1);
 }
 
@@ -132,11 +130,10 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
             throw css::bridge::BridgeExistsException(
                 sName, static_cast< cppu::OWeakObject * >(this));
         }
-        if ( sProtocol != "urp" || !aConnection.is() )
-        {
+        if (sProtocol != "urp" || !aConnection.is()) {
             throw css::lang::IllegalArgumentException(
-                "BridgeFactory::createBridge: sProtocol != urp ||"
-                " aConnection == null",
+                ("BridgeFactory::createBridge: sProtocol != urp ||"
+                 " aConnection == null"),
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
         b.set(new Bridge(this, sName, aConnection, anInstanceProvider));
