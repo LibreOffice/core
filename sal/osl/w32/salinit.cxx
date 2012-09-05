@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <iostream>
+#include <stdlib.h>
 
 #include "system.h"
 #include <osl/process.h>
@@ -33,6 +37,23 @@
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+// _set_invalid_parameter_handler appears unavailable with MinGW:
+#if defined _MSC_VER
+namespace {
+
+extern "C" void invalidParameterHandler(
+    wchar_t const * expression, wchar_t const * function, wchar_t const * file,
+    unsigned int line, SAL_UNUSED_PARAMETER uintptr_t)
+{
+    std::wcerr
+        << L"Invalid parameter in \"" << (expression ? expression : L"???")
+        << L"\" (" << (function ? function : L"???") << ") at "
+        << (file ? file : L"???") << L':' << line << std::endl;
+}
+
+}
 #endif
 
 // Prototypes for initialization and deinitialization of SAL library
@@ -85,6 +106,14 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_initialize(int argc, char ** argv)
     {
         // How to handle a very unlikely error ???
     }
+
+#if defined _MSC_VER // appears unavailable with MinGW
+    // It appears that at least some jvm.dll versions can cause calls to
+    // _fileno(NULL), which leads to a call of the invalid parameter handler,
+    // and the default handler causes the application to crash, so install a
+    // "harmless" one (cf. fdo#38913):
+    _set_invalid_parameter_handler(&invalidParameterHandler);
+#endif
 
     osl_setCommandArgs(argc, argv);
 }
