@@ -80,7 +80,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
                 icu::UnicodeString normalized;
                 nCode = U_ZERO_ERROR;
                 icu::Normalizer::normalize( icuRet, UNORM_NFKC, 0, normalized, nCode );
-                if ( U_SUCCESS( nCode ) && ( normalized != icuRet ) )
+                if ( U_SUCCESS( nCode ) )
                 {
                     // Convert the normalized UnicodeString to OUString
                     OUString sValue( reinterpret_cast<const sal_Unicode *>( normalized.getBuffer( ) ), normalized.length() );
