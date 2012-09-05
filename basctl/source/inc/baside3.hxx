@@ -125,6 +125,11 @@ class DialogWindowLayout : public Layout
 public:
     DialogWindowLayout (Window* pParent, ObjectCatalog&);
 public:
+    void ShowPropertyBrowser ();
+    void UpdatePropertyBrowser ();
+    void DisablePropertyBrowser ();
+    void RemovePropertyBrowser ();
+public:
     // Layout:
     virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
@@ -138,11 +143,14 @@ protected:
 private:
     // child window
     DialogWindow* pChild;
-    // dockable windows
+    // dockable windows:
+    // object catalog (owned by Shell)
     ObjectCatalog& rObjectCatalog;
-    // property browser
-    PropBrw aPropertyBrowser;
+    // property browser (created by this, deleted by toolkit)
+    PropBrw* pPropertyBrowser;
 
+private:
+    void AddPropertyBrowser ();
 private:
     friend class DialogWindow;
 };

@@ -22,6 +22,7 @@
 #include "basidesh.hxx"
 #include "dlgedobj.hxx"
 #include "iderid.hxx"
+#include "baside3.hxx"
 
 #include "dlgresid.hrc"
 #include <svx/svxids.hrc>
@@ -79,11 +80,12 @@ const long WIN_BORDER = 2;
 DBG_NAME(PropBrw)
 
 
-PropBrw::PropBrw (Layout& rLayout):
-    DockingWindow(&rLayout),
+PropBrw::PropBrw (DialogWindowLayout& rLayout_):
+    DockingWindow(&rLayout_),
     m_bInitialStateChange(true),
     m_xORB(comphelper::getProcessServiceFactory()),
     m_xContextDocument(SfxViewShell::Current() ? SfxViewShell::Current()->GetCurrentDocument() : Reference<XModel>()),
+    rLayout(rLayout_),
     pView(0)
 {
     DBG_CTOR(PropBrw,NULL);
@@ -201,6 +203,7 @@ PropBrw::~PropBrw()
 {
     if ( m_xBrowserController.is() )
         ImplDestroyController();
+    rLayout.RemovePropertyBrowser();
 
     DBG_DTOR(PropBrw,NULL);
 }
