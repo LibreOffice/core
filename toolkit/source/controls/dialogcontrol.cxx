@@ -175,6 +175,10 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XMultiServiceFact
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
     ImplRegisterProperty( BASEPROPERTY_HSCROLL );
     ImplRegisterProperty( BASEPROPERTY_VSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLWIDTH );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLHEIGHT );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLTOP );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLLEFT );
 
     Any aBool;
     aBool <<= (sal_Bool) sal_True;
@@ -231,6 +235,12 @@ Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         case BASEPROPERTY_DEFAULTCONTROL:
             aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog );
+            break;
+        case BASEPROPERTY_SCROLLWIDTH:
+        case BASEPROPERTY_SCROLLHEIGHT:
+        case BASEPROPERTY_SCROLLTOP:
+        case BASEPROPERTY_SCROLLLEFT:
+            aAny <<= sal_Int32(0);
             break;
         default:
             aAny = UnoControlModel::ImplGetDefaultValue( nPropId );

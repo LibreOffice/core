@@ -82,52 +82,26 @@ IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB )
         lcl_Scroll(mnScrollPos.X(), nPos );
     else if( pSB == &maHScrollBar )
         lcl_Scroll(nPos, mnScrollPos.Y() );
-#if 0
-    sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
-    Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
-    Point aScroll;
-    if( pSB == &maVScrollBar )
-    {
-        printf("vertical scroll %d\n", nPos );
-        Size aTmpScroll( nPos, nPos );
-        long nScroll = mnScrollPos.Y() - aTmpScroll.Width();
-        // I'm guessing I need to call scroll for ( stuff ) to happen
-        Scroll(0, nScroll, aScrollableArea );
-        mnScrollPos.Y() = nPos;
-        aScroll.Y() = nScroll;
-    }
-    else if( pSB == &maHScrollBar )
-    {
-        printf("horizontal scroll %d\n", nPos );
-        Size aTmpScroll( nPos, nPos );
-        long nScroll =  mnScrollPos.X() - aTmpScroll.Width();
-       Scroll( nScroll, 0, aScrollableArea);
-        mnScrollPos.X() = nPos;
-        aScroll.X() = nScroll;
-    }
-
-    // Manually scroll all children ( except the scrollbars )
-    for ( int index = 0; index < GetChildCount(); ++index )
-    {
-        Window* pChild = GetChild( index );
-        if ( pChild && pChild != &maVScrollBar && pChild != &maHScrollBar )
-        {
-            Point aPos = pChild->GetPosPixel();
-            aPos += Point( aScroll.X(), aScroll.Y() );
-            pChild->SetPosPixel( aPos );
-        }
-    }
-#endif
     return 1;
 }
 
+void ScrollableDialog::SetScrollTop( long nTop )
+{
+    printf("ScrollableDialog::SetScrollTop(%d)\n", nTop );
+}
+void ScrollableDialog::SetScrollLeft( long nLeft )
+{
+    printf("ScrollableDialog::SetScrollLeft(%d)\n", nLeft );
+}
 void ScrollableDialog::SetScrollWidth( long nWidth )
 {
+    printf("ScrollableDialog::SetScrollWidth(%d)\n", nWidth );
     maScrollArea.Width() = nWidth;
 }
 
 void ScrollableDialog::SetScrollHeight( long nHeight )
 {
+    printf("ScrollableDialog::SetScrollHeight(%d)\n", nHeight );
     maScrollArea.Height() = nHeight;
 }
 

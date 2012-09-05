@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <toolkit/awt/vclxwindows.hxx>
+#include "toolkit/awt/scrollabledialog.hxx"
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -2450,8 +2451,47 @@ throw(::com::sun::star::uno::RuntimeException)
         sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        printf("XDialog setProperty... %s\n", rtl::OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
         switch ( nPropType )
         {
+            case BASEPROPERTY_SCROLLHEIGHT:
+            case BASEPROPERTY_SCROLLWIDTH:
+            case BASEPROPERTY_SCROLLTOP:
+            case BASEPROPERTY_SCROLLLEFT:
+            {
+                sal_Int32 nVal =0;
+                Value >>= nVal;
+                Size aSize( nVal, nVal );
+                Window* pWindow = GetWindow();
+                MapMode aMode( MAP_APPFONT );
+                if ( pWindow )
+                {
+                    OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+                    if ( !pDev )
+                        pDev = pWindow->GetParent();
+
+                    aSize = pDev->LogicToPixel( aSize, aMode );
+                    toolkit::ScrollableDialog* pScrollable = static_cast< toolkit::ScrollableDialog* >( pWindow );
+                    switch ( nPropType )
+                    {
+                        case BASEPROPERTY_SCROLLHEIGHT:
+                            pScrollable->SetScrollHeight( aSize.Height() );
+                            break;
+                        case BASEPROPERTY_SCROLLWIDTH:
+                            pScrollable->SetScrollWidth( aSize.Width() );
+                            break;
+                        case BASEPROPERTY_SCROLLTOP:
+                            pScrollable->SetScrollTop( aSize.Height() );
+                            break;
+                        case BASEPROPERTY_SCROLLLEFT:
+                            pScrollable->SetScrollLeft( aSize.Width() );
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                break;
+            }
             case BASEPROPERTY_GRAPHIC:
             {
                 Reference< XGraphic > xGraphic;

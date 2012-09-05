@@ -48,6 +48,7 @@
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <tools/gen.hxx>
 //  ----------------------------------------------------
 //  class ControlModelContainerBase
 //  ----------------------------------------------------
@@ -223,6 +224,7 @@ typedef ::cppu::AggImplInheritanceHelper2   < UnoControlContainer
 
 class ControlContainerBase : public ContainerControl_IBase
 {
+    ::Size ImplGetSizePixel( const ::Size& inSize );
 protected:
     bool                                                                        mbSizeModified;
     bool                                                                        mbPosModified;
