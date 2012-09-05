@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
@@ -58,7 +58,7 @@ namespace dbaui
         using ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
         using ::com::sun::star::ui::XUIConfigurationManager;
         using ::com::sun::star::ui::XImageManager;
-        using ::com::sun::star::ui::UICommandDescription;
+        using ::com::sun::star::frame::UICommandDescription;
         using ::com::sun::star::graphic::XGraphic;
 
         String GetCommandText( const sal_Char* _pCommandURL, const ::rtl::OUString& _rModuleName )

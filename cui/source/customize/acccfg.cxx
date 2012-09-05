@@ -56,7 +56,7 @@
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -852,7 +852,8 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         // no - initialize this instance
         m_xSMGR = ::comphelper::getProcessServiceFactory();
 
-        m_xUICmdDescription = css::ui::UICommandDescription::create(comphelper::ComponentContext(m_xSMGR).getUNOContext());
+        m_xUICmdDescription = css::frame::UICommandDescription::create(
+                comphelper::ComponentContext(m_xSMGR).getUNOContext());
 
         // get the current active frame, which should be our "parent"
         // for this session

@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>
@@ -51,7 +51,7 @@ namespace frm
     using ::com::sun::star::frame::ModuleManager;
     using ::com::sun::star::frame::XModuleManager2;
     using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::ui::UICommandDescription;
+    using ::com::sun::star::frame::UICommandDescription;
     /** === end UNO using === **/
 
     //====================================================================

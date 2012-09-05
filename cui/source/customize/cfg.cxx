@@ -75,7 +75,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -914,7 +914,8 @@ SaveInData::SaveInData(
         ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
 
     uno::Reference< container::XNameAccess > xNameAccess(
-        css::ui::UICommandDescription::create(comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
+        css::frame::UICommandDescription::create(
+            comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
 
     xNameAccess->getByName( aModuleId ) >>= m_xCommandToLabelMap;
 

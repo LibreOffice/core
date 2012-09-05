@@ -45,7 +45,7 @@
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 #include "acccfg.hrc"
 #include "helpid.hrc"
@@ -586,7 +586,8 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
 
         m_xGlobalCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICATEGORYDESCRIPTION), css::uno::UNO_QUERY_THROW);
         m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName)   , css::uno::UNO_QUERY_THROW);
-        m_xUICmdDescription   = css::ui::UICommandDescription::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext());
+        m_xUICmdDescription   = css::frame::UICommandDescription::create(
+                ::comphelper::ComponentContext(m_xSMGR).getUNOContext());
 
         InitModule();
         InitBasic();
