@@ -135,6 +135,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	DocumentTemplates \
 	MediaTypeDetectionHelper \
 	ModuleManager \
+	UICommandDescription \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/graphic,\
 	GraphicObject \
@@ -290,7 +291,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	GlobalAcceleratorConfiguration \
     ModuleUIConfigurationManagerSupplier \
-    UICommandDescription \
 	WindowContentFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\

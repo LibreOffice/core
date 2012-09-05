@@ -67,7 +67,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
@@ -2092,7 +2092,8 @@ void Desktop::PreloadConfigurationData()
 {
     Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XNameAccess > xNameAccess( css::ui::UICommandDescription::create(xContext) );
+    Reference< XNameAccess > xNameAccess(
+            css::frame::UICommandDescription::create(xContext) );
 
     rtl::OUString aWriterDoc( "com.sun.star.text.TextDocument" );
     rtl::OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );

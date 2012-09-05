@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 #include "ViewShellBase.hxx"
 #include <algorithm>
@@ -1149,7 +1149,8 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
 
         if( !aModuleIdentifier.isEmpty() )
         {
-            Reference< XNameAccess > xNameAccess( ui::UICommandDescription::create(xContext) );
+            Reference< XNameAccess > const xNameAccess(
+                    frame::UICommandDescription::create(xContext) );
             Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
             Sequence< PropertyValue > aPropSeq;
             if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )

@@ -62,7 +62,7 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/DispatchInformation.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -425,7 +425,8 @@ void SvxConfigGroupListBox_Impl::Init()
         }catch(const uno::Exception&)
             { aModuleId = ::rtl::OUString(); }
 
-        Reference< container::XNameAccess > xNameAccess( ui::UICommandDescription::create(xContext) );
+        Reference< container::XNameAccess > const xNameAccess(
+                frame::UICommandDescription::create(xContext) );
         xNameAccess->getByName( aModuleId ) >>= m_xModuleCommands;
 
         Reference< container::XNameAccess > xAllCategories(

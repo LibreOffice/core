@@ -33,7 +33,7 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>
 
@@ -248,7 +248,8 @@ static ::rtl::OUString RetrieveLabelFromCommand(
         if ( !xNameAccess.is() )
         {
             xNameAccess = css::uno::Reference< css::container::XNameAccess >(
-                css::ui::UICommandDescription::create(comphelper::ComponentContext(xSMGR).getUNOContext()),
+                css::frame::UICommandDescription::create(
+                        comphelper::ComponentContext(xSMGR).getUNOContext()),
                     css::uno::UNO_QUERY_THROW );
             s_xNameAccess = xNameAccess;
         }

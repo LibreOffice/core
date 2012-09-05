@@ -58,7 +58,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -114,7 +114,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 using com::sun::star::ui::XUIElement;
-using com::sun::star::ui::UICommandDescription;
+using com::sun::star::frame::UICommandDescription;
 using com::sun::star::ui::XUIConfigurationManager;
 using com::sun::star::ui::XUIConfigurationManagerSupplier;
 using com::sun::star::ui::XAcceleratorConfiguration;

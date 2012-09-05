@@ -61,7 +61,7 @@
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -92,7 +92,9 @@ static const char XDG_CONFIG_PART[] = "/.config";
     ::rtl::OUString sLabel;
 
     uno::Reference< container::XNameAccess > xUICommands;
-    uno::Reference< container::XNameAccess > xNameAccess( ui::UICommandDescription::create(::comphelper::getProcessComponentContext()) );
+    uno::Reference< container::XNameAccess > const xNameAccess(
+            frame::UICommandDescription::create(
+                ::comphelper::getProcessComponentContext()) );
     xNameAccess->getByName( sModuleIdentifier ) >>= xUICommands;
     if (xUICommands.is())
     {

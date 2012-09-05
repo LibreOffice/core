@@ -89,7 +89,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 
 using namespace ::com::sun::star;
@@ -333,7 +333,10 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
     {
         try
         {
-            uno::Reference< container::XNameAccess > xNameAccess( ui::UICommandDescription::create(::comphelper::getProcessComponentContext() ), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNameAccess > const xNameAccess(
+                    frame::UICommandDescription::create(
+                        ::comphelper::getProcessComponentContext() ),
+                    uno::UNO_QUERY_THROW );
             uno::Reference< container::XNameAccess > xUICommandLabels;
             uno::Any a = xNameAccess->getByName( "com.sun.star.text.TextDocument" );
             uno::Reference< container::XNameAccess > xUICommands;

@@ -21,7 +21,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 #include <svl/eitem.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
@@ -63,7 +63,7 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     xUICommandDescription = xTmpNameAccess;
     if ( !xUICommandDescription.is() )
     {
-        xUICommandDescription = ui::UICommandDescription::create(xContext);
+        xUICommandDescription = frame::UICommandDescription::create(xContext);
         xTmpNameAccess = xUICommandDescription;
     }
 

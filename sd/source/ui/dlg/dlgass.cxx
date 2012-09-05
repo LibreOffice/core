@@ -64,7 +64,7 @@
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/UICommandDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <unotools/historyoptions.hxx>
 #include <osl/file.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -1757,7 +1757,8 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
             if ( ! xContext.is())
                 break;
 
-            Reference<container::XNameAccess> xNameAccess ( ui::UICommandDescription::create(xContext) );
+            Reference<container::XNameAccess> const xNameAccess(
+                    frame::UICommandDescription::create(xContext) );
             Any a = xNameAccess->getByName(
                 "com.sun.star.presentation.PresentationDocument");
             a >>= xUICommandLabels;
