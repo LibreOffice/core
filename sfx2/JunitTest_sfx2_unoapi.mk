@@ -34,12 +34,8 @@ $(eval $(call gb_JunitTest_use_jars,sfx2_unoapi,\
     jurt \
 ))
 
-$(eval $(call gb_JunitTest_add_sourcefiles,sfx2_unoapi,\
-    sfx2/qa/unoapi/Test \
-))
-
 $(eval $(call gb_JunitTest_add_classes,sfx2_unoapi,\
-    unoapi.Test \
+    org.openoffice.test.UnoApiTest \
 ))
 
 # vim: set noet sw=4 ts=4:
