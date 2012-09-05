@@ -115,11 +115,12 @@ copy-stuff:
 #
 # Then other "assets" that can be left in the .apk. Let the directory
 # structure under assets mimic that under solver or workdir for now.
-	mkdir -p assets/bin assets/lib assets/xml/ure
+	mkdir -p assets/bin assets/bin/ure assets/lib assets/xml/ure
 	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
 	cp $(OUTDIR)/bin/types.rdb assets/bin
+	cp $(OUTDIR)/bin/ure/types.rdb assets/bin/ure
 #
-	for F in xml/ure/services; do \
+	for F in xml/services xml/ure/services; do \
 		cp $(OUTDIR)/$$F.rdb assets/$$F.rdb; \
 	done
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
@@ -130,6 +131,13 @@ copy-stuff:
 	done
 	cp -R $(OUTDIR)/xml/registry assets/xml
 #
+	mkdir -p assets/share/registry/res assets/share/config/soffice.cfg
+	cp $(OUTDIR)/xml/*.xcd assets/share/registry
+	mv assets/share/registry/fcfg_langpack_en-US.xcd assets/share/registry/res
+	cp -R $(OUTDIR)/xml/uiconfig/* assets/share/config/soffice.cfg
+	cp -R $(OUTDIR)/xml/registry/* assets/share/registry
+	cp $(OUTDIR)/bin/images_tango.zip assets/share/config/images.zip
+#
 # .res files
 	for F in $(OUTDIR)/bin/*.res; do \
 		cp $$F assets/bin; \
@@ -139,9 +147,9 @@ copy-stuff:
 # doesn't use soffice_main() (at least I think it shouldn't), the
 # rtl::Bootstrap::setIniFilename() call there that hardcodes
 # /assets/program/lofficerc isn't executed. Instead the hardcoding of
-# /assets/rc in BootstrapMap::getBaseIni() gets used. However, probably it can
-# be effectively empty as we pass all we need (?) on the command line.
+# /assets/rc in BootstrapMap::getBaseIni() gets used.
 	echo '[Bootstrap]' > assets/rc
+	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/rc
 #
 # unorc is also mandatory. It seems that it *has* to contain the
 # URE_INTERNAL_LIB_DIR, UNO_TYPES and UNO_SERVICES settings(?)
@@ -151,6 +159,17 @@ copy-stuff:
 	echo "UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb"  >> assets/program/unorc
 	echo "UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/ComponentTarget/basic/util/sb.component file:///assets/ComponentTarget/chart2/source/controller/chartcontroller.component file:///assets/ComponentTarget/chart2/source/tools/charttools.component file:///assets/ComponentTarget/chart2/source/model/chartmodel.component file:///assets/ComponentTarget/comphelper/util/comphelp.component file:///assets/ComponentTarget/dbaccess/util/dba.component file:///assets/ComponentTarget/eventattacher/source/evtatt.component file:///assets/ComponentTarget/fileaccess/source/fileacc.component file:///assets/ComponentTarget/filter/source/config/cache/filterconfig1.component file:///assets/ComponentTarget/forms/util/frm.component file:///assets/ComponentTarget/oox/util/oox.component file:///assets/ComponentTarget/package/source/xstor/xstor.component file:///assets/ComponentTarget/package/util/package2.component file:///assets/ComponentTarget/sax/source/expatwrap/expwrap.component file:///assets/ComponentTarget/sax/source/fastparser/fastsax.component file:///assets/ComponentTarget/sc/util/sc.component file:///assets/ComponentTarget/sc/util/scfilt.component file:///assets/ComponentTarget/scaddins/source/analysis/analysis.component file:///assets/ComponentTarget/scaddins/source/datefunc/date.component file:///assets/ComponentTarget/sot/util/sot.component file:///assets/ComponentTarget/svl/util/svl.component file:///assets/ComponentTarget/toolkit/util/tk.component file:///assets/ComponentTarget/ucb/source/ucp/tdoc/ucptdoc1.component file:///assets/ComponentTarget/unotools/util/utl.component file:///assets/ComponentTarget/unoxml/source/rdf/unordf.component file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/ComponentTarget/ucb/source/core/ucb1.component file:///assets/ComponentTarget/ucb/source/ucp/file/ucpfile1.component" >> assets/program/unorc
 #
+# Hmm, maybe fundamentalrc, too
+	echo '[Bootstrap]' > assets/program/fundamentalrc
+	echo "LO_LIB_DIR=file:$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
+	echo "URE_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc # checkme - is this used to find configs ?
+	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
+	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
+	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
+	echo 'URE_MORE_TYPES=file:///assets/bin/ure/types.rdb file:///assets/bin/types.rdb' >> assets/program/fundamentalrc
+	echo 'URE_MORE_SERVICES=file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
+
+#
 # Test documents for filters_test
 	(cd $(SRC_ROOT) && tar cf - sc/qa/unit/data) | (cd assets && tar xvf -)
 #
@@ -158,8 +177,8 @@ copy-stuff:
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
 # The indirect command lines...
-	echo "SAL_LOG=+WARN+INFO-INFO.legacy.osl STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry' -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >assets/unpack/ucalc.cmdline
-	echo "SAL_LOG=+WARN+INFO-INFO.legacy.osl STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_filters_test.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry module:file:///assets/xml/registry/spool' -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >assets/unpack/filters_test.cmdline
+	echo "SAL_LOG=+WARN+INFO STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector" >assets/unpack/ucalc.cmdline
+	echo "SAL_LOG=+WARN+INFO STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_filters_test.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector" >assets/unpack/filters_test.cmdline
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
