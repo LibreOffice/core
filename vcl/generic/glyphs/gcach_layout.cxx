@@ -42,8 +42,6 @@
 #include <unicode/uscript.h>
 #include <unicode/ubidi.h>
 
-namespace { struct SimpleLayoutEngine : public rtl::Static< ServerFontLayoutEngine, SimpleLayoutEngine > {}; }
-
 // =======================================================================
 // layout implementation for ServerFont
 // =======================================================================
@@ -62,10 +60,8 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     ServerFontLayoutEngine* pLE = mrServerFont.GetLayoutEngine();
-    if( !pLE )
-        pLE = &SimpleLayoutEngine::get();
-
-    bool bRet = (*pLE)( *this, rArgs );
+    assert(pLE);
+    bool bRet = pLE ? pLE->layout(*this, rArgs) : false;
     return bRet;
 }
 
@@ -92,68 +88,6 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // TODO: kashida-GSUB/GPOS
         }
     }
-}
-
-// =======================================================================
-
-bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rArgs )
-{
-    ServerFont& rFont = rLayout.GetServerFont();
-
-    Point aNewPos( 0, 0 );
-    int nOldGlyphId = -1;
-    int nGlyphWidth = 0;
-    GlyphItem aPrevItem;
-    bool bRightToLeft;
-
-    rLayout.Reserve(rArgs.mnLength);
-    for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
-    {
-        sal_UCS4 cChar = rArgs.mpStr[ nCharPos ];
-        if( (cChar >= 0xD800) && (cChar <= 0xDFFF) )
-        {
-            if( cChar >= 0xDC00 ) // this part of a surrogate pair was already processed
-                continue;
-            cChar = 0x10000 + ((cChar - 0xD800) << 10)
-                  + (rArgs.mpStr[ nCharPos+1 ] - 0xDC00);
-        }
-
-        if( bRightToLeft )
-            cChar = GetMirroredChar( cChar );
-        int nGlyphIndex = rFont.GetGlyphIndex( cChar );
-        // when glyph fallback is needed update LayoutArgs
-        if( !nGlyphIndex ) {
-            rArgs.NeedFallback( nCharPos, bRightToLeft );
-        if( cChar >= 0x10000 ) // handle surrogate pairs
-                rArgs.NeedFallback( nCharPos+1, bRightToLeft );
-    }
-
-        // apply pair kerning to prev glyph if requested
-        if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
-        {
-            int nKernValue = rFont.GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
-            nGlyphWidth += nKernValue;
-            aPrevItem.mnNewWidth = nGlyphWidth;
-        }
-
-        // finish previous glyph
-        if( nOldGlyphId >= 0 )
-            rLayout.AppendGlyph( aPrevItem );
-        aNewPos.X() += nGlyphWidth;
-
-        // prepare GlyphItem for appending it in next round
-        nOldGlyphId = nGlyphIndex;
-        const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
-        nGlyphWidth = rGM.GetCharWidth();
-        int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
-        aPrevItem = GlyphItem( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
-    }
-
-    // append last glyph item if any
-    if( nOldGlyphId >= 0 )
-        rLayout.AppendGlyph( aPrevItem );
-
-    return true;
 }
 
 // =======================================================================
@@ -215,7 +149,7 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
         "vcl",
         "font( h=" << mrServerFont.GetFontSelData().mnHeight << ", \""
         << mrServerFont.GetFontFileName()->getStr() << "\" )");
-    return (const void*)pBuffer;
+    return pBuffer;
 }
 
 // -----------------------------------------------------------------------
@@ -347,7 +281,7 @@ public:
                             IcuLayoutEngine( ServerFont& );
     virtual                 ~IcuLayoutEngine();
 
-    virtual bool            operator()( ServerFontLayout&, ImplLayoutArgs& );
+    virtual bool            layout( ServerFontLayout&, ImplLayoutArgs& );
 };
 
 // -----------------------------------------------------------------------
@@ -362,8 +296,7 @@ IcuLayoutEngine::IcuLayoutEngine( ServerFont& rServerFont )
 
 IcuLayoutEngine::~IcuLayoutEngine()
 {
-    if( mpIcuLE )
-        delete mpIcuLE;
+    delete mpIcuLE;
 }
 
 // -----------------------------------------------------------------------
@@ -376,7 +309,7 @@ static bool lcl_CharIsJoiner(sal_Unicode cChar)
 //See https://bugs.freedesktop.org/show_bug.cgi?id=31016
 #define ARABIC_BANDAID
 
-bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rArgs )
+bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 {
     LEUnicode* pIcuChars;
     if( sizeof(LEUnicode) == sizeof(*rArgs.mpStr) )
@@ -643,8 +576,8 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
-    if( !mpLayoutEngine && FT_IS_SFNT( maFaceFT ) )
-        mpLayoutEngine = new IcuLayoutEngine( *this );
+    if (!mpLayoutEngine)
+        mpLayoutEngine = new IcuLayoutEngine(*this);
     return mpLayoutEngine;
 }
 

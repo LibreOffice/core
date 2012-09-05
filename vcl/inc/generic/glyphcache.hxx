@@ -340,7 +340,7 @@ class ServerFontLayoutEngine
 {
 public:
     virtual         ~ServerFontLayoutEngine() {}
-    virtual bool    operator()( ServerFontLayout&, ImplLayoutArgs& );
+    virtual bool    layout(ServerFontLayout&, ImplLayoutArgs&) = 0;
 };
 
 // =======================================================================
