@@ -119,12 +119,11 @@ copy-stuff:
 	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
 	cp $(OUTDIR)/bin/types.rdb assets/bin
 #
+	for F in xml/ure/services; do \
+		cp $(OUTDIR)/$$F.rdb assets/$$F.rdb; \
+	done
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
 # So just hardcode the known APP_DATA_PATH for now...
-# Ditto for URE_INTERNAL_LIB_DIR
-	for F in xml/ure/services; do \
-		sed -e 's!uri="vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!g' <$(OUTDIR)/$$F.rdb >assets/$$F.rdb; \
-	done
 	for F in framework/util/fwk i18npool/util/i18npool sfx2/util/sfx ucb/source/core/ucb1 ucb/source/ucp/file/ucpfile1 unoxml/source/service/unoxml configmgr/source/configmgr basic/util/sb chart2/source/controller/chartcontroller chart2/source/tools/charttools chart2/source/model/chartmodel comphelper/util/comphelp dbaccess/util/dba eventattacher/source/evtatt fileaccess/source/fileacc filter/source/config/cache/filterconfig1 forms/util/frm oox/util/oox package/source/xstor/xstor package/util/package2 sax/source/expatwrap/expwrap sax/source/fastparser/fastsax sc/util/sc sc/util/scfilt scaddins/source/analysis/analysis scaddins/source/datefunc/date sot/util/sot svl/util/svl toolkit/util/tk ucb/source/ucp/tdoc/ucptdoc1 unotools/util/utl unoxml/source/rdf/unordf; do \
 		mkdir -p assets/ComponentTarget/`dirname $$F`; \
 	        sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!g' <$(WORKDIR)/ComponentTarget/$$F.component >assets/ComponentTarget/$$F.component; \
@@ -136,6 +135,22 @@ copy-stuff:
 		cp $$F assets/bin; \
 	done
 #
+# rc is mandatory, the "inifile". See BootstrapMap::getBaseIni(). As this app
+# doesn't use soffice_main() (at least I think it shouldn't), the
+# rtl::Bootstrap::setIniFilename() call there that hardcodes
+# /assets/program/lofficerc isn't executed. Instead the hardcoding of
+# /assets/rc in BootstrapMap::getBaseIni() gets used. However, probably it can
+# be effectively empty as we pass all we need (?) on the command line.
+	echo '[Bootstrap]' > assets/rc
+#
+# unorc is also mandatory. It seems that it *has* to contain the
+# URE_INTERNAL_LIB_DIR, UNO_TYPES and UNO_SERVICES settings(?)
+	mkdir -p assets/program
+	echo "[Bootstrap]" > assets/program/unorc
+	echo "URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/unorc
+	echo "UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb"  >> assets/program/unorc
+	echo "UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/ComponentTarget/basic/util/sb.component file:///assets/ComponentTarget/chart2/source/controller/chartcontroller.component file:///assets/ComponentTarget/chart2/source/tools/charttools.component file:///assets/ComponentTarget/chart2/source/model/chartmodel.component file:///assets/ComponentTarget/comphelper/util/comphelp.component file:///assets/ComponentTarget/dbaccess/util/dba.component file:///assets/ComponentTarget/eventattacher/source/evtatt.component file:///assets/ComponentTarget/fileaccess/source/fileacc.component file:///assets/ComponentTarget/filter/source/config/cache/filterconfig1.component file:///assets/ComponentTarget/forms/util/frm.component file:///assets/ComponentTarget/oox/util/oox.component file:///assets/ComponentTarget/package/source/xstor/xstor.component file:///assets/ComponentTarget/package/util/package2.component file:///assets/ComponentTarget/sax/source/expatwrap/expwrap.component file:///assets/ComponentTarget/sax/source/fastparser/fastsax.component file:///assets/ComponentTarget/sc/util/sc.component file:///assets/ComponentTarget/sc/util/scfilt.component file:///assets/ComponentTarget/scaddins/source/analysis/analysis.component file:///assets/ComponentTarget/scaddins/source/datefunc/date.component file:///assets/ComponentTarget/sot/util/sot.component file:///assets/ComponentTarget/svl/util/svl.component file:///assets/ComponentTarget/toolkit/util/tk.component file:///assets/ComponentTarget/ucb/source/ucp/tdoc/ucptdoc1.component file:///assets/ComponentTarget/unotools/util/utl.component file:///assets/ComponentTarget/unoxml/source/rdf/unordf.component file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/ComponentTarget/ucb/source/core/ucb1.component file:///assets/ComponentTarget/ucb/source/ucp/file/ucpfile1.component" >> assets/program/unorc
+#
 # Test documents for filters_test
 	(cd $(SRC_ROOT) && tar cf - sc/qa/unit/data) | (cd assets && tar xvf -)
 #
@@ -143,8 +158,8 @@ copy-stuff:
 	mkdir -p assets/unpack/etc/fonts
 	cp fonts.conf assets/unpack/etc/fonts
 # The indirect command lines...
-	echo "SAL_LOG=+WARN+INFO-INFO.legacy.osl STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry' '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb' '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/ComponentTarget/ucb/source/core/ucb1.component file:///assets/ComponentTarget/ucb/source/ucp/file/ucpfile1.component' -env:URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >assets/unpack/ucalc.cmdline
-	echo "SAL_LOG=+WARN+INFO-INFO.legacy.osl STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_filters_test.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry module:file:///assets/xml/registry/spool' '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb' '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/ComponentTarget/basic/util/sb.component file:///assets/ComponentTarget/chart2/source/controller/chartcontroller.component file:///assets/ComponentTarget/chart2/source/tools/charttools.component file:///assets/ComponentTarget/chart2/source/model/chartmodel.component file:///assets/ComponentTarget/comphelper/util/comphelp.component file:///assets/ComponentTarget/dbaccess/util/dba.component file:///assets/ComponentTarget/eventattacher/source/evtatt.component file:///assets/ComponentTarget/fileaccess/source/fileacc.component file:///assets/ComponentTarget/filter/source/config/cache/filterconfig1.component file:///assets/ComponentTarget/forms/util/frm.component file:///assets/ComponentTarget/oox/util/oox.component file:///assets/ComponentTarget/package/source/xstor/xstor.component file:///assets/ComponentTarget/package/util/package2.component file:///assets/ComponentTarget/sax/source/expatwrap/expwrap.component file:///assets/ComponentTarget/sax/source/fastparser/fastsax.component file:///assets/ComponentTarget/sc/util/sc.component file:///assets/ComponentTarget/sc/util/scfilt.component file:///assets/ComponentTarget/scaddins/source/analysis/analysis.component file:///assets/ComponentTarget/scaddins/source/datefunc/date.component file:///assets/ComponentTarget/sot/util/sot.component file:///assets/ComponentTarget/svl/util/svl.component file:///assets/ComponentTarget/toolkit/util/tk.component file:///assets/ComponentTarget/ucb/source/ucp/tdoc/ucptdoc1.component file:///assets/ComponentTarget/unotools/util/utl.component file:///assets/ComponentTarget/unoxml/source/rdf/unordf.component file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/ComponentTarget/ucb/source/core/ucb1.component file:///assets/ComponentTarget/ucb/source/ucp/file/ucpfile1.component' -env:URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >assets/unpack/filters_test.cmdline
+	echo "SAL_LOG=+WARN+INFO-INFO.legacy.osl STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry' -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >assets/unpack/ucalc.cmdline
+	echo "SAL_LOG=+WARN+INFO-INFO.legacy.osl STAR_RESOURCEPATH=/assets/bin $(APP_DATA_PATH)/lib/libtest_sc_filters_test.so --headless --protector libunoexceptionprotector.so unoexceptionprotector --protector libunobootstrapprotector.so unobootstrapprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry module:file:///assets/xml/registry/spool' -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >assets/unpack/filters_test.cmdline
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
