@@ -5063,6 +5063,9 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
 {
     ScDocShellModificator aModificator(rDocShell);
     ScDocument* pDoc = rDocShell.GetDocument();
+    if(pDoc->IsTabProtected(nTab))
+        return;
+
     if(nOldFormat)
     {
         pDoc->DeleteConditionalFormat(nOldFormat, nTab);
