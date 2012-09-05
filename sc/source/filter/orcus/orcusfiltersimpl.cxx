@@ -14,7 +14,6 @@
 #include "orcusfiltersimpl.hxx"
 
 #define __ORCUS_STATIC_LIB
-#define BOOST_DISABLE_THREADS
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
 
@@ -23,6 +22,12 @@
 using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
 using orcus::spreadsheet::formula_grammar_t;
+
+#ifdef WNT
+#define SYSTEM_PATH INetURLObject::FSYS_DOS
+#else
+#define SYSTEM_PATH INetURLObject::FSYS_UNX
+#endif
 
 namespace {
 
@@ -138,7 +143,7 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 {
     ScOrcusFactory aFactory(rDoc);
     INetURLObject aURL(rPath);
-    const char* path = rtl::OUStringToOString(aURL.getFSysPath(INetURLObject::FSYS_UNX), RTL_TEXTENCODING_UTF8).getStr();
+    const char* path = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8).getStr();
 
     try
     {
