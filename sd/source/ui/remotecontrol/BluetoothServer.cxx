@@ -9,20 +9,19 @@
 #include "BluetoothServer.hxx"
 #include <stdio.h>
 
-#if defined(LINUX) && defined(ENABLE_GIO) && defined(ENABLE_DBUS)
+#if defined(LINUX) && defined(ENABLE_DBUS)
 #include <glib.h>
-#include <gio/gio.h>
+#include <dbus/dbus-glib.h>
 #include <sys/unistd.h>
 #include <sys/socket.h>
-#endif
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
-
-#ifdef LINUX
 #include "bluetooth/bluetooth.h"
 #include "bluetooth/rfcomm.h"
 #endif
 
+// FIXME: move this into an external file and look at sharing definitions
+// across OS's (i.e. UUID and port ).
+// Also look at determining which ports are available.
+#define BLUETOOTH_SERVICE_RECORD "<?xml version='1.0' encoding= 'UTF-8' ?><record><attribute id='0x0001'><sequence><uuid value='0x1101' /></sequence></attribute><attribute id='0x0004'><sequence><sequence><uuid value='0x0100' /></sequence><sequence><uuid value='0x0003' /><uint8 value='0x05' /></sequence></sequence></attribute><attribute id='0x0005'><sequence><uuid value='0x1002' /></sequence></attribute><attribute id='0x0006'><sequence><uint16 value='0x656e' /><uint16 value='0x006a' /><uint16 value='0x0100' /></sequence></attribute><attribute id='0x0009'><sequence><sequence><uuid value='0x1101' /><uint16 value='0x0100' /></sequence></sequence></attribute><attribute id='0x0100'><text value='Serial Port' /></attribute><attribute id='0x0101'><text value='COM Port' /></attribute></record>"
 
 #include "Communicator.hxx"
 
@@ -38,66 +37,71 @@ BluetoothServer::~BluetoothServer()
 {
 }
 
-struct oslSocketImpl {
-    int                 m_Socket;
-    int                 m_nLastError;
-    void*    m_CloseCallback;
-    void*               m_CallbackArg;
-    oslInterlockedCount m_nRefCount;
-#if defined(LINUX)
-    sal_Bool            m_bIsAccepting;
-    sal_Bool            m_bIsInShutdown;
-#endif
-};
-
-
 void BluetoothServer::execute()
 {
-#if defined(LINUX) && defined(ENABLE_GIO) && defined(ENABLE_DBUS)
-#ifdef GLIB_VERSION_2_26
+#if defined(LINUX) && defined(ENABLE_DBUS)
     g_type_init();
-    GError* aError = NULL;
 
-    GDBusConnection* aConnection = g_bus_get_sync( G_BUS_TYPE_SYSTEM, NULL, &aError );
-    if ( aError )
-    {
-        g_error_free( aError );
-        return; // We can't get a dbus connection
+    GError *aError = NULL;
+
+    DBusGConnection *aConnection = NULL;
+    aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
+
+    if ( aError != NULL ) {
+        g_error_free (aError);
+        return;
     }
 
-    GVariant *aAdapter = g_dbus_connection_call_sync( aConnection,
-                                "org.bluez", "/", "org.bluez.Manager",
-                                "DefaultAdapter", NULL,
-                                G_VARIANT_TYPE_TUPLE,
-                                G_DBUS_CALL_FLAGS_NONE, -1, NULL, &aError);
-    if ( aError )
+
+    DBusGProxy *aManager = NULL;
+    aManager = dbus_g_proxy_new_for_name( aConnection, "org.bluez", "/",
+                                          "org.bluez.Manager" );
+
+    if ( aManager == NULL )
     {
-        g_error_free( aError );
-        g_object_unref( aConnection );
-        return; // We can't get an adapter -- no bluetooth possible
+        dbus_g_connection_unref( aConnection );
+        return;
     }
-    GVariant *aAdapterName = g_variant_get_child_value( aAdapter, 0 );
 
-    GVariant *aRecordHandle = g_dbus_connection_call_sync( aConnection,
-                                "org.bluez", g_variant_get_string( aAdapterName, NULL ), "org.bluez.Service",
-                                "AddRecord",
-                                 g_variant_new("(s)",
-                                            "<?xml version='1.0' encoding= 'UTF-8' ?><record><attribute id='0x0001'><sequence><uuid value='0x1101' /></sequence></attribute><attribute id='0x0004'><sequence><sequence><uuid value='0x0100' /></sequence><sequence><uuid value='0x0003' /><uint8 value='0x05' /></sequence></sequence></attribute><attribute id='0x0005'><sequence><uuid value='0x1002' /></sequence></attribute><attribute id='0x0006'><sequence><uint16 value='0x656e' /><uint16 value='0x006a' /><uint16 value='0x0100' /></sequence></attribute><attribute id='0x0009'><sequence><sequence><uuid value='0x1101' /><uint16 value='0x0100' /></sequence></sequence></attribute><attribute id='0x0100'><text value='Serial Port' /></attribute><attribute id='0x0101'><text value='COM Port' /></attribute></record>"),
-                                G_VARIANT_TYPE_TUPLE,
-                                G_DBUS_CALL_FLAGS_NONE, -1, NULL, &aError);
+    gboolean aResult;
+    DBusGObjectPath *aAdapterPath = NULL;
+    aResult = dbus_g_proxy_call( aManager, "DefaultAdapter", &aError,
+                                 G_TYPE_INVALID,
+                                 DBUS_TYPE_G_OBJECT_PATH, &aAdapterPath,
+                                 G_TYPE_INVALID);
 
-    g_variant_unref( aAdapter );
-    g_object_unref( aConnection );
-
-    if ( aError )
+    g_object_unref( G_OBJECT( aManager ));
+    if ( !aResult )
     {
-        g_object_unref( aAdapter );
-        return; // Couldn't set up the service.
+        dbus_g_connection_unref( aConnection );
+        return;
     }
-    g_variant_unref( aRecordHandle ); // We don't need the handle
-                                      // as the service is automatically
-                                      // deregistered on exit.
 
+    DBusGProxy *aAdapter = NULL;
+    aAdapter = dbus_g_proxy_new_for_name( aConnection, "org.bluez",
+                                          aAdapterPath, "org.bluez.Service" );
+    g_free( aAdapterPath );
+    if ( aAdapter == NULL )
+    {
+        dbus_g_connection_unref( aConnection );
+        return;
+    }
+
+    // Add the record -- the handle can be used to release it again, but we
+    // don't bother as the record is automatically released when LO exits.
+    guint aHandle;
+    aResult = dbus_g_proxy_call( aAdapter, "AddRecord", &aError,
+                                G_TYPE_STRING, BLUETOOTH_SERVICE_RECORD ,
+                                G_TYPE_INVALID,
+                                G_TYPE_UINT, &aHandle,
+                                G_TYPE_INVALID);
+
+    g_object_unref( G_OBJECT( aAdapter ));
+    dbus_g_connection_unref( aConnection );
+    if ( !aResult)
+    {
+        return;
+    }
 
     // ---------------- Socket code
     int aSocket;
@@ -139,8 +143,7 @@ void BluetoothServer::execute()
         }
     }
 
-#endif // GLIB_VERSION_2_26
-#endif // LINUX
+#endif // LINUX && ENABLE_DBUS
 
 #ifdef WIN32
 

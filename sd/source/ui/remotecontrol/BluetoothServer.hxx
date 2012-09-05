@@ -26,11 +26,9 @@ namespace sd
         ~BluetoothServer();
         static BluetoothServer *spServer;
 
-
-    public:
-    private:
-        void execute();
+        void execute(); // salhelper::Thread
         std::vector<Communicator*>* mpCommunicators;
+
     };
 }
 
