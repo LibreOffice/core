@@ -4064,6 +4064,7 @@ if test "$enable_headless" = "yes"; then
     test_unix_quickstarter=no
     test_cairo=no
     enable_librsvg=no
+    enable_gnome_vfs=no
 fi
 
 dnl check for cups support
