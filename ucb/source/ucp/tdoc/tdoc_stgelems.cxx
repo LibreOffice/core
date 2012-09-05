@@ -191,11 +191,14 @@ void SAL_CALL Storage::acquire()
 void SAL_CALL Storage::release()
     throw ()
 {
-    if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
-    {
+    //#i120738, Storage::release overrides OWeakObject::release(),
+    //need call OWeakObject::release() to release OWeakObject::m_pWeakConnectionPoint
+
+    if ( m_refCount == 1 )
         m_xFactory->releaseElement( this );
-        delete this;
-    }
+
+    //delete this;
+    OWeakObject::release();
 }
 
 //=========================================================================
