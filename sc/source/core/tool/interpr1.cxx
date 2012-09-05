@@ -5416,8 +5416,8 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     {
                         if (pResMat->GetDouble( nCol, nRow) == nQueryCount)
                         {
-                            aAdr.SetCol( nCol + nMainCol1);
-                            aAdr.SetRow( nRow + nMainRow1);
+                            aAdr.SetCol( static_cast<SCCOL>(nCol) + nMainCol1);
+                            aAdr.SetRow( static_cast<SCROW>(nRow) + nMainRow1);
                             ScBaseCell* pCell = GetCell( aAdr );
                             if ( HasCellValueData(pCell) )
                             {
