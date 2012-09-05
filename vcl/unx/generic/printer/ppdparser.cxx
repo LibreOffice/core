@@ -655,7 +655,7 @@ const PPDParser* PPDParser::getParser( const String& rFile )
         PrinterInfoManager& rMgr = PrinterInfoManager::get();
         if( rMgr.getType() == PrinterInfoManager::CUPS )
         {
-#ifdef ENABLE_CUPS
+#ifdef HAVE_CUPS_H
             pNewParser = const_cast<PPDParser*>(static_cast<CUPSManager&>(rMgr).createCUPSParser( aFile ));
 #endif
         }
