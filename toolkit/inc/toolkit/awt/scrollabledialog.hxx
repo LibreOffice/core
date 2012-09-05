@@ -63,10 +63,9 @@ namespace toolkit
         Window*  getContentWindow();
         ScrollBarVisibility getScrollVisibility() { return maScrollVis; }
         void setScrollVisibility( ScrollBarVisibility rState );
-        virtual void      Paint( const Rectangle& rRect );
-        virtual void      Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
         DECL_LINK( ScrollBarHdl, ScrollBar* );
         DECL_LINK( ContainerScrolled, void* );
+        virtual void ResetScrollBars();
         // Window
         virtual void Resize();
     };
