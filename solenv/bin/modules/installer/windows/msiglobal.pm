@@ -210,7 +210,7 @@ sub generate_cab_file_list
 
             write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
 
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            my $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
             if ( $doinclude ) { push(@ddffile, $ddfline); }
 
             $counter++; # increasing the counter
@@ -230,7 +230,7 @@ sub generate_cab_file_list
                 my $nextfilestyles = "";
                 if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
                 if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+                $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
                 if ( $localdoinclude ) { push(@ddffile, $ddfline); }
 
                 $counter++; # increasing the counter!
@@ -302,7 +302,7 @@ sub generate_cab_file_list
 
             write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
 
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            my $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
             if ( $doinclude ) { push(@ddffile, $ddfline); }
 
             my $nextfile = "";
@@ -323,7 +323,7 @@ sub generate_cab_file_list
                 my $nextfilestyles = "";
                 if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
                 if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+                $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
                 if ( $localdoinclude ) { push(@ddffile, $ddfline); }
                 $counter++;
                 $nextfile = "";
@@ -384,7 +384,7 @@ sub generate_cab_file_list
 
             write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
 
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            my $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
             if ( $doinclude ) { push(@ddffile, $ddfline); }
 
             my $nextfile = ${$filesref}[$i+1];
@@ -403,7 +403,7 @@ sub generate_cab_file_list
                 my $nextfilestyles = "";
                 if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
                 if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+                $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
                 if ( $localdoinclude ) { push(@ddffile, $ddfline); }
                 $i++;                                           # increasing the counter!
                 $nextfile = ${$filesref}[$i+1];
@@ -468,7 +468,7 @@ sub generate_cab_file_list
             if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
             if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
 
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            my $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
             if ( $doinclude ) { push(@ddffile, $ddfline); }
 
             $counter++; # increasing the counter
@@ -522,7 +522,7 @@ sub generate_cab_file_list
             if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
             if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
 
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            my $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
             if ( $doinclude ) { push(@ddffile, $ddfline); }
         }
 
@@ -625,7 +625,7 @@ sub save_packorder
             if ( $oneline =~ /^\s*\.Set\s+CabinetName.*\=(.*?)\s*$/ ) { $cabinetfile = $1; }
             if ( $oneline =~ /^\s*\.Set\s+/ ) { next; }
 
-            if ( $oneline =~ /^\s*\"(.*?)\"\s+(.*?)\s*$/ )
+            if ( $oneline =~ /^\s*\"(.*?)\"\s+\"(.*?)\"\s*$/ )
             {
                 my $sourcefile = $1;
                 my $uniquefilename = $2;

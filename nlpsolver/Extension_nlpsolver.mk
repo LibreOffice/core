@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -39,11 +40,9 @@ $(eval $(call gb_Extension_add_file,nlpsolver,locale/NLPSolverStatusDialog_en_US
 $(eval $(call gb_Extension_localize_properties,nlpsolver,locale/NLPSolverCommon_en_US.properties,$(SRCDIR)/nlpsolver/src/locale/NLPSolverCommon_en_US.properties))
 $(eval $(call gb_Extension_localize_properties,nlpsolver,locale/NLPSolverStatusDialog_en_US.properties,$(SRCDIR)/nlpsolver/src/locale/NLPSolverStatusDialog_en_US.properties))
 
-$(eval $(call gb_Extension_add_file,nlpsolver,help/en-US/com.sun.star.comp.Calc.NLPSolver/Options.xhp, \
-	$(SRCDIR)/nlpsolver/help/en/com.sun.star.comp.Calc.NLPSolver/Options.xhp))
-$(eval $(call gb_Extension_add_file,nlpsolver,help/en-US/com.sun.star.comp.Calc.NLPSolver/Usage.xhp, \
-	$(SRCDIR)/nlpsolver/help/en/com.sun.star.comp.Calc.NLPSolver/Usage.xhp))
-$(eval $(call gb_Extension_localize_help,nlpsolver,help/lang/com.sun.star.comp.Calc.NLPSolver/Options.xhp, \
-	$(SRCDIR)/nlpsolver/help/en/com.sun.star.comp.Calc.NLPSolver/Options.xhp))
-$(eval $(call gb_Extension_localize_help,nlpsolver,help/lang/com.sun.star.comp.Calc.NLPSolver/Usage.xhp, \
-	$(SRCDIR)/nlpsolver/help/en/com.sun.star.comp.Calc.NLPSolver/Usage.xhp))
+$(eval $(call gb_Extension_add_helpfiles,nlpsolver,$(SRCDIR)/nlpsolver/help/en, \
+    com.sun.star.comp.Calc.NLPSolver/Options.xhp \
+	com.sun.star.comp.Calc.NLPSolver/Usage.xhp \
+))
+
+# vim: set noet sw=4 ts=4:
