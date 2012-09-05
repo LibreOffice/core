@@ -2009,6 +2009,7 @@ android_main(struct android_app* state)
     }
 
     lo_main(lo_main_argc, lo_main_argv);
+    nRet = (*(*state->activity->vm)->DetachCurrentThread)(state->activity->vm);
     fprintf (stderr, "exit android_main\n");
 }
 
