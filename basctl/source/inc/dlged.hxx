@@ -40,7 +40,7 @@ class Window;
 namespace basctl
 {
 
-class PropBrw;
+class DialogWindowLayout;
 
 #define DLGED_PAGE_WIDTH_MIN    1280
 #define DLGED_PAGE_HEIGHT_MIN   1024
@@ -119,7 +119,7 @@ private:
     DlgEdFactory*       pObjFac;
     Window*             pWindow;
     DlgEdFunc*          pFunc;
-    PropBrw&            rPropertyBrowser;
+    DialogWindowLayout& rLayout;
     Mode                eMode;
     sal_uInt16          eActObj;
     bool                bFirstDraw;
@@ -136,7 +136,7 @@ private:
 
     DlgEditor(); // not implemented
 public:
-    DlgEditor (com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel, PropBrw&);
+    DlgEditor (com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel, DialogWindowLayout&);
     ~DlgEditor();
 
     void            SetWindow( Window* pWindow );

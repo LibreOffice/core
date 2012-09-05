@@ -30,7 +30,7 @@
 #include "dlgedview.hxx"
 #include "iderdll.hxx"
 #include "localizationmgr.hxx"
-#include "propbrw.hxx"
+#include "baside3.hxx"
 
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/resource/XStringResourcePersistence.hpp>
@@ -176,7 +176,7 @@ bool DlgEditor::RemarkDialog()
 
 DlgEditor::DlgEditor (
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel,
-    PropBrw& rPropertyBrowser_
+    DialogWindowLayout& rLayout_
 )
     :pHScroll(NULL)
     ,pVScroll(NULL)
@@ -190,7 +190,7 @@ DlgEditor::DlgEditor (
     ,pObjFac(NULL)
     ,pWindow(NULL)
     ,pFunc(NULL)
-    ,rPropertyBrowser(rPropertyBrowser_)
+    ,rLayout(rLayout_)
     ,eMode( DlgEditor::SELECT )
     ,eActObj( OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(false)
@@ -612,7 +612,7 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
 
 IMPL_LINK_NOARG(DlgEditor, MarkTimeout)
 {
-    rPropertyBrowser.Update(GetShell());
+    rLayout.UpdatePropertyBrowser();
     return 1;
 }
 
@@ -1125,7 +1125,7 @@ bool DlgEditor::IsPasteAllowed()
 
 void DlgEditor::ShowProperties()
 {
-    rPropertyBrowser.Show(!rPropertyBrowser.IsVisible());
+    rLayout.ShowPropertyBrowser();
 }
 
 

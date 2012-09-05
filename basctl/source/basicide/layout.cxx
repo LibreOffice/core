@@ -56,6 +56,13 @@ Layout::Layout (Window* pParent) :
 Layout::~Layout()
 { }
 
+// removes a docking window
+void Layout::Remove (DockingWindow* pWin)
+{
+    aLeftSide.Remove(pWin);
+    aBottomSide.Remove(pWin);
+}
+
 // called by Window when resized
 void Layout::Resize()
 {
@@ -70,10 +77,18 @@ void Layout::ArrangeWindows ()
     int const nWidth = aSize.Width(), nHeight = aSize.Height();
     if (!nWidth || !nHeight) // empty size
         return;
+
+    // prevent recursion via OnFirstSize() -> Add() -> ArrangeWindows()
+    static bool bRecursion = false;
+    if (bRecursion)
+        return;
+    bRecursion = true;
+
+    // on first call
     if (bFirstSize)
     {
-        this->OnFirstSize(nWidth, nHeight); // virtual
         bFirstSize = false;
+        this->OnFirstSize(nWidth, nHeight); // virtual
     }
 
     // sides
@@ -84,6 +99,8 @@ void Layout::ArrangeWindows ()
         Point(aLeftSide.GetSize(), 0),
         Size(nWidth - aLeftSide.GetSize(), nHeight - aBottomSide.GetSize())
     );
+
+    bRecursion = false;
 }
 
 void Layout::DockaWindow (DockingWindow*)
@@ -175,6 +192,30 @@ void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
     }
     // nLastPos
     nLastPos += nSize2 + nSplitThickness;
+    // refresh
+    rLayout.ArrangeWindows();
+}
+
+// Remove() -- removes a window from the side (if contains)
+void Layout::SplittedSide::Remove (DockingWindow* pWin)
+{
+    // contains?
+    std::vector<DockingWindow*>::iterator const itWin =
+        std::find(vWindows.begin(), vWindows.end(), pWin);
+    if (itWin == vWindows.end())
+        return;
+    // index
+    unsigned const iWin = itWin - vWindows.begin();
+    // nLastPos
+    if (iWin == vWindows.size() - 1) // that is the last one
+        nLastPos = vSplitters.back()->GetSplitPosPixel() + nSplitThickness;
+    // remove
+    vWindows.erase(itWin);
+    // remove a splitter line
+    if (!vSplitters.empty())
+        vSplitters.pop_back();
+    // refresh
+    rLayout.ArrangeWindows();
 }
 
 // creating a Point or a Size object

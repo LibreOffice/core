@@ -59,6 +59,8 @@ protected:
 
     void AddToLeft   (DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
     void AddToBottom (DockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
+    void Remove (DockingWindow*);
+    bool HasSize () const { return !bFirstSize; }
 
 protected:
     // Window:
@@ -81,6 +83,7 @@ private:
         enum Side {Right, Top, Left, Bottom};
         SplittedSide (Layout*, Side);
         void Add (DockingWindow*, Size const&);
+        void Remove (DockingWindow*);
         bool IsEmpty () const;
         int  GetSize () const;
         void ArrangeIn (Rectangle const&);

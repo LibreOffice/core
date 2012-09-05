@@ -86,7 +86,7 @@ DialogWindow::DialogWindow (
 {
     InitSettings( true, true, true );
 
-    pEditor = new DlgEditor(rDocument.isDocument() ? rDocument.getDocument() : Reference<frame::XModel>(), rLayout.aPropertyBrowser);
+    pEditor = new DlgEditor(rDocument.isDocument() ? rDocument.getDocument() : Reference<frame::XModel>(), rLayout);
     pEditor->SetWindow( this );
     pEditor->SetDialog( xDialogModel );
 
@@ -683,12 +683,12 @@ bool DialogWindow::RenameDialog( const ::rtl::OUString& rNewName )
 
 void DialogWindow::DisableBrowser()
 {
-    rLayout.aPropertyBrowser.Update(0);
+    rLayout.DisablePropertyBrowser();
 }
 
 void DialogWindow::UpdateBrowser()
 {
-    rLayout.aPropertyBrowser.Update(GetShell());
+    rLayout.UpdatePropertyBrowser();
 }
 
 static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
@@ -1433,8 +1433,56 @@ DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectC
     Layout(pParent),
     pChild(0),
     rObjectCatalog(rObjectCatalog_),
-    aPropertyBrowser(*this)
-{ }
+    pPropertyBrowser(0)
+{
+    ShowPropertyBrowser();
+}
+
+// shows the property browser (and creates if neccessary)
+void DialogWindowLayout::ShowPropertyBrowser ()
+{
+    // not exists?
+    if (!pPropertyBrowser)
+    {
+        // creating
+        pPropertyBrowser = new PropBrw(*this);
+        // after OnFirstSize():
+        if (HasSize())
+            AddPropertyBrowser();
+        // updating if neccessary
+        UpdatePropertyBrowser();
+    }
+    pPropertyBrowser->Show();
+    // refreshing the button state
+    if (SfxBindings* pBindings = GetBindingsPtr())
+        pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
+}
+
+// disables the property browser
+void DialogWindowLayout::DisablePropertyBrowser ()
+{
+    if (pPropertyBrowser)
+        pPropertyBrowser->Update(0);
+}
+
+// updates the property browser
+void DialogWindowLayout::UpdatePropertyBrowser ()
+{
+    if (pPropertyBrowser)
+        pPropertyBrowser->Update(GetShell());
+}
+
+// Removes the property browser from the layout.
+// Called by PropBrw when closed. It'll destroy itself.
+void DialogWindowLayout::RemovePropertyBrowser ()
+{
+    if (pPropertyBrowser)
+        Remove(pPropertyBrowser);
+    pPropertyBrowser = 0;
+    // refreshing the button state
+    if (SfxBindings* pBindings = GetBindingsPtr())
+        pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
+}
 
 void DialogWindowLayout::Activating (BaseWindow& rChild)
 {
@@ -1443,7 +1491,8 @@ void DialogWindowLayout::Activating (BaseWindow& rChild)
     rObjectCatalog.SetLayoutWindow(this);
     rObjectCatalog.UpdateEntries();
     rObjectCatalog.Show();
-    aPropertyBrowser.Show();
+    if (pPropertyBrowser)
+        pPropertyBrowser->Show();
     Layout::Activating(rChild);
 }
 
@@ -1451,7 +1500,8 @@ void DialogWindowLayout::Deactivating ()
 {
     Layout::Deactivating();
     rObjectCatalog.Hide();
-    aPropertyBrowser.Hide();
+    if (pPropertyBrowser)
+        pPropertyBrowser->Hide();
     pChild = 0;
 }
 
@@ -1461,9 +1511,12 @@ void DialogWindowLayout::ExecuteGlobal (SfxRequest& rReq)
     {
         case SID_SHOW_PROPERTYBROWSER:
             // toggling property browser
-            aPropertyBrowser.Show(!aPropertyBrowser.IsVisible());
+            if (pPropertyBrowser && pPropertyBrowser->IsVisible())
+                pPropertyBrowser->Hide();
+            else
+                ShowPropertyBrowser();
             ArrangeWindows();
-            // refresh the button state
+            // refreshing the button state
             if (SfxBindings* pBindings = GetBindingsPtr())
                 pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
             break;
@@ -1475,7 +1528,7 @@ void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
     switch (nWhich)
     {
         case SID_SHOW_PROPERTYBROWSER:
-            rSet.Put(SfxBoolItem(nWhich, aPropertyBrowser.IsVisible()));
+            rSet.Put(SfxBoolItem(nWhich, pPropertyBrowser && pPropertyBrowser->IsVisible()));
             break;
 
         case SID_BASICIDE_CHOOSEMACRO:
@@ -1486,8 +1539,14 @@ void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
 
 void DialogWindowLayout::OnFirstSize (int const nWidth, int const nHeight)
 {
-    AddToLeft(&rObjectCatalog,   Size(nWidth * 0.25, nHeight * 0.35));
-    AddToLeft(&aPropertyBrowser, Size(nWidth * 0.25, nHeight * 0.65));
+    AddToLeft(&rObjectCatalog, Size(nWidth * 0.25, nHeight * 0.35));
+    if (pPropertyBrowser)
+        AddPropertyBrowser();
+}
+
+void DialogWindowLayout::AddPropertyBrowser () {
+    Size const aSize = GetOutputSizePixel();
+    AddToLeft(pPropertyBrowser, Size(aSize.Width() * 0.25, aSize.Height() * 0.65));
 }
 
 

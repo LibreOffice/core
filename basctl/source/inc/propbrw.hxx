@@ -34,7 +34,7 @@ class SfxViewShell;
 namespace basctl
 {
 
-class Layout;
+class DialogWindowLayout;
 
 class PropBrw : public DockingWindow, public SfxListener, public SfxBroadcaster
 {
@@ -51,6 +51,8 @@ private:
                     m_xBrowserComponentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                     m_xContextDocument;
+
+    DialogWindowLayout& rLayout;
 
 protected:
     SdrView*        pView;
@@ -71,7 +73,7 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
 public:
-    explicit PropBrw (Layout&);
+    explicit PropBrw (DialogWindowLayout&);
     virtual ~PropBrw();
     using Window::Update;
     // note: changing the Context document to an instance other than the one given in the ctor is not supported
