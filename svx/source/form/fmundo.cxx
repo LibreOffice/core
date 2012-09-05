@@ -193,6 +193,9 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
 FmXUndoEnvironment::~FmXUndoEnvironment()
 {
     DBG_DTOR(FmXUndoEnvironment,NULL);
+    if ( !m_bDisposed )   // i120746, call FormScriptingEnvironment::dispose to avoid memory leak
+        m_pScriptingEnv->dispose();
+
     if (m_pPropertySetCache)
         delete static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
 }
