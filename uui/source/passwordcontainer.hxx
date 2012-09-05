@@ -49,8 +49,8 @@ class PasswordContainerHelper
 public:
     PasswordContainerHelper(
         com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > const &
-                xServiceFactory );
+            com::sun::star::uno::XComponentContext > const &
+                xContext );
 
     // ------------------------------------------------------------------------
 
@@ -145,7 +145,7 @@ class PasswordContainerInteractionHandler :
 public:
     PasswordContainerInteractionHandler(
         const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+            com::sun::star::uno::XComponentContext >& xContext );
     virtual ~PasswordContainerInteractionHandler();
 
     // XServiceInfo

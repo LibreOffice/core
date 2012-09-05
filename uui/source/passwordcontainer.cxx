@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "comphelper/componentcontext.hxx"
 #include "cppuhelper/factory.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/task/PasswordContainer.hpp"
 #include "com/sun/star/task/NoMasterException.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
 #include "com/sun/star/task/XMasterPasswordHandling.hpp"
@@ -111,19 +113,15 @@ namespace uui {
 
 //=========================================================================
 PasswordContainerHelper::PasswordContainerHelper(
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory )
+    uno::Reference< uno::XComponentContext > const & xContext )
 {
-    OSL_ENSURE(xServiceFactory.is(), "no service factory given!");
-    if (xServiceFactory.is())
+    OSL_ENSURE(xContext.is(), "no service factory given!");
+    if (xContext.is())
         try
         {
             m_xPasswordContainer
                 = uno::Reference< task::XPasswordContainer >(
-                      xServiceFactory->
-                          createInstance(
-                              rtl::OUString(
-                                  RTL_CONSTASCII_USTRINGPARAM(
-                                     "com.sun.star.task.PasswordContainer"))),
+                      task::PasswordContainer::create(xContext),
                       uno::UNO_QUERY);
         }
         catch (uno::Exception const &)
@@ -308,8 +306,8 @@ bool PasswordContainerHelper::addRecord(
 //=========================================================================
 
 PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
-    const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
-: m_aPwContainerHelper( xSMgr )
+    const uno::Reference< uno::XComponentContext >& xContext )
+: m_aPwContainerHelper( xContext )
 {
 }
 
@@ -452,7 +450,7 @@ PasswordContainerInteractionHandler_CreateInstance(
     throw( uno::Exception )
 {
     lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new PasswordContainerInteractionHandler( rSMgr ) );
+        new PasswordContainerInteractionHandler( comphelper::ComponentContext(rSMgr).getUNOContext() ) );
     return uno::Reference< uno::XInterface >::query( pX );
 }
 

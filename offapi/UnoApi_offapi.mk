@@ -270,6 +270,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
 	InteractionRequestStringResolver \
 	JobExecutor \
 	OfficeRestartManager \
+	PasswordContainer \
 	PasswordContainerInteractionHandler \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/text,\
@@ -1216,7 +1217,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/task,\
 	AsyncJob \
 	InteractionHandler \
 	Job \
-	PasswordContainer \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	AccessibleEndnoteView \
@@ -3616,6 +3616,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/task,\
 	XMasterPasswordHandling \
 	XMasterPasswordHandling2 \
 	XPasswordContainer \
+	XPasswordContainer2 \
 	XRestartManager \
 	XStatusIndicator \
 	XStatusIndicatorFactory \

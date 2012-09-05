@@ -94,6 +94,7 @@
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/task/XMasterPasswordHandling2.hpp"
+#include "com/sun/star/task/PasswordContainer.hpp"
 #include "com/sun/star/task/XPasswordContainer.hpp"
 #include "securityoptions.hxx"
 #include "webconninfo.hxx"
@@ -709,8 +710,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
     try
     {
         Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
             UNO_QUERY_THROW );
 
         if ( maSavePasswordsCB.IsChecked() )
@@ -766,8 +766,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
     try
     {
         Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
             UNO_QUERY );
 
         if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() )
@@ -784,8 +783,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
     try
     {
         Reference< task::XMasterPasswordHandling2 > xMasterPasswd(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
             UNO_QUERY_THROW );
 
         if ( maMasterPasswordCB.IsChecked() )
@@ -830,8 +828,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
     try
     {
         Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
             UNO_QUERY );
 
         if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< task::XInteractionHandler>() ) )
@@ -966,8 +963,7 @@ void SvxSecurityTabPage::InitControls()
     try
     {
         Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
             UNO_QUERY_THROW );
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )

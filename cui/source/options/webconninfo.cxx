@@ -30,6 +30,7 @@
 #include <cuires.hrc>
 #include <sal/macros.h>
 #include <com/sun/star/task/UrlRecord.hpp>
+#include <com/sun/star/task/PasswordContainer.hpp>
 #include <com/sun/star/task/XPasswordContainer.hpp>
 #include <com/sun/star/task/XMasterPasswordHandling.hpp>
 #include "com/sun/star/task/XUrlContainer.hpp"
@@ -183,8 +184,7 @@ void WebConnectionInfoDialog::FillPasswordList()
     try
     {
         uno::Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
             uno::UNO_QUERY );
 
         if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() )
@@ -244,9 +244,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
             ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
 
             uno::Reference< task::XPasswordContainer > xPasswdContainer(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.task.PasswordContainer" ) ) ),
+                task::PasswordContainer::create(comphelper::getProcessComponentContext()),
                 uno::UNO_QUERY_THROW );
 
             sal_Int32 nPos = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
@@ -275,9 +273,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
     try
     {
         uno::Reference< task::XPasswordContainer > xPasswdContainer(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.task.PasswordContainer" ) ) ),
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
             uno::UNO_QUERY_THROW );
 
         // should the master password be requested before?
@@ -327,9 +323,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
                 aPasswd[0] = aNewPass;
 
                 uno::Reference< task::XPasswordContainer > xPasswdContainer(
-                    comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.task.PasswordContainer" ) ) ),
+                    task::PasswordContainer::create(comphelper::getProcessComponentContext()),
                     uno::UNO_QUERY_THROW );
                 xPasswdContainer->addPersistent(
                     aURL, aUserName, aPasswd, xInteractionHandler );
