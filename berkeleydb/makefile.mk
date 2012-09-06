@@ -82,7 +82,7 @@ CXXFLAGS:=
 .IF "$(COM)"=="GCC"
 CFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
 CXXFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
-.IF "$(ENABLE_SYMBOLS)"!=""
+.IF "$(ENABLE_SYMBOLS)"!="" && "$(ENABLE_SYMBOLS)"!="FALSE"
 CFLAGS+=-g
 CXXFLAGS+=-g
 .ENDIF
