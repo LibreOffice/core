@@ -753,9 +753,9 @@ namespace cppcanvas
                     // debug code - write the stream to debug file /tmp/emf-stream.emf
                     EMFP_DEBUG(
                         mfStream.Seek(0);
-                        static int emfp_debug_stream_numnber = 0;
+                        static int emfp_debug_stream_number = 0;
                         rtl::OUString emfp_debug_filename("/tmp/emf-embedded-stream");
-                        emfp_debug_filename += rtl::OUString::valueOf(emfp_debug_stream_numnber++);
+                        emfp_debug_filename += rtl::OUString::valueOf(emfp_debug_stream_number++);
                         emfp_debug_filename += rtl::OUString(".emf");
 
                         SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );
