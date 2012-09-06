@@ -439,6 +439,12 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
             sal_Int16 nSize = sal_Int16();
             if( aVal >>= nSize )
             {
+                // [Bug 120650] the slide content corrupt when open in Aoo
+                if ((nSize>250)||(nSize<=0))
+                {
+                    nSize = 100;
+                }
+
                 aFmt.SetBulletRelSize( (short)nSize );
                 continue;
             }
