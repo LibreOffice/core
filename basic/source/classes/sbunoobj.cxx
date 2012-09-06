@@ -963,7 +963,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                 {
                     // If all elements of the arrays are from the same type, take
                     // this one - otherwise the whole will be considered as Any-Sequence
-                    sal_Bool bNeedsInit = sal_True;
+                    bool bNeedsInit = true;
 
                     sal_Int32 nSize = nUpper - nLower + 1;
                     sal_Int32 nIdx = nLower;
@@ -981,7 +981,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                                 break;
                             }
                             aElementType = aType;
-                            bNeedsInit = sal_False;
+                            bNeedsInit = false;
                         }
                         else if( aElementType != aType )
                         {
@@ -1005,7 +1005,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                     // For this check the array's dim structure does not matter
                     sal_uInt32 nFlatArraySize = pArray->Count32();
 
-                    sal_Bool bNeedsInit = sal_True;
+                    bool bNeedsInit = true;
                     for( sal_uInt32 i = 0 ; i < nFlatArraySize ; i++ )
                     {
                         SbxVariableRef xVar = pArray->SbxArray::Get32( i );
@@ -1020,7 +1020,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                                 break;
                             }
                             aElementType = aType;
-                            bNeedsInit = sal_False;
+                            bNeedsInit = false;
                         }
                         else if( aElementType != aType )
                         {

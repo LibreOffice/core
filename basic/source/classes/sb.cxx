@@ -876,7 +876,7 @@ SbModule* SbClassFactory::FindClass( const String& rClassName )
     return pMod;
 }
 
-StarBASIC::StarBASIC( StarBASIC* p, sal_Bool bIsDocBasic  )
+StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
     : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) ), bDocBasic( bIsDocBasic )
 {
     SetParent( p );

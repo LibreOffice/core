@@ -30,8 +30,8 @@ class BASIC_DLLPUBLIC BasicDLL
 private:
     ResMgr*     pBasResMgr;
 
-    sal_Bool        bDebugMode;
-    sal_Bool        bBreakEnabled;
+    bool        bDebugMode;
+    bool        bBreakEnabled;
 
 public:
                 BasicDLL();
@@ -41,8 +41,8 @@ public:
 
     static void BasicBreak();
 
-    static void EnableBreak( sal_Bool bEnable );
-    static void SetDebugMode( sal_Bool bDebugMode );
+    static void EnableBreak( bool bEnable );
+    static void SetDebugMode( bool bDebugMode );
 };
 
 #define BASIC_DLL() (*(BasicDLL**)GetAppData( SHL_BASIC ) )

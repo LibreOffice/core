@@ -62,7 +62,7 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     Link            aBreakHdl;              // Breakpoint handler
     sal_Bool            bNoRtl;                 // if sal_True: do not search RTL
     sal_Bool            bBreak;                 // if sal_True: Break, otherwise Step
-    sal_Bool            bDocBasic;
+    bool            bDocBasic;
     sal_Bool            bVBAEnabled;
     BasicLibInfo*   pLibInfo;           // Info block for basic manager
     sal_Bool            bQuit;
@@ -93,7 +93,7 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASIC,1);
     TYPEINFO();
 
-    StarBASIC( StarBASIC* pParent = NULL, sal_Bool bIsDocBasic = sal_False );
+    StarBASIC( StarBASIC* pParent = NULL, bool bIsDocBasic = false );
 
     // #51727 SetModified overridden so that the Modfied-State is
         // not delivered to Parent.
@@ -171,7 +171,7 @@ public:
     sal_Bool isVBAEnabled();
 
     SbxObjectRef getRTL( void ) { return pRtl; }
-    sal_Bool IsDocBasic() { return bDocBasic; }
+    bool IsDocBasic() { return bDocBasic; }
     SbxVariable* VBAFind( const rtl::OUString& rName, SbxClassType t );
     bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
     void QuitAndExitApplication();

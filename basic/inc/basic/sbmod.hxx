@@ -80,7 +80,7 @@ protected:
     void            RunInit();
     void            ClearPrivateVars();
     void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
-    void            GlobalRunInit( sal_Bool bBasicStart );  // for all modules
+    void            GlobalRunInit( bool bBasicStart );  // for all modules
     void            GlobalRunDeInit( void );
     const sal_uInt8*    FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
     const sal_uInt8*    FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,

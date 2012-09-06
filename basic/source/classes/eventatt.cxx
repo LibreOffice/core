@@ -252,7 +252,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             xAppStandardBasic = (StarBASIC*)p;
         }
 
-        sal_Bool bSearchLib = true;
+        bool bSearchLib = true;
         StarBASICRef xLibSearchBasic;
         if( aLocation.EqualsAscii("application") )
             xLibSearchBasic = xAppStandardBasic;

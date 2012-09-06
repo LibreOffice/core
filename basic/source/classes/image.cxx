@@ -115,14 +115,14 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     sal_uInt16 nReserved1;
     sal_uInt32 nReserved2;
     sal_uInt32 nReserved3;
-    sal_Bool bBadVer = sal_False;
+    bool bBadVer = false;
     if( nSign == B_MODULE )
     {
         r >> nVersion >> nCharSet >> lDimBase
           >> nFlags >> nReserved1 >> nReserved2 >> nReserved3;
         eCharSet = (CharSet) nCharSet;
         eCharSet = GetSOLoadTextEncoding( eCharSet );
-        bBadVer  = sal_Bool( nVersion > B_CURVERSION );
+        bBadVer  = ( nVersion > B_CURVERSION );
         nDimBase = (sal_uInt16) lDimBase;
     }
 

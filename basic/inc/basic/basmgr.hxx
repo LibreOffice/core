@@ -124,7 +124,7 @@ private:
 
     String              aName;
     String              maStorageName;
-    sal_Bool                mbDocMgr;
+    bool                mbDocMgr;
 
     BasicManagerImpl*   mpImpl;
 
@@ -146,8 +146,8 @@ protected:
 
 public:
                     TYPEINFO();
-                    BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL, sal_Bool bDocMgr = sal_False );
-                    BasicManager( StarBASIC* pStdLib, String* pLibPath = NULL, sal_Bool bDocMgr = sal_False );
+                    BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL, bool bDocMgr = false );
+                    BasicManager( StarBASIC* pStdLib, String* pLibPath = NULL, bool bDocMgr = false );
 
     /** deletes the given BasicManager instance
 

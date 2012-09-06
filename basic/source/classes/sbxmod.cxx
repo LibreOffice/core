@@ -1085,7 +1085,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
     static sal_uInt16 nMaxCallLevel = 0;
 
     sal_uInt16 nRes = 0;
-    sal_Bool bDelInst = sal_Bool( GetSbData()->pInst == NULL );
+    bool bDelInst = ( GetSbData()->pInst == NULL );
         bool bQuit = false;
     StarBASICRef xBasic;
     uno::Reference< frame::XModel > xModel;
@@ -1229,7 +1229,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                 clearNativeObjectWrapperVector();
 
                 DBG_ASSERT(GetSbData()->pInst->nCallLvl==0,"BASIC-Call-Level > 0");
-                delete GetSbData()->pInst, GetSbData()->pInst = NULL, bDelInst = sal_False;
+                delete GetSbData()->pInst, GetSbData()->pInst = NULL, bDelInst = false;
 
                 // #i30690
                 SolarMutexGuard aSolarGuard;
@@ -1447,7 +1447,7 @@ void StarBASIC::ClearAllModuleVars( void )
 }
 
 // Execution of the init-code of all module
-void SbModule::GlobalRunInit( sal_Bool bBasicStart )
+void SbModule::GlobalRunInit( bool bBasicStart )
 {
     // If no Basic-Start, only initialise, if the module is not initialised
     if( !bBasicStart )
