@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAOH////I\u003d",
+        "filename": "basctl/source/basicide/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000171
+      },
+      "writtenOn": "2012-09-06T11:47:21Z",
+      "side": 1,
+      "message": "Yes, but\n1) I prefer int over long because it\u0027s the most natural integer type, and I like simplicity;\n2) even a 16-bit integer would be enough for these numbers, so an int (which is on most platforms 32-bit) should be enough.\nBut if you want, I\u0027ll convert them to long (in a separate patch).",
+      "parentUuid": "AAAAOH////U\u003d",
+      "revId": "0f693c07ff0922359a7e62d67661abf221e9279b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOH////Q\u003d",
         "filename": "basctl/source/basicide/layout.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2012-09-06T10:25:32Z",
       "side": 1,
       "message": "wouldn\u0027t it be better to test at the start of the method\nalso instead of bRecursion maybe bInArrangeWindows might be a better name",
+      "revId": "0f693c07ff0922359a7e62d67661abf221e9279b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOH////E\u003d",
+        "filename": "basctl/source/basicide/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000171
+      },
+      "writtenOn": "2012-09-06T11:47:21Z",
+      "side": 1,
+      "message": "The former: no because then the previous return would leave bRecursion \u003d\u003d true.\nThe latter: I can change it, but I prefer to do it in an other patch.",
+      "parentUuid": "AAAAOH////Q\u003d",
       "revId": "0f693c07ff0922359a7e62d67661abf221e9279b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
