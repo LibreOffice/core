@@ -244,6 +244,7 @@ dnl ===================================================================
 test_randr=yes
 test_xrender=yes
 test_cups=yes
+test_dbus=yes
 test_fontconfig=yes
 test_cairo=yes
 
@@ -327,6 +328,7 @@ cygwin*|interix*|mingw32*)
     # tool-chain that is used).
 
     test_cups=no
+    test_dbus=no
     test_randr=no
     test_xrender=no
     test_freetype=no
@@ -359,6 +361,7 @@ darwin*) # Mac OS X or iOS
     test_xrender=no
     test_freetype=no
     test_fontconfig=no
+    test_dbus=no
     if test "$host_cpu" = "arm"; then
         _os=iOS
         test_gtk=no
@@ -454,6 +457,7 @@ linux-android*)
     build_gstreamer=no
     build_gstreamer_0_10=no
     test_cups=no
+    test_dbus=no
     test_fontconfig=no
     test_freetype=no
     test_gtk=no
@@ -843,10 +847,10 @@ AC_ARG_ENABLE(opengl,
 ,enable_opengl=yes)
 
 AC_ARG_ENABLE(dbus,
-    AS_HELP_STRING([--enable-dbus],
+    AS_HELP_STRING([--disable-dbus],
         [Determines whether to enable features that depend on dbus.
-         e.g. Presentation mode screensaver control and auto font install under GNOME via DBUS.]),
-,enable_dbus=no)
+         e.g. Presentation mode screensaver control, auto font install, bluetooth presentation control])
+,enable_dbus=yes)
 
 AC_ARG_ENABLE(gconf,
     AS_HELP_STRING([--disable-gconf],
@@ -4054,6 +4058,7 @@ if test "$enable_headless" = "yes"; then
     test_randr=no
     test_xrender=no
     test_cups=no
+    test_dbus=no
     test_fontconfig=yes
     test_gtk=no
     build_gstreamer=no
@@ -9194,15 +9199,36 @@ AC_SUBST(GNOMEVFS_CFLAGS)
 AC_SUBST(ENABLE_GNOMEVFS)
 
 dnl ===================================================================
+dnl check for dbus support
+dnl ===================================================================
+ENABLE_DBUS=""
+DBUS_CFLAGS=""
+DBUS_LIBS=""
+
+if test "$enable_dbus" = "no"; then
+    test_dbus=no
+fi
+
+AC_MSG_CHECKING([whether to enable DBUS support])
+if test "$test_dbus" = "yes"; then
+    ENABLE_DBUS="TRUE"
+    AC_MSG_RESULT([yes])
+    PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.70)
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_SUBST(ENABLE_DBUS)
+AC_SUBST(DBUS_CFLAGS)
+AC_SUBST(DBUS_LIBS)
+
+dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
 dnl ===================================================================
 
 GTK_CFLAGS=""
 GTK_LIBS=""
 ENABLE_SYSTRAY_GTK=""
-ENABLE_DBUS=""
-DBUS_CFLAGS=""
-DBUS_LIBS=""
 if test  "$test_gtk" = "yes"; then
 
     if test "$ENABLE_GTK" = "TRUE"; then
@@ -9221,15 +9247,6 @@ if test  "$test_gtk" = "yes"; then
                           [ENABLE_GTK_PRINT="TRUE"],
                           [ENABLE_GTK_PRINT=""])
 
-        AC_MSG_CHECKING([whether to enable DBUS support])
-        if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_dbus" = "yes"; then
-            ENABLE_DBUS="TRUE"
-            AC_MSG_RESULT([yes])
-            PKG_CHECK_MODULES( DBUS, dbus-glib-1 >= 0.70 )
-        else
-            AC_MSG_RESULT([no])
-        fi
-
         AC_MSG_CHECKING([whether to enable GIO support])
         if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
             if test "$ENABLE_GNOMEVFS" = "TRUE"; then
@@ -9246,14 +9263,11 @@ fi
 AC_SUBST(ENABLE_GIO)
 AC_SUBST(GIO_CFLAGS)
 AC_SUBST(GIO_LIBS)
-AC_SUBST(ENABLE_DBUS)
 AC_SUBST(ENABLE_SYSTRAY_GTK)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTHREAD_CFLAGS)
 AC_SUBST(GTHREAD_LIBS)
-AC_SUBST(DBUS_CFLAGS)
-AC_SUBST(DBUS_LIBS)
 AC_SUBST([ENABLE_GTK_PRINT])
 AC_SUBST([GTK_PRINT_CFLAGS])
 AC_SUBST([GTK_PRINT_LIBS])
