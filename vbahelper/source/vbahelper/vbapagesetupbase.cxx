@@ -34,15 +34,15 @@ double SAL_CALL VbaPageSetupBase::getTopMargin() throw (css::uno::RuntimeExcepti
 
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderIsOn")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "HeaderIsOn" );
         aValue >>= headerOn;
 
-        aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TopMargin")));
+        aValue = mxPageProps->getPropertyValue( "TopMargin" );
         aValue >>= topMargin;
 
         if( headerOn )
         {
-            aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderHeight")));
+            aValue = mxPageProps->getPropertyValue( "HeaderHeight" );
             aValue >>= headerHeight;
             topMargin = topMargin + headerHeight;
         }
@@ -62,18 +62,18 @@ void SAL_CALL VbaPageSetupBase::setTopMargin( double margin ) throw (css::uno::R
 
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderIsOn")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "HeaderIsOn" );
         aValue >>= headerOn;
 
         if( headerOn )
         {
-            aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderHeight")));
+            aValue = mxPageProps->getPropertyValue( "HeaderHeight" );
             aValue >>= headerHeight;
             topMargin -= headerHeight;
         }
 
         aValue <<= topMargin;
-        mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TopMargin")), aValue );
+        mxPageProps->setPropertyValue( "TopMargin" , aValue );
     }
     catch( uno::Exception& )
     {
@@ -88,15 +88,15 @@ double SAL_CALL VbaPageSetupBase::getBottomMargin() throw (css::uno::RuntimeExce
 
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterIsOn")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "FooterIsOn" );
         aValue >>= footerOn;
 
-        aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BottomMargin")));
+        aValue = mxPageProps->getPropertyValue( "BottomMargin" );
         aValue >>= bottomMargin;
 
         if( footerOn )
         {
-            aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterHeight")));
+            aValue = mxPageProps->getPropertyValue( "FooterHeight" );
             aValue >>= footerHeight;
             bottomMargin += footerHeight;
         }
@@ -116,18 +116,18 @@ void SAL_CALL VbaPageSetupBase::setBottomMargin( double margin ) throw (css::uno
 
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterIsOn")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "FooterIsOn" );
         aValue >>= footerOn;
 
         if( footerOn )
         {
-            aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterHeight")));
+            aValue = mxPageProps->getPropertyValue( "FooterHeight" );
             aValue >>= footerHeight;
             bottomMargin -= footerHeight;
         }
 
         aValue <<= bottomMargin;
-        mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), aValue );
+        mxPageProps->setPropertyValue( "BottomMargin" , aValue );
     }
     catch( uno::Exception& )
     {
@@ -139,7 +139,7 @@ double SAL_CALL VbaPageSetupBase::getRightMargin() throw (css::uno::RuntimeExcep
     sal_Int32 rightMargin = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightMargin")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "RightMargin" );
         aValue >>= rightMargin;
     }
     catch( uno::Exception& )
@@ -156,7 +156,7 @@ void SAL_CALL VbaPageSetupBase::setRightMargin( double margin ) throw (css::uno:
     {
         uno::Any aValue;
         aValue <<= rightMargin;
-        mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightMargin")), aValue );
+        mxPageProps->setPropertyValue( "RightMargin" , aValue );
     }
     catch( uno::Exception& )
     {
@@ -169,7 +169,7 @@ double SAL_CALL VbaPageSetupBase::getLeftMargin() throw (css::uno::RuntimeExcept
     sal_Int32 leftMargin = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LeftMargin")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "LeftMargin" );
         aValue >>= leftMargin;
     }
     catch( uno::Exception& )
@@ -186,7 +186,7 @@ void SAL_CALL VbaPageSetupBase::setLeftMargin( double margin ) throw (css::uno::
     {
         uno::Any aValue;
         aValue <<= leftMargin;
-        mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), aValue );
+        mxPageProps->setPropertyValue( "LeftMargin" , aValue );
     }
     catch( uno::Exception& )
     {
@@ -198,7 +198,7 @@ double SAL_CALL VbaPageSetupBase::getHeaderMargin() throw (css::uno::RuntimeExce
     sal_Int32 headerMargin = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TopMargin")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "TopMargin" );
         aValue >>= headerMargin;
     }
     catch( uno::Exception& )
@@ -215,7 +215,7 @@ void SAL_CALL VbaPageSetupBase::setHeaderMargin( double margin ) throw (css::uno
     {
         uno::Any aValue;
         aValue <<= headerMargin;
-        mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TopMargin")), aValue );
+        mxPageProps->setPropertyValue( "TopMargin" , aValue );
     }
     catch( uno::Exception& )
     {
@@ -227,7 +227,7 @@ double SAL_CALL VbaPageSetupBase::getFooterMargin() throw (css::uno::RuntimeExce
     sal_Int32 footerMargin = 0;
     try
     {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BottomMargin")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "BottomMargin" );
         aValue >>= footerMargin;
     }
     catch( uno::Exception& )
@@ -244,7 +244,7 @@ void SAL_CALL VbaPageSetupBase::setFooterMargin( double margin ) throw (css::uno
     {
         uno::Any aValue;
         aValue <<= footerMargin;
-        mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), aValue );
+        mxPageProps->setPropertyValue( "BottomMargin" , aValue );
     }
     catch( uno::Exception& )
     {
@@ -257,7 +257,7 @@ sal_Int32 SAL_CALL VbaPageSetupBase::getOrientation() throw (css::uno::RuntimeEx
     try
     {
         sal_Bool isLandscape = sal_False;
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsLandscape")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "IsLandscape" );
         aValue >>= isLandscape;
 
         if( isLandscape )
@@ -276,13 +276,13 @@ void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation ) throw (c
     if( ( orientation != mnOrientPortrait ) &&
         ( orientation != mnOrientLandscape ) )
     {
-        DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
+        DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
     }
 
     try
     {
         sal_Bool isLandscape = sal_False;
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsLandscape")));
+        uno::Any aValue = mxPageProps->getPropertyValue( "IsLandscape" );
         aValue >>= isLandscape;
 
         sal_Bool switchOrientation = sal_False;
@@ -295,11 +295,11 @@ void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation ) throw (c
         if( switchOrientation )
         {
             aValue <<= !isLandscape;
-            uno::Any aHeight = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Height")));
-            uno::Any aWidth = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width")));
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsLandscape")), aValue );
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width")),  aHeight );
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Height")), aWidth );
+            uno::Any aHeight = mxPageProps->getPropertyValue( "Height" );
+            uno::Any aWidth = mxPageProps->getPropertyValue( "Width" );
+            mxPageProps->setPropertyValue( "IsLandscape" , aValue );
+            mxPageProps->setPropertyValue( "Width" ,  aHeight );
+            mxPageProps->setPropertyValue( "Height" , aWidth );
         }
     }
     catch( uno::Exception& )

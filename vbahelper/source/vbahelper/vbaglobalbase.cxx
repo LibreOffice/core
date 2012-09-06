@@ -33,7 +33,7 @@ const char sAppService[] = "ooo.vba.Application";
 
 VbaGlobalsBase::VbaGlobalsBase(
 const uno::Reference< ov::XHelperInterface >& xParent,
-const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sDocCtxName )
+const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCtxName )
     : Globals_BASE( xParent, xContext )
     , msDocCtxName( sDocCtxName )
     , msApplication( RTL_CONSTASCII_USTRINGPARAM("Application") )
@@ -43,14 +43,14 @@ const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& s
     uno::Reference< uno::XInterface > aSrvMgr;
     if ( xContext.is() && xContext->getServiceManager().is() )
     {
-        aSrvMgr = xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.OServiceManagerWrapper") ), xContext );
+        aSrvMgr = xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.comp.stoc.OServiceManagerWrapper" , xContext );
     }
 
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
         ::cppu::ContextEntry_Init( msApplication, uno::Any() ),
         ::cppu::ContextEntry_Init( sDocCtxName, uno::Any() ),
-        ::cppu::ContextEntry_Init( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.lang.theServiceManager" ) ), uno::makeAny( aSrvMgr ) )
+        ::cppu::ContextEntry_Init( "/singletons/com.sun.star.lang.theServiceManager" , uno::makeAny( aSrvMgr ) )
     };
     // don't pass a delegate, this seems to introduce yet another cyclic dependency ( and
     // some strange behavior
@@ -117,7 +117,7 @@ VbaGlobalsBase::init(  const uno::Sequence< beans::PropertyValue >& aInitArgs )
 }
 
 uno::Reference< uno::XInterface > SAL_CALL
-VbaGlobalsBase::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (uno::Exception, uno::RuntimeException)
+VbaGlobalsBase::createInstance( const OUString& aServiceSpecifier ) throw (uno::Exception, uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xReturn;
     if ( aServiceSpecifier == sAppService )
@@ -132,7 +132,7 @@ VbaGlobalsBase::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw
 }
 
 uno::Reference< uno::XInterface > SAL_CALL
-VbaGlobalsBase::createInstanceWithArguments( const ::rtl::OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& Arguments ) throw (uno::Exception, uno::RuntimeException)
+VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& Arguments ) throw (uno::Exception, uno::RuntimeException)
 {
 
     uno::Reference< uno::XInterface > xReturn;
@@ -147,21 +147,21 @@ VbaGlobalsBase::createInstanceWithArguments( const ::rtl::OUString& aServiceSpec
     return xReturn;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 VbaGlobalsBase::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
-    static const rtl::OUString names[] = {
+    static const OUString names[] = {
     // common
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.msforms.UserForm" ) ),
+        "ooo.vba.msforms.UserForm" ,
       };
-    static uno::Sequence< rtl::OUString > serviceNames( names, sizeof( names )/ sizeof( names[0] ) );
+    static uno::Sequence< OUString > serviceNames( names, sizeof( names )/ sizeof( names[0] ) );
     return serviceNames;
 }
 
 bool
-VbaGlobalsBase::hasServiceName( const rtl::OUString& serviceName )
+VbaGlobalsBase::hasServiceName( const OUString& serviceName )
 {
-    uno::Sequence< rtl::OUString > sServiceNames( getAvailableServiceNames() );
+    uno::Sequence< OUString > sServiceNames( getAvailableServiceNames() );
     sal_Int32 nLen = sServiceNames.getLength();
     for ( sal_Int32 index = 0; index < nLen; ++index )
     {
