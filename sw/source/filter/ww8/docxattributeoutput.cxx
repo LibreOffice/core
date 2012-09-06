@@ -2837,7 +2837,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, const c
     if( file.open( osl_File_OpenFlag_Write ) != osl::File::E_None )
         return;
     uno::Reference< com::sun::star::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
-        OUString( "word/fonts/font" ) + OUString::valueOf( m_nextFontId ) + ".ttf",
+        OUString( "word/fonts/font" ) + OUString::valueOf( static_cast< sal_Int32 >( m_nextFontId )) + ".ttf",
         "application/vnd.openxmlformats-officedocument.obfuscatedFont" );
     // Not much point in trying hard with the obfuscation key, whoever reads the spec can read the font anyway,
     // so just alter the first and last part of the key.
@@ -2888,7 +2888,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, const c
     xOutStream->closeOutput();
     OString relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/font",
-        OUString( "fonts/font" ) + OUString::valueOf( m_nextFontId ) + ".ttf" ), RTL_TEXTENCODING_UTF8 );
+        OUString( "fonts/font" ) + OUString::valueOf( static_cast< sal_Int32 >( m_nextFontId )) + ".ttf" ), RTL_TEXTENCODING_UTF8 );
     m_pSerializer->singleElementNS( XML_w, tag,
         FSNS( XML_r, XML_id ), relId.getStr(),
         FSNS( XML_w, XML_fontKey ), fontKeyStr,
