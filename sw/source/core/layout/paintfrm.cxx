@@ -4614,6 +4614,15 @@ lcl_MakeBorderLine(SwRect const& rRect,
         aEnd.setY(fStartY);
     }
 
+    // WHen rendering to very small (virtual) devices, like when producing
+    // page thumbnails in a mobile device app, the line geometry can end up
+    // bogus (negative width or height), so just ignore such border lines.
+    // Otherwise we will run into assertions later in lcl_TryMergeBorderLine()
+    // at least.
+    if (aEnd.getX() < aStart.getX() ||
+        aEnd.getY() < aStart.getY())
+        return;
+
     double const nExtentLeftStart = (isLeftOrTopBorder == isVertical)
         ?   lcl_GetExtent(pStartNeighbour, 0)
         :   lcl_GetExtent(0, pStartNeighbour);
