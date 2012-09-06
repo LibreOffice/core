@@ -416,7 +416,7 @@ OUString SmOoxmlImport::handleFunc()
     stream.ensureOpeningTag( M_TOKEN( func ));
     OUString fname = readOMathArgInElement( M_TOKEN( fName ));
     // fix the various functions
-    if( fname.match( "lim csub {", 0 )) // startsWith()
+    if( fname.startsWith( "lim csub {" ))
         fname = "lim from {" + fname.copy( 10 );
     OUString ret = fname + " {" + readOMathArgInElement( M_TOKEN( e )) + "}";
     stream.ensureClosingTag( M_TOKEN( func ));
