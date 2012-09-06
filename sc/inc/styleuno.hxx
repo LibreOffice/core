@@ -230,6 +230,15 @@ private:
                                             throw(::com::sun::star::lang::IllegalArgumentException,
                                                     ::com::sun::star::uno::RuntimeException);
 
+    // enhance ODS load performance
+    bool StyleSheetChangedUpdate();
+    void SetOnePropertyValueWithoutUpdate(  const ::rtl::OUString& rPropertyName,
+                                                    const SfxItemPropertySimpleEntry* pEntry,
+                                                    const ::com::sun::star::uno::Any* pValue )
+                                            throw(::com::sun::star::lang::IllegalArgumentException,
+                                                    ::com::sun::star::uno::RuntimeException);
+    //end add
+
     ScStyleObj(); // disabled
 public:
                             ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const String& rName);

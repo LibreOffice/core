@@ -1896,18 +1896,43 @@ void XclExpXFId::ConvertXFIndex( const XclExpRoot& rRoot )
 
 XclExpXF::XclExpXF(
         const XclExpRoot& rRoot, const ScPatternAttr& rPattern, sal_Int16 nScript,
-        sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) :
-    XclXFBase( true ),
-    XclExpRoot( rRoot )
+        sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak )
+:   XclXFBase(true),
+    XclExpRecord(),
+    XclExpRoot(rRoot),
+    mpItemSet(0),
+    maProtection(),
+    maAlignment(),
+    maBorder(),
+    maArea(),
+    mnParentXFId(),
+    mnScNumFmt(),
+    mnXclFont(),
+    mnXclNumFmt(),
+    mnBorderId(),
+    mnFillId(),
+    mnIndexInXFList(0)
 {
     mnParentXFId = GetXFBuffer().InsertStyle( rPattern.GetStyleSheet() );
     Init( rPattern.GetItemSet(), nScript, nForceScNumFmt, nForceXclFont, bForceLineBreak, false );
 }
 
-XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleSheet ) :
-    XclXFBase( false ),
-    XclExpRoot( rRoot ),
-    mnParentXFId( XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_STYLEPARENT ) )
+XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleSheet )
+:   XclXFBase(false),
+    XclExpRecord(),
+    XclExpRoot(rRoot),
+    mpItemSet(0),
+    maProtection(),
+    maAlignment(),
+    maBorder(),
+    maArea(),
+    mnParentXFId(XclExpXFBuffer::GetXFIdFromIndex(EXC_XF_STYLEPARENT)),
+    mnScNumFmt(),
+    mnXclFont(),
+    mnXclNumFmt(),
+    mnBorderId(),
+    mnFillId(),
+    mnIndexInXFList(0)
 {
     bool bDefStyle = (rStyleSheet.GetName() == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
     sal_Int16 nScript = bDefStyle ? GetDefApiScript() : ::com::sun::star::i18n::ScriptType::WEAK;
@@ -1915,10 +1940,22 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleShee
         NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND, false, bDefStyle );
 }
 
-XclExpXF::XclExpXF( const XclExpRoot& rRoot, bool bCellXF ) :
-    XclXFBase( bCellXF ),
-    XclExpRoot( rRoot ),
-    mnParentXFId( XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_STYLEPARENT ) )
+XclExpXF::XclExpXF( const XclExpRoot& rRoot, bool bCellXF )
+:   XclXFBase(bCellXF),
+    XclExpRecord(),
+    XclExpRoot(rRoot),
+    mpItemSet(0),
+    maProtection(),
+    maAlignment(),
+    maBorder(),
+    maArea(),
+    mnParentXFId(XclExpXFBuffer::GetXFIdFromIndex(EXC_XF_STYLEPARENT)),
+    mnScNumFmt(),
+    mnXclFont(),
+    mnXclNumFmt(),
+    mnBorderId(),
+    mnFillId(),
+    mnIndexInXFList(0)
 {
     InitDefault();
 }
@@ -2323,8 +2360,21 @@ bool XclExpFillPred::operator()( const XclExpCellArea& rFill ) const
         mrFill.mnBackColorId    == rFill.mnBackColorId;
 }
 
-XclExpXFBuffer::XclExpXFBuffer( const XclExpRoot& rRoot ) :
-    XclExpRoot( rRoot )
+static bool XclExpXFBuffer_mbUseMultimapBuffer = true;
+
+XclExpXFBuffer::XclExpXFBuffer( const XclExpRoot& rRoot )
+:   XclExpRecordBase(),
+    XclExpRoot(rRoot),
+    maXFList(),
+    maStyleList(),
+    maBuiltInMap(),
+    maXFIndexVec(),
+    maStyleIndexes(),
+    maCellIndexes(),
+    maSortedXFList(),
+    maBorders(),
+    maFills(),
+    maXclExpXFMap()
 {
 }
 
@@ -2603,20 +2653,90 @@ void XclExpXFBuffer::SaveXFXml( XclExpXmlStream& rStrm, XclExpXF& rXF )
     rXF.SaveXml( rStrm );
 }
 
-sal_uInt32 XclExpXFBuffer::FindXF( const ScPatternAttr& rPattern,
-        sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) const
+void XclExpXFBuffer::impAddMissingValuesFromXFListToXclExpXFMap()
 {
-    for( size_t nPos = 0, nSize = maXFList.GetSize(); nPos < nSize; ++nPos )
-        if( maXFList.GetRecord( nPos )->Equals( rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) )
-            return static_cast< sal_uInt32 >( nPos );
-    return EXC_XFID_NOTFOUND;
+    for(size_t nPos(maXclExpXFMap.size()); nPos < maXFList.GetSize(); ++nPos)
+    {
+        XclExpXF* pValue = maXFList.GetRecord(nPos).get();
+
+        if(pValue)
+        {
+            const SfxItemSet* pKey = maXFList.GetRecord(nPos)->getItemSet();
+
+            maXclExpXFMap.insert(std::pair< const SfxItemSet*, XclExpXF* >(pKey, pValue));
+            pValue->setIndexInXFList(nPos);
+        }
+        else
+        {
+            OSL_ENSURE(false, "maXFList has empty entries (!)");
+        }
+    }
+}
+
+sal_uInt32 XclExpXFBuffer::FindXF(const ScPatternAttr& rPattern, sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak) const
+{
+    // define return value
+    sal_uInt32 nXFId(EXC_XFID_NOTFOUND);
+
+    if(XclExpXFBuffer_mbUseMultimapBuffer)
+    {
+        // add values from maXFList which are not yet in maXclExpXFMap
+        const_cast< XclExpXFBuffer* >(this)->impAddMissingValuesFromXFListToXclExpXFMap();
+
+        // get the full range for the pattern set
+        typedef std::multimap< const SfxItemSet*, XclExpXF* >::const_iterator CIT;
+        typedef std::pair< CIT, CIT > Range;
+        const SfxItemSet* pPatternSet = &(rPattern.GetItemSet());
+        const Range range(maXclExpXFMap.equal_range(pPatternSet));
+
+        // iterate over evtl. multiple candidates using the pattern set
+        for(CIT ite(range.first); ite != range.second; ++ite)
+        {
+            XclExpXF* pIte = ite->second;
+
+            if(pIte->Equals(rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak))
+            {
+                nXFId = pIte->getIndexInXFList();
+                break;
+            }
+        }
+    }
+    else
+    {
+        // old, unbuffered implementation
+        for( size_t nPos = 0, nSize = maXFList.GetSize(); nPos < nSize; ++nPos )
+            if( maXFList.GetRecord( nPos )->Equals( rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) )
+                return static_cast< sal_uInt32 >( nPos );
+    }
+
+    return nXFId;
 }
 
 sal_uInt32 XclExpXFBuffer::FindXF( const SfxStyleSheetBase& rStyleSheet ) const
 {
-    for( size_t nPos = 0, nSize = maXFList.GetSize(); nPos < nSize; ++nPos )
-        if( maXFList.GetRecord( nPos )->Equals( rStyleSheet ) )
-            return static_cast< sal_uInt32 >( nPos );
+    if(XclExpXFBuffer_mbUseMultimapBuffer)
+    {
+        // add values from maXFList which are not yet in maXclExpXFMap
+        const_cast< XclExpXFBuffer* >(this)->impAddMissingValuesFromXFListToXclExpXFMap();
+
+        // find entry with given ItemSet (by StyleSheet)
+        const SfxItemSet& rItemSet = const_cast< SfxStyleSheetBase& >(rStyleSheet).GetItemSet();
+        typedef std::multimap< const SfxItemSet*, XclExpXF* >::const_iterator CIT;
+        const CIT aFound(maXclExpXFMap.find(&rItemSet));
+
+        if(aFound != maXclExpXFMap.end())
+        {
+            return aFound->second->getIndexInXFList();
+        }
+    }
+    else
+    {
+        // old, unbuffered implementation
+        for( size_t nPos = 0, nSize = maXFList.GetSize(); nPos < nSize; ++nPos )
+            if( maXFList.GetRecord( nPos )->Equals( rStyleSheet ) )
+                return static_cast< sal_uInt32 >( nPos );
+    }
+
     return EXC_XFID_NOTFOUND;
 }
 
@@ -2647,6 +2767,13 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int1
             // replace default cell pattern
             XclExpXFRef xNewXF( new XclExpXF( GetRoot(), *pPattern, nScript ) );
             maXFList.ReplaceRecord( xNewXF, EXC_XF_DEFAULTCELL );
+
+            // need to clear the multimap buffer to force reinsertin of the new element
+            if(XclExpXFBuffer_mbUseMultimapBuffer)
+            {
+                    maXclExpXFMap.clear();
+            }
+
             rbPredefined = false;
         }
         return GetDefCellXFId();
@@ -2698,6 +2825,13 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
             {
                 // replace predefined built-in style (ReplaceRecord() deletes old record)
                 maXFList.ReplaceRecord( XclExpXFRef( new XclExpXF( GetRoot(), rStyleSheet ) ), nXFId );
+
+                // need to clear the multimap buffer to force reinsertin of the new element
+                if(XclExpXFBuffer_mbUseMultimapBuffer)
+                {
+                    maXclExpXFMap.clear();
+                }
+
                 rbPredefined = false;
             }
         }

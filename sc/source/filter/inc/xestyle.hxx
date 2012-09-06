@@ -512,6 +512,11 @@ public:
 
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
+    // for buffered FindXF
+    const SfxItemSet* getItemSet() const { return mpItemSet; }
+    sal_uInt32 getIndexInXFList() const { return mnIndexInXFList; }
+    void setIndexInXFList(sal_uInt32 nNew) { mnIndexInXFList = nNew; }
+
 protected:
     explicit            XclExpXF( const XclExpRoot& rRoot, bool bCellXF );
 
@@ -523,11 +528,14 @@ protected:  // access for XclExpDefaultXF
     XclExpCellBorder    maBorder;           /// Border line style.
     XclExpCellArea      maArea;             /// Background area style.
     sal_uInt32          mnParentXFId;       /// XF ID of parent XF record.
-    sal_uLong               mnScNumFmt;         /// Calc number format index.
+    sal_uLong           mnScNumFmt;         /// Calc number format index.
     sal_uInt16          mnXclFont;          /// Excel font index.
     sal_uInt16          mnXclNumFmt;        /// Excel number format index.
     sal_Int32           mnBorderId;         /// OOXML Border Index
     sal_Int32           mnFillId;           /// OOXML Fill Index
+
+    // for buffered FindXF, holds the index in XclExpXFBuffer::maXFList when object is added to maXclExpXFMap
+    sal_uInt32          mnIndexInXFList;
 
 private:
     using               XclXFBase::Equals;
@@ -695,6 +703,9 @@ private:
     typedef XclExpRecordList< XclExpStyle > XclExpStyleList;
 
 private:
+    // helper to update the buffer for maXFList
+    void impAddMissingValuesFromXFListToXclExpXFMap();
+
     /** Returns the XF ID of the cell XF containing the passed format. */
     sal_uInt32          FindXF( const ScPatternAttr& rPattern, sal_uLong nForceScNumFmt,
                             sal_uInt16 nForceXclFont, bool bForceLineBreak ) const;
@@ -758,6 +769,8 @@ private:
     XclExpBorderList    maBorders;          /// List of borders used by XF records
     XclExpFillList      maFills;            /// List of fills used by XF records
 
+    // for optimized FindXF, buffered version of maXFList for fast access
+    std::multimap< const SfxItemSet*, XclExpXF* > maXclExpXFMap;
 };
 
 // ============================================================================

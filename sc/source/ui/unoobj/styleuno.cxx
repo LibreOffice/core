@@ -1531,8 +1531,13 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< rtl::OUString 
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             const SfxItemPropertySimpleEntry*  pEntry = pPropertyMap->getByName( pNames[i] );
-            SetOnePropertyValue( pNames[i], pEntry, &pValues[i] );
+
+            // enhance ODS load performance
+            SetOnePropertyValueWithoutUpdate( pNames[i], pEntry, &pValues[i] );
         }
+
+        // enhance ODS load performance
+        StyleSheetChangedUpdate();
     }
 }
 
@@ -1689,6 +1694,13 @@ void SAL_CALL ScStyleObj::setPropertyValue(
 }
 
 void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
+                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SetOnePropertyValueWithoutUpdate(rPropertyName, pEntry, pValue);
+    StyleSheetChangedUpdate();
+}
+
+void ScStyleObj::SetOnePropertyValueWithoutUpdate( const ::rtl::OUString& rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
@@ -1943,31 +1955,43 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
             }
         }
 
-        //! DocFunc-Funktion??
-        //! Undo ?????????????
-
-        ScDocument* pDoc = pDocShell->GetDocument();
-        if ( eFamily == SFX_STYLE_FAMILY_PARA )
-        {
-            //  Zeilenhoehen anpassen...
-
-            VirtualDevice aVDev;
-            Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
-            double nPPTX = aLogic.X() / 1000.0;
-            double nPPTY = aLogic.Y() / 1000.0;
-            Fraction aZoom(1,1);
-            pDoc->StyleSheetChanged( pStyle, sal_False, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
-
-            pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
-            pDocShell->SetDocumentModified();
-        }
-        else
+        if(SFX_STYLE_FAMILY_PARA != eFamily)
         {
             //! ModifyStyleSheet am Dokument (alte Werte merken)
 
             pDocShell->PageStyleModified( aStyleName, sal_True );
         }
     }
+}
+
+bool ScStyleObj::StyleSheetChangedUpdate()
+{
+    SfxStyleSheetBase* pStyle = GetStyle_Impl();
+
+    if(pStyle)
+    {
+        //! DocFunc-Funktion??
+        //! Undo ?????????????
+
+        if(SFX_STYLE_FAMILY_PARA == eFamily)
+        {
+            // adapt line heights
+            VirtualDevice aVDev;
+            const Point aLogic(aVDev.LogicToPixel(Point(1000,1000), MAP_TWIP));
+            const double nPPTX(aLogic.X() / 1000.0);
+            const double nPPTY(aLogic.Y() / 1000.0);
+            const Fraction aZoom(1,1);
+            ScDocument* pDoc = pDocShell->GetDocument();
+
+            pDoc->StyleSheetChanged(pStyle, sal_False, &aVDev, nPPTX, nPPTY, aZoom, aZoom);
+            pDocShell->PostPaint(0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT);
+            pDocShell->SetDocumentModified();
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyName )
