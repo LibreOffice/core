@@ -507,7 +507,8 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
-    pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );     // Helps creating the Flys by MakeFrms()   //swmod 071108//swmod 071225
+    // For creating the Flys by MakeFrms()
+    pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );
     bCallbackActionEnabled = sal_False; // needs to be set to sal_True before leaving!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
