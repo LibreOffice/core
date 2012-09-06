@@ -2060,7 +2060,7 @@ dbus_inhibit_gsm (const gchar *appname,
         /* get the DBUS session connection */
         session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
         if (error != NULL) {
-                g_warning ("DBUS cannot connect : %s", error->message);
+                g_debug ("DBUS cannot connect : %s", error->message);
                 g_error_free (error);
                 return -1;
         }
@@ -2071,7 +2071,7 @@ dbus_inhibit_gsm (const gchar *appname,
                                            GSM_DBUS_PATH,
                                            GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
+                g_debug ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return -1;
         }
 
@@ -2088,12 +2088,12 @@ dbus_inhibit_gsm (const gchar *appname,
         /* check the return value */
         if (! res) {
                 cookie = -1;
-                g_warning ("Inhibit method failed");
+                g_debug ("Inhibit method failed");
         }
 
         /* check the error value */
         if (error != NULL) {
-                g_warning ("Inhibit problem : %s", error->message);
+                g_debug ("Inhibit problem : %s", error->message);
                 g_error_free (error);
                 cookie = -1;
         }
@@ -2111,14 +2111,14 @@ dbus_uninhibit_gsm (guint cookie)
         DBusGConnection *session_connection = NULL;
 
         if (cookie == guint(-1)) {
-                g_warning ("Invalid cookie");
+                g_debug ("Invalid cookie");
                 return;
         }
 
         /* get the DBUS session connection */
         session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
         if (error) {
-                g_warning ("DBUS cannot connect : %s", error->message);
+                g_debug ("DBUS cannot connect : %s", error->message);
                 g_error_free (error);
                 return;
         }
@@ -2129,7 +2129,7 @@ dbus_uninhibit_gsm (guint cookie)
                                            GSM_DBUS_PATH,
                                            GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
+                g_debug ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return;
         }
 
@@ -2142,12 +2142,12 @@ dbus_uninhibit_gsm (guint cookie)
 
         /* check the return value */
         if (! res) {
-                g_warning ("Uninhibit method failed");
+                g_debug ("Uninhibit method failed");
         }
 
         /* check the error value */
         if (error != NULL) {
-                g_warning ("Uninhibit problem : %s", error->message);
+                g_debug ("Uninhibit problem : %s", error->message);
                 g_error_free (error);
                 cookie = -1;
         }

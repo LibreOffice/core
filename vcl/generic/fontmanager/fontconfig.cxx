@@ -868,7 +868,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
     DBusGConnection *session_connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
     if (error != NULL)
     {
-        g_warning ("DBUS cannot connect : %s", error->message);
+        g_debug ("DBUS cannot connect : %s", error->message);
         g_error_free (error);
         return -1;
     }
@@ -880,7 +880,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
                                        "org.freedesktop.PackageKit.Modify");
     if (proxy == NULL)
     {
-        g_warning("Could not get DBUS proxy: org.freedesktop.PackageKit");
+        g_debug("Could not get DBUS proxy: org.freedesktop.PackageKit");
         return -1;
     }
 
@@ -897,12 +897,12 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
                  G_TYPE_INVALID);
     /* check the return value */
     if (!res)
-       g_warning("InstallFontconfigResources method failed");
+       g_debug("InstallFontconfigResources method failed");
 
     /* check the error value */
     if (error != NULL)
     {
-        g_warning("InstallFontconfigResources problem : %s", error->message);
+        g_debug("InstallFontconfigResources problem : %s", error->message);
         g_error_free(error);
     }
 
