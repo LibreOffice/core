@@ -7,21 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,boost))
+$(eval $(call gb_Package_Package,boostdatetime,$(gb_StaticLibrary_OUTDIRLOCATION)))
 
-ifeq ($(SYSTEM_BOOST),NO)
-
-$(eval $(call gb_Module_add_targets,boost,\
-	StaticLibrary_boostdatetime \
-	UnpackedTarball_boost \
-))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,boost,\
-	Package_boostdatetime \
-))
-endif
-
-endif
+$(eval $(call gb_Package_add_file,boostdatetime,lib/libboost_date_time-vc90-mt-1_44.lib,$(notdir $(call gb_StaticLibrary_get_target,boostdatetime))))
 
 # vim: set noet sw=4 ts=4:
