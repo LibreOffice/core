@@ -970,6 +970,22 @@ void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUStr
     }
 }
 //__________________________________________________________________________________________________
+void ElementDescriptor::readScrollableSettings()
+{
+    readLongAttr( "ScrollHeight",
+                  XMLNS_DIALOGS_PREFIX ":scrollheight" );
+    readLongAttr( "ScrollWidth",
+                  XMLNS_DIALOGS_PREFIX ":scrollwidth" );
+    readLongAttr( "ScrollTop",
+                  XMLNS_DIALOGS_PREFIX ":scrolltop" );
+    readLongAttr( "ScrollLeft",
+                  XMLNS_DIALOGS_PREFIX ":scrollleft" );
+    readBoolAttr( "HScroll",
+                  XMLNS_DIALOGS_PREFIX ":hscroll" );
+    readBoolAttr( "VScroll",
+                  XMLNS_DIALOGS_PREFIX ":vscroll" );
+}
+
 void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible )
 {
     Any a( _xProps->getPropertyValue( "Name" ) );

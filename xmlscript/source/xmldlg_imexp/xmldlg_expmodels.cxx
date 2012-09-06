@@ -1063,6 +1063,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     readBoolAttr( "Sizeable", XMLNS_DIALOGS_PREFIX ":resizeable" );
     readStringAttr( "Title", XMLNS_DIALOGS_PREFIX ":title" );
 
+    readScrollableSettings();
     Any aDecorationAny( _xProps->getPropertyValue( "Decoration" ) );
     bool bDecoration = sal_False;
     if ( (aDecorationAny >>= bDecoration) && !bDecoration )

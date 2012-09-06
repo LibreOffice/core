@@ -109,6 +109,7 @@ public:
     template<typename T>
     inline bool readProp( T * ret, OUString const & rPropName );
     css::uno::Any readProp( OUString const & rPropName );
+    void readScrollableSettings();
     void readDefaults( bool supportPrintable = true, bool supportVisible = true );
     void readStringAttr(
         OUString const & rPropName, OUString const & rAttrName );

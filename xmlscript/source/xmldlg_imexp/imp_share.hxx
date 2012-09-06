@@ -401,6 +401,7 @@ public:
     inline css::uno::Reference< css::beans::XPropertySet > getControlModel() const
         { return _xControlModel; }
 
+    void importScollableSettings( css::uno::Reference< css::xml::input::XAttributes > const & xAttributes );
     void importDefaults(
         sal_Int32 nBaseX, sal_Int32 nBaseY,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,

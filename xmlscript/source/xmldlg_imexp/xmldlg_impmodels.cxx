@@ -1970,6 +1970,7 @@ void WindowElement::endElement()
     ctx.importStringProperty("Title", "title", _xAttributes );
     ctx.importBooleanProperty("Decoration", "withtitlebar", _xAttributes );
         ctx.importImageURLProperty( "ImageURL" , "image-src" , _xAttributes );
+    ctx.importScollableSettings( _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
