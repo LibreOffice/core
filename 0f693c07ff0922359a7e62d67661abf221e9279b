@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAOH///+0\u003d",
+        "filename": "basctl/source/basicide/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-09-06T14:01:49Z",
+      "side": 1,
+      "message": "please do change them",
+      "parentUuid": "AAAAOH////I\u003d",
+      "revId": "0f693c07ff0922359a7e62d67661abf221e9279b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAOH////Q\u003d",
         "filename": "basctl/source/basicide/layout.cxx",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "The former: no because then the previous return would leave bRecursion \u003d\u003d true.\nThe latter: I can change it, but I prefer to do it in an other patch.",
       "parentUuid": "AAAAOH////Q\u003d",
+      "revId": "0f693c07ff0922359a7e62d67661abf221e9279b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOH///+s\u003d",
+        "filename": "basctl/source/basicide/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-09-06T14:01:49Z",
+      "side": 1,
+      "message": "I\u0027m afraid I don\u0027t understand how bRecursion would be left true, the usual pattern is\nsomefunction()\n{\n    static bool bInRecursionGaurd( false );\n    if ( bInRecursionGaurd  )\n        return;\n    bInRecursionGaurd \u003d true;\n    // do stuff that causes somefunction to called recursively\n    //  \"\"\n    bInRecursionGaurd \u003d false;\n}\nand unless there is a good reason the check for the recursion gaurd should be the first thing checked",
+      "parentUuid": "AAAAOH////E\u003d",
       "revId": "0f693c07ff0922359a7e62d67661abf221e9279b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
