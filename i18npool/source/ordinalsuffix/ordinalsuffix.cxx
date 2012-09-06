@@ -116,7 +116,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
         // fdo#54486 lets make sure that the ordinal format and the non-ordinal
         // format match at the start, so that the expectation can be verified
         // that there is some trailing "ordinal suffix" which can be extracted
-        bool bSimpleOrdinalSuffix = sValueWithOrdinal.match(sValueWithNoOrdinal);
+        bool bSimpleOrdinalSuffix = sValueWithOrdinal.startsWith(sValueWithNoOrdinal);
 
         SAL_WARN_IF(!bSimpleOrdinalSuffix, "i18npool", "ordinal " <<
             sValueWithOrdinal << " didn't start with expected " <<
