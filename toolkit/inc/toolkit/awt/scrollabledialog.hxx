@@ -34,7 +34,8 @@
 //........................................................................
 namespace toolkit
 {
-    class ScrollableDialog : public Dialog
+  template < class T >
+    class ScrollableDialog : public T
     {
         ScrollBar          maHScrollBar;
         ScrollBar          maVScrollBar;
@@ -64,7 +65,6 @@ namespace toolkit
         ScrollBarVisibility getScrollVisibility() { return maScrollVis; }
         void setScrollVisibility( ScrollBarVisibility rState );
         DECL_LINK( ScrollBarHdl, ScrollBar* );
-        DECL_LINK( ContainerScrolled, void* );
         virtual void ResetScrollBars();
         // Window
         virtual void Resize();

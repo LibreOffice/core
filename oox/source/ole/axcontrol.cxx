@@ -316,6 +316,20 @@ void ControlConverter::convertVerticalAlign( PropertyMap& rPropMap, sal_Int32 nV
     rPropMap.setProperty( PROP_VerticalAlign, eAlign );
 }
 
+void ControlConverter::convertScrollabilitySettings( PropertyMap& rPropMap,
+                                         const AxPairData& rScrollPos, const AxPairData& rScrollArea,
+                                         sal_Int32 nScrollBars ) const
+{
+    Size tmpSize = mrGraphicHelper.convertHmmToAppFont( Size( rScrollArea.first, rScrollArea.second ) );
+    Point tmpPos = mrGraphicHelper.convertHmmToAppFont( Point( rScrollPos.first, rScrollPos.second ) );
+    rPropMap.setProperty( PROP_ScrollHeight, tmpSize.Height );
+    rPropMap.setProperty( PROP_ScrollWidth, tmpSize.Width );
+    rPropMap.setProperty( PROP_ScrollTop, tmpPos.Y );
+    rPropMap.setProperty( PROP_ScrollLeft, tmpPos.X );
+    rPropMap.setProperty( PROP_HScroll, ( nScrollBars & 0x1 ) == 0x1 );
+    rPropMap.setProperty( PROP_VScroll, ( nScrollBars & 0x2 ) == 0x2 );
+}
+
 void ControlConverter::convertScrollBar( PropertyMap& rPropMap,
         sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
         sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel ) const
@@ -2431,6 +2445,7 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+    rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
@@ -2493,6 +2508,7 @@ void AxUserFormModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     rPropMap.setProperty( PROP_Title, maCaption );
     rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
     rConv.convertAxPicture( rPropMap, maPictureData, AX_PICPOS_CENTER  );
+    rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 

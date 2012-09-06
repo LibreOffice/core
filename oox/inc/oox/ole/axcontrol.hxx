@@ -249,6 +249,12 @@ public:
                             sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
                             sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel ) const;
 
+    /** Converts scrollability settings to UNO properties. */
+    void                convertScrollabilitySettings(
+                            PropertyMap& rPropMap,
+                            const AxPairData& rScrollPos, const AxPairData& rScrollArea,
+                            sal_Int32 nScrollBars ) const;
+
     /** Binds the passed control model to the passed data sources. The
         implementation will check which source types are supported. */
     void                bindToSources(

@@ -724,7 +724,10 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_GROUPBOX:
                         {
-                pNewWindow = new GroupBox( pParent, nWinBits );
+                if ( bFrameControl )
+                    pNewWindow = new toolkit::ScrollableDialog< GroupBox >( pParent, nWinBits );
+                else
+                    pNewWindow = new GroupBox( pParent, nWinBits );
                                 if ( bFrameControl )
                                 {
                                     GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
@@ -787,7 +790,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // Modal/Modeless nur durch Show/Execute
                 if ( (pParent == NULL ) && ( rDescriptor.ParentIndex == -1 ) )
                     pParent = DIALOG_NO_PARENT;
-                pNewWindow = new toolkit::ScrollableDialog( pParent, nWinBits );
+                pNewWindow = new toolkit::ScrollableDialog<Dialog>( pParent, nWinBits );
                 // #i70217# Don't always create a new component object. It's possible that VCL has called
                 // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
                 // which creates a component object.
@@ -1062,16 +1065,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         if ( pParentComponent )
             pParent = pParentComponent->GetWindow();
     }
-#if 0
-    // #FIXME inglorious HACK we possibly need to interface at XContainerWindowPeer ?
-    // to allow access to the 'real' parent that we pass to children
-    toolkit::ScrollableDialog* pSrcDialog = dynamic_cast< toolkit::ScrollableDialog* > ( pParent );
-    if ( pSrcDialog )
-    {
-        printf( "found a parent that is a scrollable dialog\n");
-        pParent = pSrcDialog->getContentWindow();
-    }
-#endif
     WinBits nWinBits = ImplGetWinBits( rDescriptor.WindowAttributes,
         ImplGetComponentType( rDescriptor.WindowServiceName ) );
     nWinBits |= nForceWinBits;

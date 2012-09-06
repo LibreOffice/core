@@ -68,6 +68,7 @@
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 
+#include <vcl/group.hxx>
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
@@ -2451,7 +2452,6 @@ throw(::com::sun::star::uno::RuntimeException)
         sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
-        printf("XDialog setProperty... %s\n", rtl::OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
         switch ( nPropType )
         {
             case BASEPROPERTY_SCROLLHEIGHT:
@@ -2464,14 +2464,14 @@ throw(::com::sun::star::uno::RuntimeException)
                 Size aSize( nVal, nVal );
                 Window* pWindow = GetWindow();
                 MapMode aMode( MAP_APPFONT );
-                if ( pWindow )
+                toolkit::ScrollableDialog<Dialog>* pScrollable = dynamic_cast< toolkit::ScrollableDialog<Dialog>* >( pWindow );
+                if ( pWindow && pScrollable )
                 {
                     OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
                     if ( !pDev )
                         pDev = pWindow->GetParent();
 
                     aSize = pDev->LogicToPixel( aSize, aMode );
-                    toolkit::ScrollableDialog* pScrollable = static_cast< toolkit::ScrollableDialog* >( pWindow );
                     switch ( nPropType )
                     {
                         case BASEPROPERTY_SCROLLHEIGHT:
@@ -6694,7 +6694,50 @@ throw(::com::sun::star::uno::RuntimeException)
     sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
     (void)bVoid;
 #endif
+        // #TODO needs to be in common container base class,
+        // we need a common Scrollable interface then too
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_SCROLLHEIGHT:
+            case BASEPROPERTY_SCROLLWIDTH:
+            case BASEPROPERTY_SCROLLTOP:
+            case BASEPROPERTY_SCROLLLEFT:
+            {
+                sal_Int32 nVal =0;
+                Value >>= nVal;
+                Size aSize( nVal, nVal );
+                Window* pWindow = GetWindow();
+                MapMode aMode( MAP_APPFONT );
+                toolkit::ScrollableDialog<GroupBox>* pScrollable = dynamic_cast< toolkit::ScrollableDialog<GroupBox>* >( pWindow );
+                if ( pWindow && pScrollable )
+                {
+                    OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+                    if ( !pDev )
+                        pDev = pWindow->GetParent();
 
+                    aSize = pDev->LogicToPixel( aSize, aMode );
+                    switch ( nPropType )
+                    {
+                        case BASEPROPERTY_SCROLLHEIGHT:
+                            pScrollable->SetScrollHeight( aSize.Height() );
+                            break;
+                        case BASEPROPERTY_SCROLLWIDTH:
+                            pScrollable->SetScrollWidth( aSize.Width() );
+                            break;
+                        case BASEPROPERTY_SCROLLTOP:
+                            pScrollable->SetScrollTop( aSize.Height() );
+                            break;
+                        case BASEPROPERTY_SCROLLLEFT:
+                            pScrollable->SetScrollLeft( aSize.Width() );
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                break;
+            }
+    }
     VCLXContainer::setProperty( PropertyName, Value );
 }
 

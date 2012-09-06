@@ -394,9 +394,13 @@ ScaleMode
 ScaleToPages
 ScaleToPagesX
 ScaleToPagesY
+ScrollHeight
+ScrollLeft
+ScrollTop
 ScrollValue
 ScrollValueMax
 ScrollValueMin
+ScrollWidth
 Segments
 SelectedItems
 SelectedPage

@@ -1136,6 +1136,13 @@ UnoFrameModel::UnoFrameModel(  const Reference< XMultiServiceFactory >& i_factor
     ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES );
+    ImplRegisterProperty( BASEPROPERTY_HSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_VSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLWIDTH );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLHEIGHT );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLTOP );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLLEFT );
+
 
     uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
