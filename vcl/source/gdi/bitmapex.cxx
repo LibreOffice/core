@@ -131,10 +131,10 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         eTransparent    ( !rMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
         bAlpha          ( sal_False )
 {
-    if(rBmp.GetSizePixel() != rMask.GetSizePixel())
+    if(!!aBitmap && !!aMask && aBitmap.GetSizePixel() != aMask.GetSizePixel())
     {
         OSL_ENSURE(false, "Mask size differs from Bitmap size, corrected Mask (!)");
-        aMask.Scale(rBmp.GetSizePixel());
+        aMask.Scale(aBitmap.GetSizePixel());
     }
 
     // #105489# Ensure a mask is exactly one bit deep
@@ -154,7 +154,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         eTransparent    ( !rAlphaMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
         bAlpha          ( !rAlphaMask ? sal_False : sal_True )
 {
-    if(rBmp.GetSizePixel() != rAlphaMask.GetSizePixel())
+    if(!!aBitmap && !!aMask && aBitmap.GetSizePixel() != aMask.GetSizePixel())
     {
         OSL_ENSURE(false, "Alpha size differs from Bitmap size, corrected Mask (!)");
         aMask.Scale(rBmp.GetSizePixel());
