@@ -861,8 +861,8 @@ void TestBreakIterator::setUp()
 
 void TestBreakIterator::tearDown()
 {
-    BootstrapFixtureBase::tearDown();
     m_xBreak.clear();
+    BootstrapFixtureBase::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestBreakIterator);
