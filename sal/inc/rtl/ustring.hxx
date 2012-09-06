@@ -881,6 +881,65 @@ public:
 #endif
 
     /**
+      Check whether this string starts with a given substring.
+
+      @param str  the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      start of this string
+
+      @since LibreOffice 3.7
+    */
+    bool startsWith(OUString const & str) const {
+        return match(str, 0);
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.7
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
+    {
+        return rtl_ustr_asciil_reverseEquals_WithLength( pData->buffer, literal,
+                internal::ConstCharArrayDetector< T, void >::size - 1);
+    }
+
+    /**
+      Check whether this string starts with a given string, ignoring the case of
+      ASCII letters.
+
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @return true if this string starts with str, ignoring the case of ASCII
+      letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
+      @since LibreOffice 3.7
+    */
+    sal_Bool startsWithIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
+    {
+        return matchIgnoreAsciiCase(str, 0);
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.7
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type startsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
+    {
+        return (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    pData->buffer,
+                    internal::ConstCharArrayDetector< T, void >::size - 1, literal,
+                    internal::ConstCharArrayDetector< T, void >::size - 1)
+                == 0);
+    }
+
+    /**
       Check whether this string ends with a given substring.
 
       @param str  the substring to be compared

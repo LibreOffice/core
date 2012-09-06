@@ -190,6 +190,9 @@ void test::ostring::StringLiterals::checkUsage()
     CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( "fOo" ));
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
     rtl_string_unittest_const_literal_function = false;
+    CPPUNIT_ASSERT( foobar.startsWith( "foo" ));
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foobar.endsWith( "bar" ));
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
 //    rtl_string_unittest_const_literal_function = false;
@@ -249,6 +252,8 @@ void test::ostring::StringLiterals::checkNonConstUsage()
     CPPUNIT_ASSERT( FooBaRfoo.matchIgnoreAsciiCase( bAr_c, 3 ));
     CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( (const char*)fOo_c ));
     CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( fOo_c ));
+    CPPUNIT_ASSERT( foobar.startsWith( (const char*)foo_c ));
+    CPPUNIT_ASSERT( foobar.startsWith( foo_c ));
     CPPUNIT_ASSERT( foobar.endsWith( (const char*)bar_c ));
     CPPUNIT_ASSERT( foobar.endsWith( bar_c ));
 //    CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( (const char*)bar_c ));

@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_strings,\
     sal/qa/rtl/strings/test_oustring_convert \
     sal/qa/rtl/strings/test_oustring_endswith \
     sal/qa/rtl/strings/test_oustring_noadditional \
+    sal/qa/rtl/strings/test_oustring_startswith \
     sal/qa/rtl/strings/test_oustring_stringliterals \
 ))
 

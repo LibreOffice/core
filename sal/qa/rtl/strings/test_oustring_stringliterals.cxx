@@ -129,6 +129,8 @@ void test::oustring::StringLiterals::checkUsage()
     CPPUNIT_ASSERT( foobar.match( "foo" ));
     CPPUNIT_ASSERT( FooBaRfoo.matchIgnoreAsciiCase( "bAr", 3 ));
     CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( "fOo" ));
+    CPPUNIT_ASSERT( foobar.startsWith( "foo" ));
+    CPPUNIT_ASSERT( FooBaR.startsWithIgnoreAsciiCase( "foo" ));
     CPPUNIT_ASSERT( foobar.endsWith( "bar" ));
     CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( "bar" ));
     CPPUNIT_ASSERT( foo == "foo" );
