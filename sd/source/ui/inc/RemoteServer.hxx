@@ -51,19 +51,7 @@ namespace sd
             mAddress( rAddress ) {}
     };
 
-    struct ClientInfoInternal:
-        ClientInfo
-    {
-        BufferedStreamSocket *mpStreamSocket;
-        rtl::OUString mPin;
-
-        ClientInfoInternal( const rtl::OUString rName,
-                            const rtl::OUString rAddress,
-                            BufferedStreamSocket *pSocket, rtl::OUString rPin ):
-                ClientInfo( rName, rAddress ),
-                mpStreamSocket( pSocket ),
-                mPin( rPin ) {}
-    };
+    struct ClientInfoInternal;
 
     class RemoteServer : public salhelper::Thread
     {

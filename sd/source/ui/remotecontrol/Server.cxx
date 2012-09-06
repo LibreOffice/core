@@ -40,18 +40,25 @@ using rtl::OString;
 using namespace ::osl;
 using namespace ::comphelper;
 
-// struct ClientInfoInternal:
-//     ClientInfo
-// {
-//     osl::StreamSocket mStreamSocket;
-//     rtl::OUString mPin;
-//     ClientInfoInternal( const rtl::OUString rName,
-//                         const rtl::OUString rAddress,
-//                         osl::StreamSocket &rSocket, rtl::OUString rPin ):
-//             ClientInfo( rName, rAddress ),
-//             mStreamSocket( rSocket ),
-//             mPin( rPin ) {}
-// };
+namespace sd {
+    /**
+     * Used to keep track of clients that have attempted to connect, but haven't
+     * yet been approved.
+     */
+    struct ClientInfoInternal:
+        ClientInfo
+    {
+        BufferedStreamSocket *mpStreamSocket;
+        rtl::OUString mPin;
+
+        ClientInfoInternal( const rtl::OUString rName,
+                            const rtl::OUString rAddress,
+                            BufferedStreamSocket *pSocket, rtl::OUString rPin ):
+                ClientInfo( rName, rAddress ),
+                mpStreamSocket( pSocket ),
+                mPin( rPin ) {}
+    };
+}
 
 RemoteServer::RemoteServer() :
     Thread( "RemoteServerThread" ),
@@ -72,11 +79,13 @@ void RemoteServer::execute()
     if ( !mSocket.bind( aAddr ) )
     {
         // Error binding
+        return;
     }
 
     if ( !mSocket.listen(3) )
     {
         // Error listening
+        return;
     }
     while ( true )
     {
@@ -108,6 +117,7 @@ void RemoteServer::execute()
             mAvailableClients.push_back( pClient );
 
             // Read off any additional non-empty lines
+            // We know that we at least have the empty termination line to read.
             do
             {
                 pSocket->readLine( aLine );
@@ -126,10 +136,9 @@ void RemoteServer::execute()
                     OUString sPin;
                     axPin >>= sPin;
 
-                    if ( ! sPin.equals( pClient->mPin ) ) {
-                        break;
+                    if ( sPin.equals( pClient->mPin ) ) {
+                        connectClient( pClient, sPin );
                     }
-                    connectClient( pClient, sPin );
                     break;
                 }
 
