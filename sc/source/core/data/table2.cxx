@@ -1909,7 +1909,8 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
         bIsEditable = false;
     else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
-        if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )) != false)
+        bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED );
+        if(bIsEditable)
         {
             // If Sheet is protected and cells are not protected then
             // check the active scenario protect flag if this range is

@@ -533,11 +533,6 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                     pThisRowInfo->bEmptyBack = false;
                                 }
 
-                                if (bHidden || ( bFormulaMode && bHideFormula && pInfo->pCell
-                                                    && pInfo->pCell->GetCellType()
-                                                        == CELLTYPE_FORMULA ))
-                                    pInfo->bEmptyCellText = true;
-
                                 if ( pCondForm )
                                 {
                                     ScCondFormatData aData = pCondForm->GetData( pInfo->pCell,
@@ -551,6 +546,17 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                             //! Style-Sets cachen !!!
                                             pInfo->pConditionSet = &pStyleSheet->GetItemSet();
                                             bAnyCondition = true;
+
+                                            // we need to check already here for protected cells
+                                            const SfxPoolItem* pItem;
+                                            if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SFX_ITEM_SET )
+                                            {
+                                                const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(pItem);
+                                                bHidden = pProtAttr->GetHideCell();
+                                                bHideFormula = pProtAttr->GetHideFormula();
+
+                                            }
+
                                         }
                                         // if style is not there, treat like no condition
                                     }
@@ -564,6 +570,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         pInfo->pDataBar = aData.pDataBar;
                                     }
                                 }
+
+                                if (bHidden || ( bFormulaMode && bHideFormula && pInfo->pCell
+                                                    && pInfo->pCell->GetCellType()
+                                                        == CELLTYPE_FORMULA ))
+                                    pInfo->bEmptyCellText = true;
 
                                 ++nArrY;
                             }
