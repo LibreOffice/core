@@ -52,6 +52,7 @@
 
 #include "common.hxx"
 #include "helper.hxx"
+#include "gsicheck.hxx"
 
 #if OSL_DEBUG_LEVEL > 2
 void HelpParser::Dump(XMLHashMap* rElem_in)
@@ -380,9 +381,12 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                 {
                     if( pXMLElement != NULL )
                     {
-                        data   = new XMLData( sNewdata , NULL , true ); // Add new one
-                        pXMLElement->RemoveAndDeleteAllChildren();
-                        pXMLElement->AddChild( data );
+                        if (check(pEntrys->GetSDF(sCur),pEntrys->GetNLine(sCur)))
+                        {
+                            data   = new XMLData( sNewdata , NULL , true ); // Add new one
+                            pXMLElement->RemoveAndDeleteAllChildren();
+                            pXMLElement->AddChild( data );
+                        }
                         aLangHM->erase( sCur );
                     }
                 }

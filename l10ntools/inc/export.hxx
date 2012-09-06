@@ -71,6 +71,9 @@ typedef boost::unordered_map<rtl::OString, PFormEntrys*, rtl::OStringHash>
 typedef boost::unordered_map<rtl::OString, MergeData*, rtl::OStringHash>
     MergeDataHashMap;
 
+typedef boost::unordered_map<rtl::OString, size_t, rtl::OStringHash>
+    LineNumberHashMap;
+
 #define SOURCE_LANGUAGE rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))
 #define X_COMMENT rtl::OString(RTL_CONSTASCII_STRINGPARAM("x-comment"))
 #define LIST_REFID  "LIST_REFID"
@@ -374,23 +377,36 @@ private:
     OStringBoolHashMap bQuickHelpTextFirst;
     OStringHashMap sTitle;
     OStringBoolHashMap bTitleFirst;
+    OStringHashMap sSDFLine;
+    LineNumberHashMap nLine;
 
 public:
     PFormEntrys( const rtl::OString &rPForm ) : data_( rPForm ) {};
     void InsertEntry(const rtl::OString &rId, const rtl::OString &rText,
-        const rtl::OString &rQuickHelpText, const rtl::OString &rTitle)
+        const rtl::OString &rQuickHelpText, const rtl::OString &rTitle,
+        const rtl::OString &rSDFLine, const std::size_t nLineIn)
     {
-
         sText[ rId ] = rText;
         bTextFirst[ rId ] = true;
         sQuickHelpText[ rId ] = rQuickHelpText;
         bQuickHelpTextFirst[ rId ] = true;
         sTitle[ rId ] = rTitle;
         bTitleFirst[ rId ] = true;
+        sSDFLine[ rId ] = rSDFLine;
+        nLine[ rId ] = nLineIn;
     }
     sal_Bool GetText( rtl::OString &rReturn, sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel = sal_False );
     sal_Bool GetTransex3Text( rtl::OString &rReturn, sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel = sal_False );
 
+    rtl::OString & GetSDF(const rtl::OString &nLangIndex)
+    {
+        return sSDFLine[nLangIndex];
+    }
+
+    std::size_t GetNLine(const rtl::OString &nLangIndex)
+    {
+        return nLine[nLangIndex];
+    }
 };
 
 //
@@ -444,7 +460,8 @@ class MergeDataFile
             const rtl::OString &rLID, const rtl::OString &rPFO,
             const rtl::OString &nLang, const rtl::OString &rTEXT,
             const rtl::OString &rQHTEXT, const rtl::OString &rTITLE,
-            const rtl::OString &sFilename, bool bCaseSensitive);
+            const rtl::OString &sFilename, bool bCaseSensitive,
+            const rtl::OString &rSDF, std::size_t nLine);
     public:
         explicit MergeDataFile(const rtl::OString &rFileName,
             const rtl::OString& rFile, bool bCaseSensitive);

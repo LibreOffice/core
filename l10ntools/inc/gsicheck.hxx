@@ -33,6 +33,7 @@
 
 #include <cstddef>
 #include <vector>
+#include <fstream>
 
 #include "tagtest.hxx"
 
@@ -130,6 +131,65 @@ public:
     void WriteCorrect( LazyStream &aOkOut, sal_Bool bRequireSourceLine );
     void WriteFixed( LazyStream &aFixOut );
 };
+
+sal_Bool check(rtl::OString s,std::size_t nLine);
+
+void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix,
+                   rtl::OString const & aContext, sal_Bool bPrintContext, std::size_t nLine, rtl::OString aUniqueId = rtl::OString() );
+
+void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix,
+                 rtl::OString const & aContext, sal_Bool bPrintContext, std::size_t nLine, rtl::OString const & aUniqueId = rtl::OString() );
+
+bool LanguageOK( rtl::OString const & aLang );
+
+class LazyStream: public std::ofstream
+{
+
+private:
+    rtl::OString aFileName;
+    bool bOpened;
+
+public:
+    LazyStream()
+    : aFileName()
+    , bOpened(false)
+    {};
+
+    void SetFileName( const rtl::OString& rFileName )
+    {
+        aFileName = rFileName;
+    };
+
+    void LazyOpen();
+};
+
+namespace {
+
+sal_Int32 const MAX_GID_LID_LEN = 250;
+
+rtl::OString copyUpTo(
+    rtl::OString const & text, sal_Int32 start, sal_Int32 maximumLength)
+{
+    assert(start >= 0 && start <= text.getLength());
+    return text.copy(start, std::min(text.getLength() - start, maximumLength));
+}
+
+rtl::OString addSuffix(
+    rtl::OString const & pathname, rtl::OString const & suffix)
+{
+    sal_Int32 n = pathname.lastIndexOf('.');
+    if (n == -1) {
+        fprintf(
+            stderr,
+            ("Error: pathname \"%s\" does not contain dot to add suffix in"
+             " front of\n"),
+            pathname.getStr());
+        exit(EXIT_FAILURE);
+    }
+    return pathname.replaceAt(n, 0, suffix);
+}
+
+}
 
 #endif
 
