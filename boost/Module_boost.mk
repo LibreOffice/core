@@ -16,12 +16,6 @@ $(eval $(call gb_Module_add_targets,boost,\
 	UnpackedTarball_boost \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,boost,\
-	Package_boostdatetime \
-))
-endif
-
 endif
 
 # vim: set noet sw=4 ts=4:
