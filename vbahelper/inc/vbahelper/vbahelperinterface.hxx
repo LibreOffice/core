@@ -63,8 +63,8 @@ public:
     InheritedHelperInterfaceImpl() {}
     InheritedHelperInterfaceImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxContext( xContext ) {}
     InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxParent( xParent ), mxContext( xContext ) {}
-    virtual rtl::OUString getServiceImplName() = 0;
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames() = 0;
+    virtual OUString getServiceImplName() = 0;
+    virtual css::uno::Sequence<OUString> getServiceNames() = 0;
 
     // XHelperInterface Methods
     virtual ::sal_Int32 SAL_CALL getCreator() throw (css::script::BasicErrorException, css::uno::RuntimeException)
@@ -77,24 +77,24 @@ public:
             // The application could certainly be passed around in the context - seems
             // to make sense
             css::uno::Reference< css::container::XNameAccess > xNameAccess( mxContext, css::uno::UNO_QUERY_THROW );
-            return xNameAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Application" ) ) );
+            return xNameAccess->getByName( "Application" );
     }
 
     // XServiceInfo Methods
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) { return getServiceImplName(); }
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (css::uno::RuntimeException)
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) { return getServiceImplName(); }
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException)
     {
-        css::uno::Sequence< rtl::OUString > sServices = getSupportedServiceNames();
-        const rtl::OUString* pStart = sServices.getConstArray();
-        const rtl::OUString* pEnd = pStart + sServices.getLength();
+        css::uno::Sequence< OUString > sServices = getSupportedServiceNames();
+        const OUString* pStart = sServices.getConstArray();
+        const OUString* pEnd = pStart + sServices.getLength();
         for ( ; pStart != pEnd ; ++pStart )
             if ( (*pStart).equals( ServiceName ) )
                 return sal_True;
         return sal_False;
     }
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException)
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException)
     {
-        css::uno::Sequence< rtl::OUString > aNames = getServiceNames();
+        css::uno::Sequence< OUString > aNames = getServiceNames();
         return aNames;
     }
  };
@@ -136,9 +136,9 @@ public:
     implementation name.
  */
 #define VBAHELPER_IMPL_GETSERVICEIMPLNAME( classname ) \
-::rtl::OUString classname::getServiceImplName() \
+OUString classname::getServiceImplName() \
 { \
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( #classname ) ); \
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( #classname ) ); \
 }
 
 // ----------------------------------------------------------------------------
@@ -147,13 +147,13 @@ public:
     service name.
  */
 #define VBAHELPER_IMPL_GETSERVICENAMES( classname, servicename ) \
-css::uno::Sequence< ::rtl::OUString > classname::getServiceNames() \
+css::uno::Sequence< OUString > classname::getServiceNames() \
 { \
-    static css::uno::Sequence< ::rtl::OUString > saServiceNames; \
+    static css::uno::Sequence< OUString > saServiceNames; \
     if( saServiceNames.getLength() == 0 ) \
     { \
         saServiceNames.realloc( 1 ); \
-        saServiceNames[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( servicename ) ); \
+        saServiceNames[ 0 ] = servicename; \
     } \
     return saServiceNames; \
 }
@@ -165,8 +165,8 @@ css::uno::Sequence< ::rtl::OUString > classname::getServiceNames() \
     declaration.
  */
 #define VBAHELPER_DECL_XHELPERINTERFACE \
-    virtual ::rtl::OUString getServiceImplName(); \
-    virtual css::uno::Sequence< ::rtl::OUString > getServiceNames();
+    virtual OUString getServiceImplName(); \
+    virtual css::uno::Sequence< OUString > getServiceNames();
 
 // ----------------------------------------------------------------------------
 

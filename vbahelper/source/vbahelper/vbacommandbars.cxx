@@ -39,7 +39,7 @@ class CommandBarEnumeration : public CommandBarEnumeration_BASE
     uno::Reference< XHelperInterface > m_xParent;
     uno::Reference< uno::XComponentContext > m_xContext;
     VbaCommandBarHelperRef m_pCBarHelper;
-    uno::Sequence< rtl::OUString > m_sNames;
+    uno::Sequence< OUString > m_sNames;
     sal_Int32 m_nCurrentPosition;
 public:
     CommandBarEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper) throw ( uno::RuntimeException ) : m_xParent( xParent ), m_xContext( xContext ), m_pCBarHelper( pHelper ) , m_nCurrentPosition( 0 )
@@ -58,7 +58,7 @@ public:
         // FIXME: should be add menubar
         if( hasMoreElements() )
         {
-            rtl::OUString sResourceUrl( m_sNames[ m_nCurrentPosition++ ] );
+            OUString sResourceUrl( m_sNames[ m_nCurrentPosition++ ] );
             if( sResourceUrl.indexOf( "private:resource/toolbar/" ) != -1 )
             {
                 uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
@@ -100,9 +100,9 @@ uno::Any
 ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
 {
     // aSource should be a name at this time, because of the class is API wrapper.
-    rtl::OUString sResourceUrl;
+    OUString sResourceUrl;
     uno::Reference< container::XIndexAccess > xBarSettings;
-    rtl::OUString sBarName;
+    OUString sBarName;
     sal_Bool bMenu = sal_False;
     uno::Any aRet;
 
@@ -114,7 +114,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Worksheet Menu Bar") ) )
             {
                 // spreadsheet menu bar
-                sResourceUrl = rtl::OUString( ITEM_MENUBAR_URL );
+                sResourceUrl = ITEM_MENUBAR_URL;
                 bMenu = sal_True;
             }
             else if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Cell") ) )
@@ -128,7 +128,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Menu Bar") ) )
             {
                 // text processor menu bar
-                sResourceUrl = rtl::OUString( ITEM_MENUBAR_URL );
+                sResourceUrl = ITEM_MENUBAR_URL;
                 bMenu = sal_True;
             }
         }
@@ -148,7 +148,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
     }
 
     if( !aRet.hasValue() )
-        throw uno::RuntimeException( rtl::OUString( "Toolbar do not exist" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Toolbar do not exist" , uno::Reference< uno::XInterface >() );
 
     return aRet;
 }
@@ -160,20 +160,20 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
     // FIXME: only support to add Toolbar
     // Position - MsoBar MenuBar - sal_Bool
     // Currently only the Name is supported.
-    rtl::OUString sName;
+    OUString sName;
     if( Name.hasValue() )
         Name >>= sName;
 
-    rtl::OUString sResourceUrl;
+    OUString sResourceUrl;
     if( !sName.isEmpty() )
     {
         sResourceUrl = m_pCBarHelper->findToolbarByName( m_xNameAccess, sName );
         if( !sResourceUrl.isEmpty() )
-            throw uno::RuntimeException( rtl::OUString( "Toolbar exists" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "Toolbar exists" , uno::Reference< uno::XInterface >() );
     }
     else
     {
-        sName = rtl::OUString( "Custom1" );
+        sName = "Custom1";
     }
 
     sResourceUrl = VbaCommandBarHelper::generateCustomURL();
@@ -187,7 +187,7 @@ ScVbaCommandBars::getCount() throw(css::uno::RuntimeException)
 {
     // Filter out all toolbars from the window collection
     sal_Int32 nCount = 1; // there is a Menubar in OOo
-    uno::Sequence< ::rtl::OUString > allNames = m_xNameAccess->getElementNames();
+    uno::Sequence< ::OUString > allNames = m_xNameAccess->getElementNames();
     for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
     {
         if(allNames[i].indexOf( "private:resource/toolbar/" ) != -1 )
@@ -214,9 +214,9 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
     {
         uno::Any aSource;
         if( m_pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
-            aSource <<= rtl::OUString("Worksheet Menu Bar");
+            aSource <<= OUString("Worksheet Menu Bar");
         else if( m_pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
-            aSource <<= rtl::OUString("Menu Bar");
+            aSource <<= OUString("Menu Bar");
         if( aSource.hasValue() )
             return createCollectionObject( aSource );
     }
@@ -224,20 +224,20 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 ScVbaCommandBars::getServiceImplName()
 {
-    return rtl::OUString("ScVbaCommandBars");
+    return OUString("ScVbaCommandBars");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 ScVbaCommandBars::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBars"  );
+        aServiceNames[ 0 ] = "ooo.vba.CommandBars";
     }
     return aServiceNames;
 }

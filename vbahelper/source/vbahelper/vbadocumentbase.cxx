@@ -55,10 +55,10 @@ VbaDocumentBase::VbaDocumentBase( uno::Sequence< uno::Any> const & args,
 {
 }
 
-::rtl::OUString
+OUString
 VbaDocumentBase::getName() throw (uno::RuntimeException)
 {
-    rtl::OUString sName = getModel()->getURL();
+    OUString sName = getModel()->getURL();
     if ( !sName.isEmpty() )
     {
 
@@ -73,12 +73,12 @@ VbaDocumentBase::getName() throw (uno::RuntimeException)
     }
     return sName;
 }
-::rtl::OUString
+OUString
 VbaDocumentBase::getPath() throw (uno::RuntimeException)
 {
     INetURLObject aURL( getModel()->getURL() );
-    rtl::OUString sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
-    rtl::OUString sPath;
+    OUString sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    OUString sPath;
     if( !sURL.isEmpty() )
     {
        sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
@@ -87,10 +87,10 @@ VbaDocumentBase::getPath() throw (uno::RuntimeException)
     return sPath;
 }
 
-::rtl::OUString
+OUString
 VbaDocumentBase::getFullName() throw (uno::RuntimeException)
 {
-    rtl::OUString sPath = getName();
+    OUString sPath = getName();
     //::osl::File::getSystemPathFromFileURL( getModel()->getURL(), sPath );
     return sPath;
 }
@@ -100,7 +100,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
                       const uno::Any &rRouteArg ) throw (uno::RuntimeException)
 {
     sal_Bool bSaveChanges = sal_False;
-    rtl::OUString aFileName;
+    OUString aFileName;
     sal_Bool bRouteWorkbook = sal_True;
 
     rSaveArg >>= bSaveChanges;
@@ -113,9 +113,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
     {
         if( xStorable->isReadonly() )
         {
-            throw uno::RuntimeException(::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "Unable to save to a read only file ") ),
-                            uno::Reference< XInterface >() );
+            throw uno::RuntimeException("Unable to save to a read only file ", uno::Reference< XInterface >() );
         }
         if( bFileName )
             xStorable->storeAsURL( aFileName, uno::Sequence< beans::PropertyValue >(0) );
@@ -136,11 +134,11 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
         uno::Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create(mxContext) );
 
         util::URL aURL;
-        aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseDoc" ) );
+        aURL.Complete = ".uno:CloseDoc";
         xURLTransformer->parseStrict( aURL );
 
         uno::Reference< css::frame::XDispatch > xDispatch(
-                xDispatchProvider->queryDispatch( aURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ), 0 ),
+                xDispatchProvider->queryDispatch( aURL, "_self" , 0 ),
                 uno::UNO_SET_THROW );
         xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
         bUIClose = sal_True;
@@ -193,30 +191,28 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
 void
 VbaDocumentBase::Protect( const uno::Any &aPassword ) throw (uno::RuntimeException)
 {
-    rtl::OUString rPassword;
+    OUString rPassword;
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
     OSL_TRACE("Workbook::Protect stub");
     if(  aPassword >>= rPassword )
         xProt->protect( rPassword );
     else
-        xProt->protect( rtl::OUString() );
+        xProt->protect( OUString() );
 }
 
 void
 VbaDocumentBase::Unprotect( const uno::Any &aPassword ) throw (uno::RuntimeException)
 {
-    rtl::OUString rPassword;
+    OUString rPassword;
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
     if( !xProt->isProtected() )
-        throw uno::RuntimeException(::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM( "File is already unprotected" ) ),
-            uno::Reference< XInterface >() );
+        throw uno::RuntimeException("File is already unprotected", uno::Reference< XInterface >() );
     else
     {
         if( aPassword >>= rPassword )
             xProt->unprotect( rPassword );
         else
-            xProt->unprotect( rtl::OUString() );
+            xProt->unprotect( OUString() );
     }
 }
 
@@ -236,7 +232,7 @@ VbaDocumentBase::setSaved( sal_Bool bSave ) throw (uno::RuntimeException)
     {
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't change modified state of model!" ) ),
+                "Can't change modified state of model!",
                 uno::Reference< uno::XInterface >(),
                 aCaught );
     }
@@ -252,7 +248,7 @@ VbaDocumentBase::getSaved() throw (uno::RuntimeException)
 void
 VbaDocumentBase::Save() throw (uno::RuntimeException)
 {
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
+    OUString url(".uno:Save");
     uno::Reference< frame::XModel > xModel = getModel();
     dispatchRequests(xModel,url);
 }
@@ -284,16 +280,16 @@ VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
     return uno::Any( mxVBProject );
 }
 
-rtl::OUString
+OUString
 VbaDocumentBase::getServiceImplName()
 {
-    return rtl::OUString( "VbaDocumentBase" );
+    return OUString( "VbaDocumentBase" );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 VbaDocumentBase::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
