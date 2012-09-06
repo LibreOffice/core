@@ -2044,6 +2044,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
                 ScDocument* pDoc = pData->GetDocument();
 
+                if(pDoc->IsTabProtected(pData->GetTabNo()))
+                {
+                    pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
+                    break;
+                }
+
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
                 if(aRangeList.empty())
                 {
@@ -2083,6 +2089,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScViewData* pData = GetViewData();
                 pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
                 ScDocument* pDoc = pData->GetDocument();
+
+                if(pDoc->IsTabProtected(pData->GetTabNo()))
+                {
+                    pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
+                    break;
+                }
 
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
                 if(aRangeList.empty())

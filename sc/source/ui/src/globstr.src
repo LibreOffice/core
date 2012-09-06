@@ -1895,5 +1895,9 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Formula is";
     };
+    String STR_ERR_CONDFORMAT_PROTECTED
+    {
+        Text [ en-US ] = "Conditional Formats can not be created, deleted or changed in protected sheets!";
+    };
 };
 

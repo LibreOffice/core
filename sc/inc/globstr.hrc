@@ -600,7 +600,9 @@
 #define STR_COND_UNIQUE             475
 #define STR_COND_DUPLICATE          476
 
-#define STR_COUNT                   477
+#define STR_ERR_CONDFORMAT_PROTECTED 477
+
+#define STR_COUNT                   478
 
 
 #endif
