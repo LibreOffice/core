@@ -1,6 +1,0 @@
-
-..\%__SRC%\lib\*.a %_DEST%\lib\*.a
-..\%__SRC%\slb\*.lib %_DEST%\lib\*.lib
-
-mkdir: %_DEST%\inc\libcmis
-..\%__SRC%\misc\build\libcmis*\src\libcmis\*.hxx %_DEST%\inc\libcmis\*.hxx

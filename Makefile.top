@@ -87,6 +87,7 @@ jvmaccess\
 jvmfwk\
 l10ntools\
 libcdr\
+libcmis\
 libmspub\
 libvisio\
 libwpd\
@@ -209,7 +210,6 @@ instsetoo_native\
 jfreereport\
 jpeg\
 languagetool\
-libcmis\
 libcroco\
 libexttextcat\
 libgsf\

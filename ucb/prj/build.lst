@@ -1,4 +1,4 @@
-uc ucb : cppuhelper CURL:curl OPENSSL:openssl NEON:neon LIBXML2:libxml2 LIBXSLT:libxslt LIBCMIS:libcmis offapi sal salhelper ucbhelper udkapi comphelper tools NULL
+uc ucb : cppuhelper CURL:curl OPENSSL:openssl NEON:neon LIBXML2:libxml2 LIBXSLT:libxslt libcmis offapi sal salhelper ucbhelper udkapi comphelper tools NULL
 uc ucb\prj			nmake	-	all	uc_prj NULL
 #uc      ucb\qa\complex\ucb              nmake   -       all     uc_complex_ucb uc_inc NULL
 # fails, please fix

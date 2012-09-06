@@ -74,6 +74,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	io \
 	javaunohelper \
 	libcdr \
+	libcmis \
 	libmspub \
 	libvisio \
 	libwpd \

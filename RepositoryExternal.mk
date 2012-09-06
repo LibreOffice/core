@@ -349,9 +349,9 @@ ifeq ($(SYSTEM_LIBCMIS),YES)
 define gb_LinkTarget__use_cmis
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(LIBCMIS_CFLAGS) \
+	$(CMIS_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LIBCMIS_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(CMIS_LIBS))
 
 endef
 
