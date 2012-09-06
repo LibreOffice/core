@@ -359,6 +359,8 @@ SwDoc::SwDoc()
     mbUnbreakableNumberings                 = false;
     mbFloattableNomargins                   = false;
     mbClippedPictures                       = false;
+    mEmbedFonts                             = false;
+    mEmbedSystemFonts                       = false;
 
     //
     // COMPATIBILITY FLAGS END

@@ -128,7 +128,9 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_UNBREAKABLE_NUMBERINGS,
     HANDLE_STYLES_NODEFAULT,
     HANDLE_FLOATTABLE_NOMARGINS,
-    HANDLE_CLIPPED_PICTURES
+    HANDLE_CLIPPED_PICTURES,
+    HANDLE_EMBED_FONTS,
+    HANDLE_EMBED_SYSTEM_FONTS
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -194,6 +196,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("StylesNoDefault"), HANDLE_STYLES_NODEFAULT, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("FloattableNomargins"), HANDLE_FLOATTABLE_NOMARGINS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ClippedPictures"), HANDLE_CLIPPED_PICTURES, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("EmbedFonts"), HANDLE_EMBED_FONTS, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -771,6 +775,17 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::CLIPPED_PICTURES, bTmp);
         }
         break;
+        case HANDLE_EMBED_FONTS:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::EMBED_FONTS, bTmp);
+        }
+        case HANDLE_EMBED_SYSTEM_FONTS:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::EMBED_SYSTEM_FONTS, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1158,6 +1173,17 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_CLIPPED_PICTURES:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::CLIPPED_PICTURES );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_EMBED_FONTS:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::EMBED_FONTS );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        case HANDLE_EMBED_SYSTEM_FONTS:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::EMBED_SYSTEM_FONTS );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

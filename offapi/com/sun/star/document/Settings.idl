@@ -249,6 +249,21 @@ published service Settings
      */
     [optional, property] boolean AddExternalLeading;
 
+    // Writer, maybe later others
+    /**
+       Whether to embed fonts used by the document (see e.g. handling
+       of OOXML embedRegular etc.)
+       @since LibreOffice 3.7
+     */
+    [optional, property] boolean EmbedFonts;
+    // Writer, maybe later others
+    /**
+       Whether to embed also system fonts used by the document.
+       Does not have any effect if EmbedFonts is false.
+       @since LibreOffice 3.7
+     */
+    [optional, property] boolean EmbedSystemFonts;
+
 };
 
 

@@ -65,6 +65,9 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
 
     bool GetUsePrinterMetrics() const;
 
+    bool GetEmbedTrueTypeFonts() const;
+    bool GetEmbedSystemFonts() const;
+
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 
  private:

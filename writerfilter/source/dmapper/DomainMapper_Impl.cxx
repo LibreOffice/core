@@ -3665,11 +3665,13 @@ void DomainMapper_Impl::ApplySettingsTable()
                 xViewDataSupplier->setViewData(xIndexAccess);
             }
 
+            uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
             if (m_pSettingsTable->GetUsePrinterMetrics())
-            {
-                uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
                 xSettings->setPropertyValue("PrinterIndependentLayout", uno::makeAny(document::PrinterIndependentLayout::DISABLED));
-            }
+            if( m_pSettingsTable->GetEmbedTrueTypeFonts())
+                xSettings->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBED_FONTS ), uno::makeAny(true) );
+            if( m_pSettingsTable->GetEmbedSystemFonts())
+                xSettings->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
         }
         catch(const uno::Exception&)
         {
