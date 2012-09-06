@@ -326,8 +326,13 @@ else # !SYSTEM_BOOST
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	boostdatetime \
+))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	boostthread \
 ))
+endif
 
 define gb_LinkTarget__use_boostdatetime
 $(call gb_LinkTarget_use_static_libraries,$(1),\

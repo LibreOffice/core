@@ -13,7 +13,15 @@ ifeq ($(SYSTEM_BOOST),NO)
 
 $(eval $(call gb_Module_add_targets,boost,\
 	StaticLibrary_boostdatetime \
+))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,boost,\
 	StaticLibrary_boostthread \
+))
+endif
+
+$(eval $(call gb_Module_add_targets,boost,\
 	UnpackedTarball_boost \
 ))
 
@@ -24,6 +32,6 @@ $(eval $(call gb_Module_add_targets,boost,\
 ))
 endif
 
-endif
+endif # SYSTEM_BOOST
 
 # vim: set noet sw=4 ts=4:
