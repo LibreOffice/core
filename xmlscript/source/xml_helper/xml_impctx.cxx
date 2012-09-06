@@ -596,7 +596,7 @@ void DocumentHandlerImpl::startElement(
         {
             OUString const & rQAttributeName = pQNames[ nPos ];
             OSL_ENSURE(
-                rQAttributeName.compareToAscii( "xmlns:" ) != 0,
+                !rQAttributeName.startsWith( "xmlns:" ),
                 "### unexpected xmlns!" );
 
             // collect attribute's uid and current prefix
