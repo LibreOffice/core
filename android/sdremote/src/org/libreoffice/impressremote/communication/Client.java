@@ -95,6 +95,7 @@ public abstract class Client {
             e1.printStackTrace();
         } finally {
             latestInstance = null;
+            onDisconnect();
         }
 
     }
@@ -108,10 +109,7 @@ public abstract class Client {
     }
 
     /**
-     * Send a valid JSON string to the server.
-     *
-     * @param command
-     *            Must be a valid JSON string.
+     * Send a valid command to the Server.
      */
     public void sendCommand(String command) {
         try {
@@ -123,6 +121,13 @@ public abstract class Client {
             // I.e. connection closed. This will be dealt with by the listening
             // loop.
         }
+    }
+
+    /**
+     * Called after the Client disconnects. Can be extended to allow for
+     * cleaning up bluetooth properties etc.
+     */
+    protected void onDisconnect() {
     }
 
 }

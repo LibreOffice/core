@@ -25,14 +25,22 @@ import android.support.v4.content.LocalBroadcastManager;
  */
 public class BluetoothClient extends Client {
 
+    private boolean mBluetoothWasEnabled;
+    private BluetoothAdapter mAdapter;
+
     public BluetoothClient(Server aServer,
                     CommunicationService aCommunicationService) {
         super(aServer, aCommunicationService);
         try {
-            BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
-            BluetoothDevice aDevice = aAdapter.getRemoteDevice(aServer
+            mAdapter = BluetoothAdapter.getDefaultAdapter();
+            mBluetoothWasEnabled = mAdapter.isEnabled();
+            if (!mBluetoothWasEnabled) {
+                mAdapter.enable();
+            }
+
+            BluetoothDevice aDevice = mAdapter.getRemoteDevice(aServer
                             .getAddress());
-            aAdapter.cancelDiscovery();
+            mAdapter.cancelDiscovery();
             BluetoothSocket aSocket = aDevice
                             .createRfcommSocketToServiceRecord(UUID
                                             .fromString("00001101-0000-1000-8000-00805F9B34FB"));
@@ -113,6 +121,12 @@ public class BluetoothClient extends Client {
         //            // TODO Auto-generated catch block
         //            e.printStackTrace();
         //        }
+    }
+
+    protected void onDisconnect() {
+        if (!mBluetoothWasEnabled) {
+            mAdapter.disable();
+        }
     }
 
 }

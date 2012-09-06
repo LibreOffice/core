@@ -31,12 +31,10 @@ public class BluetoothFinder {
         if (mAdapter == null) {
             return; // No bluetooth adapter found (emulator, special devices)
         }
-        System.out.println("BT:Discovery starting");
         IntentFilter aFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         aFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        aFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         mContext.registerReceiver(mReceiver, aFilter);
-
-        mAdapter.enable();
         mAdapter.startDiscovery();
     }
 
@@ -62,31 +60,35 @@ public class BluetoothFinder {
 
         @Override
         public void onReceive(Context context, Intent aIntent) {
-            // TODO Auto-generated method stub
             if (aIntent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
+                System.out.println("Found");
                 BluetoothDevice aDevice = (BluetoothDevice) aIntent.getExtras()
                                 .get(BluetoothDevice.EXTRA_DEVICE);
                 Server aServer = new Server(Protocol.BLUETOOTH,
                                 aDevice.getAddress(), aDevice.getName(),
                                 System.currentTimeMillis());
                 mServerList.put(aServer.getAddress(), aServer);
-                System.out.println("Added " + aServer.getName());
-                System.out.println("Now we have: " + mServerList.size());
                 Intent aNIntent = new Intent(
                                 CommunicationService.MSG_SERVERLIST_CHANGED);
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(
                                 aNIntent);
             } else if (aIntent.getAction().equals(
-                            BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+                            BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+                            || aIntent.getAction()
+                                            .equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 // Start discovery again after a small delay.
-                Handler aHandler = new Handler();
-                aHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.startDiscovery();
-                    }
-                }, 1000 * 15);
-                ;
+                // but check whether device is on incase the user manually
+                // disabled bluetooth
+                if (mAdapter.isEnabled()) {
+                    Handler aHandler = new Handler();
+                    aHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("Looping");
+
+                        }
+                    }, 1000 * 15);
+                }
             }
 
         }

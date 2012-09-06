@@ -102,14 +102,29 @@ public class CommunicationService extends Service implements Runnable {
 
     }
 
+    private boolean mBluetoothPreviouslyEnabled;
+
     public void startSearching() {
         mNetworkFinder.startFinding();
-        mBluetoothFinder.startFinding();
+        BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (aAdapter != null) {
+            mBluetoothPreviouslyEnabled = aAdapter.isEnabled();
+            if (!mBluetoothPreviouslyEnabled)
+                aAdapter.enable();
+            mBluetoothFinder.startFinding();
+        }
     }
 
     public void stopSearching() {
         mNetworkFinder.stopFinding();
         mBluetoothFinder.stopFinding();
+        BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (aAdapter != null) {
+            if (!mBluetoothPreviouslyEnabled) {
+
+                aAdapter.disable();
+            }
+        }
     }
 
     public void connectTo(Server aServer) {
