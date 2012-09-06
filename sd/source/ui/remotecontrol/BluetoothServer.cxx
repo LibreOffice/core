@@ -64,7 +64,9 @@ void BluetoothServer::execute()
     }
 
     gboolean aResult;
-    DBusGObjectPath *aAdapterPath = NULL;
+    // The following should be a DBusGObjectPath, however the necessary
+    // typedef is missing in older version of dbus-glib.
+    char *aAdapterPath = NULL;
     aResult = dbus_g_proxy_call( aManager, "DefaultAdapter", &aError,
                                  G_TYPE_INVALID,
                                  DBUS_TYPE_G_OBJECT_PATH, &aAdapterPath,

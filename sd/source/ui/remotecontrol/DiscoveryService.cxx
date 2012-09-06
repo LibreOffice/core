@@ -65,14 +65,16 @@ DiscoveryService::~DiscoveryService()
 void DiscoveryService::execute()
 {
     char aBuffer[BUFFER_SIZE];
-
+    fprintf( stderr,"Created\n" );
     while ( true )
     {
         memset( aBuffer, 0, sizeof(char) * BUFFER_SIZE );
         sockaddr_in aAddr;
         socklen_t aLen = sizeof( aAddr );
+            fprintf( stderr,"REcing\n" );
         recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
-
+            fprintf( stderr,"Reced\n" );
+        fprintf( stderr, "Received from\n" );
         OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
         if ( aString.compareTo( "LOREMOTE_SEARCH" ) == 0 )
         {
