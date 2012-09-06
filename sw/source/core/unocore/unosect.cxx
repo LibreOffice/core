@@ -430,29 +430,28 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     SwSection *const pRet =
         pDoc->InsertSwSection( aPam, aSect, 0, aSet.Count() ? &aSet : 0 );
-    pRet->GetFmt()->Add(m_pImpl.get());
-    pRet->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
-
-    // #97450# XML import must hide sections depending on their old
-    //         condition status
-    if (m_pImpl->m_pProps->m_sCondition.getLength() != 0)
+    if( pRet )
     {
-        pRet->SetCondHidden(m_pImpl->m_pProps->m_bCondHidden);
-    }
+        pRet->GetFmt()->Add(m_pImpl.get());
+        pRet->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
 
-    // set update type if DDE link (and connect, if necessary)
-    if (m_pImpl->m_pProps->m_bDDE)
-    {
-        if (! pRet->IsConnected())
+        // XML import must hide sections depending on their old condition status
+        if (m_pImpl->m_pProps->m_sCondition.getLength() != 0)
+            pRet->SetCondHidden(m_pImpl->m_pProps->m_bCondHidden);
+
+        // set update type if DDE link (and connect, if necessary)
+        if (m_pImpl->m_pProps->m_bDDE)
         {
-            pRet->CreateLink(CREATE_CONNECT);
+            if (! pRet->IsConnected())
+                pRet->CreateLink(CREATE_CONNECT);
+
+            pRet->SetUpdateType( static_cast< sal_uInt16 >(
+                (m_pImpl->m_pProps->m_bUpdateType) ?
+                    sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
         }
-        pRet->SetUpdateType( static_cast< sal_uInt16 >(
-            (m_pImpl->m_pProps->m_bUpdateType) ?
-                sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
     }
 
-    // Undo-Klammerung hier beenden
+    // end section undo here
     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
     m_pImpl->m_pProps.reset();
     m_pImpl->m_bIsDescriptor = false;

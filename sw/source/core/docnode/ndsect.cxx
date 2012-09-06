@@ -448,8 +448,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
         }
         else if( !pSectNd && pEndSectNd )
         {
-            // versuche eine umschliessende Section zu erzeugen
-            // Aber, nur wenn das Ende am Section Ende liegt!
+            // try to create a section enclosing it if the end is at the section end
             nRet = 0;
             if( pEnd->nContent.GetIndex() == pCNd->Len() )
             {
@@ -475,8 +474,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
         }
         else if( pSectNd && !pEndSectNd )
         {
-            // versuche eine umschliessende Section zu erzeugen
-            // Aber, nur wenn der Start am Section Anfang liegt!
+            // try to create a section enclosing it if the start is at the section start
             nRet = 0;
             if( !pStt->nContent.GetIndex() )
             {
