@@ -25,9 +25,6 @@
 #include <basic/sbxfac.hxx>
 #include "basicdllapi.h"
 
-class StarBASIC;
-class SbStdFactory;
-
 //--------------------
 // class SbStdFactory
 //--------------------
