@@ -125,20 +125,20 @@ VbaWindowBase::setWidth( sal_Int32 _width ) throw (uno::RuntimeException)
     setPosSize( getWindow(), _width, css::awt::PosSize::WIDTH );
 }
 
-rtl::OUString
+OUString
 VbaWindowBase::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaWindowBase"));
+    return OUString("VbaWindowBase");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 VbaWindowBase::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VbaWindowBase" ) );
+        aServiceNames[ 0 ] = "ooo.vba.VbaWindowBase";
     }
     return aServiceNames;
 }
