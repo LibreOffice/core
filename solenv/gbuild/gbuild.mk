@@ -76,12 +76,6 @@ else
 gb_PRODUCT := $(false)
 endif
 
-ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
-gb_SYMBOL := $(true)
-else
-gb_SYMBOL := $(false)
-endif
-
 gb_TIMELOG := 0
 ifneq ($(strip $(TIMELOG)$(timelog)),)
 gb_TIMELOG := 1
@@ -117,8 +111,18 @@ ENABLE_DEBUG_FOR := all
 endif
 endif
 
+ifeq ($(or $(ENABLE_SYMBOLS),$(enable_symbols)),FALSE)
+gb_SYMBOL := $(false)
+else
+ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
+gb_SYMBOL := $(true)
+else
 ifneq ($(gb_DEBUGLEVEL),0)
 gb_SYMBOL := $(true)
+else
+gb_SYMBOL := $(false)
+endif
+endif
 endif
 
 ifneq ($(nodep),)
