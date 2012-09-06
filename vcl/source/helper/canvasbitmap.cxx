@@ -1335,7 +1335,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( con
                     sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
-            m_pBmpAcc->SetPixelOnData(pColors,0,aCol2);
+            m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
             pColors   += nNonAlphaBytes;
             *pColors++ = sal_uInt8(255);
         }
@@ -1384,7 +1384,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
                     sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
-            m_pBmpAcc->SetPixelOnData(pColors,0,aCol2);
+            m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
             pColors   += nNonAlphaBytes;
             *pColors++ = 255 - toByteColor(rgbColor[i].Alpha);
         }
@@ -1434,7 +1434,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
                     sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
-            m_pBmpAcc->SetPixelOnData(pColors,0,aCol2);
+            m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
             pColors   += nNonAlphaBytes;
             *pColors++ = 255 - toByteColor(nAlpha);
         }
