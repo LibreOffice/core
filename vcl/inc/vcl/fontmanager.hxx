@@ -153,7 +153,7 @@ class FontCache;
 
 class FontCache;
 
-class VCL_PLUGIN_PUBLIC PrintFontManager
+class VCL_DLLPUBLIC PrintFontManager
 {
     struct PrintFont;
     struct TrueTypeFontFile;
