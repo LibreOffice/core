@@ -141,6 +141,24 @@
       "revId": "0f693c07ff0922359a7e62d67661abf221e9279b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOH///+Y\u003d",
+        "filename": "basctl/source/basicide/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-09-06T14:43:57Z",
+      "side": 1,
+      "message": "Initially I didn\u0027t understand your concern about the state of bWhatever, now I see what you are talking about, However I  thought it should be implicit that wherever you \u0027return\u0027 from the method then you need to also correctly set the guard state.\nRegardless imo you should return as early as possible, when looking at the method you should see immediately that it is guarded and not have to read a couple of statements including a test that really are not necessary to perform. This is nothing about performance, it\u0027s just about clarity ( I only mentioned moving that test up because I found it a little confusing myself ) Then again I am easily confused",
+      "parentUuid": "AAAAOH///+k\u003d",
+      "revId": "0f693c07ff0922359a7e62d67661abf221e9279b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
