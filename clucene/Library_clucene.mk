@@ -63,7 +63,7 @@ $(eval $(call gb_Library_use_libraries,clucene,\
 ))
 endif
 
-$(eval $(call gb_Library_set_cxx_suffix,clucene,cpp))
+$(eval $(call gb_Library_set_generated_cxx_suffix,clucene,cpp))
 
 $(eval $(call gb_Library_add_generated_exception_objects,clucene,\
     UnpackedTarball/clucene/src/shared/CLucene/SharedHeader \

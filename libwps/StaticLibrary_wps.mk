@@ -19,7 +19,7 @@ $(eval $(call gb_StaticLibrary_use_externals,wpslib,\
 	wpd \
 ))
 
-$(eval $(call gb_StaticLibrary_set_cxx_suffix,wpslib,cpp))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,wpslib,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,wpslib,\
 	UnpackedTarball/wps/src/lib/libwps_internal \

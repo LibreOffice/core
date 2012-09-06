@@ -13,7 +13,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,wpdlib,wpd))
 
 $(eval $(call gb_StaticLibrary_use_package,wpdlib,libwpd_inc))
 
-$(eval $(call gb_StaticLibrary_set_cxx_suffix,wpdlib,cpp))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,wpdlib,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,wpdlib,\
 	UnpackedTarball/wpd/src/lib/libwpd_internal \

@@ -13,7 +13,7 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,boostdatetime))
 	
 $(eval $(call gb_StaticLibrary_use_unpacked,boostdatetime,boost))
 
-$(eval $(call gb_StaticLibrary_set_cxx_suffix,boostdatetime,cpp))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boostdatetime,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,boostdatetime,\
 	UnpackedTarball/boost/libs/date_time/src/gregorian/date_generators \

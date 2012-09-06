@@ -13,7 +13,7 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,boostthread))
 	
 $(eval $(call gb_StaticLibrary_use_unpacked,boostthread,boost))
 
-$(eval $(call gb_StaticLibrary_set_cxx_suffix,boostthread,cpp))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boostthread,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,boostthread,\
 	UnpackedTarball/boost/libs/thread/src/win32/thread \

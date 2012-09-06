@@ -1129,8 +1129,8 @@ endef
 #
 # This is useful for external libraries.
 #
-# gb_LinkTarget_set_cxx_suffix linktarget used-suffix
-define gb_LinkTarget_set_cxx_suffix
+# gb_LinkTarget_set_generated_cxx_suffix linktarget used-suffix
+define gb_LinkTarget_set_generated_cxx_suffix
 gb_LinkTarget_CXX_SUFFIX_$(1) := $(2)
 
 endef

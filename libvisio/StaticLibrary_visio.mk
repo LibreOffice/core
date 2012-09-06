@@ -18,7 +18,7 @@ $(eval $(call gb_StaticLibrary_use_externals,visiolib,\
 	wpg \
 ))
 
-$(eval $(call gb_StaticLibrary_set_cxx_suffix,visiolib,cpp))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,visiolib,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,visiolib,\
 	UnpackedTarball/visio/src/lib/libvisio_utils \
