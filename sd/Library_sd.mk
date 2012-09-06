@@ -66,7 +66,7 @@ $(eval $(call gb_Library_add_defs,sd,\
 ))
 
 ifneq ($(strip $(dbg_anim_log)$(DBG_ANIM_LOG)),)
-$(eval $(call gb_Library_set_defs,sd,\
+$(eval $(call gb_Library_add_defs,sd,\
     $$(DEFS) \
     -DDBG_ANIM_LOG \
 ))
