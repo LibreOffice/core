@@ -34,6 +34,7 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
+#include "oox/drawingml/transform2dcontext.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -225,8 +226,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
         }
         case PPT_TOKEN( txXfrm ):
         {
-            AttributeList aAttribs( xAttribs );
-            mpShapePtr->getTextBody()->getTextProperties().moRotation = aAttribs.getInteger( XML_rot );
+            xRet = new oox::drawingml::Transform2DContext( *this, xAttribs, *mpShapePtr, true );
             break;
         }
     }

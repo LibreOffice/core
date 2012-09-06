@@ -36,6 +36,8 @@ struct TextBodyProperties
     OptValue< sal_Int32 >                           moRotation;
     OptValue< sal_Int32 >                           moVert;
     boost::optional< sal_Int32 >                    moInsets[4];
+    boost::optional< sal_Int32 >                    moTextOffX;
+    boost::optional< sal_Int32 >                    moTextOffY;
     ::com::sun::star::drawing::TextVerticalAdjust   meVA;
 
     explicit            TextBodyProperties();
