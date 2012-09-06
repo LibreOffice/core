@@ -725,7 +725,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_GROUPBOX:
                         {
                 if ( bFrameControl )
-                    pNewWindow = new toolkit::ScrollableDialog< GroupBox >( pParent, nWinBits );
+                    pNewWindow = new toolkit::ScrollableWrapper< GroupBox >( pParent, nWinBits );
                 else
                     pNewWindow = new GroupBox( pParent, nWinBits );
                                 if ( bFrameControl )
@@ -790,7 +790,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // Modal/Modeless nur durch Show/Execute
                 if ( (pParent == NULL ) && ( rDescriptor.ParentIndex == -1 ) )
                     pParent = DIALOG_NO_PARENT;
-                pNewWindow = new toolkit::ScrollableDialog<Dialog>( pParent, nWinBits );
+                pNewWindow = new toolkit::ScrollableWrapper<Dialog>( pParent, nWinBits );
                 // #i70217# Don't always create a new component object. It's possible that VCL has called
                 // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
                 // which creates a component object.

@@ -36,6 +36,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
+#include "toolkit/awt/scrollabledialog.hxx"
+#include <toolkit/helper/property.hxx>
 
 //  ----------------------------------------------------
 //  class VCLXContainer
@@ -232,4 +234,60 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
     }
 }
 
+void SAL_CALL VCLXContainer::setProperty(
+    const ::rtl::OUString& PropertyName,
+    const ::com::sun::star::uno::Any& Value )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_SCROLLHEIGHT:
+        case BASEPROPERTY_SCROLLWIDTH:
+        case BASEPROPERTY_SCROLLTOP:
+        case BASEPROPERTY_SCROLLLEFT:
+        {
+            sal_Int32 nVal =0;
+            Value >>= nVal;
+            Size aSize( nVal, nVal );
+            Window* pWindow = GetWindow();
+            MapMode aMode( MAP_APPFONT );
+            toolkit::ScrollableInterface* pScrollable = dynamic_cast< toolkit::ScrollableInterface* >( pWindow );
+            if ( pWindow && pScrollable )
+            {
+                OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+                if ( !pDev )
+                    pDev = pWindow->GetParent();
+
+                aSize = pDev->LogicToPixel( aSize, aMode );
+                switch ( nPropType )
+                {
+                    case BASEPROPERTY_SCROLLHEIGHT:
+                        pScrollable->SetScrollHeight( aSize.Height() );
+                        break;
+                    case BASEPROPERTY_SCROLLWIDTH:
+                        pScrollable->SetScrollWidth( aSize.Width() );
+                        break;
+                    case BASEPROPERTY_SCROLLTOP:
+                        pScrollable->SetScrollTop( aSize.Height() );
+                        break;
+                    case BASEPROPERTY_SCROLLLEFT:
+                        pScrollable->SetScrollLeft( aSize.Width() );
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            }
+            break;
+        }
+
+        default:
+        {
+            VCLXWindow::setProperty( PropertyName, Value );
+        }
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

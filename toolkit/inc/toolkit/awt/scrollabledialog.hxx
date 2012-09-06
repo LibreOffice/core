@@ -34,8 +34,21 @@
 //........................................................................
 namespace toolkit
 {
+    class ScrollableInterface
+    {
+    public:
+        virtual void    SetScrollWidth( long nWidth ) = 0;
+        virtual long    GetScrollWidth() = 0;
+        virtual void    SetScrollHeight( long nHeight ) = 0;
+        virtual long    GetScrollHeight() = 0;
+        virtual void    SetScrollLeft( long nLeft ) = 0;
+        virtual long    GetScrollLeft() = 0;
+        virtual void    SetScrollTop( long Top ) = 0;
+        virtual long    GetScrollTop() = 0;
+    };
+
   template < class T >
-    class ScrollableDialog : public T
+    class ScrollableWrapper : public T, public ScrollableInterface
     {
         ScrollBar          maHScrollBar;
         ScrollBar          maVScrollBar;
@@ -51,17 +64,17 @@ namespace toolkit
         ScrollBarVisibility maScrollVis;
         void    lcl_Scroll( long nX, long nY );
     public:
-        ScrollableDialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-        virtual ~ScrollableDialog();
-        void    SetScrollWidth( long nWidth );
-        long    GetScrollWidth() { return maScrollArea.Width(); }
-        void    SetScrollHeight( long nHeight );
-        long    GetScrollHeight() { return maScrollArea.Height(); }
-        void    SetScrollLeft( long nLeft );
-        long    GetScrollLeft() { return mnScrollPos.X(); }
-        void    SetScrollTop( long Top );
-        long    GetScrollTop() { return mnScrollPos.Y() ; }
-        Window*  getContentWindow();
+        ScrollableWrapper( Window* pParent, WinBits nStyle = WB_STDDIALOG );
+        virtual ~ScrollableWrapper();
+        virtual void    SetScrollWidth( long nWidth );
+        virtual long    GetScrollWidth() { return maScrollArea.Width(); }
+        virtual void    SetScrollHeight( long nHeight );
+        virtual long    GetScrollHeight() { return maScrollArea.Height(); }
+        virtual void    SetScrollLeft( long nLeft );
+        virtual long    GetScrollLeft() { return mnScrollPos.X(); }
+        virtual void    SetScrollTop( long Top );
+        virtual long    GetScrollTop() { return mnScrollPos.Y() ; }
+
         ScrollBarVisibility getScrollVisibility() { return maScrollVis; }
         void setScrollVisibility( ScrollBarVisibility rState );
         DECL_LINK( ScrollBarHdl, ScrollBar* );
