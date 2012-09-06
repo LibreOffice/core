@@ -33,14 +33,16 @@ TARGET=orcus
 .ENDIF
 
 TARFILE_NAME=liborcus_0.1.0
-TARFILE_MD5=13febcdd79ad25280f199a36b792c5f9
+TARFILE_MD5=aa346e934019d412ea6905563225f3cb
 
 PATCH_FILES=
 
 .IF "$(GUI)$(COM)"=="WNTMSC"
 
 BUILD_DIR=vsprojects/liborcus-static-nozip
-BUILD_ACTION=export BOOST_INCLUDE_DIR=$(OUTDIR)/inc && \
+BUILD_ACTION= \
+	export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external && \
+	export BOOST_LIB_DIR=$(OUTDIR)/lib && \
 	$(COMPATH)$/vcpackages$/vcbuild.exe liborcus-static-nozip.vcproj "Release|Win32"
 
 .ELSE
