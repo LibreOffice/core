@@ -40,6 +40,7 @@
 #include "xmlsubti.hxx"
 #include "global.hxx"
 #include "formula/grammar.hxx"
+#include "rangelst.hxx"
 
 #include "xmlstyle.hxx"
 #include "XMLDetectiveContext.hxx"
@@ -56,7 +57,6 @@
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
-class ScRangeList;
 class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
 
@@ -858,6 +858,7 @@ class ScXMLImport: public SvXMLImport
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormats> xNumberFormats;
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormatTypes> xNumberFormatTypes;
 
+    ScRangeList maSheetRanges;
     com::sun::star::uno::Reference <com::sun::star::sheet::XSheetCellRangeContainer> xSheetCellRanges;
 
     rtl::OUString           sEmpty;

@@ -109,6 +109,12 @@ public:
     virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const = 0;
 
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
+
+    bool operator==( const ScFormatEntry& ) const;
+
+#if DUMP_FORMAT_INFO
+    virtual void dumpInfo() const = 0;
+#endif
 protected:
     ScDocument* mpDoc;
 
@@ -273,6 +279,8 @@ public:
     void            AddEntry( ScFormatEntry* pNew );
     void            AddRange( const ScRangeList& rRanges );
     const ScRangeList&  GetRange() const  { return maRanges; }
+    // don't use the same name as for the const version
+    ScRangeList& GetRangeList() { return maRanges; }
 
     bool IsEmpty() const         { return maEntries.empty(); }
     size_t size() const           { return maEntries.size(); }
