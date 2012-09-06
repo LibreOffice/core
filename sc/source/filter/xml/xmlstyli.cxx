@@ -413,7 +413,7 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
         if(!mpCondFormat)
             mpCondFormat = new ScConditionalFormat( 0, GetScImport().GetDocument() );
         ScXMLMapContext* pMapContext = new ScXMLMapContext(GetImport(), nPrefix, rLocalName, xAttrList);
-        pContext = pContext;
+        pContext = pMapContext;
         mpCondFormat->AddEntry(pMapContext->CreateConditionEntry());
     }
     if (!pContext)
