@@ -339,6 +339,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 endif
 
 define gb_LinkTarget__use_boostdatetime
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DBOOST_ALL_NO_LIB \
+)
+
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	boostdatetime \
 )

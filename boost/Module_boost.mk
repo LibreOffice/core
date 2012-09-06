@@ -18,8 +18,6 @@ $(eval $(call gb_Module_add_targets,boost,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,boost,\
-	Package_boostdatetime \
-	Package_boostthread \
 	StaticLibrary_boostthread \
 ))
 endif

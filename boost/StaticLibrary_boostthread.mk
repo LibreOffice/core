@@ -10,7 +10,12 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,boostthread))
 
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,boostthread))
-	
+
+# disable "auto link" "feature" on MSVC
+$(eval $(call gb_StaticLibrary_add_defs,boostthread,\
+	-DBOOST_ALL_NO_LIB \
+))
+
 $(eval $(call gb_StaticLibrary_use_unpacked,boostthread,boost))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boostthread,cpp))
