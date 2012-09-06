@@ -46,6 +46,10 @@ PATCH_FILES+=liborcus_0.1.0-mingw.patch
 
 .IF "$(GUI)$(COM)"=="WNTMSC"
 
+# disable boost "auto lib" in MSVC build
+# for some reason (CRLF in file?) this patch doesn't want to apply on unix...
+PATCH_FILES+=liborcus_0.1.0-boost_disable_auto_lib.patch
+
 BUILD_DIR=vsprojects/liborcus-static-nozip
 BUILD_ACTION= \
 	export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external && \
