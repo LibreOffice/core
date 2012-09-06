@@ -16,13 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.uno.*;
-import com.sun.star.util.*;
-import com.sun.star.lang.*;
-import com.sun.star.accessibility.*;
-import com.sun.star.container.*;
 import com.sun.star.beans.*;
-import com.sun.star.form.binding.*;
 
 /**
  *

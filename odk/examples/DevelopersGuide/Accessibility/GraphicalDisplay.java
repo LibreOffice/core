@@ -35,8 +35,6 @@
 import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.*;
-import java.awt.geom.*;
-
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleComponent;

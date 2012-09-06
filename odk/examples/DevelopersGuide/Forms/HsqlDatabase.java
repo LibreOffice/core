@@ -34,7 +34,6 @@ import com.sun.star.uno.XComponentContext;
 import java.io.File;
 
 import com.sun.star.util.CloseVetoException;
-import java.io.File;
 
 /**
  *

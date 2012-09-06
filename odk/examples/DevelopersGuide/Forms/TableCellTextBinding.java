@@ -19,9 +19,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.table.XCell;
 import com.sun.star.util.XModifyListener;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.text.XTextRange;
-import com.sun.star.form.binding.IncompatibleTypesException;
 
 /** a value binding to be connected to a form control
 

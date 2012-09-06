@@ -32,17 +32,8 @@
  *
  *************************************************************************/
 
-import java.awt.event.ActionListener;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-
-import com.sun.star.awt.XTopWindowListener;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.accessibility.*;
-import com.sun.star.awt.XExtendedToolkit;
 
 /** This class is used as a thread and registers or unregsiters a listener
     given the constructor at all nodes of a tree of accessibility objects.

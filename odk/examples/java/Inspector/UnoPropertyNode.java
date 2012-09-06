@@ -35,17 +35,9 @@
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.reflection.TypeDescriptionSearchDepth;
 import com.sun.star.reflection.XConstantTypeDescription;
 import com.sun.star.reflection.XPropertyTypeDescription;
-import com.sun.star.reflection.XServiceTypeDescription;
-import com.sun.star.reflection.XTypeDescription;
-import com.sun.star.reflection.XTypeDescriptionEnumeration;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 public class UnoPropertyNode extends UnoNode{
 

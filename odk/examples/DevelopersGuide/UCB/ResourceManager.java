@@ -35,7 +35,6 @@
 import com.sun.star.ucb.NameClash;
 import com.sun.star.ucb.TransferCommandOperation;
 import com.sun.star.ucb.GlobalTransferCommandArgument;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 /**

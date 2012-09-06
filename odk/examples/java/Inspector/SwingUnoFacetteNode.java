@@ -32,10 +32,7 @@
  *
  *************************************************************************/
 
-import com.sun.star.reflection.XIdlMethod;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.XComponentContext;
-import javax.swing.tree.DefaultMutableTreeNode;
+
 
 public class SwingUnoFacetteNode extends SwingUnoNode implements XUnoFacetteNode{
     String m_sFilter = "";

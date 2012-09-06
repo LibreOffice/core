@@ -32,22 +32,14 @@
  *
  *************************************************************************/
 
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.Locale;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.reflection.ParamInfo;
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.reflection.XTypeDescription;
-import com.sun.star.text.XTextTablesSupplier;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
-import com.sun.star.uno.UnoRuntime;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;

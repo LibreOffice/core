@@ -34,25 +34,17 @@
 
 import com.sun.star.beans.IllegalTypeException;
 import com.sun.star.beans.MethodConcept;
-import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XIntrospection;
 import com.sun.star.beans.XIntrospectionAccess;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.bridge.UnoUrlResolver;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.reflection.ParamInfo;
 import com.sun.star.reflection.TypeDescriptionSearchDepth;
 import com.sun.star.reflection.XConstantTypeDescription;
 import com.sun.star.reflection.XConstantsTypeDescription;
@@ -62,13 +54,11 @@ import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.reflection.XIdlReflection;
 import com.sun.star.reflection.XIndirectTypeDescription;
 import com.sun.star.reflection.XInterfaceTypeDescription;
-import com.sun.star.reflection.XInterfaceTypeDescription2;
 import com.sun.star.reflection.XPropertyTypeDescription;
 import com.sun.star.reflection.XServiceTypeDescription;
 import com.sun.star.reflection.XTypeDescription;
 import com.sun.star.reflection.XTypeDescriptionEnumeration;
 import com.sun.star.reflection.XTypeDescriptionEnumerationAccess;
-import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
@@ -78,7 +68,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.URL;
 import java.util.List;
 import java.util.Vector;
-import javax.swing.JOptionPane;
 
 public class Introspector extends WeakBase{
 

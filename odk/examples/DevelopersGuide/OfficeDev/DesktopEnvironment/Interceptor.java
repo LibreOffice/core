@@ -36,8 +36,6 @@
 
 import com.sun.star.uno.UnoRuntime;
 
-import java.lang.*;
-import javax.swing.*;
 import java.util.Vector;
 
 // __________ Implementation __________

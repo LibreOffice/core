@@ -19,13 +19,10 @@
 /**************************************************************************/
 import com.sun.star.uno.*;
 import com.sun.star.lang.*;
-import com.sun.star.util.*;
-import com.sun.star.awt.*;
 import com.sun.star.drawing.*;
 import com.sun.star.frame.*;
 import com.sun.star.form.*;
 import com.sun.star.beans.*;
-import com.sun.star.container.*;
 import com.sun.star.container.*;
 
 /**************************************************************************/

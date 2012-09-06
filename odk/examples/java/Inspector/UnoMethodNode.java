@@ -37,8 +37,6 @@ import com.sun.star.reflection.ParamMode;
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.uno.TypeClass;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class UnoMethodNode extends UnoNode{

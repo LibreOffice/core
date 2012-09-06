@@ -38,8 +38,6 @@ import com.sun.star.uno.UnoRuntime;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.*;
-import java.net.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.AWTEvent;

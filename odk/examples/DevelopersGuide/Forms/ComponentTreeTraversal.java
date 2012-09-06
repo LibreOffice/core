@@ -32,7 +32,6 @@
  *
  *************************************************************************/
 
-import com.sun.star.uno.*;
 import com.sun.star.container.*;
 import com.sun.star.lang.*;
 

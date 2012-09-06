@@ -15,7 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-import com.sun.star.uno.*;
+
 
 /** a helper "enumeration class" for classifying a document type
 */

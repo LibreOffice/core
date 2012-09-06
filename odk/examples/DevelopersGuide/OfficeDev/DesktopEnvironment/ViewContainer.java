@@ -34,9 +34,6 @@
 
 // __________ Imports __________
 
-import com.sun.star.uno.UnoRuntime;
-
-import java.lang.*;
 import java.util.*;
 
 // __________ Implementation __________

@@ -35,7 +35,6 @@
 
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
@@ -46,10 +45,7 @@ import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.reflection.XIdlMethod;
-import javax.swing.tree.ExpandVetoException;
 import org.openoffice.XInstanceInspector;
-import javax.swing.tree.TreePath;
-import javax.swing.event.TreeWillExpandListener;
 
     public class InspectorPane extends WeakBase implements XInstanceInspector{  //, XServiceInfo
         private XIdlMethod[] xIdlMethods;

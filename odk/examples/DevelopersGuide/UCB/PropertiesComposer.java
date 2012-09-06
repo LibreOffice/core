@@ -37,7 +37,6 @@ import java.util.StringTokenizer;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.ucb.XContent;
-import com.sun.star.uno.UnoRuntime;
 
 /**
  * Setting Property Values of a UCB Content

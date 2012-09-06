@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// *** HideableTreeModel ***
-import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;

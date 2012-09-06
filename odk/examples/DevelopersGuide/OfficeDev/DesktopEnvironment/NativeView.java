@@ -35,8 +35,6 @@
 // __________ Imports __________
 
 import java.awt.*;
-import java.lang.*;
-import java.awt.event.*;
 
 // __________ Implementation __________
 
