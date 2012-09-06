@@ -66,7 +66,6 @@ bool ScFormatEntry::operator==( const ScFormatEntry& r ) const
     {
         case condformat::CONDITION:
             return static_cast<const ScCondFormatEntry&>(*this) == static_cast<const ScCondFormatEntry&>(r);
-            break;
         default:
             // TODO: implement also this case
             // actually return false for these cases is not that bad
@@ -74,8 +73,6 @@ bool ScFormatEntry::operator==( const ScFormatEntry& r ) const
             // to think about the range
             return false;
     }
-
-    return true;
 }
 
 bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
