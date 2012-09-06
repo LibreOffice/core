@@ -30,6 +30,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlmetae.hxx>
@@ -75,8 +77,7 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
     if (getImportFlags() & IMPORT_META)
     {
         uno::Reference<xml::sax::XDocumentHandler> const xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
+            xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
             uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
                 GetDocumentProperties());

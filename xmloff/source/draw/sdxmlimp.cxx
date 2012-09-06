@@ -55,6 +55,8 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
+#include <comphelper/componentcontext.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -732,8 +734,7 @@ SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
                 ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
@@ -757,8 +758,7 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
     if (getImportFlags() & IMPORT_META)
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);

@@ -35,6 +35,7 @@
 
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -56,6 +57,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
 
 #include <typeinfo>
 
@@ -607,9 +609,7 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
         // mst@: right now, this seems to be not supported, so it is untested
         if (xDPS.is()) {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-                mxServiceFactory->createInstance(
-                    ::rtl::OUString(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
                     uno::UNO_QUERY_THROW);
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? new SvXMLMetaDocumentContext(*this,

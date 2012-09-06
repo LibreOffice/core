@@ -307,6 +307,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
 	DocumentBuilder \
+	SAXDocumentBuilder \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	FastShapeContextHandler \
@@ -1528,9 +1529,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/cry
 	SAXEventKeeper \
 	SignatureCreator \
 	SignatureVerifier \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/dom,\
-	SAXDocumentBuilder \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/input,\
 	SaxDocumentHandler \
@@ -4201,6 +4199,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom,\
 	XNotation \
 	XProcessingInstruction \
 	XSAXDocumentBuilder \
+	XSAXDocumentBuilder2 \
 	XText \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom/events,\

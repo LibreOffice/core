@@ -27,11 +27,15 @@
  ************************************************************************/
 
 
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
+
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -40,8 +44,6 @@
 #include <xmloff/XMLTextShapeImportHelper.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <doc.hxx>
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
@@ -71,6 +73,7 @@
 
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/servicehelper.hxx>
 
 using ::rtl::OUString;
@@ -414,8 +417,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
               IsXMLToken( rLocalName, XML_DOCUMENT ) )
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
+            xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
             GetDocumentProperties());

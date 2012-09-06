@@ -25,17 +25,16 @@
 
 #include <sal/types.h>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/xml/dom/XSAXDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
 #include <com/sun/star/xml/dom/SAXDocumentBuilderState.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -60,7 +59,7 @@ namespace DOM
     typedef std::stack< NSMap > NSStack;
 
     class  CSAXDocumentBuilder
-        : public ::cppu::WeakImplHelper3< XDocumentHandler, XSAXDocumentBuilder, XServiceInfo >
+        : public ::cppu::WeakImplHelper2< XSAXDocumentBuilder2, XServiceInfo >
     {
 
     private:

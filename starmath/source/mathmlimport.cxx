@@ -37,7 +37,9 @@ one go*/
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/uno/Any.h>
+#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -2657,8 +2659,7 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
               IsXMLToken(rLocalName, XML_DOCUMENT_META)))
         {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-                mxServiceFactory->createInstance(
-                    "com.sun.star.xml.dom.SAXDocumentBuilder"),
+                xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
                     uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
