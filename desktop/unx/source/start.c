@@ -512,6 +512,17 @@ send_args( int fd, rtl_uString *pCwdPath )
     nLen = rtl_string_getLength( pOut ) + 1;
     bResult = ( write( fd, rtl_string_getStr( pOut ), nLen ) == (ssize_t) nLen );
 
+    if ( bResult )
+    {
+        char resp[ strlen( "InternalIPC::ProcessingDone" ) ];
+        ssize_t n = read( fd, resp, SAL_N_ELEMENTS( resp ) );
+        bResult = n == (ssize_t) SAL_N_ELEMENTS( resp )
+            && (memcmp(
+                    resp, "InternalIPC::ProcessingDone",
+                    SAL_N_ELEMENTS( resp ) )
+                == 0);
+    }
+
     /* cleanup */
     rtl_uString_release( pEscapedCwdPath );
     rtl_uString_release( pBuffer );
