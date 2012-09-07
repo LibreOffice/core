@@ -34,9 +34,10 @@
 
 // __________ Imports __________
 
-import com.sun.star.uno.UnoRuntime;
-
 import java.util.Vector;
+
+import com.sun.star.frame.FrameActionEvent;
+import com.sun.star.uno.UnoRuntime;
 
 // __________ Implementation __________
 
@@ -172,14 +173,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         // was it frameAction()?
         if (nRequest==OnewayExecutor.REQUEST_FRAMEACTION)
         {
-            com.sun.star.frame.FrameActionEvent[] lOutAction   = new com.sun.star.frame.FrameActionEvent[1];
-            Vector[]                              lInParams    = new Vector[1];
-                                                  lInParams[0] = lParams;
-
-            OnewayExecutor.codeFrameAction( OnewayExecutor.DECODE_PARAMS ,
-                                            lInParams                    ,
-                                            lOutAction                   );
-            impl_frameAction(lOutAction[0]);
+            impl_frameAction((FrameActionEvent) lParams.get(0));
         }
         else
         // was it dispatch()?
@@ -244,16 +238,12 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
             return;
 
         // pack the event and start thread - which call us back later
-        Vector[]                              lOutParams   = new Vector[1];
-        com.sun.star.frame.FrameActionEvent[] lInAction    = new com.sun.star.frame.FrameActionEvent[1];
-                                              lInAction[0] = aEvent;
+        Vector<FrameActionEvent> lOutParams = new Vector<FrameActionEvent>();
+        lOutParams.add(aEvent);
 
-        OnewayExecutor.codeFrameAction( OnewayExecutor.ENCODE_PARAMS ,
-                                        lOutParams                   ,
-                                        lInAction                    );
         OnewayExecutor aExecutor = new OnewayExecutor( (IOnewayLink)this                  ,
                                                        OnewayExecutor.REQUEST_FRAMEACTION ,
-                                                       lOutParams[0]                      );
+                                                       lOutParams                      );
         aExecutor.start();
     }
 

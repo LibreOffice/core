@@ -34,6 +34,8 @@
 
 import java.util.Vector;
 
+import com.sun.star.frame.FrameActionEvent;
+
 // __________ Implementation __________
 
 /**
@@ -142,21 +144,6 @@ class OnewayExecutor extends Thread
      * one easier - you can use this helper methods. They know how suchlist
      * must be coded. It's not a must to use it - but you can ...
      */
-    public static void codeFrameAction(
-        boolean bEncode, Vector[] lParams,
-        com.sun.star.frame.FrameActionEvent[] aAction)
-    {
-        if (bEncode)
-        {
-            lParams[0] = new Vector<Object>(1);
-            lParams[0].add( (Object)(aAction[0]) );
-        }
-        else
-        {
-            aAction[0] = (com.sun.star.frame.FrameActionEvent)
-                (lParams[0].elementAt(0));
-        }
-    }
 
     // _______________________________
 
