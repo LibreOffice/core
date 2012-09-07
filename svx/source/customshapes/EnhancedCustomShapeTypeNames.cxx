@@ -239,7 +239,8 @@ static const NameTypeTable pNameTypeTableArray[] =
     { "mso-spt199", mso_sptActionButtonSound },
     { "mso-spt200", mso_sptActionButtonMovie },
     { "mso-spt201", mso_sptHostControl },
-    { "mso-spt202", mso_sptTextBox }
+    { "mso-spt202", mso_sptTextBox },
+    { "teardrop",   mso_sptTearDrop }
 };
 
     // gallery: quadrat

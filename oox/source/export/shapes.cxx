@@ -675,12 +675,12 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     DBG(printf("write custom shape\n"));
 
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
-    SdrObjCustomShape* pShape = (SdrObjCustomShape*) GetSdrObjectFromXShape( xShape );
-    sal_Bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape );
     sal_Bool bPredefinedHandlesUsed = sal_True;
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
+    SdrObjCustomShape* pShape = (SdrObjCustomShape*) GetSdrObjectFromXShape( xShape );
+    sal_Bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );
     const char* sPresetShape = lcl_GetPresetGeometry( USS( sShapeType ) );
     DBG(printf("custom shape type: %s ==> %s\n", USS( sShapeType ), sPresetShape));
     Sequence< PropertyValue > aGeometrySeq;

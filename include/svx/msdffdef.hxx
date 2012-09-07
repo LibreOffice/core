@@ -781,6 +781,8 @@ typedef enum
    mso_sptActionButtonMovie = 200,
    mso_sptHostControl = 201,
    mso_sptTextBox = 202,
+   //for pptx shape which not exist in ppt
+   mso_sptTearDrop = 203,
    mso_sptMax = 0x0FFF,
    mso_sptNil = mso_sptMax
  } MSO_SPT;

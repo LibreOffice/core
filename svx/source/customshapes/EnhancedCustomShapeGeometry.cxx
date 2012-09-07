@@ -8265,6 +8265,68 @@ static const mso_CustomShape msoCurvedConnector5 =
     (SvxMSDffHandle*)mso_sptCurvedConnector5Handle, SAL_N_ELEMENTS( mso_sptCurvedConnector5Handle )
 };
 
+/////////////////////////////teardrop////////////////////////////////////////////
+static const SvxMSDffVertPair mso_sptTearDropVert[] =
+{
+    { 10800, 0 },
+    { 0, 10800 },                                                   // X
+    { 10800, 21600 },                                               // Y
+    { 21600, 10800 },                                               // X
+    { 21600, 10800 }, { 21600, 3 MSO_I }, { 0 MSO_I, 1 MSO_I },             // C
+    { 0 MSO_I, 1 MSO_I }, { 4 MSO_I, 0 }, { 10800, 0 }
+};
+
+//  the last number (0x***n)  :  0 = sum, 1 = prod, 2 = mid, 3 = abs, 4 = min, 5 = max, 6 = if, 13 = sqrt, 15 = eclipse ...
+//    the first number(0xn***)  :  2/4/8 the first/second/third value is not directly value
+static const SvxMSDffCalculationData mso_sptTearDropCalc[] =
+{
+    { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } },  // 0  adjust value #0
+    { 0x8000 , { 21600 , 0 , 0x0400 } },            // 1  21600 - @0                     y0
+    { 0x8000 , { 32400 , 0 , 0x0400 } },            // 2   (32400 - @0)
+    { 0x2001 , { 0x0402 , 1 , 2 } },                // 3   (32400 - @0)/2               y1
+    { 0x2002 , { 0x0400 , 10800 , 0 } },            // 4  (@0+10800)/2                  x2
+};
+
+//m, qx, qy, qx,C,C
+//the last number(0x***n) : repeat number of this current Segm
+static const sal_uInt16 mso_sptTearDropSegm[] =
+{
+    0x4000, 0xa701, 0xa801, 0xa701, 0x2002, 0x6000, 0x8000
+};
+
+static const SvxMSDffTextRectangles mso_sptTearDropTextRect[] =
+{
+    { { 2863, 2863 }, { 18737, 18737 } }
+};
+
+//the range of adjust values
+static const SvxMSDffHandle mso_sptTearDropHandle[] =
+{
+    //position="$0,0" xrange="10800,32400"
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL| MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
+        0x100, 0, 10800, 10800, 10800, 32400, MIN_INT32, 0x7fffffff }
+};
+
+//the number of adjust values, the default values
+static const sal_Int32 mso_sptTearDropDefault[] =
+{
+    1, 21600
+};
+
+static const mso_CustomShape msoTearDrop =
+{
+    (SvxMSDffVertPair*)mso_sptTearDropVert, sizeof( mso_sptTearDropVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptTearDropSegm, sizeof( mso_sptTearDropSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptTearDropCalc, sizeof(mso_sptTearDropCalc)/sizeof(SvxMSDffCalculationData),
+    (sal_Int32*)mso_sptTearDropDefault,
+    (SvxMSDffTextRectangles*)mso_sptTearDropTextRect, sizeof( mso_sptTearDropTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    MIN_INT32, MIN_INT32,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptTearDropHandle, sizeof(mso_sptTearDropHandle)/sizeof(SvxMSDffHandle)        // handles
+};
+
+
 const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
 {
     const mso_CustomShape* pCustomShape = NULL;
@@ -8475,6 +8537,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptTextWave2 :                 pCustomShape = &msoTextWave2; break;
         case mso_sptTextWave3 :                 pCustomShape = &msoTextWave3; break;
         case mso_sptTextWave4 :                 pCustomShape = &msoTextWave4; break;
+        case mso_sptTearDrop :                  pCustomShape = &msoTearDrop; break;
         default :
         break;
     }

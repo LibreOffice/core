@@ -1344,7 +1344,7 @@ public:
                             sal_Int32& rnArrowLength,
                             sal_Int32& rnArrowWidth
                         );
-    static sal_Bool     IsDefaultObject( SdrObjCustomShape* pCustoShape );
+    static sal_Bool     IsDefaultObject( SdrObjCustomShape* pCustoShape, const MSO_SPT eShapeType );
     static void         LookForPolarHandles(
                             const MSO_SPT eShapeType,
                             sal_Int32& nAdjustmentsWhichNeedsToBeConverted
