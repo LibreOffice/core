@@ -26,7 +26,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
-import util.WaitUnreachable;
 import test.lib.TestBed;
 
 /**

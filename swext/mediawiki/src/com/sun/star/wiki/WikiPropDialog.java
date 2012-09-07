@@ -18,19 +18,9 @@
 
 package com.sun.star.wiki;
 
-import com.sun.star.awt.XControl;
-import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
-import com.sun.star.awt.XThrobber;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XNameContainer;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.EventObject;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.util.Hashtable;
 

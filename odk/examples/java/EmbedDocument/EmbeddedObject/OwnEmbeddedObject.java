@@ -28,7 +28,6 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTruncate;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XComponent;
-import com.sun.star.document.EventObject;
 import com.sun.star.embed.VisualRepresentation;
 import com.sun.star.container.XNameAccess;
 
@@ -38,7 +37,6 @@ import com.sun.star.embed.*;
 import java.util.Vector;
 import java.awt.Dimension;
 import java.lang.Integer;
-import org.omg.CORBA.COMM_FAILURE;
 
 public final class OwnEmbeddedObject extends WeakBase
    implements com.sun.star.embed.XEmbedPersist,

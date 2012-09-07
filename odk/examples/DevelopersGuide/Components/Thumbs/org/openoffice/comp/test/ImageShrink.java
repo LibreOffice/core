@@ -49,7 +49,6 @@ package org.openoffice.comp.test;
 
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lib.uno.helper.WeakBase;
 

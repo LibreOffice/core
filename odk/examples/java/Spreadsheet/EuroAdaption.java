@@ -64,15 +64,12 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.sheet.XSheetCellRanges;
 import com.sun.star.sheet.XCellRangesQuery;
 import com.sun.star.sheet.XCellFormatRangesSupplier;
-import com.sun.star.sheet.XCellRangesQuery;
 import com.sun.star.sheet.XSpreadsheetDocument;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.util.NumberFormat;
 import com.sun.star.util.XNumberFormats;
 import com.sun.star.util.XNumberFormatsSupplier;
 

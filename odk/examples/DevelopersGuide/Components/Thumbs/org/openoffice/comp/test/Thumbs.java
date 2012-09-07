@@ -33,8 +33,6 @@
  *************************************************************************/
 package org.openoffice.comp.test;
 
-import com.sun.star.uno.UnoRuntime;
-
 
 /**
  * Test class for testing the ImageShrink service skeleton.

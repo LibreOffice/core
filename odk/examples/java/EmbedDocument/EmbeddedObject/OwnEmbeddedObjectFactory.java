@@ -16,16 +16,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.Exception;
-import com.sun.star.lang.IllegalArgumentException;
-
-import com.sun.star.embed.*;
 
 public final class OwnEmbeddedObjectFactory extends WeakBase
    implements com.sun.star.lang.XServiceInfo,

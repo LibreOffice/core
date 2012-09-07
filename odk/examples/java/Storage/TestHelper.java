@@ -17,7 +17,6 @@
  */
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.AnyConverter;
 
 import com.sun.star.lang.*;

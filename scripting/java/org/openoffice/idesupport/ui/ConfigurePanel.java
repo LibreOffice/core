@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.Vector;
 import java.util.Enumeration;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.AbstractButton;
@@ -38,9 +37,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.w3c.dom.Document;
-
-import com.sun.star.script.framework.container.ScriptEntry;
 import com.sun.star.script.framework.container.ParcelDescriptor;
 
 import org.openoffice.idesupport.zip.ParcelZipper;

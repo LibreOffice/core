@@ -32,15 +32,9 @@
  *
  *************************************************************************/
 
-import java.io.*;
-
-import com.sun.star.comp.helper.RegistryServiceFactory;
-import com.sun.star.comp.servicemanager.ServiceManager;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XComponent;
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.beans.XPropertySet;

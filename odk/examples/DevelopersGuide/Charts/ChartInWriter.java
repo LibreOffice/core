@@ -34,8 +34,6 @@
 
 // __________ Imports __________
 
-// base classes
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.*;
 
@@ -45,28 +43,14 @@ import com.sun.star.beans.*;
 // application specific classes
 import com.sun.star.chart.*;
 import com.sun.star.drawing.*;
-import com.sun.star.text.XTextDocument;
-
-import com.sun.star.table.CellRangeAddress;
 import com.sun.star.frame.XModel;
-import com.sun.star.frame.XController;
-
-import com.sun.star.util.XNumberFormatsSupplier;
-import com.sun.star.util.XNumberFormats;
-
 // base graphics things
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
-import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.FontWeight;
-import com.sun.star.awt.FontRelief;
-
 // Exceptions
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.util.MalformedNumberFormatException;
 
 
 // __________ Implementation __________

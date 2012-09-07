@@ -18,7 +18,6 @@
 
 package org.openoffice.idesupport.ui;
 
-import java.io.File;
 import java.util.Vector;
 import java.util.Enumeration;
 

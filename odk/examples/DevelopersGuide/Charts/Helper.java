@@ -34,41 +34,18 @@
 
 // __________ Imports __________
 
-import java.util.Random;
-
-// base classes
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.*;
 
-// factory for creating components
-import com.sun.star.comp.servicemanager.ServiceManager;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XComponentLoader;
 
 // property access
 import com.sun.star.beans.*;
 
-// container access
-import com.sun.star.container.*;
-
 // application specific classes
 import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.text.XTextDocument;
-
-import com.sun.star.document.XEmbeddedObjectSupplier;
 import com.sun.star.frame.XModel;
-import com.sun.star.frame.XController;
-
-// Exceptions
-import com.sun.star.uno.RuntimeException;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.IndexOutOfBoundsException;
 
 // __________ Implementation __________
 

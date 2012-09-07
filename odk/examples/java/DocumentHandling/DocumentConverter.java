@@ -35,7 +35,6 @@
 import com.sun.star.uno.UnoRuntime;
 
 import java.io.File;
-import java.io.FileFilter;
 
 
 /** The class <CODE>DocumentConverter</CODE> allows you to convert all documents

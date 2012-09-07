@@ -27,7 +27,6 @@ import com.sun.star.connection.AlreadyAcceptingException;
 import com.sun.star.connection.ConnectionSetupException;
 import com.sun.star.connection.Acceptor;
 import com.sun.star.connection.XAcceptor;
-import com.sun.star.connection.XConnection;
 import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;

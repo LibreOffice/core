@@ -32,10 +32,7 @@
  *
  *************************************************************************/
 
-// base classes
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Type;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lib.uno.helper.WeakBase;
 
@@ -46,7 +43,6 @@ import com.sun.star.lang.XSingleServiceFactory;
 // graphics stuff
 import com.sun.star.drawing.*;
 import com.sun.star.awt.Point;
-import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 
 // chart stuff
@@ -60,8 +56,6 @@ import com.sun.star.lang.XInitialization;
 import com.sun.star.util.XRefreshable;
 import com.sun.star.lang.XServiceName;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XTypeProvider;
-
 // Exceptions
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.RuntimeException;

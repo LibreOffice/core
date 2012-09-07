@@ -16,15 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.DisposedException;
-
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-
 import com.sun.star.container.XNameAccess;
 
 import com.sun.star.embed.*;

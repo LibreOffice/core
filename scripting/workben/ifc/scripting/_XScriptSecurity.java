@@ -18,7 +18,6 @@
 
 package ifc.scripting;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Collection;
 
@@ -35,8 +34,6 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.frame.XModel;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.util.XChangesBatch;
-import com.sun.star.reflection.InvocationTargetException;
-
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Parameters;

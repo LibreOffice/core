@@ -33,12 +33,10 @@
  *************************************************************************/
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.beans.XPropertySet;
 
 public class SimpleBootstrap_java {
 

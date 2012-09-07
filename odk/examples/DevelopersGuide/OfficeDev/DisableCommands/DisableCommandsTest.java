@@ -35,12 +35,8 @@
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.util.XURLTransformer;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.text.XTextDocument;
 

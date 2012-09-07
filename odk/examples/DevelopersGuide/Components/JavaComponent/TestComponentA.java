@@ -31,11 +31,9 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.test.XSomethingA;
-import com.sun.star.uno.Type;
 
 // TestComponentA use the implementation helper WeakBase
 public class TestComponentA extends WeakBase implements XServiceInfo, XSomethingA {

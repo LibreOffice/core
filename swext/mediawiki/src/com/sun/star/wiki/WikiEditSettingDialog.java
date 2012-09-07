@@ -19,10 +19,7 @@
 package com.sun.star.wiki;
 
 import com.sun.star.awt.XDialog;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.awt.XThrobber;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.EventObject;
 import java.util.Hashtable;

@@ -18,7 +18,6 @@
 
 package mod._scripting;
 
-import java.net.URLEncoder;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -26,7 +25,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-import util.utils;
 import util.SOfficeFactory;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -37,9 +35,6 @@ import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XDesktop;
-
-
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 

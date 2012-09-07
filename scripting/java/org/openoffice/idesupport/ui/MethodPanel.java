@@ -20,22 +20,11 @@ package org.openoffice.idesupport.ui;
 
 import java.io.File;
 import java.util.Vector;
-import java.util.ArrayList;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.MalformedURLException;
-
 import com.sun.star.script.framework.container.ScriptEntry;
 import org.openoffice.idesupport.MethodFinder;
 import org.openoffice.idesupport.ExtensionFinder;

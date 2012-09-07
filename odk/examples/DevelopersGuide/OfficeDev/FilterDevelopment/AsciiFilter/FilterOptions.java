@@ -35,17 +35,9 @@
 package FilterDevelopment.AsciiFilter;
 
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
-
-import com.sun.star.uno.Exception;
-import com.sun.star.ucb.CommandAbortedException;
-import com.sun.star.lang.IllegalArgumentException;
 
 /*-************************************************************************
   @title        helper to analyze neccessary option properties of our filter

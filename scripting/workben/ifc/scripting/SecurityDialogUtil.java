@@ -27,7 +27,6 @@ import com.sun.star.awt.XExtendedToolkit;
 
 // Jsuite classes
 import util.AccessibilityTools;
-import util.dbg;
 /**
 * Thread that pushes the buttons or checkbox
 * on the message box that is on top.

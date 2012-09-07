@@ -35,10 +35,8 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.test.XSomethingB;
 import com.sun.star.test.SomethingB;
-import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.container.XSet;
 
 // sample starbasic code, you can execute it after you have connected to the office.

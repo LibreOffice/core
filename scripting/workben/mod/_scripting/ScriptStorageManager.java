@@ -28,7 +28,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.utils;
 
 public class ScriptStorageManager extends TestCase {
 

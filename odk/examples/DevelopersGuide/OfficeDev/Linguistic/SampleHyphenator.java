@@ -44,13 +44,11 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.linguistic2.XHyphenator;
 import com.sun.star.linguistic2.XLinguServiceEventBroadcaster;
 import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XServiceDisplayName;
 
 // Exceptions
 import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
 import com.sun.star.lang.IllegalArgumentException;
 
 //used Interfaces
@@ -58,15 +56,9 @@ import com.sun.star.linguistic2.XLinguServiceEventListener;
 import com.sun.star.linguistic2.XHyphenatedWord;
 import com.sun.star.linguistic2.XPossibleHyphens;
 import com.sun.star.lang.Locale;
-import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.EventObject;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Type;
-
 import java.util.ArrayList;
 
 public class SampleHyphenator extends ComponentBase implements

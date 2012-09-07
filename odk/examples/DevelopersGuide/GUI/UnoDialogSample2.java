@@ -32,18 +32,14 @@
  *
  *************************************************************************/
 import com.sun.star.awt.PushButtonType;
-import com.sun.star.awt.XControl;
 import com.sun.star.awt.XDialog;
-import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
-import com.sun.star.awt.XWindow;
 import com.sun.star.beans.MethodConcept;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XIntrospection;
 import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.beans.XMultiPropertySet;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;

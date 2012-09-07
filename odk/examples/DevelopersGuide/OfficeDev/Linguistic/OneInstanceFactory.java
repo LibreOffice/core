@@ -38,7 +38,6 @@ import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 
 import java.lang.reflect.Constructor;

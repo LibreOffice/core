@@ -24,19 +24,13 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.utils;
-import java.net.URLEncoder;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.frame.XModel;
-import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XComponent;
-import com.sun.star.frame.XDesktop;
-
 import util.SOfficeFactory;
 
-import drafts.com.sun.star.script.framework.provider.XFunction;
 import drafts.com.sun.star.script.framework.provider.XFunctionProvider;
 
 public class Function extends TestCase {

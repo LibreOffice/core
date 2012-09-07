@@ -28,7 +28,6 @@ import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import complexlib.ComplexTestCase;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;

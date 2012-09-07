@@ -55,7 +55,6 @@ import com.sun.star.container.XNameContainer;
 
 import com.sun.star.document.XEmbeddedObjectSupplier;
 
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XComponentLoader;
 
 import com.sun.star.lang.XComponent;

@@ -19,16 +19,10 @@
 package test.java_remote;
 
 import com.sun.star.bridge.XInstanceProvider;
-import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
-import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
-import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
-import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 import test.lib.TestBed;
 

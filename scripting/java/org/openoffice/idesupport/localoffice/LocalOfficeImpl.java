@@ -22,15 +22,12 @@ import java.net.ConnectException;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XComponent;
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Exception;
-
 import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 
 import org.openoffice.idesupport.LocalOffice;

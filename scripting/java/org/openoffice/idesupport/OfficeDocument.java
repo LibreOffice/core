@@ -22,10 +22,6 @@ import java.io.*;
 import java.util.zip.*;
 import java.util.Vector;
 import java.util.Enumeration;
-import java.util.StringTokenizer;
-
-import org.openoffice.idesupport.filter.FileFilter;
-import org.openoffice.idesupport.filter.BinaryOnlyFilter;
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class OfficeDocument

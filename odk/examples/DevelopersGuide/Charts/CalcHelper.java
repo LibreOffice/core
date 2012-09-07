@@ -36,22 +36,8 @@
 
 import java.util.Random;
 
-// base classes
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
-
-// factory for creating components
-import com.sun.star.comp.servicemanager.ServiceManager;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XComponentLoader;
-
-// property access
-import com.sun.star.beans.*;
-
 // container access
 import com.sun.star.container.*;
 
@@ -63,8 +49,6 @@ import com.sun.star.text.XText;
 
 import com.sun.star.document.XEmbeddedObjectSupplier;
 import com.sun.star.frame.XModel;
-import com.sun.star.frame.XController;
-
 // base graphics things
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
@@ -73,8 +57,6 @@ import com.sun.star.awt.Rectangle;
 // Exceptions
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.container.NoSuchElementException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.IndexOutOfBoundsException;
 
 // __________ Implementation __________
 

@@ -32,18 +32,10 @@
  *
  *************************************************************************/
 
-import com.sun.star.linguistic2.XLinguServiceEventBroadcaster;
-import com.sun.star.linguistic2.XLinguServiceEventListener;
 import com.sun.star.linguistic2.LinguServiceEvent;
 import com.sun.star.linguistic2.LinguServiceEventFlags;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.PropertyChangeEvent;
-import com.sun.star.lang.EventObject;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.UnoRuntime;
-
-import java.util.ArrayList;
 
 public class PropChgHelper_Hyph extends PropChgHelper
 {

@@ -34,26 +34,18 @@
 
 package FilterDevelopment.AsciiFilter;
 
-import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.beans.PropertyValue;
-
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.container.XNamed;
 import com.sun.star.document.XImporter;
 import com.sun.star.document.XExporter;
 import com.sun.star.document.XFilter;
-
-
-import com.sun.star.lang.IllegalArgumentException;
 
 /*-************************************************************************
   @title        implements a filter to import pure ascii text files
