@@ -68,7 +68,7 @@ namespace basctl
         DocumentSignature();        // not implemented
 
     private:
-        class Impl;
+        struct Impl;
         boost::scoped_ptr<Impl> m_pImpl;
     };
 
