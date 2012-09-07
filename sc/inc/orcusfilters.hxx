@@ -20,6 +20,8 @@ class ScDocument;
 class ScOrcusFilters
 {
 public:
+    virtual ~ScOrcusFilters() {}
+
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
 };
 
