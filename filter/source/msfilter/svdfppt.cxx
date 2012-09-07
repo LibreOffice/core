@@ -3531,6 +3531,63 @@ sal_Bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rM
                 rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
             }
             break;
+            case 16: // Simplified Chinese.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH );
+            }
+            break;
+            case 17: // Simplified Chinese with single-byte period.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+            }
+            break;
+            case 18: // Double byte circle numbers.
+            case 19: // Wingdings white circle numbers.
+            case 20: // Wingdings black circle numbers.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_CIRCLE_NUMBER );
+            }
+            break;
+            case 21: // Traditional Chinese.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH_TW );
+            }
+            break;
+            case 22: // Traditional Chinese with single-byte period.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH_TW );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+            }
+            break;
+            case 26: // Japanese/Korean.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH );
+            }
+            break;
+            case 27: // Japanese/Korean with single-byte period.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+            }
+            break;
+            case 28: // Double-byte Arabic numbers.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_FULL_WIDTH_ARABIC );
+            }
+            break;
+            case 29: // Double-byte Arabic numbers with double-byte period.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_FULL_WIDTH_ARABIC );
+                rNumberFormat.SetSuffix( OUString( sal_Unicode(0xff0e) ) );
+            }
+            break;
+            case 38: // Japanese with double-byte period.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH ); // No such type. Instead with Lower Chinese Number
+                rNumberFormat.SetSuffix( OUString( sal_Unicode(0xff0e) ) );
+            }
+            break;
         }
         rStartNumbering = boost::optional< sal_Int16 >( nAnmScheme >> 16 );
     }

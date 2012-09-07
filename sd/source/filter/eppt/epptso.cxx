@@ -1422,6 +1422,11 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             case SVX_NUM_ROMAN_UPPER :
                             case SVX_NUM_ROMAN_LOWER :
                             case SVX_NUM_ARABIC :
+                            case SVX_NUM_NUMBER_UPPER_ZH:
+                            case SVX_NUM_CIRCLE_NUMBER:
+                            case SVX_NUM_NUMBER_UPPER_ZH_TW:
+                            case SVX_NUM_NUMBER_LOWER_ZH:
+                            case SVX_NUM_FULL_WIDTH_ARABIC:
                                 nNumberingType = pBulletPara->nMappedNumType;
                             break;
 
