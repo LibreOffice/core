@@ -53,13 +53,7 @@ MY_CXXFLAGS = CXXFLAGS=-I$(OUTDIR)/inc/external
 .END
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=
-
-.IF "$(SYSTEM_BOOST)" != "YES"
-CONFIGURE_ACTION+=export CPPFLAGS="$(CPPFLAGS) -I$(OUTDIR)/inc/external" &&
-.ENDIF
-
-CONFIGURE_ACTION+=./configure \
+CONFIGURE_ACTION=./configure \
 	--with-pic \
 	--enable-static \
 	--disable-shared \
