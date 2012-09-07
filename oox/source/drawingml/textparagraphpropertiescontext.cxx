@@ -19,7 +19,7 @@
 
 #include "oox/drawingml/textparagraphpropertiescontext.hxx"
 
-#include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 #include "oox/drawingml/colorchoicecontext.hxx"
@@ -122,7 +122,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     if ( xAttribs->hasAttribute( XML_rtl ) )
     {
         bool bRtl = attribs.getBool( XML_rtl, false );
-        rPropertyMap[ PROP_TextWritingMode ] <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
+        rPropertyMap[ PROP_WritingMode ] <<= ( bRtl ? WritingMode2::RL_TB : WritingMode2::LR_TB );
     }
 }
 
