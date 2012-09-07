@@ -52,6 +52,8 @@
 #define HELPDELAY_SHORT         2
 #define HELPDELAY_NONE          3
 
+#define HELPTEXTMAXLEN        150
+
 // =======================================================================
 
 Help::Help()
@@ -358,7 +360,7 @@ HelpTextWindow::~HelpTextWindow()
 void HelpTextWindow::SetHelpText( const String& rHelpText )
 {
     maHelpText = rHelpText;
-    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
+    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.Len() < HELPTEXTMAXLEN)
     {
         Size aSize;
         aSize.Height() = GetTextHeight();
@@ -420,7 +422,7 @@ void HelpTextWindow::Paint( const Rectangle& )
     }
 
     // paint text
-    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
+    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.Len() < HELPTEXTMAXLEN)
     {
         if ( mnStyle & QUICKHELP_CTRLTEXT )
             DrawCtrlText( maTextRect.TopLeft(), maHelpText );
