@@ -99,7 +99,132 @@ namespace
     struct theDefaultTableStyle : public ::rtl::Static< TableStyle, theDefaultTableStyle > {};
 }
 
-const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase )
+//for pptx just has table style id
+static void SetTableStyleProperties(TableStyle* &pTableStyle , const sal_Int32& tblFillClr,const sal_Int32& tblTextClr, const sal_Int32& lineBdrClr)
+{
+    //whole table fill style and color
+    oox::drawingml::FillPropertiesPtr pWholeTabFillProperties( new oox::drawingml::FillProperties );
+    pWholeTabFillProperties->moFillType.set(XML_solidFill);
+    pWholeTabFillProperties->maFillColor.setSchemeClr(tblFillClr);
+    pWholeTabFillProperties->maFillColor.addTransformation(XML_tint,20000);
+    pTableStyle->getWholeTbl().getFillProperties() = pWholeTabFillProperties;
+    //whole table text color
+    ::oox::drawingml::Color tableTextColor;
+    tableTextColor.setSchemeClr(tblTextClr);
+    pTableStyle->getWholeTbl().getTextColor() = tableTextColor;
+    //whole table line border
+    oox::drawingml::LinePropertiesPtr pLeftBorder( new oox::drawingml::LineProperties);
+    pLeftBorder->moLineWidth = 12700;
+    pLeftBorder->moPresetDash = XML_sng;
+    pLeftBorder->maLineFill.moFillType.set(XML_solidFill);
+    pLeftBorder->maLineFill.maFillColor.setSchemeClr(lineBdrClr);
+    pTableStyle->getWholeTbl().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left,pLeftBorder));
+    pTableStyle->getWholeTbl().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right,pLeftBorder));
+    pTableStyle->getWholeTbl().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top,pLeftBorder));
+    pTableStyle->getWholeTbl().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,pLeftBorder));
+    pTableStyle->getWholeTbl().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,pLeftBorder));
+    pTableStyle->getWholeTbl().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,pLeftBorder));
+
+    //Band1H style
+    oox::drawingml::FillPropertiesPtr pBand1HFillProperties( new oox::drawingml::FillProperties );
+    pBand1HFillProperties->moFillType.set(XML_solidFill);
+    pBand1HFillProperties->maFillColor.setSchemeClr(tblFillClr);
+    pBand1HFillProperties->maFillColor.addTransformation(XML_tint,40000);
+    pTableStyle->getBand1H().getFillProperties() = pBand1HFillProperties;
+
+    //Band1V style
+    pTableStyle->getBand1V().getFillProperties() = pBand1HFillProperties;
+
+    //tet bold for 1st row/last row/column
+    ::boost::optional< sal_Bool > textBoldStyle(sal_True);
+    pTableStyle->getFirstRow().getTextBoldStyle() = textBoldStyle;
+    pTableStyle->getLastRow().getTextBoldStyle() = textBoldStyle;
+    pTableStyle->getFirstCol().getTextBoldStyle() = textBoldStyle;
+    pTableStyle->getLastCol().getTextBoldStyle() = textBoldStyle;
+}
+
+ sal_Bool CreateTableStyle(TableStyle* &pTableStyle , const OUString& styleId)
+{
+    sal_Bool createdTblStyle = sal_False;
+    if(!styleId.compareToAscii("{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}")){           //Medium Style 2 Accenat 1
+        pTableStyle = new TableStyle();
+        createdTblStyle = sal_True;
+        //first row style
+        //fill color and type
+        oox::drawingml::FillPropertiesPtr pFstRowFillProperties( new oox::drawingml::FillProperties );
+        pFstRowFillProperties->moFillType.set(XML_solidFill);
+        pFstRowFillProperties->maFillColor.setSchemeClr(XML_accent1);
+        pTableStyle->getFirstRow().getFillProperties() = pFstRowFillProperties;
+        //text color
+        ::oox::drawingml::Color fstRowTextColor;
+        fstRowTextColor.setSchemeClr(XML_lt1);
+        pTableStyle->getFirstRow().getTextColor() = fstRowTextColor;
+        //bottom line border
+        oox::drawingml::LinePropertiesPtr pFstBottomBorder( new oox::drawingml::LineProperties);
+        pFstBottomBorder->moLineWidth = 38100;
+        pFstBottomBorder->moPresetDash = XML_sng;
+        pFstBottomBorder->maLineFill.moFillType.set(XML_solidFill);
+        pFstBottomBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
+        pTableStyle->getFirstRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,pFstBottomBorder));
+
+        //last row style
+        pTableStyle->getLastRow().getFillProperties() = pFstRowFillProperties;
+        pTableStyle->getLastRow().getTextColor() = fstRowTextColor;
+        pTableStyle->getLastRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top,pFstBottomBorder));
+
+        //first column style
+        pTableStyle->getFirstRow().getFillProperties() = pFstRowFillProperties;
+        pTableStyle->getFirstRow().getTextColor() = fstRowTextColor;
+
+        //last column style
+        pTableStyle->getLastCol().getFillProperties() = pFstRowFillProperties;
+        pTableStyle->getLastCol().getTextColor() = fstRowTextColor;
+
+        SetTableStyleProperties(pTableStyle, XML_accent1, XML_dk1, XML_lt1);
+    }
+    else if (!styleId.compareToAscii("{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}"))         //Medium Style 2 Accent 2
+    {
+        pTableStyle = new TableStyle();
+        createdTblStyle = sal_True;
+        oox::drawingml::FillPropertiesPtr pFstRowFillProperties( new oox::drawingml::FillProperties );
+        pFstRowFillProperties->moFillType.set(XML_solidFill);
+        pFstRowFillProperties->maFillColor.setSchemeClr(XML_accent2);
+        pTableStyle->getFirstRow().getFillProperties() = pFstRowFillProperties;
+
+        ::oox::drawingml::Color fstRowTextColor;
+        fstRowTextColor.setSchemeClr(XML_lt1);
+        pTableStyle->getFirstRow().getTextColor() = fstRowTextColor;
+
+        oox::drawingml::LinePropertiesPtr pFstBottomBorder( new oox::drawingml::LineProperties);
+        pFstBottomBorder->moLineWidth = 38100;
+        pFstBottomBorder->moPresetDash = XML_sng;
+        pFstBottomBorder->maLineFill.moFillType.set(XML_solidFill);
+        pFstBottomBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
+        pTableStyle->getFirstRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,pFstBottomBorder));
+
+        pTableStyle->getLastRow().getFillProperties() = pFstRowFillProperties;
+        pTableStyle->getLastRow().getTextColor() = fstRowTextColor;
+        pTableStyle->getLastRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top,pFstBottomBorder));
+
+        pTableStyle->getFirstCol().getFillProperties() = pFstRowFillProperties;
+        pTableStyle->getFirstCol().getTextColor() = fstRowTextColor;
+
+        pTableStyle->getLastCol().getFillProperties() = pFstRowFillProperties;
+        pTableStyle->getLastCol().getTextColor() = fstRowTextColor;
+
+        SetTableStyleProperties(pTableStyle, XML_accent2, XML_dk1, XML_lt1);
+    }
+    else if (!styleId.compareToAscii("{C4B1156A-380E-4F78-BDF5-A606A8083BF9}"))         //Medium Style 4 Accent 4
+    {
+        pTableStyle = new TableStyle();
+        createdTblStyle = sal_True;
+        SetTableStyleProperties(pTableStyle, XML_accent4, XML_dk1, XML_accent4);
+    }
+
+    return createdTblStyle;
+}
+
+const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, sal_Bool &isCreateTabStyle )
 {
     ::oox::core::XmlFilterBase& rBase( const_cast< ::oox::core::XmlFilterBase& >( rFilterBase ) );
 
@@ -120,6 +245,11 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
             }
             ++aIter;
         }
+        //if the pptx just has table style id, but no table style content, we will create the table style ourselves
+        if ( !pTableStyle )
+        {
+            isCreateTabStyle = CreateTableStyle(pTableStyle , aStyleId);
+        }
     }
 
     if ( !pTableStyle )
@@ -137,7 +267,8 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     CreateTableColumns( xColumnRowRange->getColumns(), mvTableGrid );
     CreateTableRows( xColumnRowRange->getRows(), mvTableRows );
 
-    const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase ) );
+    sal_Bool mbOwnTblStyle = sal_False;
+    const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, mbOwnTblStyle ) );
     sal_Int32 nRow = 0;
     const std::vector< TableRow >::const_iterator aTableRowEnd( mvTableRows.end() );
     for (std::vector< TableRow >::iterator aTableRowIter( mvTableRows.begin() );
@@ -160,6 +291,17 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
                     nColumn, aTableRowIter->getTableCells().size(), nRow, mvTableRows.size() );
             }
         }
+    }
+
+    if(mbOwnTblStyle == sal_True)
+    {
+        TableStyle* pTableStyle = (TableStyle*)&rTableStyle;
+        if(pTableStyle != NULL)
+        {
+            delete pTableStyle;
+            pTableStyle = NULL;
+        }
+        mbOwnTblStyle = sal_False;
     }
 }
 
