@@ -117,7 +117,7 @@ ScVbaShapeRange::IncrementTop( double Increment ) throw (uno::RuntimeException)
     }
 }
 
-rtl::OUString SAL_CALL ScVbaShapeRange::getName() throw (uno::RuntimeException)
+OUString SAL_CALL ScVbaShapeRange::getName() throw (uno::RuntimeException)
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; /* ++index unreachable */ )
@@ -128,7 +128,7 @@ rtl::OUString SAL_CALL ScVbaShapeRange::getName() throw (uno::RuntimeException)
     throw uno::RuntimeException();
 }
 
-void SAL_CALL ScVbaShapeRange::setName( const rtl::OUString& _name ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaShapeRange::setName( const OUString& _name ) throw (uno::RuntimeException)
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; ++index )
@@ -382,20 +382,20 @@ ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
         return uno::makeAny( xVbShape );
 }
 
-rtl::OUString
+OUString
 ScVbaShapeRange::getServiceImplName()
 {
-    return rtl::OUString("ScVbaShapeRange");
+    return OUString("ScVbaShapeRange");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaShapeRange::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.msform.ShapeRange"  );
+        aServiceNames[ 0 ] = "ooo.vba.msform.ShapeRange";
     }
     return aServiceNames;
 }
