@@ -193,11 +193,11 @@ namespace basegfx
         // add object expansion
         if(bSquare)
         {
-            const double fOriginalDiag(sqrt((fTargetSizeX * fTargetSizeX) + (fTargetSizeY * fTargetSizeY)));
-            fTargetOffsetX -= (fOriginalDiag - fTargetSizeX) / 2.0;
-            fTargetOffsetY -= (fOriginalDiag - fTargetSizeY) / 2.0;
-            fTargetSizeX = fOriginalDiag;
-            fTargetSizeY = fOriginalDiag;
+            const double fSquareWidth((fTargetSizeX>fTargetSizeY) ? fTargetSizeX : fTargetSizeY);
+            fTargetOffsetX = fTargetOffsetX + fTargetSizeX / 2.0 - fSquareWidth / 2.0;
+            fTargetOffsetY = fTargetOffsetY + fTargetSizeY / 2.0 - fSquareWidth / 2.0;
+            fTargetSizeX = fSquareWidth;
+            fTargetSizeY = fSquareWidth;
         }
 
         // add object expansion
