@@ -26,27 +26,29 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/frame/XConfigManager.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#include <com/sun/star/xml/XImportFilter.hpp>
-#include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/XConfigManager.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <comphelper/oslfile2streamwrap.hxx>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-
+#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/xml/XImportFilter.hpp>
+#include <com/sun/star/xml/XExportFilter.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/oslfile2streamwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -186,12 +188,9 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
         if( xCfgMgr.is() )
             sDTDPath = xCfgMgr->substituteVariables( sDTDPath );
 
-        mxGlobalBroadcaster = Reference < XEventBroadcaster >::query( mxMSF->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" )) ) );
-        if ( mxGlobalBroadcaster.is() )
-        {
-            mxGlobalEventListener = new GlobalEventListenerImpl( this );
-            mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
-        }
+        mxGlobalBroadcaster = Reference < XEventBroadcaster >( GlobalEventBroadcaster::create(comphelper::ComponentContext(mxMSF).getUNOContext()), UNO_QUERY_THROW );
+        mxGlobalEventListener = new GlobalEventListenerImpl( this );
+        mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
     }
     catch( const Exception& )
     {

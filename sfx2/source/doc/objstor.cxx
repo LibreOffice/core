@@ -25,6 +25,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -147,20 +148,16 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
     if (!xModel.is())
         return;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::container::XSet > xModelCollection(
-        xSMGR->createInstance(::rtl::OUString("com.sun.star.frame.GlobalEventBroadcaster")),
-        css::uno::UNO_QUERY);
-    if (xModelCollection.is())
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
+        css::frame::GlobalEventBroadcaster::create(xContext);
+    try
     {
-        try
-        {
-            xModelCollection->insert(css::uno::makeAny(xModel));
-        }
-        catch ( uno::Exception& )
-        {
-            OSL_FAIL( "The document seems to be in the collection already!\n" );
-        }
+        xModelCollection->insert(css::uno::makeAny(xModel));
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL( "The document seems to be in the collection already!\n" );
     }
 }
 

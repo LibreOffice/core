@@ -39,12 +39,12 @@
 
 #include "comphelper/documentinfo.hxx"
 #include "comphelper/namedvaluecollection.hxx"
-#include "comphelper/processfactory.hxx"
 
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/container/XEnumerationAccess.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
+#include "com/sun/star/frame/GlobalEventBroadcaster.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/frame/ModuleManager.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -112,10 +112,10 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
 //=========================================================================
 
 OfficeDocumentsManager::OfficeDocumentsManager(
-            const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
+            const uno::Reference< uno::XComponentContext > & rxContext,
             OfficeDocumentsEventListener * pDocEventListener )
-: m_xSMgr( xSMgr ),
-  m_xDocEvtNotifier( createDocumentEventNotifier( xSMgr ) ),
+: m_xContext( rxContext ),
+  m_xDocEvtNotifier( createDocumentEventNotifier( rxContext ) ),
   m_pDocEventListener( pDocEventListener ),
   m_xDocCloseListener( new OfficeDocumentsCloseListener( this ) )
 {
@@ -460,15 +460,12 @@ void SAL_CALL OfficeDocumentsManager::disposing(
 // static
 uno::Reference< document::XEventBroadcaster >
 OfficeDocumentsManager::createDocumentEventNotifier(
-        const uno::Reference< lang::XMultiServiceFactory >& rXSMgr )
+        const uno::Reference< uno::XComponentContext >& rxContext )
 {
     uno::Reference< uno::XInterface > xIfc;
     try
     {
-        xIfc = rXSMgr->createInstance(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.GlobalEventBroadcaster" ) ) );
+        xIfc = frame::GlobalEventBroadcaster::create(rxContext);
     }
     catch ( uno::Exception const & )
     {
@@ -702,8 +699,7 @@ bool OfficeDocumentsManager::isBasicIDE(
         {
             try
             {
-                m_xModuleMgr = frame::ModuleManager::create(
-                    comphelper::getComponentContext(m_xSMgr));
+                m_xModuleMgr = frame::ModuleManager::create( m_xContext );
             }
             catch ( uno::Exception const & )
             {

@@ -43,6 +43,7 @@
 #include "migration.hxx"
 
 #include <svtools/javacontext.hxx>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
@@ -1531,8 +1532,7 @@ int Desktop::Main()
 
         // create service for loadin SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
-            ( xSMgr->createInstance(
-            rtl::OUString( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
+            ( css::frame::GlobalEventBroadcaster::create(comphelper::ComponentContext(xSMgr).getUNOContext()), UNO_QUERY );
 
         /* ensure existance of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively

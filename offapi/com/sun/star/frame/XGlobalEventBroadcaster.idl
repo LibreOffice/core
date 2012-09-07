@@ -16,22 +16,35 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_frame_GlobalEventBroadcaster_idl__
-#define __com_sun_star_frame_GlobalEventBroadcaster_idl__
+#ifndef __com_sun_star_frame_XGlobalEventBroadcaster_idl__
+#define __com_sun_star_frame_XGlobalEventBroadcaster_idl__
 
-#include <com/sun/star/frame/XGlobalEventBroadcaster.idl>
+#include <com/sun/star/document/XEventBroadcaster.idl>
+#include <com/sun/star/document/XEventsSupplier.idl>
+#include <com/sun/star/container/XSet.idl>
 
 
-module com {  module sun {  module star {  module frame {
+ module com {  module sun {  module star {  module frame {
 
 /**
-    This service offers the document event functionality that can be found at any
-    <type scope="com::sun::star::document">OfficeDocument</type>, but it does it for all existing documents.
-    So it is a single place where a listener can be registered for all events in all
-    documents.
+   Provides a unified interface for the GlobalEventBroadcaster service to implement.
  */
 
-service GlobalEventBroadcaster : XGlobalEventBroadcaster;
+interface XGlobalEventBroadcaster
+{
+        /** makes it possible to register listeners which are called whenever
+            a document event occurs in any document
+         */
+        interface ::com::sun::star::document::XEventsSupplier;
+
+        /** access to bound event handlers
+         */
+        interface ::com::sun::star::document::XEventBroadcaster;
+
+        interface ::com::sun::star::container::XSet;
+
+        interface ::com::sun::star::document::XEventListener;
+};
 
 
 }; }; }; };

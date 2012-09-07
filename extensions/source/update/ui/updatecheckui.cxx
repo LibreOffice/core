@@ -36,6 +36,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -255,17 +256,8 @@ UpdateCheckUI::getGlobalEventBroadcaster() const throw (uno::RuntimeException)
             UNISTRING( "UpdateCheckUI: empty component context" ),
                 uno::Reference< uno::XInterface >() );
 
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(m_xContext->getServiceManager());
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckUI: unable to obtain service manager from component context" ),
-                uno::Reference< uno::XInterface >() );
-
     return uno::Reference<document::XEventBroadcaster> (
-        xServiceManager->createInstanceWithContext(
-            UNISTRING( "com.sun.star.frame.GlobalEventBroadcaster" ),
-            m_xContext),
+        frame::GlobalEventBroadcaster::create(m_xContext),
         uno::UNO_QUERY_THROW);
 }
 

@@ -21,6 +21,7 @@
 #include <sfx2/app.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -111,14 +112,12 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
     pApp->Get_Impl()->pAppDispatch->release();
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::document::XEventListener > xGlobalBroadcaster(xSMGR->createInstance("com.sun.star.frame.GlobalEventBroadcaster"), css::uno::UNO_QUERY);
-    if (xGlobalBroadcaster.is())
-    {
-        css::document::EventObject aEvent2;
-        aEvent2.EventName = "OnCloseApp";
-        xGlobalBroadcaster->notifyEvent(aEvent2);
-    }
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xGlobalBroadcaster = css::frame::GlobalEventBroadcaster::create(xContext);
+
+    css::document::EventObject aEvent2;
+    aEvent2.EventName = "OnCloseApp";
+    xGlobalBroadcaster->notifyEvent(aEvent2);
 
     delete pApp;
     Application::Quit();

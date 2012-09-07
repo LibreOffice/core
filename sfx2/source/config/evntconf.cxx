@@ -44,6 +44,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -231,8 +232,8 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
     else
     {
         xSupplier = uno::Reference < document::XEventsSupplier >
-                ( ::comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString("com.sun.star.frame.GlobalEventBroadcaster")), uno::UNO_QUERY );
+                ( frame::GlobalEventBroadcaster::create(::comphelper::getProcessComponentContext()),
+                  uno::UNO_QUERY );
     }
 
     if ( xSupplier.is() )

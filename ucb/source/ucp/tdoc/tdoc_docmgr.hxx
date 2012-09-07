@@ -123,7 +123,7 @@ namespace tdoc_ucp {
     public:
         OfficeDocumentsManager(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory > & xSMgr,
+                com::sun::star::uno::XComponentContext > & rxContext,
             OfficeDocumentsEventListener * pDocEventListener );
         virtual ~OfficeDocumentsManager();
 
@@ -162,7 +162,7 @@ namespace tdoc_ucp {
             com::sun::star::document::XEventBroadcaster >
         createDocumentEventNotifier(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+                com::sun::star::uno::XComponentContext >& rxContext );
 
         void buildDocumentsList();
 
@@ -193,7 +193,7 @@ namespace tdoc_ucp {
 
         osl::Mutex                                          m_aMtx;
         com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
+            com::sun::star::uno::XComponentContext >        m_xContext;
         com::sun::star::uno::Reference<
             com::sun::star::document::XEventBroadcaster >   m_xDocEvtNotifier;
         com::sun::star::uno::Reference<

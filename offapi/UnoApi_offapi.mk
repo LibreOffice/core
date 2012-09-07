@@ -133,6 +133,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	DispatchHelper \
 	DispatchRecorderSupplier \
 	DocumentTemplates \
+	GlobalEventBroadcaster \
 	MediaTypeDetectionHelper \
 	ModuleManager \
 	UICommandDescription \
@@ -814,7 +815,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	FrameLoader \
 	FrameLoaderFactory \
 	FramesContainer \
-	GlobalEventBroadcaster \
 	LayoutManager \
 	PopupMenuController \
 	PopupMenuControllerFactory \
@@ -2522,6 +2522,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XFrameSetModel \
 	XFrames \
 	XFramesSupplier \
+	XGlobalEventBroadcaster \
 	XInterceptorInfo \
 	XLayoutManager \
 	XLayoutManagerEventBroadcaster \
