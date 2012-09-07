@@ -145,27 +145,6 @@ class OnewayExecutor extends Thread
 
     // _______________________________
 
-    public static void codeAddOrRemoveStatusListener(
-        boolean bEncode, Vector[] lParams,
-        com.sun.star.frame.XStatusListener[] xListener,
-        com.sun.star.util.URL[] aURL)
-    {
-        if (bEncode)
-        {
-            lParams[0] = new Vector<Object>(2);
-            lParams[0].add( (Object)xListener[0] );
-            lParams[0].add( (Object)aURL[0]      );
-        }
-        else
-        {
-            xListener[0] = (com.sun.star.frame.XStatusListener)
-                (lParams[0].elementAt(0));
-            aURL[0] = (com.sun.star.util.URL)(lParams[0].elementAt(1));
-        }
-    }
-
-    // _______________________________
-
     public static void codeDispatch(
         boolean bEncode, Vector[] lParams,
         com.sun.star.util.URL[] aURL,
