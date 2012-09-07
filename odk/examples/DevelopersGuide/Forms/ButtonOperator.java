@@ -55,7 +55,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
     private XPropertySet        m_form;
     private XFormOperations     m_formOperations;
 
-    private Vector              m_aButtons;
+    private Vector<XPropertySet>              m_aButtons;
 
     /* ------------------------------------------------------------------ */
     /** ctor
@@ -65,7 +65,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
         m_componentContext = xCtx;
         m_aDocument = aDocument;
         m_form = _form;
-        m_aButtons = new Vector();
+        m_aButtons = new Vector<XPropertySet>();
     }
 
     /* ------------------------------------------------------------------ */
@@ -89,7 +89,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
     {
         for ( int i=0; i < m_aButtons.size(); ++i )
         {
-            XPropertySet button = (XPropertySet)m_aButtons.elementAt( i );
+            XPropertySet button = m_aButtons.elementAt( i );
             if ( _formFeature == getAssociatedFormFeature( button ) )
                 return button;
         }
@@ -119,7 +119,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
         DocumentViewHelper aCurrentView = m_aDocument.getCurrentView();
 
         // add a listener so we get noticed if the user presses the button
-        XButton xButtonControl = (XButton)UnoRuntime.queryInterface( XButton.class,
+        XButton xButtonControl = UnoRuntime.queryInterface( XButton.class,
             aCurrentView.getFormControl( _buttonModel ) );
         xButtonControl.addActionListener( this );
 
@@ -215,7 +215,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
     {
         for ( int i=0; i < m_aButtons.size(); ++i )
         {
-            XPropertySet buttonModel = (XPropertySet)m_aButtons.elementAt( i );
+            XPropertySet buttonModel = m_aButtons.elementAt( i );
             updateButtonState( buttonModel, getAssociatedFormFeature( buttonModel ) );
         }
     }

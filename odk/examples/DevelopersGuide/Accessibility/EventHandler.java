@@ -52,7 +52,7 @@ public class EventHandler
         mnTopWindowCount = 0;
         maListenerProxy = new EventListenerProxy (this);
         maConnectionTask = new ConnectionTask (maListenerProxy);
-        maObjectDisplays = new Vector ();
+        maObjectDisplays = new Vector<IAccessibleObjectDisplay> ();
     }
 
     public synchronized void addObjectDisplay (IAccessibleObjectDisplay aDisplay)
@@ -148,7 +148,7 @@ public class EventHandler
             for (int i=0; i<maObjectDisplays.size(); i++)
             {
                 IAccessibleObjectDisplay aDisplay =
-                    (IAccessibleObjectDisplay)maObjectDisplays.get(i);
+                    maObjectDisplays.get(i);
                 if (aDisplay != null)
                     aDisplay.setAccessibleObject (xContext);
             }
@@ -179,7 +179,7 @@ public class EventHandler
             for (int i=0; i<maObjectDisplays.size(); i++)
             {
                 IAccessibleObjectDisplay aDisplay =
-                    (IAccessibleObjectDisplay)maObjectDisplays.get(i);
+                    maObjectDisplays.get(i);
                 if (aDisplay != null)
                     aDisplay.setAccessibleObject (null);
             }
@@ -285,7 +285,7 @@ public class EventHandler
             for (int i=0; i<maObjectDisplays.size(); i++)
             {
                 IAccessibleObjectDisplay aDisplay =
-                    (IAccessibleObjectDisplay)maObjectDisplays.get(i);
+                    maObjectDisplays.get(i);
                 if (aDisplay != null)
                     aDisplay.updateAccessibleObject (mxFocusedObject);
             }
@@ -437,7 +437,7 @@ public class EventHandler
         ways such as showing a graphical representation or some textual
         descriptions.
     */
-    private Vector maObjectDisplays;
+    private Vector<IAccessibleObjectDisplay> maObjectDisplays;
 
     /** The timer task that attempts in regular intervals to connect to a
         running Office application.

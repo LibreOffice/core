@@ -154,8 +154,8 @@ class TextualDisplay
         // Try to cast the given accessible context to the
         // XAccessibleComponent interface.
         XAccessibleComponent xComponent =
-            (XAccessibleComponent)UnoRuntime.queryInterface(
-                XAccessibleComponent.class, xContext);
+            UnoRuntime.queryInterface(
+            XAccessibleComponent.class, xContext);
         if (xComponent != null)
         {
             Point aLocation = xComponent.getLocationOnScreen();
@@ -179,7 +179,7 @@ class TextualDisplay
     private String showParents (XAccessibleContext xContext)
     {
         // Create the path from the given object to its tree's root.
-        Vector aPathToRoot = new Vector();
+        Vector<XAccessibleContext> aPathToRoot = new Vector<XAccessibleContext>();
         while (xContext != null)
         {
             aPathToRoot.add (xContext);
@@ -203,7 +203,7 @@ class TextualDisplay
         String sIndentation = new String ();
         for (int i=aPathToRoot.size()-1; i>=0; i--)
         {
-            XAccessibleContext xParentContext = (XAccessibleContext)aPathToRoot.get(i);
+            XAccessibleContext xParentContext = aPathToRoot.get(i);
             String sParentName = xParentContext.getAccessibleName();
             if (sParentName.length() == 0)
                 sParentName = "<unnamed> / Role "

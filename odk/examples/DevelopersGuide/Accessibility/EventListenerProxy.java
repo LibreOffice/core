@@ -66,7 +66,7 @@ class EventListenerProxy
         mbAsynchron = true;
         if (mbAsynchron)
         {
-            maEventQueue = new LinkedList();
+            maEventQueue = new LinkedList<Runnable>();
             new Thread (this, "EventListenerProxy").start();
         }
     }
@@ -105,7 +105,7 @@ class EventListenerProxy
                 synchronized (maEventQueue)
                 {
                     if (maEventQueue.size() > 0)
-                        aEvent = (Runnable)maEventQueue.removeFirst();
+                        aEvent = maEventQueue.removeFirst();
                     else
                         aEvent = null;
                 }
@@ -174,7 +174,7 @@ class EventListenerProxy
                 public void run()
                 {
                     maListener.windowOpened (
-                        (XAccessible) UnoRuntime.queryInterface(
+                        UnoRuntime.queryInterface(
                             XAccessible.class,
                             aEvent.Source));
                 }
@@ -192,7 +192,7 @@ class EventListenerProxy
                 public void run()
                 {
                     maListener.windowClosed (
-                        (XAccessible) UnoRuntime.queryInterface(
+                        UnoRuntime.queryInterface(
                             XAccessible.class,
                             aEvent.Source));
                 }
@@ -219,7 +219,7 @@ class EventListenerProxy
         The queue object will also serve as lock for the consumer/producer type
         syncronization.
     */
-    private LinkedList maEventQueue;
+    private LinkedList<Runnable> maEventQueue;
 
     /** This is the actual listener that the events will eventually forwarded to.
     */
