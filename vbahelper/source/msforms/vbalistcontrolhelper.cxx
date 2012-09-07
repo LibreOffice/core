@@ -24,7 +24,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-const static rtl::OUString ITEMS( "StringItemList" );
+const static OUString ITEMS( "StringItemList" );
 
 class ListPropListener : public PropListener
 {
@@ -47,15 +47,14 @@ ListPropListener::ListPropListener( const uno::Reference< beans::XPropertySet >&
 void ListPropListener::setValueEvent( const uno::Any& value )
 {
     if( m_pvargIndex.hasValue() || m_pvarColumn.hasValue() )
-        throw uno::RuntimeException( rtl::OUString(
-                "Bad argument" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Bad argument" , uno::Reference< uno::XInterface >() );
 
     m_xProps->setPropertyValue( ITEMS, value );
 }
 
 uno::Any ListPropListener::getValueEvent()
 {
-    uno::Sequence< rtl::OUString > sList;
+    uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( ITEMS ) >>= sList;
     sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
     uno::Any aRet;
@@ -64,16 +63,14 @@ uno::Any ListPropListener::getValueEvent()
         sal_Int16 nIndex = -1;
         m_pvargIndex >>= nIndex;
         if( nIndex < 0 || nIndex >= nLength )
-            throw uno::RuntimeException( rtl::OUString(
-                    "Bad row Index" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "Bad row Index" , uno::Reference< uno::XInterface >() );
         aRet <<= sList[ nIndex ];
     }
     else if ( m_pvarColumn.hasValue() ) // pvarColumn on its own would be bad
-            throw uno::RuntimeException( rtl::OUString(
-                    "Bad column Index" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "Bad column Index" , uno::Reference< uno::XInterface >() );
     else // List() ( e.g. no args )
     {
-        uno::Sequence< uno::Sequence< rtl::OUString > > sReturnArray( nLength );
+        uno::Sequence< uno::Sequence< OUString > > sReturnArray( nLength );
         for ( sal_Int32 i = 0; i < nLength; ++i )
         {
             sReturnArray[ i ].realloc( 10 );
@@ -89,7 +86,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
 {
     if ( pvargItem.hasValue()  )
     {
-        uno::Sequence< rtl::OUString > sList;
+        uno::Sequence< OUString > sList;
         m_xProps->getPropertyValue( ITEMS ) >>= sList;
 
         sal_Int32 nIndex = sList.getLength();
@@ -97,7 +94,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
         if ( pvargIndex.hasValue() )
             pvargIndex >>= nIndex;
 
-        rtl::OUString sString = getAnyAsString( pvargItem );
+        OUString sString = getAnyAsString( pvargItem );
 
         // if no index specified or item is to be appended to end of
         // list just realloc the array and set the last item
@@ -110,13 +107,13 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
         else
         {
             // just copy those elements above the one to be inserted
-            std::vector< rtl::OUString > sVec;
+            std::vector< OUString > sVec;
             // reserve just the amount we need to copy
             sVec.reserve( sList.getLength() - nIndex );
 
             // point at first element to copy
-            rtl::OUString* pString = sList.getArray() + nIndex;
-            const rtl::OUString* pEndString = sList.getArray() + sList.getLength();
+            OUString* pString = sList.getArray() + nIndex;
+            const OUString* pEndString = sList.getArray() + sList.getLength();
             // insert the new element
             sVec.push_back( sString );
             // copy elements
@@ -128,7 +125,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
             // point at first element to be overwritten
             pString = sList.getArray() + nIndex;
             pEndString = sList.getArray() + sList.getLength();
-            std::vector< rtl::OUString >::iterator it = sVec.begin();
+            std::vector< OUString >::iterator it = sVec.begin();
             for ( ; pString != pEndString; ++pString, ++it)
                 *pString = *it;
             //
@@ -146,10 +143,10 @@ ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeExcept
     // for int index
     if ( index >>= nIndex  )
     {
-        uno::Sequence< rtl::OUString > sList;
+        uno::Sequence< OUString > sList;
         m_xProps->getPropertyValue( ITEMS ) >>= sList;
         if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
-            throw uno::RuntimeException( rtl::OUString("Invalid index"), uno::Reference< uno::XInterface > () );
+            throw uno::RuntimeException( "Invalid index" , uno::Reference< uno::XInterface > () );
         if( sList.hasElements() )
         {
             if( sList.getLength() == 1 )
@@ -173,11 +170,11 @@ ListControlHelper::Clear(  ) throw (uno::RuntimeException)
 {
     // urk, setValue doesn't seem to work !!
     //setValue( uno::makeAny( sal_Int16() ) );
-    m_xProps->setPropertyValue( ITEMS, uno::makeAny( uno::Sequence< rtl::OUString >() ) );
+    m_xProps->setPropertyValue( ITEMS, uno::makeAny( uno::Sequence< OUString >() ) );
 }
 
 void SAL_CALL
-ListControlHelper::setRowSource( const rtl::OUString& _rowsource ) throw (uno::RuntimeException)
+ListControlHelper::setRowSource( const OUString& _rowsource ) throw (uno::RuntimeException)
 {
     if ( _rowsource.isEmpty() )
         Clear();
@@ -186,7 +183,7 @@ ListControlHelper::setRowSource( const rtl::OUString& _rowsource ) throw (uno::R
 sal_Int32 SAL_CALL
 ListControlHelper::getListCount() throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > sList;
+    uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( ITEMS ) >>= sList;
     return sList.getLength();
 }

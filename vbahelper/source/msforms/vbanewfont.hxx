@@ -36,8 +36,8 @@ public:
         const css::uno::Reference< css::beans::XPropertySet >& rxModelProps ) throw (css::uno::RuntimeException);
 
     // XNewFont attributes
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& rName ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& rName ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getSize() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setSize( double fSize ) throw (css::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getCharset() throw (css::uno::RuntimeException);
