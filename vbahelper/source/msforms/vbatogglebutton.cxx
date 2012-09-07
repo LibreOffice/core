@@ -24,9 +24,9 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-const static rtl::OUString LABEL( RTL_CONSTASCII_USTRINGPARAM("Label") );
-const static rtl::OUString TOGGLE( RTL_CONSTASCII_USTRINGPARAM("Toggle") );
-const static rtl::OUString STATE( RTL_CONSTASCII_USTRINGPARAM("State") );
+const static OUString LABEL( "Label" );
+const static OUString TOGGLE( "Toggle" );
+const static OUString STATE( "State" );
 ScVbaToggleButton::ScVbaToggleButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper ) : ToggleButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
     OSL_TRACE("ScVbaToggleButton(ctor)");
@@ -39,16 +39,16 @@ ScVbaToggleButton::~ScVbaToggleButton()
 }
 
 // Attributes
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaToggleButton::getCaption() throw (css::uno::RuntimeException)
 {
-    rtl::OUString Label;
+    OUString Label;
     m_xProps->getPropertyValue( LABEL ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
-ScVbaToggleButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
+ScVbaToggleButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
@@ -156,20 +156,20 @@ void SAL_CALL ScVbaToggleButton::setLocked( sal_Bool bLocked ) throw (uno::Runti
     ScVbaControl::setLocked( bLocked );
 }
 
-rtl::OUString
+OUString
 ScVbaToggleButton::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaToggleButton"));
+    return OUString( "ScVbaToggleButton" );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaToggleButton::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.ToggleButton" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.ToggleButton";
     }
     return aServiceNames;
 }

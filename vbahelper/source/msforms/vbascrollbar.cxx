@@ -23,11 +23,11 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-const static rtl::OUString LARGECHANGE( RTL_CONSTASCII_USTRINGPARAM("BlockIncrement") );
-const static rtl::OUString SMALLCHANGE( RTL_CONSTASCII_USTRINGPARAM("LineIncrement") );
-const static rtl::OUString SCROLLVALUE( RTL_CONSTASCII_USTRINGPARAM("ScrollValue") );
-const static rtl::OUString SCROLLMAX( RTL_CONSTASCII_USTRINGPARAM("ScrollValueMax") );
-const static rtl::OUString SCROLLMIN( RTL_CONSTASCII_USTRINGPARAM("ScrollValueMin") );
+const static OUString LARGECHANGE( "BlockIncrement");
+const static OUString SMALLCHANGE( "LineIncrement");
+const static OUString SCROLLVALUE( "ScrollValue");
+const static OUString SCROLLMAX( "ScrollValueMax");
+const static OUString SCROLLMIN( "ScrollValueMin");
 
 ScVbaScrollBar::ScVbaScrollBar(  const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ScrollBarImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
@@ -102,20 +102,20 @@ ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange ) throw (uno::RuntimeEx
     m_xProps->setPropertyValue( SMALLCHANGE, uno::makeAny( _smallchange ) );
 }
 
-rtl::OUString
+OUString
 ScVbaScrollBar::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaScrollBar"));
+    return OUString("ScVbaScrollBar" );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaScrollBar::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.Frame" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.Frame";
     }
     return aServiceNames;
 }

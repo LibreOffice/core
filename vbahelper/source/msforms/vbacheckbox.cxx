@@ -25,23 +25,23 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-const static rtl::OUString LABEL( RTL_CONSTASCII_USTRINGPARAM("Label") );
-const static rtl::OUString STATE( RTL_CONSTASCII_USTRINGPARAM("State") );
+const static OUString LABEL( "Label" );
+const static OUString STATE( "State" );
 ScVbaCheckbox::ScVbaCheckbox( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper ) : CheckBoxImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
 }
 
 // Attributes
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaCheckbox::getCaption() throw (css::uno::RuntimeException)
 {
-    rtl::OUString Label;
+    OUString Label;
     m_xProps->getPropertyValue( LABEL ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
-ScVbaCheckbox::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
+ScVbaCheckbox::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
@@ -86,20 +86,20 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaCheckbox::getFont() throw (uno
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString
+OUString
 ScVbaCheckbox::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCheckbox"));
+    return OUString("ScVbaCheckbox");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaCheckbox::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.CheckBox" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.CheckBox";
     }
     return aServiceNames;
 }

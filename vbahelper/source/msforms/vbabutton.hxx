@@ -31,8 +31,8 @@ class ScVbaButton : public ButtonImpl_BASE
 public:
     ScVbaButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
    // Attributes
-    virtual rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getCancel() throw (css::uno::RuntimeException);
@@ -47,8 +47,8 @@ public:
     virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
     //XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif //SC_VBA_BUTTON_HXX
 

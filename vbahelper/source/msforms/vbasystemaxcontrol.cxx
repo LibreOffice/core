@@ -36,56 +36,56 @@ uno::Reference< beans::XIntrospectionAccess > SAL_CALL VbaSystemAXControl::getIn
 }
 
 //----------------------------------------------------------
-uno::Any SAL_CALL VbaSystemAXControl::invoke( const ::rtl::OUString& aFunctionName, const uno::Sequence< uno::Any >& aParams, uno::Sequence< ::sal_Int16 >& aOutParamIndex, uno::Sequence< uno::Any >& aOutParam )
+uno::Any SAL_CALL VbaSystemAXControl::invoke( const OUString& aFunctionName, const uno::Sequence< uno::Any >& aParams, uno::Sequence< ::sal_Int16 >& aOutParamIndex, uno::Sequence< uno::Any >& aOutParam )
     throw ( lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException )
 {
     return m_xControlInvocation->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
 }
 
 //----------------------------------------------------------
-void SAL_CALL VbaSystemAXControl::setValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL VbaSystemAXControl::setValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw ( beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException )
 {
     m_xControlInvocation->setValue( aPropertyName, aValue );
 }
 
 //----------------------------------------------------------
-uno::Any SAL_CALL VbaSystemAXControl::getValue( const ::rtl::OUString& aPropertyName )
+uno::Any SAL_CALL VbaSystemAXControl::getValue( const OUString& aPropertyName )
     throw ( beans::UnknownPropertyException, uno::RuntimeException )
 {
     return m_xControlInvocation->getValue( aPropertyName );
 }
 
 //----------------------------------------------------------
-::sal_Bool SAL_CALL VbaSystemAXControl::hasMethod( const ::rtl::OUString& aName )
+::sal_Bool SAL_CALL VbaSystemAXControl::hasMethod( const OUString& aName )
     throw ( uno::RuntimeException )
 {
     return m_xControlInvocation->hasMethod( aName );
 }
 
 //----------------------------------------------------------
-::sal_Bool SAL_CALL VbaSystemAXControl::hasProperty( const ::rtl::OUString& aName )
+::sal_Bool SAL_CALL VbaSystemAXControl::hasProperty( const OUString& aName )
     throw ( uno::RuntimeException )
 {
     return m_xControlInvocation->hasProperty( aName );
 }
 
 //----------------------------------------------------------
-rtl::OUString
+OUString
 VbaSystemAXControl::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaSystemAXControl"));
+    return OUString( "VbaSystemAXControl" );
 }
 
 //----------------------------------------------------------
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 VbaSystemAXControl::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.msforms.Frame" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.Frame";
     }
     return aServiceNames;
 }

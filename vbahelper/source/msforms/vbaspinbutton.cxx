@@ -23,9 +23,9 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-const static rtl::OUString SPINVALUE( RTL_CONSTASCII_USTRINGPARAM("SpinValue") );
-const static rtl::OUString SPINMAX( RTL_CONSTASCII_USTRINGPARAM("SpinValueMax") );
-const static rtl::OUString SPINMIN( RTL_CONSTASCII_USTRINGPARAM("SpinValueMin") );
+const static OUString SPINVALUE( "SpinValue" );
+const static OUString SPINMAX( "SpinValueMax" );
+const static OUString SPINMIN( "SpinValueMin" );
 
 ScVbaSpinButton::ScVbaSpinButton(  const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : SpinButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
@@ -72,20 +72,20 @@ ScVbaSpinButton::setMin( sal_Int32 nVal ) throw (uno::RuntimeException)
     m_xProps->setPropertyValue( SPINMIN, uno::makeAny( nVal ) );
 }
 
-rtl::OUString
+OUString
 ScVbaSpinButton::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaSpinButton"));
+    return OUString( "ScVbaSpinButton" );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaSpinButton::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.Frame" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.Frame";
     }
     return aServiceNames;
 }

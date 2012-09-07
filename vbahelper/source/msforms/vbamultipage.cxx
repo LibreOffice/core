@@ -25,7 +25,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-const rtl::OUString SVALUE( RTL_CONSTASCII_USTRINGPARAM("MultiPageValue") );
+const OUString SVALUE( "MultiPageValue" );
 
 typedef cppu::WeakImplHelper1< container::XIndexAccess > PagesImpl_Base;
 class PagesImpl : public PagesImpl_Base
@@ -89,10 +89,10 @@ ScVbaMultiPage::setValue( const sal_Int32 _value ) throw (::com::sun::star::uno:
         fireChangeEvent();
 }
 
-rtl::OUString
+OUString
 ScVbaMultiPage::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMultiPage"));
+    return OUString( "ScVbaMultiPage" );
 }
 
 uno::Any SAL_CALL
@@ -106,14 +106,14 @@ ScVbaMultiPage::Pages( const uno::Any& index ) throw (uno::RuntimeException)
     return xColl->Item( uno::makeAny( index ), uno::Any() );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaMultiPage::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.MultiPage" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.MultiPage";
     }
     return aServiceNames;
 }

@@ -36,8 +36,8 @@ class ScVbaListBox : public ListBoxImpl_BASE
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ListControlHelper > mpListHelper;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    rtl::OUString sSourceName;
-    rtl::OUString msDftPropName;
+    OUString sSourceName;
+    OUString msDftPropName;
 
     sal_Int16 m_nIndex;
 
@@ -50,8 +50,8 @@ public:
     virtual ::sal_Int32 SAL_CALL getListCount() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setText( const ::rtl::OUString& _text ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getMultiSelect() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setMultiSelect( ::sal_Int32 _multiselect ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
@@ -63,14 +63,14 @@ public:
     virtual void SAL_CALL Clear(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL List( const css::uno::Any& pvargIndex, const css::uno::Any& pvarColumn ) throw (css::uno::RuntimeException);
     // XControl
-    virtual void SAL_CALL setRowSource( const rtl::OUString& _rowsource ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) throw (css::uno::RuntimeException);
 
     // XDefaultProperty
-    rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString("Value"); }
+    OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Value"); }
 
     //XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 
     //PropListener
     virtual void setValueEvent( const css::uno::Any& value );

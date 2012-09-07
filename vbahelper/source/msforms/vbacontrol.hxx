@@ -45,10 +45,10 @@ private:
 protected:
     // awt control has nothing similar to Tag property of Mso controls,
     // whether it is necessary is another question
-    ::rtl::OUString m_aControlTag;
+    OUString m_aControlTag;
 
     bool bIsDialog;
-    rtl::OUString m_sLibraryAndCodeName;
+    OUString m_sLibraryAndCodeName;
     std::auto_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
     css::uno::Reference< css::uno::XInterface > m_xControl;
@@ -66,8 +66,8 @@ public:
     // the heap
     void setGeometryHelper( ov::AbstractGeometryAttributes* pHelper );
     // sets the name of the associated library ( used for UserForm controls )
-    void setLibraryAndCodeName( const rtl::OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
-    rtl::OUString getLibraryAndCodeName() const { return m_sLibraryAndCodeName; }
+    void setLibraryAndCodeName( const OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
+    OUString getLibraryAndCodeName() const { return m_sLibraryAndCodeName; }
 
     // XControl
     virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
@@ -86,16 +86,16 @@ public:
     virtual void SAL_CALL Move( double Left, double Top, const ::com::sun::star::uno::Any& Width, const ::com::sun::star::uno::Any& Height ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setControlSource( const rtl::OUString& _controlsource ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getRowSource() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRowSource( const rtl::OUString& _rowsource ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getControlTipText() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setControlTipText( const rtl::OUString& ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTag() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTag( const ::rtl::OUString& aTag ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setControlSource( const OUString& _controlsource ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getRowSource() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getControlTipText() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setControlTipText( const OUString& ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getTag() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setTag( const OUString& aTag ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getTabIndex() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getMousePointer() throw (::com::sun::star::uno::RuntimeException);
@@ -105,8 +105,8 @@ public:
     virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     //XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
     //General helper methods for properties ( may or maynot be relevant for all
     //controls
     sal_Int32 getBackColor() throw (css::uno::RuntimeException);

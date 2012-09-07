@@ -33,8 +33,8 @@ ov::msforms::XPages > ScVbaPages_BASE;
 class ScVbaPages : public ScVbaPages_BASE
 {
 protected:
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 public:
     ScVbaPages( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPages ) throw ( css::lang::IllegalArgumentException );
     virtual ~ScVbaPages() {}

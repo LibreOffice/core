@@ -38,10 +38,10 @@ ScVbaPages::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString
+OUString
 ScVbaPages::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPages"));
+    return OUString( "ScVbaPages" );
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
@@ -51,14 +51,14 @@ ScVbaPages::createEnumeration() throw (uno::RuntimeException)
     return uno::Reference< container::XEnumeration >();
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaPages::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msform.Pages" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msform.Pages";
     }
     return aServiceNames;
 }
