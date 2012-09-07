@@ -378,13 +378,6 @@ Date:   Mon Oct 17 14:43:17 2005 +0000
     INTEGRATION: CWS i18n20 (1.1.2); FILE ADDED
     2005/09/22 23:47:49 khong 1.1.2.1: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
 
-commit 268567aa88a991e055c41d9115bccce951f7e308
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Mon Oct 17 14:42:47 2005 +0000
-
-    INTEGRATION: CWS i18n20 (1.1.2); FILE ADDED
-    2005/08/26 23:33:38 khong 1.1.2.1: #i50172# add cell breakiterator rule for Tamil
-
 commit a428a8927006a10ccfe7182e6fe5a8b677281eca
 Author: Rüdiger Timm <rt@openoffice.org>
 Date:   Mon Oct 17 14:42:30 2005 +0000
@@ -536,6 +529,7 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
 
 done, regression tests added:
 
+#i50172# add cell breakiterator rule for Tamil
 #i80412# indic cursoring
 #i107843# em-dash/en-dash breakiterator fix for spell checking
 #i103552# Japanese word for 'shutdown' added to ja.dic

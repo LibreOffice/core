@@ -573,6 +573,7 @@ void TestBreakIterator::testWordBoundaries()
 //See https://bugs.freedesktop.org/show_bug.cgi?id=40292
 //See https://issues.apache.org/ooo/show_bug.cgi?id=80412
 //See https://issues.apache.org/ooo/show_bug.cgi?id=111152
+//See https://issues.apache.org/ooo/show_bug.cgi?id=50172
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
@@ -635,6 +636,21 @@ void TestBreakIterator::testGraphemeIteration()
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(KA_VIRAMA_SSA));
         nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(KA_VIRAMA_SSA), aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
+    }
+
+    {
+        const sal_Unicode KA_VOWELSIGNU[] = { 0x0B95, 0x0BC1 };
+        rtl::OUString aTest(KA_VOWELSIGNU, SAL_N_ELEMENTS(KA_VOWELSIGNU));
+
+        sal_Int32 nDone=0;
+        sal_Int32 nPos = 0;
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(KA_VOWELSIGNU));
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(KA_VOWELSIGNU), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
