@@ -1941,10 +1941,6 @@ void SwDoc::ResetModified()
     //  Bit 1:  -> new state
     long nCall = mbModified ? 1 : 0;
     mbModified = sal_False;
-    // If there is already a document statistic, we assume that
-    // it is correct. In this case we reset the modified flag.
-    if ( 0 != pDocStat->nCharExcludingSpaces )
-        pDocStat->bModified = sal_False;
     GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( nCall && aOle2Link.IsSet() )
     {

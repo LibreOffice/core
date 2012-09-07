@@ -159,8 +159,6 @@ void SwXMLImport::SetStatistics(
         }
     }
 
-    if( 255 == nTokens )
-        aDocStat.bModified = sal_False;
     if( nTokens )
         pDoc->SetDocStat( aDocStat );
 
