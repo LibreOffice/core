@@ -313,7 +313,9 @@ sub msvc_copy_dlls($)
 sub msvc_find_msms()
 {
     my $ver = find_msvc();
-    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver->{'ver'}/Setup/VS/MSMDir"), 'w', $output_format);
+    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/9.0/Setup/VS/MSMDir"), 'w', $output_format) ||
+	(cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/10.0/Setup/VS/MSMDir"), 'w', $output_format) ||
+	(cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/11.0/Setup/VS/MSMDir"), 'w', $output_format);
     defined $msm_path || die "MSMDir not found";
     return -e "$msm_path/Microsoft_VC".$ver->{'dll_suffix'}."_CRT_x86.msm" ? 0 : 1;
 }
@@ -326,7 +328,9 @@ sub msvc_copy_msms($$)
     my $ver = find_msvc();
     defined $ver || return;
 
-    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver->{'ver'}/Setup/VS/MSMDir"), 'w', $output_format);
+    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/9.0/Setup/VS/MSMDir"), 'w', $output_format) ||
+	(cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/10.0/Setup/VS/MSMDir"), 'w', $output_format) ||
+	(cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/11.0/Setup/VS/MSMDir"), 'w', $output_format);
     defined $msm_path || die "MSMDir not found";
 	if ($ver->{'dll_suffix'} == 90) {
 	if ( $postfix eq "_x86" ) {
