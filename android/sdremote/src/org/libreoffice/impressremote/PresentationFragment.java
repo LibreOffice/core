@@ -295,7 +295,7 @@ public class PresentationFragment extends SherlockFragment {
                             * borderWidth, aBitmap.getHeight() + 2
                             * borderWidth, aBitmap.getConfig());
             Canvas canvas = new Canvas(aOut);
-            canvas.drawColor(Color.TRANSPARENT);
+            canvas.drawColor(getResources().getColor(R.color.light_grey));
             canvas.drawRect(aRect, p);
             canvas.drawBitmap(aBitmap, null, aRect, null);
 

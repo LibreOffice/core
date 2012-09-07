@@ -47,8 +47,8 @@ public class PairingActivity extends SherlockActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         unbindService(mConnection);
     }
 
