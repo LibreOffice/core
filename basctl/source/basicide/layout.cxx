@@ -283,8 +283,8 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
     // positioning separator lines and windows
     bool bPrevDocking = false; // is the previous window docked?
     long nStartPos = 0; // window position in the strip
-    unsigned iLastWin; // index of last docking window in the strip
-    // (iLastWin will be initialized if !bEmpty)
+    unsigned iLastWin = vItems.size(); // index of last docking window in the strip
+
     for (unsigned i = 0; i != vItems.size(); ++i)
     {
         // window
@@ -309,7 +309,7 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
             if (bPrevDocking)
             {
                 rSplit.Show();
-                // the actual pozition and size of the line
+                // the actual position and size of the line
                 rSplit.SetPosSizePixel(
                     MakePoint(nPos2 + nStartPos - nSplitThickness, nPos1),
                     MakeSize(nSplitThickness, nSize - nSplitThickness)
