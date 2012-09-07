@@ -591,11 +591,12 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
 void CommandLineArgs::InitParamValues()
 {
     m_minimized = false;
-    m_invisible = false;
     m_norestore = false;
 #ifdef LIBO_HEADLESS
+    m_invisible = true;
     m_headless = true;
 #else
+    m_invisible = false;
     m_headless = false;
 #endif
     m_quickstart = false;
