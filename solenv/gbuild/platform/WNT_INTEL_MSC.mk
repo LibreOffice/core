@@ -341,6 +341,13 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 
+# avoid fatal error LNK1170 for Library_merged
+define gb_LinkTarget_MergedResponseFile
+cut -f -1000 -d ' ' $${RESPONSEFILE} > $${RESPONSEFILE}.1 && \
+cut -f 1001- -d ' ' $${RESPONSEFILE} >> $${RESPONSEFILE}.1 && \
+mv $${RESPONSEFILE}.1 $${RESPONSEFILE} &&
+endef
+
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
@@ -354,6 +361,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
 		$(NATIVERES)) && \
+		$(if $(filter $(call gb_Library_get_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
 	unset INCLUDE && \
 	$(if $(filter YES,$(LIBRARY_X64)), $(LINK_X64_BINARY), $(gb_LINK)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
