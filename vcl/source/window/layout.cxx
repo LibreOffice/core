@@ -390,9 +390,6 @@ VclGrid::array_type VclGrid::assembleGrid() const
     for (Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
-        if (!pChild->IsVisible())
-            continue;
-
         sal_Int32 nLeftAttach = pChild->get_grid_left_attach();
         sal_Int32 nWidth = pChild->get_grid_width();
         sal_Int32 nMaxXPos = nLeftAttach+nWidth-1;
@@ -449,9 +446,6 @@ VclGrid::array_type VclGrid::assembleGrid() const
         }
     }
 
-    sal_Int32 nNonEmptyCols = std::count(aNonEmptyCols.begin(), aNonEmptyCols.end(), true);
-    sal_Int32 nNonEmptyRows = std::count(aNonEmptyRows.begin(), aNonEmptyRows.end(), true);
-
     //reduce the spans of elements that span empty rows or columns
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
@@ -459,12 +453,15 @@ VclGrid::array_type VclGrid::assembleGrid() const
         {
             ExtendedGridEntry &rSpan = A[x][y];
             ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
-            if (!aNonEmptyCols[x])
+            if (aNonEmptyCols[x] == false)
                 --rEntry.nSpanWidth;
-            if (!aNonEmptyRows[y])
+            if (aNonEmptyRows[y] == false)
                 --rEntry.nSpanHeight;
         }
     }
+
+    sal_Int32 nNonEmptyCols = std::count(aNonEmptyCols.begin(), aNonEmptyCols.end(), true);
+    sal_Int32 nNonEmptyRows = std::count(aNonEmptyRows.begin(), aNonEmptyRows.end(), true);
 
     //make new grid without empty rows and columns
     array_type B(boost::extents[nNonEmptyCols][nNonEmptyRows]);
