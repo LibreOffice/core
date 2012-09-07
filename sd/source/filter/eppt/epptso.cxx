@@ -3063,6 +3063,13 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 if ( !mbPresObj )
                 {
+                    if (ePageType == MASTER )
+                    {
+                        SdrObject* pObj = GetSdrObjectFromXShape( mXShape );
+                        if (pObj && pObj->IsNotVisibleAsMaster())
+                            continue;
+                    }
+
                     mType = "drawing.Text";
                     ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
                 }
