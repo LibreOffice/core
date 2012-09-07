@@ -167,7 +167,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * @param lParams
      *          the vector with all packed parameters of the original request
      */
-    public void execOneway(/*IN*/  int nRequest,/*IN*/  Vector<?> lParams )
+    public void execOneway(/*IN*/  int nRequest,/*IN*/  Vector<Object> lParams )
     {
         synchronized(this)
         {
@@ -214,7 +214,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         if (! bHandle)
             return;
 
-        Vector<FrameActionEvent> lOutParams   = new Vector<FrameActionEvent>();
+        Vector<Object> lOutParams   = new Vector<Object>();
         lOutParams.add(aEvent);
 
         OnewayExecutor aExecutor = new OnewayExecutor( (IOnewayLink)this                  ,
