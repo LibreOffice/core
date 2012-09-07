@@ -736,7 +736,8 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getMasterPage
 
     if( !xMasterPages.is() )
     {
-        initializeDocument();
+        if ( !hasControllersLocked() )
+            initializeDocument();
         mxMasterPagesAccess = xMasterPages = new SdMasterPagesAccess(*this);
     }
 
