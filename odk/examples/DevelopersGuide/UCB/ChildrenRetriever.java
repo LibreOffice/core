@@ -57,7 +57,7 @@ public class ChildrenRetriever {
     private  Helper   m_helper;
     private  XContent m_content;
     private  String   m_contenturl    = "";
-    private  Vector   m_propnames      = new Vector();
+    private  Vector<String>   m_propnames      = new Vector<String>();
 
     /**
      * Constructor. Create a new connection with the specific args to a running office
@@ -92,9 +92,9 @@ public class ChildrenRetriever {
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Vector getChildren()
+    public Vector<Vector<Object>> getChildren()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
-        Vector properties = getProperties();
+        Vector<String> properties = getProperties();
         return getChildren ( properties );
     }
 
@@ -107,10 +107,10 @@ public class ChildrenRetriever {
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Vector getChildren( Vector properties )
+    public Vector<Vector<Object>> getChildren( Vector<String> properties )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
 
-        Vector result = null;
+        Vector<Vector<Object>> result = null;
         if ( m_content != null ) {
             int size = 0;
             if ( properties != null && !properties.isEmpty()) {
@@ -122,7 +122,7 @@ public class ChildrenRetriever {
 
                 // Define property sequence.
                 Property prop = new Property();
-                prop.Name = ( String )properties.get( index );
+                prop.Name = properties.get( index );
                 prop.Handle = -1; // n/a
                 props[ index ] = prop;
             }
@@ -136,11 +136,11 @@ public class ChildrenRetriever {
             XDynamicResultSet set;
 
             // Execute command "open".
-            set = ( XDynamicResultSet )UnoRuntime.queryInterface(
+            set = UnoRuntime.queryInterface(
                 XDynamicResultSet.class, m_helper.executeCommand( m_content, "open", arg ));
             XResultSet resultSet = ( XResultSet )set.getStaticResultSet();
 
-            result = new Vector();
+            result = new Vector<Vector<Object>>();
 
             /////////////////////////////////////////////////////////////////////
             // Iterate over children, access children and property values...
@@ -148,12 +148,12 @@ public class ChildrenRetriever {
 
                 // Move to begin.
             if ( resultSet.first() ) {
-                XContentAccess contentAccess = ( XContentAccess )UnoRuntime.queryInterface(
+                XContentAccess contentAccess = UnoRuntime.queryInterface(
                     XContentAccess.class, resultSet );
-                XRow row = ( XRow )UnoRuntime.queryInterface( XRow.class, resultSet );
+                XRow row = UnoRuntime.queryInterface( XRow.class, resultSet );
 
                 do {
-                    Vector propsValues = new Vector();
+                    Vector<Object> propsValues = new Vector<Object>();
 
                     // Obtain URL of child.
                     String id = contentAccess.queryContentIdentifierString();
@@ -187,7 +187,7 @@ public class ChildrenRetriever {
      *
      *@return String    That contains the properties
      */
-    public Vector getProperties() {
+    public Vector<String> getProperties() {
         return m_propnames;
     }
 
@@ -243,7 +243,7 @@ public class ChildrenRetriever {
      *
      *@param   Vector
      */
-    public void printLine( Vector props ) {
+    public void printLine( Vector<Object> props ) {
         int limit;
         while ( !props.isEmpty() )   {
             String print = "";
@@ -305,7 +305,7 @@ public class ChildrenRetriever {
             ChildrenRetriever access = new ChildrenRetriever( args );
 
             // Get the properties Title and IsFolder for the children.
-            Vector result = access.getChildren();
+            Vector<Vector<Object>> result = access.getChildren();
 
             String tempPrint = "\nChildren of resource " + access.getContentURL();
             int size = tempPrint.length();
@@ -318,9 +318,9 @@ public class ChildrenRetriever {
 
             if ( result != null && !result.isEmpty() ) {
 
-                Vector cont = new Vector();
+                Vector<Object> cont = new Vector<Object>();
                 cont.add("URL:");
-                Vector props = access.getProperties();
+                Vector<String> props = access.getProperties();
                 size = props.size();
                 for ( int i = 0; i < size; i++ ) {
                     Object obj = props.get( i );
@@ -329,8 +329,8 @@ public class ChildrenRetriever {
                 }
                 access.printLine(cont);
                 System.out.println( "\n" );
-                for ( Enumeration e = result.elements(); e.hasMoreElements(); ) {
-                    Vector propsV   = ( Vector )e.nextElement();
+                for ( Enumeration<Vector<Object>> e = result.elements(); e.hasMoreElements(); ) {
+                    Vector<Object> propsV   = e.nextElement();
                     access.printLine( propsV );
                 }
             }

@@ -77,7 +77,7 @@ public class SampleSpellChecker extends ComponentBase implements
         XServiceInfo
 {
     PropChgHelper_Spell         aPropChgHelper;
-    ArrayList                   aEvtListeners;
+    ArrayList<?>                   aEvtListeners;
     boolean                     bDisposing;
 
     public SampleSpellChecker()
@@ -93,7 +93,7 @@ public class SampleSpellChecker extends ComponentBase implements
                 "IsSpellCapitalization"
             };
         aPropChgHelper  = new PropChgHelper_Spell( (XSpellChecker) this, aProps );
-        aEvtListeners   = new ArrayList();
+        aEvtListeners   = new ArrayList<Object>();
         bDisposing      = false;
     }
 

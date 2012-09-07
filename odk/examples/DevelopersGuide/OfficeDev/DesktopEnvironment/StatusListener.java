@@ -166,7 +166,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * @param lParams
      *          the vector with all packed parameters of the original request
      */
-    public void execOneway(/*IN*/  int nRequest,/*IN*/  Vector lParams )
+    public void execOneway(/*IN*/  int nRequest,/*IN*/  Vector<?> lParams )
     {
         synchronized(this)
         {

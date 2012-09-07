@@ -50,7 +50,7 @@ public class TestDataLoader {
             in = new BufferedReader(new FileReader(f));
 
             String s, previous, current;
-            ArrayList list = new ArrayList(11);
+            ArrayList<Parameters> list = new ArrayList<Parameters>(11);
 
             if ((s = in.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(s, ";");
@@ -70,7 +70,7 @@ public class TestDataLoader {
                 if (!current.equals(previous)) {
                     tEnv.addObjRelation(previous, list);
                     previous = current;
-                    list = new ArrayList(11);
+                    list = new ArrayList<Parameters>(11);
                 }
 
                 list.add(getParameters(st));

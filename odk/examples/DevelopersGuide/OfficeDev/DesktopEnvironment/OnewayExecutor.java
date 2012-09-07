@@ -77,7 +77,7 @@ class OnewayExecutor extends Thread
      */
     private IOnewayLink m_rLink     ;
     private int         m_nRequest  ;
-    private Vector      m_lParams   ;
+    private Vector<?>      m_lParams   ;
 
     // _______________________________
 
@@ -103,7 +103,7 @@ class OnewayExecutor extends Thread
      */
     public OnewayExecutor( IOnewayLink rLink    ,
                            int         nRequest ,
-                           Vector      lParams  )
+                           Vector<?>      lParams  )
     {
         m_rLink    = rLink   ;
         m_nRequest = nRequest;
@@ -148,7 +148,7 @@ class OnewayExecutor extends Thread
     {
         if (bEncode)
         {
-            lParams[0] = new Vector(1);
+            lParams[0] = new Vector<Object>(1);
             lParams[0].add( (Object)(aAction[0]) );
         }
         else
@@ -166,7 +166,7 @@ class OnewayExecutor extends Thread
     {
         if (bEncode)
         {
-            lParams[0] = new Vector(1);
+            lParams[0] = new Vector<Object>(1);
             lParams[0].add( (Object)aStatus[0] );
         }
         else
@@ -185,7 +185,7 @@ class OnewayExecutor extends Thread
     {
         if (bEncode)
         {
-            lParams[0] = new Vector(2);
+            lParams[0] = new Vector<Object>(2);
             lParams[0].add( (Object)xListener[0] );
             lParams[0].add( (Object)aURL[0]      );
         }
@@ -208,7 +208,7 @@ class OnewayExecutor extends Thread
         {
             int nLength = lArgs.length+1;
             int nPos    = 0;
-            lParams[0] = new Vector(nLength);
+            lParams[0] = new Vector<Object>(nLength);
 
             lParams[0].add( (Object)aURL[0] );
             --nLength;

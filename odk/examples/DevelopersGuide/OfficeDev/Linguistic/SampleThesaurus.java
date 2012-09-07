@@ -72,7 +72,7 @@ public class SampleThesaurus extends ComponentBase implements
         XServiceInfo
 {
     PropChgHelper               aPropChgHelper;
-    ArrayList                   aEvtListeners;
+    ArrayList<?>                   aEvtListeners;
     boolean                     bDisposing;
 
     public SampleThesaurus()
@@ -91,7 +91,7 @@ public class SampleThesaurus extends ComponentBase implements
         // 'GetValueToUse' function
         aPropChgHelper  = new PropChgHelper( (XThesaurus) this, aProps );
 
-        aEvtListeners   = new ArrayList();
+        aEvtListeners   = new ArrayList<Object>();
         bDisposing      = false;
     }
 

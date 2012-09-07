@@ -93,7 +93,7 @@ public class UnoMethodNode extends UnoNode{
             m_bisInvoked = true;
         }
         else{
-            Vector oUnoMethodObjects = m_xUnoMethodNode.getMethodObjects();
+            Vector<Object> oUnoMethodObjects = m_xUnoMethodNode.getMethodObjects();
             if (oUnoMethodObjects != null){
                 for (int i = 0; i < getXIdlMethod().getParameterInfos().length; i++){
                     this.m_oParamObjects[i] = oUnoMethodObjects.get(i);

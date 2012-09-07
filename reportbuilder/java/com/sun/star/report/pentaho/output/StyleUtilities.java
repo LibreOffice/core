@@ -524,9 +524,9 @@ public class StyleUtilities
     public static OfficeStyle queryStyleByProperties(final OfficeStylesCollection predefCollection,
             final String styleFamily,
             final String sectionName,
-            final ArrayList propertyNamespace,
-            final ArrayList propertyName,
-            final ArrayList propertyValues)
+            final ArrayList<?> propertyNamespace,
+            final ArrayList<?> propertyName,
+            final ArrayList<?> propertyValues)
     {
         if (propertyNamespace.size() != propertyName.size())
         {

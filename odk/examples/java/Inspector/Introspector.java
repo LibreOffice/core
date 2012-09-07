@@ -106,9 +106,9 @@ public class Introspector extends WeakBase{
         m_xComponentContext = _xComponentContext;
         m_xMultiComponentFactory = m_xComponentContext.getServiceManager();
         Object o = m_xMultiComponentFactory.createInstanceWithContext("com.sun.star.beans.Introspection", m_xComponentContext);
-        m_xIntrospection = ( XIntrospection ) UnoRuntime.queryInterface(XIntrospection.class, o );
+        m_xIntrospection = UnoRuntime.queryInterface(XIntrospection.class, o );
         Object oCoreReflection = getXMultiComponentFactory().createInstanceWithContext("com.sun.star.reflection.CoreReflection", getXComponentContext());
-        mxIdlReflection = (XIdlReflection) UnoRuntime.queryInterface(XIdlReflection.class, oCoreReflection);
+        mxIdlReflection = UnoRuntime.queryInterface(XIdlReflection.class, oCoreReflection);
         initTypeDescriptionManager();
     }
     catch( Exception exception ) {
@@ -136,13 +136,13 @@ public class Introspector extends WeakBase{
     try {
         XIntrospectionAccess xIntrospectionAccessObject = getXIntrospectionAccess(_oUnoObject);
         if (xIntrospectionAccessObject != null){
-            XEnumerationAccess xEnumerationAccess = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, xIntrospectionAccessObject.queryAdapter( new Type( XEnumerationAccess.class ) ) );
+            XEnumerationAccess xEnumerationAccess = UnoRuntime.queryInterface(XEnumerationAccess.class, xIntrospectionAccessObject.queryAdapter( new Type( XEnumerationAccess.class ) ) );
             if (xEnumerationAccess != null){
                 XEnumeration xEnumeration = xEnumerationAccess.createEnumeration();
                 bIsContainer = xEnumeration.hasMoreElements();
             }
             if (!bIsContainer){
-                XIndexAccess xIndexAccess = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, xIntrospectionAccessObject.queryAdapter(new Type( XIndexAccess.class )));
+                XIndexAccess xIndexAccess = UnoRuntime.queryInterface( XIndexAccess.class, xIntrospectionAccessObject.queryAdapter(new Type( XIndexAccess.class )));
                 if (xIndexAccess != null){
                     bIsContainer = (xIndexAccess.getCount() > 0);
                 }
@@ -160,17 +160,17 @@ public class Introspector extends WeakBase{
     public Object[] getUnoObjectsOfContainer(Object _oUnoParentObject) {
     Object[] oRetComponents = null;
     try {
-        Vector oRetComponentsVector = new Vector();
+        Vector<Object> oRetComponentsVector = new Vector<Object>();
         XIntrospectionAccess xIntrospectionAccessObject = getXIntrospectionAccess(_oUnoParentObject);
         if ( xIntrospectionAccessObject != null ) {
-            XEnumerationAccess xEnumerationAccess = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, xIntrospectionAccessObject.queryAdapter( new Type( XEnumerationAccess.class ) ) );
+            XEnumerationAccess xEnumerationAccess = UnoRuntime.queryInterface(XEnumerationAccess.class, xIntrospectionAccessObject.queryAdapter( new Type( XEnumerationAccess.class ) ) );
             if ( xEnumerationAccess != null ) {
                 XEnumeration xEnumeration = xEnumerationAccess.createEnumeration();
                 while ( xEnumeration.hasMoreElements() ) {
                     oRetComponentsVector.add(xEnumeration.nextElement());
                 }
             }
-            XIndexAccess xIndexAccess = (XIndexAccess) UnoRuntime.queryInterface( XIndexAccess.class, xIntrospectionAccessObject.queryAdapter(new Type( XIndexAccess.class )));
+            XIndexAccess xIndexAccess = UnoRuntime.queryInterface( XIndexAccess.class, xIntrospectionAccessObject.queryAdapter(new Type( XIndexAccess.class )));
             if ( xIndexAccess != null ) {
                 XIdlMethod mMethod = xIntrospectionAccessObject.getMethod("getByIndex", com.sun.star.beans.MethodConcept.INDEXCONTAINER);
                 for ( int i = 0; i < xIndexAccess.getCount(); i++ ) {
@@ -259,8 +259,8 @@ public class Introspector extends WeakBase{
 
     protected Property[] getProperties(Object _oUnoObject, String _sServiceName){
         Property[] aProperties = getProperties(_oUnoObject);
-        List aListOfProperties = java.util.Arrays.asList(aProperties);
-        Vector aPropertiesVector = new Vector(aListOfProperties);
+        List<Property> aListOfProperties = java.util.Arrays.asList(aProperties);
+        Vector<Property> aPropertiesVector = new Vector<Property>(aListOfProperties);
         if (aProperties != null){
             XPropertyTypeDescription[] xPropertyTypeDescriptions = getPropertyDescriptionsOfService(_sServiceName);
             for (int i = aProperties.length - 1; i >= 0; i--){
@@ -277,8 +277,8 @@ public class Introspector extends WeakBase{
 
     protected Type[] getInterfaces(Object _oUnoObject, String _sServiceName){
         Type[] aTypes = getInterfaces(_oUnoObject);
-        List aListOfTypes = java.util.Arrays.asList(aTypes);
-        Vector aTypesVector = new Vector(aListOfTypes);
+        List<Type> aListOfTypes = java.util.Arrays.asList(aTypes);
+        Vector<Type> aTypesVector = new Vector<Type>(aListOfTypes);
         if (aTypes != null){
             XInterfaceTypeDescription[] xInterfaceTypeDescriptions = getInterfaceDescriptionsOfService(_sServiceName);
             for (int i = aTypes.length - 1; i >= 0; i--){
@@ -300,7 +300,7 @@ public class Introspector extends WeakBase{
 
     protected Type[] getInterfaces(Object _oUnoParentObject){
         Type[] aTypes = new Type[]{};
-        XTypeProvider xTypeProvider = ( XTypeProvider ) UnoRuntime.queryInterface( XTypeProvider.class, _oUnoParentObject);
+        XTypeProvider xTypeProvider = UnoRuntime.queryInterface( XTypeProvider.class, _oUnoParentObject);
         if ( xTypeProvider != null ) {
             aTypes = xTypeProvider.getTypes();
         }
@@ -341,7 +341,7 @@ public class Introspector extends WeakBase{
                      || ( _typeClass == TypeClass.UNSIGNED_SHORT ));
     }
 
-    public static boolean isObjectPrimitive(Class _oUnoClass, TypeClass _typeClass){
+    public static boolean isObjectPrimitive(Class<? extends Object> _oUnoClass, TypeClass _typeClass){
         return !( ( !_oUnoClass.isPrimitive() ) && ( _typeClass != TypeClass.ARRAY )
                                                          && ( _typeClass != TypeClass.BOOLEAN )
                                                          && ( _typeClass != TypeClass.BYTE )
@@ -362,7 +362,7 @@ public class Introspector extends WeakBase{
     protected void initTypeDescriptionManager() {
     try {
         Object oTypeDescriptionManager = getXComponentContext().getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
-        m_xTDEnumerationAccess = (XTypeDescriptionEnumerationAccess) UnoRuntime.queryInterface(XTypeDescriptionEnumerationAccess.class, oTypeDescriptionManager);
+        m_xTDEnumerationAccess = UnoRuntime.queryInterface(XTypeDescriptionEnumerationAccess.class, oTypeDescriptionManager);
     } catch ( java.lang.Exception e) {
         System.out.println(System.out);
     }}
@@ -382,7 +382,7 @@ public class Introspector extends WeakBase{
         while (xTDEnumeration.hasMoreElements()) {
             XTypeDescription xTD = xTDEnumeration.nextTypeDescription();
             if (xTD.getName().equals(_sTypeClass)){
-                XConstantsTypeDescription xConstantsTypeDescription = (XConstantsTypeDescription) UnoRuntime.queryInterface(XConstantsTypeDescription.class, xTD);
+                XConstantsTypeDescription xConstantsTypeDescription = UnoRuntime.queryInterface(XConstantsTypeDescription.class, xTD);
                 xConstantTypeDescriptions = xConstantsTypeDescription.getConstants();
             }
             String sName = xTD.getName();
@@ -404,7 +404,7 @@ public class Introspector extends WeakBase{
             while (xTDEnumeration.hasMoreElements()) {
                 XTypeDescription xTD = xTDEnumeration.nextTypeDescription();
                 if (xTD.getName().equals(_sServiceName)){
-                    XServiceTypeDescription xServiceTypeDescription = (XServiceTypeDescription) UnoRuntime.queryInterface(XServiceTypeDescription.class, xTD);
+                    XServiceTypeDescription xServiceTypeDescription = UnoRuntime.queryInterface(XServiceTypeDescription.class, xTD);
                     return xServiceTypeDescription;
                 }
             }
@@ -433,10 +433,10 @@ public class Introspector extends WeakBase{
     public XTypeDescription getReferencedType(String _sTypeName){
     XTypeDescription xTypeDescription = null;
     try{
-        XHierarchicalNameAccess xHierarchicalNameAccess = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, m_xTDEnumerationAccess);
+        XHierarchicalNameAccess xHierarchicalNameAccess = UnoRuntime.queryInterface(XHierarchicalNameAccess.class, m_xTDEnumerationAccess);
         if (xHierarchicalNameAccess != null){
             if (xHierarchicalNameAccess.hasByHierarchicalName(_sTypeName)){
-                XIndirectTypeDescription xIndirectTypeDescription = (XIndirectTypeDescription) UnoRuntime.queryInterface(XIndirectTypeDescription.class, xHierarchicalNameAccess.getByHierarchicalName(_sTypeName));
+                XIndirectTypeDescription xIndirectTypeDescription = UnoRuntime.queryInterface(XIndirectTypeDescription.class, xHierarchicalNameAccess.getByHierarchicalName(_sTypeName));
                 if (xIndirectTypeDescription != null){
                     xTypeDescription = xIndirectTypeDescription.getReferencedType();
                 }
@@ -569,7 +569,7 @@ public class Introspector extends WeakBase{
 
     public boolean hasSupportedServices(Object _oUnoObject){
         boolean bHasSupportedServices = false;
-        XServiceInfo xServiceInfo = ( XServiceInfo ) UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject);
+        XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, _oUnoObject);
         if ( xServiceInfo != null ){
             String[] sSupportedServiceNames = xServiceInfo.getSupportedServiceNames();
             bHasSupportedServices = sSupportedServiceNames.length > 0;
@@ -622,7 +622,7 @@ public class Introspector extends WeakBase{
     try {
         if (xSimpleFileAccess == null){
             Object oSimpleFileAccess = m_xComponentContext.getServiceManager().createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", m_xComponentContext);
-            xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, oSimpleFileAccess);
+            xSimpleFileAccess = com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, oSimpleFileAccess);
         }
         return xSimpleFileAccess;
     } catch (com.sun.star.uno.Exception ex) {

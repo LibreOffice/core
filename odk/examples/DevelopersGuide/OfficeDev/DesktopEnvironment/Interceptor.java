@@ -161,7 +161,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * @param lParams
      *          the vector with all packed parameters of the original request
      */
-    public void execOneway(/*IN*/ int nRequest,/*IN*/ Vector lParams )
+    public void execOneway(/*IN*/ int nRequest,/*IN*/ Vector<?> lParams )
     {
         synchronized(this)
         {
@@ -338,7 +338,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
             xFrame          = m_xFrame;
         }
 
-        com.sun.star.frame.XDispatchProviderInterception xRegistration = (com.sun.star.frame.XDispatchProviderInterception)UnoRuntime.queryInterface(
+        com.sun.star.frame.XDispatchProviderInterception xRegistration = UnoRuntime.queryInterface(
             com.sun.star.frame.XDispatchProviderInterception.class,
             xFrame);
 
@@ -650,7 +650,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
         if (bIsRegistered)
         {
-            com.sun.star.frame.XDispatchProviderInterception xRegistration = (com.sun.star.frame.XDispatchProviderInterception)UnoRuntime.queryInterface(
+            com.sun.star.frame.XDispatchProviderInterception xRegistration = UnoRuntime.queryInterface(
                 com.sun.star.frame.XDispatchProviderInterception.class,
                 xFrame);
 

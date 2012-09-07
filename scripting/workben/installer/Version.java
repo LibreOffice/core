@@ -22,6 +22,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -210,7 +211,7 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         wizard.clearLocations();
         int len = tableModel.data.size();
         for (int i = 0; i < len; i++) {
-            ArrayList list = (ArrayList)tableModel.data.get(i);
+            ArrayList<?> list = (ArrayList<?>)tableModel.data.get(i);
             if (((Boolean)list.get(0)).booleanValue() == true)
                 wizard.storeLocation((String)list.get(2));
         }
@@ -242,12 +243,12 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
 }
 
 class MyTableModel extends AbstractTableModel {
-    ArrayList data;
+    ArrayList<ArrayList<Object>> data;
     String colNames[] = {"", "Name", "Location"};
     Object[] longValues = new Object[] {Boolean.TRUE, "Name", "Location"};
 
     MyTableModel (Properties properties, String [] validVersions) {
-        data = new ArrayList();
+        data = new ArrayList<ArrayList<Object>>();
         boolean isWindows =
             (System.getProperty("os.name").indexOf("Windows") != -1);
         int len = validVersions.length;
@@ -269,7 +270,7 @@ class MyTableModel extends AbstractTableModel {
                 File pkgChk = new File( pkgChkPath );
                 if ( pkgChk.exists() )
                 {
-                    ArrayList row = new ArrayList();
+                    ArrayList<Object> row = new ArrayList<Object>();
                     row.add(0, new Boolean(false));
 
                     row.add(1, key);
@@ -305,7 +306,7 @@ class MyTableModel extends AbstractTableModel {
             col < 0 || col > getColumnCount())
             return null;
 
-        ArrayList aRow = (ArrayList)data.get(row);
+        ArrayList<?> aRow = (ArrayList<?>)data.get(row);
         return aRow.get(col);
     }
 
@@ -322,7 +323,7 @@ class MyTableModel extends AbstractTableModel {
     }
 
     public void setValueAt(Object value, int row, int col) {
-        ArrayList aRow = (ArrayList)data.get(row);
+        ArrayList<Object> aRow = data.get(row);
         aRow.set(col, value);
         fireTableCellUpdated(row, col);
     }
@@ -334,7 +335,7 @@ class MyTableModel extends AbstractTableModel {
     public boolean isAnySelected() {
         Iterator iter = data.iterator();
         while (iter.hasNext()) {
-            ArrayList row = (ArrayList)iter.next();
+            ArrayList<?> row = (ArrayList<?>)iter.next();
             if (((Boolean)row.get(0)).booleanValue() == true) {
                 return true;
             }

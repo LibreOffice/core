@@ -91,7 +91,7 @@ public class Manifest {
             if (nl == null || (len = nl.getLength()) == 0)
                 return;
 
-            ArrayList list = new ArrayList();
+            ArrayList<Element> list = new ArrayList<Element>();
             for (int i = 0; i < len; i++) {
                 el = (Element)nl.item(i);
                 if (el.getAttribute("manifest:full-path").startsWith(entry)) {

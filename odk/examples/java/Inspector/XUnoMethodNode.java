@@ -59,7 +59,7 @@ public interface XUnoMethodNode extends XUnoNode {
 
     public boolean isPrimitive();
 
-    public Vector getMethodObjects();
+    public Vector<Object> getMethodObjects();
 
     public boolean isFoldable();
 

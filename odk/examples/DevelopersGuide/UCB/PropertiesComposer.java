@@ -49,8 +49,8 @@ public class PropertiesComposer {
     private  Helper    m_helper;
     private  XContent  m_content;
     private  String    m_contenturl = "";
-    private  Vector    m_propNames          = new Vector();
-    private  Vector    m_propValues         = new Vector();
+    private  Vector<String>    m_propNames          = new Vector<String>();
+    private  Vector<String>    m_propValues         = new Vector<String>();
 
     /**
      * Constructor.
@@ -89,8 +89,8 @@ public class PropertiesComposer {
      */
     public Object[] setProperties()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
-        Vector properties      = getProperties();
-        Vector propertyValues  = getPropertyValues();
+        Vector<String> properties      = getProperties();
+        Vector<String> propertyValues  = getPropertyValues();
         return setProperties( properties, propertyValues );
     }
 
@@ -104,7 +104,7 @@ public class PropertiesComposer {
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Object[] setProperties( Vector properties, Vector propertiesValues )
+    public Object[] setProperties( Vector<String> properties, Vector<String> propertiesValues )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
 
         Object[] result = null;
@@ -127,7 +127,7 @@ public class PropertiesComposer {
             int size = properties.size();
             PropertyValue[] props = new PropertyValue[ size ];
             for ( int index = 0 ; index < size; index++ ) {
-                String propName  = ( String )properties.get( index );
+                String propName  = properties.get( index );
                 Object propValue = propertiesValues.get( index );
 
                 /*
@@ -161,7 +161,7 @@ public class PropertiesComposer {
      *
      *@return   Vector    That contains the properties names
      */
-    public Vector getProperties() {
+    public Vector<String> getProperties() {
         return m_propNames;
     }
 
@@ -170,7 +170,7 @@ public class PropertiesComposer {
      *
      *@return   Vector    That contains the properties values
      */
-    public Vector getPropertyValues() {
+    public Vector<String> getPropertyValues() {
         return m_propValues;
     }
 
@@ -263,8 +263,8 @@ public class PropertiesComposer {
         try {
 
             PropertiesComposer setProp = new PropertiesComposer( args );
-            Vector properties       = setProp.getProperties();
-            Vector propertiesValues = setProp.getPropertyValues();
+            Vector<String> properties       = setProp.getProperties();
+            Vector<String> propertiesValues = setProp.getPropertyValues();
             Object[] result = setProp.setProperties( properties, propertiesValues );
 
             String tempPrint = "\nSetting properties of resource " + setProp.getContentURL();

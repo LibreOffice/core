@@ -52,7 +52,7 @@ public class PropertiesRetriever {
     private  Helper   m_helper;
     private  XContent m_content;
     private  String   m_contenturl    = "";
-    private  Vector   m_propNames     = new Vector();
+    private  Vector<String>   m_propNames     = new Vector<String>();
 
     /**
      * Constructor.
@@ -87,9 +87,9 @@ public class PropertiesRetriever {
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Vector getPropertyValues()
+    public Vector<Object> getPropertyValues()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
-        Vector properties = getProperties();
+        Vector<String> properties = getProperties();
         return getPropertyValues ( properties );
     }
 
@@ -101,9 +101,9 @@ public class PropertiesRetriever {
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Vector getPropertyValues( Vector properties )
+    public Vector<Object> getPropertyValues( Vector<String> properties )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
-        Vector m_propValues = null;
+        Vector<Object> m_propValues = null;
         if ( m_content != null && properties != null && !properties.isEmpty() ) {
 
             int size = properties.size();
@@ -114,17 +114,17 @@ public class PropertiesRetriever {
 
                 // Define property sequence.
                 Property prop = new Property();
-                prop.Name = ( String )properties.get( index );
+                prop.Name = properties.get( index );
                 prop.Handle = -1; // n/a
                 props[ index ] = prop;
             }
 
             // Execute command "getPropertyValues".
             XRow values =
-                ( XRow )UnoRuntime.queryInterface(
-                    XRow.class, m_helper.executeCommand( m_content,"getPropertyValues", props ));
+                UnoRuntime.queryInterface(
+                XRow.class, m_helper.executeCommand( m_content,"getPropertyValues", props ));
 
-            m_propValues = new Vector();
+            m_propValues = new Vector<Object>();
 
             /*
               Extract values from row object. Note that the
@@ -155,7 +155,7 @@ public class PropertiesRetriever {
      *
      *@return Vector  That contains the properties
      */
-    public Vector getProperties() {
+    public Vector<String> getProperties() {
         return m_propNames;
     }
 
@@ -222,8 +222,8 @@ public class PropertiesRetriever {
             "--------------------------------------------------------------" );
         try {
             PropertiesRetriever obtProperty = new PropertiesRetriever( args );
-            Vector properties  = obtProperty.getProperties();
-            Vector propertiesValues = obtProperty.getPropertyValues( properties );
+            Vector<String> properties  = obtProperty.getProperties();
+            Vector<Object> propertiesValues = obtProperty.getPropertyValues( properties );
 
             String tempPrint = "\nProperties of resource " + obtProperty.getContentURL();
             int size = tempPrint.length();
@@ -237,7 +237,7 @@ public class PropertiesRetriever {
             if ( properties != null && propertiesValues != null )  {
                 size = properties.size();
                 for (int index = 0; index < size ; index++ ) {
-                    String property  = ( String )properties.get( index );
+                    String property  = properties.get( index );
                     Object propValue = propertiesValues.get( index );
                     System.out.println( property + " : " + propValue );
                 }

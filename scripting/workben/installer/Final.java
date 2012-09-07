@@ -76,7 +76,7 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
             nav.enableNext(false);
             nav.enableBack(false);
             nav.enableCancel(false);
-            ArrayList locations = wizard.getLocations();
+            ArrayList<?> locations = wizard.getLocations();
             //System.out.println("here "+locations.size());
             // Returned 1
             String progpath=null;

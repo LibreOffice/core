@@ -99,7 +99,7 @@ class PropertyHelper
        @param _aArrayList
        @return a PropertyValue[]
     */
-    public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList _aPropertyList)
+    public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList<PropertyValue> _aPropertyList)
         {
             // copy the whole PropertyValue List to an PropertyValue Array
             PropertyValue[] aSaveProperties = null;
@@ -385,7 +385,7 @@ public class ReportDesignerTest
 //                                          sSpecial);
         }
 
-    private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList _aPropertyList, int _nType)
+    private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList<PropertyValue> _aPropertyList, int _nType)
         {
             if (_xNameAccess != null)
             {
@@ -501,7 +501,7 @@ public class ReportDesignerTest
             }
         }
 
-    private XComponent loadComponent(String _sName, Object _xComponent, ArrayList _aPropertyList)
+    private XComponent loadComponent(String _sName, Object _xComponent, ArrayList<PropertyValue> _aPropertyList)
         {
             XComponent xDocComponent = null;
             XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, _xComponent);

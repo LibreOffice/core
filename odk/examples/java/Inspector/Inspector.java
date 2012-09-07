@@ -77,13 +77,13 @@ public class Inspector{
     static public class _Inspector extends WeakBase implements XInstanceInspector, XServiceInfo{
 
         static private final String __serviceName = "org.openoffice.InstanceInspector";
-        private HashMap aApplicationHashMap = new HashMap();
+        private HashMap<String, String> aApplicationHashMap = new HashMap<String, String>();
         private String sTitle = "Object Inspector";
-        private Vector aHiddenDocuments = new Vector();
+        private Vector<XComponent> aHiddenDocuments = new Vector<XComponent>();
 //        private String[] sApplicationDocUrls = new String[]{"private:factory/swriter", "private:factory/scalc", "private:factory/simpress", "private:factory/sdraw", "private:factory/sbase"};
 //        private String[] sApplicationDocNames = new String[]{"Text Document", "Spreadsheet", "Presentation", "Drawing", "Database"};
         private XComponentContext m_xComponentContext;
-        private HashMap aInspectorPanes = new HashMap();
+        private HashMap<String, InspectorPane> aInspectorPanes = new HashMap<String, InspectorPane>();
         private XDialogProvider m_oSwingDialogProvider;
         private TDocSupplier oTDocSupplier;
         private Introspector m_oIntrospector = null;
@@ -108,7 +108,7 @@ public class Inspector{
         }
 
 
-        public HashMap getInspectorPages(){
+        public HashMap<String, InspectorPane> getInspectorPages(){
             return aInspectorPanes;
         }
 
@@ -117,7 +117,7 @@ public class Inspector{
         String sRetPath = "";
         try{
             XNameAccess xNameAccess  = getConfigurationAccess("org.openoffice.inspector.ObjectInspector", true);
-            XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
             sRetPath = (String) xPropertySet.getPropertyValue("SDKPath");
         }catch( Exception exception ) {
             exception.printStackTrace(System.err);
@@ -154,9 +154,9 @@ public class Inspector{
         try {
             String sInstallationFolder = "";
             Object oFolderPicker = m_xComponentContext.getServiceManager().createInstanceWithContext("com.sun.star.ui.dialogs.FolderPicker", m_xComponentContext);
-            XFolderPicker xFolderPicker = (XFolderPicker) UnoRuntime.queryInterface(XFolderPicker.class, oFolderPicker);
-            XExecutableDialog xExecutable = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, oFolderPicker);
-            XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, oFolderPicker);
+            XFolderPicker xFolderPicker = UnoRuntime.queryInterface(XFolderPicker.class, oFolderPicker);
+            XExecutableDialog xExecutable = UnoRuntime.queryInterface(XExecutableDialog.class, oFolderPicker);
+            XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, oFolderPicker);
             String sPath = getSDKPath();
             if (!sPath.equals("")){
                 xFolderPicker.setDisplayDirectory(sPath);
@@ -167,15 +167,15 @@ public class Inspector{
                 sInstallationFolder = xFolderPicker.getDirectory();
                 if (m_oIntrospector.isValidSDKInstallationPath(sInstallationFolder)){
                     XNameAccess xNameAccess = getConfigurationAccess(true);
-                    XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
+                    XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
                     xPropertySet.setPropertyValue("SDKPath", sInstallationFolder);
-                    XChangesBatch xBatch = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, xNameAccess);
+                    XChangesBatch xBatch = UnoRuntime.queryInterface(XChangesBatch.class, xNameAccess);
                     xBatch.commitChanges();
                 }
                 else{
-                    XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xFolderPicker);
+                    XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xFolderPicker);
                     Object oWindow = xPropertySet.getPropertyValue("Window");
-                    XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, oWindow);
+                    XWindowPeer xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, oWindow);
                     showErrorMessageBox(xWindowPeer, sTitle, sWRONGINSTALLATIONPATH);
                     assignSDKPath();
                 }
@@ -189,10 +189,10 @@ public class Inspector{
         public void showErrorMessageBox(XWindowPeer _xWindowPeer, String _sTitle, String _sMessage){
         try {
             Object oToolkit = m_xComponentContext.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit", m_xComponentContext);
-            XMessageBoxFactory xMessageBoxFactory = (XMessageBoxFactory) UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);
+            XMessageBoxFactory xMessageBoxFactory = UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);
             Rectangle aRectangle = new Rectangle();
             XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xWindowPeer, aRectangle, "errorbox", com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
-            XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xMessageBox);
+            XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, xMessageBox);
             if (xMessageBox != null){
                 short nResult = xMessageBox.execute();
                 xComponent.dispose();
@@ -217,7 +217,7 @@ public class Inspector{
 
         public void inspectOpenEmptyDocument(String _sApplicationDocUrl){
             XComponent xComponent = getTDocSupplier().openEmptyDocument(_sApplicationDocUrl);
-            String sRootTitle = (String) aApplicationHashMap.get(_sApplicationDocUrl);
+            String sRootTitle = aApplicationHashMap.get(_sApplicationDocUrl);
             inspect(xComponent, sRootTitle);
             aHiddenDocuments.add(xComponent);
         }
@@ -263,7 +263,7 @@ public class Inspector{
         try{
             String sLanguage = "Java";
             XNameAccess xNameAccess  = getConfigurationAccess("org.openoffice.inspector.ObjectInspector", true);
-            XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
             switch (_nLanguage){
                 case XLanguageSourceCodeGenerator.nJAVA:
                     sLanguage = "Java";
@@ -278,7 +278,7 @@ public class Inspector{
                     System.out.println("Warning: Sourcecode language is not defined!");
             }
             xPropertySet.setPropertyValue("Language", sLanguage);
-            XChangesBatch xBatch = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, xNameAccess);
+            XChangesBatch xBatch = UnoRuntime.queryInterface(XChangesBatch.class, xNameAccess);
             xBatch.commitChanges();
             for (int i = 0; i < m_oSwingDialogProvider.getInspectorPageCount(); i++){
                 m_oSwingDialogProvider.getInspectorPage(i).convertCompleteSourceCode(_nLanguage);
@@ -306,14 +306,14 @@ public class Inspector{
 
 
         public String[][] getApplicationUrls(){
-            Set aSet = aApplicationHashMap.keySet();
+            Set<String> aSet = aApplicationHashMap.keySet();
             String[][] sReturnList = new String[aSet.size()][];
             int n= 0;
-            for ( Iterator i = aSet.iterator(); i.hasNext(); ){
+            for ( Iterator<String> i = aSet.iterator(); i.hasNext(); ){
                 String[] sSingleApplication = new String[2];
-                sSingleApplication[0] = (String) i.next();
+                sSingleApplication[0] = i.next();
                 // assign the title in the second index
-                sSingleApplication[1] = (String) aApplicationHashMap.get(sSingleApplication[0]);
+                sSingleApplication[1] = aApplicationHashMap.get(sSingleApplication[0]);
                 sReturnList[n++] = sSingleApplication;
             }
             return sReturnList;
@@ -324,10 +324,10 @@ public class Inspector{
             int nHiddenCount = aHiddenDocuments.size();
             if (nHiddenCount > 0){
                 for (int i = nHiddenCount - 1; i >= 0; i--){
-                    XComponent xComponent = (XComponent) aHiddenDocuments.get(i);
+                    XComponent xComponent = aHiddenDocuments.get(i);
                     if (xComponent != null){
                         try {
-                            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComponent);
+                            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, xComponent);
                             xCloseable.close(true);
                             aHiddenDocuments.remove(i);
                         } catch (CloseVetoException ex) {
@@ -413,7 +413,7 @@ public class Inspector{
             XMultiComponentFactory xMCF = m_xComponentContext.getServiceManager();
             XMultiServiceFactory xMSFCfg = theDefaultProvider.get(this.getXComponentContext());
             Object oAccess = xMSFCfg.createInstanceWithArguments(sAccess, new Object[]{new NamedValue("nodepath", _sNodePath)});
-            xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oAccess);
+            xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oAccess);
         } catch (com.sun.star.uno.Exception e) {
         }
         return xNameAccess;

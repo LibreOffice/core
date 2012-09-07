@@ -65,7 +65,7 @@ public class JavaFinder implements MethodFinder {
 
     public ScriptEntry[] findMethods(File basedir) {
         String parcelName;
-        ArrayList result = new ArrayList(10);
+        ArrayList<ScriptEntry> result = new ArrayList<ScriptEntry>(10);
         ScriptEntry[] empty = new ScriptEntry[0];
 
         if (basedir == null || basedir.exists() == false ||
@@ -132,7 +132,7 @@ public class JavaFinder implements MethodFinder {
 
     private ClassLoader getClassLoader() {
         int len = classpath.size();
-        ArrayList urls = new ArrayList(len);
+        ArrayList<URL> urls = new ArrayList<URL>(len);
 
         for (int i = 0; i < len; i++) {
             try {
@@ -150,7 +150,7 @@ public class JavaFinder implements MethodFinder {
     }
 
     private ClassLoader getClassLoader(File basedir) {
-        ArrayList files = findFiles(basedir, ".jar");
+        ArrayList<File> files = findFiles(basedir, ".jar");
         files.add(basedir);
 
         try {
@@ -189,8 +189,8 @@ public class JavaFinder implements MethodFinder {
         return new URLClassLoader(urls);
     }
 
-    private ArrayList findFiles(File basedir, String suffix) {
-        ArrayList result = new ArrayList();
+    private ArrayList<File> findFiles(File basedir, String suffix) {
+        ArrayList<File> result = new ArrayList<File>();
         File[] children = basedir.listFiles();
 
         for (int i = 0; i < children.length; i++) {
@@ -204,15 +204,15 @@ public class JavaFinder implements MethodFinder {
 
     private String[] findClassNames(File basedir)
     {
-        ArrayList classFiles = findFiles(basedir, CLASS_SUFFIX);
+        ArrayList<File> classFiles = findFiles(basedir, CLASS_SUFFIX);
         if(classFiles == null || classFiles.size() == 0)
             return null;
 
-        ArrayList javaFiles = findFiles(basedir, JAVA_SUFFIX);
+        ArrayList<File> javaFiles = findFiles(basedir, JAVA_SUFFIX);
         if(javaFiles == null || javaFiles.size() == 0)
             return null;
 
-        ArrayList result = new ArrayList();
+        ArrayList<String> result = new ArrayList<String>();
         for (int i = 0; i < classFiles.size(); i++)
         {
             File classFile = (File)classFiles.get(i);

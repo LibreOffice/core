@@ -120,7 +120,7 @@ public class SwingUnoMethodNode extends SwingUnoNode implements ActionListener, 
         openIdlDescription(m_xDialogProvider.getIDLPath());
     }
 
-    public Vector getMethodObjects(){
+    public Vector<Object> getMethodObjects(){
         MethodParametersDialog oMethodParametersDialog = new MethodParametersDialog(this);
         oMethodParametersDialog.addActionListener(this);
         return oMethodParametersDialog.getMethodObjects();

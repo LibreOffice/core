@@ -77,7 +77,7 @@ public class SampleHyphenator extends ComponentBase implements
         XServiceInfo
 {
     PropChgHelper_Hyph          aPropChgHelper;
-    ArrayList                   aEvtListeners;
+    ArrayList<?>                   aEvtListeners;
     boolean                     bDisposing;
 
     public SampleHyphenator()
@@ -93,7 +93,7 @@ public class SampleHyphenator extends ComponentBase implements
                 "HyphMinWordLength"
             };
         aPropChgHelper  = new PropChgHelper_Hyph( (XHyphenator) this, aProps );
-        aEvtListeners   = new ArrayList();;
+        aEvtListeners   = new ArrayList<Object>();;
         bDisposing      = false;
     }
 
