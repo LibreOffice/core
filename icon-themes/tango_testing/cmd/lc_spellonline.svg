@@ -15,8 +15,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="lc_spelldialog-lc_spelling-lc_spellingandgrammar.svg"
-   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_spellingandgrammar.png"
+   sodipodi:docname="lc_spellonline.svg"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_spellonline.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -540,17 +540,17 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="14.555267"
-     inkscape:cy="15.788454"
+     inkscape:cx="19.05464"
+     inkscape:cy="8.8510904"
      inkscape:document-units="px"
-     inkscape:current-layer="g3583"
+     inkscape:current-layer="g11778"
      showgrid="false"
      inkscape:snap-global="false"
-     inkscape:window-width="809"
-     inkscape:window-height="436"
-     inkscape:window-x="148"
-     inkscape:window-y="145"
-     inkscape:window-maximized="0">
+     inkscape:window-width="1366"
+     inkscape:window-height="718"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid3050"
@@ -639,13 +639,13 @@
                    ry="3" />
               </g>
               <path
-                 style="fill:none;stroke:#4e9a06;stroke-width:4.4883008;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+                 style="fill:none;stroke:#9f0606;stroke-width:4.48830080000000020;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
                  sodipodi:nodetypes="cccccccccc"
                  id="path6406"
                  d="m -4.2023013,19.961004 2,2 2.9922003,-2.9922 2.9922004,2.9922 2.9922003,-2.9922 2.9922004,2.9922 2.9921999,-2.9922 2.992201,2.9922 2.9922,-2.9922 2.9922,2.9922"
                  inkscape:connector-curvature="0" />
               <path
-                 style="fill:none;stroke:#8ae234;stroke-width:1.49610019px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
+                 style="fill:none;stroke:#e85d5d;stroke-width:1.49610018999999994px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
                  sodipodi:nodetypes="cccccccccc"
                  id="path6404"
                  d="m -4.2023013,19.961004 2.2103891,2 3.0155769,-2.9922 2.9922004,2.9922 3.0155768,-2.9922 2.9688241,2.9922 2.9922,-2.9922 2.992201,2.9922 2.968823,-3.015577 3.015577,3.015577"
