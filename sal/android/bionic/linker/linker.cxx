@@ -29,7 +29,6 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <linux/auxvec.h>
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -40,13 +39,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-// Private C library headers.
-#include <private/bionic_tls.h>
-#include <private/logd.h>
+#include <android/log.h>
 
 #include "linker.h"
 #include "linker_debug.h"
-#include "linker_environ.h"
 #include "linker_format.h"
 #include "linker_phdr.h"
 
@@ -56,9 +52,6 @@
 /* Assume average path length of 64 and max 8 paths */
 #define LDPATH_BUFSIZE 512
 #define LDPATH_MAX 8
-
-#define LDPRELOAD_BUFSIZE 512
-#define LDPRELOAD_MAX 8
 
 /* >>> IMPORTANT NOTE - READ ME BEFORE MODIFYING <<<
  *
@@ -95,11 +88,6 @@ static soinfo *somain; /* main process, always the one after libdl_info */
 
 static char ldpaths_buf[LDPATH_BUFSIZE];
 static const char *ldpaths[LDPATH_MAX + 1];
-
-static char ldpreloads_buf[LDPRELOAD_BUFSIZE];
-static const char *ldpreload_names[LDPRELOAD_MAX + 1];
-
-static soinfo *preloads[LDPRELOAD_MAX + 1];
 
 #if LINKER_DEBUG
 int debug_verbosity;
@@ -149,7 +137,7 @@ static unsigned bitmask[4096];
     return_type name __VA_ARGS__                                                \
     {                                                                           \
         const char* msg = "ERROR: " #name " called from the dynamic linker!\n"; \
-         __libc_android_log_write(ANDROID_LOG_FATAL, "linker", msg);            \
+         __android_log_write(ANDROID_LOG_FATAL, "linker", msg);            \
         write(2, msg, sizeof(msg));                                             \
         abort();                                                                \
     }
@@ -336,57 +324,6 @@ static void soinfo_free(soinfo* si)
     freelist = si;
 }
 
-#ifdef ANDROID_ARM_LINKER
-
-/* For a given PC, find the .so that it belongs to.
- * Returns the base address of the .ARM.exidx section
- * for that .so, and the number of 8-byte entries
- * in that section (via *pcount).
- *
- * Intended to be called by libc's __gnu_Unwind_Find_exidx().
- *
- * This function is exposed via dlfcn.c and libdl.so.
- */
-_Unwind_Ptr dl_unwind_find_exidx(_Unwind_Ptr pc, int *pcount)
-{
-    soinfo *si;
-    unsigned addr = (unsigned)pc;
-
-    for (si = solist; si != 0; si = si->next){
-        if ((addr >= si->base) && (addr < (si->base + si->size))) {
-            *pcount = si->ARM_exidx_count;
-            return (_Unwind_Ptr)si->ARM_exidx;
-        }
-    }
-   *pcount = 0;
-    return NULL;
-}
-
-#elif defined(ANDROID_X86_LINKER) || defined(ANDROID_MIPS_LINKER)
-
-/* Here, we only have to provide a callback to iterate across all the
- * loaded libraries. gcc_eh does the rest. */
-int
-dl_iterate_phdr(int (*cb)(dl_phdr_info *info, size_t size, void *data),
-                void *data)
-{
-    int rv = 0;
-    for (soinfo* si = solist; si != NULL; si = si->next) {
-        dl_phdr_info dl_info;
-        dl_info.dlpi_addr = si->linkmap.l_addr;
-        dl_info.dlpi_name = si->linkmap.l_name;
-        dl_info.dlpi_phdr = si->phdr;
-        dl_info.dlpi_phnum = si->phnum;
-        rv = cb(&dl_info, sizeof(dl_phdr_info), data);
-        if (rv != 0) {
-            break;
-        }
-    }
-    return rv;
-}
-
-#endif
-
 static Elf32_Sym *soinfo_elf_lookup(soinfo *si, unsigned hash, const char *name)
 {
     Elf32_Sym *s;
@@ -453,14 +390,6 @@ soinfo_do_lookup(soinfo *si, const char *name, Elf32_Addr *offset,
          * Here we return the first definition found for simplicity.  */
 
         s = soinfo_elf_lookup(si, elf_hash, name);
-        if(s != NULL)
-            goto done;
-    }
-
-    /* Next, look for it in the preloads list */
-    for(i = 0; preloads[i] != NULL; i++) {
-        lsi = preloads[i];
-        s = soinfo_elf_lookup(lsi, elf_hash, name);
         if(s != NULL)
             goto done;
     }
@@ -1287,15 +1216,6 @@ static void call_array(unsigned *ctor, int count, int reverse)
     }
 }
 
-static void soinfo_call_preinit_constructors(soinfo *si)
-{
-  TRACE("[ %5d Calling preinit_array @ 0x%08x [%d] for '%s' ]\n",
-      pid, (unsigned)si->preinit_array, si->preinit_array_count,
-      si->name);
-  call_array(si->preinit_array, si->preinit_array_count, 0);
-  TRACE("[ %5d Done calling preinit_array for '%s' ]\n", pid, si->name);
-}
-
 void soinfo_call_constructors(soinfo *si)
 {
     if (si->constructors_called)
@@ -1605,23 +1525,6 @@ static int soinfo_link_image(soinfo *si)
         goto fail;
     }
 
-    /* if this is the main executable, then load all of the preloads now */
-    if(si->flags & FLAG_EXE) {
-        int i;
-        memset(preloads, 0, sizeof(preloads));
-        for(i = 0; ldpreload_names[i] != NULL; i++) {
-            soinfo *lsi = find_library(ldpreload_names[i]);
-            if(lsi == 0) {
-                strlcpy(tmp_err_buf, linker_get_error(), sizeof(tmp_err_buf));
-                DL_ERR("could not load library \"%s\" needed by \"%s\"; caused by %s",
-                       ldpreload_names[i], si->name, tmp_err_buf);
-                goto fail;
-            }
-            lsi->refcount++;
-            preloads[i] = lsi;
-        }
-    }
-
     /* dynamic_count is an upper bound for the number of needed libs */
     pneeded = needed = (soinfo**) alloca((1 + dynamic_count) * sizeof(soinfo*));
 
@@ -1709,6 +1612,7 @@ fail:
     return -1;
 }
 
+
 static void parse_path(const char* path, const char* delimiters,
                        const char** array, char* buf, size_t buf_size, size_t max_count)
 {
@@ -1740,321 +1644,20 @@ static void parse_LD_LIBRARY_PATH(const char* path) {
                ldpaths_buf, sizeof(ldpaths_buf), LDPATH_MAX);
 }
 
-static void parse_LD_PRELOAD(const char* path) {
-    // We have historically supported ':' as well as ' ' in LD_PRELOAD.
-    parse_path(path, " :", ldpreload_names,
-               ldpreloads_buf, sizeof(ldpreloads_buf), LDPRELOAD_MAX);
-}
-
-/*
- * This code is called after the linker has linked itself and
- * fixed it's own GOT. It is safe to make references to externs
- * and other non-local data at this point.
- */
-static unsigned __linker_init_post_relocation(unsigned **elfdata, unsigned linker_base)
+void __lo_linker_init(void)
 {
-    static soinfo linker_soinfo;
-
-    int argc = (int) *elfdata;
-    char **argv = (char**) (elfdata + 1);
-    unsigned *vecs = (unsigned*) (argv + argc + 1);
-    unsigned *v;
-    soinfo *si;
-    int i;
     const char *ldpath_env = NULL;
-    const char *ldpreload_env = NULL;
-
-    /* NOTE: we store the elfdata pointer on a special location
-     *       of the temporary TLS area in order to pass it to
-     *       the C Library's runtime initializer.
-     *
-     *       The initializer must clear the slot and reset the TLS
-     *       to point to a different location to ensure that no other
-     *       shared library constructor can access it.
-     */
-    __libc_init_tls(elfdata);
-
-    pid = getpid();
-
-#if TIMING
-    struct timeval t0, t1;
-    gettimeofday(&t0, 0);
-#endif
-
-    /* Initialize environment functions, and get to the ELF aux vectors table */
-    vecs = linker_env_init(vecs);
-
-    /* Check auxv for AT_SECURE first to see if program is setuid, setgid,
-       has file caps, or caused a SELinux/AppArmor domain transition. */
-    for (v = vecs; v[0]; v += 2) {
-        if (v[0] == AT_SECURE) {
-            /* kernel told us whether to enable secure mode */
-            program_is_setuid = v[1];
-            goto sanitize;
-        }
-    }
-
-    /* Kernel did not provide AT_SECURE - fall back on legacy test. */
-    program_is_setuid = (getuid() != geteuid()) || (getgid() != getegid());
-
-sanitize:
-    /* Sanitize environment if we're loading a setuid program */
-    if (program_is_setuid) {
-        linker_env_secure();
-    }
-
-    debugger_init();
 
     /* Get a few environment variables */
     {
 #if LINKER_DEBUG
         const char* env;
-        env = linker_env_get("DEBUG"); /* XXX: TODO: Change to LD_DEBUG */
+        env = getenv("LINKER_DEBUG");
         if (env)
             debug_verbosity = atoi(env);
 #endif
-
-        /* Normally, these are cleaned by linker_env_secure, but the test
-         * against program_is_setuid doesn't cost us anything */
-        if (!program_is_setuid) {
-            ldpath_env = linker_env_get("LD_LIBRARY_PATH");
-            ldpreload_env = linker_env_get("LD_PRELOAD");
-        }
+        ldpath_env = getenv("LD_LIBRARY_PATH");
     }
 
-    INFO("[ android linker & debugger ]\n");
-    DEBUG("%5d elfdata @ 0x%08x\n", pid, (unsigned)elfdata);
-
-    si = soinfo_alloc(argv[0]);
-    if(si == 0) {
-        exit(-1);
-    }
-
-    /* bootstrap the link map, the main exe always needs to be first */
-    si->flags |= FLAG_EXE;
-    link_map* map = &(si->linkmap);
-
-    map->l_addr = 0;
-    map->l_name = argv[0];
-    map->l_prev = NULL;
-    map->l_next = NULL;
-
-    _r_debug.r_map = map;
-    r_debug_tail = map;
-
-        /* gdb expects the linker to be in the debug shared object list.
-         * Without this, gdb has trouble locating the linker's ".text"
-         * and ".plt" sections. Gdb could also potentially use this to
-         * relocate the offset of our exported 'rtld_db_dlactivity' symbol.
-         * Don't use soinfo_alloc(), because the linker shouldn't
-         * be on the soinfo list.
-         */
-    strlcpy((char*) linker_soinfo.name, "/system/bin/linker", sizeof linker_soinfo.name);
-    linker_soinfo.flags = 0;
-    linker_soinfo.base = linker_base;
-    /*
-     * Set the dynamic field in the link map otherwise gdb will complain with
-     * the following:
-     *   warning: .dynamic section for "/system/bin/linker" is not at the
-     *   expected address (wrong library or version mismatch?)
-     */
-    Elf32_Ehdr *elf_hdr = (Elf32_Ehdr *) linker_base;
-    Elf32_Phdr *phdr =
-        (Elf32_Phdr *)((unsigned char *) linker_base + elf_hdr->e_phoff);
-    phdr_table_get_dynamic_section(phdr, elf_hdr->e_phnum, linker_base,
-                                   &linker_soinfo.dynamic, NULL);
-    insert_soinfo_into_debug_map(&linker_soinfo);
-
-    /* extract information passed from the kernel */
-    while(vecs[0] != 0){
-        switch(vecs[0]){
-        case AT_PHDR:
-            si->phdr = (Elf32_Phdr*) vecs[1];
-            break;
-        case AT_PHNUM:
-            si->phnum = (int) vecs[1];
-            break;
-        case AT_ENTRY:
-            si->entry = vecs[1];
-            break;
-        }
-        vecs += 2;
-    }
-
-    /* Compute the value of si->base. We can't rely on the fact that
-     * the first entry is the PHDR because this will not be true
-     * for certain executables (e.g. some in the NDK unit test suite)
-     */
-    int nn;
-    si->base = 0;
-    si->size = phdr_table_get_load_size(si->phdr, si->phnum);
-    si->load_bias = 0;
-    for ( nn = 0; nn < si->phnum; nn++ ) {
-        if (si->phdr[nn].p_type == PT_PHDR) {
-            si->load_bias = (Elf32_Addr)si->phdr - si->phdr[nn].p_vaddr;
-            si->base = (Elf32_Addr) si->phdr - si->phdr[nn].p_offset;
-            break;
-        }
-    }
-    si->dynamic = (unsigned *)-1;
-    si->refcount = 1;
-
-    // Use LD_LIBRARY_PATH and LD_PRELOAD (but only if we aren't setuid/setgid).
     parse_LD_LIBRARY_PATH(ldpath_env);
-    parse_LD_PRELOAD(ldpreload_env);
-
-    if(soinfo_link_image(si)) {
-        char errmsg[] = "CANNOT LINK EXECUTABLE\n";
-        write(2, __linker_dl_err_buf, strlen(__linker_dl_err_buf));
-        write(2, errmsg, sizeof(errmsg));
-        exit(-1);
-    }
-
-    soinfo_call_preinit_constructors(si);
-
-    for(i = 0; preloads[i] != NULL; i++) {
-        soinfo_call_constructors(preloads[i]);
-    }
-
-    soinfo_call_constructors(si);
-
-#if ALLOW_SYMBOLS_FROM_MAIN
-    /* Set somain after we've loaded all the libraries in order to prevent
-     * linking of symbols back to the main image, which is not set up at that
-     * point yet.
-     */
-    somain = si;
-#endif
-
-#if TIMING
-    gettimeofday(&t1,NULL);
-    PRINT("LINKER TIME: %s: %d microseconds\n", argv[0], (int) (
-               (((long long)t1.tv_sec * 1000000LL) + (long long)t1.tv_usec) -
-               (((long long)t0.tv_sec * 1000000LL) + (long long)t0.tv_usec)
-               ));
-#endif
-#if STATS
-    PRINT("RELO STATS: %s: %d abs, %d rel, %d copy, %d symbol\n", argv[0],
-           linker_stats.count[kRelocAbsolute],
-           linker_stats.count[kRelocRelative],
-           linker_stats.count[kRelocCopy],
-           linker_stats.count[kRelocSymbol]);
-#endif
-#if COUNT_PAGES
-    {
-        unsigned n;
-        unsigned i;
-        unsigned count = 0;
-        for(n = 0; n < 4096; n++){
-            if(bitmask[n]){
-                unsigned x = bitmask[n];
-                for(i = 0; i < 8; i++){
-                    if(x & 1) count++;
-                    x >>= 1;
-                }
-            }
-        }
-        PRINT("PAGES MODIFIED: %s: %d (%dKB)\n", argv[0], count, count * 4);
-    }
-#endif
-
-#if TIMING || STATS || COUNT_PAGES
-    fflush(stdout);
-#endif
-
-    TRACE("[ %5d Ready to execute '%s' @ 0x%08x ]\n", pid, si->name,
-          si->entry);
-    return si->entry;
-}
-
-/*
- * Find the value of AT_BASE passed to us by the kernel. This is the load
- * location of the linker.
- */
-static unsigned find_linker_base(unsigned **elfdata) {
-    int argc = (int) *elfdata;
-    char **argv = (char**) (elfdata + 1);
-    unsigned *vecs = (unsigned*) (argv + argc + 1);
-    while (vecs[0] != 0) {
-        vecs++;
-    }
-
-    /* The end of the environment block is marked by two NULL pointers */
-    vecs++;
-
-    while(vecs[0]) {
-        if (vecs[0] == AT_BASE) {
-            return vecs[1];
-        }
-        vecs += 2;
-    }
-
-    return 0; // should never happen
-}
-
-/* Compute the load-bias of an existing executable. This shall only
- * be used to compute the load bias of an executable or shared library
- * that was loaded by the kernel itself.
- *
- * Input:
- *    elf    -> address of ELF header, assumed to be at the start of the file.
- * Return:
- *    load bias, i.e. add the value of any p_vaddr in the file to get
- *    the corresponding address in memory.
- */
-static Elf32_Addr
-get_elf_exec_load_bias(const Elf32_Ehdr* elf)
-{
-    Elf32_Addr        offset     = elf->e_phoff;
-    const Elf32_Phdr* phdr_table = (const Elf32_Phdr*)((char*)elf + offset);
-    const Elf32_Phdr* phdr_end   = phdr_table + elf->e_phnum;
-    const Elf32_Phdr* phdr;
-
-    for (phdr = phdr_table; phdr < phdr_end; phdr++) {
-        if (phdr->p_type == PT_LOAD) {
-            return (Elf32_Addr)elf + phdr->p_offset - phdr->p_vaddr;
-        }
-    }
-    return 0;
-}
-
-/*
- * This is the entry point for the linker, called from begin.S. This
- * method is responsible for fixing the linker's own relocations, and
- * then calling __linker_init_post_relocation().
- *
- * Because this method is called before the linker has fixed it's own
- * relocations, any attempt to reference an extern variable, extern
- * function, or other GOT reference will generate a segfault.
- */
-extern "C" unsigned __linker_init(unsigned **elfdata) {
-    unsigned linker_addr = find_linker_base(elfdata);
-    Elf32_Ehdr *elf_hdr = (Elf32_Ehdr *) linker_addr;
-    Elf32_Phdr *phdr =
-        (Elf32_Phdr *)((unsigned char *) linker_addr + elf_hdr->e_phoff);
-
-    soinfo linker_so;
-    memset(&linker_so, 0, sizeof(soinfo));
-
-    linker_so.base = linker_addr;
-    linker_so.size = phdr_table_get_load_size(phdr, elf_hdr->e_phnum);
-    linker_so.load_bias = get_elf_exec_load_bias(elf_hdr);
-    linker_so.dynamic = (unsigned *) -1;
-    linker_so.phdr = phdr;
-    linker_so.phnum = elf_hdr->e_phnum;
-    linker_so.flags |= FLAG_LINKER;
-
-    if (soinfo_link_image(&linker_so)) {
-        // It would be nice to print an error message, but if the linker
-        // can't link itself, there's no guarantee that we'll be able to
-        // call write() (because it involves a GOT reference).
-        //
-        // This situation should never occur unless the linker itself
-        // is corrupt.
-        exit(-1);
-    }
-
-    // We have successfully fixed our own relocations. It's safe to run
-    // the main part of the linker now.
-    return __linker_init_post_relocation(elfdata, linker_addr);
 }

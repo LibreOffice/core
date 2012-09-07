@@ -51,9 +51,12 @@ static void set_dlerror(int err)
     dl_err_str = (const char *)&dl_err_buf[0];
 };
 
-void *dlopen(const char *filename, int flag)
+__attribute__ ((visibility("default")))
+void *__lo_dlopen(const char *filename, int flag)
 {
     soinfo *ret;
+
+    (void) flag;
 
     pthread_mutex_lock(&dl_lock);
     ret = find_library(filename);
@@ -67,14 +70,16 @@ void *dlopen(const char *filename, int flag)
     return ret;
 }
 
-const char *dlerror(void)
+__attribute__ ((visibility("default")))
+const char *__lo_dlerror(void)
 {
     const char *tmp = dl_err_str;
     dl_err_str = NULL;
     return (const char *)tmp;
 }
 
-void *dlsym(void *handle, const char *symbol)
+__attribute__ ((visibility("default")))
+void *__lo_dlsym(void *handle, const char *symbol)
 {
     soinfo *found;
     Elf32_Sym *sym;
@@ -125,23 +130,27 @@ err:
     return 0;
 }
 
-int dladdr(const void *addr, Dl_info *info)
+__attribute__ ((visibility("default")))
+int __lo_dladdr(const void *addr, Dl_info *info)
 {
     int ret = 0;
+    soinfo *si;
 
     pthread_mutex_lock(&dl_lock);
 
     /* Determine if this address can be found in any library currently mapped */
-    soinfo *si = find_containing_library(addr);
+    si = find_containing_library(addr);
 
     if(si) {
+        Elf32_Sym *sym;
+
         memset(info, 0, sizeof(Dl_info));
 
         info->dli_fname = si->name;
         info->dli_fbase = (void*)si->base;
 
         /* Determine if any symbol in the library contains the specified address */
-        Elf32_Sym *sym = soinfo_find_symbol(si, addr);
+        sym = soinfo_find_symbol(si, addr);
 
         if(sym != NULL) {
             info->dli_sname = si->strtab + sym->st_name;
@@ -156,28 +165,23 @@ int dladdr(const void *addr, Dl_info *info)
     return ret;
 }
 
-int dlclose(void* handle) {
+__attribute__ ((visibility("default")))
+int __lo_dlclose(void* handle) {
+    int result;
     pthread_mutex_lock(&dl_lock);
-    int result = soinfo_unload((soinfo*)handle);
+    result = soinfo_unload((soinfo*)handle);
     pthread_mutex_unlock(&dl_lock);
     return result;
 }
 
-#if defined(ANDROID_ARM_LINKER)
-//                     0000000 00011111 111112 22222222 2333333 333344444444445555555
-//                     0123456 78901234 567890 12345678 9012345 678901234567890123456
-#define ANDROID_LIBDL_STRTAB \
-                      "dlopen\0dlclose\0dlsym\0dlerror\0dladdr\0dl_unwind_find_exidx\0"
+/* Dummy replacement for the libdl_info in the real system dlfcn.c. */
 
-#elif defined(ANDROID_X86_LINKER) || defined(ANDROID_MIPS_LINKER)
-//                     0000000 00011111 111112 22222222 2333333 3333444444444455
-//                     0123456 78901234 567890 12345678 9012345 6789012345678901
-#define ANDROID_LIBDL_STRTAB \
-                      "dlopen\0dlclose\0dlsym\0dlerror\0dladdr\0dl_iterate_phdr\0"
-#else
-#error Unsupported architecture. Only ARM, MIPS, and x86 are presently supported.
-#endif
+void __lo_dummy_foo(void)
+{
+}
 
+#define ANDROID_LIBDL_STRTAB \
+                      "__lo_dummy_foo\0"
 
 static Elf32_Sym libdl_symtab[] = {
       // total length of libdl_info.strtab, including trailing 0
@@ -187,43 +191,10 @@ static Elf32_Sym libdl_symtab[] = {
     { st_name: sizeof(ANDROID_LIBDL_STRTAB) - 1,
     },
     { st_name: 0,   // starting index of the name in libdl_info.strtab
-      st_value: (Elf32_Addr) &dlopen,
+      st_value: (Elf32_Addr) &__lo_dummy_foo,
       st_info: STB_GLOBAL << 4,
       st_shndx: 1,
     },
-    { st_name: 7,
-      st_value: (Elf32_Addr) &dlclose,
-      st_info: STB_GLOBAL << 4,
-      st_shndx: 1,
-    },
-    { st_name: 15,
-      st_value: (Elf32_Addr) &dlsym,
-      st_info: STB_GLOBAL << 4,
-      st_shndx: 1,
-    },
-    { st_name: 21,
-      st_value: (Elf32_Addr) &dlerror,
-      st_info: STB_GLOBAL << 4,
-      st_shndx: 1,
-    },
-    { st_name: 29,
-      st_value: (Elf32_Addr) &dladdr,
-      st_info: STB_GLOBAL << 4,
-      st_shndx: 1,
-    },
-#ifdef ANDROID_ARM_LINKER
-    { st_name: 36,
-      st_value: (Elf32_Addr) &dl_unwind_find_exidx,
-      st_info: STB_GLOBAL << 4,
-      st_shndx: 1,
-    },
-#elif defined(ANDROID_X86_LINKER) || defined(ANDROID_MIPS_LINKER)
-    { st_name: 36,
-      st_value: (Elf32_Addr) &dl_iterate_phdr,
-      st_info: STB_GLOBAL << 4,
-      st_shndx: 1,
-    },
-#endif
 };
 
 /* Fake out a hash table with a single bucket.
@@ -246,17 +217,17 @@ static Elf32_Sym libdl_symtab[] = {
  * stubbing them out in libdl.
  */
 static unsigned libdl_buckets[1] = { 1 };
-static unsigned libdl_chains[7] = { 0, 2, 3, 4, 5, 6, 0 };
+static unsigned libdl_chains[3] = { 0, 2, 0 };
 
 soinfo libdl_info = {
-    name: "libdl.so",
+    name: "lo-dummy-libdl.so",
     flags: FLAG_LINKED,
 
     strtab: ANDROID_LIBDL_STRTAB,
     symtab: libdl_symtab,
 
     nbucket: 1,
-    nchain: 7,
+    nchain: 3,
     bucket: libdl_buckets,
     chain: libdl_chains,
 };

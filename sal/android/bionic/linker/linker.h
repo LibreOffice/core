@@ -37,7 +37,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <link.h>
 
 #undef PAGE_MASK
 #undef PAGE_SIZE

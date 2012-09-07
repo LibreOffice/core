@@ -31,15 +31,30 @@ $(eval $(call gb_Library_Library,lo-bootstrap))
 $(eval $(call gb_Library_add_libs,lo-bootstrap,\
 	-llog \
 	-landroid \
+	-lgnustl_static \
 ))
 
 $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
 	sal/android/lo-bootstrap \
+	sal/android/bionic/linker/dlfcn \
+	sal/android/bionic/linker/linker_format \
+	sal/android/bionic/linker/linker_phdr \
+	sal/android/bionic/linker/rt \
 ))
 
+$(eval $(call gb_Library_add_cxxobjects,lo-bootstrap,\
+	sal/android/bionic/linker/linker \
+))
+
+# gb_PRODUCT being empty means --enable-dbgutil, and in that case turn on the
+# debugging output possibility in the imported Bionic linker code
 $(eval $(call gb_Library_set_include,lo-bootstrap,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/sal/inc \
+	-DLINKER_DEBUG=$(if $(gb_PRODUCT),0,1) \
+	$(if $(filter ARM,$(CPUNAME)),   -DANDROID_ARM_LINKER) \
+	$(if $(filter INTEL,$(CPUNAME)), -DANDROID_X86_LINKER) \
+	$(if $(filter GODSON,$(CPUNAME)),-DANDROID_MIPS_LINKER) \
 ))
 
 # vim: set noet sw=4 ts=4:

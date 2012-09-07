@@ -444,6 +444,9 @@ out_vformat(Out *o, const char *format, va_list args)
 
         char  c;
 
+        (void) sign;
+        (void) prec;
+
         /* first, find all characters that are not 0 or '%' */
         /* then send them to the output directly */
         mm = nn;

@@ -31,6 +31,11 @@
 
 #include "linker_phdr.h"
 
+#ifndef PT_GNU_RELRO
+/* From android/bionic/libc/include/sys/exec_elf.h: */
+#define PT_GNU_RELRO    0x6474e552      /* Read-only post relocation */
+#endif
+
 /**
   TECHNICAL NOTE ON ELF LOADING.
 
@@ -184,8 +189,9 @@ Elf32_Addr phdr_table_get_load_size(const Elf32_Phdr* phdr_table,
 {
     Elf32_Addr min_vaddr = 0xFFFFFFFFU;
     Elf32_Addr max_vaddr = 0x00000000U;
+    size_t i;
 
-    for (size_t i = 0; i < phdr_count; ++i) {
+    for (i = 0; i < phdr_count; ++i) {
         const Elf32_Phdr* phdr = &phdr_table[i];
 
         if (phdr->p_type != PT_LOAD) {
@@ -234,13 +240,16 @@ phdr_table_reserve_memory(const Elf32_Phdr* phdr_table,
                           Elf32_Addr* load_bias)
 {
     Elf32_Addr size = phdr_table_get_load_size(phdr_table, phdr_count);
+    size_t i;
+    int mmap_flags;
+    void* start;
     if (size == 0) {
         errno = EINVAL;
         return -1;
     }
 
-    int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS;
-    void* start = mmap(NULL, size, PROT_NONE, mmap_flags, -1, 0);
+    mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS;
+    start = mmap(NULL, size, PROT_NONE, mmap_flags, -1, 0);
     if (start == MAP_FAILED) {
         return -1;
     }
@@ -249,7 +258,7 @@ phdr_table_reserve_memory(const Elf32_Phdr* phdr_table,
     *load_size  = size;
     *load_bias  = 0;
 
-    for (size_t i = 0; i < phdr_count; ++i) {
+    for (i = 0; i < phdr_count; ++i) {
         const Elf32_Phdr* phdr = &phdr_table[i];
         if (phdr->p_type == PT_LOAD) {
             *load_bias = (Elf32_Addr)start - PAGE_START(phdr->p_vaddr);
@@ -283,25 +292,32 @@ phdr_table_load_segments(const Elf32_Phdr* phdr_table,
     for (nn = 0; nn < phdr_count; nn++) {
         const Elf32_Phdr* phdr = &phdr_table[nn];
         void* seg_addr;
+        Elf32_Addr seg_start;
+        Elf32_Addr seg_end;
+        Elf32_Addr seg_page_start;
+        Elf32_Addr seg_page_end;
+        Elf32_Addr seg_file_end;
+        Elf32_Addr file_start;
+        Elf32_Addr file_end;
+        Elf32_Addr file_page_start;
 
         if (phdr->p_type != PT_LOAD)
             continue;
 
         /* Segment addresses in memory */
-        Elf32_Addr seg_start = phdr->p_vaddr + load_bias;
-        Elf32_Addr seg_end   = seg_start + phdr->p_memsz;
+        seg_start = phdr->p_vaddr + load_bias;
+        seg_end   = seg_start + phdr->p_memsz;
 
-        Elf32_Addr seg_page_start = PAGE_START(seg_start);
-        Elf32_Addr seg_page_end   = PAGE_END(seg_end);
+        seg_page_start = PAGE_START(seg_start);
+        seg_page_end   = PAGE_END(seg_end);
 
-        Elf32_Addr seg_file_end   = seg_start + phdr->p_filesz;
+        seg_file_end   = seg_start + phdr->p_filesz;
 
         /* File offsets */
-        Elf32_Addr file_start = phdr->p_offset;
-        Elf32_Addr file_end   = file_start + phdr->p_filesz;
+        file_start = phdr->p_offset;
+        file_end   = file_start + phdr->p_filesz;
 
-        Elf32_Addr file_page_start = PAGE_START(file_start);
-        Elf32_Addr file_page_end   = PAGE_END(file_end);
+        file_page_start = PAGE_START(file_start);
 
         seg_addr = mmap((void*)seg_page_start,
                         file_end - file_page_start,
@@ -356,15 +372,19 @@ _phdr_table_set_load_prot(const Elf32_Phdr* phdr_table,
     const Elf32_Phdr* phdr_limit = phdr + phdr_count;
 
     for (; phdr < phdr_limit; phdr++) {
+        Elf32_Addr seg_page_start;
+        Elf32_Addr seg_page_end;
+        int ret;
+
         if (phdr->p_type != PT_LOAD || (phdr->p_flags & PF_W) != 0)
             continue;
 
-        Elf32_Addr seg_page_start = PAGE_START(phdr->p_vaddr) + load_bias;
-        Elf32_Addr seg_page_end   = PAGE_END(phdr->p_vaddr + phdr->p_memsz) + load_bias;
+        seg_page_start = PAGE_START(phdr->p_vaddr) + load_bias;
+        seg_page_end   = PAGE_END(phdr->p_vaddr + phdr->p_memsz) + load_bias;
 
-        int ret = mprotect((void*)seg_page_start,
-                           seg_page_end - seg_page_start,
-                           PFLAGS_TO_PROT(phdr->p_flags) | extra_prot_flags);
+        ret = mprotect((void*)seg_page_start,
+                       seg_page_end - seg_page_start,
+                       PFLAGS_TO_PROT(phdr->p_flags) | extra_prot_flags);
         if (ret < 0) {
             return -1;
         }
@@ -430,6 +450,10 @@ _phdr_table_set_gnu_relro_prot(const Elf32_Phdr* phdr_table,
     const Elf32_Phdr* phdr_limit = phdr + phdr_count;
 
     for (phdr = phdr_table; phdr < phdr_limit; phdr++) {
+        Elf32_Addr seg_page_start;
+        Elf32_Addr seg_page_end;
+        int ret;
+
         if (phdr->p_type != PT_GNU_RELRO)
             continue;
 
@@ -450,12 +474,12 @@ _phdr_table_set_gnu_relro_prot(const Elf32_Phdr* phdr_table,
          *    linker must only emit a PT_GNU_RELRO segment if it ensures
          *    that it starts on a page boundary.
          */
-        Elf32_Addr seg_page_start = PAGE_START(phdr->p_vaddr) + load_bias;
-        Elf32_Addr seg_page_end   = PAGE_END(phdr->p_vaddr + phdr->p_memsz) + load_bias;
+        seg_page_start = PAGE_START(phdr->p_vaddr) + load_bias;
+        seg_page_end   = PAGE_END(phdr->p_vaddr + phdr->p_memsz) + load_bias;
 
-        int ret = mprotect((void*)seg_page_start,
-                           seg_page_end - seg_page_start,
-                           prot_flags);
+        ret = mprotect((void*)seg_page_start,
+                       seg_page_end - seg_page_start,
+                       prot_flags);
         if (ret < 0) {
             return -1;
         }
@@ -631,10 +655,12 @@ CHECK:
     loaded_end = loaded + phdr_count*sizeof(Elf32_Phdr);
 
     for (phdr = phdr_table; phdr < phdr_limit; phdr++) {
+        Elf32_Addr seg_start;
+        Elf32_Addr seg_end;
         if (phdr->p_type != PT_LOAD)
             continue;
-        Elf32_Addr seg_start = phdr->p_vaddr + load_bias;
-        Elf32_Addr seg_end   = phdr->p_filesz + seg_start;
+        seg_start = phdr->p_vaddr + load_bias;
+        seg_end   = phdr->p_filesz + seg_start;
 
         if (seg_start <= loaded && loaded_end <= seg_end) {
             return (const Elf32_Phdr*)loaded;
