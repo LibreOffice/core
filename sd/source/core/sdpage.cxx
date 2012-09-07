@@ -1169,6 +1169,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     {
         SdPage& rMasterPage = static_cast<SdPage&>(rPage.TRG_GetMasterPage());
         SdrObject* pMasterTitle = rMasterPage.GetPresObj( PRESOBJ_TITLE );
+        SdrObject* pMasterSubTitle = rMasterPage.GetPresObj( PRESOBJ_TEXT );
         SdrObject* pMasterOutline = rMasterPage.GetPresObj( rPage.GetPageKind()==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
 
         if( pMasterTitle )
@@ -1176,8 +1177,9 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 
         if (aTitleRect.IsEmpty() )
             aTitleRect = rPage.GetTitleRect();
-
-        if( pMasterOutline )
+        if( pMasterSubTitle )
+            aLayoutRect = pMasterSubTitle->GetLogicRect();
+        else if( pMasterOutline )
             aLayoutRect = pMasterOutline->GetLogicRect();
 
         if (aLayoutRect.IsEmpty() )
