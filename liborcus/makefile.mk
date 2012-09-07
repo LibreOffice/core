@@ -47,6 +47,10 @@ BUILD_ACTION= \
 
 .ELSE
 
+.IF "$(SYSTEM_BOOST)" == "NO"
+MY_CXXFLAGS = CXXFLAGS=-I$(OUTDIR)/inc/external
+.END
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=./configure \
 	--with-pic \
@@ -54,7 +58,7 @@ CONFIGURE_ACTION=./configure \
 	--disable-shared \
 	--without-libzip \
 	--disable-debug \
-	--disable-spreadsheet-model
+	--disable-spreadsheet-model $(MY_CXXFLAGS)
 
 BUILD_ACTION=make
 BUILD_DIR=
