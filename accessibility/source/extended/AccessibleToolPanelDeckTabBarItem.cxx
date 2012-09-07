@@ -110,7 +110,7 @@ namespace accessibility
 
         Reference< XAccessibleComponent >   getParentAccessibleComponent() const;
         ::svt::IToolPanelDeck*              getPanelDeck() const { return m_pPanelDeck; }
-        ::rtl::OUString                     getPanelDisplayName();
+        OUString                            getPanelDisplayName();
 
     private:
         void impl_notifyBoundRectChanges();
@@ -149,7 +149,7 @@ namespace accessibility
     void AccessibleToolPanelDeckTabBarItem_Impl::checkDisposed() const
     {
         if ( isDisposed() )
-            throw DisposedException( ::rtl::OUString(), *&m_rAntiImpl );
+            throw DisposedException( OUString(), *&m_rAntiImpl );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ namespace accessibility
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString AccessibleToolPanelDeckTabBarItem_Impl::getPanelDisplayName()
+    OUString AccessibleToolPanelDeckTabBarItem_Impl::getPanelDisplayName()
     {
         const ::svt::PToolPanel pPanel( m_pPanelDeck->GetPanel( getItemPos() ) );
         if ( pPanel.get() == NULL )
@@ -292,7 +292,7 @@ namespace accessibility
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         (void)i;
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+        throw IndexOutOfBoundsException( OUString(), *this );
     }
 
     //--------------------------------------------------------------------
@@ -309,14 +309,14 @@ namespace accessibility
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleDescription(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleDescription(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleName(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleName(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();
@@ -405,15 +405,15 @@ namespace accessibility
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getTitledBorderText(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getTitledBorderText(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         // no support
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getToolTipText(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getToolTipText(  ) throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getPanelDisplayName();

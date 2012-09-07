@@ -34,8 +34,6 @@
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -316,7 +314,7 @@ void AccessibleBrowseBoxTableBase::ensureIsValidRow( sal_Int32 nRow )
 {
     if( nRow >= implGetRowCount() )
         throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "row index is invalid" ) ), *this );
+            OUString( "row index is invalid" ), *this );
 }
 
 void AccessibleBrowseBoxTableBase::ensureIsValidColumn( sal_Int32 nColumn )
@@ -324,7 +322,7 @@ void AccessibleBrowseBoxTableBase::ensureIsValidColumn( sal_Int32 nColumn )
 {
     if( nColumn >= implGetColumnCount() )
         throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("column index is invalid") ), *this );
+            OUString( "column index is invalid" ), *this );
 }
 
 void AccessibleBrowseBoxTableBase::ensureIsValidAddress(
@@ -340,7 +338,7 @@ void AccessibleBrowseBoxTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
 {
     if( nChildIndex >= implGetChildCount() )
         throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("child index is invalid") ), *this );
+            OUString( "child index is invalid" ), *this );
 }
 
 // ============================================================================

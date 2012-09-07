@@ -351,17 +351,17 @@ void VCLXAccessibleTabControl::disposing()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabControl::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleTabControl::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleTabControl") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleTabControl" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleTabControl::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleTabControl::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleTabControl") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleTabControl";
     return aNames;
 }
 
@@ -413,11 +413,11 @@ sal_Int16 VCLXAccessibleTabControl::getAccessibleRole(  ) throw (RuntimeExceptio
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabControl::getAccessibleName(  ) throw (RuntimeException)
+OUString VCLXAccessibleTabControl::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------

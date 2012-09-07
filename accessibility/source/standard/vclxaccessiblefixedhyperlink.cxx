@@ -64,17 +64,17 @@ void VCLXAccessibleFixedHyperlink::implGetLineBoundary( i18n::Boundary& rBoundar
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::RuntimeException)
+OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleFixedHyperlink") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleFixedHyperlink" );
 }
 
 // -----------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException)
+uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleFixedHyperlink") );
+    uno::Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleFixedHyperlink";
     return aNames;
 }
 

@@ -40,7 +40,7 @@ namespace accessibility
     {
         // FIXME this is a copy'n'paste from
         // source/extended/AccessibleBrowseBoxTableCell.cxx, get rid of that...
-        static void checkIndex_Impl( sal_Int32 _nIndex, const ::rtl::OUString& _sText ) throw (::com::sun::star::lang::IndexOutOfBoundsException)
+        static void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (::com::sun::star::lang::IndexOutOfBoundsException)
         {
             if ( _nIndex >= _sText.getLength() )
                 throw ::com::sun::star::lang::IndexOutOfBoundsException();
@@ -49,7 +49,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace utl;
     using namespace comphelper;
-    using ::rtl::OUString;
     using ::accessibility::AccessibleGridControl;
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::accessibility::XAccessible;
@@ -71,7 +70,7 @@ namespace accessibility
     {
         // set accessible name here, because for that we need the position of the cell
         // and so the base class isn't capable of doing this
-        ::rtl::OUString aAccName;
+        OUString aAccName;
         if(_eType == TCTYPE_TABLECELL)
             aAccName = _rTable.GetAccessibleObjectName( TCTYPE_TABLECELL, _nRowPos, _nColPos );
         else if(_eType == TCTYPE_ROWHEADERCELL)
@@ -95,7 +94,7 @@ namespace accessibility
     }
     //// -----------------------------------------------------------------------------
     // implementation of a table cell
-    ::rtl::OUString AccessibleGridControlTableCell::implGetText()
+    OUString AccessibleGridControlTableCell::implGetText()
     {
         ensureIsAlive();
         return m_aTable.GetAccessibleCellText( getRowPos(),  getColumnPos() );
@@ -175,10 +174,10 @@ namespace accessibility
     /** @return
             The name of this class.
     */
-    ::rtl::OUString SAL_CALL AccessibleGridControlTableCell::getImplementationName()
+    OUString SAL_CALL AccessibleGridControlTableCell::getImplementationName()
         throw ( ::com::sun::star::uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleGridControlTableCell" ) );
+        return OUString( "com.sun.star.accessibility.AccessibleGridControlTableCell" );
     }
 
     /** @return  The count of visible children. */
@@ -266,12 +265,12 @@ namespace accessibility
         ::osl::MutexGuard aGuard( getOslMutex() );
         return OCommonAccessibleText::getCharacter( nIndex );
     }
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL AccessibleGridControlTableCell::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL AccessibleGridControlTableCell::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
 
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
 
         if ( !implIsValidIndex( nIndex, sText.getLength() ) )
             throw IndexOutOfBoundsException();
@@ -285,7 +284,7 @@ namespace accessibility
         return OCommonAccessibleText::getCharacterCount(  );
     }
 
-    ::rtl::OUString SAL_CALL AccessibleGridControlTableCell::getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL AccessibleGridControlTableCell::getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
@@ -312,13 +311,13 @@ namespace accessibility
 
         return sal_False;
     }
-    ::rtl::OUString SAL_CALL AccessibleGridControlTableCell::getText(  ) throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL AccessibleGridControlTableCell::getText(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
         return OCommonAccessibleText::getText(  );
     }
-    ::rtl::OUString SAL_CALL AccessibleGridControlTableCell::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL AccessibleGridControlTableCell::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
@@ -346,7 +345,7 @@ namespace accessibility
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
-        ::rtl::OUString sText = implGetText();
+        OUString sText = implGetText();
         checkIndex_Impl( nStartIndex, sText );
         checkIndex_Impl( nEndIndex, sText );
 

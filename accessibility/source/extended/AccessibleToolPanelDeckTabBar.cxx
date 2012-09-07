@@ -166,7 +166,7 @@ namespace accessibility
     void AccessibleToolPanelTabBar_Impl::checkDisposed()
     {
         if ( isDisposed() )
-            throw DisposedException( ::rtl::OUString(), *&m_rAntiImpl );
+            throw DisposedException( OUString(), *&m_rAntiImpl );
     }
 
     //------------------------------------------------------------------------------------------------------------------

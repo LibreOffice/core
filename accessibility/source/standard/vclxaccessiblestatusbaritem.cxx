@@ -109,7 +109,7 @@ void VCLXAccessibleStatusBarItem::SetShowing( sal_Bool bShowing )
 
 // -----------------------------------------------------------------------------
 
-void VCLXAccessibleStatusBarItem::SetItemName( const ::rtl::OUString& sItemName )
+void VCLXAccessibleStatusBarItem::SetItemName( const OUString& sItemName )
 {
     if ( !m_sItemName.equals( sItemName ) )
     {
@@ -123,9 +123,9 @@ void VCLXAccessibleStatusBarItem::SetItemName( const ::rtl::OUString& sItemName 
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::GetItemName()
+OUString VCLXAccessibleStatusBarItem::GetItemName()
 {
-    ::rtl::OUString sName;
+    OUString sName;
     if ( m_pStatusBar )
         sName = m_pStatusBar->GetAccessibleName( m_nItemId );
 
@@ -134,7 +134,7 @@ void VCLXAccessibleStatusBarItem::SetItemName( const ::rtl::OUString& sItemName 
 
 // -----------------------------------------------------------------------------
 
-void VCLXAccessibleStatusBarItem::SetItemText( const ::rtl::OUString& sItemText )
+void VCLXAccessibleStatusBarItem::SetItemText( const OUString& sItemText )
 {
     Any aOldValue, aNewValue;
     if ( implInitTextChangedEvent( m_sItemText, sItemText, aOldValue, aNewValue ) )
@@ -146,9 +146,9 @@ void VCLXAccessibleStatusBarItem::SetItemText( const ::rtl::OUString& sItemText 
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::GetItemText()
+OUString VCLXAccessibleStatusBarItem::GetItemText()
 {
-    ::rtl::OUString sText;
+    OUString sText;
     ::vcl::ControlLayoutData aLayoutData;
     if ( m_pStatusBar )
     {
@@ -191,7 +191,7 @@ awt::Rectangle VCLXAccessibleStatusBarItem::implGetBounds() throw (RuntimeExcept
 // OCommonAccessibleText
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::implGetText()
+OUString VCLXAccessibleStatusBarItem::implGetText()
 {
     return GetItemText();
 }
@@ -232,26 +232,26 @@ void VCLXAccessibleStatusBarItem::disposing()
     AccessibleTextHelper_BASE::disposing();
 
     m_pStatusBar = NULL;
-    m_sItemName = ::rtl::OUString();
-    m_sItemText = ::rtl::OUString();
+    m_sItemName = OUString();
+    m_sItemText = OUString();
 }
 
 // -----------------------------------------------------------------------------
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleStatusBarItem::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleStatusBarItem" ));
+    return OUString( "com.sun.star.comp.toolkit.AccessibleStatusBarItem" );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool VCLXAccessibleStatusBarItem::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool VCLXAccessibleStatusBarItem::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    Sequence< OUString > aNames( getSupportedServiceNames() );
+    const OUString* pNames = aNames.getConstArray();
+    const OUString* pEnd = pNames + aNames.getLength();
     for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
         ;
 
@@ -260,10 +260,10 @@ sal_Bool VCLXAccessibleStatusBarItem::supportsService( const ::rtl::OUString& rS
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleStatusBarItem::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleStatusBarItem::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleStatusBarItem" ));
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleStatusBarItem";
     return aNames;
 }
 
@@ -338,11 +338,11 @@ sal_Int16 VCLXAccessibleStatusBarItem::getAccessibleRole(  ) throw (RuntimeExcep
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::getAccessibleDescription(  ) throw (RuntimeException)
+OUString VCLXAccessibleStatusBarItem::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sDescription;
+    OUString sDescription;
     if ( m_pStatusBar )
         sDescription = m_pStatusBar->GetHelpText( m_nItemId );
 
@@ -351,7 +351,7 @@ sal_Int16 VCLXAccessibleStatusBarItem::getAccessibleRole(  ) throw (RuntimeExcep
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::getAccessibleName(  ) throw (RuntimeException)
+OUString VCLXAccessibleStatusBarItem::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -475,7 +475,7 @@ Reference< awt::XFont > VCLXAccessibleStatusBarItem::getFont(  ) throw (RuntimeE
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::getTitledBorderText(  ) throw (RuntimeException)
+OUString VCLXAccessibleStatusBarItem::getTitledBorderText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -484,11 +484,11 @@ Reference< awt::XFont > VCLXAccessibleStatusBarItem::getFont(  ) throw (RuntimeE
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::getToolTipText(  ) throw (RuntimeException)
+OUString VCLXAccessibleStatusBarItem::getToolTipText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
@@ -516,12 +516,12 @@ sal_Bool VCLXAccessibleStatusBarItem::setCaretPosition( sal_Int32 nIndex ) throw
 
 // -----------------------------------------------------------------------------
 
-Sequence< PropertyValue > VCLXAccessibleStatusBarItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
+Sequence< PropertyValue > VCLXAccessibleStatusBarItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     Sequence< PropertyValue > aValues;
-    ::rtl::OUString sText( implGetText() );
+    OUString sText( implGetText() );
 
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -606,7 +606,7 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
         Reference< datatransfer::clipboard::XClipboard > xClipboard = m_pStatusBar->GetClipboard();
         if ( xClipboard.is() )
         {
-            ::rtl::OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
 
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();

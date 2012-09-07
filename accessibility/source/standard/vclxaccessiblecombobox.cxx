@@ -74,22 +74,22 @@ void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindo
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString VCLXAccessibleComboBox::getImplementationName (void)
+OUString VCLXAccessibleComboBox::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleComboBox" ));
+    return OUString( "com.sun.star.comp.toolkit.AccessibleComboBox" );
 }
 
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleComboBox::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleComboBox::getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
+    Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleComboBox" ));
+    aNames[nLength] = OUString( "com.sun.star.accessibility.AccessibleComboBox" );
     return aNames;
 }
 

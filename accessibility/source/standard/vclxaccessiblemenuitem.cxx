@@ -137,7 +137,7 @@ void VCLXAccessibleMenuItem::FillAccessibleStateSet( utl::AccessibleStateSetHelp
 // OCommonAccessibleText
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleMenuItem::implGetText()
+OUString VCLXAccessibleMenuItem::implGetText()
 {
     return m_sItemText;
 }
@@ -173,17 +173,17 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenuItem, OAccessibleMenuItemCom
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleMenuItem::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleMenuItem::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleMenuItem") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleMenuItem" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleMenuItem::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleMenuItem::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleMenuItem") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleMenuItem";
     return aNames;
 }
 
@@ -233,12 +233,12 @@ sal_Unicode VCLXAccessibleMenuItem::getCharacter( sal_Int32 nIndex ) throw (Inde
 
 // -----------------------------------------------------------------------------
 
-Sequence< PropertyValue > VCLXAccessibleMenuItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
+Sequence< PropertyValue > VCLXAccessibleMenuItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     Sequence< PropertyValue > aValues;
-    ::rtl::OUString sText( implGetText() );
+    OUString sText( implGetText() );
 
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -306,7 +306,7 @@ sal_Int32 VCLXAccessibleMenuItem::getIndexAtPoint( const awt::Point& aPoint ) th
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleMenuItem::getSelectedText() throw (RuntimeException)
+OUString VCLXAccessibleMenuItem::getSelectedText() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -345,7 +345,7 @@ sal_Bool VCLXAccessibleMenuItem::setSelection( sal_Int32 nStartIndex, sal_Int32 
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleMenuItem::getText() throw (RuntimeException)
+OUString VCLXAccessibleMenuItem::getText() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -354,7 +354,7 @@ sal_Bool VCLXAccessibleMenuItem::setSelection( sal_Int32 nStartIndex, sal_Int32 
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleMenuItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleMenuItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -404,7 +404,7 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
             Reference< datatransfer::clipboard::XClipboard > xClipboard = pWindow->GetClipboard();
             if ( xClipboard.is() )
             {
-                ::rtl::OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+                OUString sText( getTextRange( nStartIndex, nEndIndex ) );
 
                 ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
                 const sal_uInt32 nRef = Application::ReleaseSolarMutex();
@@ -451,14 +451,14 @@ sal_Bool VCLXAccessibleMenuItem::doAccessibleAction ( sal_Int32 nIndex ) throw (
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleMenuItem::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleMenuItem::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
+    return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
 }
 
 // -----------------------------------------------------------------------------

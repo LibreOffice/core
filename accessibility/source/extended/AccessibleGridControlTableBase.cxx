@@ -34,8 +34,6 @@
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -254,7 +252,7 @@ void AccessibleGridControlTableBase::ensureIsValidRow( sal_Int32 nRow )
 {
     if( nRow >= m_aTable.GetRowCount() )
         throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "row index is invalid" ) ), *this );
+            OUString( "row index is invalid" ), *this );
 }
 
 void AccessibleGridControlTableBase::ensureIsValidColumn( sal_Int32 nColumn )
@@ -262,7 +260,7 @@ void AccessibleGridControlTableBase::ensureIsValidColumn( sal_Int32 nColumn )
 {
     if( nColumn >= m_aTable.GetColumnCount() )
         throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("column index is invalid") ), *this );
+            OUString( "column index is invalid" ), *this );
 }
 
 void AccessibleGridControlTableBase::ensureIsValidAddress(
@@ -278,7 +276,7 @@ void AccessibleGridControlTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
 {
     if( nChildIndex >= implGetChildCount() )
         throw lang::IndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("child index is invalid") ), *this );
+            OUString( "child index is invalid" ), *this );
 }
 
 // ============================================================================

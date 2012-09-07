@@ -87,22 +87,22 @@ void VCLXAccessibleDropDownListBox::ProcessWindowEvent( const VclWindowEvent& rV
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString VCLXAccessibleDropDownListBox::getImplementationName()
+OUString VCLXAccessibleDropDownListBox::getImplementationName()
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleDropDownListBox" ));
+    return OUString( "com.sun.star.comp.toolkit.AccessibleDropDownListBox" );
 }
 
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
+    Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleDropDownListBox" ));
+    aNames[nLength] = "com.sun.star.accessibility.AccessibleDropDownListBox";
     return aNames;
 }
 

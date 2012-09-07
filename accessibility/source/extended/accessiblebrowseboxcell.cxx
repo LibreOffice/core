@@ -44,7 +44,7 @@ namespace accessibility
         // set accessible name here, because for that we need the position of the cell
         // and so the base class isn't capable of doing this
         sal_Int32 nPos = _nRowPos * _rBrowseBox.GetColumnCount() + _nColPos;
-        ::rtl::OUString aAccName = _rBrowseBox.GetAccessibleObjectName( BBTYPE_TABLECELL, nPos );
+        OUString aAccName = _rBrowseBox.GetAccessibleObjectName( BBTYPE_TABLECELL, nPos );
         implSetName( aAccName );
     }
 
