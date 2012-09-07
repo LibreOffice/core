@@ -34,8 +34,6 @@
 
 import java.util.Vector;
 
-import com.sun.star.frame.FrameActionEvent;
-
 // __________ Implementation __________
 
 /**
@@ -144,24 +142,6 @@ class OnewayExecutor extends Thread
      * one easier - you can use this helper methods. They know how suchlist
      * must be coded. It's not a must to use it - but you can ...
      */
-
-    // _______________________________
-
-    public static void codeStatusChanged(
-        boolean bEncode, Vector[] lParams,
-        com.sun.star.frame.FeatureStateEvent[] aStatus)
-    {
-        if (bEncode)
-        {
-            lParams[0] = new Vector<Object>(1);
-            lParams[0].add( (Object)aStatus[0] );
-        }
-        else
-        {
-            aStatus[0] = (com.sun.star.frame.FeatureStateEvent)
-                (lParams[0].elementAt(0));
-        }
-    }
 
     // _______________________________
 
