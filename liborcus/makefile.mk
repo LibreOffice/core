@@ -35,7 +35,8 @@ TARGET=orcus
 TARFILE_NAME=liborcus_0.1.0
 TARFILE_MD5=46d9f4cf8b145c21ce1056e116d2ce71
 
-PATCH_FILES=
+PATCH_FILES=liborcus_0.1.0-warnings.patch
+    # -Werror,-Wunused-variable -Werror,-Wunused-private-field
 
 .IF "$(GUI)$(COM)"=="WNTMSC"
 
