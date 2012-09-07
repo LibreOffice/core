@@ -1251,7 +1251,7 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
     static sal_Bool GetLineArrow( const sal_Bool bLineStart,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                       ESCHER_LineEnd& reLineEnd, sal_Int32& rnArrowLength, sal_Int32& rnArrowWidth );
-    static sal_Bool IsDefaultObject( SdrObjCustomShape* pCustoShape );
+    static sal_Bool IsDefaultObject( SdrObjCustomShape* pCustoShape, const MSO_SPT eShapeType );
     static void LookForPolarHandles( const MSO_SPT eShapeType, sal_Int32& nAdjustmentsWhichNeedsToBeConverted );
     static sal_Bool GetAdjustmentValue( const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp, sal_Int32 nIndex, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, sal_Int32& nValue );
 };

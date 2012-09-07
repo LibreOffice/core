@@ -1251,7 +1251,10 @@ OUString GetShapeType( sal_Int32 nType )
             static const OUString sPlaque = CREATE_OUSTRING( "mso-spt21" );
             sType = sPlaque;
             } break;
-        case XML_teardrop:                  // TODO
+        case XML_teardrop:{
+            static const OUString sTearDrop = CREATE_OUSTRING( "teardrop" );
+            sType = sTearDrop;
+            } break;
         case XML_ellipse: {
             static const OUString sEllipse = CREATE_OUSTRING( "ellipse" );
             sType = sEllipse;
