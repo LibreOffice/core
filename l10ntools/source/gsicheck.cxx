@@ -42,6 +42,17 @@
 #include "tagtest.hxx"
 #include "gsicheck.hxx"
 
+namespace {
+
+rtl::OString copyUpTo(
+    rtl::OString const & text, sal_Int32 start, sal_Int32 maximumLength)
+{
+    assert(start >= 0 && start <= text.getLength());
+    return text.copy(start, std::min(text.getLength() - start, maximumLength));
+}
+
+}
+
 /*****************************************************************************/
 void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix,
                    rtl::OString const & aContext, sal_Bool bPrintContext, std::size_t nLine, rtl::OString aUniqueId )

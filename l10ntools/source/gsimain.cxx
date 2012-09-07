@@ -42,6 +42,25 @@
 #include "tagtest.hxx"
 #include "gsicheck.hxx"
 
+namespace {
+
+rtl::OString addSuffix(
+    rtl::OString const & pathname, rtl::OString const & suffix)
+{
+    sal_Int32 n = pathname.lastIndexOf('.');
+    if (n == -1) {
+        fprintf(
+            stderr,
+            ("Error: pathname \"%s\" does not contain dot to add suffix in"
+             " front of\n"),
+            pathname.getStr());
+        exit(EXIT_FAILURE);
+    }
+    return pathname.replaceAt(n, 0, suffix);
+}
+
+}
+
 void Help()
 {
     fprintf( stdout, "\n" );

@@ -163,33 +163,7 @@ public:
     void LazyOpen();
 };
 
-namespace {
-
 sal_Int32 const MAX_GID_LID_LEN = 250;
-
-rtl::OString copyUpTo(
-    rtl::OString const & text, sal_Int32 start, sal_Int32 maximumLength)
-{
-    assert(start >= 0 && start <= text.getLength());
-    return text.copy(start, std::min(text.getLength() - start, maximumLength));
-}
-
-rtl::OString addSuffix(
-    rtl::OString const & pathname, rtl::OString const & suffix)
-{
-    sal_Int32 n = pathname.lastIndexOf('.');
-    if (n == -1) {
-        fprintf(
-            stderr,
-            ("Error: pathname \"%s\" does not contain dot to add suffix in"
-             " front of\n"),
-            pathname.getStr());
-        exit(EXIT_FAILURE);
-    }
-    return pathname.replaceAt(n, 0, suffix);
-}
-
-}
 
 #endif
 
