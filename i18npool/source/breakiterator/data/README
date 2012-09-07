@@ -23,19 +23,6 @@ Date:   Thu Aug 6 18:13:57 2009 +0000
     CWS-TOOLING: integrate CWS tl73
     2009-07-31 15:29:33 +0200 tl  r274535 : #i64400# dash/hyphen should not break words
 
-commit 4e1fd2fa161708049f1c3b6039659d0bf4f4539e
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Tue Jan 6 12:54:16 2009 +0000
-
-    2008-12-03 16:14:17 +0100 erack  r264797 : #i93694# update script+language -> unicode digit mapping; patch from <hdu>
-    2008-11-25 02:01:18 +0100 erack  r264270 : #i83349# apply remaining parts of the patch, now that we use ICU 4.0; contributed by <kstribley>
-
-commit 16b796fcce6430448535e3692f624cb469380442
-Author: Release Engineers <releng@openoffice.org>
-Date:   Thu Oct 2 13:51:29 2008 +0000
-
-    #i80412#
-
 commit 9964a76ef58786bba47d409970512d7ded6c8889
 Author: Rüdiger Timm <rt@openoffice.org>
 Date:   Wed Jul 2 07:53:05 2008 +0000
@@ -549,6 +536,7 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
 
 done, regression tests added:
 
+#i80412# indic cursoring
 #i107843# em-dash/en-dash breakiterator fix for spell checking
 #i103552# Japanese word for 'shutdown' added to ja.dic
 #i113785# ligatures for spell checking will no longer break words

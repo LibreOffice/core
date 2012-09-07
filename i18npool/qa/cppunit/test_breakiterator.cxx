@@ -570,8 +570,9 @@ void TestBreakIterator::testWordBoundaries()
     }
 }
 
-//See http://qa.openoffice.org/issues/show_bug.cgi?id=111152
 //See https://bugs.freedesktop.org/show_bug.cgi?id=40292
+//See https://issues.apache.org/ooo/show_bug.cgi?id=80412
+//See https://issues.apache.org/ooo/show_bug.cgi?id=111152
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
@@ -680,6 +681,24 @@ void TestBreakIterator::testGraphemeIteration()
         }
 
         CPPUNIT_ASSERT_MESSAGE("Should be considered 1 grapheme", nGraphemeCount == 1);
+    }
+
+    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hi"));
+    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IN"));
+
+    {
+        const sal_Unicode SHA_VOWELSIGNII[] = { 0x936, 0x940 };
+        rtl::OUString aTest(SHA_VOWELSIGNII, SAL_N_ELEMENTS(SHA_VOWELSIGNII));
+
+        sal_Int32 nDone=0;
+        sal_Int32 nPos = 0;
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(SHA_VOWELSIGNII));
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(SHA_VOWELSIGNII), aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
 }
 
