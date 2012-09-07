@@ -117,12 +117,11 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_sAccessibilityText(       CUI_RES( STR_ACCESSIBILITY ) ),
     m_sAddDialogText    (       CUI_RES( STR_ADDDLGTEXT ) ),
 
-    xDialogListener     ( new ::svt::DialogClosedListener() ),
-
     m_aExperimental     ( this, CUI_RES( FL_EXPERIMENTAL ) ),
     m_aExperimentalCB   ( this, CUI_RES( CB_EXPERIMENTAL ) ),
-    m_aMacroCB          ( this, CUI_RES( CB_MACRO ) )
+    m_aMacroCB          ( this, CUI_RES( CB_MACRO ) ),
 
+    xDialogListener     ( new ::svt::DialogClosedListener() )
 {
     m_aJavaEnableCB.SetClickHdl( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
     m_aJavaList.SetCheckButtonHdl( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
