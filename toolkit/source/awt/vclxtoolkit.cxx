@@ -243,7 +243,7 @@ TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_NO )
             nWinBits |= WB_DEF_NO;
     }
-    if ( nCompType == WINDOW_MULTILINEEDIT )
+    if ( nCompType == WINDOW_MULTILINEEDIT || nCompType == WINDOW_DIALOG )
     {
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::AUTOHSCROLL )
             nWinBits |= WB_AUTOHSCROLL;
@@ -725,7 +725,9 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_GROUPBOX:
                         {
                 if ( bFrameControl )
-                    pNewWindow = new toolkit::ScrollableWrapper< GroupBox >( pParent, nWinBits );
+                {
+                    pNewWindow = new toolkit::ScrollableWrapper< GroupBox >( pParent, nWinBits | WB_VSCROLL );
+                }
                 else
                     pNewWindow = new GroupBox( pParent, nWinBits );
                                 if ( bFrameControl )

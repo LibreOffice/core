@@ -5,8 +5,14 @@
 namespace toolkit
 {
 
+// Using  WB_AUTOHSCROLL, WB_AUTOVSCROLL here sucks big time, there is a
+// problem in the toolkit class where there are some clashing IDs
+// ( ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL has the same value
+// as ::com::sun::star::awt::WindowAttribute::NODECORATION and they are used
+// in the same bitmap :-( WB_VSCROLL & WB_HSCROLL apparently are only for
+// child classes ( whole thing is a mess if you ask me )
 template< class T>
-ScrollableWrapper<T>::ScrollableWrapper( Window* pParent, WinBits nStyle ) : T( pParent, nStyle | ~( WB_HSCROLL | WB_VSCROLL ) ), maHScrollBar( this, WB_HSCROLL | WB_DRAG), maVScrollBar( this, WB_VSCROLL | WB_DRAG ), mbHasHoriBar( false ), mbHasVertBar( false ), maScrollVis( None )
+ScrollableWrapper<T>::ScrollableWrapper( Window* pParent, WinBits nStyle ) : T( pParent, nStyle & ~( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) ), maHScrollBar( this, WB_HSCROLL | WB_DRAG), maVScrollBar( this, WB_VSCROLL | WB_DRAG ), mbHasHoriBar( false ), mbHasVertBar( false ), maScrollVis( None )
 {
     Link aLink( LINK( this, ScrollableWrapper, ScrollBarHdl ) );
     maVScrollBar.SetScrollHdl( aLink );
@@ -15,11 +21,11 @@ ScrollableWrapper<T>::ScrollableWrapper( Window* pParent, WinBits nStyle ) : T( 
     Size aOutSz = T::GetOutputSizePixel();
     ScrollBarVisibility aVis = None;
 
-    if ( nStyle & ( WB_HSCROLL | WB_VSCROLL ) )
+    if ( nStyle & ( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) )
     {
-        if ( nStyle & WB_HSCROLL )
+        if ( nStyle & WB_AUTOHSCROLL )
             aVis = Hori;
-        if ( nStyle &  WB_VSCROLL )
+        if ( nStyle &  WB_AUTOVSCROLL )
         {
             if ( aVis == Hori )
                 aVis = Both;

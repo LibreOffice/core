@@ -328,6 +328,7 @@ void ControlConverter::convertScrollabilitySettings( PropertyMap& rPropMap,
     rPropMap.setProperty( PROP_ScrollLeft, tmpPos.X );
     rPropMap.setProperty( PROP_HScroll, ( nScrollBars & 0x1 ) == 0x1 );
     rPropMap.setProperty( PROP_VScroll, ( nScrollBars & 0x2 ) == 0x2 );
+    printf("** imported hscroll %d vscroll %d\n", ( nScrollBars & 0x1 ) == 0x1, ( nScrollBars & 0x2 ) == 0x2);
 }
 
 void ControlConverter::convertScrollBar( PropertyMap& rPropMap,
@@ -2445,6 +2446,7 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+    printf("Frame, converting scroll bits\n");
     rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
@@ -2508,6 +2510,7 @@ void AxUserFormModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     rPropMap.setProperty( PROP_Title, maCaption );
     rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
     rConv.convertAxPicture( rPropMap, maPictureData, AX_PICPOS_CENTER  );
+    printf("UserForm, converting scroll bits\n");
     rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }

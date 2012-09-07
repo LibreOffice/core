@@ -60,6 +60,7 @@
 #include <vcl/tabctrl.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include "toolkit/controls/unocontrols.hxx"
+#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -372,6 +373,24 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
 
 void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
 {
+    // HACK due to the fact that we can't really use VSCROLL & HSCROLL
+    // for Dialog  ( ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL
+    // has the same value as
+    // ::com::sun::star::awt::WindowAttribute::NODECORATION )
+    // For convenience in the PropBrowse using HSCROLL and VSCROLL ensures
+    // the Correct text. We exchange them here and the control knows
+    // about this hack ( it sucks badly I know )
+    if ( rDesc.WindowAttributes & ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL )
+    {
+       rDesc.WindowAttributes &= ~::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL;
+       rDesc.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::AUTOVSCROLL;
+    }
+    if ( rDesc.WindowAttributes & ::com::sun::star::awt::VclWindowPeerAttribute::HSCROLL )
+    {
+       rDesc.WindowAttributes &= ~::com::sun::star::awt::VclWindowPeerAttribute::HSCROLL;
+       rDesc.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::AUTOHSCROLL;
+    }
+
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( !bDecoration )
