@@ -1035,7 +1035,6 @@ PrintFontManager::~PrintFontManager()
     delete m_pAtoms;
     if( m_pFontCache )
         delete m_pFontCache;
-    TemporaryFonts::clear();
 }
 
 // -------------------------------------------------------------------------
@@ -1661,8 +1660,6 @@ void PrintFontManager::initialize()
     CALLGRIND_TOGGLE_COLLECT();
     CALLGRIND_ZERO_STATS();
     #endif
-
-    TemporaryFonts::clear();
 
     long aDirEntBuffer[ (sizeof(struct dirent)+_PC_NAME_MAX)+1 ];
 

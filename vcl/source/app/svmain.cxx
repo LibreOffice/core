@@ -49,6 +49,7 @@
 #include "vcl/unowrap.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/lazydelete.hxx"
+#include "vcl/temporaryfonts.hxx"
 
 #ifdef WNT
 #include <svsys.h>
@@ -256,6 +257,8 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
 
     if( pExceptionHandler != NULL )
         return sal_False;
+
+    TemporaryFonts::clear();
 
     if( ! ImplGetSVData() )
         ImplInitSVData();
@@ -594,6 +597,8 @@ void DeInitVCL()
         delete pOwnSvApp;
         pOwnSvApp = NULL;
     }
+
+    TemporaryFonts::clear();
 }
 
 // only one call is allowed
