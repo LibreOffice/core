@@ -745,9 +745,9 @@ AC_ARG_ENABLE(atl,
 
 AC_ARG_ENABLE(symbols,
     AS_HELP_STRING([--enable-symbols],
-        [Include debugging symbols in output. WARNING - a complete build needs
-         a lot of space (roughly 10 GiB) and takes much longer (enables -g
-         compiler flag for GCC or equivalent).]),
+        [Include debugging information in output ("symbols" is misleading here;
+         enables -g compiler option or equivalent).  WARNING: A complete build
+         needs a lot of space (roughly 10 GiB) and takes much longer.]),
 ,)
 
 AC_ARG_ENABLE(werror,
@@ -758,13 +758,13 @@ AC_ARG_ENABLE(werror,
 
 AC_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],
-        [Include debugging symbols like with --enable-symbols, disable compiler
-         optimization and inlining plus extra debugging code like assertions.
-         Extra large build! (enables -g compiler flag and dmake debug=true)
-         If you need even more verbose output, build a module with
+        [Include debugging information like with --enable-symbols, disable
+         compiler optimization and inlining plus extra debugging code like
+         assertions. Extra large build! (enables -g compiler flag and dmake
+         debug=true) If you need even more verbose output, build a module with
          "build -- debug=true dbglevel=2".
          You can also use this switch as follows:
-         --enable-debug="all -sw/ -Library_sc" to enable symbols only for
+         --enable-debug="all -sw/ -Library_sc" to enable debugging only for
          the specified gbuild-build targets (all means everything, - prepended
          means not to enable, / appended means everything in the directory,
          there is no ordering, more specific overrides more general, and
@@ -4041,9 +4041,9 @@ else
 fi
 AC_SUBST(ENABLE_LTO)
 
-dnl whether to include symbols into final build.
+dnl whether to include debgugging information into final build.
 dnl ===================================================================
-AC_MSG_CHECKING([whether to include symbols])
+AC_MSG_CHECKING([whether to include debugging information])
 if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
     ENABLE_SYMBOLS="TRUE"
     AC_MSG_RESULT([yes])
