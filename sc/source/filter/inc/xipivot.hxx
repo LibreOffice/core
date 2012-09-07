@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef SC_XIPIVOT_HXX
 #define SC_XIPIVOT_HXX
 
@@ -358,6 +356,8 @@ public:
 
     void                ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData);
 
+    sal_uInt16          GetCacheId() const { return maPTInfo.mnCacheIdx; };
+
     // ------------------------------------------------------------------------
 private:
     typedef ::std::vector< XclImpPTFieldRef > XclImpPTFieldVec;
@@ -433,11 +433,11 @@ public:
     // ------------------------------------------------------------------------
 
     /** Reads all used pivot caches and creates additional sheets for external data sources. */
-    void                ReadPivotCaches( XclImpStream& rStrm );
+//    void                ReadPivotCaches( XclImpStream& rStrm );
     /** Inserts all pivot tables into the Calc document. */
-    void                ConvertPivotTables();
-
-    void                MaybeRefreshPivotTables();
+//    void                ConvertPivotTables();
+    void                ConvertPivotTables( XclImpStream & );
+//    void                MaybeRefreshPivotTables();
 
 private:
     typedef ::std::vector< XclImpPivotCacheRef >    XclImpPivotCacheVec;

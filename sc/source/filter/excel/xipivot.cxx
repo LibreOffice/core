@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
@@ -1420,6 +1418,8 @@ void XclImpPivotTable::Convert()
     mpDPObj = pDPObj;
 
     ApplyMergeFlags(aOutRange, aSaveData);
+    MaybeRefresh(); // refresh after convert immediately
+    mxPCache = XclImpPivotCacheRef();   // release memory
 }
 
 void XclImpPivotTable::MaybeRefresh()
@@ -1612,23 +1612,48 @@ void XclImpPivotTableManager::ReadSxViewEx9( XclImpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-void XclImpPivotTableManager::ReadPivotCaches( XclImpStream& rStrm )
+// Reading all used pivot caches at one time and then converting all pivot tables together will consume too much memory, forbid this action
+// ConvertPivotTables will change to read cache one by one and convert it then release the memory
+/*void XclImpPivotTableManager::ReadPivotCaches( XclImpStream& rStrm )
 {
     for( XclImpPivotCacheVec::iterator aIt = maPCaches.begin(), aEnd = maPCaches.end(); aIt != aEnd; ++aIt )
         (*aIt)->ReadPivotCacheStream( rStrm );
-}
+}*/
 
-void XclImpPivotTableManager::ConvertPivotTables()
+void XclImpPivotTableManager::ConvertPivotTables( XclImpStream & rStm/* guoyanp: for DP memory */ )
 {
+//    for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
+//        (*aIt)->Convert();
+
+    std::map< sal_uInt16, std::list< XclImpPivotTableRef > > aMap;
+
     for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
-        (*aIt)->Convert();
+        aMap[(*aIt)->GetCacheId()].push_back( *aIt );
+
+    size_t iCache = 0;
+
+    for( std::map< sal_uInt16, std::list< XclImpPivotTableRef > >::iterator i = aMap.begin(); i != aMap.end(); i++, iCache++ )
+    {
+        if( i->first >= maPCaches.size() ) continue;
+
+        maPCaches[iCache]->ReadPivotCacheStream( rStm );
+
+        for( std::list< XclImpPivotTableRef >::iterator j = i->second.begin(); j != i->second.end(); j++ )
+            (*j)->Convert();
+
+        maPCaches[iCache] = XclImpPivotCacheRef();
+    }
 }
 
-void XclImpPivotTableManager::MaybeRefreshPivotTables()
+// Reading all used pivot caches at one time and then converting all pivot tables together will consume too much memory, forbid that action
+// ConvertPivotTables will change to read cache one by one and convert it then release the memory
+// So refreshing all pivot tables at one time is forbidden too because the cache already released
+// Need to refresh one by one after convert every pivot table
+/*void XclImpPivotTableManager::MaybeRefreshPivotTables()
 {
     for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
         (*aIt)->MaybeRefresh();
-}
+}*/
 
 // ============================================================================
 

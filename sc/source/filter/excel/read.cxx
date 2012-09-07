@@ -19,12 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
 
 //------------------------------------------------------------------------
 
@@ -1017,7 +1013,7 @@ FltError ImportExcel8::Read( void )
                         {
                             rNumFmtBfr.CreateScFormats();
                             rXFBfr.CreateUserStyles();
-                            rPTableMgr.ReadPivotCaches( maStrm );
+                            //rPTableMgr.ReadPivotCaches( maStrm );
                             eAkt = EXC_STATE_BEFORE_SHEET;
                         }
                     break;
@@ -1203,8 +1199,15 @@ FltError ImportExcel8::Read( void )
         // #i45843# Convert pivot tables before calculation, so they are available
         // for the GETPIVOTDATA function.
         if( GetBiff() == EXC_BIFF8 )
-            GetPivotTableManager().ConvertPivotTables();
+//            GetPivotTableManager().ConvertPivotTables();
+        {
+            SCTAB nTabCount = GetDoc().GetTableCount();
 
+            GetPivotTableManager().ConvertPivotTables( maStrm );
+
+            for( SCTAB nDummyTab = GetDoc().GetTableCount() - 1; nDummyTab >= nTabCount; nDummyTab-- )
+                GetDoc().DeleteTab( nDummyTab );
+        }
         pProgress.reset();
 
         if (pD->IsAdjustHeightEnabled())
@@ -1226,8 +1229,9 @@ FltError ImportExcel8::Read( void )
         else if( rAddrConv.IsColTruncated() )
             eLastErr = SCWARN_IMPORT_COLUMN_OVERFLOW;
 
-        if( GetBiff() == EXC_BIFF8 )
-            GetPivotTableManager().MaybeRefreshPivotTables();
+// Refreshing pivot tables moves to the end of converting every table
+//        if( GetBiff() == EXC_BIFF8 )
+//            GetPivotTableManager().MaybeRefreshPivotTables();
     }
 
     return eLastErr;
