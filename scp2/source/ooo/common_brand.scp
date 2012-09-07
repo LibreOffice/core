@@ -1076,7 +1076,7 @@ ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     Section = "Version";
     Order = 18;
     Key = "ExtensionUpdateURL";
-    Value = "http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update";
+    Value = "";
 End
 
 ProfileItem gid_Brand_Profileitem_Version_ReferenceOOoMajorMinor
