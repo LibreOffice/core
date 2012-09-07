@@ -65,9 +65,9 @@ void TkResMgr::ensureImplExists()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString TkResMgr::loadString( sal_uInt16 nResId )
+OUString TkResMgr::loadString( sal_uInt16 nResId )
 {
-    ::rtl::OUString sReturn;
+    OUString sReturn;
 
     ensureImplExists();
     if ( m_pImpl )

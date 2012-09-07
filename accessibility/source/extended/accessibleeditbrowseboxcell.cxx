@@ -71,9 +71,9 @@ namespace accessibility
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException )
+    OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.TableCellProxy" ) );
+        return OUString( "com.sun.star.comp.svtools.TableCellProxy" );
     }
 
     // -----------------------------------------------------------------------------
@@ -116,26 +116,26 @@ namespace accessibility
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription() throw ( RuntimeException )
+    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription() throw ( RuntimeException )
     {
         SolarMethodGuard aGuard( *this );
         return m_xInnerContext->getAccessibleDescription();
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleName() throw ( RuntimeException )
+    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleName() throw ( RuntimeException )
     {
         SolarMethodGuard aGuard( *this );
 
         // TODO: localize this!
-        rtl::OUStringBuffer sName(mpBrowseBox->GetColumnDescription( ::sal::static_int_cast< sal_uInt16 >( getColumnPos() ) ));
+        OUStringBuffer sName(mpBrowseBox->GetColumnDescription( ::sal::static_int_cast< sal_uInt16 >( getColumnPos() ) ));
         if ( 0 == sName.getLength() )
         {
-            sName.appendAscii(RTL_CONSTASCII_STRINGPARAM("Column "));
+            sName.appendAscii("Column ");
             sName.append(getColumnPos());
         }
 
-        sName.appendAscii(RTL_CONSTASCII_STRINGPARAM(", Row "));
+        sName.appendAscii(", Row ");
         sName.append(getRowPos());
 
         return sName.makeStringAndClear();

@@ -36,8 +36,6 @@
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -80,8 +78,8 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         IAccessibleTableProvider&                      rBrowseBox,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
         AccessibleBrowseBoxObjType      eObjType,
-        const ::rtl::OUString&          rName,
-        const ::rtl::OUString&          rDescription ) :
+        const OUString&          rName,
+        const OUString&          rDescription ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
     mxParent( rxParent ),
     mpBrowseBox( &rBrowseBox ),
@@ -369,7 +367,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
 Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
+    const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
     return Sequence< OUString >( &aServiceName, 1 );
 }
 
@@ -620,7 +618,7 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccess
 // ----------------------------------------------------------------------------
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccessible >& rxParent, IAccessibleTableProvider& rBrowseBox,
         const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType,
-        const ::rtl::OUString& rName, const ::rtl::OUString& rDescription )
+        const OUString& rName, const OUString& rDescription )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType, rName, rDescription )
 {
 }

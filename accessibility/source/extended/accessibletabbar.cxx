@@ -199,18 +199,18 @@ namespace accessibility
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBar::getImplementationName() throw (RuntimeException)
+    OUString AccessibleTabBar::getImplementationName() throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabBar" ));
+        return OUString( "com.sun.star.comp.svtools.AccessibleTabBar" );
     }
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool AccessibleTabBar::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool AccessibleTabBar::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+        Sequence< OUString > aNames( getSupportedServiceNames() );
+        const OUString* pNames = aNames.getConstArray();
+        const OUString* pEnd = pNames + aNames.getLength();
         for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
             ;
 
@@ -219,10 +219,10 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > AccessibleTabBar::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > AccessibleTabBar::getSupportedServiceNames() throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabBar" ));
+        Sequence< OUString > aNames(1);
+        aNames[0] = "com.sun.star.awt.AccessibleTabBar";
         return aNames;
     }
 
@@ -338,11 +338,11 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBar::getAccessibleDescription( ) throw (RuntimeException)
+    OUString AccessibleTabBar::getAccessibleDescription( ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
-        ::rtl::OUString sDescription;
+        OUString sDescription;
         if ( m_pTabBar )
             sDescription = m_pTabBar->GetAccessibleDescription();
 
@@ -351,11 +351,11 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBar::getAccessibleName(  ) throw (RuntimeException)
+    OUString AccessibleTabBar::getAccessibleName(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
-        ::rtl::OUString sName;
+        OUString sName;
         if ( m_pTabBar )
             sName = m_pTabBar->GetAccessibleName();
 
@@ -517,11 +517,11 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBar::getTitledBorderText(  ) throw (RuntimeException)
+    OUString AccessibleTabBar::getTitledBorderText(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
-        ::rtl::OUString sText;
+        OUString sText;
         if ( m_pTabBar )
             sText = m_pTabBar->GetText();
 
@@ -530,11 +530,11 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBar::getToolTipText(  ) throw (RuntimeException)
+    OUString AccessibleTabBar::getToolTipText(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
-        ::rtl::OUString sText;
+        OUString sText;
         if ( m_pTabBar )
             sText = m_pTabBar->GetQuickHelpText();
 

@@ -35,8 +35,6 @@
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -219,7 +217,7 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
 OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleGridControlHeader" ) );
+    return OUString( "com.sun.star.accessibility.AccessibleGridControlHeader" );
 }
 
 namespace

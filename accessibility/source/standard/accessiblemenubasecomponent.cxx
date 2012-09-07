@@ -722,11 +722,11 @@ void OAccessibleMenuBaseComponent::disposing()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-sal_Bool OAccessibleMenuBaseComponent::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool OAccessibleMenuBaseComponent::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    Sequence< OUString > aNames( getSupportedServiceNames() );
+    const OUString* pNames = aNames.getConstArray();
+    const OUString* pEnd = pNames + aNames.getLength();
     for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
         ;
 

@@ -62,17 +62,17 @@ sal_Bool VCLXAccessiblePopupMenu::IsFocused()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessiblePopupMenu::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessiblePopupMenu::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessiblePopupMenu") );
+    return OUString( "com.sun.star.comp.toolkit.AccessiblePopupMenu" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessiblePopupMenu") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessiblePopupMenu";
     return aNames;
 }
 

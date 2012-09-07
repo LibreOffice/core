@@ -32,8 +32,6 @@
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -327,7 +325,7 @@ void SAL_CALL AccessibleGridControlTable::release() throw ()
 OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleGridControlTable" ) );
+    return OUString( "com.sun.star.accessibility.AccessibleGridControlTable" );
 }
 
 // internal virtual methods ---------------------------------------------------

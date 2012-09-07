@@ -137,10 +137,10 @@ void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()
 /** @return
         The name of this class.
 */
-::rtl::OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
+OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleGridControlHeaderCell" ) );
+    return OUString( "com.sun.star.accessibility.AccessibleGridControlHeaderCell" );
 }
 // -----------------------------------------------------------------------------
 Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()

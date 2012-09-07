@@ -170,7 +170,7 @@ namespace accessibility
     void AccessibleToolPanelDeck_Impl::checkDisposed()
     {
         if ( isDisposed() )
-            throw DisposedException( ::rtl::OUString(), *&m_rAntiImpl );
+            throw DisposedException( OUString(), *&m_rAntiImpl );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -291,7 +291,7 @@ namespace accessibility
 
         const sal_Int32 nChildCount( getAccessibleChildCount() );
         if ( ( i_nIndex < 0 ) || ( i_nIndex >= nChildCount ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         // first "n" children are provided by the layouter
         const size_t nLayouterCount( m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChildCount() );

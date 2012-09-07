@@ -40,8 +40,6 @@ namespace accessibility
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -227,7 +225,7 @@ Any SAL_CALL AccessibleGridControl::getAccessibleKeyBinding()
 OUString SAL_CALL AccessibleGridControl::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleGridControl" ) );
+    return OUString( "com.sun.star.accessibility.AccessibleGridControl" );
 }
 // -----------------------------------------------------------------------------
 
