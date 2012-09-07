@@ -139,17 +139,17 @@ void VCLXAccessibleMenuBar::disposing()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleMenuBar::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleMenuBar::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleMenuBar") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleMenuBar" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleMenuBar") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleMenuBar";
     return aNames;
 }
 

@@ -110,21 +110,21 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     // XServiceInfo
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_Static();
     }
     // -----------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames() throw (RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        const ::rtl::OUString* pSupported = aSupported.getConstArray();
-        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+        Sequence< OUString > aSupported( getSupportedServiceNames() );
+        const OUString* pSupported = aSupported.getConstArray();
+        const OUString* pEnd = pSupported + aSupported.getLength();
         for ( ; pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported )
             ;
 
@@ -133,18 +133,18 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     // XServiceInfo - static methods
     // -----------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > AccessibleIconChoiceCtrl::getSupportedServiceNames_Static(void) throw (RuntimeException)
+    Sequence< OUString > AccessibleIconChoiceCtrl::getSupportedServiceNames_Static(void) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(3);
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleContext") );
-        aSupported[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleComponent") );
-        aSupported[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleIconChoiceControl") );
+        Sequence< OUString > aSupported(3);
+        aSupported[0] = "com.sun.star.accessibility.AccessibleContext";
+        aSupported[1] = "com.sun.star.accessibility.AccessibleComponent";
+        aSupported[2] = "com.sun.star.awt.AccessibleIconChoiceControl";
         return aSupported;
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString AccessibleIconChoiceCtrl::getImplementationName_Static(void) throw (RuntimeException)
+    OUString AccessibleIconChoiceCtrl::getImplementationName_Static(void) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svtools.AccessibleIconChoiceControl") );
+        return OUString( "com.sun.star.comp.svtools.AccessibleIconChoiceControl" );
     }
     // -----------------------------------------------------------------------------
     // XAccessible
@@ -191,7 +191,7 @@ namespace accessibility
         return AccessibleRole::TREE;
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleDescription(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleDescription(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -199,15 +199,15 @@ namespace accessibility
         return getCtrl()->GetAccessibleDescription();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleName(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleName(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
         ensureAlive();
 
-        ::rtl::OUString sName = getCtrl()->GetAccessibleName();
+        OUString sName = getCtrl()->GetAccessibleName();
         if ( sName.isEmpty() )
-            sName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IconChoiceControl" ) );
+            sName = "IconChoiceControl";
         return sName;
     }
     // -----------------------------------------------------------------------------

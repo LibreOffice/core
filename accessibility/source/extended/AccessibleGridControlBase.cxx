@@ -36,8 +36,6 @@
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -308,7 +306,7 @@ sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
 Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
+    const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
     return Sequence< OUString >( &aServiceName, 1 );
 }
 // internal virtual methods ---------------------------------------------------

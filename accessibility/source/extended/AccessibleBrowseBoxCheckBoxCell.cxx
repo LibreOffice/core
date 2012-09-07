@@ -133,9 +133,9 @@ namespace accessibility
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleCheckBoxCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException )
+    OUString SAL_CALL AccessibleCheckBoxCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.TableCheckBoxCell" ) );
+        return OUString( "com.sun.star.comp.svtools.TableCheckBoxCell" );
     }
     // -----------------------------------------------------------------------------
     sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()

@@ -123,17 +123,17 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextCompon
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleButton") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleButton" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleButton") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleButton";
     return aNames;
 }
 
@@ -141,11 +141,11 @@ Sequence< ::rtl::OUString > VCLXAccessibleButton::getSupportedServiceNames() thr
 // XAccessibleContext
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
+OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString aName( VCLXAccessibleTextComponent::getAccessibleName() );
+    OUString aName( VCLXAccessibleTextComponent::getAccessibleName() );
     sal_Int32 nLength = aName.getLength();
 
     if ( nLength >= 3 && aName.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("..."), nLength - 3 ) )
@@ -153,7 +153,7 @@ Sequence< ::rtl::OUString > VCLXAccessibleButton::getSupportedServiceNames() thr
         if ( nLength == 3 )
         {
             // it's a browse button
-            aName = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_NAME_BROWSEBUTTON ) );
+            aName = OUString( TK_RES_STRING( RID_STR_ACC_NAME_BROWSEBUTTON ) );
         }
         else
         {
@@ -204,14 +204,14 @@ sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (In
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
+    return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
 }
 
 // -----------------------------------------------------------------------------

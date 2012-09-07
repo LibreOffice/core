@@ -178,8 +178,8 @@ namespace accessibility
                             Reference< XAccessible > xChild =
                                 m_pTabListBox->CreateAccessibleCell( nRow, nCol );
                             uno::Any aOldValue, aNewValue;
-                            aOldValue <<= ::rtl::OUString( pData->m_sOldText );
-                            ::rtl::OUString sNewText( m_pTabListBox->GetCellText( nRow, nCol ) );
+                            aOldValue <<= OUString( pData->m_sOldText );
+                            OUString sNewText( m_pTabListBox->GetCellText( nRow, nCol ) );
                             aNewValue <<= sNewText;
                             TriState eState = STATE_DONTKNOW;
 
@@ -273,9 +273,9 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     // XServiceInfo
     // -----------------------------------------------------------------------------
-    ::rtl::OUString AccessibleTabListBoxTable::getImplementationName (void) throw (RuntimeException)
+    OUString AccessibleTabListBoxTable::getImplementationName (void) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabListBoxTable" ));
+        return OUString( "com.sun.star.comp.svtools.AccessibleTabListBoxTable" );
     }
     // -----------------------------------------------------------------------------
     // XAccessibleSelection

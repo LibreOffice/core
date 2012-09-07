@@ -32,8 +32,6 @@
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -333,7 +331,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::release() throw ()
 OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar" ) );
+    return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar" );
 }
 
 namespace
