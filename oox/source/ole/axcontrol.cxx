@@ -328,7 +328,6 @@ void ControlConverter::convertScrollabilitySettings( PropertyMap& rPropMap,
     rPropMap.setProperty( PROP_ScrollLeft, tmpPos.X );
     rPropMap.setProperty( PROP_HScroll, ( nScrollBars & 0x1 ) == 0x1 );
     rPropMap.setProperty( PROP_VScroll, ( nScrollBars & 0x2 ) == 0x2 );
-    printf("** imported hscroll %d vscroll %d\n", ( nScrollBars & 0x1 ) == 0x1, ( nScrollBars & 0x2 ) == 0x2);
 }
 
 void ControlConverter::convertScrollBar( PropertyMap& rPropMap,

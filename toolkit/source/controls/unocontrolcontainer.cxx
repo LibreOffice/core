@@ -46,6 +46,7 @@
 #include <limits>
 #include <map>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 
 using namespace ::com::sun::star;
 
@@ -771,6 +772,10 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
         sal_Bool bVis = maComponentInfos.bVisible;
         if( bVis )
             UnoControl::setVisible( sal_False );
+
+        uno::Reference< beans::XPropertySet > xTmpPropSet
+                ( getModel(), uno::UNO_QUERY );
+
         // Create a new peer
         UnoControl::createPeer( rxToolkit, rParent );
 
@@ -827,6 +832,25 @@ void UnoControlContainer::setVisible( sal_Bool bVisible ) throw(uno::RuntimeExce
         createPeer( uno::Reference< awt::XToolkit > (), uno::Reference< awt::XWindowPeer > () );
 }
 
-
+void UnoControlContainer::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
+{
+    // HACK due to the fact that we can't really use VSCROLL & HSCROLL
+    // for Dialog  ( ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL
+    // has the same value as
+    // ::com::sun::star::awt::WindowAttribute::NODECORATION )
+    // For convenience in the PropBrowse using HSCROLL and VSCROLL ensures
+    // the Correct text. We exchange them here and the control knows
+    // about this hack ( it sucks badly I know )
+    if ( rDesc.WindowAttributes & ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL )
+    {
+       rDesc.WindowAttributes &= ~::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL;
+       rDesc.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::AUTOVSCROLL;
+    }
+    if ( rDesc.WindowAttributes & ::com::sun::star::awt::VclWindowPeerAttribute::HSCROLL )
+    {
+       rDesc.WindowAttributes &= ~::com::sun::star::awt::VclWindowPeerAttribute::HSCROLL;
+       rDesc.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::AUTOHSCROLL;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

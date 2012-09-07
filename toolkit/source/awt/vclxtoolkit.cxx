@@ -243,7 +243,7 @@ TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_NO )
             nWinBits |= WB_DEF_NO;
     }
-    if ( nCompType == WINDOW_MULTILINEEDIT || nCompType == WINDOW_DIALOG )
+    if ( nCompType == WINDOW_MULTILINEEDIT || nCompType == WINDOW_DIALOG || WINDOW_GROUPBOX )
     {
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::AUTOHSCROLL )
             nWinBits |= WB_AUTOHSCROLL;
