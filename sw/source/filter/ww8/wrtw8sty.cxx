@@ -875,7 +875,7 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
     }
 }
 
-void wwFontHelper::WriteFontTable( const DocxAttributeOutput& rAttrOutput )
+void wwFontHelper::WriteFontTable( DocxAttributeOutput& rAttrOutput )
 {
     ::std::vector<const wwFont *> aFontList( AsVector() );
 

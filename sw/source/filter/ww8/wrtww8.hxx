@@ -318,7 +318,7 @@ public:
     sal_uInt16 GetId(const SvxFontItem& rFont);
     sal_uInt16 GetId(const wwFont& rFont);
     void WriteFontTable( SvStream *pTableStream, WW8Fib& pFib );
-    void WriteFontTable( const DocxAttributeOutput& rAttrOutput );
+    void WriteFontTable( DocxAttributeOutput& rAttrOutput );
     void WriteFontTable( const RtfAttributeOutput& rAttrOutput );
 
     /// If true, all fonts are loaded before processing the document.
