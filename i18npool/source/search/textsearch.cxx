@@ -681,13 +681,20 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
     IcuUniString aIcuSearchPatStr( (const UChar*)rPatternStr.getStr(), rPatternStr.getLength());
 #ifndef DISABLE_WORDBOUND_EMULATION
     // for conveniance specific syntax elements of the old regex engine are emulated
-    // by using regular word boundary matching \b to replace \< and \>
-    static const IcuUniString aChevronPattern( "\\\\<|\\\\>", -1, IcuUniString::kInvariant);
-    static const IcuUniString aChevronReplace( "\\\\b", -1, IcuUniString::kInvariant);
-    static RegexMatcher aChevronMatcher( aChevronPattern, 0, nIcuErr);
-    aChevronMatcher.reset( aIcuSearchPatStr);
-    aIcuSearchPatStr = aChevronMatcher.replaceAll( aChevronReplace, nIcuErr);
-    aChevronMatcher.reset();
+    // - by replacing \< with "word-break followed by a look-ahead word-char"
+    static const IcuUniString aChevronPatternB( "\\\\<", -1, IcuUniString::kInvariant);
+    static const IcuUniString aChevronReplaceB( "\\\\b(?=\\\\w)", -1, IcuUniString::kInvariant);
+    static RegexMatcher aChevronMatcherB( aChevronPatternB, 0, nIcuErr);
+    aChevronMatcherB.reset( aIcuSearchPatStr);
+    aIcuSearchPatStr = aChevronMatcherB.replaceAll( aChevronReplaceB, nIcuErr);
+    aChevronMatcherB.reset();
+    // - by replacing \> with "look-behind word-char followed by a word-break"
+    static const IcuUniString aChevronPatternE( "\\\\>", -1, IcuUniString::kInvariant);
+    static const IcuUniString aChevronReplaceE( "(?<=\\\\w)\\\\b", -1, IcuUniString::kInvariant);
+    static RegexMatcher aChevronMatcherE( aChevronPatternE, 0, nIcuErr);
+    aChevronMatcherE.reset( aIcuSearchPatStr);
+    aIcuSearchPatStr = aChevronMatcherE.replaceAll( aChevronReplaceE, nIcuErr);
+    aChevronMatcherE.reset();
 #endif
     pRegexMatcher = new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr);
     if( nIcuErr)
