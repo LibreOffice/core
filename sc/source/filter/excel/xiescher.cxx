@@ -2798,7 +2798,7 @@ XclImpPictureObj::XclImpPictureObj( const XclImpRoot& rRoot ) :
     mbUseCtlsStrm( false )
 {
     SetAreaObj( true );
-    SetSimpleMacro( false );
+    SetSimpleMacro( true );
     SetCustomDffObj( true );
 }
 
