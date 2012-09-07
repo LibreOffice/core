@@ -29,11 +29,12 @@ public class BluetoothClient extends Client {
     private BluetoothAdapter mAdapter;
 
     public BluetoothClient(Server aServer,
-                    CommunicationService aCommunicationService) {
+                    CommunicationService aCommunicationService,
+                    boolean aBluetoothWasEnabled) {
         super(aServer, aCommunicationService);
         try {
             mAdapter = BluetoothAdapter.getDefaultAdapter();
-            mBluetoothWasEnabled = mAdapter.isEnabled();
+            mBluetoothWasEnabled = aBluetoothWasEnabled;
             if (!mBluetoothWasEnabled) {
                 mAdapter.enable();
             }

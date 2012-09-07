@@ -41,6 +41,7 @@ public class StartPresentationActivity extends SherlockActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unbindService(mConnection);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mListener);
     }
 

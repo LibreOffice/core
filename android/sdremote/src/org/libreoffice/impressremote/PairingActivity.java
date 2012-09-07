@@ -83,9 +83,13 @@ public class PairingActivity extends SherlockActivity {
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
+            if (mCommunicationService == null) {
+                return;
+            }
             if (aIntent.getAction().equals(
                             CommunicationService.MSG_PAIRING_STARTED)) {
                 String aPin = aIntent.getStringExtra("PIN");
+
                 mPinText.setText(aPin);
                 //                refreshLists();
             } else if (aIntent.getAction().equals(

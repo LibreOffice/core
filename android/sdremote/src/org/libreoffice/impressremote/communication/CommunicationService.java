@@ -89,7 +89,8 @@ public class CommunicationService extends Service implements Runnable {
                             mClient = new NetworkClient(mServerDesired, this);
                             break;
                         case BLUETOOTH:
-                            mClient = new BluetoothClient(mServerDesired, this);
+                            mClient = new BluetoothClient(mServerDesired, this,
+                                            mBluetoothPreviouslyEnabled);
                             break;
                         }
                         mTransmitter = new Transmitter(mClient);
