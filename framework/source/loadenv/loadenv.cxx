@@ -718,6 +718,13 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
 
 namespace {
 
+#if 1
+bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>&, OUString&, OUString&)
+{
+    return false;
+}
+#else
+// TODO: We will reinstate this function later, so don't remove this!
 bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescriptor, OUString& rType, OUString& rFilter)
 {
     OUString aURL;
@@ -745,6 +752,7 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
 
     return false;
 }
+#endif
 
 }
 
