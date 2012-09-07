@@ -47,14 +47,14 @@ public:
     }
 };
 
-ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef pHelper, const uno::Reference< container::XIndexAccess>& xBarSettings, const rtl::OUString& sResourceUrl ) throw (uno::RuntimeException) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl )
+ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef pHelper, const uno::Reference< container::XIndexAccess>& xBarSettings, const OUString& sResourceUrl ) throw (uno::RuntimeException) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl )
 {
     m_bIsMenu = sResourceUrl.equalsAscii( ITEM_MENUBAR_URL ) ? sal_True : sal_False;
 }
 
-uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemData( const rtl::OUString& sCommandURL,
-                                                                                   const rtl::OUString& sHelpURL,
-                                                                                   const rtl::OUString& sLabel,
+uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemData( const OUString& sCommandURL,
+                                                                                   const OUString& sHelpURL,
+                                                                                   const OUString& sLabel,
                                                                                    sal_uInt16 nType,
                                                                                    const uno::Any& aSubMenu,
                                                                                    sal_Bool isVisible,
@@ -62,41 +62,41 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
-    aProps[0].Name = rtl::OUString( ITEM_DESCRIPTOR_COMMANDURL );
+    aProps[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
     aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = rtl::OUString( ITEM_DESCRIPTOR_HELPURL );
+    aProps[1].Name = ITEM_DESCRIPTOR_HELPURL;
     aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = rtl::OUString( ITEM_DESCRIPTOR_LABEL );
+    aProps[2].Name = ITEM_DESCRIPTOR_LABEL;
     aProps[2].Value <<= sLabel;
-    aProps[3].Name = rtl::OUString( ITEM_DESCRIPTOR_TYPE );
+    aProps[3].Name = ITEM_DESCRIPTOR_TYPE;
     aProps[3].Value <<= nType;
-    aProps[4].Name = rtl::OUString( ITEM_DESCRIPTOR_CONTAINER );
+    aProps[4].Name = ITEM_DESCRIPTOR_CONTAINER;
     aProps[4].Value = aSubMenu;
-    aProps[5].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE );
+    aProps[5].Name = ITEM_DESCRIPTOR_ISVISIBLE;
     aProps[5].Value <<= isVisible;
-    aProps[6].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ENABLED );
+    aProps[6].Name = ITEM_DESCRIPTOR_ENABLED;
     aProps[6].Value <<= isEnabled;
 
     return aProps;
 }
 
-uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItemData( const rtl::OUString& sCommandURL, const rtl::OUString& sHelpURL, const rtl::OUString& sLabel, sal_uInt16 nType, const uno::Any& aSubMenu, sal_Bool isVisible, sal_Int32 nStyle )
+uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const uno::Any& aSubMenu, sal_Bool isVisible, sal_Int32 nStyle )
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
-    aProps[0].Name = rtl::OUString( ITEM_DESCRIPTOR_COMMANDURL );
+    aProps[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
     aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = rtl::OUString( ITEM_DESCRIPTOR_HELPURL );
+    aProps[1].Name = ITEM_DESCRIPTOR_HELPURL;
     aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = rtl::OUString( ITEM_DESCRIPTOR_LABEL );
+    aProps[2].Name = ITEM_DESCRIPTOR_LABEL;
     aProps[2].Value <<= sLabel;
-    aProps[3].Name = rtl::OUString( ITEM_DESCRIPTOR_TYPE );
+    aProps[3].Name = ITEM_DESCRIPTOR_TYPE;
     aProps[3].Value <<= nType;
-    aProps[4].Name = rtl::OUString( ITEM_DESCRIPTOR_CONTAINER );
+    aProps[4].Name = ITEM_DESCRIPTOR_CONTAINER;
     aProps[4].Value = aSubMenu;
-    aProps[5].Name = rtl::OUString( ITEM_DESCRIPTOR_ISVISIBLE );
+    aProps[5].Name = ITEM_DESCRIPTOR_ISVISIBLE;
     aProps[5].Value <<= isVisible;
-    aProps[6].Name = rtl::OUString( ITEM_DESCRIPTOR_STYLE );
+    aProps[6].Name = ITEM_DESCRIPTOR_STYLE;
     aProps[6].Value <<= nStyle;
 
     return aProps;
@@ -123,7 +123,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     uno::Sequence< beans::PropertyValue > aProps;
     m_xIndexAccess->getByIndex( nPosition ) >>= aProps;
     uno::Reference< container::XIndexAccess > xSubMenu;
-    getPropertyValue( aProps, rtl::OUString( ITEM_DESCRIPTOR_CONTAINER ) ) >>= xSubMenu;
+    getPropertyValue( aProps, ITEM_DESCRIPTOR_CONTAINER ) >>= xSubMenu;
     ScVbaCommandBarControl* pNewCommandBarControl = NULL;
     if( xSubMenu.is() )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True );
@@ -140,7 +140,7 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
     sal_Int32 nPosition = -1;
     if( aIndex.getValueTypeClass() == uno::TypeClass_STRING )
     {
-        rtl::OUString sName;
+        OUString sName;
         aIndex >>= sName;
         nPosition = VbaCommandBarHelper::findControlByName( m_xIndexAccess, sName, m_bIsMenu );
     }
@@ -162,8 +162,8 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 {
     // Parameter is not supported
     // the following name needs to be individually created;
-    rtl::OUString sLabel("Custom");
-    rtl::OUString sCommandUrl(rtl::OUString( CUSTOM_MENU_STR) + sLabel);
+    OUString sLabel("Custom");
+    OUString sCommandUrl( CUSTOM_MENU_STR + sLabel);
     sal_Int32 nType = office::MsoControlType::msoControlButton;
     sal_Int32 nPosition = 0;
     sal_Bool bTemporary = sal_True;
@@ -175,11 +175,11 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     if( nType != office::MsoControlType::msoControlButton &&
         nType != office::MsoControlType::msoControlPopup )
-        throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
 
     if( Id.hasValue() || Parameter.hasValue( ) )
     {
-        throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
     }
 
     if( Before.hasValue() )
@@ -200,7 +200,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     // create control
     uno::Sequence< beans::PropertyValue > aProps;
-    rtl::OUString sHelpUrl;
+    OUString sHelpUrl;
     sal_uInt16 nItemType = 0;
     if( IsMenu() )
     {
@@ -229,20 +229,20 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 ScVbaCommandBarControls::getServiceImplName()
 {
-    return rtl::OUString("ScVbaCommandBarControls");
+    return OUString("ScVbaCommandBarControls");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 ScVbaCommandBarControls::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBarControls"  );
+        aServiceNames[ 0 ] = "ooo.vba.CommandBarControls";
     }
     return aServiceNames;
 }
@@ -303,18 +303,18 @@ uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
 }
 
 // XHelperInterface
-rtl::OUString VbaDummyCommandBarControls::getServiceImplName()
+OUString VbaDummyCommandBarControls::getServiceImplName()
 {
-    return rtl::OUString("VbaDummyCommandBarControls");
+    return OUString("VbaDummyCommandBarControls");
 }
 
-uno::Sequence<rtl::OUString> VbaDummyCommandBarControls::getServiceNames()
+uno::Sequence<OUString> VbaDummyCommandBarControls::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBarControls"  );
+        aServiceNames[ 0 ] = "ooo.vba.CommandBarControls";
     }
     return aServiceNames;
 }

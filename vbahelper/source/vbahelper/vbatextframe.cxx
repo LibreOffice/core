@@ -35,11 +35,11 @@ VbaTextFrame::setAsMSObehavior()
     //set property TextWordWrap default as False.
     // TextFitToSize control the text content. it seems we should set the default as False.
     // com.sun.star.drawing.TextFitToSizeType.NONE
-    m_xPropertySet->setPropertyValue( rtl::OUString("TextWordWrap"), uno::makeAny( sal_False ) );
-    m_xPropertySet->setPropertyValue( rtl::OUString("TextFitToSize"), uno::makeAny( drawing::TextFitToSizeType_NONE ) );
+    m_xPropertySet->setPropertyValue( "TextWordWrap", uno::makeAny( sal_False ) );
+    m_xPropertySet->setPropertyValue( "TextFitToSize", uno::makeAny( drawing::TextFitToSizeType_NONE ) );
 }
 
-sal_Int32 VbaTextFrame::getMargin( rtl::OUString sMarginType )
+sal_Int32 VbaTextFrame::getMargin( OUString sMarginType )
 {
     sal_Int32 nMargin = 0;
     uno::Any aMargin = m_xPropertySet->getPropertyValue( sMarginType );
@@ -47,7 +47,7 @@ sal_Int32 VbaTextFrame::getMargin( rtl::OUString sMarginType )
     return nMargin;
 }
 
-void VbaTextFrame::setMargin( rtl::OUString sMarginType, float fMargin )
+void VbaTextFrame::setMargin( OUString sMarginType, float fMargin )
 {
     sal_Int32 nMargin = Millimeter::getInHundredthsOfOneMillimeter( fMargin );
     m_xPropertySet->setPropertyValue( sMarginType, uno::makeAny( nMargin ) );
@@ -61,7 +61,7 @@ VbaTextFrame::getAutoSize() throw (uno::RuntimeException)
     // TextFitToSize control the text content.
     // and in mso, there isnot option TextWordWrap which means auto wrap. the default is False.
     sal_Bool bAutosize = sal_False;
-    uno::Any aTextAutoGrowHeight = m_xPropertySet->getPropertyValue( rtl::OUString("TextAutoGrowHeight") );
+    uno::Any aTextAutoGrowHeight = m_xPropertySet->getPropertyValue( "TextAutoGrowHeight" );
     aTextAutoGrowHeight >>= bAutosize;
     return bAutosize;
 }
@@ -70,13 +70,13 @@ void SAL_CALL
 VbaTextFrame::setAutoSize( sal_Bool _autosize ) throw (uno::RuntimeException)
 {
     setAsMSObehavior();
-    m_xPropertySet->setPropertyValue( rtl::OUString("TextAutoGrowHeight"), uno::makeAny( _autosize ) );
+    m_xPropertySet->setPropertyValue( "TextAutoGrowHeight", uno::makeAny( _autosize ) );
 }
 
 float SAL_CALL
 VbaTextFrame::getMarginBottom() throw (uno::RuntimeException)
 {
-    sal_Int32 nMargin = getMargin( rtl::OUString("TextLowerDistance") );
+    sal_Int32 nMargin = getMargin( "TextLowerDistance" );
     float fMargin = (float)Millimeter::getInPoints( nMargin );
     return fMargin;
 }
@@ -84,13 +84,13 @@ VbaTextFrame::getMarginBottom() throw (uno::RuntimeException)
 void SAL_CALL
 VbaTextFrame::setMarginBottom( float _marginbottom ) throw (uno::RuntimeException)
 {
-    setMargin( rtl::OUString("TextLowerDistance"), _marginbottom );
+    setMargin( "TextLowerDistance", _marginbottom );
 }
 
 float SAL_CALL
 VbaTextFrame::getMarginTop() throw (uno::RuntimeException)
 {
-    sal_Int32 nMargin = getMargin( rtl::OUString("TextUpperDistance") );
+    sal_Int32 nMargin = getMargin( "TextUpperDistance" );
     float fMargin = (float)Millimeter::getInPoints( nMargin );
     return fMargin;
 }
@@ -98,13 +98,13 @@ VbaTextFrame::getMarginTop() throw (uno::RuntimeException)
 void SAL_CALL
 VbaTextFrame::setMarginTop( float _margintop ) throw (uno::RuntimeException)
 {
-    setMargin( rtl::OUString("TextUpperDistance"), _margintop );
+    setMargin( "TextUpperDistance", _margintop );
 }
 
 float SAL_CALL
 VbaTextFrame::getMarginLeft() throw (uno::RuntimeException)
 {
-    sal_Int32 nMargin = getMargin( rtl::OUString("TextLeftDistance") );
+    sal_Int32 nMargin = getMargin( "TextLeftDistance" );
     float fMargin = (float)Millimeter::getInPoints( nMargin );
     return fMargin;
 }
@@ -112,13 +112,13 @@ VbaTextFrame::getMarginLeft() throw (uno::RuntimeException)
 void SAL_CALL
 VbaTextFrame::setMarginLeft( float _marginleft ) throw (uno::RuntimeException)
 {
-    setMargin( rtl::OUString("TextLeftDistance"), _marginleft );
+    setMargin( "TextLeftDistance", _marginleft );
 }
 
 float SAL_CALL
 VbaTextFrame::getMarginRight() throw (uno::RuntimeException)
 {
-    sal_Int32 nMargin = getMargin( rtl::OUString("TextRightDistance") );
+    sal_Int32 nMargin = getMargin( "TextRightDistance" );
     float fMargin = (float)Millimeter::getInPoints( nMargin );
     return fMargin;
 }
@@ -126,7 +126,7 @@ VbaTextFrame::getMarginRight() throw (uno::RuntimeException)
 void SAL_CALL
 VbaTextFrame::setMarginRight( float _marginright ) throw (uno::RuntimeException)
 {
-    setMargin( rtl::OUString("TextRightDistance"), _marginright );
+    setMargin( "TextRightDistance" , _marginright );
 }
 
 
@@ -134,23 +134,23 @@ VbaTextFrame::setMarginRight( float _marginright ) throw (uno::RuntimeException)
 uno::Any SAL_CALL
 VbaTextFrame::Characters() throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
 }
 
-rtl::OUString
+OUString
 VbaTextFrame::getServiceImplName()
 {
-    return rtl::OUString("VbaTextFrame");
+    return OUString("VbaTextFrame");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 VbaTextFrame::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.msforms.TextFrame"  );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.TextFrame";
     }
     return aServiceNames;
 }

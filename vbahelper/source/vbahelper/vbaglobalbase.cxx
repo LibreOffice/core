@@ -36,7 +36,7 @@ const uno::Reference< ov::XHelperInterface >& xParent,
 const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCtxName )
     : Globals_BASE( xParent, xContext )
     , msDocCtxName( sDocCtxName )
-    , msApplication( RTL_CONSTASCII_USTRINGPARAM("Application") )
+    , msApplication( "Application" )
 {
     // overwrite context with custom one ( that contains the application )
     // wrap the service manager as we don't want the disposing context to tear down the 'normal' ServiceManager ( or at least thats what the code appears like it wants to do )

@@ -111,7 +111,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     if( !xIntrospection.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xIntrospection.set( xFactory->createInstance( rtl::OUString("com.sun.star.beans.Introspection") ), uno::UNO_QUERY_THROW );
+        xIntrospection.set( xFactory->createInstance( "com.sun.star.beans.Introspection" ), uno::UNO_QUERY_THROW );
     }
     return xIntrospection->inspect( aObject );
 }
@@ -145,18 +145,18 @@ void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot, SfxCallMode nCa
 }
 
 void
-dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUString & aUrl, const uno::Sequence< beans::PropertyValue >& sProps )
+dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString & aUrl, const uno::Sequence< beans::PropertyValue >& sProps )
 {
     util::URL url;
     url.Complete = aUrl;
-    rtl::OUString emptyString = rtl::OUString(  "" );
+    OUString emptyString( "" );
     uno::Reference<frame::XController> xController = xModel->getCurrentController();
     uno::Reference<frame::XFrame> xFrame = xController->getFrame();
     uno::Reference<frame::XDispatchProvider> xDispatchProvider (xFrame,uno::UNO_QUERY_THROW);
     try
     {
         uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference<uno::XComponentContext > xContext( xProps->getPropertyValue( rtl::OUString(  "DefaultContext" )), uno::UNO_QUERY_THROW  );
+        uno::Reference<uno::XComponentContext > xContext( xProps->getPropertyValue( "DefaultContext" ), uno::UNO_QUERY_THROW  );
         if ( !xContext.is() )
             return;
 
@@ -195,14 +195,14 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
 }
 
 void
-dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUString& aUrl )
+dispatchRequests( const uno::Reference< frame::XModel>& xModel, const OUString& aUrl )
 {
     uno::Sequence<beans::PropertyValue> dispatchProps;
     dispatchRequests( xModel, aUrl, dispatchProps );
 }
 
 uno::Reference< frame::XModel >
-getCurrentDoc( const rtl::OUString& sKey ) throw (uno::RuntimeException)
+getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
     SbxObject* pBasic = dynamic_cast< SbxObject* > ( SFX_APP()->GetBasic() );
@@ -236,27 +236,27 @@ getCurrentDoc( const rtl::OUString& sKey ) throw (uno::RuntimeException)
             !xModel.is() )
         {
             throw uno::RuntimeException(
-                rtl::OUString(  "Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)"), uno::Reference< uno::XInterface >() );
+                "Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)" , uno::Reference< uno::XInterface >() );
         }
         else
         {
             OSL_TRACE("Have model points to url %s",
-            ::rtl::OUStringToOString( xModel->getURL(),
+                OUStringToOString( xModel->getURL(),
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
     else
     {
-        OSL_TRACE("Failed to get %s", rtl::OUStringToOString( sKey, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_TRACE("Failed to get %s", OUStringToOString( sKey, RTL_TEXTENCODING_UTF8 ).getStr() );
         throw uno::RuntimeException(
-            rtl::OUString( "Can't determine the currently selected document" ),
+            "Can't determine the currently selected document" ,
             uno::Reference< uno::XInterface >() );
     }
     return xModel;
 }
 
  uno::Reference< frame::XModel >
-getCurrentDocCtx( const rtl::OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
      // try fallback to calling doc
@@ -268,19 +268,19 @@ getCurrentDocCtx( const rtl::OUString& ctxName, const uno::Reference< uno::XComp
 uno::Reference< frame::XModel >
 getThisExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    return getCurrentDocCtx( rtl::OUString( "ExcelDocumentContext"  ), xContext );
+    return getCurrentDocCtx( "ExcelDocumentContext" , xContext );
 }
 
 uno::Reference< frame::XModel >
 getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    return getCurrentDocCtx( rtl::OUString( "WordDocumentContext"  ), xContext );
+    return getCurrentDocCtx( "WordDocumentContext" , xContext );
 }
 
  uno::Reference< frame::XModel >
 getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    static const rtl::OUString sThisExcelDoc( "ThisExcelDoc"  );
+    static const OUString sThisExcelDoc( "ThisExcelDoc"  );
     uno::Reference< frame::XModel > xModel;
     try
     {
@@ -296,7 +296,7 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) t
  uno::Reference< frame::XModel >
 getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    static const rtl::OUString sThisWordDoc( "ThisWordDoc"  );
+    static const OUString sThisWordDoc( "ThisWordDoc"  );
     uno::Reference< frame::XModel > xModel;
     try
     {
@@ -374,15 +374,15 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     if ( nCopies > 1 ) // Collate only useful when more that 1 copy
         Collate >>= bCollate;
 
-    rtl::OUString sRange(   "-"  );
-    rtl::OUString sFileName;
+    OUString sRange(   "-"  );
+    OUString sFileName;
 
     if (( nFrom || nTo ) )
     {
         if ( nFrom )
-            sRange = ( ::rtl::OUString::valueOf( nFrom ) + sRange );
+            sRange = ( OUString::valueOf( nFrom ) + sRange );
         if ( nTo )
-            sRange += ::rtl::OUString::valueOf( nTo );
+            sRange += OUString::valueOf( nTo );
     }
 
     if (  PrToFileName.getValue() )
@@ -485,56 +485,56 @@ bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
             return rAny.get< sal_Int64 >() != 0;
         default:;
     }
-    throw uno::RuntimeException( ::rtl::OUString(  "Invalid type, cannot convert to boolean."  ), 0 );
+    throw uno::RuntimeException( "Invalid type, cannot convert to boolean." , 0 );
 }
 
-::rtl::OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw (uno::RuntimeException)
+OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw (uno::RuntimeException)
 {
     switch( rAny.getValueType().getTypeClass() )
     {
         case uno::TypeClass_STRING:
-            return rAny.get< ::rtl::OUString >();
+            return rAny.get< OUString >();
         case uno::TypeClass_BOOLEAN:
             return bUppercaseBool ?
-                (rAny.get< bool >() ? ::rtl::OUString(  "TRUE"  ) : ::rtl::OUString(  "FALSE"  )) :
-                ::rtl::OUString::valueOf( (sal_Bool)rAny.get< bool >() );
+                (rAny.get< bool >() ? OUString(  "TRUE"  ) : OUString(  "FALSE"  )) :
+                OUString::valueOf( (sal_Bool)rAny.get< bool >() );
         case uno::TypeClass_FLOAT:
-            return ::rtl::OUString::valueOf( rAny.get< float >() );
+            return OUString::valueOf( rAny.get< float >() );
         case uno::TypeClass_DOUBLE:
-            return ::rtl::OUString::valueOf( rAny.get< double >() );
+            return OUString::valueOf( rAny.get< double >() );
         case uno::TypeClass_BYTE:
         case uno::TypeClass_SHORT:
         case uno::TypeClass_LONG:
-            return ::rtl::OUString::valueOf( rAny.get< sal_Int32 >() );
+            return OUString::valueOf( rAny.get< sal_Int32 >() );
         case uno::TypeClass_HYPER:
-            return ::rtl::OUString::valueOf( rAny.get< sal_Int64 >() );
+            return OUString::valueOf( rAny.get< sal_Int64 >() );
         default:;
     }
-    throw uno::RuntimeException( ::rtl::OUString(  "Invalid type, cannot convert to string."  ), 0 );
+    throw uno::RuntimeException( "Invalid type, cannot convert to string." , 0 );
 }
 
-::rtl::OUString extractStringFromAny( const uno::Any& rAny, const ::rtl::OUString& rDefault, bool bUppercaseBool ) throw (uno::RuntimeException)
+OUString extractStringFromAny( const uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool ) throw (uno::RuntimeException)
 {
     return rAny.hasValue() ? extractStringFromAny( rAny, bUppercaseBool ) : rDefault;
 }
 
-rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
+OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
 {
     return extractStringFromAny( pvargItem );
 }
 
 
-rtl::OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< ::rtl::OUString >&  _slist, const rtl::OUString& _sElementName, const ::rtl::OUString& _sSuffixSeparator)
+OUString
+ContainerUtilities::getUniqueName( const uno::Sequence< OUString >&  _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator)
 {
     return getUniqueName(_slist, _sElementName, _sSuffixSeparator, sal_Int32(2));
 }
 
-rtl::OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< rtl::OUString >& _slist, const rtl::OUString _sElementName, const rtl::OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
+OUString
+ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, const OUString _sElementName, const OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
 {
     sal_Int32 a = _nStartSuffix;
-    rtl::OUString scompname = _sElementName;
+    OUString scompname = _sElementName;
     bool bElementexists = true;
     sal_Int32 nLen = _slist.getLength();
     if ( nLen == 0 )
@@ -549,13 +549,13 @@ ContainerUtilities::getUniqueName( const uno::Sequence< rtl::OUString >& _slist,
                 return scompname;
             }
         }
-        scompname = _sElementName + _sSuffixSeparator + rtl::OUString::valueOf( a++ );
+        scompname = _sElementName + _sSuffixSeparator + OUString::valueOf( a++ );
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_Int32
-ContainerUtilities::FieldInList( const uno::Sequence< rtl::OUString >& SearchList, const rtl::OUString& SearchString )
+ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, const OUString& SearchString )
 {
     sal_Int32 FieldLen = SearchList.getLength();
     sal_Int32 retvalue = -1;
@@ -579,9 +579,9 @@ bool NeedEsc(sal_Unicode cCode)
     return (STRING_NOTFOUND != sEsc.Search(cCode));
 }
 
-rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike )
+OUString VBAToRegexp(const OUString &rIn, bool bForLike )
 {
-    rtl::OUStringBuffer sResult;
+    OUStringBuffer sResult;
     const sal_Unicode *start = rIn.getStr();
     const sal_Unicode *end = start + rIn.getLength();
 
@@ -598,11 +598,11 @@ rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike )
                 start++;
                 break;
             case '*':
-                sResult.append(rtl::OUString(".*"));
+                sResult.append(".*");
                 start++;
                 break;
             case '#':
-                sResult.append(rtl::OUString("[0-9]"));
+                sResult.append("[0-9]");
                 start++;
                 break;
             case '~':
@@ -799,7 +799,7 @@ uno::Any getDefaultPropByIntrospection( const uno::Any& aObj ) throw ( uno::Runt
     return aValue;
 }
 
-uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName )
+uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName )
 {
     uno::Any result;
     for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
@@ -813,7 +813,7 @@ uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, c
     return result;
 }
 
-sal_Bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName, const uno::Any& aValue )
+sal_Bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )
 {
     for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
     {
@@ -826,7 +826,7 @@ sal_Bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const r
     return sal_False;
 }
 
-void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName, const uno::Any& aValue )
+void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )
 {
    if( setPropertyValue( aProp, aName, aValue ) )
     return;
@@ -849,8 +849,7 @@ UserFormGeometryHelper::UserFormGeometryHelper(
     mbDialog( uno::Reference< awt::XDialog >( xControl, uno::UNO_QUERY ).is() )
 {
     if ( !xControl.is() )
-        throw uno::RuntimeException( ::rtl::OUString(  "No control is provided!"  ),
-                                     uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "No control is provided!", uno::Reference< uno::XInterface >() );
 
     mxWindow.set( xControl->getPeer(), uno::UNO_QUERY_THROW );
     mxModelProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
@@ -936,7 +935,7 @@ static const char saHeightName[] = "Height";
 
 double UserFormGeometryHelper::implGetPos( bool bPosY ) const
 {
-    sal_Int32 nPosAppFont = mxModelProps->getPropertyValue( bPosY ? rtl::OUString(saPosYName) : rtl::OUString(saPosXName) ).get< sal_Int32 >();
+    sal_Int32 nPosAppFont = mxModelProps->getPropertyValue( bPosY ? OUString(saPosYName) : OUString(saPosXName) ).get< sal_Int32 >();
     // appfont to pixel
     awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosAppFont, nPosAppFont ), util::MeasureUnit::APPFONT );
     // pixel to VBA points
@@ -951,12 +950,12 @@ void UserFormGeometryHelper::implSetPos( double fPos, bool bPosY )
     awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosPixel, nPosPixel ), util::MeasureUnit::POINT );
     // pixel to appfont
     awt::Point aPosAppFont = mxUnitConv->convertPointToLogic( aPosPixel, util::MeasureUnit::APPFONT );
-    mxModelProps->setPropertyValue( bPosY ? rtl::OUString(saPosYName) : rtl::OUString(saPosXName), uno::Any( bPosY ? aPosAppFont.Y : aPosAppFont.X ) );
+    mxModelProps->setPropertyValue( bPosY ? OUString(saPosYName) : OUString(saPosXName), uno::Any( bPosY ? aPosAppFont.Y : aPosAppFont.X ) );
 }
 
 double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
 {
-    sal_Int32 nSizeAppFont = mxModelProps->getPropertyValue( bHeight ? rtl::OUString(saHeightName) : rtl::OUString(saWidthName) ).get< sal_Int32 >();
+    sal_Int32 nSizeAppFont = mxModelProps->getPropertyValue( bHeight ? OUString(saHeightName) : OUString(saWidthName) ).get< sal_Int32 >();
     // appfont to pixel
     awt::Size aSizePixel = mxUnitConv->convertSizeToPixel( awt::Size( nSizeAppFont, nSizeAppFont ), util::MeasureUnit::APPFONT );
 
@@ -1004,7 +1003,7 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
     }
 
     awt::Size aSizeAppFont = mxUnitConv->convertSizeToLogic( aSizePixel, util::MeasureUnit::APPFONT );
-    mxModelProps->setPropertyValue( bHeight ? rtl::OUString(saHeightName) : rtl::OUString(saWidthName), uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
+    mxModelProps->setPropertyValue( bHeight ? OUString(saHeightName) : OUString(saWidthName), uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
 }
 
 // ============================================================================
@@ -1047,7 +1046,7 @@ void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
 ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException ) : xShape( _xShape )
 {
     if( !xShape.is() )
-        throw css::uno::RuntimeException( rtl::OUString("No valid shape for helper"), css::uno::Reference< css::uno::XInterface >() );
+        throw css::uno::RuntimeException( "No valid shape for helper" , css::uno::Reference< css::uno::XInterface >() );
 }
 
 double ShapeHelper::getHeight() const
@@ -1066,7 +1065,7 @@ double ShapeHelper::getHeight() const
     }
     catch (const css::uno::Exception&)
     {
-        throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+        throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
         }
 }
 double ShapeHelper::getWidth() const
@@ -1084,7 +1083,7 @@ void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorExcept
     }
     catch (const css::uno::Exception&)
     {
-        throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+        throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
     }
 }
 
@@ -1116,19 +1115,19 @@ void ShapeHelper::setTop(double _fTop)
     xShape->setPosition(aPoint);
 }
 
-void DebugHelper::exception( const rtl::OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const rtl::OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
+void DebugHelper::exception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::script::BasicErrorException( DetailedMessage.concat( rtl::OUString(" ") ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, rtl::OUString() );
+    throw css::script::BasicErrorException( DetailedMessage.concat( " " ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, OUString() );
 }
 
-void DebugHelper::exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException )
+void DebugHelper::exception( int err,  const OUString& additionalArgument ) throw( css::script::BasicErrorException )
 {
-    exception( rtl::OUString(), css::uno::Exception(), err, additionalArgument );
+    exception( OUString(), css::uno::Exception(), err, additionalArgument );
 }
 void DebugHelper::exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
 {
-    exception( rtl::OUString(), ex, SbERR_INTERNAL_ERROR, rtl::OUString() );
+    exception( OUString(), ex, SbERR_INTERNAL_ERROR, OUString() );
 }
 
 Millimeter::Millimeter():m_nMillimeter(0) {}
@@ -1163,8 +1162,8 @@ uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::
     try
     {
         uno::Reference< beans::XPropertySet > xDocProps( xModel, uno::UNO_QUERY_THROW );
-        ::rtl::OUString aCodeName;
-        xDocProps->getPropertyValue( ::rtl::OUString(  "CodeName"  ) ) >>= aCodeName;
+        OUString aCodeName;
+        xDocProps->getPropertyValue( "CodeName" ) >>= aCodeName;
         xIf = getUnoDocModule( aCodeName, getSfxObjShell( xModel ) );
     }
     catch (const uno::Exception&)
@@ -1178,7 +1177,7 @@ uno::Reference< XHelperInterface > getUnoDocModule( const String& aModName, SfxO
     uno::Reference< XHelperInterface > xIf;
     if ( pShell )
     {
-        rtl::OUString sProj( "Standard" );
+        OUString sProj( "Standard" );
         BasicManager* pBasMgr = pShell->GetBasicManager();
         if ( pBasMgr && pBasMgr->GetName().Len() )
             sProj = pBasMgr->GetName();
