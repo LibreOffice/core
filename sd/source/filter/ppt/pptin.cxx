@@ -2385,7 +2385,11 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             break;
                     }
                 }
-                if ( i < 8 )
+// [Bug 119962] Placeholder in ppt file created by MS 2007 is lost if load in Impress 
+                unsigned int nParaCount = pTextObj->Count();
+                PPTParagraphObj *pFirstPara = nParaCount == 0 ? NULL : pTextObj->First();
+                unsigned int nFirstParaTextcount = pFirstPara == NULL ? 0 : pFirstPara->GetTextSize();
+                if ( i < 8 || (nParaCount == 1 && nFirstParaTextcount == 0 || nParaCount == 0))
                 {
                     PresObjKind ePresObjKind = PRESOBJ_NONE;
                     sal_Bool    bEmptyPresObj = sal_True;
