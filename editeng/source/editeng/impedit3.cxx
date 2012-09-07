@@ -1343,6 +1343,19 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                     }
                 }
             }
+            else if( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_FIX )
+            {
+                sal_uInt16 nTxtHeight = pLine->GetHeight();
+                sal_uInt32 nH = rLSItem.GetLineHeight();
+                if ( nH != nTxtHeight )
+                {
+                    long nMaxAscent = pLine->GetMaxAscent() - nTxtHeight + nH;
+                    if ( nMaxAscent < 0 )
+                        nMaxAscent = 0 ;
+                    pLine->SetMaxAscent( (sal_uInt16)nMaxAscent );
+                    pLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
+                }
+            }
         }
 
 
@@ -1686,6 +1699,19 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
                     pTmpLine->SetMaxAscent( (sal_uInt16)(pTmpLine->GetMaxAscent() - nDiff) );
                     pTmpLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
                 }
+            }
+        }
+        else if( rLSItem.GetLineSpaceRule() == SVX_LINE_SPACE_FIX )
+        {
+            sal_uInt16 nTxtHeight = pTmpLine->GetHeight();
+            sal_uInt32 nH = rLSItem.GetLineHeight();
+            if ( nH != nTxtHeight )
+            {
+                long nMaxAscent = pTmpLine->GetMaxAscent() - nTxtHeight + nH;
+                if ( nMaxAscent < 0 )
+                    nMaxAscent = 0 ;
+                pTmpLine->SetMaxAscent( (sal_uInt16)nMaxAscent );
+                pTmpLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
             }
         }
     }

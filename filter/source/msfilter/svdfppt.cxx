@@ -6443,7 +6443,10 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         rSet.Put( SdrTextFixedCellHeightItem( sal_True ), SDRATTR_TEXT_USEFIXEDCELLHEIGHT );
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
         if ( nVal2 <= 0 )
+        {
             aItem.SetLineHeight( (sal_uInt16)( rManager.ScalePoint( -nVal2 ) / 8 ) );
+            aItem.GetLineSpaceRule() = SVX_LINE_SPACE_FIX;
+        }
         else
         {
             sal_uInt8 nPropLineSpace = (sal_uInt8)nVal2;
