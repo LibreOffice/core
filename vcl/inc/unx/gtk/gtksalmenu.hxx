@@ -89,7 +89,7 @@ public:
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText );
     void                        NativeSetItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommandStr );
     void                        NativeSetEnableItem( gchar* aCommand, gboolean bEnable );
-    void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, gboolean bCheck );
+    void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
 };
 

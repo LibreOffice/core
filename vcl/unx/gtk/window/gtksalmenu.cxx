@@ -79,6 +79,7 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
         sal_Bool itemEnabled = pVCLMenu->IsItemEnabled( nId );
         KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
         sal_Bool itemChecked = pVCLMenu->IsItemChecked( nId );
+        MenuItemBits itemBits = pVCLMenu->GetItemBits( nId );
 
         // Convert internal values to native values.
         gboolean bChecked = ( itemChecked == sal_True ) ? TRUE : FALSE;
@@ -93,7 +94,9 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
         {
             pMenu->NativeSetItemCommand( nSection, nItemPos, pSalMenuItem, aNativeCommand );
             pMenu->NativeSetEnableItem( aNativeCommand, bEnabled );
-            pMenu->NativeCheckItem( nSection, nItemPos, pSalMenuItem, bChecked );
+
+            if ( ( itemBits & MIB_CHECKABLE ) || ( itemBits & MIB_RADIOCHECK ) )
+                pMenu->NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
         }
 
         g_free( aNativeCommand );
@@ -193,49 +196,6 @@ rtl::OUString GetGtkKeyName( rtl::OUString keyName )
     return aGtkKeyName;
 }
 
-//GVariant* GetRadioButtonHints( GtkSalMenuItem *pSalMenuItem )
-//{
-//    GVariantBuilder *pBuilder;
-//    GVariant *pHints;
-
-//    pBuilder = g_variant_builder_new( G_VARIANT_TYPE_STRING );
-
-//    Menu* pMenu = pSalMenuItem->mpVCLMenu;
-
-//    gboolean bItemIncluded = FALSE;
-
-//    for ( sal_uInt16 i = 0; i < pMenu->GetItemCount(); i++ )
-//    {
-//        sal_uInt16 nId = pMenu->GetItemId( i );
-//        MenuItemBits itemBits = pMenu->GetItemBits( nId );
-//        MenuItemType itemType = pMenu->GetItemType( nId );
-
-//        if ( itemBits & MIB_RADIOCHECK )
-//        {
-//            rtl::OString aValue = rtl::OUStringToOString( pMenu->GetItemText( nId ), RTL_TEXTENCODING_UTF8 );
-//            g_variant_builder_add( pBuilder, "s", aValue.getStr() );
-
-//            if ( nId == pSalMenuItem->mnId )
-//                bItemIncluded = TRUE;
-//        }
-//        else if ( itemType == MENUITEM_SEPARATOR )
-//        {
-//            if ( bItemIncluded == FALSE )
-//            {
-//                g_variant_builder_clear( pBuilder );
-//            }
-//            else
-//                break;
-//        }
-//    }
-
-//    // Build an array of G_VARIANT_TYPE_STRING.
-//    pHints = g_variant_new ("as", pBuilder);
-//    g_variant_builder_unref ( pBuilder );
-
-//    return pHints;
-//}
-
 /*
  * GtkSalMenu
  */
@@ -269,7 +229,7 @@ GtkSalMenu::~GtkSalMenu()
 
 sal_Bool GtkSalMenu::VisibleMenuBar()
 {
-    return sal_True;
+    return sal_False;
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
@@ -310,17 +270,15 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     GdkWindow *gdkWindow = gtk_widget_get_window( widget );
 
     if (gdkWindow) {
-        GLOMenu* pMainMenu = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
-        GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
+        mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
+        mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
 
-        if ( pMainMenu && pActionGroup ) {
-            g_lo_menu_remove( pMainMenu, 0 );
-        } else {
-            pMainMenu = g_lo_menu_new();
-            pActionGroup = g_lo_action_group_new();
+        if ( mpMenuModel == NULL && mpActionGroup == NULL ) {
+            mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
+            mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new() );
 
-            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMainMenu, ObjectDestroyedNotify );
-            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
+            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", mpMenuModel, ObjectDestroyedNotify );
+            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", mpActionGroup, ObjectDestroyedNotify );
 
             XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
 
@@ -334,12 +292,12 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
             // Publish the menu.
             if ( aDBusMenubarPath ) {
-                sal_uInt16 menubarId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, G_MENU_MODEL( pMainMenu ), NULL);
+                sal_uInt16 menubarId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, mpMenuModel, NULL);
                 if(!menubarId) puts("Failed to export menubar");
             }
 
             if ( aDBusPath ) {
-                sal_uInt16 actionGroupId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, G_ACTION_GROUP( pActionGroup ), NULL);
+                sal_uInt16 actionGroupId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, mpActionGroup, NULL);
                 if(!actionGroupId) puts("Failed to export action group");
             }
 
@@ -354,14 +312,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
             g_free( aDBusMenubarPath );
         }
 
-        // Menubar has only one section, so we put it on the exported menu.
-//        mpMenuModel = G_MENU_MODEL( pMainMenu );
-        mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-        g_lo_menu_insert_section( pMainMenu, 0, NULL, mpMenuModel );
-//        g_lo_menu_new_section( G_LO_MENU( mpMenuModel ), 0, NULL );
-        mpActionGroup = G_ACTION_GROUP( pActionGroup );
-
-//        GenerateMenu( this );
+        // Generate the main menu structure.
 //        GenerateMenu( this );
 
         // Refresh the menu every second.
@@ -382,39 +333,29 @@ void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
 }
 
-void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, gboolean bCheck )
+void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck )
 {
+    if ( mpActionGroup == NULL )
+        return;
+
     gchar* aCommand = g_lo_menu_get_command_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
 
-    if ( aCommand == NULL && g_strcmp0( aCommand, "" ) != 0 )
+    if ( aCommand != NULL || g_strcmp0( aCommand, "" ) != 0 )
     {
-        if ( mpActionGroup != NULL )
+        GVariant *pCheckValue = NULL;
+        GVariant *pCurrentState = g_action_group_get_action_state( mpActionGroup, aCommand );
+
+        if ( bits & MIB_CHECKABLE )
         {
-            GVariant *pCheckValue = NULL;
-
-            // FIXME: Why pItem->mnBits differs from GetItemBits value?
-            MenuItemBits bits = pItem->mpVCLMenu->GetItemBits( pItem->mnId );
-
-            if ( bits & MIB_CHECKABLE ) {
-                GVariant* pState = g_action_group_get_action_state( mpActionGroup, aCommand );
-                gboolean bCurrentState = g_variant_get_boolean( pState );
-
-                if ( bCurrentState != bCheck )
-                    pCheckValue = g_variant_new_boolean( bCheck );
-            }
-            else if ( bits & MIB_RADIOCHECK )
-            {
-                GVariant* pState = g_action_group_get_action_state( mpActionGroup, aCommand );
-                gchar* aCurrentState = (gchar*) g_variant_get_string( pState, NULL );
-                gboolean bCurrentState = g_strcmp0( aCurrentState, "" ) != 0;
-
-                if ( bCurrentState != bCheck )
-                    pCheckValue = ( bCheck == TRUE ) ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
-            }
-
-            if ( pCheckValue )
-                g_action_group_change_action_state( mpActionGroup, aCommand, pCheckValue );
+            pCheckValue = g_variant_new_boolean( bCheck );
         }
+        else if ( bits & MIB_RADIOCHECK )
+        {
+            pCheckValue = ( bCheck == TRUE ) ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
+        }
+
+        if ( pCurrentState == NULL || g_variant_equal( pCurrentState, pCheckValue) == FALSE )
+            g_action_group_change_action_state( mpActionGroup, aCommand, pCheckValue );
     }
 
     if ( aCommand )
@@ -506,7 +447,6 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, Gtk
             // Item is a radio button.
             GVariantType* pParameterType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
             GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
-            //        GVariant* pStateHint = GetRadioButtonHints( pItem );
             GVariant* pState = g_variant_new_string( "" );
             pTarget = g_variant_new_string( aCommand );
 
