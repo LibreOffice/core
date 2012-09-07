@@ -67,7 +67,7 @@ protected:
     virtual void Resize ();
     virtual void DataChanged (DataChangedEvent const& rDCEvt);
     // new:
-    virtual void OnFirstSize (int nWidth, int nHeight) = 0;
+    virtual void OnFirstSize (long nWidth, long nHeight) = 0;
 
 private:
     // the main child window (either ModulWindow or DialogWindow)
@@ -85,7 +85,7 @@ private:
         void Add (DockingWindow*, Size const&);
         void Remove (DockingWindow*);
         bool IsEmpty () const;
-        int  GetSize () const;
+        long GetSize () const;
         void ArrangeIn (Rectangle const&);
 
     private:
@@ -98,9 +98,9 @@ private:
         // rectangle to move in
         Rectangle aRect;
         // size (width or height)
-        int nSize;
+        long nSize;
         // last position (between Add()s)
-        int nLastPos;
+        long nLastPos;
         // the main splitting line
         Splitter aSplitter;
         // the dockable windows (and some data)
@@ -113,15 +113,15 @@ private:
             // the window may fill the space of the adjacent currently
             // non-docking windows, but this change is not stored in these
             // variables. These change only when the splitter lines are moved.
-            int nStartPos, nEndPos;
+            long nStartPos, nEndPos;
             // splitter line window before the window
             // (the first one is always nullptr)
             boost::shared_ptr<Splitter> pSplit;
         };
         std::vector<Item> vItems;
     private:
-        Point MakePoint (int, int) const;
-        Size MakeSize (int, int) const;
+        Point MakePoint (long, long) const;
+        Size MakeSize (long, long) const;
     private:
         static bool IsDocking (DockingWindow const&);
     private:

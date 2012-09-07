@@ -1124,11 +1124,11 @@ void DlgEditor::ClearModifyFlag()
 
 namespace Print
 {
-    int const nLeftMargin = 1700;
-    int const nRightMargin = 900;
-    int const nTopMargin = 2000;
-    int const nBottomMargin = 1000;
-    int const nBorder = 300;
+    long const nLeftMargin = 1700;
+    long const nRightMargin = 900;
+    long const nTopMargin = 2000;
+    long const nBottomMargin = 1000;
+    long const nBorder = 300;
 }
 
 void lcl_PrintHeader( Printer* pPrinter, const ::rtl::OUString& rTitle ) // not working yet

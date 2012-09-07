@@ -140,7 +140,7 @@ public:
     virtual void UpdateDebug (bool){};
 protected:
     // Layout:
-    virtual void OnFirstSize (int nWidth, int nHeight);
+    virtual void OnFirstSize (long nWidth, long nHeight);
 
 private:
     // child window

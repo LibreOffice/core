@@ -59,11 +59,11 @@ namespace
 
 namespace Print
 {
-    int const nLeftMargin = 1700;
-    int const nRightMargin = 900;
-    int const nTopMargin = 2000;
-    int const nBottomMargin = 1000;
-    int const nBorder = 300;
+    long const nLeftMargin = 1700;
+    long const nRightMargin = 900;
+    long const nTopMargin = 2000;
+    long const nBottomMargin = 1000;
+    long const nBorder = 300;
 }
 
 short const ValidWindow = 0x1234;
@@ -1558,7 +1558,7 @@ void ModulWindowLayout::BasicRemoveWatch ()
     aWatchWindow.RemoveSelectedWatch();
 }
 
-void ModulWindowLayout::OnFirstSize (int const nWidth, int const nHeight)
+void ModulWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
 {
     AddToLeft(&rObjectCatalog, Size(nWidth * 0.20, nHeight * 0.75));
     AddToBottom(&aWatchWindow, Size(nWidth * 0.67, nHeight * 0.25));

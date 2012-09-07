@@ -424,7 +424,7 @@ protected:
     // Window:
     virtual void Paint (const Rectangle& rRect);
     // Layout:
-    virtual void OnFirstSize (int nWidth, int nHeight);
+    virtual void OnFirstSize (long nWidth, long nHeight);
 
 private:
     // main child window
