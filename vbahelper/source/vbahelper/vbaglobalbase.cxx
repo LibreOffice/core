@@ -152,7 +152,7 @@ VbaGlobalsBase::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
     static const OUString names[] = {
     // common
-        "ooo.vba.msforms.UserForm" ,
+        OUString("ooo.vba.msforms.UserForm"),
       };
     static uno::Sequence< OUString > serviceNames( names, sizeof( names )/ sizeof( names[0] ) );
     return serviceNames;
