@@ -16,12 +16,6 @@ latest versions.
 
 to-review, later are ok:
 
-commit ffdc043d7272d2e0a664f530bbc112f952acadab
-Author: Thomas Lange [tl] <tl@openoffice.org>
-Date:   Mon Mar 15 09:22:49 2010 +0100
-
-    cws sw321bf01: #i107843# em-dash/en-dash breakiterator fix for spell checking
-
 commit e1ad946ef5db3f7c0a540207d0f0fd85799e3b66
 Author: Release Engineers <releng@openoffice.org>
 Date:   Thu Aug 6 18:13:57 2009 +0000
@@ -555,6 +549,7 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
 
 done, regression tests added:
 
+#i107843# em-dash/en-dash breakiterator fix for spell checking
 #i103552# Japanese word for 'shutdown' added to ja.dic
 #i113785# ligatures for spell checking will no longer break words
 An opening quote should not be counted as a word by word count tool (regression test in in writer)

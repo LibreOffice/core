@@ -530,7 +530,7 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=113785
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=107843
     {
         aLocale.Language = rtl::OUString("en");
         aLocale.Country = rtl::OUString("US");
@@ -546,6 +546,27 @@ void TestBreakIterator::testWordBoundaries()
 
         aBounds = m_xBreak->getWordBoundary(aTest, 7, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT(aBounds.startPos == 6 && aBounds.endPos == 9);
+    }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=113785
+    {
+        aLocale.Language = rtl::OUString("en");
+        aLocale.Country = rtl::OUString("US");
+
+        const sal_Unicode TEST[] =
+        {
+            'a', 0x2013, 'b', 0x2014, 'c'
+        };
+        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 1);
+
+        aBounds = m_xBreak->nextWord(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD);
+        CPPUNIT_ASSERT(aBounds.startPos == 2 && aBounds.endPos == 3);
+
+        aBounds = m_xBreak->nextWord(aTest, aBounds.endPos, aLocale, i18n::WordType::DICTIONARY_WORD);
+        CPPUNIT_ASSERT(aBounds.startPos == 4 && aBounds.endPos == 5);
     }
 }
 
