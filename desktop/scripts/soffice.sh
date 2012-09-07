@@ -175,4 +175,4 @@ for arg in $@ ; do
 done
 
 # oosplash does the rest: forcing pages in, javaldx etc. are
-exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"
+exec $VALGRINDCHECK $STRACECHECK "$sd_prog/@SOFFICEBIN@" "$@"

@@ -40,4 +40,10 @@ else
 	cp $< $@
 endif
 
+ifeq ($(strip $(ENABLE_HEADLESS)),TRUE)
+	sed -i "s/@SOFFICEBIN@/soffice.bin/" $@
+else
+	sed -i "s/@SOFFICEBIN@/oosplash/" $@
+endif
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
