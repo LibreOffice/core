@@ -51,9 +51,9 @@ public class OfficeDocument
         return false;
     }
 
-    public Enumeration getParcels() {
+    public Enumeration<String> getParcels() {
 
-        Vector parcels = new Vector();
+        Vector<String> parcels = new Vector<String>();
         ZipFile zp = null;
 
         try

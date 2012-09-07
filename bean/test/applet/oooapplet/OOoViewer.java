@@ -73,7 +73,7 @@ public class OOoViewer extends Applet {
 //        Class arPropValClass = m_loader.loadClass("[Lcom.sun.star.beans.PropertyValue;");
         Object arProp = Array.newInstance(
             m_loader.loadClass("com.sun.star.beans.PropertyValue"), 1);
-        Class clazz = arProp.getClass();
+        Class<? extends Object> clazz = arProp.getClass();
 
         Method methLoad = beanClass.getMethod(
             "loadFromURL", new Class[] {
@@ -124,7 +124,7 @@ public class OOoViewer extends Applet {
 
 final class CustomURLClassLoader extends URLClassLoader {
 
-    private Vector resourcePaths;
+    private Vector<URL> resourcePaths;
 
     public CustomURLClassLoader( URL[] urls ) {
         super( urls );
@@ -163,7 +163,7 @@ final class CustomURLClassLoader extends URLClassLoader {
     }
 
     public void addResourcePath(URL rurl) {
-        if (resourcePaths == null) resourcePaths = new Vector();
+        if (resourcePaths == null) resourcePaths = new Vector<URL>();
         resourcePaths.add(rurl);
     }
 
@@ -177,8 +177,8 @@ final class CustomURLClassLoader extends URLClassLoader {
 
         URL u = null;
         URI uri = null;
-        for (Enumeration e = resourcePaths.elements(); e.hasMoreElements();) {
-            u = (URL)e.nextElement();
+        for (Enumeration<URL> e = resourcePaths.elements(); e.hasMoreElements();) {
+            u = e.nextElement();
             if (u.getProtocol().startsWith("file")){
                 try {
                     File f1 = new File(u.getPath());

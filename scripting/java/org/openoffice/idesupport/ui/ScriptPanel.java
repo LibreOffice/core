@@ -81,7 +81,7 @@ public class ScriptPanel extends JPanel {
         model.removeAll();
     }
 
-    public Enumeration getScriptEntries() {
+    public Enumeration<ScriptEntry> getScriptEntries() {
         return model.getScriptEntries();
     }
 
@@ -121,11 +121,11 @@ public class ScriptPanel extends JPanel {
         final String[] columnNames = {"Exported Method",
                                       "Script Name"};
 
-        private Vector scripts;
+        private Vector<ScriptEntry> scripts;
         private int nextRow;
 
         public ScriptTableModel(ScriptEntry[] entries) {
-            scripts = new Vector(entries.length + 11);
+            scripts = new Vector<ScriptEntry>(entries.length + 11);
             for (int i = 0; i < entries.length; i++) {
                 scripts.addElement(entries[i]);
             }
@@ -162,7 +162,7 @@ public class ScriptPanel extends JPanel {
             nextRow = 0;
         }
 
-        public Enumeration getScriptEntries() {
+        public Enumeration<ScriptEntry> getScriptEntries() {
             return scripts.elements();
         }
 
@@ -170,7 +170,7 @@ public class ScriptPanel extends JPanel {
             String result = "";
             ScriptEntry entry;
 
-            entry = (ScriptEntry)scripts.elementAt(row);
+            entry = scripts.elementAt(row);
 
             if (col == 0)
                 result = entry.getLanguageName();
@@ -188,7 +188,7 @@ public class ScriptPanel extends JPanel {
         }
 
         public void setValueAt(Object value, int row, int col) {
-            ScriptEntry entry = (ScriptEntry)scripts.elementAt(row);
+            ScriptEntry entry = scripts.elementAt(row);
             entry.setLogicalName((String)value);
             fireTableCellUpdated(row, col);
         }

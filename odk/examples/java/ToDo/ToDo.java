@@ -171,21 +171,19 @@ public class ToDo {
             try {
                 // Querying for the interface XSpreadsheetDocument
                 XSpreadsheetDocument xspreadsheetdocument =
-                    ( XSpreadsheetDocument ) UnoRuntime.queryInterface(
-                        XSpreadsheetDocument.class, aInstance );
+                    UnoRuntime.queryInterface(
+                    XSpreadsheetDocument.class, aInstance );
 
                 // Querying for the interface XIndexAccess
-                XIndexAccess xindexaccess = ( XIndexAccess )
-                    UnoRuntime.queryInterface( XIndexAccess.class,
-                                               xspreadsheetdocument.getSheets() );
+                XIndexAccess xindexaccess = UnoRuntime.queryInterface( XIndexAccess.class,
+                                             xspreadsheetdocument.getSheets() );
 
                 // Getting the first XSpreadsheet
-                XSpreadsheet xspreadsheet = (XSpreadsheet)UnoRuntime.queryInterface(
+                XSpreadsheet xspreadsheet = UnoRuntime.queryInterface(
                     XSpreadsheet.class, xindexaccess.getByIndex( 0 ));
 
                 // Querying for the interface XCellRange on the XSpeadsheet
-                XCellRange xcellrange = ( XCellRange )
-                UnoRuntime.queryInterface( XCellRange.class, xspreadsheet );
+                XCellRange xcellrange = UnoRuntime.queryInterface( XCellRange.class, xspreadsheet );
 
                 /* Getting the gregorian calendar with the date on which to start
                    the calculation */
@@ -206,12 +204,11 @@ public class ToDo {
 
                 // Querying for the interface XFunctionAccess on service
                 // FunctionAccess
-                XFunctionAccess xfunctionaccess = (XFunctionAccess)
-                    UnoRuntime.queryInterface(XFunctionAccess.class,
-                                              objectFunctionAccess );
+                XFunctionAccess xfunctionaccess = UnoRuntime.queryInterface(XFunctionAccess.class,
+                                                  objectFunctionAccess );
 
                 // Creating vector for holidays
-                Vector vectorHolidays = new Vector();
+                Vector<Object> vectorHolidays = new Vector<Object>();
 
                 // Get the Official Holidays
                 this.getOfficialHolidays( vectorHolidays, xcellrange,
@@ -268,11 +265,10 @@ public class ToDo {
                 {
                     // Querying for the interface XPropertySet for the cell
                     // providing the due date
-                    XPropertySet xpropertyset = ( XPropertySet )
-                        UnoRuntime.queryInterface(XPropertySet.class,
+                    XPropertySet xpropertyset = UnoRuntime.queryInterface(XPropertySet.class,
                                                   xcellrange.getCellByPosition(
-                                                      this.INT_COLUMN_DUEDATE,
-                                                      intRow ));
+                                                  this.INT_COLUMN_DUEDATE,
+                                                  intRow ));
 
                     // Changing the background color of the cell to white
                     xpropertyset.setPropertyValue( "CellBackColor",
@@ -283,15 +279,13 @@ public class ToDo {
                     this.INT_COLUMN_FEATURE, intRow );
 
                     // Querying for the interface XSimpleText
-                    XSimpleText xsimpletext = ( XSimpleText )
-                    UnoRuntime.queryInterface( XSimpleText.class, xcell );
+                    XSimpleText xsimpletext = UnoRuntime.queryInterface( XSimpleText.class, xcell );
 
                     // Getting the text cursor
                     XTextCursor xtextcursor = xsimpletext.createTextCursor();
 
                     // Querying for the interface XTextRange
-                    XTextRange xtextrange = ( XTextRange )
-                    UnoRuntime.queryInterface( XTextRange.class, xtextcursor );
+                    XTextRange xtextrange = UnoRuntime.queryInterface( XTextRange.class, xtextcursor );
 
                     // Getting the bug ID from the cell
                     String sBugID = xtextrange.getString();
@@ -302,8 +296,8 @@ public class ToDo {
 
                         // Querying for the interface XMultiServiceFactory
                         XMultiServiceFactory xMSFTextField =
-                            (XMultiServiceFactory)UnoRuntime.queryInterface(
-                                XMultiServiceFactory.class, aInstance );
+                            UnoRuntime.queryInterface(
+                            XMultiServiceFactory.class, aInstance );
 
                         // Creating an instance of the text field URL
                         Object objectTextField =
@@ -311,14 +305,12 @@ public class ToDo {
                                 "com.sun.star.text.TextField.URL" );
 
                         // Querying for the interface XTextField
-                        XTextField xtextfield = ( XTextField )
-                            UnoRuntime.queryInterface( XTextField.class,
-                                                       objectTextField );
+                        XTextField xtextfield = UnoRuntime.queryInterface( XTextField.class,
+                                                   objectTextField );
 
                         // Querying for the interface XPropertySet
-                        XPropertySet xpropertysetTextField = ( XPropertySet )
-                            UnoRuntime.queryInterface( XPropertySet.class,
-                                                       xtextfield );
+                        XPropertySet xpropertysetTextField = UnoRuntime.queryInterface( XPropertySet.class,
+                                                   xtextfield );
 
                         // Setting the URL
                         xpropertysetTextField.setPropertyValue( "URL",
@@ -329,7 +321,7 @@ public class ToDo {
                                                                 sBugID );
 
                         // Querying for the interface XText
-                        XText xtext = ( XText )UnoRuntime.queryInterface(
+                        XText xtext = UnoRuntime.queryInterface(
                             XText.class, xcell );
 
                         // Delete cell content
@@ -504,12 +496,11 @@ public class ToDo {
                                          gregCalPreviousDueDate ) ) ) {
                                     // Querying for the interface XPropertySet for
                                     // the cell providing the due date
-                                    XPropertySet xpropertyset = ( XPropertySet )
-                                        UnoRuntime.queryInterface(
+                                    XPropertySet xpropertyset = UnoRuntime.queryInterface(
                                             XPropertySet.class,
                                             xcellrange.getCellByPosition(
-                                                this.INT_COLUMN_DUEDATE,
-                                                intRow ) );
+                                            this.INT_COLUMN_DUEDATE,
+                                            intRow ) );
 
                                     // Changing the background color of the cell
                                     // to red
@@ -519,8 +510,8 @@ public class ToDo {
                                     // Querying for the interface XColumnRowRange
                                     // on the XCellRange
                                     XColumnRowRange xcolumnrowrange =
-                                        ( XColumnRowRange)UnoRuntime.queryInterface(
-                                            XColumnRowRange.class, xcellrange );
+                                        UnoRuntime.queryInterface(
+                                        XColumnRowRange.class, xcellrange );
                                     // Inserting one row to the table
                                     XTableRows xTableRows =
                                         xcolumnrowrange.getRows();
@@ -529,7 +520,7 @@ public class ToDo {
                                     // Querying for the interface
                                     // XCellRangeMovement on XCellRange
                                     XCellRangeMovement xcellrangemovement =
-                                      (XCellRangeMovement)UnoRuntime.queryInterface(
+                                      UnoRuntime.queryInterface(
                                           XCellRangeMovement.class, xcellrange );
 
                                     // Creating the cell address of the destination
@@ -648,8 +639,7 @@ public class ToDo {
                 XCell xcellStartDate = xcellrange.getCellByPosition(intColumn,
                                                                     intRow);
                 // Querying for the interface XTextRange on the XCell
-                xtextrangeStartDate = (XTextRange)
-                    UnoRuntime.queryInterface(XTextRange.class, xcellStartDate);
+                xtextrangeStartDate = UnoRuntime.queryInterface(XTextRange.class, xcellStartDate);
             }
             catch( Exception exception ) {
                 this.showExceptionMessage( exception );
@@ -672,8 +662,7 @@ public class ToDo {
                 XCell xcellStartDate = xcellrange.getCellByPosition(intColumn,
                                                                     intRow);
                 // Querying for the interface XTextRange on the XCell
-                XTextRange xtextrange = (XTextRange)
-                    UnoRuntime.queryInterface(XTextRange.class, xcellStartDate);
+                XTextRange xtextrange = UnoRuntime.queryInterface(XTextRange.class, xcellStartDate);
                 // Setting the new start date
                 xtextrange.setString( sDate );
             }
@@ -717,7 +706,7 @@ public class ToDo {
          * @param intYear Year to calculate the official holidays.
          */
         public void getOfficialHolidays(
-        Vector vectorHolidays,
+        Vector<Object> vectorHolidays,
         XCellRange xcellrange,
         XFunctionAccess xfunctionaccess,
         int intYear ) {
@@ -852,7 +841,7 @@ public class ToDo {
          * @param xcellrange Providing the cells.
          * @param xfunctionaccess Provides the access to functions of the Calc.
          */
-        public void getPrivateHolidays( Vector vectorHolidays,
+        public void getPrivateHolidays( Vector<Object> vectorHolidays,
                                         XCellRange xcellrange,
                                         XFunctionAccess xfunctionaccess ) {
             try {

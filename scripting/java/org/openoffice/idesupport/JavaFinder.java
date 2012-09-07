@@ -41,11 +41,11 @@ public class JavaFinder implements MethodFinder {
     private static final String FIRST_PARAM =
         "drafts.com.sun.star.script.framework.runtime.XScriptContext";
 
-    private Vector classpath = null;
+    private Vector<String> classpath = null;
 
     private JavaFinder() {}
 
-    private JavaFinder(Vector classpath) {
+    private JavaFinder(Vector<String> classpath) {
         this.classpath = classpath;
     }
 
@@ -59,7 +59,7 @@ public class JavaFinder implements MethodFinder {
         return finder;
     }
 
-    public static JavaFinder getInstance(Vector classpath) {
+    public static JavaFinder getInstance(Vector<String> classpath) {
         return new JavaFinder(classpath);
     }
 
@@ -126,7 +126,7 @@ public class JavaFinder implements MethodFinder {
         }
 
         if (result.size() != 0)
-            return (ScriptEntry[])result.toArray(empty);
+            return result.toArray(empty);
         return empty;
     }
 
@@ -136,7 +136,7 @@ public class JavaFinder implements MethodFinder {
 
         for (int i = 0; i < len; i++) {
             try {
-                String s = (String)classpath.elementAt(i);
+                String s = classpath.elementAt(i);
                 s = SVersionRCFile.toFileURL(s);
 
                 if (s != null)
@@ -146,7 +146,7 @@ public class JavaFinder implements MethodFinder {
             }
         }
 
-        return new URLClassLoader((URL[])urls.toArray(new URL[0]));
+        return new URLClassLoader(urls.toArray(new URL[0]));
     }
 
     private ClassLoader getClassLoader(File basedir) {
@@ -175,7 +175,7 @@ public class JavaFinder implements MethodFinder {
         File f;
         for (int i = 0; i < urls.length; i++) {
             try {
-                f = (File)files.get(i);
+                f = files.get(i);
                 urlpath = SVersionRCFile.toFileURL(f.getAbsolutePath());
 
                 if (urlpath != null)
@@ -215,7 +215,7 @@ public class JavaFinder implements MethodFinder {
         ArrayList<String> result = new ArrayList<String>();
         for (int i = 0; i < classFiles.size(); i++)
         {
-            File classFile = (File)classFiles.get(i);
+            File classFile = classFiles.get(i);
             String className = classFile.getName();
             className = className.substring(0, className.lastIndexOf(CLASS_SUFFIX));
             boolean finished = false;
@@ -223,7 +223,7 @@ public class JavaFinder implements MethodFinder {
 
             for (int j = 0; j < javaFiles.size() && finished == false; j++)
             {
-                File javaFile = (File)javaFiles.get(j);
+                File javaFile = javaFiles.get(j);
                 String javaName = javaFile.getName();
                 javaName = javaName.substring(0, javaName.lastIndexOf(JAVA_SUFFIX));
 
@@ -240,6 +240,6 @@ public class JavaFinder implements MethodFinder {
                 }
             }
         }
-        return (String[])result.toArray(new String[0]);
+        return result.toArray(new String[0]);
     }
 }

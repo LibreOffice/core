@@ -33,7 +33,7 @@ import org.openoffice.idesupport.JavaFinder;
 public class MethodPanel extends JPanel {
 
     private File basedir;
-    private Vector classpath;
+    private Vector<String> classpath;
     private final static String FIRST_PARAM =
         "drafts.com.sun.star.script.framework.runtime.XScriptContext";
 
@@ -42,7 +42,7 @@ public class MethodPanel extends JPanel {
     private JList list;
     private ScriptEntry[] values;
 
-    public MethodPanel(File basedir, Vector classpath, String language) {
+    public MethodPanel(File basedir, Vector<String> classpath, String language) {
         this.basedir = basedir;
         this.classpath = classpath;
 
@@ -50,7 +50,7 @@ public class MethodPanel extends JPanel {
         initUI();
     }
 
-    public void reload(File basedir, Vector classpath, String language) {
+    public void reload(File basedir, Vector<String> classpath, String language) {
         this.basedir = basedir;
         this.classpath = classpath;
 

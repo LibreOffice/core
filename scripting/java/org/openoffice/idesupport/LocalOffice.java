@@ -43,7 +43,7 @@ public class LocalOffice
     public static final LocalOffice create(
         ClassLoader parent, String officePath, int port)
     {
-        Vector      path    = new Vector();
+        Vector<String>      path    = new Vector<String>();
         path.addElement(officePath + "/program/classes/ridl.jar");
         path.addElement(officePath + "/program/classes/jurt.jar");
         path.addElement(officePath + "/program/classes/unoil.jar");

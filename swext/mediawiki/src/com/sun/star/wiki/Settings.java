@@ -42,8 +42,8 @@ public class Settings
     private static Settings m_instance;
 
 
-    private Vector m_WikiConnections = new Vector();
-    private Vector m_aWikiDocs = new Vector();
+    private Vector<Hashtable<String, String>> m_WikiConnections = new Vector<Hashtable<String, String>>();
+    private Vector<Hashtable<String, Object>> m_aWikiDocs = new Vector<Hashtable<String, Object>>();
 
     private Settings( XComponentContext ctx )
     {
@@ -61,13 +61,13 @@ public class Settings
     }
 
 
-    public void addWikiCon ( Hashtable wikiCon )
+    public void addWikiCon ( Hashtable<String, String> wikiCon )
     {
         m_WikiConnections.add( wikiCon );
     }
 
 
-    public Vector getWikiCons()
+    public Vector<Hashtable<String, String>> getWikiCons()
     {
         return m_WikiConnections;
     }
@@ -77,14 +77,14 @@ public class Settings
         String url = "";
         if ( num >=0 && num < m_WikiConnections.size() )
         {
-            Hashtable ht = ( Hashtable ) m_WikiConnections.get( num );
+            Hashtable ht = m_WikiConnections.get( num );
             url = ( String ) ht.get( "Url" );
         }
         return url;
     }
 
 
-    public void addWikiDoc ( Hashtable aWikiDoc )
+    public void addWikiDoc ( Hashtable<String, Object> aWikiDoc )
     {
         String sURL = ( String ) aWikiDoc.get( "CompleteUrl" );
         Hashtable aEntry = getDocByCompleteUrl( sURL );
@@ -104,7 +104,7 @@ public class Settings
     }
 
 
-    public Vector getWikiDocs()
+    public Vector<Hashtable<String, Object>> getWikiDocs()
     {
         return m_aWikiDocs;
     }
@@ -112,11 +112,11 @@ public class Settings
     public Object[] getWikiDocList( int serverid, int num )
     {
         String wikiserverurl = getWikiConUrlByNumber( serverid );
-        Vector theDocs = new Vector();
+        Vector<String> theDocs = new Vector<String>();
         String [] docs = new String[0];
         for ( int i=0; i<m_aWikiDocs.size(); i++ )
         {
-            Hashtable ht = ( Hashtable ) m_aWikiDocs.get( i );
+            Hashtable ht = m_aWikiDocs.get( i );
             String docurl = ( String ) ht.get( "Url" );
             if ( docurl.equals( wikiserverurl ) )
             {
@@ -141,27 +141,27 @@ public class Settings
         String [] WikiList = new String [m_WikiConnections.size()];
         for ( int i=0; i<m_WikiConnections.size(); i++ )
         {
-            Hashtable ht = ( Hashtable ) m_WikiConnections.get( i );
+            Hashtable ht = m_WikiConnections.get( i );
             WikiList[i] = ( String ) ht.get( "Url" );
         }
         return WikiList;
     }
 
 
-    public Hashtable getSettingByUrl( String sUrl )
+    public Hashtable<String, String> getSettingByUrl( String sUrl )
     {
-        Hashtable ht = null;
+        Hashtable<String, String> ht = null;
         for( int i=0;i<m_WikiConnections.size();i++ )
         {
-            Hashtable h1 = ( Hashtable ) m_WikiConnections.get( i );
-            String u1 = ( String ) h1.get( "Url" );
+            Hashtable<String, String> h1 = m_WikiConnections.get( i );
+            String u1 = h1.get( "Url" );
             if ( u1.equals( sUrl ) )
             {
                 ht = h1;
                 try
                 {
-                    String sUserName = (String)ht.get( "Username" );
-                    String aPassword = (String)ht.get( "Password" );
+                    String sUserName = ht.get( "Username" );
+                    String aPassword = ht.get( "Password" );
                     if ( sUserName != null && sUserName.length() > 0 && ( aPassword == null || aPassword.length() == 0 ) )
                     {
                         String[] pPasswords = Helper.GetPasswordsForURLAndUser( m_xContext, sUrl, sUserName );
@@ -185,7 +185,7 @@ public class Settings
         Hashtable ht = null;
         for( int i=0;i<m_aWikiDocs.size();i++ )
         {
-            Hashtable h1 = ( Hashtable ) m_aWikiDocs.get( i );
+            Hashtable h1 = m_aWikiDocs.get( i );
             String u1 = ( String ) h1.get( "CompleteUrl" );
             if ( u1.equals( curl ) )
             {
@@ -201,7 +201,7 @@ public class Settings
         Hashtable ht = null;
         for( int i=0;i<m_WikiConnections.size();i++ )
         {
-            Hashtable h1 = ( Hashtable ) m_WikiConnections.get( i );
+            Hashtable h1 = m_WikiConnections.get( i );
             String u1 = ( String ) h1.get( "Url" );
             if ( u1.equals( sUrl ) )
             {
@@ -224,12 +224,12 @@ public class Settings
             }
 
             // store all connections
-            XSingleServiceFactory xConnectionFactory = ( XSingleServiceFactory ) UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer );
+            XSingleServiceFactory xConnectionFactory = UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer );
             for ( int i=0; i< m_WikiConnections.size(); i++ )
             {
                 Object oNewConnection = xConnectionFactory.createInstance();
-                Hashtable ht = ( Hashtable ) m_WikiConnections.get( i );
-                XNameReplace xNewConn = ( XNameReplace ) UnoRuntime.queryInterface( XNameReplace.class, oNewConnection );
+                Hashtable ht = m_WikiConnections.get( i );
+                XNameReplace xNewConn = UnoRuntime.queryInterface( XNameReplace.class, oNewConnection );
 
                 if ( xNewConn != null )
                     xNewConn.replaceByName( "UserName", ht.get( "Username" ) );
@@ -237,7 +237,7 @@ public class Settings
                 xContainer.insertByName( (String)ht.get( "Url" ), xNewConn );
             }
             // commit changes
-            XChangesBatch xBatch = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, xContainer );
+            XChangesBatch xBatch = UnoRuntime.queryInterface( XChangesBatch.class, xContainer );
             xBatch.commitChanges();
 
             // remove stored connection information
@@ -248,13 +248,13 @@ public class Settings
                 xContainer2.removeByName( pNames2[i] );
             }
             // store all Docs
-            XSingleServiceFactory xDocListFactory = ( XSingleServiceFactory ) UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer2 );
+            XSingleServiceFactory xDocListFactory = UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer2 );
             for ( int i=0; i< m_aWikiDocs.size(); i++ )
             {
-                Hashtable ht = ( Hashtable ) m_aWikiDocs.get( i );
+                Hashtable ht = m_aWikiDocs.get( i );
 
                 Object oNewDoc = xDocListFactory.createInstance();
-                XNameReplace xNewDoc = ( XNameReplace ) UnoRuntime.queryInterface( XNameReplace.class, oNewDoc );
+                XNameReplace xNewDoc = UnoRuntime.queryInterface( XNameReplace.class, oNewDoc );
 
                 Enumeration e = ht.keys();
                 while ( e.hasMoreElements() )
@@ -266,7 +266,7 @@ public class Settings
                 xContainer2.insertByName( "d" + i, xNewDoc );
             }
             // commit changes
-            XChangesBatch xBatch2 = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, xContainer2 );
+            XChangesBatch xBatch2 = UnoRuntime.queryInterface( XChangesBatch.class, xContainer2 );
             xBatch2.commitChanges();
 
         }
@@ -288,18 +288,18 @@ public class Settings
             if ( xAccess != null )
             {
                 Object oList = xAccess.getByName( "ConnectionList" );
-                XNameAccess xConnectionList = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oList );
+                XNameAccess xConnectionList = UnoRuntime.queryInterface( XNameAccess.class, oList );
                 String [] allCons = xConnectionList.getElementNames();
                 for ( int i=0; i<allCons.length; i++ )
                 {
-                    Hashtable ht = new Hashtable();
+                    Hashtable<String, String> ht = new Hashtable<String, String>();
                     ht.put( "Url", allCons[i] );
                     ht.put( "Username", "" );
                     ht.put( "Password", "" );
 
                     try
                     {
-                        XPropertySet xProps = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xConnectionList.getByName( allCons[i] ) );
+                        XPropertySet xProps = UnoRuntime.queryInterface( XPropertySet.class, xConnectionList.getByName( allCons[i] ) );
                         if ( xProps != null )
                         {
                             String aUsername = AnyConverter.toString( xProps.getPropertyValue( "UserName" ) );
@@ -316,13 +316,13 @@ public class Settings
                 }
 
                 Object oDocs = xAccess.getByName( "RecentDocs" );
-                XNameAccess xRecentDocs = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oDocs );
+                XNameAccess xRecentDocs = UnoRuntime.queryInterface( XNameAccess.class, oDocs );
                 String [] allDocs = xRecentDocs.getElementNames();
                 for ( int i=0; i<allDocs.length; i++ )
                 {
                     Object oDoc = xRecentDocs.getByName( allDocs[i] );
-                    XNameAccess xDoc = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oDoc );
-                    Hashtable ht = new Hashtable();
+                    XNameAccess xDoc = UnoRuntime.queryInterface( XNameAccess.class, oDoc );
+                    Hashtable<String, Object> ht = new Hashtable<String, Object>();
                     ht.put( "Url", xDoc.getByName( "Url" ) );
                     ht.put( "CompleteUrl", xDoc.getByName( "CompleteUrl" ) );
                     ht.put( "Doc", xDoc.getByName( "Doc" ) );
