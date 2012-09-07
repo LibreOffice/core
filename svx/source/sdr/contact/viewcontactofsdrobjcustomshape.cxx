@@ -235,10 +235,6 @@ namespace sdr
                 aObjectBound.Left(), aObjectBound.Top(),
                 aObjectBound.Right(), aObjectBound.Bottom());
 
-            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
-                drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                    false, aObjectRange));
-
             return xRetval;
         }
     } // end of namespace contact
