@@ -829,6 +829,8 @@ sub call_epm
     my $extraflags = "";
         if ($ENV{'EPM_FLAGS'}) { $extraflags = $ENV{'EPM_FLAGS'}; }
 
+    $extraflags .= ' -g' unless $installer::globals::strip;
+
     my $systemcall = $ldpreloadstring . $epmname . " -f " . $packageformat . " " . $extraflags . " " . $localpackagename . " " . $epmlistfilename . $outdirstring . " -v " . " 2\>\&1 |";
 
     installer::logger::print_message( "... $systemcall ...\n" );
