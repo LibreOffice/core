@@ -330,8 +330,6 @@ class VCL_DLLPUBLIC PrintFontManager
     rtl::OString getDirectory( int nAtom ) const;
     int getDirectoryAtom( const rtl::OString& rDirectory, bool bCreate = false );
 
-    void cleanTemporaryFonts();
-
     /* try to initialize fonts from libfontconfig
 
     called from <code>initialize()</code>
@@ -595,27 +593,6 @@ public:
     bool Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes );
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
-
-    /**
-      Returns an URL for a file where to store contents of a temporary font, or an empty string
-      if this font is already known. The file will be cleaned up automatically as appropriate.
-      Use activateTemporaryFont() to actually enable usage of the font.
-
-      @param fontName name of the font (e.g. 'Times New Roman')
-      @param fontStyle font style, "" for regular, "bi" for bold italic, etc.
-      @since 3.7
-    */
-    OUString fileUrlForTemporaryFont( const OUString& fontName, const char* fontStyle );
-
-    /**
-      Adds the given font to the list of known fonts. The font is used only until application
-      exit.
-
-      @param fontName name of the font (e.g. 'Times New Roman')
-      @param fileUrl URL of the font file
-      @since 3.7
-    */
-    void activateTemporaryFont( const OUString& fontName, const OUString& fileUrl );
 };
 
 } // namespace

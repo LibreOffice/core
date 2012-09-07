@@ -122,7 +122,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/fontmanager.hxx>
+#include <vcl/temporaryfonts.hxx>
 
 #include <tools/color.hxx>
 
@@ -2829,7 +2829,7 @@ static inline char toHexChar( int value )
 
 void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, const char* style )
 {
-    OUString fontUrl = psp::PrintFontManager::get().fileUrlForTemporaryFont( name, style );
+    OUString fontUrl = TemporaryFonts::fileUrlForFont( name, style );
     // If a temporary font file exists for this font, assume it was embedded
     // and embed it again.
     // TODO IDocumentSettingAccess::EMBED_SYSTEM_FONTS
