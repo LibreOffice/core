@@ -1437,13 +1437,15 @@ void DialogWindowLayout::ShowPropertyBrowser ()
     {
         // creating
         pPropertyBrowser = new PropBrw(*this);
+        pPropertyBrowser->Show();
         // after OnFirstSize():
         if (HasSize())
             AddPropertyBrowser();
         // updating if neccessary
         UpdatePropertyBrowser();
     }
-    pPropertyBrowser->Show();
+    else
+        pPropertyBrowser->Show();
     // refreshing the button state
     if (SfxBindings* pBindings = GetBindingsPtr())
         pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);

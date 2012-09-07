@@ -308,6 +308,10 @@ void DockingWindow::ResizeIfDocking (Point const& rPos, Size const& rSize)
             SetPosSizePixel(rPos, rSize);
     }
 }
+void DockingWindow::ResizeIfDocking (Size const& rSize)
+{
+    ResizeIfDocking(aDockingRect.TopLeft(), rSize);
+}
 
 // Sets the parent Layout window.
 // The physical parent is set only when the window is docking.

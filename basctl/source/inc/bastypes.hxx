@@ -82,6 +82,8 @@ public:
     DockingWindow (Layout* pParent);
 public:
     void ResizeIfDocking (Point const&, Size const&);
+    void ResizeIfDocking (Size const&);
+    Size GetDockingSize () const { return aDockingRect.GetSize(); }
     void SetLayoutWindow (Layout*);
 public:
     void Show (bool = true);
@@ -228,9 +230,9 @@ public:
 
     virtual void OnNewDocument ();
     virtual char const* GetHid () const = 0;
-    virtual ItemType GetType () const = 0; // TODO
+    virtual ItemType GetType () const = 0;
     void InsertLibInfo () const;
-    bool Is (ScriptDocument const&, rtl::OUString const&, rtl::OUString const&, ItemType, bool bFindSuspended); // TODO
+    bool Is (ScriptDocument const&, rtl::OUString const&, rtl::OUString const&, ItemType, bool bFindSuspended);
     virtual bool HasActiveEditor () const;
 };
 

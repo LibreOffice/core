@@ -91,8 +91,6 @@ private:
     private:
         // the layout window
         Layout& rLayout;
-        // ArrangeIn() is called at first time?
-        bool bFirstArrange;
         // horizontal or vertical strip?
         bool bVertical;
         // lower (top or left) or higher (bottom or right) strip?
@@ -105,14 +103,27 @@ private:
         int nLastPos;
         // the main splitting line
         Splitter aSplitter;
-        // the dockable windows
-        std::vector<DockingWindow*> vWindows;
-        // splitting lines between the docking windows (vWindows.size() - 1)
-        std::vector<boost::shared_ptr<Splitter> > vSplitters;
-
+        // the dockable windows (and some data)
+        struct Item
+        {
+            // pointer to the dockable window
+            DockingWindow* pWin;
+            // starting and ending position in the strip
+            // They may be different from the actual window position, because
+            // the window may fill the space of the adjacent currently
+            // non-docking windows, but this change is not stored in these
+            // variables. These change only when the splitter lines are moved.
+            int nStartPos, nEndPos;
+            // splitter line window before the window
+            // (the first one is always nullptr)
+            boost::shared_ptr<Splitter> pSplit;
+        };
+        std::vector<Item> vItems;
     private:
         Point MakePoint (int, int) const;
         Size MakeSize (int, int) const;
+    private:
+        static bool IsDocking (DockingWindow const&);
     private:
         DECL_LINK(SplitHdl, Splitter*);
         void CheckMarginsFor (Splitter*);
