@@ -31,6 +31,11 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 
+#include "boost/tuple/tuple.hpp"
+#include <boost/function.hpp>
+#include "boost/lambda/bind.hpp"
+#include "boost/bind.hpp"
+#include "boost/lambda/lambda.hpp"
 #include "scitems.hxx"
 #include "column.hxx"
 #include "cell.hxx"
@@ -48,9 +53,9 @@
 #include "detfunc.hxx"          // fuer Notizen bei DeleteRange
 #include "postit.hxx"
 #include "stringutil.hxx"
-
+#include "dpglobal.hxx"
+#include <dptablecache.hxx>
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
-
 using ::com::sun::star::i18n::LocaleDataItem;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -1724,6 +1729,73 @@ void ScColumn::GetString( SCROW nRow, String& rString ) const
         rString.Erase();
 }
 
+template<>
+void  ScColumn::FillDPCacheT( long nDim, SCROW nStartRow, SCROW nEndRow, const boost::function<void(ScDPItemData*)> & rAddLabel, const boost::function<sal_Bool(long,ScDPItemData*)> & rAddData )
+{
+    SCROW nPattenRowStart = -1, nPatternRowEnd = -1;
+    SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+    sal_uLong nNumberFormat = 0;
+    sal_uLong nNumberFormatType = NUMBERFORMAT_NUMBER;
+    SCROW nCurRow = nStartRow;
+    ScDPItemData * pDPItemData = NULL;
+
+    if ( pItems )
+    {
+        SCSIZE nIndex;
+
+        for ( Search( nStartRow, nIndex ) ? void( ) : void(nIndex = nCount); nIndex < nCount && pItems[nIndex].nRow <= nEndRow; ++nIndex, ++nCurRow )
+        {
+            for( ; nCurRow < pItems[nIndex].nRow; nCurRow++ )
+                if( nCurRow == nStartRow )
+                    rAddLabel( new ScDPItemData() );
+                else
+                    rAddData( nDim, new ScDPItemData() );
+
+            if( nCurRow > nPatternRowEnd )
+                if( const ScPatternAttr* pPattern = pAttrArray ? pAttrArray->GetPatternRange( nPattenRowStart, nPatternRowEnd, nCurRow ) : NULL )
+                    nNumberFormatType = pFormatter->GetType( nNumberFormat = pPattern->GetNumberFormat( pFormatter ) );
+                else
+                    nNumberFormatType = NUMBERFORMAT_NUMBER, nNumberFormat = 0;
+
+            if( ScBaseCell* pCell = pItems[nIndex].pCell )
+                if( pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->GetErrCode() )
+        {
+            String str( GetStringFromCell( pCell, nNumberFormat, pFormatter ) );
+            sal_uInt8 bFlag = ScDPItemData::MK_ERR;
+                    pDPItemData = new ScDPItemData( 0, str, 0.0, bFlag );
+        }
+                else if( pCell->HasValueData() )
+                {
+                    double fVal = GetValueFromCell( pCell );
+                    String str( GetStringFromCell( pCell, nNumberFormat, pFormatter ) );
+                    sal_uInt8 bFlag = ScDPItemData::MK_VAL|ScDPItemData::MK_DATA|(ScDPItemData::MK_DATE * isDateFormat( nNumberFormatType ));
+                    pDPItemData = new ScDPItemData( nNumberFormat, str, fVal, bFlag );
+                }
+                else if( !pCell->IsBlank() )
+                    pDPItemData = new ScDPItemData( GetStringFromCell( pCell, nNumberFormat, pFormatter ) );
+                else
+                    pDPItemData = new ScDPItemData();
+            else
+                pDPItemData = new ScDPItemData();
+
+            if( nCurRow == nStartRow )
+                rAddLabel( pDPItemData );
+            else
+                rAddData( nDim, pDPItemData );
+        }
+    }
+
+    for( ; nCurRow <= nEndRow; nCurRow++ )
+        if( nCurRow == nStartRow )
+            rAddLabel( new ScDPItemData() );
+        else
+            rAddData( nDim, new ScDPItemData() );
+}
+void  ScColumn::FillDPCache( ScDPTableDataCache * pCache, long nDim, SCROW nStartRow, SCROW nEndRow )
+{
+    typedef sal_Bool(ScDPTableDataCache::*PFNAddData)( long, ScDPItemData* );
+    FillDPCacheT<boost::function<void(ScDPItemData*)>, boost::function<sal_Bool(long,ScDPItemData*)> >( nDim, nStartRow, nEndRow, boost::bind( &ScDPTableDataCache::AddLabel, pCache, _1 ), boost::bind( (PFNAddData)&ScDPTableDataCache::AddData<false>, pCache, _1, _2 ) );
+}
 
 void ScColumn::GetInputString( SCROW nRow, String& rString ) const
 {

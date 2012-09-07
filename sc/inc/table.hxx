@@ -313,6 +313,7 @@ public:
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
     void        GetString( SCCOL nCol, SCROW nRow, String& rString );
+    void    FillDPCache( ScDPTableDataCache * pCache, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );
     void        GetInputString( SCCOL nCol, SCROW nRow, String& rString );
     double      GetValue( const ScAddress& rPos ) const
                     {

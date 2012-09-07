@@ -196,4 +196,6 @@ namespace ScDPGlobal
    bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, sal_uInt16 nEndTab, sal_Bool bExcludeClip = sal_False );
 
 }
+#define isDateFormat( nNumType ) (!!((nNumType) & NUMBERFORMAT_DATE) )
+
 #endif

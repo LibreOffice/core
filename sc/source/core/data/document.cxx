@@ -2683,6 +2683,11 @@ void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString 
         rString.Erase();
 }
 
+void ScDocument::FillDPCache( ScDPTableDataCache * pCache, SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow )
+{
+    if ( VALIDTAB(nTab) && pTab[nTab] )
+        pTab[nTab]->FillDPCache( pCache, nStartCol, nEndCol, nStartRow, nEndRow );
+}
 
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
 {

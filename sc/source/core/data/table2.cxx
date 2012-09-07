@@ -1054,6 +1054,13 @@ void ScTable::GetString( SCCOL nCol, SCROW nRow, String& rString )
         rString.Erase();
 }
 
+void  ScTable::FillDPCache( ScDPTableDataCache * pCache, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow )
+{
+    for ( sal_uInt16 nCol = nStartCol; nCol <= nEndCol; nCol++ )
+        if( ValidCol( nCol ) )
+            aCol[nCol].FillDPCache( pCache, nCol - nStartCol, nStartRow, nEndRow );
+}
+
 
 void ScTable::GetInputString( SCCOL nCol, SCROW nRow, String& rString )
 {

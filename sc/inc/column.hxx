@@ -60,6 +60,7 @@ class ScPostIt;
 struct ScFunctionData;
 struct ScLineFlags;
 struct ScMergePatternState;
+class ScDPTableDataCache;
 class ScFlatBoolRowSegments;
 
 #define COLUMN_DELTA    4
@@ -360,6 +361,9 @@ public:
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     sal_Bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart );
+    template< typename TAddLebal, typename TAddData >
+    void        FillDPCacheT( long nDim, SCROW nStartRow, SCROW nEndRow, const TAddLebal & , const TAddData & );
+    void        FillDPCache( ScDPTableDataCache * pCache, long nDim, SCROW nStartRow, SCROW nEndRow );
 private:
     long        GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
                                     sal_Bool bWidth );

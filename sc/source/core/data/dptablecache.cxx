@@ -49,6 +49,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+
 // -----------------------------------------------------------------------
 namespace
 {
@@ -474,7 +475,7 @@ void ScDPTableDataCache::AddRow( ScDPItemData* pRow, sal_uInt16 nCount )
     else
     {
         for ( sal_uInt16 i = 0; i < nCount && i < mnColumnCount; i ++ )
-            AddData( i, new ScDPItemData( pRow[i] ) );
+            AddData<true>( i, new ScDPItemData( pRow[i] ) );
     }
 }
 
@@ -548,17 +549,7 @@ bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
     mpSourceData      = new std::vector<SCROW>[ mnColumnCount ];
     mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
     mpIndexOrder      = new std::vector<SCROW>[ mnColumnCount ];
-    //check valid
-    for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow ++ )
-    {
-        for ( sal_uInt16 nCol = nStartCol; nCol <= nEndCol; nCol++ )
-        {
-            if ( nRow == nStartRow )
-                AddLabel( new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
-            else
-                AddData( nCol - nStartCol, new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
-        }
-    }
+    pDoc->FillDPCache( this, nDocTab, nStartCol, nEndCol, nStartRow, nEndRow );
     return sal_True;
 }
 
@@ -616,7 +607,7 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
             {
                ScDPItemData * pNew =  lcl_GetItemValue( xRow, aColTypes[nCol], nCol+1, rNullDate );
                 if ( pNew )
-                    AddData(  nCol , pNew );
+                    AddData<true>(  nCol , pNew );
             }
         }
         while (xRowSet->next());
@@ -872,6 +863,7 @@ bool ScDPTableDataCache::IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const
     return !GetItemDataById( nColumn, GetItemDataId( nColumn, nRow, sal_False ) )->IsHasData();
 }
 
+template< bool bCheckDate >
 sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
@@ -880,6 +872,7 @@ sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 
     sal_Bool    bInserted = sal_False;
 
+    if( bCheckDate )
     pitemData->SetDate( lcl_isDate( GetNumType( pitemData->nNumFormat ) ) );
 
     if ( !lcl_Search( mpTableDataValues[nDim], mpGlobalOrder[nDim], *pitemData, nIndex ) )
@@ -908,6 +901,14 @@ sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 }
 
 
+void func_dummy()
+{
+    sal_Bool (ScDPTableDataCache::*pfnAddData)(long , ScDPItemData* )
+        = &ScDPTableDataCache::AddData<false>;
+
+    pfnAddData = (sal_Bool (ScDPTableDataCache::*)(long , ScDPItemData* ))&ScDPTableDataCache::AddData<true>;
+}
+
 String ScDPTableDataCache::GetDimensionName( sal_uInt16 nColumn ) const
 {
     DBG_ASSERT( /* nColumn>=0 && */ nColumn < mrLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
@@ -919,6 +920,7 @@ String ScDPTableDataCache::GetDimensionName( sal_uInt16 nColumn ) const
     else
         return String();
 }
+
 
 void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
 {
@@ -1135,4 +1137,3 @@ long    ScDPTableDataCache::GetId() const
 {
     return mnID;
 }
-

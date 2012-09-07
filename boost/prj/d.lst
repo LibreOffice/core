@@ -310,3 +310,11 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\utility\detail\* %_DEST%\inc%_EXT%\boost\utility\detail
 ..\%__SRC%\inc\boost\variant\* %_DEST%\inc%_EXT%\boost\variant
 ..\%__SRC%\inc\boost\variant\detail\* %_DEST%\inc%_EXT%\boost\variant\detail
+
+mkdir: %_DEST%\inc%_EXT%\boost\lambda
+..\%__SRC%\misc\build\boost-1.30.2\boost\lambda\*.*pp %_DEST%\inc%_EXT%\boost\lambda\*.*pp
+..\%__SRC%\misc\build\boost_1_39_0\boost\lambda\* %_DEST%\inc%_EXT%\boost\lambda
+mkdir: %_DEST%\inc%_EXT%\boost\lambda\detail
+..\%__SRC%\misc\build\boost-1.30.2\boost\lambda\detail\*.*pp %_DEST%\inc%_EXT%\boost\lambda\detail\*.*pp
+..\%__SRC%\misc\build\boost_1_39_0\boost\lambda\detail\* %_DEST%\inc%_EXT%\boost\lambda\detail
+

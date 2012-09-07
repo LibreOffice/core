@@ -38,6 +38,8 @@
 #include <unotools/fontcvt.hxx>
 #include "scdllapi.h"
 
+#include <cellform.hxx>
+
 #define USE_MEMPOOL
 #define TEXTWIDTH_DIRTY     0xffff
 
@@ -497,6 +499,38 @@ public:
 };
 
 // ============================================================================
+inline double GetValueFromCell( const ScBaseCell * pCell )
+{
+    switch (pCell->GetCellType())
+    {
+    case CELLTYPE_VALUE:
+        return ((ScValueCell*)pCell)->GetValue();
+    case CELLTYPE_FORMULA:
+        {
+            if (((ScFormulaCell*)pCell)->IsValue())
+                return ((ScFormulaCell*)pCell)->GetValue();
+            else
+                return 0.0;
+        }
+    default:
+        return 0.0;
+    }
+}
+// ============================================================================
+
+
+inline String GetStringFromCell( const ScBaseCell * pCell, sal_uLong nFormat, SvNumberFormatter* pFormatter )
+{
+    if (pCell->GetCellType() != CELLTYPE_NOTE)
+    {
+        String strResult;
+    Color* pColor = NULL;
+        ScCellFormat::GetString( const_cast<ScBaseCell*>(pCell), nFormat, strResult, &pColor, *(pFormatter) );
+        return strResult;
+    }
+    else
+        return String();
+}
 
 #endif
 

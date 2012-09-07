@@ -1876,6 +1876,8 @@ private: // CLOOK-Impl-Methoden
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
 
+public:
+    void    FillDPCache( ScDPTableDataCache * pCache, SCTAB nDocTab, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );
 };
 inline void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
 {
