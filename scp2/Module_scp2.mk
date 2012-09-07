@@ -66,7 +66,7 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	$(if $(filter TRUE,$(ENABLE_CRASHDUMP)),\
 		InstallModule_crashrep \
 	) \
-	$(if $(filter TRUE,$(ENABLE_GCONF) $(ENABLE_GNOMEVFS) $(ENABLE_GIO)),\
+	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GCONF) $(ENABLE_GNOMEVFS) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
 		InstallModule_gnome \
 	) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),\
