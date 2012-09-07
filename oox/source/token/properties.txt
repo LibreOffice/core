@@ -284,6 +284,7 @@ MultiPageValue
 MultiSelection
 Name
 NamedRanges
+NamedRanges2
 NegativeError
 NullDate
 NumberFormat

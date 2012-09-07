@@ -113,8 +113,8 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XLabelRange.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
+#include <com/sun/star/sheet/XNamedRanges2.hpp>
+#include <com/sun/star/sheet/XNamedRange2.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -3894,7 +3894,7 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
     uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
     if (xPropertySet.is())
     {
-        uno::Reference <sheet::XNamedRanges> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NAMEDRANGES))), uno::UNO_QUERY);
+        uno::Reference <sheet::XNamedRanges2> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NAMEDRANGES))), uno::UNO_QUERY);
         CheckAttrList();
         if (xNamedRanges.is())
         {
@@ -3922,7 +3922,7 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
                         }
                         else if( nWhichTable !=MAXTABCOUNT)
                             continue;
-                        uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByScopeName(sRangeScope,sNamedRange), uno::UNO_QUERY);
+                        uno::Reference <sheet::XNamedRange2> xNamedRange(xNamedRanges->getByScopeName(sRangeScope,sNamedRange), uno::UNO_QUERY);
                         //range scope name support
                         if (xNamedRange.is())
                         {

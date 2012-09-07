@@ -155,7 +155,7 @@ private:
     typedef ::std::auto_ptr< StreamDataSequence >   StreamDataSeqPtr;
     typedef ::std::auto_ptr< BiffInputStreamPos >   BiffStreamPosPtr;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange2 >
                         mxNamedRange;       /// XNamedRange interface of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
     sal_Int16           mnCalcSheet;        /// Calc sheet index for sheet-local names.

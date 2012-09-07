@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace lang { class XMultiServiceFactory; }
     namespace sheet { class XDatabaseRange; }
-    namespace sheet { class XNamedRange; }
+    namespace sheet { class XNamedRange2; }
     namespace sheet { class XSpreadsheet; }
     namespace sheet { class XSpreadsheetDocument; }
     namespace style { class XStyle; }
@@ -182,7 +182,7 @@ public:
     /** Creates and returns a defined name on-the-fly in the Calc document.
         The name will not be buffered in the global defined names buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange2 >
                         createNamedRangeObject(
                             ::rtl::OUString& orName,
                             sal_Int32 nSheetId = -1, //Add scope for name range

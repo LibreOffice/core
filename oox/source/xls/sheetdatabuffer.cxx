@@ -28,6 +28,7 @@
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XMultipleOperation.hpp>
+#include <com/sun/star/sheet/XNamedRange2.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -671,7 +672,7 @@ void SheetDataBuffer::createSharedFormula( const BinAddress& rMapKey, const ApiT
         append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
-    Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName );
+    Reference< XNamedRange2 > xNamedRange = createNamedRangeObject( aName );
     OSL_ENSURE( xNamedRange.is(), "SheetDataBuffer::createSharedFormula - cannot create shared formula" );
     PropertySet aNameProps( xNamedRange );
     aNameProps.setProperty( PROP_IsSharedFormula, true );

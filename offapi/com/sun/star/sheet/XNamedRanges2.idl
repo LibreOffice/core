@@ -1,0 +1,76 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
+
+#ifndef __com_sun_star_sheet_XNamedRanges2_idl__
+#define __com_sun_star_sheet_XNamedRanges2_idl__
+
+//=============================================================================
+#ifndef __com_sun_star_sheet_XNamedRanges_idl__
+#include <com/sun/star/sheet/XNamedRanges.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_RangeScopeName_idl__
+#include <com/sun/star/sheet/RangeScopeName.idl>
+#endif
+
+module com {  module sun {  module star {  module sheet {
+
+
+
+//=============================================================================
+
+/** provides access to the members in a collection user defined named ranges with duplicate names and to
+    insert and remove them.
+
+    @see com::sun::star::sheet::NamedRanges2
+    @see com::sun::star::sheet::NamedRange2
+ */
+published interface XNamedRanges2: com::sun::star::sheet::XNamedRanges
+{
+    //-------------------------------------------------------------------------
+
+    void addNewByScopeName(
+            [in] string aScopeName,
+            [in] string aRangeName,
+            [in] string aContent,
+            [in] com::sun::star::table::CellAddress aPosition,
+            [in] long nType );
+
+    void removeByScopeName( [in] string aScopeName, [in] string aRangeName );
+
+    boolean hasByScopeName( [in] string aScopeName, [in] string aRangeName );
+
+    any getByScopeName( [in] string aScopeName, [in] string aRangeName )
+            raises( com::sun::star::container::NoSuchElementException,
+                    com::sun::star::lang::WrappedTargetException );
+
+        sequence<com::sun::star::sheet::RangeScopeName> getElementScopeNames();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

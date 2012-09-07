@@ -30,10 +30,11 @@
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
+#include <com/sun/star/sheet/XNamedRange2.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/sheet/XNamedRanges2.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/sheet/RangeScopeName.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -52,7 +53,7 @@ class ScTokenArray;
 
 
 class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
-                            ::com::sun::star::sheet::XNamedRange,
+                            ::com::sun::star::sheet::XNamedRange2,
                             ::com::sun::star::sheet::XFormulaTokens,
                             ::com::sun::star::sheet::XCellRangeReferrer,
                             ::com::sun::star::beans::XPropertySet,
@@ -174,7 +175,7 @@ public:
 
 
 class ScNamedRangesObj : public ::cppu::WeakImplHelper5<
-                            ::com::sun::star::sheet::XNamedRanges,
+                            ::com::sun::star::sheet::XNamedRanges2,
                             ::com::sun::star::container::XEnumerationAccess,
                             ::com::sun::star::container::XIndexAccess,
                             ::com::sun::star::document::XActionLockable,

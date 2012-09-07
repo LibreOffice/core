@@ -84,9 +84,9 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <tools/urlobj.hxx>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/sheet/XNamedRanges2.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
+#include <com/sun/star/sheet/XNamedRange2.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
@@ -2733,7 +2733,7 @@ void ScXMLImport::SetNamedRanges()
         uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            uno::Reference <sheet::XNamedRanges> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES))), uno::UNO_QUERY);
+            uno::Reference <sheet::XNamedRanges2> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES))), uno::UNO_QUERY);
             if (xNamedRanges.is())
             {
                 ScMyNamedExpressions::iterator aItr(pNamedExpressions->begin());
@@ -2795,7 +2795,7 @@ void ScXMLImport::SetNamedRanges()
                         rtl::OUString sRangeScope( sTableName);
                         //uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
                         //getByScopeName
-                        uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByScopeName( sRangeScope,(*aItr)->sName), uno::UNO_QUERY);
+                        uno::Reference <sheet::XNamedRange2> xNamedRange(xNamedRanges->getByScopeName( sRangeScope,(*aItr)->sName), uno::UNO_QUERY);
                         if (xNamedRange.is())
                         {
                             LockSolarMutex();

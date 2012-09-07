@@ -288,8 +288,11 @@ IDLFILES=\
     XMembersSupplier.idl\
     XMultiFormulaTokens.idl\
     XMultipleOperation.idl\
+    RangeScopeName.idl\
     XNamedRange.idl\
     XNamedRanges.idl\
+    XNamedRange2.idl\
+    XNamedRanges2.idl\
     XPrintAreas.idl\
     XRangeSelection.idl\
     XRangeSelectionChangeListener.idl\

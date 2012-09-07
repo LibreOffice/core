@@ -50,6 +50,7 @@
 
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/sheet/XNamedRanges2.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -135,6 +136,7 @@ const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_LOOKUPLABELS),      PROP_UNO_LOOKUPLABELS, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_MATCHWHOLE),        PROP_UNO_MATCHWHOLE, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_NAMEDRANGES),       0, &getCppuType((uno::Reference<sheet::XNamedRanges>*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_NAMEDRANGES2),       0, &getCppuType((uno::Reference<sheet::XNamedRanges2>*)0),    0, 0},
         {MAP_CHAR_LEN(SC_UNO_DATABASERNG),       0, &getCppuType((uno::Reference<sheet::XDatabaseRanges>*)0), 0, 0},
         {MAP_CHAR_LEN(SC_UNO_NULLDATE),          PROP_UNO_NULLDATE, &getCppuType((util::Date*)0),                             0, 0},
         {MAP_CHAR_LEN(SC_UNO_ROWLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0, 0},
@@ -1845,6 +1847,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
             lang::Locale aLocale;
             ScUnoConversion::FillLocale( aLocale, eCtl );
             aRet <<= aLocale;
+        }
+        else if ( aString.EqualsAscii( SC_UNO_NAMEDRANGES2 ) )
+        {
+            aRet <<= uno::Reference<sheet::XNamedRanges2>(new ScNamedRangesObj( pDocShell ));
         }
         else if ( aString.EqualsAscii( SC_UNO_NAMEDRANGES ) )
         {

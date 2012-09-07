@@ -44,6 +44,7 @@
 #define SC_UNO_COLLABELRNG          "ColumnLabelRanges"
 #define SC_UNO_DATABASERNG          "DatabaseRanges"
 #define SC_UNO_NAMEDRANGES          "NamedRanges"
+#define SC_UNO_NAMEDRANGES2         "NamedRanges2"
 #define SC_UNO_ROWLABELRNG          "RowLabelRanges"
 #define SC_UNO_SHEETLINKS           "SheetLinks"
 #define SC_UNO_FORBIDDEN            "ForbiddenCharacters"

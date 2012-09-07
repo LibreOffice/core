@@ -763,7 +763,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    uno::Reference< sheet::XNamedRange2 >  xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
     if ( xRange.is() )
         return uno::makeAny(xRange);
     else
@@ -774,7 +774,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScNamedRangesObj::getElementType() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return ::getCppuType((const uno::Reference< sheet::XNamedRange >*)0);   // muss zu getByIndex passen
+    return ::getCppuType((const uno::Reference< sheet::XNamedRange2 >*)0);  // muss zu getByIndex passen
 }
 
 sal_Bool SAL_CALL ScNamedRangesObj::hasElements() throw(uno::RuntimeException)
@@ -788,7 +788,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByName_Impl(aName));
+    uno::Reference< sheet::XNamedRange2 >  xRange(GetObjectByName_Impl(aName));
     if ( xRange.is() )
         return uno::makeAny(xRange);
     else
@@ -801,7 +801,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByScopeName( const rtl::OUString& aScopeN
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByScopeName_Impl(aScopeName, aRangeName));
+    uno::Reference< sheet::XNamedRange2 >  xRange(GetObjectByScopeName_Impl(aScopeName, aRangeName));
     if ( xRange.is() )
         return uno::makeAny(xRange);
     else
