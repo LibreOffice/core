@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOX////I\u003d",
+        "filename": "chart2/source/view/main/ChartView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2012-09-08T03:14:32Z",
+      "side": 1,
+      "message": "I\u0027d like to hear a bit more about the rationale behind this value change. Right now I don\u0027t even know why this value change improves the overall situation rather than just to make it work for one test document...",
+      "revId": "ff1b8c41178d6018465b5aac4785e8cb63ff48f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
