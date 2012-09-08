@@ -1261,59 +1261,6 @@ sub get_free_number_in_uisequence_table
     return $newnumber;
 }
 
-##################################################################
-# Searching for a specified string in the feature table
-##################################################################
-
-sub get_feature_name
-{
-    my ( $string, $featuretable ) = @_;
-
-    my $featurename = "";
-
-    for ( my $i = 0; $i <= $#{$featuretable}; $i++ )
-    {
-        if ( ${$featuretable}[$i] =~ /^\s*(\w+$string)\t/ )
-        {
-            $featurename = $1;
-            last;
-        }
-    }
-
-    return $featurename;
-}
-
-######################################################################
-# Returning the toplevel directory name of one specific file
-######################################################################
-
-sub get_directory_name_from_file
-{
-    my ($onefile) = @_;
-
-    my $destination = $onefile->{'destination'};
-    my $name = $onefile->{'Name'};
-
-    $destination =~ s/\Q$name\E\s*$//;
-    $destination =~ s/\Q$installer::globals::separator\E\s*$//;
-
-    my $path = "";
-
-    if ( $destination =~ /\Q$installer::globals::separator\E/ )
-    {
-        if ( $destination =~ /^\s*(\S.*\S\Q$installer::globals::separator\E)(\S.+\S?)/ )
-        {
-            $path = $2;
-        }
-    }
-    else
-    {
-        $path = $destination;
-    }
-
-    return $path;
-}
-
 #############################################################
 # Including the new subdir into the directory table
 #############################################################
