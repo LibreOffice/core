@@ -20,6 +20,8 @@ $(eval $(call gb_StaticLibrary_use_externals,cdrlib,\
 	zlib \
 ))
 
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,cdrlib))
+
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,cdrlib,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,cdrlib,\
