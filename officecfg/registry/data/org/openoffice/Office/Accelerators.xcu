@@ -121,6 +121,11 @@
      <value xml:lang="en-US">.uno:Print</value>
     </prop>
    </node>
+   <node oor:name="O_SHIFT_MOD1" oor:op="replace">
+    <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+     <value xml:lang="en-US">.uno:PrintPreview</value>
+    </prop>
+   </node>
    <node oor:name="Q_MOD1" oor:op="replace">
     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
      <value xml:lang="en-US">.uno:Quit</value>
@@ -286,6 +291,11 @@
       <value xml:lang="en-US">.uno:Print</value>
      </prop>
     </node>
+    <node oor:name="O_SHIFT_MOD1" oor:op="replace">
+    <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+     <value xml:lang="en-US">.uno:PrintPreview</value>
+    </prop>
+   </node>
     <node oor:name="Q_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Quit</value>
@@ -1013,6 +1023,11 @@
       <value xml:lang="en-US">.uno:Print</value>
      </prop>
     </node>
+    <node oor:name="O_SHIFT_MOD1" oor:op="replace">
+    <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+     <value xml:lang="en-US">.uno:PrintPreview</value>
+    </prop>
+   </node>
     <node oor:name="Q_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Quit</value>
@@ -1311,6 +1326,11 @@
       <value xml:lang="en-US">.uno:Print</value>
      </prop>
     </node>
+    <node oor:name="O_SHIFT_MOD1" oor:op="replace">
+    <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+     <value xml:lang="en-US">.uno:PrintPreview</value>
+    </prop>
+   </node>
     <node oor:name="P_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SuperScript</value>
@@ -2346,6 +2366,11 @@
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:Print</value>
      </prop>
+    </node>
+    <node oor:name="O_SHIFT_MOD1" oor:op="replace">
+    <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+    <value xml:lang="en-US">.uno:PrintPreview</value>
+    </prop>
     </node>
     <node oor:name="P_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
