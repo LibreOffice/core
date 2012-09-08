@@ -1,4 +1,4 @@
-lcairo	cairo	: ZLIB:zlib LIBPNG:libpng soltools NULL
+lcairo	cairo	: ZLIB:zlib libpng soltools NULL
 lcairo	cairo			    usr1	-	all	lcairo_mkout NULL
 lcairo	cairo\pixman		    nmake	-	all	lcairo_pixman NULL
 lcairo	cairo\cairo		    nmake	-	all	lcairo_cairo lcairo_pixman NULL

@@ -1325,12 +1325,12 @@ endef
 
 else # !SYSTEM_LIBPNG
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 	png \
 ))
 
 define gb_LinkTarget__use_png
-$(call gb_LinkTarget_use_libraries,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	png \
 )
 
