@@ -27,7 +27,9 @@
  ************************************************************************/
 
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include "stringhelper.hxx"
 
 namespace testOfHelperFunctions
@@ -47,13 +49,13 @@ namespace testOfHelperFunctions
         rtl::OString sValue;
         rtl::OUString suValue("This is only a test of some helper functions");
         sValue <<= suValue;
-        t_print("'%s'\n", sValue.getStr());
+        printf("'%s'\n", sValue.getStr());
     }
 
 } // namespace testOfHelperFunctions
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_valueequal, "helperFunctions" );
+CPPUNIT_TEST_SUITE_REGISTRATION( testOfHelperFunctions::test_valueequal );
 
 // -----------------------------------------------------------------------------
 // This is only allowed to be in one file!

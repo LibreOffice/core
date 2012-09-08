@@ -34,18 +34,18 @@
 
 #include "stringhelper.hxx"
 
-#include <testshl/simpleheader.hxx>
+#include <rtl/ustring.hxx>
 
-// void isJaBloed()
-// {
-//     t_print("Ist ja echt bloed.\n");
-// }
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
 
 inline sal_Int64 t_abs64(sal_Int64 _nValue)
 {
     // std::abs() seems to have some ambiguity problems (so-texas)
     // return abs(_nValue);
-    t_print("t_abs64(%ld)\n", _nValue);
+    printf("t_abs64(%ld)\n", _nValue);
     // CPPUNIT_ASSERT(_nValue < 2147483647);
 
     if (_nValue < 0)
@@ -108,7 +108,7 @@ namespace testOfHelperFunctions
     {
         // this values has an overrun!
         sal_Int32 n32 = 2147483648;
-        t_print("n32 should be -2^31 is: %d\n", n32);
+        printf("n32 should be -2^31 is: %d\n", n32);
         CPPUNIT_ASSERT_MESSAGE("n32!=2147483648", n32 == -2147483648 );
     }
 
@@ -118,7 +118,7 @@ namespace testOfHelperFunctions
         sal_Int64 n;
         n = 1073741824;
         n <<= 9;
-        t_print("Value of n is ");
+        printf("Value of n is ");
         t_print64(n);
         CPPUNIT_ASSERT_MESSAGE("n=2^30 << 9", t_abs64(n) > 0 );
     }
@@ -127,7 +127,7 @@ namespace testOfHelperFunctions
     {
         sal_Int64 n;
         n = 2147483648 << 8;
-        t_print("Value of n is ");
+        printf("Value of n is ");
         t_print64(n);
         CPPUNIT_ASSERT_MESSAGE("n=2^31 << 8", t_abs64(n) > 0 );
     }
@@ -135,7 +135,7 @@ namespace testOfHelperFunctions
     {
         sal_Int64 n;
         n = sal_Int64(2147483648) << 8;
-        t_print("Value of n is ");
+        printf("Value of n is ");
         t_print64(n);
         CPPUNIT_ASSERT_MESSAGE("n=2^31 << 8", t_abs64(n) > 0 );
     }
@@ -144,7 +144,7 @@ namespace testOfHelperFunctions
     {
         sal_Int64 n;
         n = 2147483648 << 1;
-        t_print("Value of n is ");
+        printf("Value of n is ");
         t_print64(n);
 
         CPPUNIT_ASSERT_MESSAGE("(2147483648 << 1) is != 0", n != 0 );
@@ -178,17 +178,17 @@ namespace testOfHelperFunctions
     {
         sal_Int64 n = 0;
         n = -1;
-        t_print("Value of n is -1 : ");
+        printf("Value of n is -1 : ");
         t_print64(n);
         CPPUNIT_ASSERT_MESSAGE("n=-1", t_abs64(n) > 0 );
 
         n = -2147483648;
-        t_print("Value of n is -2^31 : ");
+        printf("Value of n is -2^31 : ");
         t_print64(n);
         CPPUNIT_ASSERT_MESSAGE("n=-2^31", t_abs64(n) > 0 );
 
         n = -8589934592LL;
-        t_print("Value of n is -2^33 : ");
+        printf("Value of n is -2^33 : ");
         t_print64(n);
         CPPUNIT_ASSERT_MESSAGE("n=-2^33", t_abs64(n) > 0 );
     }
@@ -207,16 +207,16 @@ namespace testOfHelperFunctions
 
     void test_t_print::t_print_001( )
     {
-        t_print("This is only a test of some helper functions\n");
+        printf("This is only a test of some helper functions\n");
         sal_Int32 nValue = 12345;
-        t_print("a value %d (should be 12345)\n", nValue);
+        printf("a value %d (should be 12345)\n", nValue);
 
         rtl::OString sValue("foo bar");
-        t_print("a String '%s' (should be 'foo bar')\n", sValue.getStr());
+        printf("a String '%s' (should be 'foo bar')\n", sValue.getStr());
 
         rtl::OUString suValue("a unicode string");
         sValue <<= suValue;
-        t_print("a String '%s'\n", sValue.getStr());
+        printf("a String '%s'\n", sValue.getStr());
     }
 
 
@@ -395,7 +395,7 @@ void test_TimeValues::t_time1()
 
 void test_TimeValues::t_time2()
 {
-    t_print("Wait repeats 20 times.\n");
+    printf("Wait repeats 20 times.\n");
     int i=0;
     while(i++<20)
     {
@@ -410,7 +410,7 @@ void test_TimeValues::t_time2()
 
 void test_TimeValues::t_time3()
 {
-    t_print("Wait repeats 100 times.\n");
+    printf("Wait repeats 100 times.\n");
     int i=0;
     while(i++<20)
     {
@@ -445,11 +445,11 @@ void test_TimeValues::t_time3()
 } // namespace testOfHelperFunctions
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_t_print, "helperFunctions" );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_t_abs64, "helperFunctions" );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_TimeValues, "helperFunctions" );
+CPPUNIT_TEST_SUITE_REGISTRATION( testOfHelperFunctions::test_t_print );
+CPPUNIT_TEST_SUITE_REGISTRATION( testOfHelperFunctions::test_t_abs64 );
+CPPUNIT_TEST_SUITE_REGISTRATION( testOfHelperFunctions::test_TimeValues );
 
 // -----------------------------------------------------------------------------
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
