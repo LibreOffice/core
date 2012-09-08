@@ -159,6 +159,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
 OUT2INC=libxslt$/*.h
+OUT2INC+=libexslt$/*.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib

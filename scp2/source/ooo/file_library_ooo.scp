@@ -1470,6 +1470,24 @@ File gid_File_Lib_Xslt
    #endif
   #endif
 End
+File gid_File_Lib_eXslt
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT4(libexslt,.,0,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT4(libexslt,UNXSUFFIX,.,0));
+    #endif
+  #else
+   #ifdef _gcc3
+    Name = "libexslt-0.dll";
+   #else
+    Name = "libexslt.dll";
+   #endif
+  #endif
+End
 #endif
 
 

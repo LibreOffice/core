@@ -26,8 +26,11 @@
 #*************************************************************************
 # major 
 LIBXSLT_MAJOR=1
+LIBEXSLT_MAJOR=0
 # minor 
 LIBXSLT_MINOR=1
+LIBEXSLT_MINOR=8
 # micro 
 LIBXSLT_MICRO=26
+LIBEXSLT_MICRO=15
 

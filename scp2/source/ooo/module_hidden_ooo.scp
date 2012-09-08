@@ -70,6 +70,13 @@ Unixlink gid_Unixlink_File_Lib_Xslt
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     Target = STRING(CONCAT3(libxslt,UNXSUFFIX,.1));
 End
+Unixlink gid_Unixlink_File_Lib_eXslt
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libexslt,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libexslt,UNXSUFFIX,.0));
+End
 #endif
 #endif
 
@@ -431,6 +438,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Ucppkg1,
 	gid_File_Lib_Xslt,
 	gid_Unixlink_File_Lib_Xslt,
+	gid_Unixlink_File_Lib_eXslt,
 	gid_File_Lib_LibXMLSec_xmlsecnss,
 	gid_File_Lib_LibXMLSec_xmlseccore,
 	gid_File_Lib_LibXMLSec_xmlsecmscrypto,
@@ -499,7 +507,8 @@ Module gid_Module_Root_Files_5
 	gid_Unixlink_File_Lib_Raptor,
 	gid_Unixlink_File_Lib_Rasqal,
 	gid_Unixlink_File_Lib_Rdf,
-	gid_Unixlink_File_Lib_Xslt);
+	gid_Unixlink_File_Lib_Xslt,
+	gid_Unixlink_File_Lib_eXslt);
 End
 
 Module gid_Module_Root_Files_6

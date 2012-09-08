@@ -252,9 +252,9 @@ CPPUNITLIB = $(CPPUNIT_LIBS)
 CPPUNITLIB = -lcppunit
 .ENDIF
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
-XSLTLIB=$(LIBXSLT_LIBS)
+XSLTLIB=$(LIBEXSLT_LIBS)
 .ELSE
-XSLTLIB=-lxslt $(LIBXML2LIB)
+XSLTLIB=-lexslt -lxslt $(LIBXML2LIB)
 .ENDIF
 JVMFWKLIB = -ljvmfwk
 .IF "$(SYSTEM_REDLAND)"=="YES"
@@ -491,7 +491,7 @@ PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = icppunit_dll.lib
-XSLTLIB = libxslt.lib $(LIBXML2LIB)
+XSLTLIB = libexslt.lib libxslt.lib $(LIBXML2LIB)
 REDLANDLIB = librdf.lib
 
 JVMFWKLIB = ijvmfwk.lib

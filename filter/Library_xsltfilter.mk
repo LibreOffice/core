@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_libraries,xsltfilter,\
 $(eval $(call gb_Library_use_externals,xsltfilter,\
 	libxml2 \
 	libxslt \
+	libexslt \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xsltfilter,\
