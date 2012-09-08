@@ -544,16 +544,6 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
     }
 
-    if ( $definestring eq "selfreg" )
-    {
-        $oneline = "File_\tCost\n";
-        push(@{$idtref}, $oneline);
-        $oneline = "s72\tI2\n";
-        push(@{$idtref}, $oneline);
-        $oneline = "SelfReg\tFile_\n";
-        push(@{$idtref}, $oneline);
-    }
-
     if ( $definestring eq "msiassembly" )
     {
         $oneline = "Component_\tFeature_\tFile_Manifest\tFile_Application\tAttributes\n";

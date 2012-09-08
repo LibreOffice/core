@@ -77,7 +77,6 @@ use installer::windows::msp;
 use installer::windows::property;
 use installer::windows::removefile;
 use installer::windows::registry;
-use installer::windows::selfreg;
 use installer::windows::shortcut;
 use installer::windows::strip;
 use installer::windows::update;
@@ -1541,8 +1540,6 @@ sub main {
             if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack )) # the following tables not for language packs or help packs
             {
                 installer::windows::removefile::create_removefile_table($folderitemsinproductlanguageresolvedarrayref, $newidtdir);
-
-                installer::windows::selfreg::create_selfreg_table($filesinproductlanguageresolvedarrayref, $newidtdir);
 
                 # Adding Assemblies into the tables MsiAssembly and MsiAssemblyName dynamically
                 installer::windows::assembly::create_msiassembly_table($filesinproductlanguageresolvedarrayref, $newidtdir);
