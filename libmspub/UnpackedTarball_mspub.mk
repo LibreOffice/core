@@ -11,7 +11,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mspub))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mspub,$(MSPUB_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patches,mspub,\
+$(eval $(call gb_UnpackedTarball_add_patches,mspub,\
 	libmspub/libmspub-0.0.3.patch \
 ))
 
