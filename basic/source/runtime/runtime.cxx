@@ -50,7 +50,7 @@ bool SbiRuntime::isVBAEnabled()
     return result;
 }
 
-void StarBASIC::SetVBAEnabled( sal_Bool bEnabled )
+void StarBASIC::SetVBAEnabled( bool bEnabled )
 {
     if ( bDocBasic )
     {
@@ -58,15 +58,15 @@ void StarBASIC::SetVBAEnabled( sal_Bool bEnabled )
     }
 }
 
-sal_Bool StarBASIC::isVBAEnabled()
+bool StarBASIC::isVBAEnabled()
 {
     if ( bDocBasic )
     {
         if( SbiRuntime::isVBAEnabled() )
-            return sal_True;
+            return true;
         return bVBAEnabled;
     }
-    return sal_False;
+    return false;
 }
 
 

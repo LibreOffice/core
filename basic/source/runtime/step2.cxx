@@ -95,8 +95,8 @@ SbxVariable* SbiRuntime::FindElement
         }
         if( !pElem )
         {
-            sal_Bool bSave = rBasic.bNoRtl;
-            rBasic.bNoRtl = sal_True;
+            bool bSave = rBasic.bNoRtl;
+            rBasic.bNoRtl = true;
             pElem = pObj->Find( aName, SbxCLASS_DONTCARE );
 
             // #110004, #112015: Make private really private
@@ -317,8 +317,8 @@ SbxBase* SbiRuntime::FindElementExtern( const String& rName )
     // search in module
     if( !pElem )
     {
-        sal_Bool bSave = rBasic.bNoRtl;
-        rBasic.bNoRtl = sal_True;
+        bool bSave = rBasic.bNoRtl;
+        rBasic.bNoRtl = true;
         pElem = pMod->Find( rName, SbxCLASS_DONTCARE );
         rBasic.bNoRtl = bSave;
     }
