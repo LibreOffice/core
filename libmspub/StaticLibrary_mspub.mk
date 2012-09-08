@@ -19,6 +19,8 @@ $(eval $(call gb_StaticLibrary_use_externals,mspublib,\
 	zlib \
 ))
 
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,mspublib))
+
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,mspublib,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,mspublib,\
