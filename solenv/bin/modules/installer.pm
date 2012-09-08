@@ -972,16 +972,6 @@ sub main {
 
         installer::worker::collect_scpactions($scpactionsinproductlanguageresolvedarrayref);
 
-        #########################################################
-        # creating inf files for user system integration
-        #########################################################
-
-        if (( $installer::globals::iswindowsbuild ) && ( ! $installer::globals::patch ))    # Windows specific items: Folder, FolderItem, RegistryItem
-        {
-            installer::logger::print_message( "... creating inf files ...\n" );
-            installer::worker::create_inf_file($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $modulesinproductlanguageresolvedarrayref, $languagesarrayref, $languagestringref, $allvariableshashref);
-        }
-
         ###########################################################
         # Simple package projects can now start to create the
         # installation structure by creating Directories, Files
