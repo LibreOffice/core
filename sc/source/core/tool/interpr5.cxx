@@ -1215,7 +1215,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
 }
 
 
-// fuer DATE, TIME, DATETIME
+// for DATE, TIME, DATETIME
 void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
 {
     if ( nFmt1 != NUMBERFORMAT_UNDEFINED || nFmt2 != NUMBERFORMAT_UNDEFINED )
@@ -1223,11 +1223,11 @@ void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
         if ( nFmt1 == nFmt2 )
         {
             if ( nFmt1 == NUMBERFORMAT_TIME || nFmt1 == NUMBERFORMAT_DATETIME )
-                nFuncFmt = NUMBERFORMAT_TIME;   // Zeiten ergeben Zeit
-            // else: nichts besonderes, Zahl (Datum - Datum := Tage)
+                nFuncFmt = NUMBERFORMAT_TIME;   // times result in time
+            // else: nothing special, number (date - date := days)
         }
         else if ( nFmt1 == NUMBERFORMAT_UNDEFINED )
-            nFuncFmt = nFmt2;   // z.B. Datum + Tage := Datum
+            nFuncFmt = nFmt2;   // e.g. date + days := date
         else if ( nFmt2 == NUMBERFORMAT_UNDEFINED )
             nFuncFmt = nFmt1;
         else
@@ -1236,7 +1236,7 @@ void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
                 nFmt1 == NUMBERFORMAT_DATETIME || nFmt2 == NUMBERFORMAT_DATETIME )
             {
                 if ( nFmt1 == NUMBERFORMAT_TIME || nFmt2 == NUMBERFORMAT_TIME )
-                    nFuncFmt = NUMBERFORMAT_DATETIME;   // Datum + Zeit
+                    nFuncFmt = NUMBERFORMAT_DATETIME;   // date + time
             }
         }
     }
@@ -1573,7 +1573,7 @@ void ScInterpreter::ScDiv()
     else
     {
         fVal2 = GetDouble();
-        // hier kein Currency uebernehmen, 123kg/456DM sind nicht DM
+        // do not take over currency, 123kg/456USD is not USD
         nFmtCurrencyType2 = nCurFmtType;
     }
     if ( GetStackType() == svMatrix )
@@ -1643,7 +1643,7 @@ void ScInterpreter::ScDiv()
         PushDouble( div( fVal1, fVal2) );
     }
     if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY && nFmtCurrencyType2 != NUMBERFORMAT_CURRENCY )
-    {   // auch DM/DM ist nicht DM bzw. DEM/EUR nicht DEM
+    {   // even USD/USD is not USD
         nFuncFmtType = nFmtCurrencyType;
         nFuncFmtIndex = nFmtCurrencyIndex;
     }

@@ -50,7 +50,7 @@ sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
                             SCTAB           nTab,
                             ScAddress::Details const & rDetails ) const
 {
-    // Eingabe in rAreaStr: "$Tabelle1.$A1:$D17"
+    // Input in rAreaStr: "$Tabelle1.$A1:$D17"
 
     // BROKEN BROKEN BROKEN
     // but it is only used in the consolidate dialog.  Ignore for now.
@@ -66,7 +66,7 @@ sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
         if ( nPointPos != STRING_NOTFOUND )
         {
             aStrArea += ':';
-            aStrArea += rAreaStr.Copy( nPointPos+1 ); // '.' nicht mitkopieren
+            aStrArea += rAreaStr.Copy( nPointPos+1 ); // do not include '.' in copy
         }
 
     nSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos, rDetails );
@@ -91,7 +91,7 @@ void ScRangeUtil::CutPosString( const String&   theAreaStr,
     sal_uInt16  nColonPos = theAreaStr.Search(':');
 
     if ( nColonPos != STRING_NOTFOUND )
-        aPosStr = theAreaStr.Copy( 0, nColonPos ); // ':' nicht mitkopieren
+        aPosStr = theAreaStr.Copy( 0, nColonPos ); // do not include ':' in copy
     else
         aPosStr = theAreaStr;
 
@@ -115,15 +115,13 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
     // but it is only used in the consolidate dialog.  Ignore for now.
 
     /*
-     * Erwartet wird ein String der Form
+     * Expects strings like:
      *      "$Tabelle1.$A$1:$Tabelle3.$D$17"
-     * Wenn bAcceptCellRef == sal_True ist, wird auch ein String der Form
+     * If bAcceptCellRef == sal_True then also accept strings like:
      *      "$Tabelle1.$A$1"
-     * akzeptiert.
      *
-     * als Ergebnis wird ein ScArea-Array angelegt,
-     * welches ueber ppAreas bekannt gegeben wird und auch
-     * wieder geloescht werden muss!
+     * as result a ScArea-Array is created,
+     * which is published via ppAreas and also has to be deleted this route.
      */
 
     sal_Bool    bStrOk = false;
@@ -161,7 +159,7 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
 
                 bStrOk = sal_True;
 
-                if ( pppAreas && pAreaCount ) // Array zurueckgegeben?
+                if ( pppAreas && pAreaCount ) // Array returned ?
                 {
                     SCTAB       nStartTab   = aStartPos.Tab();
                     SCTAB       nEndTab     = aEndPos.Tab();
@@ -1109,7 +1107,7 @@ bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
                 if (bValid)
                 {
                     rName = rData.GetName();
-                    return true;                            // gefunden
+                    return true;                            // found
                 }
             }
             else
@@ -1132,10 +1130,10 @@ bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
                 ++maDBPos;
                 rData.GetArea(rRange);
                 rName = rData.GetName();
-                return true;                            // gefunden
+                return true;                                // found
             }
             else
-                return false;                               // gibt nichts mehr
+                return false;                               // nothing left
         }
     }
 }

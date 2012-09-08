@@ -37,7 +37,7 @@
 
 namespace {
 
-//  incl. Doppelpunkt -> Doppelte Referenzen werden einzeln behandelt
+//  include colon -> duplicate referenced are handled individual
 const sal_Unicode pDelimiters[] = {
     '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':', 0
 };
@@ -224,7 +224,7 @@ sal_uInt16 lcl_NextFlags( sal_uInt16 nOld )
     nNew = ( nNew - 1 ) & 7;                // weiterzaehlen
 
     if (!(nOld & SCA_TAB_3D))
-        nNew &= ~SCA_TAB_ABSOLUTE;          // nicht 3D -> nie absolut!
+        nNew &= ~SCA_TAB_ABSOLUTE;          // not 3D -> never absolute!
 
     return ( nOld & 0xfff8 ) | nNew;
 }
@@ -234,9 +234,9 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
     xub_StrLen nLen = aFormula.Len();
     if (!nLen)
         return;
-    const sal_Unicode* pSource = aFormula.GetBuffer();      // fuer schnellen Zugriff
+    const sal_Unicode* pSource = aFormula.GetBuffer();      // for quick access
 
-    //  Selektion erweitern, und statt Selektion Start- und Endindex
+    // expand selection, and instead of selection start- and end-index
 
     if ( nEndPos < nStartPos )
         ::std::swap(nEndPos, nStartPos);
@@ -269,13 +269,13 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
 
             xub_StrLen nAbsStart = nStartPos+aResult.Len()+aSep.Len();
 
-            if (!nFound)                            // erste Referenz ?
+            if (!nFound)                            // first reference ?
                 nSelStart = nAbsStart;
-            nSelEnd = nAbsStart+aExpr.Len();        // Selektion, keine Indizes
+            nSelEnd = nAbsStart+aExpr.Len();        // selection, no indizes
             ++nFound;
         }
 
-        //  zusammenbauen
+        // assemble
 
         aResult += aSep;
         aResult += aExpr;
