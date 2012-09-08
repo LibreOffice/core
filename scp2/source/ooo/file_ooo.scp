@@ -741,56 +741,9 @@ End
 #ifdef WNT
 
 STD_SHELLNEW_FILE(gid_File_Shellnew_Ods_Soffice, soffice.ods)
-
-File gid_File_Shellnew2_Ods_Soffice
-    TXT_FILE_BODY;
-    Styles = (PACKED,WORKSTATION, OVERWRITE);
-    Dir = PREDEFINED_OSWINSHELLNEWDIR;
-    NetDir = gid_Dir_ShellnewToo;
-    Name = "soffice.ods";
-End
-
-#endif
-
-#ifdef WNT
-
 STD_SHELLNEW_FILE(gid_File_Shellnew_Odg_Soffice, soffice.odg)
-
-File gid_File_Shellnew2_Odg_Soffice
-    TXT_FILE_BODY;
-    Styles = (PACKED,WORKSTATION, OVERWRITE);
-    Dir = PREDEFINED_OSWINSHELLNEWDIR;
-    NetDir = gid_Dir_ShellnewToo;
-    Name = "soffice.odg";
-End
-
-#endif
-
-#ifdef WNT
-
 STD_SHELLNEW_FILE(gid_File_Shellnew_Odp_Soffice, soffice.odp)
-
-File gid_File_Shellnew2_Odp_Soffice
-    TXT_FILE_BODY;
-    Styles = (PACKED,WORKSTATION, OVERWRITE);
-    Dir = PREDEFINED_OSWINSHELLNEWDIR;
-    NetDir = gid_Dir_ShellnewToo;
-    Name = "soffice.odp";
-End
-
-#endif
-
-#ifdef WNT
-
 STD_SHELLNEW_FILE(gid_File_Shellnew_Odt_Soffice, soffice.odt)
-
-File gid_File_Shellnew2_Odt_Soffice
-    TXT_FILE_BODY;
-    Styles = (PACKED,WORKSTATION, OVERWRITE);
-    Dir = PREDEFINED_OSWINSHELLNEWDIR;
-    NetDir = gid_Dir_ShellnewToo;
-    Name = "soffice.odt";
-End
 
 #endif
 

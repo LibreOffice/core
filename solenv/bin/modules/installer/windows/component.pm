@@ -121,16 +121,6 @@ sub get_file_component_directory
 
     if ( $onefile->{'Dir'} ) { $destdir = $onefile->{'Dir'}; }
 
-    if ( $destdir =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )   # special handling for shellnew files
-    {
-        return $installer::globals::templatefolder;
-    }
-
-    if ( $destdir =~ /\bPREDEFINED_OSWINSHELLNEWDIR\b/ )
-    {
-        return "WindowsShellNewFolder";
-    }
-
     my $destination = $onefile->{'destination'};
 
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
@@ -237,9 +227,9 @@ sub get_file_component_attributes
         $attributes = 0;    # Assembly files cannot run from source
     }
 
-    if (( $onefile->{'Dir'} =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ ) || ( $onefile->{'needs_user_registry_key'} ))
+    if ( $onefile->{'needs_user_registry_key'} )
     {
-        $attributes = 4;    # Files in shellnew dir and in non advertised startmenu entries must have user registry key as KeyPath
+        $attributes = 4;    # Files in non advertised startmenu entries must have user registry key as KeyPath
     }
 
     # Setting msidbComponentAttributes64bit, if this is a 64 bit installation set.
@@ -375,8 +365,6 @@ sub get_component_keypath
         }
     }
 
-    # Special handling for components in PREDEFINED_OSSHELLNEWDIR. These components
-    # need as KeyPath a RegistryItem in HKCU
     if ( $oneitem->{'userregkeypath'} ) { $keypath = $oneitem->{'userregkeypath'}; }
 
     # saving it in the file and registry collection

@@ -826,7 +826,7 @@ RegistryItem gid_Regitem_Odt_Openoffice_Writerdocument_1_Shellnew
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".odt\LibreOffice.WriterDocument.1\ShellNew";
     Name = "FileName";
-    Value = "soffice.odt";
+    Value = "<progpath>\share\template\shellnew\soffice.odt";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_Curver

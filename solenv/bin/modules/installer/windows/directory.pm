@@ -451,9 +451,6 @@ sub add_root_directories
     $oneline = "WindowsFolder\tTARGETDIR\tWindows\n";
     push(@{$directorytableref}, $oneline);
 
-    $oneline = "WindowsShellNewFolder\tWindowsFolder\tShellNew\n";
-    push(@{$directorytableref}, $oneline);
-
     $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
     push(@{$directorytableref}, $oneline);
 

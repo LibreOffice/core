@@ -326,7 +326,6 @@ sub add_userregs_to_registry_table
         $registry{'Root'} = "1";  # always HKCU
         $registry{'Key'} = "Software\\$allvariables->{'MANUFACTURER'}\\$allvariables->{'PRODUCTNAME'} $allvariables->{'PRODUCTVERSION'}\\";
         if ( $onefile->{'needs_user_registry_key'} ) { $registry{'Key'} = $registry{'Key'} . "StartMenu"; }
-        else { $registry{'Key'} = $registry{'Key'} . "ShellNew"; }
         $registry{'Name'} = $onefile->{'Name'};
         $registry{'Value'} = "1";
         $registry{'Component_'} = $onefile->{'componentname'};
@@ -412,9 +411,7 @@ sub create_registry_table
 
         # If there are added user registry keys for files collected in
         # @installer::globals::userregistrycollector (file.pm), then
-        # this registry keys have to be added now. This is necessary for
-        # files in PREDEFINED_OSSHELLNEWDIR, because their component
-        # needs as KeyPath a RegistryItem in HKCU.
+        # this registry keys have to be added now.
 
         if ( $installer::globals::addeduserregitrykeys ) { add_userregs_to_registry_table(\@registrytable, $allvariableshashref); }
 

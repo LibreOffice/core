@@ -185,7 +185,6 @@ BEGIN
     $ooodownloadfilename = "";
     $downloadfilename = "";
     $downloadfileextension = "";
-    $shellnewfilesadded = 0;
     %multilingual_only_modules = ();
     %application_modules = ();
 

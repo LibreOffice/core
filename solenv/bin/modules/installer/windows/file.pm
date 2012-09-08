@@ -1016,12 +1016,10 @@ sub create_files_table
         # This is used for better performance in "save_packorder"
         $installer::globals::uniquefilenamesequence{$onefile->{'uniquename'}} = $onefile->{'sequencenumber'};
 
-        # Special handling for files in PREDEFINED_OSSHELLNEWDIR. These components
-        # need as KeyPath a RegistryItem in HKCU
         my $destdir = "";
         if ( $onefile->{'Dir'} ) { $destdir = $onefile->{'Dir'}; }
 
-        if (( $destdir =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ ) || ( $onefile->{'needs_user_registry_key'} ))
+        if ( $onefile->{'needs_user_registry_key'} )
         {
             my $keypath = generate_registry_keypath($onefile);
             $onefile->{'userregkeypath'} = $keypath;
