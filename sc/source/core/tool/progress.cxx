@@ -100,9 +100,9 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
     }
     else if ( SFX_APP()->IsDowning() )
     {
-        //  kommt vor z.B. beim Speichern des Clipboard-Inhalts als OLE beim Beenden
-        //  Dann wuerde ein SfxProgress wild im Speicher rummuellen
-        //! Soll das so sein ???
+        //  This happens. E.g. when saving the clipboard-content as OLE when closing the app.
+        //  In this case a SfxProgress would produce dirt in memory.
+        //! Should that be this way ???
 
         pProgress = NULL;
     }

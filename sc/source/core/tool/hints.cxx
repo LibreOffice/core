@@ -30,7 +30,7 @@ TYPEINIT1(ScDBRangeRefreshedHint, SfxHint);
 TYPEINIT1(ScDataPilotModifiedHint, SfxHint);
 
 // -----------------------------------------------------------------------
-//      ScPaintHint - Angabe, was neu gezeichnet werden muss
+// ScPaintHint - info what has to be repainted
 // -----------------------------------------------------------------------
 
 ScPaintHint::ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint ) :
@@ -45,7 +45,7 @@ ScPaintHint::~ScPaintHint()
 }
 
 // -----------------------------------------------------------------------
-//      ScUpdateRefHint - Referenz-Updaterei
+// ScUpdateRefHint - update references
 // -----------------------------------------------------------------------
 
 ScUpdateRefHint::ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
@@ -63,7 +63,7 @@ ScUpdateRefHint::~ScUpdateRefHint()
 }
 
 // -----------------------------------------------------------------------
-//      ScPointerChangedHint - Pointer ist ungueltig geworden
+// ScPointerChangedHint - pointer has become invalid
 // -----------------------------------------------------------------------
 
 

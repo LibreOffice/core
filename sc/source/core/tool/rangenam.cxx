@@ -104,7 +104,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
     {
         pCode->Reset();
         FormulaToken* p = pCode->GetNextReference();
-        if( p )// genau eine Referenz als erstes
+        if( p )   // exact one reference at first
         {
             if( p->GetType() == svSingleRef )
                 eType = eType | RT_ABSPOS;
@@ -143,7 +143,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument) :
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
-    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),        // echte Kopie erzeugen (nicht copy-ctor)
+    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),   // make real copy (not copy-ctor)
     aPos        (rScRangeData.aPos),
     eType       (rScRangeData.eType),
     pDoc        (pDocument ? pDocument : rScRangeData.pDoc),
@@ -217,8 +217,8 @@ void ScRangeData::CompileUnresolvedXML()
 
 void ScRangeData::GuessPosition()
 {
-    //  setzt eine Position, mit der alle relative Referenzen bei CalcAbsIfRel
-    //  ohne Fehler verabsolutiert werden koennen
+    // set a position that allows "absoluting" of all relative references
+    // in CalcAbsIfRel without errors
 
     OSL_ENSURE(aPos == ScAddress(), "die Position geht jetzt verloren");
 
@@ -369,10 +369,10 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
         }
     }
 
-    bModified = bChanged;           // muss direkt hinterher ausgewertet werden
+    bModified = bChanged;           // has to be evaluated immediately afterwards
 }
 
-bool ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
+bool ScRangeData::operator== (const ScRangeData& rData) const       // for Undo
 {
     if ( nIndex != rData.nIndex ||
          aName  != rData.aName  ||
@@ -445,10 +445,10 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTabl
         aComp.SetGrammar(pDoc->GetGrammar());
         switch (nFlag)
         {
-            case 1:                                     // einfache InsertTab (doc.cxx)
+            case 1:                                     // simple InsertTab (doc.cxx)
                 pRangeData = aComp.UpdateInsertTab(nOldTable, true, nNewSheets );   // und CopyTab (doc2.cxx)
                 break;
-            case 2:                                     // einfaches delete (doc.cxx)
+            case 2:                                     // simple delete (doc.cxx)
                 pRangeData = aComp.UpdateDeleteTab(nOldTable, false, true, bChanged);
                 break;
             case 3:                                     // move (doc2.cxx)
