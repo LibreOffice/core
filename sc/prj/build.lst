@@ -1,2 +1,2 @@
-sc      sc      : basic filter TRANSLATIONS:translations vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox LIBXSLT:libxslt unoxml ure test xmloff desktop ucb package configmgr officecfg scripting chart2 eventattacher forms scaddins xmlsecurity tubes LIBORCUS:liborcus NULL
+sc      sc      : basic filter TRANSLATIONS:translations vbahelper oovbaapi svx uui stoc BOOST:boost formula mdds oox LIBXSLT:libxslt unoxml ure test xmloff desktop ucb package configmgr officecfg scripting chart2 eventattacher forms scaddins xmlsecurity tubes LIBORCUS:liborcus NULL
 sc sc\prj nmake - all sc_prj NULL
