@@ -1,5 +1,5 @@
---- misc/libcmis-0.2.3/src/libcmis/atom-object.cxx	2012-06-01 07:44:26.000000000 -0600
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-object.cxx	2012-06-04 07:52:24.131190200 -0600
+--- src/libcmis/atom-object.cxx	2012-06-01 07:44:26.000000000 -0600
++++ src/libcmis/atom-object.cxx	2012-06-04 07:52:24.131190200 -0600
 @@ -29,6 +29,9 @@
  #include <algorithm>
  #include <sstream>
@@ -10,8 +10,8 @@
  #include <boost/date_time/posix_time/posix_time.hpp>
  
  #include "atom-object.hxx"
---- misc/libcmis-0.2.3/src/libcmis/object.hxx	2012-06-01 07:38:36.000000000 -0600
-+++ misc/build/libcmis-0.2.3/src/libcmis/object.hxx	2012-06-04 07:52:21.900386200 -0600
+--- src/libcmis/object.hxx	2012-06-01 07:38:36.000000000 -0600
++++ src/libcmis/object.hxx	2012-06-04 07:52:21.900386200 -0600
 @@ -32,6 +32,9 @@
  #include <map>
  #include <string>
@@ -22,8 +22,8 @@
  #include <boost/date_time.hpp>
  #include <boost/shared_ptr.hpp>
  
---- misc/libcmis-0.2.3/src/libcmis/property-type.hxx	2012-02-17 08:00:50.000000000 -0700
-+++ misc/build/libcmis-0.2.3/src/libcmis/property-type.hxx	2012-06-04 07:52:17.157977900 -0600
+--- src/libcmis/property-type.hxx	2012-02-17 08:00:50.000000000 -0700
++++ src/libcmis/property-type.hxx	2012-06-04 07:52:17.157977900 -0600
 @@ -28,6 +28,9 @@
  #ifndef _PROPERTY_TYPE_HXX_
  #define _PROPERTY_TYPE_HXX_
@@ -34,8 +34,8 @@
  #include <boost/date_time.hpp>
  #include <libxml/tree.h>
  
---- misc/libcmis-0.2.3/src/libcmis/property.hxx	2012-02-17 06:38:33.000000000 -0700
-+++ misc/build/libcmis-0.2.3/src/libcmis/property.hxx	2012-06-04 07:52:19.388781800 -0600
+--- src/libcmis/property.hxx	2012-02-17 06:38:33.000000000 -0700
++++ src/libcmis/property.hxx	2012-06-04 07:52:19.388781800 -0600
 @@ -31,6 +31,9 @@
  #include <libxml/tree.h>
  #include <libxml/xmlwriter.h>
@@ -46,8 +46,8 @@
  #include <boost/date_time.hpp>
  #include <boost/shared_ptr.hpp>
  
---- misc/libcmis-0.2.3/src/libcmis/xml-utils.hxx	2012-05-30 06:17:12.000000000 -0600
-+++ misc/build/libcmis-0.2.3/src/libcmis/xml-utils.hxx	2012-06-04 07:52:10.621566400 -0600
+--- src/libcmis/xml-utils.hxx	2012-05-30 06:17:12.000000000 -0600
++++ src/libcmis/xml-utils.hxx	2012-06-04 07:52:10.621566400 -0600
 @@ -30,6 +30,9 @@
  
  #include <string>

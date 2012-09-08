@@ -1,6 +1,5 @@
-diff -urN libcmis-0.2.3/src/cmis-client.cxx misc/build/libcmis-0.2.3/src/cmis-client.cxx
---- libcmis-0.2.3/src/cmis-client.cxx	2012-06-01 15:50:49.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/cmis-client.cxx	2012-07-05 11:21:22.316674741 +0200
+--- src/cmis-client.cxx	2012-06-01 15:50:49.000000000 +0200
++++ src/cmis-client.cxx	2012-07-05 11:21:22.316674741 +0200
 @@ -163,16 +163,13 @@
              if ( "list-repos" == command )
              {
@@ -21,9 +20,8 @@ diff -urN libcmis-0.2.3/src/cmis-client.cxx misc/build/libcmis-0.2.3/src/cmis-cl
              }
              else if ( "show-root" == command )
              {
-diff -urN libcmis-0.2.3/src/libcmis/allowable-actions.cxx misc/build/libcmis-0.2.3/src/libcmis/allowable-actions.cxx
---- libcmis-0.2.3/src/libcmis/allowable-actions.cxx	2012-02-01 12:02:56.000000000 +0100
-+++ misc/build/libcmis-0.2.3/src/libcmis/allowable-actions.cxx	2012-07-05 11:21:22.314674740 +0200
+--- src/libcmis/allowable-actions.cxx	2012-02-01 12:02:56.000000000 +0100
++++ src/libcmis/allowable-actions.cxx	2012-07-05 11:21:22.314674740 +0200
 @@ -28,14 +28,122 @@
  
  #include "allowable-actions.hxx"
@@ -148,9 +146,8 @@ diff -urN libcmis-0.2.3/src/libcmis/allowable-actions.cxx misc/build/libcmis-0.2
      }
  
      AllowableActions::AllowableActions( const AllowableActions& copy ) :
-diff -urN libcmis-0.2.3/src/libcmis/allowable-actions.hxx misc/build/libcmis-0.2.3/src/libcmis/allowable-actions.hxx
---- libcmis-0.2.3/src/libcmis/allowable-actions.hxx	2012-02-01 12:02:56.000000000 +0100
-+++ misc/build/libcmis-0.2.3/src/libcmis/allowable-actions.hxx	2012-07-05 11:21:22.314674740 +0200
+--- src/libcmis/allowable-actions.hxx	2012-02-01 12:02:56.000000000 +0100
++++ src/libcmis/allowable-actions.hxx	2012-07-05 11:21:22.314674740 +0200
 @@ -29,6 +29,11 @@
  #define _ALLOWABLE_ACTIONS_HXX_
  
@@ -207,9 +204,8 @@ diff -urN libcmis-0.2.3/src/libcmis/allowable-actions.hxx misc/build/libcmis-0.2
              AllowableActions( const AllowableActions& copy );
              virtual ~AllowableActions( );
  
-diff -urN libcmis-0.2.3/src/libcmis/atom-allowable-actions.cxx misc/build/libcmis-0.2.3/src/libcmis/atom-allowable-actions.cxx
---- libcmis-0.2.3/src/libcmis/atom-allowable-actions.cxx	2012-05-29 10:50:50.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-allowable-actions.cxx	1970-01-01 01:00:00.000000000 +0100
+--- src/libcmis/atom-allowable-actions.cxx	2012-05-29 10:50:50.000000000 +0200
++++ src/libcmis/atom-allowable-actions.cxx	1970-01-01 01:00:00.000000000 +0100
 @@ -1,237 +0,0 @@
 -/* libcmis
 - * Version: MPL 1.1 / GPLv2+ / LGPLv2+
@@ -448,9 +444,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-allowable-actions.cxx misc/build/libcmi
 -        xmlFreeDoc( doc );
 -    }
 -}
-diff -urN libcmis-0.2.3/src/libcmis/atom-allowable-actions.hxx misc/build/libcmis-0.2.3/src/libcmis/atom-allowable-actions.hxx
---- libcmis-0.2.3/src/libcmis/atom-allowable-actions.hxx	2012-01-19 17:26:32.000000000 +0100
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-allowable-actions.hxx	1970-01-01 01:00:00.000000000 +0100
+--- src/libcmis/atom-allowable-actions.hxx	2012-01-19 17:26:32.000000000 +0100
++++ src/libcmis/atom-allowable-actions.hxx	1970-01-01 01:00:00.000000000 +0100
 @@ -1,56 +0,0 @@
 -/* libcmis
 - * Version: MPL 1.1 / GPLv2+ / LGPLv2+
@@ -508,9 +503,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-allowable-actions.hxx misc/build/libcmi
 -};
 -
 -#endif
-diff -urN libcmis-0.2.3/src/libcmis/atom-document.hxx misc/build/libcmis-0.2.3/src/libcmis/atom-document.hxx
---- libcmis-0.2.3/src/libcmis/atom-document.hxx	2012-06-01 15:47:01.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-document.hxx	2012-07-05 11:21:22.314674740 +0200
+--- src/libcmis/atom-document.hxx	2012-06-01 15:47:01.000000000 +0200
++++ src/libcmis/atom-document.hxx	2012-07-05 11:21:22.314674740 +0200
 @@ -35,6 +35,7 @@
  
  #include "document.hxx"
@@ -519,9 +513,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-document.hxx misc/build/libcmis-0.2.3/s
  #include "atom-object.hxx"
  
  class AtomDocument : public libcmis::Document, public AtomObject
-diff -urN libcmis-0.2.3/src/libcmis/atom-object.cxx misc/build/libcmis-0.2.3/src/libcmis/atom-object.cxx
---- libcmis-0.2.3/src/libcmis/atom-object.cxx	2012-06-08 13:43:05.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-object.cxx	2012-07-05 11:21:22.315674740 +0200
+--- src/libcmis/atom-object.cxx	2012-06-08 13:43:05.000000000 +0200
++++ src/libcmis/atom-object.cxx	2012-07-05 11:21:22.315674740 +0200
 @@ -435,12 +435,14 @@
          // Get the infos URL as we may not have it
          m_infosUrl = getLink( "self", "application/atom+xml;type=entry" )->getHref( );
@@ -541,9 +534,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-object.cxx misc/build/libcmis-0.2.3/src
  
          // First get the type id as it will give us the property definitions
          string typeIdReq( "//cmis:propertyId[@propertyDefinitionId='cmis:objectTypeId']/cmis:value/text()" );
-diff -urN libcmis-0.2.3/src/libcmis/atom-object.hxx misc/build/libcmis-0.2.3/src/libcmis/atom-object.hxx
---- libcmis-0.2.3/src/libcmis/atom-object.hxx	2012-06-01 15:43:27.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-object.hxx	2012-07-05 11:21:22.315674740 +0200
+--- src/libcmis/atom-object.hxx	2012-06-01 15:43:27.000000000 +0200
++++ src/libcmis/atom-object.hxx	2012-07-05 11:21:22.315674740 +0200
 @@ -30,7 +30,7 @@
  
  #include <libxml/tree.h>
@@ -562,9 +554,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-object.hxx misc/build/libcmis-0.2.3/src
  
          std::vector< AtomLink > m_links;
  
-diff -urN libcmis-0.2.3/src/libcmis/atom-object-type.cxx misc/build/libcmis-0.2.3/src/libcmis/atom-object-type.cxx
---- libcmis-0.2.3/src/libcmis/atom-object-type.cxx	2012-05-29 10:50:50.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-object-type.cxx	2012-07-05 11:21:22.317674741 +0200
+--- src/libcmis/atom-object-type.cxx	2012-05-29 10:50:50.000000000 +0200
++++ src/libcmis/atom-object-type.cxx	2012-07-05 11:21:22.317674741 +0200
 @@ -255,7 +255,7 @@
      bool createdDoc = ( NULL == doc );
      if ( createdDoc )
@@ -574,9 +565,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-object-type.cxx misc/build/libcmis-0.2.
          map< string, string > vars;
          vars[URI_TEMPLATE_VAR_ID] = getId( );
          string url = m_session->createUrl( pattern, vars );
-diff -urN libcmis-0.2.3/src/libcmis/atom-session.cxx misc/build/libcmis-0.2.3/src/libcmis/atom-session.cxx
---- libcmis-0.2.3/src/libcmis/atom-session.cxx	2012-06-08 13:43:05.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-session.cxx	2012-07-05 11:21:22.317674741 +0200
+--- src/libcmis/atom-session.cxx	2012-06-08 13:43:05.000000000 +0200
++++ src/libcmis/atom-session.cxx	2012-07-05 11:21:22.317674741 +0200
 @@ -126,8 +126,8 @@
      m_username( username ),
      m_password( password ),
@@ -697,9 +687,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-session.cxx misc/build/libcmis-0.2.3/sr
      string url = createUrl( pattern, vars );
  
      try
-diff -urN libcmis-0.2.3/src/libcmis/atom-session.hxx misc/build/libcmis-0.2.3/src/libcmis/atom-session.hxx
---- libcmis-0.2.3/src/libcmis/atom-session.hxx	2012-06-08 13:43:05.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-session.hxx	2012-07-05 11:21:22.360674743 +0200
+--- src/libcmis/atom-session.hxx	2012-06-08 13:43:05.000000000 +0200
++++ src/libcmis/atom-session.hxx	2012-07-05 11:21:22.360674743 +0200
 @@ -95,9 +95,9 @@
          std::string m_username;
          std::string m_password;
@@ -742,9 +731,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-session.hxx misc/build/libcmis-0.2.3/sr
          virtual libcmis::FolderPtr getRootFolder() throw ( libcmis::Exception );
  
          virtual libcmis::ObjectPtr getObject( std::string id ) throw ( libcmis::Exception );
-diff -urN libcmis-0.2.3/src/libcmis/atom-workspace.cxx misc/build/libcmis-0.2.3/src/libcmis/atom-workspace.cxx
---- libcmis-0.2.3/src/libcmis/atom-workspace.cxx	2011-12-06 14:12:19.000000000 +0100
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-workspace.cxx	2012-07-05 11:21:22.360674743 +0200
+--- src/libcmis/atom-workspace.cxx	2011-12-06 14:12:19.000000000 +0100
++++ src/libcmis/atom-workspace.cxx	2012-07-05 11:21:22.360674743 +0200
 @@ -31,204 +31,207 @@
  
  using namespace std;
@@ -1112,9 +1100,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-workspace.cxx misc/build/libcmis-0.2.3/
 +            m_uriTemplates[ type ] = templateUri;
 +    }
  }
-diff -urN libcmis-0.2.3/src/libcmis/atom-workspace.hxx misc/build/libcmis-0.2.3/src/libcmis/atom-workspace.hxx
---- libcmis-0.2.3/src/libcmis/atom-workspace.hxx	2012-05-29 10:50:50.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-workspace.hxx	2012-07-05 11:21:22.361674743 +0200
+--- src/libcmis/atom-workspace.hxx	2012-05-29 10:50:50.000000000 +0200
++++ src/libcmis/atom-workspace.hxx	2012-07-05 11:21:22.361674743 +0200
 @@ -31,65 +31,71 @@
  #include <map>
  #include <string>
@@ -1235,9 +1222,8 @@ diff -urN libcmis-0.2.3/src/libcmis/atom-workspace.hxx misc/build/libcmis-0.2.3/
 +typedef boost::shared_ptr< AtomRepository > AtomRepositoryPtr;
  
  #endif
-diff -urN libcmis-0.2.3/src/libcmis/Makefile.am misc/build/libcmis-0.2.3/src/libcmis/Makefile.am
---- libcmis-0.2.3/src/libcmis/Makefile.am	2012-06-08 13:51:36.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/Makefile.am	2012-07-05 11:21:22.361674743 +0200
+--- src/libcmis/Makefile.am	2012-06-08 13:51:36.000000000 +0200
++++ src/libcmis/Makefile.am	2012-07-05 11:21:22.361674743 +0200
 @@ -9,6 +9,7 @@
  	object.hxx \
  	property-type.hxx \
@@ -1255,9 +1241,8 @@ diff -urN libcmis-0.2.3/src/libcmis/Makefile.am misc/build/libcmis-0.2.3/src/lib
  	allowable-actions.cxx \
  	property.cxx \
  	property-type.cxx \
-diff -urN libcmis-0.2.3/src/libcmis/Makefile.in misc/build/libcmis-0.2.3/src/libcmis/Makefile.in
---- libcmis-0.2.3/src/libcmis/Makefile.in	2012-06-08 14:17:01.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/Makefile.in	2012-07-05 11:21:22.361674743 +0200
+--- src/libcmis/Makefile.in	2012-06-08 14:17:01.000000000 +0200
++++ src/libcmis/Makefile.in	2012-07-05 11:21:22.361674743 +0200
 @@ -80,7 +80,7 @@
  am_libcmis_@LIBCMIS_API_VERSION@_la_OBJECTS = atom-object-type.lo \
  	session-factory.lo atom-document.lo atom-folder.lo \
@@ -1292,9 +1277,8 @@ diff -urN libcmis-0.2.3/src/libcmis/Makefile.in misc/build/libcmis-0.2.3/src/lib
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom-document.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom-folder.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom-object-type.Plo@am__quote@
-diff -urN libcmis-0.2.3/src/libcmis/makefile.mk misc/build/libcmis-0.2.3/src/libcmis/makefile.mk
---- libcmis-0.2.3/src/libcmis/makefile.mk	2012-05-09 12:14:57.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/makefile.mk	2012-07-05 11:21:22.315674740 +0200
+--- src/libcmis/makefile.mk	2012-05-09 12:14:57.000000000 +0200
++++ src/libcmis/makefile.mk	2012-07-05 11:21:22.315674740 +0200
 @@ -25,7 +25,6 @@
  
  SLOFILES= \
@@ -1303,9 +1287,8 @@ diff -urN libcmis-0.2.3/src/libcmis/makefile.mk misc/build/libcmis-0.2.3/src/lib
  	$(SLO)$/atom-document.obj \
  	$(SLO)$/atom-folder.obj \
  	$(SLO)$/atom-object-type.obj \
-diff -urN libcmis-0.2.3/src/libcmis/repository.hxx misc/build/libcmis-0.2.3/src/libcmis/repository.hxx
---- libcmis-0.2.3/src/libcmis/repository.hxx	1970-01-01 01:00:00.000000000 +0100
-+++ misc/build/libcmis-0.2.3/src/libcmis/repository.hxx	2012-07-05 11:21:22.361674743 +0200
+--- src/libcmis/repository.hxx	1970-01-01 01:00:00.000000000 +0100
++++ src/libcmis/repository.hxx	2012-07-05 11:21:22.361674743 +0200
 @@ -0,0 +1,54 @@
 +/* libcmis
 + * Version: MPL 1.1 / GPLv2+ / LGPLv2+
@@ -1361,9 +1344,8 @@ diff -urN libcmis-0.2.3/src/libcmis/repository.hxx misc/build/libcmis-0.2.3/src/
 +}
 +
 +#endif
-diff -urN libcmis-0.2.3/src/libcmis/session-factory.cxx misc/build/libcmis-0.2.3/src/libcmis/session-factory.cxx
---- libcmis-0.2.3/src/libcmis/session-factory.cxx	2012-05-10 15:36:32.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/session-factory.cxx	2012-07-05 11:21:22.362674743 +0200
+--- src/libcmis/session-factory.cxx	2012-05-10 15:36:32.000000000 +0200
++++ src/libcmis/session-factory.cxx	2012-07-05 11:21:22.362674743 +0200
 @@ -74,9 +74,9 @@
          return session;
      }
@@ -1376,9 +1358,8 @@ diff -urN libcmis-0.2.3/src/libcmis/session-factory.cxx misc/build/libcmis-0.2.3
  
          map< int, string >::iterator pIt = params.find( ATOMPUB_URL );
          if ( pIt != params.end( ) )
-diff -urN libcmis-0.2.3/src/libcmis/session-factory.hxx misc/build/libcmis-0.2.3/src/libcmis/session-factory.hxx
---- libcmis-0.2.3/src/libcmis/session-factory.hxx	2012-05-10 15:37:03.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/session-factory.hxx	2012-07-05 11:21:22.362674743 +0200
+--- src/libcmis/session-factory.hxx	2012-05-10 15:37:03.000000000 +0200
++++ src/libcmis/session-factory.hxx	2012-07-05 11:21:22.362674743 +0200
 @@ -33,6 +33,7 @@
  #include <string>
  
@@ -1396,9 +1377,8 @@ diff -urN libcmis-0.2.3/src/libcmis/session-factory.hxx misc/build/libcmis-0.2.3
      };
  }
  
-diff -urN libcmis-0.2.3/src/libcmis/session.hxx misc/build/libcmis-0.2.3/src/libcmis/session.hxx
---- libcmis-0.2.3/src/libcmis/session.hxx	2012-05-31 16:49:18.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/session.hxx	2012-07-05 11:21:22.362674743 +0200
+--- src/libcmis/session.hxx	2012-05-31 16:49:18.000000000 +0200
++++ src/libcmis/session.hxx	2012-07-05 11:21:22.362674743 +0200
 @@ -34,6 +34,7 @@
  #include "object-type.hxx"
  #include "object.hxx"
@@ -1418,9 +1398,8 @@ diff -urN libcmis-0.2.3/src/libcmis/session.hxx misc/build/libcmis-0.2.3/src/lib
              /** Get the Root folder of the repository
                */
              virtual FolderPtr getRootFolder() throw ( Exception )= 0;
-diff -urN libcmis-0.2.3/src/libcmis/test-atom.cxx misc/build/libcmis-0.2.3/src/libcmis/test-atom.cxx
---- libcmis-0.2.3/src/libcmis/test-atom.cxx	2012-05-30 16:17:44.000000000 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/test-atom.cxx	2012-07-05 11:21:22.362674743 +0200
+--- src/libcmis/test-atom.cxx	2012-05-30 16:17:44.000000000 +0200
++++ src/libcmis/test-atom.cxx	2012-07-05 11:21:22.362674743 +0200
 @@ -34,7 +34,6 @@
  #include "atom-document.hxx"
  #include "atom-folder.hxx"

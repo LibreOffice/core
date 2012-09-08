@@ -1,6 +1,5 @@
-diff -ru libcmis-0.2.3/src/libcmis/atom-document.cxx misc/build/libcmis-0.2.3/src/libcmis/atom-document.cxx
---- libcmis-0.2.3/src/libcmis/atom-document.cxx	2012-07-02 14:39:04.815222889 +0200
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-document.cxx	2012-07-02 14:41:09.088229625 +0200
+--- src/libcmis/atom-document.cxx	2012-07-02 14:39:04.815222889 +0200
++++ src/libcmis/atom-document.cxx	2012-07-02 14:41:09.088229625 +0200
 @@ -129,15 +129,22 @@
  vector< string > AtomDocument::getPaths( )
  {
