@@ -593,7 +593,7 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getToolTipText(  ) throw (RuntimeEx
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     if ( m_pToolBox )
     {
         if ( Help::IsExtHelpEnabled() )

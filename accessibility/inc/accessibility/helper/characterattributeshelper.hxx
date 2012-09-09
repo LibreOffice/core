@@ -34,7 +34,7 @@ class CharacterAttributesHelper
 {
 private:
 
-    typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any, ::std::less< ::rtl::OUString > > AttributeMap;
+    typedef ::std::map< OUString, ::com::sun::star::uno::Any, ::std::less< OUString > > AttributeMap;
 
     AttributeMap    m_aAttributeMap;
 
@@ -44,7 +44,7 @@ public:
     ~CharacterAttributesHelper();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetCharacterAttributes();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetCharacterAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetCharacterAttributes( const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes );
 };
 
 #endif  // ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX

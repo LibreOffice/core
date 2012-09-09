@@ -112,8 +112,8 @@ public:
         ::svt::IAccessibleTableProvider&                  rBrowseBox,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
         ::svt::AccessibleBrowseBoxObjType  eObjType,
-        const ::rtl::OUString&      rName,
-        const ::rtl::OUString&      rDescription );
+        const OUString&      rName,
+        const OUString&      rDescription );
 
 protected:
     virtual ~AccessibleBrowseBoxBase();
@@ -137,13 +137,13 @@ public:
     /** @return
             The description of this object.
     */
-    virtual ::rtl::OUString SAL_CALL getAccessibleDescription()
+    virtual OUString SAL_CALL getAccessibleDescription()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return
             The name of this object.
     */
-    virtual ::rtl::OUString SAL_CALL getAccessibleName()
+    virtual OUString SAL_CALL getAccessibleName()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return
@@ -266,11 +266,11 @@ public:
     // XServiceInfo -----------------------------------------------------------
 
     /** @return  Whether the specified service is supported by this class. */
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return  A list of all supported services. */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -283,9 +283,9 @@ public:
     inline ::svt::AccessibleBrowseBoxObjType getType() const;
 
     /** Changes the name of the object and notifies listeners. */
-    void setAccessibleName( const ::rtl::OUString& rName );
+    void setAccessibleName( const OUString& rName );
     /** Changes the description of the object and notifies listeners. */
-    void setAccessibleDescription( const ::rtl::OUString& rDescription );
+    void setAccessibleDescription( const OUString& rDescription );
 
     /** Commits an event to all listeners. */
     void commitEvent(
@@ -336,10 +336,10 @@ protected:
 
     /** Changes the name of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
-    inline void implSetName( const ::rtl::OUString& rName );
+    inline void implSetName( const OUString& rName );
     /** Changes the description of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
-    inline void implSetDescription( const ::rtl::OUString& rDescription );
+    inline void implSetDescription( const OUString& rDescription );
 
     /** Locks all mutex's and calculates the bounding box relative to the
         parent window.
@@ -377,9 +377,9 @@ protected:
 
 private:
     /** Localized name. */
-    ::rtl::OUString maName;
+    OUString maName;
     /** Localized description text. */
-    ::rtl::OUString maDescription;
+    OUString maDescription;
 
     /** The type of this object (for names, descriptions, state sets, ...). */
     ::svt::AccessibleBrowseBoxObjType meObjType;
@@ -430,8 +430,8 @@ protected:
         ::svt::IAccessibleTableProvider&                  rBrowseBox,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
         ::svt::AccessibleBrowseBoxObjType  eObjType,
-        const ::rtl::OUString&      rName,
-        const ::rtl::OUString&      rDescription );
+        const OUString&      rName,
+        const OUString&      rDescription );
 
 public:
     // XInterface
@@ -492,13 +492,13 @@ inline ::osl::Mutex* AccessibleBrowseBoxBase::getOslGlobalMutex()
 }
 
 inline void AccessibleBrowseBoxBase::implSetName(
-        const ::rtl::OUString& rName )
+        const OUString& rName )
 {
     maName = rName;
 }
 
 inline void AccessibleBrowseBoxBase::implSetDescription(
-        const ::rtl::OUString& rDescription )
+        const OUString& rDescription )
 {
     maDescription = rDescription;
 }

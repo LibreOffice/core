@@ -62,7 +62,7 @@ VCLXAccessibleTextComponent::~VCLXAccessibleTextComponent()
 
 // -----------------------------------------------------------------------------
 
-void VCLXAccessibleTextComponent::SetText( const ::rtl::OUString& sText )
+void VCLXAccessibleTextComponent::SetText( const OUString& sText )
 {
     Any aOldValue, aNewValue;
     if ( implInitTextChangedEvent( m_sText, sText, aOldValue, aNewValue ) )
@@ -93,9 +93,9 @@ void VCLXAccessibleTextComponent::ProcessWindowEvent( const VclWindowEvent& rVcl
 // OCommonAccessibleText
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTextComponent::implGetText()
+OUString VCLXAccessibleTextComponent::implGetText()
 {
-    ::rtl::OUString aText;
+    OUString aText;
     if ( GetWindow() )
         aText = OutputDevice::GetNonMnemonicString( GetWindow()->GetText() );
 
@@ -125,7 +125,7 @@ void VCLXAccessibleTextComponent::disposing()
 {
     VCLXAccessibleComponent::disposing();
 
-    m_sText = ::rtl::OUString();
+    m_sText = OUString();
 }
 
 // -----------------------------------------------------------------------------
@@ -171,12 +171,12 @@ sal_Unicode VCLXAccessibleTextComponent::getCharacter( sal_Int32 nIndex ) throw 
 
 // -----------------------------------------------------------------------------
 
-Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( sal_Int32 nIndex, const Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
+Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     Sequence< PropertyValue > aValues;
-    ::rtl::OUString sText( implGetText() );
+    OUString sText( implGetText() );
 
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -235,7 +235,7 @@ sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTextComponent::getSelectedText() throw (RuntimeException)
+OUString VCLXAccessibleTextComponent::getSelectedText() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -274,7 +274,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTextComponent::getText() throw (RuntimeException)
+OUString VCLXAccessibleTextComponent::getText() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -283,7 +283,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -330,7 +330,7 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
         Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
         if ( xClipboard.is() )
         {
-            ::rtl::OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
 
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();

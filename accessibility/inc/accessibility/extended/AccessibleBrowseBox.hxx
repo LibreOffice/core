@@ -104,7 +104,7 @@ protected:
     /** @return
             The name of this class.
     */
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw ( ::com::sun::star::uno::RuntimeException );
 
 public:

@@ -84,13 +84,13 @@ public:
     // XAccessibleTable -------------------------------------------------------
 
     /** @return  The description text of the specified row. */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getAccessibleRowDescription( sal_Int32 nRow )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
     /** @return  The description text of the specified column. */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getAccessibleColumnDescription( sal_Int32 nColumn )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
@@ -143,7 +143,7 @@ public:
     // XServiceInfo -----------------------------------------------------------
 
     /** @return  The name of this class. */
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return  An unique implementation ID. */
