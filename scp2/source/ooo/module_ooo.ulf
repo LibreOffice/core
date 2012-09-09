@@ -47,7 +47,7 @@ en-US = "Common components and additional programs shared by all %PRODUCTNAME pr
 en-US = "Dictionaries"
 
 [STR_DESC_MODULE_DICTIONARIES]
-en-US = "Spelling dictionaries, hyphenation rules, and thesauri."
+en-US = "Spelling dictionaries, hyphenation rules, thesauri and grammar checkers."
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_AF]
 en-US = "Afrikaans"
