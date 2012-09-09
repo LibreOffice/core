@@ -159,6 +159,7 @@ namespace dbaui
         m_aDatabaseName.SetModifyHdl( _rControlModificationLink );
         m_aHostName.SetModifyHdl( _rControlModificationLink );
         m_aPort.SetModifyHdl( _rControlModificationLink );
+        m_aSocket.SetModifyHdl( _rControlModificationLink );
         m_aNamedPipe.SetModifyHdl( _rControlModificationLink );
         m_aSocketRadio.SetToggleHdl( _rControlModificationLink );
         m_aNamedPipeRadio.SetToggleHdl( _rControlModificationLink );
