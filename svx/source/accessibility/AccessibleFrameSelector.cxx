@@ -101,6 +101,13 @@ AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eB
 
 AccFrameSelector::~AccFrameSelector()
 {
+    RemoveFrameSelEventListener();
+}
+
+// ----------------------------------------------------------------------------
+
+void AccFrameSelector::RemoveFrameSelEventListener()
+{
     if ( mpFrameSel )
     {
         mpFrameSel->RemoveEventListener( LINK( this, AccFrameSelector, WindowEventListener ) );
@@ -709,6 +716,7 @@ void AccFrameSelector::NotifyAccessibleEvent( const sal_Int16 _nEventId,
 
 void AccFrameSelector::Invalidate()
 {
+    RemoveFrameSelEventListener();
     mpFrameSel = 0;
     EventObject aEvent;
     Reference < XAccessibleContext > xThis( this );

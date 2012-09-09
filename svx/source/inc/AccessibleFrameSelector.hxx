@@ -118,6 +118,7 @@ protected:
 
 private:
     void                IsValid() throw (::com::sun::star::uno::RuntimeException);
+    void                RemoveFrameSelEventListener();
 
     FrameSelector*      mpFrameSel;
     ::osl::Mutex        maFocusMutex;
