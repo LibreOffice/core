@@ -13,7 +13,12 @@ $(eval $(call gb_StaticLibrary_use_unpacked,png,png))
 
 $(eval $(call gb_StaticLibrary_use_package,png,libpng_inc))
 
+$(eval $(call gb_StaticLibrary_use_externals,png,\
+	zlib \
+))
+
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,png,\
+	UnpackedTarball/png/png \
 	UnpackedTarball/png/pngerror \
 	UnpackedTarball/png/pngget \
 	UnpackedTarball/png/pngmem \
