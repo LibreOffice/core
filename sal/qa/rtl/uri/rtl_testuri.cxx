@@ -28,14 +28,12 @@
 
 
 #include "rtl/strbuf.hxx"
-#include "rtl/textenc.h"
-#include "rtl/uri.h"
 #include "rtl/uri.hxx"
 #include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include <cstddef>
 #include <stdio.h>
@@ -540,7 +538,7 @@ void Test::test_Uri() {
 
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "rtl_testuri");
-NOADDITIONAL;
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+// NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
