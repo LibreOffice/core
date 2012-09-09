@@ -76,6 +76,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	libcdr \
 	libcmis \
 	libmspub \
+	liborcus \
 	libvisio \
 	libwpd \
 	libwpg \

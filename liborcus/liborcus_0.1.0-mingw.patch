@@ -1,5 +1,5 @@
-+++ misc/build/liborcus_0.1.0/configure.dt
-+++ misc/build/liborcus_0.1.0/configure
++++ configure.dt
++++ configure
 @@ -619,6 +619,8 @@ WITH_LIBZIP_FALSE
  WITH_LIBZIP_TRUE
  LIBZIP_LIBS
@@ -39,8 +39,8 @@
  if test -z "${WITH_LIBZIP_TRUE}" && test -z "${WITH_LIBZIP_FALSE}"; then
    as_fn_error $? "conditional \"WITH_LIBZIP\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
-+++ misc/build/liborcus_0.1.0/src/liborcus/Makefile.in.dt
-+++ misc/build/liborcus_0.1.0/src/liborcus/Makefile.in
++++ src/liborcus/Makefile.in.dt
++++ src/liborcus/Makefile.in
 @@ -362,7 +361,8 @@ INCDIR = $(top_srcdir)/include
  SRCDIR = $(top_srcdir)/src/liborcus
  BINDIR = $(top_srcdir)/bin
@@ -51,8 +51,8 @@
  lib_LTLIBRARIES = liborcus-@ORCUS_API_VERSION@.la
  liborcus_@ORCUS_API_VERSION@_la_SOURCES = dom_tree.cpp exception.cpp \
  	global.cpp spreadsheet_interface.cpp orcus_css.cpp \
-+++ misc/build/liborcus_0.1.0/src/Makefile.in.dt
-+++ misc/build/liborcus_0.1.0/src/Makefile.in
++++ src/Makefile.in.dt
++++ src/Makefile.in
 @@ -37,26 +37,35 @@ host_triplet = @host@
  bin_PROGRAMS = orcus-xml-dump$(EXEEXT) $(am__EXEEXT_2) $(am__EXEEXT_3)
  EXTRA_PROGRAMS = orcus-test-common$(EXEEXT) orcus-test-xml$(EXEEXT) \

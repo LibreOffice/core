@@ -31,7 +31,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_subsequent_filters_test, \
     sc/qa/unit/subsequent_filters-test \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,sc_subsequent_filters_test,mdds_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_subsequent_filters_test, \
+	mdds_headers \
+	orcus \
+))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_subsequent_filters_test, \
     avmedia \

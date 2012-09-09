@@ -1,5 +1,5 @@
---- misc/liborcus_0.1.0/config.sub
-+++ misc/build/liborcus_0.1.0/config.sub
+--- config.sub
++++ config.sub
 @@ -120,7 +120,7 @@
  # Here we must recognize all the valid KERNEL-OS combinations.
  maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`

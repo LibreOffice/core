@@ -1,5 +1,5 @@
---- misc/liborcus_0.1.0/src/liborcus/pstring.cpp	2012-09-07 06:00:35.000000000 +0200
-+++ misc/build/liborcus_0.1.0/src/liborcus/pstring.cpp	2012-09-07 16:56:14.000000000 +0200
+--- src/liborcus/pstring.cpp	2012-09-07 06:00:35.000000000 +0200
++++ src/liborcus/pstring.cpp	2012-09-07 16:56:14.000000000 +0200
 @@ -57,25 +57,25 @@
  
  pstring pstring::intern(const char* str, size_t n)
@@ -30,8 +30,8 @@
      interned_strings.store.dump();
  }
  
---- misc/liborcus_0.1.0/src/liborcus/xml_map_tree.cpp	2012-09-07 06:00:35.000000000 +0200
-+++ misc/build/liborcus_0.1.0/src/liborcus/xml_map_tree.cpp	2012-09-07 16:59:23.000000000 +0200
+--- src/liborcus/xml_map_tree.cpp	2012-09-07 06:00:35.000000000 +0200
++++ src/liborcus/xml_map_tree.cpp	2012-09-07 16:59:23.000000000 +0200
 @@ -55,15 +55,14 @@
  {
      const char* mp_char;

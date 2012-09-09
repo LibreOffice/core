@@ -8622,7 +8622,6 @@ if test "$with_system_orcus" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     ORCUS_TARBALL=46d9f4cf8b145c21ce1056e116d2ce71-liborcus_0.1.0.tar.bz2
-    BUILD_TYPE="$BUILD_TYPE LIBORCUS"
     SYSTEM_LIBORCUS=NO
 fi
 AC_SUBST(SYSTEM_LIBORCUS)

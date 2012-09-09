@@ -1,5 +1,5 @@
---- misc/liborcus_0.1.0/vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcproj	2012-09-07 06:00:35.000000000 +0200
-+++ misc/build/liborcus_0.1.0/vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcproj	2012-09-10 18:10:23.821600000 +0200
+--- vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcproj	2012-09-07 06:00:35.000000000 +0200
++++ vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcproj	2012-09-10 18:10:23.821600000 +0200
 @@ -42,7 +42,7 @@
  				Name="VCCLCompilerTool"
  				Optimization="0"

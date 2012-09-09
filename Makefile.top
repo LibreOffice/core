@@ -89,6 +89,7 @@ l10ntools\
 libcdr\
 libcmis\
 libmspub\
+liborcus\
 libpng\
 libvisio\
 libwpd\
@@ -215,7 +216,6 @@ libcroco\
 libexttextcat\
 libgsf\
 liblangtag\
-liborcus\
 librsvg\
 libxml2\
 libxmlsec\

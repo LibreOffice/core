@@ -1914,6 +1914,11 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_orcus
+$(call gb_LinkTarget_use_unpacked,$(1),orcus)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,orcus/include) \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	orcus \
 )
