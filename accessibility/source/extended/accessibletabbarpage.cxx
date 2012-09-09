@@ -487,7 +487,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPage::getTitledBorderText(  ) throw (RuntimeException)
+    OUString AccessibleTabBarPage::getTitledBorderText(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
