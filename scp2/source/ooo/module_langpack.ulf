@@ -526,10 +526,10 @@ en-US = "Sanskrit"
 en-US = "Installs Sanskrit support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_FA]
-en-US = "Farsi"
+en-US = "Persian"
 
 [STR_DESC_MODULE_LANGPACK_FA]
-en-US = "Installs Farsi support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Persian support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_FO]
 en-US = "Faroese"

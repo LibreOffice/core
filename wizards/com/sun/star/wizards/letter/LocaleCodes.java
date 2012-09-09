@@ -104,7 +104,7 @@ public class LocaleCodes extends Resource
         Ids[45] = "English - United Kingdom;en-gb;2057";
         Ids[46] = "English - United States;en-us;1033";
         Ids[47] = "Estonian;et;1061";
-        Ids[48] = "Farsi;fa;1065";
+        Ids[48] = "Persian;fa;1065";
         Ids[49] = "Finnish;fi;1035";
         Ids[50] = "Faroese;fo;1080";
         Ids[51] = "French - France;fr-fr;1036";
