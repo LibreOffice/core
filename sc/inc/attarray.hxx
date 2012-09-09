@@ -67,8 +67,8 @@ struct ScLineFlags
 
 struct ScMergePatternState
 {
-    SfxItemSet* pItemSet;           // allocated in MergePatternArea, used for resulting ScPatternAttr
-    const ScPatternAttr* pOld1;     // existing objects, temporary
+    SfxItemSet* pItemSet;           ///< allocated in MergePatternArea, used for resulting ScPatternAttr
+    const ScPatternAttr* pOld1;     ///< existing objects, temporary
     const ScPatternAttr* pOld2;
 
     ScMergePatternState() : pItemSet(NULL), pOld1(NULL), pOld2(NULL) {}
