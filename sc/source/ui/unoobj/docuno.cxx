@@ -119,7 +119,7 @@ const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),       0, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),    0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_DIALOGLIBRARIES),   0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(SC_UNO_VBADOCOBJ),   0, &getCppuType((beans::PropertyValue*)0), beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_VBADOCOBJ),   0, &getCppuType(static_cast< const rtl::OUString * >(0)), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),       PROP_UNO_CALCASSHOWN, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
@@ -1834,15 +1834,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         }
         else if ( aString.EqualsAscii( SC_UNO_VBADOCOBJ ) )
         {
-            // PropertyValue seems extreme because we store
-            // the model ( as the value member ) of the PropertyValue that is
-            // itself a property of the model ( the intention however is to
+            // Note: the intention really here is to
             // store something like a Workbook object... but we don't do that )
             // yet
-            beans::PropertyValue aProp;
-            aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisExcelDoc") );
-            aProp.Value <<= pDocShell->GetModel();
-            aRet <<= aProp;
+            aRet = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisExcelDoc") ) );
         }
         else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
         {
