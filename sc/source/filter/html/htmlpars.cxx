@@ -391,7 +391,7 @@ bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffse
     OSL_ENSURE( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
     ScHTMLColOffset::const_iterator it = pOffset->find( nOffset );
     bool bFound = it != pOffset->end();
-    sal_uInt16 nPos = it - pOffset->end();
+    sal_uInt16 nPos = it - pOffset->begin();
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
         return true;
