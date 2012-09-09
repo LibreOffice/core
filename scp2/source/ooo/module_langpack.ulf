@@ -452,10 +452,10 @@ en-US = "Kinyarwanda"
 en-US = "Installs the Kinyarwanda user interface"
 
 [STR_NAME_MODULE_LANGPACK_FA]
-en-US = "Farsi"
+en-US = "Persian"
 
 [STR_DESC_MODULE_LANGPACK_FA]
-en-US = "Installs the Farsi user interface"
+en-US = "Installs the Persian user interface"
 
 [STR_NAME_MODULE_LANGPACK_TT]
 en-US = "Tatar"

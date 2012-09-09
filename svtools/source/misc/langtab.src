@@ -99,7 +99,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Estonian" ; LANGUAGE_ESTONIAN ; > ;
         < "Finnish" ; LANGUAGE_FINNISH ; > ;
         < "Faroese" ; LANGUAGE_FAEROESE ; > ;
-        < "Farsi" ; LANGUAGE_FARSI ; > ;
+        < "Persian" ; LANGUAGE_FARSI ; > ;
         < "French (France)" ; LANGUAGE_FRENCH ; > ;
         < "French (Belgium)" ; LANGUAGE_FRENCH_BELGIAN ; > ;
         < "French (Canada)" ; LANGUAGE_FRENCH_CANADIAN ; > ;

@@ -446,10 +446,10 @@ en-US = "Kinyarwanda"
 en-US = "Installs Kinyarwanda help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_FA]
-en-US = "Farsi"
+en-US = "Persian"
 
 [STR_DESC_MODULE_HELPPACK_FA]
-en-US = "Installs Farsi help in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Persian help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_TT]
 en-US = "Tatar"
