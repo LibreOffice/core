@@ -1880,9 +1880,9 @@ ifeq ($(SYSTEM_LIBORCUS),YES)
 define gb_LinkTarget__use_orcus
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-    $(LIBORCUS_CFLAGS) \
+    $(ORCUS_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LIBORCUS_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(ORCUS_LIBS))
 
 endef
 
