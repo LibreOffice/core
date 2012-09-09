@@ -38,6 +38,9 @@ TARFILE_MD5=46d9f4cf8b145c21ce1056e116d2ce71
 PATCH_FILES=liborcus_0.1.0-warnings.patch
     # -Werror,-Wunused-variable -Werror,-Wunused-private-field
 
+PATCH_FILES+=liborcus_0.1.0-configure.patch
+    # make config.sub recognize arm-linux-androideabi
+
 .IF "$(GUI)$(COM)"=="WNTMSC"
 
 BUILD_DIR=vsprojects/liborcus-static-nozip
@@ -60,6 +63,14 @@ CONFIGURE_ACTION=./configure \
 	--without-libzip \
 	--disable-debug \
 	--disable-spreadsheet-model $(MY_CXXFLAGS)
+
+.IF "$(CROSS_COMPILING)" == "YES"
+CONFIGURE_ACTION+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
+.IF "$(OS)" == "ANDROID"
+CONFIGURE_ACTION:=LIBS=-lgnustl_shared $(CONFIGURE_ACTION)
+.ENDIF
 
 BUILD_ACTION=make
 BUILD_DIR=
