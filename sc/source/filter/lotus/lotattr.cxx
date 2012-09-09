@@ -58,9 +58,10 @@ LotAttrCache::ENTRY::~ENTRY ()
     delete pPattAttr;
 }
 
-LotAttrCache::LotAttrCache ()
+LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot):
+    mpLotusRoot(pLotRoot)
 {
-    pDocPool = pLotusRoot->pDoc->GetPool();
+    pDocPool = mpLotusRoot->pDoc->GetPool();
 
     pColTab = new Color [ 8 ];
     pColTab[ 0 ] = Color( COL_WHITE );
@@ -115,7 +116,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 
     pAkt->nHash0 = nRefHash;
 
-    pLotusRoot->pFontBuff->Fill( rAttr.nFont, rItemSet );
+    mpLotusRoot->pFontBuff->Fill( rAttr.nFont, rItemSet );
 
     sal_uInt8 nLine = rAttr.nLineStyle;
     if( nLine )
@@ -243,6 +244,11 @@ void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum )
         pDoc->ApplyPatternAreaTab(nColNum,iter->nFirstRow,nColNum,iter->nLastRow,
                                   nTabNum, *(iter->pPattAttr));
     }
+}
+
+LotAttrTable::LotAttrTable(LOTUS_ROOT* pLotRoot):
+    aAttrCache(pLotRoot)
+{
 }
 
 void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
