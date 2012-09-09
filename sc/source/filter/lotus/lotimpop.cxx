@@ -56,7 +56,7 @@ LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, CharSet eQ )
         eActType( Lotus_X),
         pRngNmBffWK3( new RangeNameBufferWK3),
         pFontBuff( new LotusFontBuffer),
-        pAttrTable( new LotAttrTable)
+        pAttrTable( new LotAttrTable(this))
 {
 }
 

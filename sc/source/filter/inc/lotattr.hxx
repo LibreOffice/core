@@ -42,6 +42,7 @@ class ScPatternAttr;
 class SvxColorItem;
 class Color;
 class LotAttrTable;
+class LOTUS_ROOT;
 
 namespace editeng { class SvxBorderLine; }
 
@@ -68,7 +69,7 @@ class LotAttrCache
 {
 public:
 
-    LotAttrCache ();
+    LotAttrCache(LOTUS_ROOT* pLotRoot);
 
     ~LotAttrCache();
 
@@ -112,13 +113,14 @@ private:
     SvxColorItem*       pWhite;
     Color*              pColTab;
     boost::ptr_vector<ENTRY> aEntries;
+
+    LOTUS_ROOT* mpLotusRoot;
 };
 
 
 class LotAttrCol
 {
 public:
-
     void SetAttr (const SCROW nRow, const ScPatternAttr&);
 
     void Apply (const SCCOL nCol, const SCTAB nTab );
@@ -138,6 +140,7 @@ private:
 class LotAttrTable
 {
 public:
+    LotAttrTable(LOTUS_ROOT* pLotRoot);
 
     void SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
 
