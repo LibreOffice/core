@@ -102,7 +102,7 @@ public:
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
-    //  Remove an existing event listener.
+    ///  Remove an existing event listener.
     virtual void SAL_CALL
         removeEventListener(
             const ::com::sun::star::uno::Reference<

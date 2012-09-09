@@ -58,25 +58,25 @@ typedef ::boost::unordered_map< ::rtl::OUString, const ScUnoAddInFuncData*, ScSt
 
 enum ScAddInArgumentType
 {
-    SC_ADDINARG_NONE,                   // -
-    SC_ADDINARG_INTEGER,                // long
-    SC_ADDINARG_DOUBLE,                 // double
-    SC_ADDINARG_STRING,                 // string
-    SC_ADDINARG_INTEGER_ARRAY,          // sequence<sequence<long>>
-    SC_ADDINARG_DOUBLE_ARRAY,           // sequence<sequence<double>>
-    SC_ADDINARG_STRING_ARRAY,           // sequence<sequence<string>>
-    SC_ADDINARG_MIXED_ARRAY,            // sequence<sequence<any>>
-    SC_ADDINARG_VALUE_OR_ARRAY,         // any
-    SC_ADDINARG_CELLRANGE,              // XCellRange
-    SC_ADDINARG_CALLER,                 // XPropertySet
-    SC_ADDINARG_VARARGS                 // sequence<any>
+    SC_ADDINARG_NONE,                   ///< -
+    SC_ADDINARG_INTEGER,                ///< long
+    SC_ADDINARG_DOUBLE,                 ///< double
+    SC_ADDINARG_STRING,                 ///< string
+    SC_ADDINARG_INTEGER_ARRAY,          ///< sequence<sequence<long>>
+    SC_ADDINARG_DOUBLE_ARRAY,           ///< sequence<sequence<double>>
+    SC_ADDINARG_STRING_ARRAY,           ///< sequence<sequence<string>>
+    SC_ADDINARG_MIXED_ARRAY,            ///< sequence<sequence<any>>
+    SC_ADDINARG_VALUE_OR_ARRAY,         ///< any
+    SC_ADDINARG_CELLRANGE,              ///< XCellRange
+    SC_ADDINARG_CALLER,                 ///< XPropertySet
+    SC_ADDINARG_VARARGS                 ///< sequence<any>
 };
 
 //------------------------------------------------------------------------
 
 struct ScAddInArgDesc
 {
-    ::rtl::OUString         aInternalName;      // used to match configuration and reflection information
+    ::rtl::OUString         aInternalName; ///< used to match configuration and reflection information
     ::rtl::OUString         aName;
     ::rtl::OUString         aDescription;
     ScAddInArgumentType eType;
@@ -86,10 +86,10 @@ struct ScAddInArgDesc
 class ScUnoAddInFuncData
 {
 private:
-    ::rtl::OUString     aOriginalName;      // kept in formula
-    ::rtl::OUString     aLocalName;         // for display
-    ::rtl::OUString     aUpperName;         // for entering formulas
-    ::rtl::OUString     aUpperLocal;        // for entering formulas
+    ::rtl::OUString     aOriginalName;      ///< kept in formula
+    ::rtl::OUString     aLocalName;         ///< for display
+    ::rtl::OUString     aUpperName;         ///< for entering formulas
+    ::rtl::OUString     aUpperLocal;        ///< for entering formulas
     ::rtl::OUString     aDescription;
     com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod> xFunction;
     com::sun::star::uno::Any            aObject;
@@ -143,10 +143,10 @@ class SC_DLLPUBLIC ScUnoAddInCollection
 private:
     long                    nFuncCount;
     ScUnoAddInFuncData**    ppFuncData;
-    ScAddInHashMap*         pExactHashMap;      // exact internal name
-    ScAddInHashMap*         pNameHashMap;       // internal name upper
-    ScAddInHashMap*         pLocalHashMap;      // localized name upper
-    sal_Bool                    bInitialized;
+    ScAddInHashMap*         pExactHashMap;      ///< exact internal name
+    ScAddInHashMap*         pNameHashMap;       ///< internal name upper
+    ScAddInHashMap*         pLocalHashMap;      ///< localized name upper
+    sal_Bool                bInitialized;
 
     void        Initialize();
     void        ReadConfiguration();
@@ -164,9 +164,9 @@ public:
                         /// User enetered name. rUpperName MUST already be upper case!
     ::rtl::OUString     FindFunction( const ::rtl::OUString& rUpperName, sal_Bool bLocalFirst );
 
-                        // rName is the exact Name.
-                        // Only if bComplete is set, the function reference and argument types
-                        // are initialized (component may have to be loaded).
+                        /** Only if bComplete is set, the function reference and argument types
+                            are initialized (component may have to be loaded).
+                            @param rName is the exact Name. */
     const ScUnoAddInFuncData*   GetFuncData( const ::rtl::OUString& rName, bool bComplete = false );
 
                         /** For enumeration in ScCompiler::OpCodeMap::getAvailableMappings().
@@ -177,16 +177,16 @@ public:
 
     void                Clear();
 
-    void                LocalizeString( ::rtl::OUString& rName );    // modify rName - input: exact name
+    void                LocalizeString( ::rtl::OUString& rName );    ///< modify rName - input: exact name
 
     long                GetFuncCount();
-    sal_Bool                FillFunctionDesc( long nFunc, ScFuncDesc& rDesc );
+    sal_Bool            FillFunctionDesc( long nFunc, ScFuncDesc& rDesc );
 
-    static sal_Bool         FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc );
-
+    static sal_Bool     FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc );
+                  /// leave rRetExcelName unchanged, if no matching name is found
     sal_Bool                GetExcelName( const ::rtl::OUString& rCalcName, LanguageType eDestLang, ::rtl::OUString& rRetExcelName );
+                  /// leave rRetCalcName unchanged, if no matching name is found
     sal_Bool                GetCalcName( const ::rtl::OUString& rExcelName, ::rtl::OUString& rRetCalcName );
-                                // both leave rRet... unchanged, if no matching name is found
 };
 
 
