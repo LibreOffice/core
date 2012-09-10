@@ -181,12 +181,7 @@ public:
         GetModelFromBasic( SbxObject* pBasic );
 };
 
-#ifndef __SB_SBSTARBASICREF_HXX
-#define __SB_SBSTARBASICREF_HXX
-
 SV_DECL_IMPL_REF(StarBASIC)
-
-#endif
 
 #endif
 

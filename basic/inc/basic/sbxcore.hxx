@@ -108,10 +108,7 @@ public:
     static SbxObject* CreateObject( const rtl::OUString& );
 };
 
-#ifndef SBX_BASE_DECL_DEFINED
-#define SBX_BASE_DECL_DEFINED
 SV_DECL_REF(SbxBase)
-#endif
 
 inline void SbxBase::SetFlags( sal_uInt16 n )
 { //DBG_CHKTHIS( SbxBase, 0 );
