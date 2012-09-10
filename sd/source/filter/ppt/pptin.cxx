@@ -558,6 +558,10 @@ sal_Bool ImplSdPPTImport::Import()
                 sal_Bool bStarDrawFiller = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bStarDrawFiller;
 
                 PageKind ePgKind = ( bNotesMaster ) ? PK_NOTES : PK_STANDARD;
+                sal_Bool bHandout = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bHandoutMaster;
+                if ( bHandout )
+                    ePgKind = PK_HANDOUT;
+
                 pPage->SetPageKind( ePgKind );
                 pSdrModel->InsertMasterPage( (SdrPage*)pPage );
                 if ( bNotesMaster && bStarDrawFiller )
@@ -698,7 +702,7 @@ sal_Bool ImplSdPPTImport::Import()
     }
     SdPage* pMPage;
     sal_uInt16 i;
-    for ( i = 1; i < mpDoc->GetMasterPageCount() && ( (pMPage = (SdPage*)mpDoc->GetMasterPage( i )) != 0 ); i++ )
+    for ( i = 0; i < mpDoc->GetMasterPageCount() && ( (pMPage = (SdPage*)mpDoc->GetMasterPage( i )) != 0 ); i++ )
     {
         SetPageNum( i, PPT_MASTERPAGE );
         /////////////////////////////////////////////
@@ -2277,7 +2281,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 if ( aPresentationText.Len() )
                     pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aPresentationText );
 
-                if ( pPage->GetPageKind() != PK_NOTES )
+                if ( pPage->GetPageKind() != PK_NOTES && pPage->GetPageKind() != PK_HANDOUT)
                 {
                     SfxStyleSheet* pSheet2( pPage->GetStyleSheetForPresObj( ePresKind ) );
                     if ( pSheet2 )
