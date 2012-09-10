@@ -1817,6 +1817,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
             // Attribut entfernen....
             pNode->GetCharAttribs().GetAttribs().Remove(
                 pNode->GetCharAttribs().GetAttribs().GetPos( pAttr ) );
+                        delete pAttr; // #i120865#, need free it explicitly
         }
 
         // pruefen, ob ein 'gleiches' Attribut an der Stelle liegt.
