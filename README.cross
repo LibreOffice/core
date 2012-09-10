@@ -332,6 +332,11 @@ particular) and Mac OS X. The Android cross-buld tool-chain (the
 X. Sure, for Windows, too, but trying to cross-compile LO from Windows
 will probably drive you insane.
 
+You will also need the SDK as full "make" also builds a couple of
+Android apps (written in Java). Use the "android" tool from the SDK to
+install the SDK Tools, SDK Platform Tools, the API 14 SDK Platform,
+and the Android Support Library. (Hopefully that list is enough.)
+
 Here is an autogen.lastrun for Android, when cross-compiling from Mac
 OS X 10.8 with Xcode 4.4.1:
 
@@ -348,22 +353,17 @@ OS X 10.8 with Xcode 4.4.1:
 
 And here is an autogen.lastrun for Android when cross-compiling from Linux:
 
-CC_FOR_BUILD=ccache gcc
-CXX_FOR_BUILD=ccache g++
---with-android-ndk=/home/tml/android-ndk-r7b
+--with-android-ndk=/home/tml/android-ndk-r8b
+--with-android-ndk-toolchain-version=4.6
 --with-android-sdk=/home/tml/android-sdk-linux_x86
 --with-ant-home=/opt/apache-ant-1.8.2
 --build=x86_64-unknown-linux-gnu
 --disable-zenity
 --disable-python
 --with-distro=LibreOfficeAndroid
---with-num-cpus=1
---with-max-jobs=1
 
 And here is an autogen.lastrun for Android when cross-compiling to x86 from Linux:
 
-CC_FOR_BUILD=ccache gcc
-CXX_FOR_BUILD=ccache g++
 --with-android-ndk=/opt/libreoffice/android-ndk-r8b
 --with-android-ndk-toolchain-version=4.6
 --with-android-sdk=/opt/libreoffice/android-sdk-linux
