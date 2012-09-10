@@ -525,7 +525,7 @@ File gid_Brand_File_Bin_Soffice_Bin
     Name = "soffice.bin";
 End
 
-#if defined UNX && ! defined MACOSX && ! defined LIBO_HEADLESS
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Bin_QStart_Bin
     BIN_FILE_BODY;
