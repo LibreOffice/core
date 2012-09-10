@@ -42,7 +42,7 @@ class ScPatternAttr;
 class SvxColorItem;
 class Color;
 class LotAttrTable;
-class LOTUS_ROOT;
+struct LOTUS_ROOT;
 
 namespace editeng { class SvxBorderLine; }
 
