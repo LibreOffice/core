@@ -72,14 +72,18 @@ $(call gb_ExtensionTarget_get_workdir,%)/description.xml :
 else
 $(call gb_ExtensionTarget_get_workdir,%)/description.xml : $(gb_ExtensionTarget_XRMEXTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
+	POFILES=`$(gb_MKTEMP)` && \
+	$(call gb_GetPoFiles,$(PO),$${POFILES}) && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_ExtensionTarget_get_workdir,$*) && \
 		$(gb_ExtensionTarget_XRMEXCOMMAND) \
 			-p $(PRJNAME) \
 			-i $(call gb_Helper_symlinked_native,$(filter %.xml,$^)) \
 			-o $@ \
-			-m $(SDF) \
-			-l all)
+			-m $${POFILES} \
+			-l all) && \
+	rm -rf $${POFILES}
+
 endif
 
 # rule to create oxt package in workdir
@@ -112,8 +116,8 @@ $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM :=
 $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_ExtensionTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(2)/localize.sdf
-$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $$(SDF)
+$(call gb_ExtensionTarget_get_target,$(1)) : PO := $(2).po
+$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $$(PO)
 endif
 
 endef
@@ -197,16 +201,19 @@ define gb_ExtensionTarget_localize_properties
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_ExtensionTarget_LANGS)),$(subst en_US,$(lang),$(2)))
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $$(SDF)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : PO := $(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $$(PO)
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
 		$(gb_ExtensionTarget_PROPMERGETARGET)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
+	POFILES=`$(gb_MKTEMP)` && \
+	$(call gb_GetPoFiles,$$(PO),$$$${POFILES}) && \
 	mkdir -p $$(dir $$@) && \
 	cp -f $$< $$@ \
-	$(if $(strip $(gb_WITH_LANG)),&& $(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$@ -m $$(SDF))
+	$(if $(strip $(gb_WITH_LANG)),&& $(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$@ -m $$$${POFILES}) && \
+	rm -rf $$$${POFILES}
 
 endef
 
@@ -221,13 +228,17 @@ endef
 
 define gb_ExtensionTarget_localize_help_onelang
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(dir $(3))))localize.sdf
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $$(SDF)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
+	PO := $(patsubst /%/,%,$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(dir $(3))))).po
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $$(PO)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(gb_ExtensionTarget_HELPEXTARGET)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3)
 	$$(call gb_Output_announce,$(2),$(true),XHP,3)
+	POFILES=`$(gb_MKTEMP)` && \
+	echo $(gb_POLOCATION)/$(4)/$$(PO) > $$$${POFILES} && \
 	mkdir -p $$(dir $$@) && \
-	$(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(4) -m $$(SDF)
+	$(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(4) -m $$$${POFILES} && \
+	rm -rf $$$${POFILES}
 
 endef
 

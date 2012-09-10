@@ -702,16 +702,12 @@ $(COMMONMISC)/$(TARGET)/%.uulf : $$(@:b).ulf
     @$(RENAME) $@.$(INPATH) $@
     @-$(RM) $@.$(INPATH)
 
-# This is still needed?????
+POLOCATION:=$(SRCDIR)$/translations/source
+PORELPATH:=$(PRJNAME)$/$(PATH_IN_MODULE).po
+
 $(COMMONMISC)/$(TARGET)/%.xrm : %.xrm
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+    $(COMMAND_ECHO)$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(mktmp $(foreach,lang,$(subst,en-US, $(WITH_LANG)) $(POLOCATION)/$(lang)/$(PORELPATH))) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
-
-# dirty hack
-# if local *.sdf file is missing
-#%.sdf:
-#    echo > $@
-
