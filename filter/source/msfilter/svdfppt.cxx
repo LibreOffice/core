@@ -6562,6 +6562,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         SvxTabStopItem aTabItem( 0, 0, SVX_TAB_ADJUST_DEFAULT, EE_PARA_TABS );
         if ( GetTabCount() )
         {
+            //paragraph offset = MIN(first_line_offset, hanging_offset)
+            sal_uInt32 nParaOffset = Min( nTextOfs2, nTab );
             for ( i = 0; i < GetTabCount(); i++ )
             {
                 SvxTabAdjust eTabAdjust;
@@ -6573,8 +6575,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
                     case 3 :    eTabAdjust = SVX_TAB_ADJUST_DECIMAL; break;
                     default :   eTabAdjust = SVX_TAB_ADJUST_LEFT;
                 }
-                if ( nTab > nTextOfs2 )
-                    aTabItem.Insert( SvxTabStop( (sal_uInt16)( ( ( nTab - nTextOfs2 ) * 2540 ) / 576 ), eTabAdjust ) );
+                if ( nTab > nParaOffset )//If tab stop greater than paragraph offset
+                    aTabItem.Insert( SvxTabStop( ( ( (long( nTab - nTextOfs2 )) * 2540 ) / 576 ), eTabAdjust ) );
             }
             nLatestManTab = nTab;
         }
