@@ -306,6 +306,6 @@ gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 
 # static variables declared here because they are used globally
 
-gb_SDFLOCATION := $(WORKDIR)/CustomTarget/translations/translate/sdf
+gb_POLOCATION := $(SRCDIR)/translations/source
 
 # vim: set noet sw=4:

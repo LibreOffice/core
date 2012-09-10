@@ -25,6 +25,7 @@ private:
     OString    m_sUnTransStr;
     OString    m_sTransStr;
     bool       m_bFuzzy;
+    bool       m_bNull;
     OString    m_sKeyId;
 
 public:
@@ -38,6 +39,8 @@ public:
     virtual OString     getUnTransStr() const   { return m_sUnTransStr; }
     virtual OString     getTransStr() const     { return m_sTransStr; }
     virtual bool        getFuzzy() const        { return m_bFuzzy; }
+    virtual bool        isNull() const          { return m_bNull; }
+    virtual OString     getKeyId() const        { return m_sKeyId; }
 
     virtual void        setWhiteSpace(const OString& rWhiteSpace);
     virtual void        setExtractCom(const OString& rExtractCom);
@@ -68,6 +71,8 @@ private:
     OString     m_sResourceType;
     TYPE        m_eType;
     OString     m_sHelpText;
+
+    void            SetMembers();
 public:
 
                     PoEntry();
@@ -84,12 +89,16 @@ public:
     OString         getUnTransStr() const;
     OString         getTransStr() const;
     bool            getFuzzy() const            { return m_aGenPo.getFuzzy(); }
+    bool            isNull() const              { return m_aGenPo.isNull(); }
+    OString         getKeyId() const            { return m_aGenPo.getKeyId(); }
     void            setUnTransStr(const OString& rUnTransStr);
     void            setTransStr(const OString& rTransStr);
     void            setFuzzy(const bool bFuzzy);
 
     void            writeToFile(std::ofstream& rOFStream);
     void            readFromFile(std::ifstream& rIFStream);
+
+    static bool     IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2);
 
 };
 
@@ -105,18 +114,23 @@ private:
     OString    m_sPoRevisionDate;
     OString    m_sLastTranslator;
     OString    m_sLanguageTeam;
+    OString    m_sLanguage;
     OString    m_sMimeVersion;
-    OString    m_sPluralForms;
     OString    m_sContentType;
-    OString    m_sCharset;
     OString    m_sEncoding;
+    OString    m_sPluralForms;
     OString    m_sXGenerator;
     OString    m_sXAcceleratorMarker;
 
+    void            SetMembers();
 public:
+                    PoHeader();
                     PoHeader( const OString& rExtSrc );
                     ~PoHeader();
+
+    OString         getLanguage() const { return m_sLanguage; }
     void            writeToFile(std::ofstream& rOFStream);
+    void            readFromFile(std::ifstream& rIFStream);
 };
 
 #endif // _PO_INCLUDED
