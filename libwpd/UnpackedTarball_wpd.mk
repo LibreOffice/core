@@ -16,6 +16,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,wpd,\
 	libwpd/libwpd-0.9.4-warning.patch \
 	libwpd/libwpd-0.9.4-msvc-warning.patch \
 ))
-# libwpd/libwpd-0.9.4-warning.patch: -Werror,-Wunused-private-field
+# libwpd/libwpd-0.9.4-warning.patch: see upstream
+#  <http://libwpd.git.sourceforge.net/git/gitweb.cgi?p=libwpd/libwpd;a=commit;
+#  h=ca59d3ce82d1695e381255912ce1b60e826b2ca6> "-Werror,-Wunused-private-field"
+# libwpd/libwpd-0.9.4-msvc-warning.patch: see upstream
+#  <http://libwpd.git.sourceforge.net/git/gitweb.cgi?p=libwpd/libwpd;a=commit;
+#  h=fb3827aeb5de64ed84eb1140bae9e32e50ca5133> "MSVC warning C4310: cast
+#  truncates constant value"
 
 # vim: set noet sw=4 ts=4:

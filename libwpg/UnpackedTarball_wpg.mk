@@ -14,7 +14,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,wpg,$(WPG_TARBALL)))
 $(eval $(call gb_UnpackedTarball_add_patches,wpg,\
     libwpg/libwpg-0.2.1-warning.patch \
 ))
-# libwpg/libwpg-0.2.1-warning.patch: -Werror,-Wparentheses,
-#  -Werror,-Wunused-private-field
+# libwpg/libwpg-0.2.1-warning.patch: see upstream
+#  <http://libwpg.git.sourceforge.net/git/gitweb.cgi?p=libwpg/libwpg;a=commit;
+#  h=5cf190eb365df00a1446738b3ab0d3e55291def3> "Fix clang build" and
+#  <http://libwpg.git.sourceforge.net/git/gitweb.cgi?p=libwpg/libwpg;a=commit;
+#  h=f98c1f4308b75ccbb2b98ed8b4011b4f84e841d3> "-Werror,-Wunused-private-field"
 
 # vim: set noet sw=4 ts=4:
