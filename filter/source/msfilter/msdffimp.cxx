@@ -798,7 +798,10 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
     String& rsArrowName, sal_Bool bScaleArrow )
 {
     basegfx::B2DPolygon aRetval;
-    double      fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
+    // 70 100mm = 2pt = 40 twip. In MS, line width less than 2pt has the same size arrow as 2pt
+    //If the unit is twip. Make all use this unit especailly the critical value 70/40.
+    sal_Int32   nLineWidthCritical = bScaleArrow ? 40 : 70;
+    double      fLineWidth = nLineWidth < nLineWidthCritical ? nLineWidthCritical : nLineWidth;;
     double      fLenghtMul, fWidthMul;
     sal_Int32   nLineNumber;
     switch( eLineLenght )
@@ -814,12 +817,6 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
         case mso_lineMediumWidthArrow   : fWidthMul = 3.0; nLineNumber += 3; break;
         case mso_lineNarrowArrow        : fWidthMul = 2.0; break;
         case mso_lineWideArrow          : fWidthMul = 5.0; nLineNumber += 6; break;
-    }
-
-    if ( bScaleArrow )  // #i33630 arrows imported from Word are too big
-    {
-        fWidthMul /= 1.75;
-        fLenghtMul/= 1.75;
     }
 
     rbArrowCenter = sal_False;
