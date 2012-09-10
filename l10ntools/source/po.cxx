@@ -32,11 +32,12 @@ OString ImplGenKeyId(const OString& rGenerator)
     boost::crc_32_type aCRC32;
     aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
     sal_uInt32 nCRC = aCRC32.checksum();
+    //Use all readable ASCII charachter exclude xml special tags: ",',&,<,>
+    const OString sSymbols = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     char sKeyId[5];
-    for(int nIndex = 0; nIndex < 4; ++nIndex)
+    for( short nKeyInd = 0; nKeyInd < 4; ++nKeyInd )
     {
-        //Get a char from the [33,126] interval of ASCII
-        sKeyId[nIndex] = static_cast<char>((nCRC & 255) % 93 + 33);
+        sKeyId[nKeyInd] = sSymbols[(nCRC & 255) % 89];
         nCRC >>= 8;
     }
     sKeyId[4] = '\0';
@@ -109,7 +110,7 @@ OString ImplGenNormString(const OString& rString)
 //Decide whether a string starts with an other string
 bool ImplStartsWith(const OString& rString,const OString& rStart)
 {
-    return rString.copy(0,rStart.getLength())==rStart;
+    return rString.match(rStart);
 }
 
 //Default constructor
@@ -121,6 +122,7 @@ GenPoEntry::GenPoEntry()
     , m_sUnTransStr( OString() )
     , m_sTransStr( OString() )
     , m_bFuzzy( false )
+    , m_bNull( false )
     , m_sKeyId( OString() )
 {
 }
@@ -197,6 +199,12 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream)
 //Read from file
 void GenPoEntry::readFromFile(std::ifstream& rIFStream)
 {
+    *this = GenPoEntry();
+    if( rIFStream.eof() )
+    {
+        m_bNull = true;
+        return;
+    }
     m_sWhiteSpace = "\n";
     OString* pLastMsg = 0;
     std::string sTemp;
@@ -412,6 +420,34 @@ PoEntry::~PoEntry()
 {
 }
 
+//Set members on the basis of m_aGenPo
+void PoEntry::SetMembers()
+{
+    if( !m_aGenPo.isNull() )
+    {
+        m_sSourceFile = m_aGenPo.getReference();
+        OString sContext =  m_aGenPo.getContext();
+        m_sGroupId = sContext.getToken(0,'\n');
+
+        if (sContext.indexOf('\n')==sContext.lastIndexOf('\n'))
+            m_sResourceType = sContext.getToken(1,'\n').getToken(0,'.');
+        else
+        {
+            m_sLocalId = sContext.getToken(1,'\n');
+            m_sResourceType = sContext.getToken(2,'\n').getToken(0,'.');
+        }
+        if (sContext.endsWith(".text"))
+            m_eType = TTEXT;
+        else if (sContext.endsWith(".quickhelptext"))
+            m_eType = TQUICKHELPTEXT;
+        else if (sContext.endsWith(".title"))
+            m_eType = TTITLE;
+        else{
+            throw;}
+        m_sHelpText = m_aGenPo.getExtractCom();
+    }
+}
+
 //Get translation string in sdf/merge format
 OString PoEntry::getUnTransStr() const
 {
@@ -478,29 +514,18 @@ void PoEntry::writeToFile(std::ofstream& rOFStream)
 //Read from file
 void PoEntry::readFromFile(std::ifstream& rIFStream)
 {
+    *this = PoEntry();
     m_aGenPo.readFromFile(rIFStream);
-    m_sSourceFile = m_aGenPo.getReference();
+    SetMembers();
+}
 
-    OString sContext =  m_aGenPo.getContext();
-    m_sGroupId = sContext.getToken(0,'\n');
-
-    if (sContext.indexOf('\n')==sContext.lastIndexOf('\n'))
-        m_sResourceType = sContext.getToken(1,'\n').getToken(0,'.');
-    else
-    {
-        m_sLocalId = sContext.getToken(1,'\n');
-        m_sResourceType = sContext.getToken(2,'\n').getToken(0,'.');
-    }
-    if (sContext.endsWith(".text"))
-        m_eType = TTEXT;
-    else if (sContext.endsWith(".quickhelptext"))
-        m_eType = TQUICKHELPTEXT;
-    else if (sContext.endsWith(".title"))
-        m_eType = TTITLE;
-    else
-        throw;
-
-    m_sHelpText = m_aGenPo.getExtractCom();
+//Check whether po-s belong to the same localization component
+bool PoEntry::IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2)
+{
+    return ( rPo1.m_sSourceFile == rPo2.m_sSourceFile &&
+             rPo1.m_sGroupId == rPo2.m_sGroupId &&
+             rPo1.m_sLocalId == rPo2.m_sLocalId &&
+             rPo1.m_sResourceType == rPo2.m_sResourceType );
 }
 
 //Class PoHeader
@@ -515,7 +540,35 @@ OString ImplGetTime()
     return pBuff;
 }
 
-//Constructor
+//Get relevant part of actual token
+OString ImplGetElement(const OString& rText, const sal_Int32 nToken)
+{
+    OString sToken = rText.getToken(nToken,'\n');
+    sal_Int32 nFirstIndex = sToken.indexOf(':') + 2;
+    return sToken.copy( nFirstIndex,sToken.getLength()-nFirstIndex );
+}
+
+//Default Constructor
+PoHeader::PoHeader()
+    : m_aGenPo( GenPoEntry() )
+    , m_sExtractionSource( OString() )
+    , m_sProjectIdVersion( OString() )
+    , m_sReportMsgidBugsTo( OString() )
+    , m_sPotCreationDate( OString() )
+    , m_sPoRevisionDate( OString() )
+    , m_sLastTranslator( OString() )
+    , m_sLanguageTeam( OString() )
+    , m_sLanguage( OString() )
+    , m_sMimeVersion( OString() )
+    , m_sContentType( OString() )
+    , m_sEncoding( OString() )
+    , m_sPluralForms( OString() )
+    , m_sXGenerator( OString() )
+    , m_sXAcceleratorMarker( OString() )
+{
+}
+
+//Template Constructor
 PoHeader::PoHeader( const OString& rExtSrc )
     : m_aGenPo( GenPoEntry() )
     , m_sExtractionSource( rExtSrc )
@@ -527,36 +580,74 @@ PoHeader::PoHeader( const OString& rExtSrc )
     , m_sPoRevisionDate( "YEAR-MO-DA HO:MI+ZONE" )
     , m_sLastTranslator( "FULL NAME <EMAIL@ADDRESS>" )
     , m_sLanguageTeam( "LANGUAGE <LL@li.org>" )
+    , m_sLanguage( OString() )
     , m_sMimeVersion( "1.0" )
-    , m_sContentType( "text/plain" )
-    , m_sCharset( "UTF-8" )
+    , m_sContentType( "text/plain; charset=UTF-8" )
     , m_sEncoding( "8bit" )
+    , m_sPluralForms( OString() )
     , m_sXGenerator( "LibreOffice" )
     , m_sXAcceleratorMarker( "~" )
 {
-    m_aGenPo.setExtractCom("extracted from " + rExtSrc);
-    m_aGenPo.setTransStr(
-            "Project-Id-Version: " + m_sProjectIdVersion + "\n" +
-            "Report-Msgid-Bugs-To: " + m_sReportMsgidBugsTo + "\n" +
-            "POT-Creation-Date: " + m_sPotCreationDate + "\n" +
-            "PO-Revision-Date: " + m_sPoRevisionDate + "\n" +
-            "Last-Translator: " + m_sLastTranslator + "\n" +
-            "Language-Team: " + m_sLanguageTeam + "\n" +
-            "MIME-Version: " + m_sMimeVersion + "\n" +
-            "Content-Type: " + m_sContentType + "; " +
-            "charset=" + m_sCharset + "\n" +
-            "Content-Transfer-Encoding: " + m_sEncoding + "\n" +
-            "X-Genarator: " + m_sXGenerator + "\n" +
-            "X-Accelerator_Marker: " + m_sXAcceleratorMarker + "\n");
 }
 
 PoHeader::~PoHeader()
 {
 }
 
+//Set members on the basis of m_aGenPo
+void PoHeader::SetMembers()
+{
+    if( !m_aGenPo.isNull() )
+    {
+        m_sExtractionSource = m_aGenPo.getExtractCom();
+        OString sTemp = m_aGenPo.getTransStr();
+
+        sal_Int32 nToken = 0;
+        m_sProjectIdVersion = ImplGetElement(sTemp,nToken++);
+        m_sReportMsgidBugsTo = ImplGetElement(sTemp,nToken++);
+        m_sPotCreationDate = ImplGetElement(sTemp,nToken++);
+        m_sPoRevisionDate = ImplGetElement(sTemp,nToken++);
+        m_sLastTranslator = ImplGetElement(sTemp,nToken++);
+        m_sLanguageTeam = ImplGetElement(sTemp,nToken++);
+        if( sTemp.getToken(nToken,'\n').match("Language:") )
+            m_sLanguage = ImplGetElement(sTemp,nToken++);
+        m_sMimeVersion = ImplGetElement(sTemp,nToken++);
+        m_sContentType = ImplGetElement(sTemp,nToken++);
+        m_sEncoding = ImplGetElement(sTemp,nToken++);
+        if( sTemp.getToken(nToken,'\n').match("Plural-Forms:") )
+            m_sPluralForms = ImplGetElement(sTemp,nToken++);
+        m_sXGenerator = ImplGetElement(sTemp,nToken++);
+        m_sXAcceleratorMarker = ImplGetElement(sTemp,nToken);
+    }
+}
+
 void PoHeader::writeToFile(std::ofstream& rOFStream)
 {
+    m_aGenPo.setExtractCom("extracted from " + m_sExtractionSource);
+    m_aGenPo.setTransStr(
+        "Project-Id-Version: " + m_sProjectIdVersion + "\n" +
+        "Report-Msgid-Bugs-To: " + m_sReportMsgidBugsTo + "\n" +
+        "POT-Creation-Date: " + m_sPotCreationDate + "\n" +
+        "PO-Revision-Date: " + m_sPoRevisionDate + "\n" +
+        "Last-Translator: " + m_sLastTranslator + "\n" +
+        "Language-Team: " + m_sLanguageTeam + "\n" +
+        ( m_sLanguage.isEmpty() ? "" : "Language: " + m_sLanguage + "\n" ) +
+        "MIME-Version: " + m_sMimeVersion + "\n" +
+        "Content-Type: " + m_sContentType + "\n" +
+        "Content-Transfer-Encoding: " + m_sEncoding + "\n" +
+        ( m_sPluralForms.isEmpty() ? "" :
+            "Plural-Forms: " + m_sPluralForms + "\n" ) +
+        "X-Genarator: " + m_sXGenerator + "\n" +
+        "X-Accelerator_Marker: " + m_sXAcceleratorMarker + "\n");
     m_aGenPo.writeToFile(rOFStream);
 }
+
+void PoHeader::readFromFile(std::ifstream& rIFStream)
+{
+    *this = PoHeader();
+    m_aGenPo.readFromFile(rIFStream);
+    SetMembers();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

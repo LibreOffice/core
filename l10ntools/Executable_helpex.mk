@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_set_include,helpex,\
 
 $(eval $(call gb_Executable_use_libraries,helpex,\
     sal \
+    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_external,helpex,expat_utf8))
