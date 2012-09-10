@@ -1,0 +1,74 @@
+--- misc/libwpd-0.9.4/src/lib/WP6ContentListener.h
++++ misc/build/libwpd-0.9.4/src/lib/WP6ContentListener.h
+@@ -53,7 +53,7 @@ const int STATE_MEMORY = 3;
+ class WP6StyleStateSequence
+ {
+ public:
+-	WP6StyleStateSequence() : m_stateSequence(), m_currentState(), m_previousState()
++	WP6StyleStateSequence() : m_stateSequence()
+ 	{
+ 		clear();
+ 	}
+@@ -64,11 +64,11 @@ public:
+ 	}
+ 	WP6StyleState getCurrentState() const
+ 	{
+-		return m_stateSequence[0]; /*currentState;*/
++		return m_stateSequence[0];
+ 	}
+ 	WP6StyleState getPreviousState() const
+ 	{
+-		return m_stateSequence[1]; /*m_previousState;*/
++		return m_stateSequence[1];
+ 	}
+ 	void clear()
+ 	{
+@@ -78,8 +78,6 @@ public:
+ 
+ private:
+ 	std::vector<WP6StyleState> m_stateSequence;
+-	WP6StyleState m_currentState;
+-	WP6StyleState m_previousState;
+ };
+ 
+ typedef struct _WP6ContentParsingState WP6ContentParsingState;
+--- misc/libwpd-0.9.4/src/lib/WP6OutlineStylePacket.cpp
++++ misc/build/libwpd-0.9.4/src/lib/WP6OutlineStylePacket.cpp
+@@ -31,7 +31,6 @@
+ WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+ 	WP6PrefixDataPacket(input, encryption),
+ 	m_numPIDs(0),
+-	m_nonDeletableInfoSize(0),
+ 	m_outlineHash(0),
+ 	m_outlineFlags(0),
+ 	m_tabBehaviourFlag(0)
+--- misc/libwpd-0.9.4/src/lib/WP6OutlineStylePacket.h
++++ misc/build/libwpd-0.9.4/src/lib/WP6OutlineStylePacket.h
+@@ -40,7 +40,6 @@ public:
+ 
+ private:
+ 	uint16_t m_numPIDs;
+-	uint16_t m_nonDeletableInfoSize;
+ 	uint16_t m_outlineHash;
+ 	uint8_t m_numberingMethods[WP6_NUM_LIST_LEVELS];
+ 	uint8_t m_outlineFlags;
+--- misc/libwpd-0.9.4/src/lib/WP6PageGroup.cpp
++++ misc/build/libwpd-0.9.4/src/lib/WP6PageGroup.cpp
+@@ -33,7 +33,6 @@
+ WP6PageGroup::WP6PageGroup(WPXInputStream *input, WPXEncryption *encryption) :
+ 	WP6VariableLengthGroup(),
+ 	m_margin(0),
+-	m_marginType(0),
+ 	m_suppressedCode(0),
+ 	m_pageNumberTypefaceDesc(0),
+ 	m_pageNumberUseFlag(0x00),
+--- misc/libwpd-0.9.4/src/lib/WP6PageGroup.h
++++ misc/build/libwpd-0.9.4/src/lib/WP6PageGroup.h
+@@ -40,7 +40,6 @@ public:
+ private:
+ 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
+ 	uint16_t m_margin;
+-	uint8_t m_marginType;
+ 	// variables needed for subgroup 2 (suppress page characteristics)
+ 	uint8_t m_suppressedCode;
+ 	// variables needed for subgroup 3 (page number position)
