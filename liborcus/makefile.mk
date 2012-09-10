@@ -41,6 +41,9 @@ PATCH_FILES=liborcus_0.1.0-warnings.patch
 PATCH_FILES+=liborcus_0.1.0-configure.patch
     # make config.sub recognize arm-linux-androideabi
 
+# fix MinGW build
+PATCH_FILES+=liborcus_0.1.0-mingw.patch
+
 .IF "$(GUI)$(COM)"=="WNTMSC"
 
 BUILD_DIR=vsprojects/liborcus-static-nozip
