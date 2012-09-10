@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scfilt \
 	Library_scui \
 	Package_uiconfig \
+	UI_scalc \
 ))
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)

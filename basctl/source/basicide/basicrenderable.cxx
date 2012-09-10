@@ -44,37 +44,33 @@ Renderable::Renderable (BaseWindow* pWin)
 
     m_aUIProperties.realloc( 3 );
 
-    // create Subgroup for print range
+    // show Subgroup for print range
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
     aPrintRangeOpt.mbInternalOnly = true;
-    m_aUIProperties[0].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ),
-                                                      rtl::OUString(),
-                                                      aPrintRangeOpt
-                                                      );
+    m_aUIProperties[0].Value = setSubgroupControlOpt("printrange",
+        rtl::OUString(aStrings.GetString(0)), rtl::OUString(), aPrintRangeOpt);
 
     // create a choice for the range to print
     rtl::OUString aPrintContentName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
     Sequence< rtl::OUString > aChoices( 2 );
     Sequence< rtl::OUString > aHelpIds( 2 );
+    Sequence< rtl::OUString > aWidgetIds( 2 );
     aChoices[0] = aStrings.GetString( 1 );
     aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
     aChoices[1] = aStrings.GetString( 2 );
     aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
-    m_aUIProperties[1].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpIds,
-                                                    aPrintContentName,
-                                                    aChoices,
-                                                    0 );
+    aWidgetIds[0] = rtl::OUString("printallpages");
+    aWidgetIds[1] = rtl::OUString("printpages");
+    m_aUIProperties[1].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
+                                                   aHelpIds, aPrintContentName,
+                                                   aChoices, 0);
 
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
-    m_aUIProperties[2].Value = getEditControlOpt( rtl::OUString(),
-                                                  rtl::OUString(),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
-                                                  rtl::OUString(),
-                                                  aPageRangeOpt
-                                                  );
+    m_aUIProperties[2].Value = setEditControlOpt("pagerange", rtl::OUString(),
+                                                 rtl::OUString(), "PageRange",
+                                                 rtl::OUString(), aPageRangeOpt);
 }
 
 Renderable::~Renderable()

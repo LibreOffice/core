@@ -107,27 +107,6 @@ ModalDialog SV_DLG_PRINT
         Pos = MAP_APPFONT( 0, 185 );
         Size = MAP_APPFONT( 350, 8 );
     };
-    String SV_PRINT_NOPAGES
-    {
-        Text [en-US] = "No pages";
-    };
-
-    String SV_PRINT_TOFILE_TXT
-    {
-        Text [en-US] = "Print to File...";
-    };
-
-    String SV_PRINT_DEFPRT_TXT
-    {
-        Text [en-US] = "Default printer";
-    };
-
-
-    String SV_PRINT_PRINTPREVIEW_TXT
-    {
-        Text [en-US] = "Print preview";
-    };
-
     TabPage SV_PRINT_TAB_NUP
     {
         HelpID = ".HelpID:vcl:PrintDialog:NUpPage";
@@ -393,16 +372,6 @@ ModalDialog SV_DLG_PRINT
             Text [en-US] = "Collate";
         };
 
-        Image SV_PRINT_COLLATE_IMG
-        {
-            ImageBitmap = Bitmap { File = "collate.png" ; };
-        };
-
-        Image SV_PRINT_NOCOLLATE_IMG
-        {
-            ImageBitmap = Bitmap { File = "ncollate.png" ; };
-        };
-
         CheckBox SV_PRINT_OPT_REVERSE
         {
             HelpID = ".HelpID:vcl:PrintDialog:OptPage:ToReverse";
@@ -534,3 +503,32 @@ StringArray RID_STR_PAPERNAMES
     };
 };
 
+String SV_PRINT_NOPAGES
+{
+    Text [en-US] = "No pages";
+};
+
+String SV_PRINT_TOFILE_TXT
+{
+    Text [en-US] = "Print to File...";
+};
+
+String SV_PRINT_DEFPRT_TXT
+{
+    Text [en-US] = "Default printer";
+};
+
+String SV_PRINT_PRINTPREVIEW_TXT
+{
+    Text [en-US] = "Print preview";
+};
+
+Image SV_PRINT_COLLATE_IMG
+{
+    ImageBitmap = Bitmap { File = "collate.png" ; };
+};
+
+Image SV_PRINT_NOCOLLATE_IMG
+{
+    ImageBitmap = Bitmap { File = "ncollate.png" ; };
+};

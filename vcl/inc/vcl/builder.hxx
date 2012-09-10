@@ -223,6 +223,7 @@ protected:
 public:
     VclBuilderContainer();
     virtual ~VclBuilderContainer();
+    static rtl::OUString getUIRootDir();
     static VclBuilder* overrideResourceWithUIXML(Window *pWindow, const ResId& rResId);
     static bool replace_buildable(Window *pParent, const ResId& rResId, Window &rReplacement);
     template <typename T> T* get(T*& ret, rtl::OString sID)

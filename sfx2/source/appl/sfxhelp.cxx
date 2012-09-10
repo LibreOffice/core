@@ -596,6 +596,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
 {
     String sModuleName = GetHelpModuleName_Impl();
     String sHelpText = pImp->GetHelpText( aCommandURL, sModuleName );
+    fprintf(stderr, "A sHelpText %s for id %s\n", rtl::OUStringToOString(sHelpText, RTL_TEXTENCODING_UTF8).getStr(), rtl::OUStringToOString(aCommandURL, RTL_TEXTENCODING_UTF8).getStr());
 
     rtl::OString aNewHelpId;
 
@@ -607,6 +608,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
         {
             aNewHelpId = pParent->GetHelpId();
             sHelpText = pImp->GetHelpText( rtl::OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
+            fprintf(stderr, "B sHelpText %s for id %s\n", rtl::OUStringToOString(sHelpText, RTL_TEXTENCODING_UTF8).getStr(), aNewHelpId.getStr());
             if ( sHelpText.Len() > 0 )
                 pParent = NULL;
             else
@@ -710,6 +712,8 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
             // no URL, just a HelpID (maybe empty in case of keyword search)
             aHelpURL = CreateHelpURL_Impl( rURL, aHelpModuleName );
 
+            fprintf(stderr, "C aHelpURL %s\n", rtl::OUStringToOString(aHelpURL, RTL_TEXTENCODING_UTF8).getStr());
+
             if ( impl_hasHelpInstalled() && pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
             {
                 // no help found -> try with parent help id.
@@ -717,15 +721,23 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
                 while ( pParent )
                 {
                     rtl::OString aHelpId = pParent->GetHelpId();
+                    fprintf(stderr, "D helpid %s for %p\n", aHelpId.getStr(), pParent);
                     aHelpURL = CreateHelpURL( rtl::OStringToOUString(aHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName );
+                    fprintf(stderr, "D aHelpURL %s\n", rtl::OUStringToOString(aHelpURL, RTL_TEXTENCODING_UTF8).getStr());
                     if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+                    {
+                        fprintf(stderr, "found as %s\n", rtl::OUStringToOString(aHelpURL, RTL_TEXTENCODING_UTF8).getStr());
                         break;
+                    }
                     else
                     {
                         pParent = pParent->GetParent();
                         if ( !pParent )
+                        {
+                            fprintf(stderr, "no more parents\n");
                             // create help url of start page ( helpid == 0 -> start page)
                             aHelpURL = CreateHelpURL( String(), aHelpModuleName );
+                        }
                     }
                 }
             }

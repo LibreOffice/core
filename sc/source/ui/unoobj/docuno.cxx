@@ -231,62 +231,69 @@ ScPrintUIOptions::ScPrintUIOptions()
     if( aStrings.Count() < 10 ) // bad resource ?
         return;
 
-    m_aUIProperties.realloc( 8 );
+    sal_Int32 nNumProps= 9, nIdx = 0;
+
+    m_aUIProperties.realloc(nNumProps);
+
+    // load the writer PrinterOptions into the custom tab
+    m_aUIProperties[nIdx].Name = rtl::OUString("OptionsUIFile");
+    m_aUIProperties[nIdx++].Value <<= rtl::OUString("modules/scalc/ui/printeroptions.ui");
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
     String aAppGroupname( aStrings.GetString( 9 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aOpt.GetModuleName( SvtModuleOptions::E_SCALC ) );
-    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
+    m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, rtl::OUString());
 
-    // create subgroup for pages
-    m_aUIProperties[1].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ), rtl::OUString() );
+    // show subgroup for pages
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("pages", rtl::OUString(aStrings.GetString(0)), rtl::OUString());
 
     // create a bool option for empty pages
-    m_aUIProperties[2].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 1 ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox" ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsIncludeEmptyPages" ) ),
-                                                  ! bSuppress
-                                                  );
-    // create Subgroup for print content
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("includeemptypages", rtl::OUString( aStrings.GetString( 1 ) ),
+                                                  ".HelpID:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox",
+                                                  "IsIncludeEmptyPages",
+                                                  ! bSuppress);
+    // show Subgroup for print content
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
-    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 2 ) ),
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", rtl::OUString(aStrings.GetString(2)),
                                                       rtl::OUString(),
-                                                      aPrintRangeOpt
-                                                      );
+                                                      aPrintRangeOpt);
 
     // create a choice for the content to create
-    uno::Sequence< rtl::OUString > aChoices( 3 ), aHelpIds( 3 );
+    uno::Sequence< rtl::OUString > aChoices( 3 ), aHelpIds( 3 ), aWidgetIds( 3 );
     aChoices[0] = aStrings.GetString( 3 );
     aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
+    aWidgetIds[0] = "printallsheets";
     aChoices[1] = aStrings.GetString( 4 );
     aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
+    aWidgetIds[1] = "printselectedsheets";
     aChoices[2] = aStrings.GetString( 5 );
     aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ) );
-    m_aUIProperties[4].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpIds,
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ),
-                                                    aChoices,
-                                                    nContent );
+    aWidgetIds[2] = "printselectedcells";
+    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
+                                                    aHelpIds, "PrintContent",
+                                                    aChoices, nContent );
 
-    // create Subgroup for print range
+    // show Subgroup for print range
     aPrintRangeOpt.mbInternalOnly = sal_True;
-    m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ),
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("fromwhich", rtl::OUString(aStrings.GetString(6)),
                                                       rtl::OUString(),
-                                                      aPrintRangeOpt
-                                                      );
+                                                      aPrintRangeOpt);
 
     // create a choice for the range to print
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
     aChoices.realloc( 2 );
     aHelpIds.realloc( 2 );
+    aWidgetIds.realloc( 2 );
     aChoices[0] = aStrings.GetString( 7 );
     aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0" ) );
+    aWidgetIds[0] = "printallpages";
     aChoices[1] = aStrings.GetString( 8 );
     aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1" ) );
-    m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
+    aWidgetIds[1] = "printpages";
+    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
                                                     aHelpIds,
                                                     aPrintRangeName,
                                                     aChoices,
@@ -294,12 +301,11 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
-    m_aUIProperties[7].Value = getEditControlOpt( rtl::OUString(),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageRange:Edit" ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
-                                                  rtl::OUString(),
-                                                  aPageRangeOpt
-                                                  );
+    m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", rtl::OUString(),
+                                                      ".HelpID:vcl:PrintDialog:PageRange:Edit",
+                                                      "PageRange", rtl::OUString(), aPageRangeOpt);
+
+    assert(nIdx == nNumProps);
 }
 
 void ScPrintUIOptions::SetDefaults()

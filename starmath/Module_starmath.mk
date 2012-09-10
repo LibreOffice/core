@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_targets,starmath,\
     Library_sm \
     Library_smd \
     Package_uiconfig \
+    UI_smath \
 ))
 
 #$(eval $(call gb_Module_add_check_targets,starmath,\

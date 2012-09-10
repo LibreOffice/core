@@ -79,38 +79,44 @@ SmPrintUIOptions::SmPrintUIOptions()
     if (!pConfig)
         return;
 
+    sal_Int32 nNumProps = 10, nIdx=0;
+
     // create sequence of print UI options
     // (Actually IsIgnoreSpacesRight is a parser option. Without it we need only 8 properties here.)
-    m_aUIProperties.realloc( 9 );
+    m_aUIProperties.realloc( nNumProps );
+
+    // load the math PrinterOptions into the custom tab
+    m_aUIProperties[nIdx].Name = rtl::OUString("OptionsUIFile");
+    m_aUIProperties[nIdx++].Value <<= rtl::OUString("modules/smath/ui/printeroptions.ui");
 
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) );
-    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage" );
+    m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
 
     // create subgroup for print options
-    m_aUIProperties[1].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("contents", aLocalizedStrings.GetString(1), rtl::OUString());
 
     // create a bool option for title row (matches to SID_PRINTTITLE)
-    m_aUIProperties[2].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("title", aLocalizedStrings.GetString( 2 ),
                                                   ".HelpID:vcl:PrintDialog:TitleRow:CheckBox",
                                                   PRTUIOPT_TITLE_ROW,
-                                                  pConfig->IsPrintTitle() );
+                                                  pConfig->IsPrintTitle());
     // create a bool option for formula text (matches to SID_PRINTTEXT)
-    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("formulatext", aLocalizedStrings.GetString( 3 ),
                                                   ".HelpID:vcl:PrintDialog:FormulaText:CheckBox",
                                                   PRTUIOPT_FORMULA_TEXT,
-                                                  pConfig->IsPrintFormulaText() );
+                                                  pConfig->IsPrintFormulaText());
     // create a bool option for border (matches to SID_PRINTFRAME)
-    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("borders", aLocalizedStrings.GetString( 4 ),
                                                   ".HelpID:vcl:PrintDialog:Border:CheckBox",
                                                   PRTUIOPT_BORDER,
-                                                  pConfig->IsPrintFrame() );
+                                                  pConfig->IsPrintFrame());
 
     // create subgroup for print format
-    m_aUIProperties[5].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 5 ), rtl::OUString() );
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("size", aLocalizedStrings.GetString(5), rtl::OUString());
 
     // create a radio button group for print format (matches to SID_PRINTSIZE)
     Sequence< rtl::OUString > aChoices( 3 );
@@ -121,8 +127,12 @@ SmPrintUIOptions::SmPrintUIOptions()
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0";
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1";
     aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2";
+    Sequence< rtl::OUString > aWidgetIds( 3 );
+    aWidgetIds[0] = "originalsize";
+    aWidgetIds[1] = "fittopage";
+    aWidgetIds[2] = "scaling";
     OUString aPrintFormatProp( PRTUIOPT_PRINT_FORMAT );
-    m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
+    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
                                                     aHelpIds,
                                                     aPrintFormatProp,
                                                     aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
@@ -130,19 +140,20 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
-    m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
+    m_aUIProperties[nIdx++].Value = setRangeControlOpt("scalingspin", rtl::OUString(),
                                                      ".HelpID:vcl:PrintDialog:PrintScale:NumericField",
                                                      PRTUIOPT_PRINT_SCALE,
                                                      pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
                                                      1000,   // max value
-                                                     aRangeOpt );
+                                                     aRangeOpt);
 
     Sequence< PropertyValue > aHintNoLayoutPage( 1 );
     aHintNoLayoutPage[0].Name = "HintNoLayoutPage";
     aHintNoLayoutPage[0].Value = makeAny( sal_True );
-    m_aUIProperties[8].Value <<= aHintNoLayoutPage;
+    m_aUIProperties[nIdx++].Value <<= aHintNoLayoutPage;
 
+    assert(nIdx == nNumProps);
 }
 
 

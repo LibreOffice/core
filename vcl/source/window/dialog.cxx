@@ -476,7 +476,7 @@ Dialog::Dialog( WindowType nType ) :
 #define RELPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice.cfg"))
 #define SERVICENAME_PATHSETTINGS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings"))
 
-rtl::OUString getUIRootDir()
+rtl::OUString VclBuilderContainer::getUIRootDir()
 {
     namespace css = ::com::sun::star;
 

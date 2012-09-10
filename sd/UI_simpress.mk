@@ -7,14 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,modules/swriter))
+$(eval $(call gb_UI_UI,modules/simpress))
 
-$(eval $(call gb_UI_add_uifiles,modules/swriter,\
-	sw/uiconfig/swriter/ui/inserttable \
-	sw/uiconfig/swriter/ui/linenumbering \
-	sw/uiconfig/swriter/ui/printeroptions \
-	sw/uiconfig/swriter/ui/titlepage \
-	sw/uiconfig/swriter/ui/wordcount \
+$(eval $(call gb_UI_add_uifiles,modules/simpress,\
+	sd/uiconfig/simpress/ui/printeroptions \
 ))
 
 # vim: set noet sw=4 ts=4:

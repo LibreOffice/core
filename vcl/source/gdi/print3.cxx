@@ -1718,22 +1718,22 @@ void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< beans::PropertyV
     }
 }
 
-Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
-                                           const Sequence< rtl::OUString >& i_rHelpIds,
-                                           const rtl::OUString& i_rType,
-                                           const PropertyValue* i_pVal,
-                                           const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
-                                           )
+Any PrinterOptionsHelper::setUIControlOpt(const com::sun::star::uno::Sequence< rtl::OUString >& i_rIDs,
+                                          const rtl::OUString& i_rTitle,
+                                          const Sequence< rtl::OUString >& i_rHelpIds,
+                                          const rtl::OUString& i_rType,
+                                          const PropertyValue* i_pVal,
+                                          const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     sal_Int32 nElements =
-        1                                                               // ControlType
+        2                                                             // ControlType + ID
         + (i_rTitle.isEmpty() ? 0 : 1)                                // Text
-        + (i_rHelpIds.getLength() ? 1 : 0)                              // HelpId
-        + (i_pVal ? 1 : 0)                                              // Property
-        + i_rControlOptions.maAddProps.getLength()                      // additional props
+        + (i_rHelpIds.getLength() ? 1 : 0)                            // HelpId
+        + (i_pVal ? 1 : 0)                                            // Property
+        + i_rControlOptions.maAddProps.getLength()                    // additional props
         + (i_rControlOptions.maGroupHint.isEmpty() ? 0 : 1)           // grouping
-        + (i_rControlOptions.mbInternalOnly ? 1 : 0)                    // internal hint
-        + (i_rControlOptions.mbEnabled ? 0 : 1)                         // enabled
+        + (i_rControlOptions.mbInternalOnly ? 1 : 0)                  // internal hint
+        + (i_rControlOptions.mbEnabled ? 0 : 1)                       // enabled
         ;
     if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
@@ -1758,6 +1758,8 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
     }
     aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
     aCtrl[nUsed++].Value = makeAny( i_rType );
+    aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) );
+    aCtrl[nUsed++].Value = makeAny( i_rIDs );
     if( i_pVal )
     {
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
@@ -1803,7 +1805,9 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
     return makeAny( aCtrl );
 }
 
-Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpId )
+Any PrinterOptionsHelper::setGroupControlOpt(const rtl::OUString& i_rID,
+                                             const rtl::OUString& i_rTitle,
+                                             const rtl::OUString& i_rHelpId)
 {
     Sequence< rtl::OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
@@ -1811,13 +1815,15 @@ Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, con
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
     }
-    return getUIControlOpt( i_rTitle, aHelpId, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+    Sequence< rtl::OUString > aIds(1);
+    aIds[0] = i_rID;
+    return setUIControlOpt(aIds, i_rTitle, aHelpId, "Group");
 }
 
-Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle,
-                                                 const rtl::OUString& i_rHelpId,
-                                                 const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
-                                                 )
+Any PrinterOptionsHelper::setSubgroupControlOpt(const rtl::OUString& i_rID,
+                                                const rtl::OUString& i_rTitle,
+                                                const rtl::OUString& i_rHelpId,
+                                                const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     Sequence< rtl::OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
@@ -1825,16 +1831,17 @@ Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle,
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
     }
-    return getUIControlOpt( i_rTitle, aHelpId, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ),
-                            NULL, i_rControlOptions );
+    Sequence< rtl::OUString > aIds(1);
+    aIds[0] = i_rID;
+    return setUIControlOpt(aIds, i_rTitle, aHelpId, "Subgroup", NULL, i_rControlOptions);
 }
 
-Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
-                                             const rtl::OUString& i_rHelpId,
-                                             const rtl::OUString& i_rProperty,
-                                             sal_Bool i_bValue,
-                                             const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
-                                             )
+Any PrinterOptionsHelper::setBoolControlOpt(const rtl::OUString& i_rID,
+                                            const rtl::OUString& i_rTitle,
+                                            const rtl::OUString& i_rHelpId,
+                                            const rtl::OUString& i_rProperty,
+                                            sal_Bool i_bValue,
+                                            const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     Sequence< rtl::OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
@@ -1845,18 +1852,19 @@ Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_bValue );
-    return getUIControlOpt( i_rTitle, aHelpId, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, i_rControlOptions );
+    Sequence< rtl::OUString > aIds(1);
+    aIds[0] = i_rID;
+    return setUIControlOpt(aIds, i_rTitle, aHelpId, "Bool", &aVal, i_rControlOptions);
 }
 
-Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
-                                               const Sequence< rtl::OUString >& i_rHelpId,
-                                               const rtl::OUString& i_rProperty,
-                                               const Sequence< rtl::OUString >& i_rChoices,
-                                               sal_Int32 i_nValue,
-                                               const rtl::OUString& i_rType,
-                                               const Sequence< sal_Bool >& i_rDisabledChoices,
-                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
-                                               )
+Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const com::sun::star::uno::Sequence< rtl::OUString >& i_rIDs,
+                                              const rtl::OUString& i_rTitle,
+                                              const Sequence< rtl::OUString >& i_rHelpId,
+                                              const rtl::OUString& i_rProperty,
+                                              const Sequence< rtl::OUString >& i_rChoices,
+                                              sal_Int32 i_nValue,
+                                              const Sequence< sal_Bool >& i_rDisabledChoices,
+                                              const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.getLength();
@@ -1872,17 +1880,45 @@ Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
-    return getUIControlOpt( i_rTitle, i_rHelpId, i_rType, &aVal, aOpt );
+    return setUIControlOpt(i_rIDs, i_rTitle, i_rHelpId, "Radio", &aVal, aOpt);
 }
 
-Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
-                                              const rtl::OUString& i_rHelpId,
+Any PrinterOptionsHelper::setChoiceListControlOpt(const rtl::OUString& i_rID,
+                                              const rtl::OUString& i_rTitle,
+                                              const Sequence< rtl::OUString >& i_rHelpId,
                                               const rtl::OUString& i_rProperty,
+                                              const Sequence< rtl::OUString >& i_rChoices,
                                               sal_Int32 i_nValue,
-                                              sal_Int32 i_nMinValue,
-                                              sal_Int32 i_nMaxValue,
-                                              const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
-                                            )
+                                              const Sequence< sal_Bool >& i_rDisabledChoices,
+                                              const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
+{
+    UIControlOptions aOpt( i_rControlOptions );
+    sal_Int32 nUsed = aOpt.maAddProps.getLength();
+    aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
+    aOpt.maAddProps[nUsed].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
+    aOpt.maAddProps[nUsed].Value = makeAny( i_rChoices );
+    if( i_rDisabledChoices.getLength() )
+    {
+        aOpt.maAddProps[nUsed+1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChoicesDisabled" ) );
+        aOpt.maAddProps[nUsed+1].Value = makeAny( i_rDisabledChoices );
+    }
+
+    PropertyValue aVal;
+    aVal.Name = i_rProperty;
+    aVal.Value = makeAny( i_nValue );
+    Sequence< rtl::OUString > aIds(1);
+    aIds[0] = i_rID;
+    return setUIControlOpt(aIds, i_rTitle, i_rHelpId, "List", &aVal, aOpt);
+}
+
+Any PrinterOptionsHelper::setRangeControlOpt(const rtl::OUString& i_rID,
+                                             const rtl::OUString& i_rTitle,
+                                             const rtl::OUString& i_rHelpId,
+                                             const rtl::OUString& i_rProperty,
+                                             sal_Int32 i_nValue,
+                                             sal_Int32 i_nMinValue,
+                                             sal_Int32 i_nMaxValue,
+                                             const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );
     if( i_nMaxValue >= i_nMinValue )
@@ -1904,20 +1940,17 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
-    return getUIControlOpt( i_rTitle,
-                            aHelpId,
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Range" ) ),
-                            &aVal,
-                            aOpt
-                            );
+    Sequence< rtl::OUString > aIds(1);
+    aIds[0] = i_rID;
+    return setUIControlOpt(aIds, i_rTitle, aHelpId, "Range", &aVal, aOpt);
 }
 
-Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
-                                             const rtl::OUString& i_rHelpId,
-                                             const rtl::OUString& i_rProperty,
-                                             const rtl::OUString& i_rValue,
-                                             const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
-                                           )
+Any PrinterOptionsHelper::setEditControlOpt(const rtl::OUString& i_rID,
+                                            const rtl::OUString& i_rTitle,
+                                            const rtl::OUString& i_rHelpId,
+                                            const rtl::OUString& i_rProperty,
+                                            const rtl::OUString& i_rValue,
+                                            const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     Sequence< rtl::OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
@@ -1928,12 +1961,9 @@ Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_rValue );
-    return getUIControlOpt( i_rTitle,
-                            aHelpId,
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Edit" ) ),
-                            &aVal,
-                            i_rControlOptions
-                            );
+    Sequence< rtl::OUString > aIds(1);
+    aIds[0] = i_rID;
+    return setUIControlOpt(aIds, i_rTitle, aHelpId, "Edit", &aVal, i_rControlOptions);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -411,6 +411,7 @@ class VCL_DLLPUBLIC VclFrame : public VclBin
 {
 public:
     VclFrame(Window *pParent) : VclBin(pParent) {}
+    void set_label(const rtl::OUString &rLabel);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);

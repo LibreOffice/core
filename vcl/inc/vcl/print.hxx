@@ -616,63 +616,74 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // are passed over UNO interfaces. UNO does not know a byte string, hence the string is
     // transported via UTF16 strings.
 
-    // general control
-    static com::sun::star::uno::Any getUIControlOpt( const rtl::OUString& i_rTitle,
+    // Show general control
+    static com::sun::star::uno::Any setUIControlOpt( const com::sun::star::uno::Sequence< rtl::OUString >& i_rIDs,
+                                                     const rtl::OUString& i_rTitle,
                                                      const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpId,
                                                      const rtl::OUString& i_rType,
                                                      const com::sun::star::beans::PropertyValue* i_pValue = NULL,
                                                      const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                      );
-    // create a group (e.g. a TabPage); following controls will be grouped in it until the next
-    // group begins
-    static com::sun::star::uno::Any getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpId );
 
-    // create a subgroup (e.g. a FixedLine); following controls will be grouped in it until the next
-    // subgroup or group begins
-    // setting bJobPage = true will make the subgroup appear on the first page of the print dialog
-    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle,
-                                                           const rtl::OUString& i_rHelpId,
-                                                           const UIControlOptions& i_rControlOptions = UIControlOptions()
-                                                           );
+    // Show and set the title of a TagPage of id i_rID
+    static com::sun::star::uno::Any setGroupControlOpt(const rtl::OUString& i_rID,
+                                                       const rtl::OUString& i_rTitle,
+                                                       const rtl::OUString& i_rHelpId);
 
-    // create a bool option (usually a checkbox)
-    static com::sun::star::uno::Any getBoolControlOpt( const rtl::OUString& i_rTitle,
+    // Show and set the label of a VclFrame of id i_rID
+    static com::sun::star::uno::Any setSubgroupControlOpt(const rtl::OUString& i_rID,
+                                                          const rtl::OUString& i_rTitle,
+                                                          const rtl::OUString& i_rHelpId,
+                                                          const UIControlOptions& i_rControlOptions = UIControlOptions());
+
+    // Show a bool option as a checkbox
+    static com::sun::star::uno::Any setBoolControlOpt(const rtl::OUString& i_rID,
+                                                      const rtl::OUString& i_rTitle,
+                                                      const rtl::OUString& i_rHelpId,
+                                                      const rtl::OUString& i_rProperty,
+                                                      sal_Bool i_bValue,
+                                                      const UIControlOptions& i_rControlOptions = UIControlOptions());
+
+    // Show a set of choices in a list box
+    static com::sun::star::uno::Any setChoiceListControlOpt(const rtl::OUString& i_rID,
+                                                            const rtl::OUString& i_rTitle,
+                                                            const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpId,
+                                                            const rtl::OUString& i_rProperty,
+                                                            const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
+                                                            sal_Int32 i_nValue,
+                                                            const com::sun::star::uno::Sequence< sal_Bool >& i_rDisabledChoices = com::sun::star::uno::Sequence< sal_Bool >(),
+                                                            const UIControlOptions& i_rControlOptions = UIControlOptions());
+
+    // show a set of choices as radio buttons
+    static com::sun::star::uno::Any setChoiceRadiosControlOpt(const com::sun::star::uno::Sequence< rtl::OUString >& i_rIDs,
+                                                            const rtl::OUString& i_rTitle,
+                                                            const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpId,
+                                                            const rtl::OUString& i_rProperty,
+                                                            const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
+                                                            sal_Int32 i_nValue,
+                                                            const com::sun::star::uno::Sequence< sal_Bool >& i_rDisabledChoices = com::sun::star::uno::Sequence< sal_Bool >(),
+                                                            const UIControlOptions& i_rControlOptions = UIControlOptions());
+
+
+    // show an integer range (e.g. a spin field)
+    // note: max value < min value means do not apply min/max values
+    static com::sun::star::uno::Any setRangeControlOpt(const rtl::OUString& i_rID,
+                                                       const rtl::OUString& i_rTitle,
                                                        const rtl::OUString& i_rHelpId,
                                                        const rtl::OUString& i_rProperty,
-                                                       sal_Bool i_bValue,
-                                                       const UIControlOptions& i_rControlOptions = UIControlOptions()
-                                                       );
+                                                       sal_Int32 i_nValue,
+                                                       sal_Int32 i_nMinValue = -1,
+                                                       sal_Int32 i_nMaxValue = -2,
+                                                       const UIControlOptions& i_rControlOptions = UIControlOptions());
 
-    // create a set of choices (either a radio button group or a list box)
-    static com::sun::star::uno::Any getChoiceControlOpt( const rtl::OUString& i_rTitle,
-                                                         const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpId,
-                                                         const rtl::OUString& i_rProperty,
-                                                         const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
-                                                         sal_Int32 i_nValue,
-                                                         const rtl::OUString& i_rType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
-                                                         const com::sun::star::uno::Sequence< sal_Bool >& i_rDisabledChoices = com::sun::star::uno::Sequence< sal_Bool >(),
-                                                         const UIControlOptions& i_rControlOptions = UIControlOptions()
-                                                         );
-
-    // create an integer range (e.g. a spin field)
+    // show a string field
     // note: max value < min value means do not apply min/max values
-    static com::sun::star::uno::Any getRangeControlOpt( const rtl::OUString& i_rTitle,
-                                                        const rtl::OUString& i_rHelpId,
-                                                        const rtl::OUString& i_rProperty,
-                                                        sal_Int32 i_nValue,
-                                                        sal_Int32 i_nMinValue = -1,
-                                                        sal_Int32 i_nMaxValue = -2,
-                                                        const UIControlOptions& i_rControlOptions = UIControlOptions()
-                                                        );
-
-    // create a string field
-    // note: max value < min value means do not apply min/max values
-    static com::sun::star::uno::Any getEditControlOpt( const rtl::OUString& i_rTitle,
-                                                       const rtl::OUString& i_rHelpId,
-                                                       const rtl::OUString& i_rProperty,
-                                                       const rtl::OUString& i_rValue,
-                                                       const UIControlOptions& i_rControlOptions = UIControlOptions()
-                                                       );
+    static com::sun::star::uno::Any setEditControlOpt(const rtl::OUString& i_rID,
+                                                      const rtl::OUString& i_rTitle,
+                                                      const rtl::OUString& i_rHelpId,
+                                                      const rtl::OUString& i_rProperty,
+                                                      const rtl::OUString& i_rValue,
+                                                      const UIControlOptions& i_rControlOptions = UIControlOptions());
 };
 
 }

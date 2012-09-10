@@ -854,6 +854,16 @@ void VclFrame::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
+void VclFrame::set_label(const rtl::OUString &rLabel)
+{
+    //The label widget is the last (of two) children
+    Window *pChild = get_child();
+    WindowImpl* pWindowImpl = ImplGetWindowImpl();
+    Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    assert(pLabel);
+    pLabel->SetText(rLabel);
+}
+
 Size VclAlignment::calculateRequisition() const
 {
     Size aRet(m_nLeftPadding + m_nRightPadding,

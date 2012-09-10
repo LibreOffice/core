@@ -1078,7 +1078,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     // in this case we're only interested in the top border of the tabpage because the tabitems are used
     // standalone (eg impress)
     sal_Bool bNoTabPage = sal_False;
-    TabPage*        pCurPage = (pCurItem) ? pCurItem->mpTabPage : NULL;
+    TabPage* pCurPage = pCurItem ? pCurItem->mpTabPage : NULL;
     if( !pCurPage || !pCurPage->IsVisible() )
     {
         bNoTabPage = sal_True;
@@ -1855,6 +1855,18 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
     return 0;
 }
 
+sal_uInt16 TabControl::GetPageId( const TabPage& rPage ) const
+{
+    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
+    {
+        if ( it->mpTabPage == &rPage )
+            return it->mnId;
+    }
+
+    return 0;
+}
+
 // -----------------------------------------------------------------------
 
 void TabControl::SetCurPageId( sal_uInt16 nPageId )
@@ -2034,6 +2046,14 @@ const XubString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
 }
 
 // -----------------------------------------------------------------------
+
+void TabControl::SetHelpId( sal_uInt16 nPageId, const rtl::OString& rId ) const
+{
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+
+    if ( pItem )
+        pItem->maHelpId = rId;
+}
 
 rtl::OString TabControl::GetHelpId( sal_uInt16 nPageId ) const
 {

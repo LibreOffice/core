@@ -52,6 +52,7 @@ namespace vcl
 {
     class PrintDialog : public ModalDialog
     {
+    public:
         class PrintPreviewWindow : public Window
         {
             GDIMetaFile         maMtf;
@@ -65,7 +66,7 @@ namespace vcl
             FixedLine           maVertDim;
 
         public:
-            PrintPreviewWindow( Window* pParent, const ResId& );
+            PrintPreviewWindow( Window* pParent );
             virtual ~PrintPreviewWindow();
 
             virtual void Paint( const Rectangle& rRect );
@@ -91,6 +92,8 @@ namespace vcl
             ShowNupOrderWindow( Window* pParent );
             virtual ~ShowNupOrderWindow();
 
+            virtual Size GetOptimalSize(WindowSizeType eType) const;
+
             virtual void Paint( const Rectangle& );
 
             void setValues( int i_nOrderMode, int i_nColumns, int i_nRows )
@@ -102,43 +105,43 @@ namespace vcl
             }
         };
 
-        class NUpTabPage : public TabPage
+    private:
+
+        class NUpTabPage
         {
         public:
-            FixedLine                               maNupLine;
-            RadioButton                             maPagesBtn;
-            RadioButton                             maBrochureBtn;
-            FixedText                               maPagesBoxTitleTxt;
-            ListBox                                 maNupPagesBox;
+            RadioButton*                            mpPagesBtn;
+            RadioButton*                            mpBrochureBtn;
+            FixedText*                              mpPagesBoxTitleTxt;
+            ListBox*                                mpNupPagesBox;
 
             // controls for "Custom" page mode
-            FixedText                               maNupNumPagesTxt;
-            NumericField                            maNupColEdt;
-            FixedText                               maNupTimesTxt;
-            NumericField                            maNupRowsEdt;
-            FixedText                               maPageMarginTxt1;
-            MetricField                             maPageMarginEdt;
-            FixedText                               maPageMarginTxt2;
-            FixedText                               maSheetMarginTxt1;
-            MetricField                             maSheetMarginEdt;
-            FixedText                               maSheetMarginTxt2;
-            FixedText                               maNupOrientationTxt;
-            ListBox                                 maNupOrientationBox;
+            FixedText*                              mpNupNumPagesTxt;
+            NumericField*                           mpNupColEdt;
+            FixedText*                              mpNupTimesTxt;
+            NumericField*                           mpNupRowsEdt;
+            FixedText*                              mpPageMarginTxt1;
+            MetricField*                            mpPageMarginEdt;
+            FixedText*                              mpPageMarginTxt2;
+            FixedText*                              mpSheetMarginTxt1;
+            MetricField*                            mpSheetMarginEdt;
+            FixedText*                              mpSheetMarginTxt2;
+            FixedText*                              mpNupOrientationTxt;
+            ListBox*                                mpNupOrientationBox;
 
             // page order ("left to right, then down")
-            FixedText                               maNupOrderTxt;
-            ListBox                                 maNupOrderBox;
-            ShowNupOrderWindow                      maNupOrderWin;
+            FixedText*                              mpNupOrderTxt;
+            ListBox*                                mpNupOrderBox;
+            ShowNupOrderWindow*                     mpNupOrderWin;
             // border around each page
-            CheckBox                                maBorderCB;
+            CheckBox*                               mpBorderCB;
 
             boost::shared_ptr< vcl::RowOrColumn >   mxBrochureDep;
             boost::shared_ptr< vcl::LabeledElement >mxPagesBtnLabel;
 
             void setupLayout();
 
-            NUpTabPage( Window*, const ResId& );
-            virtual ~NUpTabPage();
+            NUpTabPage( VclBuilder* );
 
             void readFromSettings();
             void storeToSettings();
@@ -146,97 +149,72 @@ namespace vcl
             void enableNupControls( bool bEnable );
 
             void showAdvancedControls( bool );
-
-            // virtual void Resize();
         };
 
-        class JobTabPage : public TabPage
+        class JobTabPage
         {
         public:
-            FixedLine                               maPrinterFL;
-            ListBox                                 maPrinters;
-            DisclosureButton                        maDetailsBtn;
-            FixedText                               maStatusLabel;
-            FixedText                               maStatusTxt;
-            FixedText                               maLocationLabel;
-            FixedText                               maLocationTxt;
-            FixedText                               maCommentLabel;
-            FixedText                               maCommentTxt;
+            ListBox*                                mpPrinters;
+            FixedText*                              mpStatusTxt;
+            FixedText*                              mpLocationTxt;
+            FixedText*                              mpCommentTxt;
 
-            PushButton                              maSetupButton;
+            PushButton*                             mpSetupButton;
 
-            FixedLine                               maCopies;
-            FixedLine                               maCopySpacer;
-            FixedText                               maCopyCount;
-            NumericField                            maCopyCountField;
-            CheckBox                                maCollateBox;
-            FixedImage                              maCollateImage;
-            CheckBox                                maReverseOrderBox;
+            FixedLine*                              mpCopySpacer;
+            NumericField*                           mpCopyCountField;
+            CheckBox*                               mpCollateBox;
+            FixedImage*                             mpCollateImage;
+            CheckBox*                               mpReverseOrderBox;
 
             Image                                   maCollateImg;
             Image                                   maNoCollateImg;
 
             long                                    mnCollateUIMode;
 
-            boost::shared_ptr<vcl::RowOrColumn>     mxPrintRange;
-            boost::shared_ptr<vcl::WindowArranger>  mxDetails;
-
-            JobTabPage( Window*, const ResId& );
-            virtual ~JobTabPage();
+            JobTabPage( VclBuilder* );
 
             void readFromSettings();
             void storeToSettings();
-
-            // virtual void Resize();
-
-            void setupLayout();
         };
 
-        class OutputOptPage : public TabPage
+        class OutputOptPage
         {
         public:
-            FixedLine                           maOptionsLine;
-            CheckBox                            maToFileBox;
-            CheckBox                            maCollateSingleJobsBox;
+            CheckBox*                           mpToFileBox;
+            CheckBox*                           mpCollateSingleJobsBox;
 
             boost::shared_ptr<vcl::RowOrColumn> mxOptGroup;
 
-            OutputOptPage( Window*, const ResId& );
-            virtual ~OutputOptPage();
+            OutputOptPage( VclBuilder* );
 
             void readFromSettings();
             void storeToSettings();
-
-            // virtual void Resize();
-
-            void setupLayout();
         };
 
-        TabControl                              maTabCtrl;
+        VclBuilder*                             mpCustomOptionsUIBuilder;
+
+        boost::shared_ptr< PrinterController >  maPController;
+        TabControl*                             mpTabCtrl;
         NUpTabPage                              maNUpPage;
         JobTabPage                              maJobPage;
         OutputOptPage                           maOptionsPage;
+        PrintPreviewWindow*                     mpPreviewWindow;
+        NumericField*                           mpPageEdit;
 
-        PrintPreviewWindow                      maPreviewWindow;
-        NumericField                            maPageEdit;
-        FixedText                               maNumPagesText;
-        PushButton                              maBackwardBtn;
-        PushButton                              maForwardBtn;
+        FixedText*                              mpNumPagesText;
+        PushButton*                             mpBackwardBtn;
+        PushButton*                             mpForwardBtn;
 
-        FixedLine                               maButtonLine;
-
-        OKButton                                maOKButton;
-        CancelButton                            maCancelButton;
-        HelpButton                              maHelpButton;
-
-        boost::shared_ptr< PrinterController >  maPController;
+        OKButton*                               mpOKButton;
+        CancelButton*                           mpCancelButton;
+        HelpButton*                             mpHelpButton;
 
         rtl::OUString                           maPageStr;
         rtl::OUString                           maNoPageStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
-        std::list< Window* >                    maControls;
         std::map< Window*, rtl::OUString >      maControlToPropertyMap;
         std::map< rtl::OUString, std::vector< Window* > >
                                                 maPropertyToWindowMap;
@@ -289,7 +267,6 @@ namespace vcl
         DECL_LINK( UIOption_SelectHdl, ListBox* );
         DECL_LINK( UIOption_ModifyHdl, Edit* );
 
-        void setupLayout();
     public:
         PrintDialog( Window*, const boost::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();

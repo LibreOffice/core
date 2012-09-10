@@ -142,6 +142,7 @@ public:
     sal_uInt16              GetPageId( sal_uInt16 nPos ) const;
     sal_uInt16              GetPagePos( sal_uInt16 nPageId ) const;
     sal_uInt16              GetPageId( const Point& rPos ) const;
+    sal_uInt16              GetPageId( const TabPage& rPage ) const;
 
     void                SetCurPageId( sal_uInt16 nPageId );
     sal_uInt16              GetCurPageId() const;
@@ -162,6 +163,7 @@ public:
     void                SetHelpText( sal_uInt16 nPageId, const XubString& rText );
     const XubString&    GetHelpText( sal_uInt16 nPageId ) const;
 
+    void                SetHelpId( sal_uInt16 nPageId, const rtl::OString& rId ) const;
     rtl::OString        GetHelpId( sal_uInt16 nPageId ) const;
 
     void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
