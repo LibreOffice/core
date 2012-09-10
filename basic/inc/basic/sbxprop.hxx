@@ -36,16 +36,8 @@ public:
     virtual SbxClassType GetClass() const;
 };
 
-#ifndef __SBX_SBXPROPERTYREF_HXX
-#define __SBX_SBXPROPERTYREF_HXX
-
-#ifndef SBX_PROPERTY_DECL_DEFINED
-#define SBX_PROPERTY_DECL_DEFINED
 SV_DECL_REF(SbxProperty)
-#endif
 SV_IMPL_REF(SbxProperty)
-
-#endif
 
 #endif
 

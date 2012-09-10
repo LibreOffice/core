@@ -92,15 +92,9 @@ public:
     void Dump( SvStream&, sal_Bool bDumpAll=sal_False );
 };
 
-#ifndef __SBX_SBXOBJECTREF_HXX
-
-#ifndef SBX_OBJECT_DECL_DEFINED
-#define SBX_OBJECT_DECL_DEFINED
 SV_DECL_REF(SbxObject)
-#endif
 SV_IMPL_REF(SbxObject)
 
-#endif /* __SBX_SBXOBJECTREF_HXX */
 #endif /* _SBX_SBXOBJECT_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

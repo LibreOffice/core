@@ -351,10 +351,7 @@ public:
     static sal_uInt16 MakeHashCode( const String& rName );
 };
 
-#ifndef SBX_VARIABLE_DECL_DEFINED
-#define SBX_VARIABLE_DECL_DEFINED
 SV_DECL_REF(SbxVariable)
-#endif
 
 #endif  // SBXVAR_HXX
 

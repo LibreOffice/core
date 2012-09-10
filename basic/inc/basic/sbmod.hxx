@@ -141,12 +141,7 @@ public:
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 
-#ifndef __SB_SBMODULEREF_HXX
-#define __SB_SBMODULEREF_HXX
-
 SV_DECL_IMPL_REF(SbModule)
-
-#endif
 
 // Object class for instances of class modules
 class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
@@ -171,12 +166,7 @@ public:
     void triggerTerminateEvent( void );
 };
 
-#ifndef __SB_SBCLASSMODULEREF_HXX
-#define __SB_SBCLASSMODULEREF_HXX
-
 SV_DECL_IMPL_REF(SbClassModuleObject);
-
-#endif
 
 #endif
 
