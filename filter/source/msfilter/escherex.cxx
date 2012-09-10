@@ -24,6 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 #include "eschesdo.hxx"
+#include <svx/svdomedia.hxx>
 #include <svx/xflftrit.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <svx/unoapi.hxx>
@@ -1324,38 +1325,61 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
             if ( pGraphic )
             {
                 GraphicObject aGraphicObject( *pGraphic );
-                ByteString aUniqueId( aGraphicObject.GetUniqueID() );
-                if ( aUniqueId.Len() )
-                {
-                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-                    uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
-
-                    if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect && aXPropSet.is() )
-                    {
-                        ::com::sun::star::uno::Any aAny;
-                        ::com::sun::star::awt::Rectangle* pVisArea = NULL;
-                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) )
-                        {
-                            pVisArea = new ::com::sun::star::awt::Rectangle;
-                            aAny >>= (*pVisArea);
-                        }
-                        Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-                        sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea, NULL );
-                        if ( nBlibId )
-                        {
-                            AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
-                            ImplCreateGraphicAttributes( aXPropSet, nBlibId, sal_False );
-                            bRetValue = sal_True;
-                        }
-                        delete pVisArea;
-                    }
-                }
+                bRetValue = CreateGraphicProperties( rXShape,aGraphicObject );
+                // End
             }
         }
     }
     return bRetValue;
 }
 
+sal_Bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape ,const GraphicObject& rGraphicObj )
+{
+    sal_Bool    bRetValue = sal_False;
+    ByteString aUniqueId( rGraphicObj.GetUniqueID() );
+    if ( aUniqueId.Len() )
+    {
+        AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+        uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
+
+        if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect && aXPropSet.is() )
+        {
+            ::com::sun::star::uno::Any aAny;
+            ::com::sun::star::awt::Rectangle* pVisArea = NULL;
+            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) )
+            {
+                pVisArea = new ::com::sun::star::awt::Rectangle;
+                aAny >>= (*pVisArea);
+            }
+            Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
+            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea, NULL );
+            if ( nBlibId )
+            {
+                AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+                ImplCreateGraphicAttributes( aXPropSet, nBlibId, sal_False );
+                bRetValue = sal_True;
+            }
+            delete pVisArea;
+        }
+    }
+    return bRetValue;
+}
+
+sal_Bool EscherPropertyContainer::CreateMediaGraphicProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
+{
+    sal_Bool    bRetValue = sal_False;
+    if ( rXShape.is() )
+    {
+        SdrObject* pSdrMedia( GetSdrObjectFromXShape( rXShape ) );  // SJ: leaving unoapi, because currently there is
+        if ( pSdrMedia && pSdrMedia->ISA( SdrMediaObj ) )               // no access to the native graphic object
+        {
+            GraphicObject aGraphicObject( ((SdrMediaObj*)pSdrMedia)->getGraphic() );
+            bRetValue = CreateGraphicProperties( rXShape, aGraphicObject );
+        }
+    }
+    return bRetValue;
+}
 
 sal_Bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const ByteString& rUniqueId )
 {
