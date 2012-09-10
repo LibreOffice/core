@@ -212,6 +212,9 @@ class GtkSalFrame : public SalFrame
     GdkRegion*                      m_pRegion;
 #endif
 
+    SalMenu*                        m_pSalMenu;
+    sal_uInt32                      m_nWatcherId;
+
     void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
@@ -337,7 +340,9 @@ public:
     virtual void                SetTitle( const rtl::OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu *pSalMenu );
+    virtual SalMenu*            GetMenu( void );
     virtual void                DrawMenuBar();
+    void                        SetWatcherId( sal_uInt32 watcherId );
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     // Before the window is visible, a resize event

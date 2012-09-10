@@ -523,6 +523,9 @@ GtkSalFrame::~GtkSalFrame()
         g_object_unref( G_OBJECT( m_pForeignParent ) );
     if( m_pForeignTopLevel )
         g_object_unref( G_OBJECT( m_pForeignTopLevel) );
+
+    if ( m_nWatcherId > 0 )
+        g_bus_unwatch_name( m_nWatcherId );
 }
 
 void GtkSalFrame::moveWindow( long nX, long nY )
@@ -630,6 +633,8 @@ void GtkSalFrame::InitCommon()
     m_pRegion           = NULL;
     m_ePointerStyle     = 0xffff;
     m_bSetFocusOnMap    = false;
+    m_pSalMenu          = NULL;
+    m_nWatcherId        = 0;
 
     gtk_widget_set_app_paintable( m_pWindow, TRUE );
     gtk_widget_set_double_buffered( m_pWindow, FALSE );
@@ -1279,12 +1284,23 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
     g_list_free( pIcons );
 }
 
-void GtkSalFrame::SetMenu( SalMenu* )
+void GtkSalFrame::SetMenu( SalMenu* pSalMenu )
 {
+    m_pSalMenu = pSalMenu;
+}
+
+SalMenu* GtkSalFrame::GetMenu( void )
+{
+    return m_pSalMenu;
 }
 
 void GtkSalFrame::DrawMenuBar()
 {
+}
+
+void GtkSalFrame::SetWatcherId( sal_uInt32 watcherId )
+{
+    m_nWatcherId = watcherId;
 }
 
 void GtkSalFrame::Center()

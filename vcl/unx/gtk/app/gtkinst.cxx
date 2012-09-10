@@ -512,7 +512,7 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 
 SalMenu* GtkInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
-    GtkSalMenu *pSalMenu = new GtkSalMenu( bMenuBar );
+    GtkSalMenu* pSalMenu = new GtkSalMenu( bMenuBar );
     pSalMenu->SetMenu( pVCLMenu );
 
     return static_cast<SalMenu*>( pSalMenu );
@@ -527,7 +527,8 @@ void GtkInstance::DestroyMenu( SalMenu* pMenu )
 
 SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* pItemData )
 {
-    GtkSalMenuItem *pMenuItem = new GtkSalMenuItem( pItemData );
+    GtkSalMenuItem* pMenuItem = new GtkSalMenuItem( pItemData );
+
     return static_cast<SalMenuItem*>( pMenuItem );
 }
 

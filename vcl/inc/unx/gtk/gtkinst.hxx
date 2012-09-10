@@ -137,7 +137,6 @@ public:
     void                        subtractEvent( sal_uInt16 nMask );
 
     boost::shared_ptr<vcl::unx::GtkPrintWrapper> getPrintWrapper() const;
-
   private:
     std::vector<GtkSalTimer *>  m_aTimers;
     bool                        IsTimerExpired();

@@ -44,21 +44,25 @@ private:
     std::vector< GtkSalMenuItem* >  maItems;
 
     sal_Bool                        mbMenuBar;
+    sal_Bool                        mbVisible;
     Menu*                           mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
     const GtkSalFrame*              mpFrame;
+
+    sal_uInt32                      mWatcherId;
 
     // GMenuModel and GActionGroup attributes
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
-    sal_Int32       GetPositionFromItem( GtkSalMenuItem* pSalMenuItem );
-    void            GetItemSectionAndPosition( unsigned nPos, unsigned *insertSection, unsigned *insertPos );
+    sal_Int32                   GetPositionFromItem( GtkSalMenuItem* pSalMenuItem );
+    void                        GetItemSectionAndPosition( unsigned nPos, unsigned *insertSection, unsigned *insertPos );
 
 public:
     GtkSalMenu( sal_Bool bMenuBar );
     virtual ~GtkSalMenu();
 
+    virtual void                SetVisibleMenuBar( sal_Bool bVisible );
     virtual sal_Bool            VisibleMenuBar();   // must return TRUE to actually DISPLAY native menu bars
                                                     // otherwise only menu messages are processed (eg, OLE on Windows)
 
