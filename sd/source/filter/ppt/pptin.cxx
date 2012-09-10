@@ -2005,6 +2005,8 @@ String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                                                 if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aStr, aRetVal ) )
                                                 {
                                                     aRetVal = INetURLObject( aRetVal ).GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+                                                }else{
+                                                    aRetVal = aStr;
                                                 }
                                             }
                                         }
