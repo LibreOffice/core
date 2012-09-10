@@ -1377,8 +1377,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                 else if ( aAny >>= fTiming )
                 {
                     bCreateEvent = sal_True;
-                    if ( eTiming == Timing_INDEFINITE )
-                        nBegin = (sal_Int32)( fTiming * 1000.0 );
+                    nBegin = (sal_Int32)( fTiming * 1000.0 );
                 }
             }
             break;
