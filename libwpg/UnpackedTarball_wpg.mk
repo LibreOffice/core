@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,wpg))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,wpg,$(WPG_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_add_patches,wpg,\
+    libwpg/libwpg-0.2.1-warning.patch \
+))
+# libwpg/libwpg-0.2.1-warning.patch: -Werror,-Wparentheses,
+#  -Werror,-Wunused-private-field
+
 # vim: set noet sw=4 ts=4:
