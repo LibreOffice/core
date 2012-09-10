@@ -99,8 +99,6 @@ private:
         Rectangle aRect;
         // size (width or height)
         long nSize;
-        // last position (between Add()s)
-        long nLastPos;
         // the main splitting line
         Splitter aSplitter;
         // the dockable windows (and some data)

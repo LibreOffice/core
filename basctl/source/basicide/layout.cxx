@@ -164,7 +164,6 @@ Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
     bVertical(eSide == Left || eSide == Right),
     bLower(eSide == Left || eSide == Top),
     nSize(0),
-    nLastPos(0),
     aSplitter(pParent, bVertical ? WB_HSCROLL : WB_VSCROLL)
 {
     InitSplitter(aSplitter);
