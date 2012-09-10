@@ -475,7 +475,7 @@ void ScDPTableDataCache::AddRow( ScDPItemData* pRow, sal_uInt16 nCount )
     else
     {
         for ( sal_uInt16 i = 0; i < nCount && i < mnColumnCount; i ++ )
-            AddData<true>( i, new ScDPItemData( pRow[i] ) );
+            AddData( i, new ScDPItemData( pRow[i] ) );
     }
 }
 
@@ -607,7 +607,7 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
             {
                ScDPItemData * pNew =  lcl_GetItemValue( xRow, aColTypes[nCol], nCol+1, rNullDate );
                 if ( pNew )
-                    AddData<true>(  nCol , pNew );
+                    AddData(  nCol , pNew );
             }
         }
         while (xRowSet->next());
@@ -863,7 +863,6 @@ bool ScDPTableDataCache::IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const
     return !GetItemDataById( nColumn, GetItemDataId( nColumn, nRow, sal_False ) )->IsHasData();
 }
 
-template< bool bCheckDate >
 sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
@@ -872,7 +871,6 @@ sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 
     sal_Bool    bInserted = sal_False;
 
-    if( bCheckDate )
     pitemData->SetDate( lcl_isDate( GetNumType( pitemData->nNumFormat ) ) );
 
     if ( !lcl_Search( mpTableDataValues[nDim], mpGlobalOrder[nDim], *pitemData, nIndex ) )
@@ -898,15 +896,6 @@ sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
         delete pitemData;
 
     return sal_True;
-}
-
-
-void func_dummy()
-{
-    sal_Bool (ScDPTableDataCache::*pfnAddData)(long , ScDPItemData* )
-        = &ScDPTableDataCache::AddData<false>;
-
-    pfnAddData = (sal_Bool (ScDPTableDataCache::*)(long , ScDPItemData* ))&ScDPTableDataCache::AddData<true>;
 }
 
 String ScDPTableDataCache::GetDimensionName( sal_uInt16 nColumn ) const

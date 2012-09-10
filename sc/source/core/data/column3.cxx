@@ -1793,8 +1793,7 @@ void  ScColumn::FillDPCacheT( long nDim, SCROW nStartRow, SCROW nEndRow, const b
 }
 void  ScColumn::FillDPCache( ScDPTableDataCache * pCache, long nDim, SCROW nStartRow, SCROW nEndRow )
 {
-    typedef sal_Bool(ScDPTableDataCache::*PFNAddData)( long, ScDPItemData* );
-    FillDPCacheT<boost::function<void(ScDPItemData*)>, boost::function<sal_Bool(long,ScDPItemData*)> >( nDim, nStartRow, nEndRow, boost::bind( &ScDPTableDataCache::AddLabel, pCache, _1 ), boost::bind( (PFNAddData)&ScDPTableDataCache::AddData<false>, pCache, _1, _2 ) );
+    FillDPCacheT<boost::function<void(ScDPItemData*)>, boost::function<sal_Bool(long,ScDPItemData*)> >( nDim, nStartRow, nEndRow, boost::bind( &ScDPTableDataCache::AddLabel, pCache, _1 ), boost::bind( &ScDPTableDataCache::AddData, pCache, _1, _2 ) );
 }
 
 void ScColumn::GetInputString( SCROW nRow, String& rString ) const

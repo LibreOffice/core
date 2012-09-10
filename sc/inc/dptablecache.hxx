@@ -109,7 +109,6 @@ protected:
 private:
 public:
     void        AddLabel( ScDPItemData* pData);
-    template< bool bCheckDate >
     sal_Bool    AddData( long nDim, ScDPItemData* itemData );
 };
 
