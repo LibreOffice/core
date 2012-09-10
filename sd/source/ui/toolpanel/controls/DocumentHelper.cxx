@@ -315,7 +315,7 @@ void DocumentHelper::AssignMasterPageToPageList (
 
     // Make the layout name by stripping ouf the layout postfix from the
     // layout name of the given master page.
-    String sFullLayoutName (pMasterPage->GetLayoutName());
+    OUString sFullLayoutName(pMasterPage->GetLayoutName());
     String sBaseLayoutName (sFullLayoutName);
     sBaseLayoutName.Erase (sBaseLayoutName.SearchAscii (SD_LT_SEPARATOR));
 
@@ -329,8 +329,7 @@ void DocumentHelper::AssignMasterPageToPageList (
     for (iPage=rpPageList->begin(); iPage!=rpPageList->end(); ++iPage)
     {
         OSL_ASSERT(*iPage!=NULL && (*iPage)->GetModel() == &rTargetDocument);
-        if (*iPage != NULL
-            && (*iPage)->GetLayoutName().CompareTo(sFullLayoutName)!=0)
+        if (*iPage != NULL && (*iPage)->GetLayoutName() != sFullLayoutName)
         {
             aCleanedList.push_back(*iPage);
         }

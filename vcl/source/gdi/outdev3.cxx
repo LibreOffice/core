@@ -6966,7 +6966,7 @@ static sal_Bool ImplIsCharIn( xub_Unicode c, const sal_Char* pStr )
 
 // -----------------------------------------------------------------------
 
-String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
+OUString OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
                                         sal_uInt16 nStyle ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );

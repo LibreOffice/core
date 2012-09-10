@@ -69,7 +69,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 
     if ( aText.Len() )
     {
-        String aVal = rDev.GetEllipsisString(aText,aInnerRect.GetWidth() - 2*MIN_COLUMNWIDTH);
+        OUString aVal = rDev.GetEllipsisString(aText,aInnerRect.GetWidth() - 2*MIN_COLUMNWIDTH);
 
         Font aFont( rDev.GetFont() );
         sal_Bool bOldTransp = aFont.IsTransparent();

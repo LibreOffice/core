@@ -1759,9 +1759,9 @@ const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/
     return NULL;
 }
 
-XubString SdrPage::GetLayoutName() const
+OUString SdrPage::GetLayoutName() const
 {
-    return String();
+    return OUString();
 }
 
 void SdrPage::SetInserted( bool bIns )

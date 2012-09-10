@@ -56,10 +56,10 @@ const sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
 
 struct ImplTabBarItem
 {
-    sal_uInt16          mnId;
+    sal_uInt16      mnId;
     TabBarPageBits  mnBits;
-    XubString       maText;
-    XubString       maHelpText;
+    OUString        maText;
+    OUString        maHelpText;
     Rectangle       maRect;
     long            mnWidth;
     rtl::OString    maHelpId;
@@ -69,7 +69,7 @@ struct ImplTabBarItem
     Color           maTabBgColor;
     Color           maTabTextColor;
 
-                    ImplTabBarItem( sal_uInt16 nItemId, const XubString& rText,
+                    ImplTabBarItem( sal_uInt16 nItemId, const OUString& rText,
                                     TabBarPageBits nPageBits ) :
                         maText( rText )
                     {
@@ -1392,7 +1392,7 @@ void TabBar::Paint( const Rectangle& rect )
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
             bool bSpecialTab = (pItem->mnBits & TPB_SPECIAL);
             bool bEnabled = pItem->mbEnable;
-            String aText = pItem->mbShort ?
+            OUString aText = pItem->mbShort ?
                 GetEllipsisString(pItem->maText, mnCurMaxWidth, TEXT_DRAW_ENDELLIPSIS) : pItem->maText;
 
             aDrawer.setRect(aRect);
@@ -1535,8 +1535,8 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
     {
         if ( rHEvt.GetMode() & HELPMODE_BALLOON )
         {
-            XubString aStr = GetHelpText( nItemId );
-            if ( aStr.Len() )
+            OUString aStr = GetHelpText( nItemId );
+            if (!aStr.isEmpty())
             {
                 Rectangle aItemRect = GetPageRect( nItemId );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -1578,8 +1578,8 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
                 aPt = OutputToScreenPixel( aItemRect.BottomRight() );
                 aItemRect.Right()  = aPt.X();
                 aItemRect.Bottom() = aPt.Y();
-                XubString aStr = (*mpItemList)[ nPos ]->maText;
-                if ( aStr.Len() )
+                OUString aStr = (*mpItemList)[ nPos ]->maText;
+                if (!aStr.isEmpty())
                 {
                     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                         Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
@@ -1823,7 +1823,7 @@ void TabBar::Mirror()
 
 // -----------------------------------------------------------------------
 
-void TabBar::InsertPage( sal_uInt16 nPageId, const XubString& rText,
+void TabBar::InsertPage( sal_uInt16 nPageId, const OUString& rText,
                          TabBarPageBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nPageId, "TabBar::InsertPage(): PageId == 0" );
@@ -2456,7 +2456,7 @@ void TabBar::SetMaxPageWidth( long nMaxWidth )
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetPageText( sal_uInt16 nPageId, const XubString& rText )
+void TabBar::SetPageText( sal_uInt16 nPageId, const OUString& rText )
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
@@ -2474,13 +2474,12 @@ void TabBar::SetPageText( sal_uInt16 nPageId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-XubString TabBar::GetPageText( sal_uInt16 nPageId ) const
+OUString TabBar::GetPageText( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
         return (*mpItemList)[ nPos ]->maText;
-    else
-        return XubString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -2491,7 +2490,7 @@ XubString TabBar::GetHelpText( sal_uInt16 nPageId ) const
     if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = (*mpItemList)[ nPos ];
-        if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
+        if (pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty())
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
@@ -2500,8 +2499,7 @@ XubString TabBar::GetHelpText( sal_uInt16 nPageId ) const
 
         return pItem->maHelpText;
     }
-    else
-        return XubString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------

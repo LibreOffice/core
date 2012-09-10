@@ -90,10 +90,10 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     /*********************************************************************
     |* Layoutname der Seite
     \********************************************************************/
-    String aOldLayoutName(maLayoutName);    // merken
-    maLayoutName = rLayoutName;
-    maLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
-    maLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
+    OUString aOldLayoutName(maLayoutName);    // merken
+    OUStringBuffer aBuf(rLayoutName);
+    aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
+    maLayoutName = aBuf.makeStringAndClear();
 
     /*********************************************************************
     |* ggf. Masterpage suchen und setzen

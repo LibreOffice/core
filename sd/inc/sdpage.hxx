@@ -127,7 +127,7 @@ protected:
     sal_uInt32  mnTime;                   ///< Display time in seconds
     sal_Bool    mbSoundOn;                ///< with / without sound.
     sal_Bool    mbExcluded;               ///< will (not) be displayed during show.
-    String      maLayoutName;             ///< Name of the layout
+    OUString    maLayoutName;             ///< Name of the layout
     String      maSoundFile;              ///< Path to sound file (MSDOS notation).
     bool        mbLoopSound;
     bool        mbStopSound;
@@ -273,8 +273,8 @@ public:
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
                          const Rectangle& rOldBoundRect);
 
-    void            SetLayoutName(String aName);
-    virtual String  GetLayoutName() const       { return maLayoutName; }
+    void            SetLayoutName(OUString aName);
+    virtual OUString GetLayoutName() const       { return maLayoutName; }
 
     void            SetFileName(const String& aName) { maFileName = aName; }
     virtual String  GetFileName() const       { return maFileName; }

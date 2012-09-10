@@ -891,9 +891,10 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 if( pNewPage )
                 {
                     SdrPageView* pPV = mpDrawView->GetSdrPageView();
-
-                    String sPageText (pNewPage->GetLayoutName());
-                    sPageText.Erase(sPageText.SearchAscii(SD_LT_SEPARATOR));
+                    OUString sPageText(pNewPage->GetLayoutName());
+                    sal_Int32 nPos = sPageText.indexOf(SD_LT_SEPARATOR);
+                    if (nPos != -1)
+                        sPageText = sPageText.copy(0, nPos);
                     if (pPV
                         && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() )
                         && sPageText == maTabControl.GetPageText(nSelectedPage+1))
@@ -918,7 +919,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                     SdPage* pCurrentPage = dynamic_cast< SdPage* >( pPV->GetPage());
                     if (pPV
                         && pNewPage == pCurrentPage
-                        && pNewPage->GetName() == maTabControl.GetPageText(nSelectedPage+1))
+                        && maTabControl.GetPageText(nSelectedPage+1).equals(pNewPage->GetName()))
                     {
                         // this slide is already visible
                         return sal_True;
@@ -1049,7 +1050,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
 
             maTabControl.SetCurPageId(nSelectedPage+1);
-            String aPageName = mpActualPage->GetName();
+            OUString aPageName = mpActualPage->GetName();
 
             if (maTabControl.GetPageText(nSelectedPage+1) != aPageName)
             {
@@ -1117,8 +1118,10 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 }
             }
 
-            String aLayoutName(pMaster->GetLayoutName());
-            aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
+            OUString aLayoutName(pMaster->GetLayoutName());
+            sal_Int32 nPos = aLayoutName.indexOf(SD_LT_SEPARATOR);
+            if (nPos != -1)
+                aLayoutName = aLayoutName.copy(0, nPos);
 
             maTabControl.SetCurPageId(nSelectedPage+1);
 

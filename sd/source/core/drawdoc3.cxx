@@ -1258,7 +1258,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool 
         {
             // Do not delete master pages that have their precious flag set.
             sal_Bool bDeleteMaster = !pMaster->IsPrecious();
-            String aLayoutName = pMaster->GetLayoutName();
+            OUString aLayoutName = pMaster->GetLayoutName();
 
             if(bOnlyDuplicatePages )
             {
@@ -1419,11 +1419,11 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         }
         else
         {
-            String aSearchFor(rLayoutName);
-            aSearchFor.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
-            aSearchFor.Append( String(SdResId(STR_LAYOUT_OUTLINE))) ;
+            OUStringBuffer aBuf(rLayoutName);
+            aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
+            OUString aSearchFor(aBuf.makeStringAndClear());
 
-            for (sal_uInt16 nMP = 0; nMP < pSourceDoc->GetMasterPageCount(); nMP++)
+            for (sal_uInt16 nMP = 0; nMP < pSourceDoc->GetMasterPageCount(); ++nMP)
             {
                 SdPage* pMP = (SdPage*) pSourceDoc->GetMasterPage(nMP);
 

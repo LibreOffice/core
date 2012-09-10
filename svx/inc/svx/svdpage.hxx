@@ -546,7 +546,7 @@ public:
     const         SdrLayerAdmin& GetLayerAdmin() const                  { return *pLayerAdmin; }
                   SdrLayerAdmin& GetLayerAdmin()                        { return *pLayerAdmin; }
 
-    virtual String GetLayoutName() const;
+    virtual OUString GetLayoutName() const;
 
     // fuer's Raster im Writer, auch fuer AlignObjects wenn 1 Objekt markiert ist
     // wenn pRect!=NULL, dann die Seiten, die von diesem Rect intersected werden

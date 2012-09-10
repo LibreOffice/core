@@ -351,14 +351,13 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
     // Get a list of all pages.  As a little optimization we only
     // include pages that do not already have the given master page
     // assigned.
-    String sFullLayoutName (pMasterPage->GetLayoutName());
+    OUString sFullLayoutName(pMasterPage->GetLayoutName());
     ::sd::slidesorter::SharedPageSelection pPageList (
         new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
     for (sal_uInt16 nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
     {
         SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
-        if (pPage != NULL
-            && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
+        if (pPage != NULL && pPage->GetLayoutName() != sFullLayoutName)
         {
             pPageList->push_back (pPage);
         }

@@ -118,9 +118,9 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, sal_Bool bMasterPage)
     // Der Layoutname der Seite wird von SVDRAW benutzt, um die Praesentations-
     // vorlagen der Gliederungsobjekte zu ermitteln. Darum enthaelt er bereits
     // den Bezeichner fuer die Gliederung (STR_LAYOUT_OUTLINE).
-    maLayoutName  = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
-    maLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
-    maLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
+    OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME).toString());
+    aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
+    maLayoutName = aBuf.makeStringAndClear();
 
     Size aPageSize(GetSize());
 
@@ -2494,18 +2494,16 @@ void SdPage::SetLinkData(const String&, const String& )
 |* Layoutname setzen
 |*
 \************************************************************************/
-void SdPage::SetLayoutName(String aName)
+void SdPage::SetLayoutName(OUString aName)
 {
     maLayoutName = aName;
 
     if( mbMaster )
     {
-        String aSep( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR) );
-        sal_uInt16 nPos = maLayoutName.Search( aSep );
-        if ( nPos != STRING_NOTFOUND )
-        {
-            FmFormPage::SetName(maLayoutName.Copy(0, nPos));
-        }
+        OUString aSep(SD_LT_SEPARATOR);
+        sal_Int32 nPos = maLayoutName.indexOf(aSep);
+        if (nPos != -1)
+            FmFormPage::SetName(maLayoutName.copy(0, nPos));
     }
 }
 
