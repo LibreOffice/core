@@ -68,7 +68,6 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
@@ -2215,7 +2214,8 @@ sal_Bool EscherPropertyContainer::CreateShadowProperties(
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Int32 GetValueForEnhancedCustomShapeParameter( const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, const std::vector< sal_Int32 >& rEquationOrder )
+sal_Int32 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter( const ::com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter,
+                                const std::vector< sal_Int32 >& rEquationOrder, sal_Bool bAdjustTrans )
 {
     sal_Int32 nValue = 0;
     if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
@@ -2231,22 +2231,29 @@ sal_Int32 GetValueForEnhancedCustomShapeParameter( const com::sun::star::drawing
     {
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
-            OSL_ASSERT(nValue < rEquationOrder.size());
-            if ( nValue < rEquationOrder.size() )
+            OSL_ASSERT((sal_uInt32)nValue < rEquationOrder.size());
+            if ( (sal_uInt32)nValue < rEquationOrder.size() )
             {
                 nValue = (sal_uInt16)rEquationOrder[ nValue ];
                 nValue |= (sal_uInt32)0x80000000;
             }
         }
         break;
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT:
         {
-
+            if(bAdjustTrans)
+            {
+                sal_uInt32 nAdjustValue = 0;
+                sal_Bool bGot = GetOpt((sal_uInt16)( DFF_Prop_adjustValue + nValue ), nAdjustValue);
+                if(bGot) nValue = (sal_Int32)nAdjustValue;
+            }
         }
+        break;
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL :
+        default:
         break;
 /* not sure if it is allowed to set following values
 (but they are not yet used)
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP :
@@ -2453,6 +2460,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     if ( aXPropSet.is() )
     {
         SdrObjCustomShape* pCustoShape = (SdrObjCustomShape*)GetSdrObjectFromXShape( rXShape );
+        if ( !pCustoShape ) return;
         const rtl::OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
         uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
         uno::Sequence< beans::PropertyValue > aGeoPropSeq;
@@ -2468,6 +2476,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             const rtl::OUString sAdjustmentValues   ( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
 
             const beans::PropertyValue* pAdjustmentValuesProp = NULL;
+            const beans::PropertyValue* pPathCoordinatesProp = NULL;
             sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
             uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
             sal_Bool bPredefinedHandlesUsed = sal_True;
@@ -2916,38 +2925,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             else if ( rrProp.Name.equals( sPathCoordinates ) )
                             {
                                 if ( !bIsDefaultObject )
-                                {
-                                    com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
-                                    if ( rrProp.Value >>= aCoordinates )
-                                    {
-                                        // creating the vertices
-                                        if ( (sal_uInt16)aCoordinates.getLength() )
-                                        {
-                                            sal_uInt16 j, nElements = (sal_uInt16)aCoordinates.getLength();
-                                            sal_uInt16 nElementSize = 8;
-                                            sal_uInt32 nStreamSize = nElementSize * nElements + 6;
-                                            SvMemoryStream aOut( nStreamSize );
-                                            aOut << nElements
-                                                << nElements
-                                                << nElementSize;
-                                            for( j = 0; j < nElements; j++ )
-                                            {
-                                                sal_Int32 X = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].First, aEquationOrder );
-                                                sal_Int32 Y = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].Second, aEquationOrder );
-                                                aOut << X
-                                                    << Y;
-                                            }
-                                            sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
-                                            memcpy( pBuf, aOut.GetData(), nStreamSize );
-                                            AddOpt( DFF_Prop_pVertices, sal_True, nStreamSize - 6, pBuf, nStreamSize ); // -6
-                                        }
-                                        else
-                                        {
-                                            sal_uInt8* pBuf = new sal_uInt8[ 1 ];
-                                            AddOpt( DFF_Prop_pVertices, sal_True, 0, pBuf, 0 );
-                                        }
-                                    }
-                                }
+                                    pPathCoordinatesProp = &rrProp;
                             }
                             else if ( rrProp.Name.equals( sPathGluePoints ) )
                             {
@@ -3590,6 +3568,39 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     for ( k = 0; k < nAdjustmentValues; k++ )
                         if( GetAdjustmentValue( aAdjustmentSeq[ k ], k, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
                             AddOpt( (sal_uInt16)( DFF_Prop_adjustValue + k ), (sal_uInt32)nValue );
+                }
+            }
+            if( pPathCoordinatesProp )
+            {
+                com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+                if ( pPathCoordinatesProp->Value >>= aCoordinates )
+                {
+                    // creating the vertices
+                    if ( (sal_uInt16)aCoordinates.getLength() )
+                    {
+                        sal_uInt16 j, nElements = (sal_uInt16)aCoordinates.getLength();
+                        sal_uInt16 nElementSize = 8;
+                        sal_uInt32 nStreamSize = nElementSize * nElements + 6;
+                        SvMemoryStream aOut( nStreamSize );
+                        aOut << nElements
+                            << nElements
+                            << nElementSize;
+                        for( j = 0; j < nElements; j++ )
+                        {
+                            sal_Int32 X = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].First, aEquationOrder, sal_True );
+                            sal_Int32 Y = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].Second, aEquationOrder, sal_True );
+                            aOut << X
+                                << Y;
+                        }
+                        sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
+                        memcpy( pBuf, aOut.GetData(), nStreamSize );
+                        AddOpt( DFF_Prop_pVertices, sal_True, nStreamSize - 6, pBuf, nStreamSize ); // -6
+                    }
+                    else
+                    {
+                        sal_uInt8* pBuf = new sal_uInt8[ 1 ];
+                        AddOpt( DFF_Prop_pVertices, sal_True, 0, pBuf, 0 );
+                    }
                 }
             }
         }
