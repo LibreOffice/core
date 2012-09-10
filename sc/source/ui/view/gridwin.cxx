@@ -1187,7 +1187,8 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
     pFilterBox = new ScFilterListBox(
         pFilterFloat, this, nCol, nRow, bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER );
-    if ( bLayoutRTL )
+    // Fix for bug fdo#44925
+    if (Application::GetSettings().GetLayoutRTL() != bLayoutRTL)
         pFilterBox->EnableMirroring();
 
     nSizeX += 1;
