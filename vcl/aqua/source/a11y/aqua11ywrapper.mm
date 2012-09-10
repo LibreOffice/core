@@ -970,15 +970,9 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
             com::sun::star::awt::Point location = rxAccessibleComponent -> getLocationOnScreen();
             com::sun::star::awt::Point hitPoint ( point.X - location.X , point.Y - location.Y); 
             Reference < XAccessible > rxAccessible = rxAccessibleComponent -> getAccessibleAtPoint ( hitPoint );
-            if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {
-                if ( rxAccessible -> getAccessibleContext() -> getAccessibleChildCount() > 0 ) {
-                    hitChild = hitTestRunner ( point, rxAccessible -> getAccessibleContext() );
-                    if ( ! hitChild.is() ) {
-                        hitChild = rxAccessible -> getAccessibleContext();
-                    }
-                } else {
-                    hitChild = rxAccessible -> getAccessibleContext();
-                }
+            if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() &&
+                 rxAccessible -> getAccessibleContext() -> getAccessibleChildCount() == 0 ) {
+                hitChild = rxAccessible -> getAccessibleContext();
             }
         } 
         if ( !hitChild.is() && rxAccessibleContext -> getAccessibleChildCount() > 0 ) { // special treatment for e.g. comboboxes
