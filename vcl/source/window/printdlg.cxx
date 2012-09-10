@@ -1155,6 +1155,9 @@ void PrintDialog::setupOptionalUI()
         maJobPage.mpCopySpacer->Show( sal_False );
         maJobPage.mpReverseOrderBox->Show( sal_False );
     }
+
+    if (!mpCustomOptionsUIBuilder)
+        mpTabCtrl->RemovePage(mpTabCtrl->GetPageId(1));
 }
 
 void PrintDialog::DataChanged( const DataChangedEvent& i_rDCEvt )
