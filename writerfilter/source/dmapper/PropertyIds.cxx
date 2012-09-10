@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include "PropertyIds.hxx"
 #include <map>
@@ -326,10 +327,15 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
     }
     return aIt->second;
 }
+
+namespace
+{
+    class thePropertyNameSupplier : public rtl::Static<PropertyNameSupplier, PropertyNameSupplier> {};
+}
+
 PropertyNameSupplier& PropertyNameSupplier::GetPropertyNameSupplier()
 {
-    static PropertyNameSupplier aNameSupplier;
-    return aNameSupplier;
+    return thePropertyNameSupplier::get();
 }
 
 } //namespace dmapper
