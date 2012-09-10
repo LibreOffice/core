@@ -13,6 +13,7 @@ symlink: %_DEST%\lib\libexslt.so.0 %_DEST%\lib\libexslt.so
 ..\%__SRC%\lib\libexslt.0.dylib %_DEST%\lib\libexslt.0.dylib
 symlink: %_DEST%\lib\libexslt.0.dylib %_DEST%\lib\libexslt.dylib
 ..\%__SRC%\lib\libexslt.so %_DEST%\lib\libexslt.so
+..\%__SRC%\lib\libexslt.lib %_DEST%\lib\libexslt.lib
 ..\%__SRC%\lib\libxslt*.* %_DEST%\lib\libxslt*.*
 ..\%__SRC%\lib\lib*.dll.a %_DEST%\lib\*.a
 ..\%__SRC%\bin\lib*.dll %_DEST%\bin
