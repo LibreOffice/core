@@ -447,15 +447,19 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
 
         FieldUnit eUnit = detectMetricUnit(sUnit);
 
+        WinBits nBits = WB_RIGHT|WB_BORDER|WB_3DLOOK;
+        if (!id.endsWith("-nospin"))
+            nBits |= WB_SPIN;
+
         if (sPattern.isEmpty())
         {
             fprintf(stderr, "making numeric field for %s %s\n", name.getStr(), sUnit.getStr());
-            pWindow = new NumericField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
+            pWindow = new NumericField(pParent, nBits);
         }
         else
         {
             fprintf(stderr, "making metric field for %s %s\n", name.getStr(), sUnit.getStr());
-            MetricField *pField = new MetricField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
+            MetricField *pField = new MetricField(pParent, nBits);
             pField->SetUnit(eUnit);
             pWindow = pField;
         }
