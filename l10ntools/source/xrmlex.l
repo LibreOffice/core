@@ -203,7 +203,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 	FILE *pFile;
 
 	pOutput = GetOutputFile( argc, argv );
-
 	if ( !pOutput ) {
 		fprintf( stdout, "Syntax: XRMEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...]\n" );
 		fprintf( stdout, " Prj:      Project\n" );

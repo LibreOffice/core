@@ -34,6 +34,7 @@
 #include <vector>
 
 #include "export.hxx"
+#include "po.hxx"
 
 namespace
 {
@@ -142,41 +143,93 @@ MergeDataFile::MergeDataFile(
     bool bCaseSensitive)
 {
     std::ifstream aInputStream(rFileName.getStr());
-    const ::rtl::OString sHACK(RTL_CONSTASCII_STRINGPARAM("HACK"));
-    const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(rFile));
-    const bool isFileEmpty = !sFileNormalized.isEmpty();
+    const OString sHACK("HACK");
+    const OString sFileNormalized(lcl_NormalizeFilename(rFile));
 
     if (!aInputStream.is_open())
     {
         printf("Warning : Can't open %s\n", rFileName.getStr());
         return;
     }
-    while (!aInputStream.eof())
-    {
-        std::string buf;
-        std::getline(aInputStream, buf);
-        rtl::OString sLine(buf.data(), buf.length());
-        sal_Int32 n = 0;
-        // Skip all wrong filenames
-        const ::rtl::OString filename = lcl_NormalizeFilename(sLine.getToken(1, '\t', n)); // token 1
-        if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
-        {
-            const rtl::OString sTYP = sLine.getToken( 1, '\t', n ); // token 3
-            const rtl::OString sGID = sLine.getToken( 0, '\t', n ); // token 4
-            const rtl::OString sLID = sLine.getToken( 0, '\t', n ); // token 5
-            rtl::OString sPFO = sLine.getToken( 1, '\t', n ); // token 7
-            sPFO = sHACK;
-            rtl::OString nLANG = sLine.getToken( 1, '\t', n ); // token 9
-            nLANG = nLANG.trim();
-            const rtl::OString sTEXT = sLine.getToken( 0, '\t', n ); // token 10
-            const rtl::OString sQHTEXT = sLine.getToken( 1, '\t', n ); // token 12
-            const rtl::OString sTITLE = sLine.getToken( 0, '\t', n ); // token 13
 
-            if (!nLANG.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
+    int nCountLang = 0;
+    GenPoEntry aGenPo;
+    OString nLANG;
+    if(!aInputStream.eof())
+        aGenPo.readFromFile(aInputStream);
+    while (!aGenPo.isNull())
+    {
+        PoEntry aActPo;
+        if(aGenPo.getUnTransStr().isEmpty())
+        {
+            nLANG = PoHeader(aGenPo).getLanguage();
+            aLanguageSet.insert(nLANG);
+            ++nCountLang;
+            aActPo.readFromFile(aInputStream);
+        }
+        else
+            aActPo = PoEntry(aGenPo);
+
+        const OString sFileName = aActPo.getSourceFile();
+        if( sFileName == sFileNormalized )
+        {
+            const OString sTYP = aActPo.getResourceType();
+            const OString sGID = aActPo.getGroupId();
+            const OString sLID = aActPo.getLocalId();
+
+            bool bInSameComp = false;
+            OString sTEXT;
+            OString sQHTEXT;
+            OString sTITLE;
+            OString sEXTEXT;
+            OString sEXQHTEXT;
+            OString sEXTITLE;
+            OString sTEXTQTZ;
+            OString sQHTEXTQTZ;
+            OString sTITLEQTZ;
+            do
             {
-                aLanguageSet.insert(nLANG);
-                InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE, filename, bCaseSensitive );
+                if( bInSameComp )
+                    aActPo = PoEntry(aGenPo);
+                OString sTemp = aActPo.getTransStr();
+                if( aActPo.getFuzzy() || sTemp.isEmpty() )
+                    sTemp = aActPo.getUnTransStr();
+                switch( aActPo.getType() )
+                {
+                    case PoEntry::TTEXT:
+                        sTEXT = sTemp;
+                        sEXTEXT = aActPo.getUnTransStr();
+                        sTEXTQTZ = aActPo.getKeyId();
+                        break;
+                    case PoEntry::TQUICKHELPTEXT:
+                        sQHTEXT = sTemp;
+                        sEXQHTEXT = aActPo.getUnTransStr();
+                        sQHTEXTQTZ = aActPo.getKeyId();
+                        break;
+                    case PoEntry::TTITLE:
+                        sTITLE = sTemp;
+                        sEXTITLE = aActPo.getUnTransStr();
+                        sTITLEQTZ = aActPo.getKeyId();
+                        break;
+                }
+                aGenPo.readFromFile(aInputStream);
+            } while(!aGenPo.isNull() && !aGenPo.getUnTransStr().isEmpty() && (bInSameComp = PoEntry::IsInSameComp(aActPo,PoEntry(aGenPo))));
+
+            if ( nLANG!="en-US" )
+            {
+                InsertEntry( sTYP, sGID, sLID, sHACK, nLANG, sTEXT, sQHTEXT, sTITLE, sFileName, bCaseSensitive );
+
+                if( nCountLang == 1 )
+                {
+                    aLanguageSet.insert("qtz");
+                    InsertEntry( sTYP, sGID, sLID, sHACK, "qtz", sTEXTQTZ+"‖"+sEXTEXT,
+                                 sQHTEXTQTZ+"‖"+sEXQHTEXT, sTITLEQTZ+"‖"+sEXTITLE, sFileName, bCaseSensitive );
+                }
             }
+        }
+        else
+        {
+            aGenPo.readFromFile(aInputStream);
         }
     }
     aInputStream.close();

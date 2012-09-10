@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_set_include,cfgex,\
 
 $(eval $(call gb_Executable_use_libraries,cfgex,\
     sal \
+    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_add_scanners,cfgex,\

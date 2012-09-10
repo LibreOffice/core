@@ -125,14 +125,14 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
             if (!sActUnTrans.getToken(vTypes[nIndex],'\t').isEmpty())
             {
                 /**Because of xrmex lexer there are duplicated id's,
-                   only use this if the lexer have already fixed*/
-                if (sActUnTrans.getToken(PoEntry::GROUPID,'\t')==
+                   only use this if the lexer have already fixed
+               if (sActUnTrans.getToken(PoEntry::GROUPID,'\t')==
                     sActUnTrans.getToken(PoEntry::LOCALID,'\t') &&
                     sActUnTrans.getToken(PoEntry::SOURCEFILE,'\t').
                                 endsWith(".xrm"))
                 {
                     sActUnTrans = DelLocalId(sActUnTrans);
-                }
+                }*/
                 PoEntry aPE(sActUnTrans, vTypes[nIndex]);
                 aPE.setTransStr(sActTrans.getToken(vTypes[nIndex],'\t'));
                 aPE.setFuzzy(sActTrans.isEmpty() ? 0 :

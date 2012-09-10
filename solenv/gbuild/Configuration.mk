@@ -38,7 +38,7 @@
 #	    => XcuMergeTarget: merge
 #          => buildtools (cfgex)
 #	       => Xcu data source
-#          => localize.sdf
+#          => *.po
 #       => XcsTarget (schema)
 
 # Per-repo pattern rules for each repository do not work for all targets
@@ -255,12 +255,20 @@ $(call gb_Helper_abbreviate_dirs,\
 		-p $(firstword $(subst /, ,$(2))) \
 		-i $(call gb_Helper_symlinked_native,$(3)) \
 		-o $(1) \
-		-m $(SDF) \
+		-m $(4) \
 		-l all)
 endef
 
+define gb_CfgexMerge
+RESPONSEFILE=`$(gb_MKTEMP)`
+$(call gb_ConcatPo,$(PO),@$${RESPONSEFILE})
+$(call gb_XcuMergeTarget__command,$(1),$(2),$(3),@$${RESPONSEFILE})
+rm -rf @$${RESPONSEFILE}
+endef
+
 $(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXTARGET)
-	$(if $(SDF),$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
+	$(if $(PO),$(call gb_CfgexMerge,$@,$*,$(filter %.xcu,$^)),mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
+
 
 $(call gb_XcuMergeTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,5)
@@ -271,9 +279,8 @@ $(call gb_XcuMergeTarget_get_clean_target,%) :
 define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
-	$(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
-$(call gb_XcuMergeTarget_get_target,$(1)) : \
-	SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
+	$(wildcard $(addsuffix .po,$(patsubst %/,%,$(dir $(1)))))
+$(call gb_XcuMergeTarget_get_target,$(1)) : PO := $(addsuffix .po,$(patsubst %/,%,$(dir $(1))))
 endef
 
 

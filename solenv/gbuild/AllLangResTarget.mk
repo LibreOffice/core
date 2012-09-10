@@ -59,14 +59,26 @@ $(call gb_Helper_abbreviate_dirs,\
 		-p $(firstword $(subst /, ,$(2))) \
 		-i $(3) \
 		-o $(1) \
-		-m $(SDF) \
+		-m $(4) \
 		-l all)
 
 endef
 
-$(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)  $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-	$(if $(SDF),$(call gb_SrsPartMergeTarget__command,$@,$*,$<),mkdir -p $(dir $@) && cp $< $@)
+LANGS_EXCLUDE_ENUS=$(filter-out en-US,$(gb_WITH_LANG))
+define gb_ConcatPo
+cat $(gb_POLOCATION)/$(firstword $(LANGS_EXCLUDE_ENUS))/$(1) > $(2) && printf "\n" >> $(2)
+$(foreach lang,$(filter-out $(firstword $(LANGS_EXCLUDE_ENUS)),$(LANGS_EXCLUDE_ENUS)),`cat $(gb_POLOCATION)/$(lang)/$(1) >> $(2) && printf "\n" >> $(2)`)
+endef
 
+define gb_Transex3Merge
+RESPONSEFILE=`$(gb_MKTEMP)`
+$(call gb_ConcatPo,$(PO),@$${RESPONSEFILE})
+$(call gb_SrsPartMergeTarget__command,$(1),$(2),$(3),@$${RESPONSEFILE})
+rm -rf @$${RESPONSEFILE}
+endef
+
+$(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)  $(gb_SrsPartMergeTarget_TRANSEXTARGET)
+	$(if $(PO),$(call gb_Transex3Merge,$@,$*,$<),mkdir -p $(dir $@) && cp $< $@)
 
 # SrsPartTarget class
 
@@ -110,7 +122,7 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : PO := $(addsuffix .po,$(patsubst %/,%,$(dir $(1))))
 endif
 
 endef
@@ -123,8 +135,8 @@ $(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_
 	    mkdir -p $$(dir $$@) && \
 	    cp $$< $$@)
 ifneq ($(strip $(WITH_LANG)),)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : $$(SDF)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : PO := $(addsuffix .po,$(patsubst %/,%,$(dir $(1))))
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : $$(PO)
 endif
 
 endef
