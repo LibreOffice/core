@@ -938,8 +938,10 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
     do
     {
 
+    SdrPageView *pPageView = m_pView ? m_pView->GetSdrPageView() : NULL;
+    SdrPage *pSdrPage = pPageView ? pPageView->GetPage() : NULL;
     // get the forms collection of the page we belong to
-    FmFormPage* pPage = m_pView ? PTR_CAST( FmFormPage, m_pView->GetSdrPageView()->GetPage() ) : NULL;
+    FmFormPage* pPage = PTR_CAST( FmFormPage, pSdrPage );
     Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms(), UNO_QUERY ) : Reference< XIndexAccess >() );
 
     const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
