@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <svx/msdffdef.hxx>
 #include "filter/msfilter/msfilterdllapi.h"
@@ -1313,6 +1314,8 @@ public:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &
                 );
 
+        sal_Int32   GetValueForEnhancedCustomShapeParameter( const ::com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter,
+                            const std::vector< sal_Int32 >& rEquationOrder, sal_Bool bAdjustTrans = sal_False );
         // creates all necessary CustomShape properties, this includes also Text-, Shadow-, Fill-, and LineProperties
     void        CreateCustomShapeProperties(
                     const MSO_SPT eShapeType,
