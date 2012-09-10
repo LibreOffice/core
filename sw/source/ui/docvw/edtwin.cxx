@@ -492,10 +492,12 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             }
             else
             {
+                // Background images don't count.
+                SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
                 // dvo: IsObjSelectable() eventually calls SdrView::PickObj, so
                 // apparently this is used to determine whether this is a
                 // drawling layer object or not.
-                if ( rSh.IsObjSelectable( rLPt ) )
+                if ( rSh.IsObjSelectable( rLPt ) && pSelectableObj->GetLayer() != rSh.GetDoc()->GetHellId())
                 {
                     if (pSdrView->IsTextEdit())
                     {
@@ -523,10 +525,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                                 (rSh.IsObjSelected() || rSh.IsFrmSelected()) &&
                                 (!rSh.IsSelObjProtected(FLYPROTECT_POS));
 
-                            SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
-                            // Don't update pointer if this is a background image only.
-                            if (pSelectableObj->GetLayer() != rSh.GetDoc()->GetHellId())
-                                eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
+                            eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
                             aActHitType = SDRHIT_OBJECT;
                         }
                     }
