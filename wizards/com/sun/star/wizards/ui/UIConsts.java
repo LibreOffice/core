@@ -29,7 +29,7 @@ public interface UIConsts
     public static final int RID_FORM = 2200;
     public static final int RID_QUERY = 2300;
     public static final int RID_REPORT = 2400;
-    public static final int RID_TABLE = 2500;
+    public static final int RID_TABLE = 2600;
     public static final int RID_IMG_REPORT = 1000;
     public static final int RID_IMG_FORM = 1100;
     public static final int RID_IMG_WEB = 1200;
