@@ -1231,6 +1231,13 @@ public:
     sal_Bool    CreateOLEGraphicProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXOleObject
                 );
+    sal_Bool    CreateGraphicProperties(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
+                    const GraphicObject& rGraphicObj
+                );
+    sal_Bool    CreateMediaGraphicProperties(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXMediaObject
+                );
 
     /** Creates a complex ESCHER_Prop_fillBlip containing the BLIP directly (for Excel charts). */
     sal_Bool    CreateEmbeddedBitmapProperties(

@@ -3216,7 +3216,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mnAngle = 0;
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
-
+                if ( aPropOpt.CreateMediaGraphicProperties( mXShape ) )
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 ::com::sun::star::uno::Any aAny;
                 if ( PropValue::GetPropertyValue( aAny, mXPropSet, OUString( "MediaURL" ), sal_True ) )
                 {
@@ -3266,6 +3267,18 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                      << (sal_uInt16)EPP_ExObjRefAtom
                                      << (sal_uInt32)4
                                      << nRefId;
+                        // write EPP_InteractiveInfo container for no_action
+                        *pClientData << (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0xf ) << (sal_uInt32)24;
+                        *pClientData << (sal_uInt16)0
+                                     << (sal_uInt16)EPP_InteractiveInfoAtom
+                                     << (sal_uInt32)16
+                                     << (sal_uInt32) 0
+                                     << (sal_uInt32) 0
+                                     << (sal_uInt8) 6
+                                     << (sal_uInt8) 0
+                                     << (sal_uInt8) 0
+                                     << (sal_uInt8) 0
+                                     << (sal_uInt32) 0;
                     }
                 }
             }
