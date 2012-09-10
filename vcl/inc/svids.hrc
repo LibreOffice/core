@@ -63,17 +63,6 @@
 #define SV_MENU_MAC_SHOWALL                 2005
 #define SV_MENU_MAC_QUITAPP                 2006
 
-#define SV_DLG_PRINT                        2048
-#define SV_PRINT_OK                         1
-#define SV_PRINT_CANCEL                     2
-#define SV_PRINT_HELP                       3
-#define SV_PRINT_PAGE_PREVIEW               4
-#define SV_PRINT_PAGE_TXT                   5
-#define SV_PRINT_PAGE_FORWARD               6
-#define SV_PRINT_PAGE_BACKWARD              7
-#define SV_PRINT_PAGE_EDIT                  8
-#define SV_PRINT_TABCTRL                    9
-
 #define SV_PRINT_TAB_NUP                       1
 #define SV_PRINT_PRT_NUP_LAYOUT_FL             1
 #define SV_PRINT_PRT_NUP_BROCHURE_BTN          3
