@@ -39,7 +39,6 @@ OOXMLParserState::OOXMLParserState() :
     mnHandle(0),
     mpDocument(NULL),
     inTxbxContent(false),
-    savedInSectionGroup(false),
     savedInParagraphGroup(false),
     savedInCharacterGroup(false),
     savedLastParagraphInSection(false)

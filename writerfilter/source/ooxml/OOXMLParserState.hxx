@@ -44,7 +44,6 @@ class OOXMLParserState
     unsigned int mnContexts;
     unsigned int mnHandle;
     OOXMLDocument * mpDocument;
-    sal_Int32 mnXNoteId;
     OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
@@ -52,7 +51,6 @@ class OOXMLParserState
     stack<OOXMLPropertySet::Pointer_t> mTableProps;
     bool inTxbxContent;
     // these 4 save when inTxbxContent
-    bool savedInSectionGroup;
     bool savedInParagraphGroup;
     bool savedInCharacterGroup;
     bool savedLastParagraphInSection;
