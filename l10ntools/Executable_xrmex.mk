@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_set_include,xrmex,\
 
 $(eval $(call gb_Executable_use_libraries,xrmex,\
     sal \
+    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_add_scanners,xrmex,\
