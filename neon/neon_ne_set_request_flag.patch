@@ -1,5 +1,5 @@
---- misc/neon-0.29.5/src/ne_request.c	2010-09-28 13:57:26.000000000 +0200
-+++ misc/build/neon-0.29.5/src/ne_request.c	2011-05-18 12:39:05.134445529 +0200
+--- src/ne_request.c	2010-09-28 13:57:26.000000000 +0200
++++ src/ne_request.c	2011-05-18 12:39:05.134445529 +0200
 @@ -529,7 +529,7 @@
  
  void ne_set_request_flag(ne_request *req, ne_request_flag flag, int value)

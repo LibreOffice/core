@@ -580,14 +580,9 @@ endif # ENABLE_LIBLANGTAG
 ifeq ($(SYSTEM_NEON),YES)
 
 define gb_LinkTarget__use_neon
-ifeq ($(NEON_VERSION),)
-NEON_VERSION=0295
-endif
-
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DNEON_VERSION=0x$(NEON_VERSION) \
 )
-
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(NEON_CFLAGS) \
@@ -599,16 +594,15 @@ endef
 
 else # !SYSTEM_NEON
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 	neon \
 ))
 
 define gb_LinkTarget__use_neon
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/external/neon \
+	-I$(call gb_UnpackedTarball_get_dir,neon/src) \
 	$$(INCLUDE) \
 )
-
 $(call gb_LinkTarget_use_libraries,$(1),\
 	neon \
 )

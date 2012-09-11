@@ -64,7 +64,7 @@ db60e4fde8dd6d6807523deb71ee34dc-liblayout-0.2.10.zip
 eeb2c7ddf0d302fba4bfc6e97eac9624-libbase-1.1.6.zip
 f94d9870737518e3b597f9265f4e9803-libserializer-1.1.6.zip
 ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip
-ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
+@NEON_TARBALL@
 3dd55b952826d2b32f51308f2f91aa89-gettext-0.18.1.1.tar.gz
 9f6e85e1e38490c3956f4415bcd33e6e-glib-2.28.1.tar.gz
 a7d6c5f2fe2d481149ed3ba807b5c043-gdk-pixbuf-2.23.0.tar.gz

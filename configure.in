@@ -8606,7 +8606,6 @@ if test "$with_system_neon" = "yes"; then
     AC_MSG_RESULT([external])
     PKG_CHECK_MODULES(NEON, neon >= 0.26.0, , AC_MSG_ERROR([you need neon >= 0.26.x for system-neon]))
     NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
-    NEON_CFLAGS="$NEON_CFLAGS -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
     SYSTEM_NEON=YES
     libo_MINGW_CHECK_DLL([NEON], [libneon])
     libo_MINGW_TRY_DLL([TASN1], [libtasn1])
@@ -8614,14 +8613,15 @@ if test "$with_system_neon" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_NEON=NO
-    NEON_LIBS=-lneon
-    NEON_CFLAGS=
     BUILD_TYPE="$BUILD_TYPE NEON"
+    NEON_TARBALL=ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
+    NEON_VERSION=0295
 fi
 AC_SUBST(SYSTEM_NEON)
-AC_SUBST(NEON_VERSION)
 AC_SUBST(NEON_LIBS)
 AC_SUBST(NEON_CFLAGS)
+AC_SUBST(NEON_TARBALL)
+AC_SUBST(NEON_VERSION)
 AC_SUBST([MINGW_GNUTLS_DLL])
 AC_SUBST([MINGW_NEON_DLL])
 AC_SUBST([MINGW_TASN1_DLL])

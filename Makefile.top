@@ -100,6 +100,7 @@ lingucomponent\
 linguistic\
 lotuswordpro\
 mdds\
+neon\
 nlpsolver\
 np_sdk\
 o3tl\
@@ -229,7 +230,6 @@ moz\
 mysqlc\
 mysqlcppconn\
 mythes\
-neon\
 nss\
 odk\
 openldap\
