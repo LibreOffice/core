@@ -52,7 +52,6 @@ $(eval $(call gb_Library_use_libraries,tk,\
     tl \
     utl \
     vcl \
-    svt \
     $(gb_STDLIBS) \
 ))
 
