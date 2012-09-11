@@ -143,7 +143,7 @@ static VBAConstantNameMap s_aRegisteredVBAConstants;
     if( xProps.is() ) try
     {
         ::rtl::OUString aConstName;
-        xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobalConstantName" ) ) ) >>= aConstName;
+        xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  "ThisVBADocObj"  ) ) ) >>= aConstName;
         return ::rtl::OUStringToOString( aConstName, RTL_TEXTENCODING_ASCII_US );
     }
     catch( uno::Exception& ) // not supported
