@@ -1918,7 +1918,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,orcus/include) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_static_external_library,$(1),orcus,liborcus)
+$(call gb_LinkTarget_use_static_libraries,$(1),orcus)
 endef
 
 endif # SYSTEM_LIBORCUS

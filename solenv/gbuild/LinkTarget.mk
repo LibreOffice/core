@@ -745,15 +745,6 @@ $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_headers_target,$$(lib)))
 
 endef
 
-# gb_LinkTarget_use_static_external_library linktarget library externalproject
-define gb_LinkTarget_use_static_external_library
-$(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $(2)
-
-$(call gb_LinkTarget_get_target,$(1)) : $(call gb_ExternalProject_get_target,$(3))
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : $(call gb_ExternalProject_get_target,$(3))
-
-endef
-
 define gb_LinkTarget_add_cobject
 $(if $(wildcard $(call gb_CObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_CObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)
