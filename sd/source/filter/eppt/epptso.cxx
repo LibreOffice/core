@@ -2810,6 +2810,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         if ( mbIsBullet && bNumberingIsNumber )
                             nBulletFlags |= 1;
                     }
+        default: break;
                 }
             }
         }
