@@ -200,6 +200,12 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
 
 ChartView::~ChartView()
 {
+    // #i120831#. In ChartView::initialize(), m_xShapeFactory is created from SdrModel::getUnoModel() and indirectly
+    //   from SfxBaseModel, it needs call dispose() to make sure SfxBaseModel object is freed correctly.
+    uno::Reference< lang::XComponent > xComp( m_xShapeFactory, uno::UNO_QUERY);
+    if ( xComp.is() )
+        xComp->dispose();
+
     if( m_pDrawModelWrapper.get() )
     {
         EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
