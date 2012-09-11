@@ -387,6 +387,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
             VclBin* pContainer = new VclBin(pPage);
             pContainer->Show();
             m_aChildren.push_back(WinAndId(rtl::OString(), pContainer));
+            pContainer->SetHelpId(m_sHelpRoot + sTabPageId + rtl::OString("-bin"));
             pParent = pContainer;
 
             pTabControl->SetTabPage(nNewPageId, pPage);
