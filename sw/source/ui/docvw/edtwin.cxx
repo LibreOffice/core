@@ -492,12 +492,10 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             }
             else
             {
-                // Background images don't count.
-                SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
                 // dvo: IsObjSelectable() eventually calls SdrView::PickObj, so
                 // apparently this is used to determine whether this is a
                 // drawling layer object or not.
-                if ( rSh.IsObjSelectable( rLPt ) && pSelectableObj->GetLayer() != rSh.GetDoc()->GetHellId())
+                if ( rSh.IsObjSelectable( rLPt ) )
                 {
                     if (pSdrView->IsTextEdit())
                     {
@@ -525,7 +523,10 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                                 (rSh.IsObjSelected() || rSh.IsFrmSelected()) &&
                                 (!rSh.IsSelObjProtected(FLYPROTECT_POS));
 
-                            eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
+                            SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
+                            // Don't update pointer if this is a background image only.
+                            if (pSelectableObj->GetLayer() != rSh.GetDoc()->GetHellId())
+                                eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
                             aActHitType = SDRHIT_OBJECT;
                         }
                     }
@@ -2750,6 +2751,18 @@ void SwEditWin::RstMBDownFlags()
     ReleaseMouse();
 }
 
+/**
+ * Determines if the current position has a clickable url over a background
+ * frame. In that case, ctrl-click should select the url, not the frame.
+ */
+bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
+{
+    SwContentAtPos aSwContentAtPos(SwContentAtPos::SW_INETATTR);
+    SdrObject* pSelectableObj = rSh.GetObjAt(rDocPos);
+
+    return rSh.GetContentAtPos(rDocPos, aSwContentAtPos) && pSelectableObj->GetLayer() == rSh.GetDoc()->GetHellId();
+}
+
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -3370,7 +3383,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case KEY_MOD1:
                     if ( !bExecDrawTextLink )
                     {
-                        if ( !bInsDraw && IsDrawObjSelectable( rSh, aDocPos ) )
+                        if ( !bInsDraw && IsDrawObjSelectable( rSh, aDocPos ) && !lcl_urlOverBackground( rSh, aDocPos ) )
                         {
                             rView.NoRotate();
                             rSh.HideCrsr();
@@ -3566,9 +3579,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     const int nSelType = rSh.GetSelectionType();
                     // Check in general, if an object is selectable at given position.
                     // Thus, also text fly frames in background become selectable via Ctrl-Click.
-                    if ( nSelType & nsSelectionType::SEL_OLE ||
+                    if ( ( nSelType & nsSelectionType::SEL_OLE ||
                          nSelType & nsSelectionType::SEL_GRF ||
-                         rSh.IsObjSelectable( aDocPos ) )
+                         rSh.IsObjSelectable( aDocPos ) ) && !lcl_urlOverBackground( rSh, aDocPos ) )
                     {
                         SwMvContext aMvContext( &rSh );
                         if( !rSh.IsFrmSelected() )
