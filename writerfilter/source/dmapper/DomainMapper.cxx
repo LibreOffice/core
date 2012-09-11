@@ -3547,12 +3547,6 @@ void DomainMapper::PopListProperties()
 void DomainMapper::lcl_startCharacterGroup()
 {
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
-    DomainMapperTableManager& rTableManager = m_pImpl->getTableManager();
-    if( !rTableManager.getTableStyleName().isEmpty() )
-    {
-        PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
-        rTableManager.CopyTextProperties(pTopContext, m_pImpl->GetStyleSheetTable());
-    }
 }
 
 void DomainMapper::lcl_endCharacterGroup()

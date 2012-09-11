@@ -2165,9 +2165,15 @@ lcl_ApplyCellProperties(
                     xCellText->createTextCursor();
                 xCellCurs->gotoStart( sal_False );
                 xCellCurs->gotoEnd( sal_True );
-                const uno::Reference< beans::XPropertySet > xCellTextProps(
-                        xCellCurs, uno::UNO_QUERY);
-                xCellTextProps->setPropertyValue(rName, rValue);
+                const uno::Reference< beans::XPropertyState >
+                    xCellTextPropState(xCellCurs, uno::UNO_QUERY);
+                const beans::PropertyState state = xCellTextPropState->getPropertyState(rName);
+                if (state == beans::PropertyState_DEFAULT_VALUE)
+                {
+                    const uno::Reference< beans::XPropertySet >
+                        xCellTextProps(xCellCurs, uno::UNO_QUERY);
+                    xCellTextProps->setPropertyValue(rName, rValue);
+                }
             }
         }
     }
