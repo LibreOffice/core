@@ -85,6 +85,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     linguistic \
     lotuswordpro \
     MathMLDTD \
+	mdds \
     Mesa \
 	$(if $(filter NLPSOLVER,$(BUILD_TYPE)),\
 		nlpsolver \
