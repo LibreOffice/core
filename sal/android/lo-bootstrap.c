@@ -69,6 +69,19 @@
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
+extern void *__lo_dlopen(const char *path, int flags);
+extern const char *__lo_dlerror(void);
+extern void *__lo_dlsym(void *handle, const char *symbol);
+extern int __lo_dlclose(void *handle);
+extern int __lo_dladdr(void *addr, Dl_info *info);
+extern void __lo_linker_init(void);
+
+#define dlopen __lo_dlopen
+#define dlerror __lo_dlerror
+#define dlsym __lo_dlsym
+#define dlclose __lo_dlclose
+#define dladdr __lo_dladdr
+
 struct engine {
     int dummy;
 };
@@ -492,6 +505,8 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     char *lib_dir;
 
     (void) clazz;
+
+    __lo_linker_init();
 
     n = (*env)->GetArrayLength(env, ld_library_path);
 
