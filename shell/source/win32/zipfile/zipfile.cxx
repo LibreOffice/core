@@ -264,6 +264,7 @@ static bool findCentralDirectoryEnd(StreamInterface *stream)
     if (!stream)
         return false;
     stream->sseek(0, SEEK_SET);
+    if (stream->sseek(-1024, SEEK_END)) stream->sseek(0, SEEK_SET);
     try
     {
         while (stream->stell() != -1)
