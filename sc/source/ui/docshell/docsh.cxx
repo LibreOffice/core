@@ -475,7 +475,7 @@ sal_Bool ScDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
     LoadMediumGuard aLoadGuard(&aDocument);
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     //  only the latin script language is loaded
     //  -> initialize the others from options (before loading)
@@ -959,7 +959,7 @@ sal_Bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
     LoadMediumGuard aLoadGuard(&aDocument);
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     WaitObject aWait( GetActiveDialogParent() );
 
@@ -1019,7 +1019,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     sal_Bool bRet = false;              // sal_False heisst Benutzerabbruch !!
                                     // bei Fehler: Fehler am Stream setzen!!
 
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     GetUndoManager()->Clear();
 
@@ -1560,7 +1560,7 @@ sal_Bool ScDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
 
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     PrepareSaveGuard aPrepareGuard( *this);
 
@@ -1590,7 +1590,7 @@ sal_Bool ScDocShell::SaveAs( SfxMedium& rMedium )
     }
 
 
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     PrepareSaveGuard aPrepareGuard( *this);
 
@@ -2103,7 +2103,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
 
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     //  #i6500# don't call DoEnterHandler here (doesn't work with AutoSave),
     //  it's already in ExecuteSave (as for Save and SaveAs)
