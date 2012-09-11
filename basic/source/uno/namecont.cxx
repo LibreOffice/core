@@ -1760,7 +1760,6 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             Reference< XNameAccess > xNameAccess;
             aLibAny >>= xNameAccess;
             if ( ! ( xNameAccess->hasElements() || ( bInplaceStorage && isModified() ) ) )
-            if ( ! ( xNameAccess->hasElements() ) )
                 return;
         }
 
