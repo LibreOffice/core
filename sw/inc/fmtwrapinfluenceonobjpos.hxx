@@ -52,17 +52,17 @@ public:
     SwFmtWrapInfluenceOnObjPos& operator=(
             const SwFmtWrapInfluenceOnObjPos& _rSource );
 
-    // pure virtual methods of class <SfxPoolItem>
+    /// pure virtual methods of class <SfxPoolItem>
     virtual int operator==( const SfxPoolItem& _rAttr ) const;
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    // direct accessors to data
+    /// direct accessors to data
     void SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition );
     // #i35017# - add parameter <_bIterativeAsOnceConcurrent>
-    // to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
+    /// to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
     sal_Int16 GetWrapInfluenceOnObjPos(
                         const bool _bIterativeAsOnceConcurrent = false ) const;
 };

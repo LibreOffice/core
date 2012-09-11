@@ -36,15 +36,15 @@
 #include <tools/string.hxx>
 #include <swddllapi.h>
 
-#define FILTER_RTF      "RTF"       // RTF filter
+#define FILTER_RTF      "RTF"       ///< RTF filter
 #define sRtfWH          "WH_RTF"
-#define FILTER_TEXT     "TEXT"      // text filter with default codeset
-#define FILTER_BAS      "BAS"       // StarBasic (identical to ANSI)
-#define FILTER_WW8      "CWW8"      // WinWord 97 filter
-#define FILTER_TEXT_DLG "TEXT_DLG"  // text filter with encoding dialog
-#define FILTER_XML      "CXML"      // XML filter
-#define FILTER_XMLV     "CXMLV"     // XML filter
-#define FILTER_XMLVW    "CXMLVWEB"  // XML filter
+#define FILTER_TEXT     "TEXT"      ///< text filter with default codeset
+#define FILTER_BAS      "BAS"       ///< StarBasic (identical to ANSI)
+#define FILTER_WW8      "CWW8"      ///< WinWord 97 filter
+#define FILTER_TEXT_DLG "TEXT_DLG"  ///< text filter with encoding dialog
+#define FILTER_XML      "CXML"      ///< XML filter
+#define FILTER_XMLV     "CXMLV"     ///< XML filter
+#define FILTER_XMLVW    "CXMLVWEB"  ///< XML filter
 #define sHTML           "HTML"
 #define sWW1            "WW1"
 #define sWW5            "WW6"
@@ -88,29 +88,29 @@ enum ReaderWriterEnum {
 
 extern SWD_DLLPUBLIC SwIoDetect aFilterDetect[];
 
-// The following class is a wrapper for basic i/o functions of Writer 3.0.
-// Everything is static. All filter names mentioned are Writer-internal
-// names, i.e. the names in front of the equality sign in INSTALL.INI, like SWG
-// or ASCII.
+/** The following class is a wrapper for basic i/o functions of Writer 3.0.
+ Everything is static. All filter names mentioned are Writer-internal
+ names, i.e. the names in front of the equality sign in INSTALL.INI, like SWG
+ or ASCII.*/
 
 class SwIoSystem
 {
 public:
-    // find for an internal format name the corresponding filter entry
+    /// find for an internal format name the corresponding filter entry
     SWD_DLLPUBLIC static const SfxFilter*
         GetFilterOfFormat( const String& rFormat,
             const SfxFilterContainer* pCnt = 0 );
 
-    // Detect for the given file which filter should be used. The filter name
-    // is returned. If no filter could be found, the name of the ASCII filter
-    // is returned!
+    /** Detect for the given file which filter should be used. The filter name
+     is returned. If no filter could be found, the name of the ASCII filter
+     is returned! */
     SWD_DLLPUBLIC static const SfxFilter*
         GetFileFilter( const String& rFileName,
             const String& rPrefFltName,
             SfxMedium* pMedium = 0 );
 
-    // Detect whether the given file is in the given format.
-    // For now, only our own filters are supported!
+    /** Detect whether the given file is in the given format.
+     For now, only our own filters are supported! */
     static sal_Bool IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
             const SfxFilter** ppFlt = 0 );
 

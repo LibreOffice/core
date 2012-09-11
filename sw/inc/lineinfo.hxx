@@ -34,21 +34,21 @@ enum LineNumberPosition
     LINENUMBER_POS_OUTSIDE
 };
 
-class SW_DLLPUBLIC SwLineNumberInfo : public SwClient //purpose of derivation from SwClient:
-                                         //character style for displaying the numbers.
+class SW_DLLPUBLIC SwLineNumberInfo : public SwClient /**< purpose of derivation from SwClient:
+                                                         character style for displaying the numbers. */
 {
-    SvxNumberType       aType;              //e.g. roman linenumbers
-    String              aDivider;           //String for aditional interval (vert. lines user defined)
-    sal_uInt16              nPosFromLeft;       //Position for paint
-    sal_uInt16              nCountBy;           //Paint only for every n line
-    sal_uInt16              nDividerCountBy;    //Interval for display of an user defined
-                                            //string every n lines
-    LineNumberPosition  ePos;               //Where should the display occur (number and divicer)
-    sal_Bool                bPaintLineNumbers;  //Should anything be displayed?
-    sal_Bool                bCountBlankLines;   //Count empty lines?
-    sal_Bool                bCountInFlys;       //Count also within FlyFrames?
-    sal_Bool                bRestartEachPage;   //Restart counting at the first paragraph of each page
-                                            //(even on follows when paragraphs are splitted)
+    SvxNumberType       aType;                  ///< e.g. roman linenumbers
+    String              aDivider;               ///< String for aditional interval (vert. lines user defined)
+    sal_uInt16              nPosFromLeft;       ///< Position for paint
+    sal_uInt16              nCountBy;           ///< Paint only for every n line
+    sal_uInt16              nDividerCountBy;    /**< Interval for display of an user defined
+                                                   string every n lines */
+    LineNumberPosition  ePos;                   ///< Where should the display occur (number and divicer)
+    sal_Bool                bPaintLineNumbers;  ///< Should anything be displayed?
+    sal_Bool                bCountBlankLines;   ///< Count empty lines?
+    sal_Bool                bCountInFlys;       ///< Count also within FlyFrames?
+    sal_Bool                bRestartEachPage;   /**< Restart counting at the first paragraph of each page
+                                                    (even on follows when paragraphs are splitted) */
 protected:
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 

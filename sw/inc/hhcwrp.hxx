@@ -35,36 +35,36 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
     Window*     pWin;
     SwWrtShell &rWrtShell;
 
-    SwConversionArgs *pConvArgs;    // object for arguments (and results) needed
-                                    // to find of next convertible text portion
+    SwConversionArgs *pConvArgs;    /**< object for arguments (and results) needed
+                                       to find of next convertible text portion */
 
-    xub_StrLen      nLastPos;   // starting position of the last found text part
-                                // (needs to be sth that gets not moved like
-                                // SwPaM or SwPosition by replace operations!)
+    xub_StrLen      nLastPos;       /**< starting position of the last found text part
+                                       (needs to be sth that gets not moved like
+                                       SwPaM or SwPosition by replace operations!) */
     sal_Int32       nUnitOffset;
 
-    sal_uInt16      nPageCount;     // page count for progress bar
-    sal_uInt16      nPageStart;     // first checked page
+    sal_uInt16      nPageCount;     ///< page count for progress bar
+    sal_uInt16      nPageStart;     ///< first checked page
 
     sal_Bool    bIsDrawObj;
     sal_Bool    bIsStart;
     sal_Bool    bIsOtherCntnt;
     sal_Bool    bStartChk;
-    sal_Bool    bIsSelection;   // true if only the selected text should be converted
-    sal_Bool    bInfoBox;       // true if message should be displayed at the end
-    sal_Bool    bIsConvSpecial; // true if special regions: header, footer, ... should be converted
+    sal_Bool    bIsSelection;       ///< true if only the selected text should be converted
+    sal_Bool    bInfoBox;           ///< true if message should be displayed at the end
+    sal_Bool    bIsConvSpecial;     ///< true if special regions: header, footer, ... should be converted
     sal_Bool    bStartDone;
     sal_Bool    bEndDone;
 
-    // from SvxSpellWrapper copied and modified
-    sal_Bool    ConvNext_impl();        // former SpellNext
-    sal_Bool    FindConvText_impl();    // former FindSpellError
+    /// from SvxSpellWrapper copied and modified
+    sal_Bool    ConvNext_impl();        ///< former SpellNext
+    sal_Bool    FindConvText_impl();    ///< former FindSpellError
 
-    // from SwSpellWrapper copied and modified
+    /// from SwSpellWrapper copied and modified
     sal_Bool    HasOtherCnt_impl();
-    void        ConvStart_impl( SwConversionArgs *pConvArgs, SvxSpellArea eSpell );   // former SpellStart
-    void        ConvEnd_impl( SwConversionArgs *pConvArgs );                          // former SpellEnd
-    sal_Bool    ConvContinue_impl( SwConversionArgs *pConvArgs );                     // former SpellContinue
+    void        ConvStart_impl( SwConversionArgs *pConvArgs, SvxSpellArea eSpell );   ///< former SpellStart
+    void        ConvEnd_impl( SwConversionArgs *pConvArgs );                          ///< former SpellEnd
+    sal_Bool    ConvContinue_impl( SwConversionArgs *pConvArgs );                     ///< former SpellContinue
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
