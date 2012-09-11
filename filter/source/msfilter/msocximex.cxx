@@ -1370,10 +1370,11 @@ sal_Bool OCX_CommandButton::Import( com::sun::star::uno::Reference<
     aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
-    // fake transparent push button by setting window background color
-    if( !fBackStyle )
-        mnBackColor = 0x80000005;
-    aTmp <<= ImportColor(mnBackColor);
+    //fBackStyle is a flag. 1 means with background color. 0 means default.
+    if( fBackStyle )
+        aTmp <<= ImportColor(mnBackColor);
+    else
+        aTmp = uno::Any();
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     sal_Bool bTemp;
@@ -1432,18 +1433,21 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef& rContents,
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
 
+    //fBackStyle is a flag. 1 means with background color. 0 means default.
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
+    else
+        fBackStyle = 0;
     *rContents << ExportColor(mnBackColor);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
     fEnabled = any2bool(aTmp);
     sal_uInt8 nTemp=0;//fEnabled;
     if (fEnabled)
-        nTemp |= 0x02;
+        nTemp |= 0x02;//has enabled prop
     if (fBackStyle)
-        nTemp |= 0x08;
+        nTemp |= 0x08;//has background color
     *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
 
@@ -1468,7 +1472,7 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef& rContents,
     mbTakeFocus = any2bool( rPropSet->getPropertyValue( WW8_ASCII2STR( "FocusOnClick" ) ) );
 
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
-
+    aFontData.nDefaultAlign = 1;
     bRet = aFontData.Export(rContents,rPropSet);
 
     rContents->Seek(nOldPos);
@@ -5078,13 +5082,46 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     if (bHasFont)
     {
         aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontWeight"));
-        float nBold = 0;
-        aTmp >>= nBold;
+        //Export font related props
+        if ( aTmp.hasValue() )
+        {
+            float nBold = 0.0;
+            aTmp >>= nBold;
+            if ( nBold >= 150 )
+                fBold = 1;
+        }
 
-        if (nBold >= 150)
+        aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontSlant"));
+        if ( aTmp.hasValue() )
+        {
+            short eItalic = 0 ;
+            aTmp >>= eItalic ;
+            if ( eItalic == awt::FontSlant_ITALIC )
+                fItalic = 1;
+        }
+
+        aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontUnderline"));
+        if ( aTmp.hasValue() )
+        {
+            short eUnderline = 0 ;
+            aTmp >>= eUnderline;
+            if ( eUnderline == awt::FontUnderline::SINGLE )
+                fUnderline = 1;
+        }
+
+        aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontStrikeout"));
+        if ( aTmp.hasValue() )
+        {
+            short eLtStrikeout = 0;
+            aTmp >>= eLtStrikeout;
+            if ( eLtStrikeout == awt::FontStrikeout::SINGLE )
+                fStrike = 1;
+        }
+
+        sal_uInt8 nTmp= 1 * fBold  +  2* fItalic  + 4* fUnderline +  8 * fStrike;
+        if ( nTmp > 0 )
         {
             nFlags |= 0x02;
-            sal_uInt8 nTmp=0x01;
             *rContent << nTmp;
             nTmp=0x00;
             *rContent << nTmp;
@@ -5114,7 +5151,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
 
             aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Align"));
             nFlags |= 0x40;
-            sal_Int16 nAlign(0);
+            sal_Int16 nAlign = nDefaultAlign;
             if (aTmp.hasValue())
                 aTmp >>= nAlign;
             nJustification = ExportAlign(nAlign);
@@ -5588,6 +5625,7 @@ sal_Bool OCX_SpinButton::Export(
         0x00, 0x00, 0x00, 0x45, 0x6D, 0x62, 0x65, 0x64,
         0x64, 0x65, 0x64, 0x20, 0x4F, 0x62, 0x6A, 0x65,
         0x63, 0x74, 0x00, 0x13, 0x00, 0x00, 0x00, 0x46,
+        0x6F, 0x72, 0x6D, 0x73, 0x2E, 0x53, 0x70, 0x69,//Add those to avoid MS crash when open
         0x6E, 0x42, 0x75, 0x74, 0x74, 0x6F, 0x6E, 0x2E,
         0x31, 0x00, 0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

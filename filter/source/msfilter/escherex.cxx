@@ -24,6 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 #include "eschesdo.hxx"
+#include <svx/svdxcgv.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/xflftrit.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -3661,6 +3662,37 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
 }
 
 // ---------------------------------------------------------------------------------------------
+//Implement for form control export
+sal_Bool   EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape)
+{
+    SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
+    if ( pShape )
+    {
+        SdrModel* pMod = pShape->GetModel();
+        Graphic aGraphic(SdrExchangeView::GetObjGraphic( pMod, pShape));
+
+        GraphicObject   aGraphicObject = aGraphic;
+        ByteString  aUniqueId = aGraphicObject.GetUniqueID();
+        if ( aUniqueId.Len() )
+        {
+            if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
+            {
+                Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
+
+                sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, NULL );
+                if ( nBlibId )
+                {
+                    AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+                    ImplCreateGraphicAttributes( rXPropSet, nBlibId, sal_False );
+                    return sal_True;
+                }
+            }
+        }
+    }
+
+    return sal_False;
+
+}
 
 EscherPersistTable::EscherPersistTable()
 {

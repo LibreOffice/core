@@ -172,7 +172,7 @@ class OCX_FontData
 {
 public:
     OCX_FontData() : nFontNameLen(0), fBold(0), fItalic(0), fUnderline(0),
-        fStrike(0), nFontSize(12), nJustification(1), pFontName(0),
+        fStrike(0), nFontSize(12), nJustification(1), nDefaultAlign(0), pFontName(0),
         bHasAlign(sal_False), bHasFont(sal_True) {}
     ~OCX_FontData()  {
         if (pFontName)
@@ -206,7 +206,7 @@ public:
     sal_uInt16 nLanguageID;
     sal_uInt8   nJustification;
     sal_uInt16  nFontWeight;
-
+    sal_Int16 nDefaultAlign;
     char *pFontName;
     void SetHasAlign(sal_Bool bIn) {bHasAlign=bIn;}
     void SetHasFont(sal_Bool bIn) {bHasFont=bIn;}
@@ -1115,6 +1115,7 @@ public:
             msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel");
             mnForeColor = 0x80000012L;
                 mnBackColor = 0x8000000FL;
+                aFontData.SetHasAlign(sal_True);
     }
 
     ~OCX_CommandButton() {
