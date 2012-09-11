@@ -260,6 +260,10 @@ throw(::com::sun::star::uno::RuntimeException)
                 OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
                 if ( !pDev )
                     pDev = pWindow->GetParent();
+                // shouldn't happen but it appears pDev can be NULL
+                // #FIXME ( find out how/why )
+                if ( !pDev )
+                    break;
 
                 aSize = pDev->LogicToPixel( aSize, aMode );
                 switch ( nPropType )
