@@ -212,6 +212,8 @@ protected:
 private:
     static void impl_initializeOnce( bool const bGLXPresent );
 
+    void impl_createTexture( bool useMipmap, uno::Sequence<sal_Int8>& data, const OGLFormat* pFormat );
+
     bool initWindowFromSlideShowView( const uno::Reference< presentation::XSlideShowView >& xView );
     /** After the window has been created, and the slides have been set, we'll initialize the slides with OpenGL.
     */
@@ -905,7 +907,19 @@ void OGLTransitionerImpl::createTexture( unsigned int* texID,
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         }
     } else {
+        impl_createTexture( useMipmap, data, pFormat );
+    }
+#else
+    impl_createTexture( useMipmap, data, pFormat );
 #endif
+    SAL_WARN_IF(!glIsTexture(*texID), "slideshow.opengl", "Can't generate Leaving slide textures in OpenGL");
+}
+
+void OGLTransitionerImpl::impl_createTexture(
+                     bool useMipmap,
+                     uno::Sequence<sal_Int8>& data,
+                     const OGLFormat* pFormat )
+{
     if( !pFormat )
     {
         // force-convert color to ARGB8888 int color space
@@ -943,10 +957,6 @@ void OGLTransitionerImpl::createTexture( unsigned int* texID,
             glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy );
         }
     }
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    }
-#endif
-    SAL_WARN_IF(!glIsTexture(*texID), "slideshow.opengl", "Can't generate Leaving slide textures in OpenGL");
 }
 
 void OGLTransitionerImpl::prepareEnvironment()
