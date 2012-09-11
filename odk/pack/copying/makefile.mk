@@ -30,6 +30,9 @@ TARGET=copying
 .INCLUDE: $(PRJ)/util/makefile.pmk
 #----------------------------------------------------------------
 
+SCM_ROOT_PATH=$(shell dirname $(SRC_ROOT))
+SCMREVISION=$(shell $(PERL) -I$(SOLARENV)/bin/modules -e "use SvnRevision; print SvnRevision::DetectRevisionId(\"$(SCM_ROOT_PATH)\")")
+
 IDLLIST:={$(subst,/,/ $(shell @$(FIND) $(IDLOUT)/com -type f))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
@@ -233,7 +236,7 @@ $(DESTDIRBIN)/addsym-macosx.sh : addsym-macosx.sh
 $(DESTDIRSETTINGS)/dk.mk : dk.mk
     @@-rm -f $@
     -$(MKDIRHIER) $(@:d)
-    tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(RSCREVISION)/'> $@
+    tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(RSCREVISION)/' -e 's/@@SCMREVISION@@/$(SCMREVISION)/'> $@
 
 $(CONVERTTAGFLAG) : $(DOCUHTMLFILES)
 #    $(PERL) $(CONVERTTAGSCRIPT) 1 "$(TITLE)" "$(OFFICEPRODUCTNAME)" $(DOCUHTMLFILES)
