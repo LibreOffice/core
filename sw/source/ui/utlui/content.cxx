@@ -209,7 +209,6 @@ SwContentType::SwContentType(SwWrtShell* pShell, sal_uInt16 nType, sal_uInt8 nLe
     nMemberCount(0),
     nContentType(nType),
     nOutlineLevel(nLevel),
-    bMemberFilled(sal_False),
     bDataValid(sal_False),
     bEdit(sal_False),
     bDelete(sal_True)

@@ -130,11 +130,10 @@ class SwDataChanged
     SwDoc* pDoc;
     sal_uLong nNode;
     xub_StrLen nCntnt;
-    sal_uInt16 nType;       // Insert/Move/Delete/... (UndoIds)
 
 public:
-    SwDataChanged( const SwPaM& rPam, sal_uInt16 nType );
-    SwDataChanged( SwDoc* pDoc, const SwPosition& rPos, sal_uInt16 nType );
+    SwDataChanged( const SwPaM& rPam );
+    SwDataChanged( SwDoc* pDoc, const SwPosition& rPos );
     ~SwDataChanged();
 
     sal_uLong GetNode() const           { return nNode; }

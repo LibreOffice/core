@@ -84,7 +84,6 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     pRealFirst( 0 ),
     pFirst( 0 ),
     pLast( 0 ),
-    nMax( nInitSize ),
     nCurMax( nInitSize )
 #ifdef DBG_UTIL
     , m_aName( rNm )

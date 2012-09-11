@@ -44,7 +44,6 @@ class SwBlockName
 {
     friend class SwImpBlocks;
     sal_uInt16 nHashS, nHashL;          // Hash-Codes zum Checken
-    long   nPos;                        // Dateiposition (SW2-Format)
 public:
     String aShort;                      // Short name
     String aLong;                       // Long name
@@ -53,7 +52,7 @@ public:
     sal_Bool bIsOnlyTxt : 1;                // unformatted text
     sal_Bool bInPutMuchBlocks : 1;          // put serveral block entries
 
-    SwBlockName( const String& rShort, const String& rLong, long n );
+    SwBlockName( const String& rShort, const String& rLong );
     SwBlockName( const String& rShort, const String& rLong, const String& rPackageName );
 
     // fuer das Einsortieren in das Array

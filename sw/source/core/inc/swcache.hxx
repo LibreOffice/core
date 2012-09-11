@@ -75,9 +75,6 @@ class SwCache
     SwCacheObj *pFirst;             //der virtuelle erste.
     SwCacheObj *pLast;
 
-    const sal_uInt16 nMax;              //Mehr sollen nicht aufgenommen werden,
-                                    //der Cache kann aber dynamisch um jeweils
-                                    //nMax vergroessert werden.
           sal_uInt16 nCurMax;           //Mehr werden nicht aufgenommen.
 
 

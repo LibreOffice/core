@@ -39,9 +39,7 @@ class SwVbaCells : public SwVbaCells_BASE
 {
 private:
     css::uno::Reference< css::text::XTextTable > mxTextTable;
-    sal_Int32 mnLeft;
     sal_Int32 mnTop;
-    sal_Int32 mnRight;
     sal_Int32 mnBottom;
 
 public:

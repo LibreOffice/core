@@ -111,7 +111,6 @@ public:
 
 class SwInputChild : public SfxChildWindow
 {
-    sal_Bool            bObjVis;
     SfxDispatcher*  pDispatch;
 public:
     SwInputChild( Window* ,

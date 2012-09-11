@@ -129,7 +129,6 @@ class SwInterHyphInfo
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord >    xHyphWord;
     const   Point aCrsrPos;
-    sal_Bool    bAuto   : 1;
     sal_Bool    bNoLang : 1;
     sal_Bool    bCheck  : 1;
 public:
@@ -144,7 +143,7 @@ public:
                             const sal_uInt16 nStartPos = 0,
                             const sal_uInt16 nLength = USHRT_MAX )
          : aCrsrPos( rCrsrPos ),
-           bAuto(sal_False), bNoLang(sal_False), bCheck(sal_False),
+           bNoLang(sal_False), bCheck(sal_False),
            nStart(nStartPos), nLen(nLength),
            nWordStart(0), nWordLen(0),
            nHyphPos(0), nMinTrail(0)

@@ -186,8 +186,6 @@ class SwContentType : public SwTypeNumber
     sal_uInt16              nMemberCount;       // content count
     sal_uInt16              nContentType;       // content type's Id
     sal_uInt8               nOutlineLevel;
-    sal_Bool                bMemberFilled : 1;  // has content already been inserted?
-    sal_Bool                bIsInternalDrag:1;  // can content be relocated?
     sal_Bool                bDataValid :    1;  //
     sal_Bool                bEdit:          1;  // can this type be edited?
     sal_Bool                bDelete:        1;  // can this type be deleted?

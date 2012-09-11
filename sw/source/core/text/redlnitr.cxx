@@ -184,7 +184,7 @@ SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
                             SwAttrHandler& rAH, MSHORT nRed, sal_Bool bShw,
                             const std::vector<sal_uInt16> *pArr,
                             xub_StrLen nExtStart )
-    : rDoc( *rTxtNd.GetDoc() ), rNd( rTxtNd ), rAttrHandler( rAH ), pSet( 0 ),
+    : rDoc( *rTxtNd.GetDoc() ), rAttrHandler( rAH ), pSet( 0 ),
       nNdIdx( rTxtNd.GetIndex() ), nFirst( nRed ),
       nAct( MSHRT_MAX ), bOn( sal_False ), bShow( bShw )
 {

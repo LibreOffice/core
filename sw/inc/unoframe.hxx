@@ -49,8 +49,6 @@
 #include <unoevtlstnr.hxx>
 #include <unotext.hxx>
 
-
-class SfxItemPropertSet;
 class SdrObject;
 class SwDoc;
 class SwFmt;
@@ -171,8 +169,6 @@ class SwXTextFrame : public SwXTextFrameBaseClass,
     public SwXText,
     public SwXFrame
 {
-    const SfxItemPropertSet*    _pPropSet;
-
 protected:
     virtual const SwStartNode *GetStartNode() const;
 

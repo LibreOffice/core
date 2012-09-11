@@ -35,7 +35,7 @@ using namespace ::ooo::vba;
 
 #define UNO_TABLE_COLUMN_SUM    10000
 
-SwVbaTableHelper::SwVbaTableHelper( const uno::Reference< text::XTextTable >& xTextTable ) throw (uno::RuntimeException) : mxTextTable( xTextTable ), pDoc( NULL )
+SwVbaTableHelper::SwVbaTableHelper( const uno::Reference< text::XTextTable >& xTextTable ) throw (uno::RuntimeException) : mxTextTable( xTextTable )
 {
     pTable = GetSwTable( mxTextTable );
 }

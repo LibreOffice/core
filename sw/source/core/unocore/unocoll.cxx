@@ -184,10 +184,9 @@ public:
 typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > StringHashMap;
 class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper1< container::XNameContainer >
 {
-    SwDocShell* mpDocShell;
     StringHashMap mTemplateToProject;
 public:
-    SwVbaProjectNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
+    SwVbaProjectNameProvider()
     {
     }
     virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
@@ -603,7 +602,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                         uno::Reference< container::XNameContainer > xProjProv = pDoc->GetVBATemplateToProjectCache();
                         if ( !xProjProv.is() && pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
                         {
-                xProjProv = new SwVbaProjectNameProvider( pDoc->GetDocShell() );
+                xProjProv = new SwVbaProjectNameProvider;
                             pDoc->SetVBATemplateToProjectCache( xProjProv );
                         }
             //xRet =  (cppu::OWeakObject*)xProjProv;

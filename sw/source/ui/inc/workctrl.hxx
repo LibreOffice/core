@@ -139,9 +139,6 @@ class SwScrollNaviPopup : public SfxPopupWindow
 
     String          sQuickHelp[2 * NID_COUNT];
 
-    sal_uInt16          nFwdId;
-    sal_uInt16          nBackId;
-
     void            ApplyImageList();
 
     using Window::GetQuickHelpText;

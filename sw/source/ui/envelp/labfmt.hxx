@@ -61,7 +61,6 @@ class SwLabPreview : public Window
     long lLeftWidth;
     long lUpperWidth;
     long lColsWidth;
-    long PRowsWidth;
     long lPWidthWidth;
     long lPHeightWidth;
 

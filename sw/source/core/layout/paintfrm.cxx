@@ -345,8 +345,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
 //To be able to save the statics so the paint is more or lees reentrant.
 class SwSavePaintStatics
 {
-    sal_Bool            bSFlyMetafile,
-                        bSPageOnly;
+    sal_Bool            bSFlyMetafile;
     ViewShell          *pSGlobalShell;
     OutputDevice       *pSFlyMetafileOut;
     SwFlyFrm           *pSRetoucheFly,

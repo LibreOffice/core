@@ -46,9 +46,6 @@ public:
 
 class SwXMLBlockContext : public SvXMLImportContext
 {
-private:
-    SwXMLBlockListImport & rLocalRef;
-
 public:
     SwXMLBlockContext(     SwXMLBlockListImport& rImport,
                            sal_uInt16 nPrefix,

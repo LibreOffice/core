@@ -133,7 +133,6 @@ class WW8_WrFkp
     sal_uInt8 nItemSize;
     sal_uInt8 nIMax;         // Anzahl der Eintrags-Paare
     sal_uInt8 nOldVarLen;
-    sal_uInt8 nMark;
     bool bCombined;     // true : Einfuegen verboten
 
     sal_uInt8 SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms );
@@ -892,7 +891,7 @@ void WW8_WrPlcPn::WritePlc()
 WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8)
     : ePlc(ePl), nStartGrp(511), nOldStartGrp(511),
     nItemSize( ( CHP == ePl ) ? 1 : ( bWrtWW8 ? 13 : 7 )),
-    nIMax(0), nOldVarLen(0), nMark(0), bCombined(false)
+    nIMax(0), nOldVarLen(0), bCombined(false)
 {
     pFkp = (sal_uInt8*)new sal_Int32[128];           // 512 Byte
     pOfs = (sal_uInt8*)new sal_Int32[128];           // 512 Byte

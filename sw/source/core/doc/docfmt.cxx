@@ -313,7 +313,7 @@ sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
 {
     SwHistory* pHst = 0;
-    SwDataChanged aTmp( rRg, 0 );
+    SwDataChanged aTmp( rRg );
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg, RES_CHRFMT );
@@ -385,11 +385,11 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     // #i96644#
-    // SwDataChanged aTmp( *pPam, 0 );
+    // SwDataChanged aTmp( *pPam );
     std::auto_ptr< SwDataChanged > pDataChanged;
     if ( bSendDataChangedEvents )
     {
-        pDataChanged.reset( new SwDataChanged( *pPam, 0 ) );
+        pDataChanged.reset( new SwDataChanged( *pPam ) );
     }
     SwHistory* pHst = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1019,7 +1019,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
                             const SetAttrMode nFlags )
 {
-    SwDataChanged aTmp( rRg, 0 );
+    SwDataChanged aTmp( rRg );
     SwUndoAttr* pUndoAttr = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1044,7 +1044,7 @@ bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
 bool SwDoc::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
                             const SetAttrMode nFlags )
 {
-    SwDataChanged aTmp( rRg, 0 );
+    SwDataChanged aTmp( rRg );
     SwUndoAttr* pUndoAttr = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1689,7 +1689,7 @@ sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
                            bool bReset,
                            bool bResetListAttrs )
 {
-    SwDataChanged aTmp( rRg, 0 );
+    SwDataChanged aTmp( rRg );
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     SwHistory* pHst = 0;
     sal_Bool bRet = sal_True;

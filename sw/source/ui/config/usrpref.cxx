@@ -394,8 +394,7 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
 SwGridConfig::SwGridConfig(sal_Bool bIsWeb, SwMasterUsrPref& rPar) :
     ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Grid") :  C2U("Office.Writer/Grid"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
-    rParent(rPar),
-    bWeb(bIsWeb)
+    rParent(rPar)
 {
 }
 

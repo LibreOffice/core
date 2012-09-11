@@ -44,7 +44,6 @@ class SwFldVarPage;
 
 class SelectionListBox : public ListBox
 {
-    SwFldVarPage*   pDlg;
     sal_Bool            bCallAddSelection;
 
     virtual long        PreNotify( NotifyEvent& rNEvt );

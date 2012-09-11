@@ -25,7 +25,6 @@ class SwGlosDocShell : public SwDocShell
     String          aLongName;
     String          aShortName;
     String          aGroupName;
-    sal_Bool        bShow;
 
     using SotObject::GetInterface;
 

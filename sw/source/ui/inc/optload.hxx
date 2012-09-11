@@ -159,7 +159,6 @@ private:
     String          sNone;
 
     SwFldMgr        *pMgr;
-    sal_uInt16          eType;
     sal_Bool            bHTMLMode;
 
     DECL_LINK(SelectHdl, void *);

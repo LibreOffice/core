@@ -778,7 +778,6 @@ class SwDefFontSave
     SwTxtSizeInfo *pInf;
     SwFont        *pFnt;
     SwFont        *pNewFnt;
-    sal_Bool           bAlter;
 public:
     SwDefFontSave( const SwTxtSizeInfo &rInf );
    ~SwDefFontSave();

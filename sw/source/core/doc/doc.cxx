@@ -761,7 +761,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     {
         // BUG 26675: Send DataChanged before deleting, so that we notice which objects are in scope.
         //            After that they can be before/after the position.
-        SwDataChanged aTmp( this, rPos, 0 );
+        SwDataChanged aTmp( this, rPos );
     }
 
     SwUndoSplitNode* pUndo = 0;
@@ -944,7 +944,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
     if(!pNode)
         return false;
 
-    SwDataChanged aTmp( rRg, 0 );
+    SwDataChanged aTmp( rRg );
 
     if (!bDoesUndo || !GetIDocumentUndoRedo().DoesGroupUndo())
     {

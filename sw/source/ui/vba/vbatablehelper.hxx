@@ -32,14 +32,12 @@
 #include "wordvbahelper.hxx"
 #include <swtable.hxx>
 #include <tabcol.hxx>
-#include <doc.hxx>
 
 class SwVbaTableHelper
 {
 private:
     css::uno::Reference< css::text::XTextTable > mxTextTable;
     SwTable* pTable;
-    SwDoc* pDoc;
 
 private:
     SwTableBox* GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw (css::uno::RuntimeException);

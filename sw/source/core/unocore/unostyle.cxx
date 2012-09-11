@@ -2933,15 +2933,13 @@ void SwXStyle::Invalidate()
 SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool,
         SwDocShell* pDocSh, SfxStyleFamily eFam,
         const String& rStyleName):
-    SwXStyle(rPool, eFam, pDocSh->GetDoc(), rStyleName),
-    pDocShell(pDocSh)
+    SwXStyle(rPool, eFam, pDocSh->GetDoc(), rStyleName)
 {
 
 }
 
 SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh) :
-    SwXStyle(pDocSh->GetDoc(), SFX_STYLE_FAMILY_PAGE),
-    pDocShell(pDocSh)
+    SwXStyle(pDocSh->GetDoc(), SFX_STYLE_FAMILY_PAGE)
 {
 }
 

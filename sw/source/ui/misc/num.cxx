@@ -915,8 +915,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet, SwWrtShell & rSh) :
     SfxTabDialog(pParent, SW_RES(DLG_SVXTEST_NUM_BULLET), pSwItemSet, sal_False, &aEmptyStr),
     rWrtSh(rSh),
-    sRemoveText(SW_RES(ST_RESET)),
-    nRetOptionsDialog(USHRT_MAX)
+    sRemoveText(SW_RES(ST_RESET))
 {
     FreeResource();
     GetUserButton()->SetText(sRemoveText);

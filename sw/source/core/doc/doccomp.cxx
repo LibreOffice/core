@@ -227,7 +227,6 @@ private:
     const SwTxtNode *pTxtNd1, *pTxtNd2;
     int *pPos1, *pPos2;
     int nCnt1, nCnt2;		// number of words
-    const unsigned nMul;
 
     void CalcPositions( int *pPos, const SwTxtNode *pTxtNd, int &nCnt );
 
@@ -2206,7 +2205,7 @@ bool CharArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 
 WordArrayComparator::WordArrayComparator( const SwTxtNode *pNode1,
                                             const SwTxtNode *pNode2 )
-    : pTxtNd1( pNode1 ), pTxtNd2( pNode2 ), nMul( 251 )
+    : pTxtNd1( pNode1 ), pTxtNd2( pNode2 )
 {
     pPos1 = new int[ pTxtNd1->GetTxt().Len() + 1 ];
     pPos2 = new int[ pTxtNd2->GetTxt().Len() + 1 ];

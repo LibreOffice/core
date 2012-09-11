@@ -1255,7 +1255,6 @@ sal_uInt16 SwFldVarPage::GetGroup()
 
 SelectionListBox::SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId ) :
     ListBox (pDialog, rResId),
-    pDlg    (pDialog),
     bCallAddSelection(sal_False)
 {
 }

@@ -815,7 +815,6 @@ SwXMLTableColContext_Impl::~SwXMLTableColContext_Impl()
 class SwXMLTableColsContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef   xMyTable;
-    sal_Bool bHeader;
 
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
@@ -825,8 +824,7 @@ public:
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
-            SwXMLTableContext *pTable,
-            sal_Bool bHead );
+            SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableColsContext_Impl();
 
@@ -840,10 +838,9 @@ public:
 SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< xml::sax::XAttributeList > &,
-        SwXMLTableContext *pTable, sal_Bool bHead ) :
+        SwXMLTableContext *pTable ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    xMyTable( pTable ),
-    bHeader( bHead )
+    xMyTable( pTable )
 {
 }
 
@@ -1482,12 +1479,11 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_TABLE_HEADER_COLS:
-        bHeader = sal_True;
     case XML_TOK_TABLE_COLS:
         if( IsValid() )
             pContext = new SwXMLTableColsContext_Impl( GetSwImport(), nPrefix,
                                                        rLocalName, xAttrList,
-                                                       this, bHeader );
+                                                       this );
         break;
     case XML_TOK_TABLE_COL:
         if( IsValid() && IsInsertColPossible() )

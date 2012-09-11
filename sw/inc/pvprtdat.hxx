@@ -29,12 +29,11 @@ class SwPagePreViewPrtData
             nHorzSpace, nVertSpace;
     sal_uInt8 nRow, nCol;
     sal_Bool bLandscape : 1;
-    sal_Bool bStretch : 1;
 public:
     SwPagePreViewPrtData()
         : nLeftSpace(0), nRightSpace(0), nTopSpace(0), nBottomSpace(0),
             nHorzSpace(0), nVertSpace(0), nRow(1), nCol(1),
-            bLandscape(0),bStretch(0)
+            bLandscape(0)
     {}
 
     sal_uLong GetLeftSpace() const          { return nLeftSpace; }

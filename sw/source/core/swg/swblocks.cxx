@@ -65,15 +65,15 @@ sal_uInt16 SwImpBlocks::Hash( const String& r )
 }
 
 
-SwBlockName::SwBlockName( const String& rShort, const String& rLong, long n )
-    : nPos( n ), aShort( rShort ), aLong( rLong ), aPackageName (rShort),
+SwBlockName::SwBlockName( const String& rShort, const String& rLong )
+    : aShort( rShort ), aLong( rLong ), aPackageName (rShort),
     bIsOnlyTxtFlagInit( sal_False ), bIsOnlyTxt( sal_False )
 {
     nHashS = SwImpBlocks::Hash( rShort );
     nHashL = SwImpBlocks::Hash( rLong );
 }
 SwBlockName::SwBlockName( const String& rShort, const String& rLong, const String& rPackageName)
-    : nPos( 0 ), aShort( rShort ), aLong( rLong ), aPackageName (rPackageName),
+    : aShort( rShort ), aLong( rLong ), aPackageName (rPackageName),
     bIsOnlyTxtFlagInit( sal_False ), bIsOnlyTxt( sal_False )
 {
     nHashS = SwImpBlocks::Hash( rShort );
@@ -205,7 +205,7 @@ void SwImpBlocks::AddName( const String& rShort, const String& rLong,
         delete aNames[nIdx];
         aNames.erase( aNames.begin() + nIdx );
     }
-    SwBlockName* pNew = new SwBlockName( rShort, rLong, 0L );
+    SwBlockName* pNew = new SwBlockName( rShort, rLong );
     pNew->bIsOnlyTxtFlagInit = sal_True;
     pNew->bIsOnlyTxt = bOnlyTxt;
     aNames.insert( pNew );
