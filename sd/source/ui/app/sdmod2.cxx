@@ -685,7 +685,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             sal_uInt32 nCntrl;
 
             SdDrawDocument* pDocument = pDocSh->GetDoc();
-            SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+            SdrOutliner& rOutl = pDocument->GetDrawOutliner();
             nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
             rOutl.SetControlWord( nCntrl | nSum );
             ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
