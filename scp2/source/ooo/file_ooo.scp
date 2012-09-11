@@ -1560,9 +1560,9 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_Pt
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt;
-	Name = "dict-pt.oxt";
+File gid_File_Extension_Dictionary_Pt_Br
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Br;
+	Name = "dict-pt-BR.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
@@ -1571,7 +1571,7 @@ End
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pt_Pt
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt;
-	Name = "dict-pt-pt.oxt";
+	Name = "dict-pt-PT.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End

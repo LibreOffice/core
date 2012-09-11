@@ -334,14 +334,14 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Pl
     DosName = "dict-pl";
 End
 
-Directory gid_Brand_Dir_Share_Extensions_Dict_Pt
+Directory gid_Brand_Dir_Share_Extensions_Dict_Pt_Br
     ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-pt";
+    DosName = "dict-pt-BR";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt
     ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-pt-pt";
+    DosName = "dict-pt-PT";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Ro
