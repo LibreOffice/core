@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOX///8E\u003d",
+        "filename": "solenv/gbuild/AllLangResTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-11T11:37:22Z",
+      "side": 1,
+      "message": "this variable needs \"gb_\"  prefix (and can be defined with :\u003d instead of \u003d)",
+      "revId": "53ec8850ea723685878f6bf845c4cb6bf902a90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///8A\u003d",
+        "filename": "solenv/gbuild/AllLangResTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-11T11:37:22Z",
+      "side": 1,
+      "message": "this is unnecessarily complex: \n- why are backticks used here? there is rarely a good reason to do that\n- why is it necessary to handle the first element specially?\n\ni\u0027d much prefer something like:\nrm -f $(2) $(foreach lang,$(..langs...), \u0026\u0026 cat ..$(lang)... \u003e\u003e $(2) \u0026\u0026 printf \"\\n\" \u003e\u003e $(2))\n\nhmm.. why do we need to add a newline anyway? for bonus points, drag the cat out of the foreach and find a way to get rid of printf calls (perhaps that would need changes to the source files? should be a separate followup patch then)",
+      "revId": "53ec8850ea723685878f6bf845c4cb6bf902a90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///7s\u003d",
+        "filename": "solenv/gbuild/AllLangResTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-11T11:37:22Z",
+      "side": 1,
+      "message": "hmm... this one should be called gb_SrsPartMergeTarget__command, and the other one gb_Transex3Merge... or perhaps better gb_SrsPartMergeTarget__Transex3Merge",
+      "revId": "53ec8850ea723685878f6bf845c4cb6bf902a90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///78\u003d",
+        "filename": "solenv/gbuild/AllLangResTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-11T11:37:22Z",
+      "side": 1,
+      "message": "please connect that with \"\u0026\u0026 \\\" to the resot of the command, that will save a process :)",
+      "revId": "53ec8850ea723685878f6bf845c4cb6bf902a90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///74\u003d",
+        "filename": "solenv/gbuild/AllLangResTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-11T11:37:22Z",
+      "side": 1,
+      "message": "i don\u0027t really see a need to define gb_ConcatPo as a separate function here, why not just inline it?\n\nor, perhaps, move everything here to gb_SrsPartMergeTarget__command\n\n(in GNU make functions are quite painful to use because they don\u0027t have named parameters and there\u0027s no error checking, so i personally don\u0027t abstract as many functions as i would in other languages; of course if you plan to call this from another place as well then that\u0027s a good reason for a function)\n\noh wait it seems you\u0027re calling it in Configuration.mk as well...",
+      "revId": "53ec8850ea723685878f6bf845c4cb6bf902a90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///7o\u003d",
+        "filename": "solenv/gbuild/Configuration.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-11T11:37:22Z",
+      "side": 1,
+      "message": "this one should be called gb_XcuMergeTarget__command",
+      "revId": "53ec8850ea723685878f6bf845c4cb6bf902a90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///7g\u003d",
+        "filename": "solenv/gbuild/InstallModuleTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-11T11:37:22Z",
+      "side": 1,
+      "message": "this one should be called gb_ScpMergeTarget__command",
+      "revId": "53ec8850ea723685878f6bf845c4cb6bf902a90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOX///7k\u003d",
+        "filename": "solenv/inc/rules.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-11T11:37:22Z",
+      "side": 1,
+      "message": "i don\u0027t know much about dmake, but is it really necessary to use $(shell here?",
+      "revId": "53ec8850ea723685878f6bf845c4cb6bf902a90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
