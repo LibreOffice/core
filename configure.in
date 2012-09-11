@@ -1642,6 +1642,11 @@ AC_ARG_WITH(system-orcus,
         [Use orcus library already on system.]),,
     [with_system_orcus="$with_system_libs"])
 
+AC_ARG_WITH(system-liblangtag,
+    AS_HELP_STRING([--with-system-liblangtag],
+        [Use orcus library already on system.]),,
+    [with_system_liblangtag="$with_system_libs"])
+
 AC_ARG_WITH(system-mozilla,
     AS_HELP_STRING([--with-system-mozilla],
         [Use Mozilla already on system. Note that some components cannot be built
@@ -11247,34 +11252,41 @@ else
 fi
 AC_SUBST(SYSTEM_GLIB)
 
+if test "$SYSTEM_GLIB" = "YES"; then
+        PKG_CHECK_MODULES( GLIB, glib-2.0 )
+else
+        BUILD_TYPE="$BUILD_TYPE GLIB"
+fi
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBS)
 
 dnl ===================================================================
 dnl Test whether to use liblangtag
 dnl ===================================================================
 ENABLE_LIBLANGTAG=
 SYSTEM_LIBLANGTAG=
-GLIB_CFLAGS=''
-GLIB_LIBS=''
+AC_MSG_CHECKING([whether to use liblangtag])
 if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a "$CROSS_COMPILING" != "YES" \); then
     ENABLE_LIBLANGTAG=YES
-    dnl Get system's glib flags and libs.
-    dnl The i18npool LanguageTag wrapper uses it for liblangtag.
-
-    if test "$SYSTEM_GLIB" = YES; then
-        PKG_CHECK_MODULES( GLIB, glib-2.0 )
+    AC_MSG_RESULT([yes])
+    AC_MSG_CHECKING([whether to use system liblangtag])
+    if test -n "$with_system_liblangtag"; then
+	SYSTEM_LIBLANGTAG=YES
+	AC_MSG_RESULT([yes])
+	PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.3)
     else
-        BUILD_TYPE="$BUILD_TYPE GLIB"
+	SYSTEM_LIBLANGTAG=NO
+	AC_MSG_RESULT([no])
+        BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
     fi
-
-    dnl So far AFAIK no system has liblangtag, set this unconditionally for now.
-    dnl TODO Allow system liblangtag
-    BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
+else
+    ENABLE_LIBLANGTAG=NO
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_LIBLANGTAG)
 AC_SUBST(SYSTEM_LIBLANGTAG)
-AC_SUBST(GLIB_CFLAGS)
-AC_SUBST(GLIB_LIBS)
-
+AC_SUBST(LIBLANGTAG_CFLAGS)
+AC_SUBST(LIBLANGTAG_LIBS)
 
 dnl ===================================================================
 dnl Test whether to build gettext runtime (libintl) or rely on the
