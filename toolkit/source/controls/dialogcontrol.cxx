@@ -361,9 +361,6 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
         // there must be a better way than doing this, we can't
         // process the scrolltop & scrollleft in XDialog because
         // the children haven't been added when those props are applied
-        Reference< XPropertySet > xDlgProps( getModel(), UNO_QUERY );
-        Reference< XPropertySet > xPeerProps(  getPeer(), uno::UNO_QUERY );
-
         ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLTOP ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLTOP ) ) );
         ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLLEFT ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLLEFT ) ) );
 

@@ -97,7 +97,9 @@ void Frame::endElement()
     {
         xControlModel->setPropertyValue( "Label" , makeAny( _label ) );
     }
+#if SCROLLABLEFRAME
     ctx.importScollableSettings( _xAttributes );
+#endif
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)

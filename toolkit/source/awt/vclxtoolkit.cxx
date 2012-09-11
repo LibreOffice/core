@@ -724,11 +724,13 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_GROUPBOX:
                         {
+#if SCROLLABLEFRAME
                 if ( bFrameControl )
                 {
                     pNewWindow = new toolkit::ScrollableWrapper< GroupBox >( pParent, nWinBits | WB_VSCROLL );
                 }
                 else
+#endif
                     pNewWindow = new GroupBox( pParent, nWinBits );
                                 if ( bFrameControl )
                                 {

@@ -2445,8 +2445,9 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
-    printf("Frame, converting scroll bits\n");
+#if SCROLLABLEFRAME
     rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
+#endif
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
@@ -2509,7 +2510,6 @@ void AxUserFormModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     rPropMap.setProperty( PROP_Title, maCaption );
     rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
     rConv.convertAxPicture( rPropMap, maPictureData, AX_PICPOS_CENTER  );
-    printf("UserForm, converting scroll bits\n");
     rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
