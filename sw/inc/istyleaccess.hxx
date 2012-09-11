@@ -44,15 +44,15 @@ public:
                                                                SwAutoStyleFamily eFamily ) = 0;
     virtual void getAllStyles( std::vector<StylePool::SfxItemSet_Pointer_t> &rStyles,
                                                                SwAutoStyleFamily eFamily ) = 0;
-    // It's slow to iterate through a stylepool looking for a special name, but if
-    // the style has been inserted via "cacheAutomaticStyle" instead of "getAutomaticStyle",
-    // it's faster
+    /** It's slow to iterate through a stylepool looking for a special name, but if
+     the style has been inserted via "cacheAutomaticStyle" instead of "getAutomaticStyle",
+     it's faster */
     virtual StylePool::SfxItemSet_Pointer_t getByName( const rtl::OUString& rName,
                                                                SwAutoStyleFamily eFamily ) = 0;
-    // insert the style to the pool and the cache (used during import)
+    /// insert the style to the pool and the cache (used during import)
     virtual StylePool::SfxItemSet_Pointer_t cacheAutomaticStyle( const SfxItemSet& rSet,
                                                                SwAutoStyleFamily eFamily ) = 0;
-    // To release the cached styles (shared_pointer!)
+    /// To release the cached styles (shared_pointer!)
     virtual void clearCaches() = 0;
 };
 

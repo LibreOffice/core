@@ -46,11 +46,11 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     friend class SwNodes;
 
     GraphicObject aGrfObj;
-    ::sfx2::SvBaseLinkRef refLink;       // If graphics only as link then pointer is set.
+    ::sfx2::SvBaseLinkRef refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
-    String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
-                                // name or package url)
-    String aLowResGrf;          // HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
+    String aNewStrmName;                 /**< SW3/XML: new stream name (either SW3 stream
+                                         // name or package url) */
+    String aLowResGrf;                   ///< HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
     sal_Bool bTransparentFlagValid  :1;
     sal_Bool bInSwapIn              :1;
 
@@ -58,8 +58,8 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     sal_Bool bChgTwipSize           :1;
     sal_Bool bChgTwipSizeFromPixel  :1;
     sal_Bool bLoadLowResGrf         :1;
-    sal_Bool bFrameInPaint          :1; // To avoid Start-/EndActions in Paint via SwapIn.
-    sal_Bool bScaleImageMap         :1; // Scale image map in SetTwipSize.
+    sal_Bool bFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
+    sal_Bool bScaleImageMap         :1; ///< Scale image map in SetTwipSize.
 
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
@@ -71,7 +71,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
                const Graphic* pGraphic,
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
-    // Ctor for reading (SW/G) without graphics.
+    ///< Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
                const String& rGrfName, const String& rFltName,
                SwGrfFmtColl* pGrfColl,
@@ -84,11 +84,11 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     void InsertLink( const String& rGrfName, const String& rFltName );
     sal_Bool ImportGraphic( SvStream& rStrm );
     sal_Bool HasStreamName() const { return aGrfObj.HasUserData(); }
-    // adjust return type and rename method to
-    // indicate that its an private one.
+    /** adjust return type and rename method to
+       indicate that its an private one. */
 
-    // embedded graphic stream couldn't be inside a 3.1 - 5.2 storage any more.
-    // Thus, return value isn't needed any more.
+    /** embedded graphic stream couldn't be inside a 3.1 - 5.2 storage any more.
+       Thus, return value isn't needed any more. */
     void _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
 
     void DelStreamName();
@@ -162,34 +162,34 @@ public:
     inline sal_Bool IsScaleImageMap() const         { return bScaleImageMap; }
     inline void SetScaleImageMap( sal_Bool b )      { bScaleImageMap = b; }
 #endif
-        // in ndcopy.cxx
+        /// in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
-    // Re-read in case graphic was not OK. The current one
-    // gets replaced by the new one.
+    /** Re-read in case graphic was not OK. The current one
+       gets replaced by the new one. */
     sal_Bool ReRead( const String& rGrfName, const String& rFltName,
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
                  sal_Bool bModify = sal_True );
-    // Loading of graphic immediately before displaying.
+    /// Loading of graphic immediately before displaying.
     short SwapIn( sal_Bool bWaitForData = sal_False );
-    // Remove graphic in order to free memory.
+    /// Remove graphic in order to free memory.
     short SwapOut();
-    // Access to storage stream-name.
+    /// Access to storage stream-name.
     void SetStreamName( const String& r ) { aGrfObj.SetUserData( r ); }
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
-    // Is this node selected by any shell?
+    /// Is this node selected by any shell?
     sal_Bool IsSelected() const;
 #endif
 
-    // Communicate to graphic that node is in Undo-range.
+    /// Communicate to graphic that node is in Undo-range.
     virtual sal_Bool SavePersistentData();
     virtual sal_Bool RestorePersistentData();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
-    // Query link-data.
+    /// Query link-data.
     sal_Bool IsGrfLink() const                  { return refLink.Is(); }
     inline sal_Bool IsLinkedFile() const;
     inline sal_Bool IsLinkedDDE() const;
@@ -197,11 +197,11 @@ public:
     sal_Bool GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
 
-    // Scale an image-map: the image-map becomes zoomed in / out by
-    // factor between graphic-size and border-size.
+    /** Scale an image-map: the image-map becomes zoomed in / out by
+       factor between graphic-size and border-size. */
     void ScaleImageMap();
 
-    // Returns the with our graphic attributes filled Graphic-Attr-Structure.
+    /// Returns the with our graphic attributes filled Graphic-Attr-Structure.
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
 #endif

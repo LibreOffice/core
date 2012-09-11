@@ -48,7 +48,7 @@ class SdrObject;
 class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;
-    friend class SwPageDesc;    // Is allowed to call protected CTor.
+    friend class SwPageDesc;    ///< Is allowed to call protected CTor.
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> m_wXObject;
@@ -71,41 +71,41 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
-    TYPEINFO();     // Already in base class Client.
+    TYPEINFO();     ///< Already in base class Client.
 
-    // Destroys all Frms in aDepend (Frms are identified via PTR_CAST).
+    /// Destroys all Frms in aDepend (Frms are identified via PTR_CAST).
     virtual void DelFrms();
 
-    // Creates the views.
+    /// Creates the views.
     virtual void MakeFrms();
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
-    //  Returns the IMapObject defined at format (Fly)
-    //  in the ImageMap at position Point.
-    //  rPoint - test on DocPosition.
-    //  pFly - optional FlyFrame, in case it is already known.
+    /**  @return the IMapObject defined at format (Fly)
+        in the ImageMap at position Point.
+        rPoint - test on DocPosition.
+        pFly - optional FlyFrame, in case it is already known. */
     IMapObject* GetIMapObject( const Point& rPoint,
                                 const SwFlyFrm *pFly = 0 ) const;
 
 
-    // Returns the real size of the frame - or an empty rectangle
-    // if no layout exists.
-    // If pPoint is given, look for the frame closest to it.
+    /** @return the real size of the frame - or an empty rectangle
+       if no layout exists.
+       If pPoint is given, look for the frame closest to it. */
     SwRect FindLayoutRect( const sal_Bool bPrtArea = sal_False,
                             const Point* pPoint = 0,
                             const sal_Bool bCalcFrm = sal_False ) const;
 
-    // Searches SdrObject. SdrObjUserCall is client of the format.
-    // The UserCall knows its SdrObject.
+    /** Searches SdrObject. SdrObjUserCall is client of the format.
+       The UserCall knows its SdrObject. */
           SwContact *FindContactObj();
     const SwContact *FindContactObj() const
         { return ((SwFrmFmt*)this)->FindContactObj(); }
 
-    // Returns the SdrObject, that ist connected to the ContactObject.
-    // Only DrawFrmFmts are connected to the "real SdrObject". FlyFrmFmts
-    // are connected to a Master and all FlyFrms has the "real SdrObject".
-    // "Real SdrObject" has position and a Z-order.
+    /** @return the SdrObject, that ist connected to the ContactObject.
+       Only DrawFrmFmts are connected to the "real SdrObject". FlyFrmFmts
+       are connected to a Master and all FlyFrms has the "real SdrObject".
+       "Real SdrObject" has position and a Z-order. */
           SdrObject *FindSdrObject();
     const SdrObject *FindSdrObject() const
         { return ((SwFrmFmt*)this)->FindSdrObject(); }
@@ -121,7 +121,7 @@ public:
         HORI_L2R,
         HORI_R2L,
         VERT_R2L,
-        VERT_L2R    // Not supported yet.
+        VERT_L2R    ///< Not supported yet.
     };
 
     virtual SwFrmFmt::tLayoutDir GetLayoutDir() const;
@@ -149,10 +149,10 @@ class SW_DLLPUBLIC SwFlyFrmFmt: public SwFrmFmt
 {
     friend class SwDoc;
 
-    // Both not existent.
-    // it stores the previous position of Prt rectangle from RequestObjectResize
-    // so it can be used to move frames of non-resizable objects to align them correctly
-    // when they get borders (this is done in SwWrtShell::CalcAndGetScale)
+    /** Both not existent.
+       it stores the previous position of Prt rectangle from RequestObjectResize
+       so it can be used to move frames of non-resizable objects to align them correctly
+       when they get borders (this is done in SwWrtShell::CalcAndGetScale) */
     Point   m_aLastFlyFrmPrtRectPos;
 
     SwFlyFrmFmt( const SwFlyFrmFmt &rCpy );
@@ -172,7 +172,7 @@ public:
     TYPEINFO();
     ~SwFlyFrmFmt();
 
-    // Creates the views.
+    /// Creates the views.
     virtual void MakeFrms();
 
     SwFlyFrm* GetFrm( const Point* pDocPos = 0,
@@ -233,7 +233,7 @@ class SW_DLLPUBLIC SwDrawFrmFmt: public SwFrmFmt
     mutable const SdrObject * pSdrObjCached;
     mutable String sSdrObjCachedComment;
 
-    // Both not existent.
+    /// Both not existent.
     SwDrawFrmFmt( const SwDrawFrmFmt &rCpy );
     SwDrawFrmFmt &operator=( const SwDrawFrmFmt &rCpy );
 
@@ -271,12 +271,12 @@ public:
     TYPEINFO();
     ~SwDrawFrmFmt();
 
-    // DrawObjects are removed from the arrays at the layout.
-    // The DrawObjects are marked as deleted.
+    /** DrawObjects are removed from the arrays at the layout.
+     The DrawObjects are marked as deleted. */
     virtual void DelFrms();
 
-    // Register DrawObjects in the arrays at layout.
-    // Reset delete marks.
+    /** Register DrawObjects in the arrays at layout.
+     Reset delete marks. */
     virtual void MakeFrms();
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
