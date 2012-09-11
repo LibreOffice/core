@@ -68,7 +68,7 @@ Reference< XInterface > SAL_CALL DocumentPropertiesImport_createInstance( const 
 
 namespace {
 
-Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxStorage, const OUString& rStreamType ) throw (RuntimeException)
+Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxStorage, const OUString& rStreamType ) throw (RuntimeException, IllegalArgumentException)
 {
     Reference< XRelationshipAccess > xRelation( rxStorage, UNO_QUERY_THROW );
     Reference< XHierarchicalStorageAccess > xHierarchy( rxStorage, UNO_QUERY_THROW );
@@ -138,19 +138,26 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
         const Reference< XStorage >& rxSource, const Reference< XDocumentProperties >& rxDocumentProperties )
         throw (RuntimeException, IllegalArgumentException, SAXException, Exception)
 {
+    Sequence< InputSource > aCoreStreams;
+    Sequence< InputSource > aExtStreams;
+    Sequence< InputSource > aCustomStreams;
+
     if( !mxContext.is() )
         throw RuntimeException();
 
     if( !rxSource.is() || !rxDocumentProperties.is() )
         throw IllegalArgumentException();
 
-    Sequence< InputSource > aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "metadata/core-properties" ) );
-    // MS Office seems to have a bug, so we have to do similar handling
-    if( !aCoreStreams.hasElements() )
-        aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_PACKAGE_RELATION_TYPE( "metadata/core-properties" ) );
+    try {
+        aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "metadata/core-properties" ) );
+        // MS Office seems to have a bug, so we have to do similar handling
+        if( !aCoreStreams.hasElements() )
+            aCoreStreams = lclGetRelatedStreams( rxSource, CREATE_PACKAGE_RELATION_TYPE( "metadata/core-properties" ) );
 
-    Sequence< InputSource > aExtStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "extended-properties" ) );
-    Sequence< InputSource > aCustomStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "custom-properties" ) );
+        aExtStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "extended-properties" ) );
+        aCustomStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE( "custom-properties" ) );
+    }
+    catch(Exception) { }
 
     if( aCoreStreams.hasElements() || aExtStreams.hasElements() || aCustomStreams.hasElements() )
     {
