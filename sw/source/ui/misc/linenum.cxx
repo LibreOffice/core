@@ -201,11 +201,11 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
  --------------------------------------------------------------------*/
 IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl)
 {
-    bool bHasValue = m_pDivisorED->GetText().Len() != 0;
+    bool bEnable = m_pNumberingOnCB->IsChecked() && m_pDivisorED->GetText().Len() != 0;
 
-    m_pDivIntervalFT->Enable(bHasValue);
-    m_pDivIntervalNF->Enable(bHasValue);
-    m_pDivRowsFT->Enable(bHasValue);
+    m_pDivIntervalFT->Enable(bEnable);
+    m_pDivIntervalNF->Enable(bEnable);
+    m_pDivRowsFT->Enable(bEnable);
 
     return 0;
 }
