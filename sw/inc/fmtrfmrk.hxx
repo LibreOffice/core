@@ -41,7 +41,7 @@ class SwFmtRefMark : public SfxPoolItem
     friend class SwTxtRefMark;
     SwTxtRefMark* pTxtAttr;
 
-    // Protected CopyCtor.
+    /// Protected CopyCtor.
     SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark);
     rtl::OUString aRefName;
 
@@ -50,7 +50,7 @@ public:
     SwFmtRefMark( const SwFmtRefMark& rRefMark );
     ~SwFmtRefMark( );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

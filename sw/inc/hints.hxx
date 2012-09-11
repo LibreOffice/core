@@ -118,18 +118,18 @@ public:
 };
 
 
-// SwRefMarkFldUpdate is sent when the referencemarks should be updated.
-// To determine Page- / chapternumbers the current frame has to be asked.
-//  For this we need the current outputdevice
+/** SwRefMarkFldUpdate is sent when the referencemarks should be updated.
+     To determine Page- / chapternumbers the current frame has to be asked.
+      For this we need the current outputdevice */
 class SwRefMarkFldUpdate : public SwMsgPoolItem
 {
 public:
-    const OutputDevice* pOut; // pointer to the current output device
+    const OutputDevice* pOut; ///< pointer to the current output device
     SwRefMarkFldUpdate( const OutputDevice* );
 };
 
-// SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position
-// have to be updated. At the moment this is only needed when updating pagenumber fields.
+/** SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position
+   have to be updated. At the moment this is only needed when updating pagenumber fields. */
 class SwDocPosUpdate : public SwMsgPoolItem
 {
 public:
@@ -137,7 +137,7 @@ public:
     SwDocPosUpdate( const long nDocPos );
 };
 
-// SwTableFmlUpdate is sent when the table has to be newly calculated or when a table itself is merged or splitted
+/// SwTableFmlUpdate is sent when the table has to be newly calculated or when a table itself is merged or splitted
 enum TableFmlUpdtFlags { TBL_CALC = 0,
                          TBL_BOXNAME,
                          TBL_BOXPTR,
@@ -148,13 +148,13 @@ enum TableFmlUpdtFlags { TBL_CALC = 0,
 class SwTableFmlUpdate : public SwMsgPoolItem
 {
 public:
-    const SwTable* pTbl;         // Pointer to the current table
+    const SwTable* pTbl;         ///< Pointer to the current table
     union {
-        const SwTable* pDelTbl;  // Merge: Pointer to the table to be removed
-        const String* pNewTblNm; // Split: the name of the new table
+        const SwTable* pDelTbl;  ///< Merge: Pointer to the table to be removed
+        const String* pNewTblNm; ///< Split: the name of the new table
     } DATA;
     SwHistory* pHistory;
-    sal_uInt16 nSplitLine;           // Split: from this BaseLine on will be splitted
+    sal_uInt16 nSplitLine;       ///< Split: from this BaseLine on will be splitted
     TableFmlUpdtFlags eFlags;
     sal_Bool bModified : 1;
     sal_Bool bBehindSplitLine : 1;
@@ -179,18 +179,18 @@ public:
 class SwAttrSetChg: public SwMsgPoolItem
 {
     sal_Bool bDelSet;
-    SwAttrSet* pChgSet;           // what has changed
-    const SwAttrSet* pTheChgdSet; // is only used to compare
+    SwAttrSet* pChgSet;           ///< what has changed
+    const SwAttrSet* pTheChgdSet; ///< is only used to compare
 public:
     SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet );
     SwAttrSetChg( const SwAttrSetChg& );
     ~SwAttrSetChg();
 
-    // What has changed
+    /// What has changed
     const SwAttrSet* GetChgSet() const     { return pChgSet; }
           SwAttrSet* GetChgSet()           { return pChgSet; }
 
-    // Where it has changed
+    /// Where it has changed
     const SwAttrSet* GetTheChgdSet() const { return pTheChgdSet; }
 
     sal_uInt16 Count() const { return pChgSet->Count(); }
@@ -214,8 +214,8 @@ class SwVirtPageNumInfo: public SwMsgPoolItem
     const SwPageFrm *pPage;
     const SwPageFrm *pOrigPage;
     const SwFrm     *pFrm;
-    // Multiple attributes can be attached to a single paragraph / table
-    // The frame, in the end, has to decide which attribute takes effect and which physical page it involves
+    /** Multiple attributes can be attached to a single paragraph / table
+     The frame, in the end, has to decide which attribute takes effect and which physical page it involves */
 public:
     SwVirtPageNumInfo( const SwPageFrm *pPg );
 
