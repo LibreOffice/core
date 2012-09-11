@@ -131,22 +131,6 @@ static unsigned bitmask[4096];
 #define MARK(x) do {} while (0)
 #endif
 
-// You shouldn't try to call memory-allocating functions in the dynamic linker.
-// Guard against the most obvious ones.
-#define DISALLOW_ALLOCATION(return_type, name, ...)                             \
-    return_type name __VA_ARGS__                                                \
-    {                                                                           \
-        const char* msg = "ERROR: " #name " called from the dynamic linker!\n"; \
-         __android_log_write(ANDROID_LOG_FATAL, "linker", msg);            \
-        write(2, msg, sizeof(msg));                                             \
-        abort();                                                                \
-    }
-#define UNUSED __attribute__((unused))
-DISALLOW_ALLOCATION(void*, malloc, (size_t u UNUSED));
-DISALLOW_ALLOCATION(void, free, (void* u UNUSED));
-DISALLOW_ALLOCATION(void*, realloc, (void* u1 UNUSED, size_t u2 UNUSED));
-DISALLOW_ALLOCATION(void*, calloc, (size_t u1 UNUSED, size_t u2 UNUSED));
-
 static char tmp_err_buf[768];
 static char __linker_dl_err_buf[768];
 #define BASENAME(s) (strrchr(s, '/') != NULL ? strrchr(s, '/') + 1 : s)
@@ -1644,6 +1628,7 @@ static void parse_LD_LIBRARY_PATH(const char* path) {
                ldpaths_buf, sizeof(ldpaths_buf), LDPATH_MAX);
 }
 
+extern "C"
 void __lo_linker_init(void)
 {
     const char *ldpath_env = NULL;
