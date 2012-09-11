@@ -855,7 +855,7 @@ AC_ARG_ENABLE(dbus,
 AC_ARG_ENABLE(packagekit,
     AS_HELP_STRING([--enable-packagekit],
         [Determines whether to enable features using packagekit.
-         Right now that is auto font install)]
+         Right now that is auto font install])
 ,)
 
 AC_ARG_ENABLE(gconf,
