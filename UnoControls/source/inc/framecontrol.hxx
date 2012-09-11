@@ -396,7 +396,7 @@ public:
         @onerror
     */
 
-    static const ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
+    static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
     /**_________________________________________________________________________________________________________
         @short
@@ -411,7 +411,7 @@ public:
         @onerror
     */
 
-    static const ::rtl::OUString impl_getStaticImplementationName();
+    static const OUString impl_getStaticImplementationName();
 
 //______________________________________________________________________________________________________________
 //  protected methods
@@ -553,7 +553,7 @@ private:
     */
 
     void impl_createFrame(  const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&       xPeer           ,
-                            const ::rtl::OUString&                                  sURL            ,
+                            const OUString&                                         sURL            ,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    seqArguments    );
 
     /**_________________________________________________________________________________________________________
@@ -594,7 +594,7 @@ private:
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >         m_xFrame                    ;
-    ::rtl::OUString                                 m_sComponentURL             ;
+    OUString                                        m_sComponentURL             ;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_seqLoaderArguments        ;
     ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer       ;
     OConnectionPointContainerHelper                 m_aConnectionPointContainer ;
