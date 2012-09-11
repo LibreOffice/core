@@ -2217,7 +2217,7 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 break;
             case FIELD_PROP_IS_FIELD_USED:
             case FIELD_PROP_IS_FIELD_DISPLAYED:
-                aRet.setValue( sal_False, ::getCppuBooleanType() );
+                aRet <<= false;
                 break;
             }
         }

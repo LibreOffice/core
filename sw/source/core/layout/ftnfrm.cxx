@@ -1185,7 +1185,7 @@ SwFtnFrm *SwFtnBossFrm::FindFirstFtn()
         pBoss = pRet->GetRef()->FindFtnBossFrm();
         OSL_ENSURE( pBoss, "FindFirstFtn: No boss found" );
         if( !pBoss )
-            return sal_False; // ?There must be a bug, but no GPF
+            return NULL; // ?There must be a bug, but no GPF
         pPage = pBoss->FindPageFrm();
         nPgNum = pPage->GetPhyPageNum();
         if ( nPgNum == nRefNum )

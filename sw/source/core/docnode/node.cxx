@@ -613,7 +613,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                         if( n >= rFmts.size() )
                         {
                             OSL_ENSURE( !this, "Fly-Section aber kein Format gefunden" );
-                            return sal_False;
+                            return 0;
                         }
                     }
                 }
