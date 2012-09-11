@@ -22,7 +22,6 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& $(COMPATH)/vcpackages/vcbuild.exe liborcus-static-nozip.vcproj "Release|Win32" \
-	&& cp Release/orcus.lib $(OUTDIR)/lib \
 	&& touch $@
 
 else
@@ -40,8 +39,6 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(GNUMAKE) \
-	&& cp src/liborcus/.libs/liborcus-0.2.a $(OUTDIR)/lib \
-	&& ln -s liborcus-0.2.a $(OUTDIR)/lib/liborcus.a \
 	&& touch $@
 
 endif

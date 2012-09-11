@@ -13,6 +13,7 @@ ifeq ($(SYSTEM_LIBORCUS),NO)
 
 $(eval $(call gb_Module_add_targets,liborcus,\
 	ExternalProject_liborcus \
+	Package_liborcus \
 	UnpackedTarball_orcus \
 ))
 
