@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(GNUMAKE) \
 	&& cp src/liborcus/.libs/liborcus-0.2.a $(OUTDIR)/lib \
-	&& ln -s $(OUTDIR)/lib/liborcus.a liborcus-0.2.a \
+	&& ln -s liborcus-0.2.a $(OUTDIR)/lib/liborcus.a \
 	&& touch $@
 
 endif

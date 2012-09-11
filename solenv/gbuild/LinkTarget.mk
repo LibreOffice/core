@@ -745,18 +745,12 @@ $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_headers_target,$$(lib)))
 
 endef
 
-define gb_LinkTarget_add_linked_static_external_libs
-$$(call gb_Output_error,\
- gb_LinkTarget_add_linked_static_external_libs: use gb_LinkTarget_use_static_external_libraries instead.)
-endef
-
-# TODO: why do we need this?
-define gb_LinkTarget_use_static_external_libraries
-
+# gb_LinkTarget_use_static_external_library linktarget library externalproject
+define gb_LinkTarget_use_static_external_library
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $(2)
 
-$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_ExternalLibs_get_target,$$(lib)))
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : $$(foreach lib,$(2),$$(call gb_ExternalLibs_get_target,$$(lib)))
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_ExternalProject_get_target,$(3))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : $(call gb_ExternalProject_get_target,$(3))
 
 endef
 
