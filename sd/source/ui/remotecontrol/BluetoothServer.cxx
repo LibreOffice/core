@@ -40,6 +40,7 @@ BluetoothServer::~BluetoothServer()
 void BluetoothServer::execute()
 {
 #if defined(LINUX) && defined(ENABLE_DBUS)
+
     g_type_init();
 
     GError *aError = NULL;
@@ -145,13 +146,9 @@ void BluetoothServer::execute()
         }
     }
 
-#endif // LINUX && ENABLE_DBUS
+#else
 
-#ifdef WIN32
-
-#endif
-
-#ifdef MACOSX
+    (void) mpCommunicators; // avoid warnings about unused member
 
 #endif
 }
