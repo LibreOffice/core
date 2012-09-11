@@ -57,8 +57,8 @@ namespace rtl {
 
     @since LibreOffice 3.5.
 */
-template< typename charT, typename traits > std::basic_ostream<charT, traits> &
-operator <<(
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
 {
     return stream <<
