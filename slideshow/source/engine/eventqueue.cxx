@@ -91,12 +91,12 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-            OSL_TRACE("adding at %f event [%s] at %x  with delay %f\r",
-                mpTimer->getElapsedTime(),
-                OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
-                rEvent.get(),
-                rEvent->getActivationTime(0.0));
+#if OSL_DEBUG_LEVEL > 1
+            SAL_INFO("slideshow.eventqueue", "adding event \"" << rEvent->GetDescription()
+                << "\" [" << rEvent.get()
+                << "] at " << mpTimer->getElapsedTime()
+                << " with delay " << rEvent->getActivationTime(0.0)
+                );
 #endif
             ENSURE_OR_RETURN_FALSE( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
@@ -119,12 +119,12 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-            OSL_TRACE("adding at %f event [%s] at %x  for next round with delay %f\r",
-                mpTimer->getElapsedTime(),
-                OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
-                rEvent.get(),
-                rEvent->getActivationTime(0.0));
+#if OSL_DEBUG_LEVEL > 1
+            SAL_INFO("slideshow.eventqueue", "adding event \"" << rEvent->GetDescription()
+                << "\" [" << rEvent.get()
+                << "] for the next round at " << mpTimer->getElapsedTime()
+                << " with delay " << rEvent->getActivationTime(0.0)
+                );
 #endif
 
             ENSURE_OR_RETURN_FALSE( rEvent.get() != NULL,
@@ -139,12 +139,12 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-            OSL_TRACE("adding at %f event [%s] at %x for execution when queue is empty with delay %f\r",
-                mpTimer->getElapsedTime(),
-                OUStringToOString(rpEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
-                rpEvent.get(),
-                rpEvent->getActivationTime(0.0));
+#if OSL_DEBUG_LEVEL > 1
+            SAL_INFO("slideshow.eventqueue", "adding event \"" << rpEvent->GetDescription()
+                << "\" [" << rpEvent.get()
+                << "] for execution when the queue is empty at " << mpTimer->getElapsedTime()
+                << " with delay " << rpEvent->getActivationTime(0.0)
+                );
 #endif
 
             ENSURE_OR_RETURN_FALSE(
@@ -227,16 +227,20 @@ namespace slideshow
                                        event.pEvent.get(),
                                        event.pEvent->getActivationTime(0.0) );
 #endif
-#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-                        OSL_TRACE("firing at %f event [%s] at %x with delay %f\r",
-                            mpTimer->getElapsedTime(),
-                            OUStringToOString(event.pEvent->GetDescription(),
-                                RTL_TEXTENCODING_UTF8).getStr(),
-                            event.pEvent.get(),
-                            event.pEvent->getActivationTime(0.0));
+#if OSL_DEBUG_LEVEL > 1
+                        SAL_INFO("slideshow.eventqueue", "firing event \""
+                                << event.pEvent->GetDescription()
+                                << "\" [" << event.pEvent.get()
+                                << "] at " << mpTimer->getElapsedTime()
+                                << " with delay " << event.pEvent->getActivationTime(0.0)
+                                );
 #endif
 
                         event.pEvent->fire();
+                        SAL_INFO("slideshow.eventqueue", "event \""
+                                << event.pEvent->GetDescription()
+                                << "\" [" << event.pEvent.get() << "] fired"
+                                );
                     }
                     catch( uno::RuntimeException& )
                     {
