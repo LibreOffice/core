@@ -556,6 +556,9 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     m_pUndoManager.clear();
         // that's important, since the UndoManager implementation delegates its ref counting to ourself.
 
+    if( m_xOldModelAgg.is())  // #i120828#, to release cyclic reference to ChartModel object
+        m_xOldModelAgg->setDelegator( 0 );
+
     m_aControllers.disposeAndClear( lang::EventObject( static_cast< cppu::OWeakObject * >( this )));
     m_xCurrentController.clear();
 
