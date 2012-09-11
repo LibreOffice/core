@@ -190,7 +190,6 @@ private:
     sal_uInt16              nTableWidth;        // je Table
     sal_uInt16              nColOffset;         // aktuell, Pixel
     sal_uInt16              nColOffsetStart;    // Startwert je Table, in Pixel
-    sal_uInt16              nMetaCnt;           // fuer ParseMetaOptions
     sal_uInt16              nOffsetTolerance;   // for use with SeekOffset and related
     bool                bTabInTabCell:1;
     bool                bFirstRow:1;          // je Table, ob in erster Zeile

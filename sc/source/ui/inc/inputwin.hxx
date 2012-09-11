@@ -147,7 +147,6 @@ private:
     Accelerator*    pAccel;
     sal_uLong           nTipVisible;
     sal_Bool            bFormulaMode;
-    sal_Bool            bTopHadFocus;
 
 public:
                     ScPosWnd( Window* pParent );
@@ -303,14 +302,12 @@ private:
     std::auto_ptr<ScTextWndBase> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
-    SfxBindings*    pBindings;
     String          aTextOk;
     String          aTextCancel;
     String          aTextSum;
     String          aTextEqual;
     long            mnMaxY;
     sal_Bool            bIsOkCancelMode;
-    bool            bIsMultiLine;
     bool            bInResize;
     bool            mbIsMultiLine;
 };

@@ -148,7 +148,6 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
 
 ColorScaleRule::ColorScaleRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
-    mrCondFormat( rFormat ),
     mnCfvo(0),
     mnCol(0)
 {
@@ -267,7 +266,6 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
 //
 DataBarRule::DataBarRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
-    mrCondFormat( rFormat ),
     mpFormat(new ScDataBarFormatData)
 {
     mpFormat->meAxisPosition = databar::NONE;

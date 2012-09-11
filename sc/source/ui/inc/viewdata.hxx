@@ -181,8 +181,6 @@ private:
     ScViewOptions*      pOptions;
     EditView*           pSpellingView;
 
-    long                nEditMargin;
-
     Size                aScenButSize;
 
     Size                aScrSize;

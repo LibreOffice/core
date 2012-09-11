@@ -88,7 +88,6 @@ public:
                     ScUndoInsertTables(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
-                            sal_Bool bApp,
                             std::vector<rtl::OUString>& newNameList);
     virtual         ~ScUndoInsertTables();
 
@@ -106,7 +105,6 @@ private:
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
     SCTAB           nTab;
-    sal_Bool            bAppend;
 
     void            SetChangeTrack();
 };
@@ -247,7 +245,6 @@ public:
 
 private:
     ScUndoTabColorInfo::List aTabColorList;
-    bool    bIsMultipleUndo;
 
     void DoChange(bool bUndoType) const;
 };
@@ -289,8 +286,7 @@ public:
                     TYPEINFO();
                     ScUndoImportTab(
                             ScDocShell* pShell,
-                            SCTAB nNewTab, SCTAB nNewCount,
-                            sal_Bool bNewLink );
+                            SCTAB nNewTab, SCTAB nNewCount );
     virtual         ~ScUndoImportTab();
 
     virtual void    Undo();
@@ -303,7 +299,6 @@ public:
 private:
     SCTAB       nTab;
     SCTAB       nCount;
-    sal_Bool        bLink;
     ScDocument* pRedoDoc;
     SdrUndoAction*  pDrawUndo;
 

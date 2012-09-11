@@ -182,7 +182,6 @@ private:
     SCCOLROW                nEnd;
     size_t                  nSubLevel;
     size_t                  nSubEntry;
-    size_t                  nCount;
     size_t                  nDepth;
 
 public:

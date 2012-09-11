@@ -81,15 +81,6 @@ public:
     void        SetpData   (void*   pdata)      {pData   =pdata;}
 };
 
-class ScViewEntryPtrList
-{
-    ScViewEntryPtrList* pNext;
-    ScViewEntryPtrList* pLast;
-
-    ScViewEntryPtr* pData;
-};
-
-
 class ScRedlinData : public RedlinData
 {
 public:

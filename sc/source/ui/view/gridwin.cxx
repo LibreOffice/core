@@ -5431,7 +5431,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
 
         Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
         ::basegfx::B2DRange aRange(aLogic.Left(), aLogic.Top(), aLogic.Right(), aLogic.Bottom());
-        ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight, this);
+        ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight);
         xOverlayManager->add(*pDashedBorder);
         mpOOSelectionBorder->append(*pDashedBorder);
     }

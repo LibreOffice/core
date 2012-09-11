@@ -159,7 +159,6 @@ public:
     virtual void EndElement();
 
 private:
-    ScXMLImport&            mrScImport;
     ScXMLExternalRefCellContext& mrParent;
 
     ::rtl::OUStringBuffer   maCellStrBuf;

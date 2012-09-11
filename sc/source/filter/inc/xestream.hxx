@@ -236,7 +236,6 @@ private:
     sal_uInt8           mpnSalt[16];
     sal_uInt8           mpnSaltDigest[16];
 
-    const XclExpRoot&   mrRoot;
     sal_Size            mnOldPos;      /// Last known stream position
     bool                mbValid;
 };

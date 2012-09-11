@@ -149,7 +149,6 @@ public:
 
 private:
 
-    ScColorScaleFormat* mpFormat;
     ScColorScaleEntry* mpFormatEntry;
 };
 

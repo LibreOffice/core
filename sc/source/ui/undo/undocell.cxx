@@ -346,12 +346,11 @@ sal_Bool ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
 
 
 ScUndoEnterValue::ScUndoEnterValue( ScDocShell* pNewDocShell, const ScAddress& rNewPos,
-                                    ScBaseCell* pUndoCell, double nVal, sal_Bool bHeight ) :
+                                    ScBaseCell* pUndoCell, double nVal ) :
     ScSimpleUndo( pNewDocShell ),
     aPos        ( rNewPos ),
     pOldCell    ( pUndoCell ),
-    nValue      ( nVal ),
-    bNeedHeight ( bHeight )
+    nValue      ( nVal )
 {
     SetChangeTrack();
 }
@@ -424,12 +423,11 @@ sal_Bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoPutCell::ScUndoPutCell( ScDocShell* pNewDocShell, const ScAddress& rNewPos,
-                            ScBaseCell* pUndoCell, ScBaseCell* pRedoCell, sal_Bool bHeight ) :
+                            ScBaseCell* pUndoCell, ScBaseCell* pRedoCell ) :
     ScSimpleUndo( pNewDocShell ),
     aPos        ( rNewPos ),
     pOldCell    ( pUndoCell ),
-    pEnteredCell( pRedoCell ),
-    bNeedHeight ( bHeight )
+    pEnteredCell( pRedoCell )
 {
     SetChangeTrack();
 }

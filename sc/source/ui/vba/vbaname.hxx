@@ -36,8 +36,6 @@
 
 #include <formula/grammar.hxx>
 
-class ScDocument;
-
 typedef InheritedHelperInterfaceImpl1< ov::excel::XName > NameImpl_BASE;
 
 class ScVbaName : public NameImpl_BASE
@@ -45,8 +43,6 @@ class ScVbaName : public NameImpl_BASE
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::sheet::XNamedRange > mxNamedRange;
     css::uno::Reference< css::sheet::XNamedRanges > mxNames;
-
-    ScDocument * m_pDoc;
 
 protected:
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }

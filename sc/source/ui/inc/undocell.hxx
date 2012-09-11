@@ -124,7 +124,7 @@ public:
                     TYPEINFO();
                     ScUndoEnterValue( ScDocShell* pNewDocShell,
                             const ScAddress& rNewPos,
-                            ScBaseCell* pUndoCell, double nVal, sal_Bool bHeight );
+                            ScBaseCell* pUndoCell, double nVal );
     virtual         ~ScUndoEnterValue();
 
     virtual void    Undo();
@@ -139,7 +139,6 @@ private:
     ScBaseCell*     pOldCell;
     double          nValue;
     sal_uLong           nEndChangeAction;
-    sal_Bool            bNeedHeight;
 
     void            SetChangeTrack();
 };
@@ -151,7 +150,7 @@ public:
                     TYPEINFO();
                     ScUndoPutCell( ScDocShell* pNewDocShell,
                             const ScAddress& rNewPos,
-                            ScBaseCell* pUndoCell, ScBaseCell* pRedoCell, sal_Bool bHeight );
+                            ScBaseCell* pUndoCell, ScBaseCell* pRedoCell );
     virtual         ~ScUndoPutCell();
 
     virtual void    Undo();
@@ -166,7 +165,6 @@ private:
     ScBaseCell*     pOldCell;
     ScBaseCell*     pEnteredCell;
     sal_uLong           nEndChangeAction;
-    sal_Bool            bNeedHeight;
 
     void            SetChangeTrack();
 };

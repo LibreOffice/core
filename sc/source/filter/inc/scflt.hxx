@@ -721,7 +721,6 @@ class Sc10Import
     Sc10PatternCollection*  pPatternCollection;
     Sc10DataBaseCollection* pDataBaseCollection;
     sal_uLong                   nError;
-    SCTAB                   TabCount;
     SCTAB                   nShowTab;
     ScViewOptions           aSc30ViewOpt;
     ScfStreamProgressBar*   pPrgrsBar;

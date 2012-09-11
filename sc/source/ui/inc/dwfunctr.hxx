@@ -77,8 +77,6 @@ private:
     Point               aSplitterInitPos;
     const ScFuncDesc*   pFuncDesc;
     sal_uInt16              nArgs;
-    String**            pArgArr;
-
 
     ::std::vector< const formula::IFunctionDescription*> aLRUList;
 

@@ -485,8 +485,7 @@ bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
 // ============================================================================
 
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper ),
-    mnCalcSheet( -1 )
+    WorkbookHelper( rHelper )
 {
 }
 

@@ -121,7 +121,6 @@ private:
     ScEditViewForwarder* mpEditViewForwarder;
     ScTabViewShell* mpViewShell;
     ScSplitPos meSplitPos;
-    sal_Bool mbViewEditEngine;
     ScAccessibleCell* mpAccessibleCell;
 
     // prevent the using of this method of the base class

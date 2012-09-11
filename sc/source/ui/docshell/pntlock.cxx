@@ -30,8 +30,7 @@
 
 //------------------------------------------------------------------------
 
-ScPaintLockData::ScPaintLockData(sal_uInt16 nNewMode) :
-    nMode( nNewMode ),
+ScPaintLockData::ScPaintLockData() :
     nLevel( 0 ),
     nDocLevel( 0 ),
     nParts( 0 ),

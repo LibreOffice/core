@@ -595,7 +595,7 @@ ScDPTableData* ScDPObject::GetTableData()
             if (pCache)
             {
                 pCache->AddReference(this);
-                pData.reset(new ScDatabaseDPData(pDoc, *pImpDesc, pCache));
+                pData.reset(new ScDatabaseDPData(pDoc, pCache));
             }
         }
         else

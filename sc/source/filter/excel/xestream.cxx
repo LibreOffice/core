@@ -483,7 +483,6 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
 // ============================================================================
 
 XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
-    mrRoot(rRoot),
     mnOldPos(STREAM_SEEK_TO_END),
     mbValid(false)
 {

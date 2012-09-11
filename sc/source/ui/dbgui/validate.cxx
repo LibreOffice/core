@@ -683,9 +683,7 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
         aFtTitle        ( this, ScResId( FT_TITLE ) ),
         aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
         aFtInputHelp    ( this, ScResId( FT_INPUTHELP ) ),
-        aEdInputHelp    ( this, ScResId( EDT_INPUTHELP ) ),
-
-        mrArgSet            ( rArgSet )
+        aEdInputHelp    ( this, ScResId( EDT_INPUTHELP ) )
 {
     Init();
     FreeResource();
@@ -770,9 +768,7 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
         aFtTitle        ( this, ScResId( FT_TITLE ) ),
         aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
         aFtError        ( this, ScResId( FT_ERROR ) ),
-        aEdError        ( this, ScResId( EDT_ERROR ) ),
-
-        mrArgSet            ( rArgSet )
+        aEdError        ( this, ScResId( EDT_ERROR ) )
 {
     Init();
     FreeResource();

@@ -44,7 +44,6 @@
 ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
         SfxTabDialog        ( pParent, ScResId( RID_SCDLG_CHAR ), pAttr ),
-        rOutAttrs           ( *pAttr ),
         rDocShell           ( *pDocShell )
 {
     FreeResource();
@@ -84,8 +83,7 @@ void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 // -----------------------------------------------------------------------
 
 ScParagraphDlg::ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
-        SfxTabDialog        ( pParent, ScResId( RID_SCDLG_PARAGRAPH ), pAttr ),
-        rOutAttrs           ( *pAttr )
+        SfxTabDialog        ( pParent, ScResId( RID_SCDLG_PARAGRAPH ), pAttr )
 {
     FreeResource();
 

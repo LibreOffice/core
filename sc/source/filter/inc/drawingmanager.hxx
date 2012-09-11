@@ -158,16 +158,12 @@ private:
     ::rtl::OUString     maObjName;      /// Name of the object.
     ::rtl::OUString     maMacroName;    /// Name of an attached macro.
     ::rtl::OUString     maHyperlink;    /// On-click hyperlink URL.
-    sal_uInt32          mnDffShapeId;   /// Shape identifier from DFF stream (BIFF8 only).
-    sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
     sal_uInt16          mnObjId;        /// The object identifier (unique per drawing).
     sal_uInt16          mnObjType;      /// The object type from OBJ record.
-    bool                mbHasAnchor;    /// True = anchor has been initialized.
     bool                mbHidden;       /// True = object is hidden.
     bool                mbVisible;      /// True = object is visible (form controls).
     bool                mbPrintable;    /// True = object is printable.
     bool                mbAreaObj;      /// True = width and height must be greater than 0.
-    bool                mbAutoMargin;   /// True = set automatic text margin.
     bool                mbSimpleMacro;  /// True = create simple macro link and hyperlink.
     bool                mbProcessShape; /// True = object is valid, do processing and insertion.
     bool                mbInsertShape;  /// True = insert the UNO shape into the draw page.

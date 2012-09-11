@@ -57,7 +57,6 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     rtl::OUString           sCont;
 
     bool    bDisplay;
-    bool    bInsertContent;
     bool    bLeft;
     bool    bContainsLeft;
     bool    bContainsRight;

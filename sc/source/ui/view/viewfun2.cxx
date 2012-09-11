@@ -1984,7 +1984,7 @@ sal_Bool ScViewFunc::InsertTables(std::vector<rtl::OUString>& aNames, SCTAB nTab
     {
         if (bRecord)
             pDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoInsertTables( pDocSh, nTab, false, aNames));
+                        new ScUndoInsertTables( pDocSh, nTab, aNames));
 
         //    Update views
 
@@ -2416,7 +2416,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     if (bUndo)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoImportTab( pDocSh, nTab, nCount, bLink ) );
+                new ScUndoImportTab( pDocSh, nTab, nCount ) );
     }
 
     for (i=0; i<nInsCount; i++)
@@ -2584,7 +2584,7 @@ void ScViewFunc::MoveTable(
             pDestDoc->GetName(nDestTab, sName);
             pDestShell->GetUndoManager()->AddUndoAction(
                             new ScUndoImportTab( pDestShell, nDestTab,
-                                static_cast<SCTAB>(TheTabs.size()), false));
+                                static_cast<SCTAB>(TheTabs.size())));
 
         }
         else

@@ -61,11 +61,10 @@
 //==================================================================
 
 ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
-                                    SCCOLROW nNewSize, sal_uInt16 nNewFlags ) :
+                                    SCCOLROW nNewSize, bool bNewVertical ) :
             Window      ( pParent ),
             pSelEngine  ( pSelectionEngine ),
-            nFlags      ( nNewFlags ),
-            bVertical   ( (nNewFlags & HDR_VERTICAL) != 0 ),
+            bVertical   ( bNewVertical ),
             nSize       ( nNewSize ),
             nMarkStart  ( 0 ),
             nMarkEnd    ( 0 ),

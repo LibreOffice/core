@@ -151,7 +151,6 @@ private:
 
     bool mbHasScrollBar;
     boost::scoped_ptr<ScrollBar> mpScrollBar;
-    long mnTopIndex;
 
     ScDocument* mpDoc;
     ScAddress maPos;
@@ -181,8 +180,6 @@ private:
 
     ScCondFormatList maCondFormList;
 
-    ScDocument* mpDoc;
-    const ScConditionalFormat* mpFormat;
     ScAddress maPos;
 
 public:

@@ -560,7 +560,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         if (!pDocDB->empty())
             pUndoDB = new ScDBCollection( *pDocDB );
 
-        pUndoAction = new ScUndoSort( &rDocShell, nTab, rSortParam, bRepeatQuery, pUndoDoc, pUndoDB, pR );
+        pUndoAction = new ScUndoSort( &rDocShell, nTab, rSortParam, pUndoDoc, pUndoDB, pR );
         rDocShell.GetUndoManager()->AddUndoAction( pUndoAction );
 
         // #i59745# collect all drawing undo actions affecting cell note captions

@@ -34,7 +34,6 @@ class ScColBar : public ScHeaderControl
     ScViewData*              pViewData;
     ScHSplitPos              eWhich;
     ScHeaderFunctionSet*     pFuncSet;
-    ScHeaderSelectionEngine* pSelEngine;
 
 public:
                 ScColBar( Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
@@ -68,7 +67,6 @@ class ScRowBar : public ScHeaderControl
     ScViewData*              pViewData;
     ScVSplitPos              eWhich;
     ScHeaderFunctionSet*     pFuncSet;
-    ScHeaderSelectionEngine* pSelEngine;
 
 public:
                 ScRowBar( Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,

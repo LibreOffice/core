@@ -2085,9 +2085,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                ScRangeList aRangeList;
                 ScViewData* pData = GetViewData();
-                pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
                 ScDocument* pDoc = pData->GetDocument();
 
                 if(pDoc->IsTabProtected(pData->GetTabNo()))
@@ -2097,14 +2095,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
-                if(aRangeList.empty())
-                {
-                    ScRange* pRange = new ScRange(aPos);
-                    aRangeList.push_back(pRange);
-                }
 
                 ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
-                AbstractScCondFormatManagerDlg* pDlg = pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aRangeList, aPos, RID_SCDLG_COND_FORMAT_MANAGER);
+                AbstractScCondFormatManagerDlg* pDlg = pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER);
                 if(pDlg->Execute() == RET_OK)
                 {
                     pDoc->SetCondFormList(pDlg->GetConditionalFormatList(), aPos.Tab());

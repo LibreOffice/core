@@ -26,14 +26,13 @@ class ScPaintLockData
 {
 private:
     ScRangeListRef  xRangeList;
-    sal_uInt16          nMode;
     sal_uInt16          nLevel;
     sal_uInt16          nDocLevel;
     sal_uInt16          nParts;
     sal_Bool            bModified;
 
 public:
-                    ScPaintLockData(sal_uInt16 nNewMode);
+                    ScPaintLockData();
                     ~ScPaintLockData();
 
     void            AddRange( const ScRange& rRange, sal_uInt16 nP );

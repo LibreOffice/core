@@ -61,7 +61,6 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       ScXMLTableRowCellContext* pTempCellContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrAnnotationData( rAnnotationData ),
-    nParagraphCount(0),
     pCellContext(pTempCellContext),
     pShapeContext(NULL)
 {

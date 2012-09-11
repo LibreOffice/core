@@ -751,13 +751,12 @@ sal_Bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 ScUndoSort::ScUndoSort( ScDocShell* pNewDocShell,
                         SCTAB nNewTab, const ScSortParam& rParam,
-                        sal_Bool bQuery, ScDocument* pNewUndoDoc, ScDBCollection* pNewUndoDB,
+                        ScDocument* pNewUndoDoc, ScDBCollection* pNewUndoDB,
                         const ScRange* pDest ) :
     ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
                                          rParam.nCol2, rParam.nRow2, nNewTab ) ),
     nTab( nNewTab ),
     aSortParam( rParam ),
-    bRepeatQuery( bQuery ),
     pUndoDoc( pNewUndoDoc ),
     pUndoDB( pNewUndoDB ),
     bDestArea( false )

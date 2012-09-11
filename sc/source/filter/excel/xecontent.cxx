@@ -1043,7 +1043,6 @@ void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
 XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat, sal_Int32 nPriority ):
     XclExpRecord(),
     XclExpRoot( rRoot ),
-    mrFormat( rFormat ),
     mnPriority( nPriority )
 {
     const ScRange* pRange = rFormat.GetRange().front();

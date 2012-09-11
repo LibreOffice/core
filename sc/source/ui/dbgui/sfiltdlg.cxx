@@ -193,7 +193,6 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     // Optionen initialisieren lassen:
 
     pOptionsMgr  = new ScFilterOptionsMgr(
-                            this,
                             pViewData,
                             theQueryData,
                             aBtnMore,

@@ -82,7 +82,6 @@ private:
     sal_Bool                bReference;
     sal_Bool                bColByName;
     sal_Bool                bRowByName;
-    sal_Bool                bSubTitles;
     SCSIZE              nColCount;
     SCSIZE              nRowCount;
     sal_Bool**              ppUsed;

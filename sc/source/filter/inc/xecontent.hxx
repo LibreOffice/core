@@ -257,7 +257,6 @@ private:
 
     XclExpCfvoList maCfvoList;
     XclExpColScaleColList maColList;
-    const ScColorScaleFormat& mrFormat;
     sal_Int32 mnPriority;
 };
 

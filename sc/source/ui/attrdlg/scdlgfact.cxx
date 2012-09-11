@@ -795,13 +795,13 @@ AbstractScCondFormatDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatDlg(Win
 }
 
 AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
-                                                                const ScRangeList& rList, const ScAddress& rPos, int nId )
+                                                                const ScAddress& rPos, int nId )
 {
     ScCondFormatManagerDlg* pDlg = NULL;
     switch( nId )
     {
         case RID_SCDLG_COND_FORMAT_MANAGER:
-            pDlg = new ScCondFormatManagerDlg( pParent, pDoc, pFormatList, rList, rPos );
+            pDlg = new ScCondFormatManagerDlg( pParent, pDoc, pFormatList, rPos );
             break;
         default:
             break;

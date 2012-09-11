@@ -193,14 +193,12 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
         pRuntimeWindow ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow    ( *pRuntimeWindow ),
         pInputHdl       ( NULL ),
-        pBindings       ( pBind ),
         aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // nicht immer neu aus Resource
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
         aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
         aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
         mnMaxY          (0),
         bIsOkCancelMode ( false ),
-        bIsMultiLine    ( false ),
         bInResize       ( false ),
         mbIsMultiLine   ( lcl_isExperimentalMode() )
 {

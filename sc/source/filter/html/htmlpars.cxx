@@ -238,7 +238,6 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
         nTableWidth(0),
         nColOffset(0),
         nColOffsetStart(0),
-        nMetaCnt(0),
         nOffsetTolerance( SC_HTML_OFFSET_TOLERANCE_SMALL ),
         bTabInTabCell( false ),
         bFirstRow( true ),

@@ -127,8 +127,6 @@ class ScDPOutputImpl
 
     SCCOL   mnTabStartCol;
     SCROW   mnTabStartRow;
-    SCCOL   mnMemberStartCol;
-    SCROW   mnMemberStartRow;
 
     SCCOL   mnDataStartCol;
     SCROW   mnDataStartRow;
@@ -139,8 +137,6 @@ public:
     ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
         SCCOL   nTabStartCol,
         SCROW   nTabStartRow,
-        SCCOL   nMemberStartCol,
-        SCROW   nMemberStartRow,
         SCCOL nDataStartCol,
         SCROW nDataStartRow,
         SCCOL nTabEndCol,
@@ -200,8 +196,6 @@ void ScDPOutputImpl::OutputDataArea()
 ScDPOutputImpl::ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
         SCCOL   nTabStartCol,
         SCROW   nTabStartRow,
-        SCCOL   nMemberStartCol,
-        SCROW   nMemberStartRow,
         SCCOL nDataStartCol,
         SCROW nDataStartRow,
         SCCOL nTabEndCol,
@@ -210,8 +204,6 @@ ScDPOutputImpl::ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
     mnTab( nTab ),
     mnTabStartCol( nTabStartCol ),
     mnTabStartRow( nTabStartRow ),
-    mnMemberStartCol( nMemberStartCol),
-    mnMemberStartRow( nMemberStartRow),
     mnDataStartCol ( nDataStartCol ),
     mnDataStartRow ( nDataStartRow ),
     mnTabEndCol(  nTabEndCol ),
@@ -805,7 +797,7 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( nFlags & sheet::MemberResultFlags::SUBTOTAL )
     {
         ScDPOutputImpl outputimp( pDoc, nTab,
-            nTabStartCol, nTabStartRow, nMemberStartCol, nMemberStartRow,
+            nTabStartCol, nTabStartRow,
             nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow );
         //! limit frames to horizontal or vertical?
         if (bColHeader)
@@ -1030,7 +1022,7 @@ void ScDPOutput::Output()
 
     //  output column headers:
     ScDPOutputImpl outputimp( pDoc, nTab,
-        nTabStartCol, nTabStartRow, nMemberStartCol, nMemberStartRow,
+        nTabStartCol, nTabStartRow,
         nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow );
     for (nField=0; nField<nColFieldCount; nField++)
     {

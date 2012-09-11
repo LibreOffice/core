@@ -31,12 +31,10 @@
 
 #include "svx/sdr/overlay/overlayobject.hxx"
 
-class Window;
-
 class ScOverlayDashedBorder : public ::sdr::overlay::OverlayObject
 {
 public:
-    ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, const Color& rColor, Window* pWin);
+    ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, const Color& rColor);
     virtual ~ScOverlayDashedBorder();
 
     virtual void Trigger(sal_uInt32 nTime);
@@ -48,7 +46,6 @@ protected:
 
 private:
     ::basegfx::B2DRange maRange;
-    Window* mpParent;
     bool mbToggle;
 };
 

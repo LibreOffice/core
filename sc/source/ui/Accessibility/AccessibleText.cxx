@@ -473,11 +473,10 @@ class ScPreviewHeaderCellViewForwarder : public ScPreviewViewForwarder
 {
     ScAddress           maCellPos;
     sal_Bool            mbColHeader;
-    sal_Bool            mbRowHeader;
 public:
                         ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
                             ScAddress aCellPos,
-                            sal_Bool bColHeader, sal_Bool bRowHeader);
+                            sal_Bool bColHeader);
     virtual             ~ScPreviewHeaderCellViewForwarder();
 
     virtual Rectangle   GetVisArea() const;
@@ -485,12 +484,11 @@ public:
 
 ScPreviewHeaderCellViewForwarder::ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
                                                                    ScAddress aCellPos,
-                                                                   sal_Bool bColHeader, sal_Bool bRowHeader)
+                                                                   sal_Bool bColHeader)
     :
     ScPreviewViewForwarder(pViewShell),
     maCellPos(aCellPos),
-    mbColHeader(bColHeader),
-    mbRowHeader(bRowHeader)
+    mbColHeader(bColHeader)
 {
 }
 
@@ -735,7 +733,6 @@ ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
     mpEditViewForwarder(NULL),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
-    mbViewEditEngine(false),
     mpAccessibleCell( pAccCell )
 {
 }
@@ -1429,7 +1426,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
 SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()
 {
     if (!mpViewForwarder)
-        mpViewForwarder = new ScPreviewHeaderCellViewForwarder(mpViewShell, aCellPos, mbColHeader, mbRowHeader);
+        mpViewForwarder = new ScPreviewHeaderCellViewForwarder(mpViewShell, aCellPos, mbColHeader);
     return mpViewForwarder;
 }
 

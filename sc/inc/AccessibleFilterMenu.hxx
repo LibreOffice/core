@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-class ScDocument;
 class ScMenuFloatingWindow;
 
 typedef ::cppu::ImplHelper1<
@@ -50,7 +49,7 @@ public:
     explicit ScAccessibleFilterMenu(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent,
-            ScMenuFloatingWindow* pWin, const ::rtl::OUString& rName, size_t nMenuPos, ScDocument* pDoc);
+            ScMenuFloatingWindow* pWin, const ::rtl::OUString& rName, size_t nMenuPos);
     virtual ~ScAccessibleFilterMenu();
 
     // XAccessibleComponent
@@ -175,7 +174,6 @@ private:
 
     size_t mnMenuPos;
     ScMenuFloatingWindow* mpWindow;
-    ScDocument* mpDoc;
 
     bool mbEnabled:1;
 };

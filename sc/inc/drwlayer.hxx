@@ -78,7 +78,6 @@ private:
     ScAddress   aOldEnd;
     ScAddress   aNewStt;
     ScAddress   aNewEnd;
-    sal_Bool        bHasNew;
 public:
                 ScUndoObjData( SdrObject* pObj, const ScAddress& rOS, const ScAddress& rOE,
                                                 const ScAddress& rNS, const ScAddress& rNE );

@@ -129,7 +129,6 @@ private:
 
     NumberFormatMap     maNumFmts;          /// List of number formats.
     ::rtl::OUString     maLocaleStr;        /// Current office locale.
-    sal_Int32           mnNextBiffIndex;    /// Format id counter for BIFF2-BIFF4.
 };
 
 // ============================================================================

@@ -457,7 +457,6 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
                         const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    mpFormat( pFormat ),
     mpFormatEntry( NULL )
 {
     double nVal = 0;

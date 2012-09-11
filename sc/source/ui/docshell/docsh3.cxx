@@ -229,7 +229,7 @@ void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, SCCOL nStartCol, SCROW n
 void ScDocShell::LockPaint_Impl(sal_Bool bDoc)
 {
     if ( !pPaintLockData )
-        pPaintLockData = new ScPaintLockData(0);    //! Modus...
+        pPaintLockData = new ScPaintLockData;
     pPaintLockData->IncLevel(bDoc);
 }
 
@@ -304,7 +304,7 @@ void ScDocShell::SetLockCount(sal_uInt16 nNew)
     if (nNew)                   // setzen
     {
         if ( !pPaintLockData )
-            pPaintLockData = new ScPaintLockData(0);    //! Modus...
+            pPaintLockData = new ScPaintLockData;
         pPaintLockData->SetLevel(nNew-1, sal_True);
         LockDocument_Impl(nNew);
     }

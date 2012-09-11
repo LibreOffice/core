@@ -179,12 +179,11 @@ sal_Bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
-                                        sal_Bool bApp,std::vector<rtl::OUString>& newNameList) :
+                                        std::vector<rtl::OUString>& newNameList) :
     ScSimpleUndo( pNewDocShell ),
     pDrawUndo( NULL ),
     aNameList( newNameList ),
-    nTab( nTabNum ),
-    bAppend( bApp )
+    nTab( nTabNum )
 {
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 
@@ -891,11 +890,10 @@ sal_Bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoImportTab::ScUndoImportTab( ScDocShell* pShell,
-                        SCTAB nNewTab, SCTAB nNewCount, sal_Bool bNewLink ) :
+                        SCTAB nNewTab, SCTAB nNewCount ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
     nCount( nNewCount ),
-    bLink( bNewLink ),
     pRedoDoc( NULL ),
     pDrawUndo( NULL )
 {

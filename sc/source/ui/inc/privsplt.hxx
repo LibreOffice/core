@@ -36,8 +36,6 @@ class ScPrivatSplit : public Control
         short               nOldY;
         short               nNewX;
         short               nNewY;
-        short               nMinPos;
-        short               nMaxPos;
         Range               aXMovingRange;
         Range               aYMovingRange;
         short               nDeltaX;

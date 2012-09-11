@@ -68,10 +68,9 @@ struct ScImportSourceDesc
 class ScDatabaseDPData : public ScDPTableData
 {
 private:
-    const ScImportSourceDesc& mrImport;
     ScDPCacheTable aCacheTable;
 public:
-    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport, const ScDPCache* pCache);
+    ScDatabaseDPData(ScDocument* pDoc, const ScDPCache* pCache);
     virtual ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();

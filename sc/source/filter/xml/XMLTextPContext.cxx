@@ -97,8 +97,7 @@ ScXMLTextPContext::ScXMLTextPContext( ScXMLImport& rImport,
     sLName(rLName),
     sSimpleContent(),
     pContentBuffer(NULL),
-    nPrefix(nPrfx),
-    bIsOwn(sal_True)
+    nPrefix(nPrfx)
 {
     // here are no attributes
 }
