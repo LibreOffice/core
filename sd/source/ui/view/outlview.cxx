@@ -115,7 +115,6 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
 , mbFirstPaint(sal_True)
 , mpProgress(NULL)
 , maDocColor( COL_WHITE )
-, mnPageNumberWidthPixel( 0 )
 , maLRSpaceItem( 0, 0, 2000, 0, EE_PARA_OUTLLRSPACE )
 {
     sal_Bool bInitOutliner = sal_False;

@@ -42,10 +42,7 @@ using ::com::sun::star::lang::DisposedException;
 namespace sd {
 
 PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
-    : mrViewShell(rViewShell),
-      mbWindowVisibilitySaved(false),
-      mbOriginalLeftPaneWindowVisibility(false),
-      mbOriginalRightPaneWindowVisibility(false)
+    : mrViewShell(rViewShell)
 {
      // Hide the left and right pane windows when a slideshow exists and is
     // not full screen.

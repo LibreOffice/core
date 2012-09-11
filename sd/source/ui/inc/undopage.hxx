@@ -39,7 +39,6 @@ class SdPageFormatUndoAction : public SdUndoAction
     sal_Int32       mnOldRight;
     sal_Int32       mnOldUpper;
     sal_Int32       mnOldLower;
-    sal_Bool        mbOldScale;
     Orientation meOldOrientation;
     sal_uInt16      mnOldPaperBin;
     sal_Bool        mbOldFullSize;
@@ -63,7 +62,6 @@ public:
                             sal_Int32           nOldRgt,
                             sal_Int32           nOldUpr,
                             sal_Int32           nOldLwr,
-                            sal_Bool            bOldScl,
                             Orientation     eOldOrient,
                             sal_uInt16          nOPaperBin,
                             sal_Bool            bOFullSize,
@@ -85,7 +83,6 @@ public:
         mnOldRight  (nOldRgt),
         mnOldUpper  (nOldUpr),
         mnOldLower  (nOldLwr),
-        mbOldScale   (bOldScl),
         meOldOrientation(eOldOrient),
         mnOldPaperBin (nOPaperBin),
         mbOldFullSize (bOFullSize),

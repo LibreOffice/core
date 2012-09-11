@@ -122,7 +122,7 @@ class ChangePlaceholderTag : public SmartTag
 {
     friend class ImageButtonHdl;
 public:
-    ChangePlaceholderTag( ViewOverlayManager& rManager, ::sd::View& rView, SdrObject& rPlaceholderObj );
+    ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj );
     virtual ~ChangePlaceholderTag();
 
     /** returns true if the SmartTag handled the event. */
@@ -140,7 +140,6 @@ protected:
     virtual void deselect();
 
 private:
-    ViewOverlayManager& mrManager;
     SdrObjectWeakRef    mxPlaceholderObj;
 };
 
@@ -315,9 +314,8 @@ Pointer ImageButtonHdl::GetPointer() const
 
 // ====================================================================
 
-ChangePlaceholderTag::ChangePlaceholderTag( ViewOverlayManager& rManager, ::sd::View& rView, SdrObject& rPlaceholderObj )
+ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj )
 : SmartTag( rView )
-, mrManager( rManager )
 , mxPlaceholderObj( &rPlaceholderObj )
 {
 }
@@ -565,7 +563,7 @@ bool ViewOverlayManager::CreateTags()
         {
             if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
             {
-                rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *this, *mrBase.GetMainViewShell()->GetView(), *(*iter) ) );
+                rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *mrBase.GetMainViewShell()->GetView(), *(*iter) ) );
                 maTagVector.push_back(xTag);
                 bChanges = true;
             }

@@ -131,7 +131,6 @@ private:
     ::std::auto_ptr<VirtualDevice> mpPreviewDevice;
     ::std::auto_ptr<DrawView> mpView;
     DrawDocShell* mpDocShellOfView;
-    int mnWidthOfView;
     const Color maFrameColor;
     const bool mbHasFrame;
     static const int snSubstitutionTextSize;

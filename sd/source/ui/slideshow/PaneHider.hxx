@@ -50,9 +50,6 @@ private:
     /** Remember whether the visibility states of the windows of the  panes
         has been modified and have to be restored.
     */
-    bool mbWindowVisibilitySaved;
-    bool mbOriginalLeftPaneWindowVisibility;
-    bool mbOriginalRightPaneWindowVisibility;
 
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
         mxConfigurationController;

@@ -51,7 +51,6 @@
 
 SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage ) :
         SfxTabDialog ( pParent, SdResId( TAB_PAGE ), pAttr ),
-        mrOutAttrs          ( *pAttr ),
         mpDocShell          ( pDocSh )
 {
     SvxColorListItem aColorListItem(*( (const SvxColorListItem*)

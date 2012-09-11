@@ -52,7 +52,6 @@ PageObjectLayouter::PageObjectLayouter (
     const sal_Int32 nPageCount)
     : mpWindow(rpWindow),
       maPageObjectSize(rPageObjectWindowSize.Width(), rPageObjectWindowSize.Height()),
-      mnModelToWindowScale(1),
       maPageObjectBoundingBox(),
       maPageNumberAreaBoundingBox(),
       maPreviewBoundingBox(),

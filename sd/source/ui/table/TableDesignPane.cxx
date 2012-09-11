@@ -895,7 +895,6 @@ void TableDesignPane::FillDesignPreviewControl()
 
 TableDesignDialog::TableDesignDialog(::Window* pParent, ViewShellBase& rBase )
 : ModalDialog( pParent, SdResId( DLG_TABLEDESIGNPANE ))
-, mrBase( rBase )
 {
     mxFlSep1.reset( new FixedLine( this, SdResId( FL_SEP1 ) ) );
     mxFlSep2.reset( new FixedLine( this, SdResId( FL_SEP2 ) ) );

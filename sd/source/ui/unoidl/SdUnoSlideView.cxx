@@ -51,13 +51,9 @@ namespace sd {
 
 
 SdUnoSlideView::SdUnoSlideView (
-    DrawController& rController,
-    slidesorter::SlideSorter& rSlideSorter,
-    View& rView) throw()
+    slidesorter::SlideSorter& rSlideSorter) throw()
     : DrawSubControllerInterfaceBase(m_aMutex),
-      mrController(rController),
-      mrSlideSorter(rSlideSorter),
-      mrView(rView)
+      mrSlideSorter(rSlideSorter)
 {
 }
 

@@ -29,10 +29,7 @@ namespace css = ::com::sun::star;
 
 namespace sd {
 
-class DrawController;
 class OutlineViewShell;
-class View;
-
 
 /** This class implements the OutlineViewShell specific part of the controller.
 */
@@ -42,9 +39,7 @@ class SdUnoOutlineView
 {
 public:
     SdUnoOutlineView (
-        DrawController& rController,
-        OutlineViewShell& rViewShell,
-        View& rView) throw();
+        OutlineViewShell& rViewShell) throw();
     virtual ~SdUnoOutlineView (void) throw();
 
     virtual void SAL_CALL disposing (void);
@@ -107,9 +102,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    DrawController& mrController;
     OutlineViewShell& mrOutlineViewShell;
-    sd::View& mrView;
 };
 
 } // end of namespace sd

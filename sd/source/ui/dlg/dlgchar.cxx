@@ -42,7 +42,6 @@
 SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
         SfxTabDialog        ( pParent, SdResId( TAB_CHAR ), pAttr ),
-        rOutAttrs           ( *pAttr ),
         rDocShell           ( *pDocShell )
 {
     FreeResource();

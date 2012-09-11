@@ -37,7 +37,6 @@ class SfxObjectShell;
 class SdCharDlg : public SfxTabDialog
 {
 private:
-    const SfxItemSet&       rOutAttrs;
     const SfxObjectShell&   rDocShell;
 
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );

@@ -260,9 +260,7 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
         // Create uno controller for the main view shell.
         xSubController = Reference<drawing::XDrawSubController>(
             new SdUnoSlideView (
-                GetViewShellBase().GetDrawController(),
-                *mpSlideSorter,
-                *GetView()));
+                *mpSlideSorter));
     }
 
     return xSubController;

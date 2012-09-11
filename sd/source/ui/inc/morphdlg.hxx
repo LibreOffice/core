@@ -63,8 +63,6 @@ private:
     OKButton        aBtnOK;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
-    SdrObject*      pSdrObj1;
-    SdrObject*      pSdrObj2;
 
     void            LoadSettings();
 };

@@ -42,8 +42,6 @@
 class SdParagraphDlg : public SfxTabDialog
 {
 private:
-    const SfxItemSet&   rOutAttrs;
-
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:

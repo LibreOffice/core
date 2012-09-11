@@ -41,10 +41,6 @@ class SlideSorter;
 
 namespace sd {
 
-class DrawController;
-class View;
-
-
 /** This class implements the SlideSorter specific part of the
     controller.
  */
@@ -54,9 +50,7 @@ class SdUnoSlideView
 {
 public:
     SdUnoSlideView (
-        DrawController& rController,
-        slidesorter::SlideSorter& rSlideSorter,
-        View& rView) throw();
+        slidesorter::SlideSorter& rSlideSorter) throw();
     virtual ~SdUnoSlideView (void) throw();
 
     // XSelectionSupplier
@@ -111,9 +105,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    DrawController& mrController;
     slidesorter::SlideSorter& mrSlideSorter;
-    sd::View& mrView;
     /*
     virtual void FillPropertyTable (
         ::std::vector< ::com::sun::star::beans::Property>& rProperties);

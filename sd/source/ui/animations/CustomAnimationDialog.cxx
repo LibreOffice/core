@@ -1149,17 +1149,6 @@ private:
     CheckBox*       mpCBSmoothEnd;
     CheckBox*       mpCBAutoRestart;
 
-    FixedLine*      mpFLPlay;
-    RadioButton*    mpRBFromStart;
-    RadioButton*    mpRBFromLast;
-    RadioButton*    mpRBFromTime;
-    MetricField*    mpMFStartTime;
-    FixedLine*      mpFLStop;
-    RadioButton*    mpRBStopOnClick;
-    RadioButton*    mpRBStopOnNextSlide;
-    RadioButton*    mpRBStopAfterSlides;
-    MetricField*    mpMFStopAfterSlides;
-
     FixedLine*      mpFLEnhancements;
     FixedText*      mpFTSound;
     ListBox*        mpLBSound;

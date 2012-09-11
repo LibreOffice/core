@@ -40,7 +40,6 @@ class SfxItemSet;
 
 namespace sd {
 class DrawDocShell;
-class ViewShell;
 }
 
 
@@ -51,7 +50,6 @@ class SdPresLayoutDlg
 public:
     SdPresLayoutDlg(
         ::sd::DrawDocShell* pDocShell,
-        ::sd::ViewShell* pViewShell,
         ::Window* pWindow,
         const SfxItemSet& rInAttrs);
 
@@ -64,7 +62,6 @@ public:
 
 private:
     ::sd::DrawDocShell* mpDocSh;
-    ::sd::ViewShell*    mpViewSh;
     FixedText           maFtLayout;
     ValueSet            maVS;
     OKButton            maBtnOK;

@@ -62,7 +62,6 @@ class SdHtmlOptionsDialog : public cppu::WeakImplHelper5
     XServiceInfo
 >
 {
-    const Reference< XMultiServiceFactory > &mrxMgr;
     Sequence< PropertyValue > maMediaDescriptor;
     Sequence< PropertyValue > maFilterDataSequence;
     ::rtl::OUString aDialogTitle;
@@ -70,7 +69,7 @@ class SdHtmlOptionsDialog : public cppu::WeakImplHelper5
 
 public:
 
-    SdHtmlOptionsDialog( const Reference< XMultiServiceFactory >& _rxORB );
+    SdHtmlOptionsDialog();
     ~SdHtmlOptionsDialog();
 
     // XInterface
@@ -110,9 +109,9 @@ public:
 
 Reference< XInterface >
     SAL_CALL SdHtmlOptionsDialog_CreateInstance(
-        const Reference< XMultiServiceFactory > & _rxFactory )
+        SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
 {
-    return static_cast< ::cppu::OWeakObject* > ( new SdHtmlOptionsDialog( _rxFactory ) );
+    return static_cast< ::cppu::OWeakObject* > ( new SdHtmlOptionsDialog );
 }
 
 ::rtl::OUString SdHtmlOptionsDialog_getImplementationName()
@@ -138,8 +137,7 @@ Sequence< ::rtl::OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceName
 
 // -----------------------------------------------------------------------------
 
-SdHtmlOptionsDialog::SdHtmlOptionsDialog( const Reference< XMultiServiceFactory > & xMgr ) :
-    mrxMgr      ( xMgr ),
+SdHtmlOptionsDialog::SdHtmlOptionsDialog() :
     meDocType   ( DOCUMENT_TYPE_DRAW )
 {
 }
