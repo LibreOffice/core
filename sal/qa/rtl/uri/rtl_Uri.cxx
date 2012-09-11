@@ -149,7 +149,7 @@ namespace Stringtest
                 showContent(suStr_UriDecodeToIuri);
 
                 // string --> ustring
-                rtl::OString sStr("h\xE4llo");
+                rtl::OString sStr("h\xE4llo", strlen("h\xE4llo"));
                 rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
 
                 CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suString.equals(suStr_UriDecodeToIuri) == sal_True);
