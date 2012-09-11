@@ -11289,7 +11289,7 @@ if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != 
     ENABLE_LIBLANGTAG=YES
     AC_MSG_RESULT([yes])
     AC_MSG_CHECKING([whether to use system liblangtag])
-    if test -n "$with_system_liblangtag"; then
+    if test "$with_system_liblangtag" = yes; then
         SYSTEM_LIBLANGTAG=YES
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.3)
