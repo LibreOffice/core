@@ -307,7 +307,7 @@ public:
     */
 
     virtual sal_Bool SAL_CALL supportsService(
-        const ::rtl::OUString& sServiceName
+        const OUString& sServiceName
     ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
@@ -323,7 +323,7 @@ public:
         @onerror    -
     */
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
@@ -339,7 +339,7 @@ public:
         @onerror    -
     */
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
@@ -1012,7 +1012,7 @@ public:
         @onerror    -
     */
 
-    static const ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
+    static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -1027,7 +1027,7 @@ public:
         @onerror    -
     */
 
-    static const ::rtl::OUString impl_getStaticImplementationName();
+    static const OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
 //  protected methods

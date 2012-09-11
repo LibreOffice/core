@@ -47,7 +47,7 @@ namespace unocontrols{
 struct IMPL_ControlInfo
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl ;
-    ::rtl::OUString                         sName    ;
+    OUString                                sName    ;
 };
 
 class BaseContainerControl  : public ::com::sun::star::awt::XControlModel
@@ -268,7 +268,7 @@ public:
     */
 
     virtual void SAL_CALL addControl(
-        const ::rtl::OUString&                            sName    ,
+        const OUString&                                   sName    ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >&    xControl
     ) throw( ::com::sun::star::uno::RuntimeException  );
 
@@ -337,7 +337,7 @@ public:
     */
 
     virtual void SAL_CALL setStatusText(
-        const ::rtl::OUString& sStatusText
+        const OUString& sStatusText
     ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
@@ -354,7 +354,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl(
-        const ::rtl::OUString& sName
+        const OUString& sName
     ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
