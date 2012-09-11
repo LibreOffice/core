@@ -217,7 +217,7 @@
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
                                 <child>
-                                  <object class="GtkExpander" id="expander1">
+                                  <object class="GtkExpander" id="expander">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>

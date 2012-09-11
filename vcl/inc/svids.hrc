@@ -230,6 +230,4 @@
 #define SV_ICON_ID_FORMULA                     13
 #define SV_ICON_ID_PRINTERADMIN               501
 
-#define HID_PRINTDLG                        HID_VCL_START
-
 #endif  // _SV_SVIDS_HRC
