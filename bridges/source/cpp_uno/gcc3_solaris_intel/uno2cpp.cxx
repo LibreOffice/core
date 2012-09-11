@@ -127,7 +127,8 @@ static void callVirtualMethod(
 }
 
 //==================================================================================================
-static void cpp_call(
+extern "C" {
+void callVirtualMethod(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
     typelib_TypeDescriptionReference * pReturnTypeRef,
@@ -298,7 +299,7 @@ static void cpp_call(
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
     }
 }
-
+}
 }
 
 namespace bridges { namespace cpp_uno { namespace shared {
