@@ -28,10 +28,27 @@
 #include <vcl/menu.hxx>
 #include <unx/gtk/gtkinst.hxx>
 
+#include <framework/menuconfiguration.hxx>
+
 #include <iostream>
 
 using namespace std;
 
+
+static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
+{
+    gchar* aCommand = NULL;
+
+    sal_uInt16 nId = pSalMenuItem->mnId;
+
+    // If item belongs to window list, generate a command with "window-(id)" format.
+    if ( ( nId >= START_ITEMID_WINDOWLIST ) && ( nId <= END_ITEMID_WINDOWLIST ) )
+    {
+        aCommand = g_strdup_printf( "window-%d", nId );
+    }
+
+    return aCommand;
+}
 
 static void UpdateNativeMenu( GtkSalMenu* pMenu )
 {
@@ -90,13 +107,23 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
         pMenu->NativeSetItemText( nSection, nItemPos, aText );
         pMenu->NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( pMenu->GetFrame()->GetWindow() ) );
 
+        // Some items are special, so they have different commands.
+        if ( g_strcmp0( aNativeCommand, "" ) == 0 )
+        {
+            gchar *aSpecialItemCmd = GetCommandForSpecialItem( pSalMenuItem );
+
+            if ( aSpecialItemCmd != NULL )
+            {
+                g_free( aNativeCommand );
+                aNativeCommand = aSpecialItemCmd;
+            }
+        }
+
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == NULL )
         {
             pMenu->NativeSetItemCommand( nSection, nItemPos, pSalMenuItem, aNativeCommand );
+            pMenu->NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
             pMenu->NativeSetEnableItem( aNativeCommand, bEnabled );
-
-            if ( ( itemBits & MIB_CHECKABLE ) || ( itemBits & MIB_RADIOCHECK ) )
-                pMenu->NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
         }
 
         g_free( aNativeCommand );
@@ -114,12 +141,12 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
             }
 
             pSubmenu->GetMenu()->Activate();
+            pSubmenu->GetMenu()->Deactivate();
 
             pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
             pSubmenu->SetActionGroup( pActionGroup );
             UpdateNativeMenu( pSubmenu );
 
-            pSubmenu->GetMenu()->Deactivate();
         }
 
         nItemPos++;
@@ -417,16 +444,18 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
         GVariant *pCheckValue = NULL;
         GVariant *pCurrentState = g_action_group_get_action_state( mpActionGroup, aCommand );
 
-        if ( bits & MIB_CHECKABLE )
-        {
-            pCheckValue = g_variant_new_boolean( bCheck );
-        }
-        else if ( bits & MIB_RADIOCHECK )
+        if ( bits & MIB_RADIOCHECK )
         {
             pCheckValue = ( bCheck == TRUE ) ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
         }
+        else
+        {
+            // By default, all checked items are checkmark buttons.
+            if ( bCheck == TRUE || ( ( bCheck == FALSE ) && pCurrentState != NULL ) )
+                pCheckValue = g_variant_new_boolean( bCheck );
+        }
 
-        if ( pCurrentState == NULL || g_variant_equal( pCurrentState, pCheckValue) == FALSE )
+        if ( pCheckValue != NULL && ( pCurrentState == NULL || g_variant_equal( pCurrentState, pCheckValue) == FALSE ) )
             g_action_group_change_action_state( mpActionGroup, aCommand, pCheckValue );
     }
 
@@ -583,6 +612,20 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand )
     }
 
     return pMenu;
+}
+
+void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
+{
+    // Only the menubar is allowed to dispatch commands.
+    if ( mbMenuBar != TRUE )
+        return;
+
+    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aCommand );
+    Menu* pSubMenu = ( pSalSubMenu != NULL ) ? pSalSubMenu->GetMenu() : NULL;
+
+    MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
+
+    pMenuBar->HandleMenuCommandEvent( pSubMenu, itemId );
 }
 
 void GtkSalMenu::Freeze()

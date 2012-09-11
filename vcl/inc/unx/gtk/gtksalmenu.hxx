@@ -55,8 +55,7 @@ private:
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
-    sal_Int32                   GetPositionFromItem( GtkSalMenuItem* pSalMenuItem );
-    void                        GetItemSectionAndPosition( unsigned nPos, unsigned *insertSection, unsigned *insertPos );
+    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand );
 
 public:
     GtkSalMenu( sal_Bool bMenuBar );
@@ -89,13 +88,14 @@ public:
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     virtual void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
-    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText );
     void                        NativeSetItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommandStr );
     void                        NativeSetEnableItem( gchar* aCommand, gboolean bEnable );
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
+
+    void                        DispatchCommand( gint itemId, const gchar* aCommand );
 };
 
 class GtkSalMenuItem : public SalMenuItem

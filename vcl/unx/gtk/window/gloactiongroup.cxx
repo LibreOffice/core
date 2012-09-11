@@ -26,7 +26,6 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtksalmenu.hxx>
-#include <vcl/menu.hxx>
 
 
 /*
@@ -218,20 +217,13 @@ g_lo_action_group_activate (GActionGroup *group,
 
     GtkSalFrame *pFrame = lo_group->priv->frame;
 
-    if ( pFrame == NULL )
-        return;
+    if ( pFrame != NULL )
+    {
+        GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pFrame->GetMenu() );
 
-    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pFrame->GetMenu() );
-
-    if ( pSalMenu == NULL )
-        return;
-
-    GtkSalMenu* pSalSubMenu = pSalMenu->GetMenuForItemCommand( (gchar*) action_name );
-    Menu* pSubMenu = ( pSalMenu != NULL ) ? pSalSubMenu->GetMenu() : NULL;
-
-    MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
-
-    pMenuBar->HandleMenuCommandEvent( pSubMenu, action->item_id );
+        if ( pSalMenu != NULL )
+            pSalMenu->DispatchCommand( action->item_id, action_name );
+    }
 }
 
 void
