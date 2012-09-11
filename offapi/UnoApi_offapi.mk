@@ -2172,7 +2172,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	XUndoManager \
 	XUndoManagerListener \
 	XUndoManagerSupplier \
-	XVbaMethodParameter \
 	XViewDataSupplier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\

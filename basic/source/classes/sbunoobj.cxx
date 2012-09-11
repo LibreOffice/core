@@ -437,32 +437,6 @@ void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
     SbError nError( ERRCODE_BASIC_EXCEPTION );
     ::rtl::OUStringBuffer aMessageBuf;
 
-    // Add for VBA, to get the correct error code and message.
-    if ( SbiRuntime::isVBAEnabled() )
-    {
-        if ( aExamine >>= aBasicError )
-        {
-            if ( aBasicError.ErrorCode != 0 )
-            {
-                nError = StarBASIC::GetSfxFromVBError( (sal_uInt16) aBasicError.ErrorCode );
-                if ( nError == 0 )
-                {
-                    nError = (SbError) aBasicError.ErrorCode;
-                }
-                aMessageBuf.append( aBasicError.ErrorMessageArgument );
-                aExamine.clear();
-            }
-        }
-
-        IndexOutOfBoundsException aIdxOutBndsExp;
-        if ( aExamine >>= aIdxOutBndsExp )
-        {
-            nError = SbERR_OUT_OF_RANGE;
-            aExamine.clear();
-        }
-    }
-    // End add
-
     // strip any other WrappedTargetException instances, but this time preserve the error messages.
     WrappedTargetException aWrapped;
     sal_Int32 nLevel = 0;

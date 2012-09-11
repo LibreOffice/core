@@ -47,7 +47,6 @@ public:
     virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
-    static sal_Int32 GetSupportedDialogCount();
 };
 
 #endif /* SC_VBA_DIALOG_HXX */

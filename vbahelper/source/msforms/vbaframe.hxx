@@ -41,8 +41,6 @@ public:
     virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException);
 
-    virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getSpecialEffect() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBorderStyle() throw (css::uno::RuntimeException);

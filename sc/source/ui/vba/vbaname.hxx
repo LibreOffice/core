@@ -34,7 +34,7 @@
 
 #include <vbahelper/vbahelperinterface.hxx>
 
-#include <formula/grammar.hxx>
+class ScDocument;
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XName > NameImpl_BASE;
 
@@ -47,8 +47,6 @@ class ScVbaName : public NameImpl_BASE
 protected:
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
     virtual css::uno::Reference< ov::excel::XWorksheet > getWorkSheet() throw (css::uno::RuntimeException);
-    // Get value by FormulaGrammar, such as FormulaGrammar::GRAM_NATIVE_XL_R1C1
-    virtual ::rtl::OUString SAL_CALL getValue(const formula::FormulaGrammar::Grammar eGrammar) throw (css::uno::RuntimeException);
 
 public:
     ScVbaName( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRange >& xName , const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );

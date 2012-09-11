@@ -116,13 +116,10 @@ sal_Int32 SAL_CALL RangePageBreaks::getCount(  ) throw (uno::RuntimeException)
     for( sal_Int32 i=0; i<nLength; i++ )
     {
         sal_Int32 nPos = aTablePageBreakData[i].Position;
-
-        // All page breaks before the used range should be counted.
-        // And the page break at the end of the used range also should be counted.
-        if(  nPos <= nUsedEnd + 1 )
-            nCount++;
-        else
+        if( nPos > nUsedEnd )
             return nCount;
+        if( nPos >= nUsedStart )
+            nCount++;
     }
 
     return nCount;
@@ -148,15 +145,26 @@ uno::Any SAL_CALL RangePageBreaks::getByIndex( sal_Int32 Index ) throw (lang::In
 
 sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPIItemIndex ) throw ( script::BasicErrorException, uno::RuntimeException)
 {
+    sal_Int32 index = -1;
     sheet::TablePageBreakData aTablePageBreakData;
     uno::Reference< excel::XWorksheet > xWorksheet( mxParent, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XRange > xRange = xWorksheet->getUsedRange();
+    sal_Int32 nUsedStart = getAPIStartofRange( xRange );
+    sal_Int32 nUsedEnd = getAPIEndIndexofRange( xRange, nUsedStart );
     uno::Sequence<sheet::TablePageBreakData> aTablePageBreakDataList = getAllPageBreaks();
 
     sal_Int32 nLength = aTablePageBreakDataList.getLength();
-    // No need to filter the page break. All page breaks before the used range are counted.
-    if ( nAPIItemIndex < nLength && nAPIItemIndex>=0 )
-        aTablePageBreakData = aTablePageBreakDataList[nAPIItemIndex];
+    for( sal_Int32 i=0; i<nLength; i++ )
+    {
+        aTablePageBreakData = aTablePageBreakDataList[i];
+        sal_Int32 nPos = aTablePageBreakData.Position;
+        if( nPos >= nUsedStart )
+            index++;
+        if( nPos > nUsedEnd )
+            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+        if( index == nAPIItemIndex )
+            return aTablePageBreakData;
+    }
 
     return aTablePageBreakData;
 }

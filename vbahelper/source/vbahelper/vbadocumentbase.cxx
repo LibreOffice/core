@@ -150,39 +150,38 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
     if ( !bUIClose )
     {
         // if it is not possible to use UI dispatch, try to close the model directly
-        uno::Reference< util::XCloseable > xCloseable( getModel(), uno::UNO_QUERY );
-        if( xCloseable.is() )
+        bool bCloseable = false;
+        uno::Reference< frame::XModel > xModel = getModel();
+        try
         {
-            // use close(boolean DeliverOwnership)
+            uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
 
-            // The boolean parameter DeliverOwnership tells objects vetoing the close process that they may
-            // assume ownership if they object the closure by throwing a CloseVetoException
-            // Here we give up ownership. To be on the safe side, catch possible veto exception anyway.
-            try
+            // use close(boolean DeliverOwnership)
+            // The boolean parameter DeliverOwnership tells objects vetoing the close
+            // process that they may assume ownership if they object the closure by
+            // throwing a CloseVetoException. Here we give up ownership. To be on the
+            // safe side, catch possible veto exception anyway.
+            if ( xCloseable.is() )
             {
+                bCloseable = true;
                 xCloseable->close(sal_True);
             }
-            catch(const util::CloseVetoException&)
-            {
-                //close is cancelled, nothing to do
-            }
         }
-        // If close is not supported by this model - try to dispose it.
-        // But if the model disagree with a reset request for the modify state
-        // we shouldn't do so. Otherwhise some strange things can happen.
-        else
+        catch (const uno::Exception &)
         {
-            uno::Reference< lang::XComponent > xDisposable ( getModel(), uno::UNO_QUERY );
-            if ( xDisposable.is() )
+            // vetoed
+        }
+        if (!bCloseable)
+        {
+            try {
+                // If close is not supported by this model - try to dispose it.
+                // But if the model disagree with a reset request for the modify state
+                // we shouldn't do so. Otherwhise some strange things can happen.
+                uno::Reference< lang::XComponent > xDisposable ( xModel, uno::UNO_QUERY_THROW );
+                xDisposable->dispose();
+            }
+            catch(const uno::Exception&)
             {
-                // To be on the safe side, catch possible veto exception anyway.
-                try
-                {
-                    xDisposable->dispose();
-                }
-                catch(const uno::Exception&)
-                {
-                }
             }
         }
     }

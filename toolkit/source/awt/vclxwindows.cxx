@@ -2290,7 +2290,6 @@ VCLXDialog::~VCLXDialog()
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::document::XVbaMethodParameter* >(this)),
                                         (static_cast< ::com::sun::star::awt::XDialog2* >(this)),
                                         (static_cast< ::com::sun::star::awt::XDialog* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
@@ -2298,7 +2297,6 @@ VCLXDialog::~VCLXDialog()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::document::XVbaMethodParameter>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
     VCLXTopWindow::getTypes()
@@ -2407,36 +2405,6 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
         pDlg->GetDrawWindowBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
 
     return aInfo;
-}
-
-// ::com::sun::star::document::XVbaMethodParameter
-void SAL_CALL VCLXDialog::setVbaMethodParameter(
-    const ::rtl::OUString& PropertyName,
-    const ::com::sun::star::uno::Any& Value )
-throw(::com::sun::star::uno::RuntimeException)
-{
-    if (rtl::OUString("Cancel") == PropertyName)
-    {
-        SolarMutexGuard aGuard;
-        if ( GetWindow() )
-        {
-            sal_Int8 nCancel = 0;
-            Value >>= nCancel;
-
-            Dialog* pDlg = (Dialog*) GetWindow();
-            pDlg->SetCloseFlag(nCancel);
-        }
-    }
-}
-
-::com::sun::star::uno::Any SAL_CALL VCLXDialog::getVbaMethodParameter(
-    const ::rtl::OUString& /*PropertyName*/ )
-throw(::com::sun::star::uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-
-    ::com::sun::star::uno::Any aRet;
-    return aRet;
 }
 
 void SAL_CALL VCLXDialog::setProperty(

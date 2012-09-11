@@ -35,17 +35,6 @@ ScVbaPivotCache::ScVbaPivotCache( const uno::Reference< XHelperInterface >& xPar
 {
 }
 
-sal_Int32
-ScVbaPivotCache::getMissingItemsLimit() throw (css::uno::RuntimeException)
-{
-    return -1;
-}
-
-void
-ScVbaPivotCache::setMissingItemsLimit( sal_Int32 /*aValue*/ ) throw ( css::uno::RuntimeException)
-{
-}
-
 void SAL_CALL
 ScVbaPivotCache::Refresh() throw (css::uno::RuntimeException)
 {

@@ -2351,15 +2351,6 @@ public:
 
                     mpUserForm->triggerMethod( rtl::OUString("Userform_QueryClose" ),
                                                 aParams);
-                    xVbaMethodParameter->setVbaMethodParameter( rtl::OUString( "Cancel"), aParams[0]);
-                    // If we don't cancel then we want to make sure the dialog
-                    // really is gone to make sure when we attempt to raise it again
-                    // it will actually generate an initialise event
-                    if  ( !nCancel )
-                    {
-                        removeListener(); // presumably we need to do this
-                        mpUserForm->ResetApiObj();
-                    }
                     return;
 
                 }
@@ -2687,7 +2678,7 @@ void SbUserFormModule::InitObject()
             aArgs[ 0 ] = uno::Any();
             aArgs[ 1 ] <<= m_xDialog;
             aArgs[ 2 ] <<= m_xModel;
-            aArgs[ 3 ] <<= sProjectName;
+            aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( "ooo.vba.msforms.UserForm"), aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );

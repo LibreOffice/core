@@ -108,7 +108,6 @@ namespace ooo
         VBAHELPER_DLLPUBLIC sal_Int32 getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
         VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, const Pointer& rPointer, sal_Bool bOverWrite );
         VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const css::uno::Any& aObj, const css::uno::Any& aValue  ) throw ( css::uno::RuntimeException );
-        VBAHELPER_DLLPUBLIC css::uno::Any getDefaultPropByIntrospection( const css::uno::Any& aObj ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC css::uno::Any getPropertyValue( const css::uno::Sequence< css::beans::PropertyValue >& aProp, const rtl::OUString& aName );
         VBAHELPER_DLLPUBLIC sal_Bool setPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const rtl::OUString& aName, const css::uno::Any& aValue );
         VBAHELPER_DLLPUBLIC void setOrAppendPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const rtl::OUString& aName, const css::uno::Any& aValue );

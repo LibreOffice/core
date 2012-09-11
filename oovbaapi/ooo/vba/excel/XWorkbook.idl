@@ -61,7 +61,6 @@ interface XWorkbook
     any Colors( [in] any Index ) raises (com::sun::star::script::BasicErrorException);
     void SaveCopyAs( [in] string Filename );
     void Protect( [in] any Password );
-    void SaveAs([in] string FileName, [in]any FileFormat, [in]any CreateBackup);
 };
 
 }; }; };

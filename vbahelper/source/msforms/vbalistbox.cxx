@@ -103,7 +103,7 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
     m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nSelectedIndices ) );
     if ( nSelectedIndices != nOldSelectedIndices )
         fireClickEvent();
-    //m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) );
+    m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) );
 }
 
 OUString SAL_CALL
@@ -120,19 +120,18 @@ ScVbaListBox::setText( const OUString& _text ) throw (uno::RuntimeException)
     setValue( uno::makeAny( _text ) ); // seems the same
 }
 
-sal_Int32 SAL_CALL
+sal_Bool SAL_CALL
 ScVbaListBox::getMultiSelect() throw (css::uno::RuntimeException)
 {
     sal_Bool bMultiSelect = sal_False;
     m_xProps->getPropertyValue( "MultiSelection" ) >>= bMultiSelect;
-    return bMultiSelect ? 1 : 0 ;
+    return bMultiSelect;
 }
 
 void SAL_CALL
-ScVbaListBox::setMultiSelect( sal_Int32 _multiselect ) throw (css::uno::RuntimeException)
+ScVbaListBox::setMultiSelect( sal_Bool _multiselect ) throw (css::uno::RuntimeException)
 {
-    sal_Bool bMultiSelect = _multiselect == 1 ? 1 : 0;
-    m_xProps->setPropertyValue( "MultiSelection" , uno::makeAny( bMultiSelect ) );
+    m_xProps->setPropertyValue( "MultiSelection" , uno::makeAny( _multiselect ) );
 }
 
 

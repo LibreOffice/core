@@ -457,10 +457,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
         mbSyntheticModify = sal_True;
         Modify();
         mbSyntheticModify = sal_False;
-        if (ImplGetWindowImpl() != NULL) //liuchen 2009-7-28, resolve the problem that soffice get crashed if in ComboBox_Change event a Worksheets("SheetX").Activate sentence needs to be executed
-        {
-            Select();
-        }
+        Select();
     }
 
     return 0;

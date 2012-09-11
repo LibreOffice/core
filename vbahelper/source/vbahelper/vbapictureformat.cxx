@@ -104,13 +104,13 @@ ScVbaPictureFormat::IncrementContrast( double increment ) throw (uno::RuntimeExc
 {
     double nContrast = getContrast();
     nContrast += increment;
-    if( nContrast < 0 )
+    if( increment < 0 )
     {
-        nContrast = 0.0;
+        increment = 0.0;
     }
-    if( nContrast > 1 )
+    if( increment > 1 )
     {
-        nContrast = 1.0;
+        increment = 1.0;
     }
     setContrast( nContrast );
 }

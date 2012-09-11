@@ -52,8 +52,8 @@ public:
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getMultiSelect() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMultiSelect( ::sal_Int32 _multiselect ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getMultiSelect() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setMultiSelect( sal_Bool _multiselect ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
 
     // Methods

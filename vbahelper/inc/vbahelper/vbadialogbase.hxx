@@ -36,7 +36,7 @@ public:
     virtual ~VbaDialogBase() {}
 
     // Methods
-    virtual sal_Bool SAL_CALL Show() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Show() throw (css::uno::RuntimeException);
     virtual rtl::OUString mapIndexToName( sal_Int32 nIndex ) = 0;
 };
 

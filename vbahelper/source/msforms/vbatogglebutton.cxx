@@ -66,25 +66,10 @@ void SAL_CALL
 ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     sal_Int16 nState = 0;
-    if (_value.getValueTypeClass() == uno::TypeClass_BOOLEAN)
-    {
-        sal_Bool bValue;
-        _value >>= bValue;
-        nState = static_cast< sal_Int16 >(bValue);
-    }
-    else if (_value.getValueTypeClass() == uno::TypeClass_BYTE)
-    {
-        sal_Int8 nValue;
-        _value >>= nValue;
-        nState = ( nValue == 1) ? 1 : 0;
-    }
-    else
-    {
-        _value >>= nState;
-        OSL_TRACE( "nState - %d", nState );
-        nState = ( nState == -1 ) ?  1 : 0;
-        OSL_TRACE( "nState - %d", nState );
-    }
+    _value >>= nState;
+    OSL_TRACE( "nState - %d", nState );
+    nState = ( nState == -1 ) ?  1 : 0;
+    OSL_TRACE( "nState - %d", nState );
     m_xProps->setPropertyValue( STATE, uno::makeAny(  nState ) );
 }
 

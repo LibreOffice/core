@@ -782,23 +782,6 @@ void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue
         throw uno::RuntimeException();
 }
 
-uno::Any getDefaultPropByIntrospection( const uno::Any& aObj ) throw ( uno::RuntimeException )
-{
-    uno::Any aValue;
-    uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObj ) );
-    uno::Reference< script::XDefaultProperty > xDefaultProperty( aObj, uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xPropSet;
-
-    if ( xUnoAccess.is() )
-        xPropSet.set( xUnoAccess->queryAdapter( ::getCppuType( (const uno::Reference< beans::XPropertySet > *)0 ) ), uno::UNO_QUERY );
-
-    if ( xPropSet.is() )
-        aValue = xPropSet->getPropertyValue( xDefaultProperty->getDefaultPropertyName() );
-    else
-        throw uno::RuntimeException();
-    return aValue;
-}
-
 uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName )
 {
     uno::Any result;

@@ -53,8 +53,6 @@ interface XBorders;
 interface XValidation;
 interface XWorksheet;
 
-interface XPivotTable;
-interface XQueryTable;
 interface XRange
 {
      interface com::sun::star::container::XEnumerationAccess;
@@ -64,7 +62,6 @@ interface XRange
     interface ::ooo::vba::excel::XFormat;
     //interface ::ooo::vba::XHelperInterface;
 
-    [attribute] any Name;
     [attribute] any Value;
     [attribute] any Formula;
     [attribute] any FormulaArray;
@@ -90,7 +87,6 @@ interface XRange
     [attribute] any Style;
     [attribute] any AddIndent;
     [attribute] any ShowDetail;
-    [attribute, readonly] XQueryTable QueryTable;
 
     XComment AddComment( [in] any Text );
     void Clear();
@@ -155,11 +151,6 @@ interface XRange
     void    Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
     XRange MergeArea( ) raises ( com::sun::star::script::BasicErrorException );
     any Hyperlinks( [in] any Index );
-    long   CopyFromRecordset([in] any Data, [in]  any MaxRows , [in]  any MaxColumns) raises ( com::sun::star::script::BasicErrorException );
-    XPivotTable PivotTable();
-    void TextToColumns([in] any Destination, [in] any DataType, [in] any TextQualifier, [in] any ConsecutiveDelimiter, [in] any Tab, [in] any Semicolon, [in] any Comma,
-        [in] any Space, [in] any Other, [in] any OtherChar, [in] any FieldInfo, [in] any DecimalSeparator, [in] any ThousandsSeparator, [in] any TrailingMinusNumbers );
-    any AdvancedFilter([in] long Action, [in] any CriteriaRange, [in] any CopyToRange, [in] any Unique) raises ( com::sun::star::script::BasicErrorException );
 };
 
 //=============================================================================

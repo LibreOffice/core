@@ -20,7 +20,6 @@
 #include "vbauserform.hxx"
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -139,20 +138,6 @@ ScVbaUserForm::Hide(  ) throw (uno::RuntimeException)
     mbDispose = false;  // hide not dispose
     if ( m_xDialog.is() )
         m_xDialog->endExecute();
-}
-
-sal_Bool SAL_CALL ScVbaUserForm::getVisible() throw (uno::RuntimeException)
-{
-    uno::Reference< awt::XWindow2 > xWindow2( getWindowPeer(), uno::UNO_QUERY_THROW );
-    return xWindow2->isVisible();
-}
-
-void SAL_CALL ScVbaUserForm::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
-{
-    if ( bVisible )
-        Show();
-    else
-        Hide();
 }
 
 void SAL_CALL

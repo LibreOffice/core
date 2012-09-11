@@ -38,7 +38,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XlFileFormat.hpp>
-#include <ooo/vba/excel/XApplication.hpp>
 
 #include "scextopt.hxx"
 #include "vbaworksheet.hxx"
@@ -161,24 +160,6 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
         }
 
         return aFileFormat;
-}
-
-// Convert Excel fileformat to OO file filter
-::rtl::OUString ScVbaWorkbook::convertFileFormat(sal_Int32 aFileFormat)
-{
-    rtl::OUString aFilterName;
-
-    switch(aFileFormat)
-    {
-        case excel::XlFileFormat::xlCSV:
-                aFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text - txt - csv (StarCalc)" ) );
-                break;
-        case excel::XlFileFormat::xlExcel9795:
-                aFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MS Excel 97" ) );
-                break;
-    }
-
-    return aFilterName;
 }
 
 void
@@ -310,50 +291,6 @@ ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::Runtime
     storeProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
     storeProps[0].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MS Excel 97" ) );
     xStor->storeToURL( aURL, storeProps );
-}
-
-// Add Workbook.SaveAs.
-void
-ScVbaWorkbook::SaveAs( const rtl::OUString& FileName, const uno::Any& FileFormat, const uno::Any& /*CreateBackup*/ ) throw ( uno::RuntimeException)
-{
-    rtl::OUString aURL;
-    osl::FileBase::getFileURLFromSystemPath( FileName, aURL );
-    //if the input parameter "FileName" takes the form as "MyFile", we need to get the current directory and combine the current directory and the file name
-    INetURLObject aFileNameURL( aURL );
-    aURL = aFileNameURL.GetMainURL( INetURLObject::NO_DECODE );
-    if ( aURL.isEmpty() )
-    {
-        uno::Reference< excel::XApplication > xApplication ( Application(),uno::UNO_QUERY_THROW );
-        rtl::OUString aPathStr = xApplication->getDefaultFilePath();
-        rtl::OUString aPathURLStr;
-        osl::FileBase::getFileURLFromSystemPath( aPathStr, aPathURLStr );
-        INetURLObject aPathURL( aPathURLStr );
-        aPathURL.Append( FileName );
-        aURL = aPathURL.GetMainURL( INetURLObject::NO_DECODE );
-    }
-
-    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
-
-    sal_Int32 aFileFormat = excel::XlFileFormat::xlExcel9795;
-    FileFormat >>= aFileFormat;
-
-    if (  FileName.indexOf('.') == -1 )
-    {
-        if ( aFileFormat == excel::XlFileFormat::xlExcel9795 )
-        {
-            aURL = aURL + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".xls" ) );
-        }
-        else if ( aFileFormat == excel::XlFileFormat::xlCSV )
-        {
-            aURL = aURL + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".csv" ) );
-        }
-    }
-
-    uno::Sequence<  beans::PropertyValue > storeProps(1);
-    storeProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
-    storeProps[0].Value <<= convertFileFormat(aFileFormat);
-
-    xStor->storeAsURL( aURL, storeProps );
 }
 
 css::uno::Any SAL_CALL

@@ -88,32 +88,6 @@ ScVbaNames::getScDocument()
     return pViewData->GetDocument();
 }
 
-void GetRangeOrRefersTo( const css::uno::Any& RefersTo, const uno::Reference< uno::XComponentContext >& xContext, css::uno::Reference< excel::XRange >& xRange, rtl::OUString& sRefersTo )
-{
-    if ( RefersTo.getValueTypeClass() == uno::TypeClass_STRING )
-    {
-        RefersTo >>= sRefersTo;
-    }
-    else if ( RefersTo.getValueTypeClass() == uno::TypeClass_INTERFACE )
-    {
-        RefersTo >>= xRange;
-    }
-    else if ( RefersTo.hasValue() )
-    {
-        uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( xContext );
-        try
-        {
-            if ( xConverter.is() )
-            {
-                uno::Any aConverted = xConverter->convertTo( RefersTo, getCppuType((rtl::OUString*)0) );
-                aConverted >>= sRefersTo;
-            }
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
-}
 
 css::uno::Any
 ScVbaNames::Add( const css::uno::Any& Name ,
@@ -128,9 +102,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                                         const css::uno::Any& RefersToR1C1,
                                         const css::uno::Any& RefersToR1C1Local ) throw (css::uno::RuntimeException)
 {
-    rtl::OUString sSheetName;
     rtl::OUString sName;
-    rtl::OUString sRefersTo;
     uno::Reference< excel::XRange > xRange;
     if ( Name.hasValue() )
         Name >>= sName;
@@ -138,12 +110,6 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         NameLocal >>= sName;
     if ( !sName.isEmpty() )
     {
-        sal_Int32 nTokenIndex = sName.indexOf('!');
-        if ( nTokenIndex >= 0 )
-        {
-            sSheetName = sName.copy( 0, nTokenIndex );
-            sName = sName.copy( nTokenIndex + 1 );
-        }
         if ( !ScRangeData::IsNameValid( sName , getScDocument() ) )
         {
             ::rtl::OUString sResult ;
@@ -156,22 +122,20 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                 sResult = sName.copy( nIndex );
             sName = sResult ;
             if ( !ScRangeData::IsNameValid( sName , getScDocument() ) )
-                throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This Name is a invalid .")), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( "This Name is not valid .",
+                                             uno::Reference< uno::XInterface >() );
         }
     }
     if ( RefersTo.hasValue() || RefersToR1C1.hasValue() || RefersToR1C1Local.hasValue() )
     {
         if ( RefersTo.hasValue() )
-            GetRangeOrRefersTo( RefersTo, mxContext, xRange, sRefersTo );
+            RefersTo >>= xRange;
         if ( RefersToR1C1.hasValue() )
-            GetRangeOrRefersTo( RefersToR1C1, mxContext, xRange, sRefersTo );
+            RefersToR1C1 >>= xRange;
         if ( RefersToR1C1Local.hasValue() )
-            GetRangeOrRefersTo( RefersToR1C1Local, mxContext, xRange, sRefersTo );
+            RefersToR1C1Local >>= xRange;
     }
 
-    String aContent;
-    table::CellAddress aPosition;
-    RangeType nType = RT_NAME;
     if ( xRange.is() )
     {
         ScVbaRange* pRange = dynamic_cast< ScVbaRange* >( xRange.get() );
@@ -184,36 +148,19 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         ScAddress aPos( static_cast< SCCOL >( aAddr.StartColumn ) , static_cast< SCROW >( aAddr.StartRow ) , static_cast< SCTAB >(aAddr.Sheet ) );
         uno::Any xAny2 ;
         String sRangeAdd = xRange->Address( xAny2, xAny2 , xAny2 , xAny2, xAny2 );
-        aContent += rtl::OUString("$");
-        aContent += UniString(xRange->getWorksheet()->getName());
-        aContent += rtl::OUString(".");
-        aContent += sRangeAdd;
-        aPosition = table::CellAddress( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
-    }
-    else
-    {
-        ScDocShell* pDocShell = excel::getDocShell( mxModel );
-        ScDocument* pDoc = pDocShell ? pDocShell->GetDocument() : NULL;
-        excel::CompileExcelFormulaToODF( pDoc, sRefersTo, aContent );
-        if ( aContent.Len() == 0 )
+        String sTmp;
+        sTmp += "$";
+        sTmp += UniString(xRange->getWorksheet()->getName());
+        sTmp += ".";
+        sTmp += sRangeAdd;
+        if ( mxNames.is() )
         {
-            aContent = sRefersTo;
+            RangeType nType = RT_NAME;
+            table::CellAddress aCellAddr( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
+            if ( mxNames->hasByName( sName ) )
+                mxNames->removeByName(sName);
+            mxNames->addNewByName( sName , rtl::OUString(sTmp) , aCellAddr , (sal_Int32)nType);
         }
-    }
-
-    uno::Reference< sheet::XNamedRange > xNewNamedRange;
-    if ( mxNames.is() )
-    {
-        if ( mxNames->hasByName( sName ) )
-        {
-            mxNames->removeByName( sName );
-        }
-        mxNames->addNewByName( sName, rtl::OUString( aContent ), aPosition, (sal_Int32) nType );
-        xNewNamedRange = uno::Reference< sheet::XNamedRange >( mxNames->getByName( sName ), uno::UNO_QUERY );
-    }
-    if ( xNewNamedRange.is() )
-    {
-        return uno::makeAny( uno::Reference< excel::XName >( new ScVbaName( mxParent, mxContext, xNewNamedRange ,mxNames , mxModel ) ) );
     }
     return css::uno::Any();
 }

@@ -101,7 +101,6 @@ public:
     // Replace??
     virtual void SAL_CALL Select( const css::uno::Any& Replace ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL ShapeRange( const css::uno::Any& index ) throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL Copy(  ) throw (css::uno::RuntimeException);
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rEventObject ) throw( css::uno::RuntimeException );
 };

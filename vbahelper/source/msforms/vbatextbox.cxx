@@ -59,8 +59,6 @@ ScVbaTextBox::getText() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setText( const OUString& _text ) throw (css::uno::RuntimeException)
 {
-    OUString sOldText = getText();
-
     if ( !mbDialog )
     {
         uno::Reference< text::XTextRange > xTextRange( m_xProps, uno::UNO_QUERY_THROW );
@@ -68,11 +66,6 @@ ScVbaTextBox::setText( const OUString& _text ) throw (css::uno::RuntimeException
     }
     else
         m_xProps->setPropertyValue( "Text" , uno::makeAny( _text ) );
-
-    if ( _text != sOldText )
-    {
-        fireChangeEvent();
-    }
 }
 
 sal_Int32 SAL_CALL
@@ -88,8 +81,7 @@ ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException)
 {
-    sal_Int16 _maxlength16 = static_cast<sal_Int16> (_maxlength);
-    uno::Any aValue( _maxlength16 );
+    uno::Any aValue( _maxlength );
     m_xProps->setPropertyValue( "MaxTextLen" , aValue);
 }
 

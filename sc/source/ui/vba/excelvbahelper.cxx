@@ -35,9 +35,6 @@
 #include "transobj.hxx"
 #include "scmod.hxx"
 #include "cellsuno.hxx"
-#include "compiler.hxx"
-#include "token.hxx"
-#include "tokenarray.hxx"
 
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -120,16 +117,6 @@ ScDocument* GetDocumentFromRange( const uno::Reference< uno::XInterface >& xRang
                 throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying document from uno range object" ) ), uno::Reference< uno::XInterface >() );
         }
         return pDocShell->GetDocument();
-}
-
-uno::Reference< frame::XModel > GetModelFromRange( const uno::Reference< uno::XInterface >& xRange ) throw ( uno::RuntimeException )
-{
-    ScDocShell* pDocShell = GetDocShellFromRange( xRange );
-    if ( !pDocShell )
-    {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying model uno range object" ) ), uno::Reference< uno::XInterface >() );
-    }
-    return pDocShell->GetModel();
 }
 
 void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs )
@@ -262,24 +249,6 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16
 
 }
 
-bool implnCopyRanges( const uno::Reference< frame::XModel>& xModel, ScRangeList& rRangeList )
-{
-    bool bResult = false;
-    ScTabViewShell* pViewShell = getBestViewShell( xModel );
-    if ( pViewShell )
-    {
-        bResult = pViewShell->CopyToClip( NULL, rRangeList, false, true, true );
-    }
-    return bResult;
-}
-
-bool implnCopyRange( const uno::Reference< frame::XModel>& xModel, const ScRange& rRange )
-{
-    ScRangeList aRanges;
-    aRanges.Append( rRange );
-    return implnCopyRanges( xModel, aRanges );
-}
-
 ScDocShell*
 getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
 {
@@ -308,17 +277,13 @@ getCurrentBestViewShell(  const uno::Reference< uno::XComponentContext >& xConte
     return getBestViewShell( xModel );
 }
 
-sal_Bool IsR1C1ReferFormat( ScDocument* pDoc, const rtl::OUString& sRangeStr )
+SfxViewFrame*
+getViewFrame( const uno::Reference< frame::XModel >& xModel )
 {
-    ScRangeList aCellRanges;
-    String sAddress( sRangeStr );
-    sal_uInt16 nMask = SCA_VALID;
-    sal_uInt16 rResFlags = aCellRanges.Parse( sAddress, pDoc, nMask, formula::FormulaGrammar::CONV_XL_R1C1 );
-    if ( rResFlags & SCA_VALID )
-    {
-        return sal_True;
-    }
-    return false;
+    ScTabViewShell* pViewShell = getBestViewShell( xModel );
+    if ( pViewShell )
+        return pViewShell->GetViewFrame();
+    return NULL;
 }
 
 uno::Reference< vba::XHelperInterface >
@@ -334,84 +299,6 @@ getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) thro
     // create the special document module objects if they don't exist.
     uno::Reference< XHelperInterface > xParent( ov::getUnoDocModule( sCodeName, GetDocShellFromRange( xSheet ) ), uno::UNO_QUERY );
     return xParent;
-}
-
-formula::FormulaGrammar::Grammar GetFormulaGrammar( ScDocument* pDoc, const ScAddress& sAddress, const css::uno::Any& aFormula )
-{
-    formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
-    if ( pDoc && aFormula.hasValue() && aFormula.getValueTypeClass() == uno::TypeClass_STRING )
-    {
-        rtl::OUString sFormula;
-        aFormula >>= sFormula;
-
-        ScCompiler aCompiler( pDoc, sAddress );
-        aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
-        ScTokenArray* pCode = aCompiler.CompileString( sFormula );
-        if ( pCode )
-        {
-            sal_uInt16 nLen = pCode->GetLen();
-            formula::FormulaToken** pTokens = pCode->GetArray();
-            for ( sal_uInt16 nPos = 0; nPos < nLen; nPos++ )
-            {
-                const formula::FormulaToken& rToken = *pTokens[nPos];
-                switch ( rToken.GetType() )
-                {
-                    case formula::svSingleRef:
-                    case formula::svDoubleRef:
-                    {
-                        return formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
-                    }
-                    break;
-                    default: break;
-                }
-            }
-        }
-    }
-    return eGrammar;
-}
-
-void CompileExcelFormulaToODF( ScDocument* pDoc, const String& rOldFormula, String& rNewFormula )
-{
-    if ( !pDoc )
-    {
-        return;
-    }
-    ScCompiler aCompiler( pDoc, ScAddress() );
-    aCompiler.SetGrammar( excel::GetFormulaGrammar( pDoc, ScAddress(), uno::Any( rtl::OUString( rOldFormula ) ) ) );
-    aCompiler.CompileString( rOldFormula );
-    aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
-    aCompiler.CreateStringFromTokenArray( rNewFormula );
-}
-
-void CompileODFFormulaToExcel( ScDocument* pDoc, const String& rOldFormula, String& rNewFormula, const formula::FormulaGrammar::Grammar eGrammar )
-{
-    // eGrammar can be formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 and formula::FormulaGrammar::GRAM_NATIVE_XL_A1
-    if ( !pDoc )
-    {
-        return;
-    }
-    ScCompiler aCompiler( pDoc, ScAddress() );
-    aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
-    ScTokenArray* pCode = aCompiler.CompileString( rOldFormula );
-    aCompiler.SetGrammar( eGrammar );
-    if ( !pCode )
-    {
-        return;
-    }
-    sal_uInt16 nLen = pCode->GetLen();
-    formula::FormulaToken** pTokens = pCode->GetArray();
-    for ( sal_uInt16 nPos = 0; nPos < nLen && pTokens[nPos]; nPos++ )
-    {
-        String rFormula;
-        formula::FormulaToken* pToken = pTokens[nPos];
-        aCompiler.CreateStringFromToken( rFormula, pToken, true );
-        if ( pToken->GetOpCode() == ocSep )
-        {
-            // Excel formula separator is ",".
-            rFormula = rtl::OUString(",");
-        }
-        rNewFormula += rFormula;
-    }
 }
 
 uno::Reference< XHelperInterface >

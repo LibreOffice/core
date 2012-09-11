@@ -92,8 +92,8 @@ public:
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setName( const ::rtl::OUString &rName ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( ::sal_Int32 _Visible ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getVisible() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setVisible( sal_Int32 nVisible ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getStandardWidth() throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getStandardHeight() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectionMode() throw (css::uno::RuntimeException);
@@ -116,7 +116,7 @@ public:
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Select(const css::uno::Any& aReplace) throw (css::uno::RuntimeException); // add the input parameter to support expand selection
+    virtual void SAL_CALL Select() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Move( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException) ;
      virtual void SAL_CALL Copy( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException);

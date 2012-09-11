@@ -564,7 +564,6 @@ public:
     bool            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             const ScMarkData& rMark ) const;
-    bool            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTAB ) const;
 
     bool            GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
 
@@ -956,7 +955,7 @@ public:
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab,
                                             ScDirection eDir );
 
-    SC_DLLPUBLIC void           FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection ) const;
+    void           FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection ) const;
     SC_DLLPUBLIC void           GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
 
@@ -1015,7 +1014,7 @@ public:
     SC_DLLPUBLIC void           ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks );
     SC_DLLPUBLIC void           ResetClip( ScDocument* pSourceDoc, SCTAB nTab );
     void            SetCutMode( bool bCut );
-    SC_DLLPUBLIC bool           IsCutMode();
+    bool            IsCutMode();
     void            SetClipArea( const ScRange& rArea, bool bCut = false );
 
     SC_DLLPUBLIC bool           IsDocVisible() const                        { return bIsVisible; }
@@ -1865,7 +1864,6 @@ private: // CLOOK-Impl-methods
                              const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs);
-    void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab);
 
     bool    HasPartOfMerged( const ScRange& rRange );
 

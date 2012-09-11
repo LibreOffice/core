@@ -42,9 +42,6 @@ class ScVbaPivotCache : public PivotCacheImpl_BASE
 public:
     ScVbaPivotCache( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
 
-    virtual ::sal_Int32 SAL_CALL getMissingItemsLimit() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMissingItemsLimit( ::sal_Int32 aValue ) throw ( css::uno::RuntimeException);
-
     virtual void SAL_CALL Refresh() throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString getServiceImplName();

@@ -52,9 +52,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,oovbaapi,oovbaapi/ooo/vba/excel,\
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba,\
 	ControlProvider \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/msforms,\
-	MSFormReturnTypes \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/excel,\
 	Button \
 	SheetObjects \
@@ -97,9 +94,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
 	XDocumentsBase \
 	XErrObject \
 	XExecutableDialog \
-	XFileDialog \
-	XFileDialogSelectedItems \
-	XFileSearch \
 	XFontBase \
 	XFoundFiles \
 	XGlobalsBase \
@@ -473,7 +467,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/excel,\
 	XPivotCache \
 	XPivotTable \
 	XPivotTables \
-	XQueryTable \
 	XRange \
 	XSeries \
 	XSeriesCollection \
@@ -533,6 +526,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/msforms,\
     fmTransitionEffect \
     fmVerticalScrollBarSide \
     fmZOrder \
+	ReturnBoolean \
+	ReturnEffect \
+	ReturnInteger \
+	ReturnSingle \
 	XButton \
 	XCheckBox \
 	XColorFormat \
@@ -553,8 +550,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/msforms,\
 	XPictureFormat \
 	XProgressBar \
 	XRadioButton \
-	XReturnBoolean \
-	XReturnInteger \
 	XScrollBar \
 	XShape \
 	XShapeRange \

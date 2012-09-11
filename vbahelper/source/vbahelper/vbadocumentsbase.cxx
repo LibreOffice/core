@@ -44,7 +44,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include <vbahelper/vbadocumentbase.hxx>
 #include <boost/unordered_map.hpp>
 #include <osl/file.hxx>
 
@@ -142,13 +141,8 @@ public:
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );
-                OUString sName;
-                uno::Reference< ::ooo::vba::XDocumentBase > xVbaDocument = new VbaDocumentBase( uno::Reference< XHelperInterface >(), xContext, xModel );
-                if ( xVbaDocument.is() )
-                {
-                    sName = xVbaDocument->getName();
-                }
-                namesToIndices[ sName ] = nIndex++;
+                INetURLObject aURL( xModel->getURL() );
+                namesToIndices[ aURL.GetLastName() ] = nIndex++;
             }
         }
 

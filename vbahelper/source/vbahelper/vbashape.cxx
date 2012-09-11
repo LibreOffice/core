@@ -492,17 +492,6 @@ ScVbaShape::ShapeRange( const uno::Any& index ) throw ( uno::RuntimeException )
     return uno::makeAny( xShapeRange );
 }
 
-void SAL_CALL ScVbaShape::Copy() throw (uno::RuntimeException)
-{
-    if ( m_xModel.is() )
-    {
-        Select( uno::Any() );
-        // Copy this Shape.
-        OUString sUrl( ".uno:Copy" );
-        dispatchRequests( m_xModel, sUrl );
-    }
-}
-
 sal_Bool SAL_CALL
 ScVbaShape::getLockAspectRatio() throw (uno::RuntimeException)
 {

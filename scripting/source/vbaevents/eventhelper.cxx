@@ -58,7 +58,7 @@
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 
-#include "vbamsformreturntypes.hxx"
+#include <ooo/vba/msforms/ReturnInteger.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <basic/sbstar.hxx>
@@ -67,9 +67,6 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
-
-
-
 
 // for debug
 #include <comphelper/anytostring.hxx>
@@ -122,14 +119,6 @@ bool isMouseEventOk( awt::MouseEvent& evt, const Sequence< Any >& params )
     return true;
 }
 
-bool isFocusEventOk( awt::FocusEvent& evt, const Sequence< Any >& params )
-{
-    if ( !( params.getLength() > 0 ) ||
-        !( params[ 0 ] >>= evt ) )
-        return false;
-    return true;
-}
-
 Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
 {
     Sequence< Any > translatedParams;
@@ -173,14 +162,9 @@ Sequence< Any > ooKeyPressedToVBAKeyPressed( const Sequence< Any >& params )
 
     translatedParams.realloc(1);
 
-    //The VBA events such as ComboBox_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger) may cause an error because
-    //the original input parameter data structure -- msforms::ReturnInteger -- is a struct, it cannot support default value.
-    //So the newly defined VbaReturnIntege class is used here to support default value.
-    VbaReturnInteger* pKeyCode = new VbaReturnInteger();
-    pKeyCode->Value = evt.KeyChar;
-    ::uno::Reference< msforms::XReturnInteger > xInteger =
-        static_cast< ::uno::Reference< msforms::XReturnInteger > > (pKeyCode);
-    translatedParams[0] <<= xInteger;
+    msforms::ReturnInteger keyCode;
+    keyCode.Value = evt.KeyCode;
+    translatedParams[0] <<= keyCode;
     return  translatedParams;
 }
 
@@ -194,40 +178,17 @@ Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
 
     translatedParams.realloc(2);
 
-    //The VBA events such as ComboBox_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger) may cause an error because
-    //the original input parameter data structure -- msforms::ReturnInteger -- is a struct, it cannot support default value.
-    //So the newly defined VbaReturnIntege class is used here to support default value.
-    VbaReturnInteger* pKeyCode = new VbaReturnInteger();
-    sal_Int8 shift = evt.Modifiers;
+    msforms::ReturnInteger keyCode;
+    sal_Int8 shift = sal::static_int_cast<sal_Int8>( evt.Modifiers );
 
-    pKeyCode->Value = evt.KeyChar;
-    ::uno::Reference< msforms::XReturnInteger > xInteger =  static_cast< ::uno::Reference< msforms::XReturnInteger > > (pKeyCode);
-    translatedParams[0] <<= xInteger;
+    // #TODO check whether values from OOO conform to values generated from vba
+    keyCode.Value = evt.KeyCode;
+    translatedParams[0] <<= keyCode;
     translatedParams[1] <<= shift;
     return  translatedParams;
 }
 
-Sequence< Any > ooFocusLostToVBAExit( const Sequence< Any >& params )
-{
-    Sequence< Any > translatedParams;
-    awt::FocusEvent evt;
-
-    if ( !isFocusEventOk( evt, params ) )
-        return Sequence< Any >();
-
-    translatedParams.realloc(1);
-
-    VbaReturnBoolean* pCancel = new VbaReturnBoolean();
-
-    ::uno::Reference< msforms::XReturnBoolean > xBoolean=
-        static_cast< ::uno::Reference< msforms::XReturnBoolean > > (pCancel);
-    translatedParams[0] <<= xBoolean;
-    return  translatedParams;
-}
-
-
 typedef Sequence< Any > (*Translator)(const Sequence< Any >&);
-
 
 //expand the "TranslateInfo" struct to support more kinds of events
 struct TranslateInfo
@@ -255,7 +216,6 @@ bool ApproveAll(const ScriptEvent& evt, void* pPara); //allow all types of contr
 bool ApproveType(const ScriptEvent& evt, void* pPara); //certain types of controls should execute the event, those types are given by pPara
 bool DenyType(const ScriptEvent& evt, void* pPara);    //certain types of controls should not execute the event, those types are given by pPara
 bool DenyMouseDrag(const ScriptEvent& evt, void* pPara); //used for VBA MouseMove event when "Shift" key is pressed
-bool DenyKeys(const ScriptEvent& evt, void* pPara);  //For some keys, press them will cause Symphony keyPressed event, but will not cause any events in Excel, so deny these key events
 
 struct TypeList
 {
@@ -295,7 +255,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
     // focusLost ooo event
     { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_LostFocus"), NULL, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_Exit"), ooFocusLostToVBAExit, ApproveType, (void*)(&textCompList) } },
+    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_Exit"), NULL, ApproveType, (void*)(&textCompList) } }, // support VBA TextBox_Exit event
 
     // adjustmentValueChanged ooo event
     { MAP_CHAR_LEN("adjustmentValueChanged"), { MAP_CHAR_LEN("_Scroll"), NULL, ApproveAll, NULL } },
@@ -321,7 +281,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
     // keyPressed ooo event
     { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyPress"), ooKeyPressedToVBAKeyUpDown, DenyKeys, NULL } }
+    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, NULL } }
 };
 
 EventInfoHash& getEventTransInfo()
@@ -884,23 +844,6 @@ bool DenyMouseDrag(const ScriptEvent& evt, void* )
         return false;
     }
 }
-
-//For some keys, press them will cause Symphony keyPressed event, but will not cause any events in Excel, so deny these key events
-bool DenyKeys(const ScriptEvent& evt, void* /*pPara*/)
-{
-    awt::KeyEvent aEvent;
-    evt.Arguments[ 0 ] >>= aEvent;
-    if (aEvent.KeyChar == 0 || aEvent.KeyChar == 8)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
-
-
 
 
 // EventListener

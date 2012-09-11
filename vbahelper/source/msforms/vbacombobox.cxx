@@ -119,29 +119,8 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
-    OUString sOldValue, sNewValue;
     // booleans are converted to uppercase strings
-    sOldValue =  extractStringFromAny( getValue(), OUString(), true );
-    // booleans are converted to uppercase strings
-    sNewValue =  extractStringFromAny( _value, OUString(), true );
-
-    m_xProps->setPropertyValue( sSourceName, uno::Any( sNewValue ) );
-
-    if ( sNewValue != sOldValue )
-    {
-        // If the new value is in current list, we should fire click event, otherwise fire the change event.
-        sal_Int32 nListIndex = -1;
-        getListIndex() >>= nListIndex;
-        sal_Bool bIsInList = ( nListIndex >= 0 );
-        if ( bIsInList )
-        {
-            fireClickEvent();
-        }
-        else
-        {
-            fireChangeEvent();
-        }
-    }
+    m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, ::rtl::OUString(), true ) ) );
 }
 
 // see Value

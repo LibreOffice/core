@@ -64,13 +64,4 @@ ScVbaDialogs::getServiceNames()
     return aServiceNames;
 }
 
-::sal_Int32
-ScVbaDialogs::getCount() throw (uno::RuntimeException)
-{
-    return ScVbaDialog::GetSupportedDialogCount();
-}
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,7 +39,6 @@ module ooo {  module vba {  module excel {
 
 interface XPageSetup : com::sun::star::uno::XInterface
 {
-
 //  interface ::ooo::vba::XHelperInterface;
 
     //Attributes
@@ -60,7 +59,6 @@ interface XPageSetup : com::sun::star::uno::XInterface
     [attribute] boolean CenterVertically;
     [attribute] boolean CenterHorizontally;
     [attribute] boolean PrintHeadings;
-    [attribute] long PaperSize;
 
 };
 

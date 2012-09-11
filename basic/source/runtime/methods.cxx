@@ -631,36 +631,6 @@ RTLFUNC(MkDir)
             {
                 try
                 {
-                    if ( SbiRuntime::isVBAEnabled() )
-                    {
-                        // If aPath is the folder name, not a path, then create the folder under current directory.
-                        INetURLObject aTryPathURL( aPath );
-                        ::rtl::OUString sPathURL = aTryPathURL.GetMainURL( INetURLObject::NO_DECODE );
-                        if ( sPathURL.isEmpty() )
-                        {
-                            File::getFileURLFromSystemPath( aPath, sPathURL );
-                        }
-                        INetURLObject aPathURL( sPathURL );
-                        if ( aPathURL.GetPath().isEmpty() )
-                        {
-                            ::rtl::OUString sCurDirURL;
-                            SbxArrayRef pPar = new SbxArray;
-                            SbxVariableRef pVar = new SbxVariable();
-                            pPar->Put( pVar, 0 );
-                            SbRtl_CurDir( pBasic, *pPar, sal_False );
-                            String aCurPath = pPar->Get(0)->GetString();
-
-                            File::getFileURLFromSystemPath( aCurPath, sCurDirURL );
-                            INetURLObject aDirURL( sCurDirURL );
-                            aDirURL.Append( aPath );
-                            ::rtl::OUString aTmpPath = aDirURL.GetMainURL( INetURLObject::NO_DECODE );
-                            if ( !aTmpPath.isEmpty() )
-                            {
-                                aPath = aTmpPath;
-                            }
-                        }
-                    }
-
                     xSFI->createFolder( getFullPath( aPath ) );
                 }
                 catch(const Exception & )
@@ -3287,20 +3257,10 @@ RTLFUNC(Shell)
             pParamList[j] = NULL;
         }
 
-        long nResult = 0;
-        // We should return the identifier of the executing process when is running VBA, because method Shell(...) returns it in Excel.
-        if ( bSucc && SbiRuntime::isVBAEnabled())
-        {
-            oslProcessInfo aInfo;
-            aInfo.Size = sizeof(oslProcessInfo);
-            osl_getProcessInfo( pApp, osl_Process_IDENTIFIER, &aInfo );
-            nResult = aInfo.Ident;
-        }
-
         if( !bSucc )
             StarBASIC::Error( SbERR_FILE_NOT_FOUND );
         else
-            rPar.Get(0)->PutLong( nResult );
+            rPar.Get(0)->PutLong( 0 );
     }
 }
 
