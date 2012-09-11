@@ -242,7 +242,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                 {
                     m_pSpellState->pOtherCursor = new SwPaM(*pWrtShell->GetCrsr()->GetPoint());
                     m_pSpellState->m_bStartedInOther = true;
-                    pWrtShell->SpellStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_CURR, sal_False );
+                    pWrtShell->SpellStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_CURR );
                 }
                 else
                 {
@@ -255,7 +255,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                                 *pWrtShell->GetDoc(),
                                 *pCrsr->Start(), pCrsr->End());
                     }
-                    pWrtShell->SpellStart( DOCPOS_START, DOCPOS_END, DOCPOS_CURR, sal_False );
+                    pWrtShell->SpellStart( DOCPOS_START, DOCPOS_END, DOCPOS_CURR );
                 }
             }
             else
@@ -300,7 +300,7 @@ The code below would only be part of the solution.
                     //if there's any that has not been spelled yet
                     if(!m_pSpellState->m_bOtherSpelled && pWrtShell->HasOtherCnt())
                     {
-                        pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART, sal_False );
+                        pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART );
                         if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                         {
                             pWrtShell->SpellEnd();
@@ -312,7 +312,7 @@ The code below would only be part of the solution.
                     //if no result has been found try at the body text - completely
                     if(!m_pSpellState->m_bBodySpelled && !aRet.size())
                     {
-                        pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START, sal_False );
+                        pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START );
                         if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                         {
                             m_pSpellState->m_bBodySpelled = true;
@@ -341,7 +341,7 @@ The code below would only be part of the solution.
                         pWrtShell->SpellEnd();
                         delete m_pSpellState->pOtherCursor;
                         m_pSpellState->pOtherCursor = 0;
-                        pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_CURR, DOCPOS_OTHERSTART, sal_False );
+                        pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_CURR, DOCPOS_OTHERSTART );
                         pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
                     }
                     if(!aRet.size())
@@ -354,7 +354,7 @@ The code below would only be part of the solution.
                             //has the body been spelled?
                             if(!m_pSpellState->m_bBodySpelled)
                             {
-                                pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START, sal_False );
+                                pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START );
                                 if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                                 {
                                     m_pSpellState->m_bBodySpelled = true;
@@ -367,7 +367,7 @@ The code below would only be part of the solution.
                              m_pSpellState->m_bBodySpelled = true;
                              if(!m_pSpellState->m_bOtherSpelled && pWrtShell->HasOtherCnt())
                              {
-                                pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART, sal_False );
+                                pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART );
                                 if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                                 {
                                     pWrtShell->SpellEnd();
