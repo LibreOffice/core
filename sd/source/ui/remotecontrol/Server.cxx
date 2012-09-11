@@ -206,10 +206,11 @@ void RemoteServer::removeCommunicator( Communicator* mCommunicator )
 
 std::vector<ClientInfo*> RemoteServer::getClients()
 {
-    if ( !spServer )
-        std::vector<ClientInfo*>();
-    MutexGuard aGuard( spServer->mDataMutex );
     std::vector<ClientInfo*> aClients;
+    if ( !spServer )
+        return aClients;
+
+    MutexGuard aGuard( spServer->mDataMutex );
     aClients.assign( spServer->mAvailableClients.begin(),
                      spServer->mAvailableClients.end() );
     return aClients;
