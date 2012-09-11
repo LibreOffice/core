@@ -51,7 +51,7 @@ void ScrollableWrapper<T>::setScrollVisibility( ScrollBarVisibility rVisState )
         maVScrollBar.Show();
     }
     if ( mbHasHoriBar || mbHasVertBar )
-        SetStyle( T::GetStyle() | WB_CLIPCHILDREN | SCROLL_UPDATE );
+        this->SetStyle( T::GetStyle() | WB_CLIPCHILDREN | SCROLL_UPDATE );
 }
 
 template< class T>
