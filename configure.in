@@ -11272,9 +11272,9 @@ fi
 AC_SUBST(SYSTEM_GLIB)
 
 if test "$SYSTEM_GLIB" = "YES"; then
-        PKG_CHECK_MODULES( GLIB, glib-2.0 )
-else
-        BUILD_TYPE="$BUILD_TYPE GLIB"
+    PKG_CHECK_MODULES( GLIB, glib-2.0 )
+elif test $_os != iOS -a $_os != Android; then
+    BUILD_TYPE="$BUILD_TYPE GLIB"
 fi
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
@@ -11285,17 +11285,17 @@ dnl ===================================================================
 ENABLE_LIBLANGTAG=
 SYSTEM_LIBLANGTAG=
 AC_MSG_CHECKING([whether to use liblangtag])
-if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a "$CROSS_COMPILING" != "YES" \); then
+if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != Android -a $_os != iOS \); then
     ENABLE_LIBLANGTAG=YES
     AC_MSG_RESULT([yes])
     AC_MSG_CHECKING([whether to use system liblangtag])
     if test -n "$with_system_liblangtag"; then
-	SYSTEM_LIBLANGTAG=YES
-	AC_MSG_RESULT([yes])
-	PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.3)
+        SYSTEM_LIBLANGTAG=YES
+        AC_MSG_RESULT([yes])
+        PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.3)
     else
-	SYSTEM_LIBLANGTAG=NO
-	AC_MSG_RESULT([no])
+        SYSTEM_LIBLANGTAG=NO
+        AC_MSG_RESULT([no])
         BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
     fi
 else
