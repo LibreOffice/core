@@ -9262,6 +9262,20 @@ AC_SUBST(ENABLE_DBUS)
 AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
 
+AC_MSG_CHECKING([whether to enable font install via packagekit])
+if test "$ENABLE_DBUS" = "TRUE"; then
+	if test -n "$enable_packagekit"; then
+		ENABLE_PACKAGEKIT=YES
+		AC_MSG_RESULT([yes])
+	else
+		ENABLE_PACKAGEKIT=NO
+		AC_MSG_RESULT([no])
+	fi	
+else
+	AC_MSG_RESULT([no, dbus disabled.])
+fi
+AC_SUBST(ENABLE_PACKAGEKIT)
+
 dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
 dnl ===================================================================

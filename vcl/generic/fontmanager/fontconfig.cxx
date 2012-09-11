@@ -82,7 +82,7 @@ using namespace psp;
     #define FC_FONTFORMAT "fontformat"
 #endif
 
-#ifdef ENABLE_DBUS
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
 #include <dbus/dbus-glib.h>
 #endif
 
@@ -834,7 +834,7 @@ namespace
         return OString();
     }
 
-#ifdef ENABLE_DBUS
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     LanguageTag getExemplerLangTagForCodePoint(sal_uInt32 currentChar)
     {
         int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
@@ -857,7 +857,7 @@ namespace
 
 IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
 {
-#ifdef ENABLE_DBUS
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
     guint xid = get_xid_for_dbus();
 
     if (!xid)
@@ -1056,7 +1056,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
                     }
                 }
                 OUString sStillMissing(pRemainingCodes, nRemainingLen);
-#ifdef ENABLE_DBUS
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
                 if (get_xid_for_dbus())
                 {
                     if (sStillMissing == rMissingCodes) //replaced nothing
