@@ -18,7 +18,6 @@ ScrollableWrapper<T>::ScrollableWrapper( Window* pParent, WinBits nStyle ) : T( 
     maVScrollBar.SetScrollHdl( aLink );
     maHScrollBar.SetScrollHdl( aLink );
 
-    Size aOutSz = T::GetOutputSizePixel();
     ScrollBarVisibility aVis = None;
 
     if ( nStyle & ( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) )
