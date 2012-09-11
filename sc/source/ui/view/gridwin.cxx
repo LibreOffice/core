@@ -1168,7 +1168,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     sal_uInt16 i;
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
     long nSizeX  = 0;
     long nSizeY  = 0;
