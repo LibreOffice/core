@@ -28,10 +28,6 @@
 #include <unx/gtk/gtksalmenu.hxx>
 #include <vcl/menu.hxx>
 
-#include <stdio.h>
-#include <iostream>
-
-using namespace std;
 
 /*
  * GLOAction
@@ -47,7 +43,7 @@ struct _GLOAction
 {
     GObject         parent_instance;
 
-    GtkSalMenuItem* item;               // A pointer to the menu item.
+    gint            item_id;            // Menu item ID.
     gboolean        enabled;            // TRUE if action is enabled, FALSE otherwise.
     GVariantType*   parameter_type;     // A GVariantType with the action parameter type.
     GVariantType*   state_type;         // A GVariantType with item state type
@@ -69,7 +65,7 @@ g_lo_action_new (void)
 static void
 g_lo_action_init (GLOAction *action)
 {
-    action->item = NULL;
+    action->item_id = -1;
     action->enabled = TRUE;
     action->parameter_type = NULL;
     action->state_type = NULL;
@@ -81,8 +77,6 @@ static void
 g_lo_action_finalize (GObject *object)
 {
     GLOAction* action = G_LO_ACTION(object);
-
-    action->item = NULL;
 
     if (action->parameter_type)
         g_variant_type_free (action->parameter_type);
@@ -113,7 +107,8 @@ g_lo_action_class_init (GLOActionClass *klass)
 
 struct _GLOActionGroupPrivate
 {
-    GHashTable *table;  /* string -> GtkSalMenuItem* */
+    GHashTable  *table;  /* string -> GLOAction */
+    GtkSalFrame *frame;  /* Frame to which GActionGroup is associated. */
 };
 
 static void g_lo_action_group_iface_init (GActionGroupInterface *);
@@ -218,67 +213,39 @@ g_lo_action_group_activate (GActionGroup *group,
 {
     GTK_YIELD_GRAB();
 
-    GLOActionGroup *loGroup = G_LO_ACTION_GROUP (group);
-    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (loGroup->priv->table, action_name));
-    GtkSalMenuItem *pSalMenuItem = action->item;
+    GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
+    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
 
-    if (pSalMenuItem == NULL || pSalMenuItem->mpSubMenu )
+    GtkSalFrame *pFrame = lo_group->priv->frame;
+
+    if ( pFrame == NULL )
         return;
 
-    const GtkSalFrame *pFrame = pSalMenuItem->mpParentMenu ? pSalMenuItem->mpParentMenu->GetFrame() : NULL;
+    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pFrame->GetMenu() );
 
-    if ( pFrame && !pFrame->GetParent() ) {
-        ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
-        SalMenuEvent aMenuEvt( pSalMenuItem->mnId, pSalMenuItem->mpVCLMenu );
-        pFrame->CallCallback( SALEVENT_MENUCOMMAND, &aMenuEvt );
-    }
-    else if ( pSalMenuItem->mpVCLMenu )
-    {
-        // if an item from submenu was selected. the corresponding Window does not exist because
-        // we use native popup menus, so we have to set the selected menuitem directly
-        // incidentally this of course works for top level popup menus, too
-        PopupMenu * pPopupMenu = dynamic_cast<PopupMenu *>(pSalMenuItem->mpVCLMenu);
-        if( pPopupMenu )
-        {
-            // FIXME: revise this ugly code
+    if ( pSalMenu == NULL )
+        return;
 
-            // select handlers in vcl are dispatch on the original menu
-            // if not consumed by the select handler of the current menu
-            // however since only the starting menu ever came into Execute
-            // the hierarchy is not build up. Workaround this by getting
-            // the menu it should have been
+    GtkSalMenu* pSalSubMenu = pSalMenu->GetMenuForItemCommand( (gchar*) action_name );
+    Menu* pSubMenu = ( pSalMenu != NULL ) ? pSalSubMenu->GetMenu() : NULL;
 
-            // get started from hierarchy in vcl menus
-            GtkSalMenu* pParentMenu = pSalMenuItem->mpParentMenu;
-            Menu* pCurMenu = pSalMenuItem->mpVCLMenu;
-            while( pParentMenu && pParentMenu->GetMenu() )
-            {
-                pCurMenu = pParentMenu->GetMenu();
-                pParentMenu = pParentMenu->GetParentSalMenu();
-            }
+    MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
 
-            pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
-            pPopupMenu->ImplSelectWithStart( pCurMenu );
-        }
-        else
-        {
-            OSL_FAIL( "menubar item without frame !" );
-        }
-    }
+    pMenuBar->HandleMenuCommandEvent( pSubMenu, action->item_id );
 }
 
 void
 g_lo_action_group_insert (GLOActionGroup *group,
                           const gchar    *action_name,
-                          gpointer        action_info)
+                          gint            item_id)
 {
-    g_lo_action_group_insert_stateful (group, action_name, action_info, NULL, NULL, NULL, NULL);
+    g_lo_action_group_insert_stateful (group, action_name, item_id, NULL, NULL, NULL, NULL);
 }
 
 void
 g_lo_action_group_insert_stateful (GLOActionGroup     *group,
                                    const gchar        *action_name,
-                                   gpointer            action_info,
+                                   gint                item_id,
                                    const GVariantType *parameter_type,
                                    const GVariantType *state_type,
                                    GVariant           *state_hint,
@@ -288,7 +255,7 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
 
     GLOAction* old_action = G_LO_ACTION (g_hash_table_lookup (group->priv->table, action_name));
 
-    if (old_action == NULL || old_action->item != action_info)
+    if (old_action == NULL || old_action->item_id != item_id)
     {
         if (old_action != NULL)
             g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
@@ -297,7 +264,7 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
 
         g_hash_table_insert (group->priv->table, g_strdup (action_name), action);
 
-        action->item = static_cast< GtkSalMenuItem* >( action_info );
+        action->item_id = item_id;
 
         if (parameter_type)
             action->parameter_type = (GVariantType*) parameter_type;
@@ -333,6 +300,7 @@ g_lo_action_group_init (GLOActionGroup *group)
                                                  GLOActionGroupPrivate);
     group->priv->table = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free, g_object_unref);
+    group->priv->frame = NULL;
 }
 
 static void
@@ -355,9 +323,12 @@ g_lo_action_group_iface_init (GActionGroupInterface *iface)
 }
 
 GLOActionGroup *
-g_lo_action_group_new (void)
+g_lo_action_group_new (gpointer frame)
 {
-    return G_LO_ACTION_GROUP( g_object_new (G_TYPE_LO_ACTION_GROUP, NULL) );
+    GLOActionGroup* group = G_LO_ACTION_GROUP (g_object_new (G_TYPE_LO_ACTION_GROUP, NULL));
+    group->priv->frame = static_cast< GtkSalFrame* > (frame);
+
+    return group;
 }
 
 void
@@ -375,21 +346,7 @@ g_lo_action_group_set_action_enabled (GLOActionGroup *group,
 
     action->enabled = enabled;
 
-    g_action_group_action_enabled_changed(G_ACTION_GROUP(group),
-                                          action_name,
-                                          enabled);
-}
-
-gpointer
-g_lo_action_group_get_action_item (GLOActionGroup *group,
-                                   const gchar    *action_name)
-{
-    g_return_val_if_fail (G_IS_LO_ACTION_GROUP (group), NULL);
-    g_return_val_if_fail (action_name != NULL, NULL);
-
-    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (group->priv->table, action_name));
-
-    return (action != NULL) ? action->item : NULL;
+    g_action_group_action_enabled_changed (G_ACTION_GROUP (group), action_name, enabled);
 }
 
 void

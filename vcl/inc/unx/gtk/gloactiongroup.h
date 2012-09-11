@@ -63,15 +63,15 @@ struct _GLOActionGroupClass
 
 GType               g_lo_action_group_get_type              (void) G_GNUC_CONST;
 
-GLOActionGroup *    g_lo_action_group_new                   (void);
+GLOActionGroup *    g_lo_action_group_new                   (gpointer           frame);
 
 void                g_lo_action_group_insert                (GLOActionGroup     *group,
                                                              const gchar        *action_name,
-                                                             gpointer            action_info);
+                                                             gint                item_id);
 
 void                g_lo_action_group_insert_stateful       (GLOActionGroup     *group,
                                                              const gchar        *action_name,
-                                                             gpointer            action_info,
+                                                             gint                item_id,
                                                              const GVariantType *parameter_type,
                                                              const GVariantType *state_type,
                                                              GVariant           *state_hint,
@@ -79,10 +79,7 @@ void                g_lo_action_group_insert_stateful       (GLOActionGroup     
 
 void                g_lo_action_group_set_action_enabled    (GLOActionGroup     *group,
                                                              const gchar        *action_name,
-                                                             gboolean           enabled);
-
-gpointer            g_lo_action_group_get_action_item       (GLOActionGroup     *group,
-                                                             const gchar        *action_name);
+                                                             gboolean            enabled);
 
 void                g_lo_action_group_remove                (GLOActionGroup     *group,
                                                              const gchar        *action_name);

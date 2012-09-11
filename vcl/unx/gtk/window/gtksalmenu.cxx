@@ -367,19 +367,19 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
         if ( mpMenuModel == NULL && mpActionGroup == NULL ) {
             mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-            mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new() );
+            mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new( ( gpointer ) mpFrame ) );
 
             g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", mpMenuModel, ObjectDestroyedNotify );
             g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", mpActionGroup, ObjectDestroyedNotify );
 
             // Publish the menu only if AppMenu registrar is available.
             guint nWatcherId = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                                           "com.canonical.AppMenu.Registrar",
-                                           G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                           on_registrar_available,
-                                           on_registrar_unavailable,
-                                           (gpointer) mpFrame,
-                                           NULL);
+                                                 "com.canonical.AppMenu.Registrar",
+                                                 G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                                 on_registrar_available,
+                                                 on_registrar_unavailable,
+                                                 (gpointer) mpFrame,
+                                                 NULL);
 
             ( ( GtkSalFrame* ) mpFrame )->SetWatcherId( nWatcherId );
         }
@@ -512,7 +512,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, Gtk
             GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_BOOLEAN );
             GVariant* pState = g_variant_new_boolean( bChecked );
 
-            g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem, NULL, pStateType, NULL, pState );
+            g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem->mnId, NULL, pStateType, NULL, pState );
         }
         else if ( bits & MIB_RADIOCHECK )
         {
@@ -522,12 +522,12 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, Gtk
             GVariant* pState = g_variant_new_string( "" );
             pTarget = g_variant_new_string( aCommand );
 
-            g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem, pParameterType, pStateType, NULL, pState );
+            g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem->mnId, pParameterType, pStateType, NULL, pState );
         }
         else
         {
             // Item is not special, so insert a stateless action.
-            g_lo_action_group_insert( pActionGroup, aCommand, pItem );
+            g_lo_action_group_insert( pActionGroup, aCommand, pItem->mnId );
         }
     }
 
@@ -553,6 +553,36 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, Gtk
 
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* pData )
 {
+}
+
+GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand )
+{
+    GtkSalMenu* pMenu = NULL;
+
+    for ( sal_uInt16 nPos = 0; nPos < maItems.size(); nPos++ )
+    {
+        GtkSalMenuItem *pSalItem = maItems[ nPos ];
+
+        String aItemCommand = mpVCLMenu->GetItemCommand( pSalItem->mnId );
+
+        gchar* aItemCommandStr = (gchar*) rtl::OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 ).getStr();
+
+        if ( g_strcmp0( aItemCommandStr, aCommand ) == 0 )
+        {
+            pMenu = this;
+            break;
+        }
+        else
+        {
+            if ( pSalItem->mpSubMenu != NULL )
+                pMenu = pSalItem->mpSubMenu->GetMenuForItemCommand( aCommand );
+
+            if ( pMenu != NULL )
+               break;
+        }
+    }
+
+    return pMenu;
 }
 
 void GtkSalMenu::Freeze()

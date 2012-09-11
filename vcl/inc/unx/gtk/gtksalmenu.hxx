@@ -89,6 +89,7 @@ public:
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     virtual void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
+    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText );
     void                        NativeSetItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommandStr );
