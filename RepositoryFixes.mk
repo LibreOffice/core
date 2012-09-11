@@ -92,6 +92,7 @@ gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:libxml2$(gb_Library_IARCEXT)
 gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
 
+gb_StaticLibrary_FILENAMES := $(patsubst orcus:liborcus%,orcus:liborcus-0.2%,$(gb_StaticLibrary_FILENAMES))
 
 # Libraries not provided by mingw(-w64), available only in the Windows
 # SDK. So if these actually are liked with somewhere, we can't
