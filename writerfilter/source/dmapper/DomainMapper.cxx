@@ -4357,11 +4357,6 @@ void DomainMapper::lcl_startCharacterGroup()
 {
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
     DomainMapperTableManager& rTableManager = m_pImpl->getTableManager();
-    if( rTableManager.getTableStyleName().getLength() )
-    {
-        PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
-        rTableManager.CopyTextProperties(pTopContext, m_pImpl->GetStyleSheetTable());
-    }
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
