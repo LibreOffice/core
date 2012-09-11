@@ -102,8 +102,10 @@ endef
 # converted, it is better to be changed to 1.
 gb_UnpackedTarball_PATCHLEVEL_DEFAULT := 3
 
-gb_UnpackedTarball_CONVERTTARGET := $(SRCDIR)/solenv/bin/leconvert.pl
-gb_UnpackedTarball_CONVERTCOMMAND := $(PERL) -w $(gb_UnpackedTarball_CONVERTTARGET)
+gb_UnpackedTarball_CONVERTTODOS = \
+	$(gb_AWK) 'sub("$$","\r")' $(1) > $(1).TEMP && mv $(1).TEMP $(1)
+gb_UnpackedTarball_CONVERTTOUNIX = \
+	tr -d '\r' < $(1) > $(1).TEMP && mv $(1).TEMP $(1)
 
 define gb_UnpackedTarball__copy_files_impl
 $(if $(1),\
@@ -125,13 +127,13 @@ define gb_UnpackedTarball__command
 $(call gb_Output_announce,$(2),$(true),PAT,2)
 $(call gb_Helper_abbreviate_dirs,\
 	cd $(3) && \
-	$(if $(UNPACKED_FIX_EOL),$(gb_UnpackedTarball_CONVERTCOMMAND) unix $(UNPACKED_FIX_EOL) &&) \
+	$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTOUNIX,$(file)) && ) \
 	$(if $(UNPACKED_PATCHES),\
 		for p in $(UNPACKED_PATCHES); do \
 			$(GNUPATCH) -s -p$(UNPACKED_PATCHLEVEL) < "$$p" || exit 1;\
 		done && \
 	) \
-	$(if $(UNPACKED_FIX_EOL),$(gb_UnpackedTarball_CONVERTCOMMAND) dos $(UNPACKED_FIX_EOL) &&) \
+	$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTODOS,$(file)) && ) \
 	$(if $(UNPACKED_FILES),\
 		mkdir -p $(sort $(dir $(UNPACKED_DESTFILES))) && \
 		$(call gb_UnpackedTarball__copy_files,$(UNPACKED_FILES),$(UNPACKED_DESTFILES)) && \
