@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="lc_color-lc_fontcolor.svg"
-   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_color.png"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_fontcolor.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -104,6 +104,16 @@
        y1="14.541593"
        x2="4.7950678"
        y2="10.431535" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4256"
+       id="radialGradient3814"
+       cx="4.75"
+       cy="3.625"
+       fx="4.75"
+       fy="3.625"
+       r="3.59375"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -112,13 +122,13 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="12.818743"
-     inkscape:cy="12.305908"
+     inkscape:zoom="1"
+     inkscape:cx="11.677535"
+     inkscape:cy="17.067354"
      inkscape:document-units="px"
      inkscape:current-layer="g6159"
-     showgrid="true"
-     inkscape:snap-global="false"
+     showgrid="false"
+     inkscape:snap-global="true"
      inkscape:window-width="1366"
      inkscape:window-height="716"
      inkscape:window-x="0"
@@ -418,6 +428,16 @@
              style="fill:#fce94f;stroke:none;display:inline"
              transform="matrix(1.1234418,0,-0.7136519,1.2607334,166.69725,2.9002995)" />
         </g>
+        <path
+           sodipodi:type="arc"
+           style="opacity:1;fill:url(#radialGradient3814);fill-opacity:1;stroke:none"
+           id="path3038"
+           sodipodi:cx="4.75"
+           sodipodi:cy="3.625"
+           sodipodi:rx="3.59375"
+           sodipodi:ry="3.59375"
+           d="m 8.34375,3.625 a 3.59375,3.59375 0 1 1 -7.1875,0 3.59375,3.59375 0 1 1 7.1875,0 z"
+           transform="matrix(1.6695652,0,0,1.6695657,575.5911,441.6055)" />
       </g>
     </g>
   </g>
