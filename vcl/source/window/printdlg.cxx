@@ -976,7 +976,6 @@ void PrintDialog::setupOptionalUI()
         {
             maNUpPage.mpBrochureBtn->SetText( aText );
             maNUpPage.mpBrochureBtn->Show();
-            setHelpText( maNUpPage.mpBrochureBtn, aHelpTexts, 0 );
 
             sal_Bool bVal = sal_False;
             PropertyValue* pVal = maPController->getValue( aPropertyName );
@@ -988,6 +987,11 @@ void PrintDialog::setupOptionalUI()
 
             maPropertyToWindowMap[ aPropertyName ].push_back( maNUpPage.mpBrochureBtn );
             maControlToPropertyMap[maNUpPage.mpBrochureBtn] = aPropertyName;
+
+            // set help id
+            setHelpId( maNUpPage.mpBrochureBtn, aHelpIds, 0 );
+            // set help text
+            setHelpText( maNUpPage.mpBrochureBtn, aHelpTexts, 0 );
         }
         else if (aCtrlType == "Bool")
         {
