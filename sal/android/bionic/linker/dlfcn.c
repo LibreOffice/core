@@ -51,7 +51,6 @@ static void set_dlerror(int err)
     dl_err_str = (const char *)&dl_err_buf[0];
 };
 
-__attribute__ ((visibility("default")))
 void *__lo_dlopen(const char *filename, int flag)
 {
     soinfo *ret;
@@ -70,7 +69,6 @@ void *__lo_dlopen(const char *filename, int flag)
     return ret;
 }
 
-__attribute__ ((visibility("default")))
 const char *__lo_dlerror(void)
 {
     const char *tmp = dl_err_str;
@@ -78,7 +76,6 @@ const char *__lo_dlerror(void)
     return (const char *)tmp;
 }
 
-__attribute__ ((visibility("default")))
 void *__lo_dlsym(void *handle, const char *symbol)
 {
     soinfo *found;
@@ -130,7 +127,6 @@ err:
     return 0;
 }
 
-__attribute__ ((visibility("default")))
 int __lo_dladdr(const void *addr, Dl_info *info)
 {
     int ret = 0;
@@ -165,7 +161,6 @@ int __lo_dladdr(const void *addr, Dl_info *info)
     return ret;
 }
 
-__attribute__ ((visibility("default")))
 int __lo_dlclose(void* handle) {
     int result;
     pthread_mutex_lock(&dl_lock);
