@@ -25,7 +25,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
-#include "com/sun/star/task/XPasswordContainer.hpp"
+#include "com/sun/star/task/XPasswordContainer2.hpp"
 
 namespace com {
     namespace sun {
@@ -133,7 +133,7 @@ public:
 
 private:
     com::sun::star::uno::Reference<
-        com::sun::star::task::XPasswordContainer > m_xPasswordContainer;
+        com::sun::star::task::XPasswordContainer2 > m_xPasswordContainer;
 };
 
 // ============================================================================

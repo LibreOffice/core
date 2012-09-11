@@ -93,9 +93,8 @@
 #include <comphelper/string.hxx>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/task/XMasterPasswordHandling2.hpp"
 #include "com/sun/star/task/PasswordContainer.hpp"
-#include "com/sun/star/task/XPasswordContainer.hpp"
+#include "com/sun/star/task/XPasswordContainer2.hpp"
 #include "securityoptions.hxx"
 #include "webconninfo.hxx"
 #include "certpath.hxx"
@@ -709,9 +708,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
 {
     try
     {
-        Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
-            UNO_QUERY_THROW );
+        Reference< task::XPasswordContainer2 > xMasterPasswd(
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         if ( maSavePasswordsCB.IsChecked() )
         {
@@ -765,11 +763,10 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
 {
     try
     {
-        Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
-            UNO_QUERY );
+        Reference< task::XPasswordContainer2 > xMasterPasswd(
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-        if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() )
+        if ( xMasterPasswd->isPersistentStoringAllowed() )
             xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() );
     }
     catch (const Exception&)
@@ -782,9 +779,8 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
 {
     try
     {
-        Reference< task::XMasterPasswordHandling2 > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
-            UNO_QUERY_THROW );
+        Reference< task::XPasswordContainer2 > xMasterPasswd(
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         if ( maMasterPasswordCB.IsChecked() )
         {
@@ -827,11 +823,10 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
 {
     try
     {
-        Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
-            UNO_QUERY );
+        Reference< task::XPasswordContainer2 > xMasterPasswd(
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-        if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< task::XInteractionHandler>() ) )
+        if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< task::XInteractionHandler>() ) )
         {
             svx::WebConnectionInfoDialog aDlg( this );
             aDlg.Execute();
@@ -962,9 +957,8 @@ void SvxSecurityTabPage::InitControls()
     // initialize the password saving checkbox
     try
     {
-        Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()),
-            UNO_QUERY_THROW );
+        Reference< task::XPasswordContainer2 > xMasterPasswd(
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
@@ -972,8 +966,7 @@ void SvxSecurityTabPage::InitControls()
             maShowConnectionsPB.Enable( sal_True );
             maSavePasswordsCB.Check( sal_True );
 
-            Reference< task::XMasterPasswordHandling2 > xMasterPasswd2( xMasterPasswd, UNO_QUERY );
-            if ( xMasterPasswd2.is() && xMasterPasswd2->isDefaultMasterPasswordUsed() )
+            if ( xMasterPasswd->isDefaultMasterPasswordUsed() )
                 maMasterPasswordCB.Check( sal_False );
             else
             {

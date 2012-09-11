@@ -40,7 +40,7 @@ module com { module sun { module star { module task {
 
     @since OOo 3.2
 */
-/*published*/ interface XUrlContainer : com::sun::star::uno::XInterface
+published interface XUrlContainer : com::sun::star::uno::XInterface
 {
     /** Add a URL to the container.
 

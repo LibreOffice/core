@@ -22,15 +22,13 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <com/sun/star/task/XPasswordContainer.hpp>
-#include <com/sun/star/task/XUrlContainer.hpp>
+#include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/task/XMasterPasswordHandling2.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
@@ -233,10 +231,8 @@ enum PasswordState {
     cancelled
 };
 
-class PasswordContainer : public ::cppu::WeakImplHelper5<
-        ::com::sun::star::task::XPasswordContainer,
-        ::com::sun::star::task::XMasterPasswordHandling2,
-        ::com::sun::star::task::XUrlContainer,
+class PasswordContainer : public ::cppu::WeakImplHelper3<
+        ::com::sun::star::task::XPasswordContainer2,
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XEventListener >
 {
