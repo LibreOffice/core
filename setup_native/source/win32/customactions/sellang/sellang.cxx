@@ -49,6 +49,8 @@
 #include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
 
+#include "spellchecker_selection.hxx"
+
 BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 {
     DWORD sz = 0;
@@ -203,6 +205,37 @@ present_in_ui_langs(const char *lang)
     return FALSE;
 }
 
+namespace {
+
+struct Dictionary {
+    char lang[sizeof("xx_XX")];
+    bool install;
+};
+
+void addMatchingDictionaries(char const * lang, Dictionary * dicts, int ndicts)
+{
+    for (int i = 0; i != SAL_N_ELEMENTS(setup_native::languageDictionaries);
+         ++i)
+    {
+        if (strcmp(lang, setup_native::languageDictionaries[i].language) == 0) {
+            for (char const * const * p = setup_native::languageDictionaries[i].
+                     dictionaries;
+                 *p != NULL; ++p)
+            {
+                for (int j = 0; j != ndicts; ++j) {
+                    if (_stricmp(*p, dicts[j].lang) == 0) {
+                        dicts[j].install = true;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+    }
+}
+
+}
+
 extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
 {
     char feature[100];
@@ -210,6 +243,8 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
     DWORD length;
     int nlangs = 0;
     char langs[MAX_LANGUAGES][6];
+    int ndicts = 0;
+    Dictionary dicts[MAX_LANGUAGES];
 
     database = MsiGetActiveDatabase(handle);
 
@@ -245,6 +280,41 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
 
     MsiCloseHandle(view);
 
+    /* Keep track of what dictionaries are included in this installer:
+     */
+    if (MsiDatabaseOpenViewA(
+            database,
+            ("SELECT Feature from Feature WHERE"
+             " Feature_Parent = 'gm_Dictionaries'"),
+            &view)
+        == ERROR_SUCCESS)
+    {
+        if (MsiViewExecute(view, NULL) == ERROR_SUCCESS) {
+            while (ndicts < MAX_LANGUAGES &&
+                   MsiViewFetch(view, &record) == ERROR_SUCCESS)
+            {
+                length = sizeof(feature);
+                if (MsiRecordGetStringA(record, 1, feature, &length)
+                    == ERROR_SUCCESS)
+                {
+                    if (strncmp(
+                            feature, "gm_r_ex_Dictionary_",
+                            strlen("gm_r_ex_Dictionary_"))
+                        == 0)
+                    {
+                        strcpy(
+                            dicts[ndicts].lang,
+                            feature + strlen("gm_r_ex_Dictionary_"));
+                        dicts[ndicts].install = false;
+                        ++ndicts;
+                    }
+                }
+                MsiCloseHandle(record);
+            }
+        }
+        MsiCloseHandle(view);
+    }
+
     if (nlangs > 0) {
         int i;
         char* pVal = NULL;
@@ -266,6 +336,7 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
                     rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
                 }
                 else {
+                    addMatchingDictionaries(langs[i], dicts, ndicts);
                     sel_ui_lang++;
                 }
             }
@@ -274,6 +345,7 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
                  * in the installer, install at least en_US localization.
                  */
                 MsiSetFeatureStateA(handle, "gm_Langpack_r_en_US", INSTALLSTATE_LOCAL);
+                addMatchingDictionaries("en_US", dicts, ndicts);
             }
         }
         else {
@@ -322,10 +394,20 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
                     UINT rc;
                     sprintf(feature, "gm_Langpack_r_%s", langs[i]);
                     rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
+                } else {
+                    addMatchingDictionaries(langs[i], dicts, ndicts);
                 }
             }
         }
     }
+
+    for (int i = 0; i != ndicts; ++i) {
+        if (!dicts[i].install) {
+            sprintf(feature, "gm_r_ex_Dictionary_%s", dicts[i].lang);
+            MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
+        }
+    }
+
     MsiCloseHandle(database);
 
     return ERROR_SUCCESS;
