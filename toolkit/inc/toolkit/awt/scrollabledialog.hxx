@@ -37,6 +37,7 @@ namespace toolkit
     class ScrollableInterface
     {
     public:
+        virtual ~ScrollableInterface() {}
         virtual void    SetScrollWidth( long nWidth ) = 0;
         virtual long    GetScrollWidth() = 0;
         virtual void    SetScrollHeight( long nHeight ) = 0;
