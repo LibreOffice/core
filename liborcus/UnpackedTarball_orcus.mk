@@ -21,8 +21,11 @@ orcus_patches += liborcus_0.1.0-configure.patch
 # fix MinGW build
 orcus_patches += liborcus_0.1.0-mingw.patch
 # disable boost "auto lib" in MSVC build
-# for some reason (CRLF in file?) this patch doesn't want to apply on unix...
 orcus_patches += liborcus_0.1.0-boost_disable_auto_lib.patch
+
+$(eval $(call gb_UnpackedTarball_fix_end_of_line,orcus,\
+	vsprojects/liborcus-static-nozip/liborcus-static-nozip.vcproj \
+))
 
 $(eval $(call gb_UnpackedTarball_add_patches,orcus,\
 	$(foreach patch,$(orcus_patches),liborcus/$(patch)) \
