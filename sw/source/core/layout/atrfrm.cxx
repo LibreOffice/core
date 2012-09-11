@@ -823,8 +823,8 @@ SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
     eAdj( rCpy.GetLineAdj() ),
     aColumns( (sal_Int8)rCpy.GetNumCols(), 1 ),
     nWidth( rCpy.GetWishWidth() ),
-    bOrtho( rCpy.IsOrtho() ),
-    aWidthAdjustValue( rCpy.aWidthAdjustValue )
+    aWidthAdjustValue( rCpy.aWidthAdjustValue ),
+    bOrtho( rCpy.IsOrtho() )
 {
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
@@ -861,8 +861,8 @@ SwFmtCol::SwFmtCol()
     nLineHeight( 100 ),
     eAdj( COLADJ_NONE ),
     nWidth( USHRT_MAX ),
-    bOrtho( sal_True ),
-    aWidthAdjustValue( 0 )
+    aWidthAdjustValue( 0 ),
+    bOrtho( sal_True )
 {
 }
 
