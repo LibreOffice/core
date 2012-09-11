@@ -32,7 +32,6 @@ use warnings;
 
 use installer::exiter;
 use installer::logger;
-use Carp;
 
 ############################################
 # File Operations
