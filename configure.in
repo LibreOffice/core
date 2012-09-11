@@ -1644,7 +1644,7 @@ AC_ARG_WITH(system-orcus,
 
 AC_ARG_WITH(system-liblangtag,
     AS_HELP_STRING([--with-system-liblangtag],
-        [Use orcus library already on system.]),,
+        [Use liblangtag library already on system.]),,
     [with_system_liblangtag="$with_system_libs"])
 
 AC_ARG_WITH(system-mozilla,
