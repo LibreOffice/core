@@ -44,7 +44,7 @@ terminate() if ( ! defined $inpath );
 
 my $destpath = $inpath;
 my $with_lang = $ARGV[1];
-my $xmllint = $ENV{XMLLINT};
+my $xmllint = $ENV{XMLLINT} || "$ENV{OUTDIR_FOR_BUILD}/bin/xmllint";
 
 $tree_target_prefix = $ARGV[4];
 

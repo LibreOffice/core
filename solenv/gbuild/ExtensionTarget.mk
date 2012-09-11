@@ -40,7 +40,10 @@ gb_ExtensionTarget_PROPMERGECOMMAND := \
 	$(PERL) $(gb_ExtensionTarget_PROPMERGETARGET)
 
 gb_ExtensionTarget_UPDATETREETARGET := $(SRCDIR)/l10ntools/scripts/update_tree.pl
-gb_ExtensionTarget_UPDATETREECOMMAND := $(PERL) $(gb_ExtensionTarget_UPDATETREETARGET)
+gb_ExtensionTarget_UPDATETREECOMMAND := \
+    $(gb_Helper_set_ld_path) $(PERL) $(gb_ExtensionTarget_UPDATETREETARGET)
+    # update_tree.pl calls xmllint, which needs $(gb_Helper_set_ld_path) if it
+    # is the internal one
 
 gb_ExtensionTarget_HELPEXTARGET := $(call gb_Executable_get_target_for_build,helpex)
 gb_ExtensionTarget_HELPEXCOMMAND := \
