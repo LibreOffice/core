@@ -1325,7 +1325,8 @@ void PPTWriter::ImplWriteOLE( )
                 if ( pPtr->xControlModel.is() )
                 {
                     OUString aName;
-                    ::com::sun::star::awt::Size aSize;
+                    //Initialize the graphic size which will be used on export
+                    ::com::sun::star::awt::Size  aSize( pPtr->xShape->getSize() );
                     SvStorageRef xDest( new SvStorage( new SvMemoryStream(), sal_True ) );
                     sal_Bool bOk = oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xDest, pPtr->xControlModel, aSize, aName );
                     if ( bOk )

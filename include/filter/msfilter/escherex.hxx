@@ -1262,6 +1262,8 @@ public:
                     const sal_Bool bFillBitmapModeAllowed = sal_True
                 );
 
+    sal_Bool   CreateBlipPropertiesforOLEControl( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape);
+
     sal_Bool    CreatePolygonProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                     sal_uInt32 nFlags,

@@ -2573,6 +2573,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             << nPageId;
                 PPTExOleObjEntry* pEntry = new PPTExOleObjEntry( OCX_CONTROL, mpExEmbed->Tell() );
                 pEntry->xControlModel = aXControlModel;
+                pEntry->xShape = mXShape;
                 maExOleObj.push_back( pEntry );
 
                 mnExEmbed++;
@@ -2643,6 +2644,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 sal_uInt32 nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
                 ImplCreateShape( ESCHER_ShpInst_HostControl, nSpFlags, aSolverContainer );
                 if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "MetaFile" ), sal_False  ) )
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                //export form control graphic
+                else if ( aPropOpt.CreateBlipPropertiesforOLEControl(mXPropSet,mXShape))
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 aPropOpt.AddOpt( ESCHER_Prop_pictureId, mnExEmbed );
                 aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
