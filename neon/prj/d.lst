@@ -1,9 +1,0 @@
-mkdir: %_DEST%\inc\external
-mkdir: %_DEST%\inc\external\neon
-..\version.mk %_DEST%\inc\external\neon\version.mk
-..\%__SRC%\inc\ne_*.h %_DEST%\inc\external\neon\ne_*.h
-..\%__SRC%\lib\ineon.lib %_DEST%\lib\ineon.lib
-..\%__SRC%\bin\neon*.dll %_DEST%\bin\neon*.dll
-..\%__SRC%\lib\libneon*.so %_DEST%\lib\libneon*.so
-..\%__SRC%\lib\libneon*.dylib %_DEST%\lib\libneon*.dylib
-..\%__SRC%\lib\libneon*.a %_DEST%\lib\libneon*.a

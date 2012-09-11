@@ -89,6 +89,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     MathMLDTD \
 	mdds \
     Mesa \
+	neon \
 	$(if $(filter NLPSOLVER,$(BUILD_TYPE)),\
 		nlpsolver \
 	) \

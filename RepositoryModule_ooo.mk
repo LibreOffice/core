@@ -97,6 +97,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     MathMLDTD \
 	mdds \
     Mesa \
+	neon \
     nlpsolver \
     np_sdk \
     o3tl \
