@@ -112,6 +112,35 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
 
 void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 {
+    //i120759,this function is for both the reference chapter field and normal chapter field
+    //bSrchNum can distinguish the two types,to the latter type,the outline num rule is must...
+    sNumber = aEmptyStr;
+    sTitle = aEmptyStr;
+    sPost = aEmptyStr;
+    sPre = aEmptyStr;
+    //The reference chapter field of normal num rule will be handled in this code segment
+    if (bSrchNum && !rTxtNd.IsOutline())
+    {
+        SwNumRule* pRule(rTxtNd.GetNumRule());
+        if (rTxtNd.IsCountedInList() && pRule)
+        {
+            sNumber = rTxtNd.GetNumString(false);
+            const SwNumFmt& rNFmt = pRule->Get(static_cast<unsigned short>(rTxtNd.GetActualListLevel()));
+            sPost = rNFmt.GetSuffix();
+            sPre = rNFmt.GetPrefix();
+        }
+        else
+        {
+            sNumber = String("??", RTL_TEXTENCODING_ASCII_US);
+        }
+        sTitle = rTxtNd.GetExpandTxt();
+
+        for( xub_StrLen i = 0; i < sTitle.Len(); ++i )
+            if( ' ' > sTitle.GetChar( i ) )
+                sTitle.Erase( i--, 1 );
+    }else
+    {
+    //End
     SwDoc* pDoc = (SwDoc*)rTxtNd.GetDoc();
     const SwTxtNode *pTxtNd = rTxtNd.FindOutlineNodeOfLevel( nLevel );
     if( pTxtNd )
@@ -162,13 +191,9 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
                 sPost = rNFmt.GetSuffix();
                 sPre = rNFmt.GetPrefix();
             }
-            else
-                sPost = aEmptyStr, sPre = aEmptyStr;
         }
         else
         {
-            sPost = aEmptyStr;
-            sPre = aEmptyStr;
             sNumber = String("??", RTL_TEXTENCODING_ASCII_US);
         }
 
@@ -178,12 +203,6 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             if( ' ' > sTitle.GetChar( i ) )
                 sTitle.Erase( i--, 1 );
     }
-    else
-    {
-        sNumber = aEmptyStr;
-        sTitle = aEmptyStr;
-        sPost = aEmptyStr;
-        sPre = aEmptyStr;
     }
 }
 
