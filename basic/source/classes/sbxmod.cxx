@@ -2329,7 +2329,7 @@ public:
     }
 
 
-    virtual void SAL_CALL windowClosing( const lang::EventObject& e ) throw (uno::RuntimeException)
+    virtual void SAL_CALL windowClosing( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
 #ifdef IN_THE_FUTURE
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
