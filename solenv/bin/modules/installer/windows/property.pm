@@ -411,10 +411,14 @@ sub set_ms_file_types_properties
 {
     my ($propertyfile) = @_;
 
+# we do not register PPSM, PPAM, and XLAM file types in
+# setup_native\source\win32\customactions\reg4allmsdoc\reg4allmsi.cxx
+# (probably because LibreOffice can't deal with them properly (?)
+
     push(@{$propertyfile}, "REGISTER_PPS"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_PPSX" . "\t" . "0" . "\n");
-    push(@{$propertyfile}, "REGISTER_PPSM" . "\t" . "0" . "\n");
-    push(@{$propertyfile}, "REGISTER_PPAM" . "\t" . "0" . "\n");
+#    push(@{$propertyfile}, "REGISTER_PPSM" . "\t" . "0" . "\n");
+#    push(@{$propertyfile}, "REGISTER_PPAM" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_PPT"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_PPTX" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_PPTM" . "\t" . "0" . "\n");
@@ -434,7 +438,7 @@ sub set_ms_file_types_properties
     push(@{$propertyfile}, "REGISTER_XLSX" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLSM" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLSB" . "\t" . "0" . "\n");
-    push(@{$propertyfile}, "REGISTER_XLAM" . "\t" . "0" . "\n");
+#    push(@{$propertyfile}, "REGISTER_XLAM" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLT"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLTX" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLTM" . "\t" . "0" . "\n");
