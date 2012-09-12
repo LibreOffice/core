@@ -161,6 +161,7 @@ endif
 ifeq ($(GUI),UNX)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/conditn \
+	sal/osl/unx/diagnose \
 	sal/osl/unx/file \
 	sal/osl/unx/file_error_transl \
 	sal/osl/unx/file_misc \
@@ -175,7 +176,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/uunxapi \
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
-	sal/osl/unx/diagnose \
 	sal/osl/unx/mutex \
 	sal/osl/unx/nlsupport \
 	sal/osl/unx/pipe \
