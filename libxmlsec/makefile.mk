@@ -77,6 +77,11 @@ PATCH_FILES=\
    xmlsec1-android.patch \
    xmlsec1-1.2.14-ansi.patch
 
+.IF "$(OS)$(CPU)"=="MACOSXP"
+PATCH_FILES+=xmlsec1-1.2.14_old_automake.patch
+EXTRA_LINKFLAGS+=-Wl,-dylib_file,@executable_path/libnssutil3.dylib:$(SOLARLIBDIR)/libnssutil3.dylib
+.ENDIF
+
 ADDITIONAL_FILES= \
     include/xmlsec/mscrypto/akmngr.h \
     src/mscrypto/akmngr.c \
@@ -177,7 +182,7 @@ CONFIGURE_ACTION=autoreconf ; ./configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS=
 .IF "$(ACLOCAL)" == ""
 ACLOCAL=aclocal
 .ENDIF
-CONFIGURE_ACTION:=ACLOCAL="$(ACLOCAL) -I$(SRCDIR)/m4/mac" $(CONFIGURE_ACTION)
+CONFIGURE_ACTION:=ACLOCAL="$(ACLOCAL) -I $(SRCDIR)/m4/mac" $(CONFIGURE_ACTION)
 .ENDIF
 
 CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
