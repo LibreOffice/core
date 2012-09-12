@@ -292,9 +292,10 @@ SfxItemInfo aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_RSID
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_BOX
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_SHADOW
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_HIGHLIGHT
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_GRABBAG
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY3
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_BIDIRTL
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_IDCTHINT
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
@@ -502,8 +503,9 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_HIGHLIGHT - POOLATTR_BEGIN ] =     new SvxBrushItem( RES_CHRATR_HIGHLIGHT );
     aAttrTab[ RES_CHRATR_GRABBAG - POOLATTR_BEGIN ] =       new SfxGrabBagItem( RES_CHRATR_GRABBAG );
 
-// CharakterAttr - Dummies
-    aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY3 );
+// CharakterAttr - MSWord weak char direction/script override emulation
+    aAttrTab[ RES_CHRATR_BIDIRTL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_BIDIRTL, sal_Int16(-1) );
+    aAttrTab[ RES_CHRATR_IDCTHINT - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_IDCTHINT, sal_Int16(-1) );
 
 
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFmtRefMark( OUString() );

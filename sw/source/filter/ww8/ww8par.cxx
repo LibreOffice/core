@@ -3205,6 +3205,10 @@ namespace
 // to auto-bias to LATIN.
 //
 // See https://bugs.libreoffice.org/show_bug.cgi?id=34319 for an example
+//
+// TO-DO: revisit this after the fix of #i119612# which retains the
+// idcthint feature on import from word and has it available for reexport
+// but we don't use it yet for the actual rendering and layout
 void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString)
 {
     if (rAddString.isEmpty())
@@ -4809,6 +4813,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 {
     sal_uLong nErrRet = 0;
 
+    rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
     if (mbNewDoc && pStg && !pGloss)
         ReadDocInfo();
 

@@ -4943,6 +4943,14 @@ void DocxAttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
         m_pSerializer->singleElementNS( XML_w, XML_bCs, FSNS( XML_w, XML_val ), "false", FSEND );
 }
 
+void DocxAttributeOutput::CharBidiRTL( const SfxPoolItem& )
+{
+}
+
+void DocxAttributeOutput::CharIdctHint( const SfxPoolItem& )
+{
+}
+
 void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
     // Not rorated or we the rotation already handled?

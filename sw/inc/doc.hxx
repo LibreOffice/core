@@ -703,6 +703,13 @@ private:
     bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
 
 public:
+    enum DocumentType {
+        DOCTYPE_NATIVE,
+        DOCTYPE_MSWORD              //This doc medul is come from Ms Word
+        };
+    DocumentType    meDocType;
+    DocumentType    GetDocumentType(){ return meDocType; }
+    void            SetDocumentType( DocumentType eDocType ) { meDocType = eDocType; }
 
     /** Life cycle
     */

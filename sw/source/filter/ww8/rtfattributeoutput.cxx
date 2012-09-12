@@ -2340,6 +2340,14 @@ void RtfAttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
         m_aStyles.append((sal_Int32)0);
 }
 
+void RtfAttributeOutput::CharBidiRTL( const SfxPoolItem& )
+{
+}
+
+void RtfAttributeOutput::CharIdctHint( const SfxPoolItem&)
+{
+}
+
 void RtfAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);

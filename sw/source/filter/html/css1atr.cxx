@@ -3608,8 +3608,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_BOX */                OutCSS1_SvxBox,
 /* RES_CHRATR_SHADOW */             0,
 /* RES_CHRATR_HIGHLIGHT */          0,
-/* RES_CHRATR_DUMMY2 */             0,
-/* RES_CHRATR_DUMMY3 */             0,
+/* RES_CHRATR_GRABBAG */            0,
+/* RES_CHRATR_BIDIRTL */            0,
+/* RES_CHRATR_IDCTHINT */           0,
 
 /* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,
@@ -3639,9 +3640,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_PARATR_HYPHENZONE*/          0,
 /* RES_PARATR_DROP */               OutCSS1_SwFmtDrop,
 /* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
-/* RES_PARATR_NUMRULE */            0, // Dummy:
-/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
+/* RES_PARATR_NUMRULE */            0,
+/* RES_PARATR_SCRIPTSPACE */        0,
+/* RES_PARATR_HANGINGPUNCTUATION */ 0,
 /* RES_PARATR_FORBIDDEN_RULES */    0, // new
 /* RES_PARATR_VERTALIGN */          0, // new
 /* RES_PARATR_SNAPTOGRID*/          0, // new

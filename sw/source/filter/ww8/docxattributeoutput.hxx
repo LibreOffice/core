@@ -507,6 +507,12 @@ protected:
     /// Sfx item RES_CHRATR_CTL_WEIGHT
     virtual void CharWeightCTL( const SvxWeightItem& rWeight );
 
+    /// Sfx item RES_CHRATR_BidiRTL
+    virtual void CharBidiRTL( const SfxPoolItem& );
+
+    /// Sfx item RES_CHRATR_IdctHint
+    virtual void CharIdctHint( const SfxPoolItem& );
+
     /// Sfx item RES_CHRATR_ROTATE
     virtual void CharRotate( const SvxCharRotateItem& rRotate );
 

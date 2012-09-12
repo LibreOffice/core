@@ -322,7 +322,8 @@ SwDoc::SwDoc()
     // COMPATIBILITY FLAGS END
 
     mbStartIdleTimer(false),
-    mbReadOnly(false)
+    mbReadOnly(false),
+    meDocType(DOCTYPE_NATIVE)
 {
     // COMPATIBILITY FLAGS START
 

@@ -2858,12 +2858,19 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
     SetToggleAttr( nI, bOn );
 }
 
-void SwWW8ImplReader::Read_Bidi(sal_uInt16, const sal_uInt8*, short nLen)
+void SwWW8ImplReader::Read_Bidi(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
-    if (nLen > 0)
-        bBidi = true;
-    else
-        bBidi = false;
+    if( nLen < 0 )  //Property end
+    {
+        bBidi = sal_False;
+        pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_CHRATR_BIDIRTL);
+    }
+    else    //Property start
+    {
+        bBidi = sal_True;
+        sal_uInt8 nBidi = *pData;
+        NewAttr( SfxInt16Item( RES_CHRATR_BIDIRTL, (nBidi!=0)? 1 : 0 ) );
+    }
 }
 
 // Read_BoldUsw for BiDi Italic, Bold
@@ -4205,10 +4212,20 @@ void SwWW8ImplReader::Read_ParaContextualSpacing( sal_uInt16, const sal_uInt8* p
 
 void SwWW8ImplReader::Read_IdctHint( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if (nLen < 0)
-        nIdctHint = 0;
-    else
-        nIdctHint = *pData;
+    // sprmcidcthint (opcode 0x286f) specifies a script bias for the text in the run.
+    // for unicode characters that are shared between far east and non-far east scripts,
+    // this property determines what font and language the character will use.
+    // when this value is 0, text properties bias towards non-far east properties.
+    // when this value is 1, text properties bias towards far east properties.
+    if( nLen < 0 )  //Property end
+    {
+        pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_CHRATR_IDCTHINT);
+    }
+    else    //Property start
+    {
+        sal_uInt8 nVal = *pData;
+        NewAttr( SfxInt16Item( RES_CHRATR_IDCTHINT, (nVal!=0)? 1 : 0 ) );
+    }
 }
 
 void SwWW8ImplReader::Read_Justify( sal_uInt16, const sal_uInt8* pData, short nLen )
