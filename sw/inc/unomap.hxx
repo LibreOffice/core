@@ -247,6 +247,7 @@
 #define WID_DOC_HAS_VALID_SIGNATURES            1017
 #define WID_DOC_BUILDID                         1024
 #define WID_DOC_ISTEMPLATEID                        1025
+#define WID_DOC_DEFAULT_PAGE_MODE                   1069
 // --> OD 2006-03-21 #b6375613#
 #define WID_APPLY_WORKAROUND_FOR_B6375613       1070
 // <--

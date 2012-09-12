@@ -2144,6 +2144,13 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         }
         break;
         // <--
+        case WID_DOC_DEFAULT_PAGE_MODE:
+        {
+            bool bDefaultPageMode( false );
+            aValue >>= bDefaultPageMode;
+            pDocShell->GetDoc()->SetDefaultPageMode( bDefaultPageMode );
+        }
+        break;
 
         default:
         {

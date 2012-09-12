@@ -237,6 +237,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_GRID_LINES            :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridLines")); break;
             case PROP_GRID_BASE_HEIGHT      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridBaseHeight")); break;
             case PROP_GRID_RUBY_HEIGHT      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridRubyHeight")); break;
+            case PROP_GRID_STANDARD_MODE     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StandardPageMode")); break;
             case PROP_IS_ON                  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsOn")); break;
             case PROP_RESTART_AT_EACH_PAGE   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RestartAtEachPage")); break;
             case PROP_COUNT_EMPTY_LINES      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CountEmptyLines")); break;
