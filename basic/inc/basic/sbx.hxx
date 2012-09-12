@@ -119,8 +119,6 @@ public:
 class SbxVarRefs;
 class SbxVariableRef;
 
-class SbxArrayImpl;
-
 class BASIC_DLLPUBLIC SbxArray : public SbxBase
 {
 // #100883 Method to set method directly to parameter array
@@ -129,7 +127,6 @@ class BASIC_DLLPUBLIC SbxArray : public SbxBase
     friend SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
     BASIC_DLLPRIVATE void PutDirect( SbxVariable* pVar, sal_uInt32 nIdx );
 
-    SbxArrayImpl* mpSbxArrayImpl; // Impl data
     SbxVarRefs*   pData;          // The variables
 
 protected:

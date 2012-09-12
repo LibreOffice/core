@@ -42,7 +42,6 @@ class SbClassModuleObject;
 class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
-class SbModuleImpl;
 
 class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
 {
@@ -52,7 +51,6 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
     friend class    StarBASIC;
     friend class    SbClassModuleObject;
 
-    SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
 
     BASIC_DLLPRIVATE void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );

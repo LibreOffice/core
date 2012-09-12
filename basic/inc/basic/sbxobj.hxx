@@ -27,12 +27,8 @@
 
 class SbxProperty;
 
-class SbxObjectImpl;
-
 class BASIC_DLLPUBLIC SbxObject : public SbxVariable, public SfxListener
 {
-    SbxObjectImpl* mpSbxObjectImpl; // Impl data
-
     BASIC_DLLPRIVATE SbxArray* FindVar( SbxVariable*, sal_uInt16& );
 protected:
     SbxArrayRef  pMethods;                  // Methods

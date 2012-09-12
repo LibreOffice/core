@@ -41,8 +41,6 @@ class SbMethod;
 class BasicManager;
 class DocBasicItem;
 
-class StarBASICImpl;
-
 class BASIC_DLLPUBLIC StarBASIC : public SbxObject
 {
     friend class SbiScanner;
@@ -50,8 +48,6 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     friend class SbiInstance;
     friend class SbiRuntime;
     friend class DocBasicItem;
-
-    StarBASICImpl*  mpStarBASICImpl;
 
     SbxArrayRef     pModules;               // List of all modules
     SbxObjectRef    pRtl;               // Runtime Library

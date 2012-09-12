@@ -26,7 +26,6 @@
 #include "basicdllapi.h"
 
 class SbModule;
-class SbMethodImpl;
 
 class BASIC_DLLPUBLIC SbMethod : public SbxMethod
 {
@@ -38,7 +37,6 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
     friend class SbJScriptMethod;
     friend class SbIfaceMapperMethod;
 
-    SbMethodImpl* mpSbMethodImpl;           // Impl data
     SbxVariable* mCaller;                   // caller
     SbModule* pMod;
     sal_uInt16    nDebugFlags;
