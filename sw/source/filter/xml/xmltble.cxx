@@ -977,14 +977,9 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             if ( nCol < nOldCol )
             {
                 OSL_FAIL( "table and/or table information seems to be corrupted." );
-                if ( nBox == nBoxes - 1 )
-                {
-                    nCol = rLines.GetColumns().size() - 1;
-                }
-                else
-                {
-                    nCol = nOldCol;
-                }
+                // NOTE: nOldCol is not necessarily a valid index into
+                // GetColumns(), but that doesn't matter here
+                nCol = nOldCol;
             }
 
             sal_uInt16 nColSpan = nCol - nOldCol + 1U;
