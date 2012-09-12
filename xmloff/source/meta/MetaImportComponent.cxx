@@ -34,9 +34,6 @@
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/nmspmap.hxx>
 
-#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
-#include <comphelper/componentcontext.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -68,11 +65,8 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
                 "XMLMetaImportComponent::CreateContext: setTargetDocument "
                 "has not been called")), *this);
         }
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
-                 uno::UNO_QUERY_THROW);
         return new SvXMLMetaDocumentContext(
-                        *this, nPrefix, rLocalName, mxDocProps, xDocBuilder);
+                        *this, nPrefix, rLocalName, mxDocProps);
     }
     else
     {

@@ -28,11 +28,12 @@
 
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/xml/dom/XSAXDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -53,7 +54,7 @@ class XMLDocumentBuilderContext : public SvXMLImportContext
 {
 private:
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XDocumentHandler> mxDocBuilder;
+        ::com::sun::star::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
 
 public:
     XMLDocumentBuilderContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -61,7 +62,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XDocumentHandler>& rDocBuilder);
+            ::com::sun::star::xml::dom::XSAXDocumentBuilder2>& rDocBuilder);
 
     virtual ~XMLDocumentBuilderContext();
 
@@ -81,7 +82,7 @@ public:
 XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
         sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>&,
-        const uno::Reference<xml::sax::XDocumentHandler>& rDocBuilder) :
+        const uno::Reference<xml::dom::XSAXDocumentBuilder2>& rDocBuilder) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mxDocBuilder(rDocBuilder)
 {
@@ -124,13 +125,11 @@ void XMLDocumentBuilderContext::EndElement()
 
 static void
 lcl_initDocumentProperties(SvXMLImport & rImport,
-        uno::Reference<xml::sax::XDocumentHandler> const& xDocBuilder,
+        uno::Reference<xml::dom::XSAXDocumentBuilder2> const& xDocBuilder,
         uno::Reference<document::XDocumentProperties> const& xDocProps)
 {
     uno::Sequence< uno::Any > aSeq(1);
-    uno::Reference< xml::dom::XSAXDocumentBuilder > const xDB(xDocBuilder,
-        uno::UNO_QUERY_THROW);
-    aSeq[0] <<= xDB->getDocument();
+    aSeq[0] <<= xDocBuilder->getDocument();
     uno::Reference< lang::XInitialization > const xInit(xDocProps,
         uno::UNO_QUERY_THROW);
     try {
@@ -156,11 +155,9 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
 
 static void
 lcl_initGenerator(SvXMLImport & rImport,
-        uno::Reference<xml::sax::XDocumentHandler> const& xDocBuilder)
+        uno::Reference<xml::dom::XSAXDocumentBuilder2> const& xDocBuilder)
 {
-    uno::Reference< xml::dom::XSAXDocumentBuilder > const xDB(xDocBuilder,
-        uno::UNO_QUERY_THROW);
-    uno::Reference< xml::dom::XDocument > const xDoc(xDB->getDocument(),
+    uno::Reference< xml::dom::XDocument > const xDoc(xDocBuilder->getDocument(),
         uno::UNO_SET_THROW);
     try {
         uno::Reference< xml::xpath::XXPathAPI > const xPath(
@@ -188,16 +185,15 @@ lcl_initGenerator(SvXMLImport & rImport,
 
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
             sal_uInt16 nPrfx, const rtl::OUString& rLName,
-            const uno::Reference<document::XDocumentProperties>& xDocProps,
-            const uno::Reference<xml::sax::XDocumentHandler>& xDocBuilder) :
+            const uno::Reference<document::XDocumentProperties>& xDocProps) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mxDocProps(xDocProps),
-    mxDocBuilder(xDocBuilder)
+    mxDocBuilder(
+        xml::dom::SAXDocumentBuilder::create(
+            comphelper::getProcessComponentContext()))
 {
 // #i103539#: must always read meta.xml for generator, xDocProps unwanted then
 //    OSL_ENSURE(xDocProps.is(), "SvXMLMetaDocumentContext: no document props");
-    OSL_ENSURE(xDocBuilder.is(), "SvXMLMetaDocumentContext: no document hdlr");
-    // here are no attributes
 }
 
 SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()

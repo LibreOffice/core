@@ -43,12 +43,10 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <rtl/logfile.hxx>
-#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
@@ -1085,11 +1083,8 @@ SvXMLImportContext* ORptFilter::CreateMetaContext(const ::rtl::OUString& rLocalN
 
     if ( (getImportFlags() & IMPORT_META) )
     {
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(getServiceFactory()).getUNOContext()),
-            uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
-        pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties(), xDocBuilder);
+        pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties());
     }
     return pContext;
 }

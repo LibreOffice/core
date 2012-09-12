@@ -26,7 +26,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
 
 
 /// handles the top-level office:document-meta element of meta.xml documents
@@ -39,15 +39,13 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties> mxDocProps;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XDocumentHandler> mxDocBuilder;
+        ::com::sun::star::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
 
 public:
     SvXMLMetaDocumentContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XDocumentProperties>& xDocProps,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XDocumentHandler>& xDocBuilder);
+            ::com::sun::star::document::XDocumentProperties>& xDocProps);
 
     virtual ~SvXMLMetaDocumentContext();
 

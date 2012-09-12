@@ -71,7 +71,6 @@
 #include "rangeutl.hxx"
 #include "postit.hxx"
 #include "formulaparserpool.hxx"
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -91,7 +90,6 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
 
 #include <memory>
 
@@ -296,8 +294,7 @@ public:
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     virtual ~ScXMLFlatDocContext_Impl();
 
@@ -309,12 +306,11 @@ public:
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
                                                    sal_uInt16 i_nPrefix, const OUString & i_rLName,
                                                    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
-                                                   const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-                                                   const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
+                                                   const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
 SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
 ScXMLDocContext_Impl(i_rImport, i_nPrefix, i_rLName, i_xAttrList),
 SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
-                         i_xDocProps, i_xDocBuilder)
+                         i_xDocProps)
 {
 }
 
@@ -1832,14 +1828,11 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
             pContext = CreateMetaContext(rLocalName);
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
         ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
-            uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-                xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
-                uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
             // flat OpenDocument file format
             pContext = new ScXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
-                xAttrList, xDPS->getDocumentProperties(), xDocBuilder);
+                xAttrList, xDPS->getDocumentProperties());
     }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
@@ -2127,14 +2120,11 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
 
     if( !IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
     {
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
-            uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
         pContext = new SvXMLMetaDocumentContext(*this,
             XML_NAMESPACE_OFFICE, rLocalName,
-            xDPS->getDocumentProperties(), xDocBuilder);
+            xDPS->getDocumentProperties());
     }
 
     if( !pContext )

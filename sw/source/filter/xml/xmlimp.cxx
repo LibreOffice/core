@@ -34,7 +34,6 @@
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
@@ -73,7 +72,6 @@
 
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/servicehelper.hxx>
 
 using ::rtl::OUString;
@@ -281,8 +279,7 @@ public:
                 sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList,
-                const Reference< document::XDocumentProperties >& xDocProps,
-                const Reference< xml::sax::XDocumentHandler >& xDocBuilder);
+                const Reference< document::XDocumentProperties >& xDocProps);
     virtual ~SwXMLOfficeDocContext_Impl();
 
     TYPEINFO();
@@ -298,11 +295,10 @@ SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
                 sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList,
-                const Reference< document::XDocumentProperties >& xDocProps,
-                const Reference< xml::sax::XDocumentHandler >& xDocBuilder) :
+                const Reference< document::XDocumentProperties >& xDocProps) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList ),
-    SvXMLMetaDocumentContext( rImport, nPrfx, rLName, xDocProps, xDocBuilder)
+    SvXMLMetaDocumentContext( rImport, nPrfx, rLName, xDocProps)
 {
 }
 
@@ -416,14 +412,11 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT ) )
     {
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            xml::dom::SAXDocumentBuilder::create(comphelper::ComponentContext(mxServiceFactory).getUNOContext()),
-                uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
             GetDocumentProperties());
         // flat OpenDocument file format
         pContext = new SwXMLOfficeDocContext_Impl( *this, nPrefix, rLocalName,
-                        xAttrList, xDocProps, xDocBuilder);
+                        xAttrList, xDocProps);
     }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
