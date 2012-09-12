@@ -519,7 +519,7 @@ AC_SUBST(FONTCONFIG_TARBALL)
 ###############################################################################
 # By default these should be enabled unless having extra dependencies.
 # If there is extra dependency over configure options then the enable should
-# be automagic based on wether the requiring feature is enabled or not.
+# be automagic based on whether the requiring feature is enabled or not.
 # All this options change anything only with --enable-extension-integration.
 
 # The name of this option and its help string makes it sound as if
