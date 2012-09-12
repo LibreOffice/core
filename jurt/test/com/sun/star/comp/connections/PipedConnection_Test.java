@@ -18,115 +18,82 @@
 
 package com.sun.star.comp.connections;
 
+import com.sun.star.io.IOException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public final class PipedConnection_Test {
+    private static final int ROUNDS = 2000;
+
     @Test public void test() throws Exception {
         PipedConnection rightSide = new PipedConnection(new Object[0]);
         PipedConnection leftSide = new PipedConnection(new Object[]{rightSide});
 
-        byte theByte[] = new byte[1];
-
-        Reader reader = new Reader(rightSide, theByte);
-        Writer writer = new Writer(leftSide, theByte, reader);
+        Reader reader = new Reader(rightSide);
+        Writer writer = new Writer(leftSide);
 
         reader.start();
         writer.start();
 
-        Thread.sleep(2000);
-
-        writer.term();
         writer.join();
-
         reader.join();
 
         assertTrue(writer._state);
         assertTrue(reader._state);
+        assertEquals(ROUNDS, reader._rounds);
     }
 
-    static class Reader extends Thread {
+    private static class Reader extends Thread {
         PipedConnection _pipedConnection;
-        byte _theByte[];
-        boolean _quit;
         boolean _state = false;
+        int _rounds = 0;
 
-        Reader(PipedConnection pipedConnection, byte theByte[]) {
+        Reader(PipedConnection pipedConnection) {
             _pipedConnection = pipedConnection;
-            _theByte = theByte;
         }
 
         public void run() {
             try {
-                byte bytes[][] = new byte[1][];
-
-                while(!_quit) {
-                    int read = _pipedConnection.read(bytes, 1);
-
-                    if(read == 1) {
-//                          System.err.println("read :" + bytes[0][0]);
-
-                        if(_theByte[0] != bytes[0][0])
-                            throw new NullPointerException();
-
-                        synchronized(this) {
-                            notifyAll();
-                        }
+                for (byte v = 0;; v++) {
+                    byte[][] b = new byte[1][];
+                    int n = _pipedConnection.read(b, 1);
+                    if (n == 0) {
+                        break;
                     }
-                    else
-                        _quit = true; // EOF
+                    assertEquals(1, n);
+                    assertEquals(1, b[0].length);
+                    assertEquals(v, b[0][0]);
+                    ++_rounds;
                 }
-
                 _pipedConnection.close();
                 _state = true;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            catch(com.sun.star.io.IOException ioException) {
-                System.err.println("#### Reader - unexpected:" + ioException);
-            }
-
         }
     }
 
-    static class Writer extends Thread {
+    private static class Writer extends Thread {
         PipedConnection _pipedConnection;
-        byte _theByte[];
-        Reader _reader;
-        boolean _quit;
         boolean _state = false;
 
-        Writer(PipedConnection pipedConnection, byte theByte[], Reader reader) {
+        Writer(PipedConnection pipedConnection) {
             _pipedConnection = pipedConnection;
-            _reader = reader;
-            _theByte = theByte;
         }
 
         public void run() {
             try {
-                while(!_quit) {
-                    synchronized(_reader) {
-                        _pipedConnection.write(_theByte);
-                        _pipedConnection.flush();
-//                          System.err.println("written :" + _theByte[0]);
-
-                        _reader.wait();
-                    }
-                    ++ _theByte[0];
+                byte v = 0;
+                for (int i = 0; i != ROUNDS; ++i) {
+                    byte[] b = new byte[] { v++ };
+                    _pipedConnection.write(b);
+                    _pipedConnection.flush();
                 }
-
                 _pipedConnection.close();
-
                 _state = true;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            catch(com.sun.star.io.IOException ioException) {
-                System.err.println("#### Writer:" + ioException);
-            }
-            catch(InterruptedException interruptedException) {
-                System.err.println("#### Writer:" + interruptedException);
-            }
-        }
-
-        public void term() {
-            _quit = true;
         }
     }
 }
