@@ -209,6 +209,17 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 /************************************************************************/
 /* osl_assertFailedLine */
 /************************************************************************/
+
+namespace {
+
+// getenv is not thread safe, so minimize use of result:
+bool isEnv(char const * name) {
+    char * p = getenv(name);
+    return p != NULL && *p != '\0';
+}
+
+}
+
 sal_Bool SAL_CALL osl_assertFailedLine (
     const sal_Char* pszFileName,
     sal_Int32       nLine,
@@ -219,9 +230,9 @@ sal_Bool SAL_CALL osl_assertFailedLine (
 
     // after reporting the assertion, abort if told so by SAL_DIAGNOSE_ABORT, but *not* if
     // assertions are routed to some external instance
-    char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
-    char const * envBacktrace = getenv( "SAL_DIAGNOSE_BACKTRACE" );
-    sal_Bool const doAbort = ( ( env != NULL ) && ( *env != '\0' ) && ( f == NULL ) );
+    static bool envAbort = isEnv( "SAL_DIAGNOSE_ABORT" );
+    static bool envBacktrace = isEnv( "SAL_DIAGNOSE_BACKTRACE" );
+    sal_Bool const doAbort = envAbort && f == NULL;
 
     /* If there's a callback for detailed messages, use it */
     if ( g_pDetailedDebugMessageFunc != NULL )
@@ -251,7 +262,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 
     /* should we output backtrace? */
-    if( envBacktrace != NULL && *envBacktrace != '\0' )
+    if( envBacktrace )
         osl_diagnose_backtrace_Impl(f);
 
     /* release lock and leave */
