@@ -646,8 +646,7 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
                 if( const PivotCacheItem* pSharedItem = pCacheField->getCacheItem( nCacheItem ) )
                 {
                     OUString aSelectedPage = pSharedItem->getName();
-                    if( aSelectedPage.getLength() > 0 )
-                        aPropSet.setProperty( PROP_SelectedPage, aSelectedPage );
+                    aPropSet.setProperty( PROP_SelectedPage, aSelectedPage );
                 }
             }
         }
