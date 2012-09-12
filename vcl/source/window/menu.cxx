@@ -1135,8 +1135,7 @@ void Menu::Select()
     }
 }
 
-// FIXME: Workaround to make GLOMenu without defining macros.
-//#if defined(QUARTZ)
+#if defined(QUARTZ)
 void Menu::ImplSelectWithStart( Menu* pSMenu )
 {
     Menu* pOldStartedFrom = pStartedFrom;
@@ -1147,7 +1146,7 @@ void Menu::ImplSelectWithStart( Menu* pSMenu )
         pOldStartedFrom->pStartedFrom = pOldStartedStarted;
     pStartedFrom = pOldStartedFrom;
 }
-//#endif
+#endif
 
 void Menu::RequestHelp( const HelpEvent& )
 {

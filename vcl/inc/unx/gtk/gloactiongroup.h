@@ -67,11 +67,13 @@ GLOActionGroup *    g_lo_action_group_new                   (gpointer           
 
 void                g_lo_action_group_insert                (GLOActionGroup     *group,
                                                              const gchar        *action_name,
-                                                             gint                item_id);
+                                                             gint                item_id,
+                                                             gboolean            submenu);
 
 void                g_lo_action_group_insert_stateful       (GLOActionGroup     *group,
                                                              const gchar        *action_name,
                                                              gint                item_id,
+                                                             gboolean            submenu,
                                                              const GVariantType *parameter_type,
                                                              const GVariantType *state_type,
                                                              GVariant           *state_hint,

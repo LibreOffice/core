@@ -55,7 +55,7 @@ private:
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
-    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand );
+    GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu );
 
 public:
     GtkSalMenu( sal_Bool bMenuBar );
@@ -101,6 +101,8 @@ public:
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
 
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
+    void                        Activate( const gchar* aMenuCommand );
+    void                        Deactivate( const gchar* aMenuCommand );
 };
 
 class GtkSalMenuItem : public SalMenuItem

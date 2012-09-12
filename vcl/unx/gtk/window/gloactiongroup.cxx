@@ -43,7 +43,8 @@ struct _GLOAction
     GObject         parent_instance;
 
     gint            item_id;            // Menu item ID.
-    gboolean        enabled;            // TRUE if action is enabled, FALSE otherwise.
+    gboolean        submenu;            // TRUE if action is a submenu action.
+    gboolean        enabled;            // TRUE if action is enabled.
     GVariantType*   parameter_type;     // A GVariantType with the action parameter type.
     GVariantType*   state_type;         // A GVariantType with item state type
     GVariant*       state_hint;         // A GVariant with state hints.
@@ -65,6 +66,7 @@ static void
 g_lo_action_init (GLOAction *action)
 {
     action->item_id = -1;
+    action->submenu = FALSE;
     action->enabled = TRUE;
     action->parameter_type = NULL;
     action->state_type = NULL;
@@ -174,6 +176,30 @@ g_lo_action_group_query_action (GActionGroup        *group,
 }
 
 static void
+g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
+                                          const gchar    *action_name,
+                                          GVariant       *state)
+{
+    GTK_YIELD_GRAB();
+
+    GtkSalFrame* pFrame = group->priv->frame;
+
+    if (pFrame == NULL)
+        return;
+
+    GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*> (pFrame->GetMenu());
+
+    if (pSalMenu != NULL) {
+        gboolean bState = g_variant_get_boolean (state);
+
+        if (bState == TRUE)
+            pSalMenu->Activate (action_name);
+        else
+            pSalMenu->Deactivate (action_name);
+    }
+}
+
+static void
 g_lo_action_group_change_state (GActionGroup *group,
                                 const gchar  *action_name,
                                 GVariant     *value)
@@ -182,23 +208,29 @@ g_lo_action_group_change_state (GActionGroup *group,
         return;
 
     GLOActionGroup* lo_group = G_LO_ACTION_GROUP (group);
-
     GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
 
     if (action == NULL)
         return;
 
-    if (action->state_type == NULL)
-        action->state_type = g_variant_type_copy(g_variant_get_type(value));
+    if (action->submenu == TRUE)
+    {
+//        g_action_group_action_state_changed(group, action_name, value);
+        g_lo_action_group_perform_submenu_action (lo_group, action_name, value);
+    }
+    else
+    {
+        if (action->state_type == NULL)
+            action->state_type = g_variant_type_copy(g_variant_get_type(value));
 
-    g_return_if_fail (g_variant_is_of_type(value, action->state_type) == TRUE);
+        g_return_if_fail (g_variant_is_of_type(value, action->state_type) == TRUE);
 
-    if (action->state)
-        g_variant_unref(action->state);
+        if (action->state)
+            g_variant_unref(action->state);
 
-    action->state = g_variant_take_ref(value);
-
-    g_action_group_action_state_changed(group, action_name, value);
+        action->state = g_variant_take_ref(value);
+        g_action_group_action_state_changed(group, action_name, value);
+    }
 }
 
 static void
@@ -226,15 +258,17 @@ g_lo_action_group_activate (GActionGroup *group,
 void
 g_lo_action_group_insert (GLOActionGroup *group,
                           const gchar    *action_name,
-                          gint            item_id)
+                          gint            item_id,
+                          gboolean        submenu)
 {
-    g_lo_action_group_insert_stateful (group, action_name, item_id, NULL, NULL, NULL, NULL);
+    g_lo_action_group_insert_stateful (group, action_name, item_id, submenu, NULL, NULL, NULL, NULL);
 }
 
 void
 g_lo_action_group_insert_stateful (GLOActionGroup     *group,
                                    const gchar        *action_name,
                                    gint                item_id,
+                                   gboolean            submenu,
                                    const GVariantType *parameter_type,
                                    const GVariantType *state_type,
                                    GVariant           *state_hint,
@@ -254,6 +288,7 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
         g_hash_table_insert (group->priv->table, g_strdup (action_name), action);
 
         action->item_id = item_id;
+        action->submenu = submenu;
 
         if (parameter_type)
             action->parameter_type = (GVariantType*) parameter_type;
