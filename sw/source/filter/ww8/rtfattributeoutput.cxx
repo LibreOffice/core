@@ -2130,6 +2130,13 @@ void RtfAttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
     if ( rWeight.GetWeight() != WEIGHT_BOLD )
         m_aStyles.append((sal_Int32)0);
 }
+void RtfAttributeOutput:: CharBidiRTL( const SfxPoolItem& )
+{
+}
+
+void RtfAttributeOutput:: CharIdctHint( const SfxPoolItem&)
+{
+}
 
 void RtfAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {

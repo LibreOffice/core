@@ -288,6 +288,7 @@ SwDoc::SwDoc()
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
     mbReadlineChecked(false),
+    meDocType( DOCTYPE_NATIVE ),
     // --> OD 2005-02-11 #i38810#
     mbLinksUpdated( sal_False ),
     mbClipBoard( false ),

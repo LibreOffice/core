@@ -949,8 +949,11 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
 {
     if ( m_rWW8Export.bWrtWW8 && bIsRTL )
     {
-        m_rWW8Export.InsUInt16( NS_sprm::LN_CFBiDi );
-        m_rWW8Export.pO->Insert( (sal_uInt8)1, m_rWW8Export.pO->Count() );
+        if( m_rWW8Export.pDoc->GetDocumentType() != SwDoc::DOCTYPE_MSWORD )
+        {
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CFBiDi );
+            m_rWW8Export.pO->Insert( (sal_uInt8)1, m_rWW8Export.pO->Count() );
+        }
     }
 
     // #i46087# patch from james_clark; complex texts needs the undocumented SPRM CComplexScript with param 0x81.
@@ -1494,6 +1497,23 @@ void WW8AttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
             m_rWW8Export.pO->Insert( (sal_uInt8)0x0, m_rWW8Export.pO->Count() );
         }
     }
+}
+
+void WW8AttributeOutput::CharBidiRTL( const SfxPoolItem& rHt )
+{
+    const SfxInt16Item& rAttr = (const SfxInt16Item&)rHt;
+    if( rAttr.GetValue() == 1 )
+    {
+        m_rWW8Export.InsUInt16(0x85a);
+        m_rWW8Export.pO->Insert((sal_uInt8)1, m_rWW8Export.pO->Count());
+    }
+}
+
+void WW8AttributeOutput::CharIdctHint( const SfxPoolItem& rHt )
+{
+    const SfxInt16Item& rAttr = (const SfxInt16Item&)rHt;
+    m_rWW8Export.InsUInt16(0x286F);
+    m_rWW8Export.pO->Insert((sal_uInt8)(rAttr.GetValue()), m_rWW8Export.pO->Count());
 }
 
 void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
@@ -5186,7 +5206,12 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_CHRATR_HIDDEN:
             CharHidden( static_cast< const SvxCharHiddenItem& >( rHt ) );
             break;
-
+        case RES_CHRATR_BIDIRTL:
+            CharBidiRTL( static_cast< const SfxPoolItem& >( rHt ) );
+            break;
+        case RES_CHRATR_IDCTHINT:
+            CharIdctHint( static_cast< const SfxPoolItem& >( rHt ) );
+            break;
         case RES_TXTATR_INETFMT:
             TextINetFormat( static_cast< const SwFmtINetFmt& >( rHt ) );
             break;

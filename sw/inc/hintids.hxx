@@ -93,6 +93,8 @@ RES_CHRATR_BEGIN = HINT_BEGIN,
     RES_CHRATR_OVERLINE,                    // 38
     RES_CHRATR_DUMMY1,                      // 39
     RES_CHRATR_DUMMY2,                      // 40
+    RES_CHRATR_BIDIRTL,
+    RES_CHRATR_IDCTHINT,
 RES_CHRATR_END
 };
 

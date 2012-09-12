@@ -303,6 +303,8 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },      // RES_CHRATR_OVERLINE
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_BIDIRTL
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_IDCTHINT
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
@@ -543,6 +545,8 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY2 );
     aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY5 );
 // TextAttr - Dummies
+    aAttrTab[ RES_CHRATR_BIDIRTL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_BIDIRTL, sal_Int16(-1) );
+    aAttrTab[ RES_CHRATR_IDCTHINT - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_IDCTHINT, sal_Int16(-1) );
 
     aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] = new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
     aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] = new SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST );

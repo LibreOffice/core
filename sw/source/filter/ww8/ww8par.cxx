@@ -3897,6 +3897,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 {
     sal_uLong nErrRet = 0;
 
+    rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
     if (mbNewDoc && pStg && !pGloss)
         ReadDocInfo();
 
