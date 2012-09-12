@@ -124,6 +124,7 @@ LDFLAGSADD += -Wl,--hash-style=$(WITH_LINKER_HASH_STYLE)
 .IF "$(OS)"=="IOS"
 # Let's try this...
 icu_CFLAGS+=-DUCONFIG_NO_FILE_IO
+icu_CXXFLAGS+=-DUCONFIG_NO_FILE_IO
 .ENDIF
 
 .IF "$(OS)"=="ANDROID"
