@@ -1155,6 +1155,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aSet.insert(String("TabOverflow", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("UnbreakableNumberings", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("ClippedPictures", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("BackgroundParaOverDrawings", RTL_TEXTENCODING_ASCII_US));
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1187,6 +1188,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bTabOverflow = false;
     bool bUnbreakableNumberings = false;
     bool bClippedPictures = false;
+    bool bBackgroundParaOverDrawings = false;
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1277,6 +1279,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bUnbreakableNumberings = true;
                 else if ( pValues->Name == "ClippedPictures" )
                     bClippedPictures = true;
+                else if ( pValues->Name == "BackgroundParaOverDrawings" )
+                    bBackgroundParaOverDrawings = true;
             }
             catch( Exception& )
             {
@@ -1460,6 +1464,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("ClippedPictures") ), makeAny( false ) );
     }
+
+    if ( !bBackgroundParaOverDrawings )
+        xProps->setPropertyValue("BackgroundParaOverDrawings", makeAny( false ) );
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();

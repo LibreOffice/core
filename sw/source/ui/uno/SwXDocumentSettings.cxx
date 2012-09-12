@@ -129,6 +129,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_STYLES_NODEFAULT,
     HANDLE_FLOATTABLE_NOMARGINS,
     HANDLE_CLIPPED_PICTURES,
+    HANDLE_BACKGROUND_PARA_OVER_DRAWINGS,
     HANDLE_EMBED_FONTS,
     HANDLE_EMBED_SYSTEM_FONTS
 };
@@ -196,6 +197,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("StylesNoDefault"), HANDLE_STYLES_NODEFAULT, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("FloattableNomargins"), HANDLE_FLOATTABLE_NOMARGINS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ClippedPictures"), HANDLE_CLIPPED_PICTURES, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("BackgroundParaOverDrawings"), HANDLE_BACKGROUND_PARA_OVER_DRAWINGS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("EmbedFonts"), HANDLE_EMBED_FONTS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, CPPUTYPE_BOOLEAN, 0, 0},
 /*
@@ -775,6 +777,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::CLIPPED_PICTURES, bTmp);
         }
         break;
+        case HANDLE_BACKGROUND_PARA_OVER_DRAWINGS:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS, bTmp);
+        }
+        break;
         case HANDLE_EMBED_FONTS:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
@@ -1173,6 +1181,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_CLIPPED_PICTURES:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::CLIPPED_PICTURES );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_BACKGROUND_PARA_OVER_DRAWINGS:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

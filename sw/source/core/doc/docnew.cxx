@@ -359,6 +359,7 @@ SwDoc::SwDoc()
     mbUnbreakableNumberings                 = false;
     mbFloattableNomargins                   = false;
     mbClippedPictures                       = false;
+    mbBackgroundParaOverDrawings            = false;
     mEmbedFonts                             = false;
     mEmbedSystemFonts                       = false;
 

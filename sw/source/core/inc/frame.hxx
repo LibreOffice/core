@@ -492,11 +492,12 @@ public:
     virtual void PaintBorder( const SwRect&, const SwPageFrm *pPage,
                               const SwBorderAttrs & ) const;
     void PaintBaBo( const SwRect&, const SwPageFrm *pPage = 0,
-                    const sal_Bool bLowerBorder = sal_False ) const;
+                    const sal_Bool bLowerBorder = sal_False, const bool bOnlyTxtBackground = false ) const;
     void PaintBackground( const SwRect&, const SwPageFrm *pPage,
                           const SwBorderAttrs &,
                           const sal_Bool bLowerMode = sal_False,
-                          const sal_Bool bLowerBorder = sal_False ) const;
+                          const sal_Bool bLowerBorder = sal_False,
+                          const bool bOnlyTxtBackground = false ) const;
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrm*,
                           const Color *pColor, const editeng::SvxBorderStyle =
                 ::com::sun::star::table::BorderLineStyle::SOLID ) const;

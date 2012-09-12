@@ -85,6 +85,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          TAB_OVERFLOW,
          UNBREAKABLE_NUMBERINGS,
          CLIPPED_PICTURES,
+         BACKGROUND_PARA_OVER_DRAWINGS,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,
