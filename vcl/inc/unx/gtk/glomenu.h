@@ -28,6 +28,7 @@
 
 #define G_LO_MENU_ATTRIBUTE_ACCELERATOR     "accel"
 #define G_LO_MENU_ATTRIBUTE_COMMAND         "command"
+#define G_LO_MENU_ATTRIBUTE_SUBMENU_ACTION  "submenu-action"
 
 G_BEGIN_DECLS
 
@@ -127,6 +128,11 @@ void        g_lo_menu_set_submenu_to_item_in_section                    (GLOMenu
 GLOMenu *   g_lo_menu_get_submenu_from_item_in_section                  (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position);
+
+void        g_lo_menu_set_submenu_action_to_item_in_section             (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position,
+                                                                         const gchar *action);
 
 GLOMenu *   g_lo_menu_get_menu_containing_item                          (GLOMenu     *menu,
                                                                          gint         item_id);

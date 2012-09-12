@@ -189,7 +189,7 @@ g_lo_menu_set_attribute_value (GLOMenu     *menu,
     g_return_if_fail (attribute != NULL);
     g_return_if_fail (valid_attribute_name (attribute));
 
-    if (position >= menu->items->len)
+    if (position >= (gint) menu->items->len)
         return;
 
     struct item menu_item = g_array_index (menu->items, struct item, position);
@@ -510,6 +510,32 @@ g_lo_menu_get_submenu_from_item_in_section (GLOMenu     *menu,
         submenu = g_menu_model_get_item_link (G_MENU_MODEL (model), position, G_MENU_LINK_SUBMENU);
 
     return G_LO_MENU (submenu);
+}
+
+void
+g_lo_menu_set_submenu_action_to_item_in_section (GLOMenu     *menu,
+                                                 gint         section,
+                                                 gint         position,
+                                                 const gchar *action)
+{
+    g_return_if_fail (G_IS_LO_MENU (menu));
+
+    GMenuModel *model = G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
+                        ->get_item_link (G_MENU_MODEL (menu), section, G_MENU_LINK_SECTION);
+
+    g_return_if_fail (model != NULL);
+
+    GVariant *value;
+
+    if (action != NULL)
+        value = g_variant_new_string (action);
+    else
+        value = NULL;
+
+    g_lo_menu_set_attribute_value (G_LO_MENU (model), position, G_LO_MENU_ATTRIBUTE_SUBMENU_ACTION, value);
+
+    // Notify the update.
+    g_menu_model_items_changed (model, position, 1, 1);
 }
 
 static void

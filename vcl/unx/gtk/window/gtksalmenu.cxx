@@ -121,12 +121,10 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == NULL )
         {
-            pMenu->NativeSetItemCommand( nSection, nItemPos, pSalMenuItem, aNativeCommand );
+            pMenu->NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, FALSE );
             pMenu->NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
             pMenu->NativeSetEnableItem( aNativeCommand, bEnabled );
         }
-
-        g_free( aNativeCommand );
 
         GtkSalMenu* pSubmenu = pSalMenuItem->mpSubMenu;
 
@@ -140,6 +138,8 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
                 g_lo_menu_set_submenu_to_item_in_section( pLOMenu, nSection, nItemPos, G_MENU_MODEL( pSubMenuModel ) );
             }
 
+            pMenu->NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+
             pSubmenu->GetMenu()->Activate();
             pSubmenu->GetMenu()->Deactivate();
 
@@ -147,6 +147,8 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
             pSubmenu->SetActionGroup( pActionGroup );
             UpdateNativeMenu( pSubmenu );
         }
+
+        g_free( aNativeCommand );
 
         nItemPos++;
         validItems++;
@@ -403,7 +405,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         }
 
         // Generate the main menu structure.
-//        GenerateMenu( this );
+        GenerateMenu( this );
 
         // Refresh the menu every second.
         // This code is a workaround until required modifications in Gtk+ are available.
@@ -490,27 +492,28 @@ void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, con
         g_free( aCurrentAccel );
 }
 
-void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommand )
+void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
+                                       unsigned nItemPos,
+                                       sal_uInt16 nId,
+                                       const gchar* aCommand,
+                                       MenuItemBits nBits,
+                                       gboolean bChecked,
+                                       gboolean bIsSubmenu )
 {
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
     GVariant *pTarget = NULL;
 
     if ( g_action_group_has_action( mpActionGroup, aCommand ) == FALSE ) {
-        gboolean bChecked = ( pItem->mpVCLMenu->IsItemChecked( pItem->mnId ) ) ? TRUE : FALSE;
-
-        // FIXME: Why pItem->mnBits differs from GetItemBits value?
-        MenuItemBits bits = pItem->mpVCLMenu->GetItemBits( pItem->mnId );
-
-        if ( bits & MIB_CHECKABLE )
+        if ( ( nBits & MIB_CHECKABLE ) || ( bIsSubmenu == TRUE ) )
         {
             // Item is a checkmark button.
             GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_BOOLEAN );
             GVariant* pState = g_variant_new_boolean( bChecked );
 
-            g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem->mnId, NULL, pStateType, NULL, pState );
+            g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, NULL, pStateType, NULL, pState );
         }
-        else if ( bits & MIB_RADIOCHECK )
+        else if ( nBits & MIB_RADIOCHECK )
         {
             // Item is a radio button.
             GVariantType* pParameterType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );
@@ -518,12 +521,12 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, Gtk
             GVariant* pState = g_variant_new_string( "" );
             pTarget = g_variant_new_string( aCommand );
 
-            g_lo_action_group_insert_stateful( pActionGroup, aCommand, pItem->mnId, pParameterType, pStateType, NULL, pState );
+            g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, pParameterType, pStateType, NULL, pState );
         }
         else
         {
             // Item is not special, so insert a stateless action.
-            g_lo_action_group_insert( pActionGroup, aCommand, pItem->mnId );
+            g_lo_action_group_insert( pActionGroup, aCommand, nId );
         }
     }
 
@@ -538,7 +541,10 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, Gtk
 
         gchar* aItemCommand = g_strconcat("win.", aCommand, NULL );
 
-        g_lo_menu_set_action_and_target_value_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand, pTarget );
+        if ( bIsSubmenu == TRUE )
+            g_lo_menu_set_submenu_action_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand );
+        else
+            g_lo_menu_set_action_and_target_value_to_item_in_section( pMenu, nSection, nItemPos, aItemCommand, pTarget );
 
         g_free( aItemCommand );
     }
@@ -556,7 +562,6 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand )
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
 
         String aItemCommand = mpVCLMenu->GetItemCommand( pSalItem->mnId );
-
         gchar* aItemCommandStr = (gchar*) rtl::OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 ).getStr();
 
         if ( g_strcmp0( aItemCommandStr, aCommand ) == 0 )
