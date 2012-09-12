@@ -2154,7 +2154,7 @@ inline bool lcl_FormatHasNegColor( const SvNumberformat* pFormat )
 
 inline bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
 {
-    return pFormat && (pFormat->GetFormatstring().Search( '(' ) != STRING_NOTFOUND);
+    return pFormat && (pFormat->GetFormatstring().indexOf('(') != -1);
 }
 
 namespace {

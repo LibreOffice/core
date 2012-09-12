@@ -58,7 +58,7 @@ void FontNameMenu::Select()
 
 void FontNameMenu::Highlight()
 {
-    XubString aTempName = maCurName;
+    OUString aTempName = maCurName;
     maCurName = GetItemText( GetCurItemId() );
     maHighlightHdl.Call( this );
     maCurName = aTempName;
@@ -84,7 +84,7 @@ void FontNameMenu::Fill( const FontList* pList )
         sal_uInt16 j = GetItemCount();
         while ( j )
         {
-            XubString aText = GetItemText( GetItemId( j-1 ) );
+            OUString aText = GetItemText( GetItemId( j-1 ) );
             if ( rI18nHelper.CompareString( rName, aText ) > 0 )
                 break;
             j--;
@@ -97,7 +97,7 @@ void FontNameMenu::Fill( const FontList* pList )
 
 // -----------------------------------------------------------------------
 
-void FontNameMenu::SetCurName( const XubString& rName )
+void FontNameMenu::SetCurName(const OUString& rName)
 {
     maCurName = rName;
 
@@ -111,7 +111,7 @@ void FontNameMenu::SetCurName( const XubString& rName )
         if ( IsItemChecked( nItemId ) )
             nChecked = nItemId;
 
-        XubString aText = GetItemText( nItemId );
+        OUString aText = GetItemText( nItemId );
         if ( aText == maCurName )
         {
             CheckItem( nItemId, sal_True );
@@ -240,8 +240,8 @@ void FontSizeMenu::SetCurHeight( long nHeight )
 {
     mnCurHeight = nHeight;
 
-    // check menue item
-    XubString   aHeight = Application::GetSettings().GetUILocaleI18nHelper().GetNum( nHeight, 1, sal_True, sal_False  );
+    // check menu item
+    OUString aHeight = Application::GetSettings().GetUILocaleI18nHelper().GetNum( nHeight, 1, sal_True, sal_False  );
     sal_uInt16      nChecked = 0;
     sal_uInt16      nItemCount = GetItemCount();
     for( sal_uInt16 i = 0; i < nItemCount; i++ )

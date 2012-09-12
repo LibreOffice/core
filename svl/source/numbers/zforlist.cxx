@@ -856,7 +856,7 @@ sal_uInt32 SvNumberFormatter::ImpGetCLOffset(LanguageType eLnge) const
     return nOffset;
 }
 
-sal_uInt32 SvNumberFormatter::ImpIsEntry(const String& rString,
+sal_uInt32 SvNumberFormatter::ImpIsEntry(const OUString& rString,
                                        sal_uInt32 nCLOffset,
                                        LanguageType eLnge)
 {
@@ -3322,7 +3322,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat,
                     *ppEntry = pFoundEntry;
                     if ( pBank )
                         *pBank = bFoundBank;
-                    pFoundEntry->BuildSymbolString( rStr, bFoundBank );
+                    rStr = pFoundEntry->BuildSymbolString(bFoundBank);
                 }
             }
             if ( !rStr.Len() )
@@ -3778,50 +3778,53 @@ bool NfCurrencyEntry::operator==( const NfCurrencyEntry& r ) const
         ;
 }
 
-void NfCurrencyEntry::BuildSymbolString( String& rStr, bool bBank,
-            bool bWithoutExtension ) const
+OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
+    bool bWithoutExtension) const
 {
-    rStr  = '[';
-    rStr += '$';
-    if ( bBank )
-        rStr += aBankSymbol;
+    OUStringBuffer aBuf("[$");
+    if (bBank)
+        aBuf.append(aBankSymbol);
     else
     {
         if ( aSymbol.Search( '-' ) != STRING_NOTFOUND || aSymbol.Search( ']' ) != STRING_NOTFOUND )
         {
-            rStr += '"';
-            rStr += aSymbol;
-            rStr += '"';
+            aBuf.append('"').append(aSymbol).append('"');
         }
         else
-            rStr += aSymbol;
+        {
+            aBuf.append(aSymbol);
+        }
         if ( !bWithoutExtension && eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_SYSTEM )
         {
-            rStr += '-';
-            rStr += String::CreateFromInt32( sal_Int32( eLanguage ), 16 ).ToUpperAscii();
+            sal_Int32 nLang = static_cast<sal_Int32>(eLanguage);
+            aBuf.append('-').append(
+                OUString::valueOf(nLang, 16).toAsciiUpperCase());
         }
     }
-    rStr += ']';
+    aBuf.append(']');
+    return aBuf.makeStringAndClear();
 }
 
-
-void NfCurrencyEntry::Impl_BuildFormatStringNumChars( String& rStr,
-            const LocaleDataWrapper& rLoc, sal_uInt16 nDecimalFormat ) const
+OUString NfCurrencyEntry::Impl_BuildFormatStringNumChars(
+    const LocaleDataWrapper& rLoc, sal_uInt16 nDecimalFormat) const
 {
-    rStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###0" ) );
-    rStr.Insert( rLoc.getNumThousandSep(), 1 );
-    if ( nDecimalFormat && nDigits )
+    OUStringBuffer aBuf;
+    aBuf.append('#').append(rLoc.getNumThousandSep()).append("##0");
+    if (nDecimalFormat && nDigits)
     {
-        rStr += rLoc.getNumDecimalSep();
-        rStr.Expand( rStr.Len() + nDigits, (nDecimalFormat == 2 ? '-' : cZeroChar) );
+        aBuf.append(rLoc.getNumDecimalSep());
+        sal_Unicode cDecimalChar = nDecimalFormat == 2 ? '-' : cZeroChar;
+        for (sal_uInt16 i = 0; i < nDigits; ++i)
+            aBuf.append(cDecimalChar);
     }
+    return aBuf.makeStringAndClear();
 }
 
 
 void NfCurrencyEntry::BuildPositiveFormatString( String& rStr, bool bBank,
             const LocaleDataWrapper& rLoc, sal_uInt16 nDecimalFormat ) const
 {
-    Impl_BuildFormatStringNumChars( rStr, rLoc, nDecimalFormat );
+    rStr = Impl_BuildFormatStringNumChars(rLoc, nDecimalFormat);
     sal_uInt16 nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
         rLoc.getCurrPositiveFormat(), nPositiveFormat, bBank );
     CompletePositiveFormatString( rStr, bBank, nPosiForm );
@@ -3831,7 +3834,7 @@ void NfCurrencyEntry::BuildPositiveFormatString( String& rStr, bool bBank,
 void NfCurrencyEntry::BuildNegativeFormatString( String& rStr, bool bBank,
             const LocaleDataWrapper& rLoc, sal_uInt16 nDecimalFormat ) const
 {
-    Impl_BuildFormatStringNumChars( rStr, rLoc, nDecimalFormat );
+    rStr = Impl_BuildFormatStringNumChars(rLoc, nDecimalFormat);
     sal_uInt16 nNegaForm = NfCurrencyEntry::GetEffectiveNegativeFormat(
         rLoc.getCurrNegativeFormat(), nNegativeFormat, bBank );
     CompleteNegativeFormatString( rStr, bBank, nNegaForm );
@@ -3841,8 +3844,7 @@ void NfCurrencyEntry::BuildNegativeFormatString( String& rStr, bool bBank,
 void NfCurrencyEntry::CompletePositiveFormatString( String& rStr, bool bBank,
             sal_uInt16 nPosiForm ) const
 {
-    String aSymStr;
-    BuildSymbolString( aSymStr, bBank );
+    String aSymStr = BuildSymbolString(bBank);
     NfCurrencyEntry::CompletePositiveFormatString( rStr, aSymStr, nPosiForm );
 }
 
@@ -3850,8 +3852,7 @@ void NfCurrencyEntry::CompletePositiveFormatString( String& rStr, bool bBank,
 void NfCurrencyEntry::CompleteNegativeFormatString( String& rStr, bool bBank,
             sal_uInt16 nNegaForm ) const
 {
-    String aSymStr;
-    BuildSymbolString( aSymStr, bBank );
+    String aSymStr = BuildSymbolString(bBank);
     NfCurrencyEntry::CompleteNegativeFormatString( rStr, aSymStr, nNegaForm );
 }
 

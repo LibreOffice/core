@@ -125,7 +125,7 @@ public:
 
     void    GetColor() const;
 
-    void    SetTextValue(const XubString& rText);
+    void    SetTextValue(const OUString& rText);
         // der String wird in ein double umgewandelt (durch den Formatter) und anschliessen in SetValue gesteckt
 
     sal_Bool    IsEmptyFieldEnabled() const         { return m_bEnableEmptyField; }
@@ -159,8 +159,8 @@ public:
         // Das hier gelieferte Objekt wird allerdings zwischen allen Instanzen der Klasse geteilt (aus Zeit- und Platzgruenden),
         // also ist etwas Vorsicht angebracht ...
 
-    void        GetFormat(XubString& rFormatString, LanguageType& eLang) const;
-    sal_Bool        SetFormat(const XubString& rFormatString, LanguageType eLang);
+    OUString        GetFormat(LanguageType& eLang) const;
+    sal_Bool        SetFormat(const OUString& rFormatString, LanguageType eLang);
         // sal_False, wenn der FormatString nicht gesetzt werden konnte (also wahrscheinlich ungueltig ist)
 
     sal_Bool    IsStrictFormat() const              { return m_bStrictFormat; }
@@ -196,10 +196,10 @@ public:
         einfach den Text formatiert ausgeben ...
         (der Text wird einfach nur durch den Formatter gejagt und dann gesetzt)
     */
-    void SetTextFormatted(const XubString& rText);
+    void SetTextFormatted(const OUString& rText);
     String  GetTextValue() const;
 
-    void    SetDefaultText(const XubString& rDefault) { m_sDefaultText = rDefault; }
+    void    SetDefaultText(const OUString& rDefault) { m_sDefaultText = rDefault; }
     String  GetDefaultText() const { return m_sDefaultText; }
 
     // die bei der letzten Ausgabe-Operation vom Formatter gelieferte Farbe (Ausgabe-Operationen werden getriggert durch
@@ -248,7 +248,7 @@ protected:
     virtual void Modify();
 
     // CheckText ueberschreiben fuer Ueberpruefung zur Eingabezeit
-    virtual sal_Bool CheckText(const XubString&) const { return sal_True; }
+    virtual sal_Bool CheckText(const OUString&) const { return sal_True; }
 
     // any aspect of the current format has changed
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
@@ -291,7 +291,7 @@ public:
     virtual ~DoubleNumericField();
 
 protected:
-    virtual sal_Bool CheckText(const XubString& sText) const;
+    virtual sal_Bool CheckText(const OUString& sText) const;
 
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
     void ResetConformanceTester();

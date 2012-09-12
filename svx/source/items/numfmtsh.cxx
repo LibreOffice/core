@@ -940,9 +940,9 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
 
     if(pTmpCurrencyEntry!=NULL)
     {
-        pTmpCurrencyEntry->BuildSymbolString(rSymbol,false);
-        pTmpCurrencyEntry->BuildSymbolString(rBankSymbol,true);
-        pTmpCurrencyEntry->BuildSymbolString(rShortSymbol,bTmpBanking,true);
+        rSymbol = pTmpCurrencyEntry->BuildSymbolString(false);
+        rBankSymbol = pTmpCurrencyEntry->BuildSymbolString(true);
+        rShortSymbol = pTmpCurrencyEntry->BuildSymbolString(bTmpBanking,true);
     }
 
     SvNumberFormatTable::iterator it = pCurFmtTable->begin();
@@ -1722,9 +1722,8 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
         for(sal_uInt16 i=0;i<nCount;i++)
         {
             const NfCurrencyEntry* pTmpCurrencyEntry=&rCurrencyTable[i];
-            XubString _aSymbol, aBankSymbol;
-            pTmpCurrencyEntry->BuildSymbolString(_aSymbol,false);
-            pTmpCurrencyEntry->BuildSymbolString(aBankSymbol,true);
+            OUString _aSymbol = pTmpCurrencyEntry->BuildSymbolString(false);
+            OUString aBankSymbol = pTmpCurrencyEntry->BuildSymbolString(true);
 
             if(rFmtString.Search(_aSymbol)!=STRING_NOTFOUND)
             {

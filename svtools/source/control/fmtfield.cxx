@@ -395,7 +395,7 @@ void FormattedField::SetText( const XubString& rStr, const Selection& rNewSelect
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetTextFormatted(const XubString& rStr)
+void FormattedField::SetTextFormatted(const OUString& rStr)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -628,9 +628,8 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
     }
     else
     {
-        XubString sOldFormat;
         LanguageType aOldLang;
-        GetFormat(sOldFormat, aOldLang);
+        OUString sOldFormat = GetFormat(aOldLang);
 
         sal_uInt32 nDestKey = pFormatter->TestNewString(sOldFormat);
         if (nDestKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
@@ -652,17 +651,19 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::GetFormat(XubString& rFormatString, LanguageType& eLang) const
+OUString FormattedField::GetFormat(LanguageType& eLang) const
 {
     DBG_CHKTHIS(FormattedField, NULL);
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
     DBG_ASSERT(pFormatEntry != NULL, "FormattedField::GetFormat: no number format for the given format key.");
-    rFormatString = pFormatEntry ? pFormatEntry->GetFormatstring() : XubString();
+    OUString sFormatString = pFormatEntry ? pFormatEntry->GetFormatstring() : OUString();
     eLang = pFormatEntry ? pFormatEntry->GetLanguage() : LANGUAGE_DONTKNOW;
+
+    return sFormatString;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FormattedField::SetFormat(const XubString& rFormatString, LanguageType eLang)
+sal_Bool FormattedField::SetFormat(const OUString& rFormatString, LanguageType eLang)
 {
     DBG_CHKTHIS(FormattedField, NULL);
     sal_uInt32 nNewKey = ImplGetFormatter()->TestNewString(rFormatString, eLang);
@@ -709,8 +710,7 @@ void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
 
     // we need the language for the following
     LanguageType eLang;
-    String sFmtDescription;
-    GetFormat(sFmtDescription, eLang);
+    String sFmtDescription = GetFormat(eLang);
 
     // generate a new format ...
     ImplGetFormatter()->GenerateFormat(sFmtDescription, m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
@@ -753,8 +753,7 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 
     // we need the language for the following
     LanguageType eLang;
-    String sFmtDescription;
-    GetFormat(sFmtDescription, eLang);
+    String sFmtDescription = GetFormat(eLang);
 
     // generate a new format ...
     ImplGetFormatter()->GenerateFormat(sFmtDescription, m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
@@ -913,7 +912,7 @@ void FormattedField::SetMaxValue(double dMax)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetTextValue(const XubString& rText)
+void FormattedField::SetTextValue(const OUString& rText)
 {
     DBG_CHKTHIS(FormattedField, NULL);
     SetText(rText);
@@ -1126,7 +1125,7 @@ void DoubleNumericField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool DoubleNumericField::CheckText(const XubString& sText) const
+sal_Bool DoubleNumericField::CheckText(const OUString& sText) const
 {
     // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
     // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
@@ -1230,9 +1229,8 @@ void DoubleCurrencyField::setPrependCurrSym(sal_Bool _bPrepend)
 void DoubleCurrencyField::UpdateCurrencyFormat()
 {
     // the old settings
-    XubString sOldFormat;
     LanguageType eLanguage;
-    GetFormat(sOldFormat, eLanguage);
+    GetFormat(eLanguage);
     sal_Bool bThSep = GetThousandsSep();
     sal_uInt16 nDigits = GetDecimalDigits();
 
