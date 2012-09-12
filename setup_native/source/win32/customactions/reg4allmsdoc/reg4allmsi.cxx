@@ -108,13 +108,13 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
         DWORD   nSize = sizeof( szBuffer );
 
         lResult = RegQueryValueExA( hKey, "", NULL, NULL, (LPBYTE)szBuffer, &nSize );
-        if ( ERROR_SUCCESS == lResult )
+        if ( ERROR_SUCCESS == lResult && nSize > 0 )
         {
             szBuffer[nSize] = '\0';
             OutputDebugStringFormat( "Found value [%s] for key [%s].\n", szBuffer, lpSubKey );
 
             if ( strncmp( szBuffer, "WordPad.Document.1", 18 ) == 0 )
-            {   // We will replace registration for word pad
+            {   // We will replace registration for WordPad (alas, on XP only) FIXME
                 bRet = true;
             }
             else if ( strncmp( szBuffer, "LibreOffice.", 12 ) == 0 )
@@ -122,38 +122,11 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
                 bRet = true;
             }
             else if ( strncmp( szBuffer, "lostub.", 7 ) == 0 )
-            {   // We will replace registration for ooostub, too
+            {   // We will replace registration for lostub, too
                 bRet = true;
             }
-            else
-            {
-                OutputDebugStringFormat( "  Checking OpenWithList of [%s].\n", lpSubKey );
-                HKEY hSubKey;
-                lResult = RegOpenKeyExA( hKey, "OpenWithList", 0, KEY_ENUMERATE_SUB_KEYS, &hSubKey );
-                if ( ERROR_SUCCESS == lResult )
-                {
-                    DWORD nIndex = 0;
-                    while ( ERROR_SUCCESS == lResult )
-                    {
-                        nSize = sizeof( szBuffer );
-                        lResult = RegEnumKeyExA( hSubKey, nIndex++, szBuffer, &nSize, NULL, NULL, NULL, NULL );
-                        if ( ERROR_SUCCESS == lResult )
-                        {
-                            OutputDebugStringFormat( "    Found value [%s] in OpenWithList of [%s].\n", szBuffer, lpSubKey );
-                            if ( strncmp( szBuffer, "WordPad.exe", 11 ) == 0 )
-                            {   // We will replace registration for word pad
-                                bRet = true;
-                            }
-                            else if ( nSize > 0 )
-                                bRet = false;
-                        }
-                    }
-                }
-                else
-                {
-                    OutputDebugStringFormat( "  No OpenWithList found!\n" );
-                }
-            }
+            else // we have a default value -> do not register, see fdo#39791
+                bRet = false;
         }
         else    // no default value found -> return TRUE to register for that key
             bRet = true;
