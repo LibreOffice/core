@@ -44,7 +44,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
-#include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
