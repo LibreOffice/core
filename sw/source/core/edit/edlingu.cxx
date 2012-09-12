@@ -1289,7 +1289,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
 
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, NULL );
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_UI_TEXT_CORRECTION, NULL );
         StartAction();
 
         SwPaM *pCrsr = GetCrsr();
@@ -1418,7 +1418,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // set continuation position for spell/grammar checking to the end of this sentence
         pSpellIter->SetCurr( new SwPosition( *pCrsr->Start() ) );
 
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, NULL );
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_UI_TEXT_CORRECTION, NULL );
         EndAction();
     }
 }
