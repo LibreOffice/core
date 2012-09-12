@@ -400,6 +400,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     SwSection *const pRet =
         pDoc->InsertSwSection( aPam, aSect, 0, aSet.Count() ? &aSet : 0 );
+    if (!pRet) // fdo#42450 text range could parially overlap existing section
+    {
+        throw lang::IllegalArgumentException(
+                "SwXTextSection::attach(): invalid TextRange",
+                static_cast< ::cppu::OWeakObject*>(this), 0);
+    }
     pRet->GetFmt()->Add(m_pImpl.get());
     pRet->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
 
