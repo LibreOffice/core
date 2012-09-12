@@ -165,7 +165,9 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     if( rRange.HasMark() &&
         0 == ( nRegionRet = IsInsRegionAvailable( rRange, &pPrvNd ) ))
     {
-        OSL_ENSURE( !this, "Selection ueber verschiedene Sections" );
+        // demoted to info because this is called from SwXTextSection::attach,
+        // so it could be invalid input
+        SAL_INFO("sw.core" , "InsertSwSection: rRange overlaps other sections");
         return 0;
     }
 
