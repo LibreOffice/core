@@ -158,21 +158,17 @@ g_lo_action_group_query_action (GActionGroup        *group,
     if (enabled)
         *enabled = action->enabled;
 
-    if (parameter_type) {
+    if (parameter_type)
         *parameter_type = action->parameter_type;
-    }
 
-    if (state_type) {
+    if (state_type)
         *state_type = action->state_type;
-    }
 
-    if (state_hint) {
+    if (state_hint)
         *state_hint = (action->state_hint) ? g_variant_ref(action->state_hint) : NULL;
-    }
 
-    if (state) {
+    if (state)
         *state = (action->state) ? g_variant_ref(action->state) : NULL;
-    }
 
     return TRUE;
 }
@@ -213,8 +209,6 @@ g_lo_action_group_activate (GActionGroup *group,
     GTK_YIELD_GRAB();
 
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
-    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
-
     GtkSalFrame *pFrame = lo_group->priv->frame;
 
     if ( pFrame != NULL )
@@ -222,7 +216,10 @@ g_lo_action_group_activate (GActionGroup *group,
         GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pFrame->GetMenu() );
 
         if ( pSalMenu != NULL )
+        {
+            GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
             pSalMenu->DispatchCommand( action->item_id, action_name );
+        }
     }
 }
 

@@ -61,7 +61,6 @@ public:
     GtkSalMenu( sal_Bool bMenuBar );
     virtual ~GtkSalMenu();
 
-    virtual void                SetVisibleMenuBar( sal_Bool bVisible );
     virtual sal_Bool            VisibleMenuBar();   // must return TRUE to actually DISPLAY native menu bars
                                                     // otherwise only menu messages are processed (eg, OLE on Windows)
 
@@ -105,7 +104,6 @@ public:
     virtual ~GtkSalMenuItem();
 
     sal_uInt16          mnId;               // Item ID
-    MenuItemBits        mnBits;             // Item bits
     MenuItemType        mnType;             // Item type
     Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
     GtkSalMenu*         mpParentMenu;       // The menu in which this menu item is inserted

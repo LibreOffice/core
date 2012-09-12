@@ -146,7 +146,6 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
             pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
             pSubmenu->SetActionGroup( pActionGroup );
             UpdateNativeMenu( pSubmenu );
-
         }
 
         nItemPos++;
@@ -275,7 +274,6 @@ on_registrar_available (GDBusConnection * /*connection*/,
             g_free( aDBusMenubarPath );
 
             bDBusIsAvailable = sal_True;
-            pSalMenu->SetVisibleMenuBar( sal_True );
             pMenuBar->SetDisplayable( sal_False );
         }
     }
@@ -296,7 +294,6 @@ on_registrar_unavailable (GDBusConnection * /*connection*/,
         MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
 
         bDBusIsAvailable = sal_False;
-        pSalMenu->SetVisibleMenuBar( sal_False );
         pMenuBar->SetDisplayable( sal_True );
     }
 
@@ -338,14 +335,8 @@ GtkSalMenu::~GtkSalMenu()
     maItems.clear();
 }
 
-void GtkSalMenu::SetVisibleMenuBar( sal_Bool bVisible )
-{
-//    mbVisible = bVisible;
-}
-
 sal_Bool GtkSalMenu::VisibleMenuBar()
 {
-//    return mbVisible;
     return bDBusIsAvailable;
 }
 
@@ -428,10 +419,6 @@ const GtkSalFrame* GtkSalMenu::GetFrame() const
     return pMenu ? pMenu->mpFrame : NULL;
 }
 
-void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
-{
-}
-
 void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck )
 {
     if ( mpActionGroup == NULL )
@@ -463,20 +450,12 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
         g_free( aCommand );
 }
 
-void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
-{
-}
-
 void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
 {
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
     if ( g_action_group_get_action_enabled( G_ACTION_GROUP( pActionGroup ), aCommand ) != bEnable )
         g_lo_action_group_set_action_enabled( pActionGroup, aCommand, bEnable );
-}
-
-void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )
-{
 }
 
 void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText )
@@ -495,14 +474,6 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
         g_free( aLabel );
 }
 
-void GtkSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage)
-{
-}
-
-void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
-{
-}
-
 void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
 {
     if ( rKeyName.isEmpty() )
@@ -517,10 +488,6 @@ void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, con
 
     if ( aCurrentAccel )
         g_free( aCurrentAccel );
-}
-
-void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr )
-{
 }
 
 void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, GtkSalMenuItem* pItem, const gchar* aCommand )
@@ -580,10 +547,6 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection, unsigned nItemPos, Gtk
         g_free( aCurrentCommand );
 }
 
-void GtkSalMenu::GetSystemMenuData( SystemMenuData* pData )
-{
-}
-
 GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand )
 {
     GtkSalMenu* pMenu = NULL;
@@ -628,6 +591,34 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
     pMenuBar->HandleMenuCommandEvent( pSubMenu, itemId );
 }
 
+void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
+{
+}
+
+void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
+{
+}
+
+void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )
+{
+}
+
+void GtkSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage)
+{
+}
+
+void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
+{
+}
+
+void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr )
+{
+}
+
+void GtkSalMenu::GetSystemMenuData( SystemMenuData* pData )
+{
+}
+
 void GtkSalMenu::Freeze()
 {
 }
@@ -640,7 +631,6 @@ void GtkSalMenu::Freeze()
 
 GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
-    mnBits( pItemData->nBits ),
     mnType( pItemData->eType ),
     mpVCLMenu( pItemData->pMenu ),
     mpParentMenu( NULL ),
