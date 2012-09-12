@@ -2153,10 +2153,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
         case DISP_E_EXCEPTION:
                 message = OUSTR("[automation bridge]: ");
                 message += OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription),
-                    ::SysStringLen(excepinfo.bstrDescription));
+                                    ::SysStringLen(excepinfo.bstrDescription));
 
-                    throw InvocationTargetException(message, Reference<XInterface>(), Any());
-            }
+                throw InvocationTargetException(message, Reference<XInterface>(), Any());
+            break;
         case DISP_E_MEMBERNOTFOUND:
             message = OUSTR("[automation bridge]: A function with the name \"")
                 + sFuncName + OUSTR("\" is not supported. Object returned "
