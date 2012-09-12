@@ -843,6 +843,7 @@ static bool osl_file_queryLocking (sal_uInt32 uFlags)
         return enabled;
     }
 #endif
+    (void) uFlags;
     return false;
 }
 
