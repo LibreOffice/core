@@ -71,7 +71,6 @@ class VCLPLUG_GEN_PUBLIC X11SalData : public SalGenericData
 
 protected:
     SalXLib      *pXLib_;
-    pthread_t     hMainThread_;
 
 public:
              X11SalData( SalGenericDataType t, SalInstance *pInstance );
@@ -87,7 +86,6 @@ public:
     void                    DeleteDisplay(); // for shutdown
 
     inline  SalXLib*        GetLib() const { return pXLib_; }
-    inline  pthread_t       GetMainThread() const { return hMainThread_; }
 
     void                    StartTimer( sal_uLong nMS );
     inline  void            StopTimer();
