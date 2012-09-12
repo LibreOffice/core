@@ -211,7 +211,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL start(
-            const ::rtl::OUString&  sText   ,
+            const OUString&  sText   ,
             sal_Int32 nRange
         ) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -258,7 +258,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setText( const ::rtl::OUString& sText ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL setText( const OUString& sText ) throw( ::com::sun::star::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -438,7 +438,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         */
 
-        static const ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
+        static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
         /**_______________________________________________________________________________________________________
             @short      -
@@ -453,7 +453,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    -
         */
 
-        static const ::rtl::OUString impl_getStaticImplementationName();
+        static const OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
 //  protected methods

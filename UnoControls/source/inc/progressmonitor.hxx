@@ -91,8 +91,8 @@ namespace unocontrols{
 /// Item of TextList
 struct IMPL_TextlistItem
 {
-    ::rtl::OUString sTopic  ;   /// Left site of textline in dialog
-    ::rtl::OUString sText   ;   /// Right site of textline in dialog
+    OUString sTopic  ;          /// Left site of textline in dialog
+    OUString sText   ;          /// Right site of textline in dialog
 };
 
 //____________________________________________________________________________________________________________
@@ -261,8 +261,8 @@ public:
     */
 
     virtual void SAL_CALL addText(
-        const ::rtl::OUString& sTopic ,
-        const ::rtl::OUString& sText ,
+        const OUString& sTopic ,
+        const OUString& sText ,
         sal_Bool bbeforeProgress
     ) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -280,7 +280,7 @@ public:
     */
 
     virtual void SAL_CALL removeText(
-        const ::rtl::OUString& sTopic ,
+        const OUString& sTopic ,
         sal_Bool bbeforeProgress
     ) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -298,8 +298,8 @@ public:
     */
 
     virtual void SAL_CALL updateText(
-        const ::rtl::OUString&  sTopic ,
-        const ::rtl::OUString&  sText ,
+        const OUString&  sTopic ,
+        const OUString&  sText ,
         sal_Bool bbeforeProgress
     ) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -434,7 +434,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setLabel( const ::rtl::OUString& sLabel ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setLabel( const OUString& sLabel ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -449,7 +449,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setActionCommand( const ::rtl::OUString& sCommand )
+    virtual void SAL_CALL setActionCommand( const OUString& sCommand )
         throw( ::com::sun::star::uno::RuntimeException );
 
     //________________________________________________________________________________________________________
@@ -615,7 +615,7 @@ public:
         @onerror    -
     */
 
-    static const ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
+    static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -630,7 +630,7 @@ public:
         @onerror    -
     */
 
-    static const ::rtl::OUString impl_getStaticImplementationName();
+    static const OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
 //  protected methods
@@ -719,7 +719,7 @@ private:
         @onerror    -
     */
 
-    IMPL_TextlistItem* impl_searchTopic( const ::rtl::OUString& sTopic , sal_Bool bbeforeProgress );
+    IMPL_TextlistItem* impl_searchTopic( const OUString& sTopic , sal_Bool bbeforeProgress );
 
 //____________________________________________________________________________________________________________
 // debug methods
@@ -742,8 +742,8 @@ private:
 
     #ifdef DBG_UTIL
 
-    sal_Bool impl_debug_checkParameter( const ::rtl::OUString& sTopic, const ::rtl::OUString& sText, sal_Bool bbeforeProgress );    // addText, updateText
-    sal_Bool impl_debug_checkParameter( const ::rtl::OUString& rTopic, sal_Bool bbeforeProgress );                              // removeText
+    sal_Bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText, sal_Bool bbeforeProgress );    // addText, updateText
+    sal_Bool impl_debug_checkParameter( const OUString& rTopic, sal_Bool bbeforeProgress );                              // removeText
 
     #endif
 //____________________________________________________________________________________________________________
