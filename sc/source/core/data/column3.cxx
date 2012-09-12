@@ -1730,7 +1730,7 @@ void ScColumn::GetString( SCROW nRow, String& rString ) const
 }
 
 template<>
-void  ScColumn::FillDPCacheT( long nDim, SCROW nStartRow, SCROW nEndRow, const boost::function<void(ScDPItemData*)> & rAddLabel, const boost::function<sal_Bool(long,ScDPItemData*)> & rAddData )
+void  ScColumn::FillDPCacheT( long nDim, SCROW nStartRow, SCROW nEndRow, const boost::function<void(ScDPItemData*)> & rAddLabel, const boost::function<sal_Bool(long,ScDPItemData*, bool)> & rAddData )
 {
     SCROW nPattenRowStart = -1, nPatternRowEnd = -1;
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
@@ -1749,7 +1749,7 @@ void  ScColumn::FillDPCacheT( long nDim, SCROW nStartRow, SCROW nEndRow, const b
                 if( nCurRow == nStartRow )
                     rAddLabel( new ScDPItemData() );
                 else
-                    rAddData( nDim, new ScDPItemData() );
+                    rAddData( nDim, new ScDPItemData(), false);
 
             if( nCurRow > nPatternRowEnd )
                 if( const ScPatternAttr* pPattern = pAttrArray ? pAttrArray->GetPatternRange( nPattenRowStart, nPatternRowEnd, nCurRow ) : NULL )
@@ -1781,7 +1781,7 @@ void  ScColumn::FillDPCacheT( long nDim, SCROW nStartRow, SCROW nEndRow, const b
             if( nCurRow == nStartRow )
                 rAddLabel( pDPItemData );
             else
-                rAddData( nDim, pDPItemData );
+                rAddData( nDim, pDPItemData, false );
         }
     }
 
@@ -1789,11 +1789,11 @@ void  ScColumn::FillDPCacheT( long nDim, SCROW nStartRow, SCROW nEndRow, const b
         if( nCurRow == nStartRow )
             rAddLabel( new ScDPItemData() );
         else
-            rAddData( nDim, new ScDPItemData() );
+            rAddData( nDim, new ScDPItemData(), false );
 }
 void  ScColumn::FillDPCache( ScDPTableDataCache * pCache, long nDim, SCROW nStartRow, SCROW nEndRow )
 {
-    FillDPCacheT<boost::function<void(ScDPItemData*)>, boost::function<sal_Bool(long,ScDPItemData*)> >( nDim, nStartRow, nEndRow, boost::bind( &ScDPTableDataCache::AddLabel, pCache, _1 ), boost::bind( &ScDPTableDataCache::AddData, pCache, _1, _2 ) );
+    FillDPCacheT<boost::function<void(ScDPItemData*)>, boost::function<sal_Bool(long,ScDPItemData*, bool)> >( nDim, nStartRow, nEndRow, boost::bind( &ScDPTableDataCache::AddLabel, pCache, _1 ), boost::bind( &ScDPTableDataCache::AddData, pCache, _1, _2, _3 ) );
 }
 
 void ScColumn::GetInputString( SCROW nRow, String& rString ) const

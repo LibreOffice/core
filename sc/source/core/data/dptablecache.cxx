@@ -863,16 +863,15 @@ bool ScDPTableDataCache::IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const
     return !GetItemDataById( nColumn, GetItemDataId( nColumn, nRow, sal_False ) )->IsHasData();
 }
 
-sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
+sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData, bool bCheckDate )
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
     SCROW nIndex = 0;
 
     sal_Bool    bInserted = sal_False;
-
+    if( true == bCheckDate)
     pitemData->SetDate( lcl_isDate( GetNumType( pitemData->nNumFormat ) ) );
-
     if ( !lcl_Search( mpTableDataValues[nDim], mpGlobalOrder[nDim], *pitemData, nIndex ) )
     {
         mpTableDataValues[nDim].push_back( pitemData );
