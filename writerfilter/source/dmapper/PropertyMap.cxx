@@ -904,14 +904,20 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( aElement != end())
             aElement->second >>= eWritingMode;
 
-
-
         sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode_LR_TB ?
             nHeight - m_nTopMargin - m_nBottomMargin :
             nWidth - m_nLeftMargin - m_nRightMargin;
 
+        sal_Int32 nGridLinePitch = m_nGridLinePitch;
+        //sep.dyaLinePitch
+        if (nGridLinePitch < 1 || nGridLinePitch > 31680)
+        {
+            SAL_WARN("writerfilter", "sep.dyaLinePitch outside legal range: " << nGridLinePitch);
+            nGridLinePitch = 1;
+        }
+
         operator[]( PropertyDefinition( PROP_GRID_LINES, false )) =
-                uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/m_nGridLinePitch));
+                uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/nGridLinePitch));
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
         //todo: is '0' the right index here?
@@ -941,7 +947,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             nCharWidth += ConversionHelper::convertTwipToMM100( nFraction );
         }
         operator[]( PropertyDefinition( PROP_GRID_BASE_HEIGHT, false )) = uno::makeAny( nCharWidth );
-        sal_Int32 nRubyHeight = m_nGridLinePitch - nCharWidth;
+        sal_Int32 nRubyHeight = nGridLinePitch - nCharWidth;
         if(nRubyHeight < 0 )
             nRubyHeight = 0;
         operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT, false )) = uno::makeAny( nRubyHeight );
