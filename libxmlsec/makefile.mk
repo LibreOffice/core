@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 #xmlsec1-nssdisablecallbacks.patch: Disable use of smime3 so don't need to package it
 #xmlsec1-customkeymanage.patch: Could we do this alternatively outside xmlsec
 #xmlsec1-nssmangleciphers.patch: Dubious, do we still need this ?
-#xmlsec1-noverify.patch: As per readme.txt. 
-#xmlsec1-mingw32.patch: Mingw32 support. 
+#xmlsec1-noverify.patch: As per readme.txt.
+#xmlsec1-mingw32.patch: Mingw32 support.
 #xmlsec1-mingw-customkeymanage-addmscrypto.patch: builds the custom keymanager on mingw
 #xmlsec1-vc.path: support for Visual C++ 10
 #xmlsec1-1.2.14-ansi.patch: otherwise, at least MacPorts autoreconf (GNU
@@ -78,14 +78,14 @@ PATCH_FILES=\
    xmlsec1-1.2.14-ansi.patch
 
 ADDITIONAL_FILES= \
-    include$/xmlsec$/mscrypto$/akmngr.h \
-    src$/mscrypto$/akmngr.c \
-    include$/xmlsec$/nss$/akmngr.h \
-    include$/xmlsec$/nss$/ciphers.h \
-    include$/xmlsec$/nss$/tokens.h \
-    src$/nss$/akmngr.c \
-    src$/nss$/keywrapers.c \
-    src$/nss$/tokens.c
+    include/xmlsec/mscrypto/akmngr.h \
+    src/mscrypto/akmngr.c \
+    include/xmlsec/nss/akmngr.h \
+    include/xmlsec/nss/ciphers.h \
+    include/xmlsec/nss/tokens.h \
+    src/nss/akmngr.c \
+    src/nss/keywrapers.c \
+    src/nss/tokens.c
 
 .IF "$(GUI)"=="WNT"
 CRYPTOLIB=mscrypto
@@ -109,7 +109,7 @@ CONF_ILIB=-L$(ILIB:s/;/ -L/)
 .ENDIF
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=autoreconf ; .$/configure
+CONFIGURE_ACTION=autoreconf ; ./configure
 
 .IF "$(CROSS_COMPILING)"=="YES"
 BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) MINGW_SYSROOT=$(MINGW_SYSROOT) OBJDUMP="$(OBJDUMP)"
@@ -146,7 +146,7 @@ xmlsec_CFLAGS+=-m64
 .ENDIF
 
 .IF "$(SYSBASE)"!=""
-xmlsec_CFLAGS+=-I$(SYSBASE)$/usr$/include 
+xmlsec_CFLAGS+=-I$(SYSBASE)/usr/include
 .IF "$(COMNAME)"=="sunpro5"
 xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
@@ -154,7 +154,7 @@ xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 xmlsec_CFLAGS+=$(EXTRA_CFLAGS)
 xmlsec_CPPFLAGS+=$(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
-xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
+xmlsec_LDFLAGS+=-L$(SYSBASE)/usr/lib
 .ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
 xmlsec_CPPFLAGS+=$(EXTRA_CDEFS)
 .ENDIF
@@ -171,7 +171,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 
 .ENDIF
 CONFIGURE_DIR=
-CONFIGURE_ACTION=autoreconf ; .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
+CONFIGURE_ACTION=autoreconf ; ./configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 
 .IF "$(OS)" == "MACOSX"
 .IF "$(ACLOCAL)" == ""
@@ -214,24 +214,24 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
 
-OUTDIR2INC=include$/xmlsec 
+OUTDIR2INC=include/xmlsec
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-OUT2LIB+=src$/.libs$/libxmlsec1.dll.a src$/nss$/.libs$/libxmlsec1-nss.dll.a
-OUT2BIN+=src$/.libs$/libxmlsec1.dll src$/nss$/.libs$/libxmlsec1-nss.dll
+OUT2LIB+=src/.libs/libxmlsec1.dll.a src/nss/.libs/libxmlsec1-nss.dll.a
+OUT2BIN+=src/.libs/libxmlsec1.dll src/nss/.libs/libxmlsec1-nss.dll
 .IF "$(CROSS_COMPILING)" != "YES"
-OUT2LIB+=src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll.a
-OUT2BIN+=src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll
+OUT2LIB+=src/mscrypto/.libs/libxmlsec1-mscrypto.dll.a
+OUT2BIN+=src/mscrypto/.libs/libxmlsec1-mscrypto.dll
 .ENDIF
 .ELSE
-OUT2LIB+=win32$/binaries$/*.lib
-OUT2BIN+=win32$/binaries$/*.dll
+OUT2LIB+=win32/binaries/*.lib
+OUT2BIN+=win32/binaries/*.dll
 .ENDIF
 .ELIF "$(OS)" == "ANDROID"
-OUT2LIB+=src$/.libs$/libxmlsec1.a src$/openssl/.libs$/libxmlsec1-openssl.a
+OUT2LIB+=src/.libs/libxmlsec1.a src/openssl/.libs/libxmlsec1-openssl.a
 .ELSE
-OUT2LIB+=src$/.libs$/libxmlsec1.a src$/nss$/.libs$/libxmlsec1-nss.a
+OUT2LIB+=src/.libs/libxmlsec1.a src/nss/.libs/libxmlsec1-nss.a
 .ENDIF
 
 # --- Targets ------------------------------------------------------
