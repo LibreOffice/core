@@ -47,7 +47,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-#include <com/sun/star/document/XVbaMethodParameter.hpp>
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -2332,6 +2331,7 @@ public:
 
     virtual void SAL_CALL windowClosing( const lang::EventObject& e ) throw (uno::RuntimeException)
     {
+#ifdef IN_THE_FUTURE
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
         if ( xDialog.is() )
         {
@@ -2358,6 +2358,7 @@ public:
         }
 
         mpUserForm->triggerMethod( rtl::OUString("Userform_QueryClose" ) );
+#endif
     }
 
 
