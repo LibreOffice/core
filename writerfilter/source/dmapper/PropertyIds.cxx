@@ -228,6 +228,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_GRID_LINES            :    sName = "GridLines"; break;
             case PROP_GRID_BASE_HEIGHT      :    sName = "GridBaseHeight"; break;
             case PROP_GRID_RUBY_HEIGHT      :    sName = "GridRubyHeight"; break;
+            case PROP_GRID_STANDARD_MODE     :    sName = "StandardPageMode"; break;
             case PROP_IS_ON                  :    sName = "IsOn"; break;
             case PROP_RESTART_AT_EACH_PAGE   :    sName = "RestartAtEachPage"; break;
             case PROP_COUNT_EMPTY_LINES      :    sName = "CountEmptyLines"; break;

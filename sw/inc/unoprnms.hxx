@@ -820,7 +820,9 @@ enum SwPropNameIds
 /* 0758 */  UNO_NAME_FILL_GRADIENT,
 /* 0759 */  UNO_NAME_FILL_GRADIENT_NAME,
 
-/* 0760 */  SW_PROPNAME_END
+/* 0760 */  UNO_NAME_DEFAULT_PAGE_MODE,
+
+/* 0761 */  SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
 };

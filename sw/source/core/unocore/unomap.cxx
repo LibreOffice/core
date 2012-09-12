@@ -1559,6 +1559,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_LOCK_UPDATES),        WID_DOC_LOCK_UPDATES,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_HAS_VALID_SIGNATURES),  WID_DOC_HAS_VALID_SIGNATURES, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY,   0},
                     { SW_PROP_NMID(UNO_NAME_BUILDID), WID_DOC_BUILDID, CPPU_E2T(CPPUTYPE_OUSTRING), 0, 0},
+                    { SW_PROP_NMID(UNO_NAME_DEFAULT_PAGE_MODE),  WID_DOC_DEFAULT_PAGE_MODE,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aDocMap_Impl;

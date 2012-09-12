@@ -1991,6 +1991,14 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             aValue >>= maBuildId;
         break;
 
+        case WID_DOC_DEFAULT_PAGE_MODE:
+        {
+            bool bDefaultPageMode( false );
+            aValue >>= bDefaultPageMode;
+            pDocShell->GetDoc()->SetDefaultPageMode( bDefaultPageMode );
+        }
+        break;
+
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pEntry->nWID);
