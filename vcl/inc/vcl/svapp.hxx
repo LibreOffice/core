@@ -243,7 +243,7 @@ public:
 
     virtual void                Main() = 0;
 
-    virtual sal_Bool                QueryExit();
+    virtual sal_Bool            QueryExit();
 
     virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
 
@@ -264,11 +264,11 @@ public:
 
     static void                 InitAppRes( const ResId& rResId );
 
-    static sal_uInt16               GetCommandLineParamCount();
+    static sal_uInt16           GetCommandLineParamCount();
     static XubString            GetCommandLineParam( sal_uInt16 nParam );
     static const XubString&     GetAppFileName();
 
-    virtual sal_uInt16              Exception( sal_uInt16 nError );
+    virtual sal_uInt16          Exception( sal_uInt16 nError );
     static void                 Abort( const XubString& rErrorText );
 
     static void                 Execute();
@@ -278,23 +278,23 @@ public:
     static void                 EndYield();
     static vos::IMutex&                     GetSolarMutex();
     static vos::OThread::TThreadIdentifier  GetMainThreadIdentifier();
-    static sal_uLong                ReleaseSolarMutex();
+    static sal_uLong            ReleaseSolarMutex();
     static void                 AcquireSolarMutex( sal_uLong nCount );
     static void                 EnableNoYieldMode( bool i_bNoYield );
     static void                 AddPostYieldListener( const Link& i_rListener );
     static void                 RemovePostYieldListener( const Link& i_rListener );
 
-    static sal_Bool                 IsInMain();
-    static sal_Bool                 IsInExecute();
-    static sal_Bool                 IsShutDown();
-    static sal_Bool                 IsInModalMode();
-    static sal_uInt16               GetModalModeCount();
+    static sal_Bool             IsInMain();
+    static sal_Bool             IsInExecute();
+    static sal_Bool             IsShutDown();
+    static sal_Bool             IsInModalMode();
+    static sal_uInt16           GetModalModeCount();
 
-    static sal_uInt16               GetDispatchLevel();
-    static sal_Bool                 AnyInput( sal_uInt16 nType = INPUT_ANY );
-    static sal_uLong                GetLastInputInterval();
-    static sal_Bool                 IsUICaptured();
-    static sal_Bool                 IsUserActive( sal_uInt16 nTest = USERACTIVE_ALL );
+    static sal_uInt16           GetDispatchLevel();
+    static sal_Bool             AnyInput( sal_uInt16 nType = INPUT_ANY );
+    static sal_uLong            GetLastInputInterval();
+    static sal_Bool             IsUICaptured();
+    static sal_Bool             IsUserActive( sal_uInt16 nTest = USERACTIVE_ALL );
 
     virtual void                SystemSettingsChanging( AllSettings& rSettings,
                                                         Window* pFrame );
@@ -323,20 +323,20 @@ public:
     static void                 RemoveKeyListener( const Link& rKeyListener );
     static void                 ImplCallEventListeners( sal_uLong nEvent, Window* pWin, void* pData );
     static void                 ImplCallEventListeners( VclSimpleEvent* pEvent );
-    static sal_Bool                 HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static sal_Bool             HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
-    static sal_uLong                PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
-    static sal_uLong                PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
+    static sal_uLong            PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static sal_uLong            PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
-    static sal_Bool                 IsProcessedMouseOrKeyEvent( sal_uLong nEventId );
+    static sal_Bool             IsProcessedMouseOrKeyEvent( sal_uLong nEventId );
 
-    static sal_uLong                PostUserEvent( sal_uLong nEvent, void* pEventData = NULL );
-    static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    static sal_Bool                 PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
-    static sal_Bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    static sal_uLong            PostUserEvent( sal_uLong nEvent, void* pEventData = NULL );
+    static sal_uLong            PostUserEvent( const Link& rLink, void* pCaller = NULL );
+    static sal_Bool             PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
+    static sal_Bool             PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
     static void                 RemoveUserEvent( sal_uLong nUserEvent );
 
-    static sal_Bool                 InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
+    static sal_Bool             InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
     static void                 RemoveIdleHdl( const Link& rLink );
 
     virtual void                AppEvent( const ApplicationEvent& rAppEvent );
@@ -384,14 +384,14 @@ public:
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();
 
-    static sal_Bool                 InsertAccel( Accelerator* pAccel );
+    static sal_Bool             InsertAccel( Accelerator* pAccel );
     static void                 RemoveAccel( Accelerator* pAccel );
     static void                 FlushAccel();
-    static sal_Bool                 CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
+    static sal_Bool             CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
 
-    static sal_uLong                AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData = NULL );
+    static sal_uLong            AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData = NULL );
     static void                 RemoveHotKey( sal_uLong nId );
-    static sal_uLong                AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
+    static sal_uLong            AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
     static void                 RemoveEventHook( sal_uLong nId );
     static long                 CallEventHooks( NotifyEvent& rEvt );
     static long                 CallPreNotify( NotifyEvent& rEvt );
@@ -401,12 +401,12 @@ public:
     static Help*                GetHelp();
 
     static void                 EnableAutoHelpId( sal_Bool bEnabled = sal_True );
-    static sal_Bool                 IsAutoHelpIdEnabled();
+    static sal_Bool             IsAutoHelpIdEnabled();
 
     static void                 EnableAutoMnemonic( sal_Bool bEnabled = sal_True );
-    static sal_Bool                 IsAutoMnemonicEnabled();
+    static sal_Bool             IsAutoMnemonicEnabled();
 
-    static sal_uLong                GetReservedKeyCodeCount();
+    static sal_uLong            GetReservedKeyCodeCount();
     static const KeyCode*       GetReservedKeyCode( sal_uLong i );
     static String               GetReservedKeyCodeDescription( sal_uLong i );
 
@@ -414,10 +414,10 @@ public:
     static Window*              GetDefDialogParent();
 
     static void                 EnableDialogCancel( sal_Bool bDialogCancel = sal_True );
-    static sal_Bool                 IsDialogCancelEnabled();
+    static sal_Bool             IsDialogCancelEnabled();
 
     static void                 SetSystemWindowMode( sal_uInt16 nMode );
-    static sal_uInt16               GetSystemWindowMode();
+    static sal_uInt16           GetSystemWindowMode();
 
     static void                 SetDialogScaleX( short nScale );
     static short                GetDialogScaleX();
@@ -437,10 +437,14 @@ public:
     static void                 SetFilterHdl( const Link& rLink );
     static const Link&          GetFilterHdl();
 
-    static sal_Bool                 IsAccessibilityEnabled();
+    static sal_Bool             IsAccessibilityEnabled();
 
     static void                 EnableHeadlessMode( sal_Bool bEnable = sal_True );
-    static sal_Bool                 IsHeadlessModeEnabled();
+    static sal_Bool             IsHeadlessModeEnabled();
+
+    static void                 EnableConversionMode( bool bEnableConv = true );
+    static bool                 IsConversionModeEnabled();
+
 
     static void                 ShowNativeErrorBox(const String& sTitle  ,
                                                    const String& sMessage);

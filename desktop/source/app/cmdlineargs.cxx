@@ -416,6 +416,14 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-conversionmode" )) == sal_True )
+    {
+        // ConversionMode means also headless and invisibile, so set these parameters to true!
+        SetBoolParam_Impl( CMD_BOOLPARAM_HEADLESS, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_CONVERSIONMODE, sal_True );
+        return sal_True;
+    }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart" )) == sal_True )
     {
 #if defined(ENABLE_QUICKSTART_APPLET)
@@ -688,6 +696,12 @@ sal_Bool CommandLineArgs::IsHeadless() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HEADLESS ];
+}
+
+sal_Bool CommandLineArgs::IsConversionMode() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_CONVERSIONMODE ];
 }
 
 sal_Bool CommandLineArgs::IsQuickstart() const

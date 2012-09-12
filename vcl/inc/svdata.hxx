@@ -155,23 +155,25 @@ struct ImplSVAppData
     ImplHotKey*             mpFirstHotKey;      // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;   // Event-Hooks
     VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
-    sal_uLong                   mnLastInputTime;                // GetLastInputTime()
-    sal_uInt16                  mnDispatchLevel;                // DispatchLevel
-    sal_uInt16                  mnModalMode;                    // ModalMode Count
-    sal_uInt16                  mnModalDialog;                  // ModalDialog Count
-    sal_uInt16                  mnAccessCount;                  // AccessHdl Count
-    sal_uInt16                  mnSysWinMode;                   // Modus, wann SystemWindows erzeugt werden sollen
-    sal_uInt16                  mnLayout;                       // --- RTL-Flags --- currently not used, only for testing
+    sal_uLong               mnLastInputTime;                // GetLastInputTime()
+    sal_uInt16              mnDispatchLevel;                // DispatchLevel
+    sal_uInt16              mnModalMode;                    // ModalMode Count
+    sal_uInt16              mnModalDialog;                  // ModalDialog Count
+    sal_uInt16              mnAccessCount;                  // AccessHdl Count
+    sal_uInt16              mnSysWinMode;                   // Modus, wann SystemWindows erzeugt werden sollen
+    sal_uInt16              mnLayout;                       // --- RTL-Flags --- currently not used, only for testing
     short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
-    sal_Bool                    mbInAppMain;                    // is Application::Main() on stack
-    sal_Bool                    mbInAppExecute;                 // is Application::Execute() on stack
-    sal_Bool                    mbAppQuit;                      // is Application::Quit() called
-    sal_Bool                    mbSettingsInit;                 // sal_True: Settings are initialized
-    sal_Bool                    mbDialogCancel;                 // sal_True: Alle Dialog::Execute()-Aufrufe werden mit return sal_False sofort beendet
-    sal_Bool                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
+    sal_Bool                mbInAppMain;                    // is Application::Main() on stack
+    sal_Bool                mbInAppExecute;                 // is Application::Execute() on stack
+    sal_Bool                mbAppQuit;                      // is Application::Quit() called
+    sal_Bool                mbSettingsInit;                 // sal_True: Settings are initialized
+    sal_Bool                mbDialogCancel;                 // sal_True: Alle Dialog::Execute()-Aufrufe werden mit return sal_False sofort beendet
+    sal_Bool                mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
     long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
                                                             // in window arrangers
+
+    bool                    mbConversionMode;               // true allows further optimizations during document conversion in different code areas.
 
     /** Controls whether showing any IME status window is toggled on or off.
 

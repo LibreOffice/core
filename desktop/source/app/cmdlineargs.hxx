@@ -43,6 +43,7 @@ class CommandLineArgs
             CMD_BOOLPARAM_PLUGIN,
             CMD_BOOLPARAM_SERVER,
             CMD_BOOLPARAM_HEADLESS,
+            CMD_BOOLPARAM_CONVERSIONMODE,
             CMD_BOOLPARAM_QUICKSTART,
             CMD_BOOLPARAM_NOQUICKSTART,
             CMD_BOOLPARAM_TERMINATEAFTERINIT,
@@ -129,6 +130,7 @@ class CommandLineArgs
         sal_Bool IsBean() const;
         sal_Bool IsServer() const;
         sal_Bool IsHeadless() const;
+        sal_Bool IsConversionMode() const;
         sal_Bool IsQuickstart() const;
         sal_Bool IsNoQuickstart() const;
         sal_Bool IsTerminateAfterInit() const;

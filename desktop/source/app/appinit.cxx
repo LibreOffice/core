@@ -263,6 +263,10 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         if ( bHeadlessMode )
             Application::EnableHeadlessMode();
 
+        // ConversionMode
+        if ( pCmdLine->IsConversionMode() )
+            Application::EnableConversionMode();
+
         if ( conDcp.getLength() > 0 )
         {
             // accept incoming connections (scripting and one rvp)

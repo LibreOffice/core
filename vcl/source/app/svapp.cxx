@@ -1974,6 +1974,19 @@ sal_Bool Application::IsHeadlessModeEnabled()
     return IsDialogCancelEnabled();
 }
 
+
+void Application::EnableConversionMode( bool bEnableConv )
+{
+    ImplGetSVData()->maAppData.mbConversionMode = bEnableConv;
+}
+
+// -----------------------------------------------------------------------
+
+bool Application::IsConversionModeEnabled()
+{
+    return ImplGetSVData()->maAppData.mbConversionMode;
+}
+
 // -----------------------------------------------------------------------
 
 void Application::ShowNativeErrorBox(const String& sTitle  ,

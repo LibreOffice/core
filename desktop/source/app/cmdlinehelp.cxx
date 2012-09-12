@@ -56,25 +56,26 @@ namespace desktop
         "\n"\
         "Options:\n";
     const char *aCmdLineHelp_left =
-        "-minimized    \n"\
-        "-invisible    \n"\
-        "-norestore    \n"\
-        "-quickstart   \n"\
-        "-nologo       \n"\
-        "-nolockcheck  \n"\
-        "-nodefault    \n"\
-        "-headless     \n"\
-        "-help/-h/-?   \n"\
-        "-writer       \n"\
-        "-calc         \n"\
-        "-draw         \n"\
-        "-impress      \n"\
-        "-base         \n"\
-        "-math         \n"\
-        "-global       \n"\
-        "-web          \n"\
-        "-o            \n"\
-        "-n            \n";
+        "-minimized      \n"\
+        "-invisible      \n"\
+        "-norestore      \n"\
+        "-quickstart     \n"\
+        "-nologo         \n"\
+        "-nolockcheck    \n"\
+        "-nodefault      \n"\
+        "-headless       \n"\
+        "-conversionmode \n"\
+        "-help/-h/-?     \n"\
+        "-writer         \n"\
+        "-calc           \n"\
+        "-draw           \n"\
+        "-impress        \n"\
+        "-base           \n"\
+        "-math           \n"\
+        "-global         \n"\
+        "-web            \n"\
+        "-o              \n"\
+        "-n              \n";
     const char *aCmdLineHelp_right =
         "keep startup bitmap minimized.\n"\
         "no startup screen, no default document and no UI.\n"\
@@ -84,6 +85,7 @@ namespace desktop
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\
         "like invisible but no userinteraction at all.\n"\
+        "enable further optimization for document conversion, includes enabled headless mode.\n"\
         "show this message and exit.\n"\
         "create new text document.\n"\
         "create new spreadsheet document.\n"\
