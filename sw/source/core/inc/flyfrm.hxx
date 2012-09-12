@@ -150,6 +150,9 @@ protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
+//Bug 120881:Modify here for Directly Page Numbering
+    sal_Bool IsPageNumberingFrm();
+//Bug 120881(End)
     // OD 2004-03-23 #i26791#
     TYPEINFO();
 

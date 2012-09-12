@@ -196,6 +196,9 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SW_DLLPRIVATE void impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet);
 
 public:
+    //Bug 120881:Modify here for Directly Page Numbering
+    bool HasPageNumberField();
+    //Bug 120881(End)
     bool IsWordCountDirty() const;
     bool IsWrongDirty() const;
     bool IsGrammarCheckDirty() const;
@@ -382,6 +385,10 @@ public:
      */
     SwTxtAttr *GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
                             enum GetTxtAttrMode const eMode = DEFAULT) const;
+    //Bug 120881:Modify here for Directly Page Numbering
+    SwTxtFld  *GetTxtFld( xub_StrLen const rIdx )
+                { return (SwTxtFld *)GetTxtAttrAt( rIdx, RES_TXTATR_FIELD ); }
+    //Bug 120881(End)
 
     /** get the innermost text attributes covering position nIndex.
         @param nWhich   only attributes with this id are returned.

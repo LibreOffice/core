@@ -2211,3 +2211,11 @@ bool SwTxtNode::IsAutoCompleteWordDirty() const
 //
 // Paragraph statistics end
 //
+
+//Bug 120881:Modify here for Directly Page Numbering
+sal_Bool SwTxtFrm::HasPageNumberField()
+{
+    return GetRegisteredIn()?((SwTxtNode*)GetRegisteredIn())->HasPageNumberField():false;
+}
+//Bug 120881(End)
+

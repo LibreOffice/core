@@ -5077,4 +5077,21 @@ SwTxtNode::MakeUnoObject()
             SwXParagraph::CreateXParagraph(*GetDoc(), *this), uno::UNO_QUERY);
     return xMeta;
 }
+//Bug 120881:Modify here for Directly Page Numbering
+bool SwTxtNode::HasPageNumberField()
+{
+    xub_StrLen nEnd = Len();
+    for(xub_StrLen nStart=0;nStart<nEnd;nStart++)
+    {
+        SwTxtFld* pFld = GetTxtFld(nStart);
+        const SwField* pSwField = NULL;
+        const SwFieldType* pType = NULL;
+        if (pFld && (pSwField=pFld->GetFld().GetFld()) &&
+            (pType=pSwField->GetTyp()) && pType->Which()==RES_PAGENUMBERFLD)
+            return true;
+    }
+    return false;
+
+}
+//Bug 120881(End)
 
