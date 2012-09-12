@@ -266,7 +266,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
                                                     PageType ePageType,
                                                         sal_Bool bMaster,
                                                             int nPageNumber = 0 );
-        void                ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 );
+        sal_Bool            ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 );
         void                ImplCreateTable( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt );
 
