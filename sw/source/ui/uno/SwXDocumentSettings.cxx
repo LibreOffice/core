@@ -126,7 +126,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_SMALL_CAPS_PERCENTAGE_66,
     HANDLE_TAB_OVERFLOW,
     HANDLE_UNBREAKABLE_NUMBERINGS,
-    HANDLE_FLOATTABLE_NOMARGINS
+    HANDLE_FLOATTABLE_NOMARGINS,
+    HANDLE_BACKGROUND_PARA_OVER_DRAWINGS
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -190,6 +191,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("TabOverflow"), HANDLE_TAB_OVERFLOW, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("UnbreakableNumberings"), HANDLE_UNBREAKABLE_NUMBERINGS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("FloattableNomargins"), HANDLE_FLOATTABLE_NOMARGINS, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("BackgroundParaOverDrawings"), HANDLE_BACKGROUND_PARA_OVER_DRAWINGS, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -755,6 +757,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::FLOATTABLE_NOMARGINS, bTmp);
         }
         break;
+        case HANDLE_BACKGROUND_PARA_OVER_DRAWINGS:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1130,6 +1138,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_FLOATTABLE_NOMARGINS:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::FLOATTABLE_NOMARGINS );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_BACKGROUND_PARA_OVER_DRAWINGS:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

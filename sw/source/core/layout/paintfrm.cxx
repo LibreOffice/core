@@ -3137,6 +3137,9 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     pLines->LockLines( sal_False );
                 }
 
+                if ( pSh->GetDoc()->get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS ) )
+                pPage->PaintBaBo( aPaintRect, pPage, sal_True, /*bOnlyTxtBackground=*/true );
+
                 if( pSh->GetWin() )
                 {
                     // collect sub-lines
@@ -6008,7 +6011,7 @@ SwRect SwPageFrm::GetBoundRect() const
 |*************************************************************************/
 
 void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
-                       const sal_Bool bLowerBorder ) const
+                       const sal_Bool bLowerBorder, const bool bOnlyTxtBackground ) const
 {
     if ( !pPage )
         pPage = FindPageFrm();
@@ -6028,18 +6031,19 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     // OD 20.11.2002 #104598# - take care of page margin area
     // Note: code move from <SwFrm::PaintBackground(..)> to new method
     // <SwPageFrm::Paintmargin(..)>.
-    if ( IsPageFrm() )
+    if ( IsPageFrm() && !bOnlyTxtBackground)
     {
         static_cast<const SwPageFrm*>(this)->PaintMarginArea( rRect, pGlobalShell );
     }
 
     // paint background
     {
-        PaintBackground( rRect, pPage, rAttrs, sal_False, bLowerBorder );
+        PaintBackground( rRect, pPage, rAttrs, sal_False, bLowerBorder, bOnlyTxtBackground );
     }
 
     // OD 06.08.2002 #99657# - paint border before painting background
     // paint grid for page frame and paint border
+    if (!bOnlyTxtBackground)
     {
         SwRect aRect( rRect );
         if( IsPageFrm() )
@@ -6061,7 +6065,8 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
 void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                               const SwBorderAttrs & rAttrs,
                              const sal_Bool bLowerMode,
-                             const sal_Bool bLowerBorder ) const
+                             const sal_Bool bLowerBorder,
+                             const bool bOnlyTxtBackground ) const
 {
     // OD 20.01.2003 #i1837# - no paint of table background, if corresponding
     // option is *not* set.
@@ -6189,8 +6194,9 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                         ///     background transparency have to be considered
                         ///     Set missing 5th parameter to the default value GRFNUM_NO
                         ///         - see declaration in /core/inc/frmtool.hxx.
-                        ::DrawGraphic( pItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
-                                bConsiderBackgroundTransparency );
+                        if (IsTxtFrm() || !bOnlyTxtBackground)
+                            ::DrawGraphic( pItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
+                                    bConsiderBackgroundTransparency );
                     }
                 }
                 if( pCol )

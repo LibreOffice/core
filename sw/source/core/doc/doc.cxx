@@ -199,6 +199,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case SMALL_CAPS_PERCENTAGE_66: return mbSmallCapsPercentage66;
         case TAB_OVERFLOW: return mbTabOverflow;
         case UNBREAKABLE_NUMBERINGS: return mbUnbreakableNumberings;
+        case BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
 
         case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the ViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
@@ -342,6 +343,10 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case UNBREAKABLE_NUMBERINGS:
             mbUnbreakableNumberings = value;
             break;
+        case BACKGROUND_PARA_OVER_DRAWINGS:
+            mbBackgroundParaOverDrawings = value;
+            break;
+
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: //can be used temporary (load/save) when no ViewShell is avaiable
