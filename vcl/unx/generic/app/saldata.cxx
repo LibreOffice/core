@@ -322,6 +322,12 @@ int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 
 int X11SalData::XIOErrorHdl( Display * )
 {
+    if (::osl::Thread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
+    {
+        pthread_exit(NULL);
+        return 0;
+    }
+
     /*  #106197# hack: until a real shutdown procedure exists
      *  _exit ASAP
      */

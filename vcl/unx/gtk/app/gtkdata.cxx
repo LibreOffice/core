@@ -526,6 +526,18 @@ GtkData::GtkData( SalInstance *pInstance )
     m_aDispatchCondition = osl_createCondition();
 }
 
+XIOErrorHandler aOrigXIOErrorHandler = NULL;
+
+int XIOErrorHdl(Display *pDisplay)
+{
+    if (::osl::Thread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
+    {
+        pthread_exit(NULL);
+        return 0;
+    }
+    return aOrigXIOErrorHandler ? aOrigXIOErrorHandler(pDisplay) : 0;
+}
+
 GtkData::~GtkData()
 {
     Yield( true, true );
@@ -545,6 +557,7 @@ GtkData::~GtkData()
     osl_destroyCondition( m_aDispatchCondition );
     osl_releaseMutex( m_aDispatchMutex );
     osl_destroyMutex( m_aDispatchMutex );
+    XSetIOErrorHandler(aOrigXIOErrorHandler);
 }
 
 void GtkData::Dispose()
@@ -664,6 +677,7 @@ void GtkData::Init()
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
     gdk_error_trap_push();
+    aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
 
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
