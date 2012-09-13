@@ -1915,7 +1915,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
     // save EdgeInfos and mark object as user modified
     ImpSetEdgeInfoToAttr();
     bEdgeTrackUserDefined = false;
-    //SetRectsDirty();
+    SetRectsDirty();
     //SetChanged();
 
     if(bOriginalEdgeModified && rDragStat.GetView())
