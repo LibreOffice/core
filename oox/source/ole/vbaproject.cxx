@@ -455,10 +455,11 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 
         if( xBasicLib.is() )
         {
+            // #TODO cater for mxOleOverridesSink, like I used to before
             // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
             aModules.forEachMem( &VbaModule::createAndImportModule,
                 ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ),
-                ::boost::cref( xDocObjectNA ), ::boost::cref( mxOleOverridesSink ) );
+                ::boost::cref( xDocObjectNA ) );
 
             // create empty dummy modules
             aDummyModules.forEachMem( &VbaModule::createEmptyModule,
@@ -494,7 +495,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 // create and import the form
                 Reference< XNameContainer > xDialogLib( createDialogLibrary(), UNO_SET_THROW );
                 VbaUserForm aForm( mxContext, mxDocModel, rGraphicHelper, bDefaultColorBgr );
-                aForm.importForm( mxDocModel, xDialogLib, *xSubStrg, aModuleName, eTextEnc );
+                aForm.importForm( xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
             catch(const Exception& )
             {

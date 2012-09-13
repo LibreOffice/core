@@ -158,18 +158,6 @@ const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) c
 
 // -----------------------------------------------------------------------
 
-WinBits TabControl::ImplInitStyle( WinBits nStyle )
-{
-    if ( !(nStyle & WB_NOTABSTOP) )
-        nStyle |= WB_TABSTOP;
-    if ( !(nStyle & WB_NOGROUP) )
-        nStyle |= WB_GROUP;
-
-    return nStyle;
-}
-
-// -----------------------------------------------------------------------
-
 void TabControl::ImplInitSettings( sal_Bool bFont,
                                    sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -1481,10 +1469,6 @@ void TabControl::StateChanged( StateChangedType nType )
     {
         ImplInitSettings( sal_False, sal_False, sal_True );
         Invalidate();
-    }
-    else if ( nType == STATE_CHANGE_STYLE )
-    {
-        SetStyle( ImplInitStyle( GetStyle() ) );
     }
 }
 

@@ -201,10 +201,9 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
 
 void VbaModule::createAndImportModule( StorageBase& rVbaStrg,
                                        const Reference< container::XNameContainer >& rxBasicLib,
-                                       const Reference< container::XNameAccess >& rxDocObjectNA,
-                                       const Reference< container::XNameContainer >& rxOleNameOverrides ) const
+                                       const Reference< container::XNameAccess >& rxDocObjectNA ) const
 {
-    OUString aVBASourceCode = readSourceCode( rVbaStrg, rxOleNameOverrides );
+    OUString aVBASourceCode = readSourceCode( rVbaStrg );
     createModule( aVBASourceCode, rxBasicLib, rxDocObjectNA );
 }
 
@@ -214,7 +213,7 @@ void VbaModule::createEmptyModule( const Reference< container::XNameContainer >&
     createModule( OUString(), rxBasicLib, rxDocObjectNA );
 }
 
-OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< container::XNameContainer >& rxOleNameOverrides ) const
+OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
 {
     OUStringBuffer aSourceCode;
     const static rtl::OUString sUnmatchedRemovedTag( RTL_CONSTASCII_USTRINGPARAM( "Rem removed unmatched Sub/End: " ) );
@@ -275,8 +274,6 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< cont
                             }
                         }
                     }
-                    else
-                        extractOleOverrideFromAttr( aCodeLine, rxOleNameOverrides );
                 }
                 else
                 {

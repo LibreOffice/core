@@ -90,7 +90,6 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE WinBits      ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
 
     virtual void                FillLayoutData() const;

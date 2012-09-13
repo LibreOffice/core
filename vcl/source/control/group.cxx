@@ -133,7 +133,6 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
 void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
-        OSL_TRACE("GroupBox::ImplDraw Y %d, X %d", rPos.Y(), rPos.X() );
     long                    nTop;
     long                    nTextOff;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();

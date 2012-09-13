@@ -158,7 +158,13 @@ private:
     /** Imports the site models of all embedded controls from the 'f' stream. */
     bool                importEmbeddedSiteModels( BinaryInputStream& rInStrm );
     /*  Final processing of all embedded controls after import. */
-    void                finalizeEmbeddedControls( StorageBase& rStrg );
+    void                finalizeEmbeddedControls();
+
+    /** Moves the control relative to its current position by the passed distance. */
+    void                moveRelative( const AxPairData& rDistance );
+    /** Moves all embedded controls from their relative position in this
+        control to an absolute position in the parent of this control. */
+    void                moveEmbeddedToAbsoluteParent();
 
     /** Functor for comparing controls by their tab index. */
     static bool         compareByTabIndex( const VbaFormControlRef& rxLeft, const VbaFormControlRef& rxRight );
@@ -186,7 +192,6 @@ public:
     /** Imports the form and its embedded controls, and inserts the form with
         all its controls into the passed dialog library. */
     void                importForm(
-                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxDialogLib,
                            StorageBase& rVbaFormStrg,
                            const ::rtl::OUString& rModuleName,
