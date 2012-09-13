@@ -109,7 +109,6 @@ namespace connectivity
             // Added to enable me to use SQLInterpreter which requires an
             // XNameAccess i/f to access tables.
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
-
         };
     }
 }

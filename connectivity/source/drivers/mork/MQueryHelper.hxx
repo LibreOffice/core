@@ -82,7 +82,9 @@ namespace connectivity
             MQueryHelperResultEntry*   next();
             MQueryHelperResultEntry*   getByIndex( sal_uInt32 nRow );
             sal_Bool                   isError() const;
+            sal_Bool                   queryComplete() const;
             sal_Int32                  getResultCount() const;
+            sal_Bool                   checkRowAvailable( sal_Int32 nDBRow );
             sal_Bool getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType );
             sal_Int32 executeQuery(OConnection* xConnection);
         };

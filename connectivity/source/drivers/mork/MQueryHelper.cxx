@@ -158,6 +158,26 @@ sal_Int32 MQueryHelper::getResultCount() const
 
 // -------------------------------------------------------------------------
 
+sal_Bool MQueryHelper::queryComplete() const
+{
+    return sal_True;
+}
+
+sal_Bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
+{
+/*
+    while (!queryComplete() && getResultCount() <= (sal_uInt32)nDBRow)
+    {
+        if ( !m_aQueryHelper->waitForRow( nDBRow ) ) {
+            m_aError = m_aQueryHelper->getError();
+            return( sal_False );
+        }
+    }
+*/
+    return( getResultCount() > nDBRow );
+}
+
+
 sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType )
 {
     SAL_INFO("connectivity.mork", "MQueryHelper::getRowValue()" );
@@ -185,6 +205,7 @@ sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const
 
 sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
 {
+//    OSL_FAIL( "MQueryHelper::executeQuery" );
     SAL_INFO("connectivity.mork", "MQueryHelper::executeQuery()" );
     reset();
 

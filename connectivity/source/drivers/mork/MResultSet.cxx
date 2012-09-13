@@ -467,8 +467,8 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
     ResultSetEntryGuard aGuard( *this );
 
     OSL_TRACE("In/Out: OResultSet::isAfterLast" );
-    return sal_True;
-//    return m_nRowPos > currentRowCount() && m_aQuery.queryComplete();
+//    return sal_True;
+    return m_nRowPos > currentRowCount() && m_aQueryHelper.queryComplete();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
@@ -485,8 +485,8 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
     ResultSetEntryGuard aGuard( *this );
 
     OSL_TRACE("In/Out: OResultSet::isLast" );
-    return sal_True;
-//    return m_nRowPos == currentRowCount() && m_aQuery.queryComplete();
+//    return sal_True;
+    return m_nRowPos == currentRowCount() && m_aQueryHelper.queryComplete();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
@@ -1486,34 +1486,41 @@ sal_Bool OResultSet::isCount() const
 //
 // Check for valid row in m_aQuery
 //
-sal_Bool OResultSet::validRow( sal_uInt32 /*nRow*/ )
+sal_Bool OResultSet::validRow( sal_uInt32 nRow)
 {
-    OSL_FAIL( "OResultSet::validRow() is not implemented" );
+//    OSL_FAIL( "OResultSet::validRow() is not implemented" );
 
-/*
-    sal_Int32  nNumberOfRecords = m_aQuery.getRealRowCount();
 
-    while ( nRow > (sal_uInt32)nNumberOfRecords && !m_aQuery.queryComplete() ) {
+    sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
+//m_aQuery.getRealRowCount();
+
+    while ( nRow > (sal_uInt32)nNumberOfRecords && !m_aQueryHelper.queryComplete() ) {
 #if OSL_DEBUG_LEVEL > 0
             OSL_TRACE("validRow: waiting...");
 #endif
-            m_aQuery.checkRowAvailable( nRow );
+            if (m_aQueryHelper.checkRowAvailable( nRow ) == sal_False)
+            {
+                OSL_TRACE("validRow(%u): return False", nRow);
+                return sal_False;
+            }
+#if 0
             if ( m_aQuery.hadError() )
             {
                 m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
             }
-            nNumberOfRecords = m_aQuery.getRealRowCount();
+#endif
+            nNumberOfRecords = m_aQueryHelper.getResultCount();
     }
 
     if (( nRow == 0 ) ||
-        ( nRow > (sal_uInt32)nNumberOfRecords && m_aQuery.queryComplete()) ){
+        ( nRow > (sal_uInt32)nNumberOfRecords && m_aQueryHelper.queryComplete()) ){
         OSL_TRACE("validRow(%u): return False", nRow);
         return sal_False;
     }
 #if OSL_DEBUG_LEVEL > 0
     OSL_TRACE("validRow(%u): return True", nRow);
 #endif
-*/
+
     return sal_True;
 }
 sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
@@ -1596,16 +1603,16 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     else    //The requested row has not been retrived until now. We should get the right card for it.
         nCurCard = nCurPos + deletedCount();
 
-    while ( nCurCard > nNumberOfRecords ) {
 /*
+    while ( nCurCard > nNumberOfRecords ) {
             m_aQuery.checkRowAvailable( nCurCard );
             if ( m_aQuery.hadError() )
             {
                 m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
             }
-*/
             nNumberOfRecords = m_aQueryHelper.getResultCount();
     }
+*/
 
     if ( nCurCard > nNumberOfRecords) {
         fillKeySet(nNumberOfRecords);
