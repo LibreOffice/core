@@ -44,7 +44,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/beans,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/bridge,\
 	Bridge \
-	BridgeFactory \
 	IiopBridge \
 	OleApplicationRegistration \
 	OleBridgeSupplier \
@@ -229,11 +228,13 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/beans,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/bridge,\
 	BridgeExistsException \
+	BridgeFactory \
 	InvalidProtocolChangeException \
 	ModelDependent \
 	ProtocolProperty \
 	XBridge \
 	XBridgeFactory \
+	XBridgeFactory2 \
 	XBridgeSupplier \
 	XBridgeSupplier2 \
 	XInstanceProvider \

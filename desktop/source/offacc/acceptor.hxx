@@ -24,7 +24,7 @@
 #include <com/sun/star/connection/XAcceptor.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
-#include <com/sun/star/bridge/XBridgeFactory.hpp>
+#include <com/sun/star/bridge/XBridgeFactory2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -66,9 +66,9 @@ private:
     Condition m_cEnable;
 
     Reference< XMultiServiceFactory > m_rSMgr;
-    Reference< XInterface >           m_rContext;
+    Reference< XComponentContext >    m_rContext;
     Reference< XAcceptor >            m_rAcceptor;
-    Reference< XBridgeFactory >       m_rBridgeFactory;
+    Reference< XBridgeFactory2 >      m_rBridgeFactory;
 
     OUString m_aAcceptString;
     OUString m_aConnectString;

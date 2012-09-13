@@ -41,6 +41,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
+#include <com/sun/star/bridge/BridgeFactory.hpp>
+#include <com/sun/star/bridge/XBridge.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -52,8 +54,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/bridge/XBridge.hpp>
-#include <com/sun/star/bridge/XBridgeFactory.hpp>
 
 using namespace comphelper;
 using namespace com::sun::star::uno;
@@ -214,19 +214,11 @@ bool needSecurityRestrictions( void )
             return true;
         }
 
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( !xSMgr.is() )
-            return true;
-        Reference< XBridgeFactory > xBridgeFac( xSMgr->createInstance
-            ( ::rtl::OUString("com.sun.star.bridge.BridgeFactory" ) ), UNO_QUERY );
+        Reference< XComponentContext > xContext = getProcessComponentContext();
+        Reference< XBridgeFactory2 > xBridgeFac( BridgeFactory::create(xContext) );
 
-        Sequence< Reference< XBridge > > aBridgeSeq;
-        sal_Int32 nBridgeCount = 0;
-        if( xBridgeFac.is() )
-        {
-            aBridgeSeq = xBridgeFac->getExistingBridges();
-            nBridgeCount = aBridgeSeq.getLength();
-        }
+        Sequence< Reference< XBridge > > aBridgeSeq = xBridgeFac->getExistingBridges();
+        sal_Int32 nBridgeCount = aBridgeSeq.getLength();
 
         if( nBridgeCount == 0 )
         {

@@ -26,7 +26,7 @@
 #include <map>
 
 #include "boost/noncopyable.hpp"
-#include "com/sun/star/bridge/XBridgeFactory.hpp"
+#include "com/sun/star/bridge/XBridgeFactory2.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -50,7 +50,7 @@ namespace binaryurp {
 typedef
     cppu::WeakComponentImplHelper2<
         com::sun::star::lang::XServiceInfo,
-        com::sun::star::bridge::XBridgeFactory >
+        com::sun::star::bridge::XBridgeFactory2 >
     BridgeFactoryBase;
 
 class BridgeFactory:
