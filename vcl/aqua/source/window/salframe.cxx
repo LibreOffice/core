@@ -222,6 +222,10 @@ void AquaSalFrame::initWindowAndView()
     // do this:
     objc_msgSend(mpWindow, @selector(setDelegate:), mpWindow);
 
+    if( [mpWindow respondsToSelector: @selector(setRestorable:)])
+    {
+        objc_msgSend(mpWindow, @selector(setRestorable:), NO);
+    }
     NSRect aRect = { { 0,0 }, { maGeometry.nWidth, maGeometry.nHeight } };
     mnTrackingRectTag = [mpView addTrackingRect: aRect owner: mpView userData: nil assumeInside: NO];
 
