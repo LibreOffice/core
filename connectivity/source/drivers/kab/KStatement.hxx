@@ -137,9 +137,6 @@ namespace connectivity
             // XCloseable
             virtual void SAL_CALL close(
                     ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-            // other methods
-            inline KabConnection* getOwnConnection() const { return m_pConnection; }
         };
 
         //**************************************************************

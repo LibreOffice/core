@@ -329,8 +329,7 @@ DateTime SAL_CALL KabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLExc
 
     if (m_nRowPos != -1 && m_nRowPos != nAddressees && m_xMetaData.is())
     {
-        KabResultSetMetaData *pMeta = static_cast<KabResultSetMetaData *>(m_xMetaData.get());
-        sal_Int32 nFieldNumber = pMeta->fieldAtColumn(columnIndex);
+        sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(columnIndex);
 
         if (nFieldNumber == KAB_FIELD_REVISION)
         {
@@ -435,7 +434,7 @@ Reference< XResultSetMetaData > SAL_CALL KabResultSet::getMetaData() throw(SQLEx
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
     if (!m_xMetaData.is())
-        m_xMetaData = new KabResultSetMetaData(m_xStatement->getOwnConnection());
+        m_xMetaData = new KabResultSetMetaData;
 
     Reference< XResultSetMetaData > xMetaData = m_xMetaData.get();
     return xMetaData;

@@ -102,6 +102,9 @@ namespace connectivity
             void someKabAddressees(const class KabCondition *pCondition);
             void sortKabAddressees(const class KabOrder *pOrder);
 
+            ::rtl::Reference< KabResultSetMetaData > getKabMetaData() const
+            { return m_xMetaData; }
+
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
 

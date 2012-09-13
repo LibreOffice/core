@@ -28,9 +28,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-KabResultSetMetaData::KabResultSetMetaData(KabConnection* _pConnection)
-    : m_pConnection(_pConnection),
-      m_aKabFields()
+KabResultSetMetaData::KabResultSetMetaData()
 {
 }
 // -------------------------------------------------------------------------

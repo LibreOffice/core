@@ -301,15 +301,13 @@ sal_Bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
 void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLException)
 {
     ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
-    KabResultSetMetaData *pMeta;                // meta information - holds the list of KAddressBook fields
 
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.is())
     {
         lcl_throwError(STR_INVALID_COLUMN_SELECTION);
     }
-    pMeta = static_cast<KabResultSetMetaData *>(pResult->getMetaData().get());
-    pMeta->setKabFields(xColumns);
+    pResult->getKabMetaData()->setKabFields(xColumns);
 }
 // -------------------------------------------------------------------------
 void KabCommonStatement::selectAddressees(KabResultSet *pResult) const throw(SQLException)

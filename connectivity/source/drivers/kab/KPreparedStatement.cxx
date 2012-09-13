@@ -115,7 +115,7 @@ Reference< XResultSetMetaData > SAL_CALL KabPreparedStatement::getMetaData() thr
 
     if (!m_xMetaData.is())
     {
-        m_xMetaData = new KabResultSetMetaData(getOwnConnection());
+        m_xMetaData = new KabResultSetMetaData;
         setKabFields();
     }
     Reference< XResultSetMetaData > xMetaData = m_xMetaData.get();
