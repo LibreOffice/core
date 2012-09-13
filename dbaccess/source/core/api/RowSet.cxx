@@ -558,6 +558,8 @@ void ORowSet::freeResources( bool _bComplete )
         // the columns must be disposed before the querycomposer is disposed because
         // their owner can be the composer
         TDataColumns().swap(m_aDataColumns);// clear and resize capacity
+        ::std::vector<bool>().swap(m_aReadOnlyDataColumns);
+
         m_xColumns      = NULL;
         if ( m_pColumns )
             m_pColumns->disposing();
@@ -1239,6 +1241,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
 
 void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
+    assert(m_aDataColumns.size() == m_aReadOnlyDataColumns.size() || m_aReadOnlyDataColumns.size() == 0 );
     TDataColumns::iterator aIter = m_aDataColumns.begin();
     ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aReadIter != m_aReadOnlyDataColumns.end();++aIter,++aReadIter)
