@@ -629,8 +629,10 @@ public:
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();
-    /// If the current paragraph has a numbering style associated, this method returns its character style
+    /// If the current paragraph has a numbering style associated, this method returns its character style (part of the numbering rules)
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> GetCurrentNumberingCharStyle();
+    /// If the current paragraph has a numbering style associated, this method returns its numbering rules
+    com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel = 0);
 
     /**
      Used for attributes/sprms which cannot be evaluated immediatelly (e.g. they depend
