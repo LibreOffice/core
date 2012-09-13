@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "com/sun/star/ucb/UniversalContentBroker.hpp"
 #include "com/sun/star/ucb/Command.hpp"
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #include "com/sun/star/ucb/IllegalIdentifierException.hpp"
@@ -286,22 +287,11 @@ URIHelper::normalizedMakeRelative(
     rtl::OUString const & baseUriReference, rtl::OUString const & uriReference)
 {
     OSL_ASSERT(context.is());
-    css::uno::Reference< css::lang::XMultiComponentFactory > componentFactory(
-        context->getServiceManager());
-    if (!componentFactory.is()) {
-        throw css::uno::RuntimeException("component context has no service manager",
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    css::uno::Sequence< css::uno::Any > args(2);
-    args[0] <<= rtl::OUString("Local");
-    args[1] <<= rtl::OUString("Office");
     css::uno::Reference< css::ucb::XContentProvider > broker;
     try {
         broker = css::uno::Reference< css::ucb::XContentProvider >(
-            componentFactory->createInstanceWithArgumentsAndContext(
-                "com.sun.star.ucb.UniversalContentBroker",
-                args, context),
-            css::uno::UNO_QUERY_THROW);
+                  css::ucb::UniversalContentBroker::createWithKeys(context, "Local", "Office"),
+                  css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (css::uno::Exception &) {

@@ -20,13 +20,10 @@
 #ifndef _UCB_HXX
 #define _UCB_HXX
 
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
+
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -57,14 +54,9 @@ namespace com { namespace sun { namespace star { namespace ucb {
 
 class UniversalContentBroker :
                 public cppu::OWeakObject,
+                public com::sun::star::ucb::XUniversalContentBroker,
                 public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XComponent,
                 public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::lang::XInitialization,
-                public com::sun::star::ucb::XContentProviderManager,
-                public com::sun::star::ucb::XContentProvider,
-                public com::sun::star::ucb::XContentIdentifierFactory,
-                public com::sun::star::ucb::XCommandProcessor,
                 public com::sun::star::util::XChangesListener
 {
 public:
@@ -159,6 +151,10 @@ public:
                com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL
     abort( sal_Int32 CommandId )
+        throw( com::sun::star::uno::RuntimeException );
+
+    // XCommandProcessor2
+    virtual void SAL_CALL releaseCommandIdentifier(sal_Int32 aCommandId)
         throw( com::sun::star::uno::RuntimeException );
 
     // XChangesListener

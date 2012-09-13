@@ -288,6 +288,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
 	SimpleFileAccess \
 	SortedDynamicResultSetFactory \
 	Store \
+	UniversalContentBroker \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	GlobalAcceleratorConfiguration \
@@ -1449,7 +1450,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ucb,\
 	TransientDocumentsFolderContent \
 	TransientDocumentsRootContent \
 	TransientDocumentsStreamContent \
-	UniversalContentBroker \
 	WebDAVContentProvider \
 	WebDAVDocumentContent \
 	WebDAVFolderContent \
@@ -3918,6 +3918,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	XSimpleFileAccess3 \
 	XSortedDynamicResultSetFactory \
 	XSourceInitialization \
+	XUniversalContentBroker \
 	XWebDAVCommandEnvironment \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\

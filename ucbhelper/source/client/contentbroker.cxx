@@ -26,8 +26,10 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
@@ -40,6 +42,7 @@
 #include <ucbhelper/configurationkeys.hxx>
 #endif
 
+using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
@@ -310,13 +313,21 @@ bool ContentBroker_Impl::initialize()
             {
                 try
                 {
-                    xIfc = m_xSMgr->createInstanceWithArguments(
-                            OUString(
-                                "com.sun.star.ucb.UniversalContentBroker" ),
-                            m_aArguments );
+                    Reference< XPropertySet > xFactoryProperties( m_xSMgr, UNO_QUERY_THROW );
+                    Reference< XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY_THROW );
+                    if( m_aArguments.getLength() == 0 )
+                        xIfc = UniversalContentBroker::createDefault(xContext);
+                    else
+                    {
+                        rtl::OUString aPrimaryConfigKey, aSecondaryConfigKey;
+                        m_aArguments[0] >>= aPrimaryConfigKey;
+                        m_aArguments[1] >>= aSecondaryConfigKey;
+                        xIfc = UniversalContentBroker::createWithKeys(xContext, aPrimaryConfigKey, aSecondaryConfigKey);
+                    }
                 }
-                catch ( Exception const & )
+                catch ( const Exception & e)
                 {
+                    SAL_WARN("ucbhelper", "exception while initialising UniversalContentBroker " << e.Message);
                 }
             }
 

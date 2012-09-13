@@ -269,7 +269,8 @@ UniversalContentBroker::~UniversalContentBroker()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_8( UniversalContentBroker,
+XINTERFACE_IMPL_9( UniversalContentBroker,
+                   XUniversalContentBroker,
                    XTypeProvider,
                    XComponent,
                    XServiceInfo,
@@ -285,13 +286,14 @@ XINTERFACE_IMPL_8( UniversalContentBroker,
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_8( UniversalContentBroker,
-                         XTypeProvider,
+XTYPEPROVIDER_IMPL_9( UniversalContentBroker,
+                      XUniversalContentBroker,
+                      XTypeProvider,
                       XComponent,
-                         XServiceInfo,
+                      XServiceInfo,
                       XInitialization,
-                         XContentProviderManager,
-                         XContentProvider,
+                      XContentProviderManager,
+                      XContentProvider,
                       XContentIdentifierFactory,
                       XCommandProcessor );
 
@@ -673,6 +675,19 @@ Any SAL_CALL UniversalContentBroker::execute(
     }
 
     return aRet;
+}
+
+//=========================================================================
+//
+// XCommandProcessor2 methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL UniversalContentBroker::releaseCommandIdentifier(sal_Int32 /*aCommandId*/)
+    throw( RuntimeException )
+{
+    // @@@ Not implemeted ( yet).
 }
 
 //=========================================================================

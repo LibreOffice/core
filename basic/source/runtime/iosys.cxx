@@ -44,6 +44,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
@@ -276,18 +277,17 @@ bool hasUno( void )
     if( bNeedInit )
     {
         bNeedInit = false;
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( !xSMgr.is() )
+        Reference< XComponentContext > xContext = getProcessComponentContext();
+        if( !xContext.is() )
         {
             // No service manager at all
             bRetVal = false;
         }
         else
         {
-            Reference< XContentProviderManager > xManager( xSMgr->createInstance(
-                                                               ::rtl::OUString( "com.sun.star.ucb.UniversalContentBroker" ) ), UNO_QUERY );
+            Reference< XUniversalContentBroker > xManager = UniversalContentBroker::createDefault(xContext);
 
-            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
+            if ( !( xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
             {
                 // No UCB
                 bRetVal = false;

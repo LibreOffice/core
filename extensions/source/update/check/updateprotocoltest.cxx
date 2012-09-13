@@ -21,6 +21,7 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include "updateprotocol.hxx"
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
 #include <sal/main.h>
 #include <osl/process.h>
@@ -48,15 +49,8 @@ SAL_IMPLEMENT_MAIN()
     uno::Reference< uno::XComponentContext > rComponentContext = cppu::defaultBootstrap_InitialComponentContext();
 
     // initialize UCB
-    uno::Sequence< uno::Any > theArguments(2);
-    theArguments[0] = uno::makeAny( UNISTRING( "Local") );
-    theArguments[1] = uno::makeAny( UNISTRING( "Office") );
-
-    uno::Reference< uno::XInterface > xUCB =
-        rComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ),
-            theArguments,
-            rComponentContext );
+    uno::Reference< uno::XUniversalContentBroker > xUCB =
+        UniversalContentBroker::createWithKeys(rComponentContext, theArguments, "Local", "Office");
 
 
     rtl::OUString aURL;
