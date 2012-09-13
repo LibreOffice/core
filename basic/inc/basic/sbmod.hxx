@@ -164,8 +164,6 @@ public:
     void triggerTerminateEvent( void );
 };
 
-SV_DECL_IMPL_REF(SbClassModuleObject);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

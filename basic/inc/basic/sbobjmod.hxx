@@ -101,8 +101,6 @@ public:
     virtual SbxVariable* Find( const rtl::OUString& rName, SbxClassType t );
 };
 
-SV_DECL_IMPL_REF(SbObjModule);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,8 +62,6 @@ public:
         { mbSet = bSet; }
 };
 
-SV_DECL_IMPL_REF(SbProcedureProperty)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
