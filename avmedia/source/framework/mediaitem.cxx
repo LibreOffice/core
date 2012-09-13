@@ -59,8 +59,8 @@ TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
 
 struct MediaItem::Impl
 {
-    ::rtl::OUString         m_URL;
-    ::rtl::OUString         m_TempFileURL;
+    OUString                m_URL;
+    OUString                m_TempFileURL;
     sal_uInt32              m_nMaskSet;
     MediaState              m_eState;
     double                  m_fTime;
@@ -243,22 +243,22 @@ sal_uInt32 MediaItem::getMaskSet() const
 
 //------------------------------------------------------------------------
 
-void MediaItem::setURL( const ::rtl::OUString& rURL,
-        ::rtl::OUString const*const pTempURL)
+void MediaItem::setURL( const OUString& rURL,
+        OUString const*const pTempURL)
 {
     m_pImpl->m_URL = rURL;
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_URL;
-    m_pImpl->m_TempFileURL = (pTempURL) ? *pTempURL : ::rtl::OUString();
+    m_pImpl->m_TempFileURL = (pTempURL) ? *pTempURL : OUString();
 }
 
 //------------------------------------------------------------------------
 
-const ::rtl::OUString& MediaItem::getURL() const
+const OUString& MediaItem::getURL() const
 {
     return m_pImpl->m_URL;
 }
 
-const ::rtl::OUString& MediaItem::getTempURL() const
+const OUString& MediaItem::getTempURL() const
 {
     return m_pImpl->m_TempFileURL;
 }
@@ -370,18 +370,17 @@ void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
 
 //------------------------------------------------------------------------
 
-static ::rtl::OUString lcl_GetFilename(::rtl::OUString const& rSourceURL)
+static OUString lcl_GetFilename(OUString const& rSourceURL)
 {
     uno::Reference<uri::XUriReferenceFactory> const xUriFactory(
         ::comphelper::createProcessComponent(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.uri.UriReferenceFactory"))),
+            "com.sun.star.uri.UriReferenceFactory"),
         uno::UNO_QUERY_THROW);
 
     uno::Reference<uri::XUriReference> const xSourceURI(
         xUriFactory->parse(rSourceURL), uno::UNO_SET_THROW);
 
-    ::rtl::OUString filename;
+    OUString filename;
     {
         sal_Int32 const nSegments(xSourceURI->getPathSegmentCount());
         if (0 < nSegments)
@@ -392,21 +391,21 @@ static ::rtl::OUString lcl_GetFilename(::rtl::OUString const& rSourceURL)
     if (!::comphelper::OStorageHelper::IsValidZipEntryFileName(
                 filename, false) || !filename.getLength())
     {
-        filename = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("media"));
+        filename = "media";
     }
     return filename;
 }
 
 static uno::Reference<io::XStream>
 lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
-        ::rtl::OUString const& rFilename)
+        OUString const& rFilename)
 {
-    ::rtl::OUString filename(rFilename);
+    OUString filename(rFilename);
 
     if (xStorage->hasByName(filename))
     {
-        ::rtl::OUString basename;
-        ::rtl::OUString suffix;
+        OUString basename;
+        OUString suffix;
         sal_Int32 const nIndex(rFilename.lastIndexOf(sal_Unicode('.')));
         if (0 < nIndex)
         {
@@ -417,7 +416,7 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
         do
         {
             ++count;
-            filename = basename + ::rtl::OUString::valueOf(count) + suffix;
+            filename = basename + OUString::valueOf(count) + suffix;
         }
         while (xStorage->hasByName(filename));
     }
@@ -429,21 +428,18 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
-        xStreamProps->setPropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
-            uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        xStreamProps->setPropertyValue("MediaType", uno::makeAny(OUString(
             //FIXME how to detect real media type?
             //but currently xmloff has this one hardcoded anyway...
-                    "application/vnd.sun.star.media"))));
+            "application/vnd.sun.star.media")));
         xStreamProps->setPropertyValue( // turn off compression
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
-            uno::makeAny(sal_False));
+            "Compressed", uno::makeAny(sal_False));
     }
     return xStream;
 }
 
 bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
-        ::rtl::OUString const& rSourceURL, ::rtl::OUString & o_rEmbeddedURL)
+        OUString const& rSourceURL, OUString & o_rEmbeddedURL)
 {
     try
     {
@@ -455,11 +451,11 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
         uno::Reference<embed::XStorage> const xStorage(
                 xSBD->getDocumentStorage(), uno::UNO_QUERY_THROW);
 
-        ::rtl::OUString const media(RTL_CONSTASCII_USTRINGPARAM("Media"));
+        OUString const media("Media");
         uno::Reference<embed::XStorage> const xSubStorage(
             xStorage->openStorageElement(media, embed::ElementModes::WRITE));
 
-        ::rtl::OUString filename(lcl_GetFilename(rSourceURL));
+        OUString filename(lcl_GetFilename(rSourceURL));
 
         uno::Reference<io::XStream> const xStream(
             lcl_CreateStream(xSubStorage, filename), uno::UNO_SET_THROW);
@@ -483,8 +479,7 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
             xTransaction->commit();
         }
 
-        ::rtl::OUStringBuffer buf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "vnd.sun.star.Package:")));
+        OUStringBuffer buf("vnd.sun.star.Package:");
         buf.append(media);
         buf.append(sal_Unicode('/'));
         buf.append(filename);

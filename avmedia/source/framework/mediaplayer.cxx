@@ -132,7 +132,7 @@ void MediaFloater::ToggleFloatingMode()
 
 // -----------------------------------------------------------------------------
 
-void MediaFloater::setURL( const ::rtl::OUString& rURL, bool bPlayImmediately )
+void MediaFloater::setURL( const OUString& rURL, bool bPlayImmediately )
 {
     if( mpMediaWindow )
     {
@@ -145,9 +145,9 @@ void MediaFloater::setURL( const ::rtl::OUString& rURL, bool bPlayImmediately )
 
 // -----------------------------------------------------------------------------
 
-const ::rtl::OUString& MediaFloater::getURL() const
+const OUString& MediaFloater::getURL() const
 {
-    static const ::rtl::OUString aEmptyStr;
+    static const OUString aEmptyStr;
     return( mpMediaWindow ? mpMediaWindow->getURL() : aEmptyStr );
 }
 
