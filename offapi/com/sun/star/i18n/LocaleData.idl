@@ -36,14 +36,7 @@ module com { module sun { module star { module i18n {
 
 
 /// Access locale specific data.
-published service LocaleData
-{
-    interface com::sun::star::i18n::XLocaleData;
-
-    [optional] interface com::sun::star::i18n::XLocaleData2;
-    [optional] interface com::sun::star::i18n::XLocaleData3;
-    [optional] interface com::sun::star::i18n::XLocaleData4;
-};
+published service LocaleData : com::sun::star::i18n::XLocaleData4;
 
 }; }; }; };
 

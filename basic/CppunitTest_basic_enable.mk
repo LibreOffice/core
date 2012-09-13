@@ -52,5 +52,6 @@ $(eval $(call gb_CppunitTest_use_ure,basic_enable))
 
 $(eval $(call gb_CppunitTest_use_components,basic_enable,\
     configmgr/source/configmgr \
+    i18npool/util/i18npool \
 ))
 $(eval $(call gb_CppunitTest_use_configuration,basic_enable))

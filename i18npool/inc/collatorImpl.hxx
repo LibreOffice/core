@@ -22,7 +22,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <cppuhelper/weak.hxx>
@@ -97,7 +97,7 @@ private :
     // Service Factory
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
     // lang::Locale Data
-    com::sun::star::uno::Reference < XLocaleData > localedata;
+    com::sun::star::uno::Reference < XLocaleData4 > mxLocaleData;
 
     sal_Bool SAL_CALL createCollator(const lang::Locale& rLocale, const rtl::OUString& serviceName,
         const rtl::OUString& rSortAlgorithm) throw(com::sun::star::uno::RuntimeException);

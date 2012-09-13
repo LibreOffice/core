@@ -28,7 +28,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
@@ -258,8 +258,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
     m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
     m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getLegacyServiceFactory() );
-    Reference< XLocaleData > xLocaleData;
-    m_aContext.createComponent( "com.sun.star.i18n.LocaleData", xLocaleData );
+    Reference< XLocaleData4 > xLocaleData( LocaleData::create(m_aContext.getUNOContext()) );
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
     m_sDecimalSep = aData.decimalSeparator;
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OSingleSelectQueryComposer::OSingleSelectQueryComposer decimal separator is not 1 length");

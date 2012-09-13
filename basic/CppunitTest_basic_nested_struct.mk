@@ -53,6 +53,7 @@ $(eval $(call gb_CppunitTest_use_ure,basic_nested_struct))
 
 $(eval $(call gb_CppunitTest_use_components,basic_nested_struct,\
     configmgr/source/configmgr \
+    i18npool/util/i18npool \
 ))
 $(eval $(call gb_CppunitTest_use_configuration,basic_nested_struct))
 

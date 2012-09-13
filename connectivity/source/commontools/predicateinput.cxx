@@ -21,6 +21,7 @@
 #include <connectivity/predicateinput.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
@@ -47,6 +48,7 @@ namespace dbtools
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::i18n::LocaleData;
     using ::com::sun::star::i18n::XLocaleData;
     using ::com::sun::star::i18n::LocaleDataItem;
 
@@ -123,9 +125,7 @@ namespace dbtools
             // create the locale data
             if ( m_xORB.is() )
             {
-                m_xLocaleData = m_xLocaleData.query( m_xORB->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.LocaleData" ) ) )
-                );
+                m_xLocaleData = LocaleData::create( comphelper::ComponentContext(m_xORB).getUNOContext() );
             }
         }
         catch( const Exception& )

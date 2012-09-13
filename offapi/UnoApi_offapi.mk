@@ -150,6 +150,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/inspection
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
 	BreakIterator \
+	LocaleData \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguistic2,\
 	LanguageGuessing \
@@ -847,7 +848,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
 	IndexEntrySupplier \
 	InputSequenceChecker \
 	LocaleCalendar \
-	LocaleData \
 	NativeNumberSupplier \
 	NumberFormatMapper \
 	OrdinalSuffix \

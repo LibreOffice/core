@@ -32,10 +32,12 @@
 #include "instance.hxx"
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
+
+#include <comphelper/componentcontext.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
@@ -73,9 +75,7 @@ LocaleDataWrapper::LocaleDataWrapper(
         bReservedWordValid( sal_False )
 {
     setLocale( rLocale );
-    xLD = Reference< XLocaleData4 > (
-        intl_createInstance( xSMgr, "com.sun.star.i18n.LocaleData",
-                             "LocaleDataWrapper" ), uno::UNO_QUERY );
+    xLD = LocaleData::create(comphelper::ComponentContext(xSMgr).getUNOContext());
 }
 
 

@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_ure,filter_pict_test))
 
 $(eval $(call gb_CppunitTest_use_components,filter_pict_test,\
     configmgr/source/configmgr \
+    i18npool/util/i18npool \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,filter_pict_test))
