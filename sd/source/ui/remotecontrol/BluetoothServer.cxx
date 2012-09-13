@@ -18,9 +18,16 @@
 #include "bluetooth/rfcomm.h"
 #endif
 
+#ifdef WIN32
+  #undef MSC // Unset a legacy define, as otherwise ws2bth.h breaks
+  #include <winsock2.h>
+  #include <ws2bth.h>
+#endif
+
 // FIXME: move this into an external file and look at sharing definitions
 // across OS's (i.e. UUID and port ).
 // Also look at determining which ports are available.
+// Alternatively use the binary sdp record
 #define BLUETOOTH_SERVICE_RECORD "<?xml version='1.0' encoding= 'UTF-8' ?><record><attribute id='0x0001'><sequence><uuid value='0x1101' /></sequence></attribute><attribute id='0x0004'><sequence><sequence><uuid value='0x0100' /></sequence><sequence><uuid value='0x0003' /><uint8 value='0x05' /></sequence></sequence></attribute><attribute id='0x0005'><sequence><uuid value='0x1002' /></sequence></attribute><attribute id='0x0006'><sequence><uint16 value='0x656e' /><uint16 value='0x006a' /><uint16 value='0x0100' /></sequence></attribute><attribute id='0x0009'><sequence><sequence><uuid value='0x1101' /><uint16 value='0x0100' /></sequence></sequence></attribute><attribute id='0x0100'><text value='Serial Port' /></attribute><attribute id='0x0101'><text value='COM Port' /></attribute></record>"
 
 #include "Communicator.hxx"
@@ -146,10 +153,102 @@ void BluetoothServer::execute()
         }
     }
 
-#else
+// LINUX && ENABLE_DBUS
+#elif defined(WIN32)
+    WORD wVersionRequested;
+    WSADATA wsaData;
 
+    wVersionRequested = MAKEWORD(2, 2);
+
+    if ( WSAStartup(wVersionRequested, &wsaData) )
+    {
+        return; // winsock dll couldn't be loaded
+    }
+
+    int aSocket = socket( AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM );
+    if ( !aSocket )
+    {
+        WSACleanup();
+        return;
+    }
+    SOCKADDR_BTH aAddr;
+    aAddr.addressFamily = AF_BTH;
+    aAddr.btAddr = 0;
+    aAddr.serviceClassId = GUID_NULL;
+    aAddr.port = BT_PORT_ANY; // Select any free socket.
+    if ( bind( aSocket, (SOCKADDR*) &aAddr, sizeof(aAddr) ) == SOCKET_ERROR )
+    {
+        closesocket( aSocket );
+        WSACleanup();
+        return;
+    }
+
+    SOCKADDR aName;
+    int aNameSize = sizeof(aAddr);
+    getsockname( aSocket, &aName, &aNameSize ); // Retrieve the local address and port
+
+    CSADDR_INFO aAddrInfo;
+    memset( &aAddrInfo, 0, sizeof(aAddrInfo) );
+    aAddrInfo.LocalAddr.lpSockaddr = &aName;
+    aAddrInfo.LocalAddr.iSockaddrLength = sizeof( SOCKADDR_BTH );
+    aAddrInfo.RemoteAddr.lpSockaddr = &aName;
+    aAddrInfo.RemoteAddr.iSockaddrLength = sizeof( SOCKADDR_BTH );
+    aAddrInfo.iSocketType = SOCK_STREAM;
+    aAddrInfo.iProtocol = BTHPROTO_RFCOMM;
+
+    // To be used for setting a custom UUID once available.
+//    GUID uuid;
+//    uuid.Data1 = 0x00001101;
+//  memset( &uuid, 0x1000 + UUID*2^96, sizeof( GUID ) );
+//    uuid.Data2 = 0;
+//    uuid.Data3 = 0x1000;
+//    ULONGLONG aData4 = 0x800000805F9B34FB;
+//    memcpy( uuid.Data4, &aData4, sizeof(uuid.Data4) );
+
+    WSAQUERYSET aRecord;
+    memset( &aRecord, 0, sizeof(aRecord));
+    aRecord.dwSize = sizeof(aRecord);
+    aRecord.lpszServiceInstanceName = "LibreOffice-SDRemote"; // Optional
+    aRecord.lpszComment = "Remote control of presentations over bluetooth.";
+    aRecord.lpServiceClassId = (LPGUID) &SerialPortServiceClass_UUID;
+    aRecord.dwNameSpace = NS_BTH;
+    aRecord.dwNumberOfCsAddrs = 1;
+    aRecord.lpcsaBuffer = &aAddrInfo;
+
+    if ( WSASetService( &aRecord, RNRSERVICE_REGISTER, 0 ) == SOCKET_ERROR )
+    {
+        closesocket( aSocket );
+        WSACleanup();
+        return;
+    }
+
+    if ( listen( aSocket, 1 ) == SOCKET_ERROR )
+    {
+        closesocket( aSocket );
+        WSACleanup();
+        return;
+    }
+
+    SOCKADDR_BTH aRemoteAddr;
+    int aRemoteAddrLen = sizeof(aRemoteAddr);
+    while ( true )
+    {
+        int bSocket;
+        if ( (bSocket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) == INVALID_SOCKET )
+        {
+            closesocket( aSocket );
+            WSACleanup();
+            return;
+        } else {
+            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket) );
+            mpCommunicators->push_back( pCommunicator );
+            pCommunicator->launch();
+        }
+    }
+
+// WIN32
+#else // !(defined(LINUX) && defined(ENABLE_DBUS)) && !defined(WIN32)
     (void) mpCommunicators; // avoid warnings about unused member
-
 #endif
 }
 
