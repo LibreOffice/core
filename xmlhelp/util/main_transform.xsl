@@ -371,6 +371,10 @@
 			<xsl:apply-templates />
 		</xsl:when>		
 		
+		<xsl:when test="@role='bascode'">
+			<xsl:call-template name="insertbascode" />
+		</xsl:when>
+
 		<xsl:otherwise>
 			<xsl:call-template name="insertpara" />
 		</xsl:otherwise>
@@ -592,6 +596,11 @@
 		</xsl:choose>
 	</xsl:variable>
 	<p class="{$role}"><xsl:apply-templates /></p>
+</xsl:template>
+
+<!-- Insert Basic code snippet  -->
+<xsl:template name="insertbascode">
+	<pre><xsl:apply-templates /></pre>
 </xsl:template>
 
 <!-- Insert "How to get Link" -->
