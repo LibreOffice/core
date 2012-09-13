@@ -1697,6 +1697,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_TARGET_FRAME_NAME,
                       GetStringProperty(sPropertyTargetFrame,rPropSet),
                       sal_True, XML_NAMESPACE_OFFICE);
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, XML_A,
                                      sal_False, sal_False);
         GetExport().Characters(sPresentation);
