@@ -1292,7 +1292,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
  For explicit attributes we turn the adjusted writer tabstops back into 0 based
  word indexes and we'll turn them back into writer indexes when setting them
  into the document. If explicit left indent exist which affects them, then this
- is handled when the explict left indent is set into the document
+ is handled when the explicit left indent is set into the document
 */
 void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 {
