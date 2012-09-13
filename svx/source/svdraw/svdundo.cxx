@@ -64,6 +64,8 @@ static void ImplUnmarkObject( SdrObject* pObj )
 
 TYPEINIT1(SdrUndoAction,SfxUndoAction);
 
+SdrUndoAction::~SdrUndoAction() {}
+
 sal_Bool SdrUndoAction::CanRepeat(SfxRepeatTarget& rView) const
 {
     SdrView* pV=PTR_CAST(SdrView,&rView);
@@ -552,6 +554,8 @@ XubString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrUndoMoveObj::~SdrUndoMoveObj() {}
 
 void SdrUndoMoveObj::Undo()
 {

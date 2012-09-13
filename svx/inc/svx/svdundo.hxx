@@ -72,6 +72,8 @@ protected:
 
 public:
     TYPEINFO();
+    virtual ~SdrUndoAction();
+
     virtual sal_Bool CanRepeat(SfxRepeatTarget& rView) const;
     virtual void Repeat(SfxRepeatTarget& rView);
 
@@ -210,6 +212,7 @@ protected:
 public:
     SdrUndoMoveObj(SdrObject& rNewObj): SdrUndoObj(rNewObj) {}
     SdrUndoMoveObj(SdrObject& rNewObj, const Size& rDist): SdrUndoObj(rNewObj),aDistance(rDist) {}
+    virtual ~SdrUndoMoveObj();
 
     void SetDistance(const Size& rDist) { aDistance=rDist; }
     const Size& GetDistance() const { return aDistance; }
