@@ -114,11 +114,11 @@ public:
     void                    setZoom( ::com::sun::star::media::ZoomLevel eZoom );
     ::com::sun::star::media::ZoomLevel  getZoom() const;
 
-    void                    setURL( const ::rtl::OUString& rURL,
-                                    ::rtl::OUString const*const pTempURL);
-    const ::rtl::OUString&  getURL() const;
+    void                    setURL( const OUString& rURL,
+                                    OUString const*const pTempURL);
+    const OUString&  getURL() const;
 
-    const ::rtl::OUString&  getTempURL() const;
+    const OUString&  getTempURL() const;
 
 private:
 
@@ -131,8 +131,8 @@ typedef ::avmedia::MediaItem avmedia_MediaItem;
 bool AVMEDIA_DLLPUBLIC EmbedMedia(
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>
             const& xModel,
-        ::rtl::OUString const& rSourceURL,
-        ::rtl::OUString & o_rEmbeddedURL);
+        OUString const& rSourceURL,
+        OUString & o_rEmbeddedURL);
 
 }
 

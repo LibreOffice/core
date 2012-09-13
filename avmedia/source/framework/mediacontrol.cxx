@@ -497,7 +497,7 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
         {
             case( AVMEDIA_TOOLBOXITEM_OPEN ):
             {
-                ::rtl::OUString aURL;
+                OUString aURL;
 
                  if (::avmedia::MediaWindow::executeMediaURLDialog(
                              GetParent(), aURL, 0))

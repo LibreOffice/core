@@ -63,7 +63,7 @@ namespace rtl { class OUString; }
 
 namespace avmedia
 {
-    typedef ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > FilterNameVector;
+    typedef ::std::vector< ::std::pair< OUString, OUString > > FilterNameVector;
 
     class MediaItem;
 
@@ -79,8 +79,8 @@ namespace avmedia
                             MediaWindow( Window* parent, bool bInternalMediaControl );
         virtual             ~MediaWindow();
 
-        void                setURL( const ::rtl::OUString& rURL );
-        const ::rtl::OUString&  getURL() const;
+        void                setURL( const OUString& rURL );
+        const OUString&     getURL() const;
 
         bool                isValid() const;
         Size                getPreferredSize() const;
@@ -121,13 +121,13 @@ namespace avmedia
         /// @param o_pbLink if not 0, this is an "insert" dialog: display link
         ///                 checkbox and store its state in *o_pbLink
         static bool         executeMediaURLDialog( Window* pParent,
-                ::rtl::OUString& rURL, bool *const o_pbLink );
+                OUString& rURL, bool *const o_pbLink );
         static void         executeFormatErrorBox( Window* pParent );
-        static bool         isMediaURL( const ::rtl::OUString& rURL, bool bDeep = false, Size* pPreferredSizePixel = NULL );
+        static bool         isMediaURL( const OUString& rURL, bool bDeep = false, Size* pPreferredSizePixel = NULL );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL );
+        static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > grabFrame( const ::rtl::OUString& rURL,
+        static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > grabFrame( const OUString& rURL,
                                                                                                   bool bAllowToCreateReplacementGraphic = false,
                                                                                                   double fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME );
 
