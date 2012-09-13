@@ -33,6 +33,9 @@
 
 #ifndef LINKER_DEBUG
 #error LINKER_DEBUG should be defined to either 1 or 0 in Android.mk
+#else
+#undef LINKER_DEBUG
+#define LINKER_DEBUG 1
 #endif
 
 /* set LINKER_DEBUG_TO_LOG to 1 to send the logs to logcat,

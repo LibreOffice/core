@@ -169,7 +169,7 @@ struct soinfo
 };
 
 
-extern soinfo libdl_info;
+extern soinfo liblo_bootstrap_info;
 
 
 #include <asm/elf.h>

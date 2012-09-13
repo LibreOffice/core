@@ -79,10 +79,10 @@ static int soinfo_link_image(soinfo *si);
 static int socount = 0;
 static soinfo sopool[SO_MAX];
 static soinfo *freelist = NULL;
-static soinfo *solist = &libdl_info;
-static soinfo *sonext = &libdl_info;
+static soinfo *solist = &liblo_bootstrap_info;
+static soinfo *sonext = &liblo_bootstrap_info;
 #if ALLOW_SYMBOLS_FROM_MAIN
-static soinfo *somain; /* main process, always the one after libdl_info */
+static soinfo *somain; /* main process, always the one after liblo_bootstrap_info */
 #endif
 
 
@@ -90,7 +90,7 @@ static char ldpaths_buf[LDPATH_BUFSIZE];
 static const char *ldpaths[LDPATH_MAX + 1];
 
 #if LINKER_DEBUG
-int debug_verbosity;
+int debug_verbosity = 2;
 #endif
 
 static int pid;
@@ -300,7 +300,7 @@ static void soinfo_free(soinfo* si)
     }
 
     /* prev will never be NULL, because the first entry in solist is
-       always the static libdl_info.
+       always the static liblo_bootstrap_info.
     */
     prev->next = si->next;
     if (si == sonext) sonext = prev;

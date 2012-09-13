@@ -69,18 +69,15 @@
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
+/* The functions from our tweaked copy of the run-time linker, in
+ * sal/android/bionic/linker
+ */
 extern void *__lo_dlopen(const char *path, int flags);
 extern const char *__lo_dlerror(void);
 extern void *__lo_dlsym(void *handle, const char *symbol);
 extern int __lo_dlclose(void *handle);
 extern int __lo_dladdr(void *addr, Dl_info *info);
 extern void __lo_linker_init(void);
-
-#define dlopen __lo_dlopen
-#define dlerror __lo_dlerror
-#define dlsym __lo_dlsym
-#define dlclose __lo_dlclose
-#define dladdr __lo_dladdr
 
 struct engine {
     int dummy;
@@ -869,6 +866,13 @@ lo_dlopen(const char *library)
 
     struct timeval tv0, tv1, tvdiff;
 
+    FILE *maps;
+    char line[200];
+
+    /* libdl.so is special */
+    if (strcmp(library, "libdl.so") == 0)
+        return (void *) 42; /* ??? */
+
     rover = loaded_libraries;
     while (rover != NULL &&
            strcmp(rover->name, library) != 0)
@@ -923,16 +927,48 @@ lo_dlopen(const char *library)
     }
     free_ptrarray((void **) needed);
 
+    /* Find out if the real system run-time linker has loaded it */
+    maps = fopen("/proc/self/maps", "r");
+    if (maps == NULL) {
+        LOGE("lo_dladdr: Could not open /proc/self/maps: %s", strerror(errno));
+        return NULL;
+    }
+
+    found = 0;
+    while (fgets(line, sizeof(line), maps) != NULL &&
+           line[strlen(line)-1] == '\n') {
+        char file[sizeof(line)];
+        file[0] = '\0';
+        if (sscanf(line, "%*x-%*x %*s %*x %*x:%*x %*d %[^\n]", file) == 1) {
+            if (strcmp(file, full_name) == 0) {
+                found = 1;
+                break;
+            }
+        }
+    }
+    fclose(maps);
+
     gettimeofday(&tv0, NULL);
-    p = dlopen(full_name, RTLD_LOCAL);
+    if (found) {
+        /* It is already mapped, but it wasn't in our loaded_libraries list,
+         * presumably it's the system run-time linker that has loaded it.
+         */
+        LOGI("lo_dlopen: Using system dlopen()");
+        p = dlopen(full_name, RTLD_LOCAL);
+    } else {
+        /* Call our tweaked copy of the run-time linker to load it. */
+        LOGI("lo_dlopen: Using our tweaked__lo_dlopen()");
+        p = __lo_dlopen(full_name, RTLD_LOCAL);
+    }
     gettimeofday(&tv1, NULL);
     timersub(&tv1, &tv0, &tvdiff);
-    LOGI("dlopen(%s) = %p, %ld.%03lds",
+    LOGI("%s(%s) = %p, %ld.%03lds",
+         (found ? "dlopen" : "__lo_dlopen"),
          full_name, p,
          (long) tvdiff.tv_sec, (long) tvdiff.tv_usec / 1000);
     free(full_name);
     if (p == NULL)
-        LOGE("lo_dlopen: Error from dlopen(%s): %s", library, dlerror());
+        LOGE("lo_dlopen: Error from __lo_dlopen(%s): %s", library, (found ? dlerror() : __lo_dlerror()));
 
     new_loaded_lib = malloc(sizeof(*new_loaded_lib));
     new_loaded_lib->name = strdup(library);
@@ -949,10 +985,20 @@ void *
 lo_dlsym(void *handle,
          const char *symbol)
 {
-    void *p = dlsym(handle, symbol);
-    /* LOGI("dlsym(%p, %s) = %p", handle, symbol, p); */
+    int used_system_dlsym = 0;
+    void *p;
+
+    p = __lo_dlsym(handle, symbol);
+    LOGI("__lo_dlsym(%p, %s) = %p", handle, symbol, p);
+
+    if (p == NULL) {
+        used_system_dlsym = 1;
+        p = dlsym(handle, symbol);
+        LOGI("dlsym(%p, %s) = %p", handle, symbol, p);
+    }
+
     if (p == NULL)
-        LOGE("lo_dlsym: %s", dlerror());
+        LOGE("lo_dlsym: %s", (used_system_dlsym ? dlerror() : __lo_dlerror()));
     return p;
 }
 
@@ -966,11 +1012,16 @@ lo_dladdr(void *addr,
     int result;
     int found;
 
-    result = dladdr(addr, info);
+    result = __lo_dladdr(addr, info);
+    LOGI("__lo_dladdr(%p) = 0", addr);
+
     if (result == 0) {
-        /* LOGI("dladdr(%p) = 0", addr); */
-        return 0;
+        result = dladdr(addr, info);
+        LOGI("dladdr(%p) = 0", addr);
     }
+
+    if (result == 0)
+        return 0;
 
     maps = fopen("/proc/self/maps", "r");
     if (maps == NULL) {
@@ -1368,13 +1419,21 @@ patch(const char *symbol,
      * containing lo_main() already, libgnustl_shared.so will have
      * been brought in, too.
      */
-    libgnustl_shared = dlopen("libgnustl_shared.so", RTLD_LOCAL);
+    libgnustl_shared = __lo_dlopen("libgnustl_shared.so", RTLD_LOCAL);
+
+    if (libgnustl_shared == NULL)
+        libgnustl_shared = dlopen("libgnustl_shared.so", RTLD_LOCAL);
+
     if (libgnustl_shared == NULL) {
         LOGF("android_main: libgnustl_shared.so not mapped??");
         exit(0);
     }
 
-    code = dlsym(libgnustl_shared, symbol);
+    code = __lo_dlsym(libgnustl_shared, symbol);
+
+    if (code == NULL)
+        code = dlsym(libgnustl_shared, symbol);
+
     if (code == NULL) {
         LOGF("android_main: %s not found!?", plaintext);
         exit(0);
@@ -1586,7 +1645,7 @@ Java_org_libreoffice_android_Bootstrap_initVCL(JNIEnv* env,
 
     /* This obviously should be called only after libvcllo.so has been loaded */
 
-    InitVCLWrapper = dlsym(RTLD_DEFAULT, "InitVCLWrapper");
+    InitVCLWrapper = __lo_dlsym(RTLD_DEFAULT, "InitVCLWrapper");
     if (InitVCLWrapper == NULL) {
         LOGE("InitVCL: InitVCLWrapper not found");
         return;
@@ -1626,7 +1685,7 @@ Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
         c_argv[0] = new_argv0;
     }
 
-    osl_setCommandArgs = dlsym(RTLD_DEFAULT, "osl_setCommandArgs");
+    osl_setCommandArgs = __lo_dlsym(RTLD_DEFAULT, "osl_setCommandArgs");
     if (osl_setCommandArgs == NULL) {
         LOGE("setCommandArgs: osl_setCommandArgs not found");
         return;
@@ -1644,7 +1703,7 @@ Java_org_libreoffice_android_Bootstrap_createWindowFoo(JNIEnv* env,
     (void) clazz;
 
     lo_dlopen("libvcllo.so");
-    createWindowFoo = dlsym(RTLD_DEFAULT, "createWindowFoo");
+    createWindowFoo = __lo_dlsym(RTLD_DEFAULT, "createWindowFoo");
     if (createWindowFoo == NULL) {
         LOGE("createWindowFoo: createWindowFoo not found");
         return 0;

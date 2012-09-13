@@ -292,8 +292,6 @@ public class Bootstrap extends NativeActivity
     // time by the package manager.
     static {
         System.loadLibrary("lo-bootstrap");
-        System.loadLibrary("gnustl_shared");
-        System.loadLibrary("libotouchlo");
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
