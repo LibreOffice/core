@@ -147,7 +147,7 @@ Window* MediaToolBoxControl::CreateItemWindow( Window *pParent )
 
 void MediaToolBoxControl::implUpdateMediaControl()
 {
-    updateStatus( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AVMediaToolBox" ) ) );
+    updateStatus( ".uno:AVMediaToolBox" );
 }
 
 // -----------------------------------------------------------------------------
@@ -160,10 +160,10 @@ void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
 
     aExecItem.merge( rItem );
     aExecItem.QueryValue( aAny );
-    aArgs[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AVMediaToolBox" ) );
+    aArgs[ 0 ].Name = "AVMediaToolBox" ;
     aArgs[ 0 ].Value = aAny;
 
-    Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AVMediaToolBox" ) ), aArgs );
+    Dispatch( ".uno:AVMediaToolBox" , aArgs );
 }
 
 }
