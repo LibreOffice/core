@@ -28,8 +28,7 @@
 module com {  module sun {  module star {  module io {
 
 
-// DocMerge from xml: service com::sun::star::io::Pipe
-/** the implementation of an output stream and an input stream.
+/** The implementation of an output stream and an input stream.
     <p>
     All data written through the outputstream is buffered until it is
     read again from the input stream. Often two different threads access
@@ -37,13 +36,13 @@ module com {  module sun {  module star {  module io {
 
     <p> With the pipe-service, an outputstream can be converted into an
     input stream at the cost of an additional buffer.
+
+    @since LibreOffice 3.7
  */
 published interface XPipe
 {
-    // DocMerge: empty anyway
     interface com::sun::star::io::XOutputStream;
 
-    // DocMerge: empty anyway
     interface com::sun::star::io::XInputStream;
 
 };
