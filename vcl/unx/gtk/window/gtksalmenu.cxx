@@ -20,7 +20,7 @@
  * Author: Antonio Fernández <antonio.fernandez@aentos.es>
  */
 
-#include "unx/gtk/gtksalmenu.hxx"
+#include <unx/gtk/gtksalmenu.hxx>
 
 //#include <gtk/gtk.h>
 #include <unx/gtk/glomenu.h>
@@ -421,7 +421,7 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
 GtkSalMenu::~GtkSalMenu()
 {
     if ( mbMenuBar == sal_True ) {
-        g_source_remove_by_user_data( this );
+//        g_source_remove_by_user_data( this );
 
         ((GtkSalFrame*) mpFrame)->SetMenu( NULL );
 
