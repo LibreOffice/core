@@ -1152,11 +1152,36 @@ void XMLTextParagraphExport::exportListChange(
     }
 }
 
+struct XMLTextParagraphExport::Impl
+{
+    typedef ::std::map<Reference<XFormField>, sal_Int32> FieldMarkMap_t;
+    FieldMarkMap_t m_FieldMarkMap;
+
+    explicit Impl() {}
+    sal_Int32 AddFieldMarkStart(Reference<XFormField> const& i_xFieldMark)
+    {
+        assert(m_FieldMarkMap.find(i_xFieldMark) == m_FieldMarkMap.end());
+        sal_Int32 const ret(m_FieldMarkMap.size());
+        m_FieldMarkMap.insert(::std::make_pair(i_xFieldMark, ret));
+        return ret;
+    }
+    sal_Int32 GetFieldMarkIndex(Reference<XFormField> const& i_xFieldMark)
+    {
+        FieldMarkMap_t::const_iterator const it(
+                m_FieldMarkMap.find(i_xFieldMark));
+        // rely on SwXFieldmark::CreateXFieldmark returning the same instance
+        // because the Reference in m_FieldMarkMap will keep it alive
+        assert(it != m_FieldMarkMap.end());
+        return it->second;
+    }
+};
+
 XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP & rASP
         ) :
     XMLStyleExport( rExp, OUString(), &rASP ),
+    m_pImpl(new Impl),
     rAutoStylePool( rASP ),
     pBoundFrameSets(new BoundFrameSets(GetExport().GetModel())),
     pFieldExport( 0 ),
@@ -2178,7 +2203,8 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         sal_Bool bAutoStyles, sal_Bool bIsProgress,
         sal_Bool bPrvChrIsSpc )
 {
-    static OUString sMeta("InContentMetadata");
+    static const OUString sMeta("InContentMetadata");
+    static const OUString sFieldMarkName("__FieldMark_");
     bool bPrevCharIsSpace = bPrvChrIsSpc;
     bool bAnnotationStarted = false;
 
@@ -2304,16 +2330,22 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 {
                     if (xFormField.is())
                     {
+                        OUString sName;
                         Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
                         if (xParameters.is() && xParameters->hasByName("Name"))
                         {
                             const Any aValue = xParameters->getByName("Name");
                             OUString sValue;
-                            if (aValue >>= sValue)
-                            {
-                                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, sValue);
-                            }
+                            aValue >>= sName;
                         }
+                        if (sName.isEmpty())
+                        {   // name attribute is mandatory, so have to pull a
+                            // rabbit out of the hat here
+                            sName = sFieldMarkName + OUString::valueOf(
+                                    m_pImpl->AddFieldMarkStart(xFormField));
+                        }
+                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
+                                sName);
                         SvXMLElementExport aElem( GetExport(), !bAutoStyles,
                             XML_NAMESPACE_TEXT, XML_BOOKMARK_START,
                             sal_False, sal_False );
@@ -2358,20 +2390,25 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                     if (xFormField.is())
                     {
+                        OUString sName;
                         Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
                         if (xParameters.is() && xParameters->hasByName("Name"))
                         {
                             const Any aValue = xParameters->getByName("Name");
-                            OUString sValue;
-                            if (aValue >>= sValue)
-                            {
-                                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, sValue);
-                            }
+                            aValue >>= sName;
                         }
+                        if (sName.isEmpty())
+                        {   // name attribute is mandatory, so have to pull a
+                            // rabbit out of the hat here
+                            sName = sFieldMarkName + OUString::valueOf(
+                                m_pImpl->GetFieldMarkIndex(xFormField));
+                        }
+                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
+                                sName);
+                        SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                            XML_NAMESPACE_TEXT, XML_BOOKMARK_END,
+                            sal_False, sal_False );
                     }
-                    SvXMLElementExport aElem( GetExport(), !bAutoStyles,
-                        XML_NAMESPACE_TEXT, XML_BOOKMARK_END,
-                        sal_False, sal_False );
                 }
             }
             else if (sType.equals(sTextFieldStartEnd))
@@ -2401,10 +2438,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     if (xBookmark.is())
                     {
                         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                        SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                            XML_NAMESPACE_TEXT, XML_BOOKMARK,
+                            sal_False, sal_False );
                     }
-                    SvXMLElementExport aElem( GetExport(), !bAutoStyles,
-                        XML_NAMESPACE_TEXT, XML_BOOKMARK,
-                        sal_False, sal_False );
                 }
             }
             else if (sType.equals(sSoftPageBreak))
