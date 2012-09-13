@@ -89,6 +89,7 @@ public:
     void testN775899();
     void testN777345();
     void testN777337();
+    void testN778836();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -120,6 +121,7 @@ public:
     CPPUNIT_TEST(testN775899);
     CPPUNIT_TEST(testN777345);
     CPPUNIT_TEST(testN777337);
+    CPPUNIT_TEST(testN778836);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -799,6 +801,19 @@ void Test::testN777337()
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "BottomMargin"));
+}
+
+void Test::testN778836()
+{
+    /*
+     * The problem was that the paragraph inherited margins from the numbering
+     * and parent paragraph styles and the result was incorrect.
+     */
+    load("n778836.docx");
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(0), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3810), getProperty<sal_Int32>(getParagraph(0), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(0), "ParaFirstLineIndent"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
