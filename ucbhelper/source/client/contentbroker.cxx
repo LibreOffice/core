@@ -35,13 +35,13 @@ InitUCBHelper()
     Reference< XComponentContext > xCtx;
     try
     {
-        Reference< XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
+        xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
     }
     catch( Exception& )
     {
     }
 
-    if( !xFactory.is() )
+    if( !xCtx.is() )
     {
         fprintf( stderr,
                  "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
