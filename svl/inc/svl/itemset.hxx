@@ -78,6 +78,16 @@ class SVL_DLLPUBLIC SfxItemSet
     sal_uInt16*                     _pWhichRanges;  // Array von Which-Bereichen
     sal_uInt16                      _nCount;        // Anzahl Items
 
+    //optimize a comparing operation from 'memcmp' to 'hash compare' to improve xls loading performance, i120575
+    sal_Int32 _aHashKey; //hash result of array of points: _aItems.
+
+    void UpdateHashKey();
+    //Need invlidate the hashkey at every possible place where the array _aItems may be changed.
+    //thread safe : there is always solarmutex outter, so no need to add mutex here.
+    void InvalidateHashKey() { _aHashKey = 0;} //treat '0' as an invalidate key.
+    sal_Bool IsValidateHashKey() const { return (0!=_aHashKey);}
+    sal_Int32 GetHashKey() const { return _aHashKey; }
+    //end:i120575
     //---------------------------------------------------------------------
 #ifndef _SFXITEMS_HXX
 
@@ -91,7 +101,14 @@ private:
     SVL_DLLPRIVATE void                     InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2);
 
 public:
-    SfxItemArray                GetItems_Impl() const { return _aItems; }
+    //optimize a comparing operation from 'memcmp' to 'hash compare' to improve xls loading performance, i120575
+    //Make this method public is dangerous, may disrupt the item array. so invalidate the hash key here.
+    //currently this method is never called, pls also do not do it in future.
+    SfxItemArray    GetItems_Impl() const
+    {
+        const_cast<SfxItemSet &>(*this).InvalidateHashKey();
+        return _aItems;
+    }//end:i120575
 
 #endif
     //---------------------------------------------------------------------
@@ -169,6 +186,13 @@ public:
     virtual SvStream &          Store( SvStream &, FASTBOOL bDirect = sal_False ) const;
 
     virtual int                 operator==(const SfxItemSet &) const;
+
+    //optimize a comparing operation from 'memcmp' to 'hash compare' to improve xls loading performance, i120575
+    //in some situation (e.g.. ScPatternAttr::operator== ),
+    //two sfxitemset can be compared 'quickly' by the Hashkey only.
+    //may also update the hashkey in this method.
+    sal_Bool QuickCompare( SfxItemSet & rCmp);
+    //end:i120575
 };
 
 // --------------- Inline Implementierungen ------------------------
