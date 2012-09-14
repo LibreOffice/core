@@ -51,4 +51,22 @@
         android:text="www.libreoffice.org"
         tools:ignore="HardcodedText" />
 
+    <TextView
+        android:id="@+id/about_licence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dip"
+        android:gravity="center_horizontal"
+        android:text="@string/about_licence" />
+
+    <TextView
+        android:id="@+id/about_libraries"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dip"
+
+        android:text="@string/about_libraries" />
+
 </LinearLayout>

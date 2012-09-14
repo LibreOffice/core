@@ -33,6 +33,8 @@
     <string name="about_close">Close</string>
     <string name="about_versionstring">Version: {0} (Build ID: {1})</string>
     <string name="about_copyright">Copyright \u00A9 2012 LibreOffice Contributors and/or their affiliates.</string>
+    <string name="about_licence">This app is release under the Mozilla Public License, v. 2.0.</string>
+    <string name="about_libraries">This app uses android-coverflow\n\tCopyright © 2011, Polidea\n\tAll rights reserved.\n\nThis app uses ActionBarSherlock:\n\tCopyright 2012 Jake Wharton\n\tLicensed under the Apache License, Version 2.0 (the "License")</string>
     <string name="addserver">Add Server</string>
     <string name="addserver_entername">Server name:</string>
     <string name="addserver_enteraddress">Server address as IP or hostname:</string>
@@ -40,5 +42,6 @@
     <string name="addserver_add">Add</string>
     <string name="addserver_cancel">Cancel</string>
     <string name="reconnect_description1">Your connection has been dropped.</string>
-<string name="reconnect_description2">Attempting to reconnect…</string>
+    <string name="reconnect_description2">Attempting to reconnect…</string>
+
 </resources>

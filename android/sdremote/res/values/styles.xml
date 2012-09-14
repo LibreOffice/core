@@ -25,7 +25,7 @@
         <item name="android:titleTextStyle">@style/Theme.ImpressRemote.ActionBar.Title</item>
         <item name="titleTextStyle">@style/Theme.ImpressRemote.ActionBar.Title</item>
         <item name="backgroundSplit">@color/text_grey</item>
-    <item name="android:backgroundSplit">@color/text_grey</item>
+        <item name="android:backgroundSplit">@color/text_grey</item>
     </style>
 
     <style name="Theme.ImpressRemote.ActionBarWidget" parent="android:style/Widget.Holo.Light">
@@ -41,9 +41,22 @@
 
     <style name="Theme.ImpressRemote.ActionBarMenuItem" parent="Widget.Sherlock.Light.Spinner.DropDown.ActionBar">
         <item name="android:background">@color/grey</item>
-
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="Theme.ImpressRemote.Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/light_grey</item>
+        <item name="android:fullDark">@color/light_grey</item>
+        <item name="android:topDark">@color/light_grey</item>
+        <item name="android:centerDark">@color/light_grey</item>
+        <item name="android:bottomDark">@color/light_grey</item>
+        <item name="android:fullBright">@color/light_grey</item>
+        <item name="android:centerBright">@color/light_grey</item>
+        <item name="android:bottomBright">@color/light_grey</item>
+        <item name="android:bottomMedium">@color/light_grey</item>
+        <item name="android:centerMedium">@color/light_grey</item>
+        <item name="android:textColor">@color/grey</item>
     </style>
 
     <style name="Theme.ImpressRemote" parent="Theme.Sherlock.Light.DarkActionBar">
@@ -56,7 +69,7 @@
         <item name="android:windowBackground">@color/light_grey</item>
         <item name="android:homeAsUpIndicator">@drawable/up_indicator_white</item>
         <item name="android:textColor">@color/text_grey</item>
-
+        <item name="android:alertDialogStyle">@style/Theme.ImpressRemote.Dialog</item>
     </style>
 
 </resources>
