@@ -498,12 +498,6 @@ $(eval $(call gb_Library_add_defs,vcl,\
     ) \
 ))
 
-ifeq ($(ENABLE_CUPS),YES)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DENABLE_CUPS\
-))
-endif
-
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
@@ -515,15 +509,15 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/plugadapt/salplug \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
-    $(if $(filter YES,$(ENABLE_CUPS)),\
+    $(if $(filter TRUE,$(ENABLE_CUPS)),\
         vcl/unx/generic/printer/cupsmgr \
-        vcl/unx/generic/printer/printerinfomanager \
-    ) \
-    $(if $(filter NO,$(ENABLE_CUPS)),\
+        vcl/unx/generic/printer/printerinfomanager, \
+      else \
         vcl/null/printerinfomanager \
     ) \
 ))
 $(eval $(call gb_Library_use_externals,vcl,\
+	cups \
 	dbus \
 	fontconfig \
 	freetype \

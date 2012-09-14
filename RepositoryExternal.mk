@@ -1219,6 +1219,26 @@ $(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
 
 endef
 
+ifeq ($(ENABLE_CUPS),TRUE)
+
+define gb_LinkTarget__use_cups
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DENABLE_CUPS \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lcups \
+)
+
+endef
+
+else # ENABLE_CUPS
+
+define gb_LinkTarget__use_cups
+
+endef
+
+endif # ENABLE_DBUS
 
 ifeq ($(ENABLE_DBUS),TRUE)
 
