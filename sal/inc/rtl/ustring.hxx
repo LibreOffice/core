@@ -169,7 +169,7 @@ public:
     }
 
     /**
-      New string from a Uniocde character buffer array.
+      New string from a Unicode character buffer array.
 
       @param    value       a Unicode character array.
       @param    length      the number of character which should be copied.
