@@ -1415,7 +1415,10 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
     Sequence<sal_Int8> aData;
     sal_Int32          nSize;
 
-    nCount = SAL_MIN(nCount, 0x7FFFFFFF);
+    if(nCount > 0x7FFFFFFF)
+    {
+        nCount = 0x7FFFFFFF;
+    }
     try
     {
         if ( !m_bTerminated && !IsSynchronMode() )

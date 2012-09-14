@@ -116,9 +116,14 @@ sal_uInt32 writeString(sal_uInt8* buffer, const sal_Unicode* v)
 
 sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSize)
 {
-    sal_uInt32 len = SAL_MIN(UINT16StringLen(buffer) + 1, maxSize / 2);
+    sal_uInt32 len = UINT16StringLen(buffer) + 1;
     sal_uInt32 i;
     sal_uInt8* buff = (sal_uInt8*)buffer;
+
+    if(len > maxSize / 2)
+    {
+        len = maxSize / 2;
+    }
 
     for (i = 0; i < (len - 1); i++)
     {
@@ -615,8 +620,9 @@ void MethodEntry::reallocParams(sal_uInt16 size)
     if (m_paramCount)
     {
         sal_uInt16 i;
+        sal_uInt16 mn = size < m_paramCount ? size : m_paramCount;
 
-        for (i = 0; i < SAL_MIN(size, m_paramCount); i++)
+        for (i = 0; i < mn; i++)
         {
             newParams[i].setData(m_params[i].m_typeName, m_params[i].m_name, m_params[i].m_mode);
         }
@@ -638,8 +644,9 @@ void MethodEntry::reallocExcs(sal_uInt16 size)
         newExcNames = NULL;
 
     sal_uInt16 i;
+    sal_uInt16 mn = size < m_excCount ? size : m_excCount;
 
-    for (i = 0; i < SAL_MIN(size, m_excCount); i++)
+    for (i = 0; i < mn; i++)
     {
         newExcNames[i] = m_excNames[i];
     }

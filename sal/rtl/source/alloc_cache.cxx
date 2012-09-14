@@ -658,7 +658,10 @@ rtl_cache_depot_dequeue (
 
         /* update depot stats */
         depot->m_mag_count--;
-        depot->m_curr_min = SAL_MIN(depot->m_curr_min, depot->m_mag_count);
+        if(depot->m_curr_min > depot->m_mag_count)
+        {
+            depot->m_curr_min = depot->m_mag_count;
+        }
     }
     return (mag);
 }
@@ -1470,7 +1473,7 @@ rtl_cache_depot_wsupdate (
     depot->m_prev_min = depot->m_curr_min;
     depot->m_curr_min = depot->m_mag_count;
 
-    npurge = SAL_MIN(depot->m_curr_min, depot->m_prev_min);
+    npurge = depot->m_curr_min < depot->m_prev_min ? depot->m_curr_min : depot->m_prev_min;
     for (; npurge > 0; npurge--)
     {
         rtl_cache_magazine_type * mag = rtl_cache_depot_dequeue (depot);

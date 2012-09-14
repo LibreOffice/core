@@ -32,10 +32,6 @@
 #include <stddef.h>
 
 
-#ifndef SAL_MIN
-#    define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
-
 #ifndef SAL_N_ELEMENTS
 #    if defined(__cplusplus) && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
         /*

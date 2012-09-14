@@ -179,7 +179,7 @@ cpyBootstrapSocketPath(sal_Char *name, size_t len)
                                OUSTRING_TO_OSTRING_CVTFLAGS);
             if (pStrValue && pStrValue->length > 0)
             {
-                size_t nCopy = SAL_MIN (len-1, (size_t)pStrValue->length);
+                size_t nCopy = (len-1 < (size_t)pStrValue->length) ? len-1 : (size_t)pStrValue->length;
                 strncpy (name, pStrValue->buffer, nCopy);
                 name[nCopy] = '\0';
                 bRet = (size_t)pStrValue->length < len;
