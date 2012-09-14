@@ -4356,7 +4356,6 @@ void DomainMapper::PopListProperties()
 void DomainMapper::lcl_startCharacterGroup()
 {
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
-    DomainMapperTableManager& rTableManager = m_pImpl->getTableManager();
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
