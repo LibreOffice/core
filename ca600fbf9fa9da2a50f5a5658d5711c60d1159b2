@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOX///0c\u003d",
+        "filename": "sd/source/ui/framework/module/ToolPanelModule.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-09-14T14:36:14Z",
+      "side": 1,
+      "message": "while I acknowledge the fact it blends with the rest of this part of Impress, I personally consider \"method (void)\" to be an exercise in over-verbosity for exactly zero gain ... ;)",
+      "revId": "ca600fbf9fa9da2a50f5a5658d5711c60d1159b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
