@@ -25,4 +25,12 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_rtl_uri,\
     $(gb_STDLIBS) \
 ))
 
+# The test uses O(U)String capabilities that dlopen this lib
+ifneq ($(OS),ANDROID)
+# Except that on Android we don't build it separately
+$(call gb_CppunitTest_get_target,sal_rtl_uri) : \
+    $(call gb_Library_get_target,sal_textenc)
+endif
+
+
 # vim: set noet sw=4 ts=4:
