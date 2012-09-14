@@ -51,7 +51,7 @@ public class DocumentInfo
     XTextDocument xTextDoc = null;
     XTextDocument xTextDocSecond = null;
 
-    @Test public void checkDocInfo()
+    @Test public void checkDocInfo() throws Exception
     {
         m_xMSF = getMSF();
 
@@ -59,8 +59,7 @@ public class DocumentInfo
 
         assertNotNull("## Couldn't get MultiServiceFactory make sure your Office is started", m_xMSF);
 
-        // TODO: need other temp directory!
-        String tempdir = System.getProperty("java.io.tmpdir");
+        String tempdir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
         String fs = System.getProperty("file.separator");
 
         if (!tempdir.endsWith(fs))
@@ -127,16 +126,9 @@ public class DocumentInfo
 
 
             System.out.println("Storing the document");
-            try
-            {
-                XStorable store = UnoRuntime.queryInterface(XStorable.class, xTextDoc);
-                store.storeToURL(sTempDocument, new PropertyValue[] {});
-                DesktopTools.closeDoc(xTextDoc);
-            }
-            catch (Exception e)
-            {
-                fail("Couldn't store document");
-            }
+            XStorable store = UnoRuntime.queryInterface(XStorable.class, xTextDoc);
+            store.storeToURL(sTempDocument, new PropertyValue[] {});
+            DesktopTools.closeDoc(xTextDoc);
 
             System.out.println("...done");
         }
@@ -146,16 +138,9 @@ public class DocumentInfo
         {
             System.out.println("loading the document");
 
-            try
-            {
-                XComponentLoader xCL = UnoRuntime.queryInterface(XComponentLoader.class, m_xMSF.createInstance("com.sun.star.frame.Desktop"));
-                XComponent xComp = xCL.loadComponentFromURL(sTempDocument, "_blank", 0, new PropertyValue[] {});
-                xTextDocSecond = UnoRuntime.queryInterface(XTextDocument.class, xComp);
-            }
-            catch (Exception e)
-            {
-                fail("Couldn't load document");
-            }
+            XComponentLoader xCL = UnoRuntime.queryInterface(XComponentLoader.class, m_xMSF.createInstance("com.sun.star.frame.Desktop"));
+            XComponent xComp = xCL.loadComponentFromURL(sTempDocument, "_blank", 0, new PropertyValue[] {});
+            xTextDocSecond = UnoRuntime.queryInterface(XTextDocument.class, xComp);
 
             System.out.println("...done");
 
