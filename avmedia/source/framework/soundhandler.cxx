@@ -133,7 +133,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
 }
 
 #define DECLARE_ASCII( SASCIIVALUE ) \
-        ::rtl::OUString( SASCIIVALUE  )
+        OUString( SASCIIVALUE  )
 
 #define IMPLEMENTATIONNAME_SOUNDHANDLER DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler")
 #define SERVICENAME_CONTENTHANDLER DECLARE_ASCII("com.sun.star.frame.ContentHandler")
@@ -141,7 +141,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
 /*===========================================================================================================*/
 /* XServiceInfo */
 /*===========================================================================================================*/
-::rtl::OUString SAL_CALL SoundHandler::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL SoundHandler::getImplementationName() throw( css::uno::RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
@@ -149,13 +149,13 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
 /*===========================================================================================================*/
 /* XServiceInfo */
 /*===========================================================================================================*/
-sal_Bool SAL_CALL SoundHandler::supportsService( const ::rtl::OUString& sServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL SoundHandler::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )
 {
     /* Set default return value. */
     sal_Bool bReturn = sal_False ;
     /* Get names of all supported servicenames. */
-    css::uno::Sequence< ::rtl::OUString >  seqServiceNames =   getSupportedServiceNames();
-    const ::rtl::OUString*                 pArray          =   seqServiceNames.getConstArray();
+    css::uno::Sequence < OUString >  seqServiceNames       =   getSupportedServiceNames();
+    const OUString*                        pArray          =   seqServiceNames.getConstArray();
     sal_Int32                              nCounter        =   0;
     sal_Int32                              nLength         =   seqServiceNames.getLength();
     /* Search for right name in list. */
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL SoundHandler::supportsService( const ::rtl::OUString& sService
 /*===========================================================================================================*/
 /* XServiceInfo */
 /*===========================================================================================================*/
-css::uno::Sequence< ::rtl::OUString > SAL_CALL SoundHandler::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL SoundHandler::getSupportedServiceNames() throw( css::uno::RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
@@ -187,9 +187,9 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SoundHandler::getSupportedService
 /*===========================================================================================================*/
 /* Helper for XServiceInfo                                                                                   */
 /*===========================================================================================================*/
-css::uno::Sequence< ::rtl::OUString > SoundHandler::impl_getStaticSupportedServiceNames()
+css::uno::Sequence< OUString > SoundHandler::impl_getStaticSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > seqServiceNames( 1 );
+    css::uno::Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = SERVICENAME_CONTENTHANDLER;
     return seqServiceNames;
 }
@@ -197,7 +197,7 @@ css::uno::Sequence< ::rtl::OUString > SoundHandler::impl_getStaticSupportedServi
 /*===========================================================================================================*/
 /* Helper for XServiceInfo */
 /*===========================================================================================================*/
-::rtl::OUString SoundHandler::impl_getStaticImplementationName()
+OUString SoundHandler::impl_getStaticImplementationName()
 {
     return IMPLEMENTATIONNAME_SOUNDHANDLER;
 }
@@ -379,14 +379,14 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
     @onerror    We return nothing.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-::rtl::OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException )
+OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException )
 {
     // Our default is "nothing". So we can return it, if detection failed or fily type is realy unknown.
-    ::rtl::OUString sTypeName;
+    OUString sTypeName;
 
     // Analyze given descriptor to find filename or input stream or ...
     ::comphelper::MediaDescriptor aDescriptor(lDescriptor);
-    ::rtl::OUString               sURL       = aDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString());
+    OUString                      sURL       = aDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), OUString());
 
     if (
         (sURL.getLength()           ) &&
@@ -397,7 +397,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString("wav_Wave_Audio_File");
+        sTypeName = "wav_Wave_Audio_File";
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
@@ -468,7 +468,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Ch
         css::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
             xServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager )  ;
 
-        if ( avmedia::SoundHandler::impl_getStaticImplementationName().equals( ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+        if ( avmedia::SoundHandler::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )
             xFactory = avmedia::SoundHandler::impl_createFactory( xServiceManager );
 
         if ( xFactory.is() == sal_True )
