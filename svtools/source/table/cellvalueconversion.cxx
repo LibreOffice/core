@@ -421,12 +421,7 @@ namespace svt
                 }
                 else
                 {
-#if OSL_DEBUG_LEVEL > 0
-                    ::rtl::OStringBuffer message( "lcl_getValueNormalizer: unsupported type '" );
-                    message.append( ::rtl::OUStringToOString( sTypeName, RTL_TEXTENCODING_ASCII_US ) );
-                    message.append( "'!" );
-                    OSL_ENSURE( false, message.makeStringAndClear() );
-#endif
+                    SAL_WARN( "svtools.table", "unsupported type '" << sTypeName << "'!" );
                 }
                 io_data.aNormalizers[ sTypeName ] = o_formatter;
             }
