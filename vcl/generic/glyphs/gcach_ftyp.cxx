@@ -341,8 +341,7 @@ FtFontInfo::~FtFontInfo()
     delete mpChar2Glyph;
     delete mpGlyph2Char;
 #ifdef ENABLE_GRAPHITE
-    if (mpGraphiteFace)
-        delete mpGraphiteFace;
+    delete mpGraphiteFace;
 #endif
 }
 
@@ -416,7 +415,7 @@ bool FtFontInfo::HasExtraKerning() const
     if( !mpExtraKernInfo )
         return false;
     // TODO: how to enable the line below without getting #i29881# back?
-    // on the other hand being to optimistic doesn't cause problems
+    // on the other hand being too optimistic doesn't cause problems
     // return mpExtraKernInfo->HasKernPairs();
     return true;
 }
@@ -428,19 +427,6 @@ int FtFontInfo::GetExtraKernPairs( ImplKernPairData** ppKernPairs ) const
     if( !mpExtraKernInfo )
         return 0;
     return mpExtraKernInfo->GetUnscaledKernPairs( ppKernPairs );
-}
-
-// -----------------------------------------------------------------------
-
-int FtFontInfo::GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const
-{
-    if( !mpExtraKernInfo )
-        return 0;
-    if( !mpGlyph2Char )
-        return 0;
-    sal_Unicode cLeftChar   = (*mpGlyph2Char)[ nLeftGlyph ];
-    sal_Unicode cRightChar  = (*mpGlyph2Char)[ nRightGlyph ];
-    return mpExtraKernInfo->GetUnscaledKernValue( cLeftChar, cRightChar );
 }
 
 // -----------------------------------------------------------------------
@@ -1840,38 +1826,6 @@ bool ServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) c
     }
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------
-// kerning stuff
-// -----------------------------------------------------------------------
-
-int ServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) const
-{
-    // if no kerning info is available from Freetype
-    // then we may have to use extra info provided by e.g. psprint
-    if( !FT_HAS_KERNING( maFaceFT ) || !FT_IS_SFNT( maFaceFT ) )
-    {
-        int nKernVal = mpFontInfo->GetExtraGlyphKernValue( nGlyphLeft, nGlyphRight );
-        if( !nKernVal )
-            return 0;
-        // scale the kern value to match the font size
-        const FontSelectPattern& rFSD = GetFontSelData();
-        nKernVal *= rFSD.mnWidth ? rFSD.mnWidth : rFSD.mnHeight;
-        return (nKernVal + 500) / 1000;
-    }
-
-    // when font faces of different sizes share the same maFaceFT
-    // then we have to make sure that it uses the correct maSizeFT
-    if( maSizeFT )
-        pFTActivateSize( maSizeFT );
-
-    // use Freetype's kerning info
-    FT_Vector aKernVal;
-    FT_Error rcFT = FT_Get_Kerning( maFaceFT, nGlyphLeft, nGlyphRight,
-                FT_KERNING_DEFAULT, &aKernVal );
-    int nResult = (rcFT == FT_Err_Ok) ? (aKernVal.x + 32) >> 6 : 0;
-    return nResult;
 }
 
 // -----------------------------------------------------------------------

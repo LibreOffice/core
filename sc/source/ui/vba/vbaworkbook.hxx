@@ -50,8 +50,6 @@ public:
     ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~ScVbaWorkbook() {}
 
-    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-
     // Attributes
     virtual ::sal_Bool SAL_CALL getProtectStructure() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException);

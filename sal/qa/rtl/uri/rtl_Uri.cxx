@@ -41,52 +41,12 @@
 
 namespace Stringtest
 {
-    rtl::OString toHex(unsigned char _c)
-    {
-        rtl::OStringBuffer sStrBuf;
-        static char cHex[] = "0123456789ABCDEF";
-
-        int nhigh = int(_c) >> 4 & 0xf;
-        int nlow  = int(_c) & 0xf;
-        sStrBuf.append( cHex[nhigh] );
-        sStrBuf.append( cHex[nlow] );
-        return sStrBuf.makeStringAndClear();
-    }
-
-    rtl::OString escapeString(rtl::OString const& _sStr)
-    {
-        rtl::OStringBuffer sStrBuf;
-        sal_Int32 nLength = _sStr.getLength();
-        for(int i=0;i<nLength;++i)
-        {
-            unsigned char c = (unsigned char)_sStr[i];
-            if (c > 127)
-            {
-                sStrBuf.append("%");
-                sStrBuf.append(toHex(c));
-            }
-            else
-            {
-                sStrBuf.append((char)c);
-            }
-        }
-        return sStrBuf.makeStringAndClear();
-    }
-
     // -----------------------------------------------------------------------------
 
     class Convert : public CppUnit::TestFixture
     {
         rtl::OUString m_aStr;
     public:
-        /*
-          rtl::OString toUTF8(rtl::OUString const& _suStr)
-            {
-                rtl::OString sStrAsUTF8 = rtl::OUStringToOString(_suStr, RTL_TEXTENCODING_UTF8);
-                printf("%s\n", escapeString(sStrAsUTF8).getStr());
-                return sStrAsUTF8;
-            }
-        */
         rtl::OUString fromUTF8(rtl::OString const& _suStr)
             {
                 rtl::OUString suStr = rtl::OStringToOUString(_suStr, RTL_TEXTENCODING_UTF8);

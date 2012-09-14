@@ -456,25 +456,6 @@ int ExtraKernInfo::GetUnscaledKernPairs( ImplKernPairData** ppKernPairs ) const
     return nKernCount;
 }
 
-//--------------------------------------------------------------------------
-
-int ExtraKernInfo::GetUnscaledKernValue( sal_Unicode cLeft, sal_Unicode cRight ) const
-{
-    if( !mbInitialized )
-        Initialize();
-
-    if( maUnicodeKernPairs.empty() )
-        return 0;
-
-    ImplKernPairData aKernPair = { cLeft, cRight, 0 };
-    UnicodeKernPairs::const_iterator it = maUnicodeKernPairs.find( aKernPair );
-    if( it == maUnicodeKernPairs.end() )
-        return 0;
-
-    int nUnscaledValue = (*it).mnKern;
-    return nUnscaledValue;
-}
-
 // =======================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

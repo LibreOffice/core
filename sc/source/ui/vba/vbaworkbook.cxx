@@ -190,17 +190,6 @@ ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
     init();
 }
 
-namespace
-{
-    class theScVbaWorkbookUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScVbaWorkbookUnoTunnelId > {};
-}
-
-const uno::Sequence<sal_Int8>&
-ScVbaWorkbook::getUnoTunnelId()
-{
-    return theScVbaWorkbookUnoTunnelId::get().getSeq();
-}
-
 uno::Reference< excel::XWorksheet >
 ScVbaWorkbook::getActiveSheet() throw (uno::RuntimeException)
 {
