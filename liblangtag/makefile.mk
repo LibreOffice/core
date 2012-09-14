@@ -109,6 +109,10 @@ CONFIGURE_FLAGS+= LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+PATCH_FILES+=liblangtag-0.2-mingw.patch
+# There's a tool used only at build time to create the .xml file, and this does not work
+# with cross-compiling. The file for this case is from a normal (non-cross) build.
+PATCH_FILES+=liblangtag-0.2-mingw-genfile.patch
 .ENDIF
 
 .ELSE	# "$(COM)"=="GCC"
@@ -121,8 +125,13 @@ PATCH_FILES+=liblangtag-0.2-msc-configure.patch
 
 OUT2INC += $(my_install_relative)/include/liblangtag/*
 
-.IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
+.IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+OUT2BIN += $(my_install_relative)/bin/liblangtag-0.dll
+OUT2LIB += $(my_install_relative)/lib/liblangtag.dll.a
+.ELSE
 OUT2LIB += $(my_install_relative)/lib/langtag.lib*
+.ENDIF
 .ELSE
 .IF "$(OS)" == "MACOSX"
 OUT2LIB += $(my_install_relative)/lib/liblangtag*.dylib
