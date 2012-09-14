@@ -44,6 +44,10 @@
 #include <stdio.h>
 #include <vector>
 
+#ifdef ANDROID
+#include <osl/detail/android-bootstrap.h>
+#endif
+
 #ifdef IOS
 #include <osl/detail/ios-bootstrap.h>
 #endif
