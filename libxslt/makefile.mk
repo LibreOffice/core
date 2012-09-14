@@ -130,8 +130,10 @@ CPPFLAGS+:=$(ARCH_FLAGS) -xc99=none
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
+.IF "$(OS)" == "IOS"
 CONFIGURE_ACTION+=LIBS=-liconv
+.ENDIF
 CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
@@ -166,7 +168,7 @@ OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib
 OUT2LIB+=libexslt$/.libs$/libexslt.*.dylib
 OUT2BIN_NONE+=xsltproc$/.libs$/xsltproc
 OUT2BIN+=xslt-config
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)" == "TRUE"
 OUT2LIB+=libxslt$/.libs$/libxslt.a
 OUT2LIB+=libexslt$/.libs$/libexslt.a
 OUT2BIN+=xslt-config
