@@ -142,9 +142,11 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
 #else
 #ifdef LIBO_WERROR
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpragmas"
+#ifdef __clang__
 #pragma GCC diagnostic warning "-Wbool-conversions"
+#else
 #pragma GCC diagnostic warning "-Waddress"
+#endif
 #endif
 #endif
     if (toHanja && getHangul2HanjaIndex && getHangul2HanjaIndexCount && getHangul2HanjaData) {
