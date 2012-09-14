@@ -349,17 +349,12 @@ public class PresentationActivity extends SherlockFragmentActivity {
             @Override
             public void run() {
                 CharSequence aTimeString;
-                long aTime = mCommunicationService.getSlideShow().getTimer()
-                                .getTimeMillis();
-                if (mTimerOn) {
-                    aTimeString = DateFormat.format(aTimerFormat, aTime);
-                } else {
-                    aTimeString = DateFormat.format(aTimeFormat,
-                                    System.currentTimeMillis());
-                }
+		long aTime = System.currentTimeMillis();
+		if (mTimerOn && mCommunicationService != null)
+		    aTime = mCommunicationService.getSlideShow().getTimer().getTimeMillis();
+		aTimeString = DateFormat.format(aTimerFormat, aTime);
                 mTimeLabel.setText(aTimeString);
                 timerHandler.postDelayed(this, 50);
-
             }
 
         };

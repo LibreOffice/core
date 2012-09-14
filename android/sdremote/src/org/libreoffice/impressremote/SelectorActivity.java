@@ -130,7 +130,8 @@ public class SelectorActivity extends SherlockActivity {
 
     @Override
     public void onBackPressed() {
-        mCommunicationService.stopSearching();
+        if (mCommunicationService != null)
+            mCommunicationService.stopSearching();
         Intent aIntent = new Intent(this, CommunicationService.class);
         stopService(aIntent);
         super.onBackPressed();
