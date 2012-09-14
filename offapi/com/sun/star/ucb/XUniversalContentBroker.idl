@@ -25,8 +25,6 @@
 #include <com/sun/star/ucb/XContentProviderManager.idl>
 #include <com/sun/star/ucb/XContentProvider.idl>
 #include <com/sun/star/ucb/XContentIdentifierFactory.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-
 
 module com { module sun { module star { module ucb {
 
@@ -74,26 +72,6 @@ published interface XUniversalContentBroker
         <p>This interface is required.
       */
     interface com::sun::star::ucb::XContentIdentifierFactory;
-
-    /** supports the configuration of a newly created broker.
-
-        <p>The
-        <member scope="com::sun::star::lang">XInitialization::initialize</member>
-        method should be called with two arguments of type string. These strings
-        are used as a pair of keys to retrieve a set of content provider
-        descriptions from the configuration management (stored at
-        <code>org.openoffice.ucb.Configuration.ContentProviders.<var>key<sub>1</sub></var>.SecondaryKeys.<var>key<sub>2</sub></var>.ProviderData</code>
-        within the configuration management's hierarchy). The retrieved
-        descriptions are in turn used to register the corresponding content
-        provider services at the broker.
-
-        <p>Typical values for the pair of strings would be
-        <code>"Local"</code>/<code>"Office"</code>, to configure a broker that
-        contains all the relevant content providers.
-
-        <p>This interface is required.
-     */
-    interface com::sun::star::lang::XInitialization;
 
     /** Enables the caller to execute commands at the broker.
 

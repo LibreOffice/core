@@ -62,7 +62,7 @@ OUString LibraryContainer::get_libname(
     Reference<XComponentContext> const & xContext )
 {
     ::xmlscript::LibDescriptor import;
-    ::ucbhelper::Content ucb_content( url, xCmdEnv );
+    ::ucbhelper::Content ucb_content( url, xCmdEnv, xContext );
     xml_parse( ::xmlscript::importLibrary( import ), ucb_content, xContext );
 
     if (import.aName.isEmpty()) {

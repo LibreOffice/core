@@ -49,6 +49,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -65,13 +66,12 @@
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include <osl/time.h>
-#include <osl/file.hxx>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 
+#include <cstring>
 #include <memory>
 #include <vector>
 
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/seekableinput.hxx>
@@ -99,37 +99,6 @@ using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 #define LOGFILE_AUTHOR "mg115289"
-
-
-namespace {
-
-sal_Bool isLocalFile_Impl( OUString aURL )
-{
-    OUString aSystemPath;
-    ContentBroker* pBroker = ContentBroker::get();
-    if ( !pBroker )
-    {
-        OUString aRet;
-        if ( FileBase::getSystemPathFromFileURL( aURL, aRet ) == FileBase::E_None )
-            aSystemPath = aRet;
-    }
-    else
-    {
-        uno::Reference< XContentProviderManager > xManager =
-                pBroker->getContentProviderManagerInterface();
-        try
-        {
-               aSystemPath = getSystemPathFromFileURL( xManager, aURL );
-        }
-        catch ( Exception& )
-        {
-        }
-    }
-
-    return ( !aSystemPath.isEmpty() );
-}
-
-}
 
 //===========================================================================
 
@@ -201,6 +170,22 @@ ZipPackage::~ZipPackage( void )
     // So there is no need in explicit m_pRootFolder->releaseUpwardRef() call here any more
     // since m_pRootFolder has no parent and cleaning of it's children will be done automatically
     // during m_pRootFolder dieing by refcount.
+}
+
+sal_Bool ZipPackage::isLocalFile() const
+{
+    OUString aSystemPath;
+    uno::Reference< XUniversalContentBroker > xUcb(
+        UniversalContentBroker::create(
+            comphelper::ComponentContext( m_xFactory ).getUNOContext() ) );
+    try
+    {
+        aSystemPath = getSystemPathFromFileURL( xUcb, m_aURL );
+    }
+    catch ( Exception& )
+    {
+    }
+    return !aSystemPath.isEmpty();
 }
 
 //--------------------------------------------------------
@@ -646,7 +631,9 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     else
                         m_aURL = aParamUrl;
 
-                    Content aContent ( m_aURL, uno::Reference < XCommandEnvironment >() );
+                    Content aContent(
+                        m_aURL, uno::Reference< XCommandEnvironment >(),
+                        comphelper::ComponentContext( m_xFactory ).getUNOContext() );
                     Any aAny = aContent.getPropertyValue("Size");
                     sal_uInt64 aSize = 0;
                     // kind of optimisation: treat empty files as nonexistent files
@@ -1153,7 +1140,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     uno::Reference < io::XOutputStream > xTempOut;
     uno::Reference< io::XActiveDataStreamer > xSink;
 
-    if ( m_eMode == e_IMode_URL && !m_pZipFile && isLocalFile_Impl( m_aURL ) )
+    if ( m_eMode == e_IMode_URL && !m_pZipFile && isLocalFile() )
     {
         xSink = openOriginalForOutput();
         if( xSink.is() )
@@ -1331,7 +1318,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
 {
     // open and truncate the original file
-    Content aOriginalContent ( m_aURL, uno::Reference < XCommandEnvironment >() );
+    Content aOriginalContent(
+        m_aURL, uno::Reference< XCommandEnvironment >(),
+        comphelper::ComponentContext( m_xFactory ).getUNOContext() );
     uno::Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
 
     if ( m_eMode == e_IMode_URL )
@@ -1462,7 +1451,7 @@ void SAL_CALL ZipPackage::commitChanges()
             uno::Reference< XOutputStream > aOrigFileStream;
             sal_Bool bCanBeCorrupted = sal_False;
 
-            if( isLocalFile_Impl( m_aURL ) )
+            if( isLocalFile() )
             {
                 // write directly in case of local file
                 uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > xSimpleAccess(
@@ -1512,7 +1501,9 @@ void SAL_CALL ZipPackage::commitChanges()
                         throw uno::RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
                     OUString sTargetFolder = m_aURL.copy ( 0, m_aURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
-                    Content aContent ( sTargetFolder, uno::Reference < XCommandEnvironment > () );
+                    Content aContent(
+                        sTargetFolder, uno::Reference< XCommandEnvironment >(),
+                        comphelper::ComponentContext( m_xFactory ).getUNOContext() );
 
                     OUString sTempURL;
                     Any aAny = xPropSet->getPropertyValue ("Uri");

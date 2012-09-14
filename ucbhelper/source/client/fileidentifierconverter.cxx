@@ -19,8 +19,8 @@
 
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <com/sun/star/ucb/ContentProviderInfo.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/XFileIdentifierConverter.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
@@ -55,15 +55,15 @@ getLocalFileURL() SAL_THROW((uno::RuntimeException))
 
 rtl::OUString
 getFileURLFromSystemPath(
-    uno::Reference< ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XUniversalContentBroker > const & rUcb,
     rtl::OUString const & rBaseURL,
     rtl::OUString const & rSystemPath)
     SAL_THROW((uno::RuntimeException))
 {
-    OSL_ASSERT(rManager.is());
+    OSL_ASSERT(rUcb.is());
 
     uno::Reference< ucb::XFileIdentifierConverter >
-        xConverter(rManager->queryContentProvider(rBaseURL), uno::UNO_QUERY);
+        xConverter(rUcb->queryContentProvider(rBaseURL), uno::UNO_QUERY);
     if (xConverter.is())
         return xConverter->getFileURLFromSystemPath(rBaseURL, rSystemPath);
     else
@@ -78,14 +78,14 @@ getFileURLFromSystemPath(
 
 rtl::OUString
 getSystemPathFromFileURL(
-    uno::Reference< ucb::XContentProviderManager > const & rManager,
+    uno::Reference< ucb::XUniversalContentBroker > const & rUcb,
     rtl::OUString const & rURL)
     SAL_THROW((uno::RuntimeException))
 {
-    OSL_ASSERT(rManager.is());
+    OSL_ASSERT(rUcb.is());
 
     uno::Reference< ucb::XFileIdentifierConverter >
-        xConverter(rManager->queryContentProvider(rURL), uno::UNO_QUERY);
+        xConverter(rUcb->queryContentProvider(rURL), uno::UNO_QUERY);
     if (xConverter.is())
         return xConverter->getSystemPathFromFileURL(rURL);
     else

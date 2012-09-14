@@ -63,6 +63,7 @@ typedef ::cppu::WeakComponentImplHelper2<
 //==============================================================================
 class ExpandContentProviderImpl : protected MutexHolder, public t_impl_helper
 {
+    uno::Reference< uno::XComponentContext > m_xComponentContext;
     uno::Reference< util::XMacroExpander > m_xMacroExpander;
     OUString expandUri(
         uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const;
@@ -75,6 +76,7 @@ public:
     inline ExpandContentProviderImpl(
         uno::Reference< uno::XComponentContext > const & xComponentContext )
         : t_impl_helper( m_mutex ),
+          m_xComponentContext( xComponentContext ),
           m_xMacroExpander(
               xComponentContext->getValueByName(
                   OUSTR("/singletons/com.sun.star.util.theMacroExpander") ),
@@ -216,7 +218,8 @@ uno::Reference< ucb::XContent > ExpandContentProviderImpl::queryContent(
 
     ::ucbhelper::Content ucb_content;
     if (::ucbhelper::Content::create(
-            uri, uno::Reference< ucb::XCommandEnvironment >(), ucb_content ))
+            uri, uno::Reference< ucb::XCommandEnvironment >(),
+            m_xComponentContext, ucb_content ))
     {
         return ucb_content.get();
     }

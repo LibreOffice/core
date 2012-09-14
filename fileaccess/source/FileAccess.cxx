@@ -21,7 +21,7 @@
 #include <osl/diagnose.h>
 
 #include <uno/mapping.hxx>
-
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 
@@ -294,8 +294,8 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
 
     }
 
-    ucbhelper::Content aDestPath( aDestURL,   mxEnvironment );
-    ucbhelper::Content aSrc     ( aSourceURL, mxEnvironment );
+    ucbhelper::Content aDestPath( aDestURL,   mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aSrc     ( aSourceURL, mxEnvironment, comphelper::getProcessComponentContext() );
 
     try
     {
@@ -329,7 +329,7 @@ void OFileAccess::kill( const rtl::OUString& FileURL )
 {
     // SfxContentHelper::Kill
     INetURLObject aDeleteObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     try
     {
         aCnt.executeCommand( rtl::OUString("delete" ), makeAny( sal_Bool( sal_True ) ) );
@@ -347,7 +347,7 @@ sal_Bool OFileAccess::isFolder( const rtl::OUString& FileURL )
     try
     {
         INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
         bRet = aCnt.isFolder();
     }
     catch (const Exception &) {}
@@ -358,7 +358,7 @@ sal_Bool OFileAccess::isReadOnly( const rtl::OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aRetAny = aCnt.getPropertyValue( rtl::OUString( "IsReadOnly"  ) );
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
@@ -369,7 +369,7 @@ void OFileAccess::setReadOnly( const rtl::OUString& FileURL, sal_Bool bReadOnly 
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aAny;
     aAny <<= bReadOnly;
     aCnt.setPropertyValue( rtl::OUString( "IsReadOnly"  ), aAny );
@@ -398,7 +398,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
         }
     }
 
-    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
     sal_Int32 nCount = aInfo.getLength();
@@ -451,7 +451,7 @@ sal_Int32 OFileAccess::getSize( const rtl::OUString& FileURL )
     sal_Int32 nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     aCnt.getPropertyValue( rtl::OUString("Size" ) ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
@@ -461,7 +461,7 @@ rtl::OUString OFileAccess::getContentType( const rtl::OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     Reference< XContent > xContent = aCnt.get();
     rtl::OUString aTypeStr = xContent->getContentType();
@@ -475,7 +475,7 @@ DateTime OFileAccess::getDateTimeModified( const rtl::OUString& FileURL )
     DateTime aDateTime;
 
     Reference< XCommandEnvironment > aCmdEnv;
-    ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+    ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
     aYoung.getPropertyValue( rtl::OUString("DateModified" ) ) >>= aDateTime;
     return aDateTime;
 }
@@ -490,7 +490,7 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
     StringList_Impl* pFiles = NULL;
     INetURLObject aFolderObj( FolderURL, INET_PROT_FILE );
 
-    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Reference< XResultSet > xResultSet;
     Sequence< rtl::OUString > aProps(0);
 
@@ -562,7 +562,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const rtl::OUString& FileUR
 {
     Reference< XInputStream > xRet;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     Reference< XActiveDataSink > xSink = (XActiveDataSink*)(new OActiveDataSink());
 
@@ -606,7 +606,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const rtl::OUString& FileUR
     aCmdArg <<= aArg;
 
     INetURLObject aFileObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
     // Be silent...
     Reference< XInteractionHandler > xIH;
@@ -668,7 +668,7 @@ bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
                                  const Reference< XInputStream >& data )
     throw ( Exception )
 {
-    ucbhelper::Content aParentCnt( rParentURL, mxEnvironment );
+    ucbhelper::Content aParentCnt( rParentURL, mxEnvironment, comphelper::getProcessComponentContext() );
 
     Sequence< ContentInfo > aInfo = aParentCnt.queryCreatableContentsInfo();
     sal_Int32 nCount = aInfo.getLength();
@@ -729,7 +729,8 @@ void SAL_CALL OFileAccess::writeFile( const rtl::OUString& FileURL,
     try
     {
         ucbhelper::Content aCnt(
-            aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+            aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment,
+            comphelper::getProcessComponentContext() );
 
         try
         {
@@ -775,7 +776,7 @@ sal_Bool OFileAccess::isHidden( const ::rtl::OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aRetAny = aCnt.getPropertyValue( rtl::OUString( "IsHidden"  ) );
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
@@ -786,7 +787,7 @@ void OFileAccess::setHidden( const ::rtl::OUString& FileURL, sal_Bool bHidden )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aAny;
     aAny <<= bHidden;
     aCnt.setPropertyValue( rtl::OUString( "IsHidden"  ), aAny );

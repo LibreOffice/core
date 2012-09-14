@@ -40,7 +40,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
 	cppuhelper \
 	sal \
 	test \
-	ucbhelper \
 	unotest \
 	vcl \
 	writerfilter \

@@ -48,7 +48,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -703,7 +703,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     // (v) Last but not least the UCB is used inside office to
     //     load contents. He has a special configuration to know
     //     which URL schemata can be used inside office.
-    css::uno::Reference< css::ucb::XContentProviderManager > xUCB(xSMGR->createInstance(SERVICENAME_UCBCONTENTBROKER), css::uno::UNO_QUERY);
+    css::uno::Reference< css::ucb::XUniversalContentBroker > xUCB(css::ucb::UniversalContentBroker::create(comphelper::ComponentContext(xSMGR).getUNOContext()));
     if (xUCB->queryContentProvider(sURL).is())
         return E_CAN_BE_LOADED;
 

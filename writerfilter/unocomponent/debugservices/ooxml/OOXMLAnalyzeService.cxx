@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/processfactory.hxx>
-
 #include "OOXMLAnalyzeService.hxx"
 #include <stdio.h>
 #include <wchar.h>
@@ -28,7 +26,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <ucbhelper/contentbroker.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <osl/process.h>
@@ -43,9 +40,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/seqstream.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
 
@@ -141,107 +135,88 @@ sal_Int32 SAL_CALL AnalyzeService::run
 ( const uno::Sequence< OUString >& aArguments )
     throw (uno::RuntimeException)
 {
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= OUString("Local");
-    aUcbInitSequence[1] <<= OUString("Office");
-    uno::Reference<lang::XMultiServiceFactory>
-        xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiComponentFactory>
-        xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    OUString arg=aArguments[0];
 
-    if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
+    rtl_uString *dir=NULL;
+    osl_getProcessWorkingDir(&dir);
+
+    OUString absFileUrlUrls;
+    osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrlUrls.pData);
+
+    URLLister aLister(xContext, absFileUrlUrls);
+
+    fprintf(stdout, "<analyze>\n");
+
+    writerfilter::analyzerIds();
+
+    OUString aURL = aLister.getURL();
+
+    while (!aURL.isEmpty())
     {
-        ::comphelper::setProcessServiceFactory(xServiceFactory);
+        uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
-        OUString arg=aArguments[0];
+        OString aStr;
+        aURL.convertToString(&aStr, RTL_TEXTENCODING_ASCII_US,
+                             OUSTRING_TO_OSTRING_CVTFLAGS);
 
-        rtl_uString *dir=NULL;
-        osl_getProcessWorkingDir(&dir);
+        fprintf(stdout, "<file><name>%s</name>\n", aStr.getStr());
+        fprintf(stderr, "%s\n", aStr.getStr());
+        fflush(stderr);
 
-        OUString absFileUrlUrls;
-        osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrlUrls.pData);
-
-        URLLister aLister(xContext, absFileUrlUrls);
-
-        fprintf(stdout, "<analyze>\n");
-
-        writerfilter::analyzerIds();
-
-        OUString aURL = aLister.getURL();
-
-        while (!aURL.isEmpty())
+        bool bStatus = true;
+        try
         {
-            uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
+            uno::Reference<io::XInputStream> xInputStream =
+                xFileAccess->openFileRead(aURL);
 
-            OString aStr;
-            aURL.convertToString(&aStr, RTL_TEXTENCODING_ASCII_US,
-                                 OUSTRING_TO_OSTRING_CVTFLAGS);
-
-            fprintf(stdout, "<file><name>%s</name>\n", aStr.getStr());
-            fprintf(stderr, "%s\n", aStr.getStr());
-            fflush(stderr);
-
-            bool bStatus = true;
-            try
+            if (xInputStream.is())
             {
-                uno::Reference<io::XInputStream> xInputStream =
-                    xFileAccess->openFileRead(aURL);
+                ooxml::OOXMLStream::Pointer_t pDocStream =
+                    ooxml::OOXMLDocumentFactory::createStream
+                    (xContext, xInputStream);
 
-                if (xInputStream.is())
+                if (pDocStream.get() != NULL)
                 {
-                    ooxml::OOXMLStream::Pointer_t pDocStream =
-                        ooxml::OOXMLDocumentFactory::createStream
-                        (xContext, xInputStream);
+                    ooxml::OOXMLDocument::Pointer_t pDocument
+                        (ooxml::OOXMLDocumentFactory::createDocument
+                         (pDocStream));
 
-                    if (pDocStream.get() != NULL)
-                    {
-                        ooxml::OOXMLDocument::Pointer_t pDocument
-                            (ooxml::OOXMLDocumentFactory::createDocument
-                             (pDocStream));
-
-                        Stream::Pointer_t pAnalyzer =
-                            writerfilter::createAnalyzer();
-                        pDocument->resolve(*pAnalyzer);
-                    }
-                    else
-                    {
-                        fprintf(stdout,
-                                "<exception>file open failed</exception>\n");
-                        bStatus = false;
-                    }
-                    fprintf(stderr, "done\n");
+                    Stream::Pointer_t pAnalyzer =
+                        writerfilter::createAnalyzer();
+                    pDocument->resolve(*pAnalyzer);
                 }
-
-                xInputStream->closeInput();
+                else
+                {
+                    fprintf(stdout,
+                            "<exception>file open failed</exception>\n");
+                    bStatus = false;
+                }
+                fprintf(stderr, "done\n");
             }
-            catch (...)
-            {
-                fprintf(stdout, "<exception>unknown</exception>\n");
-                bStatus = false;
-            }
 
-            if (bStatus)
-                fprintf(stdout, "<status>ok</status>\n");
-            else
-                fprintf(stdout, "<status>failed</status>\n");
-
-            aURL = aLister.getURL();
-
-            fprintf(stdout, "</file>\n");
-            fflush(stdout);
+            xInputStream->closeInput();
+        }
+        catch (...)
+        {
+            fprintf(stdout, "<exception>unknown</exception>\n");
+            bStatus = false;
         }
 
-        fprintf(stdout, "</analyze>\n");
+        if (bStatus)
+            fprintf(stdout, "<status>ok</status>\n");
+        else
+            fprintf(stdout, "<status>failed</status>\n");
 
-        rtl_uString_release(dir);
-        ::ucbhelper::ContentBroker::deinitialize();
+        aURL = aLister.getURL();
 
-
+        fprintf(stdout, "</file>\n");
+        fflush(stdout);
     }
-    else
-    {
-        fprintf(stdout, "can't initialize UCB");
-    }
+
+    fprintf(stdout, "</analyze>\n");
+
+    rtl_uString_release(dir);
+
     return 0;
 }
 

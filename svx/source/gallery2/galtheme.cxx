@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <unotools/streamwrap.hxx>
@@ -1160,7 +1162,7 @@ sal_Bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, s
 
     try
     {
-        ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         sal_Bool        bFolder = false;
 
         aCnt.getPropertyValue( OUString("IsFolder") ) >>= bFolder;

@@ -56,7 +56,6 @@ $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
     cppu \
     cppuhelper \
     vcl \
-    ucbhelper \
     svxcore \
     $(gb_STDLIBS) \
 ))

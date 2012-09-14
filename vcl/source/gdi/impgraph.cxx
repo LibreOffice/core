@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include <comphelper/processfactory.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
@@ -375,7 +377,8 @@ void ImpGraphic::ImplClear()
             try
             {
                 ::ucbhelper::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                                     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                     comphelper::getProcessComponentContext() );
 
                 aCnt.executeCommand( ::rtl::OUString("delete"),
                                      ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
@@ -1093,7 +1096,8 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
                                 try
                                 {
                                     ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                                         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                                                         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                                         comphelper::getProcessComponentContext() );
 
                                     aCnt.executeCommand( ::rtl::OUString("delete"),
                                                          ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
@@ -1285,7 +1289,8 @@ sal_Bool ImpGraphic::ImplSwapOut()
                         try
                         {
                             ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                                 comphelper::getProcessComponentContext() );
 
                             aCnt.executeCommand( ::rtl::OUString("delete"),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
@@ -1394,7 +1399,8 @@ sal_Bool ImpGraphic::ImplSwapIn()
                         try
                         {
                             ::ucbhelper::Content aCnt( aSwapURL,
-                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                                 comphelper::getProcessComponentContext() );
 
                             aCnt.executeCommand( ::rtl::OUString("delete"),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );

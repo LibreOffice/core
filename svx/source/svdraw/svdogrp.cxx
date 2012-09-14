@@ -28,8 +28,6 @@
 
 #include <sfx2/linkmgr.hxx>
 
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <unotools/datetime.hxx>
 
 #include <svx/svdogrp.hxx>

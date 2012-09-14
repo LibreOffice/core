@@ -286,7 +286,7 @@ namespace ucb { namespace ucp { namespace ext
             if ( aOpenCommand.Sink.is() )
             {
                 const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
-                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment );
+                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment, comphelper::ComponentContext(m_xSMgr).getUNOContext() );
                 aRet = aRequestedContent.executeCommand( ::rtl::OUString(  "open"  ), makeAny( aOpenCommand ) );
             }
         }
@@ -502,7 +502,7 @@ namespace ucb { namespace ucp { namespace ext
         case E_EXTENSION_CONTENT:
         {
             const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
-            ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnv );
+            ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnv, comphelper::ComponentContext(m_xSMgr).getUNOContext() );
 
             // translate the property request
             Sequence< ::rtl::OUString > aPropertyNames( i_rProperties.getLength() );

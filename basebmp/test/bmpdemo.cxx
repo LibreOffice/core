@@ -28,9 +28,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/configurationkeys.hxx>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -1222,17 +1220,13 @@ void TestApp::Main()
         exit( 1 );
     }
 
-    // Create UCB.
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE );
-    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
+    // Create UCB (for backwards compatibility, in case some code still uses
+    // plain createInstance w/o args directly to obtain an instance):
+    ::ucb::UniversalContentBroker::create(
+        comphelper::getProcessComponentContext() );
 
     TestWindow pWindow;
     pWindow.Execute();
-
-    // clean up UCB
-    ::ucbhelper::ContentBroker::deinitialize();
 }
 
 TestApp aDemoApp;

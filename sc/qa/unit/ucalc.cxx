@@ -81,8 +81,6 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
-#include <ucbhelper/contentbroker.hxx>
-
 #include <iostream>
 #include <vector>
 

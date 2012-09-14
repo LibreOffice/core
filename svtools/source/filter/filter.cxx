@@ -124,7 +124,8 @@ sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
     try
     {
         ::ucbhelper::Content    aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
-                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                              comphelper::getProcessComponentContext() );
 
         bExists = aCnt.isDocument();
     }
@@ -150,7 +151,8 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
     try
     {
         ::ucbhelper::Content aCnt( rMainUrl,
-                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                             comphelper::getProcessComponentContext() );
 
         aCnt.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )),
                              ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );

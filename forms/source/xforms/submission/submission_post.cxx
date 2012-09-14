@@ -61,7 +61,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
     auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
     try {
-        ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
+        ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment, comphelper::getProcessComponentContext());
 
         // use post command
         OUString aCommandName(RTL_CONSTASCII_USTRINGPARAM("post"));

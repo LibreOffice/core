@@ -44,7 +44,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>

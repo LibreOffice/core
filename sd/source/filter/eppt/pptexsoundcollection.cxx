@@ -30,7 +30,7 @@
 #include "epptdef.hxx"
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/proptypehlp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -44,7 +44,8 @@ ExSoundEntry::ExSoundEntry(const rtl::OUString& rString)
     try
     {
         ::ucbhelper::Content aCnt( aSoundURL,
-            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+            comphelper::getProcessComponentContext() );
         sal_Int64 nVal = 0;
         ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( "Size" ) ) );
         nFileSize = (sal_uInt32)nVal;
@@ -99,7 +100,8 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
     try
     {
         ::ucbhelper::Content aCnt( aSoundURL,
-            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+            comphelper::getProcessComponentContext() );
 
         // create SoundContainer
         rSt << (sal_uInt32)( ( EPP_Sound << 16 ) | 0xf ) << (sal_uInt32)( GetSize( nId ) - 8 );

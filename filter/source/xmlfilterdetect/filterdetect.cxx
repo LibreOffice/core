@@ -33,7 +33,6 @@
 #include <cstring>
 #include "filterdetect.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -47,27 +46,21 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/commandenvironment.hxx>
-#include <unotools/ucbhelper.hxx>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-
-
 
 using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::io::XActiveDataSource;
 using com::sun::star::io::XOutputStream;
 using com::sun::star::beans::PropertyValue;
@@ -80,7 +73,6 @@ using com::sun::star::document::XImporter;
 using com::sun::star::xml::sax::InputSource;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
-using com::sun::star::task::XInteractionHandler;
 
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star;
@@ -167,10 +159,11 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
     }
     try
     {
-        Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
         if (!xInStream.is())
         {
-            ::ucbhelper::Content aContent(sUrl,xEnv);
+            ::ucbhelper::Content aContent(
+                sUrl, Reference< com::sun::star::ucb::XCommandEnvironment >(),
+                mxCtx);
             xInStream = aContent.openStream();
             if (!xInStream.is())
             {
@@ -189,7 +182,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
             return ::rtl::OUString();
 
         // test typedetect code
-        Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString( "com.sun.star.document.TypeDetection" )),UNO_QUERY);
+        Reference <XNameAccess> xTypeCont(mxCtx->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxCtx), UNO_QUERY);
         Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
         nLength = myTypes.getLength();
 
@@ -270,32 +263,21 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
 
 
 OUString FilterDetect_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.filters.XMLFilterDetect" ) );
 }
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
 
-sal_Bool SAL_CALL FilterDetect_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
+Sequence< OUString > FilterDetect_getSupportedServiceNames()
 {
-    return ServiceName == SERVICE_NAME1;
-}
-Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
-    throw (RuntimeException)
-{
-    Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
+    Sequence < OUString > aRet(1);
+    aRet[0] = SERVICE_NAME1;
     return aRet;
 }
-#undef SERVICE_NAME1
-#undef SERVICE_NAME2
 
-Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
+Reference< XInterface > FilterDetect_createInstance( const Reference< XComponentContext > & context)
 {
-    return (cppu::OWeakObject*) new FilterDetect( rSMgr );
+    return static_cast< cppu::OWeakObject * >( new FilterDetect( context ) );
 }
 
 // XServiceInfo
@@ -307,7 +289,7 @@ OUString SAL_CALL FilterDetect::getImplementationName(  )
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return FilterDetect_supportsService( rServiceName );
+    return rServiceName == SERVICE_NAME1;
 }
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
     throw (RuntimeException)

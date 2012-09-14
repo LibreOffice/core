@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_libraries,subsequenttest,\
     test \
 	tl \
 	utl \
-	ucbhelper \
 	unotest \
 	vcl \
     $(gb_STDLIBS) \

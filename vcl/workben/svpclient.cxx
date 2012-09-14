@@ -48,8 +48,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include "ucbhelper/contentbroker.hxx"
-#include "ucbhelper/configurationkeys.hxx"
 
 #include <errno.h>
 #include <unistd.h>
@@ -101,25 +99,6 @@ SAL_IMPLEMENT_MAIN()
         fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
         exit( 1 );
     }
-
-    /*
-     *  Create UCB.
-     */
-    Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString(UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= OUString(UCB_CONFIGURATION_KEY2_OFFICE );
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bSuccess =
-#endif
-        ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
-
-#if OSL_DEBUG_LEVEL > 1
-    if ( !bSuccess )
-    {
-        fprintf( stderr, "Error creating UCB, installation must be in disorder. Exiting.\n" );
-        exit( 1 );
-    }
-#endif
 
     InitVCL( xFactory );
     ::Main();

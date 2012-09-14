@@ -111,27 +111,6 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
             "serviceManager - "
             "Cannot create intial service manager" ) ;
 
-        /*-
-         * Because of the exception rasied from
-         * ucbhelper/source/provider/provconf.cxx, lin 323
-         * I do not use the content broker at present
-         ********************************************************************
-        //init ucb
-        if( ::ucb::ContentBroker::get() == NULL ) {
-            Reference< lang::XMultiServiceFactory > xSvmg( xLocalServiceManager , UNO_QUERY ) ;
-            OSL_ENSURE( xLocalServiceManager.is() ,
-                "serviceManager - "
-                "Cannot get multi-service factory" ) ;
-
-            Sequence< Any > args( 2 ) ;
-            args[ 0 ] <<= OUString( UCB_CONFIGURATION_KEY1_LOCAL ) ;
-            args[ 1 ] <<= OUString( UCB_CONFIGURATION_KEY2_OFFICE ) ;
-            if( ! ::ucb::ContentBroker::initialize( xSvmg , args ) ) {
-                throw RuntimeException( OUString("Cannot inlitialize ContentBroker") , Reference< XInterface >() , Any() ) ;
-            }
-        }
-        ********************************************************************/
-
         xUsedComponentContext = xLocalComponentContext ;
         xUsedServiceManager = xLocalServiceManager ;
     } else {

@@ -36,7 +36,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_doctok, \
 	cppu \
 	cppuhelper \
 	sal \
-	ucbhelper \
 	writerfilter \
 	$(gb_STDLIBS) \
 ))

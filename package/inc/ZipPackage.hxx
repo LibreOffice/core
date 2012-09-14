@@ -106,6 +106,8 @@ protected:
     ZipPackageFolder *m_pRootFolder;
     ZipFile          *m_pZipFile;
 
+    sal_Bool isLocalFile() const;
+
     void parseManifest();
     void parseContentType();
     void getZipFileContents();

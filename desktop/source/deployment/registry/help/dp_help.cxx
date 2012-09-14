@@ -203,7 +203,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             OUString name;
             if (!bRemoved)
             {
-                ::ucbhelper::Content ucbContent( url, xCmdEnv );
+                ::ucbhelper::Content ucbContent(
+                    url, xCmdEnv, getComponentContext() );
                 name = StrTitle::getTitle( ucbContent );
             }
 

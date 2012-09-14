@@ -59,7 +59,8 @@ sal_Bool FileExists( const String &rMainURL )
         try
         {
             ::ucbhelper::Content aContent( rMainURL,
-                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                    comphelper::getProcessComponentContext());
             bExists = aContent.isDocument();
         }
         catch (uno::Exception &)

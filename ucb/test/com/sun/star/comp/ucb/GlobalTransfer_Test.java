@@ -64,6 +64,7 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
            XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
            oObj
             = xMSF.createInstance( "com.sun.star.ucb.UniversalContentBroker" );
+               // unconfigured instance
         }
         catch(com.sun.star.uno.Exception e) {
             e.printStackTrace((PrintWriter)log);

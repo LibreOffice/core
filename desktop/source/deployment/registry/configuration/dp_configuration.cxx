@@ -349,11 +349,11 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             OUString name;
             if (!bRemoved)
             {
-                ::ucbhelper::Content ucbContent( url, xCmdEnv );
+                ::ucbhelper::Content ucbContent( url, xCmdEnv, m_xComponentContext );
                 name = StrTitle::getTitle( ucbContent );
             }
 
-            ::ucbhelper::Content ucbContent( url, xCmdEnv );
+            ::ucbhelper::Content ucbContent( url, xCmdEnv, m_xComponentContext );
             if (subType.EqualsIgnoreCaseAscii(
                     "vnd.sun.star.configuration-data"))
             {
@@ -483,7 +483,7 @@ void BackendImpl::configmgrini_flush(
                 reinterpret_cast<sal_Int8 const *>(buf.getStr()),
                 buf.getLength() ) ) );
     ::ucbhelper::Content ucb_content(
-        makeURL( getCachePath(), OUSTR("configmgr.ini") ), xCmdEnv );
+        makeURL( getCachePath(), OUSTR("configmgr.ini") ), xCmdEnv, m_xComponentContext );
     ucb_content.writeStream( xData, true /* replace existing */ );
 
     m_configmgrini_modified = false;
@@ -616,10 +616,10 @@ OUString encodeForXml( OUString const & text )
 
 //______________________________________________________________________________
 OUString replaceOrigin(
-    OUString const & url, OUString const & destFolder, Reference< XCommandEnvironment > const & xCmdEnv, bool & out_replaced)
+    OUString const & url, OUString const & destFolder, Reference< XCommandEnvironment > const & xCmdEnv, Reference< XComponentContext > const & xContext, bool & out_replaced)
 {
     // looking for %origin%:
-    ::ucbhelper::Content ucb_content( url, xCmdEnv );
+    ::ucbhelper::Content ucb_content( url, xCmdEnv, xContext );
     ::rtl::ByteSequence bytes( readFile( ucb_content ) );
     ::rtl::ByteSequence filtered( bytes.getLength() * 2,
                                   ::rtl::BYTESEQ_NODEFAULT );
@@ -694,7 +694,7 @@ OUString replaceOrigin(
         newUrl = destFolder + url.copy(i);
     }
 
-    ucbhelper::Content(newUrl, xCmdEnv).writeStream(
+    ucbhelper::Content(newUrl, xCmdEnv, xContext).writeStream(
         xmlscript::createInputStream(filtered), true);
     out_replaced = true;
     return newUrl;
@@ -726,7 +726,7 @@ void BackendImpl::PackageImpl::processPackage_(
             {
                 const OUString sModFolder = that->createFolder(OUString(), xCmdEnv);
                 bool out_replaced = false;
-                url = replaceOrigin(url, sModFolder, xCmdEnv, out_replaced);
+                url = replaceOrigin(url, sModFolder, xCmdEnv, that->getComponentContext(), out_replaced);
                 if (out_replaced)
                     data.dataUrl = sModFolder;
                 else
@@ -783,7 +783,7 @@ void BackendImpl::PackageImpl::processPackage_(
                        const OUString sModFolder = that->createFolder(OUString(), xCmdEnv);
                        bool out_replaced = false;
                        url_replaced = replaceOrigin(
-                           url2, sModFolder, xCmdEnv, out_replaced);
+                           url2, sModFolder, xCmdEnv, that->getComponentContext(), out_replaced);
                        if (out_replaced)
                            data.dataUrl = sModFolder;
                        else
@@ -799,7 +799,7 @@ void BackendImpl::PackageImpl::processPackage_(
             {
                 ::ucbhelper::Content(
                     makeURL( that->getCachePath(), OUSTR("registry") ),
-                    xCmdEnv ).executeCommand(
+                    xCmdEnv, that->getComponentContext() ).executeCommand(
                         OUSTR("delete"), Any( true /* delete physically */ ) );
             }
             catch(const Exception&)

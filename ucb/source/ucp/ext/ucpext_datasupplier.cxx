@@ -178,7 +178,7 @@ namespace ucb { namespace ucp { namespace ext
             case E_EXTENSION_CONTENT:
             {
                 const ::rtl::OUString sPackageLocation( m_pImpl->m_xContent->getPhysicalURL() );
-                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment() );
+                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), comphelper::ComponentContext(m_pImpl->m_xSMgr).getUNOContext() );
 
                 // obtain the properties which our result set is set up for from the wrapped content
                 Sequence< ::rtl::OUString > aPropertyNames(1);

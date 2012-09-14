@@ -53,5 +53,6 @@ $(eval $(call gb_CppunitTest_use_ure,basic_enable))
 $(eval $(call gb_CppunitTest_use_components,basic_enable,\
     configmgr/source/configmgr \
     ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
 ))
 $(eval $(call gb_CppunitTest_use_configuration,basic_enable))

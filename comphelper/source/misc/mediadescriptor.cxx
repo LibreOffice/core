@@ -353,7 +353,7 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
                 bReadOnly = sal_True;
             else
             {
-                ::ucbhelper::Content aContent(xContent, css::uno::Reference< css::ucb::XCommandEnvironment >());
+                ::ucbhelper::Content aContent(xContent, css::uno::Reference< css::ucb::XCommandEnvironment >(), getProcessComponentContext());
                 aContent.getPropertyValue(CONTENTPROP_ISREADONLY) >>= bReadOnly;
             }
         }
@@ -526,7 +526,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
             xSeek->seek( 0 );
 
         // a content for the URL
-        ::ucbhelper::Content aContent( sURL, xCommandEnv );
+        ::ucbhelper::Content aContent( sURL, xCommandEnv, getProcessComponentContext() );
 
         // use post command
         css::ucb::PostCommandArgument2 aPostArgument;
@@ -579,7 +579,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
     css::uno::Reference< css::ucb::XContent > xContent;
     try
     {
-        aContent = ::ucbhelper::Content(sURL, xCommandEnv);
+        aContent = ::ucbhelper::Content(sURL, xCommandEnv, getProcessComponentContext());
         xContent = aContent.get();
     }
     catch(const css::uno::RuntimeException&)

@@ -57,7 +57,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
     auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
     try {
-        ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
+        ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment, comphelper::getProcessComponentContext());
 
         // insert serialized data to content -> PUT
         CSS::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();

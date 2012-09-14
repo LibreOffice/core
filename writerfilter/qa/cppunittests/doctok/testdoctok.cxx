@@ -23,7 +23,6 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include <ucbhelper/contentbroker.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -59,7 +58,6 @@ public:
     {
         bool bResult = false;
 
-        // initialise UCB-Broker
         uno::Reference<uno::XComponentContext>
             xComponentContext
             (::cppu::defaultBootstrap_InitialComponentContext());
@@ -71,36 +69,22 @@ public:
             xFactory(xComponentContext->getServiceManager() );
         OSL_ASSERT(xFactory.is());
 
-        uno::Sequence<uno::Any> aUcbInitSequence(2);
-        aUcbInitSequence[0] <<=
-            OUString("Local");
-        aUcbInitSequence[1] <<=
-            OUString("Office");
-
         uno::Reference<lang::XMultiServiceFactory>
             xServiceFactory(xFactory, uno::UNO_QUERY);
         OSL_ASSERT( xServiceFactory.is() );
 
         if (xServiceFactory.is())
         {
-            sal_Bool bRet =
-                ::ucbhelper::ContentBroker::initialize(xServiceFactory,
-                                                       aUcbInitSequence);
+            uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >
+                xNameContainer(xFactory->createInstanceWithContext
+                               ("com.sun.star.ucb.SimpleFileAccess",
+                                xComponentContext), uno::UNO_QUERY );
 
-            OSL_ASSERT(bRet);
-            if (bRet)
+            if (xNameContainer.is())
             {
-                uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >
-                    xNameContainer(xFactory->createInstanceWithContext
-                                       ("com.sun.star.ucb.SimpleFileAccess",
-                                    xComponentContext), uno::UNO_QUERY );
+                xSimpleFileAccess = xNameContainer;
 
-                if (xNameContainer.is())
-                {
-                    xSimpleFileAccess = xNameContainer;
-
-                    bResult = true;
-                }
+                bResult = true;
             }
         }
 
@@ -150,11 +134,6 @@ public:
         pDocument->resolve(*pStream);
     }
 
-    void testEnd()
-    {
-        ::ucbhelper::ContentBroker::deinitialize();
-    }
-
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -163,7 +142,6 @@ public:
     CPPUNIT_TEST(testInitUno);
     CPPUNIT_TEST(testOpenFile);
     CPPUNIT_TEST(testEvents);
-    CPPUNIT_TEST(testEnd);
     CPPUNIT_TEST_SUITE_END();
 }; // class test
 

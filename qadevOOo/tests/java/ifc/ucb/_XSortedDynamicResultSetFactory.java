@@ -74,7 +74,7 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
         try {
             Object oUCB = xMSF.createInstanceWithArguments
                 ("com.sun.star.ucb.UniversalContentBroker",
-                new Object[] {"Local", "Office"}) ;
+                new Object[0]) ;
 
             XContentIdentifierFactory ciFac = UnoRuntime.queryInterface
                 (XContentIdentifierFactory.class,oUCB) ;

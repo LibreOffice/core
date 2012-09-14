@@ -138,7 +138,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
     try
     {
         ::com::sun::star::uno::Reference< XCommandEnvironment > xEnv;
-        Content aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+        Content aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext() );
         Sequence< OUString > aProps( 2 );
 
         aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));

@@ -141,7 +141,8 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
     uno::Reference< lang::XSingleServiceFactory > xFact;
     try {
         ::ucbhelper::Content aCntnt( aURL,
-            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > (),
+            getProcessComponentContext() );
         if (aCntnt.isDocument()) {
             xFact = GetStorageFactory( xFactory );
         } else {

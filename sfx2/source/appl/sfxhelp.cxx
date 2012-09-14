@@ -177,7 +177,8 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     try
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
-                             Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                             Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                             comphelper::getProcessComponentContext() );
         if ( ( aCnt.getPropertyValue( ::rtl::OUString("AnchorName") ) >>= sAnchor ) )
         {
 

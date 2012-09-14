@@ -319,7 +319,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
 
     try
     {
-        ::ucbhelper::Content aContent( _sURL, NULL );
+        ::ucbhelper::Content aContent( _sURL, NULL, comphelper::getProcessComponentContext() );
         if ( !aContent.isDocument() )
             throw InteractiveIOException(
                 _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE

@@ -1314,7 +1314,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         Reference< XCommandEnvironment > xCmdEnv =
             static_cast<XCommandEnvironment*>( new OLibCommandEnvironment( xHandler ) );
 
-        ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv );
+        ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv, comphelper::getProcessComponentContext() );
 
         ::rtl::OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
@@ -1328,7 +1328,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         if( xSFA->exists( aPackageURL ) )
             xSFA->kill( aPackageURL );
 
-        ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv );
+        ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv, comphelper::getProcessComponentContext() );
         destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
             OUString(), NameClash::OVERWRITE );
@@ -1369,10 +1369,10 @@ void LibPage::ExportAsPackage( const String& aLibName )
             true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
 
         // write buffered pipe data to content:
-        ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv );
+        ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv, comphelper::getProcessComponentContext() );
         manifestContent.writeStream( Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ), true );
 
-        ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv );
+        ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv, comphelper::getProcessComponentContext() );
         destFolderContent.transferContent(
             MetaInfContent, ::ucbhelper::InsertOperation_COPY,
             OUString(), NameClash::OVERWRITE );

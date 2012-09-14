@@ -372,17 +372,34 @@ void SAL_CALL UniversalContentBroker::initialize(
     throw( com::sun::star::uno::Exception,
            com::sun::star::uno::RuntimeException )
 {
-    //@@@ At the moment, there's a problem when one (non-one-instance) factory
-    // 'wraps' another (one-instance) factory, causing this method to be
-    // called several times:
-    m_aArguments = aArguments;
-
-    oslInterlockedCount nCount = osl_incrementInterlockedCount(&m_nInitCount);
-    if (nCount == 1)
-        configureUcb();
-    else
-        osl_decrementInterlockedCount(&m_nInitCount);
-            // make the possibility of overflow less likely...
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        if (m_aArguments.getLength() != 0)
+        {
+            if (aArguments.getLength() != 0
+                && !(m_aArguments.getLength() == 2
+                     && aArguments.getLength() == 2
+                     && m_aArguments[0] == aArguments[0]
+                     && m_aArguments[1] == aArguments[1]))
+            {
+                throw IllegalArgumentException(
+                    "UCB reinitialized with different arguments",
+                    static_cast< cppu::OWeakObject * >(this), 0);
+            }
+            return;
+        }
+        if (aArguments.getLength() == 0)
+        {
+            m_aArguments.realloc(2);
+            m_aArguments[0] <<= OUString("Local");
+            m_aArguments[1] <<= OUString("Office");
+        }
+        else
+        {
+            m_aArguments = aArguments;
+        }
+    }
+    configureUcb();
 }
 
 //=========================================================================

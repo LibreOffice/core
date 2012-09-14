@@ -444,7 +444,8 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
     try
     {
         ::ucbhelper::Content sourceContent(rSourceURL,
-                uno::Reference<ucb::XCommandEnvironment>());
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
 
         uno::Reference<document::XStorageBasedDocument> const xSBD(xModel,
                 uno::UNO_QUERY_THROW);

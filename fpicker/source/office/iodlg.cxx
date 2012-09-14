@@ -30,7 +30,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include "svtools/ehdl.hxx"
 #include "svl/urihelper.hxx"
 #include "unotools/pathoptions.hxx"
@@ -52,7 +51,7 @@
 #include "svtools/QueryFolderName.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
@@ -273,17 +272,11 @@ namespace
         //=================================================================
         try
         {
-            // get the content provider manager
-            ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-            Reference< XContentProviderManager > xProviderManager;
-            if ( pBroker )
-                xProviderManager = pBroker->getContentProviderManagerInterface();
-
-            //=================================================================
             // get the provider for the current scheme
-            Reference< XContentProvider > xProvider;
-            if ( xProviderManager.is() )
-                xProvider = xProviderManager->queryContentProvider( _rForURL );
+            Reference< XContentProvider > xProvider(
+                UniversalContentBroker::create(
+                    comphelper::getProcessComponentContext() )->
+                queryContentProvider( _rForURL ) );
 
             DBG_ASSERT( xProvider.is(), "lcl_getHomeDirectory: could not find a (valid) content provider for the current URL!" );
             Reference< XPropertySet > xProviderProps( xProvider, UNO_QUERY );
@@ -2072,7 +2065,8 @@ short SvtFileDialog::PrepareExecute()
             INetURLObject aStdDir( GetStandardDir() );
             ::ucbhelper::Content aCnt( rtl::OUString( aStdDir.GetMainURL(
                                                     INetURLObject::NO_DECODE ) ),
-                                 Reference< XCommandEnvironment >() );
+                                 Reference< XCommandEnvironment >(),
+                                 comphelper::getProcessComponentContext() );
             Sequence< rtl::OUString > aProps(2);
             aProps[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ));
             aProps[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IsRemoveable" ));

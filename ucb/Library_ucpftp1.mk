@@ -32,6 +32,7 @@ $(eval $(call gb_Library_set_componentfile,ucpftp1,ucb/source/ucp/ftp/ucpftp1))
 $(eval $(call gb_Library_use_sdk_api,ucpftp1))
 
 $(eval $(call gb_Library_use_libraries,ucpftp1,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

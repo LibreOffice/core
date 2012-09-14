@@ -31,14 +31,6 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#include <com/sun/star/ucb/OpenMode.hpp>
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
@@ -53,7 +45,6 @@
 
 using namespace ::rtl;
 using namespace ::cppu;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -101,13 +92,8 @@ public:
     {
         m_rxDocumentHandler = xHandler;
     }
-    void setUCB( Reference< XInterface > xUCB )
-    {
-         rUCB = xUCB;
-    }
 private:
     Reference< XDocumentHandler > m_rxDocumentHandler;
-    Reference< XInterface > rUCB;
     Reference< XAttributeList > rList;
     AttributeListImpl *pList;
     HWPFile hwpfile;
@@ -226,15 +212,6 @@ HwpImportFilter::HwpImportFilter( const Reference< XMultiServiceFactory > xFact 
 
         HwpReader *p = new HwpReader;
         p->setDocumentHandler( xHandler );
-
-        Sequence< Any > aArgs( 2 );
-        aArgs[0] <<= OUString("Local");
-        aArgs[1] <<= OUString("Office");
-        Reference< XInterface > xUCB
-            ( xFact->createInstanceWithArguments
-               (OUString("com.sun.star.ucb.UniversalContentBroker"),
-                aArgs));
-        p->setUCB( xUCB );
 
         Reference< XImporter > xImporter = Reference< XImporter >( xHandler, UNO_QUERY );
         rImporter = xImporter;

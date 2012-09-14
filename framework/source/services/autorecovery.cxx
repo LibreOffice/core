@@ -3227,7 +3227,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
 
     try
     {
-        aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment);
+        aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment, comphelper::ComponentContext(m_xSMGR).getUNOContext());
     }
     catch(const css::uno::Exception&)
     {
@@ -3239,7 +3239,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
 
     try
     {
-        ::ucbhelper::Content::create(sSource, xEnvironment, aSourceContent);
+        ::ucbhelper::Content::create(sSource, xEnvironment, comphelper::ComponentContext(m_xSMGR).getUNOContext(), aSourceContent);
         aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation_COPY, sTargetName, nNameClash);
     }
     catch(const css::uno::Exception&)
@@ -3627,7 +3627,7 @@ void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
 
     try
     {
-        ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >());
+        ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::ComponentContext(m_xSMGR).getUNOContext());
         aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)

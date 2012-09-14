@@ -26,7 +26,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <ucbhelper/contentbroker.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <osl/process.h>
@@ -41,9 +40,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/seqstream.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <resourcemodel/exceptions.hxx>
 #include <doctok/WW8Document.hxx>
@@ -140,111 +136,93 @@ sal_Int32 SAL_CALL AnalyzeService::run
 ( const uno::Sequence< OUString >& aArguments )
     throw (uno::RuntimeException)
 {
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= OUString("Local");
-    aUcbInitSequence[1] <<=
-        OUString("Office");
-    uno::Reference<lang::XMultiServiceFactory>
-        xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiComponentFactory>
-        xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    OUString arg=aArguments[0];
 
-    if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
+    rtl_uString *dir=NULL;
+    osl_getProcessWorkingDir(&dir);
+
+    OUString absFileUrlUrls;
+    osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrlUrls.pData);
+
+    URLLister aLister(xContext, absFileUrlUrls);
+
+    fprintf(stdout, "<analyze>\n");
+
+    OUString aURL = aLister.getURL();
+
+    while (!aURL.isEmpty())
     {
-        OUString arg=aArguments[0];
+        uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
-        rtl_uString *dir=NULL;
-        osl_getProcessWorkingDir(&dir);
+        OString aStr;
+        aURL.convertToString(&aStr, RTL_TEXTENCODING_ASCII_US,
+                             OUSTRING_TO_OSTRING_CVTFLAGS);
 
-        OUString absFileUrlUrls;
-        osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrlUrls.pData);
+        fprintf(stdout, "<file><name>%s</name>\n", aStr.getStr());
+        fprintf(stderr, "%s\n", aStr.getStr());
+        fflush(stderr);
 
-        URLLister aLister(xContext, absFileUrlUrls);
-
-        fprintf(stdout, "<analyze>\n");
-
-        OUString aURL = aLister.getURL();
-
-        while (!aURL.isEmpty())
+        bool bStatus = true;
+        try
         {
-            uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
-
-            OString aStr;
-            aURL.convertToString(&aStr, RTL_TEXTENCODING_ASCII_US,
-                                 OUSTRING_TO_OSTRING_CVTFLAGS);
-
-            fprintf(stdout, "<file><name>%s</name>\n", aStr.getStr());
-            fprintf(stderr, "%s\n", aStr.getStr());
-            fflush(stderr);
-
-            bool bStatus = true;
             try
             {
-                try
+                uno::Reference<io::XInputStream> xInputStream =
+                    xFileAccess->openFileRead(aURL);
                 {
-                    uno::Reference<io::XInputStream> xInputStream =
-                        xFileAccess->openFileRead(aURL);
+                    doctok::WW8Stream::Pointer_t pDocStream =
+                        doctok::WW8DocumentFactory::createStream
+                        (xContext, xInputStream);
+
+                    if (pDocStream.get() != NULL)
                     {
-                        doctok::WW8Stream::Pointer_t pDocStream =
-                            doctok::WW8DocumentFactory::createStream
-                            (xContext, xInputStream);
+                        doctok::WW8Document::Pointer_t pDocument
+                            (doctok::WW8DocumentFactory::createDocument
+                             (pDocStream));
 
-                        if (pDocStream.get() != NULL)
-                        {
-                            doctok::WW8Document::Pointer_t pDocument
-                                (doctok::WW8DocumentFactory::createDocument
-                                (pDocStream));
-
-                            Stream::Pointer_t pAnalyzer =
-                                writerfilter::createAnalyzer();
-                            pDocument->resolve(*pAnalyzer);
-                        }
-                        else
-                        {
-                            fprintf(stdout,
-                                    "<exception>file open failed</exception>\n");
-                            bStatus = false;
-                        }
-                        fprintf(stderr, "done\n");
+                        Stream::Pointer_t pAnalyzer =
+                            writerfilter::createAnalyzer();
+                        pDocument->resolve(*pAnalyzer);
                     }
+                    else
+                    {
+                        fprintf(stdout,
+                                "<exception>file open failed</exception>\n");
+                        bStatus = false;
+                    }
+                    fprintf(stderr, "done\n");
+                }
 
-                    xInputStream->closeInput();
-                }
-                catch (const Exception &e)
-                {
-                    fprintf(stdout, "<exception>%s</exception>\n",
-                            e.getText().c_str());
-                    bStatus = false;
-                }
+                xInputStream->closeInput();
             }
-            catch (...)
+            catch (const Exception &e)
             {
-                fprintf(stdout, "<exception>unknown</exception>\n");
+                fprintf(stdout, "<exception>%s</exception>\n",
+                        e.getText().c_str());
                 bStatus = false;
             }
-
-            if (bStatus)
-                fprintf(stdout, "<status>ok</status>\n");
-            else
-                fprintf(stdout, "<status>failed</status>\n");
-
-            aURL = aLister.getURL();
-
-            fprintf(stdout, "</file>\n");
-            fflush(stdout);
+        }
+        catch (...)
+        {
+            fprintf(stdout, "<exception>unknown</exception>\n");
+            bStatus = false;
         }
 
-        fprintf(stdout, "</analyze>\n");
+        if (bStatus)
+            fprintf(stdout, "<status>ok</status>\n");
+        else
+            fprintf(stdout, "<status>failed</status>\n");
 
-        rtl_uString_release(dir);
-        ::ucbhelper::ContentBroker::deinitialize();
+        aURL = aLister.getURL();
 
-
+        fprintf(stdout, "</file>\n");
+        fflush(stdout);
     }
-    else
-    {
-        fprintf(stdout, "can't initialize UCB");
-    }
+
+    fprintf(stdout, "</analyze>\n");
+
+    rtl_uString_release(dir);
+
     return 0;
 }
 

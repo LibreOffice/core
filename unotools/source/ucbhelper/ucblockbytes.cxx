@@ -54,8 +54,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <comphelper/storagehelper.hxx>
-
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -628,8 +626,8 @@ Moderator::Moderator(
           xContent,
           new UcbTaskEnvironment(
               xInteract.is() ? new ModeratorsInteractionHandler(*this) : 0,
-              xProgress.is() ? new ModeratorsProgressHandler(*this) : 0
-          ))
+              xProgress.is() ? new ModeratorsProgressHandler(*this) : 0),
+          comphelper::getProcessComponentContext())
 {
     // now exchange the whole data sink stuff
     // with a thread safe version
@@ -1149,7 +1147,9 @@ static sal_Bool _UCBOpenContentSync(
     Reference < XProgressHandler > xProgress,
     UcbLockBytesHandlerRef xHandler )
 {
-    ::ucbhelper::Content aContent( xContent, new UcbTaskEnvironment( xInteract, xProgress ) );
+    ::ucbhelper::Content aContent(
+        xContent, new UcbTaskEnvironment( xInteract, xProgress ),
+        comphelper::getProcessComponentContext() );
     Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
     ::rtl::OUString aScheme = xIdent->getContentProviderScheme();
 

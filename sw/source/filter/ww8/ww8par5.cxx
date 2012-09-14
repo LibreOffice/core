@@ -32,7 +32,7 @@
 
 #include <sal/types.h>
 #include <tools/solar.h>
-
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <sot/storinfo.hxx>
@@ -48,8 +48,6 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/commandenvironment.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <hintids.hxx>
@@ -2320,8 +2318,8 @@ bool CanUseRemoteLink(const String &rGrfName)
     try
     {
         ::ucbhelper::Content aCnt(rGrfName,
-            uno::Reference<
-            ucb::XCommandEnvironment >() );
+            uno::Reference< ucb::XCommandEnvironment >(),
+            comphelper::getProcessComponentContext() );
         rtl::OUString   aTitle;
 
         aCnt.getPropertyValue("Title") >>= aTitle;

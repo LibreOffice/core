@@ -41,7 +41,6 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include "connectivity/sqlnode.hxx"
-#include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/process.h>
@@ -49,9 +48,8 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 
-#include <ucbhelper/content.hxx>
 #include <osl/module.h>
 
 #include <stdio.h>
@@ -76,7 +74,6 @@ using ::rtl::OUStringBuffer;
 using ::rtl::OUStringToOString;
 
 #define OUtoCStr( x ) (OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US ).getStr())
-Reference< XContentProviderManager > globalUcb;
 #define PRINTSTR(x) printf("%s",x);
 
 int autoTest(Reference<XResultSet> &xRes);
@@ -258,17 +255,13 @@ Reference< XMultiServiceFactory > InitializeFac( void )
 
 
 //  Create unconfigured Ucb:
-    Sequence< Any > aArgs;
-    ::ucb::ContentBroker::initialize( xSMgr, aArgs );
-    Reference< XContentProviderManager > xUcb =
-        ucb::ContentBroker::get()->getContentProviderManagerInterface();
+    Reference< XUniversalContentBroker > xUcb
+        ( xSMgr->createInstance( OUString("com.sun.star.ucb.UniversalContentBroker") ), UNO_QUERY_THROW );
 
     Reference< XContentProvider > xFileProvider
-        ( xSMgr->createInstance( OUString("com.sun.star.ucb.FileContentProvider") ), UNO_QUERY );
+        ( xSMgr->createInstance( OUString("com.sun.star.ucb.FileContentProvider") ), UNO_QUERY_THROW );
     xUcb->registerContentProvider( xFileProvider, OUString("file"), sal_True );
 
-
-    globalUcb = xUcb;
     return xSMgr;
 }
 

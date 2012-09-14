@@ -634,7 +634,7 @@ void IndexTabPage_Impl::InitializeIndex()
         AppendConfigToken( aTemp, sal_True );
         aURL = aTemp;
 
-        Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
@@ -3340,7 +3340,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
             {
                 try
                 {
-                    Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                    Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
                     if ( xInfo->hasPropertyByName( PROPERTY_TITLE ) )
                     {

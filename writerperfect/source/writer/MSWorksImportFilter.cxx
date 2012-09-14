@@ -151,7 +151,7 @@ throw( com::sun::star::uno::RuntimeException )
     {
         try
         {
-            ::ucbhelper::Content aContent(sURL, xEnv);
+            ::ucbhelper::Content aContent(sURL, xEnv, mxContext);
             xInputStream = aContent.openStream();
         }
         catch ( ... )

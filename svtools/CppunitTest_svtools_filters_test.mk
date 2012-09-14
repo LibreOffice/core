@@ -53,6 +53,7 @@ $(eval $(call gb_CppunitTest_use_ure,svtools_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,svtools_filters_test,\
     configmgr/source/configmgr \
+    ucb/source/core/ucb1 \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,svtools_filters_test))

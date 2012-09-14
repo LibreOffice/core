@@ -68,6 +68,7 @@
 #include "dlgattr.hrc"
 #include "TypeInfo.hxx"
 #include "FieldDescriptions.hxx"
+#include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/componentcontext.hxx>
 
@@ -1228,7 +1229,8 @@ namespace
         try
         {
             ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
-                                 Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                                 Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                 comphelper::getProcessComponentContext() );
             if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
             {
 

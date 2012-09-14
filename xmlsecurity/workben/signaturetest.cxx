@@ -38,9 +38,6 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <unotools/streamhelper.hxx>
 
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/configurationkeys.hxx>
-
 // Will be in comphelper if CWS MAV09 is integrated
 #include <comphelper/storagehelper.hxx>
 
@@ -91,18 +88,6 @@ void Main();
             OSL_FAIL( "No service manager!" );
             return -1;
         }
-
-        // Init USB
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= rtl::OUString( UCB_CONFIGURATION_KEY1_LOCAL );
-        aArgs[ 1 ] <<= rtl::OUString( UCB_CONFIGURATION_KEY2_OFFICE );
-        sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xMSF, aArgs );
-        if ( !bSuccess )
-        {
-            OSL_FAIL( "Error creating UCB!" );
-            return -1;
-        }
-
     }
     catch ( uno::Exception const & )
     {

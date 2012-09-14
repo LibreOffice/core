@@ -70,7 +70,7 @@ void BackendDb::save()
 
     const Reference<css::io::XInputStream> xData(
         ::xmlscript::createInputStream(bytes));
-    ::ucbhelper::Content ucbDb(m_urlDb, 0);
+    ::ucbhelper::Content ucbDb(m_urlDb, 0, m_xContext);
     ucbDb.writeStream(xData, true /*replace existing*/);
 }
 
@@ -86,7 +86,8 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
         if (err == ::osl::File::E_None)
         {
             ::ucbhelper::Content descContent(
-                m_urlDb, css::uno::Reference<css::ucb::XCommandEnvironment>());
+                m_urlDb, css::uno::Reference<css::ucb::XCommandEnvironment>(),
+                m_xContext);
             Reference<css::io::XInputStream> xIn = descContent.openStream();
             m_doc = xDocBuilder->parse(xIn);
         }

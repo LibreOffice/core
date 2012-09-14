@@ -2064,7 +2064,7 @@ namespace
             sPathCheck += '.';
             try
             {
-                ::ucbhelper::Content aContent( sPathCheck, uno::Reference< ucb::XCommandEnvironment >() );
+                ::ucbhelper::Content aContent( sPathCheck, uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 bValid = aContent.isFolder();
             }
             catch( const Exception& ) {}
@@ -2538,7 +2538,8 @@ static int impl_isFolder( const OUString& rPath )
     try
     {
         ::ucbhelper::Content aContent(
-            rPath, uno::Reference< ucb::XCommandEnvironment > () );
+            rPath, uno::Reference< ucb::XCommandEnvironment > (),
+            comphelper::getProcessComponentContext() );
         if ( aContent.isFolder() )
             return 1;
 

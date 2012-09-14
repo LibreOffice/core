@@ -174,7 +174,7 @@ sal_Bool KillFile_Impl( const String& rURL )
     sal_Bool bRet = sal_True;
     try
     {
-        Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         aCnt.executeCommand( OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )

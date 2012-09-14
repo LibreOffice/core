@@ -44,6 +44,7 @@
 #include <com/sun/star/plugin/PluginManager.hpp>
 
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <plugin/impl.hxx>
 #include <tools/fsys.hxx>
 #include <ucbhelper/content.hxx>
@@ -1039,7 +1040,8 @@ void PluginInputStream::load()
         m_pContent =
             new ::ucbhelper::Content(
                                aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI),
-                               uno::Reference< com::sun::star::ucb::XCommandEnvironment >()
+                               uno::Reference< com::sun::star::ucb::XCommandEnvironment >(),
+                               comphelper::getProcessComponentContext()
                                );
         m_pContent->openStream( static_cast< XOutputStream* >( this ) );
     }

@@ -432,7 +432,7 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
         try
         {
             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv;
-            ::ucbhelper::Content aContent( rURL, xCmdEnv );
+            ::ucbhelper::Content aContent( rURL, xCmdEnv, comphelper::getProcessComponentContext() );
 
             bExists = aContent.isDocument();
             if (bExists)

@@ -22,6 +22,7 @@
 #include <tools/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <comphelper/processfactory.hxx>
 #include <svl/fstathelper.hxx>
 
 using namespace ::com::sun::star;
@@ -36,7 +37,8 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const rtl::OUString& rURL,
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
-                                uno::Reference< XCommandEnvironment > ());
+                                uno::Reference< XCommandEnvironment > (),
+                                comphelper::getProcessComponentContext());
         uno::Any aAny = aTestContent.getPropertyValue(
             OUString("DateModified") );
         if( aAny.hasValue() )
@@ -63,7 +65,8 @@ sal_Bool FStatHelper::IsDocument( const rtl::OUString& rURL )
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
-                                uno::Reference< XCommandEnvironment > ());
+                                uno::Reference< XCommandEnvironment > (),
+                                comphelper::getProcessComponentContext());
         bExist = aTestContent.isDocument();
     }
     catch(...)
@@ -78,7 +81,8 @@ sal_Bool FStatHelper::IsFolder( const rtl::OUString& rURL )
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
-                                uno::Reference< XCommandEnvironment > ());
+                                uno::Reference< XCommandEnvironment > (),
+                                comphelper::getProcessComponentContext());
         bExist = aTestContent.isFolder();
     }
     catch(...)

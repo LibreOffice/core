@@ -53,6 +53,10 @@ namespace com { namespace sun { namespace star { namespace ucb {
     struct NumberedSortingInfo;
 } } } }
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 namespace ucbhelper
 {
 
@@ -118,7 +122,9 @@ public:
       */
     Content( const rtl::OUString& rURL,
              const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
+                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
+             const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::uno::XComponentContext >& rCtx )
         throw ( ::com::sun::star::ucb::ContentCreationException,
                 ::com::sun::star::uno::RuntimeException );
     /**
@@ -133,7 +139,9 @@ public:
     Content( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContent >& rContent,
              const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
+                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
+             const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::uno::XComponentContext >& rCtx )
         throw ( ::com::sun::star::ucb::ContentCreationException,
                 ::com::sun::star::uno::RuntimeException );
     /**
@@ -172,6 +180,8 @@ public:
     create( const rtl::OUString& rURL,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::uno::XComponentContext >& rCtx,
             Content& rContent );
 
     //////////////////////////////////////////////////////////////////////

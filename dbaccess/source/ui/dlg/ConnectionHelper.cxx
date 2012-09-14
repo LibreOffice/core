@@ -530,7 +530,7 @@ DBG_NAME(OConnectionHelper)
         Reference< XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
         try
         {
-            aCheckExistence = ::ucbhelper::Content(_rURL, xCmdEnv );
+            aCheckExistence = ::ucbhelper::Content(_rURL, xCmdEnv, comphelper::getProcessComponentContext());
             bExists = bIsFile? aCheckExistence.isDocument(): aCheckExistence.isFolder();
             eExists = bExists? PATH_EXIST: PATH_NOT_EXIST;
         }
@@ -596,7 +596,7 @@ DBG_NAME(OConnectionHelper)
         {
             // the parent content
             Reference< XCommandEnvironment > xEmptyEnv;
-            ::ucbhelper::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv);
+            ::ucbhelper::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv, comphelper::getProcessComponentContext());
 
             ::rtl::OUString sContentType;
             if ( INET_PROT_FILE == eProtocol )

@@ -64,7 +64,6 @@
 #include <comphelper/types.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/file.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/stl_types.hxx>

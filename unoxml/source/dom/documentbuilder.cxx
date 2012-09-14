@@ -32,6 +32,7 @@
 #include <rtl/memory.h>
 #include <rtl/ustrbuf.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -71,7 +72,7 @@ namespace DOM
                 Reference< XCommandEnvironment > aEnvironment(
                     new CommandEnvironment(Reference< XInteractionHandler >(),
                                            Reference< XProgressHandler >() ));
-                Content aContent(sSystemId, aEnvironment);
+                Content aContent(sSystemId, aEnvironment, comphelper::getProcessComponentContext());
 
                 is.aInputStream = aContent.openStream();
             } catch (const com::sun::star::uno::Exception&) {

@@ -36,20 +36,39 @@ module com { module sun { module star { module ucb {
 /** is a one-instance service that provides access to a set of
     <type>Content</type>s via <type>ContentProvider</type>s.
 
-    <p>If the instance is created with two arguments of type string,
-    these two strings are used to configure the newly instantiated broker;
-    see the description of the required
-    <type scope="com::sun::star::lang">XInitialization</type> interface for
-    details.
+    <p>Traditionally, this service implements
+    <type scope="com::sun::star::lang">XInitialization</type> and needed to be
+    instantiated once with two arguments via
+    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext</method>
+    for configuration before it could be obtained via plain
+    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContext</method>.
 
-    <p>If the instance is created without arguments, the newly instantiated
-    broker is not configured.
+    <p>However, the only pair of initialization arguments used in practice is
+    <code>"Local"</code>/<code>"Office"</code>, so this service is simplified
+    now to automatically configure itself with that argument pair upon first
+    instantiation.
+
+    <p>(For backwards compatibility, the service implementation still supports
+    <type scope="com::sun::star::lang">XInitialization</type> and can still
+    explicitly be initialized via
+    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext</method>
+    with two arguments of type string.  These strings are used as a pair of keys
+    to retrieve a set of content provider descriptions from the configuration
+    management (stored at
+    <code>org.openoffice.ucb.Configuration.ContentProviders.<var>key<sub>1</sub></var>.SecondaryKeys.<var>key<sub>2</sub></var>.ProviderData</code>
+    within the configuration management's hierarchy).  The retrieved
+    descriptions are in turn used to register the corresponding content provider
+    services at the broker.)
 */
 published service UniversalContentBroker : XUniversalContentBroker
 {
-  createDefault();
+    /** The (default) constructor.
 
-  createWithKeys([in] string primaryConfigKey, [in] string secondaryConfigKey);
+        <p>(This default constructor is only mentioned explicitly for technical
+        reasons, so that its implementation calls the service implementation's
+        <method scope="com::sun::star::lang">XInitialization::initialize</method>.)
+     */
+    create();
 };
 
 

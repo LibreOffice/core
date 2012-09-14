@@ -23,10 +23,9 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-
+#include <comphelper/processfactory.hxx>
 
 #include <ucbhelper/fileidentifierconverter.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <unotools/tempfile.hxx>
@@ -72,7 +71,8 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
         throw uno::RuntimeException(); // TODO: can not create tempfile
 
     ::ucbhelper::Content aResultContent(
-        aTempURL, uno::Reference< ucb::XCommandEnvironment >() );
+        aTempURL, uno::Reference< ucb::XCommandEnvironment >(),
+        comphelper::getProcessComponentContext() );
 
     return uno::Reference< uno::XInterface >(
         static_cast< OWeakObject* >(
@@ -148,7 +148,8 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
         throw io::IOException(); // there is no such folder
 
     ::ucbhelper::Content aResultContent(
-        aURL, uno::Reference< ucb::XCommandEnvironment >() );
+        aURL, uno::Reference< ucb::XCommandEnvironment >(),
+        comphelper::getProcessComponentContext() );
 
     // create storage based on source
     return uno::Reference< uno::XInterface >(

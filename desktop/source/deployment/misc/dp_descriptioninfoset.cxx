@@ -201,7 +201,7 @@ ExtensionDescription::ExtensionDescription(
         Reference<css::ucb::XCommandEnvironment> xFilter =
             static_cast<css::ucb::XCommandEnvironment*>(
                 new FileDoesNotExistFilter(xCmdEnv));
-        ::ucbhelper::Content descContent(sDescriptionUri, xFilter);
+        ::ucbhelper::Content descContent(sDescriptionUri, xFilter, xContext);
 
         //throws an com::sun::star::uno::Exception if the file is not available
         Reference<css::io::XInputStream> xIn;

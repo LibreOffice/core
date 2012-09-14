@@ -26,42 +26,30 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
-#include <osl/mutex.hxx>
-#include <osl/thread.h>
-#include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include "sal/config.h"
+
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/implementationentry.hxx"
+#include "sal/types.h"
+
 #include "filterdetect.hxx"
 
-using namespace ::rtl;
-using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+namespace {
 
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
-{
-    void * pRet = 0;
-    OUString implName = OUString::createFromAscii( pImplName );
-    if ( pServiceManager && implName.equals(FilterDetect_getImplementationName()) )
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            FilterDetect_createInstance, FilterDetect_getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+static cppu::ImplementationEntry const services[] = {
+    { &FilterDetect_createInstance, &FilterDetect_getImplementationName,
+      &FilterDetect_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    char const * pImplName, void * pServiceManager, void * pRegistryKey)
+{
+    return cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, services);
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,6 +57,7 @@ class UniversalContentBroker :
                 public com::sun::star::ucb::XUniversalContentBroker,
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::lang::XServiceInfo,
+                public com::sun::star::lang::XInitialization,
                 public com::sun::star::util::XChangesListener
 {
 public:

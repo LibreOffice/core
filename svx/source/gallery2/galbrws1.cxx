@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include <comphelper/processfactory.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/msgbox.hxx>
@@ -231,7 +233,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
     try
     {
-        ::ucbhelper::Content aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         util::DateTime  aDateTimeModified;
         DateTime        aDateTime( DateTime::EMPTY );
 

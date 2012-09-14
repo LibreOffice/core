@@ -408,7 +408,7 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
             uno::Reference< uno::XInterface > ());
 
     uno::Reference< ucb::XUniversalContentBroker > xUniversalContentBroker =
-        ucb::UniversalContentBroker::createDefault(xContext);
+        ucb::UniversalContentBroker::create(xContext);
 
     uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
         xml::dom::DocumentBuilder::create(xContext));

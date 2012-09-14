@@ -26,7 +26,6 @@
 #include "com/sun/star/uno/Exception.hpp"
 
 #include <cppuhelper/bootstrap.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>

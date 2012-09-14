@@ -159,7 +159,7 @@ bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
         aProps[6] = "IsRemote";
         aProps[7] = "IsRemoveable";
 
-        ucbhelper::Content aContent(aURL,m_xCmdEnv);
+        ucbhelper::Content aContent(aURL, m_xCmdEnv, comphelper::getProcessComponentContext());
 
         uno::Reference< XResultSet > xResultSet;
         uno::Reference< XDynamicResultSet > xDynResultSet;
@@ -218,7 +218,7 @@ bool TemplateRemoteView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
                     if ( bHasTargetURL &&
                         INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
                     {
-                        ucbhelper::Content aCnt( aTargetURL, m_xCmdEnv );
+                        ucbhelper::Content aCnt( aTargetURL, m_xCmdEnv, comphelper::getProcessComponentContext() );
 
                         try
                         {

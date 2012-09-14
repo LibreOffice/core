@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.sun.star.beans.Property;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 // import com.sun.star.uno.XComponentContext;
@@ -54,20 +53,14 @@ import static org.junit.Assert.*;
  * It should be always: dir,filename.
  */
 public class UCB  {
-    private Object ucb;
+    private XUniversalContentBroker ucb;
 
 //  public String[] getTestMethodNames() {
 //      return new String[] {"checkWrongFtpConnection"};
 //  }
 
-    public void init(XMultiServiceFactory xmsf) throws Exception {
-        String[] keys = new String[2];
-        keys[0] = "Local";
-        keys[1] = "Office";
-        ucb =
-            xmsf.createInstanceWithArguments(
-                "com.sun.star.ucb.UniversalContentBroker",
-                keys);
+    public void init() throws Exception {
+        ucb = UniversalContentBroker.create(connection.getComponentContext());
     }
 
     public void delete(String filename) throws Exception {
@@ -193,8 +186,8 @@ public class UCB  {
 
     public Object getContent(String path) throws Exception
         {
-        XContentIdentifier id = (UnoRuntime.queryInterface(XContentIdentifierFactory.class, ucb)).createContentIdentifier(path);
-        return (UnoRuntime.queryInterface(XContentProvider.class, ucb)).queryContent(id);
+        XContentIdentifier id = ucb.createContentIdentifier(path);
+        return ucb.queryContent(id);
     }
 
     public static interface Verifier {
@@ -204,10 +197,9 @@ public class UCB  {
     @Test public void checkWrongFtpConnection() {
         //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
         try {
-            XMultiServiceFactory xLocMSF = getMSF();
             String acountUrl = "ftp://noname:nopasswd@nohost";
             System.out.println(acountUrl);
-            init(xLocMSF);
+            init();
             Object content = getContent(acountUrl);
 
             OpenCommandArgument2 aArg = new OpenCommandArgument2();
@@ -230,14 +222,6 @@ public class UCB  {
             fail("Wrong exception thrown: " + exceptionName);
         }
 //      System.exit(0);
-    }
-
-
-
-         private XMultiServiceFactory getMSF()
-    {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
     }
 
     // setup and close connections

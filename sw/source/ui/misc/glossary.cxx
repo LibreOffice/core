@@ -668,7 +668,8 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
             try
             {
                 Content aTestContent( sPath,
-                            uno::Reference< XCommandEnvironment >());
+                            uno::Reference< XCommandEnvironment >(),
+                            comphelper::getProcessComponentContext() );
                 Any aAny = aTestContent.getPropertyValue( C2U("IsReadOnly") );
                 if(aAny.hasValue())
                 {

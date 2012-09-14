@@ -365,7 +365,7 @@ void NameTranslationList::Init()
 
     try
     {
-        ::ucbhelper::Content aTestContent( maTransFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+        ::ucbhelper::Content aTestContent( maTransFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
 
         if( aTestContent.isDocument() )
         {
@@ -816,7 +816,7 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
             {
                 OUString aURL( static_cast< SvtContentEntry * >(
                     pEntry->GetUserData() )->maURL );
-                aCnt = ::ucbhelper::Content( aURL, mxCmdEnv );
+                aCnt = ::ucbhelper::Content( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
             }
             catch( Exception const & )
             {
@@ -929,7 +929,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         bool canDelete = true;
         try
         {
-            ::ucbhelper::Content aCnt( aURL, mxCmdEnv );
+            ::ucbhelper::Content aCnt( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
             Reference< XCommandInfo > aCommands = aCnt.getCommands();
             if ( aCommands.is() )
                 canDelete
@@ -996,7 +996,7 @@ sal_Bool ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
     {
         OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
         bool canRename = true;
-        ::ucbhelper::Content aContent( aURL, mxCmdEnv );
+        ::ucbhelper::Content aContent( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
 
         try
         {
@@ -1125,7 +1125,7 @@ sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 
     try
     {
-        ::ucbhelper::Content aCnt( rContent, mxCmdEnv );
+        ::ucbhelper::Content aCnt( rContent, mxCmdEnv, comphelper::getProcessComponentContext() );
         aCnt.executeCommand( OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException const & )
@@ -1251,7 +1251,7 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
     sal_Bool bRet = sal_False;
     try
     {
-        ::ucbhelper::Content aCnt( mpImp->maViewURL, mpImp->mxCmdEnv );
+        ::ucbhelper::Content aCnt( mpImp->maViewURL, mpImp->mxCmdEnv, comphelper::getProcessComponentContext() );
         Reference< XContent > xContent( aCnt.get() );
         Reference< com::sun::star::container::XChild > xChild( xContent, UNO_QUERY );
         if ( xChild.is() )
@@ -1308,7 +1308,7 @@ sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com:
     WaitObject aWaitCursor( this );
 
     mpImp->Clear();
-    ::ucbhelper::Content aContent(_xContent, mpImp->mxCmdEnv );
+    ::ucbhelper::Content aContent(_xContent, mpImp->mxCmdEnv, comphelper::getProcessComponentContext() );
     FileViewResult eResult = mpImp->GetFolderContent_Impl( FolderDescriptor( aContent ), NULL );
     OSL_ENSURE( eResult != eStillRunning, "SvtFileView::Initialize: this was expected to be synchronous!" );
     if ( eResult != eSuccess )

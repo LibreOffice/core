@@ -54,11 +54,8 @@ public class UCB
     
     public UCB(XMultiServiceFactory xmsf) throws Exception
     {
-        String[] keys = new String[2];
-        keys[ 0 ] = "Local";
-        keys[ 1 ] = "Office";
         ucb = xmsf.createInstanceWithArguments(                
-            "com.sun.star.ucb.UniversalContentBroker", keys );
+            "com.sun.star.ucb.UniversalContentBroker", new Object[0] );
         fa = new FileAccess(xmsf);
     }
     

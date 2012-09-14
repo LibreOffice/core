@@ -48,9 +48,9 @@ SAL_IMPLEMENT_MAIN()
     // create the initial component context
     uno::Reference< uno::XComponentContext > rComponentContext = cppu::defaultBootstrap_InitialComponentContext();
 
-    // initialize UCB
-    uno::Reference< uno::XUniversalContentBroker > xUCB =
-        UniversalContentBroker::createWithKeys(rComponentContext, theArguments, "Local", "Office");
+    // initialize UCB (for backwards compatibility, in case some code still uses
+    // plain createInstance w/o args directly to obtain an instance):
+    com::sun::star::ucb::UniversalContentBroker::create(rComponentContext);
 
 
     rtl::OUString aURL;

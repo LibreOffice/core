@@ -98,7 +98,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
             aUTF8QueryURL.append(aQueryString.makeStringAndClear());
         }
         OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
-        ucbhelper::Content aContent(aQueryURL, aEnvironment);
+        ucbhelper::Content aContent(aQueryURL, aEnvironment, comphelper::ComponentContext(m_aFactory).getUNOContext());
         CSS::uno::Reference< XOutputStream > aPipe( CSS::io::Pipe::create(comphelper::ComponentContext(m_aFactory).getUNOContext()), UNO_QUERY_THROW );
         aContent.openStream(aPipe);
         // get reply

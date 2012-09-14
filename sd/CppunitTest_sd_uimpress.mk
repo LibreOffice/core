@@ -95,6 +95,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_uimpress,\
     configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/util/i18npool \
+    ucb/source/core/ucb1 \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_uimpress))

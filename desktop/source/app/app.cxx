@@ -94,7 +94,6 @@
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
-#include <ucbhelper/contentbroker.hxx>
 
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -1768,10 +1767,6 @@ int Desktop::doShutdown()
     pExecGlobals->pLanguageOptions.reset( 0 );
     pExecGlobals->pPathOptions.reset( 0 );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
-
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> deinit ucb" );
-    ::ucbhelper::ContentBroker::deinitialize();
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
 
     sal_Bool bRR = pExecGlobals->bRestartRequested;
     delete pExecGlobals, pExecGlobals = NULL;

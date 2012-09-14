@@ -110,7 +110,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
         xSeekable->seek( 0 );
 
         uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-        ::ucbhelper::Content aTargetContent( m_aURL, xEnv );
+        ::ucbhelper::Content aTargetContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
 
         ucb::InsertCommandArgument aInsertArg;
         aInsertArg.Data = xInput;
@@ -162,7 +162,7 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-    ::ucbhelper::Content aSourceContent( m_aURL, xEnv );
+    ::ucbhelper::Content aSourceContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
 
     // the file can be opened readonly, no locking will be done
     return aSourceContent.openStream();
@@ -175,7 +175,7 @@ sal_Bool DocumentLockFile::OverwriteOwnLockFile()
     try
     {
         uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-        ::ucbhelper::Content aTargetContent( m_aURL, xEnv );
+        ::ucbhelper::Content aTargetContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
 
         uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
 
@@ -213,7 +213,7 @@ void DocumentLockFile::RemoveFile()
         throw io::IOException(); // not the owner, access denied
 
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-    ::ucbhelper::Content aCnt(m_aURL, xEnv);
+    ::ucbhelper::Content aCnt(m_aURL, xEnv, comphelper::getProcessComponentContext());
     aCnt.executeCommand(rtl::OUString("delete"),
         uno::makeAny(sal_Bool(sal_True)));
 }

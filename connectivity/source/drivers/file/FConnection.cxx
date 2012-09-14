@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include "file/FConnection.hxx"
 #include "file/FDatabaseMetaData.hxx"
@@ -157,7 +160,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         ::ucbhelper::Content aFile;
         try
         {
-            aFile = ::ucbhelper::Content(getURL(),Reference< XCommandEnvironment >());
+            aFile = ::ucbhelper::Content(getURL(), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
         }
         catch(ContentCreationException& e)
         {
@@ -182,7 +185,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
                 Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
                 m_xContent = xParent;
 
-                ::ucbhelper::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+                ::ucbhelper::Content aParent(xIdent->getContentIdentifier(), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
                 m_xDir = aParent.createDynamicCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
             }
             else
@@ -398,7 +401,7 @@ Reference< XDynamicResultSet > OConnection::getDir() const
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
-        ::ucbhelper::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+        ::ucbhelper::Content aParent(xIdent->getContentIdentifier(), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
         xContent = aParent.createDynamicCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
     }
     catch(Exception&)

@@ -358,7 +358,8 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
                       new ::ucbhelper::CommandEnvironment( uno::Reference< XInteractionHandler >(),
-                                                     uno::Reference< XProgressHandler >() ) );
+                                                     uno::Reference< XProgressHandler >() ),
+                      comphelper::getProcessComponentContext() );
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();

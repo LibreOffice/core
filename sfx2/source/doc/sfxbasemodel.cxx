@@ -3783,7 +3783,8 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
         {
             try {
                 ::ucbhelper::Content aContent( pMedium->GetName(),
-                    uno::Reference<ucb::XCommandEnvironment>() );
+                    uno::Reference<ucb::XCommandEnvironment>(),
+                    comphelper::getProcessComponentContext() );
                 const uno::Reference < beans::XPropertySetInfo > xProps
                      = aContent.getProperties();
                 if ( xProps.is() )

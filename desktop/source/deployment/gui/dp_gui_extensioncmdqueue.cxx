@@ -875,7 +875,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     uno::Any anyTitle;
     try
     {
-        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv.get() ).getPropertyValue( OUSTR("Title") );
+        anyTitle = ::ucbhelper::Content( rPackageURL, rCmdEnv.get(), m_xContext ).getPropertyValue( OUSTR("Title") );
     }
     catch ( const uno::Exception & )
     {

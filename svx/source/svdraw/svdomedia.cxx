@@ -36,7 +36,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <ucbhelper/content.hxx>
-
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <vcl/svapp.hxx>
@@ -290,7 +290,8 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
         return 0;
     }
     ucbhelper::Content tempFile(m_pImpl->m_pTempFile->m_TempFileURL,
-                uno::Reference<ucb::XCommandEnvironment>());
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
     return tempFile.openStream();
 }
 
@@ -338,7 +339,8 @@ bool lcl_HandlePackageURL(
     try
     {
         ::ucbhelper::Content tempContent(tempFileURL,
-                uno::Reference<ucb::XCommandEnvironment>());
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
         tempContent.writeStream(xInStream, true); // copy stream to file
     }
     catch (uno::Exception const& e)

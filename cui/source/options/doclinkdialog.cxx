@@ -30,7 +30,7 @@
 #include "doclinkdialog.hrc"
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <cuires.hrc>
 #include <svl/filenotation.hxx>
 #include <vcl/msgbox.hxx>
@@ -120,7 +120,7 @@ namespace svx
         sal_Bool bFileExists = sal_False;
         try
         {
-            ::ucbhelper::Content aFile(sURL, Reference< XCommandEnvironment >());
+            ::ucbhelper::Content aFile(sURL, Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
             if (aFile.isDocument())
                 bFileExists = sal_True;
         }

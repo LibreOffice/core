@@ -285,7 +285,7 @@ bool hasUno( void )
         }
         else
         {
-            Reference< XUniversalContentBroker > xManager = UniversalContentBroker::createDefault(xContext);
+            Reference< XUniversalContentBroker > xManager = UniversalContentBroker::create(xContext);
 
             if ( !( xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
             {

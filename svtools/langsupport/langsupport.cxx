@@ -35,7 +35,6 @@
 #include <sal/main.h>
 #include <svtools/langtab.hxx>
 #include <tools/extendapplicationenvironment.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <vcl/svapp.hxx>
 #include <iostream>
 

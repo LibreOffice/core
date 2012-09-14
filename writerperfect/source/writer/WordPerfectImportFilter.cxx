@@ -206,7 +206,7 @@ throw( RuntimeException )
     {
         try
         {
-            Content aContent(sURL, xEnv);
+            Content aContent(sURL, xEnv, mxContext);
                     xInputStream = aContent.openStream();
         }
         catch ( ... )

@@ -46,6 +46,7 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <vcl/svapp.hxx>
 
@@ -114,7 +115,7 @@ Reference< embed::XStorage > lcl_createStorage(
     try
     {
         Reference< io::XStream > xStream(
-            ::ucbhelper::Content( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >()).openStream(),
+            ::ucbhelper::Content( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext()).openStream(),
             uno::UNO_QUERY );
 
         Reference< lang::XSingleServiceFactory > xStorageFact(

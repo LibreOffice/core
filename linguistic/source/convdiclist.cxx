@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
 #include "convdiclist.hxx"
@@ -314,7 +314,8 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
         try
         {
             ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                    comphelper::getProcessComponentContext() );
             aCnt.executeCommand( "delete", makeAny( sal_Bool( sal_True ) ) );
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )

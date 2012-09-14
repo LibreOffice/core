@@ -101,9 +101,10 @@ struct MatchTempDir
 
 namespace {
 OUString getExtensionFolder(OUString const &  parentFolder,
-                            Reference<ucb::XCommandEnvironment> const & xCmdEnv)
+                            Reference<ucb::XCommandEnvironment> const & xCmdEnv,
+                            Reference<uno::XComponentContext> const & xContext)
 {
-    ::ucbhelper::Content tempFolder( parentFolder, xCmdEnv );
+    ::ucbhelper::Content tempFolder( parentFolder, xCmdEnv, xContext );
     Reference<sdbc::XResultSet> xResultSet(
                 StrTitle::createCursor (tempFolder, ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
 
@@ -147,7 +148,7 @@ void PackageManagerImpl::initActivationLayer(
                 ::ucbhelper::Content sourceContent(
                     Reference<XContentAccess>(
                         xResultSet, UNO_QUERY_THROW )->queryContent(),
-                    xCmdEnv );
+                    xCmdEnv, m_xComponentContext );
 
                 OUString mediaType( detectMediaType( sourceContent,
                                                      false /* no throw */) );
@@ -193,7 +194,7 @@ void PackageManagerImpl::initActivationLayer(
             // clean up activation layer, scan for zombie temp dirs:
             ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
-            ::ucbhelper::Content tempFolder( m_activePackages_expanded, xCmdEnv );
+            ::ucbhelper::Content tempFolder( m_activePackages_expanded, xCmdEnv, m_xComponentContext );
             Reference<sdbc::XResultSet> xResultSet(
                 StrTitle::createCursor (tempFolder,
                                          ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
@@ -265,7 +266,7 @@ void PackageManagerImpl::initActivationLayer(
                             ::osl::Security aSecurity;
                             aSecurity.getUserName( aUserName );
                             ucbhelper::Content remFileContent(
-                                url + OUSTR("removed"), Reference<XCommandEnvironment>());
+                                url + OUSTR("removed"), Reference<XCommandEnvironment>(), m_xComponentContext);
                             ::rtl::ByteSequence data = dp_misc::readFile(remFileContent);
                             ::rtl::OString osData(reinterpret_cast<const sal_Char*>(data.getConstArray()),
                                                   data.getLength());
@@ -646,7 +647,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
         }
         buf.append( static_cast<sal_Unicode>('/') );
         sourceContent = ::ucbhelper::Content(
-            buf.makeStringAndClear(), xCmdEnv );
+            buf.makeStringAndClear(), xCmdEnv, m_xComponentContext );
     }
     if (! destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
@@ -667,7 +668,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     dbData->version = info.getVersion();
 
     //No write the properties file next to the extension
-    ExtensionProperties props(sFolderUrl, properties, xCmdEnv);
+    ExtensionProperties props(sFolderUrl, properties, xCmdEnv, m_xComponentContext);
     props.write();
     return destFolder;
 }
@@ -773,7 +774,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                     OUSTR("UCB transferContent() failed!"), 0 );
             // set media-type:
             ::ucbhelper::Content docContent(
-                makeURL( m_context, title_enc ), xCmdEnv );
+                makeURL( m_context, title_enc ), xCmdEnv, m_xComponentContext );
                 //TODO #i73136#: using title instead of id can lead to
                 // clashes, but the whole m_activePackages.getLength()==0
                 // case (i.e., document-relative deployment) currently does
@@ -915,7 +916,7 @@ void PackageManagerImpl::removePackage(
                 OSL_ASSERT(!val.temporaryName.isEmpty());
                 OUString url(makeURL(m_activePackages_expanded,
                                      val.temporaryName + OUSTR("removed")));
-                ::ucbhelper::Content contentRemoved(url, xCmdEnv );
+                ::ucbhelper::Content contentRemoved(url, xCmdEnv, m_xComponentContext);
                 OUString aUserName;
                 ::osl::Security aSecurity;
                 aSecurity.getUserName( aUserName );
@@ -1332,7 +1333,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
             NULL, m_activePackages_expanded, Reference<css::ucb::XCommandEnvironment>(), false))
         return bModified;
 
-    ::ucbhelper::Content tempFolder( m_activePackages_expanded, xCmdEnv );
+    ::ucbhelper::Content tempFolder( m_activePackages_expanded, xCmdEnv, m_xComponentContext );
     Reference<sdbc::XResultSet> xResultSet(
         StrTitle::createCursor( tempFolder,
                                 ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
@@ -1381,7 +1382,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                         continue;
                     sExtFolder = getExtensionFolder(
                         m_activePackages_expanded +
-                        OUString(OUSTR("/")) + titleEncoded + OUSTR("_"), xCmdEnv);
+                        OUString(OUSTR("/")) + titleEncoded + OUSTR("_"), xCmdEnv, m_xComponentContext);
                     url = makeURLAppendSysPathSegment(m_activePackages_expanded, title);
                     url = makeURLAppendSysPathSegment(url, sExtFolder);
                 }
@@ -1416,7 +1417,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                         dp_misc::getDescriptionInfoset(url);
                     ::boost::optional<dp_misc::SimpleLicenseAttributes>
                           attr = info.getSimpleLicenseAttributes();
-                    ExtensionProperties props(url,xCmdEnv);
+                    ExtensionProperties props(url, xCmdEnv, m_xComponentContext);
                     bool bNoLicense = false;
                     if (attr && attr->suppressIfRequired && props.isSuppressedLicense())
                         bNoLicense = true;

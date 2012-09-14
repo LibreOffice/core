@@ -50,11 +50,6 @@
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/io/XDataInputStream.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XContentAccess.hpp>
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/container.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/svtabbx.hxx>
@@ -91,9 +86,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::lang;
-using namespace ::ucb;
 
 #define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
 

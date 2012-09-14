@@ -340,7 +340,7 @@ static sal_uInt16 GetFolderImageId_Impl( const String& rURL )
     ::svtools::VolumeInfo aVolumeInfo;
     try
     {
-        ::ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
             if ( aVolumeInfo.m_bIsRemote )
@@ -472,7 +472,7 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const String& rURL )
     svtools::VolumeInfo aVolumeInfo;
     try
     {
-        ::ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
             if ( aVolumeInfo.m_bIsRemote )

@@ -81,7 +81,7 @@ void ShareControlFile::OpenStream()
     if ( !m_xStream.is() && !m_aURL.isEmpty() )
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
-        ::ucbhelper::Content aContent = ::ucbhelper::Content( m_aURL, xDummyEnv );
+        ::ucbhelper::Content aContent = ::ucbhelper::Content( m_aURL, xDummyEnv, comphelper::getProcessComponentContext() );
 
         uno::Reference< ucb::XContentIdentifier > xContId( aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
         if ( !xContId.is() || xContId->getContentProviderScheme() != "file" )

@@ -561,7 +561,7 @@ String SfxDocumentTemplates::GetPath
     ::rtl::OUString aResult;
     Content aTemplate;
     uno::Reference< XCommandEnvironment > aCmdEnv;
-    if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, aTemplate ) )
+    if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
     {
         OUString aPropName( TARGET_URL  );
         getTextProperty_Impl( aTemplate, aPropName, aResult );
@@ -817,7 +817,7 @@ sal_Bool SfxDocumentTemplates::CopyTo
 
     try
     {
-        aTarget = Content( aParentURL, aCmdEnv );
+        aTarget = Content( aParentURL, aCmdEnv, comphelper::getProcessComponentContext() );
 
         TransferInfo aTransferInfo;
         aTransferInfo.MoveData = sal_False;
@@ -953,7 +953,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aTemplCont;
 
-        if( Content::create( aTemplURL, aCmdEnv, aTemplCont ) )
+        if( Content::create( aTemplURL, aCmdEnv, comphelper::getProcessComponentContext(), aTemplCont ) )
         {
             OUString aTemplName;
             OUString aPropName( TARGET_URL  );
@@ -1665,7 +1665,7 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
         uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aRegion;
 
-        if ( Content::create( GetHierarchyURL(), aCmdEnv, aRegion ) )
+        if ( Content::create( GetHierarchyURL(), aCmdEnv, comphelper::getProcessComponentContext(), aRegion ) )
         {
             OUString aPropName( TARGET_URL  );
 
@@ -1826,7 +1826,7 @@ const OUString& RegionData_Impl::GetTargetURL()
         uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aRegion;
 
-        if ( Content::create( GetHierarchyURL(), aCmdEnv, aRegion ) )
+        if ( Content::create( GetHierarchyURL(), aCmdEnv, comphelper::getProcessComponentContext(), aRegion ) )
         {
             OUString aPropName( TARGET_DIR_URL  );
 
@@ -2027,7 +2027,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
                 OUString aTitle( xRow->getString( 1 ) );
 
                 OUString aId = xContentAccess->queryContentIdentifierString();
-                Content  aContent = Content( aId, aCmdEnv );
+                Content  aContent = Content( aId, aCmdEnv, comphelper::getProcessComponentContext() );
 
                 AddRegion( aTitle, aContent );
             }
@@ -2076,7 +2076,7 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     if ( aLongNames.Count() )
         maStandardGroup = aLongNames.GetString( 0 );
 
-    Content aTemplRoot( aRootContent, aCmdEnv );
+    Content aTemplRoot( aRootContent, aCmdEnv, comphelper::getProcessComponentContext() );
     CreateFromHierarchy( aTemplRoot );
 
     return sal_True;
@@ -2090,7 +2090,7 @@ void SfxDocTemplate_Impl::ReInitFromComponent()
     {
         uno::Reference < XContent > aRootContent = xTemplates->getContent();
         uno::Reference < XCommandEnvironment > aCmdEnv;
-        Content aTemplRoot( aRootContent, aCmdEnv );
+        Content aTemplRoot( aRootContent, aCmdEnv, comphelper::getProcessComponentContext() );
         Clear();
         CreateFromHierarchy( aTemplRoot );
     }
@@ -2138,7 +2138,7 @@ void SfxDocTemplate_Impl::Rescan()
             uno::Reference < XContent > aRootContent = xTemplates->getContent();
             uno::Reference < XCommandEnvironment > aCmdEnv;
 
-            Content aTemplRoot( aRootContent, aCmdEnv );
+            Content aTemplRoot( aRootContent, aCmdEnv, comphelper::getProcessComponentContext() );
             CreateFromHierarchy( aTemplRoot );
         }
     }
