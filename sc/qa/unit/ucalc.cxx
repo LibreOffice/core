@@ -108,6 +108,7 @@ public:
     virtual void tearDown();
 
     void testCollator();
+    void testRangeList();
     void testInput();
     void testCellFunctions();
 
@@ -226,6 +227,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
+    CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testSheetsFunc);
@@ -355,6 +357,22 @@ void Test::testCollator()
     CollatorWrapper* p = ScGlobal::GetCollator();
     sal_Int32 nRes = p->compareString(s1, s2);
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
+}
+
+void Test::testRangeList()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    ScRangeList aRL;
+    aRL.Append(ScRange(1,1,0,3,10,0));
+    CPPUNIT_ASSERT_MESSAGE("List should have one range.", aRL.size() == 1);
+    const ScRange* p = aRL[0];
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the range object.", p);
+    CPPUNIT_ASSERT_MESSAGE("Wrong range.", p->aStart == ScAddress(1,1,0) && p->aEnd == ScAddress(3,10,0));
+
+    // TODO: Add more tests here.
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testInput()
