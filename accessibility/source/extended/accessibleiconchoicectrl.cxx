@@ -34,6 +34,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 //........................................................................
@@ -122,13 +123,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleIconChoiceCtrl::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( getSupportedServiceNames() );
-        const OUString* pSupported = aSupported.getConstArray();
-        const OUString* pEnd = pSupported + aSupported.getLength();
-        for ( ; pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported )
-            ;
-
-        return pSupported != pEnd;
+        return cppu::supportsService(this, _rServiceName);
     }
     // -----------------------------------------------------------------------------
     // XServiceInfo - static methods

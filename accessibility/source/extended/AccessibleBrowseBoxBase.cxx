@@ -29,6 +29,7 @@
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
 #include <svtools/accessibletableprovider.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -351,17 +352,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
         const OUString& rServiceName )
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
-
-    Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
-    const OUString* pArrBegin = aSupportedServices.getConstArray();
-    const OUString* pArrEnd = pArrBegin + aSupportedServices.getLength();
-    const OUString* pString = pArrBegin;
-
-    for( ; ( pString != pArrEnd ) && ( rServiceName != *pString ); ++pString )
-        ;
-
-    return pString != pArrEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames()

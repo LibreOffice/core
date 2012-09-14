@@ -38,6 +38,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/unohelp2.hxx>
@@ -227,13 +228,7 @@ OUString VCLXAccessibleListItem::getImplementationName() throw (RuntimeException
 // -----------------------------------------------------------------------------
 sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aNames( getSupportedServiceNames() );
-    const OUString* pNames = aNames.getConstArray();
-    const OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 // -----------------------------------------------------------------------------
 Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames() throw (RuntimeException)

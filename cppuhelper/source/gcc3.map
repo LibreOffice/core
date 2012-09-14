@@ -408,6 +408,11 @@ global:
         _ZThn*_N4cppu19OPropertySetHelper232enableChangeListenerNotificationEh;
 } UDK_3.7;
 
+UDK_3.9 { # LibO 3.7
+global:
+    _ZN4cppu15supportsServiceEPN3com3sun4star4lang12XServiceInfoERKN3rtl8OUStringE; # cppu::supportsService(com::sun::star::lang::XServiceInfo*, rtl::OUString const&)
+} UDK_3.8;
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:

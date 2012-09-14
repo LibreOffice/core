@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -188,13 +189,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleListBox::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( getSupportedServiceNames() );
-        const OUString* pSupported = aSupported.getConstArray();
-        const OUString* pEnd = pSupported + aSupported.getLength();
-        for ( ; pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported )
-            ;
-
-        return pSupported != pEnd;
+        return cppu::supportsService(this, _rServiceName);
     }
     // -----------------------------------------------------------------------------
     // XServiceInfo - static methods

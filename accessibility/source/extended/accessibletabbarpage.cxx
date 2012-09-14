@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
@@ -265,13 +266,7 @@ namespace accessibility
 
     sal_Bool AccessibleTabBarPage::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aNames( getSupportedServiceNames() );
-        const OUString* pNames = aNames.getConstArray();
-        const OUString* pEnd = pNames + aNames.getLength();
-        for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-            ;
-
-        return pNames != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
 
     // -----------------------------------------------------------------------------

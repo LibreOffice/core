@@ -29,7 +29,8 @@
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
 #include <svtools/accessibletable.hxx>
 #include <comphelper/servicehelper.hxx>
-//
+#include <cppuhelper/supportsservice.hxx>
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -300,16 +301,7 @@ sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
         const OUString& rServiceName )
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
-
-    Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
-    const OUString* pArrBegin = aSupportedServices.getConstArray();
-    const OUString* pArrEnd = pArrBegin + aSupportedServices.getLength();
-    const OUString* pString = pArrBegin;
-
-    for( ; ( pString != pArrEnd ) && ( rServiceName != *pString ); ++pString )
-        ;
-    return pString != pArrEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceNames()

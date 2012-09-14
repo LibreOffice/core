@@ -36,7 +36,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
@@ -281,13 +281,7 @@ OUString VCLXAccessibleTabPage::getImplementationName() throw (RuntimeException)
 
 sal_Bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aNames( getSupportedServiceNames() );
-    const OUString* pNames = aNames.getConstArray();
-    const OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 // -----------------------------------------------------------------------------

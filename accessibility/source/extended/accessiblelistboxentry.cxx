@@ -42,6 +42,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -268,13 +269,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( getSupportedServiceNames() );
-        const OUString* pSupported = aSupported.getConstArray();
-        const OUString* pEnd = pSupported + aSupported.getLength();
-        for ( ; pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported )
-            ;
-
-        return pSupported != pEnd;
+        return cppu::supportsService(this, _rServiceName);
     }
     // -----------------------------------------------------------------------------
     // XServiceInfo - static methods
