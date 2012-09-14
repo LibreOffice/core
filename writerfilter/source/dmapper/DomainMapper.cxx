@@ -100,10 +100,6 @@ LoggedStream(dmapper_logger, "DomainMapper"),
         PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TABS_RELATIVE_TO_INDENT ),
         uno::makeAny( false ) );
 
-    m_pImpl->SetDocumentSettingsProperty(
-        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ADD_PARA_TABLE_SPACING ),
-        uno::makeAny( false ) );
-
     //import document properties
 
     try
