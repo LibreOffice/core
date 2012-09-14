@@ -113,7 +113,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
 {
     oslProcessError result = osl_Process_E_NotFound;
 
-#ifdef ANDROID
+#if defined(ANDROID) && !defined(DISABLE_DYNLOADING)
     /* On Android we in theory want the address of the "lo_main()"
      * function, as that is what corresponds to "main()" in
      * LibreOffice programs on normal desktop OSes.
