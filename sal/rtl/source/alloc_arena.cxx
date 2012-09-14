@@ -1011,7 +1011,7 @@ SAL_CALL rtl_arena_alloc (
                 /* resize */
                 assert(segment->m_size >= size);
                 oversize = segment->m_size - size;
-                if (oversize >= SAL_MAX(arena->m_quantum, arena->m_qcache_max))
+                if ((oversize >= arena->m_quantum) && (oversize >= arena->m_qcache_max))
                 {
                     rtl_arena_segment_type * remainder = 0;
                     rtl_arena_segment_get (arena, &remainder);
@@ -1174,7 +1174,14 @@ SAL_CALL rtl_machdep_alloc (
     size -= (pArena->m_quantum + pArena->m_quantum); /* "red-zone" pages */
 #else
     /* default allocation granularity */
-    size = RTL_MEMORY_P2ROUNDUP(size, SAL_MAX(pArena->m_quantum, 64 << 10));
+    if(pArena->m_quantum < (64 << 10))
+    {
+        size = RTL_MEMORY_P2ROUNDUP(size, (64 << 10));
+    }
+    else
+    {
+        size = RTL_MEMORY_P2ROUNDUP(size, pArena->m_quantum);
+    }
 #endif
 
 #if defined(SAL_UNX)

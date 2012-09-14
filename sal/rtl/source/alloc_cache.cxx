@@ -838,7 +838,10 @@ rtl_cache_activate (
         snprintf (cache->m_name, sizeof(cache->m_name), "%s", name);
 
         /* ensure minimum size (embedded bufctl linkage) */
-        objsize = SAL_MAX(objsize, sizeof(rtl_cache_bufctl_type*));
+        if(objsize < sizeof(rtl_cache_bufctl_type*))
+        {
+            objsize = sizeof(rtl_cache_bufctl_type*);
+        }
 
         if (objalign == 0)
         {
@@ -851,7 +854,10 @@ rtl_cache_activate (
         else
         {
             /* ensure minimum alignment */
-            objalign = SAL_MAX(objalign, RTL_MEMORY_ALIGNMENT_4);
+            if(objalign < RTL_MEMORY_ALIGNMENT_4)
+            {
+                objalign = RTL_MEMORY_ALIGNMENT_4;
+            }
         }
         assert(RTL_MEMORY_ISP2(objalign));
 
@@ -871,12 +877,18 @@ rtl_cache_activate (
         if (flags & RTL_CACHE_FLAG_QUANTUMCACHE)
         {
             /* next power of 2 above 3 * qcache_max */
-            slabsize = SAL_MAX(slabsize, (1UL << highbit(3 * source->m_qcache_max)));
+            if(slabsize < (1UL << highbit(3 * source->m_qcache_max)))
+            {
+                slabsize = (1UL << highbit(3 * source->m_qcache_max));
+            }
         }
         else
         {
             /* waste at most 1/8 of slab */
-            slabsize = SAL_MAX(slabsize, cache->m_type_size * 8);
+            if(slabsize < cache->m_type_size * 8)
+            {
+                slabsize = cache->m_type_size * 8;
+            }
         }
 
         slabsize = RTL_MEMORY_P2ROUNDUP(slabsize, source->m_quantum);

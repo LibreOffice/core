@@ -31,9 +31,6 @@
 
 #include <stddef.h>
 
-#ifndef SAL_MAX
-#    define SAL_MAX(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
 
 #ifndef SAL_MIN
 #    define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
