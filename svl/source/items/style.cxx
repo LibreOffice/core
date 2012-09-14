@@ -740,7 +740,10 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 {
     if( p )
     {
-        SfxStyles::iterator aIter( std::find( aStyles.begin(), aStyles.end(), rtl::Reference< SfxStyleSheetBase >( p ) ) );
+        // Reference to keep p alive until after Broadcast call!
+        rtl::Reference<SfxStyleSheetBase> xP(p);
+        SfxStyles::iterator const aIter(
+                std::find(aStyles.begin(), aStyles.end(), xP));
         if( aIter != aStyles.end() )
         {
             // Alle Styles umsetzen, deren Parent dieser hier ist
