@@ -36,7 +36,7 @@
 #include <rtl/ref.hxx>
 
 #include <algorithm>
-#include <functional>
+#include <o3tl/compat_functional.hxx>
 
 //......................................................................................................................
 namespace toolkit
@@ -182,7 +182,7 @@ namespace toolkit
         Sequence< Any > resultData( m_nColumnCount );
         RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
 
-        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(), ::std::select1st< CellData >() );
+        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(), ::o3tl::select1st< CellData >() );
         return resultData;
     }
 
