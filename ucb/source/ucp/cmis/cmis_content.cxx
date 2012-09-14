@@ -101,26 +101,15 @@ namespace cmis
         m_pProvider( pProvider ),
         m_pSession( NULL ),
         m_pObject( pObject ),
-        m_bTransient( false )
+        m_sURL( Identifier->getContentIdentifier( ) ),
+        m_aURL( Identifier->getContentIdentifier( ) ),
+        m_bTransient( false ),
+        m_bIsFolder( false )
     {
-        // Split the URL into bits
-        m_sURL = m_xIdentifier->getContentIdentifier( );
-        cmis::URL url( m_sURL );
         SAL_INFO( "cmisucp", "Content::Content() " << m_sURL );
 
-        // Look for a cached session, key is binding url + repo id
-        rtl::OUString sSessionId = url.getBindingUrl( ) + url.getRepositoryId( );
-        m_pSession = pProvider->getSession( sSessionId );
-        if ( NULL == m_pSession )
-        {
-            // Initiate a CMIS session and register it as we found nothing
-            m_pSession = libcmis::SessionFactory::createSession( url.getSessionParams( ) );
-            pProvider->registerSession( sSessionId, m_pSession );
-        }
-
-        m_sObjectPath = url.getObjectPath( );
-        m_sObjectId = url.getObjectId( );
-        m_sBindingUrl = url.getBindingUrl( );
+        m_sObjectPath = m_aURL.getObjectPath( );
+        m_sObjectId = m_aURL.getObjectId( );
     }
 
     Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
@@ -130,47 +119,69 @@ namespace cmis
         : ContentImplHelper( rxSMgr, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_pSession( NULL ),
-        m_bTransient( true )
+        m_sURL( Identifier->getContentIdentifier( ) ),
+        m_aURL( Identifier->getContentIdentifier( ) ),
+        m_bTransient( true ),
+        m_bIsFolder( bIsFolder )
     {
-        // Split the URL into bits
-        m_sURL = m_xIdentifier->getContentIdentifier( );
-        cmis::URL url( m_sURL );
         SAL_INFO( "cmisucp", "Content::Content() " << m_sURL );
 
-        // Look for a cached session, key is binding url + repo id
-        rtl::OUString sSessionId = url.getBindingUrl( ) + url.getRepositoryId( );
-        m_pSession = pProvider->getSession( sSessionId );
-        if ( NULL == m_pSession )
-        {
-            // Initiate a CMIS session and register it as we found nothing
-            m_pSession = libcmis::SessionFactory::createSession( url.getSessionParams( ) );
-            pProvider->registerSession( sSessionId, m_pSession );
-        }
-
-        m_sObjectPath = url.getObjectPath( );
-        m_sObjectId = url.getObjectId( );
-        m_sBindingUrl = url.getBindingUrl( );
-
-        // Get the object type
-        string typeId = bIsFolder ? "cmis:folder" : "cmis:document";
-        m_pObjectType = m_pSession->getType( typeId );
+        m_sObjectPath = m_aURL.getObjectPath( );
+        m_sObjectId = m_aURL.getObjectId( );
     }
 
     Content::~Content()
     {
     }
 
-    libcmis::ObjectPtr Content::getObject( ) throw ( libcmis::Exception )
+    libcmis::Session* Content::getSession( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+    {
+        // Look for a cached session, key is binding url + repo id
+        rtl::OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
+        if ( NULL == m_pSession )
+            m_pSession = m_pProvider->getSession( sSessionId );
+
+        if ( NULL == m_pSession )
+        {
+            // Get the auth credentials
+            AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
+
+            string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
+            string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
+            if ( authProvider.authenticationQuery( rUsername, rPassword ) )
+            {
+                // Initiate a CMIS session and register it as we found nothing
+                m_pSession = libcmis::SessionFactory::createSession(
+                        OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
+                        rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ) );
+                m_pProvider->registerSession( sSessionId, m_pSession );
+            }
+        }
+        return m_pSession;
+    }
+
+    libcmis::ObjectTypePtr Content::getObjectType( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+    {
+        if ( NULL == m_pObjectType.get( ) && m_bTransient )
+        {
+            string typeId = m_bIsFolder ? "cmis:folder" : "cmis:document";
+            m_pObjectType = getSession( xEnv )->getType( typeId );
+        }
+        return m_pObjectType;
+    }
+
+
+    libcmis::ObjectPtr Content::getObject( const uno::Reference< ucb::XCommandEnvironment >& xEnv ) throw ( libcmis::Exception )
     {
         if ( !m_pObject.get() )
         {
             if ( !m_sObjectPath.isEmpty( ) )
-                m_pObject = m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
+                m_pObject = getSession( xEnv )->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
             else if (!m_sObjectId.isEmpty( ) )
-                m_pObject = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+                m_pObject = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
             else
             {
-                m_pObject = m_pSession->getRootFolder( );
+                m_pObject = getSession( xEnv )->getRootFolder( );
                 m_sObjectPath = "/";
                 m_sObjectId = rtl::OUString( );
             }
@@ -179,19 +190,12 @@ namespace cmis
         return m_pObject;
     }
 
-    void Content::resetAuthProvider( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    {
-        libcmis::AuthProviderPtr authProvider( new AuthProvider( xEnv, m_sURL, m_sBindingUrl ) );
-        m_pSession->setAuthenticationProvider( authProvider );
-    }
-
     bool Content::isFolder(const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         bool bIsFolder = false;
         try
         {
-            resetAuthProvider( xEnv );
-            bIsFolder = getObject( )->getBaseType( ) == "cmis:folder";
+            bIsFolder = getObject( xEnv )->getBaseType( ) == "cmis:folder";
         }
         catch ( const libcmis::Exception& e )
         {
@@ -216,8 +220,6 @@ namespace cmis
             const uno::Sequence< beans::Property >& rProperties,
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        resetAuthProvider( xEnv );
-
         rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xSMgr );
 
         sal_Int32 nProps;
@@ -236,12 +238,12 @@ namespace cmis
                 {
                     try
                     {
-                        xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:document" );
+                        xRow->appendBoolean( rProp, getObject( xEnv )->getBaseType( ) == "cmis:document" );
                     }
                     catch ( const libcmis::Exception& )
                     {
                         if ( m_pObjectType.get( ) )
-                            xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:document" );
+                            xRow->appendBoolean( rProp, getObjectType( xEnv )->getBaseType()->getId( ) == "cmis:document" );
                         else
                             xRow->appendVoid( rProp );
                     }
@@ -250,12 +252,12 @@ namespace cmis
                 {
                     try
                     {
-                        xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:folder" );
+                        xRow->appendBoolean( rProp, getObject( xEnv )->getBaseType( ) == "cmis:folder" );
                     }
                     catch ( const libcmis::Exception& )
                     {
                         if ( m_pObjectType.get( ) )
-                            xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:folder" );
+                            xRow->appendBoolean( rProp, getObjectType( xEnv )->getBaseType()->getId( ) == "cmis:folder" );
                         else
                             xRow->appendVoid( rProp );
                     }
@@ -265,7 +267,7 @@ namespace cmis
                     rtl::OUString sTitle;
                     try
                     {
-                        sTitle = STD_TO_OUSTR( getObject()->getName() );
+                        sTitle = STD_TO_OUSTR( getObject( xEnv )->getName() );
                     }
                     catch ( const libcmis::Exception& )
                     {
@@ -306,11 +308,11 @@ namespace cmis
                     string path;
                     try
                     {
-                        vector< string > paths = getObject( )->getPaths( );
+                        vector< string > paths = getObject( xEnv )->getPaths( );
                         if ( !paths.empty( ) )
                             path = paths.front( );
                         else
-                            path = getObject()->getName( );
+                            path = getObject( xEnv )->getName( );
 
                         xRow->appendString( rProp, STD_TO_OUSTR( path ) );
                     }
@@ -321,7 +323,7 @@ namespace cmis
                 }
                 else if ( rProp.Name == "IsReadOnly" )
                 {
-                    boost::shared_ptr< libcmis::AllowableActions > allowableActions = getObject()->getAllowableActions( );
+                    boost::shared_ptr< libcmis::AllowableActions > allowableActions = getObject( xEnv )->getAllowableActions( );
                     sal_Bool bReadOnly = sal_False;
                     if ( !allowableActions->isAllowed( libcmis::ObjectAction::SetContentStream ) )
                         bReadOnly = sal_True;
@@ -330,19 +332,19 @@ namespace cmis
                 }
                 else if ( rProp.Name == "DateCreated" )
                 {
-                    util::DateTime aTime = lcl_boostToUnoTime( getObject( )->getCreationDate( ) );
+                    util::DateTime aTime = lcl_boostToUnoTime( getObject( xEnv )->getCreationDate( ) );
                     xRow->appendTimestamp( rProp, aTime );
                 }
                 else if ( rProp.Name == "DateModified" )
                 {
-                    util::DateTime aTime = lcl_boostToUnoTime( getObject( )->getLastModificationDate( ) );
+                    util::DateTime aTime = lcl_boostToUnoTime( getObject( xEnv )->getLastModificationDate( ) );
                     xRow->appendTimestamp( rProp, aTime );
                 }
                 else if ( rProp.Name == "Size" )
                 {
                     try
                     {
-                        libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get( ) );
+                        libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( xEnv ).get( ) );
                         if ( NULL != document )
                             xRow->appendLong( rProp, document->getContentLength() );
                         else
@@ -361,7 +363,7 @@ namespace cmis
                 {
                     try
                     {
-                        libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get( ) );
+                        libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( xEnv ).get( ) );
                         if ( NULL != document )
                             xRow->appendString( rProp, STD_TO_OUSTR( document->getContentType() ) );
                         else
@@ -384,7 +386,7 @@ namespace cmis
         return uno::Reference< sdbc::XRow >( xRow.get() );
     }
 
-    bool Content::exists( )
+    bool Content::exists( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         bool bExists = true;
         try
@@ -392,7 +394,7 @@ namespace cmis
             if ( !m_sObjectPath.isEmpty( ) )
                 m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
             else if ( !m_sObjectId.isEmpty( ) )
-                m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+                getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
             // No need to handle the root folder case... how can it not exists?
         }
         catch ( const libcmis::Exception& )
@@ -410,7 +412,7 @@ namespace cmis
         bool bIsFolder = isFolder( xEnv );
 
         // Handle the case of the non-existing file
-        if ( !exists( ) )
+        if ( !exists( xEnv ) )
         {
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
@@ -480,7 +482,7 @@ namespace cmis
         if ( aSourceUrl.GetProtocol() != INET_PROT_CMIS_ATOM )
         {
             rtl::OUString sSrcBindingUrl = URL( rTransferInfo.SourceURL ).getBindingUrl( );
-            if ( sSrcBindingUrl != m_sBindingUrl )
+            if ( sSrcBindingUrl != m_aURL.getBindingUrl( ) )
             {
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
@@ -516,7 +518,7 @@ namespace cmis
             libcmis::Folder* pFolder = NULL;
             try
             {
-                pFolder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
+                pFolder = dynamic_cast< libcmis::Folder* >( getObject( xEnv ).get( ) );
             }
             catch ( const libcmis::Exception& )
             {
@@ -541,7 +543,7 @@ namespace cmis
                 libcmis::ObjectPtr object;
                 try
                 {
-                    object = m_pSession->getObjectByPath( newPath );
+                    object = getSession( xEnv )->getObjectByPath( newPath );
                     sNewPath = STD_TO_OUSTR( newPath );
                 }
                 catch ( const libcmis::Exception& )
@@ -568,14 +570,14 @@ namespace cmis
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
-                        document->setContentStream( pOut, sMime, bReplaceExisting );
+                        document->setContentStream( pOut, sMime, string( ), bReplaceExisting );
                     }
                 }
                 else
                 {
                     // We need to create a brand new object... either folder or document
-                    bool bIsFolder = m_pObjectType->getBaseType( )->getId( ) == "cmis:folder";
-                    setCmisProperty( "cmis:objectTypeId", m_pObjectType->getId( ) );
+                    bool bIsFolder = getObjectType( xEnv )->getBaseType( )->getId( ) == "cmis:folder";
+                    setCmisProperty( "cmis:objectTypeId", getObjectType( xEnv )->getId( ), xEnv );
 
                     if ( bIsFolder )
                     {
@@ -587,7 +589,7 @@ namespace cmis
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
-                        libcmis::DocumentPtr pNew = pFolder->createDocument( m_pObjectProps, pOut, string() );
+                        pFolder->createDocument( m_pObjectProps, pOut, string(), string() );
                         sNewPath = STD_TO_OUSTR( newPath );
                     }
                 }
@@ -631,10 +633,10 @@ namespace cmis
         try
         {
             // Get the already set properties if possible
-            if ( !m_bTransient && getObject( ).get( ) )
+            if ( !m_bTransient && getObject( xEnv ).get( ) )
             {
-                m_pObjectProps = getObject()->getProperties( );
-                m_pObjectType = getObject()->getTypeDescription();
+                m_pObjectProps.clear( );
+                m_pObjectType = getObject( xEnv )->getTypeDescription();
             }
         }
         catch ( const libcmis::Exception& e )
@@ -686,7 +688,7 @@ namespace cmis
 
                 }
 
-                setCmisProperty( "cmis:name", OUSTR_TO_STDSTR( aNewTitle ) );
+                setCmisProperty( "cmis:name", OUSTR_TO_STDSTR( aNewTitle ), xEnv );
                 bChanged = true;
             }
             else
@@ -702,7 +704,7 @@ namespace cmis
         {
             if ( !m_bTransient && bChanged )
             {
-                getObject()->updateProperties();
+                getObject( xEnv )->updateProperties( m_pObjectProps );
             }
         }
         catch ( const libcmis::Exception& e )
@@ -736,7 +738,7 @@ namespace cmis
 
         try
         {
-            libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get() );
+            libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( xEnv ).get() );
             boost::shared_ptr< istream > aIn = document->getContentStream( );
 
             uno::Reference< io::XInputStream > xIn = new ucbhelper::StdInputStream( aIn );
@@ -762,10 +764,8 @@ namespace cmis
     }
 
     uno::Sequence< beans::Property > Content::getProperties(
-            const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+            const uno::Reference< ucb::XCommandEnvironment > & )
     {
-        resetAuthProvider( xEnv );
-
         static const beans::Property aGenericProperties[] =
         {
             beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
@@ -807,8 +807,6 @@ namespace cmis
     uno::Sequence< ucb::CommandInfo > Content::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
-        resetAuthProvider( xEnv );
-
         static ucb::CommandInfo aCommandInfoTable[] =
         {
             // Required commands
@@ -845,8 +843,8 @@ namespace cmis
               -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
         };
 
-        const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
-        return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
+        const int nProps = SAL_N_ELEMENTS( aCommandInfoTable );
+        return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, isFolder( xEnv ) ? nProps : nProps - 2);
     }
 
     ::rtl::OUString Content::getParentURL( )
@@ -858,8 +856,8 @@ namespace cmis
         string parentPath;
         try
         {
-            libcmis::ObjectPtr pObj = getObject( );
-            libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( ).get( ) );
+            libcmis::ObjectPtr pObj = getObject( uno::Reference< ucb::XCommandEnvironment >() );
+            libcmis::Document* document = dynamic_cast< libcmis::Document* >( pObj.get( ) );
             if ( NULL != document )
             {
                 vector< boost::shared_ptr< libcmis::Folder > > parents = document->getParents( );
@@ -868,7 +866,7 @@ namespace cmis
             }
             else
             {
-                libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
+                libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( pObj.get( ) );
                 if ( NULL != folder )
                     parentPath = folder->getFolderParent( )->getPath( );
             }
@@ -933,7 +931,7 @@ namespace cmis
 
     rtl::OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
     {
-        return isFolder(uno::Reference< ucb::XCommandEnvironment >())
+        return isFolder( uno::Reference< ucb::XCommandEnvironment >() )
             ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CMIS_FOLDER_TYPE ))
             : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CMIS_FILE_TYPE ));
     }
@@ -945,8 +943,6 @@ namespace cmis
             throw( uno::Exception, ucb::CommandAbortedException, uno::RuntimeException )
     {
         SAL_INFO( "cmisucp", "Content::execute( ) - " << aCommand.Name );
-        resetAuthProvider( xEnv );
-
         uno::Any aRet;
 
         if ( aCommand.Name == "getPropertyValues" )
@@ -1002,11 +998,11 @@ namespace cmis
             {
                 if ( !isFolder( xEnv ) )
                 {
-                    getObject( )->remove( );
+                    getObject( xEnv )->remove( );
                 }
                 else
                 {
-                    libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( ).get() );
+                    libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( xEnv ).get() );
                     folder->removeTree( );
                 }
             }
@@ -1118,7 +1114,6 @@ namespace cmis
         const uno::Reference< ucb::XCommandEnvironment >& xEnv)
             throw( uno::RuntimeException )
     {
-        resetAuthProvider( xEnv );
         if ( isFolder( xEnv ) )
         {
             uno::Sequence< ucb::ContentInfo > seq(2);
@@ -1155,7 +1150,7 @@ namespace cmis
         list< uno::Reference< ucb::XContent > > results;
         SAL_INFO( "cmisucp", "Content::getChildren() " << m_sURL );
 
-        libcmis::Folder* pFolder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
+        libcmis::Folder* pFolder = dynamic_cast< libcmis::Folder* >( getObject( uno::Reference< ucb::XCommandEnvironment >() ).get( ) );
         if ( NULL != pFolder )
         {
             // Get the children from pObject
@@ -1190,17 +1185,17 @@ namespace cmis
         return results;
     }
 
-    void Content::setCmisProperty( std::string sName, std::string sValue )
+    void Content::setCmisProperty( std::string sName, std::string sValue, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        if ( m_pObjectType.get( ) )
+        if ( getObjectType( xEnv ).get( ) )
         {
             map< string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find( sName );
             vector< string > values;
             values.push_back( sValue );
 
-            if ( propIt == m_pObjectProps.end( ) && m_pObjectType.get( ) )
+            if ( propIt == m_pObjectProps.end( ) && getObjectType( xEnv ).get( ) )
             {
-                map< string, libcmis::PropertyTypePtr > propsTypes = m_pObjectType->getPropertiesTypes( );
+                map< string, libcmis::PropertyTypePtr > propsTypes = getObjectType( xEnv )->getPropertiesTypes( );
                 map< string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find( sName );
 
                 if ( typeIt != propsTypes.end( ) )

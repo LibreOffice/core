@@ -13,13 +13,6 @@ $(eval $(call gb_Package_use_unpacked,libcmis_inc,cmis))
 
 $(eval $(call gb_Package_add_files,libcmis_inc,inc/external/libcmis,\
 	allowable-actions.hxx \
-	atom-document.hxx \
-	atom-folder.hxx \
-	atom-object-type.hxx \
-	atom-object.hxx \
-	atom-session.hxx \
-	atom-utils.hxx \
-	atom-workspace.hxx \
 	document.hxx \
 	exception.hxx \
 	folder.hxx \
@@ -30,7 +23,6 @@ $(eval $(call gb_Package_add_files,libcmis_inc,inc/external/libcmis,\
 	repository.hxx \
 	session-factory.hxx \
 	session.hxx \
-	test-helpers.hxx \
 	xml-utils.hxx \
 	xmlserializable.hxx \
 ))

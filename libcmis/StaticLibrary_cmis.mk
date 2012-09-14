@@ -27,11 +27,28 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,cmislib,\
 	UnpackedTarball/cmis/src/libcmis/atom-object-type \
 	UnpackedTarball/cmis/src/libcmis/atom-object \
 	UnpackedTarball/cmis/src/libcmis/atom-session \
-	UnpackedTarball/cmis/src/libcmis/atom-utils \
 	UnpackedTarball/cmis/src/libcmis/atom-workspace \
+	UnpackedTarball/cmis/src/libcmis/base-session \
+	UnpackedTarball/cmis/src/libcmis/document \
+	UnpackedTarball/cmis/src/libcmis/folder \
+	UnpackedTarball/cmis/src/libcmis/object \
+	UnpackedTarball/cmis/src/libcmis/object-type \
 	UnpackedTarball/cmis/src/libcmis/property-type \
 	UnpackedTarball/cmis/src/libcmis/property \
+	UnpackedTarball/cmis/src/libcmis/repository \
 	UnpackedTarball/cmis/src/libcmis/session-factory \
+	UnpackedTarball/cmis/src/libcmis/ws-document \
+	UnpackedTarball/cmis/src/libcmis/ws-folder \
+	UnpackedTarball/cmis/src/libcmis/ws-navigationservice \
+	UnpackedTarball/cmis/src/libcmis/ws-object \
+	UnpackedTarball/cmis/src/libcmis/ws-object-type \
+	UnpackedTarball/cmis/src/libcmis/ws-objectservice \
+	UnpackedTarball/cmis/src/libcmis/ws-relatedmultipart \
+	UnpackedTarball/cmis/src/libcmis/ws-repositoryservice \
+	UnpackedTarball/cmis/src/libcmis/ws-requests \
+	UnpackedTarball/cmis/src/libcmis/ws-session \
+	UnpackedTarball/cmis/src/libcmis/ws-soap \
+	UnpackedTarball/cmis/src/libcmis/ws-versioningservice \
 	UnpackedTarball/cmis/src/libcmis/xml-utils \
 ))
 

@@ -147,13 +147,10 @@ namespace cmis
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
-                map< int, string > params = m_aURL.getSessionParams( );
-                params[USERNAME] = rUsername;
-                params[PASSWORD] = rPassword;
-
                 try
                 {
-                    m_aRepositories = libcmis::SessionFactory::getRepositories( params );
+                    m_aRepositories = libcmis::SessionFactory::getRepositories(
+                           OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ), rUsername, rPassword );
                 }
                 catch (const libcmis::Exception&)
                 {

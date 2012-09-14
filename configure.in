@@ -6704,11 +6704,11 @@ AC_MSG_CHECKING([which libcmis to use])
 if test "$with_system_libcmis" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBCMIS=YES
-    PKG_CHECK_MODULES( CMIS, libcmis-0.2 >= 0.2.1 )
+    PKG_CHECK_MODULES( CMIS, libcmis-0.3 >= 0.3.0 )
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBCMIS=NO
-    CMIS_TARBALL=0d2dcdfbf28d6208751b33057f5361f0-libcmis-0.2.3.tar.gz
+    CMIS_TARBALL=b2371dc7cf4811c9d32146eec913d296-libcmis-0.3.0.tar.gz
 fi
 AC_SUBST(SYSTEM_LIBCMIS)
 AC_SUBST(CMIS_CFLAGS)
