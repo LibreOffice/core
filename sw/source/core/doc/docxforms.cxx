@@ -29,7 +29,7 @@
 #include <com/sun/star/xforms/XForms.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
-
+#include <com/sun/star/container/XIndexAccess.hpp>
 
 using namespace ::com::sun::star;
 
@@ -42,7 +42,7 @@ using container::XNameContainer;
 using xforms::XModel2;
 using frame::XModule;
 using xforms::XFormsUIHelper1;
-
+using com::sun::star::container::XIndexAccess;
 
 Reference<XNameContainer> SwDoc::getXForms() const
 {
@@ -91,6 +91,53 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// #i113606#, to release the cyclic reference between XFormModel and bindings/submissions.
+void SwDoc::disposeXForms( )
+{
+    // get XForms models
+    if( mxXForms.is() )
+    {
+        // iterate over all models
+        uno::Sequence<OUString> aNames = mxXForms->getElementNames();
+        const OUString* pNames = aNames.getConstArray();
+        sal_Int32 nNames = aNames.getLength();
+        for( sal_Int32 n = 0; (n < nNames); n++ )
+        {
+            Reference< xforms::XModel > xModel(
+                mxXForms->getByName( pNames[n] ), UNO_QUERY );
+
+            if( xModel.is() )
+            {
+                // ask model for bindings
+                Reference< XIndexAccess > xBindings(
+                         xModel->getBindings(), UNO_QUERY );
+
+                //
+                // Then release them one by one
+                //
+                int nCount = xBindings->getCount();
+                for( int i = nCount-1; i >= 0; i-- )
+                {
+                    xModel->getBindings()->remove(xBindings->getByIndex( i ));
+                }
+
+                // ask model for Submissions
+                Reference< XIndexAccess > xSubmissions(
+                         xModel->getSubmissions(), UNO_QUERY );
+
+                //
+                // Then release them one by one
+                //
+                nCount = xSubmissions->getCount();
+                for( int i = nCount-1; i >= 0; i-- )
+                {
+                    xModel->getSubmissions()->remove(xSubmissions->getByIndex( i ));
+                }
+            }
+        }
     }
 }
 

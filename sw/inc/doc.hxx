@@ -2036,12 +2036,14 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > GetGCIterator() const;
 
-    /// is this an XForms document?
+    /// #i31958# is this an XForms document?
     bool isXForms() const;
 
-    /// initialize XForms models; turn this into an XForms document
+    /// #i31958# initialize XForms models; turn this into an XForms document
     void initXForms( bool bCreateDefaultModel );
-    // access methods for XForms model(s)
+
+    /// #i113606# for disposing XForms
+    void disposeXForms( );
 
     //Update all the page masters
     void SetDefaultPageMode(bool bSquaredPageMode);
