@@ -756,6 +756,11 @@ AC_ARG_ENABLE(werror,
          of warnings as errors is disabled explicitly.)]),
 ,)
 
+AC_ARG_ENABLE(assert-always-abort,
+    AS_HELP_STRING([--enable-assert-always-abort],
+        [make assert() abort even in release code.]),
+,)
+
 AC_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],
         [Include debugging information like with --enable-symbols, disable
@@ -4010,6 +4015,18 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(EXTERNAL_WARNINGS_NOT_ERRORS)
+
+dnl Set the ASSERT_ALWAYS_ABORT variable. (Activate --enable-assert-always-abort)
+dnl ===================================================================
+AC_MSG_CHECKING([whether to have assert to abort in release code])
+if test -n "$enable_assert_always_abort" -a "$enable_assert_always_abort" = "yes"; then
+    ASSERT_ALWAYS_ABORT="TRUE"
+    AC_MSG_RESULT([yes])
+else
+    ASSERT_ALWAYS_ABORT="FALSE"
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ASSERT_ALWAYS_ABORT)
 
 dnl Set the ENABLE_DEBUG variable.
 dnl ===================================================================

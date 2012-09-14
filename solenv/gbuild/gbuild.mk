@@ -228,6 +228,12 @@ gb_GLOBALDEFS += \
 endif
 endif
 
+ifeq ($(strip $(ASSERT_ALWAYS_ABORT)),TRUE)
+gb_GLOBALDEFS += \
+	-DASSERT_ALWAYS_ABORT \
+
+endif
+
 ifneq ($(strip $(ENABLE_GTK)),)
 gb_GLOBALDEFS += -DENABLE_GTK
 endif

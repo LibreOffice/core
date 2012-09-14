@@ -31,6 +31,22 @@
 
 #include <stddef.h>
 
+/* we want to be able to compile release code while retaining the abort capabilities of assert().
+ * This presume that this include is called early... i.e before anyone else included assert.h
+ * which should more often than not be the case since macros.h is included by sal/types.h
+ * which is included at the top of most source (or should be)
+ */
+#ifdef ASSERT_ALWAYS_ABORT
+#    ifdef NDEBUG
+#        undef NDEBUG
+#        include <assert.h>
+#        define NDEBUG
+#    else /* Ndef NDEBUG */
+#        include <assert.h>
+#    endif /* Ndef NDEBUG */
+#else /* NDef ASSERT_ALWAYS_ABORT */
+#        include <assert.h>
+#endif /* NDef ASSERT_ALWAYS_ABORT */
 
 #ifndef SAL_N_ELEMENTS
 #    if defined(__cplusplus) && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
