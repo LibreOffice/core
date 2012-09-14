@@ -410,8 +410,10 @@ void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
     if ( pPage && !_rRect.IsEmpty() )
     {
         uno::Reference<report::XSection> xSection = pPage->getSection();
-        if ( xSection.is() && (static_cast<sal_uInt32>(_rRect.getHeight() + _rRect.Top()) > xSection->getHeight()) )
-            xSection->setHeight(_rRect.getHeight() + _rRect.Top());
+        assert(_rRect.getHeight() >= 0);
+        const sal_uInt32 newHeight( ::std::max(0l, _rRect.getHeight()+_rRect.Top()) );
+        if ( xSection.is() && ( newHeight > xSection->getHeight() ) )
+            xSection->setHeight( newHeight );
 
         // TODO
         //pModel->GetRefDevice()->Invalidate(INVALIDATE_CHILDREN);
