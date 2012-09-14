@@ -101,12 +101,12 @@ class SoundHandler  :   // interfaces
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( css::uno::RuntimeException );
 
     /* interface XServiceInfo */
-       virtual ::rtl::OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );
-       virtual sal_Bool                                               SAL_CALL supportsService                    ( const ::rtl::OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );
-       virtual css::uno::Sequence< ::rtl::OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );
+       virtual OUString                                               SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );
+       virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                               sServiceName    ) throw( css::uno::RuntimeException );
+       virtual css::uno::Sequence< OUString >                         SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );
     /* Helper for XServiceInfo */
-       static css::uno::Sequence< ::rtl::OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );
-       static ::rtl::OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );
+       static css::uno::Sequence< OUString >                          SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );
+       static OUString                                                SAL_CALL impl_getStaticImplementationName   (                                                                               );
     /* Helper for registry */
        static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
@@ -134,7 +134,7 @@ class SoundHandler  :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  XExtendedFilterDetection
         //---------------------------------------------------------------------------------------------------------
-        virtual ::rtl::OUString SAL_CALL detect     (           css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException );
+        virtual OUString SAL_CALL detect           (           css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
