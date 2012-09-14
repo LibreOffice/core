@@ -329,11 +329,11 @@ static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
 {
     if (rBridgeName.equalsAscii( CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" ))
         return CPPU_ENV_uno_ext_getMapping;
-#ifndef IOS
-    // I don't think the affine or log bridges will be needed on iOS,
-    // and DISABLE_DYNLOADING will hardly be used elsewhere, but if
-    // somebody wants to experiment, need to find out then whether
-    // these are needed.
+#if 0
+    // I don't think the affine or log bridges will be needed on any
+    // DISABLE_DYNLOADING platform (iOS at least, possibly Android), but if
+    // somebody wants to experiment, need to find out then whether these are
+    // needed.
     if (rBridgeName.equalsAscii( "affine_uno_uno" ))
         return affine_uno_uno_ext_getMapping;
     if (rBridgeName.equalsAscii( "log_uno_uno" ))
