@@ -140,6 +140,7 @@ public:
     bool                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
                             double fRotationAngle );
+    bool getAutoLayout(){return mrModel.mbAutoLayout;}
 };
 
 // ============================================================================

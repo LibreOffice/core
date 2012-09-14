@@ -31,7 +31,10 @@
 #include "oox/drawingml/chart/datasourceconverter.hxx"
 #include "oox/drawingml/chart/titlemodel.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/drawing/Alignment.hpp>
 
+#include "oox/drawingml/chart/modelbase.hxx"
 namespace oox {
 namespace drawingml {
 namespace chart {
@@ -41,6 +44,7 @@ namespace chart {
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
@@ -204,6 +208,8 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         // predefined legend position and expansion
         cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_CUSTOM;
         cssc::ChartLegendExpansion eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
+        RelativePosition eRelPos;
+        bool bTopRight=0;
         switch( mrModel.mnPosition )
         {
             case XML_l:
@@ -211,9 +217,16 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
                 eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             break;
             case XML_r:
-            case XML_tr:    // top-right not supported
                 eLegendPos = cssc2::LegendPosition_LINE_END;
                 eLegendExpand = cssc::ChartLegendExpansion_HIGH;
+                break;
+            case XML_tr:    // top-right not supported
+                eLegendPos = LegendPosition_CUSTOM;
+                eRelPos.Primary = 1;
+                eRelPos.Secondary =0;
+                eRelPos.Anchor = Alignment_TOP_RIGHT;
+                bTopRight=1;
+
             break;
             case XML_t:
                 eLegendPos = cssc2::LegendPosition_PAGE_START;
@@ -224,7 +237,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
                 eLegendExpand = cssc::ChartLegendExpansion_WIDE;
             break;
         }
-
+        bool bManualLayout=false;
         // manual positioning and size
         if( mrModel.mxLayout.get() )
         {
@@ -232,11 +245,15 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
             // manual size needs ChartLegendExpansion_CUSTOM
             if( aLayoutConv.convertFromModel( aPropSet ) )
                 eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
+            bManualLayout = !aLayoutConv.getAutoLayout();
         }
 
         // set position and expansion properties
         aPropSet.setProperty( PROP_AnchorPosition, eLegendPos );
         aPropSet.setProperty( PROP_Expansion, eLegendExpand );
+
+        if(eLegendPos == LegendPosition_CUSTOM && 1 == bTopRight && bManualLayout==false)
+            aPropSet.setProperty( PROP_RelativePosition , makeAny(eRelPos));
     }
     catch( Exception& )
     {
