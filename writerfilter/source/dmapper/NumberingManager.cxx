@@ -1073,6 +1073,13 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     pProperties->resolve(*this);
             }
             break;
+            case NS_ooxml::LN_CT_AbstractNum_numStyleLink:
+            {
+                OUString sStyleName = rSprm.getValue( )->getString( );
+                AbstractListDef* pAbstractListDef = dynamic_cast< AbstractListDef* >( m_pCurrentDefinition.get( ) );
+                pAbstractListDef->SetNumStyleLink(sStyleName);
+            }
+            break;
             case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties
             case NS_ooxml::LN_EG_RPrBase_color:
             case NS_ooxml::LN_EG_RPrBase_u:
@@ -1133,7 +1140,31 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
     while ( !pAbstractList.get( ) && i < nLen )
     {
         if ( m_aAbstractLists[i]->GetId( ) == nId )
-            pAbstractList = m_aAbstractLists[i];
+        {
+            if ( m_aAbstractLists[i]->GetNumStyleLink().getLength() > 0 )
+            {
+                // If the abstract num has a style linked, check the linked style's number id.
+                StyleSheetTablePtr pStylesTable = m_rDMapper.GetStyleSheetTable( );
+
+                const StyleSheetEntryPtr pStyleSheetEntry =
+                    pStylesTable->FindStyleSheetByISTD( m_aAbstractLists[i]->GetNumStyleLink() );
+
+                const StyleSheetPropertyMap* pStyleSheetProperties =
+                    dynamic_cast<const StyleSheetPropertyMap*>(pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : 0);
+
+                if( pStyleSheetProperties && pStyleSheetProperties->GetNumId() >= 0 )
+                {
+                    ListDef::Pointer pList = GetList( pStyleSheetProperties->GetNumId() );
+                    if ( pList!=NULL )
+                        return pList->GetAbstractDefinition();
+                }
+
+            }
+            else
+            {
+                pAbstractList = m_aAbstractLists[i];
+            }
+        }
         i++;
     }
 

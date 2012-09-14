@@ -1585,8 +1585,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     rContext->erase( PropertyDefinition( PROP_NUMBERING_STYLE_NAME, true ));
                 }
             }
-            else if ( !m_pImpl->IsStyleSheetImport( ) )
-                rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny( OUString() ) );
+            else
+            {
+                if( m_pImpl->IsStyleSheetImport() )
+                {
+                    // set the number id for AbstractNum references
+                    StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
+                    pStyleSheetPropertyMap->SetNumId( nIntValue );
+                }
+                else
+                {
+                    rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny( OUString() ) );
+                }
+            }
         }
         break;
     case NS_sprm::LN_PFNoLineNumb:   // sprmPFNoLineNumb
