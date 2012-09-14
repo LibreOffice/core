@@ -2991,7 +2991,7 @@ sal_Bool SwFlyFrm::IsPageNumberingFrm()
         return false;
 
     SwFrmFmt* pFmt = NULL;
-    if (pFmt = GetFmt())
+    if ((pFmt = GetFmt()))
     {
         if (pLower && pLower->GetNext() && pFmt->GetCol().GetNumCols()>1)//Has more than 1 column...
             return false;
