@@ -288,7 +288,6 @@ SwDoc::SwDoc()
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
     mbReadlineChecked(false),
-    meDocType( DOCTYPE_NATIVE ),
     // --> OD 2005-02-11 #i38810#
     mbLinksUpdated( sal_False ),
     mbClipBoard( false ),
@@ -300,7 +299,8 @@ SwDoc::SwDoc()
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
     mbStartIdleTimer(sal_False),
-    mbSetDrawDefaults(false)
+    mbSetDrawDefaults(false),
+    meDocType( DOCTYPE_NATIVE )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
