@@ -32,11 +32,7 @@ Module gid_Module_Optional_Stdlibs
     Default = NO;
     PackageInfo = "packinfo_ure.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_STDLIBS);
-#ifdef UNX
     Styles = ();
-#else
-    Styles = (DONTSHOWINUSERINSTALL);
-#endif
     Files = (
 #if defined _gcc3 && !(defined FREEBSD || defined NETBSD || defined OPENBSD \
 	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT) || defined(DRAGONFLY))

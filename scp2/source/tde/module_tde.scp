@@ -30,7 +30,7 @@ Module gid_Module_Optional_Tde
     Default = YES;
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_TDE);
-    Styles = (DONTSHOWINUSERINSTALL);
+    Styles = ();
     Files = (
 #ifdef ENABLE_TDE
     gid_File_Lib_Tdebe

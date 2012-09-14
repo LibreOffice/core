@@ -33,7 +33,7 @@ Module gid_Module_Optional_Onlineupdate
     Sortkey = "800";
     ParentID = gid_Module_Optional;
     Default = YES;
-    Styles = (DONTSHOWINUSERINSTALL);
+    Styles = ();
     Files = (gid_File_Bin_UnpackUpdate,
              gid_File_Lib_Updchk,
              gid_File_Lib_Updchkui,
