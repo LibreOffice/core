@@ -256,12 +256,12 @@ void SvXMLImportPropertyMapper::importXML(
 
             if( !bFound )
             {
+                SAL_INFO_IF((XML_NAMESPACE_NONE != nPrefix) &&
+                            !(XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) &&
+                            !bAlienImport, "xmloff.style",
+                            "unknown attribute: \"" << rAttrName << "\"");
                 if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) || bAlienImport )
                 {
-                    OSL_ENSURE( XML_NAMESPACE_NONE == nPrefix ||
-                                (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) ||
-                                bAlienImport,
-                                "unknown attribute - might be a new feature?" );
                     if( !xAttrContainer.is() )
                     {
                         // add an unknown attribute container to the properties
