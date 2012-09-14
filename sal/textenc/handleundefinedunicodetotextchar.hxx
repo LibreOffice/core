@@ -30,9 +30,6 @@
 #ifndef INCLUDED_SAL_TEXTENC_HANDLEUNDEFINEDUNICODETOTEXTCHAR_HXX
 #define INCLUDED_SAL_TEXTENC_HANDLEUNDEFINEDUNICODETOTEXTCHAR_HXX
 
-#include "sal/config.h"
-
-#include "sal/saldllapi.h"
 #include "sal/types.h"
 
 // Internal, non-stable ABI

@@ -300,7 +300,11 @@ typedef void *                   sal_Handle;
 #define SAL_EXCEPTION_DLLPRIVATE
 #endif
 
-#include <sal/saldllapi.h>
+#if defined(SAL_DLLIMPLEMENTATION)
+#define SAL_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
+#else
+#define SAL_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
+#endif
 
 /** Use this as markup for functions and methods whose return value must be
     checked.
