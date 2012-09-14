@@ -145,7 +145,7 @@ LDFLAGSADD += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-
 
 CONFIGURE_DIR=source
 
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
 STATIC_OR_SHARED=--enable-static --disable-shared
 .ELSE
 STATIC_OR_SHARED=--disable-static --enable-shared
@@ -157,7 +157,10 @@ BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-bu
 .ENDIF
 
 .IF "$(OS)"=="ANDROID"
+.IF "$(DISABLE_DYNLOADING)" != "TRUE"
 LIBRARY_SUFFIX= --with-library-suffix=lo
+.ENDIF
+# Just so that some executables that nobody will run anyway get built...
 icu_LDFLAGS+=-lgnustl_shared -lm
 .ENDIF
 
@@ -180,14 +183,14 @@ CONFIGURE_FLAGS=
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata.a \
     $(BUILD_DIR)$/lib$/libicuuc.a \
     $(BUILD_DIR)$/lib$/libicui18n.a \
     $(BUILD_DIR)$/lib$/libicule.a \
     $(BUILD_DIR)$/lib$/libicutu.a
-.ELIF "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="ANDROID" # The so far normal, non-DISABLE_DYNLOADING case for Android
 BUILD_ACTION+= && cat uconfig.h.prepend common/unicode/uconfig.h >common/unicode/uconfig.h.new && mv common/unicode/uconfig.h.new common/unicode/uconfig.h
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudatalo.so \
