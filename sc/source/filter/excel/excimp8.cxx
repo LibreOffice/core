@@ -173,6 +173,10 @@ void ImportExcel8::Boundsheet( void )
         pD->MakeTable( nScTab );
     }
 
+    //assume pending row heights true here. Only optimize the excel8 type for now. i120586
+    //if the sheet contain sdrobject, will set false then.
+    pD->SetPendingRowHeights( nScTab, true );
+    //end i120586
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
         pD->SetVisible( nScTab, sal_False );
 

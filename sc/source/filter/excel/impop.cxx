@@ -1203,8 +1203,26 @@ void ImportExcel::AdjustRowHeight()
         update row heights (here), last load all charts -> do not any longer
         update inside of ScDocShell::ConvertFrom() (causes update of existing
         charts during each and every change of row height). */
-    if( ScModelObj* pDocObj = GetDocModelObj() )
-        pDocObj->UpdateAllRowHeights();
+        /*if( ScModelObj* pDocObj = GetDocModelObj() )
+         pDocObj->UpdateAllRowHeights();*/
+
+       //just update row heights for : 1. visible sheet, 2. sheet containing sdrobject. i120586
+    SCTAB nCount = GetDoc().GetTableCount();
+    SCTAB nVisible = GetDocViewSettings().GetDisplScTab();
+
+    GetDoc().SetPendingRowHeights(nVisible, false);
+
+    ScMarkData aUpdateSheets;
+    for (SCTAB nTab=0; nTab<nCount; ++nTab)
+    {
+        if ( false == GetDoc().IsPendingRowHeights(nTab))
+            aUpdateSheets.SelectTable( nTab, true );
+    }
+
+    ScModelObj* pDocObj = GetDocModelObj();
+    if (pDocObj && (aUpdateSheets.GetSelectCount()))
+        pDocObj->UpdateAllRowHeights(&aUpdateSheets);
+     //end i120586
 }
 
 

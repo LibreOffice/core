@@ -611,8 +611,8 @@ public:
     void            SetStreamValid( SCTAB nTab, sal_Bool bSet, sal_Bool bIgnoreLock = sal_False );
     void            LockStreamValid( bool bLock );
     bool            IsStreamValidLocked() const                         { return mbStreamValidLocked; }
-    sal_Bool            IsPendingRowHeights( SCTAB nTab ) const;
-    void            SetPendingRowHeights( SCTAB nTab, sal_Bool bSet );
+    SC_DLLPUBLIC sal_Bool        IsPendingRowHeights( SCTAB nTab ) const;
+    SC_DLLPUBLIC void            SetPendingRowHeights( SCTAB nTab, sal_Bool bSet );
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, sal_Bool bRTL );
     SC_DLLPUBLIC sal_Bool           IsLayoutRTL( SCTAB nTab ) const;
     sal_Bool            IsNegativePage( SCTAB nTab ) const;

@@ -200,6 +200,9 @@ XclImpDrawObjBase::XclImpDrawObjBase( const XclImpRoot& rRoot ) :
     mbInsertSdr( true ),
     mbCustomDff( false )
 {
+    //  if this sheet(ScTab) have an xclimpdrawobjbase (i.e. it contain sdrobject),
+    //  then the sheet should be 'updaterowheights' in loading procedure. i120586
+    GetDoc().SetPendingRowHeights( rRoot.GetCurrScTab(), false );
 }
 
 XclImpDrawObjBase::~XclImpDrawObjBase()
