@@ -128,6 +128,9 @@ private:
     // Only used during the numberings import
     ListLevel::Pointer                         m_pCurrentLevel;
 
+    // The style name linked to.
+    ::rtl::OUString                      m_sNumStyleLink;
+
 public:
     typedef boost::shared_ptr< AbstractListDef > Pointer;
 
@@ -151,6 +154,9 @@ public:
     virtual com::sun::star::uno::Sequence<
         com::sun::star::uno::Sequence<
             com::sun::star::beans::PropertyValue > > GetPropertyValues( );
+
+    void                  SetNumStyleLink(rtl::OUString sValue) { m_sNumStyleLink = sValue; };
+    ::rtl::OUString       GetNumStyleLink() { return m_sNumStyleLink; };
 };
 
 class ListDef : public AbstractListDef

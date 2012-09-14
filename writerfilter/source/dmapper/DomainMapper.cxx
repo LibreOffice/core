@@ -2288,10 +2288,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     rContext->Insert( PROP_NUMBERING_RULES, true, aRules );
                 }
             }
-            else if ( !m_pImpl->IsStyleSheetImport( ) )
+            else
             {
-                rtl::OUString sNone;
-                rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny( sNone ) );
+                if( m_pImpl->IsStyleSheetImport() )
+                {
+                    // set the number id for AbstractNum references
+                    StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
+                    pStyleSheetPropertyMap->SetNumId( nIntValue );
+                }
+                else
+                {
+                    rtl::OUString sNone;
+                    rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny( sNone ) );
+                }
             }
         }
         break;
