@@ -320,7 +320,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     return GST_BUS_PASS;
 }
 
-void Player::preparePlaybin( const ::rtl::OUString& rURL, bool bFakeVideo )
+void Player::preparePlaybin( const OUString& rURL, bool bFakeVideo )
 {
         GstBus *pBus;
 
@@ -347,7 +347,7 @@ void Player::preparePlaybin( const ::rtl::OUString& rURL, bool bFakeVideo )
         g_object_unref( pBus );
 }
 
-bool Player::create( const ::rtl::OUString& rURL )
+bool Player::create( const OUString& rURL )
 {
     bool    bRet = false;
 
@@ -368,7 +368,7 @@ bool Player::create( const ::rtl::OUString& rURL )
     if( bRet )
         maURL = rURL;
     else
-        maURL = ::rtl::OUString();
+        maURL = OUString();
 
     return bRet;
 }
@@ -643,15 +643,15 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL Player::getImplementationName()
+OUString SAL_CALL Player::getImplementationName()
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME ) );
+    return OUString( AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME );
 }
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_GST_PLAYER_SERVICENAME;
@@ -659,11 +659,11 @@ sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_GST_PLAYER_SERVICENAME ) );
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = AVMEDIA_GST_PLAYER_SERVICENAME ;
 
     return aRet;
 }
