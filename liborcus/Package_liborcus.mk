@@ -14,6 +14,7 @@ $(eval $(call gb_Package_use_external_project,liborcus,liborcus))
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Package_add_file,liborcus,lib/orcus.lib,vsprojects/liborcus-static-nozip/Release/orcus.lib))
 else
+$(eval $(call gb_Package_add_file,liborcus,lib/liborcus-0.2.a,src/liborcus/.libs/liborcus-0.2.a))
 $(eval $(call gb_Package_add_file,liborcus,lib/liborcus.a,src/liborcus/.libs/liborcus-0.2.a))
 endif
 
