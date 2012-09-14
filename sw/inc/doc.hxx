@@ -2082,6 +2082,8 @@ public:
     void initXForms( bool bCreateDefaultModel );
     // <-- #i31958# access methods for XForms model(s)
 
+    void disposeXForms( );  // #i113606#, for disposing XForms
+
     // --> OD 2006-03-21 #b6375613#
     inline bool ApplyWorkaroundForB6375613() const
     {

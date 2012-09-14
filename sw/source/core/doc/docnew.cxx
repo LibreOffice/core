@@ -683,6 +683,8 @@ SwDoc::~SwDoc()
     maListStyleLists.clear();
     // <--
 
+    disposeXForms(); // #i113606#, dispose the XForms objects
+
     delete pPrtData;
     delete pNumberFormatter;
     delete pFtnInfo;
