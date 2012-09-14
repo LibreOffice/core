@@ -42,6 +42,10 @@ PATCH_FILES += android.patch
 PATCH_FILES += ios.patch
 .ENDIF
 
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
+PATCH_FILES += disable-dynloading.patch
+.ENDIF
+
 .IF "$(OS)" == "WNT"
 .IF "$(COM)" == "MSC"
 
@@ -148,7 +152,7 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     LDFLAGS='$(LDFLAGS)' \
     LIBS='$(MY_LIBS)'
 
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
 CONFIGURE_FLAGS+=--disable-shared
 .ELSE
 CONFIGURE_FLAGS+=--disable-static
@@ -173,7 +177,7 @@ PACKAGE_DIR = \
 OUT2LIB = ooo-install/lib/libcppunit-1.13.a
 .ELIF "$(OS)" == "OPENBSD"
 OUT2LIB = ooo-install/lib/libcppunit-1.13.so.0.0
-.ELIF "$(OS)" == "IOS"
+.ELIF "$(DISABLE_DYNLOADING)" == "TRUE"
 OUT2LIB = ooo-install/lib/libcppunit.a
 .ELIF "$(OS)" == "ANDROID"
 OUT2LIB = ooo-install/lib/libcppunit-1.13.so
