@@ -48,7 +48,7 @@ using ::formula::FormulaGrammar;
 namespace {
 
 template<typename T>
-class FindEnclosingRange : public ::std::unary_function<bool, ScRange*>
+class FindEnclosingRange : public ::std::unary_function<ScRange*, bool>
 {
 public:
     FindEnclosingRange(const T& rTest) : mrTest(rTest) {}
@@ -62,7 +62,7 @@ private:
 };
 
 template<typename T>
-class FindRangeIn : public ::std::unary_function<bool, ScRange*>
+class FindRangeIn : public ::std::unary_function<ScRange*, bool>
 {
 public:
     FindRangeIn(const T& rTest) : mrTest(rTest) {}
@@ -76,7 +76,7 @@ private:
 };
 
 template<typename T>
-class FindIntersectingRange : public ::std::unary_function<bool, ScRange*>
+class FindIntersectingRange : public ::std::unary_function<ScRange*, bool>
 {
 public:
     FindIntersectingRange(const T& rTest) : mrTest(rTest) {}
@@ -89,7 +89,7 @@ private:
     const T& mrTest;
 };
 
-class AppendToList : public ::std::unary_function<void, const ScRange*>
+class AppendToList : public ::std::unary_function<const ScRange*, void>
 {
 public:
     AppendToList(vector<ScRange*>& rRanges) : mrRanges(rRanges) {}
@@ -102,7 +102,7 @@ private:
     vector<ScRange*>& mrRanges;
 };
 
-class CountCells : public ::std::unary_function<void, const ScRange*>
+class CountCells : public ::std::unary_function<const ScRange*, void>
 {
 public:
     CountCells() : mnCellCount(0) {}
@@ -122,7 +122,7 @@ private:
     size_t mnCellCount;
 };
 
-class FormatString : public ::std::unary_function<void, const ScRange*>
+class FormatString : public ::std::unary_function<const ScRange*, void>
 {
 public:
     FormatString(String& rStr, sal_uInt16 nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
@@ -160,15 +160,15 @@ private:
     bool mbFirst;
 };
 
-class FindDeletedRange : public ::std::unary_function<bool, const ScRange*>
+class FindDeletedRange : public ::std::unary_function<const ScRange*, bool>
 {
 public:
     FindDeletedRange( SCsCOL nDx, SCsROW nDy): mnDx(nDx), mnDy(nDy) {}
     FindDeletedRange( const FindDeletedRange& r) : mnDx(r.mnDx), mnDy(r.mnDy) {}
     bool operator() (const ScRange* p)
     {
-        ScAddress rStart = p->aStart;
-        ScAddress rEnd = p->aEnd;
+        const ScAddress& rStart = p->aStart;
+        const ScAddress& rEnd = p->aEnd;
 
         if( rEnd.Col() +mnDx < rStart.Col() )
             return true;
