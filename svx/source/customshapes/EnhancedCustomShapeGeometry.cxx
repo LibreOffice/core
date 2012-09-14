@@ -1523,11 +1523,12 @@ static const SvxMSDffCalculationData mso_sptNotchedRightArrowCalc[] =
     { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },
-    { 0x6001, { 0x403, 0x404, 10800 } }
+    { 0x6001, { 0x403, 0x404, 10800 } },
+    { 0x8000, { 21600, 0, 0x405 }}
 };
 static const SvxMSDffTextRectangles mso_sptNotchedRightArrowTextRect[] =    // todo
 {
-    { { 0, 0 }, { 21600, 21600 } }
+    { { 5 MSO_I, 1 MSO_I }, { 6 MSO_I, 2 MSO_I } }
 };
 static const SvxMSDffHandle mso_sptNotchedRightArrowHandle[] =
 {
