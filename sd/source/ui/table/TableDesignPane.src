@@ -41,7 +41,7 @@ Control DLG_TABLEDESIGNPANE
         Pos = MAP_APPFONT ( 146, 16 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Header Row" ;
+        Text [ en-US ] = "~Header Row" ;
     };
 
     CheckBox CB_TOTAL_ROW+1
@@ -49,7 +49,7 @@ Control DLG_TABLEDESIGNPANE
         Pos = MAP_APPFONT ( 146, 29 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Total Row" ;
+        Text [ en-US ] = "Tot~al Row" ;
     };
 
     CheckBox CB_BANDED_ROWS+1
@@ -57,7 +57,7 @@ Control DLG_TABLEDESIGNPANE
         Pos = MAP_APPFONT ( 146, 42 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Banded Rows" ;
+        Text [ en-US ] = "~Banded Rows" ;
     };
 
     CheckBox CB_FIRST_COLUMN+1
@@ -65,7 +65,7 @@ Control DLG_TABLEDESIGNPANE
         Pos = MAP_APPFONT ( 146, 55 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "First Column" ;
+        Text [ en-US ] = "Fi~rst Column" ;
     };
 
     CheckBox CB_LAST_COLUMN+1
@@ -73,7 +73,7 @@ Control DLG_TABLEDESIGNPANE
         Pos = MAP_APPFONT ( 146, 68 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Last Column" ;
+        Text [ en-US ] = "~Last Column" ;
     };
 
     CheckBox CB_BANDED_COLUMNS+1
@@ -81,7 +81,7 @@ Control DLG_TABLEDESIGNPANE
         Pos = MAP_APPFONT ( 146, 82 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Banded Columns" ;
+        Text [ en-US ] = "Ba~nded Columns" ;
     };
 
     FixedLine FL_TABLE_STYLES+1
