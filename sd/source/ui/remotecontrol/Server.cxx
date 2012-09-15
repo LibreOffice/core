@@ -171,7 +171,7 @@ void RemoteServer::presentationStarted( const css::uno::Reference<
         return;
     MutexGuard aGuard( spServer->mDataMutex );
     for ( vector<Communicator*>::const_iterator aIt = spServer->mCommunicators.begin();
-         aIt < spServer->mCommunicators.end(); aIt++ )
+         aIt != spServer->mCommunicators.end(); ++aIt )
     {
         (*aIt)->presentationStarted( rController );
     }
@@ -182,7 +182,7 @@ void RemoteServer::presentationStopped()
         return;
     MutexGuard aGuard( spServer->mDataMutex );
     for ( vector<Communicator*>::const_iterator aIt = spServer->mCommunicators.begin();
-         aIt < spServer->mCommunicators.end(); aIt++ )
+         aIt != spServer->mCommunicators.end(); ++aIt )
     {
         (*aIt)->disposeListener();
     }
@@ -194,7 +194,7 @@ void RemoteServer::removeCommunicator( Communicator* mCommunicator )
         return;
     MutexGuard aGuard( spServer->mDataMutex );
     for ( vector<Communicator*>::iterator aIt = spServer->mCommunicators.begin();
-         aIt < spServer->mCommunicators.end(); aIt++ )
+         aIt != spServer->mCommunicators.end(); ++aIt )
     {
         if ( mCommunicator == *aIt )
         {
@@ -259,7 +259,7 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
         spServer->mCommunicators.push_back( pCommunicator );
 
         for ( vector<ClientInfoInternal*>::iterator aIt = spServer->mAvailableClients.begin();
-            aIt < spServer->mAvailableClients.end(); aIt++ )
+            aIt != spServer->mAvailableClients.end(); ++aIt )
         {
             if ( pClient == *aIt )
             {
