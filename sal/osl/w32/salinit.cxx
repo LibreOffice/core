@@ -45,7 +45,7 @@ namespace {
 
 extern "C" void invalidParameterHandler(
     wchar_t const * expression, wchar_t const * function, wchar_t const * file,
-    unsigned int line, SAL_UNUSED_PARAMETER uintptr_t)
+    unsigned int line, uintptr_t)
 {
     std::wcerr
         << L"Invalid parameter in \"" << (expression ? expression : L"???")
