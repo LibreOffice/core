@@ -29,6 +29,9 @@
 #ifndef INCLUDED_SAL_TEXTENC_CONVERTER_HXX
 #define INCLUDED_SAL_TEXTENC_CONVERTER_HXX
 
+#include "sal/config.h"
+
+#include "sal/saldllapi.h"
 #include "sal/types.h"
 
 // Internal, non-stable ABI
