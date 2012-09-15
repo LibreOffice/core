@@ -121,6 +121,7 @@ private:
 
     LabelsType maLabelNames;    // Stores dimension names.
     mdds::flat_segment_tree<SCROW, bool> maEmptyRows;
+    SCROW mnDataSize;
 
     bool mbDisposing;
 
@@ -150,8 +151,9 @@ public:
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
 
-    SCROW  GetRowCount() const;
-    SCROW  GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
+    SCROW GetRowCount() const;
+    SCROW GetDataSize() const;
+    SCROW GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
     rtl::OUString GetDimensionName(LabelsType::size_type nDim) const;
     bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
