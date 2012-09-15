@@ -30,26 +30,23 @@
 
 class AutoOGuardArray
 {
-    sal_Int32                       nSize;
-    boost::scoped_ptr< osl::SolarGuard > *  pGuardArray;
+    boost::scoped_ptr< osl::SolarGuard > *  mpGuardArray;
 
 public:
     AutoOGuardArray( sal_Int32 nNumElements );
     ~AutoOGuardArray();
 
-    boost::scoped_ptr< osl::SolarGuard > &  operator[] ( sal_Int32 i ) { return pGuardArray[i]; }
+    boost::scoped_ptr< osl::SolarGuard > &  operator[] ( sal_Int32 i ) { return mpGuardArray[i]; }
 };
 
-AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements )
+AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements ) : mpGuardArray(new boost::scoped_ptr< osl::SolarGuard >[nNumElements])
 {
-    nSize       = nNumElements;
-    pGuardArray = new boost::scoped_ptr< osl::SolarGuard >[ nSize ];
 }
 
 AutoOGuardArray::~AutoOGuardArray()
 {
     //!! release auto_ptr's and thus the mutexes locks
-    delete [] pGuardArray;
+    delete [] mpGuardArray;
 
 }
 
