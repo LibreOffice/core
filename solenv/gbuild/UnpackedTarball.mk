@@ -126,25 +126,31 @@ endef
 define gb_UnpackedTarball__command
 $(call gb_Output_announce,$(2),$(true),PAT,2)
 $(call gb_Helper_abbreviate_dirs,\
-	cd $(3) && \
-	$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTOUNIX,$(file)) && ) \
-	$(if $(UNPACKED_PATCHES),\
-		for p in $(UNPACKED_PATCHES); do \
-			$(GNUPATCH) -s -p$(UNPACKED_PATCHLEVEL) < "$$p" || exit 1;\
-		done && \
-	) \
-	$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTODOS,$(file)) && ) \
-	$(if $(UNPACKED_FILES),\
-		mkdir -p $(sort $(dir $(UNPACKED_DESTFILES))) && \
-		$(call gb_UnpackedTarball__copy_files,$(UNPACKED_FILES),$(UNPACKED_DESTFILES)) && \
-	) \
-	$(if $(UNPACKED_SUBDIRS),\
-		cp -rf $(UNPACKED_SUBDIRS) $(gb_EXTERNAL_HEADERS_DIR) && \
-	) \
-	$(if $(UNPACKED_POST_ACTION),\
-		$(UNPACKED_POST_ACTION) && \
-	) \
-	touch $(1) \
+	( \
+		cd $(3) && \
+		$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTOUNIX,$(file)) && ) \
+		$(if $(UNPACKED_PATCHES),\
+			for p in $(UNPACKED_PATCHES); do \
+				$(GNUPATCH) -s -p$(UNPACKED_PATCHLEVEL) < "$$p" || exit 1;\
+			done && \
+		) \
+		$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTODOS,$(file)) && ) \
+		$(if $(UNPACKED_FILES),\
+			mkdir -p $(sort $(dir $(UNPACKED_DESTFILES))) && \
+			$(call gb_UnpackedTarball__copy_files,$(UNPACKED_FILES),$(UNPACKED_DESTFILES)) && \
+		) \
+		$(if $(UNPACKED_SUBDIRS),\
+			cp -rf $(UNPACKED_SUBDIRS) $(gb_EXTERNAL_HEADERS_DIR) && \
+		) \
+		$(if $(UNPACKED_POST_ACTION),\
+			$(UNPACKED_POST_ACTION) && \
+		) \
+		touch $(1) \
+	) || \
+	( \
+		touch $(call gb_UnpackedTarball_get_preparation_target,$(2)) && \
+		exit 1 \
+	)
 )
 endef
 
