@@ -65,6 +65,7 @@ ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
     mnColumnCount ( 0 ),
     maEmptyRows(0, MAXROW, true),
+    mnDataSize(-1),
     mbDisposing(false)
 {
 }
@@ -654,7 +655,21 @@ public:
 
 void ScDPCache::PostInit()
 {
+    OSL_ENSURE(!maFields.empty(), "Cache not initialized!");
+
     maEmptyRows.build_tree();
+    typedef mdds::flat_segment_tree<SCROW, bool>::const_reverse_iterator itr_type;
+    itr_type it = maEmptyRows.rbegin(), itEnd = maEmptyRows.rend();
+    OSL_ENSURE(it != itEnd, "corrupt flat_segment_tree instance!");
+    mnDataSize = maFields[0].maItems.size();
+    ++it; // Skip the first position.
+    OSL_ENSURE(it != itEnd, "buggy version of flat_segment_tree is used.");
+    if (it->second)
+    {
+        SCROW nLastNonEmpty = it->first - 1;
+        if (nLastNonEmpty < mnDataSize)
+            mnDataSize = nLastNonEmpty;
+    }
 }
 
 void ScDPCache::Clear()
@@ -751,6 +766,11 @@ SCROW ScDPCache::GetRowCount() const
         return 0;
 
     return maFields[0].maData.size();
+}
+
+SCROW ScDPCache::GetDataSize() const
+{
+    return mnDataSize >= 0 ? mnDataSize : 0;
 }
 
 const ScDPCache::ItemsType& ScDPCache::GetDimMemberValues(SCCOL nDim) const

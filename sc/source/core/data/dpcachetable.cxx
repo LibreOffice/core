@@ -147,6 +147,7 @@ void ScDPCacheTable::fillTable(
     const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
     const SCROW nRowCount = getRowSize();
+    SCROW nDataSize = mpCache->GetDataSize();
     const SCCOL  nColCount = (SCCOL) getColSize();
     if ( nRowCount <= 0 || nColCount <= 0)
         return;
