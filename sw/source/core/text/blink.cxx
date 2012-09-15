@@ -180,7 +180,7 @@ void SwBlink::FrmDelete( const SwRootFrm* pRoot )
     for( SwBlinkList::iterator it = aList.begin(); it != aList.end(); )
     {
         if( pRoot == (*it).GetRootFrm() )
-            aList.erase( it );
+            aList.erase( it++ );
         else
             ++it;
     }
