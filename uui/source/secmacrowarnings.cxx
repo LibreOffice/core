@@ -113,10 +113,8 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl)
 {
     DBG_ASSERT( mxCert.is(), "*MacroWarning::ViewSignsBtnHdl(): no certificate set!" );
 
-    uno::Sequence< uno::Any > aArgs( 1 );
-    aArgs[0] = uno::makeAny( maODFVersion );
     uno::Reference< security::XDocumentDigitalSignatures > xD(
-        security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
+        security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
     if( xD.is() )
     {
         if( mxCert.is() )
@@ -132,10 +130,8 @@ IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl)
 {
     if( mbSignedMode && maAlwaysTrustCB.IsChecked() )
     {   // insert path into trusted path list
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[0] = uno::makeAny( maODFVersion );
         uno::Reference< security::XDocumentDigitalSignatures > xD(
-            security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
+            security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
         if( mxCert.is() )
             xD->addAuthorToTrustedSources( mxCert );
         else if( mxStore.is() )
