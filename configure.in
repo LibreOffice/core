@@ -3289,26 +3289,23 @@ AC_SUBST(DBGHELP_DLL)
 #
 # prefix C with ccache if needed
 #
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-    if test "$CCACHE" != ""; then
-        AC_MSG_CHECKING([whether $CC is already ccached])
+if test "$CCACHE" != ""; then
+	AC_MSG_CHECKING([whether $CC is already ccached])
 
-        AC_LANG_PUSH([C])
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS --ccache-skip -O2"
-        dnl an empty program will do, we're checking the compiler flags
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
-                          [use_ccache=yes], [use_ccache=no])
-        if test $use_ccache = yes; then
-            AC_MSG_RESULT([yes])
-        else
-            CC="$CCACHE $CC"
-            AC_MSG_RESULT([no])
-        fi
-        CFLAGS=$save_CFLAGS
-        AC_LANG_POP([C])
-    fi
-
+	AC_LANG_PUSH([C])
+	save_CFLAGS=$CFLAGS
+	CFLAGS="$CFLAGS --ccache-skip -O2"
+	dnl an empty program will do, we're checking the compiler flags
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+					  [use_ccache=yes], [use_ccache=no])
+	if test $use_ccache = yes; then
+		AC_MSG_RESULT([yes])
+	else
+		CC="$CCACHE $CC"
+		AC_MSG_RESULT([no])
+	fi
+	CFLAGS=$save_CFLAGS
+	AC_LANG_POP([C])
 fi
 
 #
