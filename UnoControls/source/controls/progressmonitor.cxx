@@ -508,13 +508,10 @@ Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException )
     aGuard.clear () ;
 
     // calc preferred size of progressmonitor
-    sal_Int32   nWidth  =   0 ;
-    sal_Int32   nHeight =   0 ;
-
-    nWidth   =  3 * PROGRESSMONITOR_FREEBORDER          ;
+    sal_Int32 nWidth   =  3 * PROGRESSMONITOR_FREEBORDER          ;
     nWidth  +=  aProgressBarSize.Width  ;
 
-    nHeight  =  6 * PROGRESSMONITOR_FREEBORDER          ;
+    sal_Int32 nHeight  =  6 * PROGRESSMONITOR_FREEBORDER          ;
     nHeight +=  aTopicSize_Top.Height   ;
     nHeight +=  aProgressBarSize.Height ;
     nHeight +=  aTopicSize_Bottom.Height;
