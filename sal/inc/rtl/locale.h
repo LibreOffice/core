@@ -29,7 +29,10 @@
 #ifndef _RTL_LOCALE_H_
 #define _RTL_LOCALE_H_
 
-#include <rtl/ustring.h>
+#include "sal/config.h"
+
+#include "rtl/ustring.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

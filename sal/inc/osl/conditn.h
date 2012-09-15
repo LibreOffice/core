@@ -30,7 +30,10 @@
 #ifndef _OSL_CONDITION_H_
 #define _OSL_CONDITION_H_
 
-#include <osl/time.h>
+#include "sal/config.h"
+
+#include "osl/time.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

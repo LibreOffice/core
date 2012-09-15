@@ -40,6 +40,7 @@
 #include "rtl/allocator.hxx"
 #include "rtl/instance.hxx"
 #include "sal/log.hxx"
+#include "sal/saldllapi.h"
 #include "sal/types.h"
 
 /// @cond INTERNAL

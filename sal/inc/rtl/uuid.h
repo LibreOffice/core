@@ -28,9 +28,11 @@
 #ifndef _RTL_UUID_H_
 #define _RTL_UUID_H_
 
+#include "sal/config.h"
 
-#include <sal/types.h>
-#include <rtl/string.h>
+#include "rtl/string.h"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 /**
    @file

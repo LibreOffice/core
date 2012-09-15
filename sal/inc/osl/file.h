@@ -29,8 +29,11 @@
 #ifndef _OSL_FILE_H_
 #define _OSL_FILE_H_
 
-#include <osl/time.h>
-#   include <rtl/ustring.h>
+#include "sal/config.h"
+
+#include "osl/time.h"
+#include "rtl/ustring.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

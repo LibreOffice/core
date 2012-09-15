@@ -28,8 +28,12 @@
 #ifndef _RTL_BYTESEQ_H_
 #define _RTL_BYTESEQ_H_
 
-#include <sal/types.h>
-#include <rtl/alloc.h>
+#include "sal/config.h"
+
+#include "rtl/alloc.h"
+#include "rtl/ustring.h"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C"

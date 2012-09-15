@@ -28,7 +28,10 @@
 #ifndef _RTL_LOGFILE_H_
 #define _RTL_LOGFILE_H_
 
-#include <sal/types.h>
+#include "sal/config.h"
+
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C" {

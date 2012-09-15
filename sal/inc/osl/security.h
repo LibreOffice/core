@@ -29,7 +29,10 @@
 #ifndef _OSL_SECURITY_H_
 #define _OSL_SECURITY_H_
 
-#include <rtl/ustring.h>
+#include "sal/config.h"
+
+#include "rtl/ustring.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

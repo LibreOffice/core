@@ -29,7 +29,10 @@
 #ifndef INCLUDED_RTL_MATH_H
 #define INCLUDED_RTL_MATH_H
 
+#include "sal/config.h"
+
 #include "rtl/ustring.h"
+#include "sal/saldllapi.h"
 #include "sal/types.h"
 
 #if defined __cplusplus

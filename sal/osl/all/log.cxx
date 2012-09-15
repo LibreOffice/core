@@ -179,7 +179,7 @@ void log(
 
 }
 
-SAL_DLLPUBLIC void sal_detail_log(
+void sal_detail_log(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message)
 {
@@ -188,7 +188,7 @@ SAL_DLLPUBLIC void sal_detail_log(
     }
 }
 
-SAL_DLLPUBLIC void sal_detail_logFormat(
+void sal_detail_logFormat(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 {

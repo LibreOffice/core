@@ -29,11 +29,11 @@
 #ifndef _OSL_THREAD_H_
 #define _OSL_THREAD_H_
 
-#include <osl/time.h>
+#include "sal/config.h"
 
-#ifndef _RTL_TEXTENC_H_
-#   include <rtl/textenc.h>
-#endif
+#include "osl/time.h"
+#include "rtl/textenc.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -28,10 +28,13 @@
 #ifndef _RTL_UNLOAD_H_
 #define _RTL_UNLOAD_H_
 
-#include <sal/types.h>
-#include <osl/time.h>
-#include <osl/interlck.h>
-#include <osl/module.h>
+#include "sal/config.h"
+
+#include "osl/interlck.h"
+#include "osl/module.h"
+#include "osl/time.h"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 /** @file
 The API enables an effective way of unloading libraries in a centralized way.

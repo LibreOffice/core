@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include "sal/saldllapi.h"
 #include "sal/types.h"
 
 /** @cond INTERNAL */

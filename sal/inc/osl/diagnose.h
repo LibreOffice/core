@@ -32,8 +32,9 @@
 
 #include "sal/config.h"
 
-#include <sal/detail/log.h>
-#include <sal/types.h>
+#include "sal/detail/log.h"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 /** provides simple diagnostic support
 
