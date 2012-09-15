@@ -72,7 +72,7 @@ public:
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
             ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >::const_iterator aIter =
                     aSeriesVector.begin();
-            for( ; aIter != aSeriesVector.end(); aIter++ )
+            for( ; aIter != aSeriesVector.end(); ++aIter )
             {
                 PROPERTYTYPE aCurValue = getValueFromSeries( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >::query( *aIter ) );
                 if( !bHasDetectableInnerValue )
@@ -101,7 +101,7 @@ public:
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
             ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >::const_iterator aIter =
                     aSeriesVector.begin();
-            for( ; aIter != aSeriesVector.end(); aIter++ )
+            for( ; aIter != aSeriesVector.end(); ++aIter )
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xSeriesPropertySet( *aIter, ::com::sun::star::uno::UNO_QUERY );
                 if( xSeriesPropertySet.is() )
