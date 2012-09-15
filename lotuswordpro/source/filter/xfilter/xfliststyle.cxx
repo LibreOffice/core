@@ -317,7 +317,6 @@ void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt& fmt, sal_Int16 sta
 
 void XFListStyle::ToXml(IXFStream *pStrm)
 {
-    std::vector<XFListLevel*>::iterator it;
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
