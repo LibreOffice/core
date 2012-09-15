@@ -214,7 +214,12 @@ endif
 ifeq ($(gb_DEBUGLEVEL),0)
 gb_GLOBALDEFS += \
 	-DOPTIMIZE \
+
+ifeq ($(strip $(ASSERT_ALWAYS_ABORT)),FALSE)
+gb_GLOBALDEFS += \
 	-DNDEBUG \
+
+endif
 
 else
 gb_GLOBALDEFS += \
@@ -226,12 +231,6 @@ gb_GLOBALDEFS += \
 	-DDEBUG \
 
 endif
-endif
-
-ifeq ($(strip $(ASSERT_ALWAYS_ABORT)),TRUE)
-gb_GLOBALDEFS += \
-	-DASSERT_ALWAYS_ABORT \
-
 endif
 
 ifneq ($(strip $(ENABLE_GTK)),)
