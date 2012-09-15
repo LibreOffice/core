@@ -163,37 +163,37 @@ void ScDPCacheTable::fillTable(
     {
         maFieldEntries.push_back( vector<SCROW>() );
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
-        if ( nMemCount )
+        if (!nMemCount)
+            continue;
+
+        std::vector<SCROW> aAdded(nMemCount, -1);
+
+        for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
         {
-            std::vector<SCROW> aAdded( nMemCount, -1 );
+            SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, bRepeatIfEmpty);
+            SCROW nOrder = getOrder(nCol, nIndex);
 
-            for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
+            if (nCol == 0)
             {
-                SCROW nIndex = getCache()->GetItemDataId( nCol, nRow, bRepeatIfEmpty );
-                SCROW nOrder = getOrder( nCol, nIndex );
-
-                if ( nCol == 0 )
-                {
-                    maRowFlags.push_back(RowFlag());
-                    maRowFlags.back().mbShowByFilter = false;
-                }
-
-                if (!getCache()->ValidQuery(nRow, rQuery))
-                    continue;
-
-                if ( bIgnoreEmptyRows &&  getCache()->IsRowEmpty( nRow ) )
-                    continue;
-
-                if ( nCol == 0 )
-                     maRowFlags.back().mbShowByFilter = true;
-
-                aAdded[nOrder] = nIndex;
+                maRowFlags.push_back(RowFlag());
+                maRowFlags.back().mbShowByFilter = false;
             }
-            for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
-            {
-                if ( aAdded[nRow] != -1 )
-                    maFieldEntries.back().push_back( aAdded[nRow] );
-            }
+
+            if (!getCache()->ValidQuery(nRow, rQuery))
+                continue;
+
+            if (bIgnoreEmptyRows && getCache()->IsRowEmpty(nRow))
+                continue;
+
+            if (nCol == 0)
+                 maRowFlags.back().mbShowByFilter = true;
+
+            aAdded[nOrder] = nIndex;
+        }
+        for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
+        {
+            if (aAdded[nRow] != -1)
+                maFieldEntries.back().push_back(aAdded[nRow]);
         }
     }
 }
