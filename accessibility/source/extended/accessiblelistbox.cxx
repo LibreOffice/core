@@ -307,9 +307,8 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 i, nCount = 0;
-        nCount = getListBox()->GetLevelChildCount( NULL );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )
@@ -323,9 +322,8 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 i, nCount = 0;
-        nCount = getListBox()->GetLevelChildCount( NULL );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
             if ( !getListBox()->IsSelected( pEntry ) )
@@ -339,9 +337,9 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 i, nSelCount = 0, nCount = 0;
-        nCount = getListBox()->GetLevelChildCount( NULL );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nSelCount = 0;
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )
@@ -361,9 +359,9 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         Reference< XAccessible > xChild;
-        sal_Int32 i, nSelCount = 0, nCount = 0;
-        nCount = getListBox()->GetLevelChildCount( NULL );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nSelCount= 0;
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )

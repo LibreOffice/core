@@ -250,10 +250,9 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 i, nCount = 0;
         SvtIconChoiceCtrl* pCtrl = getCtrl();
-        nCount = pCtrl->GetEntryCount();
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = pCtrl->GetEntryCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
             if ( pCtrl->GetCursor() != pEntry )
@@ -267,10 +266,10 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 i, nSelCount = 0, nCount = 0;
+        sal_Int32 nSelCount = 0;
         SvtIconChoiceCtrl* pCtrl = getCtrl();
-        nCount = pCtrl->GetEntryCount();
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = pCtrl->GetEntryCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
             if ( pCtrl->GetCursor() == pEntry )
@@ -290,10 +289,10 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         Reference< XAccessible > xChild;
-        sal_Int32 i, nSelCount = 0, nCount = 0;
+        sal_Int32 nSelCount = 0;
         SvtIconChoiceCtrl* pCtrl = getCtrl();
-        nCount = pCtrl->GetEntryCount();
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = pCtrl->GetEntryCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
             if ( pCtrl->GetCursor() == pEntry )
@@ -319,11 +318,11 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         Reference< XAccessible > xChild;
-        sal_Int32 i, nSelCount = 0, nCount = 0;
+        sal_Int32 nSelCount = 0;
         SvtIconChoiceCtrl* pCtrl = getCtrl();
-        nCount = pCtrl->GetEntryCount();
+        sal_Int32 nCount = pCtrl->GetEntryCount();
         bool bFound = false;
-        for ( i = 0; i < nCount; ++i )
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
             if ( pEntry->IsSelected() )

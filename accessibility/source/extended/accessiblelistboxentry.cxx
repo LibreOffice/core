@@ -730,9 +730,8 @@ namespace accessibility
         SvLBoxEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException();
-        sal_Int32 i, nCount = 0;
-        nCount = getListBox()->GetLevelChildCount( pParent );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( pParent );
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( getListBox()->IsSelected( pEntry ) )
@@ -750,9 +749,8 @@ namespace accessibility
         SvLBoxEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException();
-        sal_Int32 i, nCount = 0;
-        nCount = getListBox()->GetLevelChildCount( pParent );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( pParent );
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( !getListBox()->IsSelected( pEntry ) )
