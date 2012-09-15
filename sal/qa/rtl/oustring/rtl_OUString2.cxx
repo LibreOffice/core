@@ -270,7 +270,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         volatile T nValue = nCalcValue + static_cast<T>(0.1);
         volatile T dSub = nValue - nCalcValue;
         // ----- 0.11 ---- 0.1 ---- 0.09 -----
-        if (0.11 > dSub && dSub < 0.09)
+        if (0.11 > dSub && dSub > 0.09)
         {
             // due to the fact, that the value is break down we sub 1 from the precision value
             // but to suppress this, we start at zero, precision is i+1 till here --i;
