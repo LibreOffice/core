@@ -342,6 +342,7 @@ endif
 	rm -fr $(OUTDIR)
 	rm -fr $(WORKDIR)
 	rm -fr $(SRCDIR)/*/$(INPATH)
+	rm -fr $(SRCDIR)/solenv/$(OUTPATH)
 	rm -fr install
 
 clean-build:
@@ -361,7 +362,8 @@ endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
     bin/repo-list config.log config.status configure \
 	ooo.lst post_download post_download.log \
-	config_host.mk.last set_soenv.stamp src.downloaded warn
+	config_host.mk.last set_soenv.stamp src.downloaded warn \
+	solenv/bin/concat-deps.exe solenv/bin/concat-deps
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #
