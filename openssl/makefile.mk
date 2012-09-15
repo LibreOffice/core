@@ -155,7 +155,8 @@ OUT2BIN += libeay32.dll
             # The env. vars CC and PERL are used by nmake, and nmake insists on '\'s
             # If WRAPCMD is set it is prepended before the compiler, don't touch that.
             .IF "$(WRAPCMD)"==""
-                CC!:=$(subst,/,\ $(normpath,1 $(CC)))
+                CC!:=$(subst,/,\ $(normpath,1 $(CC:1)))
+				CC!:=$(CC:s/ccache/ccache cl.exe/)
                 .EXPORT : CC
             .ENDIF
             PERL_bak:=$(PERL)
