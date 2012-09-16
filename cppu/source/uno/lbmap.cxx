@@ -205,7 +205,7 @@ static void SAL_CALL mediate_free( uno_Mapping * pMapping )
 static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
     SAL_THROW(())
 {
-    if (1 == ::osl_incrementInterlockedCount(
+    if (1 == ::osl_atomic_increment(
         & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
     {
         uno_registerMapping(
@@ -219,7 +219,7 @@ static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
 static void SAL_CALL mediate_release( uno_Mapping * pMapping )
     SAL_THROW(())
 {
-    if (! ::osl_decrementInterlockedCount(
+    if (! ::osl_atomic_decrement(
         & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
     {
         uno_revokeMapping( pMapping );
