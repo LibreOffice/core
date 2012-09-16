@@ -138,7 +138,7 @@ namespace cmis
 
     void RepoContent::getRepositories( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
-        if ( m_aRepositories.size( ) == 0 )
+        if ( m_aRepositories.empty() )
         {
             // Get the auth credentials
             AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
