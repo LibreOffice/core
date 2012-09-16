@@ -66,13 +66,13 @@ public:
     Base(): m_count(0) {}
 
     void acquire() {
-        if (osl_incrementInterlockedCount(&m_count) == SAL_MAX_INT32) {
+        if (osl_atomic_increment(&m_count) == SAL_MAX_INT32) {
             abort();
         }
     }
 
     void release() {
-        if (osl_decrementInterlockedCount(&m_count) == 0) {
+        if (osl_atomic_decrement(&m_count) == 0) {
             delete this;
         }
     }
