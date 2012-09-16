@@ -58,7 +58,7 @@ extern "C" void invalidParameterHandler(
 
 // Prototypes for initialization and deinitialization of SAL library
 
-void sal_detail_initialize(int argc, char ** argv)
+SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_initialize(int argc, char ** argv)
 {
     // SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
     // SetDllDirectoryW(L"");
@@ -118,7 +118,7 @@ void sal_detail_initialize(int argc, char ** argv)
     osl_setCommandArgs(argc, argv);
 }
 
-void sal_detail_deinitialize()
+SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_deinitialize()
 {
     if ( SOCKET_ERROR == WSACleanup() )
     {

@@ -39,7 +39,7 @@
 
 extern "C" {
 
-void sal_detail_initialize(int argc, char ** argv) {
+SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_initialize(int argc, char ** argv) {
 #if defined MACOSX
     // On Mac OS X, soffice can restart itself via exec (see restartOnMac in
     // desktop/source/app/app.cxx), which leaves all file descriptors open,
@@ -69,7 +69,7 @@ void sal_detail_initialize(int argc, char ** argv) {
     osl_setCommandArgs(argc, argv);
 }
 
-void sal_detail_deinitialize() {}
+SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_deinitialize() {}
 
 }
 
