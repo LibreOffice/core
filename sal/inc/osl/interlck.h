@@ -52,6 +52,20 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInte
 */
 SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount);
 
+
+#if defined( HAVE_GCC_BUILTIN_ATOMIC )
+#    define osl_atomic_increment(p)  __sync_add_and_fetch((p), 1)
+#else
+#    define osl_atomic_increment(p) osl_incrementInterlockedCount(p)
+#endif
+
+
+#if defined( HAVE_GCC_BUILTIN_ATOMIC )
+#    define osl_atomic_decrement(p) __sync_sub_and_fetch((p), 1)
+#else
+#    define osl_atomic_decrement(p) osl_decrementInterlockedCount(p)
+#endif
+
 #ifdef __cplusplus
 }
 #endif
