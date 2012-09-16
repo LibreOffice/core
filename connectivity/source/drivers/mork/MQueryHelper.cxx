@@ -38,6 +38,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace connectivity;
 
 
+extern
+::std::vector< sal_Bool > entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry);
+
 MQueryHelperResultEntry::MQueryHelperResultEntry()
 {
 }
@@ -83,7 +86,8 @@ MQueryHelper::MQueryHelper(const OColumnAlias& _ca)
 
 MQueryHelper::~MQueryHelper()
 {
-    OSL_TRACE("IN MQueryHelper::~MQueryHelper()");
+    SAL_INFO("connectivity.mork", "MQueryHelper::~MQueryHelper()");
+
     clear_results();
     OSL_TRACE("OUT MQueryHelper::~MQueryHelper()");
 }
@@ -91,7 +95,8 @@ MQueryHelper::~MQueryHelper()
 // -------------------------------------------------------------------------
 void MQueryHelper::setAddressbook(::rtl::OUString &ab)
 {
-    OSL_TRACE("IN MQueryHelper::setAddressbook()");
+    SAL_INFO("connectivity.mork", "MQueryHelper::setAddressbook()");
+
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_aAddressbook = ab;
@@ -101,6 +106,7 @@ void MQueryHelper::setAddressbook(::rtl::OUString &ab)
 // -------------------------------------------------------------------------
 void MQueryHelper::setExpression( MQueryExpression &_expr )
 {
+    SAL_INFO("connectivity.mork", "MQueryHelper::setExpression()");
     OSL_TRACE("IN MQueryHelper::setExpression()");
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -111,7 +117,7 @@ void MQueryHelper::setExpression( MQueryExpression &_expr )
 
 void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 {
-//    SAL_INFO("connectivity.mork", "MQueryHelper::append()" );
+//    SAL_INFO("connectivity.mork", "MQueryHelper::append()");
 
     if ( resEnt != NULL ) {
         m_aResults.push_back( resEnt );
@@ -170,9 +176,9 @@ MQueryHelper::getByIndex(sal_uInt32 nRow)
 
 sal_Int32 MQueryHelper::getResultCount() const
 {
-    SAL_INFO("connectivity.mork", "MQueryHelper::getResultCount()" );
+//    SAL_INFO("connectivity.mork", "MQueryHelper::getResultCount()" );
     sal_Int32 result = static_cast<sal_Int32>(m_aResults.size());
-    SAL_INFO("connectivity.mork", "result: " << result);
+//    SAL_INFO("connectivity.mork", "result: " << result);
 
     return result;
 }
@@ -229,6 +235,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     SAL_INFO("connectivity.mork", "MQueryHelper::executeQuery()" );
     reset();
 
+    //dumpExpression(this, &m_aExpr);
     MorkTableMap::iterator tableIter;
     MorkTableMap *Tables = xConnection->getMorkParser()->getTables( 0x80 );
     MorkRowMap *Rows = 0;
@@ -260,13 +267,148 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
                         rtl::OUString valueOUString = ::rtl::OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
                         entry->setValue(key, valueOUString);
                     }
-                    append(entry);
+                    ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &m_aExpr, entry);
+                    sal_Bool result = sal_True;
+                    for (::std::vector<sal_Bool>::iterator iter = vector.begin(); iter != vector.end(); ++iter) {
+                        result = result && *iter;
+                    }
+                    if (result) {
+                        append(entry);
+                    }
                 }
             }
         }
     }
 
     return 0;
+}
+
+::std::vector< sal_Bool > entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry)
+{
+    ::std::vector< sal_Bool > resultVector;
+    MQueryExpression::ExprVector::iterator evIter;
+    for( evIter = _aExpr->getExpressions().begin();
+         evIter != _aExpr->getExpressions().end();
+         ++evIter )
+    {
+        if ( (*evIter)->isStringExpr() ) {
+            MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (*evIter);
+
+            // Set the 'name' property of the boolString.
+            // Check if it's an alias first...
+            rtl::OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
+            //OSL_TRACE("Name = %s ;", attrName.getStr() );
+            SAL_INFO("connectivity.mork", "Name = " << attrName.getStr());
+            // Set the 'matchType' property of the boolString. Check for equal length.
+            sal_Bool requiresValue = sal_True;
+            switch(evStr->getCond()) {
+                case MQueryOp::Exists:
+                    SAL_INFO("connectivity.mork", "MQueryOp::Exists; done");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::Exists);
+                    requiresValue = sal_False;
+                    break;
+                case MQueryOp::DoesNotExist:
+                    SAL_INFO("connectivity.mork", "MQueryOp::DoesNotExist; done");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::DoesNotExist);
+                    requiresValue = sal_False;
+                    break;
+                case MQueryOp::Contains:
+                    SAL_INFO("connectivity.mork", "MQueryOp::Contains; done");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::Contains);
+                    break;
+                case MQueryOp::DoesNotContain:
+                    SAL_INFO("connectivity.mork", "MQueryOp::DoesNotContain; done");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::DoesNotContain);
+                    break;
+                case MQueryOp::Is:
+                    SAL_INFO("connectivity.mork", "MQueryOp::Is; done");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
+                    break;
+                case MQueryOp::IsNot:
+                    SAL_INFO("connectivity.mork", "MQueryOp::IsNot; done");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::IsNot);
+                    break;
+                case MQueryOp::BeginsWith:
+                    SAL_INFO("connectivity.mork", "MQueryOp::BeginsWith; done");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::BeginsWith);
+                    break;
+                case MQueryOp::EndsWith:
+                    SAL_INFO("connectivity.mork", "MQueryOp::EndsWith; done");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::EndsWith);
+                    break;
+                case MQueryOp::SoundsLike:
+                    SAL_INFO("connectivity.mork", "MQueryOp::SoundsLike; TODO");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::SoundsLike);
+                    break;
+                case MQueryOp::RegExp:
+                    SAL_INFO("connectivity.mork", "MQueryOp::RegExp; TODO");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::RegExp);
+                    break;
+                default:
+                    SAL_INFO("connectivity.mork", "(default) MQueryOp::Is; ");
+                    //boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
+                    break;
+            }
+            rtl::OUString currentValue = entry->getValue(attrName);
+            // Set the 'matchValue' property of the boolString. Value returned in unicode.
+            if ( requiresValue )
+            {
+                SAL_INFO("connectivity.mork", "Value = " << evStr->getValue() );
+                rtl::OUString searchedValue = evStr->getValue();
+                if (evStr->getCond() == MQueryOp::Is) {
+                    resultVector.push_back((currentValue == searchedValue) ? sal_True : sal_False);
+                } else if (evStr->getCond() == MQueryOp::IsNot) {
+                    resultVector.push_back((currentValue == searchedValue) ? sal_False : sal_True);
+                } else if (evStr->getCond() == MQueryOp::EndsWith) {
+                    resultVector.push_back((currentValue.endsWith(searchedValue)) ? sal_True : sal_False);
+                } else if (evStr->getCond() == MQueryOp::BeginsWith) {
+                    resultVector.push_back((currentValue.indexOf(searchedValue) == 0) ? sal_True : sal_False);
+                } else if (evStr->getCond() == MQueryOp::Contains) {
+                    resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? sal_False : sal_True);
+                } else if (evStr->getCond() == MQueryOp::DoesNotContain) {
+                    resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? sal_True : sal_False);
+                } else {
+                    OSL_FAIL("not yet implemented");
+                }
+            }
+
+            // Find it and change it ;-)
+            // class rtl::OUString "has no element named" isEmtpy
+            if (evStr->getCond() == MQueryOp::Exists) {
+                resultVector.push_back((currentValue.getLength() == 0) ? sal_False : sal_True);
+            } else if (evStr->getCond() == MQueryOp::DoesNotExist) {
+                resultVector.push_back((currentValue.getLength() == 0) ? sal_True : sal_False);
+            }
+        }
+        else if ( (*evIter)->isExpr() ) {
+            SAL_INFO("connectivity.mork", "Appending Subquery Expression");
+            MQueryExpression* queryExpression = static_cast<MQueryExpression*> (*evIter);
+             ::std::vector<sal_Bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
+            MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
+            if (condition == MQueryExpression::OR) {
+                sal_Bool result = sal_False;
+                for (::std::vector<sal_Bool>::iterator iter =  subquery_result.begin(); iter != subquery_result.end(); ++iter) {
+                    result = result || *iter;
+                }
+                resultVector.push_back(result);
+            } else if (condition == MQueryExpression::AND) {
+                sal_Bool result = sal_True;
+                for (::std::vector<sal_Bool>::iterator iter = subquery_result.begin(); iter != subquery_result.end(); ++iter) {
+                    result = result && *iter;
+                }
+                resultVector.push_back(result);
+            } else {
+                OSL_FAIL("Unknown Expression Type");
+            }
+        }
+        else {
+            // Should never see this...
+            // OSL_FAIL("Unknown Expression Type!");
+            SAL_WARN("connectivity.mork", "Unknown Expression Type!");
+            return resultVector;
+        }
+    }
+    return resultVector;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

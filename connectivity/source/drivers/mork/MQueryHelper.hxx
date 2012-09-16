@@ -199,7 +199,7 @@ namespace connectivity
             sal_Bool                   checkRowAvailable( sal_Int32 nDBRow );
             sal_Bool getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType );
             sal_Int32 executeQuery(OConnection* xConnection);
-
+            const OColumnAlias&             getColumnAlias() const { return m_rColumnAlias; }
             bool                            hadError() const { return m_aError.is(); }
             inline const ErrorDescriptor&   getError() const { return m_aError; }
 
