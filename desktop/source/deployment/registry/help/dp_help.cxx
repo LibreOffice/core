@@ -42,8 +42,8 @@
 #include "unotools/pathoptions.hxx"
 
 #if !defined(ANDROID) && !defined(IOS)
-#include <l10ntools/compilehelp.hxx>
-#include <l10ntools/HelpIndexer.hxx>
+#include <helpcompiler/compilehelp.hxx>
+#include <helpcompiler/HelpIndexer.hxx>
 #endif
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>

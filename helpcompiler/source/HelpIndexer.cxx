@@ -27,7 +27,7 @@
  * instead of those above.
  */
 
-#include <l10ntools/HelpIndexer.hxx>
+#include <helpcompiler/HelpIndexer.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/uri.hxx>

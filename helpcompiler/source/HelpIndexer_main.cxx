@@ -27,7 +27,7 @@
  * instead of those above.
  */
 
-#include <l10ntools/HelpIndexer.hxx>
+#include <helpcompiler/HelpIndexer.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>

@@ -27,7 +27,7 @@
 $(eval $(call gb_Executable_Executable,HelpLinker))
 
 $(eval $(call gb_Executable_use_package,HelpLinker,\
-    l10ntools_inc \
+    helpcompiler_inc \
 ))
 
 $(eval $(call gb_Executable_use_libraries,HelpLinker,\
@@ -44,7 +44,7 @@ $(eval $(call gb_Executable_use_externals,HelpLinker,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,HelpLinker,\
-    l10ntools/source/help/HelpLinker_main \
+    helpcompiler/source/HelpLinker_main \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

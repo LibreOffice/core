@@ -57,7 +57,7 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 
-#include <compilehelp.hxx>
+#include <helpcompiler/compilehelp.hxx>
 
 #if OSL_DEBUG_LEVEL > 2
     #include <iostream>

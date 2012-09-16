@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	javaunohelper \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
 		l10ntools \
+		helpcompiler \
 	) \
 	o3tl \
 	oovbaapi \

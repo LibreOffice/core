@@ -27,7 +27,7 @@
 $(eval $(call gb_Library_Library,helplinker))
 
 $(eval $(call gb_Library_use_package,helplinker,\
-    l10ntools_inc\
+    helpcompiler_inc\
 ))
 
 $(eval $(call gb_Library_add_defs,helplinker,\
@@ -48,20 +48,20 @@ $(eval $(call gb_Library_use_externals,helplinker,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,helplinker,\
-    l10ntools/source/help/HelpCompiler \
-    l10ntools/source/help/LuceneHelper \
-    l10ntools/source/help/HelpIndexer \
-    l10ntools/source/help/HelpSearch \
+    helpcompiler/source/HelpCompiler \
+    helpcompiler/source/LuceneHelper \
+    helpcompiler/source/HelpIndexer \
+    helpcompiler/source/HelpSearch \
 ))
 
 ifeq ($(strip $(OS)$(CPU)$(COM)),MACOSXPGCC)
 $(eval $(call gb_Library_add_cxxobjects,helplinker,\
-    l10ntools/source/help/HelpLinker \
+    helpcompiler/source/HelpLinker \
     , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,helplinker,\
-    l10ntools/source/help/HelpLinker \
+    helpcompiler/source/HelpLinker \
 ))
 endif
 

@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
-#include <l10ntools/HelpSearch.hxx>
+#include <helpcompiler/HelpSearch.hxx>
 
 #if defined _MSC_VER
 #pragma warning(push)

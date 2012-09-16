@@ -27,14 +27,9 @@
 $(eval $(call gb_Package_Package,l10ntools_inc,$(SRCDIR)/l10ntools))
 
 $(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/export.hxx,inc/export.hxx))
-$(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/dllapi.h,inc/l10ntools/dllapi.h))
 $(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/directory.hxx,inc/l10ntools/directory.hxx))
 $(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/file.hxx,inc/l10ntools/file.hxx))
-$(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/HelpIndexer.hxx,inc/l10ntools/HelpIndexer.hxx))
-$(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/HelpLinker.hxx,inc/l10ntools/HelpLinker.hxx))
-$(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/HelpSearch.hxx,inc/l10ntools/HelpSearch.hxx))
 $(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/FCFGMerge.cfg,source/filter/merge/FCFGMerge.cfg))
-$(eval $(call gb_Package_add_file,l10ntools_inc,inc/l10ntools/compilehelp.hxx,source/help/compilehelp.hxx))
 
 
 # vim: set noet sw=4 ts=4:

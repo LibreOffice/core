@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include "HelpCompiler.hxx"
+#include <helpcompiler/HelpCompiler.hxx>
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>

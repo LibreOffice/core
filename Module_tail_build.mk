@@ -159,6 +159,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	) \
     xmerge \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
+	    helpcompiler \
 	    xmlhelp) \
     xmloff \
     xmlscript \

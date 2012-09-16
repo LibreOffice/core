@@ -30,7 +30,7 @@
 #ifndef HELPINDEXER_HXX
 #define HELPINDEXER_HXX
 
-#include <l10ntools/dllapi.h>
+#include <helpcompiler/dllapi.h>
 
 #include <rtl/ustring.hxx>
 #include <set>

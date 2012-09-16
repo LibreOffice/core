@@ -27,7 +27,7 @@
  * instead of those above.
  */
 
-#include <l10ntools/HelpSearch.hxx>
+#include <helpcompiler/HelpSearch.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 

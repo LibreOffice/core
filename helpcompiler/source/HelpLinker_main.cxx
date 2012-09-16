@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#include "HelpCompiler.hxx"
-#include "l10ntools/HelpLinker.hxx"
+#include <helpcompiler/HelpCompiler.hxx>
+#include <helpcompiler/HelpLinker.hxx>
 #include <iostream>
 #include <sal/main.h>
 

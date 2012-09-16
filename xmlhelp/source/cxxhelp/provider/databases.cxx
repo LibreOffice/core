@@ -38,7 +38,7 @@
 #include <algorithm>
 #include <string.h>
 
-#include <l10ntools/HelpIndexer.hxx>
+#include <helpcompiler/HelpIndexer.hxx>
 
 // Extensible help
 #include "com/sun/star/deployment/ExtensionManager.hpp"

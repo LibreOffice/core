@@ -29,7 +29,7 @@
 #ifndef HELPLINKER_HXX
 #define HELPLINKER_HXX
 
-#include <l10ntools/dllapi.h>
+#include <helpcompiler/dllapi.h>
 #include <libxslt/transform.h>
 
 #ifdef AIX

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#include "HelpCompiler.hxx"
-#include "l10ntools/HelpLinker.hxx"
+#include <helpcompiler/HelpCompiler.hxx>
+#include <helpcompiler/HelpLinker.hxx>
 
 #include <map>
 
@@ -425,7 +425,7 @@ void HelpLinker::link() throw( HelpProcessingException )
         if (!bExtensionMode && xhpFileName.rfind(".xhp") != xhpFileName.length()-4)
         {
             // only work on .xhp - files
-            SAL_WARN("l10ntools",
+            SAL_WARN("helpcompiler",
                 "ERROR: input list entry '"
                     << xhpFileName
                     << "' has the wrong extension (only files with extension .xhp "
