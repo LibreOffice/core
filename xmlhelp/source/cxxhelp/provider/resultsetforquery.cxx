@@ -56,7 +56,6 @@
 
 #include <algorithm>
 #include <set>
-
 #include <qe/Query.hxx>
 #include <qe/DocGenerator.hxx>
 #include "resultsetforquery.hxx"
@@ -233,8 +232,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                     for( int i = 0 ; i < nItemCount ; ++i )
                     {
                         const HitItem& rItem = rQueryResultVector[ i ];
-                        set< rtl::OUString >::iterator it;
-                        if( (it = aResultSet.find( rItem.m_aURL )) != aResultSet.end() )
+                        if( (aResultSet.find( rItem.m_aURL )) != aResultSet.end() )
                         {
                             HitItem aItemCopy( rItem );
                             aItemCopy.m_fScore /= nQueryListSize;   // To get average score
