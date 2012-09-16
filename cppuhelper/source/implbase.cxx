@@ -238,11 +238,11 @@ void WeakComponentImplHelperBase::acquire()
 void WeakComponentImplHelperBase::release()
     throw ()
 {
-    if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+    if (osl_atomic_decrement( &m_refCount ) == 0) {
         // ensure no other references are created, via the weak connection point, from now on
         disposeWeakConnectionPoint();
         // restore reference count:
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         if (! rBHelper.bDisposed) {
             try {
                 dispose();
@@ -374,11 +374,11 @@ void WeakAggComponentImplHelperBase::release()
     if (xDelegator_.is()) {
         OWeakAggObject::release();
     }
-    else if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+    else if (osl_atomic_decrement( &m_refCount ) == 0) {
         // ensure no other references are created, via the weak connection point, from now on
         disposeWeakConnectionPoint();
         // restore reference count:
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         if (! rBHelper.bDisposed) {
             try {
                 dispose();

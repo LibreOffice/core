@@ -951,7 +951,7 @@ internRelease (rtl_uString *pThis)
 
     rtl_uString *pFree = NULL;
     if ( SAL_STRING_REFCOUNT(
-             osl_decrementInterlockedCount( &(pThis->refCount) ) ) == 0)
+             osl_atomic_decrement( &(pThis->refCount) ) ) == 0)
     {
         pPoolMutex = getInternMutex();
         osl_acquireMutex( pPoolMutex );
@@ -960,7 +960,7 @@ internRelease (rtl_uString *pThis)
 
         /* May have been separately acquired */
         if ( SAL_STRING_REFCOUNT(
-                 osl_incrementInterlockedCount( &(pThis->refCount) ) ) == 1 )
+                 osl_atomic_increment( &(pThis->refCount) ) ) == 1 )
         {
             /* we got the last ref */
             pFree = pThis;

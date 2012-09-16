@@ -116,7 +116,7 @@ inline sal_uInt32 calcSeqMemSize(
 //--------------------------------------------------------------------------------------------------
 inline uno_Sequence * createEmptySequence() SAL_THROW(())
 {
-    ::osl_incrementInterlockedCount( &g_emptySeq.nRefCount );
+    osl_atomic_increment( &g_emptySeq.nRefCount );
     return &g_emptySeq;
 }
 //--------------------------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ inline typelib_TypeDescriptionReference * _getVoidType()
 
 //--------------------------------------------------------------------------------------------------
 #define TYPE_ACQUIRE( pType ) \
-    ::osl_incrementInterlockedCount( &(pType)->nRefCount );
+    osl_atomic_increment( &(pType)->nRefCount );
 
 //--------------------------------------------------------------------------------------------------
 extern "C" void * binuno_queryInterface(

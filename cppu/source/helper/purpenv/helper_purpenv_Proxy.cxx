@@ -307,7 +307,7 @@ void Proxy::acquire(void)
                    NULL,
                    NULL);
 
-    if (osl_incrementInterlockedCount(&m_nRef) == 1)
+    if (osl_atomic_increment(&m_nRef) == 1)
     {
         // rebirth of proxy zombie
         void * pThis = this;
@@ -350,7 +350,7 @@ void Proxy::release(void)
                    NULL,
                    NULL);
 
-    if (osl_decrementInterlockedCount(&m_nRef) == 0)
+    if (osl_atomic_decrement(&m_nRef) == 0)
         m_from.get()->pExtEnv->revokeInterface(m_from.get()->pExtEnv, this);
 
     if (probeFun)

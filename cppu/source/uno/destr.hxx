@@ -327,7 +327,7 @@ inline void idestructSequence(
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
 {
-    if (::osl_decrementInterlockedCount( &pSeq->nRefCount ) == 0)
+    if (osl_atomic_decrement( &pSeq->nRefCount ) == 0)
     {
         if (pSeq->nElements > 0)
         {

@@ -720,7 +720,7 @@ static inline bool ireallocSequence(
         if (ret)
         {
             // destruct sequence
-            if (osl_decrementInterlockedCount( &pSeq->nRefCount ) == 0)
+            if (osl_atomic_decrement( &pSeq->nRefCount ) == 0)
             {
                 if (nElements > 0)
                 {
@@ -926,7 +926,7 @@ sal_Bool SAL_CALL uno_type_sequence_reference2One(
             if (ret)
             {
                 // easy destruction of empty sequence:
-                if (osl_decrementInterlockedCount( &pSequence->nRefCount ) == 0)
+                if (osl_atomic_decrement( &pSequence->nRefCount ) == 0)
                     rtl_freeMemory( pSequence );
                 *ppSequence = pNew;
             }
@@ -969,7 +969,7 @@ sal_Bool SAL_CALL uno_sequence_reference2One(
             if (ret)
             {
                 // easy destruction of empty sequence:
-                if (osl_decrementInterlockedCount( &pSequence->nRefCount ) == 0)
+                if (osl_atomic_decrement( &pSequence->nRefCount ) == 0)
                     rtl_freeMemory( pSequence );
                 *ppSequence = pNew;
             }
@@ -989,7 +989,7 @@ void SAL_CALL uno_sequence_assign(
 {
     if (*ppDest != pSource)
     {
-        ::osl_incrementInterlockedCount( &pSource->nRefCount );
+        osl_atomic_increment( &pSource->nRefCount );
         idestructSequence( *ppDest, pTypeDescr->pWeakRef, pTypeDescr, release );
         *ppDest = pSource;
     }
@@ -1005,7 +1005,7 @@ void SAL_CALL uno_type_sequence_assign(
 {
     if (*ppDest != pSource)
     {
-        ::osl_incrementInterlockedCount( &pSource->nRefCount );
+        osl_atomic_increment( &pSource->nRefCount );
         idestructSequence( *ppDest, pType, 0, release );
         *ppDest = pSource;
     }

@@ -796,7 +796,7 @@ ComponentContext::ComponentContext(
         Reference< lang::XMultiComponentFactory > xMgr( m_xDelegate->getServiceManager() );
         if (xMgr.is())
         {
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             try
             {
                 // create new smgr based on delegate's one
@@ -815,10 +815,10 @@ ComponentContext::ComponentContext(
             }
             catch (...)
             {
-                osl_decrementInterlockedCount( &m_refCount );
+                osl_atomic_decrement( &m_refCount );
                 throw;
             }
-            osl_decrementInterlockedCount( &m_refCount );
+            osl_atomic_decrement( &m_refCount );
             OSL_ASSERT( m_xSMgr.is() );
         }
     }
