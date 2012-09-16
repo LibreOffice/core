@@ -534,7 +534,8 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
 
-        mpCondFormatList->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
+        if( nDelFlag & IDF_ATTRIB )
+            mpCondFormatList->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
     }
 
     if (nDelFlag & IDF_NOTE)
