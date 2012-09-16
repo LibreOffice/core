@@ -495,6 +495,8 @@ $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSION :=
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_LinkTarget_get_dep_target,$(1))
@@ -519,9 +521,19 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSION :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSIONSCRIPT :=
 endif
 
 gb_LinkTarget_CXX_SUFFIX_$(1) := cxx
+
+endef
+
+define gb_LinkTarget_set_soversion_script
+$(call gb_LinkTarget_get_target,$(1)) : $(3)
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
+$(call gb_LinkTarget_add_auxtargets,$(1),$(call gb_LinkTarget_get_target,$(1)).$(2))
 
 endef
 
