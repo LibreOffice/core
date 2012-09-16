@@ -56,7 +56,7 @@ inline Sequence< E >::Sequence() SAL_THROW(())
 template< class E >
 inline Sequence< E >::Sequence( const Sequence< E > & rSeq ) SAL_THROW(())
 {
-    ::osl_incrementInterlockedCount( &rSeq._pSequence->nRefCount );
+    osl_atomic_increment( &rSeq._pSequence->nRefCount );
     _pSequence = rSeq._pSequence;
 }
 

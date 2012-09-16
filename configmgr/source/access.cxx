@@ -108,11 +108,11 @@ namespace css = com::sun::star;
 }
 
 oslInterlockedCount Access::acquireCounting() {
-    return osl_incrementInterlockedCount(&m_refCount);
+    return osl_atomic_increment(&m_refCount);
 }
 
 void Access::releaseNondeleting() {
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 bool Access::isValue() {

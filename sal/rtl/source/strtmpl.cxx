@@ -1026,7 +1026,7 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 #define IMPL_RTL_AQUIRE( pThis )                                \
 {                                                               \
     if (!SAL_STRING_IS_STATIC (pThis))                          \
-        osl_incrementInterlockedCount( &((pThis)->refCount) );  \
+        osl_atomic_increment( &((pThis)->refCount) );  \
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1055,7 +1055,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
 #endif
 
     if ( pThis->refCount == 1 ||
-         !osl_decrementInterlockedCount( &(pThis->refCount) ) )
+         !osl_atomic_decrement( &(pThis->refCount) ) )
     {
         RTL_LOG_STRING_DELETE( pThis );
         rtl_freeMemory( pThis );

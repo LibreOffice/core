@@ -115,14 +115,14 @@ void MediatorMapping::acquire(void)
 {
     LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
 
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
 }
 
 void MediatorMapping::release(void)
 {
     LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
 
-    if (osl_decrementInterlockedCount(&m_refCount) == 0)
+    if (osl_atomic_decrement(&m_refCount) == 0)
     {
         ::uno_revokeMapping(this);
     }

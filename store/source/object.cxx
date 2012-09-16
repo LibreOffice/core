@@ -81,7 +81,7 @@ sal_Bool SAL_CALL OStoreObject::isKindOf (sal_uInt32 nTypeId)
  */
 oslInterlockedCount SAL_CALL OStoreObject::acquire (void)
 {
-    oslInterlockedCount result = osl_incrementInterlockedCount (&m_nRefCount);
+    oslInterlockedCount result = osl_atomic_increment (&m_nRefCount);
     return (result);
 }
 
@@ -90,7 +90,7 @@ oslInterlockedCount SAL_CALL OStoreObject::acquire (void)
  */
 oslInterlockedCount SAL_CALL OStoreObject::release (void)
 {
-    oslInterlockedCount result = osl_decrementInterlockedCount (&m_nRefCount);
+    oslInterlockedCount result = osl_atomic_decrement (&m_nRefCount);
     if (result == 0)
     {
         // Last reference released.

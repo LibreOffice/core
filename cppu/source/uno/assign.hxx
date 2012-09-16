@@ -196,8 +196,7 @@ inline sal_Bool _assignArray(
     case typelib_TypeClass_SEQUENCE:
         for (i=0; i < nTotalElements; i++)
         {
-            ::osl_incrementInterlockedCount(
-                &(*((uno_Sequence **)pSource + i))->nRefCount );
+            osl_atomic_increment( &(*((uno_Sequence **)pSource + i))->nRefCount );
             idestructSequence(
                 *((uno_Sequence **)pDest + i),
                 pElementTypeRef, pElementTypeDescr, release );
@@ -566,8 +565,7 @@ inline sal_Bool _assignData(
             return sal_True;
         if (_type_equals( pDestType, pSourceType ))
         {
-            ::osl_incrementInterlockedCount(
-                &(*(uno_Sequence **)pSource)->nRefCount );
+            osl_atomic_increment( &(*(uno_Sequence **)pSource)->nRefCount );
             idestructSequence(
                 *(uno_Sequence **)pDest, pDestType, pDestTypeDescr, release );
             *(uno_Sequence **)pDest = *(uno_Sequence **)pSource;
