@@ -353,7 +353,6 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         default:
         {
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            break;
         }
     }
 }
