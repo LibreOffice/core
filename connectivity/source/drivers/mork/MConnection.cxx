@@ -20,6 +20,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 
+#include "resource/mork_res.hrc"
 #include "resource/common_res.hrc"
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -346,7 +347,50 @@ Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
 }
 // -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Reference< XInterface >& _rxContext )
+{
+    if ( _rError.getResId() != 0 )
+    {
+        OSL_ENSURE( ( _rError.getErrorCondition() == 0 ),
+            "OConnection::throwSQLException: unsupported error code combination!" );
 
+        ::rtl::OUString sParameter( _rError.getParameter() );
+        if ( !sParameter.isEmpty() )
+        {
+            const ::rtl::OUString sError( getResources().getResourceStringWithSubstitution(
+                _rError.getResId(),
+                "$1$", sParameter
+             ) );
+            ::dbtools::throwGenericSQLException( sError, _rxContext );
+            OSL_FAIL( "OConnection::throwSQLException: unreachable (1)!" );
+        }
+
+        throwGenericSQLException( _rError.getResId(), _rxContext );
+        OSL_FAIL( "OConnection::throwSQLException: unreachable (2)!" );
+    }
+
+    if ( _rError.getErrorCondition() != 0 )
+    {
+        SQLError aErrorHelper( getDriver()->getFactory() );
+        ::rtl::OUString sParameter( _rError.getParameter() );
+        if ( !sParameter.isEmpty() )
+            aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
+        else
+            aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);
+        OSL_FAIL( "OConnection::throwSQLException: unreachable (3)!" );
+    }
+
+    throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );
+}
+
+// -----------------------------------------------------------------------------
+void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const Reference< XInterface >& _rxContext )
+{
+    ErrorDescriptor aError;
+    aError.setResId( _nErrorResourceId );
+    throwSQLException( aError, _rxContext );
+}
 
 } } // namespace connectivity::mork
 

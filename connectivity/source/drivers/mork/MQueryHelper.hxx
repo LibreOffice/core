@@ -30,11 +30,120 @@
 
 #include <boost/unordered_map.hpp>
 
+#include "MErrorResource.hxx"
+
 namespace connectivity
 {
     namespace mork
     {
         class OConnection;
+        class MQueryHelper;
+        class ErrorDescriptor;
+
+        namespace MQueryOp {
+             typedef enum {
+                 Exists         = 0,
+                 DoesNotExist   = 1,
+                 Contains       = 2,
+                 DoesNotContain = 3,
+                 Is             = 4,
+                 IsNot          = 5,
+                 BeginsWith     = 6,
+                 EndsWith       = 7,
+                 SoundsLike     = 8,
+                 RegExp         = 9
+            } cond_type;
+        }
+
+        class MQueryExpressionBase {
+        public:
+            typedef enum {
+                Unknown,
+                StringExpr,
+                Expr
+            } node_type;
+
+        protected:
+            node_type   m_eNodeType;
+
+            MQueryExpressionBase() : m_eNodeType( Unknown ) {}
+            MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
+
+        public:
+            sal_Bool   isUnknown( ) const { return m_eNodeType == Unknown; }
+            sal_Bool   isStringExpr( ) const { return m_eNodeType == StringExpr; }
+            sal_Bool   isExpr( ) const { return m_eNodeType == Expr; }
+        };
+
+        class MQueryExpressionString : public MQueryExpressionBase {
+        protected:
+            ::rtl::OUString     m_aName;         // LHS
+            MQueryOp::cond_type m_aBooleanCondition;
+            ::rtl::OUString     m_aValue;        // RHS
+
+        public:
+
+            MQueryExpressionString( ::rtl::OUString&    lhs,
+                                    MQueryOp::cond_type cond,
+                                    ::rtl::OUString     rhs )
+                : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
+                , m_aName( lhs )
+                , m_aBooleanCondition( cond )
+                , m_aValue( rhs )
+            {
+            }
+
+            MQueryExpressionString( ::rtl::OUString&    lhs,
+                                    MQueryOp::cond_type cond )
+                : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
+                , m_aName( lhs )
+                , m_aBooleanCondition( cond )
+                , m_aValue( ::rtl::OUString() )
+            {
+            }
+
+            const ::rtl::OUString&    getName() const { return m_aName; }
+            MQueryOp::cond_type getCond() const { return m_aBooleanCondition; }
+            const ::rtl::OUString&    getValue() const { return m_aValue; }
+        };
+
+        class MQueryExpression : public MQueryExpressionBase
+        {
+            friend class MQueryHelper;
+
+        public:
+            typedef ::std::vector< MQueryExpressionBase* > ExprVector;
+
+            typedef enum {
+                AND,
+                OR
+            } bool_cond;
+
+            void setExpressions( ExprVector& _exprVector )
+                            { m_aExprVector = _exprVector; }
+
+            // All expressions on a peer level use same condition operator
+            void setExpressionCondition( bool_cond _cond )
+                            { m_aExprCondType = _cond; }
+
+            ExprVector& getExpressions( )
+                            { return m_aExprVector; }
+
+            // All expressions on a peer level use same condition operator
+            bool_cond getExpressionCondition( ) const
+                            { return m_aExprCondType; }
+
+            MQueryExpression() : MQueryExpressionBase( MQueryExpressionBase::Expr ),
+                                 m_aExprCondType( OR )
+                            { m_aExprVector.clear(); }
+
+
+        protected:
+            ExprVector          m_aExprVector;
+            bool_cond           m_aExprCondType;
+
+        };
+
         class MQueryHelperResultEntry
         {
         private:
@@ -66,6 +175,9 @@ namespace connectivity
             void            append(MQueryHelperResultEntry* resEnt );
             void            clear_results();
             OColumnAlias        m_rColumnAlias;
+            ErrorDescriptor     m_aError;
+            ::rtl::OUString     m_aAddressbook;
+            MQueryExpression    m_aExpr;
 
 /*
             void            clearResultOrComplete();
@@ -87,6 +199,13 @@ namespace connectivity
             sal_Bool                   checkRowAvailable( sal_Int32 nDBRow );
             sal_Bool getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType );
             sal_Int32 executeQuery(OConnection* xConnection);
+
+            bool                            hadError() const { return m_aError.is(); }
+            inline const ErrorDescriptor&   getError() const { return m_aError; }
+
+            void                            setAddressbook( ::rtl::OUString&);
+            void                            setExpression( MQueryExpression &_expr );
+
         };
     }
 }

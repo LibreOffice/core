@@ -14,6 +14,7 @@
 #include "connectivity/OSubComponent.hxx"
 
 #include "MConnection.hxx"
+#include "MDatabaseMetaDataHelper.hxx"
 #include "TDatabaseMetaDataBase.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>

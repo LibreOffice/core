@@ -249,8 +249,8 @@ protected:
 
             void parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString );
             void fillRowData() throw( ::com::sun::star::sdbc::SQLException );
-//            void analyseWhereClause( const OSQLParseNode*                 parseTree,
-//                                     MQueryExpression                    &queryExpression);
+            void analyseWhereClause( const OSQLParseNode*                 parseTree,
+                                     MQueryExpression                    &queryExpression);
 
             sal_Bool isCount() const;
 

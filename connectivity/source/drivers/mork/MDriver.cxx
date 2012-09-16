@@ -11,6 +11,9 @@
 #include "MConnection.hxx"
 #include "MNSProfileDiscover.hxx"
 
+#include "resource/mork_res.hrc"
+#include "resource/common_res.hrc"
+
 using namespace connectivity::mork;
 
 namespace connectivity

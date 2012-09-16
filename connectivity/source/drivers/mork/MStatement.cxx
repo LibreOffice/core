@@ -44,6 +44,9 @@
 #include "MResultSet.hxx"
 #include "MDatabaseMetaData.hxx"
 
+#include "resource/mork_res.hrc"
+#include "resource/common_res.hrc"
+
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
@@ -209,10 +212,10 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUStrin
         m_pSQLIterator->traverseAll();
         const OSQLTables& xTabs = m_pSQLIterator->getTables();
 
-        // TODO
-        SAL_WARN("connectivity.mork", "STR_QUERY_AT_LEAST_ONE_TABLES!");
-        // if(xTabs.empty())
-        //    getOwnConnection()->throwSQLException( STR_QUERY_AT_LEAST_ONE_TABLES, *this );
+        if (xTabs.empty())
+        {
+            getOwnConnection()->throwSQLException( STR_QUERY_AT_LEAST_ONE_TABLES, *this );
+        }
 
 #if OSL_DEBUG_LEVEL > 0
         OSQLTables::const_iterator citer;
@@ -257,9 +260,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUStrin
         return parseSql(sql + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("(""E-mail"" caracter)")),sal_True);
     }
 
-    // TODO:
-    SAL_WARN("connectivity.mork", "STR_QUERY_TOO_COMPLEX!");
-    //getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
+    getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
     OSL_FAIL( "OCommonStatement::parseSql: unreachable!" );
     return eSelect;
 
@@ -311,6 +312,7 @@ void OCommonStatement::clearCachedResultSet()
     }
     catch( const DisposedException& )
     {
+        SAL_INFO("connectivity.mork", "=>  OCommonStatement::clearCachedResultSet()" );
         DBG_UNHANDLED_EXCEPTION();
     }
 

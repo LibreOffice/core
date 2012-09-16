@@ -109,6 +109,9 @@ namespace connectivity
             // Added to enable me to use SQLInterpreter which requires an
             // XNameAccess i/f to access tables.
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
+
+            void throwSQLException( const ErrorDescriptor& _rError, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext );
+            void throwSQLException( const sal_uInt16 _nErrorResourceId, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext );
         };
     }
 }

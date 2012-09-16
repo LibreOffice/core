@@ -88,6 +88,27 @@ MQueryHelper::~MQueryHelper()
     OSL_TRACE("OUT MQueryHelper::~MQueryHelper()");
 }
 
+// -------------------------------------------------------------------------
+void MQueryHelper::setAddressbook(::rtl::OUString &ab)
+{
+    OSL_TRACE("IN MQueryHelper::setAddressbook()");
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    m_aAddressbook = ab;
+
+    OSL_TRACE("\tOUT MQuery::setAddressbook()");
+}
+// -------------------------------------------------------------------------
+void MQueryHelper::setExpression( MQueryExpression &_expr )
+{
+    OSL_TRACE("IN MQueryHelper::setExpression()");
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    m_aExpr = _expr;
+
+    OSL_TRACE("\tOUT MQuery::setExpression()");
+}
+
 void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 {
 //    SAL_INFO("connectivity.mork", "MQueryHelper::append()" );
@@ -205,7 +226,6 @@ sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const
 
 sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
 {
-//    OSL_FAIL( "MQueryHelper::executeQuery" );
     SAL_INFO("connectivity.mork", "MQueryHelper::executeQuery()" );
     reset();
 
