@@ -52,9 +52,11 @@ endif
 
 gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 
+gb_CPPU_ENV := gcc3
+
 gb_COMPILERDEFS := \
 	-D$(COM) \
-	-DCPPU_ENV=gcc3 \
+	-DCPPU_ENV=$(gb_CPPU_ENV) \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
 ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)

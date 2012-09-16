@@ -156,8 +156,10 @@ endef
 define gb_CppunitTest_use_ure
 $(call gb_CppunitTest_use_rdb,$(1),ure/services)
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(true)
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,$(gb_CPPU_ENV)_uno)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,unobootstrapprotector)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,unoexceptionprotector)
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,cppuhelper_unorc)
 
 endef
 

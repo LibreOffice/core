@@ -49,6 +49,8 @@ ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
 
+gb_CPPU_ENV := msci
+
 gb_COMPILERDEFS := \
 	-DMSC \
 	-D_CRT_NON_CONFORMING_SWPRINTFS \
@@ -57,7 +59,7 @@ gb_COMPILERDEFS := \
 	-D_MT \
 	-D_DLL \
 	-DBOOST_MEM_FN_ENABLE_CDECL \
-	-DCPPU_ENV=msci \
+	-DCPPU_ENV=$(gb_CPPU_ENV) \
 	-DM1500 \
 
 gb_CPUDEFS := -D_X86_=1
