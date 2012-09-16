@@ -42,5 +42,6 @@ $(RPMFLAGFILES) : $(SPECFILE)
         --define "iconprefix $(ICONPREFIX.$(@:b:s/-/ /:1))" \
         --define "version $(PKGVERSION.$(@:b:s/-/ /:1))" \
         --define "release $(PKGREV)" \
+        --define "__debug_install_post %nil" \
         --define "_unpackaged_files_terminate_build  0" && $(TOUCH) $@
 .ENDIF
