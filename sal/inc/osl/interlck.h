@@ -52,9 +52,47 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInte
 */
 SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount);
 
+
+/** Increments the count variable addressed by pCount.
+    @param pCount Address of counter variable
+    @return The result of the operation is zero, the value of the count variable.
+*/
+
+/// @cond INTERNAL
+
+/** Increments the count variable addressed by p.
+    @param p Address of counter variable
+    @attention This functionality should only be used internally within
+    LibreOffice.
+
+    @return The adjusted value of the count variable.
+*/
+#if defined( HAVE_GCC_BUILTIN_ATOMIC )
+#    define osl_atomic_increment(p)  __sync_add_and_fetch((p), 1)
+#else
+#    define osl_atomic_increment(p) osl_incrementInterlockedCount(p)
+#endif
+
+
+/** Decrement the count variable addressed by p.
+    @param p Address of counter variable
+    @attention This functionality should only be used internally within
+    LibreOffice.
+
+    @return The adjusted value of the count variable.
+*/
+#if defined( HAVE_GCC_BUILTIN_ATOMIC )
+#    define osl_atomic_decrement(p) __sync_sub_and_fetch((p), 1)
+#else
+#    define osl_atomic_decrement(p) osl_decrementInterlockedCount(p)
+#endif
+
+/// @endcond
+
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif  /* _OSL_INTERLOCK_H_ */
 
