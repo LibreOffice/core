@@ -29,7 +29,7 @@
 
 #include <svx/svdomedia.hxx>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>

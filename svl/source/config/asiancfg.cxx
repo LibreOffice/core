@@ -35,7 +35,6 @@
 #include "comphelper/configuration.hxx"
 #include "comphelper/processfactory.hxx"
 #include "officecfg/Office/Common.hxx"
-#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"

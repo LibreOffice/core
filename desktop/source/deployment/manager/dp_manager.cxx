@@ -32,7 +32,6 @@
 #include "dp_platform.hxx"
 #include "dp_manager.h"
 #include "dp_identifier.hxx"
-#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/uri.hxx"

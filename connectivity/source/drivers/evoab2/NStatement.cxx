@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>

@@ -30,7 +30,7 @@
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 
 #include "cppunit/extensions/HelperMacros.h"
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 using namespace com::sun::star::uno;
 

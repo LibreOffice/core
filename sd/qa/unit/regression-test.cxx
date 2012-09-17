@@ -55,7 +55,6 @@
 
 #include <string>
 #include <iostream>
-#include <rtl/oustringostreaminserter.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <drawinglayer/XShapeDumper.hxx>

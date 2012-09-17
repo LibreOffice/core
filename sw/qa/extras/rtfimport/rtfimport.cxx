@@ -49,7 +49,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 

@@ -28,7 +28,7 @@
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 using namespace connectivity::evoab;
 using namespace dbtools;

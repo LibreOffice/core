@@ -28,7 +28,7 @@
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 #include <PropertyMapHelper.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #endif
 
 namespace writerfilter {

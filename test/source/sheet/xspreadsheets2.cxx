@@ -50,7 +50,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include "cppunit/extensions/HelperMacros.h"
 
 using namespace com::sun::star::uno;

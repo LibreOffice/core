@@ -35,7 +35,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <tools/debug.hxx>

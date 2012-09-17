@@ -21,7 +21,7 @@
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <basic/sbstar.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>

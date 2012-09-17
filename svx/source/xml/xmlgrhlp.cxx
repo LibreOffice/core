@@ -28,7 +28,6 @@
 
 #include <comphelper/string.hxx>
 #include <sal/macros.h>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

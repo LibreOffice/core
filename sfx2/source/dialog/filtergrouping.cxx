@@ -24,7 +24,6 @@
 #include <sfx2/docfac.hxx>
 #include "sfx2/sfxresid.hxx"
 #include <osl/thread.h>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/beans/StringPair.hpp>

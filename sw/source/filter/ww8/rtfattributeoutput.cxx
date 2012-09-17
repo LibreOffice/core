@@ -38,7 +38,7 @@
 #include "fmtcntnt.hxx"
 #include "fchrfmt.hxx"
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <svtools/rtfkeywd.hxx>
 
 #include <editeng/fontitem.hxx>

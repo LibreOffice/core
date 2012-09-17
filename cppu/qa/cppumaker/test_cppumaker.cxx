@@ -360,8 +360,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "rtl/oustringostreaminserter.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
 #include <cstddef>

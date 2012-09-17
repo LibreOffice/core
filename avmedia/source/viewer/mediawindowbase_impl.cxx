@@ -30,8 +30,7 @@
 #include <avmedia/mediaitem.hxx>
 #include "mediamisc.hxx"
 #include "mediawindow.hrc"
-#include <rtl/oustringostreaminserter.hxx>
-#include <sal/log.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/ole/axcontrol.hxx"

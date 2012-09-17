@@ -47,11 +47,8 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "comphelper/configuration.hxx"
 #include "rtl/instance.hxx"
-#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/log.hxx"
 
 namespace {
 

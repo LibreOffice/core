@@ -91,7 +91,6 @@
 #include "filedlgimpl.hxx"
 #include <helpid.hrc>
 #include <sfxlocal.hrc>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 
 #ifdef UNX
