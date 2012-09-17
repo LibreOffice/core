@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include "oox/vml/vmlshape.hxx"
 
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -502,7 +504,22 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
         return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
 
     // default: try to create a rectangle shape
-    return SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
+    Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
+    rtl::OUString sArcsize = maTypeModel.maArcsize;
+    if ( !sArcsize.isEmpty( ) )
+    {
+        sal_Unicode cLastChar = sArcsize[sArcsize.getLength() - 1];
+        sal_Int32 nValue = sArcsize.copy( 0, sArcsize.getLength() - 1 ).toInt32( );
+        // Get the smallest half-side
+        double size = std::min( rShapeRect.Height, rShapeRect.Width ) / 2.0;
+        sal_Int32 nRadius = 0;
+        if ( cLastChar == 'f' )
+            nRadius = size * nValue / 65536;
+        else if ( cLastChar == '%' )
+            nRadius = size * nValue / 100;
+        PropertySet( xShape ).setAnyProperty( PROP_CornerRadius, makeAny( nRadius ) );
+    }
+    return xShape;
 }
 
 // ============================================================================

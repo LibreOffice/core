@@ -77,6 +77,7 @@ struct ShapeTypeModel
     sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
     sal_Bool            mbVisible;              ///< Visible or Hidden
     ::rtl::OUString     maWrapStyle;            ///< Wrapping mode for text.
+    ::rtl::OUString     maArcsize;              ///< round rectangles arc size
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
