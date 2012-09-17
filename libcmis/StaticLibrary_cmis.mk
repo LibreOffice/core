@@ -11,6 +11,14 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,cmislib))
 
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,cmislib))
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+# Avoid narrowing conversion error (even though the option is technically a warning)
+# caused by boost.
+$(eval $(call gb_StaticLibrary_add_cxxflags,cmislib,\
+    -Wno-error=c++11-narrowing \
+))
+endif
+
 $(eval $(call gb_StaticLibrary_use_unpacked,cmislib,cmis))
 
 $(eval $(call gb_StaticLibrary_use_package,cmislib,libcmis_inc))
