@@ -53,8 +53,6 @@ $(eval $(call gb_CppunitTest_use_ure,basic_nested_struct))
 
 $(eval $(call gb_CppunitTest_use_components,basic_nested_struct,\
     configmgr/source/configmgr \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
 ))
 $(eval $(call gb_CppunitTest_use_configuration,basic_nested_struct))
 
