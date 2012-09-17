@@ -37,7 +37,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class PresentationActivity extends SherlockFragmentActivity {
     private CommunicationService mCommunicationService;
-    private FrameLayout mLayout;
     private FrameLayout mOuterLayout;
     private ThumbnailFragment mThumbnailFragment;
     private PresentationFragment mPresentationFragment;
@@ -65,7 +64,6 @@ public class PresentationActivity extends SherlockFragmentActivity {
             fragmentTransaction.commit();
         }
         mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
-        mLayout = (FrameLayout) findViewById(R.id.presentation_interceptor);
     }
 
     @Override
@@ -207,7 +205,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
         private boolean mTimerOn = false;
 
         public void stop() {
-            timerHandler.removeCallbacks(timerUpdateThread);
+            timerHandler.removeCallbacks(timerUpdateRunnable);
         }
 
         public ActionBarManager() {
@@ -228,8 +226,8 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
             getSupportFragmentManager().addOnBackStackChangedListener(this);
 
-            timerHandler.removeCallbacks(timerUpdateThread);
-            timerHandler.postDelayed(timerUpdateThread, 50);
+            timerHandler.removeCallbacks(timerUpdateRunnable);
+            timerHandler.postDelayed(timerUpdateRunnable, 50);
 
         }
 
@@ -344,15 +342,19 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
         }
 
-        private Thread timerUpdateThread = new Thread() {
+        private Runnable timerUpdateRunnable = new Runnable() {
 
             @Override
             public void run() {
                 CharSequence aTimeString;
-		long aTime = System.currentTimeMillis();
-		if (mTimerOn && mCommunicationService != null)
-		    aTime = mCommunicationService.getSlideShow().getTimer().getTimeMillis();
-		aTimeString = DateFormat.format(aTimerFormat, aTime);
+                long aTime = System.currentTimeMillis();
+                if (mTimerOn && mCommunicationService != null) {
+                    aTime = mCommunicationService.getSlideShow().getTimer()
+                                    .getTimeMillis();
+                    aTimeString = DateFormat.format(aTimerFormat, aTime);
+                } else {
+                    aTimeString = DateFormat.format(aTimeFormat, aTime);
+                }
                 mTimeLabel.setText(aTimeString);
                 timerHandler.postDelayed(this, 50);
             }
@@ -479,7 +481,6 @@ public class PresentationActivity extends SherlockFragmentActivity {
     /**
      * Intermediate layout that catches all touches, used in order to hide
      * the clock menu as appropriate.
-     * @author andy
      *
      */
     public static class InterceptorLayout extends FrameLayout {
