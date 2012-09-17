@@ -41,7 +41,7 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include "cppunit/extensions/HelperMacros.h"
 #include <iostream>
 

@@ -33,7 +33,7 @@
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 #include "dmapperLoggers.hxx"
 

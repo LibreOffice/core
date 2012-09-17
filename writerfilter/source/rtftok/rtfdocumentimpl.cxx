@@ -41,7 +41,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <vcl/svapp.hxx>

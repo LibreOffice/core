@@ -32,7 +32,6 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/signal.h>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>

@@ -34,7 +34,7 @@
 #include "com/sun/star/script/XTypeConverter.hpp"
 #include "comphelper/processfactory.hxx"
 #include "comphelper/string.hxx"
-#include "rtl/oustringostreaminserter.hxx"
+#include "rtl/ustring.hxx"
 #include "svl/inettype.hxx"
 #include "svtools/DocumentInfoPreview.hxx"
 #include "svtools/imagemgr.hxx"

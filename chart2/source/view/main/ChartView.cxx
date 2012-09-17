@@ -103,7 +103,7 @@
 #include <sot/clsids.hxx>
 
 #include <rtl/strbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 //.............................................................................
 namespace chart

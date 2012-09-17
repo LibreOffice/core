@@ -70,7 +70,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
-#include <rtl/oustringostreaminserter.hxx>
 #include "FieldTypes.hxx"
 #include <oox/mathml/import.hxx>
 

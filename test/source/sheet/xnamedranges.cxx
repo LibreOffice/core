@@ -45,7 +45,7 @@
 #include <com/sun/star/sheet/Border.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include "cppunit/extensions/HelperMacros.h"
 #include <iostream>
 

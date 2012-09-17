@@ -40,7 +40,6 @@
 #include "osl/mutex.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/logfile.h"
-#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"

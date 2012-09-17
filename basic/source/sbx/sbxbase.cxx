@@ -25,8 +25,7 @@
 #include <basic/sbxbase.hxx>
 
 #include <rtl/instance.hxx>
-#include <rtl/oustringostreaminserter.hxx>
-#include <sal/log.hxx>
+#include <rtl/ustring.hxx>
 #include <boost/foreach.hpp>
 
 // AppData-Structure for SBX:

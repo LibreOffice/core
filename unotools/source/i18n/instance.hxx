@@ -30,7 +30,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 
 namespace css = ::com::sun::star;

@@ -35,7 +35,6 @@
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <vcl/textview.hxx>

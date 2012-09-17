@@ -37,7 +37,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 using namespace com::sun::star::uno;
 

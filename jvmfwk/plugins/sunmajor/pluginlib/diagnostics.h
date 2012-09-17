@@ -22,8 +22,7 @@
 
 #include "sal/config.h"
 
-#include "rtl/oustringostreaminserter.hxx"
-#include "sal/log.hxx"
+#include "rtl/ustring.hxx"
 
 #define JFW_ENSURE(c, m) SAL_WARN_IF(!(c), "jfw", m)
 

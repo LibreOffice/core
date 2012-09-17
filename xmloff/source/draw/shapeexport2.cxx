@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

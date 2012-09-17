@@ -52,7 +52,7 @@
 #include <editsh.hxx>
 #include <pam.hxx>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>

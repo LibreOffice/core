@@ -33,7 +33,6 @@
 #include <unotest/macros_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>

@@ -30,7 +30,7 @@
 #include "ooxmlexport.hxx"
 
 #include <oox/token/tokens.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 using namespace oox;
 using namespace oox::core;

@@ -41,7 +41,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 
 #include <dmapper/DomainMapper.hxx>
 #include <doctok/resourceids.hxx>
