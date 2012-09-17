@@ -33,6 +33,7 @@
 
 #include "system.h"
 #include <osl/process.h>
+#include <sal/main.h>
 #include <sal/types.h>
 
 #ifdef __cplusplus
@@ -58,7 +59,7 @@ extern "C" void invalidParameterHandler(
 
 // Prototypes for initialization and deinitialization of SAL library
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_initialize(int argc, char ** argv)
+void sal_detail_initialize(int argc, char ** argv)
 {
     // SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
     // SetDllDirectoryW(L"");
@@ -118,7 +119,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_initialize(int argc, char ** argv)
     osl_setCommandArgs(argc, argv);
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_deinitialize()
+void sal_detail_deinitialize()
 {
     if ( SOCKET_ERROR == WSACleanup() )
     {

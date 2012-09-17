@@ -35,11 +35,12 @@
 #endif
 
 #include "osl/process.h"
+#include "sal/main.h"
 #include "sal/types.h"
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_initialize(int argc, char ** argv) {
+void sal_detail_initialize(int argc, char ** argv) {
 #if defined MACOSX
     // On Mac OS X, soffice can restart itself via exec (see restartOnMac in
     // desktop/source/app/app.cxx), which leaves all file descriptors open,
@@ -69,7 +70,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_initialize(int argc, char ** argv)
     osl_setCommandArgs(argc, argv);
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL sal_detail_deinitialize() {}
+void sal_detail_deinitialize() {}
 
 }
 
