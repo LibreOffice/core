@@ -67,29 +67,32 @@ DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponen
 void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    if (aArguments.getLength() == 0 || aArguments.getLength() > 2)
+    if (aArguments.getLength() > 2)
         throw css::lang::IllegalArgumentException(
-        OUSTR("DocumentDigitalSignatures::initialize requires one or two arguments"),
+        OUSTR("DocumentDigitalSignatures::initialize requires zero, one, or two arguments"),
         Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 0);
 
     m_nArgumentsCount = aArguments.getLength();
 
-    if (!(aArguments[0] >>= m_sODFVersion))
-        throw css::lang::IllegalArgumentException(
-        OUSTR("DocumentDigitalSignatures::initialize: the first arguments must be a string"),
-        Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 0);
+    if (aArguments.getLength() > 0)
+    {
+        if (!(aArguments[0] >>= m_sODFVersion))
+            throw css::lang::IllegalArgumentException(
+                OUSTR("DocumentDigitalSignatures::initialize: the first arguments must be a string"),
+                Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 0);
 
-    if (aArguments.getLength() == 2
-        && !(aArguments[1] >>= m_bHasDocumentSignature))
-        throw css::lang::IllegalArgumentException(
-        OUSTR("DocumentDigitalSignatures::initialize: the second arguments must be a bool"),
-        Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 1);
+        if (aArguments.getLength() == 2
+            && !(aArguments[1] >>= m_bHasDocumentSignature))
+            throw css::lang::IllegalArgumentException(
+                OUSTR("DocumentDigitalSignatures::initialize: the second arguments must be a bool"),
+                Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 1);
 
-    //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the
-    //an empty string. In this case we set it to ODFVER_010_TEXT. Then we can later check easily
-    //if initialize was called. Only then m_sODFVersion.getLength() is greater than 0
-    if (m_sODFVersion.isEmpty())
-        m_sODFVersion = ODFVER_010_TEXT;
+        //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the
+        //an empty string. In this case we set it to ODFVER_010_TEXT. Then we can later check easily
+        //if initialize was called. Only then m_sODFVersion.getLength() is greater than 0
+        if (m_sODFVersion.isEmpty())
+            m_sODFVersion = ODFVER_010_TEXT;
+    }
 }
 
 sal_Bool DocumentDigitalSignatures::signDocumentContent(
