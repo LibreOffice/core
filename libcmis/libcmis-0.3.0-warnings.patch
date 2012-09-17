@@ -100,14 +100,14 @@ index c2baa4f..1716755 100644
                              // Invalid repository, don't take care of this
                          }
 diff --git src/libcmis/atom-workspace.cxx src/libcmis/atom-workspace.cxx
-index b6f2388..5e4363b 100644
+index b6f2388..527d0f4 100644
 --- src/libcmis/atom-workspace.cxx
 +++ src/libcmis/atom-workspace.cxx
 @@ -69,6 +69,7 @@ AtomRepository::AtomRepository( xmlNodePtr wsNode ) throw ( libcmis::Exception )
  }
  
  AtomRepository::AtomRepository( const AtomRepository& rCopy ) :
-+    Repository( ),
++    Repository( rCopy ),
      m_collections( rCopy.m_collections ),
      m_uriTemplates( rCopy.m_uriTemplates )
  {
