@@ -6,8 +6,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dip"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="10dip" >
 
         <TextView
             android:id="@+id/selector_label_none"

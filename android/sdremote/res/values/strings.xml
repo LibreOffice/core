@@ -24,6 +24,7 @@
     <string name="wifi">WI-FI</string>
     <string name="selector_noservers">Searching for computers…</string>
     <string name="selector_delete">Remove server</string>
+    <string name="selector_choose_a_computer">Choose a Computer</string>
     <string name="pairing_instructions_1">In Impress, click on the "Slideshow" menu and select "Impress Remote".</string>
     <string name="pairing_instructions_2_deviceName">Choose \"{0}\" as your device.</string>
     <string name="pairing_instructions_3">Then input this PIN:</string>

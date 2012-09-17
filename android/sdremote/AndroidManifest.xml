@@ -17,6 +17,8 @@
         android:theme="@style/Theme.ImpressRemote" >
         <activity
             android:name=".SelectorActivity"
+            android:icon="@drawable/actionbar_icon_computer"
+            android:label="@string/selector_choose_a_computer"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

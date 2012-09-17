@@ -59,6 +59,10 @@
         <item name="android:textColor">@color/grey</item>
     </style>
 
+    <style name="Theme.ImpressRemote.Dialog.Title" parent="@android:style/Theme.Dialog">
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
     <style name="Theme.ImpressRemote" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
         <item name="actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
@@ -70,6 +74,7 @@
         <item name="android:homeAsUpIndicator">@drawable/up_indicator_white</item>
         <item name="android:textColor">@color/text_grey</item>
         <item name="android:alertDialogStyle">@style/Theme.ImpressRemote.Dialog</item>
+
     </style>
 
 </resources>
