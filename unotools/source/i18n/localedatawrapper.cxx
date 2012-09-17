@@ -71,11 +71,11 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         xSMgr( xSF ),
+        xLD( LocaleData::create(comphelper::ComponentContext(xSMgr).getUNOContext()) ),
         bLocaleDataItemValid( sal_False ),
         bReservedWordValid( sal_False )
 {
     setLocale( rLocale );
-    xLD = LocaleData::create(comphelper::ComponentContext(xSMgr).getUNOContext());
 }
 
 
@@ -131,8 +131,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getLanguageCountryInfo( getLocale() );
+        return xLD->getLanguageCountryInfo( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -146,8 +145,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getLocaleItem( getLocale() );
+        return xLD->getLocaleItem( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -161,8 +159,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getAllCurrencies2( getLocale() );
+        return xLD->getAllCurrencies2( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -176,8 +173,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getAllFormats( getLocale() );
+        return xLD->getAllFormats( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -191,8 +187,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getForbiddenCharacters( getLocale() );
+        return xLD->getForbiddenCharacters( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -206,8 +201,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getReservedWord( getLocale() );
+        return xLD->getReservedWord( getLocale() );
     }
     catch ( const Exception& e )
     {
@@ -226,8 +220,7 @@ void LocaleDataWrapper::invalidateData()
 
     try
     {
-        if ( xLD.is() )
-            rInstalledLocales = xLD->getAllInstalledLocaleNames();
+        rInstalledLocales = xLD->getAllInstalledLocaleNames();
     }
     catch ( const Exception& e )
     {
@@ -1832,8 +1825,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getAllCalendars2( getLocale() );
+        return xLD->getAllCalendars2( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -1856,12 +1848,9 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 
     try
     {
-        if ( xLD.is() )
-        {
-            const_cast<LocaleDataWrapper*>(this)->aDateAcceptancePatterns =
-                xLD->getDateAcceptancePatterns( getLocale() );
-            return aDateAcceptancePatterns;
-        }
+        const_cast<LocaleDataWrapper*>(this)->aDateAcceptancePatterns =
+            xLD->getDateAcceptancePatterns( getLocale() );
+        return aDateAcceptancePatterns;
     }
     catch (const Exception& e)
     {
@@ -1881,8 +1870,7 @@ void LocaleDataWrapper::setDateAcceptancePatterns(
     {
         try
         {
-            if ( xLD.is() )
-                aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( getLocale() );
+            aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( getLocale() );
         }
         catch (const Exception& e)
         {
