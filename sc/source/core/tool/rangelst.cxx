@@ -707,7 +707,7 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
     for(size_t i = 0; i < maRanges.size();)
     {
-        if(FindRangeIn(aRange)(maRanges[i]))
+        if(FindRangeIn< ScRange >(aRange)(maRanges[i]))
         {
             ScRange* pRange = Remove(i);
             delete pRange;
