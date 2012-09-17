@@ -312,10 +312,17 @@ static bool lcl_CharIsJoiner(sal_Unicode cChar)
 bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 {
     le_int32 nLayoutFlags = 0;
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
     if (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS)
         nLayoutFlags |= LayoutEngine::kTypoFlagKern;
     if (rArgs.mnFlags & SAL_LAYOUT_ENABLE_LIGATURES)
         nLayoutFlags |= LayoutEngine::kTypoFlagLiga;
+#else
+    if (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS)
+        nLayoutFlags |= 0x01;
+    if (rArgs.mnFlags & SAL_LAYOUT_ENABLE_LIGATURES)
+        nLayoutFlags |= 0x10;
+#endif
 
     LEUnicode* pIcuChars;
     if( sizeof(LEUnicode) == sizeof(*rArgs.mpStr) )
