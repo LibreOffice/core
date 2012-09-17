@@ -56,17 +56,30 @@ public class NetworkClient extends Client {
                             + "\n\n");
 
             // Wait until we get the appropriate string back...
-            System.out.println("SF:waiting");
             String aTemp = mReader.readLine();
-            System.out.println("SF:waited");
-            if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
-                return;
-            } else {
-                aIntent = new Intent(
-                                CommunicationService.MSG_PAIRING_SUCCESSFUL);
-                LocalBroadcastManager.getInstance(mCommunicationService)
-                                .sendBroadcast(aIntent);
+
+            while (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
+                if (aTemp.equals("LO_SERVER_VALIDATING_PIN")) {
+                    // Broadcast that we need a pin screen.
+                    aIntent = new Intent(
+                                    CommunicationService.STATUS_PAIRING_PINVALIDATION);
+                    aIntent.putExtra("PIN", aPin);
+                    mPin = aPin;
+                    LocalBroadcastManager.getInstance(mCommunicationService)
+                                    .sendBroadcast(aIntent);
+                    while (mReader.readLine().length() != 0) {
+                        // Read off empty lines
+                    }
+                    aTemp = mReader.readLine();
+                } else {
+                    return;
+                }
             }
+
+            aIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
+            LocalBroadcastManager.getInstance(mCommunicationService)
+                            .sendBroadcast(aIntent);
+
             while (mReader.readLine().length() != 0) {
                 // Get rid of extra lines
                 System.out.println("SF: empty line");

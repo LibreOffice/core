@@ -29,6 +29,7 @@ public class ActivityChangeBroadcastProcessor {
     public void addToFilter(IntentFilter aFilter) {
         aFilter.addAction(CommunicationService.STATUS_CONNECTED_NOSLIDESHOW);
         aFilter.addAction(CommunicationService.STATUS_CONNECTED_SLIDESHOW_RUNNING);
+        aFilter.addAction(CommunicationService.STATUS_PAIRING_PINVALIDATION);
     }
 
     public void onReceive(Context aContext, Intent aIntent) {
@@ -43,6 +44,11 @@ public class ActivityChangeBroadcastProcessor {
                         .equals(CommunicationService.STATUS_CONNECTED_SLIDESHOW_RUNNING)) {
             Intent nIntent = new Intent(mActivity, PresentationActivity.class);
             nIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            mActivity.startActivity(nIntent);
+        } else if (aIntent.getAction().equals(
+                        CommunicationService.STATUS_PAIRING_PINVALIDATION)) {
+            Intent nIntent = new Intent(mActivity, PairingActivity.class);
+            nIntent.putExtras(aIntent.getExtras()); // Pass on pin and other info.
             mActivity.startActivity(nIntent);
         }
     }

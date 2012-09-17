@@ -8,6 +8,7 @@
  */
 package org.libreoffice.impressremote;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -17,6 +18,7 @@ import org.libreoffice.impressremote.communication.Server;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -50,6 +52,8 @@ public class SelectorActivity extends SherlockActivity {
     private LinearLayout mNetworkList;
     private TextView mNoServerLabel;
     private ActivityChangeBroadcastProcessor mBroadcastProcessor;
+
+    ProgressDialog mProgressDialog = null;
 
     /** Called when the activity is first created. */
     @Override
@@ -160,6 +164,9 @@ public class SelectorActivity extends SherlockActivity {
             mCommunicationService.stopSearching();
         }
         doUnbindService();
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
     }
 
     void doBindService() {
@@ -303,9 +310,17 @@ public class SelectorActivity extends SherlockActivity {
             }
             if (aDesiredServer != null) {
                 mCommunicationService.connectTo(aDesiredServer);
-                Intent aIntent = new Intent(SelectorActivity.this,
-                                PairingActivity.class);
-                startActivity(aIntent);
+                // Connect Service and wait for broadcast
+                String aFormat = getResources().getString(
+                                R.string.selector_dialog_connecting);
+                String aDialogText = MessageFormat.format(aFormat,
+                                aDesiredServer.getName());
+
+                mProgressDialog = ProgressDialog.show(SelectorActivity.this,
+                                "", aDialogText, true);
+                //                Intent aIntent = new Intent(SelectorActivity.this,
+                //                                PairingActivity.class);
+                //                startActivity(aIntent);
             }
 
         }

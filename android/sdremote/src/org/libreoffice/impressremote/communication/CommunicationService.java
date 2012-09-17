@@ -192,6 +192,8 @@ public class CommunicationService extends Service implements Runnable {
      */
     public static final String STATUS_CONNECTED_NOSLIDESHOW = "STATUS_CONNECTED_NOSLIDESHOW";
 
+    public static final String STATUS_PAIRING_PINVALIDATION = "STATUS_PAIRING_PINVALIDATION";
+
     private Transmitter mTransmitter;
 
     private Client mClient;

@@ -66,12 +66,6 @@ public class StartPresentationActivity extends SherlockActivity {
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
 
-            if (mCommunicationService.isSlideShowRunning()) {
-                Intent nIntent = new Intent(StartPresentationActivity.this,
-                                PresentationActivity.class);
-                startActivity(nIntent);
-            }
-
         }
 
         @Override
