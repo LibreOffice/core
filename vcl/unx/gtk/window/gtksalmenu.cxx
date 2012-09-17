@@ -52,6 +52,7 @@ static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
 
 static void UpdateNativeMenu2( GtkSalMenu *pMenu )
 {
+    cout << __FUNCTION__ << endl;
     if ( pMenu == NULL )
         return;
 
@@ -152,6 +153,7 @@ static void UpdateNativeMenu2( GtkSalMenu *pMenu )
 
 static void UpdateNativeMenu( GtkSalMenu* pMenu )
 {
+    cout << __FUNCTION__ << endl;
     if ( pMenu == NULL )
         return;
 
@@ -334,6 +336,7 @@ on_registrar_available (GDBusConnection * /*connection*/,
                         const gchar     * /*name_owner*/,
                         gpointer         user_data)
 {
+    cout << __FUNCTION__ << endl;
     GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
     GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
 
@@ -394,6 +397,7 @@ on_registrar_unavailable (GDBusConnection * /*connection*/,
                           const gchar     * /*name*/,
                           gpointer         user_data)
 {
+    cout << __FUNCTION__ << endl;
     GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
     GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
 
@@ -421,12 +425,14 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpMenuModel( NULL ),
     mpActionGroup( NULL )
 {
+    cout << __FUNCTION__ << endl;
 }
 
 GtkSalMenu::~GtkSalMenu()
 {
     if ( mbMenuBar == sal_True ) {
 //        g_source_remove_by_user_data( this );
+        cout << __FUNCTION__ << endl;
 
         ((GtkSalFrame*) mpFrame)->SetMenu( NULL );
 
@@ -486,7 +492,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
     GdkWindow *gdkWindow = gtk_widget_get_window( widget );
 
-    if (gdkWindow) {
+    if ( gdkWindow != NULL ) {
         mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
         mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
 

@@ -167,10 +167,10 @@ g_lo_action_group_query_action (GActionGroup        *group,
         *state_type = action->state_type;
 
     if (state_hint)
-        *state_hint = (action->state_hint) ? g_variant_ref(action->state_hint) : NULL;
+        *state_hint = (action->state_hint) ? g_variant_ref (action->state_hint) : NULL;
 
     if (state)
-        *state = (action->state) ? g_variant_ref(action->state) : NULL;
+        *state = (action->state) ? g_variant_ref (action->state) : NULL;
 
     return TRUE;
 }
