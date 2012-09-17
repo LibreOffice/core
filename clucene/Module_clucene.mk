@@ -28,13 +28,13 @@
 $(eval $(call gb_Module_Module,clucene))
 
 ifeq ($(SYSTEM_CLUCENE),NO)
-
+ifneq ($(OS),ANDROID)
 $(eval $(call gb_Module_add_targets,clucene,\
     Library_clucene \
     Package_source \
 	UnpackedTarball_clucene \
 ))
-
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
