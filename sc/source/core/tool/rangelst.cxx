@@ -705,9 +705,16 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
 {
     ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-    iterator itrDel = std::remove_if(maRanges.begin(), maRanges.end(), FindRangeIn<ScRange>(aRange));
-    for_each(itrDel, maRanges.end(), ScDeleteObjectByPtr<ScRange>());
-    maRanges.erase(itrDel, maRanges.end());
+    for(size_t i = 0; i < maRanges.size();)
+    {
+        if(FindRangeIn(aRange)(maRanges[i]))
+        {
+            ScRange* pRange = Remove(i);
+            delete pRange;
+        }
+        else
+            ++i;
+    }
 
     std::vector<ScRange> aNewRanges;
 
