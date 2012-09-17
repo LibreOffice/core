@@ -209,14 +209,19 @@ void ScDPCacheTable::fillTable(
 
 void ScDPCacheTable::fillTable()
 {
-   const SCROW  nRowCount = getRowSize();
-   const SCCOL  nColCount = (SCCOL) getColSize();
-   if ( nRowCount <= 0 || nColCount <= 0)
+   SCROW nRowCount = getRowSize();
+   SCCOL nColCount = getColSize();
+   if (nRowCount <= 0 || nColCount <= 0)
         return;
 
     maRowFlags.clear();
     maRowFlags.reserve(nRowCount);
 
+    for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
+    {
+        maRowFlags.push_back(RowFlag());
+        maRowFlags.back().mbShowByFilter = true;
+    }
 
     // Initialize field entries container.
     maFieldEntries.clear();
@@ -227,28 +232,21 @@ void ScDPCacheTable::fillTable()
     {
         maFieldEntries.push_back( vector<SCROW>() );
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
-        if ( nMemCount )
+        if (!nMemCount)
+            continue;
+
+        std::vector<SCROW> aAdded(nMemCount, -1);
+
+        for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
         {
-            std::vector< SCROW > pAdded( nMemCount, -1 );
-
-            for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
-            {
-                SCROW nIndex = getCache()->GetItemDataId( nCol, nRow, false );
-                SCROW nOrder = getOrder( nCol, nIndex );
-
-                if ( nCol == 0 )
-                {
-                     maRowFlags.push_back(RowFlag());
-                     maRowFlags.back().mbShowByFilter = true;
-                }
-
-                pAdded[nOrder] = nIndex;
-            }
-            for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
-            {
-                if ( pAdded[nRow] != -1 )
-                    maFieldEntries.back().push_back( pAdded[nRow] );
-            }
+            SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, false);
+            SCROW nOrder = getOrder(nCol, nIndex);
+            aAdded[nOrder] = nIndex;
+        }
+        for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
+        {
+            if (aAdded[nRow] != -1)
+                maFieldEntries.back().push_back(aAdded[nRow]);
         }
     }
 }
