@@ -38,12 +38,14 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_flat \
 	Configuration_mysql \
 	Configuration_odbc \
+	Executable_mork_helper \
 	Library_calc \
 	Library_dbase \
 	Library_dbpool2 \
 	Library_dbtools \
 	Library_file \
 	Library_flat \
+	Library_mork \
 	Library_mysql \
 	Library_odbc \
 	Library_odbcbase \

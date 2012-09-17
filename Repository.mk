@@ -45,6 +45,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     idxdict \
     lngconvex \
     localize \
+    mork_helper \
     mkunroll \
     osl_process_child \
     pdf2xml \
@@ -300,6 +301,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lwpft \
 	MacOSXSpell \
     merged \
+    mork \
     mozab2 \
     mozabdrv \
     msfilter \
