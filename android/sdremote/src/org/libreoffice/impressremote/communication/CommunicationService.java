@@ -59,6 +59,10 @@ public class CommunicationService extends Service implements Runnable {
         return Client.getPin();
     }
 
+    public String getPairingDeviceName() {
+        return Client.getName();
+    }
+
     private State mStateDesired = State.DISCONNECTED;
 
     private Server mServerDesired = null;

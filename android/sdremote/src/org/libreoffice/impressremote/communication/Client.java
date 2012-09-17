@@ -33,6 +33,7 @@ public abstract class Client {
     protected BufferedReader mReader;
     protected OutputStream mOutputStream;
     protected String mPin = "";
+    protected String mName = "";
 
     private static Client latestInstance = null;
 
@@ -103,6 +104,14 @@ public abstract class Client {
     public static String getPin() {
         if (latestInstance != null) {
             return latestInstance.mPin;
+        } else {
+            return "";
+        }
+    }
+
+    public static String getName() {
+        if (latestInstance != null) {
+            return latestInstance.mName;
         } else {
             return "";
         }

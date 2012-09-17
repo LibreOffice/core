@@ -26,12 +26,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PairingActivity"
+            android:icon="@drawable/actionbar_icon_computer" >
+        </activity>
 
         <service android:name=".communication.CommunicationService" >
         </service>
 
-        <activity android:name=".PairingActivity" >
-        </activity>
         <activity android:name=".StartPresentationActivity" >
         </activity>
         <activity

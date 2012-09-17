@@ -44,6 +44,8 @@ public class PairingActivity extends SherlockActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
                         aFilter);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -69,6 +71,8 @@ public class PairingActivity extends SherlockActivity {
 
             if (mCommunicationService.getState() == State.CONNECTING) {
                 mPinText.setText(mCommunicationService.getPairingPin());
+                getSupportActionBar().setTitle(
+                                mCommunicationService.getPairingDeviceName());
             }
 
         }
@@ -91,6 +95,10 @@ public class PairingActivity extends SherlockActivity {
                 String aPin = aIntent.getStringExtra("PIN");
 
                 mPinText.setText(aPin);
+                if (mCommunicationService != null)
+                    getSupportActionBar().setTitle(
+                                    mCommunicationService
+                                                    .getPairingDeviceName());
                 //                refreshLists();
             } else if (aIntent.getAction().equals(
                             CommunicationService.MSG_PAIRING_SUCCESSFUL)) {

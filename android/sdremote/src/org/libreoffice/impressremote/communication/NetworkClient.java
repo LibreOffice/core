@@ -35,6 +35,7 @@ public class NetworkClient extends Client {
                     CommunicationService aCommunicationService) {
         super(aServer, aCommunicationService);
         try {
+            mName = aServer.getName();
             mSocket = new Socket(aServer.getAddress(), PORT);
             mInputStream = mSocket.getInputStream();
             mReader = new BufferedReader(new InputStreamReader(mInputStream,
