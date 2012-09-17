@@ -62,7 +62,7 @@ using namespace ::utl;
 //------------------------------------------------------------------------------------
 // class ODMAFilePicker
 //------------------------------------------------------------------------------------
-ODMAFilePicker::ODMAFilePicker( const Reference < XMultiServiceFactory >& xFactory ) :
+ODMAFilePicker::ODMAFilePicker( const Reference < XComponentContext >& rxContext ) :
     cppu::WeakComponentImplHelper9<
       XFilterManager,
       XFilterGroupManager,
@@ -73,14 +73,15 @@ ODMAFilePicker::ODMAFilePicker( const Reference < XMultiServiceFactory >& xFacto
       XCancellable,
       XEventListener,
       XServiceInfo>( m_rbHelperMtx ),
+    m_xContext( rxContext ),
     m_bMultiSelectionMode( sal_False ),
     m_aDefaultName( ),
     m_aFiles( ),
     m_nDialogKind( OPEN )
 {
     m_bUseDMS = ::odma::DMSsAvailable();
-    m_xSystemFilePicker = xFactory->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.Win32FilePicker" ) ));
+    m_xSystemFilePicker = rxContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.ui.dialogs.Win32FilePicker", rxContext);
 }
 
 // XExecutableDialog functions
@@ -198,7 +199,7 @@ sal_Int16 SAL_CALL ODMAFilePicker::execute( )
                 // Create a Content for the odma URL so that
                 // odma::ContentProvider will learn about the DOCID we
                 // just created.
-                ucbhelper::Content content( s, Reference< XCommandEnvironment >() );
+                ucbhelper::Content content( s, Reference< XCommandEnvironment >(), m_xContext );
                 m_aFiles = Sequence< rtl::OUString >( &s, 1 );
                 return ExecutableDialogResults::OK;
             }
@@ -538,8 +539,7 @@ Reference< XInterface > SAL_CALL ODMAFilePicker::impl_createInstance(
     const Reference< XComponentContext >& rxContext)
     throw( Exception )
 {
-    Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference< XInterface >( *new ODMAFilePicker( xServiceManager ) );
+    return Reference< XInterface >( *new ODMAFilePicker( rxContext ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
