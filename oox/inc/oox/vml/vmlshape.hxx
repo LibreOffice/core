@@ -91,6 +91,7 @@ struct ShapeTypeModel
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
+    ::rtl::OUString     maArcsize;              /// round rectangles arc size
 
     OptValue< ::rtl::OUString > moGraphicPath;  ///< Path to a graphic for this shape.
     OptValue< ::rtl::OUString > moGraphicTitle; ///< Title of the graphic.
