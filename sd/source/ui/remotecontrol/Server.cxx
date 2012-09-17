@@ -143,6 +143,8 @@ void RemoteServer::execute()
                 }
 
             }
+            pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
+                            strlen( "LO_SERVER_VALIDATING_PIN\n\n" ) );
         } else {
             delete pSocket;
         }
