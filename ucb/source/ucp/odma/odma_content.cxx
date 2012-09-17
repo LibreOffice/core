@@ -40,6 +40,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
