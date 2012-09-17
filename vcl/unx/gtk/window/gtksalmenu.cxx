@@ -346,6 +346,9 @@ on_registrar_available (GDBusConnection * /*connection*/,
 
         if ( gdkWindow != NULL )
         {
+            GMenuModel* pMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
+            GActionGroup* pActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
+
             XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
 
             gchar* aDBusPath = g_strdup_printf("/window/%lu", windowId);
@@ -359,11 +362,11 @@ on_registrar_available (GDBusConnection * /*connection*/,
                 return;
 
             // Publish the menu.
-            if ( aDBusMenubarPath != NULL )
-                g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pSalMenu->GetMenuModel(), NULL);
+            if ( aDBusMenubarPath != NULL && pMenuModel != NULL )
+                g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
 
-            if ( aDBusPath != NULL )
-                g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pSalMenu->GetActionGroup(), NULL);
+            if ( aDBusPath != NULL && pActionGroup != NULL )
+                g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
 
             // Set window properties.
             gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
@@ -376,7 +379,9 @@ on_registrar_available (GDBusConnection * /*connection*/,
             g_free( aDBusMenubarPath );
 
             bDBusIsAvailable = sal_True;
-            pMenuBar->SetDisplayable( sal_False );
+
+            if ( pMenuBar )
+                pMenuBar->SetDisplayable( sal_False );
         }
     }
 
@@ -545,8 +550,11 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
                 pCheckValue = g_variant_new_boolean( bCheck );
         }
 
-        if ( pCheckValue != NULL && ( pCurrentState == NULL || g_variant_equal( pCurrentState, pCheckValue) == FALSE ) )
+        if ( pCheckValue != NULL && ( pCurrentState == NULL || g_variant_equal( pCurrentState, pCheckValue ) == FALSE ) )
             g_action_group_change_action_state( mpActionGroup, aCommand, pCheckValue );
+
+        if ( pCurrentState )
+            g_variant_unref( pCurrentState );
     }
 
     if ( aCommand )
@@ -563,7 +571,7 @@ void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
 
 void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText )
 {
-    // Replace the "~" character with "_".
+    // Replace the '~' character with '_'.
     rtl::OUString aText = rText.replace( '~', '_' );
     rtl::OString aConvertedText = OUStringToOString( aText, RTL_TEXTENCODING_UTF8 );
 

@@ -204,33 +204,38 @@ g_lo_action_group_change_state (GActionGroup *group,
                                 const gchar  *action_name,
                                 GVariant     *value)
 {
-    if (!action_name || !value)
-        return;
+    g_return_if_fail (value != NULL);
 
-    GLOActionGroup* lo_group = G_LO_ACTION_GROUP (group);
-    GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
+    g_variant_ref_sink (value);
 
-    if (action == NULL)
-        return;
-
-    if (action->submenu == TRUE)
+    if (action_name != NULL)
     {
-//        g_action_group_action_state_changed(group, action_name, value);
-        g_lo_action_group_perform_submenu_action (lo_group, action_name, value);
+        GLOActionGroup* lo_group = G_LO_ACTION_GROUP (group);
+        GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
+
+        if (action != NULL)
+        {
+            if (action->submenu == TRUE)
+                g_lo_action_group_perform_submenu_action (lo_group, action_name, value);
+            else
+            {
+                if (action->state_type == NULL)
+                    action->state_type = g_variant_type_copy (g_variant_get_type(value));
+
+                if (g_variant_is_of_type (value, action->state_type) == TRUE)
+                {
+                    if (action->state)
+                        g_variant_unref(action->state);
+
+                    action->state = g_variant_ref (value);
+
+                    g_action_group_action_state_changed (group, action_name, value);
+                }
+            }
+        }
     }
-    else
-    {
-        if (action->state_type == NULL)
-            action->state_type = g_variant_type_copy(g_variant_get_type(value));
 
-        g_return_if_fail (g_variant_is_of_type(value, action->state_type) == TRUE);
-
-        if (action->state)
-            g_variant_unref(action->state);
-
-        action->state = g_variant_take_ref(value);
-        g_action_group_action_state_changed(group, action_name, value);
-    }
+    g_variant_unref (value);
 }
 
 static void
@@ -281,7 +286,8 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
     if (old_action == NULL || old_action->item_id != item_id)
     {
         if (old_action != NULL)
-            g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
+            g_lo_action_group_remove (group, action_name);
+//            g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
 
         GLOAction* action = g_lo_action_new();
 
@@ -297,10 +303,10 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
             action->state_type = (GVariantType*) state_type;
 
         if (state_hint)
-            action->state_hint = g_variant_take_ref (state_hint);
+            action->state_hint = g_variant_ref_sink (state_hint);
 
         if (state)
-            action->state = g_variant_take_ref (state);
+            action->state = g_variant_ref_sink (state);
 
         g_action_group_action_added (G_ACTION_GROUP (group), action_name);
     }
