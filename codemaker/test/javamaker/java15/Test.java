@@ -19,7 +19,6 @@
 package test.codemaker.javamaker.java15;
 
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.DeploymentException;
 import com.sun.star.uno.XComponentContext;
 import complexlib.ComplexTestCase;
 
@@ -69,18 +68,18 @@ public final class Test extends ComplexTestCase {
                 }
 
                 public XMultiComponentFactory getServiceManager() {
-                    return null;
+                    throw new com.sun.star.uno.RuntimeException();
                 }
             };
         try {
             Service.create(context);
             failed();
-        } catch (DeploymentException e) {}
+        } catch (com.sun.star.uno.RuntimeException e) {}
         try {
             Service.create(
                 context, false, (byte) 1, (short) 2, Integer.valueOf(4));
             failed();
-        } catch (DeploymentException e) {}
+        } catch (com.sun.star.uno.RuntimeException e) {}
     }
 
     private static final class Ifc implements XIfc {

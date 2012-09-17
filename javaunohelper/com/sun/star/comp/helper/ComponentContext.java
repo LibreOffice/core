@@ -207,6 +207,11 @@ public class ComponentContext implements XComponentContext, XComponent
     //______________________________________________________________________________________________
     public XMultiComponentFactory getServiceManager()
     {
+        if (m_xSMgr == null)
+        {
+            throw new com.sun.star.uno.RuntimeException(
+                "null component context service manager" );
+        }
         return m_xSMgr;
     }
 

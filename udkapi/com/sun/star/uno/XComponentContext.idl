@@ -44,12 +44,13 @@ published interface XComponentContext : XInterface
     any getValueByName( [in] string Name );
 
     /** Gets the service manager instance to be used from key
-        <code>/singletons/com.sun.star.lang.theServiceManager</code> (maybe null ref).
+        <code>/singletons/com.sun.star.lang.theServiceManager</code>.
         This method has been added for convenience, because the
         service manager is used very often.
 
         @return
-                service manager, if any
+                service manager; throws RuntimeException in case service manager
+                is null
     */
     com::sun::star::lang::XMultiComponentFactory getServiceManager();
 };

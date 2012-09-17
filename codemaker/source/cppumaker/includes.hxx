@@ -37,6 +37,7 @@ public:
     ~Includes();
 
     void add(rtl::OString const & registryType);
+    void addCassert() { m_includeCassert = true; }
     void addAny() { m_includeAny = true; }
     void addReference() { m_includeReference = true; }
     void addSequence() { m_includeSequence = true; }
@@ -72,6 +73,7 @@ private:
     TypeManager const & m_manager;
     codemaker::Dependencies::Map m_map;
     bool m_hpp;
+    bool m_includeCassert;
     bool m_includeAny;
     bool m_includeReference;
     bool m_includeSequence;

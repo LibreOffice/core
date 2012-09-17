@@ -2634,12 +2634,14 @@ void addConstructor(
     SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     // stack: context
-    code->instrInvokestatic(
-        className, rtl::OString(RTL_CONSTASCII_STRINGPARAM("$getFactory")),
+    code->instrInvokeinterface(
+        rtl::OString(
+            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")),
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("getServiceManager")),
         rtl::OString(
             RTL_CONSTASCII_STRINGPARAM(
-                "(Lcom/sun/star/uno/XComponentContext;)"
-                "Lcom/sun/star/lang/XMultiComponentFactory;")));
+                "()Lcom/sun/star/lang/XMultiComponentFactory;")),
+        1);
     // stack: factory
     code->loadStringConstant(unoName);
     // stack: factory serviceName
@@ -2904,67 +2906,6 @@ void handleService(
             addConstructor(
                 manager, realJavaBaseName, unoName, className, reader, i, name,
                 base, defaultCtor, dependencies, cf.get());
-        }
-        // Synthetic getFactory method:
-        {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            std::auto_ptr< ClassFile::Code > code(cf->newCode());
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            code->loadLocalReference(0);
-            // stack: context
-            code->instrInvokeinterface(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/uno/XComponentContext")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("getServiceManager")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "()Lcom/sun/star/lang/XMultiComponentFactory;")),
-                1);
-            // stack: factory
-            code->instrDup();
-            // stack: factory factory
-            ClassFile::Code::Branch branch = code->instrIfnull();
-            // stack: factory
-            code->instrAreturn();
-            code->branchHere(branch);
-            code->instrPop();
-            // stack: -
-            code->instrNew(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/uno/DeploymentException")));
-            // stack: ex
-            code->instrDup();
-            // stack: ex ex
-            code->loadStringConstant(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "component context fails to supply service manager")));
-            // stack: ex ex "..."
-            code->loadLocalReference(0);
-            // stack: ex ex "..." context
-            code->instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/uno/DeploymentException")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;Ljava/lang/Object;)V")));
-            // stack: ex
-            code->instrAthrow();
-            code->setMaxStackAndLocals(4, 1);
-            cf->addMethod(
-                static_cast< ClassFile::AccessFlags >(
-                    ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
-                    | ClassFile::ACC_SYNTHETIC),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("$getFactory")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Lcom/sun/star/uno/XComponentContext;)"
-                        "Lcom/sun/star/lang/XMultiComponentFactory;")),
-                code.get(), std::vector< rtl::OString >(), rtl::OString());
         }
         // Synthetic castInstance method:
         {

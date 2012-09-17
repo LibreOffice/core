@@ -672,6 +672,12 @@ Any ComponentContext::getValueByName( OUString const & rName )
 Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
     throw (RuntimeException)
 {
+    if ( !m_xSMgr.is() )
+    {
+        throw RuntimeException(
+            "null component context service manager",
+            static_cast<OWeakObject *>(this) );
+    }
     return m_xSMgr;
 }
 //__________________________________________________________________________________________________

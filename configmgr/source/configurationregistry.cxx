@@ -28,7 +28,6 @@
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/container/XNamed.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/registry/InvalidRegistryException.hpp"
@@ -323,13 +322,11 @@ Service::Service(
     assert(context.is());
     try {
         provider_ = css::uno::Reference< css::lang::XMultiServiceFactory >(
-            (css::uno::Reference< css::lang::XMultiComponentFactory >(
-                context->getServiceManager(), css::uno::UNO_SET_THROW)->
-             createInstanceWithContext(
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.configuration.DefaultProvider")),
-                 context)),
+            context->getServiceManager()->createInstanceWithContext(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.DefaultProvider")),
+                context),
             css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {
         throw;

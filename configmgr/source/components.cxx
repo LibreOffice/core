@@ -29,7 +29,6 @@
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -431,9 +430,8 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
     if (j == externalServices_.end()) {
         css::uno::Reference< css::uno::XInterface > service;
         try {
-            service = css::uno::Reference< css::lang::XMultiComponentFactory >(
-                context_->getServiceManager(), css::uno::UNO_SET_THROW)->
-                createInstanceWithContext(name, context_);
+            service = context_->getServiceManager()->createInstanceWithContext(
+                name, context_);
         } catch (css::uno::RuntimeException &) {
             // Assuming these exceptions are real errors:
             throw;
