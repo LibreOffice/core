@@ -1164,9 +1164,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
-                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
             else
-                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( ConversionHelper::convertTwipToMM100(200) ) );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, false, uno::makeAny( ConversionHelper::convertTwipToMM100(200) ) );
         break;
         case NS_ooxml::LN_CT_SmartTagRun_uri:
         case NS_ooxml::LN_CT_SmartTagRun_element:
