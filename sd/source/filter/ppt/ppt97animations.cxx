@@ -682,11 +682,8 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     // append the effect to the main sequence
     if( !this->HasParagraphEffect() )
     {
-        if( this->HasAnimateAssociatedShape() )
-            pEffect->setTargetSubItem( presentation::ShapeAnimationSubType::AS_WHOLE );
-        else
-            pEffect->setTargetSubItem( presentation::ShapeAnimationSubType::AS_WHOLE ); //todo: set ONLY_TEXT again if that is fixed
-            //pEffect->setTargetSubItem( presentation::ShapeAnimationSubType::ONLY_TEXT );
+        // TODO: !this->HasAnimateAssociatedShape() can possibly have this set to ONLY_TEXT - see i#42737
+        pEffect->setTargetSubItem( presentation::ShapeAnimationSubType::AS_WHOLE );
     }
 
     //3. ------ put the created effect to the model and do some last changes fro paragraph effects ------
