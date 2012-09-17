@@ -1958,6 +1958,8 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
     if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label")))
         SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("title")))
+        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
         Show(toBool(rValue));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("sensitive")))
