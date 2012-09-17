@@ -772,22 +772,10 @@ SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pP
 
 }
 
-AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg (
-                                    SwView& rView,int nResId, bool bToTable )
+AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg(SwView& rView, bool bToTable)
 {
-    SwConvertTableDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_CONV_TEXT_TABLE :
-            pDlg = new SwConvertTableDlg( rView, bToTable );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwConvertTableDlg_Impl( pDlg );
-    return 0;
+    SwConvertTableDlg* pDlg = new SwConvertTableDlg(rView, bToTable);
+    return new AbstractSwConvertTableDlg_Impl(pDlg);
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId)

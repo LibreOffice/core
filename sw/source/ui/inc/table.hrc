@@ -19,7 +19,7 @@
 #include "rcid.hrc"
 
 #define DLG_FORMAT_TABLE        (RC_TABLE_BEGIN + 1)
-#define DLG_CONV_TEXT_TABLE     (RC_TABLE_BEGIN + 2)
+
 #define DLG_ROW_HEIGHT          (RC_TABLE_BEGIN + 4)
 
 

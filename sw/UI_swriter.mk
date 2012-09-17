@@ -11,6 +11,7 @@ $(eval $(call gb_UI_UI,modules/swriter))
 
 $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/columnwidth \
+	sw/uiconfig/swriter/ui/converttexttable \
 	sw/uiconfig/swriter/ui/inserttable \
 	sw/uiconfig/swriter/ui/linenumbering \
 	sw/uiconfig/swriter/ui/printeroptions \

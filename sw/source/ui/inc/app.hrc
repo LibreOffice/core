@@ -85,14 +85,13 @@
 #define MN_SUB_ALIGN                    (RC_APP_BEGIN + 50)
 
 #define STR_WRITER_DOCUMENT_FULLTYPE    (RC_APP_BEGIN + 100)
+#define STR_CONVERT_TEXT_TABLE          (RC_APP_BEGIN + 101)
 #define STR_ABSTRACT_TITLE              (RC_APP_BEGIN + 102)
 #define STR_DONT_ASK_AGAIN              (RC_APP_BEGIN + 103)
-// --> OD 2008-04-14 #outlinelevel#
 #define STR_OUTLINE_NUMBERING           (RC_APP_BEGIN + 104)
-//#outline level,zhaojianwei
 #define STR_FDLG_OUTLINE_LEVEL          (RC_APP_BEGIN + 105)
 #define STR_FDLG_STYLE                  (RC_APP_BEGIN + 106)
-//<-end,zhaojianwei
+#define STR_SYMBOL                      (RC_APP_BEGIN + 107)
 
 // Status bar strings
 #define STR_STATUSBAR_WORDCOUNT_NO_SELECTION (RC_APP_BEGIN + 110)

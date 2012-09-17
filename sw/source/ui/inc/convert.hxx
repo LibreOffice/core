@@ -42,31 +42,24 @@ struct SwInsertTableOptions;
 
 class SwConvertTableDlg: public SfxModalDialog
 {
-    RadioButton     aTabBtn;
-    RadioButton     aSemiBtn;
-    RadioButton     aParaBtn;
-    RadioButton     aOtherBtn;
-    Edit            aOtherEd;
-    CheckBox        aKeepColumn;
-    FixedLine       aDelimFL;
+    RadioButton*    mpTabBtn;
+    RadioButton*    mpSemiBtn;
+    RadioButton*    mpParaBtn;
+    RadioButton*    mpOtherBtn;
+    Edit*           mpOtherEd;
+    CheckBox*       mpKeepColumn;
 
-    CheckBox        aHeaderCB;
-    CheckBox        aRepeatHeaderCB;
+    VclContainer*   mpOptions;
 
-    FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
-    FixedText           aRepeatHeaderBeforeFT;
-    NumericField        aRepeatHeaderNF;
-    FixedText           aRepeatHeaderAfterFT;
-    TextControlCombo    aRepeatHeaderCombo;
+    CheckBox*       mpHeaderCB;
+    CheckBox*       mpRepeatHeaderCB;
 
-    FixedLine       aOptionsFL;
-    CheckBox        aDontSplitCB;
-    CheckBox        aBorderCB;
-    PushButton      aAutoFmtBtn;
+    VclContainer*   mpRepeatRows;
+    NumericField*   mpRepeatHeaderNF;
 
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    CheckBox*       mpDontSplitCB;
+    CheckBox*       mpBorderCB;
+    PushButton*     mpAutoFmtBtn;
 
     String          sConvertTextTable;
     SwTableAutoFmt* pTAutoFmt;

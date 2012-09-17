@@ -837,8 +837,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(
-                            GetView(),DLG_CONV_TEXT_TABLE , bToTable);
+                AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(GetView(), bToTable);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {

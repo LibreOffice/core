@@ -560,6 +560,16 @@ String STR_STATUSBAR_WORDCOUNT
     Text [ en-US ] = "Words: $1 Selected: $2";
 };
 
+String STR_CONVERT_TEXT_TABLE
+{
+    Text [ en-US ] = "Convert Text to Table" ;
+};
+
+String STR_SYMBOL
+{
+    Text [ en-US ] = "Symbol" ;
+};
+
 ToolBox RID_MODULE_TOOLBOX
 {
     HelpID = HID_MODULE_TOOLBOX ;
