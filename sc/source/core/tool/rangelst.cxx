@@ -689,7 +689,7 @@ bool handleFourRanges( const ScRange& rDelRange, ScRange* p, std::vector<ScRange
     {
         SCTAB nTab = rDelStart.Tab();
 
-        ScRange aNewRange( ScAddress( rPStart.Col(), rDelEnd.Row(), nTab ), rDelEnd );
+        ScRange aNewRange( ScAddress( rPStart.Col(), rDelEnd.Row()+1, nTab ), rPEnd );
         rNewRanges.push_back( aNewRange );
 
         aNewRange = ScRange( rPStart.Col(), rDelStart.Row(), nTab, rDelStart.Col() -1, rDelEnd.Row(), nTab );
