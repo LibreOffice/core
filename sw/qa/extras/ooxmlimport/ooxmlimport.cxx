@@ -90,6 +90,7 @@ public:
     void testN777345();
     void testN777337();
     void testN778836();
+    void testN778140();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -122,6 +123,7 @@ public:
     CPPUNIT_TEST(testN777345);
     CPPUNIT_TEST(testN777337);
     CPPUNIT_TEST(testN778836);
+    CPPUNIT_TEST(testN778140);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -814,6 +816,18 @@ void Test::testN778836()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(0), "ParaRightMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3810), getProperty<sal_Int32>(getParagraph(0), "ParaLeftMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(0), "ParaFirstLineIndent"));
+}
+
+void Test::testN778140()
+{
+    /*
+     * The problem was that the paragraph top/bottom margins were incorrect due
+     * to unhandled w:doNotUseHTMLParagraphAutoSpacing.
+     */
+    load("n778140.docx");
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
