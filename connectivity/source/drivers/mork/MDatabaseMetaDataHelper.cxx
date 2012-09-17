@@ -31,6 +31,7 @@ static ::osl::Mutex m_aMetaMutex;
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <comphelper/processfactory.hxx>
 
+using namespace connectivity;
 using namespace connectivity::mork;
 
 // -------------------------------------------------------------------------
