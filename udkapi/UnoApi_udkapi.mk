@@ -127,6 +127,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/beans,\
 	Introspection \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/bridge,\
+	BridgeFactory \
 	UnoUrlResolver \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/connection,\
@@ -228,7 +229,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/beans,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/bridge,\
 	BridgeExistsException \
-	BridgeFactory \
 	InvalidProtocolChangeException \
 	ModelDependent \
 	ProtocolProperty \
