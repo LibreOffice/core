@@ -28,6 +28,7 @@ class SVX_DLLPUBLIC SvxStandardDialog: public SfxModalDialog
 {
 public:
     SvxStandardDialog( Window* pParent, const ResId& rResId );
+    SvxStandardDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
     ~SvxStandardDialog();
 
     short           Execute();

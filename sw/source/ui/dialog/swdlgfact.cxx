@@ -1040,22 +1040,10 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pPare
     return 0;
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg ( Window *pParent, SwTableFUNC &rFnc , int nResId )
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc)
 {
-    Dialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_COL_WIDTH :
-            pDlg = new SwTableWidthDlg( pParent, rFnc);
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    Dialog* pDlg = new SwTableWidthDlg(pParent, rFnc);
+    return new VclAbstractDialog_Impl( pDlg );
 }
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,

@@ -46,8 +46,13 @@ short SvxStandardDialog::Execute()
 
 // -----------------------------------------------------------------------
 
-SvxStandardDialog::SvxStandardDialog( Window *pParent, const ResId &rResId ) :
-    SfxModalDialog( pParent, rResId )
+SvxStandardDialog::SvxStandardDialog( Window *pParent, const ResId &rResId )
+    : SfxModalDialog( pParent, rResId )
+{
+}
+
+SvxStandardDialog::SvxStandardDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription )
+    : SfxModalDialog(pParent, rID, rUIXMLDescription)
 {
 }
 

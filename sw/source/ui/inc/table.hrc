@@ -21,8 +21,10 @@
 #define DLG_FORMAT_TABLE        (RC_TABLE_BEGIN + 1)
 #define DLG_CONV_TEXT_TABLE     (RC_TABLE_BEGIN + 2)
 #define DLG_ROW_HEIGHT          (RC_TABLE_BEGIN + 4)
-#define DLG_COL_WIDTH           (RC_TABLE_BEGIN + 6)
+
+
 #define MSG_ERR_TABLE_MERGE     (RC_TABLE_BEGIN + 7)
+
 #define DLG_AUTOFMT_TABLE       (RC_TABLE_BEGIN + 9)
 #define DLG_SWDLG_STRINPUT      (RC_TABLE_BEGIN + 10)
 #define TP_TABLE_COLUMN         (RC_TABLE_BEGIN + 11)

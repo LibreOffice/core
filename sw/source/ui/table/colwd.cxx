@@ -38,54 +38,44 @@
 #include <usrpref.hxx>
 
 #include <cmdid.h>
-#include <colwd.hrc>
 #include <table.hrc>
 
 
 IMPL_LINK_NOARG_INLINE_START(SwTableWidthDlg, LoseFocusHdl)
 {
-    sal_uInt16 nId = (sal_uInt16)aColEdit.GetValue()-1;
+    sal_uInt16 nId = (sal_uInt16)m_pColNF->GetValue()-1;
     const SwTwips lWidth = rFnc.GetColWidth(nId);
-    aWidthEdit.SetValue(aWidthEdit.Normalize(lWidth), FUNIT_TWIP);
-    aWidthEdit.SetMax(aWidthEdit.Normalize(rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
+    m_pWidthMF->SetMax(m_pWidthMF->Normalize(rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
+    m_pWidthMF->SetValue(m_pWidthMF->Normalize(lWidth), FUNIT_TWIP);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwTableWidthDlg, LoseFocusHdl)
 
 
 
-SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
-
-    SvxStandardDialog( pParent, SW_RES(DLG_COL_WIDTH) ),
-    aWidthFL(this,     SW_RES(FL_WIDTH)),
-
-    aColFT(this,        SW_RES(FT_COL)),
-    aColEdit(this,      SW_RES(ED_COL)),
-    aWidthFT(this,      SW_RES(FT_WIDTH)),
-    aWidthEdit(this,    SW_RES(ED_WIDTH)),
-    aOKBtn(this,        SW_RES(BT_OK)),
-    aCancelBtn(this,    SW_RES(BT_CANCEL)),
-    aHelpBtn(this,      SW_RES(BT_HELP)),
-    rFnc(rTableFnc)
+SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc )
+    : SvxStandardDialog( pParent, "ColumnWidthDialog", "modules/swriter/ui/columnwidth.ui" )
+    , rFnc(rTableFnc)
 {
-    FreeResource();
+    get(m_pColNF, "column");
+    get(m_pWidthMF, "width");
 
     sal_Bool bIsWeb = rTableFnc.GetShell()
                     ? static_cast< sal_Bool >(0 != PTR_CAST( SwWebDocShell,
                             rTableFnc.GetShell()->GetView().GetDocShell()) )
                     : sal_False;
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
-    ::SetFieldUnit(aWidthEdit, eFieldUnit );
+    ::SetFieldUnit(*m_pWidthMF, eFieldUnit);
 
-    aColEdit.SetValue( rFnc.GetCurColNum() +1 );
-    aWidthEdit.SetMin(aWidthEdit.Normalize(MINLAY), FUNIT_TWIP);
-    if(!aWidthEdit.GetMin())
-        aWidthEdit.SetMin(1);
+    m_pColNF->SetValue( rFnc.GetCurColNum() +1 );
+    m_pWidthMF->SetMin(m_pWidthMF->Normalize(MINLAY), FUNIT_TWIP);
+    if(!m_pWidthMF->GetMin())
+        m_pWidthMF->SetMin(1);
 
     if(rFnc.GetColCount() == 0)
-        aWidthEdit.SetMin(aWidthEdit.Normalize(rFnc.GetColWidth(0)), FUNIT_TWIP);
-    aColEdit.SetMax(rFnc.GetColCount() +1 );
-    aColEdit.SetModifyHdl(LINK(this,SwTableWidthDlg, LoseFocusHdl));
+        m_pWidthMF->SetMin(m_pWidthMF->Normalize(rFnc.GetColWidth(0)), FUNIT_TWIP);
+    m_pColNF->SetMax(rFnc.GetColCount() +1 );
+    m_pColNF->SetModifyHdl(LINK(this,SwTableWidthDlg, LoseFocusHdl));
     LoseFocusHdl();
 }
 
@@ -95,8 +85,8 @@ void SwTableWidthDlg::Apply()
 {
     rFnc.InitTabCols();
     rFnc.SetColWidth(
-            static_cast< sal_uInt16 >(aColEdit.GetValue() - 1),
-            static_cast< sal_uInt16 >(aWidthEdit.Denormalize(aWidthEdit.GetValue(FUNIT_TWIP))));
+            static_cast< sal_uInt16 >(m_pColNF->GetValue() - 1),
+            static_cast< sal_uInt16 >(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP))));
 }
 
 
