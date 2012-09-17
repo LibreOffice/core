@@ -74,9 +74,9 @@ void Test::testDeleteArea_4Ranges()
         for(SCROW nRow = 0; nRow <= 5; ++nRow)
         {
             if((nCol == 2 || nCol == 3) && ( nRow == 2 || nRow == 3))
-                CPPUNIT_ASSERT(!aList.Intersects(ScRange(nCol, nRow, 0)));
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
             else
-                CPPUNIT_ASSERT(aList.Intersects(ScRange(nCol, nRow, 0)));
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
         }
     }
 }
@@ -96,9 +96,9 @@ void Test::testDeleteArea_2Ranges()
         for(SCROW nRow = 0; nRow <= 5; ++nRow)
         {
             if(nCol>=4 && nRow >= 4)
-                CPPUNIT_ASSERT(!aList.Intersects(ScRange(nCol, nRow, 0)));
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
             else
-                CPPUNIT_ASSERT(aList.Intersects(ScRange(nCol, nRow, 0)));
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
         }
     }
 }
@@ -111,9 +111,9 @@ void Test::testDeleteArea_2Ranges_Case2()
     for(SCROW nRow = 1; nRow <= 5; ++nRow)
     {
         if(nRow == 3)
-            CPPUNIT_ASSERT(!aList.Intersects(ScRange(1,3,0)));
+            CPPUNIT_ASSERT(!aList.In(ScRange(1,3,0)));
         else
-            CPPUNIT_ASSERT(aList.Intersects(ScRange(1,nRow,0)));
+            CPPUNIT_ASSERT(aList.In(ScRange(1,nRow,0)));
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aList.GetCellCount());
 }
@@ -141,9 +141,9 @@ void Test::testUpdateReference_DeleteRow()
     {
         for(SCROW nRow = 1; nRow <= 3; ++nRow)
         {
-            CPPUNIT_ASSERT(aList.Intersects(ScRange(nCol, nRow, 0)));
+            CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
         }
-        CPPUNIT_ASSERT(!aList.Intersects(ScRange(nCol, 4, 0)));
+        CPPUNIT_ASSERT(!aList.In(ScRange(nCol, 4, 0)));
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), aList.GetCellCount());
 }
@@ -158,9 +158,9 @@ void Test::testUpdateReference_DeleteCol()
     {
         for(SCCOL nCol = 1; nCol <= 3; ++nCol)
         {
-            CPPUNIT_ASSERT(aList.Intersects(ScRange(nCol, nRow, 0)));
+            CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
         }
-        CPPUNIT_ASSERT(!aList.Intersects(ScRange(4, nRow, 0)));
+        CPPUNIT_ASSERT(!aList.In(ScRange(4, nRow, 0)));
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), aList.GetCellCount());
 }
