@@ -37,16 +37,6 @@
 #include <vector>
 #include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-
-namespace com { namespace sun { namespace star {
-    namespace sdbc {
-        class XRowSet;
-    }
-    namespace sheet {
-        struct DataPilotFieldFilter;
-    }
-}}}
 
 class Date;
 class ScDPItemData;

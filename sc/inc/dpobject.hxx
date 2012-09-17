@@ -53,6 +53,10 @@ namespace com { namespace sun { namespace star {
         class XIndexAccess;
     }
 
+    namespace sdbc {
+        class XRowSet;
+    }
+
     namespace sheet {
         struct DataPilotTablePositionData;
         struct DataPilotTableHeaderData;
