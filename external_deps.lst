@@ -222,6 +222,12 @@ if ( true )
     URL1 = http://multidimalgorithm.googlecode.com/files/mdds_0.3.0.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
+if (SYSTEM_BOOST!=YES || (OS==SOLARIS && COM!=GCC))
+    MD5 = d1e9a7a7f532bb031a3c175d86688d95
+    name = boost_1_48_0.tar.bz2
+    URL1 = http://sourceforge.net/projects/boost/files/boost/1.48.0/boost_1_48_0.tar.bz2/download
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+
 if (SYSTEM_VIGRA != YES)
     MD5 = ea91f2fb4212a21d708aced277e6e85a
     name = vigra1.4.0.tar.gz
@@ -244,12 +250,6 @@ if (WITH_CATA_FONTS == YES)
     MD5 = f872f4ac066433d8ff92f5e316b36ff9
     name = dejavu-fonts-ttf-2.33.zip
     URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.33/dejavu-fonts-ttf-2.33.zip/download
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-
-if (SYSTEM_BOOST!=YES || (OS==SOLARIS && COM!=GCC))
-    MD5 = fcc6df1160753d0b8c835d17fdeeb0a7
-    name = boost_1_39_0.tar.gz
-    URL1 = http://sourceforge.net/projects/boost/files/boost/1.39.0/boost_1_39_0.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )

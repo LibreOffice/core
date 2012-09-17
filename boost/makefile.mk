@@ -44,11 +44,9 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=boost_1_39_0
-TARFILE_MD5=fcc6df1160753d0b8c835d17fdeeb0a7
+TARFILE_NAME=boost_1_48_0
+TARFILE_MD5=d1e9a7a7f532bb031a3c175d86688d95
 PATCH_FILES=$(TARFILE_NAME).patch
-# See https://svn.boost.org/trac/boost/ticket/3780
-PATCH_FILES+=aliasing.patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
