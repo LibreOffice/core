@@ -36,6 +36,8 @@ class SfxFilter;
 #include <sfx2/module.hxx>
 #include <sfx2/docfac.hxx>
 
+#include "scdllapi.h"
+
 /**
  * This class is a wrapper for a Load-On-Demand-DLL. One instance per
  * SfxApplication will be created for the runtime of
@@ -56,7 +58,7 @@ public:
     static void     PreExit();  // muss vor LibExit gerufen werden
 
                     // DLL-init/exit-code must be linked to the DLL only
-    static void     Init();     // called directly after loading the DLL
+    static SC_DLLPUBLIC void     Init();     // called directly after loading the DLL
 
     static sal_uLong    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
                                     SfxFilterFlags nMust, SfxFilterFlags nDont );
