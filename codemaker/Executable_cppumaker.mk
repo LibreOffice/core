@@ -26,11 +26,6 @@
 
 $(eval $(call gb_Executable_Executable,cppumaker))
 
-$(eval $(call gb_Executable_set_include,cppumaker,\
-    -I$(SRCDIR)/codemaker/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_libraries,cppumaker,\
     reg \
     sal \
