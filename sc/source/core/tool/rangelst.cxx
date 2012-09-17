@@ -417,6 +417,23 @@ bool ScRangeList::UpdateReference(
     SCTAB nTab2;
     rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
+    if(eUpdateRefMode == URM_INSDEL)
+    {
+        // right now this only works for nTab1 == nTab2
+        if(nTab1 == nTab2)
+        {
+            if(nDx < 0)
+            {
+                DeleteArea(nCol1+nDx, nRow1, nTab1, nCol1-1, nRow1, nTab2);
+            }
+            if(nDy < 0)
+            {
+                DeleteArea(nCol1, nRow1+nDy, nTab1, nCol1, nRow1-1, nTab2);
+            }
+            SAL_WARN_IF(nDx < 0 && nDy < 0, "sc", "nDx and nDy are negative, check why");
+        }
+    }
+
     vector<ScRange*>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
     {
