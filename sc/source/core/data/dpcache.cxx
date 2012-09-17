@@ -661,14 +661,14 @@ void ScDPCache::PostInit()
     typedef mdds::flat_segment_tree<SCROW, bool>::const_reverse_iterator itr_type;
     itr_type it = maEmptyRows.rbegin(), itEnd = maEmptyRows.rend();
     OSL_ENSURE(it != itEnd, "corrupt flat_segment_tree instance!");
-    mnDataSize = maFields[0].maItems.size();
+    mnDataSize = maFields[0].maData.size();
     ++it; // Skip the first position.
     OSL_ENSURE(it != itEnd, "buggy version of flat_segment_tree is used.");
     if (it->second)
     {
         SCROW nLastNonEmpty = it->first - 1;
-        if (nLastNonEmpty < mnDataSize)
-            mnDataSize = nLastNonEmpty;
+        if (nLastNonEmpty+1 < mnDataSize)
+            mnDataSize = nLastNonEmpty+1;
     }
 }
 
@@ -770,6 +770,7 @@ SCROW ScDPCache::GetRowCount() const
 
 SCROW ScDPCache::GetDataSize() const
 {
+    OSL_ENSURE(mnDataSize <= GetRowCount(), "Data size should never be larger than the row count.");
     return mnDataSize >= 0 ? mnDataSize : 0;
 }
 

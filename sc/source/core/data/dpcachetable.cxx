@@ -70,7 +70,7 @@ bool ScDPCacheTable::RowFlag::isActive() const
 }
 
 ScDPCacheTable::RowFlag::RowFlag() :
-    mbShowByFilter(true),
+    mbShowByFilter(false),
     mbShowByPage(true)
 {
 }
@@ -146,20 +146,41 @@ sal_Int32 ScDPCacheTable::getColSize() const
 void ScDPCacheTable::fillTable(
     const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
-    const SCROW nRowCount = getRowSize();
+    SCROW nRowCount = getRowSize();
     SCROW nDataSize = mpCache->GetDataSize();
-    const SCCOL  nColCount = (SCCOL) getColSize();
-    if ( nRowCount <= 0 || nColCount <= 0)
+    SCCOL nColCount = getColSize();
+    if (nRowCount <= 0 || nColCount <= 0)
         return;
 
     maRowFlags.clear();
     maRowFlags.reserve(nRowCount);
 
+    // Process the non-empty data rows.
+    for (SCROW nRow = 0; nRow < nDataSize; ++nRow)
+    {
+        maRowFlags.push_back(RowFlag());
+        if (!getCache()->ValidQuery(nRow, rQuery))
+            continue;
+
+        if (bIgnoreEmptyRows && getCache()->IsRowEmpty(nRow))
+            continue;
+
+        maRowFlags.back().mbShowByFilter = true;
+    }
+
+    // Process the trailing empty rows.
+    for (SCROW nRow = nDataSize; nRow < nRowCount; ++nRow)
+    {
+        maRowFlags.push_back(RowFlag());
+        if (!bIgnoreEmptyRows)
+            maRowFlags.back().mbShowByFilter = true;
+    }
+
     // Initialize field entries container.
     maFieldEntries.clear();
     maFieldEntries.reserve(nColCount);
 
-    // Data rows
+    // Build unique field entries.
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
         maFieldEntries.push_back( vector<SCROW>() );
@@ -171,24 +192,11 @@ void ScDPCacheTable::fillTable(
 
         for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
         {
+            if (!maRowFlags[nRow].mbShowByFilter)
+                continue;
+
             SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, bRepeatIfEmpty);
             SCROW nOrder = getOrder(nCol, nIndex);
-
-            if (nCol == 0)
-            {
-                maRowFlags.push_back(RowFlag());
-                maRowFlags.back().mbShowByFilter = false;
-            }
-
-            if (!getCache()->ValidQuery(nRow, rQuery))
-                continue;
-
-            if (bIgnoreEmptyRows && getCache()->IsRowEmpty(nRow))
-                continue;
-
-            if (nCol == 0)
-                 maRowFlags.back().mbShowByFilter = true;
-
             aAdded[nOrder] = nIndex;
         }
         for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
