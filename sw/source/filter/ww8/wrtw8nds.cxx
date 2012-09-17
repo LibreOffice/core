@@ -1974,7 +1974,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     if ( pTOXSect )
                     {
                         m_aCurrentCharPropStarts.pop();
-                        AttrOutput().EndTOX( *pTOXSect );
+                        AttrOutput().EndTOX( *pTOXSect ,false);
                     }
                     //For i120928,the position of the bullet's graphic is at end of doc
                     if (bLastCR && (!bExported))
@@ -2019,6 +2019,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 aAttrIter.OutFlys( nEnd );
                 // insert final bookmarks if any before CR and after flys
                 AppendBookmarks( rNode, nEnd, 1 );
+                WriteCR( pTextNodeInfoInner );
                 // #i120928 - position of the bullet's graphic is at end of doc
                 if (bLastCR && (!bExported))
                 {
@@ -2031,8 +2032,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     m_aCurrentCharPropStarts.pop();
                     AttrOutput().EndTOX( *pTOXSect );
                 }
-
-                WriteCR( pTextNodeInfoInner );
 
                 if ( bRedlineAtEnd )
                 {
@@ -2447,7 +2446,8 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
 
     SwNodeIndex aIdx( rSectionNode, 1 );
     const SwNode& rNd = aIdx.GetNode();
-    if ( !rNd.IsSectionNode() && !IsInTable() ) //No sections in table
+    if ( !rNd.IsSectionNode() && !IsInTable()
+        && rSection.GetType() != TOX_CONTENT_SECTION && rSection.GetType() != TOX_HEADER_SECTION) //No sections in table
     {
         // if the first Node inside the section has an own
         // PageDesc or PageBreak attribut, then dont write

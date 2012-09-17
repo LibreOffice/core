@@ -26,6 +26,9 @@
 
 #include <algorithm>
 
+#include <map>
+#include <set>
+
 #include <hintids.hxx>
 #include <string.h>
 #include <osl/endian.h>
@@ -177,40 +180,145 @@ public:
     WW8_FC GetStartFc() const       { return nStartFc; }
 };
 
+typedef std::map<OUString,long> BKMKNames;
+typedef BKMKNames::iterator BKMKNmItr;
+typedef std::pair<bool,OUString> BKMK;
+typedef std::pair<long,BKMK> BKMKCP;
+typedef std::multimap<long,BKMKCP*> BKMKCPs;
+typedef BKMKCPs::iterator CPItr;
+
 class WW8_WrtBookmarks
 {
 private:
-    //! Holds information about a single bookmark.
-    struct BookmarkInfo {
-        sal_uLong  startPos; //!< Starting character position.
-        sal_uLong  endPos;   //!< Ending character position.
-        bool       isField;  //!< True if the bookmark is in a field result.
-        OUString    name;    //!< Name of this bookmark.
-        inline BookmarkInfo(sal_uLong start, sal_uLong end, bool isFld, const OUString& bkName) : startPos(start), endPos(end), isField(isFld), name(bkName) {};
-        //! Operator < is defined purely for sorting.
-        inline bool operator<(const BookmarkInfo &other) const { return startPos < other.startPos; }
-    };
-    std::vector<BookmarkInfo> aBookmarks;
-    typedef std::vector<BookmarkInfo>::iterator BkmIter;
-
-    //! Return the position in aBookmarks where the string rNm can be found.
-    BkmIter GetPos( const OUString& rNm );
-
-    //No copying
+    BKMKCPs aSttCps,aEndCps;
+    BKMKNames maSwBkmkNms;
     WW8_WrtBookmarks(const WW8_WrtBookmarks&);
     WW8_WrtBookmarks& operator=(const WW8_WrtBookmarks&);
+
 public:
     WW8_WrtBookmarks();
     ~WW8_WrtBookmarks();
-
     //! Add a new bookmark to the list OR add an end position to an existing bookmark.
     void Append( WW8_CP nStartCp, const OUString& rNm, const ::sw::mark::IMark* pBkmk=NULL );
     //! Write out bookmarks to file.
     void Write( WW8Export& rWrt );
     //! Move existing field marks from one position to another.
-    void MoveFieldMarks(sal_uLong nFrom,sal_uLong nTo);
-
+    void MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo);
 };
+
+WW8_WrtBookmarks::WW8_WrtBookmarks()
+{}
+
+WW8_WrtBookmarks::~WW8_WrtBookmarks()
+{
+    CPItr aEnd = aSttCps.end();
+    for (CPItr aItr = aSttCps.begin();aItr!=aEnd;aItr++)
+    {
+        if (aItr->second)
+        {
+            delete aItr->second;
+            aItr->second = NULL;
+        }
+    }
+}
+
+void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm, const ::sw::mark::IMark*)
+{
+    std::pair<BKMKNmItr,bool> aResult = maSwBkmkNms.insert(std::pair<OUString,long>(rNm,0L));
+    if (aResult.second)
+    {
+        BKMK aBK(false,rNm);
+        BKMKCP* pBKCP = new BKMKCP((long)nStartCp,aBK);
+        aSttCps.insert(std::pair<long,BKMKCP*>(nStartCp,pBKCP));
+        aResult.first->second = (long)nStartCp;
+    }
+    else
+    {
+        std::pair<CPItr,CPItr> aRange = aSttCps.equal_range(aResult.first->second);
+        for (CPItr aItr = aRange.first;aItr != aRange.second;aItr++)
+        {
+            if (aItr->second && aItr->second->second.second == rNm)
+            {
+                if (aItr->second->second.first)
+                    nStartCp--;
+                aItr->second->first = (long)nStartCp;
+                break;
+            }
+        }
+    }
+}
+
+void WW8_WrtBookmarks::Write( WW8Export& rWrt)
+{
+    if (!aSttCps.size())
+        return;
+    CPItr aItr;
+    long n;
+    std::vector<OUString> aNames;
+    SvMemoryStream aTempStrm1(65535,65535);
+    SvMemoryStream aTempStrm2(65535,65535);
+    for (aItr = aSttCps.begin();aItr!=aSttCps.end();aItr++)
+    {
+        if (aItr->second)
+        {
+            aEndCps.insert(std::pair<long,BKMKCP*>(aItr->second->first,aItr->second));
+            aNames.push_back(aItr->second->second.second);
+            SwWW8Writer::WriteLong( aTempStrm1, aItr->first);
+        }
+    }
+
+    aTempStrm1.Seek(0L);
+    for (aItr = aEndCps.begin(), n = 0;aItr != aEndCps.end();aItr++,n++)
+    {
+        if (aItr->second)
+        {
+            aItr->second->first = n;
+            SwWW8Writer::WriteLong( aTempStrm2, aItr->first);
+        }
+    }
+
+    aTempStrm2.Seek(0L);
+    rWrt.WriteAsStringTable(aNames, rWrt.pFib->fcSttbfbkmk,rWrt.pFib->lcbSttbfbkmk);
+    SvStream& rStrm = rWrt.bWrtWW8 ? *rWrt.pTableStrm : rWrt.Strm();
+    rWrt.pFib->fcPlcfbkf = rStrm.Tell();
+    rStrm<<aTempStrm1;
+    SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
+    for (aItr = aSttCps.begin();aItr!=aSttCps.end();aItr++)
+    {
+        if (aItr->second)
+        {
+            SwWW8Writer::WriteLong(rStrm, aItr->second->first);
+        }
+    }
+    rWrt.pFib->lcbPlcfbkf = rStrm.Tell() - rWrt.pFib->fcPlcfbkf;
+    rWrt.pFib->fcPlcfbkl = rStrm.Tell();
+    rStrm<<aTempStrm2;
+    SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
+    rWrt.pFib->lcbPlcfbkl = rStrm.Tell() - rWrt.pFib->fcPlcfbkl;
+}
+
+void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
+{
+    std::pair<CPItr,CPItr> aRange = aSttCps.equal_range(nFrom);
+    CPItr aItr = aRange.first;
+    while (aItr != aRange.second)
+    {
+        if (aItr->second)
+        {
+            if (aItr->second->first == nFrom)
+            {
+                aItr->second->second.first = true;
+                aItr->second->first = nTo;
+            }
+            aSttCps.insert(std::pair<long,BKMKCP*>(nTo,aItr->second));
+            aItr->second = NULL;
+            aRange = aSttCps.equal_range(nFrom);
+            aItr = aRange.first;
+            continue;
+        }
+        aItr++;
+    }
+}
 
 #define ANZ_DEFAULT_STYLES 16
 
@@ -1237,122 +1345,6 @@ WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
     return nFc + aPcts.back().GetStartCp();
 }
 
-//--------------------------------------------------------------------------
-
-WW8_WrtBookmarks::WW8_WrtBookmarks()
-{
-}
-
-WW8_WrtBookmarks::~WW8_WrtBookmarks()
-{
-}
-
-void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm,  const ::sw::mark::IMark* )
-{
-    BkmIter bkIter = GetPos( rNm );
-    if( bkIter == aBookmarks.end() )
-    {
-        // new bookmark -> insert with start==end
-        aBookmarks.push_back( BookmarkInfo(nStartCp, nStartCp, false, rNm) );
-    }
-    else
-    {
-        // old bookmark -> this should be the end position
-        OSL_ENSURE( bkIter->endPos == bkIter->startPos, "end position is valid" );
-
-        //If this bookmark was around a field in writer, then we want to move
-        //it to the field result in word. The end is therefore one cp
-        //backwards from the 0x15 end mark that was inserted.
-        if (bkIter->isField)
-            --nStartCp;
-        bkIter->endPos = nStartCp;
-    }
-}
-
-
-void WW8_WrtBookmarks::Write( WW8Export& rWrt )
-{
-    if (!aBookmarks.empty())
-    {
-        //Make sure the bookmarks are sorted in order of start position.
-        std::sort(aBookmarks.begin(), aBookmarks.end());
-
-        // First write the Bookmark Name Stringtable
-        std::vector<OUString> aNames;
-        aNames.reserve(aBookmarks.size());
-        for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt)
-            aNames.push_back(bIt->name);
-        rWrt.WriteAsStringTable(aNames, rWrt.pFib->fcSttbfbkmk, rWrt.pFib->lcbSttbfbkmk);
-
-        // Second write the Bookmark start positions as pcf of longs
-        SvStream& rStrm = rWrt.bWrtWW8 ? *rWrt.pTableStrm : rWrt.Strm();
-        rWrt.pFib->fcPlcfbkf = rStrm.Tell();
-        for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt)
-            SwWW8Writer::WriteLong( rStrm, bIt->startPos );
-        SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
-
-        //Lastly, need to write out the end positions (sorted by end position). But
-        //before that we need a lookup table (sorted by start position) to link
-        //start and end positions.
-        //   Start by sorting the end positions.
-        std::vector<sal_uLong> aEndSortTab;
-        aEndSortTab.reserve(aBookmarks.size());
-        for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt)
-            aEndSortTab.push_back(bIt->endPos);
-        std::sort(aEndSortTab.begin(), aEndSortTab.end());
-
-        //Now write out the lookups.
-        //Note that in most cases, the positions in both vectors will be very close.
-        for( sal_uLong i = 0; i < aBookmarks.size(); ++i )
-        {
-            sal_uLong nEndCP = aBookmarks[ i ].endPos;
-            sal_uInt16 nPos = i;
-            if( aEndSortTab[ nPos ] > nEndCP )
-            {
-                while( aEndSortTab[ --nPos ] != nEndCP )
-                    ;
-            }
-            else if( aEndSortTab[ nPos ] < nEndCP )
-                while( aEndSortTab[ ++nPos ] != nEndCP )
-                    ;
-            SwWW8Writer::WriteLong( rStrm, nPos );
-        }
-        rWrt.pFib->lcbPlcfbkf = rStrm.Tell() - rWrt.pFib->fcPlcfbkf;
-
-        // Finally, the actual Bookmark end positions.
-        rWrt.pFib->fcPlcfbkl = rStrm.Tell();
-        for(sal_uLong i = 0; i < aEndSortTab.size(); ++i )
-            SwWW8Writer::WriteLong( rStrm, aEndSortTab[ i ] );
-        SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
-        rWrt.pFib->lcbPlcfbkl = rStrm.Tell() - rWrt.pFib->fcPlcfbkl;
-    }
-}
-
-WW8_WrtBookmarks::BkmIter WW8_WrtBookmarks::GetPos( const OUString& rNm )
-{
-    for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt) {
-        if (rNm == bIt->name)
-            return bIt;
-    }
-    return aBookmarks.end();
-}
-
-void WW8_WrtBookmarks::MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo)
-{
-    for (BkmIter i = aBookmarks.begin(); i < aBookmarks.end(); ++i)
-    {
-        if (i->startPos == nFrom)
-        {
-            i->startPos = nTo;
-            if (i->endPos == nFrom)
-            {
-                i->isField = true;
-                i->endPos = nTo;
-            }
-        }
-    }
-}
-
 void WW8Export::AppendBookmarks( const SwTxtNode& rNd,
     xub_StrLen nAktPos, xub_StrLen nLen )
 {
@@ -1397,7 +1389,7 @@ void WW8Export::AppendBookmarks( const SwTxtNode& rNd,
     }
 }
 
-void WW8Export::MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo)
+void WW8Export::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
 {
     pBkmks->MoveFieldMarks(nFrom, nTo);
 }
@@ -2540,7 +2532,8 @@ void MSWordExportBase::WriteText()
                 ;
             else if ( aIdx.GetNode().IsSectionNode() )
                 ;
-            else if ( !IsInTable() ) //No sections in table
+            else if ( !IsInTable()
+                && (rSect.GetType() != TOX_CONTENT_SECTION && rSect.GetType() != TOX_HEADER_SECTION )) //No sections in table
             {
                 //#120140# Do not need to insert a page/section break after a section end. Check this case first
                 sal_Bool bNeedExportBreakHere = sal_True;

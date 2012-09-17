@@ -923,7 +923,8 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
 
 void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
-    m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
+    m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() - (mbOnTOXEnding?2:0), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
+    mbOnTOXEnding = false;
     m_rWW8Export.pO->clear();
 
     if ( pTextNodeInfoInner.get() != NULL )
@@ -966,6 +967,11 @@ void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSi
             }
         }
     }
+}
+
+void WW8AttributeOutput::OnTOXEnding()
+{
+    mbOnTOXEnding = true;
 }
 
 void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
@@ -2034,260 +2040,268 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
         static const sal_Char sEntryEnd[] = "\" ";
 
         ww::eField eCode = ww::eTOC;
-        OUString sStr;
-        switch (pTOX->GetType())
+        OUString sStr = pTOX->GetMSTOCExpression();
+        if ( sStr.isEmpty() )
         {
-        case TOX_INDEX:
-            eCode = ww::eINDEX;
-            sStr = FieldString(eCode);
-
-            if (pTOX->GetTOXForm().IsCommaSeparated())
-                sStr += "\\r ";
-
-            if (nsSwTOIOptions::TOI_ALPHA_DELIMITTER & pTOX->GetOptions())
-                sStr += "\\h \"A\" ";
-
+            switch (pTOX->GetType())
             {
-                OUString aFillTxt;
-                for (sal_uInt8 n = 1; n <= 3; ++n)
-                {
-                    OUString aTxt;
-                    int nRet = ::lcl_CheckForm(pTOX->GetTOXForm(), n, aTxt);
-
-                    if( 3 == nRet )
-                        aFillTxt = aTxt;
-                    else if ((4 == nRet) || (2 == nRet))
-                        aFillTxt = "\t";
-                    else
-                        aFillTxt = "";
-                }
-                sStr += "\\e \"";
-                sStr += aFillTxt;
-                sStr += sEntryEnd;
-            }
-            break;
-
-        case TOX_ILLUSTRATIONS:
-        case TOX_OBJECTS:
-        case TOX_TABLES:
-            if (!pTOX->IsFromObjectNames())
-            {
+            case TOX_INDEX:
+                eCode = ww::eINDEX;
                 sStr = FieldString(eCode);
 
-                sStr += "\\c \"";
-                sStr += pTOX->GetSequenceName();
-                sStr += sEntryEnd;
+                if (pTOX->GetTOXForm().IsCommaSeparated())
+                    sStr += "\\r ";
 
-                OUString aTxt;
-                int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aTxt );
-                if (1 == nRet)
-                    sStr += "\\n ";
-                else if( 3 == nRet || 4 == nRet )
+                if (nsSwTOIOptions::TOI_ALPHA_DELIMITTER & pTOX->GetOptions())
+                    sStr += "\\h \"A\" ";
+
                 {
-                    sStr += "\\p \"";
-                    sStr += aTxt;
+                    OUString aFillTxt;
+                    for (sal_uInt8 n = 1; n <= 3; ++n)
+                    {
+                        OUString aTxt;
+                        int nRet = ::lcl_CheckForm(pTOX->GetTOXForm(), n, aTxt);
+
+                        if( 3 == nRet )
+                            aFillTxt = aTxt;
+                        else if ((4 == nRet) || (2 == nRet)) //#109414#
+                            aFillTxt = "\t";
+                        else
+                            aFillTxt = "";
+                    }
+                    sStr += "\\e \"";
+                    sStr += aFillTxt;
                     sStr += sEntryEnd;
                 }
-            }
-            break;
+                break;
 
-        default:
-            {
-                sStr = FieldString(eCode);
-
-                OUString sTOption;
-                sal_uInt16 n, nTOXLvl = pTOX->GetLevel();
-                if( !nTOXLvl )
-                    ++nTOXLvl;
-
-                if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() )
+                //      case TOX_AUTHORITIES:   eCode = eTOA; sStr = ???; break;
+            case TOX_ILLUSTRATIONS:
+            case TOX_OBJECTS:
+            case TOX_TABLES:
+                if (!pTOX->IsFromObjectNames())
                 {
-                    sStr += "\\f ";
+                    sStr = FieldString(eCode);
 
-                    if( TOX_USER == pTOX->GetType() )
+                    sStr += "\\c \"";
+                    sStr += pTOX->GetSequenceName();
+                    sStr += sEntryEnd;
+
+                    OUString aTxt;
+                    int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aTxt );
+                    if (1 == nRet)
+                        sStr += "\\n ";
+                    else if( 3 == nRet || 4 == nRet )
                     {
-                         sStr += "\"";
-                         sStr += OUString((sal_Char)( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ));
-                         sStr += sEntryEnd;
+                        sStr += "\\p \"";
+                        sStr += aTxt;
+                        sStr += sEntryEnd;
                     }
+                }
+                break;
 
-                    if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
+                //      case TOX_USER:
+                //      case TOX_CONTENT:
+            default:
+                {
+                    sStr = FieldString(eCode);
+
+                    OUString sTOption;
+                    sal_uInt16 n, nTOXLvl = pTOX->GetLevel();
+                    if( !nTOXLvl )
+                        ++nTOXLvl;
+
+                    if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() )
                     {
-                        const int nMinLvl = nTOXLvl;
+                        sStr += "\\f ";
 
-                        if ( nMinLvl > 0 )
+                        if( TOX_USER == pTOX->GetType() )
                         {
-                            int nTmpLvl = nMinLvl;
-                            if (nTmpLvl > WW8ListManager::nMaxLevel)
-                                nTmpLvl = WW8ListManager::nMaxLevel;
-
-                            sStr += "\\o \"1-";
-                            sStr += OUString::number( nTmpLvl );
+                            sStr += "\"";
+                            sStr += OUString((sal_Char)( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ));
                             sStr += sEntryEnd;
                         }
-                    }
 
-                    if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
-                    {
-                        // Take the TOC value of the max level to evaluate to as
-                        // the starting point for the \o flag, but reduce it to the
-                        // value of the highest outline level filled by a *standard*
-                        // Heading 1 - 9 style because \o "Builds a table of
-                        // contents from paragraphs formatted with built-in heading
-                        // styles". And afterward fill in any outline styles left
-                        // uncovered by that range to the \t flag
-                        //
-                        // i.e. for
-                        // Heading 1
-                        // Heading 2
-                        // custom-style
-                        // Heading 4
-                        // output
-                        // \o 1-2 \tcustom-style,3,Heading 3,4
-
-                        // Search over all the outline styles used and figure out
-                        // what is the minimum outline level (if any) filled by a
-                        // non-standard style for that level, i.e. ignore headline
-                        // styles 1-9 and find the lowest valid outline level
-                        sal_uInt8 nPosOfLowestNonStandardLvl = MAXLEVEL;
-                        const SwTxtFmtColls& rColls = *GetExport().pDoc->GetTxtFmtColls();
-                        for( n = rColls.size(); n; )
+                        if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                         {
-                            const SwTxtFmtColl* pColl = rColls[ --n ];
-                            sal_uInt16 nPoolId = pColl->GetPoolFmtId();
-                            if (
-                                //Is a Non-Standard Outline Style
-                                (RES_POOLCOLL_HEADLINE1 > nPoolId || RES_POOLCOLL_HEADLINE9 < nPoolId) &&
-                                //Has a valid outline level
-                                (pColl->IsAssignedToListLevelOfOutlineStyle()) &&
-                                // Is less than the lowest known non-standard level
-                                (pColl->GetAssignedOutlineStyleLevel() < nPosOfLowestNonStandardLvl)
-                               )
+                            const int nMinLvl = nTOXLvl;
+                            if ( nMinLvl > 0 )
                             {
-                                nPosOfLowestNonStandardLvl = ::sal::static_int_cast<sal_uInt8>(pColl->GetAssignedOutlineStyleLevel());
+                                int nTmpLvl = nMinLvl;
+                                if (nTmpLvl > WW8ListManager::nMaxLevel)
+                                    nTmpLvl = WW8ListManager::nMaxLevel;
+
+                                sStr += "\\o \"1-";
+                                sStr += OUString::number(nTmpLvl);
+                                sStr += sEntryEnd;
+
                             }
                         }
 
-                        sal_uInt8 nMaxMSAutoEvaluate = nPosOfLowestNonStandardLvl < nTOXLvl ? nPosOfLowestNonStandardLvl : (sal_uInt8)nTOXLvl;
-
-                        //output \o 1-X where X is the highest normal outline style to be included in the toc
-                        if ( nMaxMSAutoEvaluate )
+                        if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                         {
-                            if (nMaxMSAutoEvaluate > WW8ListManager::nMaxLevel)
-                              nMaxMSAutoEvaluate = WW8ListManager::nMaxLevel;
+                            // Take the TOC value of the max level to evaluate to as
+                            // the starting point for the \o flag, but reduce it to the
+                            // value of the highest outline level filled by a *standard*
+                            // Heading 1 - 9 style because \o "Builds a table of
+                            // contents from paragraphs formatted with built-in heading
+                            // styles". And afterward fill in any outline styles left
+                            // uncovered by that range to the \t flag
+                            //
+                            // i.e. for
+                            // Heading 1
+                            // Heading 2
+                            // custom-style
+                            // Heading 4
+                            // output
+                            // \o 1-2 \tcustom-style,3,Heading 3,4
 
-                            sStr += "\\o \"1-";
-                            sStr += OUString::number( nMaxMSAutoEvaluate );
-                            sStr += sEntryEnd;
-                        }
-
-                        //collect up any other styles in the writer TOC which will
-                        //not already appear in the MS TOC and place then into the
-                        //\t option
-                        if( nMaxMSAutoEvaluate < nTOXLvl )
-                        {
-                            // collect this templates into the \t otion
-                            for( n = rColls.size(); n;)
+                            // Search over all the outline styles used and figure out
+                            // what is the minimum outline level (if any) filled by a
+                            // non-standard style for that level, i.e. ignore headline
+                            // styles 1-9 and find the lowest valid outline level
+                            sal_uInt8 nPosOfLowestNonStandardLvl = MAXLEVEL;
+                            const SwTxtFmtColls& rColls = *GetExport().pDoc->GetTxtFmtColls();
+                            for( n = rColls.size(); n; )
                             {
                                 const SwTxtFmtColl* pColl = rColls[ --n ];
-                                if (!pColl->IsAssignedToListLevelOfOutlineStyle())
-                                    continue;
-                                sal_uInt8 nTestLvl =  ::sal::static_int_cast<sal_uInt8>(pColl->GetAssignedOutlineStyleLevel());
-                                if (nTestLvl < nTOXLvl && nTestLvl >= nMaxMSAutoEvaluate)
+                                sal_uInt16 nPoolId = pColl->GetPoolFmtId();
+                                if (
+                                    //Is a Non-Standard Outline Style
+                                    (RES_POOLCOLL_HEADLINE1 > nPoolId || RES_POOLCOLL_HEADLINE9 < nPoolId) &&
+                                    //Has a valid outline level
+                                    (pColl->IsAssignedToListLevelOfOutlineStyle()) &&
+                                    // Is less than the lowest known non-standard level
+                                    (pColl->GetAssignedOutlineStyleLevel() < nPosOfLowestNonStandardLvl)
+                                    )
                                 {
-                                    if( !sTOption.isEmpty() )
-                                        sTOption += ",";
-                                    sTOption += pColl->GetName()  + "," + OUString::number( nTestLvl + 1 );
+                                    nPosOfLowestNonStandardLvl = ::sal::static_int_cast<sal_uInt8>(pColl->GetAssignedOutlineStyleLevel());
+                                }
+                            }
+
+                            sal_uInt8 nMaxMSAutoEvaluate = nPosOfLowestNonStandardLvl < nTOXLvl ? nPosOfLowestNonStandardLvl : (sal_uInt8)nTOXLvl;
+
+                            //output \o 1-X where X is the highest normal outline style to be included in the toc
+                            if ( nMaxMSAutoEvaluate )
+                            {
+                                if (nMaxMSAutoEvaluate > WW8ListManager::nMaxLevel)
+                                    nMaxMSAutoEvaluate = WW8ListManager::nMaxLevel;
+
+                                sStr += "\\o \"1-";
+                                sStr += OUString::number(nMaxMSAutoEvaluate);
+                                sStr += sEntryEnd;
+                            }
+
+                            //collect up any other styles in the writer TOC which will
+                            //not already appear in the MS TOC and place then into the
+                            //\t option
+                            if( nMaxMSAutoEvaluate < nTOXLvl )
+                            {
+                                // collect this templates into the \t otion
+                                for( n = rColls.size(); n;)
+                                {
+                                    const SwTxtFmtColl* pColl = rColls[ --n ];
+                                    if (!pColl->IsAssignedToListLevelOfOutlineStyle())
+                                        continue;
+                                    sal_uInt8 nTestLvl =  ::sal::static_int_cast<sal_uInt8>(pColl->GetAssignedOutlineStyleLevel());
+                                    if (nTestLvl < nTOXLvl && nTestLvl >= nMaxMSAutoEvaluate)
+                                    {
+                                        if (!sTOption.isEmpty())
+                                            sTOption += ",";
+                                        sTOption += pColl->GetName() + "," + OUString::number( nTestLvl + 1 );
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
-                        // #i99641# - Consider additional styles regardless of TOX-outlinelevel
-                        for( n = 0; n < MAXLEVEL; ++n )
-                        {
-                            const OUString& rStyles = pTOX->GetStyleNames( n );
-                            if( !rStyles.isEmpty() )
+                        if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
+                            // #i99641# - Consider additional styles regardless of TOX-outlinelevel
+                            for( n = 0; n < MAXLEVEL; ++n )
                             {
-                                sal_Int32 nPos = 0;
-                                OUString sLvl = OUString(',');
-                                sLvl += OUString::number( n + 1 );
-                                do {
-                                    OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
-                                    if( !sStyle.isEmpty() )
-                                    {
-                                        SwTxtFmtColl* pColl = GetExport().pDoc->FindTxtFmtCollByName(sStyle);
-                                        if (!pColl || !pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
+                                const OUString& rStyles = pTOX->GetStyleNames( n );
+                                if( !rStyles.isEmpty() )
+                                {
+                                    sal_Int32 nPos = 0;
+                                    OUString sLvl = OUString(',');
+                                    sLvl += OUString::number( n + 1 );
+                                    do {
+                                        OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
+                                        if( !sStyle.isEmpty() )
                                         {
-                                            if( !sTOption.isEmpty() )
-                                                sTOption += ",";
-                                            ( sTOption += sStyle ) += sLvl;
+                                            SwTxtFmtColl* pColl = GetExport().pDoc->FindTxtFmtCollByName(sStyle);
+                                            if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
+                                            {
+                                                if( !sTOption.isEmpty() )
+                                                    sTOption += ",";
+                                                sTOption += sStyle + sLvl;
+                                            }
+                                        }
+                                    } while( -1 != nPos );
+                                }
+                            }
+
+                            {
+                                OUString aFillTxt;
+                                sal_uInt8 nNoPgStt = MAXLEVEL, nNoPgEnd = MAXLEVEL;
+                                bool bFirstFillTxt = true, bOnlyText = true;
+                                for( n = 0; n < nTOXLvl; ++n )
+                                {
+                                    OUString aTxt;
+                                    int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(),
+                                        static_cast< sal_uInt8 >(n+1), aTxt );
+                                    if( 1 == nRet )
+                                    {
+                                        bOnlyText = false;
+                                        if( MAXLEVEL == nNoPgStt )
+                                            nNoPgStt = static_cast< sal_uInt8 >(n+1);
+                                    }
+                                    else
+                                    {
+                                        if( MAXLEVEL != nNoPgStt &&
+                                            MAXLEVEL == nNoPgEnd )
+                                            nNoPgEnd = sal_uInt8(n);
+
+                                        bOnlyText = bOnlyText && 3 == nRet;
+                                        if( 3 == nRet || 4 == nRet )
+                                        {
+                                            if( bFirstFillTxt )
+                                                aFillTxt = aTxt;
+                                            else if( aFillTxt != aTxt )
+                                                aFillTxt = "";
+                                            bFirstFillTxt = false;
                                         }
                                     }
-                                } while( -1 != nPos );
+                                }
+                                if( MAXLEVEL != nNoPgStt )
+                                {
+                                    if (WW8ListManager::nMaxLevel < nNoPgEnd)
+                                        nNoPgEnd = WW8ListManager::nMaxLevel;
+                                    sStr += "\\n ";
+                                    sStr += OUString::number( nNoPgStt );
+                                    sStr += "-";
+                                    sStr += OUString::number( nNoPgEnd  );
+                                    sStr += " ";
+                                }
+                                if( bOnlyText )
+                                {
+                                    sStr += "\\p \"";
+                                    sStr += aFillTxt;
+                                    sStr += sEntryEnd;
+                                }
                             }
-                        }
 
-                    OUString aFillTxt;
-                    sal_uInt8 nNoPgStt = MAXLEVEL, nNoPgEnd = MAXLEVEL;
-                    bool bFirstFillTxt = true, bOnlyText = true;
-                    for( n = 0; n < nTOXLvl; ++n )
-                    {
-                        OUString aTxt;
-                        int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(),
-                                                    static_cast< sal_uInt8 >(n+1), aTxt );
-                        if( 1 == nRet )
-                        {
-                            bOnlyText = false;
-                            if( MAXLEVEL == nNoPgStt )
-                                nNoPgStt = static_cast< sal_uInt8 >(n+1);
-                        }
-                        else
-                        {
-                            if( MAXLEVEL != nNoPgStt &&
-                                MAXLEVEL == nNoPgEnd )
-                                nNoPgEnd = sal_uInt8(n);
-
-                            bOnlyText = bOnlyText && 3 == nRet;
-                            if( 3 == nRet || 4 == nRet )
+                            if( !sTOption.isEmpty() )
                             {
-                                if( bFirstFillTxt )
-                                    aFillTxt = aTxt;
-                                else if( aFillTxt != aTxt )
-                                    aFillTxt = "";
-                                bFirstFillTxt = false;
+                                sStr += "\\t \"";
+                                sStr += sTOption;
+                                sStr += sEntryEnd;
                             }
-                        }
-                    }
-                    if( MAXLEVEL != nNoPgStt )
-                    {
-                        if (WW8ListManager::nMaxLevel < nNoPgEnd)
-                            nNoPgEnd = WW8ListManager::nMaxLevel;
-                        sStr += "\\n ";
-                        sStr += OUString::number( nNoPgStt );
-                        sStr += "-";
-                        sStr += OUString::number( nNoPgEnd  );
-                        sStr += " ";
-                    }
-                    if( bOnlyText )
-                    {
-                        sStr += "\\p \"";
-                        sStr += aFillTxt;
-                        sStr += sEntryEnd;
-                    }
 
-                    if( !sTOption.isEmpty() )
-                    {
-                        sStr += "\\t \"";
-                        sStr += sTOption;
-                        sStr += sEntryEnd;
+                            if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
+                                sStr += "\\h";
                     }
-
-                    if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
-                        sStr += "\\h";
+                    break;
                 }
-            break;
             }
         }
 
@@ -2302,7 +2316,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
     GetExport( ).bStartTOX = false;
 }
 
-void AttributeOutputBase::EndTOX( const SwSection& rSect )
+void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
 {
     const SwTOXBase* pTOX = rSect.GetTOXBase();
     if ( pTOX )
@@ -2311,6 +2325,8 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect )
         GetExport( ).OutputField( 0, eCode, aEmptyOUStr, WRITEFIELD_CLOSE );
     }
     GetExport( ).bInWriteTOX = false;
+    if (bCareEnd)
+        OnTOXEnding();
 }
 
 bool MSWordExportBase::GetNumberFmt(const SwField& rFld, OUString& rStr)

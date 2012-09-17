@@ -3165,8 +3165,14 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 cInsert = '\xb5';
             break;
         case 0x15:
-            if( !bSpec )        // Section sign
-                cInsert = '\xa7';
+            if( !bSpec )        // Juristenparagraph
+            {
+                cp_set::iterator aItr = maTOXEndCps.find((WW8_CP)nPosCp);
+                if (aItr == maTOXEndCps.end())
+                    cInsert = '\xa7';
+                else
+                    maTOXEndCps.erase(aItr);
+            }
             break;
         case 0x9:
             cInsert = '\x9';    // Tab
@@ -3576,10 +3582,26 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
         // create a new txtnode and join the two paragraphs together
         if (bStartLine && !pPreviousNode) // Line end
         {
-            // We will record the CP of a paragraph end ('0x0D'), if current loading contents is from main stream;
-            if (mbOnLoadingMain)
-                maEndParaPos.push_back(l-1);
-            AppendTxtNode(*pPaM->GetPoint());
+            bool bSplit = true;
+            if (mbCareFirstParaEndInToc)
+            {
+                mbCareFirstParaEndInToc = false;
+                if (pPaM->End() && pPaM->End()->nNode.GetNode().GetTxtNode() &&  pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0)
+                    bSplit = false;
+            }
+            if (mbCareLastParaEndInToc)
+            {
+                mbCareLastParaEndInToc = false;
+                if (pPaM->End() && pPaM->End()->nNode.GetNode().GetTxtNode() &&  pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0)
+                    bSplit = false;
+            }
+            if (bSplit)
+            {
+                // We will record the CP of a paragraph end ('0x0D'), if current loading contents is from main stream;
+                if (mbOnLoadingMain)
+                    maEndParaPos.push_back(l-1);
+                AppendTxtNode(*pPaM->GetPoint());
+            }
         }
 
         if (pPreviousNode && bStartLine)
@@ -3714,33 +3736,39 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
  * class SwWW8ImplReader
  */
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc) :
-    mpDocShell(rD.GetDocShell()),
-    pStg(pStorage),
-    pStrm(pSt),
-    pTableStream(0),
-    pDataStream(0),
-    rDoc(rD),
-    maSectionManager(*this),
-    m_aExtraneousParas(rD),
-    maInsertedTables(rD),
-    maSectionNameGenerator(rD, OUString("WW")),
-    maGrfNameGenerator(bNewDoc, OUString('G')),
-    maParaStyleMapper(rD),
-    maCharStyleMapper(rD),
-    maTxtNodesHavingFirstLineOfstSet(), // #i103711#
-    maTxtNodesHavingLeftIndentSet(), // #i105414#
-    pMSDffManager(0),
-    mpAtnNames(0),
-    sBaseURL(rBaseURL),
-    m_bRegardHindiDigits( false ),
-    mbNewDoc(bNewDoc),
-    nDropCap(0),
-    nIdctHint(0),
-    bBidi(false),
-    bReadTable(false),
-    maCurrAttrCP(-1),
-    mbOnLoadingMain(false)
+    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc)
+    : mpDocShell(rD.GetDocShell())
+    , pStg(pStorage)
+    , pStrm(pSt)
+    , pTableStream(0)
+    , pDataStream(0)
+    , rDoc(rD)
+    , maSectionManager(*this)
+    , m_aExtraneousParas(rD)
+    , maInsertedTables(rD)
+    , maSectionNameGenerator(rD, OUString("WW"))
+    , maGrfNameGenerator(bNewDoc, OUString('G'))
+    , maParaStyleMapper(rD)
+    , maCharStyleMapper(rD)
+    , maTxtNodesHavingFirstLineOfstSet()
+    , maTxtNodesHavingLeftIndentSet()
+    , pMSDffManager(0)
+    , mpAtnNames(0)
+    , sBaseURL(rBaseURL)
+    , m_bRegardHindiDigits( false )
+    , mbNewDoc(bNewDoc)
+    , nDropCap(0)
+    , nIdctHint(0)
+    , bBidi(false)
+    , bReadTable(false)
+    , mbLoadingTOCCache(false)
+    , mbLoadingTOCHyperlink(false)
+    , mpPosAfterTOC(0)
+    , mbCareFirstParaEndInToc(false)
+    , mbCareLastParaEndInToc(false)
+    , maTOXEndCps()
+    , maCurrAttrCP(-1)
+    , mbOnLoadingMain(false)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;

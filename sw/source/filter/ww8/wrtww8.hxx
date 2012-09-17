@@ -1018,7 +1018,7 @@ public:
     virtual void ExportGrfBullet(const SwTxtNode& rNd);
     void OutGrfBullets(const sw::Frame &rFrame);
 
-    void MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo);
+    void MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo);
 
     void WriteAsStringTable(const ::std::vector<OUString>&, sal_Int32& rfcSttbf,
         sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen = 0);

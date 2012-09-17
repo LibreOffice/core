@@ -51,6 +51,8 @@ public:
     ///
     virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false );
 
+    virtual void OnTOXEnding();
+
     /// End of the text run.
     ///
     /// No-op for binary filters.
@@ -441,8 +443,10 @@ protected:
     /// of the field results if we were forced to split text.
     sal_uInt16 m_nFieldResults;
 
+    bool mbOnTOXEnding;
+
 public:
-    WW8AttributeOutput( WW8Export &rWW8Export ) : AttributeOutputBase(), m_rWW8Export( rWW8Export ) {}
+    WW8AttributeOutput( WW8Export &rWW8Export ) : AttributeOutputBase(), m_rWW8Export( rWW8Export ),mbOnTOXEnding(false) {}
     virtual ~WW8AttributeOutput() {}
 
     /// Return the right export class.

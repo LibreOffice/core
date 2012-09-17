@@ -974,6 +974,7 @@ struct WW8TabBandDesc
 //-----------------------------------------
 //            Storage-Reader
 //-----------------------------------------
+typedef std::set<WW8_CP> cp_set;
 typedef std::vector<WW8_CP> cp_vector;
 
 class SwWW8ImplReader
@@ -1276,6 +1277,16 @@ private:
     bool bBidi;
     bool bReadTable;
     boost::shared_ptr<SwPaM> mpTableEndPaM;
+    // Indicate that currently on loading a TOC, managed by Read_F_TOX() and End_Field()
+    bool mbLoadingTOCCache;
+    // Indicate that current on loading a hyperlink, which is inside a TOC; Managed by Read_F_Hyperlink() and End_Field()
+    bool mbLoadingTOCHyperlink;
+    // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
+    SwPaM* mpPosAfterTOC;
+
+    bool mbCareFirstParaEndInToc;
+    bool mbCareLastParaEndInToc;
+    cp_set maTOXEndCps;
 
     cp_vector maEndParaPos;
     WW8_CP maCurrAttrCP;

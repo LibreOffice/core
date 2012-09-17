@@ -706,7 +706,7 @@ public:
     virtual void GetSprms(WW8PLCFxDesc* p);
     virtual void advance();
     bool StartPosIsFieldStart();
-    bool EndPosIsFieldEnd();
+    bool EndPosIsFieldEnd(WW8_CP&);
     bool GetPara(long nIdx, WW8FieldDesc& rF);
 };
 

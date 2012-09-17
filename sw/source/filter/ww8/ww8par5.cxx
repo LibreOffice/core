@@ -116,13 +116,15 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         return 0;
     }
 
-    //"_Toc*" and "_Hlt*" are unnecessary
+    // "_Hlt*" are unnecessary
     const OUString* pName = pB->GetName();
-#if !defined(WW_NATIVE_TOC)
-    if(    !pName || pName->startsWithIgnoreAsciiCase( "_Toc" )
-        || pName->startsWithIgnoreAsciiCase( "_Hlt" ) )
+    // Now, as we read the TOC field completely, we also need the hyperlinks inside keep available.
+    // So the hidden bookmarks inside for hyperlink jumping also should be kept.
+    if ( !pName ||
+         pName->startsWithIgnoreAsciiCase( "_Hlt" ) )
+    {
         return 0;
-#endif
+    }
 
     // do NOT call ToUpper as the bookmark name can also be a hyperlink target!
 
@@ -455,7 +457,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
     sal_uInt16 nRet = 0;
     WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
     OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer nicht da");
-    if (!pF || !pF->EndPosIsFieldEnd())
+    WW8_CP nCP = 0;
+    if (!pF || !pF->EndPosIsFieldEnd(nCP))
         return nRet;
 
     const SvtFilterOptions &rOpt = SvtFilterOptions::Get();
@@ -486,28 +489,43 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             }
         }
         break;
-#if defined(WW_NATIVE_TOC)
-        case 8: // TOX_INDEX
-        case 13: // TOX_CONTENT
-        case 88: // HYPERLINK
-        case 37: // REF
-        if (pPaM!=NULL && pPaM->GetPoint()!=NULL) {
+            // Doing corresponding status management for TOC field, index field, hyperlink field and page reference field
+            case 13://TOX
+            case 8://index
+                if (mbLoadingTOCCache)
+                {
+                    maTOXEndCps.insert(nCP);
+                    mbLoadingTOCCache = false;
+                    if ( pPaM->End() &&
+                         pPaM->End()->nNode.GetNode().GetTxtNode() &&
+                         pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0 )
+                    {
+                            JoinNode(*pPaM);
+                    }
+                    else
+                    {
+                            mbCareLastParaEndInToc = true;
+                    }
 
-            SwPosition aEndPos = *pPaM->GetPoint();
-            SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
-            SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeFieldBookmark(aFldPam, maFieldStack.back().GetBookmarkName(), maFieldStack.back().GetBookmarkType());
-            OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
-            if (pFieldmark!=NULL) {
-                const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
-                pFieldmark->GetParameters()->insert(pParameters.begin(), pParameters.end());
-            }
-        }
-        break;
-#else
+                    if (mpPosAfterTOC)
+                    {
+                        *pPaM = *mpPosAfterTOC;
+                        delete mpPosAfterTOC;
+                        mpPosAfterTOC = 0;
+                    }
+                }
+                break;
+            case 37://REF
+                if (mbLoadingTOCCache && !mbLoadingTOCHyperlink)
+                {
+                    pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
+                }
+                break;
             case 88:
+                if (mbLoadingTOCHyperlink)
+                    mbLoadingTOCHyperlink = false;
                 pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
-            break;
-#endif
+                break;
             case 36:
             case 68:
                 //Move outside the section associated with this type of field
@@ -592,10 +610,8 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
 {
     switch (nFieldCode)
     {
-#if defined(WW_NATIVE_TOC)
-    case 8:  // allow recursive field in TOC...
-    case 13: // allow recursive field in TOC...
-#endif
+        case 8:  // allow recursive field in TOC...
+        case 13: // allow recursive field in TOC...
         case 36:
         case 68:
         case 79:
@@ -2017,27 +2033,36 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
         const sal_Int32 nRet = aReadParam.SkipToNextToken();
         if ( nRet==-1 )
             break;
-        switch( nRet )
+        else if ( nRet == -2 && sOrigName.isEmpty() )
         {
-        case -2:
-            if( sOrigName.isEmpty() )
-                sOrigName = aReadParam.GetResult();
-            break;
+            sOrigName = aReadParam.GetResult();
         }
     }
 
     OUString sName(GetMappedBookmark(sOrigName));
 
-#if defined(WW_NATIVE_TOC)
-    if (1) {
-    OUString aBookmarkName("_REF");
-    maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(ODF_PAGEREF);
-    maFieldStack.back().AddParam(OUString(), sName);
-    return FLD_TEXT;
+    //loading page reference field in TOC
+    if (mbLoadingTOCCache )
+    {
+        //Step 1. Insert page ref representation as plain text
+        //Step 2. If there is no hyperlink settings for current toc, assign link to current ref area
+        if ( !mbLoadingTOCHyperlink)
+        {
+            OUString sURL, sTarget;
+            if (!sName.isEmpty())
+                sURL += OUString(INET_MARK_TOKEN) + sName;
+            SwFmtINetFmt aURL( sURL, sTarget );
+            OUString sLinkStyle("Index Link");
+            sal_uInt16 nPoolId =
+                SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+            aURL.SetVisitedFmt(sLinkStyle);
+            aURL.SetINetFmt(sLinkStyle);
+            aURL.SetVisitedFmtId(nPoolId);
+            aURL.SetINetFmtId(nPoolId);
+            pCtrlStck->NewAttr( *pPaM->GetPoint(), aURL );
+        }
+        return FLD_TEXT;
     }
-#endif
-
 
     SwGetRefField aFld(
         (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), sName,
@@ -2771,14 +2796,7 @@ static sal_uInt16 lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 {
-#if defined(WW_NATIVE_TOC)
-    if (1) {
-    OUString aBookmarkName("_TOC");
-    maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(ODF_TOC);
-    return FLD_TEXT;
-    }
-#endif
+    mbLoadingTOCCache = true;
 
     if (pF->nLRes < 3)
         return FLD_TEXT;      // ignore (#i25440#)
@@ -2906,6 +2924,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     case TOX_CONTENT:
         {
             bool bIsHyperlink = false;
+            bool bShowPage = true;
             // TOX_OUTLINELEVEL setzen wir genau dann, wenn
             // die Parameter \o in 1 bis 9 liegen
             // oder der Parameter \f existiert
@@ -3076,27 +3095,37 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                 }
             }
 
-            if (bIsHyperlink)
+            // For loading the expression of TOC field, we need to mapping its parameters to TOX entries tokens
+            // also include the hyperlinks and page references
+            SwFormToken aLinkStart(TOKEN_LINK_START);
+            SwFormToken aLinkEnd(TOKEN_LINK_END);
+            aLinkStart.sCharStyleName = "Index Link";
+            aLinkEnd.sCharStyleName = "Index Link";
+            SwForm aForm(pBase->GetTOXForm());
+            sal_uInt16 nEnd = aForm.GetFormMax()-1;
+
+            for(sal_uInt16 nLevel = 1; nLevel <= nEnd; ++nLevel)
             {
-                SwForm aForm(pBase->GetTOXForm());
-                sal_uInt16 nEnd = aForm.GetFormMax()-1;
-                SwFormToken aLinkStart(TOKEN_LINK_START);
-                SwFormToken aLinkEnd(TOKEN_LINK_END);
-
-                // -> #i21237#
-                for(sal_uInt16 nLevel = 1; nLevel <= nEnd; ++nLevel)
+                SwFormTokens aPattern = aForm.GetPattern(nLevel);
+                if ( bIsHyperlink )
                 {
-                    SwFormTokens aPattern = aForm.GetPattern(nLevel);
-
                     aPattern.insert(aPattern.begin(), aLinkStart);
-                    aPattern.push_back(aLinkEnd);
-
-                    aForm.SetPattern(nLevel, aPattern);
-
                 }
-                // <- #i21237#
-                pBase->SetTOXForm(aForm);
+                else if ( bShowPage )
+                {
+                    for (SwFormTokens::iterator aItr = aPattern.begin();aItr!= aPattern.end();aItr++)
+                    {
+                        if (aItr->eTokenType == TOKEN_PAGE_NUMS)
+                        {
+                            aPattern.insert(aItr,aLinkStart);
+                            break;
+                        }
+                    }
+                }
+                aPattern.push_back(aLinkEnd);
+                aForm.SetPattern(nLevel, aPattern);
             }
+            pBase->SetTOXForm(aForm);
 
             if (!nMaxLevel)
                 nMaxLevel = WW8ListManager::nMaxLevel;
@@ -3177,11 +3206,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                         pattern which do not apply to illustration indices
                         */
                         SwForm aOldForm( pBase->GetTOXForm() );
-                        SwForm aForm( eType );
-                        sal_uInt16 nEnd = aForm.GetFormMax()-1;
+                        SwForm aNewForm( eType );
+                        sal_uInt16 nNewEnd = aNewForm.GetFormMax()-1;
 
                         // #i21237#
-                        for(sal_uInt16 nLevel = 1; nLevel <= nEnd; ++nLevel)
+                        for(sal_uInt16 nLevel = 1; nLevel <= nNewEnd; ++nLevel)
                         {
                             SwFormTokens aPattern = aOldForm.GetPattern(nLevel);
 
@@ -3191,13 +3220,13 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             // table index imported with wrong page number format
                             aPattern.erase (new_end, aPattern.end() );
 
-                            aForm.SetPattern(nLevel, aPattern);
+                            aNewForm.SetPattern(nLevel, aPattern);
 
-                            aForm.SetTemplate( nLevel,
+                            aNewForm.SetTemplate( nLevel,
                                 aOldForm.GetTemplate(nLevel));
                         }
 
-                        pBase->SetTOXForm( aForm );
+                        pBase->SetTOXForm( aNewForm );
                     }
                     break;
                 default:
@@ -3213,15 +3242,23 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
         break;
     } // ToxBase fertig
 
-    // Update fuer TOX anstossen
-    rDoc.SetUpdateTOX(true);
+    // no Update of TOC anymore as its actual content is imported and kept.
+    //rDoc.SetUpdateTOX(true);
 
     // #i21237# - propagate tab stops from paragraph styles
     // used in TOX to patterns of the TOX
 
     pBase->AdjustTabStops(rDoc, sal_True);
 
-    // #i10028# - inserting a toc implicltly acts like a parabreak in word and writer
+    // #i10028# - inserting a toc implictly acts like a parabreak in word and writer
+
+    if ( pPaM->End() &&
+         pPaM->End()->nNode.GetNode().GetTxtNode() &&
+         pPaM->End()->nNode.GetNode().GetTxtNode()->Len() != 0 )
+    {
+        mbCareFirstParaEndInToc = true;
+    }
+
     if (pPaM->GetPoint()->nContent.GetIndex())
         AppendTxtNode(*pPaM->GetPoint());
 
@@ -3252,14 +3289,22 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     rDoc.InsertTableOf(*pPaM->GetPoint(), *aFltTOX.GetBase());
 
-    //inserting a toc inserts a section before this point, so adjust pos
-    //for future page/section segment insertion
+    //The TOC field representation contents should be inserted into TOC section, but not after TOC section.
+    //So we need update the document position when loading TOC representation and after loading TOC;
+    if (mpPosAfterTOC)
+    {
+        delete mpPosAfterTOC;
+    }
+    mpPosAfterTOC = new SwPaM(*pPaM);
+    (*pPaM).Move(fnMoveBackward);
     SwPaM aRegion(*pPaM);
-    aRegion.Move(fnMoveBackward);
+
     OSL_ENSURE(rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
     if (SwTOXBase* pBase2 = (SwTOXBase*)rDoc.GetCurTOX(*aRegion.GetPoint()))
     {
-        if(nIndexCols>1)
+        pBase2->SetMSTOCExpression(rStr);
+
+        if ( nIndexCols > 1 )
         {
             // Set the column number for index
             SfxItemSet aSet( rDoc.GetAttrPool(), RES_COL, RES_COL );
@@ -3269,8 +3314,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
             pBase2->SetAttrSet( aSet );
         }
 
-        maSectionManager.PrependedInlineNode(*pPaM->GetPoint(),
-            *aRegion.GetNode());
+        // inserting a toc inserts a section before this point, so adjust pos
+        // for future page/section segment insertion
+        maSectionManager.PrependedInlineNode( *mpPosAfterTOC->GetPoint(), *aRegion.GetNode() );
     }
 
     // Setze Ende in Stack
@@ -3278,7 +3324,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     if (!maApos.back()) //a para end in apo doesn't count
         bWasParaEnd = true;
-    return FLD_OK;
+
+    //Return FLD_TEXT, instead of FLD_OK
+    //FLD_TEXT means the following content, commonly indicate the field representation content should be parsed
+    //FLD_OK means the current field loading is finished. The rest part should be ignored.
+    return FLD_TEXT;
 }
 
 eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* /*pF*/, OUString& /*rStr*/)
@@ -3293,17 +3343,7 @@ eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* /*pF*/, OUString& /*rStr*/)
 
 eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr )
 {
-#if defined(WW_NATIVE_TOC)
-    if (1) {
-    OUString aBookmarkName("_HYPERLINK");
-    maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(ODF_HYPERLINK);
-    return FLD_TEXT;
-    }
-#endif
-
-    OUString sURL, sMark;
-    OUString sTarget;
+    OUString sURL, sTarget, sMark;
     bool bDataImport = false;
     //HYPERLINK "filename" [switches]
 
@@ -3338,6 +3378,10 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                         if( sMark.endsWith("\""))
                             sMark = sMark.copy( 0, sMark.getLength() - 1 );
 
+                        if (mbLoadingTOCCache)
+                        {
+                            mbLoadingTOCHyperlink = true;//on loading a TOC field nested hyperlink field
+                        }
                     }
                     break;
                 case 't':
@@ -3362,6 +3406,17 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
         ( sURL += OUString(INET_MARK_TOKEN) ) += sMark;
 
     SwFmtINetFmt aURL( sURL, sTarget );
+    // If on loading TOC field, change the default style into the "index link"
+    if (mbLoadingTOCCache)
+    {
+        OUString sLinkStyle("Index Link");
+        sal_uInt16 nPoolId =
+            SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        aURL.SetVisitedFmt(sLinkStyle);
+        aURL.SetINetFmt(sLinkStyle);
+        aURL.SetVisitedFmtId(nPoolId);
+        aURL.SetINetFmtId(nPoolId);
+    }
 
     //As an attribute this needs to be closed, and that'll happen from
     //EndExtSprm in conjunction with the maFieldStack If there are are flyfrms
