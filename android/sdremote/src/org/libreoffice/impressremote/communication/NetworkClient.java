@@ -32,8 +32,9 @@ public class NetworkClient extends Client {
     private Socket mSocket;
 
     public NetworkClient(Server aServer,
-                    CommunicationService aCommunicationService) {
-        super(aServer, aCommunicationService);
+                    CommunicationService aCommunicationService,
+                    Receiver aReceiver) {
+        super(aServer, aCommunicationService, aReceiver);
         try {
             mName = aServer.getName();
             mSocket = new Socket(aServer.getAddress(), PORT);

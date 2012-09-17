@@ -29,18 +29,23 @@ import com.actionbarsherlock.app.SherlockActivity;
 public class PairingActivity extends SherlockActivity {
     private CommunicationService mCommunicationService;
     private TextView mPinText;
+    private ActivityChangeBroadcastProcessor mBroadcastProcessor;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
         bindService(new Intent(this, CommunicationService.class), mConnection,
                         Context.BIND_IMPORTANT);
 
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_PAIRING_STARTED);
         aFilter.addAction(CommunicationService.MSG_PAIRING_SUCCESSFUL);
+
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+        mBroadcastProcessor.addToFilter(aFilter);
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
                         aFilter);
 
@@ -106,7 +111,7 @@ public class PairingActivity extends SherlockActivity {
                                 StartPresentationActivity.class);
                 startActivity(nIntent);
             }
-
+            mBroadcastProcessor.onReceive(aContext, aIntent);
         }
     };
 

@@ -19,6 +19,7 @@
             android:name=".SelectorActivity"
             android:icon="@drawable/actionbar_icon_computer"
             android:label="@string/selector_choose_a_computer"
+            android:title="@string/app_name"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +29,8 @@
         </activity>
         <activity
             android:name=".PairingActivity"
-            android:icon="@drawable/actionbar_icon_computer" >
+            android:icon="@drawable/actionbar_icon_computer"
+            android:noHistory="true" >
         </activity>
 
         <service android:name=".communication.CommunicationService" >

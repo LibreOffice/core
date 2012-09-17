@@ -73,7 +73,6 @@ public class CommunicationService extends Service implements Runnable {
             while (true) {
                 // Condition
                 try {
-
                     wait();
                 } catch (InterruptedException e) {
                     // We have finished
@@ -84,21 +83,23 @@ public class CommunicationService extends Service implements Runnable {
                     if ((mStateDesired == State.CONNECTED && mState == State.CONNECTED)
                                     || (mStateDesired == State.DISCONNECTED && mState == State.CONNECTED)) {
                         mClient.closeConnection();
+                        mClient = null;
                         mState = State.DISCONNECTED;
                     }
                     if (mStateDesired == State.CONNECTED) {
                         mState = State.CONNECTING;
                         switch (mServerDesired.getProtocol()) {
                         case NETWORK:
-                            mClient = new NetworkClient(mServerDesired, this);
+                            mClient = new NetworkClient(mServerDesired, this,
+                                            mReceiver);
                             break;
                         case BLUETOOTH:
                             mClient = new BluetoothClient(mServerDesired, this,
+                                            mReceiver,
                                             mBluetoothPreviouslyEnabled);
                             break;
                         }
                         mTransmitter = new Transmitter(mClient);
-                        mClient.setReceiver(mReceiver);
                         mState = State.CONNECTED;
                     }
                 }
@@ -177,6 +178,19 @@ public class CommunicationService extends Service implements Runnable {
     public static final String MSG_SERVERLIST_CHANGED = "SERVERLIST_CHANGED";
     public static final String MSG_PAIRING_STARTED = "PAIRING_STARTED";
     public static final String MSG_PAIRING_SUCCESSFUL = "PAIRING_SUCCESSFUL";
+
+    /**
+     * Notify the UI that the service has connected to a server AND a slideshow
+     * is running.
+     * In this case the PresentationActivity should be started.
+     */
+    public static final String STATUS_CONNECTED_SLIDESHOW_RUNNING = "STATUS_CONNECTED_SLIDESHOW_RUNNING";
+    /**
+     * Notify the UI that the service has connected to a server AND no slideshow
+     * is running.
+     * In this case the StartPresentationActivity should be started.
+     */
+    public static final String STATUS_CONNECTED_NOSLIDESHOW = "STATUS_CONNECTED_NOSLIDESHOW";
 
     private Transmitter mTransmitter;
 

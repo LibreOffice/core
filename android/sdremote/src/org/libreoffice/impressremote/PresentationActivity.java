@@ -8,9 +8,11 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -41,13 +44,22 @@ public class PresentationActivity extends SherlockFragmentActivity {
     private ThumbnailFragment mThumbnailFragment;
     private PresentationFragment mPresentationFragment;
     private static ActionBarManager mActionBarManager;
+    private ActivityChangeBroadcastProcessor mBroadcastProcessor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+
         bindService(new Intent(this, CommunicationService.class), mConnection,
                         Context.BIND_IMPORTANT);
+
+        IntentFilter aFilter = new IntentFilter();
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+        mBroadcastProcessor.addToFilter(aFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
+                        aFilter);
 
         //((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
         setContentView(R.layout.activity_presentation);
@@ -64,6 +76,18 @@ public class PresentationActivity extends SherlockFragmentActivity {
             fragmentTransaction.commit();
         }
         mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+            return;
+        }
+        Intent aIntent = new Intent(this, SelectorActivity.class);
+        aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(aIntent);
+        mCommunicationService.disconnect();
     }
 
     @Override
@@ -501,4 +525,12 @@ public class PresentationActivity extends SherlockFragmentActivity {
         }
 
     }
+
+    private BroadcastReceiver mListener = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context aContext, Intent aIntent) {
+            mBroadcastProcessor.onReceive(aContext, aIntent);
+        }
+    };
 }

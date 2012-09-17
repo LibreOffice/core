@@ -49,6 +49,7 @@ public class SelectorActivity extends SherlockActivity {
     private View mNetworkContainer;
     private LinearLayout mNetworkList;
     private TextView mNoServerLabel;
+    private ActivityChangeBroadcastProcessor mBroadcastProcessor;
 
     /** Called when the activity is first created. */
     @Override
@@ -58,6 +59,10 @@ public class SelectorActivity extends SherlockActivity {
 
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_SERVERLIST_CHANGED);
+
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+        mBroadcastProcessor.addToFilter(aFilter);
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
                         aFilter);
 
@@ -191,7 +196,9 @@ public class SelectorActivity extends SherlockActivity {
             if (aIntent.getAction().equals(
                             CommunicationService.MSG_SERVERLIST_CHANGED)) {
                 refreshLists();
+                return;
             }
+            mBroadcastProcessor.onReceive(aContext, aIntent);
 
         }
     };

@@ -45,14 +45,13 @@ public abstract class Client {
 
     protected CommunicationService mCommunicationService;
 
-    protected Client(Server aServer, CommunicationService aCommunicationService) {
+    protected Client(Server aServer,
+                    CommunicationService aCommunicationService,
+                    Receiver aReceiver) {
         mServer = aServer;
         mCommunicationService = aCommunicationService;
-        latestInstance = this;
-    }
-
-    public void setReceiver(Receiver aReceiver) {
         mReceiver = aReceiver;
+        latestInstance = this;
     }
 
     protected void startListening() {

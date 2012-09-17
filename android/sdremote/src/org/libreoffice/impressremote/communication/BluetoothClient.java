@@ -30,8 +30,8 @@ public class BluetoothClient extends Client {
 
     public BluetoothClient(Server aServer,
                     CommunicationService aCommunicationService,
-                    boolean aBluetoothWasEnabled) {
-        super(aServer, aCommunicationService);
+                    Receiver aReceiver, boolean aBluetoothWasEnabled) {
+        super(aServer, aCommunicationService, aReceiver);
         try {
             mAdapter = BluetoothAdapter.getDefaultAdapter();
             mBluetoothWasEnabled = aBluetoothWasEnabled;
