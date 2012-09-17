@@ -1,0 +1,229 @@
+diff --git src/libcmis/atom-folder.cxx src/libcmis/atom-folder.cxx
+index f2e0381..1c65d41 100644
+--- src/libcmis/atom-folder.cxx
++++ src/libcmis/atom-folder.cxx
+@@ -177,7 +177,7 @@ libcmis::FolderPtr AtomFolder::createFolder( const map< string, libcmis::Propert
+ }
+ 
+ libcmis::DocumentPtr AtomFolder::createDocument( const map< string, libcmis::PropertyPtr >& properties,
+-        boost::shared_ptr< ostream > os, string contentType, string fileName ) throw ( libcmis::Exception )
++        boost::shared_ptr< ostream > os, string contentType, string ) throw ( libcmis::Exception )
+ {
+     AtomLink* childrenLink = getLink( "down", "application/atom+xml;type=feed" );
+ 
+diff --git src/libcmis/atom-session.cxx src/libcmis/atom-session.cxx
+index c2baa4f..1716755 100644
+--- src/libcmis/atom-session.cxx
++++ src/libcmis/atom-session.cxx
+@@ -39,74 +39,6 @@
+ 
+ using namespace std;
+ 
+-namespace
+-{
+-    size_t lcl_getEncoding( void *ptr, size_t size, size_t nmemb, void *userdata )
+-    {
+-        libcmis::EncodedData* data = static_cast< libcmis::EncodedData* >( userdata );
+-
+-        string buf( ( const char* ) ptr, size * nmemb );
+-
+-        size_t sepPos = buf.find( ':' );
+-        if ( sepPos != string::npos )
+-        {
+-            string name( buf, 0, sepPos );
+-            if ( "Content-Transfer-Encoding" == name )
+-            {
+-                string encoding = buf.substr( sepPos + 1 );
+-                encoding.erase( remove_if( encoding.begin(), encoding.end(), ptr_fun< int, int> ( isspace ) ), encoding.end() );
+-
+-                data->setEncoding( encoding );
+-            }
+-        }
+-        
+-        return nmemb;
+-    }
+-
+-    size_t lcl_bufferData( void* buffer, size_t size, size_t nmemb, void* data )
+-    {
+-        libcmis::EncodedData* encoded = static_cast< libcmis::EncodedData* >( data );
+-        encoded->decode( buffer, size, nmemb );
+-        return nmemb;
+-    }
+-
+-    size_t lcl_readStream( void* buffer, size_t size, size_t nmemb, void* data )
+-    {
+-        istream& is = *( static_cast< istream* >( data ) );
+-        char* out = ( char * ) buffer;
+-        is.read( out, size * nmemb );
+-
+-        return is.gcount( ) / size;
+-    }
+-
+-    curlioerr lcl_ioctlStream( CURL* /*handle*/, int cmd, void* data )
+-    {
+-        curlioerr errCode = CURLIOE_OK;
+-
+-        switch ( cmd )
+-        {
+-            case CURLIOCMD_RESTARTREAD:
+-                {
+-                    istream& is = *( static_cast< istream* >( data ) );
+-                    is.clear( );
+-                    is.seekg( 0, ios::beg );
+-
+-                    if ( !is.good() )
+-                    {
+-                        fprintf ( stderr, "rewind failed\n" );
+-                        errCode = CURLIOE_FAILRESTART;
+-                    }
+-                }
+-                break;
+-            case CURLIOCMD_NOP:
+-                break;
+-            default:
+-                errCode = CURLIOE_UNKNOWNCMD;
+-        }
+-        return errCode;
+-    }
+-}
+-
+ AtomPubSession::AtomPubSession( string atomPubUrl, string repositoryId, 
+         string username, string password, bool verbose ) throw ( libcmis::Exception ) :
+     BaseSession( atomPubUrl, repositoryId, username, password, verbose ),
+@@ -190,7 +122,7 @@ void AtomPubSession::initialize( ) throw ( libcmis::Exception )
+ 
+                             m_repositories.push_back( ws );
+                         }
+-                        catch ( const libcmis::Exception& e )
++                        catch ( const libcmis::Exception& )
+                         {
+                             // Invalid repository, don't take care of this
+                         }
+diff --git src/libcmis/atom-workspace.cxx src/libcmis/atom-workspace.cxx
+index b6f2388..5e4363b 100644
+--- src/libcmis/atom-workspace.cxx
++++ src/libcmis/atom-workspace.cxx
+@@ -69,6 +69,7 @@ AtomRepository::AtomRepository( xmlNodePtr wsNode ) throw ( libcmis::Exception )
+ }
+ 
+ AtomRepository::AtomRepository( const AtomRepository& rCopy ) :
++    Repository( ),
+     m_collections( rCopy.m_collections ),
+     m_uriTemplates( rCopy.m_uriTemplates )
+ {
+diff --git src/libcmis/base-session.cxx src/libcmis/base-session.cxx
+index c99f110..b060d0b 100644
+--- src/libcmis/base-session.cxx
++++ src/libcmis/base-session.cxx
+@@ -61,28 +61,6 @@ namespace
+         return nmemb;
+     }
+ 
+-    size_t lcl_getEncoding( void *ptr, size_t size, size_t nmemb, void *userdata )
+-    {
+-        libcmis::EncodedData* data = static_cast< libcmis::EncodedData* >( userdata );
+-
+-        string buf( ( const char* ) ptr, size * nmemb );
+-
+-        size_t sepPos = buf.find( ':' );
+-        if ( sepPos != string::npos )
+-        {
+-            string name( buf, 0, sepPos );
+-            if ( "Content-Transfer-Encoding" == name )
+-            {
+-                string encoding = buf.substr( sepPos + 1 );
+-                encoding.erase( remove_if( encoding.begin(), encoding.end(), ptr_fun< int, int> ( isspace ) ), encoding.end() );
+-
+-                data->setEncoding( encoding );
+-            }
+-        }
+-        
+-        return nmemb;
+-    }
+-
+     size_t lcl_bufferData( void* buffer, size_t size, size_t nmemb, void* data )
+     {
+         libcmis::EncodedData* encoded = static_cast< libcmis::EncodedData* >( data );
+@@ -125,16 +103,6 @@ namespace
+         }
+         return errCode;
+     }
+-
+-    string lcl_tolower( string sText )
+-    {
+-        string lower( sText );
+-        for ( size_t i = 0; i < sText.size(); ++i )
+-        {
+-            lower[i] = ::tolower( sText[i] );
+-        }
+-        return lower;
+-    }
+ }
+ 
+ BaseSession::BaseSession( string atomPubUrl, string repositoryId, 
+@@ -443,7 +411,7 @@ const char* CurlException::what( ) const throw ()
+     if ( !isCancelled( ) )
+     {
+         stringstream buf;
+-        buf << "CURL error - " << m_code << ": ";
++        buf << "CURL error - " << ( unsigned int )m_code << ": ";
+         buf << m_message;
+         m_errorMessage = buf.str( );
+ 
+diff --git src/libcmis/object.cxx src/libcmis/object.cxx
+index 690bb17..3397070 100644
+--- src/libcmis/object.cxx
++++ src/libcmis/object.cxx
+@@ -93,8 +93,8 @@ namespace libcmis
+             xmlXPathObjectPtr xpathObj = xmlXPathEvalExpression( BAD_CAST( "//cmis:allowableActions" ), xpathCtx );
+             if ( xpathObj && xpathObj->nodesetval && xpathObj->nodesetval->nodeNr > 0 )
+             {
+-                xmlNodePtr node = xpathObj->nodesetval->nodeTab[0];
+-                m_allowableActions.reset( new libcmis::AllowableActions( node ) );
++                xmlNodePtr actionsNode = xpathObj->nodesetval->nodeTab[0];
++                m_allowableActions.reset( new libcmis::AllowableActions( actionsNode ) );
+             }
+             xmlXPathFreeObject( xpathObj );
+ 
+@@ -109,8 +109,8 @@ namespace libcmis
+                 int size = xpathObj->nodesetval->nodeNr;
+                 for ( int i = 0; i < size; i++ )
+                 {
+-                    xmlNodePtr node = xpathObj->nodesetval->nodeTab[i];
+-                    libcmis::PropertyPtr property = libcmis::parseProperty( node, getTypeDescription( ) );
++                    xmlNodePtr propertyNode = xpathObj->nodesetval->nodeTab[i];
++                    libcmis::PropertyPtr property = libcmis::parseProperty( propertyNode, getTypeDescription( ) );
+                     if ( property.get( ) )
+                         m_properties[ property->getPropertyType( )->getId() ] = property;
+                 }
+diff --git src/libcmis/ws-requests.cxx src/libcmis/ws-requests.cxx
+index 2b421b2..e13ae07 100644
+--- src/libcmis/ws-requests.cxx
++++ src/libcmis/ws-requests.cxx
+@@ -349,7 +349,7 @@ void UpdateProperties::toXml( xmlTextWriterPtr writer )
+     xmlTextWriterEndElement( writer );
+ }
+ 
+-SoapResponsePtr UpdatePropertiesResponse::create( xmlNodePtr node, RelatedMultipart&, SoapSession* session )
++SoapResponsePtr UpdatePropertiesResponse::create( xmlNodePtr node, RelatedMultipart&, SoapSession* )
+ {
+     UpdatePropertiesResponse* response = new UpdatePropertiesResponse( );
+ 
+@@ -425,7 +425,7 @@ void DeleteTree::toXml( xmlTextWriterPtr writer )
+     xmlTextWriterEndElement( writer );
+ }
+ 
+-SoapResponsePtr DeleteTreeResponse::create( xmlNodePtr node, RelatedMultipart&, SoapSession* session )
++SoapResponsePtr DeleteTreeResponse::create( xmlNodePtr node, RelatedMultipart&, SoapSession* )
+ {
+     DeleteTreeResponse* response = new DeleteTreeResponse( );
+ 
+@@ -624,7 +624,7 @@ void CreateFolder::toXml( xmlTextWriterPtr writer )
+     xmlTextWriterEndElement( writer );
+ }
+ 
+-SoapResponsePtr CreateFolderResponse::create( xmlNodePtr node, RelatedMultipart&, SoapSession* session )
++SoapResponsePtr CreateFolderResponse::create( xmlNodePtr node, RelatedMultipart&, SoapSession* )
+ {
+     CreateFolderResponse* response = new CreateFolderResponse( );
+ 
