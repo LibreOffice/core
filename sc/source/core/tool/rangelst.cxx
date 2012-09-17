@@ -417,14 +417,6 @@ bool ScRangeList::UpdateReference(
     SCTAB nTab2;
     rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
-    // delete all entries that are fully deleted
-    if( eUpdateRefMode == URM_INSDEL && (nDx < 0 || nDy < 0) )
-    {
-        vector<ScRange*>::iterator itr = std::remove_if(maRanges.begin(), maRanges.end(), FindDeletedRange(nDx, nDy));
-        for_each(itr, maRanges.end(), ScDeleteObjectByPtr<ScRange>());
-        maRanges.erase(itr, maRanges.end());
-    }
-
     vector<ScRange*>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
     {
