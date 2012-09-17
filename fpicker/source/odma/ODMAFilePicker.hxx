@@ -59,7 +59,7 @@ class ODMAFilePicker :
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext
+        m_xContext;
     sal_Bool m_bUseDMS;
     sal_Bool m_bMultiSelectionMode;
     rtl::OUString m_aDefaultName;
