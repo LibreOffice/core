@@ -522,6 +522,10 @@ namespace sw
                 return true;
             if (nB == RES_TXTATR_CHARFMT)
                 return false;
+            if (nA == RES_TXTATR_INETFMT)
+                return true;
+            if (nB == RES_TXTATR_INETFMT)
+               return false;
             return nA < nB;
         }
 

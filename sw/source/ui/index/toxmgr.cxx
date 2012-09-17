@@ -459,7 +459,9 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         if (pNewTOX != NULL) // => pTOX != NULL
             pDoc->ChgTOX(*pTOX, *pNewTOX);
 
+        pTOX->DisableKeepExpression();
         bRet = pSh->UpdateTableOf(*pTOX, pSet);
+        pTOX->EnableKeepExpression();
 
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {

@@ -3786,7 +3786,7 @@ bool WW8PLCFx_FLD::StartPosIsFieldStart()
     return true;
 }
 
-bool WW8PLCFx_FLD::EndPosIsFieldEnd()
+bool WW8PLCFx_FLD::EndPosIsFieldEnd(WW8_CP& nCP)
 {
     bool bRet = false;
 
@@ -3799,7 +3799,10 @@ bool WW8PLCFx_FLD::EndPosIsFieldEnd()
         void* pData;
         sal_Int32 nTest;
         if ( pPLCF->Get(nTest, pData) && ((((sal_uInt8*)pData)[0] & 0x1f) == 0x15) )
+        {
+            nCP = nTest;
             bRet = true;
+        }
 
         pPLCF->SetIdx(n);
     }
@@ -4116,7 +4119,14 @@ WW8PLCFx& WW8PLCFx_Book::operator ++( int )
         else if( l1 < l0 )
             nIsEnd = 1;
         else
-            nIsEnd = ( nIsEnd ) ? 0 : 1;
+        {
+            const void * p = pBook[0]->GetData(pBook[0]->GetIdx());
+            long nPairFor = (p == NULL)? 0L : SVBT16ToShort(*((SVBT16*) p));
+            if (nPairFor == pBook[1]->GetIdx())
+                nIsEnd = 0;
+            else
+                nIsEnd = ( nIsEnd ) ? 0 : 1;
+        }
     }
     return *this;
 }

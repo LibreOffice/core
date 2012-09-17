@@ -187,7 +187,9 @@ public:
 
     void StartTOX( const SwSection& rSect );
 
-    void EndTOX( const SwSection& rSect );
+    void EndTOX( const SwSection& rSect,bool bCareEnd=true );
+
+    virtual void OnTOXEnding() {}
 
     virtual void TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAttr );
 

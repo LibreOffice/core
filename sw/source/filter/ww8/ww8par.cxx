@@ -2747,7 +2747,13 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             break;
         case 0x15:
             if( !bSpec )        // Juristenparagraph
-                cInsert = '\xa7';
+            {
+                cp_set::iterator aItr = maTOXEndCps.find((WW8_CP)nPosCp);
+             if (aItr == maTOXEndCps.end())
+                    cInsert = '\xa7';
+             else
+              maTOXEndCps.erase(aItr);
+            }
             break;
         case 0x9:
             cInsert = '\x9';    // Tab
@@ -3167,12 +3173,26 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 
         if (bStartLine && !pPreviousNode) // Zeilenende
         {
-            //Modify here for #119405, by easyfan, 2012-05-24
-            //We will record the CP of a paragraph end ('0x0D'), if current loading contents is from main stream;
-            if (mbOnLoadingMain)
-                maEndParaPos.push_back(l-1);
-            //End of modification, by easyfan
-            AppendTxtNode(*pPaM->GetPoint());
+            bool bSplit = true;
+            if (mbCareFirstParaEndInToc)
+            {
+                mbCareFirstParaEndInToc = false;
+                if (pPaM->End() && pPaM->End()->nNode.GetNode().GetTxtNode() &&  pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0)
+                    bSplit = false;
+            }
+            if (mbCareLastParaEndInToc)
+            {
+                mbCareLastParaEndInToc = false;
+                if (pPaM->End() && pPaM->End()->nNode.GetNode().GetTxtNode() &&  pPaM->End()->nNode.GetNode().GetTxtNode()->Len() == 0)
+                    bSplit = false;
+            }
+            if (bSplit)
+            {
+                // #119405# - We will record the CP of a paragraph end ('0x0D'), if current loading contents is from main stream;
+                if (mbOnLoadingMain)
+                    maEndParaPos.push_back(l-1);
+                AppendTxtNode(*pPaM->GetPoint());
+            }
         }
 
         if (pPreviousNode && bStartLine)
@@ -3310,31 +3330,37 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, const String& rBaseURL, bool bNewDoc)
-    : mpDocShell(rD.GetDocShell()),
-      maTracer(*(mpDocShell->GetMedium())),
-      pStg(pStorage),
-      pStrm(pSt),
-      pTableStream(0),
-      pDataStream(0),
-      rDoc(rD),
-      maSectionManager(*this),
-      maInsertedTables(rD),
-      maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
-      maGrfNameGenerator(bNewDoc,String('G')),
-      maParaStyleMapper(rD),
-      maCharStyleMapper(rD),
-      maTxtNodesHavingFirstLineOfstSet(),
-      maTxtNodesHavingLeftIndentSet(),
-      pMSDffManager(0),
-      mpAtnNames(0),
-      pAuthorInfos(0),
-      sBaseURL(rBaseURL),
-      m_bRegardHindiDigits( false ),
-      mbNewDoc(bNewDoc),
-      nDropCap(0),
-      nIdctHint(0),
-      bBidi(false),
-      bReadTable(false)
+    : mpDocShell(rD.GetDocShell())
+    , maTracer(*(mpDocShell->GetMedium()))
+    , pStg(pStorage)
+    , pStrm(pSt)
+    , pTableStream(0)
+    , pDataStream(0)
+    , rDoc(rD)
+    , maSectionManager(*this)
+    , maInsertedTables(rD)
+    , maSectionNameGenerator(rD,CREATE_CONST_ASC("WW"))
+    , maGrfNameGenerator(bNewDoc,String('G'))
+    , maParaStyleMapper(rD)
+    , maCharStyleMapper(rD)
+    , maTxtNodesHavingFirstLineOfstSet()
+    , maTxtNodesHavingLeftIndentSet()
+    , pMSDffManager(0)
+    , mpAtnNames(0)
+    , pAuthorInfos(0)
+    , sBaseURL(rBaseURL)
+    , m_bRegardHindiDigits( false )
+    , mbNewDoc(bNewDoc)
+    , nDropCap(0)
+    , nIdctHint(0)
+    , bBidi(false)
+    , bReadTable(false)
+    , mbLoadingTOCCache(false)
+    , mbLoadingTOCHyperlink(false)
+    , mpPosAfterTOC(0)
+    , mbCareFirstParaEndInToc(false)
+    , mbCareLastParaEndInToc(false)
+    , maTOXEndCps()
     //Modify here for #119405, by easyfan, 2012-05-24
     ,maCurrAttrCP(-1),
     mbOnLoadingMain(false)
@@ -3660,11 +3686,11 @@ void wwSectionManager::InsertSegments()
         bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
         bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
-    if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected()) {
-        // here we have the special case that the whole document is protected, with the execption of this section.
-        // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
-        mrReader.rDoc.set(IDocumentSettingAccess::PROTECT_FORM, false );
-    }
+        if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected()) {
+            // here we have the special case that the whole document is protected, with the execption of this section.
+            // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
+            mrReader.rDoc.set(IDocumentSettingAccess::PROTECT_FORM, false );
+        }
 
 
         if (bInsertPageDesc)

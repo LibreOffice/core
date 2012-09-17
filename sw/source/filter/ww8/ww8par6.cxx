@@ -3884,6 +3884,15 @@ void SwWW8ImplReader::Read_CColl( sal_uInt16, const sal_uInt8* pData, short nLen
         || pCollA[nId].bColl )              // oder Para-Style ?
         return;                             // dann ignorieren
 
+    // if current on loading a TOC field, and current trying to apply a hyperlink character style,
+    // just ignore. For the hyperlinks inside TOC in MS Word is not same with a common hyperlink
+    // Character styles: without underline and blue font color. And such type style will be applied in others
+    // processes.
+    if (mbLoadingTOCCache && pCollA[nId].GetWWStyleId() == ww::stiHyperlink)
+    {
+        return;
+    }
+
     NewAttr( SwFmtCharFmt( (SwCharFmt*)pCollA[nId].pFmt ) );
     nCharFmt = (short) nId;
 }

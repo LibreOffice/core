@@ -510,17 +510,19 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
 
 SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
                      sal_uInt16 nCreaType, const String& rTitle )
-    : SwClient((SwModify*)pTyp),
-    aForm(rForm),
-    aTitle(rTitle),
-    eLanguage((LanguageType)::GetAppLanguage()),
-    nCreateType(nCreaType),
-    nOLEOptions(0),
-    eCaptionDisplay(CAPTION_COMPLETE),
-    bProtected( sal_True ),
-    bFromChapter(sal_False),
-    bFromObjectNames(sal_False),
-    bLevelFromChapter(sal_False)
+    : SwClient((SwModify*)pTyp)
+    , aForm(rForm)
+    , aTitle(rTitle)
+    , eLanguage((LanguageType)::GetAppLanguage())
+    , nCreateType(nCreaType)
+    , nOLEOptions(0)
+    , eCaptionDisplay(CAPTION_COMPLETE)
+    , bProtected( sal_True )
+    , bFromChapter(sal_False)
+    , bFromObjectNames(sal_False)
+    , bLevelFromChapter(sal_False)
+    , maMSTOCExpression()
+    , mbKeepExpression(sal_True)
 {
     aData.nOptions = 0;
 }
@@ -528,6 +530,7 @@ SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
 
 SwTOXBase::SwTOXBase( const SwTOXBase& rSource, SwDoc* pDoc )
     : SwClient( rSource.GetRegisteredInNonConst() )
+    , mbKeepExpression(sal_True)
 {
     CopyTOXBase( pDoc, rSource );
 }
@@ -539,6 +542,7 @@ void SwTOXBase::RegisterToTOXType( SwTOXType& rType )
 
 SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 {
+    maMSTOCExpression = rSource.maMSTOCExpression;
     SwTOXType* pType = (SwTOXType*)rSource.GetTOXType();
     if( pDoc && USHRT_MAX == pDoc->GetTOXTypes().GetPos( pType ))
     {

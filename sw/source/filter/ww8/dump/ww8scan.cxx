@@ -3541,7 +3541,7 @@ bool WW8PLCFx_FLD::StartPosIsFieldStart()
     return true;
 }
 
-bool WW8PLCFx_FLD::EndPosIsFieldEnd()
+bool WW8PLCFx_FLD::EndPosIsFieldEnd(WW8_CP& nCP)
 {
     bool bRet = false;
 
@@ -3554,7 +3554,10 @@ bool WW8PLCFx_FLD::EndPosIsFieldEnd()
         void* pData;
         long nTest;
         if ( pPLCF->Get(nTest, pData) && ((((sal_uInt8*)pData)[0] & 0x1f) == 0x15) )
+        {
+            nCP = nTest;
             bRet = true;
+        }
 
         pPLCF->SetIdx(n);
     }

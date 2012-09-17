@@ -501,6 +501,13 @@ class SW_DLLPUBLIC SwTOXBase : public SwClient
     sal_Bool        bFromObjectNames : 1;   // create a table or object index
                                     // from the names rather than the caption
     sal_Bool        bLevelFromChapter : 1; // User index: get the level from the source chapter
+
+protected:
+    // Add a data member, for record the TOC field expression of MS Word binary format
+    // For keeping fedality and may giving a better exporting performance
+    String maMSTOCExpression;
+    sal_Bool mbKeepExpression;
+
 public:
     SwTOXBase( const SwTOXType* pTyp, const SwForm& rForm,
                sal_uInt16 nCreaType, const String& rTitle );
@@ -519,6 +526,12 @@ public:
 
     const String&       GetTOXName() const {return aName;}
     void                SetTOXName(const String& rSet) {aName = rSet;}
+
+    // for record the TOC field expression of MS Word binary format
+    const String&       GetMSTOCExpression() const{return maMSTOCExpression;}
+    void                SetMSTOCExpression(const String& rExp) {maMSTOCExpression = rExp;}
+    void                EnableKeepExpression() {mbKeepExpression = sal_True;}
+    void                DisableKeepExpression() {mbKeepExpression = sal_False;}
 
     const String&       GetTitle() const;           // Title
     const String&       GetTypeName() const;        // Name

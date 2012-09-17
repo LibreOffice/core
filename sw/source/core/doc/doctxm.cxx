@@ -798,7 +798,14 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         !GetFmt() || 0 == (pSectNd = GetFmt()->GetSectionNode() ) ||
         !pSectNd->GetNodes().IsDocNodes() ||
         IsHiddenFlag() )
+    {
         return;
+    }
+
+    if ( !mbKeepExpression )
+    {
+        maMSTOCExpression = String();
+    }
 
     SwDoc* pDoc = (SwDoc*)pSectNd->GetDoc();
 

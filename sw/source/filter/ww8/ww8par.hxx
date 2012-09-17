@@ -798,9 +798,9 @@ struct WW8PostProcessAttrsInfo
 //-----------------------------------------
 //            Storage-Reader
 //-----------------------------------------
-//Modify here for #119405, by easyfan, 2012-05-24
+typedef std::set<WW8_CP> cp_set;
+
 typedef std::vector<WW8_CP> cp_vector;
-//End of modification, by easyfan
 
 class SwWW8ImplReader
 {
@@ -1103,12 +1103,20 @@ private:
     bool bBidi;
     bool bReadTable;
     boost::shared_ptr<SwPaM> mpTableEndPaM;
+    // Indicate that currently on loading a TOC, managed by Read_F_TOX() and End_Field()
+    bool mbLoadingTOCCache;
+    // Indicate that current on loading a hyperlink, which is inside a TOC; Managed by Read_F_Hyperlink() and End_Field()
+    bool mbLoadingTOCHyperlink;
+    // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
+    SwPaM* mpPosAfterTOC;
 
-    //Modify here for #119405, by easyfan, 2012-05-24
+    bool mbCareFirstParaEndInToc;
+    bool mbCareLastParaEndInToc;
+    cp_set maTOXEndCps;
+
     cp_vector maEndParaPos;
     WW8_CP maCurrAttrCP;
     bool mbOnLoadingMain:1;
-    //End of modification, by easyfan
 //---------------------------------------------
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
