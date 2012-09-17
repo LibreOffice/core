@@ -119,7 +119,6 @@
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">customheading</property>
                       </object>
@@ -139,7 +138,6 @@
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">noheading</property>
                       </object>
@@ -159,7 +157,6 @@
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">copyheading</property>
                       </object>

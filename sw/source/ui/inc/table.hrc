@@ -30,7 +30,7 @@
 #define TP_TABLE_COLUMN         (RC_TABLE_BEGIN + 11)
 #define DLG_INSERT_CHART        (RC_TABLE_BEGIN + 12)
 #define MSG_WRONG_TABLENAME     (RC_TABLE_BEGIN + 13)
-#define DLG_SPLIT_TABLE         (RC_TABLE_BEGIN + 14)
+
 #define DLG_MERGE_TABLE         (RC_TABLE_BEGIN + 15)
 
 #define TABLE_ACT_END           DLG_MERGE_TABLE
