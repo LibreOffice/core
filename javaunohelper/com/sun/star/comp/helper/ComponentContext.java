@@ -20,6 +20,7 @@ package com.sun.star.comp.helper;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Any;
 
+import com.sun.star.uno.DeploymentException;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;
@@ -209,7 +210,7 @@ public class ComponentContext implements XComponentContext, XComponent
     {
         if (m_xSMgr == null)
         {
-            throw new com.sun.star.uno.RuntimeException(
+            throw new DeploymentException(
                 "null component context service manager" );
         }
         return m_xSMgr;

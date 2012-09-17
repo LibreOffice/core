@@ -49,8 +49,8 @@ published interface XComponentContext : XInterface
         service manager is used very often.
 
         @return
-                service manager; throws RuntimeException in case service manager
-                is null
+                service manager; throws DeploymentException in case service
+                manager is null
     */
     com::sun::star::lang::XMultiComponentFactory getServiceManager();
 };

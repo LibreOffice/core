@@ -60,6 +60,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 #include <memory>
@@ -674,7 +675,7 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
 {
     if ( !m_xSMgr.is() )
     {
-        throw RuntimeException(
+        throw DeploymentException(
             "null component context service manager",
             static_cast<OWeakObject *>(this) );
     }
