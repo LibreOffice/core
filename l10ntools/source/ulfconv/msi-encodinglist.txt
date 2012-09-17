@@ -122,7 +122,7 @@ pt-BR 1252  1046
 pt-PT 1252  2070
 qtz   1252  1033   # key id pseudo language
 rm       0  1047   # Raeto-Romance
-ro    1250  1048   # Romanian
+ro       0  1048   # Romanian
 ru    1251  1049
 rw       0  1569   # Kinyarwanda
 sa-IN    0  1103   # Sanskrit
