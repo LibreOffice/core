@@ -21,9 +21,13 @@ public:
     virtual void tearDown();
 
     void testDeleteArea_4Ranges();
+    void testDeleteArea_2Ranges();
+    void testDeleteArea_0Ranges();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testDeleteArea_4Ranges);
+    CPPUNIT_TEST(testDeleteArea_2Ranges);
+    CPPUNIT_TEST(testDeleteArea_0Ranges);
     CPPUNIT_TEST_SUITE_END();
 
 
@@ -68,6 +72,41 @@ void Test::testDeleteArea_4Ranges()
                 CPPUNIT_ASSERT(aList.Intersects(ScRange(nCol, nRow, 0)));
         }
     }
+}
+
+void Test::testDeleteArea_2Ranges()
+{
+    ScRangeList aList(ScRange(0,0,0,5,5,5));
+    ScRangeList aList2(aList);
+
+    aList.DeleteArea(4,4,0,6,7,0);
+    aList2.DeleteArea(4,4,0,6,7,0);
+    CPPUNIT_ASSERT_EQUAL(aList.size(), static_cast<size_t>(2));
+    CPPUNIT_ASSERT_EQUAL(aList2.size(), static_cast<size_t>(2));
+
+    for(SCCOL nCol = 0; nCol <= 5; ++nCol)
+    {
+        for(SCROW nRow = 0; nRow <= 5; ++nRow)
+        {
+            if(nCol>=4 && nRow >= 4)
+                CPPUNIT_ASSERT(!aList.Intersects(ScRange(nCol, nRow, 0)));
+            else
+                CPPUNIT_ASSERT(aList.Intersects(ScRange(nCol, nRow, 0)));
+        }
+    }
+}
+
+void Test::testDeleteArea_0Ranges()
+{
+    ScRangeList aList(ScRange(1,1,0,3,3,0));
+    aList.DeleteArea(1,1,0,3,3,0);
+
+    CPPUNIT_ASSERT(aList.empty());
+
+    ScRangeList aList2(ScRange(1,1,0,3,3,0));
+    aList2.DeleteArea(0,0,0,4,4,0);
+
+    CPPUNIT_ASSERT(aList.empty());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
