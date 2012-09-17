@@ -87,25 +87,24 @@ use installer::ziplist;
 our @EXPORT_OK = qw(main);
 
 sub main {
-    #################################################
-    # Main program
-    #################################################
-
-    #################################################
-    # Part 1: The platform independent part
-    #################################################
-
-    #################################################
-    # Part 1a: The language independent part
-    #################################################
-
     installer::logger::starttime();
 
-    #########################################
-    # Checking the environment and setting
-    # most important variables
-    #########################################
+    my $exit_code = 0;
 
+    eval {
+        run();
+    };
+    if ($@) {
+        warn "$@\n";
+        $exit_code = -1;
+    }
+
+    installer::logger::stoptime();
+
+    return $exit_code;
+}
+
+sub run {
     installer::logger::print_message( "... checking environment variables ...\n" );
     my $environmentvariableshashref = installer::control::check_system_environment();
 
@@ -1822,12 +1821,6 @@ sub main {
         print $log_fh Dumper($filesinproductlanguageresolvedarrayref);
 
     }   # end of iteration for one language group
-
-    #######################################################
-    # Stopping time
-    #######################################################
-
-    installer::logger::stoptime();
 }
 
 1;
