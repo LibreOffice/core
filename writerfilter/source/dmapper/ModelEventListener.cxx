@@ -18,7 +18,7 @@
  */
 #include <ModelEventListener.hxx>
 #include <PropertyIds.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>

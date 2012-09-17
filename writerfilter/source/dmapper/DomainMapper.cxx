@@ -58,7 +58,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <CellColorHandler.hxx>
 #include <SectionColumnHandler.hxx>

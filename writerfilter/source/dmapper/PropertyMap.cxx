@@ -21,7 +21,7 @@
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <i18nutil/paper.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

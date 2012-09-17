@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>

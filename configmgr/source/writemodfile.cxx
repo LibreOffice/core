@@ -29,7 +29,6 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/file.h"
 #include "osl/file.hxx"
-#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"

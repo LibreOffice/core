@@ -52,7 +52,7 @@
 #pragma warning(pop)
 #endif
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 #include <algorithm>
 #include <set>

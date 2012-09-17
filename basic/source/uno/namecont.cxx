@@ -25,10 +25,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/errinf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
 

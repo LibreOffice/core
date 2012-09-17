@@ -139,7 +139,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include "svx/EnhancedCustomShape2d.hxx"
 #include <rtl/strbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star    ;

@@ -62,7 +62,7 @@
 #include "ww8par.hxx"
 
 #include <comphelper/string.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/configmgr.hxx>

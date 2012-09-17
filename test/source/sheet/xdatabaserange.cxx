@@ -42,7 +42,7 @@
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include "cppunit/extensions/HelperMacros.h"
 #include <iostream>
 

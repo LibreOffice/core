@@ -46,7 +46,6 @@
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/time.h"
-#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "unotest/gettestargument.hxx"

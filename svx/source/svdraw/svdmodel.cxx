@@ -34,7 +34,6 @@
 #include <osl/endian.h>
 #include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>

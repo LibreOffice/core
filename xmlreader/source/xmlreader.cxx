@@ -28,7 +28,6 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/file.h"
-#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"

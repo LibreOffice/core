@@ -39,7 +39,6 @@ extern bool rtl_string_unittest_non_const_literal_function;
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
-#include "rtl/oustringostreaminserter.hxx"
 
 namespace test { namespace oustring {
 

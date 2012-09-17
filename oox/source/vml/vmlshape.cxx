@@ -37,7 +37,6 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
