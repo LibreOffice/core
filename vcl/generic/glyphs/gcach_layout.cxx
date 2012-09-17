@@ -311,6 +311,12 @@ static bool lcl_CharIsJoiner(sal_Unicode cChar)
 
 bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 {
+    le_int32 nLayoutFlags = 0;
+    if (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS)
+        nLayoutFlags |= LayoutEngine::kTypoFlagKern;
+    if (rArgs.mnFlags & SAL_LAYOUT_ENABLE_LIGATURES)
+        nLayoutFlags |= LayoutEngine::kTypoFlagLiga;
+
     LEUnicode* pIcuChars;
     if( sizeof(LEUnicode) == sizeof(*rArgs.mpStr) )
         pIcuChars = (LEUnicode*)rArgs.mpStr;
@@ -371,7 +377,7 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             delete mpIcuLE;
             meScriptCode = eScriptCode;
             le_int32 eLangCode = 0; // TODO: get better value
-            mpIcuLE = LayoutEngine::layoutEngineFactory( &maIcuFont, eScriptCode, eLangCode, rcIcu );
+            mpIcuLE = LayoutEngine::layoutEngineFactory( &maIcuFont, eScriptCode, eLangCode, nLayoutFlags, rcIcu );
             if( LE_FAILURE(rcIcu) )
             {
                 delete mpIcuLE;
