@@ -22,11 +22,16 @@ public:
 
     void testDeleteArea_4Ranges();
     void testDeleteArea_2Ranges();
+    void testDeleteArea_2Ranges_Case2();
     void testDeleteArea_0Ranges();
+
+    void testUpdateReference_DeleteRow();
+    void testUpdateReference_DeleteCol();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testDeleteArea_4Ranges);
     CPPUNIT_TEST(testDeleteArea_2Ranges);
+    CPPUNIT_TEST(testDeleteArea_2Ranges_Case2);
     CPPUNIT_TEST(testDeleteArea_0Ranges);
     CPPUNIT_TEST_SUITE_END();
 
@@ -96,6 +101,21 @@ void Test::testDeleteArea_2Ranges()
     }
 }
 
+void Test::testDeleteArea_2Ranges_Case2()
+{
+    ScRangeList aList(ScRange(1,1,0,1,5,0));
+    aList.DeleteArea(0,3,0,MAXCOL,3,0);
+
+    for(SCROW nRow = 1; nRow <= 5; ++nRow)
+    {
+        if(nRow == 3)
+            CPPUNIT_ASSERT(!aList.Intersects(ScRange(1,3,0)));
+        else
+            CPPUNIT_ASSERT(aList.Intersects(ScRange(1,nRow,0)));
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aList.GetCellCount());
+}
+
 void Test::testDeleteArea_0Ranges()
 {
     ScRangeList aList(ScRange(1,1,0,3,3,0));
@@ -107,6 +127,19 @@ void Test::testDeleteArea_0Ranges()
     aList2.DeleteArea(0,0,0,4,4,0);
 
     CPPUNIT_ASSERT(aList.empty());
+}
+
+void Test::testUpdateReference_DeleteRow()
+{
+    ScRangeList aList(ScRange(1,1,0,4,4,0));
+    bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,MAXCOL,MAXROW,0), 0, -1, 0);
+    CPPUNIT_ASSERT(bUpdated);
+
+}
+
+void Test::testUpdateReference_DeleteCol()
+{
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
