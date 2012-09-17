@@ -45,9 +45,7 @@ $(eval $(call gb_CppunitTest_set_include,writerfilter_doctok,\
 	-I$(SRCDIR)/writerfilter/inc \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,writerfilter_doctok,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,writerfilter_doctok))
+$(eval $(call gb_CppunitTest_use_udk_api,writerfilter_doctok))
 
 # vim: set noet sw=4 ts=4:
