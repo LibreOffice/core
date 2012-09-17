@@ -1154,15 +1154,19 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                              uno::makeAny( aLocale ) );
         }
         break;
-#define AUTO_PARA_SPACING sal_Int32(100)
+// This is the value when the compat option is not enabled. No idea where it comes from, the spec doesn't mention it.
+#define AUTO_PARA_SPACING sal_Int32(49)
         case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
-            //TODO: autospacing depends on some document property (called fDontUseHTMLAutoSpacing in old ww8 filter) 100 or 280 twip
-            //and should be set to 0 on start of page
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( ConversionHelper::convertTwipToMM100(AUTO_PARA_SPACING) ) );
+            if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+            else
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ) );
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
-            //TODO: autospacing depends on some document property (called fDontUseHTMLAutoSpacing in old ww8 filter) 100 or 280 twip
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, false, uno::makeAny( ConversionHelper::convertTwipToMM100(AUTO_PARA_SPACING) ) );
+            if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+            else
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( ConversionHelper::convertTwipToMM100(200) ) );
         break;
         case NS_ooxml::LN_CT_SmartTagRun_uri:
         case NS_ooxml::LN_CT_SmartTagRun_element:

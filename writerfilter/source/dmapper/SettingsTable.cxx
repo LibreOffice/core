@@ -71,6 +71,7 @@ struct SettingsTable_Impl
     bool                m_bUsePrinterMetrics;
     bool                embedTrueTypeFonts;
     bool                embedSystemFonts;
+    bool                m_bDoNotUseHTMLParagraphAutoSpacing;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -93,6 +94,7 @@ struct SettingsTable_Impl
     , m_bUsePrinterMetrics(false)
     , embedTrueTypeFonts(false)
     , embedSystemFonts(false)
+    , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     {}
 
 };
@@ -209,6 +211,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_embedSystemFonts:
         m_pImpl->embedSystemFonts = nIntValue != 0;
         break;
+    case NS_ooxml::LN_CT_Compat_doNotUseHTMLParagraphAutoSpacing:
+        m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -259,6 +264,11 @@ bool SettingsTable::GetEmbedTrueTypeFonts() const
 bool SettingsTable::GetEmbedSystemFonts() const
 {
     return m_pImpl->embedSystemFonts;
+}
+
+bool SettingsTable::GetDoNotUseHTMLParagraphAutoSpacing() const
+{
+    return m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )
