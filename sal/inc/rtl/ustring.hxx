@@ -32,12 +32,14 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <ostream>
 
 #include "osl/diagnose.h"
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/memory.h>
+#include <rtl/textenc.h>
 #include "sal/log.hxx"
 
 #if defined EXCEPTIONS_OFF
@@ -2141,6 +2143,35 @@ inline OString OUStringToOString( const OUString & rUnicode,
 
 } /* Namespace */
 
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+namespace rtl
+{
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+#endif
+
+/**
+    Support for rtl::OUString in std::ostream (and thus in
+    CPPUNIT_ASSERT or SAL_INFO macros, for example).
+
+    The rtl::OUString is converted to UTF-8.
+
+    @since LibreOffice 3.5.
+*/
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, OUString const & string)
+{
+    return stream <<
+        rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
+        // best effort; potentially loses data due to conversion failures
+        // (stray surrogate halves) and embedded null characters
+}
+
+} // namespace
+
 // RTL_USING is defined by gbuild for all modules except those with stable public API
 // (as listed in ure/source/README). It allows to use classes like OUString without
 // having to explicitly refer to the rtl namespace, which is kind of superfluous
@@ -2153,10 +2184,5 @@ using ::rtl::OUStringToOString;
 #endif
 
 #endif /* _RTL_USTRING_HXX */
-
-// Include the ostream << operator directly here, so that it's always available
-// for SAL_INFO etc. Make sure it's outside of #ifdef _RTL_USTRING_HXX, because
-// includes ustring.hxx back.
-#include <rtl/oustringostreaminserter.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

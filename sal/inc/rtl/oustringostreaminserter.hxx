@@ -27,47 +27,9 @@
 #ifndef INCLUDED_RTL_OUSTRINGOSTREAMINSERTER_HXX
 #define INCLUDED_RTL_OUSTRINGOSTREAMINSERTER_HXX
 
-#include "sal/config.h"
-
-#include <ostream>
-
-#include "rtl/textenc.h"
-#include "rtl/ustring.hxx"
-
-// The unittest uses slightly different code to help check that the proper
-// calls are made. The class is put into a different namespace to make
-// sure the compiler generates a different (if generating also non-inline)
-// copy of the function and does not merge them together. The class
-// is "brought" into the proper rtl namespace by a typedef below.
-#ifdef RTL_STRING_UNITTEST
-#define rtl rtlunittest
-#endif
-
-namespace rtl {
-
-#ifdef RTL_STRING_UNITTEST
-#undef rtl
-#endif
-
-/**
-    Support for rtl::OUString in std::ostream (and thus in
-    CPPUNIT_ASSERT or SAL_INFO macros, for example).
-
-    The rtl::OUString is converted to UTF-8.
-
-    @since LibreOffice 3.5.
-*/
-template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
-{
-    return stream <<
-        rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
-        // best effort; potentially loses data due to conversion failures
-        // (stray surrogate halves) and embedded null characters
-}
-
-}
+// File kept only for backwards compatibility, the inserter is now defined
+// together with OUString.
+#include <rtl/ustring.hxx>
 
 #endif
 
