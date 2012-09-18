@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn///7A\u003d",
+        "filename": "solenv/gbuild/AllLangResTarget.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-18T17:24:00Z",
+      "side": 1,
+      "message": "see my firstword comment in Configuration.mk",
+      "revId": "e3629c646b8694d08bd5f63cfc490d11dad08abc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn///7M\u003d",
+        "filename": "solenv/gbuild/Configuration.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-18T17:24:00Z",
+      "side": 1,
+      "message": "hmmm do i understand it right that there is one PO file per language, each of which may or may not exist independently of the others, for the merge target?\n\nif you check the firstword only then it could happen that gb_WITH_LANG happens to start with a language for which a PO file does not exist and then comes a language for which a PO file exists... a foreach would fix that.",
+      "revId": "e3629c646b8694d08bd5f63cfc490d11dad08abc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn///7I\u003d",
+        "filename": "solenv/gbuild/Configuration.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-18T17:24:00Z",
+      "side": 1,
+      "message": "hmmm do i understand it right that there is one PO file per language for the merge target?\n\nin that case the \"firstword\" here is a problem: this really needs to depend on all PO files, not just one, i.e. you want a foreach (which may be inside the wildcard, according to documentation wildcard takes multiple parameters)",
+      "revId": "e3629c646b8694d08bd5f63cfc490d11dad08abc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
