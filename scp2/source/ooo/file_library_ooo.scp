@@ -890,6 +890,8 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
+#if defined(WNT)
+
 #if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
                                                                 // #i91209#
 STD_LIB_FILE(gid_File_Lib_Mozab,mozab2)
@@ -907,6 +909,12 @@ File gid_File_Lib_Mozbootstrap
     Name = "mozbootstrap.dll";
   #endif
 End
+
+#endif
+
+#else
+
+STD_LIB_FILE(gid_File_Lib_Mork,mork)
 
 #endif
 

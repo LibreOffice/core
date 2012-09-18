@@ -379,9 +379,13 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Hsqldb_2,
 	gid_File_Lib_Jdbc,
 	gid_File_Lib_Mcnttype,
+#if defined(WNT)
 	gid_File_Lib_Mozab_2,
 	gid_File_Lib_Mozabdrv,
 	gid_File_Lib_Mozbootstrap,
+#else
+	gid_File_Lib_Mork,
+#endif
 	gid_File_Lib_Mysql,
 	gid_File_Lib_Odbc,
 	gid_File_Lib_Officebean,
