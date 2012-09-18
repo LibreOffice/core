@@ -56,8 +56,14 @@ add_warning()
     if test "$have_WARNINGS" = "no" ; then
         echo "*************************************" >> warn
         have_WARNINGS="yes"
+        if test $(tput colors) -ge 8 ; then
+            dnl <esc> as actual byte (U+1b), [ escaped using quadrigraph @<:@
+            COLORWARN='*@<:@1;33;40m WARNING @<:@0m:'
+        else
+            COLORWARN="* WARNING :"
+        fi
     fi
-    echo "* WARNING : $@" >> warn
+    echo "$COLORWARN $@" >> warn
 }
 
 if test -n "$SOLARENV" ; then
