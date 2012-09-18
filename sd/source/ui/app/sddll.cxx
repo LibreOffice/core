@@ -125,7 +125,9 @@ void SdDLL::Init()
     SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
 
     // register your exotic remote controlls here
+#ifdef ENABLE_SDREMOTE
     RegisterRemotes();
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

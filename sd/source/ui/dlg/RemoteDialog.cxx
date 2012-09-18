@@ -66,6 +66,7 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
     else
         return 1;
 #endif
+        return 0;
 }
 
 IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
@@ -76,8 +77,8 @@ IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
         RemoteServer::setBluetoothDiscoverable( false );
     }
     Close();
-    return 0;
 #endif
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
