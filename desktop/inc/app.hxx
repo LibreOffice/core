@@ -107,15 +107,16 @@ class Desktop : public Application
         static ResMgr*          GetDesktopResManager();
         static CommandLineArgs& GetCommandLineArgs();
 
-        void                    HandleBootstrapErrors( BootstrapError );
-        void                    SetBootstrapError( BootstrapError nError )
+        void                    HandleBootstrapErrors(
+            BootstrapError nError, rtl::OUString const & aMessage );
+        void                    SetBootstrapError(
+            BootstrapError nError, rtl::OUString const & aMessage )
         {
             if ( m_aBootstrapError == BE_OK )
+            {
                 m_aBootstrapError = nError;
-        }
-        BootstrapError          GetBootstrapError() const
-        {
-            return m_aBootstrapError;
+                m_aBootstrapErrorMessage = aMessage;
+            }
         }
 
         void                    SetBootstrapStatus( BootstrapStatus nStatus )
@@ -139,8 +140,6 @@ class Desktop : public Application
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
-        static void             ensureProcessServiceFactory();
-
     private:
         // Bootstrap methods
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
@@ -162,9 +161,6 @@ class Desktop : public Application
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
         void                    StartSetup( const ::rtl::OUString& aParameters );
-
-        // Get a resource message string securely e.g. if resource cannot be retrieved return aFaultBackMsg
-        ::rtl::OUString         GetMsgString( sal_uInt16 nId, const ::rtl::OUString& aFaultBackMsg );
 
         // Create a error message depending on bootstrap failure code and an optional file url
         ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
@@ -207,6 +203,7 @@ class Desktop : public Application
         bool                            m_bServicesRegistered;
         sal_uInt16                          m_nAppEvents;
         BootstrapError                  m_aBootstrapError;
+        rtl::OUString                   m_aBootstrapErrorMessage;
         BootstrapStatus                 m_aBootstrapStatus;
 
         std::auto_ptr< Lockfile > m_pLockfile;
