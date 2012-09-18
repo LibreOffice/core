@@ -55,10 +55,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_C
 
     if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
-        const ::rtl::OUString aServiceName( SERVICE_NAME );
+        const OUString aServiceName( SERVICE_NAME );
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        IMPL_NAME, create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
+                        IMPL_NAME, create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );
     }
 
     if( xFactory.is() )

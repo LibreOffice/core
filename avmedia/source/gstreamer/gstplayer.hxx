@@ -50,8 +50,8 @@ public:
     Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
     ~Player();
 
-    void preparePlaybin( const ::rtl::OUString& rURL, bool bFakeVideo );
-    bool create( const ::rtl::OUString& rURL );
+    void preparePlaybin( const OUString& rURL, bool bFakeVideo );
+    bool create( const OUString& rURL );
     void processMessage( GstMessage *message );
     GstBusSyncReply processSyncMessage( GstMessage *message );
 
@@ -74,15 +74,15 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XFrameGrabber > SAL_CALL createFrameGrabber(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
-    ::rtl::OUString         maURL;
+    OUString                maURL;
 
     // Add elements and pipeline here
     GstElement*             mpPlaybin;  // the playbin is also a pipeline
