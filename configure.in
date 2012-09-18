@@ -7813,7 +7813,7 @@ if test "$with_system_mdds" = "yes"; then
     AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
-    MDDS_TARBALL=3e89a35f253a4f1c7de68c57d851ef38-mdds_0.6.0.tar.bz2
+    MDDS_TARBALL=9f9e15966b5624834157fe3d748312bc-mdds_0.6.1.tar.bz2
     SYSTEM_MDDS=NO
 
     dnl ===================================================================
