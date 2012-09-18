@@ -268,6 +268,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                                 gst_structure_get_int( pStructure, "height", &mnHeight );
                                 DBG( "queried size: %d x %d", mnWidth, mnHeight );
                             }
+                            g_object_unref (pPad);
                         }
                     }
 
@@ -294,18 +295,19 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
                 caps = gst_pad_get_current_caps( pad );
 
-                if( gst_structure_get( gst_caps_get_structure (caps, 0),
+                if( gst_structure_get( gst_caps_get_structure( caps, 0 ),
                                        "width", G_TYPE_INT, &w,
                                        "height", G_TYPE_INT, &h,
                                        NULL ) ) {
                     mnWidth = w;
                     mnHeight = h;
 
-                    fprintf (stderr, "queried size: %d x %d", mnWidth, mnHeight );
+                    fprintf( stderr, "queried size: %d x %d", mnWidth, mnHeight );
 
                     maSizeCondition.set();
                 }
                 gst_caps_unref( caps );
+                g_object_unref( pad );
             }
         }
 #endif
