@@ -40,6 +40,7 @@
 #include <sfx2/sfxsids.hrc>
 #include "helper.hxx"
 #include <sfx2/docfile.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
@@ -86,7 +87,7 @@ namespace
 
         try
         {
-            ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
+            ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             bRet = aCnt.isDocument();
         }
         catch( const ucb::CommandAbortedException& )
