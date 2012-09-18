@@ -1684,8 +1684,8 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
             xub_StrLen nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
             // Keep only the bookmars starting or ending in the snippet
-            bool bIsStartOk = ( nBStart >= nStt ) && ( nBStart <= nEnd );
-            bool bIsEndOk = ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
+            bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
+            bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
 
             if ( bIsStartOk || bIsEndOk )
                 rArr.push_back( pMark );
