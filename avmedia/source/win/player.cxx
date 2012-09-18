@@ -318,7 +318,7 @@ double SAL_CALL Player::getRate(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setPlaybackLoop( bool bSet )
+void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException)
 {
     mbLooping = bSet;
@@ -334,7 +334,7 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setMute( bool bSet )
+void SAL_CALL Player::setMute( sal_Bool bSet )
     throw (uno::RuntimeException)
 {
     if( mpBA && ( mbMuted != bSet ) )
