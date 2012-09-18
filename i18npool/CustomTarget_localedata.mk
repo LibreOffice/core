@@ -38,7 +38,10 @@ $(i18npool_LDDIR)/localedata_%.cxx : \
 		$(SRCDIR)/i18npool/source/localedata/data/%.xml \
 		$(i18npool_LDDIR)/saxparser.rdb \
 		$(OUTDIR_FOR_BUILD)/bin/types.rdb \
-		$(call gb_Executable_get_target_for_build,saxparser)
+		$(call gb_Executable_get_target_for_build,saxparser) \
+		$(call gb_Rdb_get_outdir_target,ure/services) \
+		$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+		$(call gb_Package_get_target,cppuhelper_unorc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SAX,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,saxparser) $* $< $@.tmp \
