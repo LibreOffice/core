@@ -123,10 +123,9 @@ bool BluetoothServer::isDiscoverable()
             g_error_free( aError );
         return false;
     }
-    GVariant* aVariant = dbus_g_value_build_g_variant ( (GValue*)
-            g_hash_table_lookup( aProperties, "Discoverable" ) );
-    gboolean aIsDiscoverable = g_variant_get_boolean( aVariant );
-    g_free( aVariant );
+
+    gboolean aIsDiscoverable = g_value_get_boolean( (GValue*) g_hash_table_lookup(
+                aProperties, "Discoverable" ) );
 
     g_free( aProperties );
     return aIsDiscoverable;
@@ -171,10 +170,10 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
             g_error_free( aError );
         return;
     }
-    GVariant* aVariant = dbus_g_value_build_g_variant( (GValue*)
-            g_hash_table_lookup( aProperties, "Powered" ) );
-    gboolean aPowered = g_variant_get_boolean( aVariant );
-    g_free( aVariant );
+
+    gboolean aPowered = g_value_get_boolean( (GValue*) g_hash_table_lookup(
+                aProperties, "Powered" ) );
+
     g_free( aProperties );
     if ( !aPowered )
     {
