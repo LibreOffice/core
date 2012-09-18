@@ -4241,7 +4241,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/sax,\
 	XFastDocumentHandler \
 	XFastParser \
 	XFastSAXSerializable \
-	XFastSerializer \
 	XFastShapeContextHandler \
 	XFastTokenHandler \
 	XLocator \

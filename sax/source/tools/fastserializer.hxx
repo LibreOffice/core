@@ -20,11 +20,8 @@
 #ifndef SAX_FASTSERIALIZER_HXX
 #define SAX_FASTSERIALIZER_HXX
 
-#include <com/sun/star/xml/sax/XFastSerializer.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <cppuhelper/implbase2.hxx>
 #include <rtl/byteseq.hxx>
 
 #include <stack>
@@ -34,54 +31,86 @@
 
 #include "sax/fshelper.hxx"
 
-#define SERIALIZER_IMPLEMENTATION_NAME  "com.sun.star.comp.extensions.xml.sax.FastSerializer"
-#define SERIALIZER_SERVICE_NAME     "com.sun.star.xml.sax.FastSerializer"
-
 namespace sax_fastparser {
 
-class FastSaxSerializer : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastSerializer, ::com::sun::star::lang::XServiceInfo >
+/// Receives notification of sax document events to write into an XOutputStream.
+class FastSaxSerializer
 {
     typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
     typedef ::com::sun::star::uno::Sequence< ::sal_Int32 > Int32Sequence;
 
 public:
-    explicit            FastSaxSerializer(  );
-    virtual             ~FastSaxSerializer();
+    explicit FastSaxSerializer();
+    ~FastSaxSerializer();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream() {return mxOutputStream;}
 
-    // The implementation details
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >   getSupportedServiceNames_Static(void);
+    /** called by the parser when parsing of an XML stream is started.
+     */
+    void SAL_CALL startDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
-    // XFastSerializer
-    virtual void SAL_CALL startDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
+    /** called by the parser after the last XML element of a stream is processed.
+     */
+    void SAL_CALL endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+    /** receives notification of the beginning of an element.
+
+        @param Element
+            contains the integer token from the <type>XFastTokenHandler</type>
+            registered at the <type>XFastParser</type>.<br>
+
+            If the element has a namespace that was registered with the
+            <type>XFastParser</type>, <param>Element</param> contains the integer
+            token of the elements local name from the <type>XFastTokenHandler</type>
+            and the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @param Attribs
+            Contains a <type>XFastAttrbitueList</type> to access the attributes
+            from the element.
+
+    */
+    void SAL_CALL startFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL startUnknownElement( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
+
+    /** receives notification of the end of an known element.
+        @see startFastElement
+     */
+    void SAL_CALL endFastElement( ::sal_Int32 Element )
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element )
+
+    /** receives notification of the beginning of a single element.
+
+        @param Element
+            contains the integer token from the <type>XFastTokenHandler</type>
+            registered at the <type>XFastParser</type>.<br>
+
+            If the element has a namespace that was registered with the
+            <type>XFastParser</type>, <param>Element</param> contains the integer
+            token of the elements local name from the <type>XFastTokenHandler</type>
+            and the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @param Attribs
+            Contains a <type>XFastAttrbitueList</type> to access the attributes
+            from the element.
+
+    */
+    void SAL_CALL singleFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endUnknownElement( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name )
+
+    /// receives notification of character data.
+    void SAL_CALL characters( const ::rtl::OUString& aChars )
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL singleFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL singleUnknownElement( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL characters( const ::rtl::OUString& aChars )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
+
+    void SAL_CALL setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw ( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
+        throw (::com::sun::star::uno::RuntimeException);
 
     // C++ helpers
-    virtual void SAL_CALL writeId( ::sal_Int32 Element );
+    void SAL_CALL writeId( ::sal_Int32 Element );
 
     static ::rtl::OUString escapeXml( const ::rtl::OUString& s );
 
