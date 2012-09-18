@@ -65,29 +65,29 @@
     <xsl:param name="path"/>
     <xsl:text>#ifndef INCLUDED_OFFICECFG_</xsl:text>
     <xsl:value-of
-        select="translate($ns1, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+        select="translate($ns1, 'abcdefghijklmnopqrstuvwxyz-', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_')"/>
     <xsl:if test="$ns2">
       <xsl:text>_</xsl:text>
       <xsl:value-of
-          select="translate($ns2, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+          select="translate($ns2, 'abcdefghijklmnopqrstuvwxyz-', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_')"/>
       <xsl:if test="$ns3">
         <xsl:text>_</xsl:text>
         <xsl:value-of
-            select="translate($ns3, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+            select="translate($ns3, 'abcdefghijklmnopqrstuvwxyz-', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_')"/>
       </xsl:if>
     </xsl:if>
     <xsl:text>_HXX&#xA;</xsl:text>
     <xsl:text>#define INCLUDED_OFFICECFG_</xsl:text>
     <xsl:value-of
-        select="translate($ns1, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+        select="translate($ns1, 'abcdefghijklmnopqrstuvwxyz-', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_')"/>
     <xsl:if test="$ns2">
       <xsl:text>_</xsl:text>
       <xsl:value-of
-          select="translate($ns2, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+          select="translate($ns2, 'abcdefghijklmnopqrstuvwxyz-', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_')"/>
       <xsl:if test="$ns3">
         <xsl:text>_</xsl:text>
         <xsl:value-of
-            select="translate($ns3, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+            select="translate($ns3, 'abcdefghijklmnopqrstuvwxyz-', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_')"/>
       </xsl:if>
     </xsl:if>
     <xsl:text>_HXX&#xA;</xsl:text>
@@ -113,13 +113,13 @@
       <xsl:text>#include "comphelper/configuration.hxx"&#xA;</xsl:text>
       <xsl:text>&#xA;</xsl:text>
       <xsl:text>namespace officecfg { namespace </xsl:text>
-      <xsl:value-of select="$ns1"/>
+      <xsl:value-of select="translate($ns1, '-', '_')"/>
       <xsl:if test="$ns2">
         <xsl:text> { namespace </xsl:text>
-        <xsl:value-of select="$ns2"/>
+        <xsl:value-of select="translate($ns2, '-', '_')"/>
         <xsl:if test="$ns3">
           <xsl:text> { namespace </xsl:text>
-          <xsl:value-of select="$ns3"/>
+          <xsl:value-of select="translate($ns3, '-', '_')"/>
         </xsl:if>
       </xsl:if>
       <xsl:text> {&#xA;</xsl:text>

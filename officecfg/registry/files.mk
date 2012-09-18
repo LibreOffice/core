@@ -1,4 +1,4 @@
-officecfg_FILES = \
+officecfg_FILES := \
     FirstStartWizard \
     Inet \
     Interaction \
@@ -22,6 +22,7 @@ officecfg_FILES = \
     Office/FormWizard \
     Office/Histories \
     Office/Impress \
+	$(if $(filter YES,$(ENABLE_SDREMOTE)),Office/Impress-sdremote) \
     Office/Java \
     Office/Jobs \
     Office/Labels \
