@@ -311,7 +311,8 @@ typedef sal_uInt16 StandardButtonType;
 #define BUTTON_IGNORE       ((StandardButtonType)8)
 #define BUTTON_ABORT        ((StandardButtonType)9)
 #define BUTTON_LESS         ((StandardButtonType)10)
-#define BUTTON_COUNT        11
+#define BUTTON_RESET        ((StandardButtonType)11)
+#define BUTTON_COUNT        12
 
 // prominent place for ListBox window types
 

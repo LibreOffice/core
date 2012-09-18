@@ -262,6 +262,12 @@ namespace
                 pBtn->SetText(VclResId(SV_BUTTONTEXT_CLOSE).toString());
                 pWindow = pBtn;
             }
+            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-revert-to-saved")))
+            {
+                PushButton *pBtn = new PushButton(pParent, nBits);
+                pBtn->SetText(VclResId(SV_BUTTONTEXT_RESET).toString());
+                pWindow = pBtn;
+            }
             else
                 fprintf(stderr, "unknown stock type %s\n", sType.getStr());
         }

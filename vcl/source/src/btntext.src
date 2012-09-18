@@ -76,3 +76,8 @@ String SV_BUTTONTEXT_ABORT
 {
     Text [ en-US ] = "~Abort";
 };
+
+String SV_BUTTONTEXT_RESET
+{
+    Text [ en-US ] = "R~eset";
+};

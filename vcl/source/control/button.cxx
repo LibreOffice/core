@@ -139,7 +139,8 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         { SV_BUTTONTEXT_MORE, "~More" },
         { SV_BUTTONTEXT_IGNORE, "~Ignore" },
         { SV_BUTTONTEXT_ABORT, "~Abort" },
-        { SV_BUTTONTEXT_LESS, "~Less" }
+        { SV_BUTTONTEXT_LESS, "~Less" },
+        { SV_BUTTONTEXT_RESET, "R~eset" }
     };
 
     String aText;
