@@ -90,19 +90,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="AuthorisedRemote">
-      <info>
-        <author>ajrhunt</author>
-        <desc>
-          A Remote Control Device that has been authorised for connection.
-        </desc>
-      </info>
-      <prop oor:name="PIN" oor:type="xs:string">
-        <info>
-          <desc>The PIN used by the device for authentication.</desc>
-        </info>
-      </prop>
-    </group>
   </templates>
   <component>
     <group oor:name="Layout">
@@ -668,12 +655,6 @@
           <value>5000</value>
         </prop>
       </group>
-      <set oor:name="AuthorisedRemotes" oor:node-type="AuthorisedRemote">
-       <info>
-        <author>ajrhunt</author>
-        <desc>Contains a list of remote control devices that can connect without user confirmation.</desc>
-       </info>
-      </set>
     </group>
     <group oor:name="Snap">
       <info>
