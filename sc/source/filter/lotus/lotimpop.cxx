@@ -63,10 +63,10 @@ LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, CharSet eQ )
 
 LOTUS_ROOT::~LOTUS_ROOT()
 {
-	delete pRangeNames;
-	delete pRngNmBffWK3;
-	delete pFontBuff;
-	delete pAttrTable;
+    delete pRangeNames;
+    delete pRngNmBffWK3;
+    delete pFontBuff;
+    delete pAttrTable;
 }
 
 
@@ -81,7 +81,7 @@ ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :
     // good point to start locking of import lotus
     aLotImpSemaphore.acquire();
 
-	pLotusRoot = new LOTUS_ROOT( pDoc, eQ);
+    pLotusRoot = new LOTUS_ROOT( pDoc, eQ);
 }
 
 
@@ -139,7 +139,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
     OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nWindow2;
-	sal_uInt16	nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
+    sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
 
     Read( nLTab );
     Read( nWindow2 );
@@ -171,7 +171,7 @@ void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
     OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nWindow2;
-	sal_uInt16	nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
+    sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
 
     Read( nLTab );
     Read( nWindow2 );
@@ -200,10 +200,10 @@ void ImportLotus::Userrange( void )
 
     Read( nRangeType );
 
-	sal_Char aBuffer[ 17 ];
-	pIn->Read( aBuffer, 16 );
-	aBuffer[ 16 ] = 0;
-	String		aName( aBuffer, eQuellChar );
+    sal_Char aBuffer[ 17 ];
+    pIn->Read( aBuffer, 16 );
+    aBuffer[ 16 ] = 0;
+    String        aName( aBuffer, eQuellChar );
 
     Read( aScRange );
 
@@ -282,7 +282,7 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     Read( aAddr );
     Skip( 10 );
 
-	n -= (n > 14) ? 14 : n;
+    n -= (n > 14) ? 14 : n;
 
     const ScTokenArray* pErg;
     sal_Int32               nRest = n;
@@ -313,7 +313,7 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 
     sal_uInt8    nLTab, nFlags;
     sal_uInt16  nRow, nHeight;
-	sal_uInt16	nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 8;
+    sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 8;
 
     Read( nLTab );
     Skip( 1 );
@@ -364,33 +364,33 @@ void ImportLotus::Font_Face( void )
 
     Read( nNum );
 
-	if( nNum >= LotusFontBuffer::nSize )
-		return;     // nonsense
+    if( nNum >= LotusFontBuffer::nSize )
+        return;     // nonsense
 
     Read( aName );
 
-	pLotusRoot->pFontBuff->SetName( nNum, aName );
+    pLotusRoot->pFontBuff->SetName( nNum, aName );
 }
 
 
 void ImportLotus::Font_Type( void )
 {
-	for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
+    for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
     {
         sal_uInt16 nType;
         Read( nType );
-		pLotusRoot->pFontBuff->SetType( nCnt, nType );
+        pLotusRoot->pFontBuff->SetType( nCnt, nType );
     }
 }
 
 
 void ImportLotus::Font_Ysize( void )
 {
-	for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
+    for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
     {
         sal_uInt16 nSize;
         Read( nSize );
-		pLotusRoot->pFontBuff->SetHeight( nCnt, nSize );
+        pLotusRoot->pFontBuff->SetHeight( nCnt, nSize );
     }
 }
 
@@ -401,7 +401,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
 
     sal_uInt16          nRow;
     sal_uInt16          nHeight;
-	sal_uInt16			nCntDwn = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 5;
+    sal_uInt16            nCntDwn = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 5;
     SCCOL           nColCnt = 0;
     sal_uInt8           nRepeats;
     LotAttrWK3      aAttr;
