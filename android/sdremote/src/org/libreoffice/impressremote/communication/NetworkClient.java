@@ -33,66 +33,58 @@ public class NetworkClient extends Client {
 
     public NetworkClient(Server aServer,
                     CommunicationService aCommunicationService,
-                    Receiver aReceiver) {
+                    Receiver aReceiver) throws UnknownHostException,
+                    IOException {
         super(aServer, aCommunicationService, aReceiver);
-        try {
-            mName = aServer.getName();
-            mSocket = new Socket(aServer.getAddress(), PORT);
-            mInputStream = mSocket.getInputStream();
-            mReader = new BufferedReader(new InputStreamReader(mInputStream,
-                            CHARSET));
-            mOutputStream = mSocket.getOutputStream();
-            // Pairing.
-            String aPin = setupPin(aServer);
-            Intent aIntent = new Intent(
-                            CommunicationService.MSG_PAIRING_STARTED);
-            aIntent.putExtra("PIN", aPin);
-            mPin = aPin;
-            LocalBroadcastManager.getInstance(mCommunicationService)
-                            .sendBroadcast(aIntent);
-            // Send out
-            String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
-            sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin
-                            + "\n\n");
+        mName = aServer.getName();
+        mSocket = new Socket(aServer.getAddress(), PORT);
+        mInputStream = mSocket.getInputStream();
+        mReader = new BufferedReader(new InputStreamReader(mInputStream,
+                        CHARSET));
+        mOutputStream = mSocket.getOutputStream();
+        // Pairing.
+        String aPin = setupPin(aServer);
+        Intent aIntent = new Intent(CommunicationService.MSG_PAIRING_STARTED);
+        aIntent.putExtra("PIN", aPin);
+        mPin = aPin;
+        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
+                        aIntent);
+        // Send out
+        String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
+        sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin + "\n\n");
 
-            // Wait until we get the appropriate string back...
-            String aTemp = mReader.readLine();
+        // Wait until we get the appropriate string back...
+        String aTemp = mReader.readLine();
 
-            while (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
-                if (aTemp.equals("LO_SERVER_VALIDATING_PIN")) {
-                    // Broadcast that we need a pin screen.
-                    aIntent = new Intent(
-                                    CommunicationService.STATUS_PAIRING_PINVALIDATION);
-                    aIntent.putExtra("PIN", aPin);
-                    mPin = aPin;
-                    LocalBroadcastManager.getInstance(mCommunicationService)
-                                    .sendBroadcast(aIntent);
-                    while (mReader.readLine().length() != 0) {
-                        // Read off empty lines
-                    }
-                    aTemp = mReader.readLine();
-                } else {
-                    return;
+        while (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
+            if (aTemp.equals("LO_SERVER_VALIDATING_PIN")) {
+                // Broadcast that we need a pin screen.
+                aIntent = new Intent(
+                                CommunicationService.STATUS_PAIRING_PINVALIDATION);
+                aIntent.putExtra("PIN", aPin);
+                aIntent.putExtra("SERVERNAME", aServer.getName());
+                mPin = aPin;
+                LocalBroadcastManager.getInstance(mCommunicationService)
+                                .sendBroadcast(aIntent);
+                while (mReader.readLine().length() != 0) {
+                    // Read off empty lines
                 }
+                aTemp = mReader.readLine();
+            } else {
+                return;
             }
-
-            aIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
-            LocalBroadcastManager.getInstance(mCommunicationService)
-                            .sendBroadcast(aIntent);
-
-            while (mReader.readLine().length() != 0) {
-                // Get rid of extra lines
-                System.out.println("SF: empty line");
-            }
-            System.out.println("SD: empty");
-            startListening();
-        } catch (UnknownHostException e) {
-            // TODO Tell the user we have a problem
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO As above
-            e.printStackTrace();
         }
+
+        aIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
+        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
+                        aIntent);
+
+        while (mReader.readLine().length() != 0) {
+            // Get rid of extra lines
+            System.out.println("SF: empty line");
+        }
+        System.out.println("SD: empty");
+        startListening();
 
     }
 

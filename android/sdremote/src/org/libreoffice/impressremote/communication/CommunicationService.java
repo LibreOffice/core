@@ -8,6 +8,7 @@
  */
 package org.libreoffice.impressremote.communication;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class CommunicationService extends Service implements Runnable {
 
@@ -88,16 +90,27 @@ public class CommunicationService extends Service implements Runnable {
                     }
                     if (mStateDesired == State.CONNECTED) {
                         mState = State.CONNECTING;
-                        switch (mServerDesired.getProtocol()) {
-                        case NETWORK:
-                            mClient = new NetworkClient(mServerDesired, this,
-                                            mReceiver);
-                            break;
-                        case BLUETOOTH:
-                            mClient = new BluetoothClient(mServerDesired, this,
-                                            mReceiver,
-                                            mBluetoothPreviouslyEnabled);
-                            break;
+                        try {
+                            switch (mServerDesired.getProtocol()) {
+                            case NETWORK:
+                                mClient = new NetworkClient(mServerDesired,
+                                                this, mReceiver);
+                                break;
+                            case BLUETOOTH:
+                                mClient = new BluetoothClient(mServerDesired,
+                                                this, mReceiver,
+                                                mBluetoothPreviouslyEnabled);
+                                break;
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            mClient = null;
+                            mState = State.DISCONNECTED;
+                            Intent aIntent = new Intent(
+                                            CommunicationService.STATUS_CONNECTION_FAILED);
+                            LocalBroadcastManager.getInstance(this)
+                                            .sendBroadcast(aIntent);
+                            return;
                         }
                         mTransmitter = new Transmitter(mClient);
                         mState = State.CONNECTED;
@@ -193,6 +206,8 @@ public class CommunicationService extends Service implements Runnable {
     public static final String STATUS_CONNECTED_NOSLIDESHOW = "STATUS_CONNECTED_NOSLIDESHOW";
 
     public static final String STATUS_PAIRING_PINVALIDATION = "STATUS_PAIRING_PINVALIDATION";
+
+    public static final String STATUS_CONNECTION_FAILED = "STATUS_CONNECTION_FAILED";
 
     private Transmitter mTransmitter;
 

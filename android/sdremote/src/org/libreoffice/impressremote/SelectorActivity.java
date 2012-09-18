@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -63,6 +64,7 @@ public class SelectorActivity extends SherlockActivity {
 
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_SERVERLIST_CHANGED);
+        aFilter.addAction(CommunicationService.STATUS_CONNECTION_FAILED);
 
         mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
         mBroadcastProcessor.addToFilter(aFilter);
@@ -204,6 +206,32 @@ public class SelectorActivity extends SherlockActivity {
                             CommunicationService.MSG_SERVERLIST_CHANGED)) {
                 refreshLists();
                 return;
+            } else if (aIntent.getAction().equals(
+                            CommunicationService.STATUS_CONNECTION_FAILED)) {
+                if (mProgressDialog != null) {
+                    mProgressDialog.dismiss();
+
+                    String aFormat = getResources().getString(
+                                    R.string.selector_dialog_connectionfailed);
+                    String aDialogText = MessageFormat.format(aFormat,
+                                    mCommunicationService
+                                                    .getPairingDeviceName());
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(
+                                    SelectorActivity.this);
+                    builder.setMessage(aDialogText)
+                                    .setCancelable(false)
+                                    .setPositiveButton(
+                                                    R.string.selector_dialog_connectionfailed_ok,
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(
+                                                                        DialogInterface dialog,
+                                                                        int id) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    });
+                    builder.show();
+                }
             }
             mBroadcastProcessor.onReceive(aContext, aIntent);
 
@@ -318,9 +346,14 @@ public class SelectorActivity extends SherlockActivity {
 
                 mProgressDialog = ProgressDialog.show(SelectorActivity.this,
                                 "", aDialogText, true);
-                //                Intent aIntent = new Intent(SelectorActivity.this,
-                //                                PairingActivity.class);
-                //                startActivity(aIntent);
+                mProgressDialog.setCancelable(true);
+                mProgressDialog.setOnCancelListener(new OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        mCommunicationService.disconnect();
+                    }
+                });
             }
 
         }
