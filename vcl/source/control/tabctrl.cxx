@@ -2200,7 +2200,7 @@ Size TabControl::calculateRequisition() const
         TabControl* pThis = const_cast<TabControl*>(this);
 
         sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
-        Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aPageSize.Width(), aPageSize.Height());
+        Rectangle aTabRect = pThis->ImplGetTabRect(nPos, LONG_MAX, LONG_MAX);
         if (aTabRect.Bottom() > nTabLabelsBottom)
             nTabLabelsBottom = aTabRect.Bottom();
 
