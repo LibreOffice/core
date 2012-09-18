@@ -77,7 +77,7 @@ OUString SAL_CALL Manager::getImplementationName(  )
 
 // ------------------------------------------------------------------------------
 
-bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_WIN_MANAGER_SERVICENAME;

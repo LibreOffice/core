@@ -249,7 +249,7 @@ void SAL_CALL Player::stop(  )
 
 // ------------------------------------------------------------------------------
 
-bool SAL_CALL Player::isPlaying()
+sal_Bool SAL_CALL Player::isPlaying()
     throw (uno::RuntimeException)
 {
     OAFilterState   eFilterState;
@@ -326,7 +326,7 @@ void SAL_CALL Player::setPlaybackLoop( bool bSet )
 
 // ------------------------------------------------------------------------------
 
-bool SAL_CALL Player::isPlaybackLoop(  )
+sal_Bool SAL_CALL Player::isPlaybackLoop(  )
     throw (uno::RuntimeException)
 {
     return mbLooping;
@@ -346,7 +346,7 @@ void SAL_CALL Player::setMute( bool bSet )
 
 // ------------------------------------------------------------------------------
 
-bool SAL_CALL Player::isMute(  )
+sal_Bool SAL_CALL Player::isMute(  )
     throw (uno::RuntimeException)
 {
     return mbMuted;
@@ -441,7 +441,7 @@ OUString SAL_CALL Player::getImplementationName(  )
 
 // ------------------------------------------------------------------------------
 
-bool SAL_CALL Player::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_WIN_PLAYER_SERVICENAME;
