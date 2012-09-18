@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#include "officecfg/Office/Common.hxx"
-
-#include "comphelper/processfactory.hxx"
-
 #include "osl/module.h"
 #include "osl/process.h"
 
@@ -55,16 +51,14 @@ static oslModule pCloseModule = NULL;
 static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
     SalInstance* pInst = NULL;
-#if !defined(ANDROID)
+    // Disable gtk3 plugin for now unless explicitly requested via
+    // SAL_USE_VCLPLUGIN=gtk3 (would ideally depend on experimental mode, but
+    // reading the experimental mode setting requires the UNO service manager
+    // which has not yet been instantiated):
     if (!bForce && rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")))
     {
-        // Disable gtk3 plugin load except in experimental mode for now.
-        using namespace com::sun::star;
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-        if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-            return NULL;
+        return NULL;
     }
-#endif
     OUStringBuffer aModName( 128 );
     aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
     aModName.append( rModuleBase );
