@@ -118,35 +118,6 @@
 #define STR_EFFECTS_SHADOW      266
 #define STR_EFFECTS_BLINKING    267
 
-// PositionPage -------------------------------------------------------------
-
-#define FL_POSITION             300
-#define RB_HIGHPOS              301
-#define RB_NORMALPOS            302
-#define RB_LOWPOS               303
-#define FT_HIGHLOW              304
-#define ED_HIGHLOW              305
-#define CB_HIGHLOW              306
-#define FT_FONTSIZE             307
-#define ED_FONTSIZE             308
-#define FL_ROTATION_SCALING     309
-#define FL_SCALING              310
-#define RB_0_DEG                311
-#define RB_90_DEG               312
-#define RB_270_DEG              313
-#define CB_FIT_TO_LINE          314
-#define FT_SCALE_WIDTH          315
-#define MF_SCALE_WIDTH          316
-
-#define FL_KERNING2             320
-#define LB_KERNING2             321
-#define FT_KERNING2             322
-#define ED_KERNING2             323
-#define CB_PAIRKERNING          324
-
-#define WIN_POS_PREVIEW         331
-#define FT_POS_FONTTYPE         332
-
 #define FT_WEST_NAME_NOCJK                    423
 #define LB_WEST_NAME_NOCJK                    424
 #define FT_WEST_STYLE_NOCJK                   425

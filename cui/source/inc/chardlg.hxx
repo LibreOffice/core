@@ -280,40 +280,30 @@ class SvxCharPositionPage : public SvxCharBasePage
 {
 
 private:
-    VclVBox m_aBox;
+    RadioButton*        m_pHighPosBtn;
+    RadioButton*        m_pNormalPosBtn;
+    RadioButton*        m_pLowPosBtn;
+    FixedText*          m_pHighLowFT;
+    MetricField*        m_pHighLowMF;
+    CheckBox*           m_pHighLowRB;
+    FixedText*          m_pFontSizeFT;
+    MetricField*        m_pFontSizeMF;
 
-    FixedLine           m_aPositionLine;
+    VclContainer*       m_pRotationContainer;
 
-    VclGrid m_aPositionGrid;
-    RadioButton         m_aHighPosBtn;
-    RadioButton         m_aNormalPosBtn;
-    RadioButton         m_aLowPosBtn;
-    FixedText           m_aHighLowFT;
-    MetricField         m_aHighLowEdit;
-    CheckBox            m_aHighLowRB;
-    FixedText           m_aFontSizeFT;
-    MetricField         m_aFontSizeEdit;
+    FixedText*          m_pScalingFT;
+    FixedText*          m_pScalingAndRotationFT;
+    RadioButton*        m_p0degRB;
+    RadioButton*        m_p90degRB;
+    RadioButton*        m_p270degRB;
+    CheckBox*           m_pFitToLineCB;
 
-    FixedLine           m_aRotationScalingFL;
+    MetricField*        m_pScaleWidthMF;
 
-    VclHBox m_aRotationBox;
-    FixedLine           m_aScalingFL;
-    RadioButton         m_a0degRB;
-    RadioButton         m_a90degRB;
-    RadioButton         m_a270degRB;
-    CheckBox            m_aFitToLineCB;
-
-    VclHBox m_aScaleBox;
-    FixedText           m_aScaleWidthFT;
-    MetricField         m_aScaleWidthMF;
-
-    FixedLine           m_aKerningLine;
-
-    VclHBox m_aKerningBox;
-    ListBox             m_aKerningLB;
-    FixedText           m_aKerningFT;
-    MetricField         m_aKerningEdit;
-    CheckBox            m_aPairKerningBtn;
+    ListBox*            m_pKerningLB;
+    FixedText*          m_pKerningFT;
+    MetricField*        m_pKerningMF;
+    CheckBox*           m_pPairKerningBtn;
 
     short               m_nSuperEsc;
     short               m_nSubEsc;

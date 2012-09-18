@@ -2797,34 +2797,7 @@ void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet)
 // class SvxCharPositionPage ---------------------------------------------
 
 SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet )
-    : SvxCharBasePage(pParent, CUI_RES(RID_SVXPAGE_CHAR_POSITION), rInSet)
-    , m_aBox(this, false, 7)
-    , m_aPositionLine(&m_aBox, CUI_RES(FL_POSITION))
-    , m_aPositionGrid(&m_aBox)
-    , m_aHighPosBtn(&m_aPositionGrid, CUI_RES(RB_HIGHPOS))
-    , m_aNormalPosBtn(&m_aPositionGrid, CUI_RES( RB_NORMALPOS))
-    , m_aLowPosBtn(&m_aPositionGrid, CUI_RES(RB_LOWPOS))
-    , m_aHighLowFT(&m_aPositionGrid, CUI_RES(FT_HIGHLOW))
-    , m_aHighLowEdit(&m_aPositionGrid, CUI_RES(ED_HIGHLOW))
-    , m_aHighLowRB(&m_aPositionGrid, CUI_RES(CB_HIGHLOW))
-    , m_aFontSizeFT(&m_aPositionGrid, CUI_RES(FT_FONTSIZE))
-    , m_aFontSizeEdit(&m_aPositionGrid, CUI_RES(ED_FONTSIZE))
-    , m_aRotationScalingFL(&m_aBox, CUI_RES(FL_ROTATION_SCALING))
-    , m_aRotationBox(&m_aBox, false, 7)
-    , m_aScalingFL(&m_aRotationBox, CUI_RES(FL_SCALING))
-    , m_a0degRB(&m_aRotationBox, CUI_RES(RB_0_DEG))
-    , m_a90degRB(&m_aRotationBox, CUI_RES(RB_90_DEG))
-    , m_a270degRB(&m_aRotationBox, CUI_RES(RB_270_DEG))
-    , m_aFitToLineCB(&m_aRotationBox, CUI_RES(CB_FIT_TO_LINE))
-    , m_aScaleBox(&m_aBox, false, 7)
-    , m_aScaleWidthFT(&m_aScaleBox, CUI_RES(FT_SCALE_WIDTH))
-    , m_aScaleWidthMF(&m_aScaleBox, CUI_RES(MF_SCALE_WIDTH))
-    , m_aKerningLine(&m_aBox, CUI_RES(FL_KERNING2))
-    , m_aKerningBox(&m_aBox, false, 7)
-    , m_aKerningLB(&m_aKerningBox, CUI_RES(LB_KERNING2))
-    , m_aKerningFT(&m_aKerningBox, CUI_RES(FT_KERNING2))
-    , m_aKerningEdit(&m_aKerningBox, CUI_RES(ED_KERNING2))
-    , m_aPairKerningBtn(&m_aKerningBox, CUI_RES(CB_PAIRKERNING))
+    : SvxCharBasePage(pParent, "PositionPage", "cui/ui/positionpage.ui", rInSet)
     , m_nSuperEsc((short)DFLT_ESC_SUPER)
     , m_nSubEsc((short)DFLT_ESC_SUB)
     , m_nScaleWidthItemSetVal(100)
@@ -2832,22 +2805,29 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     , m_nSuperProp((sal_uInt8)DFLT_ESC_PROP)
     , m_nSubProp((sal_uInt8)DFLT_ESC_PROP)
 {
-    m_aBox.set_expand(true);
+    get(m_pHighPosBtn, "superscript");
+    get(m_pNormalPosBtn, "normal");
+    get(m_pLowPosBtn, "subscript");
+    get(m_pHighLowFT, "raiselower");
+    get(m_pHighLowMF, "raiselowersb");
+    get(m_pHighLowRB, "automatic");
+    get(m_pFontSizeFT, "relativefontsize");
+    get(m_pFontSizeMF, "fontsizesb");
+    get(m_pRotationContainer, "rotationcontainer");
+    get(m_pScalingFT, "rotate");
+    get(m_pScalingAndRotationFT, "rotateandscale");
+    get(m_p0degRB, "0deg");
+    get(m_p90degRB, "90deg");
+    get(m_p270degRB, "270deg");
+    get(m_pFitToLineCB, "fittoline");
+    get(m_pScaleWidthMF, "scalewidthsb");
+    get(m_pKerningLB, "kerninglb");
+    get(m_pKerningFT, "kerningft");
+    get(m_pKerningMF, "kerningsb");
+    get(m_pPairKerningBtn, "pairkerning");
 
-    m_aPositionGrid.set_column_spacing(7);
-    m_aPositionGrid.set_row_spacing(2);
+    get(m_pPreviewWin, "preview");
 
-    setGridAttach(m_aHighPosBtn, 0, 0);
-    setGridAttach(m_aHighLowFT, 1, 0);
-    setGridAttach(m_aHighLowEdit, 2, 0);
-    setGridAttach(m_aHighLowRB, 3, 0);
-    setGridAttach(m_aNormalPosBtn, 0, 1);
-    setGridAttach(m_aFontSizeFT, 1, 1);
-    setGridAttach(m_aFontSizeEdit, 2, 1);
-    setGridAttach(m_aLowPosBtn, 0, 2);
-
-    makeWidgets(&m_aBox, CUI_RES(RID_SVXPAGE_CHAR_POSITION), WIN_POS_PREVIEW, FT_POS_FONTTYPE);
-    FreeResource();
     Initialize();
 }
 
@@ -2862,43 +2842,41 @@ void SvxCharPositionPage::Initialize()
     GetPreviewCJKFont().SetSize( Size( 0, 240 ) );
     GetPreviewCTLFont().SetSize( Size( 0, 240 ) );
 
-    m_aNormalPosBtn.Check();
-    PositionHdl_Impl( &m_aNormalPosBtn );
-    m_aKerningLB.SelectEntryPos( 0 );
+    m_pNormalPosBtn->Check();
+    PositionHdl_Impl( m_pNormalPosBtn );
+    m_pKerningLB->SelectEntryPos( 0 );
     KerningSelectHdl_Impl( NULL );
 
     Link aLink = LINK( this, SvxCharPositionPage, PositionHdl_Impl );
-    m_aHighPosBtn.SetClickHdl( aLink );
-    m_aNormalPosBtn.SetClickHdl( aLink );
-    m_aLowPosBtn.SetClickHdl( aLink );
+    m_pHighPosBtn->SetClickHdl( aLink );
+    m_pNormalPosBtn->SetClickHdl( aLink );
+    m_pLowPosBtn->SetClickHdl( aLink );
 
     aLink = LINK( this, SvxCharPositionPage, RotationHdl_Impl );
-    m_a0degRB  .SetClickHdl( aLink );
-    m_a90degRB .SetClickHdl( aLink );
-    m_a270degRB.SetClickHdl( aLink );
+    m_p0degRB->SetClickHdl( aLink );
+    m_p90degRB->SetClickHdl( aLink );
+    m_p270degRB->SetClickHdl( aLink );
 
     aLink = LINK( this, SvxCharPositionPage, FontModifyHdl_Impl );
-    m_aHighLowEdit.SetModifyHdl( aLink );
-    m_aFontSizeEdit.SetModifyHdl( aLink );
+    m_pHighLowMF->SetModifyHdl( aLink );
+    m_pFontSizeMF->SetModifyHdl( aLink );
 
     aLink = LINK( this, SvxCharPositionPage, LoseFocusHdl_Impl );
-    m_aHighLowEdit.SetLoseFocusHdl( aLink );
-    m_aFontSizeEdit.SetLoseFocusHdl( aLink );
+    m_pHighLowMF->SetLoseFocusHdl( aLink );
+    m_pFontSizeMF->SetLoseFocusHdl( aLink );
 
-    m_aHighLowRB.SetClickHdl( LINK( this, SvxCharPositionPage, AutoPositionHdl_Impl ) );
-    m_aFitToLineCB.SetClickHdl( LINK( this, SvxCharPositionPage, FitToLineHdl_Impl ) );
-    m_aKerningLB.SetSelectHdl( LINK( this, SvxCharPositionPage, KerningSelectHdl_Impl ) );
-    m_aKerningEdit.SetModifyHdl( LINK( this, SvxCharPositionPage, KerningModifyHdl_Impl ) );
-    m_aPairKerningBtn.SetClickHdl( LINK( this, SvxCharPositionPage, PairKerningHdl_Impl ) );
-    m_aScaleWidthMF.SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
+    m_pHighLowRB->SetClickHdl( LINK( this, SvxCharPositionPage, AutoPositionHdl_Impl ) );
+    m_pFitToLineCB->SetClickHdl( LINK( this, SvxCharPositionPage, FitToLineHdl_Impl ) );
+    m_pKerningLB->SetSelectHdl( LINK( this, SvxCharPositionPage, KerningSelectHdl_Impl ) );
+    m_pKerningMF->SetModifyHdl( LINK( this, SvxCharPositionPage, KerningModifyHdl_Impl ) );
+    m_pPairKerningBtn->SetClickHdl( LINK( this, SvxCharPositionPage, PairKerningHdl_Impl ) );
+    m_pScaleWidthMF->SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
 }
 
 SvxCharPositionPage::~SvxCharPositionPage()
 {
-    delete m_pPreviewWin, m_pPreviewWin = NULL;
-    delete m_pFontTypeFT, m_pFontTypeFT = NULL;
+    m_pPreviewWin = NULL; //to-do, when all of these tab pages are converted to .ui this and the parent delete can go
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -2926,30 +2904,30 @@ void SvxCharPositionPage::SetEscapement_Impl( sal_uInt16 nEsc )
 
     short nFac = aEscItm.GetEsc() < 0 ? -1 : 1;
 
-    m_aHighLowEdit.SetValue( aEscItm.GetEsc() * nFac );
-    m_aFontSizeEdit.SetValue( aEscItm.GetProp() );
+    m_pHighLowMF->SetValue( aEscItm.GetEsc() * nFac );
+    m_pFontSizeMF->SetValue( aEscItm.GetProp() );
 
     if ( SVX_ESCAPEMENT_OFF == nEsc )
     {
-        m_aHighLowFT.Disable();
-        m_aHighLowEdit.Disable();
-        m_aFontSizeFT.Disable();
-        m_aFontSizeEdit.Disable();
-        m_aHighLowRB.Disable();
+        m_pHighLowFT->Disable();
+        m_pHighLowMF->Disable();
+        m_pFontSizeFT->Disable();
+        m_pFontSizeMF->Disable();
+        m_pHighLowRB->Disable();
     }
     else
     {
-        m_aFontSizeFT.Enable();
-        m_aFontSizeEdit.Enable();
-        m_aHighLowRB.Enable();
+        m_pFontSizeFT->Enable();
+        m_pFontSizeMF->Enable();
+        m_pHighLowRB->Enable();
 
-        if ( !m_aHighLowRB.IsChecked() )
+        if ( !m_pHighLowRB->IsChecked() )
         {
-            m_aHighLowFT.Enable();
-            m_aHighLowEdit.Enable();
+            m_pHighLowFT->Enable();
+            m_pHighLowMF->Enable();
         }
         else
-            AutoPositionHdl_Impl( &m_aHighLowRB );
+            AutoPositionHdl_Impl( m_pHighLowRB );
     }
 
     UpdatePreview_Impl( 100, aEscItm.GetProp(), aEscItm.GetEsc() );
@@ -2961,9 +2939,9 @@ IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, RadioButton*, pBtn )
 {
     sal_uInt16 nEsc = SVX_ESCAPEMENT_OFF;   // also when pBtn == NULL
 
-    if ( &m_aHighPosBtn == pBtn )
+    if ( m_pHighPosBtn == pBtn )
         nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
-    else if ( &m_aLowPosBtn == pBtn )
+    else if ( m_pLowPosBtn == pBtn )
         nEsc = SVX_ESCAPEMENT_SUBSCRIPT;
 
     SetEscapement_Impl( nEsc );
@@ -2975,11 +2953,11 @@ IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, RadioButton*, pBtn )
 IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
 {
     sal_Bool bEnable = sal_False;
-    if (&m_a90degRB == pBtn  ||  &m_a270degRB == pBtn)
+    if (m_p90degRB == pBtn  || m_p270degRB == pBtn)
         bEnable = sal_True;
     else
-        OSL_ENSURE( &m_a0degRB == pBtn, "unexpected button" );
-    m_aFitToLineCB.Enable( bEnable );
+        OSL_ENSURE( m_p0degRB == pBtn, "unexpected button" );
+    m_pFitToLineCB->Enable( bEnable );
     return 0;
 }
 
@@ -2987,9 +2965,9 @@ IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
 
 IMPL_LINK_NOARG(SvxCharPositionPage, FontModifyHdl_Impl)
 {
-    sal_uInt8 nEscProp = (sal_uInt8)m_aFontSizeEdit.GetValue();
-    short nEsc  = (short)m_aHighLowEdit.GetValue();
-    nEsc *= m_aLowPosBtn.IsChecked() ? -1 : 1;
+    sal_uInt8 nEscProp = (sal_uInt8)m_pFontSizeMF->GetValue();
+    short nEsc  = (short)m_pHighLowMF->GetValue();
+    nEsc *= m_pLowPosBtn->IsChecked() ? -1 : 1;
     UpdatePreview_Impl( 100, nEscProp, nEsc );
     return 0;
 }
@@ -3000,13 +2978,13 @@ IMPL_LINK( SvxCharPositionPage, AutoPositionHdl_Impl, CheckBox*, pBox )
 {
     if ( pBox->IsChecked() )
     {
-        m_aHighLowFT.Disable();
-        m_aHighLowEdit.Disable();
+        m_pHighLowFT->Disable();
+        m_pHighLowMF->Disable();
     }
     else
-        PositionHdl_Impl( m_aHighPosBtn.IsChecked() ? &m_aHighPosBtn
-                                                      : m_aLowPosBtn.IsChecked() ? &m_aLowPosBtn
-                                                                                   : &m_aNormalPosBtn );
+        PositionHdl_Impl( m_pHighPosBtn->IsChecked() ? m_pHighPosBtn
+                                                      : m_pLowPosBtn->IsChecked() ? m_pLowPosBtn
+                                                                                   : m_pNormalPosBtn );
     return 0;
 }
 
@@ -3014,12 +2992,12 @@ IMPL_LINK( SvxCharPositionPage, AutoPositionHdl_Impl, CheckBox*, pBox )
 
 IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
 {
-    if ( &m_aFitToLineCB == pBox)
+    if (m_pFitToLineCB == pBox)
     {
         sal_uInt16 nVal = m_nScaleWidthInitialVal;
-        if (m_aFitToLineCB.IsChecked())
+        if (m_pFitToLineCB->IsChecked())
             nVal = m_nScaleWidthItemSetVal;
-        m_aScaleWidthMF.SetValue( nVal );
+        m_pScaleWidthMF->SetValue( nVal );
 
         m_pPreviewWin->SetFontWidthScale( nVal );
     }
@@ -3030,30 +3008,30 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
 
 IMPL_LINK_NOARG(SvxCharPositionPage, KerningSelectHdl_Impl)
 {
-    if ( m_aKerningLB.GetSelectEntryPos() > 0 )
+    if ( m_pKerningLB->GetSelectEntryPos() > 0 )
     {
-        m_aKerningFT.Enable();
-        m_aKerningEdit.Enable();
+        m_pKerningFT->Enable();
+        m_pKerningMF->Enable();
 
-        if ( m_aKerningLB.GetSelectEntryPos() == 2 )
+        if ( m_pKerningLB->GetSelectEntryPos() == 2 )
         {
             // Condensed -> max value == 1/6 of the current font height
             SvxFont& rFont = GetPreviewFont();
             long nMax = rFont.GetSize().Height() / 6;
-            m_aKerningEdit.SetMax( m_aKerningEdit.Normalize( nMax ), FUNIT_TWIP );
-            m_aKerningEdit.SetLast( m_aKerningEdit.GetMax( m_aKerningEdit.GetUnit() ) );
+            m_pKerningMF->SetMax( m_pKerningMF->Normalize( nMax ), FUNIT_TWIP );
+            m_pKerningMF->SetLast( m_pKerningMF->GetMax( m_pKerningMF->GetUnit() ) );
         }
         else
         {
-            m_aKerningEdit.SetMax( 9999 );
-            m_aKerningEdit.SetLast( 9999 );
+            m_pKerningMF->SetMax( 9999 );
+            m_pKerningMF->SetLast( 9999 );
         }
     }
     else
     {
-        m_aKerningEdit.SetValue( 0 );
-        m_aKerningFT.Disable();
-        m_aKerningEdit.Disable();
+        m_pKerningMF->SetValue( 0 );
+        m_pKerningFT->Disable();
+        m_pKerningMF->Disable();
     }
 
     KerningModifyHdl_Impl( NULL );
@@ -3065,12 +3043,12 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningSelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
 {
-    long nVal = static_cast<long>(m_aKerningEdit.GetValue());
+    long nVal = static_cast<long>(m_pKerningMF->GetValue());
     nVal = LogicToLogic( nVal, MAP_POINT, MAP_TWIP );
-    long nKern = (short)m_aKerningEdit.Denormalize( nVal );
+    long nKern = (short)m_pKerningMF->Denormalize( nVal );
 
     // Condensed? -> then negative
-    if ( m_aKerningLB.GetSelectEntryPos() == 2 )
+    if ( m_pKerningLB->GetSelectEntryPos() == 2 )
         nKern *= -1;
 
     SvxFont& rFont = GetPreviewFont();
@@ -3096,24 +3074,24 @@ IMPL_LINK_NOARG(SvxCharPositionPage, PairKerningHdl_Impl)
 IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
 {
 #ifdef DBG_UTIL
-    sal_Bool bHigh = m_aHighPosBtn.IsChecked();
+    sal_Bool bHigh = m_pHighPosBtn->IsChecked();
 #endif
-    sal_Bool bLow = m_aLowPosBtn.IsChecked();
+    sal_Bool bLow = m_pLowPosBtn->IsChecked();
     DBG_ASSERT( bHigh || bLow, "normal position is not valid" );
 
-    if ( &m_aHighLowEdit == pField )
+    if ( m_pHighLowMF == pField )
     {
         if ( bLow )
-            m_nSubEsc = (short)m_aHighLowEdit.GetValue() * -1;
+            m_nSubEsc = (short)m_pHighLowMF->GetValue() * -1;
         else
-            m_nSuperEsc = (short)m_aHighLowEdit.GetValue();
+            m_nSuperEsc = (short)m_pHighLowMF->GetValue();
     }
-    else if ( &m_aFontSizeEdit == pField )
+    else if ( m_pFontSizeMF == pField )
     {
         if ( bLow )
-            m_nSubProp = (sal_uInt8)m_aFontSizeEdit.GetValue();
+            m_nSubProp = (sal_uInt8)m_pFontSizeMF->GetValue();
         else
-            m_nSuperProp = (sal_uInt8)m_aFontSizeEdit.GetValue();
+            m_nSuperProp = (sal_uInt8)m_pFontSizeMF->GetValue();
     }
     return 0;
 }
@@ -3122,7 +3100,7 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
 
 IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl)
 {
-    m_pPreviewWin->SetFontWidthScale( sal_uInt16( m_aScaleWidthMF.GetValue() ) );
+    m_pPreviewWin->SetFontWidthScale( sal_uInt16( m_pScaleWidthMF->GetValue() ) );
 
     return 0;
 }
@@ -3134,14 +3112,14 @@ void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
 
     //the only thing that has to be checked is the max. allowed value for the
     //condense edit field
-    if ( m_aKerningLB.GetSelectEntryPos() == 2 )
+    if ( m_pKerningLB->GetSelectEntryPos() == 2 )
     {
         // Condensed -> max value == 1/6 of the current font height
         SvxFont& rFont = GetPreviewFont();
         long nMax = rFont.GetSize().Height() / 6;
-        long nKern = (short)m_aKerningEdit.Denormalize( LogicToLogic( static_cast<long>(m_aKerningEdit.GetValue()), MAP_POINT, MAP_TWIP ) );
-        m_aKerningEdit.SetMax( m_aKerningEdit.Normalize( nKern > nMax ? nKern : nMax ), FUNIT_TWIP );
-        m_aKerningEdit.SetLast( m_aKerningEdit.GetMax( m_aKerningEdit.GetUnit() ) );
+        long nKern = (short)m_pKerningMF->Denormalize( LogicToLogic( static_cast<long>(m_pKerningMF->GetValue()), MAP_POINT, MAP_TWIP ) );
+        m_pKerningMF->SetMax( m_pKerningMF->Normalize( nKern > nMax ? nKern : nMax ), FUNIT_TWIP );
+        m_pKerningMF->SetLast( m_pKerningMF->GetMax( m_pKerningMF->GetUnit() ) );
     }
 }
 
@@ -3185,10 +3163,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     sal_uInt8 nEscProp = 100;
     sal_uInt8 nProp = 100;
 
-    m_aHighLowFT.Disable();
-    m_aHighLowEdit.Disable();
-    m_aFontSizeFT.Disable();
-    m_aFontSizeEdit.Disable();
+    m_pHighLowFT->Disable();
+    m_pHighLowMF->Disable();
+    m_pFontSizeFT->Disable();
+    m_pFontSizeMF->Disable();
 
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
@@ -3203,10 +3181,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
         if ( nEsc != 0 )
         {
-            m_aHighLowFT.Enable();
-            m_aHighLowEdit.Enable();
-            m_aFontSizeFT.Enable();
-            m_aFontSizeEdit.Enable();
+            m_pHighLowFT->Enable();
+            m_pHighLowMF->Enable();
+            m_pFontSizeFT->Enable();
+            m_pFontSizeMF->Enable();
 
             short nFac;
             sal_Bool bAutomatic(sal_False);
@@ -3214,7 +3192,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             if ( nEsc > 0 )
             {
                 nFac = 1;
-                m_aHighPosBtn.Check( sal_True );
+                m_pHighPosBtn->Check( sal_True );
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
                     nEsc = DFLT_ESC_SUPER;
@@ -3224,40 +3202,40 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             else
             {
                 nFac = -1;
-                m_aLowPosBtn.Check( sal_True );
+                m_pLowPosBtn->Check( sal_True );
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
                     nEsc = DFLT_ESC_SUB;
                     bAutomatic = sal_True;
                 }
             }
-            if (!m_aHighLowRB.IsEnabled())
+            if (!m_pHighLowRB->IsEnabled())
             {
-                m_aHighLowRB.Enable();
+                m_pHighLowRB->Enable();
             }
-            m_aHighLowRB.Check(bAutomatic);
+            m_pHighLowRB->Check(bAutomatic);
 
-            if ( m_aHighLowRB.IsChecked() )
+            if ( m_pHighLowRB->IsChecked() )
             {
-                m_aHighLowFT.Disable();
-                m_aHighLowEdit.Disable();
+                m_pHighLowFT->Disable();
+                m_pHighLowMF->Disable();
             }
-            m_aHighLowEdit.SetValue( m_aHighLowEdit.Normalize( nFac * nEsc ) );
+            m_pHighLowMF->SetValue( m_pHighLowMF->Normalize( nFac * nEsc ) );
         }
         else
         {
-            m_aNormalPosBtn.Check( sal_True );
-            m_aHighLowRB.Check( sal_True );
+            m_pNormalPosBtn->Check( sal_True );
+            m_pHighLowRB->Check( sal_True );
             PositionHdl_Impl( NULL );
         }
         //the height has to be set after the handler is called to keep the value also if the escapement is zero
-        m_aFontSizeEdit.SetValue( m_aFontSizeEdit.Normalize( nEscProp ) );
+        m_pFontSizeMF->SetValue( m_pFontSizeMF->Normalize( nEscProp ) );
     }
     else
     {
-        m_aHighPosBtn.Check( sal_False );
-        m_aNormalPosBtn.Check( sal_False );
-        m_aLowPosBtn.Check( sal_False );
+        m_pHighPosBtn->Check( sal_False );
+        m_pNormalPosBtn->Check( sal_False );
+        m_pLowPosBtn->Check( sal_False );
     }
 
     // set BspFont
@@ -3272,7 +3250,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         MapUnit eOrgUnit = (MapUnit)eUnit;
         MapUnit ePntUnit( MAP_POINT );
-        long nBig = static_cast<long>(m_aKerningEdit.Normalize( static_cast<long>(rItem.GetValue()) ));
+        long nBig = static_cast<long>(m_pKerningMF->Normalize( static_cast<long>(rItem.GetValue()) ));
         long nKerning = LogicToLogic( nBig, eOrgUnit, ePntUnit );
 
         // set Kerning at the Font, convert into Twips before
@@ -3283,28 +3261,28 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
         if ( nKerning > 0 )
         {
-            m_aKerningLB.SelectEntryPos( LW_GESPERRT );
+            m_pKerningLB->SelectEntryPos( LW_GESPERRT );
         }
         else if ( nKerning < 0 )
         {
-            m_aKerningLB.SelectEntryPos( LW_SCHMAL );
+            m_pKerningLB->SelectEntryPos( LW_SCHMAL );
             nKerning = -nKerning;
         }
         else
         {
             nKerning = 0;
-            m_aKerningLB.SelectEntryPos( LW_NORMAL );
+            m_pKerningLB->SelectEntryPos( LW_NORMAL );
         }
         //enable/disable and set min/max of the Edit
-        KerningSelectHdl_Impl(&m_aKerningLB);
+        KerningSelectHdl_Impl(m_pKerningLB);
         //the attribute value must be displayed also if it's above the maximum allowed value
-        long nVal = static_cast<long>(m_aKerningEdit.GetMax());
+        long nVal = static_cast<long>(m_pKerningMF->GetMax());
         if(nVal < nKerning)
-            m_aKerningEdit.SetMax( nKerning );
-        m_aKerningEdit.SetValue( nKerning );
+            m_pKerningMF->SetMax( nKerning );
+        m_pKerningMF->SetValue( nKerning );
     }
     else
-        m_aKerningEdit.SetText( String() );
+        m_pKerningMF->SetText( String() );
 
     // Pair kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
@@ -3312,10 +3290,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxAutoKernItem& rItem = (SvxAutoKernItem&)rSet.Get( nWhich );
-        m_aPairKerningBtn.Check( rItem.GetValue() );
+        m_pPairKerningBtn->Check( rItem.GetValue() );
     }
     else
-        m_aPairKerningBtn.Check( sal_False );
+        m_pPairKerningBtn->Check( sal_False );
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
@@ -3323,10 +3301,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     {
         const SvxCharScaleWidthItem& rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
         m_nScaleWidthInitialVal = rItem.GetValue();
-        m_aScaleWidthMF.SetValue( m_nScaleWidthInitialVal );
+        m_pScaleWidthMF->SetValue( m_nScaleWidthInitialVal );
     }
     else
-        m_aScaleWidthMF.SetValue( 100 );
+        m_pScaleWidthMF->SetValue( 100 );
 
     nWhich = GetWhich( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE );
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
@@ -3337,85 +3315,66 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     SfxItemState eState = rSet.GetItemState( nWhich );
     if( SFX_ITEM_UNKNOWN == eState )
     {
-        m_aRotationScalingFL.Hide();
-        m_aScalingFL.Show();
-        m_a0degRB.Hide();
-        m_a90degRB.Hide();
-        m_a270degRB.Hide();
-        m_aFitToLineCB.Hide();
-        m_aFitToLineCB .Hide();
-
-
-        // move the following controls upwards
-        Window* aCntrlArr[] = {
-            &m_aScaleWidthFT, &m_aScaleWidthMF, &m_aKerningLine,
-            &m_aKerningLB, &m_aKerningFT, &m_aKerningEdit, &m_aPairKerningBtn,
-            0 };
-
-        long nDiff = m_aScaleWidthMF.GetPosPixel().Y() -
-                        m_a0degRB.GetPosPixel().Y();
-
-        for( Window** ppW = aCntrlArr; *ppW; ++ppW )
-        {
-            Point aPnt( (*ppW)->GetPosPixel() );
-            aPnt.Y() -= nDiff;
-            (*ppW)->SetPosPixel( aPnt );
-        }
+        m_pRotationContainer->Hide();
+        m_pScalingAndRotationFT->Hide();
+        m_pScalingFT->Show();
     }
     else
     {
-        m_aScalingFL.Hide();
+        m_pRotationContainer->Show();
+        m_pScalingAndRotationFT->Show();
+        m_pScalingFT->Hide();
 
-        Link aOldLink( m_aFitToLineCB.GetClickHdl() );
-        m_aFitToLineCB.SetClickHdl( Link() );
+        Link aOldLink( m_pFitToLineCB->GetClickHdl() );
+        m_pFitToLineCB->SetClickHdl( Link() );
         if( eState >= SFX_ITEM_DEFAULT )
         {
             const SvxCharRotateItem& rItem =
                     (SvxCharRotateItem&) rSet.Get( nWhich );
             if (rItem.IsBottomToTop())
-                m_a90degRB.Check( sal_True );
+                m_p90degRB->Check( sal_True );
             else if (rItem.IsTopToBotton())
-                m_a270degRB.Check( sal_True );
+                m_p270degRB->Check( sal_True );
             else
             {
                 DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
-                m_a0degRB.Check( sal_True );
+                m_p0degRB->Check( sal_True );
             }
-            m_aFitToLineCB.Check( rItem.IsFitToLine() );
+            m_pFitToLineCB->Check( rItem.IsFitToLine() );
         }
         else
         {
             if( eState == SFX_ITEM_DONTCARE )
             {
-                m_a0degRB.Check( sal_False );
-                m_a90degRB.Check( sal_False );
-                m_a270degRB.Check( sal_False );
+                m_p0degRB->Check( sal_False );
+                m_p90degRB->Check( sal_False );
+                m_p270degRB->Check( sal_False );
             }
             else
-                m_a0degRB.Check( sal_True );
+                m_p0degRB->Check( sal_True );
 
-            m_aFitToLineCB.Check( sal_False );
+            m_pFitToLineCB->Check( sal_False );
         }
-        m_aFitToLineCB.SetClickHdl( aOldLink );
-        m_aFitToLineCB.Enable( !m_a0degRB.IsChecked() );
+        m_pFitToLineCB->SetClickHdl( aOldLink );
+        m_pFitToLineCB->Enable( !m_p0degRB->IsChecked() );
 
         // is this value set?
         if( SFX_ITEM_UNKNOWN == rSet.GetItemState( GetWhich(
                                         SID_ATTR_CHAR_WIDTH_FIT_TO_LINE ) ))
-            m_aFitToLineCB.Hide();
+            m_pFitToLineCB->Hide();
     }
 
-    m_aHighPosBtn.SaveValue();
-    m_aNormalPosBtn.SaveValue();
-    m_aLowPosBtn.SaveValue();
-    m_a0degRB.SaveValue();
-    m_a90degRB.SaveValue();
-    m_a270degRB.SaveValue();
-    m_aFitToLineCB.SaveValue();
-    m_aScaleWidthMF.SaveValue();
-    m_aKerningLB.SaveValue();
-    m_aKerningEdit.SaveValue();
-    m_aPairKerningBtn.SaveValue();
+    m_pHighPosBtn->SaveValue();
+    m_pNormalPosBtn->SaveValue();
+    m_pLowPosBtn->SaveValue();
+    m_p0degRB->SaveValue();
+    m_p90degRB->SaveValue();
+    m_p270degRB->SaveValue();
+    m_pFitToLineCB->SaveValue();
+    m_pScaleWidthMF->SaveValue();
+    m_pKerningLB->SaveValue();
+    m_pKerningMF->SaveValue();
+    m_pPairKerningBtn->SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -3427,20 +3386,20 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     sal_Bool bModified = sal_False, bChanged = sal_True;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
     const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_CHAR_ESCAPEMENT );
-    const bool bHigh = m_aHighPosBtn.IsChecked();
+    const bool bHigh = m_pHighPosBtn->IsChecked();
     short nEsc;
     sal_uInt8  nEscProp;
 
-    if ( bHigh || m_aLowPosBtn.IsChecked() )
+    if ( bHigh || m_pLowPosBtn->IsChecked() )
     {
-        if ( m_aHighLowRB.IsChecked() )
+        if ( m_pHighLowRB->IsChecked() )
             nEsc = bHigh ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;
         else
         {
-            nEsc = (short)m_aHighLowEdit.Denormalize( m_aHighLowEdit.GetValue() );
+            nEsc = (short)m_pHighLowMF->Denormalize( m_pHighLowMF->GetValue() );
             nEsc *= (bHigh ? 1 : -1);
         }
-        nEscProp = (sal_uInt8)m_aFontSizeEdit.Denormalize( m_aFontSizeEdit.GetValue() );
+        nEscProp = (sal_uInt8)m_pFontSizeMF->Denormalize( m_pFontSizeMF->GetValue() );
     }
     else
     {
@@ -3455,12 +3414,12 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
             bChanged = sal_False;
     }
 
-    if ( !bChanged && !m_aHighPosBtn.GetSavedValue() &&
-         !m_aNormalPosBtn.GetSavedValue() && !m_aLowPosBtn.GetSavedValue() )
+    if ( !bChanged && !m_pHighPosBtn->GetSavedValue() &&
+         !m_pNormalPosBtn->GetSavedValue() && !m_pLowPosBtn->GetSavedValue() )
         bChanged = sal_True;
 
     if ( bChanged &&
-         ( m_aHighPosBtn.IsChecked() || m_aNormalPosBtn.IsChecked() || m_aLowPosBtn.IsChecked() ) )
+         ( m_pHighPosBtn->IsChecked() || m_pNormalPosBtn->IsChecked() || m_pLowPosBtn->IsChecked() ) )
     {
         rSet.Put( SvxEscapementItem( nEsc, nEscProp, nWhich ) );
         bModified = sal_True;
@@ -3473,15 +3432,15 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     // Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_KERNING );
-    sal_uInt16 nPos = m_aKerningLB.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pKerningLB->GetSelectEntryPos();
     short nKerning = 0;
     SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
 
     if ( nPos == LW_GESPERRT || nPos == LW_SCHMAL )
     {
-        long nTmp = static_cast<long>(m_aKerningEdit.GetValue());
+        long nTmp = static_cast<long>(m_pKerningMF->GetValue());
         long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
-        nKerning = (short)m_aKerningEdit.Denormalize( nVal );
+        nKerning = (short)m_pKerningMF->Denormalize( nVal );
 
         if ( nPos == LW_SCHMAL )
             nKerning *= - 1;
@@ -3495,8 +3454,8 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     }
 
     if ( !bChanged &&
-         ( m_aKerningLB.GetSavedValue() == LISTBOX_ENTRY_NOTFOUND ||
-           ( !m_aKerningEdit.GetSavedValue().Len() && m_aKerningEdit.IsEnabled() ) ) )
+         ( m_pKerningLB->GetSavedValue() == LISTBOX_ENTRY_NOTFOUND ||
+           ( !m_pKerningMF->GetSavedValue().Len() && m_pKerningMF->IsEnabled() ) ) )
         bChanged = sal_True;
 
     if ( bChanged && nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -3512,9 +3471,9 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     // Pair-Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
 
-    if ( m_aPairKerningBtn.IsChecked() != m_aPairKerningBtn.GetSavedValue() )
+    if ( m_pPairKerningBtn->IsChecked() != m_pPairKerningBtn->GetSavedValue() )
     {
-        rSet.Put( SvxAutoKernItem( m_aPairKerningBtn.IsChecked(), nWhich ) );
+        rSet.Put( SvxAutoKernItem( m_pPairKerningBtn->IsChecked(), nWhich ) );
         bModified = sal_True;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
@@ -3522,9 +3481,9 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if ( m_aScaleWidthMF.GetText() != m_aScaleWidthMF.GetSavedValue() )
+    if ( m_pScaleWidthMF->GetText() != m_pScaleWidthMF->GetSavedValue() )
     {
-        rSet.Put( SvxCharScaleWidthItem( (sal_uInt16)m_aScaleWidthMF.GetValue(), nWhich ) );
+        rSet.Put( SvxCharScaleWidthItem( (sal_uInt16)m_pScaleWidthMF->GetValue(), nWhich ) );
         bModified = sal_True;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
@@ -3532,15 +3491,15 @@ sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     // Rotation
     nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
-    if ( m_a0degRB     .IsChecked() != m_a0degRB     .GetSavedValue()  ||
-         m_a90degRB    .IsChecked() != m_a90degRB    .GetSavedValue()  ||
-         m_a270degRB   .IsChecked() != m_a270degRB   .GetSavedValue()  ||
-         m_aFitToLineCB.IsChecked() != m_aFitToLineCB.GetSavedValue() )
+    if ( m_p0degRB->IsChecked() != m_p0degRB->GetSavedValue()  ||
+         m_p90degRB->IsChecked() != m_p90degRB->GetSavedValue()  ||
+         m_p270degRB->IsChecked() != m_p270degRB->GetSavedValue()  ||
+         m_pFitToLineCB->IsChecked() != m_pFitToLineCB->GetSavedValue() )
     {
-        SvxCharRotateItem aItem( 0, m_aFitToLineCB.IsChecked(), nWhich );
-        if (m_a90degRB.IsChecked())
+        SvxCharRotateItem aItem( 0, m_pFitToLineCB->IsChecked(), nWhich );
+        if (m_p90degRB->IsChecked())
             aItem.SetBottomToTop();
-        else if (m_a270degRB.IsChecked())
+        else if (m_p270degRB->IsChecked())
             aItem.SetTopToBotton();
         rSet.Put( aItem );
         bModified = sal_True;
