@@ -55,10 +55,12 @@
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
+#define LOTUS123_FORMAT_TYPE 268435649
 
 #define ODS     0
 #define XLS     1
 #define XLSX    2
+#define LOTUS123 3
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -72,7 +74,8 @@ struct FileFormat {
 FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
+    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
+    { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE }
 };
 
 }
@@ -106,6 +109,7 @@ public:
     void testContentODS();
     void testContentXLS();
     void testContentXLSX();
+    void testContentLotus123();
 
 #if TEST_BUG_FILES
     //goes recursively through all files in this dir and tries to open them
@@ -122,6 +126,7 @@ public:
     CPPUNIT_TEST(testContentODS);
     CPPUNIT_TEST(testContentXLS);
     CPPUNIT_TEST(testContentXLSX);
+    CPPUNIT_TEST(testContentLotus123);
 
 #if TEST_BUG_FILES
     CPPUNIT_TEST(testBugFiles);
@@ -319,7 +324,7 @@ void ScFiltersTest::testRangeNameODS()
 
 namespace {
 
-void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
+void testContentImpl(ScDocument* pDoc ) //same code for ods, xls, xlsx
 {
     double fValue;
     //check value import
@@ -387,6 +392,18 @@ void ScFiltersTest::testContentXLSX()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     testContentImpl(pDoc);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testContentLotus123()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 3);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    //testContentImpl(pDoc);
     xDocSh->DoClose();
 }
 
