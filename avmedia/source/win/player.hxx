@@ -60,7 +60,7 @@ public:
                         Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
                         ~Player();
 
-    bool                create( const ::rtl::OUString& rURL );
+    bool                create( const OUString& rURL );
 
     void                setNotifyWnd( int nNotifyWnd );
     void                setDDrawParams( IDirectDraw* pDDraw, IDirectDrawSurface* pDDrawSurface );
@@ -71,15 +71,15 @@ public:
     // XPlayer
     virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL stop(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isPlaying(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual bool SAL_CALL isPlaying(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getDuration(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setMediaTime( double fTime ) throw (::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getMediaTime(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getRate(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isPlaybackLoop(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setMute( sal_Bool bSet ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isMute(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPlaybackLoop( bool bSet ) throw (::com::sun::star::uno::RuntimeException);
+    virtual bool SAL_CALL isPlaybackLoop(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMute( bool bSet ) throw (::com::sun::star::uno::RuntimeException);
+    virtual bool SAL_CALL isMute(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setVolumeDB( sal_Int16 nVolumeDB ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getVolumeDB(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Size SAL_CALL getPreferredPlayerWindowSize(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -87,15 +87,15 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XFrameGrabber > SAL_CALL createFrameGrabber(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
-    ::rtl::OUString         maURL;
+    OUString                maURL;
     IGraphBuilder*          mpGB;
     IBaseFilter*            mpOMF;
     IMediaControl*          mpMC;
@@ -107,8 +107,8 @@ private:
     IVideoWindow*           mpVW;
     IDDrawExclModeVideo*    mpEV;
     long                    mnUnmutedVolume;
-    sal_Bool                mbMuted;
-    sal_Bool                mbLooping;
+    bool                    mbMuted;
+    bool                    mbLooping;
 
     void                    ImplLayoutVideoWindow();
 };

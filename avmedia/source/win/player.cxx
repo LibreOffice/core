@@ -125,7 +125,7 @@ Player::~Player()
 
 // ------------------------------------------------------------------------------
 
-bool Player::create( const ::rtl::OUString& rURL )
+bool Player::create( const OUString& rURL )
 {
     HRESULT hR;
     bool    bRet = false;
@@ -169,7 +169,7 @@ bool Player::create( const ::rtl::OUString& rURL )
     if( bRet )
         maURL = rURL;
     else
-        maURL = ::rtl::OUString();
+        maURL = OUString();
 
     return bRet;
 }
@@ -249,7 +249,7 @@ void SAL_CALL Player::stop(  )
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Player::isPlaying()
+bool SAL_CALL Player::isPlaying()
     throw (uno::RuntimeException)
 {
     OAFilterState   eFilterState;
@@ -318,7 +318,7 @@ double SAL_CALL Player::getRate(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
+void SAL_CALL Player::setPlaybackLoop( bool bSet )
     throw (uno::RuntimeException)
 {
     mbLooping = bSet;
@@ -326,7 +326,7 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Player::isPlaybackLoop(  )
+bool SAL_CALL Player::isPlaybackLoop(  )
     throw (uno::RuntimeException)
 {
     return mbLooping;
@@ -334,7 +334,7 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setMute( sal_Bool bSet )
+void SAL_CALL Player::setMute( bool bSet )
     throw (uno::RuntimeException)
 {
     if( mpBA && ( mbMuted != bSet ) )
@@ -346,7 +346,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Player::isMute(  )
+bool SAL_CALL Player::isMute(  )
     throw (uno::RuntimeException)
 {
     return mbMuted;
@@ -433,15 +433,15 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL Player::getImplementationName(  )
+OUString SAL_CALL Player::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME ) );
+    return OUString( AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME );
 }
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
+bool SAL_CALL Player::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_WIN_PLAYER_SERVICENAME;
@@ -449,11 +449,11 @@ sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_WIN_PLAYER_SERVICENAME ) );
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = AVMEDIA_WIN_PLAYER_SERVICENAME ;
 
     return aRet;
 }
