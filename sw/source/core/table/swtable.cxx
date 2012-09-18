@@ -1724,10 +1724,9 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableL
     rSrtArr.insert( p );        // insert
 }
 
-SwTableBox::~SwTableBox()
+void SwTableBox::RemoveFromTable()
 {
-    // box containing contents?
-    if( !GetFrmFmt()->GetDoc()->IsInDtor() && pSttNd )
+    if (pSttNd) // box containing contents?
     {
         // remove from table
         const SwTableNode* pTblNd = pSttNd->FindTableNode();
@@ -1736,6 +1735,15 @@ SwTableBox::~SwTableBox()
                                     GetTabSortBoxes();
         SwTableBox *p = this;   // error: &this
         rSrtArr.erase( p );        // remove
+        pSttNd = 0; // clear it so this is only run once
+    }
+}
+
+SwTableBox::~SwTableBox()
+{
+    if (!GetFrmFmt()->GetDoc()->IsInDtor())
+    {
+        RemoveFromTable();
     }
 
     // the TabelleBox can be deleted if it's the last client of the FrameFormat

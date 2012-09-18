@@ -1758,7 +1758,11 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 rDoc.GetNodes()._MoveNodes( aRg, rDoc.GetNodes(), aInsPos, sal_False );
             }
             else
+            {   // first disconnect box from node, otherwise ~SwTableBox would
+                // access pBox->pSttNd, deleted by DeleteSection
+                pBox->RemoveFromTable();
                 rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
+            }
             aDelBoxes.insert( aDelBoxes.end(), pBox );
         }
     }
@@ -1774,6 +1778,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             // TL_CHART2: notify chart about box to be removed
             if (pPCD)
                 pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
+            pBox->RemoveFromTable(); // ~SwTableBox would access pBox->pSttNd
             aDelBoxes.insert( aDelBoxes.end(), pBox );
             rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
         }

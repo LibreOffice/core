@@ -431,6 +431,7 @@ public:
     SwFrmFmt* ClaimFrmFmt();
     void ChgFrmFmt( SwTableBoxFmt *pNewFmt );
 
+    void RemoveFromTable();
     const SwStartNode *GetSttNd() const { return pSttNd; }
     sal_uLong GetSttIdx() const;
 
