@@ -472,6 +472,12 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         pListBox->SetDropDownLineCount(16); //arbitrary
         pWindow = pListBox;
     }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBoxText")))
+    {
+        extractModel(id, rMap);
+        ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+        pWindow = pComboBox;
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkTreeView")))
     {
         extractModel(id, rMap);
