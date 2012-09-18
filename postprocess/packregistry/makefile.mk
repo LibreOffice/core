@@ -351,6 +351,10 @@ MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-kab.xcu
 MY_DRIVERS += kab
 .END
+
+
+# somebody would simplify that? ;-)
+.IF "$(OS)" == "WNT"
 .IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO" && \
         "$(OS)" != "MACOSX"
 .IF "$(OS)" == "WNT"
@@ -361,6 +365,15 @@ MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab2.xcu
 MY_DRIVERS += mozab2
 .END
 .END
+
+.ELSE
+
+# new and shiny mork driver
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
+MY_DRIVERS += mork
+
+.END
+
 .IF "$(SYSTEM_LIBEXTTEXTCAT_DATA)" != ""
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-externallibexttextcatdata.xcu
 .ELSE

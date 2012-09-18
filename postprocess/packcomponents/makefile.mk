@@ -376,12 +376,23 @@ my_components += \
 .END
 
 .IF "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
+
+.IF "$(OS)" == "WNT"
+
 .IF "$(OS)" != "MACOSX" && "$(SYSTEM_MOZILLA)" != "YES" && \
     "$(WITH_MOZILLA)" != "NO"
 my_components += component/connectivity/source/drivers/mozab/mozab
 .ELSE
 my_components += component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
 .END
+
+.ELSE
+
+# new and shiny mork driver
+my_components += component/connectivity/source/drivers/mork/mork
+
+.ENDIF
+
 .ENDIF
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS" && "$(OS)" != "headless"
