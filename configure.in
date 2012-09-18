@@ -7088,14 +7088,14 @@ dnl Test whether rat scan was requested and whether apache-rat is available
 dnl ===================================================================
 RAT_JAR=
 AC_MSG_CHECKING([whether to trigger rat scan])
-if test -z "$with_rat_scan" -o "$with_rat_scan" == "no"; then
+if test -z "$with_rat_scan" -o "$with_rat_scan" = "no"; then
     AC_MSG_RESULT([no])
 else
-    if test "$WITH_JAVA" == "no"; then
+    if test "$WITH_JAVA" = "no"; then
         AC_MSG_ERROR([no, java disabled, enable with --with-java])
-    elif test "$enable_saxon" == "no"; then
+    elif test "$enable_saxon" = "no"; then
         AC_MSG_ERROR([no, saxon disabled, enable with --enable-category-b])
-    elif test "$with_rat_scan" == "yes"; then
+    elif test "$with_rat_scan" = "yes"; then
         AC_MSG_RESULT([yes, use pre-built library])
         RAT_JAR_HOME="BUILD"
         BUILD_TYPE="$BUILD_TYPE RAT"
