@@ -407,7 +407,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
@@ -430,7 +430,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
@@ -453,7 +453,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
@@ -476,7 +476,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
@@ -515,7 +515,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                         aTitle,
                         ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
                     // Do not change the setting in case the user chooses to cancel
                     if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
@@ -529,7 +529,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                         aTitle,
                         ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
-                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
+                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK, true);
                 }
             }
         }
