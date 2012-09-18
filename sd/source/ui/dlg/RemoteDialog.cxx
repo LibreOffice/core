@@ -53,6 +53,7 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 {
 //     setBusy( true );
     // Fixme: Try and connect
+#ifdef ENABLE_SDREMOTE
     long aSelected = mClientBox.GetActiveEntryIndex();
     if ( aSelected < 0 )
         return 1;
@@ -64,16 +65,19 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
     }
     else
         return 1;
+#endif
 }
 
 IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
 {
+#ifdef ENABLE_SDREMOTE
     if ( !mPreviouslyDiscoverable )
     {
         RemoteServer::setBluetoothDiscoverable( false );
     }
     Close();
     return 0;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
