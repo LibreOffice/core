@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdb/XDatabaseEnvironment.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
@@ -39,7 +40,7 @@
 #include <basic/basicmanagerrepository.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/stl_types.hxx>
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -64,14 +65,9 @@ class DatabaseDocumentLoader;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::lang::XServiceInfo
-                                            ,   ::com::sun::star::container::XEnumerationAccess
-                                            ,   ::com::sun::star::container::XNameAccess
-                                            ,   ::com::sun::star::uno::XNamingService
-                                            ,   ::com::sun::star::container::XContainer
-                                            ,   ::com::sun::star::lang::XSingleServiceFactory
+typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::lang::XServiceInfo
+                                            ,   ::com::sun::star::sdb::XDatabaseContext
                                             ,   ::com::sun::star::lang::XUnoTunnel
-                                            ,   ::com::sun::star::sdb::XDatabaseRegistrations
                                             >   DatabaseAccessContext_Base;
 
 class ODatabaseContext  :public DatabaseAccessContext_Base

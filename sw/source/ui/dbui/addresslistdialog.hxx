@@ -41,6 +41,9 @@ namespace com{namespace sun{namespace star{
     namespace container{
         class XNameAccess;
     }
+    namespace sdb{
+        class XDatabaseContext;
+    }
     namespace sdbc{
         class XDataSource;
     }
@@ -81,9 +84,9 @@ class SwAddressListDialog : public SfxModalDialog
 
     SwMailMergeAddressBlockPage* m_pAddressPage;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xDBContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext> m_xDBContext;
 
-    SwDBData                                                                        m_aDBData;
+    SwDBData                                                                   m_aDBData;
 
     void DetectTablesAndQueries(SvLBoxEntry* pSelect, bool bWidthDialog);
 

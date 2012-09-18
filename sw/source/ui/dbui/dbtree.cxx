@@ -33,6 +33,7 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/XDatabaseAccess.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -79,7 +80,7 @@ typedef boost::ptr_vector<SwConnectionData> SwConnectionArr;
 
 class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
 {
-    Reference< XNameAccess > xDBContext;
+    Reference< XDatabaseContext > xDBContext;
     SwConnectionArr aConnections;
     SwWrtShell* pWrtSh;
 
@@ -96,7 +97,7 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
     sal_Bool                        HasContext();
     SwWrtShell*                 GetWrtShell() { return pWrtSh;}
     void                        SetWrtShell(SwWrtShell& rSh) { pWrtSh = &rSh;}
-    Reference< XNameAccess >    GetContext() const {return xDBContext;}
+    Reference<XDatabaseContext>    GetContext() const {return xDBContext;}
     Reference<XConnection>      GetConnection(const rtl::OUString& rSourceName);
 };
 
@@ -149,17 +150,11 @@ sal_Bool SwDBTreeList_Impl::HasContext()
 {
     if(!xDBContext.is())
     {
-        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        if( xMgr.is() )
-        {
-            Reference<XInterface> xInstance = xMgr->createInstance(
-                        C2U( "com.sun.star.sdb.DatabaseContext" ));
-            xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-            Reference<XContainer> xContainer(xDBContext, UNO_QUERY);
-            if(xContainer.is())
-                xContainer->addContainerListener( this );
-        }
-        OSL_ENSURE(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        xDBContext = DatabaseContext::create(xContext);
+        Reference<XContainer> xContainer(xDBContext, UNO_QUERY);
+        if(xContainer.is())
+            xContainer->addContainerListener( this );
     }
     return xDBContext.is();
 }

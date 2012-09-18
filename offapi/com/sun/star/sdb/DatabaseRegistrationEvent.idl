@@ -33,7 +33,7 @@ module com { module sun { module star { module sdb {
 
     @since  OpenOffice.org 3.3
  */
-struct DatabaseRegistrationEvent : ::com::sun::star::lang::EventObject
+published struct DatabaseRegistrationEvent : ::com::sun::star::lang::EventObject
 {
     /// is the name of the database registration affected by the event
     string  Name;

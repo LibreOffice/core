@@ -30,6 +30,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -41,6 +42,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <vcl/msgbox.hxx>
@@ -444,13 +446,9 @@ namespace dbp
         {
             DBG_ASSERT(xORB.is(), "OControlWizard::implGetDSContext: invalid service factory!");
 
-            Reference< XInterface > xContext;
-            if (xORB.is())
-                xContext = xORB->createInstance(::rtl::OUString("com.sun.star.sdb.DatabaseContext"));
-            DBG_ASSERT(xContext.is(), "OControlWizard::implGetDSContext: invalid database context!");
-
-            m_aContext.xDatasourceContext = Reference< XNameAccess >(xContext, UNO_QUERY);
-            DBG_ASSERT(m_aContext.xDatasourceContext.is() || !xContext.is(), "OControlWizard::implGetDSContext: invalid database context (missing the XNameAccess)!");
+            m_aContext.xDatasourceContext = Reference<XNameAccess>(
+                DatabaseContext::create(comphelper::ComponentContext(xORB).getUNOContext()),
+                UNO_QUERY_THROW);
         }
         catch(const Exception&)
         {

@@ -1,0 +1,78 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_sdb_XDatabaseContext_idl__
+#define __com_sun_star_sdb_XDatabaseContext_idl__
+
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/lang/XSingleServiceFactory.idl>
+#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/uno/XNamingService.idl>
+#include <com/sun/star/sdb/XDatabaseRegistrations.idl>
+
+module com {  module sun {  module star {  module sdb {
+
+/**
+    Provides an interface for the new-style DatabaseContext service to implement.
+ */
+published interface XDatabaseContext
+{
+    /** Enumeration on all registered data sources.
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    /** NameAccess on all registered data sources.
+        <p>One exception is the <method "com.sun.star.container.XNameAccess">getByName</method>, this method also allows to ask
+        for a <member "DataAccessDescriptor">DatabaseLocation</member>.
+        </p>
+     */
+    interface com::sun::star::container::XNameAccess;
+
+    /** Interface for registering new datasources.
+     */
+    interface com::sun::star::uno::XNamingService;
+
+    /** Interface for registering listener to get notified when new datasources are created or removed.
+    */
+    interface com::sun::star::container::XContainer;
+
+    /** Interface for creation of new datasources.
+    */
+    interface com::sun::star::lang::XSingleServiceFactory;
+
+    /** allows to access and modify the configuration data for registered data source.
+
+        <p>The main purpose of this interface is to allow you to register data sources which you know
+        by URL only, and have not yet loaded.</p>
+
+        <p>Also, it hides the details of the configuration data where the data source registrations
+        are maintained, so if possible at all, you should use this interface, instead of modifying or
+        querying the configuration data directly.</p>
+
+        @since OOo 3.3
+    */
+    [optional] interface XDatabaseRegistrations;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

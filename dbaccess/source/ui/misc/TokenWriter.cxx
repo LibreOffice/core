@@ -29,6 +29,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -276,7 +277,7 @@ void ODatabaseImportExport::initialize()
     if ( !m_xConnection.is() )
     {   // we need a connection
         OSL_ENSURE(!m_sDataSourceName.isEmpty(),"There must be a datsource name!");
-        Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(m_xFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        Reference<XNameAccess> xDatabaseContext( DatabaseContext::create(comphelper::ComponentContext(m_xFactory).getUNOContext()), UNO_QUERY_THROW);
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
 
         Reference< XConnection > xConnection;

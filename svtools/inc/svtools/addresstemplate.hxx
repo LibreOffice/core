@@ -40,6 +40,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
+#include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <unotools/configitem.hxx>
 
@@ -75,7 +76,7 @@ namespace svt
         const String    m_sNoFieldSelection;
 
         /// the DatabaseContext for selecting data sources
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
                         m_xDatabaseContext;
         // the ORB for creating objects
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >

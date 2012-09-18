@@ -53,6 +53,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
@@ -101,6 +102,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml::sax;
@@ -1868,7 +1870,7 @@ Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames(  ) thro
 Reference< XInterface > ODatabaseDocument::Create( const Reference< XComponentContext >& _rxContext )
 {
     ::comphelper::ComponentContext aContext( _rxContext );
-    Reference< XUnoTunnel > xDBContextTunnel( aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ), UNO_QUERY_THROW );
+    Reference< XUnoTunnel > xDBContextTunnel( DatabaseContext::create(_rxContext), UNO_QUERY_THROW );
     ODatabaseContext* pContext = reinterpret_cast< ODatabaseContext* >( xDBContextTunnel->getSomething( ODatabaseContext::getUnoTunnelImplementationId() ) );
 
     ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( aContext.getLegacyServiceFactory(), *pContext ) );

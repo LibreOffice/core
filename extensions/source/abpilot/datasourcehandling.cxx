@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
@@ -77,22 +78,21 @@ namespace abp
 
     //=====================================================================
     //---------------------------------------------------------------------
-    static Reference< XNameAccess > lcl_getDataSourceContext( const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW (( Exception ))
+    static Reference< XDatabaseContext > lcl_getDataSourceContext( const Reference< XComponentContext >& _rxContext ) SAL_THROW (( Exception ))
     {
-        Reference< XNameAccess > xContext( _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DatabaseContext" )) ), UNO_QUERY );
-        DBG_ASSERT(xContext.is(), "lcl_getDataSourceContext: could not access the data source context!");
+        Reference<XDatabaseContext> xContext = DatabaseContext::create(_rxContext);
         return xContext;
     }
 
     //---------------------------------------------------------------------
     /// creates a new data source and inserts it into the context
     static void lcl_implCreateAndInsert(
-        const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rName,
+        const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rName,
         Reference< XPropertySet >& /* [out] */ _rxNewDataSource ) SAL_THROW (( ::com::sun::star::uno::Exception ))
     {
         //.............................................................
         // get the data source context
-        Reference< XNameAccess > xContext = lcl_getDataSourceContext( _rxORB );
+        Reference< XDatabaseContext > xContext = lcl_getDataSourceContext( _rxContext );
 
         DBG_ASSERT( !xContext->hasByName( _rName ), "lcl_implCreateAndInsert: name already used!" );
         (void)_rName;
@@ -127,7 +127,7 @@ namespace abp
         {
             // create the new data source
             Reference< XPropertySet > xNewDataSource;
-            lcl_implCreateAndInsert( _rxORB, _rName, xNewDataSource );
+            lcl_implCreateAndInsert( comphelper::ComponentContext(_rxORB).getUNOContext(), _rName, xNewDataSource );
 
             //.............................................................
             // set the URL property
@@ -200,7 +200,9 @@ namespace abp
         try
         {
             // create the UNO context
-            m_pImpl->xContext = lcl_getDataSourceContext( _rxORB );
+            m_pImpl->xContext = Reference<XNameAccess>(
+                      lcl_getDataSourceContext( comphelper::ComponentContext(_rxORB).getUNOContext() ),
+                      UNO_QUERY_THROW);
 
             if (m_pImpl->xContext.is())
             {

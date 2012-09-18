@@ -235,6 +235,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/vba
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
 	DataAccessDescriptorFactory \
+	DatabaseContext \
 	DatabaseInteractionHandler \
 	InteractionHandler \
 ))
@@ -973,7 +974,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb,\
 	DatabaseAccessConnection \
 	DatabaseAccessContext \
 	DatabaseAccessDataSource \
-	DatabaseContext \
 	DatabaseDocument \
 	DatabaseEnvironment \
 	DatasourceAdministrationDialog \
@@ -3092,6 +3092,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb,\
 	XDataAccessDescriptorFactory \
 	XDatabaseAccess \
 	XDatabaseAccessListener \
+	XDatabaseContext \
 	XDatabaseEnvironment \
 	XDatabaseRegistrations \
 	XDatabaseRegistrationsListener \

@@ -40,6 +40,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -600,8 +601,7 @@ Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames(  ) throw 
 Reference< XInterface > ODatabaseSource::Create( const Reference< XComponentContext >& _rxContext )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::Create" );
-    ::comphelper::ComponentContext aContext( _rxContext );
-    Reference< XSingleServiceFactory > xDBContext( aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ), UNO_QUERY_THROW );
+    Reference< XSingleServiceFactory > xDBContext( DatabaseContext::create(_rxContext), UNO_QUERY_THROW );
     return xDBContext->createInstance();
 }
 

@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -1571,9 +1572,10 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
 {
     Reference< sdbc::XConnection> xConnection;
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     try
     {
-        Reference<XCompletedConnection> xComplConnection(SwNewDBMgr::GetDbtoolsClient().getDataSource(rDataSource, xMgr),UNO_QUERY);
+        Reference<XCompletedConnection> xComplConnection(SwNewDBMgr::GetDbtoolsClient().getDataSource(rDataSource, xContext),UNO_QUERY);
         if ( xComplConnection.is() )
         {
             rxSource.set(xComplConnection,UNO_QUERY);
@@ -2173,18 +2175,9 @@ const SwDBData& SwNewDBMgr::GetAddressDBName()
 
 Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
 {
-    uno::Reference<XNameAccess> xDBContext;
-    uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if( xMgr.is() )
-    {
-        uno::Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
-        xDBContext = uno::Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-    }
-    if(xDBContext.is())
-    {
-        return xDBContext->getElementNames();
-    }
-    return Sequence<rtl::OUString>();
+    Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
+    return xDBContext->getElementNames();
 }
 
 String SwNewDBMgr::LoadAndRegisterDataSource()
@@ -2297,9 +2290,9 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 #endif
         try
         {
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
-            Reference<XNameAccess> xDBContext(xInstance, UNO_QUERY_THROW);
+            Reference<XMultiServiceFactory> xMgr( ::comphelper::getProcessServiceFactory() );
+            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
             Reference<XSingleServiceFactory> xFact( xDBContext, UNO_QUERY);
 
             String sNewName = INetURLObject::decode( aURL.getName(),
@@ -2569,13 +2562,13 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         OSL_FAIL("PropertyValues missing or unset");
         return;
     }
-    uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<XDataSource> xSource;
     uno::Reference<XChild> xChild(xConnection, UNO_QUERY);
     if(xChild.is())
         xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     if(!xSource.is())
-        xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(sDataSource, xMgr);
+        xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(sDataSource, xContext);
     uno::Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
     SwDBData aDBData;
     aDBData.sDataSource = sDataSource;
@@ -2633,7 +2626,7 @@ uno::Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const uno::Referen
         if ( xChild.is() )
             xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
         if ( !xSource.is() )
-            xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessServiceFactory());
+            xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
     }
     catch(const Exception&)
     {

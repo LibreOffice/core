@@ -149,7 +149,7 @@ namespace svxform
         // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
                 const ::rtl::OUString& _rsRegisteredName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
             ) const;
 
         // ------------------------------------------------

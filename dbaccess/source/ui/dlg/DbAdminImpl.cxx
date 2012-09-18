@@ -41,6 +41,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
@@ -49,6 +50,7 @@
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
@@ -206,7 +208,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
 
     try
     {
-        m_xDatabaseContext = Reference< XNameAccess >(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        m_xDatabaseContext = Reference< XNameAccess >( DatabaseContext::create(comphelper::ComponentContext(m_xORB).getUNOContext()), UNO_QUERY_THROW );
         m_xDynamicContext.set(m_xDatabaseContext,UNO_QUERY);
     }
     catch(Exception&)

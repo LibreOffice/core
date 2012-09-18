@@ -54,6 +54,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -858,8 +859,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const ::rtl::OUString& _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-        Reference< XNamingService > xDatabaseContext(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-        Reference< XNameAccess > xNameAccessDatabaseContext(xDatabaseContext, UNO_QUERY);
+        Reference< XNamingService > xDatabaseContext( DatabaseContext::create(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW );
+        Reference< XNameAccess > xNameAccessDatabaseContext(xDatabaseContext, UNO_QUERY_THROW );
         INetURLObject aURL( _sPath );
         ::rtl::OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
         ::rtl::OUString sDatabaseName = ::dbtools::createUniqueName(xNameAccessDatabaseContext, sFilename,sal_False);

@@ -34,6 +34,7 @@
 #include <svtools/helpid.hrc>
 #include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
@@ -47,6 +48,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -797,14 +799,14 @@ void AssignmentPersistentData::Commit()
             if (!m_xORB.is())
                 return;
 
-            const rtl::OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
             try
             {
-                m_xDatabaseContext = Reference< XNameAccess >(m_xORB->createInstance(sContextServiceName), UNO_QUERY);
+                m_xDatabaseContext = DatabaseContext::create(comphelper::ComponentContext(m_xORB).getUNOContext());
             }
             catch(Exception&) { }
             if (!m_xDatabaseContext.is())
             {
+                const rtl::OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
                 ShowServiceNotAvailableError( this, sContextServiceName, sal_False);
                 return;
             }

@@ -27,6 +27,7 @@
 #include "dbtreelistbox.hxx"
 #include "defaultobjectnamecheck.hxx"
 #include <comphelper/extract.hxx>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -223,7 +224,7 @@ Reference< XDataSource > getDataSourceByName( const ::rtl::OUString& _rDataSourc
     Window* _pErrorMessageParent, Reference< XMultiServiceFactory > _rxORB, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     ::comphelper::ComponentContext aContext( _rxORB );
-    Reference< XNameAccess > xDatabaseContext( aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
+    Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create(aContext.getUNOContext());
 
     Reference< XDataSource > xDatasource;
     Any aError;
@@ -722,22 +723,18 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     return sDefaultName;
 }
 // -----------------------------------------------------------------------------
-sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
+sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
 {
-    sal_Bool bRet = sal_False;
-    Reference< XNameAccess > xDataBaseContext(_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-    if ( xDataBaseContext.is() )
-    {
-        bRet = xDataBaseContext->hasByName(_sDataSourceName);
-        if ( !bRet )
-        { // try if this one is a URL
-            try
-            {
-                bRet = xDataBaseContext->getByName(_sDataSourceName).hasValue();
-            }
-            catch(const Exception&)
-            {
-            }
+    Reference< XDatabaseContext > xDataBaseContext = DatabaseContext::create(_xContext);
+    sal_Bool bRet = xDataBaseContext->hasByName(_sDataSourceName);
+    if ( !bRet )
+    { // try if this one is a URL
+        try
+        {
+            bRet = xDataBaseContext->getByName(_sDataSourceName).hasValue();
+        }
+        catch(const Exception&)
+        {
         }
     }
     return bRet;
@@ -1019,7 +1016,7 @@ const SfxFilter* getStandardDatabaseFilter()
 // -----------------------------------------------------------------------------
 sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
                         const ::rtl::OUString& _sName,
-                        const Reference< XMultiServiceFactory >& _xFactory,
+                        const Reference< XComponentContext >& _rxContext,
                         Window* _pParent)
 {
     sal_Bool bRet = sal_False;
@@ -1050,7 +1047,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
             bRet = sal_True;
             if(bHasToInsert)
             {
-                if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_xFactory))
+                if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_rxContext))
                 {
                     String aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
                     OSQLWarningBox( _pParent, aMessage ).Execute();

@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
@@ -211,61 +212,55 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aListLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aOK.SetClickHdl( LINK( this, SwAddressListDialog, OKHdl_Impl));
 
-    uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if( xMgr.is() )
-    {
-        uno::Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
-        m_xDBContext = uno::Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-    }
+    uno::Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    m_xDBContext = DatabaseContext::create(xContext);
+
     SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
     const SwDBData& rCurrentData = rConfigItem.GetCurrentDBData();
 
-    OSL_ENSURE(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!");
     sal_Bool bEnableEdit = sal_False;
     sal_Bool bEnableOK = sal_True;
     m_aListLB.SelectAll( sal_False );
 
-    if(m_xDBContext.is())
+    SwDBConfig aDb;
+    ::rtl::OUString sBibliography = aDb.GetBibliographySource().sDataSource;
+    uno::Sequence< ::rtl::OUString> aNames = m_xDBContext->getElementNames();
+    const ::rtl::OUString* pNames = aNames.getConstArray();
+    for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
     {
-        SwDBConfig aDb;
-        ::rtl::OUString sBibliography = aDb.GetBibliographySource().sDataSource;
-        uno::Sequence< ::rtl::OUString> aNames = m_xDBContext->getElementNames();
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
+        if ( pNames[nName] == sBibliography )
+            continue;
+        SvLBoxEntry* pEntry = m_aListLB.InsertEntry(pNames[nName]);
+        AddressUserData_Impl* pUserData = new AddressUserData_Impl();
+        pEntry->SetUserData(pUserData);
+        if(pNames[nName] == rCurrentData.sDataSource)
         {
-            if ( pNames[nName] == sBibliography )
-                continue;
-            SvLBoxEntry* pEntry = m_aListLB.InsertEntry(pNames[nName]);
-            AddressUserData_Impl* pUserData = new AddressUserData_Impl();
-            pEntry->SetUserData(pUserData);
-            if(pNames[nName] == rCurrentData.sDataSource)
+            m_aListLB.Select(pEntry);
+            m_aListLB.SetEntryText(rCurrentData.sCommand, pEntry, ITEMID_TABLE - 1);
+            pUserData->nCommandType = rCurrentData.nCommandType;
+            pUserData->xSource = rConfigItem.GetSource();
+            pUserData->xConnection = rConfigItem.GetConnection();
+            pUserData->xColumnsSupplier = rConfigItem.GetColumnsSupplier();
+            pUserData->xResultSet = rConfigItem.GetResultSet();
+            pUserData->sFilter = rConfigItem.GetFilter();
+            //is the data source editable (csv, Unicode, single table)
+            uno::Reference<beans::XPropertySet> xSourceProperties;
+            try
             {
-                m_aListLB.Select(pEntry);
-                m_aListLB.SetEntryText(rCurrentData.sCommand, pEntry, ITEMID_TABLE - 1);
-                pUserData->nCommandType = rCurrentData.nCommandType;
-                pUserData->xSource = rConfigItem.GetSource();
-                pUserData->xConnection = rConfigItem.GetConnection();
-                pUserData->xColumnsSupplier = rConfigItem.GetColumnsSupplier();
-                pUserData->xResultSet = rConfigItem.GetResultSet();
-                pUserData->sFilter = rConfigItem.GetFilter();
-                //is the data source editable (csv, Unicode, single table)
-                uno::Reference<beans::XPropertySet> xSourceProperties;
-                try
-                {
-                    m_xDBContext->getByName(pNames[nName]) >>= xSourceProperties;
-                    pUserData->sURL = lcl_getFlatURL( xSourceProperties );
-                    bEnableEdit = !pUserData->sURL.isEmpty() &&
-                        SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
-                        !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
-                }
-                catch (const uno::Exception&)
-                {
-                    bEnableOK = sal_False;
-                }
-                m_aDBData = rCurrentData;
+                m_xDBContext->getByName(pNames[nName]) >>= xSourceProperties;
+                pUserData->sURL = lcl_getFlatURL( xSourceProperties );
+                bEnableEdit = !pUserData->sURL.isEmpty() &&
+                    SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
+                    !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
             }
+            catch (const uno::Exception&)
+            {
+                bEnableOK = sal_False;
+            }
+            m_aDBData = rCurrentData;
         }
     }
+
     m_aOK.Enable(m_aListLB.GetEntryCount()>0 && bEnableOK);
     m_aEditPB.Enable(bEnableEdit);
     m_aListLB.SetSelectHdl(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));

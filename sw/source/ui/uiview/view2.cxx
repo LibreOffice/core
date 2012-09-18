@@ -30,6 +30,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <svtools/filter.hxx>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -156,6 +157,7 @@ using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui::dialogs;
 
 static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhichId )
@@ -2149,7 +2151,7 @@ void SwView::EnableMailMerge(sal_Bool bEnable )
 
 namespace
 {
-    sal_Bool lcl_NeedAdditionalDataSource( const uno::Reference< XNameAccess >& _rDatasourceContext )
+    sal_Bool lcl_NeedAdditionalDataSource( const uno::Reference< XDatabaseContext >& _rDatasourceContext )
     {
         Sequence < OUString > aNames = _rDatasourceContext->getElementNames();
 
@@ -2214,16 +2216,8 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
         if(!GetWrtShell().IsAnyDatabaseFieldInDoc())
         {
             //check availability of data sources (except biblio source)
-            uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            uno::Reference<XNameAccess>  xDBContext;
-            if( xMgr.is() )
-            {
-                uno::Reference<XInterface> xInstance = xMgr->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext")));
-                xDBContext = uno::Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-            }
-            if(!xDBContext.is())
-                return ;
+            uno::Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            uno::Reference<XDatabaseContext>  xDBContext = DatabaseContext::create(xContext);
             sal_Bool bCallAddressPilot = sal_False;
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {

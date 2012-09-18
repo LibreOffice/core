@@ -56,6 +56,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/streamsection.hxx>
 #include <comphelper/types.hxx>
@@ -405,7 +406,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                 assignTable();
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
-            ::dbaui::appendToFilter(getConnection(),m_sName,getORB(),getView()); // we are not interessted in the return value
+            ::dbaui::appendToFilter(getConnection(),m_sName,comphelper::ComponentContext(getORB()).getUNOContext(),getView()); // we are not interessted in the return value
             Reference< frame::XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )
             {

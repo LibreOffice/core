@@ -26,6 +26,7 @@
 #include "dbustrings.hrc"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -160,7 +161,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
         case ID_BROWSER_SAVEDOC:
             {
                 OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
-                if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)),getORB()))
+                if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)), comphelper::ComponentContext(getORB()).getUNOContext()))
                 {
                     String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
                     OSQLWarningBox( getView(), aMessage ).Execute();

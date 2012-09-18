@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
@@ -2154,9 +2155,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
         Reference< XConnection > xNewConn;
         if ( !m_aDataSourceName.isEmpty() )
         {
-            Reference< XNameAccess > xDatabaseContext(
-                m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ),
-                UNO_QUERY_THROW );
+            Reference< XNameAccess > xDatabaseContext( DatabaseContext::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
             try
             {
                 Reference< XDataSource > xDataSource( xDatabaseContext->getByName( m_aDataSourceName ), UNO_QUERY_THROW );

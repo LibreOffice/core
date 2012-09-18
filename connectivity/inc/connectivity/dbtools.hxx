@@ -60,7 +60,9 @@ namespace lang {
 namespace container {
     class XNameAccess;
 }
-
+namespace uno {
+    class XComponentContext;
+}
 namespace util {
     class XNumberFormatTypes;
     class XNumberFormatsSupplier;
@@ -505,7 +507,7 @@ namespace dbtools
                                     sal_Int32 _nDataType);
     // return the datasource for the given datasource name
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const ::rtl::OUString& _rsDataSourceName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
     /** search for a name that is NOT in the NameAcces
         @param  _rxContainer

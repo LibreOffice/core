@@ -57,6 +57,7 @@ namespace com { namespace sun { namespace star {
         class XNumberFormatter;
     }
     namespace ucb { class XContent; }
+    namespace uno { class XComponentContext; }
 
 }}}
 
@@ -138,7 +139,7 @@ namespace dbaui
     /** checks if the given name exists in the database context
     */
     sal_Bool checkDataSourceAvailable(  const ::rtl::OUString& _sDataSourceName,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory_xORB);
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
     /** maps SvxCellHorJustify to com::sun::star::awt::TextAlign
         @param SvxCellHorJustify& _eAlignment
@@ -215,7 +216,7 @@ namespace dbaui
     */
     sal_Bool appendToFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::rtl::OUString& _sName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                             Window* _pParent);
 
     /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.

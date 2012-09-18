@@ -1177,7 +1177,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         // obtain the data source
         if ( !xDataSource.is() )
-            xDataSource = OStaticDataAccessTools().getDataSource( sDataSource, m_aContext.getLegacyServiceFactory() );
+            xDataSource = OStaticDataAccessTools().getDataSource( sDataSource, m_aContext.getUNOContext() );
 
         // and the connection, if necessary
         if ( !xConnection.is() )

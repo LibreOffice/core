@@ -34,6 +34,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -255,7 +256,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     OSL_ENSURE(getORB().is(), "OGenericUnoController::Construct need a service factory!");
     try
     {
-        m_xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        m_xDatabaseContext = Reference< XNameAccess >( DatabaseContext::create(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW );
     }
     catch(Exception&)
     {

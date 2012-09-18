@@ -1534,7 +1534,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                     m_xAlterView.set( xElements->getByName( m_sName ), UNO_QUERY );
 
                 // now check if our datasource has set a tablefilter and if so, append the new table name to it
-                ::dbaui::appendToFilter( getConnection(), m_sName, getORB(), getView() );
+                ::dbaui::appendToFilter( getConnection(), m_sName, comphelper::ComponentContext(getORB()).getUNOContext(), getView() );
             }
             Reference< XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )
