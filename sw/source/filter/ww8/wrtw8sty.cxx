@@ -1605,7 +1605,8 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         {
             const SwPageDesc *pFollow = pPd->GetFollow();
             const SwFrmFmt& rFollowFmt = pFollow->GetMaster();
-            if ( sw::util::IsPlausableSingleWordSection( *pPdFmt, rFollowFmt ) )
+            const sal_Int8 nType = pDoc->GetDocumentType();
+            if ( sw::util::IsPlausableSingleWordSection( *pPdFmt, rFollowFmt, nType ))
             {
                 if (rSepInfo.pPDNd)
                     pPdFirstPgFmt = pPd->GetPageFmtOfNode( *rSepInfo.pPDNd );

@@ -111,9 +111,10 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
 
             @see #i4320#/#i14509#/#i11717# for examples
+            add a param to identify documentype, 0 means NATIVE, 1 means MSWORD
         */
         bool IsPlausableSingleWordSection(const SwFrmFmt &rTitleFmt,
-            const SwFrmFmt &rFollowFmt);
+            const SwFrmFmt &rFollowFmt, sal_Int8 nDocType = 0 );
 
         /** Make export a word section top/bottom values easy
 

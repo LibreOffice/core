@@ -383,7 +383,7 @@ namespace sw
     {
 
         bool IsPlausableSingleWordSection(const SwFrmFmt &rTitleFmt,
-            const SwFrmFmt &rFollowFmt)
+            const SwFrmFmt &rFollowFmt, sal_Int8 nDocType )
         {
             bool bPlausableTitlePage = true;
 
@@ -405,8 +405,10 @@ namespace sw
             {
                 HdFtDistanceGlue aOne(rTitleFmt.GetAttrSet());
                 HdFtDistanceGlue aTwo(rFollowFmt.GetAttrSet());
+                //if one doesn't own a footer, then assume it equals with the other one.
+                const sal_Bool bCheckFooter = ( aOne.HasFooter() && aTwo.HasFooter() ) ? sal_True : sal_False;
                 //e.g. #i14509#
-                if (!aOne.EqualTopBottom(aTwo))
+                if (!aOne.EqualTopBottom(aTwo) && nDocType != 1 && bCheckFooter )
                     bPlausableTitlePage = false;
             }
             return bPlausableTitlePage;
