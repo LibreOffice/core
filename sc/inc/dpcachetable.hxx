@@ -55,15 +55,7 @@ struct ScQueryParam;
  */
 class SC_DLLPUBLIC ScDPCacheTable
 {
-    struct RowFlag
-    {
-        bool mbShowByFilter:1;
-        bool mbShowByPage:1;
-        bool isActive() const;
-        RowFlag();
-    };
 public:
-
     /** interface class used for filtering of rows. */
     class FilterBase
     {

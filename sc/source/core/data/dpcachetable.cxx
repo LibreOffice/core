@@ -64,17 +64,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::sheet::DataPilotFieldFilter;
 
-bool ScDPCacheTable::RowFlag::isActive() const
-{
-    return mbShowByFilter && mbShowByPage;
-}
-
-ScDPCacheTable::RowFlag::RowFlag() :
-    mbShowByFilter(false),
-    mbShowByPage(true)
-{
-}
-
 ScDPCacheTable::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
     maItem(rItem) {}
 
