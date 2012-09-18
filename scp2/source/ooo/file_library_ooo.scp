@@ -892,8 +892,8 @@ End
 
 #if defined(WNT)
 
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
-                                                                // #i91209#
+#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)
+
 STD_LIB_FILE(gid_File_Lib_Mozab,mozab2)
 STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
 
@@ -903,11 +903,7 @@ File gid_File_Lib_Mozbootstrap
     LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmozbootstrap,UNXSUFFIX));
-  #else
     Name = "mozbootstrap.dll";
-  #endif
 End
 
 #endif

@@ -115,29 +115,25 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-# mozab only on windows
 ifeq ($(OS),WNT)
 
-ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA)),$(filter MACOSX,$(OS))),YES),YES)
+ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA))),YES),YES)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mozbootstrap \
 ))
 else
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_mozab \
 	Library_mozab \
 	Library_mozabdrv \
 ))
-
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mozab \
-))
 endif
 
-else # the new and shiny mork driver ;-)
+else ifneq ($(filter-out ANDROID IOS,$(OS)),)
 
 $(eval $(call gb_Module_add_targets,connectivity,\
-	Executable_mork_helper \
 	Configuration_mork \
+	Executable_mork_helper \
 	Library_mork \
 ))
 

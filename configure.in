@@ -701,7 +701,7 @@ AC_ARG_ENABLE(pch,
 
 AC_ARG_ENABLE(mozilla,
     AS_HELP_STRING([--enable-mozilla],
-        [LibreOffice can include a strangely hacked up Mozilla binary on Windows
+        [LibreOffice can include a strangely hacked up Mozilla binary for your
          platform, to build with this version, use this option.])
 )
 
@@ -4519,18 +4519,6 @@ if test $_os = Darwin -a "$enable_mozilla" = no; then
 fi
 
 dnl ===================================================================
-dnl --enable-mozilla is supported only on Windows
-dnl ===================================================================
-
-if test "$_os" != "WINNT" ; then
-    if test "$enable_mozilla" = "yes"; then
-        AC_MSG_ERROR([--enable-mozilla is only available on Windows])
-    fi
-
-fi
-
-
-dnl ===================================================================
 dnl  .NET needs special treatment
 dnl (does the above comment really mean .NET, or is it misusing
 dnl that to mean Visual Studio .NET 2003 ? And does this also
@@ -7900,13 +7888,13 @@ if test "$_os" = "WINNT"; then
    elif test "$with_system_mozilla" = "yes"; then
       AC_MSG_RESULT([no, not possible with system-mozilla])
    else
-      AC_MSG_RESULT([yes])
+      AC_MSG_RESULT([yes (old mozab driver)])
    fi
 else
 # on all other platforms Mozilla addressbook connectivity
 # is unconditionally built
 # new and shiny mork driver
-   AC_MSG_RESULT([yes])
+   AC_MSG_RESULT([yes (new mork driver)])
 fi
 
 dnl ===================================================================
