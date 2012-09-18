@@ -9,13 +9,13 @@
 #include "BluetoothServer.hxx"
 #include <stdio.h>
 
-#if defined(LINUX) && defined(ENABLE_DBUS)
+#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include <sys/unistd.h>
 #include <sys/socket.h>
-#include "bluetooth/bluetooth.h"
-#include "bluetooth/rfcomm.h"
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/rfcomm.h>
 #endif
 
 #ifdef WIN32
@@ -51,7 +51,7 @@ bool BluetoothServer::isDiscoverable()
 
 void BluetoothServer::execute()
 {
-#if defined(LINUX) && defined(ENABLE_DBUS)
+#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
 
     g_type_init();
 
@@ -252,7 +252,7 @@ void BluetoothServer::execute()
     }
 
 // WIN32
-#else // !(defined(LINUX) && defined(ENABLE_DBUS)) && !defined(WIN32)
+#else // !((defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)) && !defined(WIN32)
     (void) mpCommunicators; // avoid warnings about unused member
 #endif
 }

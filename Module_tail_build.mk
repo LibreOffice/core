@@ -36,7 +36,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     basic \
     bean \
 	binaryurp \
-	bluez_bluetooth \
+	$(if $(filter BLUEZ,$(BUILD_TYPE)),\
+		bluez_bluetooth \
+	) \
     canvas \
     chart2 \
     configmgr \

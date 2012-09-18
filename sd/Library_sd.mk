@@ -329,15 +329,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/presenter/PresenterPreviewCache \
     sd/source/ui/presenter/PresenterTextView \
     sd/source/ui/presenter/SlideRenderer \
-    sd/source/ui/remotecontrol/BluetoothServer \
-    sd/source/ui/remotecontrol/BufferedStreamSocket \
-    sd/source/ui/remotecontrol/Communicator \
-    sd/source/ui/remotecontrol/DiscoveryService \
-    sd/source/ui/remotecontrol/ImagePreparer \
-    sd/source/ui/remotecontrol/Server \
-    sd/source/ui/remotecontrol/Receiver \
-    sd/source/ui/remotecontrol/Listener \
-    sd/source/ui/remotecontrol/Transmitter \
     sd/source/ui/slideshow/PaneHider \
     sd/source/ui/slideshow/SlideShowRestarter \
     sd/source/ui/slideshow/showwin \
@@ -521,6 +512,20 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/view/viewshel \
     sd/source/ui/view/zoomlist \
 ))
+
+ifeq ($(ENABLE_SDREMOTE),YES)
+$(eval $(call gb_Library_add_exception_objects,sd,\
+    sd/source/ui/remotecontrol/BluetoothServer \
+    sd/source/ui/remotecontrol/BufferedStreamSocket \
+    sd/source/ui/remotecontrol/Communicator \
+    sd/source/ui/remotecontrol/DiscoveryService \
+    sd/source/ui/remotecontrol/ImagePreparer \
+    sd/source/ui/remotecontrol/Server \
+    sd/source/ui/remotecontrol/Receiver \
+    sd/source/ui/remotecontrol/Listener \
+    sd/source/ui/remotecontrol/Transmitter \
+))
+endif
 
 ifeq ($(strip $(GUI)),WNT)
 $(eval $(call gb_Library_add_cxxobjects,sd,\
