@@ -434,7 +434,7 @@ bool ScRangeList::UpdateReference(
         }
     }
 
-    vector<ScRange*>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
     {
         ScRange* pR = *itr;
@@ -781,14 +781,14 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
-    vector<ScRange*>::const_iterator itr = find_if(
+    const_iterator itr = find_if(
         maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
     return itr == maRanges.end() ? NULL : *itr;
 }
 
 ScRange* ScRangeList::Find( const ScAddress& rAdr )
 {
-    vector<ScRange*>::iterator itr = find_if(
+    iterator itr = find_if(
         maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
     return itr == maRanges.end() ? NULL : *itr;
 }
@@ -824,16 +824,16 @@ void ScRangeList::Append( const ScRange& rRange )
 
 bool ScRangeList::Intersects( const ScRange& rRange ) const
 {
-    vector<ScRange*>::const_iterator itrEnd = maRanges.end();
-    vector<ScRange*>::const_iterator itr =
+    const_iterator itrEnd = maRanges.end();
+    const_iterator itr =
         find_if(maRanges.begin(), itrEnd, FindIntersectingRange<ScRange>(rRange));
     return itr != itrEnd;
 }
 
 bool ScRangeList::In( const ScRange& rRange ) const
 {
-    vector<ScRange*>::const_iterator itrEnd = maRanges.end();
-    vector<ScRange*>::const_iterator itr =
+    const_iterator itrEnd = maRanges.end();
+    const_iterator itr =
         find_if(maRanges.begin(), itrEnd, FindEnclosingRange<ScRange>(rRange));
     return itr != itrEnd;
 }
@@ -851,7 +851,7 @@ ScRange* ScRangeList::Remove(size_t nPos)
         // Out-of-bound condition.  Bail out.
         return NULL;
 
-    vector<ScRange*>::iterator itr = maRanges.begin();
+    iterator itr = maRanges.begin();
     advance(itr, nPos);
     ScRange* p = *itr;
     maRanges.erase(itr);
@@ -869,7 +869,7 @@ ScRange ScRangeList::Combine() const
     if (maRanges.empty())
         return ScRange();
 
-    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     ScRange aRet = **itr;
     ++itr;
     for (; itr != itrEnd; ++itr)
