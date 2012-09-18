@@ -21,8 +21,10 @@ public:
     virtual void tearDown();
 
     void testDeleteArea_4Ranges();
+    void testDeleteArea_3Ranges();
     void testDeleteArea_2Ranges();
     void testDeleteArea_2Ranges_Case2();
+    void testDeleteArea_1Range();
     void testDeleteArea_0Ranges();
 
     void testUpdateReference_DeleteRow();
@@ -30,8 +32,10 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testDeleteArea_4Ranges);
+    CPPUNIT_TEST(testDeleteArea_3Ranges);
     CPPUNIT_TEST(testDeleteArea_2Ranges);
     CPPUNIT_TEST(testDeleteArea_2Ranges_Case2);
+    CPPUNIT_TEST(testDeleteArea_1Range);
     CPPUNIT_TEST(testDeleteArea_0Ranges);
     CPPUNIT_TEST(testUpdateReference_DeleteRow);
     CPPUNIT_TEST(testUpdateReference_DeleteCol);
@@ -81,6 +85,11 @@ void Test::testDeleteArea_4Ranges()
     }
 }
 
+void Test::testDeleteArea_3Ranges()
+{
+    ScRangeList aList(ScRange(1,1,0,6,6,0));
+}
+
 void Test::testDeleteArea_2Ranges()
 {
     ScRangeList aList(ScRange(0,0,0,5,5,5));
@@ -116,6 +125,20 @@ void Test::testDeleteArea_2Ranges_Case2()
             CPPUNIT_ASSERT(aList.In(ScRange(1,nRow,0)));
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aList.GetCellCount());
+}
+
+void Test::testDeleteArea_1Range()
+{
+    ScRangeList aList(ScRange(1,1,0,3,3,0));
+    aList.DeleteArea(1,1,0,2,3,0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
+
+    for(SCROW nRow = 1; nRow <= 3; ++nRow)
+    {
+        CPPUNIT_ASSERT(aList.In(ScRange(3,nRow,0)));
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.GetCellCount());
 }
 
 void Test::testDeleteArea_0Ranges()
