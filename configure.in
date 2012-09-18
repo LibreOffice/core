@@ -812,7 +812,7 @@ AC_ARG_ENABLE(gtk,
 ,enable_gtk=yes)
 
 AC_ARG_ENABLE(gtk3,
-    AS_HELP_STRING([--disable-gtk3],
+    AS_HELP_STRING([--enable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
 ,enable_gtk3=no)
 
@@ -9195,7 +9195,8 @@ GTK3_LIBS=""
 ENABLE_GTK3=""
 if test "x$enable_gtk3" = "xyes"; then
     if test "$with_system_cairo" != yes; then
-        echo "System cairo required for gtk3 support, please use --with-system-cairo"
+        AC_MSG_WARN([System cairo required for gtk3 support, please use --with-system-cairo])
+        add_warning "System cairo required for gtk3 support, please use --with-system-cairo"
     fi
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.2 gtk+-unix-print-3.0 gmodule-no-export-2.0 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
     if test "x$ENABLE_GTK3" = "xTRUE"; then
