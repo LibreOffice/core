@@ -88,6 +88,21 @@ void Test::testDeleteArea_4Ranges()
 void Test::testDeleteArea_3Ranges()
 {
     ScRangeList aList(ScRange(1,1,0,6,6,0));
+    aList.DeleteArea(3,3,0,8,4,0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.size());
+    for(SCCOL nCol = 1; nCol <= 6; ++nCol)
+    {
+        for(SCROW nRow = 1; nRow <= 6; ++nRow)
+        {
+            if((nRow == 3 || nRow == 4) && (nCol >= 3))
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
+            else
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(28), aList.GetCellCount());
 }
 
 void Test::testDeleteArea_2Ranges()
