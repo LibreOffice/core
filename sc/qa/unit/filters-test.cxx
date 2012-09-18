@@ -324,7 +324,7 @@ void ScFiltersTest::testRangeNameODS()
 
 namespace {
 
-void testContentImpl(ScDocument* pDoc ) //same code for ods, xls, xlsx
+void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, xls, xlsx
 {
     double fValue;
     //check value import
@@ -334,10 +334,12 @@ void testContentImpl(ScDocument* pDoc ) //same code for ods, xls, xlsx
     CPPUNIT_ASSERT_MESSAGE("value not imported correctly", fValue == 2);
     rtl::OUString aString;
     pDoc->GetString(1,0,0,aString);
+
     //check string import
     CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String1")));
     pDoc->GetString(1,1,0,aString);
     CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String2")));
+
     //check basic formula import
     pDoc->GetValue(2,0,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=2*3", fValue == 6);
@@ -347,16 +349,22 @@ void testContentImpl(ScDocument* pDoc ) //same code for ods, xls, xlsx
     CPPUNIT_ASSERT_MESSAGE("=2-3", fValue == -1);
     pDoc->GetValue(2,3,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=C1+C2", fValue == 11);
+
     //check merged cells import
-    SCCOL nCol = 4;
-    SCROW nRow = 1;
-    pDoc->ExtendMerge(4, 1, nCol, nRow, 0, false);
-    CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
-    //check notes import
-    ScAddress aAddress(7, 2, 0);
-    ScPostIt* pNote = pDoc->GetNotes(aAddress.Tab())->findByAddress(aAddress);
-    CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
-    CPPUNIT_ASSERT_MESSAGE("note text not imported correctly", pNote->GetText() == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
+    if(nFormat != LOTUS123)
+    {
+        SCCOL nCol = 4;
+        SCROW nRow = 1;
+        pDoc->ExtendMerge(4, 1, nCol, nRow, 0, false);
+        CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
+
+        //check notes import
+        ScAddress aAddress(7, 2, 0);
+        ScPostIt* pNote = pDoc->GetNotes(aAddress.Tab())->findByAddress(aAddress);
+        CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", pNote->GetText(), rtl::OUString("Test"));
+    }
+
     //add additional checks here
 }
 
@@ -369,7 +377,7 @@ void ScFiltersTest::testContentODS()
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc);
+    testContentImpl(pDoc, ODS);
     xDocSh->DoClose();
 }
 
@@ -380,7 +388,7 @@ void ScFiltersTest::testContentXLS()
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc);
+    testContentImpl(pDoc, XLS);
     xDocSh->DoClose();
 }
 
@@ -391,7 +399,7 @@ void ScFiltersTest::testContentXLSX()
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc);
+    testContentImpl(pDoc, XLSX);
     xDocSh->DoClose();
 }
 
@@ -403,7 +411,7 @@ void ScFiltersTest::testContentLotus123()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
-    //testContentImpl(pDoc);
+    testContentImpl(pDoc, LOTUS123);
     xDocSh->DoClose();
 }
 
