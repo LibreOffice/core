@@ -1938,11 +1938,11 @@ void Test::testPivotTableFilters()
 
     // Set current page of 'Group2' to 'A'.
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
-    ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(
+    ScDPSaveDimension* pPageDim = aSaveData.GetDimensionByName(
         OUString("Group2"));
-    CPPUNIT_ASSERT_MESSAGE("Dimension not found", pDim);
+    CPPUNIT_ASSERT_MESSAGE("Dimension not found", pPageDim);
     OUString aPage("A");
-    pDim->SetCurrentPage(&aPage);
+    pPageDim->SetCurrentPage(&aPage);
     pDPObj->SetSaveData(aSaveData);
     aOutRange = refresh(pDPObj);
     {
@@ -1991,6 +1991,27 @@ void Test::testPivotTableFilters()
 
     fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 20.0);
+
+    // Set the current page of 'Group2' back to '- all -'. The query filter
+    // should still be in effect.
+    pPageDim->SetCurrentPage(NULL); // Remove the page.
+    pDPObj->SetSaveData(aSaveData);
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Filter", 0 },
+            { "Group2", "- all -" },
+            { 0, 0 },
+            { "Data", 0 },
+            { "Sum - Val1", "4" },
+            { "Sum - Val2", "40" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
