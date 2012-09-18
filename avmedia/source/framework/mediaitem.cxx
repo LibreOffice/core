@@ -36,6 +36,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
@@ -373,10 +374,8 @@ void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
 static OUString lcl_GetFilename(OUString const& rSourceURL)
 {
     uno::Reference<uri::XUriReferenceFactory> const xUriFactory(
-        ::comphelper::createProcessComponent(
-            "com.sun.star.uri.UriReferenceFactory"),
-        uno::UNO_QUERY_THROW);
-
+        uri::UriReferenceFactory::create(
+            comphelper::getProcessComponentContext()));
     uno::Reference<uri::XUriReference> const xSourceURI(
         xUriFactory->parse(rSourceURL), uno::UNO_SET_THROW);
 
