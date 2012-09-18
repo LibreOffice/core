@@ -127,6 +127,7 @@ void RemoteServer::execute()
             // Check if we already have this server.
             Reference< XNameAccess > xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
             Sequence< OUString > aNames = xConfig->getElementNames();
+            bool aFound = false;
             for ( int i = 0; i < aNames.getLength(); i++ )
             {
                 if ( aNames[i].equals( pClient->mName ) )
@@ -138,12 +139,15 @@ void RemoteServer::execute()
 
                     if ( sPin.equals( pClient->mPin ) ) {
                         connectClient( pClient, sPin );
+                        aFound = true;
+                        break;
                     }
-                    break;
                 }
 
             }
-            pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
+            // Pin not found so inform the client.
+            if ( !aFound )
+                pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
                             strlen( "LO_SERVER_VALIDATING_PIN\n\n" ) );
         } else {
             delete pSocket;

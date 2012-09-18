@@ -44,6 +44,17 @@ BluetoothServer::~BluetoothServer()
 {
 }
 
+bool BluetoothServer::isDiscoverable()
+{
+    return true;
+}
+
+void BluetoothServer::setDiscoverable( bool aDiscoverable )
+{
+
+}
+
+
 void BluetoothServer::execute()
 {
 #if defined(LINUX) && defined(ENABLE_DBUS)
