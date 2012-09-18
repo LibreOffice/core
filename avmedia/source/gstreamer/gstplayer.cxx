@@ -51,11 +51,11 @@
 #endif
 
 #if !defined DBG
-#if OSL_DEBUG_LEVEL > 2
+# if OSL_DEBUG_LEVEL > 2
 #define DBG(...) do { fprintf (stderr, "%s", AVVERSION); fprintf (stderr, __VA_ARGS__); fprintf (stderr, "\n"); } while (0);
-#else
+# else
 #define DBG(...)
-#endif
+# endif
 #endif
 
 using namespace ::com::sun::star;
@@ -207,17 +207,20 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
 #ifdef AVMEDIA_GST_0_10
     if (message->structure &&
-        !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) && mnWindowID != 0 )
+        !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) )
 #else
-    if (gst_message_has_name (message, "prepare-window-handle") && mnWindowID != 0 )
+    if (gst_is_video_overlay_prepare_window_handle_message (message) )
 #endif
     {
-        DBG( "%p processSyncMessage has handle: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
+        DBG( "%p processSyncMessage prepare window id: %s %d", this,
+             GST_MESSAGE_TYPE_NAME( message ), (int)mnWindowId );
         if( mpXOverlay )
             g_object_unref( G_OBJECT ( mpXOverlay ) );
+        g_object_set( GST_MESSAGE_SRC( message ), "force-aspect-ratio", FALSE, NULL );
         mpXOverlay = GST_VIDEO_OVERLAY( GST_MESSAGE_SRC( message ) );
         g_object_ref( G_OBJECT ( mpXOverlay ) );
-        gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
+        if ( mnWindowID != 0 )
+            gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
         return GST_BUS_DROP;
     }
 
@@ -302,7 +305,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                     mnWidth = w;
                     mnHeight = h;
 
-                    fprintf( stderr, "queried size: %d x %d", mnWidth, mnHeight );
+                    DBG( "queried size: %d x %d", mnWidth, mnHeight );
 
                     maSizeCondition.set();
                 }
@@ -312,7 +315,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
         }
 #endif
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
-        fprintf (stderr, "Error !\n");
+        DBG( "Error !\n" );
         if( mnWidth == 0 ) {
             // an error occurred, set condition so that OOo thread doesn't wait for us
             maSizeCondition.set();
@@ -333,9 +336,9 @@ void Player::preparePlaybin( const OUString& rURL, bool bFakeVideo )
         }
 
         mpPlaybin = gst_element_factory_make( "playbin", NULL );
-
-        if( bFakeVideo )
-            g_object_set( G_OBJECT( mpPlaybin ), "video-sink", gst_element_factory_make( "fakesink", NULL ), NULL );
+        if( bFakeVideo ) // used for getting prefered size etc.
+            g_object_set( G_OBJECT( mpPlaybin ), "video-sink",
+                          gst_element_factory_make( "fakesink", NULL ), NULL );
 
         mbFakeVideo = bFakeVideo;
 
@@ -345,7 +348,11 @@ void Player::preparePlaybin( const OUString& rURL, bool bFakeVideo )
         pBus = gst_element_get_bus( mpPlaybin );
         gst_bus_add_watch( pBus, pipeline_bus_callback, this );
         DBG( "%p set sync handler", this );
+#ifdef AVMEDIA_GST_0_10
         gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this );
+#else
+        gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this, NULL );
+#endif
         g_object_unref( pBus );
 }
 
@@ -584,13 +591,8 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
 #endif
                                  maSizeCondition.wait( &aTimeout );
 
-    if( mbFakeVideo ) {
-        mbFakeVideo = sal_False;
-
-         g_object_set( G_OBJECT( mpPlaybin ), "video-sink", NULL, NULL );
-         gst_element_set_state( mpPlaybin, GST_STATE_READY );
-         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
-    }
+    if( mbFakeVideo ) // ready ourselves for the real thing
+        preparePlaybin( maURL, false );
 
     DBG( "%p Player::getPreferredPlayerWindowSize after waitCondition %d, member %d x %d", this, aResult, mnWidth, mnHeight );
 
@@ -626,7 +628,13 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : NULL;
             OSL_ASSERT(pEnvData);
             if (pEnvData)
+            {
                 mnWindowID = pEnvData->aWindow;
+                DBG( "set window id to %d XOverlay %p\n", (int)mnWindowID, mpXOverlay);
+                gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
+                if ( mpXOverlay != NULL )
+                    gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
+            }
         }
     }
 
