@@ -65,12 +65,6 @@ $(eval $(call gb_Library_add_defs,sd,\
     -DSD_DLLIMPLEMENTATION \
 ))
 
-ifeq ($(ENABLE_SDREMOTE),YES)
-$(eval $(call gb_Library_add_defs,sd,\
-    -DENABLE_SDREMOTE \
-))
-endif
-
 ifneq ($(strip $(dbg_anim_log)$(DBG_ANIM_LOG)),)
 $(eval $(call gb_Library_add_defs,sd,\
     $$(DEFS) \
@@ -531,6 +525,11 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/remotecontrol/Listener \
     sd/source/ui/remotecontrol/Transmitter \
 ))
+
+$(eval $(call gb_Library_add_defs,sd,\
+    -DENABLE_SDREMOTE \
+))
+
 endif
 
 ifeq ($(strip $(GUI)),WNT)
