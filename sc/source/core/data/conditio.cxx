@@ -768,8 +768,21 @@ static bool lcl_IsDuplicate( ScDocument *pDoc, double nArg, const String& rStr, 
         const ScRange *aRange = rRanges[i];
         SCROW nRow = aRange->aEnd.Row();
         SCCOL nCol = aRange->aEnd.Col();
-        for( SCROW r = aRange->aStart.Row(); r <= nRow; r++ )
-            for( SCCOL c = aRange->aStart.Col(); c <= nCol; c++ )
+        SCCOL nColStart = aRange->aStart.Col();
+        SCROW nRowStart = aRange->aEnd.Row();
+        SCTAB nTab = aRange->aStart.Tab();
+
+        // temporary fix to workaorund slow duplicate entry
+        // conditions, prevent to use a whole row
+        if(nRow == MAXROW)
+        {
+            bool bShrunk = false;
+            pDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,
+                                            nCol, nRow, false);
+        }
+
+        for( SCROW r = nRowStart; r <= nRow; r++ )
+            for( SCCOL c = nColStart; c <= nCol; c++ )
             {
                 double nVal = 0.0;
                 ScBaseCell *pCell = NULL;
