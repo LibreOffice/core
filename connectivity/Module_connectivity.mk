@@ -38,14 +38,12 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_flat \
 	Configuration_mysql \
 	Configuration_odbc \
-	Executable_mork_helper \
 	Library_calc \
 	Library_dbase \
 	Library_dbpool2 \
 	Library_dbtools \
 	Library_file \
 	Library_flat \
-	Library_mork \
 	Library_mysql \
 	Library_odbc \
 	Library_odbcbase \
@@ -117,26 +115,31 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+# mozab only on windows
+ifeq ($(OS),WNT)
+
 ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA)),$(filter MACOSX,$(OS))),YES),YES)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mozbootstrap \
 ))
 else
-
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mozab \
 	Library_mozabdrv \
 ))
 
-ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mozab \
 ))
-else
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mozab2 \
-))
 endif
+
+else # the new and shiny mork driver ;-)
+
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Executable_mork_helper \
+	Configuration_mork \
+	Library_mork \
+))
 
 endif
 
