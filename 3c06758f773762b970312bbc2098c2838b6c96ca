@@ -16,6 +16,24 @@
       "revId": "3c06758f773762b970312bbc2098c2838b6c96ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn///8Q\u003d",
+        "filename": "configure.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 4508,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-09-18T12:09:09Z",
+      "side": 1,
+      "message": "it is already disabled on mingw, see the lines:\n\n    # Don\u0027t bother having configure look for stuff not needed for the build platform anyway\n    ./configure \\\n        --disable-graphite \\\n        --disable-build-mozilla \\\n        --disable-mozilla \\",
+      "parentUuid": "AAAAOn///8Y\u003d",
+      "revId": "3c06758f773762b970312bbc2098c2838b6c96ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
