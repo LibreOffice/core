@@ -416,11 +416,11 @@ sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_QUICKTIME_PLAYER_SERVICENAME ) );
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_QUICKTIME_PLAYER_SERVICENAME ) );
 
     return aRet;
 }
