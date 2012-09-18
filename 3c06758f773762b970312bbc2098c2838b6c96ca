@@ -34,6 +34,24 @@
       "revId": "3c06758f773762b970312bbc2098c2838b6c96ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn///8I\u003d",
+        "filename": "configure.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 4508,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-09-18T12:15:57Z",
+      "side": 1,
+      "message": "...but that is only about the build platform, not the host platform",
+      "parentUuid": "AAAAOn///8Q\u003d",
+      "revId": "3c06758f773762b970312bbc2098c2838b6c96ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
