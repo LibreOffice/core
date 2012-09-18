@@ -1651,8 +1651,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     // make a selection from aStartPam to a EndPam
-    SwSelBoxes aBoxes;
-    SfxItemSet aFrameItemSet(m_pImpl->m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
     // If there is no content in the frame the shape is in
     // it gets deleted in the DelFullPara call below,
     // In this case insert a tmp text node ( we delete it later )
