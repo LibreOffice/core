@@ -487,7 +487,7 @@ void DeInitVCL()
         try
         {
             uno::Reference<lang::XComponent> const xDesktop(
-                    comphelper::createProcessComponent(
+                    comphelper::getProcessServiceFactory()->createInstance(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
                     uno::UNO_QUERY_THROW)
                 ;

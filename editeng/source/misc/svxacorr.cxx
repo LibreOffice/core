@@ -443,7 +443,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         // Check if the characters after that number correspond to the ordinal suffix
         rtl::OUString sServiceName("com.sun.star.i18n.OrdinalSuffix");
         uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix(
-                comphelper::createProcessComponent( sServiceName ),
+                comphelper::getProcessServiceFactory()->createInstance( sServiceName ),
                 uno::UNO_QUERY );
 
         if ( xOrdSuffix.is( ) )

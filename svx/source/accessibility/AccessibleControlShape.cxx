@@ -270,7 +270,7 @@ void AccessibleControlShape::Init()
                 // finally, aggregate a proxy for the control context
                 // first a factory for the proxy
                 Reference< XProxyFactory > xFactory;
-                xFactory = xFactory.query( createProcessComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ) );
+                xFactory = xFactory.query( getProcessServiceFactory()->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ) );
                 OSL_ENSURE( xFactory.is(), "AccessibleControlShape::Init: could not create a proxy factory!" );
                 // then the proxy itself
                 if ( xFactory.is() && xNativeControlContext.is() )

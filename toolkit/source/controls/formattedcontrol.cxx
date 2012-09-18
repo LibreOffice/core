@@ -84,7 +84,7 @@ namespace toolkit
             {
                 rbTriedCreation = true;
                 rDefaultFormats = Reference< XNumberFormatsSupplier >(
-                    ::comphelper::createProcessComponent(
+                    ::comphelper::getProcessServiceFactory()->createInstance(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatsSupplier" ) ) ),
                     UNO_QUERY_THROW
                 );
