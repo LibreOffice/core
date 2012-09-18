@@ -39,7 +39,7 @@
 -o sc.ScAutoFormatFieldObj
 -o sc.ScAutoFormatObj
 -o sc.ScAutoFormatsObj
--o sc.ScCellCursorObj
+# fdo#55065 -o sc.ScCellCursorObj
 # ported to cppunit -o sc.ScCellFieldObj
 -o sc.ScCellFieldsObj
 -o sc.ScCellFormatsEnumeration
