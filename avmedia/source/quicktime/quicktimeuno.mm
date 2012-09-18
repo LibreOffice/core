@@ -52,7 +52,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_C
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                         ::rtl::OUString(AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ),
-                        create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
+                        create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );
     }
 
     if( xFactory.is() )
