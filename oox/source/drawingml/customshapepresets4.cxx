@@ -31,6 +31,7 @@ class ShapeCteardrop : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 100000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -374,18 +375,22 @@ class ShapeCrightArrowCallout : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = CREATE_OUSTRING ("adj3");
         }
         {
             Any aAny ((sal_Int32) 64977);
             aAdjSequence [3].Value = aAny;
+            aAdjSequence [3].Name = CREATE_OUSTRING ("adj4");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -694,10 +699,12 @@ class ShapeCrightBrace : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 8333);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -1440,10 +1447,12 @@ class ShapeCdownArrow : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -1654,14 +1663,17 @@ class ShapeCcurvedDownArrow : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = CREATE_OUSTRING ("adj3");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -2718,6 +2730,7 @@ class ShapeCbracketPair : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 16667);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -3008,6 +3021,7 @@ class ShapeCsmileyFace : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 4653);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -3366,10 +3380,12 @@ class ShapeCwave : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 12500);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 0);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -3605,10 +3621,12 @@ class ShapeCswooshArrow : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 16667);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -4582,6 +4600,7 @@ class ShapeCframe : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 12500);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -5027,14 +5046,17 @@ class ShapeCcurvedRightArrow : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = CREATE_OUSTRING ("adj3");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -5456,14 +5478,17 @@ class ShapeCleftUpArrow : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = CREATE_OUSTRING ("adj3");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -5742,10 +5767,12 @@ class ShapeCwedgeEllipseCallout : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) -20833);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 62500);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -5949,10 +5976,12 @@ class ShapeCdoubleWave : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 6250);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 0);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -6224,18 +6253,22 @@ class ShapeCbentArrow : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = CREATE_OUSTRING ("adj3");
         }
         {
             Any aAny ((sal_Int32) 43750);
             aAdjSequence [3].Value = aAny;
+            aAdjSequence [3].Name = CREATE_OUSTRING ("adj4");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -6565,10 +6598,12 @@ class ShapeCstar10 : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 42533);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj");
         }
         {
             Any aAny ((sal_Int32) 105146);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("hf");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -6830,10 +6865,12 @@ class ShapeCleftArrow : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -7044,14 +7081,17 @@ class ShapeCcurvedUpArrow : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = CREATE_OUSTRING ("adj3");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -7476,6 +7516,7 @@ class ShapeCsnip1Rect : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 16667);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -7636,14 +7677,17 @@ class ShapeCellipseRibbon2 : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj1");
         }
         {
             Any aAny ((sal_Int32) 50000);
             aAdjSequence [1].Value = aAny;
+            aAdjSequence [1].Name = CREATE_OUSTRING ("adj2");
         }
         {
             Any aAny ((sal_Int32) 12500);
             aAdjSequence [2].Value = aAny;
+            aAdjSequence [2].Name = CREATE_OUSTRING ("adj3");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }
@@ -8231,6 +8275,7 @@ class ShapeCplus : public CustomShapeProvider
         {
             Any aAny ((sal_Int32) 25000);
             aAdjSequence [0].Value = aAny;
+            aAdjSequence [0].Name = CREATE_OUSTRING ("adj");
         }
         aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
     }

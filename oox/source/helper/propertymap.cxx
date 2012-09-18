@@ -631,6 +631,10 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
                 const char *var = lclDumpAnyValueCode( makeAny (adjArray[i].Value), level + 1 );
                 printLevel (level + 1);
                 fprintf (stderr, "aAdjSequence [%d].Value = %s;\n", i, var);
+                if (adjArray[i].Name.getLength() > 0) {
+                    printLevel (level + 1);
+                    fprintf (stderr, "aAdjSequence [%d].Name = CREATE_OUSTRING (\"%s\");\n", i, USS (adjArray[i].Name));
+                }
                 printLevel (level);
                 fprintf (stderr, "}\n");
             }
