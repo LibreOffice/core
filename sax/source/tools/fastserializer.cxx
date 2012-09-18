@@ -45,8 +45,6 @@ using ::com::sun::star::xml::FastAttribute;
 using ::com::sun::star::xml::Attribute;
 using ::com::sun::star::xml::sax::SAXException;
 using ::com::sun::star::xml::sax::XFastAttributeList;
-using ::com::sun::star::xml::sax::XFastTokenHandler;
-using ::com::sun::star::xml::sax::XFastSerializer;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::io::NotConnectedException;
 using ::com::sun::star::io::IOException;
@@ -145,27 +143,6 @@ namespace sax_fastparser {
         writeBytes(toUnoSequence(maClosingBracket));
     }
 
-    void SAL_CALL FastSaxSerializer::startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs )
-        throw (SAXException, RuntimeException)
-    {
-        if (!mxOutputStream.is())
-            return;
-
-        writeBytes(toUnoSequence(maOpeningBracket));
-
-        if (!Namespace.isEmpty())
-        {
-            write(Namespace);
-            writeBytes(toUnoSequence(maColon));
-        }
-
-        write(Name);
-
-        writeFastAttributeList(Attribs);
-
-        writeBytes(toUnoSequence(maClosingBracket));
-    }
-
     void SAL_CALL FastSaxSerializer::endFastElement( ::sal_Int32 Element )
         throw (SAXException, RuntimeException)
     {
@@ -175,25 +152,6 @@ namespace sax_fastparser {
         writeBytes(toUnoSequence(maOpeningBracketAndSlash));
 
         writeId(Element);
-
-        writeBytes(toUnoSequence(maClosingBracket));
-    }
-
-    void SAL_CALL FastSaxSerializer::endUnknownElement( const OUString& Namespace, const OUString& Name )
-        throw (SAXException, RuntimeException)
-    {
-        if (!mxOutputStream.is())
-            return;
-
-        writeBytes(toUnoSequence(maOpeningBracketAndSlash));
-
-        if (!Namespace.isEmpty())
-        {
-            write(Namespace);
-            writeBytes(toUnoSequence(maColon));
-        }
-
-        write(Name);
 
         writeBytes(toUnoSequence(maClosingBracket));
     }
@@ -210,27 +168,6 @@ namespace sax_fastparser {
         writeBytes(toUnoSequence(maOpeningBracket));
 
         writeId(Element);
-        writeFastAttributeList(Attribs);
-
-        writeBytes(toUnoSequence(maSlashAndClosingBracket));
-    }
-
-    void SAL_CALL FastSaxSerializer::singleUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs )
-        throw (SAXException, RuntimeException)
-    {
-        if (!mxOutputStream.is())
-            return;
-
-        writeBytes(toUnoSequence(maOpeningBracket));
-
-        if (!Namespace.isEmpty())
-        {
-            write(Namespace);
-            writeBytes(toUnoSequence(maColon));
-        }
-
-        write(Name);
-
         writeFastAttributeList(Attribs);
 
         writeBytes(toUnoSequence(maSlashAndClosingBracket));
@@ -287,40 +224,6 @@ namespace sax_fastparser {
 
             writeBytes(toUnoSequence(maQuote));
         }
-    }
-
-    // XServiceInfo
-    OUString FastSaxSerializer::getImplementationName() throw (RuntimeException)
-    {
-        return OUString( SERIALIZER_IMPLEMENTATION_NAME );
-    }
-
-    // XServiceInfo
-    sal_Bool FastSaxSerializer::supportsService(const OUString& ServiceName) throw (RuntimeException)
-    {
-        Sequence< OUString > aSNL = getSupportedServiceNames();
-        const OUString * pArray = aSNL.getConstArray();
-
-        for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-        return sal_False;
-    }
-
-    // XServiceInfo
-    Sequence< OUString > FastSaxSerializer::getSupportedServiceNames(void) throw (RuntimeException)
-    {
-        Sequence<OUString> seq(1);
-        seq.getArray()[0] = OUString( SERIALIZER_SERVICE_NAME );
-        return seq;
-    }
-
-    Sequence< OUString > FastSaxSerializer::getSupportedServiceNames_Static(void)
-    {
-        Sequence<OUString> aRet(1);
-        aRet.getArray()[0] = OUString( SERIALIZER_SERVICE_NAME );
-        return aRet;
     }
 
     void FastSaxSerializer::mark( Int32Sequence aOrder )

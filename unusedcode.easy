@@ -97,7 +97,6 @@ ooo::vba::excel::GetDocShellFromRanges(com::sun::star::uno::Reference<com::sun::
 ooo::vba::excel::GetDocumentFromRange(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
 oox::drawingml::TextParagraphProperties::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
-sax_fastparser::FastSaxSerializer::getSupportedServiceNames_Static()
 sd::ClientBox::GetMinOutputSizePixel() const
 sd::ClientBox::RemoveUnlocked()
 sd::ClientBox::SetScrollHdl(Link const&)
