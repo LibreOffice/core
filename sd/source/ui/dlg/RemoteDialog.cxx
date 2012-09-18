@@ -25,6 +25,7 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     mClientBox(         this, NULL, SdResId( LB_SERVERS ) ),
     mPreviouslyDiscoverable()
 {
+#ifdef ENABLE_SDREMOTE
     FreeResource();
 
     mPreviouslyDiscoverable = RemoteServer::isBluetoothDiscoverable();
@@ -42,6 +43,7 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     mButtonConnect.SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
     SetCloseHdl( LINK( this, RemoteDialog, CloseHdl ) );
     mButtonCancel.SetClickHdl( LINK( this, RemoteDialog, CloseHdl ) );
+#endif
 }
 
 RemoteDialog::~RemoteDialog()
