@@ -191,12 +191,14 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                                         EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
                                         aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
                                         aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                                        aAdjustmentVal.Name = (*aIter).maName;
                                         aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
                                     }
                                 } else if ( aAdjustmentSeq.getLength() > 0 ) {
                                     EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
                                     aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
                                     aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                                    aAdjustmentVal.Name = (*aIter).maName;
                                     aAdjustmentSeq[ 0 ] = aAdjustmentVal;
                                 }
                                 aIter++;
@@ -233,6 +235,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
             aAdjustmentVal.Value <<= maAdjustmentGuideList[ i ].maFormula.toInt32();
             aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+            aAdjustmentVal.Name = maAdjustmentGuideList[ i ].maName;
             aAdjustmentValues[ i ] = aAdjustmentVal;
         }
         aPropertyMap[ PROP_AdjustmentValues ] <<= aAdjustmentValues;
