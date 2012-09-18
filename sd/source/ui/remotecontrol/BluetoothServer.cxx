@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
+#define DBUS_TYPE_G_STRING_ANY_HASHTABLE (dbus_g_type_get_map( "GHashTable", G_TYPE_STRING, G_TYPE_VALUE ))
 #endif
 
 #ifdef WIN32
@@ -34,37 +35,11 @@
 
 using namespace sd;
 
-BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators ):
-    Thread( "BluetoothServer" ),
-    mpCommunicators( pCommunicators )
-{
-}
-
-BluetoothServer::~BluetoothServer()
-{
-}
-
-bool BluetoothServer::isDiscoverable()
-{
-    return true;
-}
-
-void BluetoothServer::execute()
-{
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
-
-    g_type_init();
-
+DBusGProxy* bluezGetDefaultAdapter( DBusGConnection* aConnection,
+                                    const gchar* aInterfaceType = "org.bluez.Adapter" )
+{
     GError *aError = NULL;
-
-    DBusGConnection *aConnection = NULL;
-    aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
-
-    if ( aError != NULL ) {
-        g_error_free (aError);
-        return;
-    }
-
 
     DBusGProxy *aManager = NULL;
     aManager = dbus_g_proxy_new_for_name( aConnection, "org.bluez", "/",
@@ -73,7 +48,7 @@ void BluetoothServer::execute()
     if ( aManager == NULL )
     {
         dbus_g_connection_unref( aConnection );
-        return;
+        return NULL;
     }
 
     gboolean aResult;
@@ -86,16 +61,176 @@ void BluetoothServer::execute()
                                  G_TYPE_INVALID);
 
     g_object_unref( G_OBJECT( aManager ));
-    if ( !aResult )
+    if ( !aResult || aError )
+    {
+        if ( aError )
+            g_error_free( aError );
+        return NULL;
+    }
+
+    DBusGProxy *aAdapter = NULL;
+    aAdapter = dbus_g_proxy_new_for_name( aConnection, "org.bluez",
+                                          aAdapterPath, aInterfaceType );
+    g_free( aAdapterPath );
+
+    return aAdapter;
+}
+#endif // defined(LINUX) && defined(ENABLE_DBUS)
+
+BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators ):
+    Thread( "BluetoothServer" ),
+    mpCommunicators( pCommunicators )
+{
+}
+
+BluetoothServer::~BluetoothServer()
+{
+}
+
+bool BluetoothServer::isDiscoverable()
+{
+#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+    g_type_init();
+    gboolean aResult;
+
+    GError *aError = NULL;
+
+    DBusGConnection *aConnection = NULL;
+    aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
+
+    if ( aError != NULL ) {
+        g_error_free (aError);
+        return false;
+    }
+
+    DBusGProxy* aAdapter = bluezGetDefaultAdapter( aConnection );
+    if ( aAdapter == NULL )
+    {
+        dbus_g_connection_unref( aConnection );
+        return false;
+    }
+
+    GHashTable* aProperties;
+    aResult = dbus_g_proxy_call( aAdapter, "GetProperties", &aError,
+                                G_TYPE_INVALID,
+                                DBUS_TYPE_G_STRING_ANY_HASHTABLE, &aProperties,
+                                G_TYPE_INVALID);
+    g_object_unref( G_OBJECT( aAdapter ));
+    dbus_g_connection_unref( aConnection );
+    if ( !aResult || aError )
+    {
+        if ( aError )
+            g_error_free( aError );
+        return false;
+    }
+    GVariant* aVariant = dbus_g_value_build_g_variant ( (GValue*)
+            g_hash_table_lookup( aProperties, "Discoverable" ) );
+    gboolean aIsDiscoverable = g_variant_get_boolean( aVariant );
+    g_free( aVariant );
+
+    g_free( aProperties );
+    return aIsDiscoverable;
+#else // defined(LINUX) && defined(ENABLE_DBUS)
+    return false;
+#endif
+}
+
+void BluetoothServer::setDiscoverable( bool aDiscoverable )
+{
+#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+    g_type_init();
+    gboolean aResult;
+
+    GError *aError = NULL;
+
+    DBusGConnection *aConnection = NULL;
+    aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
+
+    if ( aError != NULL )
+    {
+        g_error_free (aError);
+        return;
+    }
+
+    DBusGProxy* aAdapter = bluezGetDefaultAdapter( aConnection );
+    if ( aAdapter == NULL )
     {
         dbus_g_connection_unref( aConnection );
         return;
     }
 
-    DBusGProxy *aAdapter = NULL;
-    aAdapter = dbus_g_proxy_new_for_name( aConnection, "org.bluez",
-                                          aAdapterPath, "org.bluez.Service" );
-    g_free( aAdapterPath );
+    GHashTable* aProperties;
+    aResult = dbus_g_proxy_call( aAdapter, "GetProperties", &aError,
+                                G_TYPE_INVALID,
+                                DBUS_TYPE_G_STRING_ANY_HASHTABLE, &aProperties,
+                                G_TYPE_INVALID);
+
+    if ( !aResult || aError )
+    {
+        if ( aError )
+            g_error_free( aError );
+        return;
+    }
+    GVariant* aVariant = dbus_g_value_build_g_variant( (GValue*)
+            g_hash_table_lookup( aProperties, "Powered" ) );
+    gboolean aPowered = g_variant_get_boolean( aVariant );
+    g_free( aVariant );
+    g_free( aProperties );
+    if ( !aPowered )
+    {
+        g_object_unref( G_OBJECT( aAdapter ));
+        return;
+    }
+
+    GValue aTimeout = G_VALUE_INIT;
+    g_value_init( &aTimeout, G_TYPE_UINT );
+    g_value_set_uint( &aTimeout, 0 );
+    aResult = dbus_g_proxy_call( aAdapter, "SetProperty", &aError,
+                                G_TYPE_STRING, "DiscoverableTimeout",
+                                 G_TYPE_VALUE, &aTimeout, G_TYPE_INVALID, G_TYPE_INVALID);
+    if ( !aResult || aError )
+    {
+        if ( aError )
+            g_error_free( aError );
+        return;
+    }
+
+    GValue aDiscoverableGValue = G_VALUE_INIT;
+    g_value_init( &aDiscoverableGValue, G_TYPE_BOOLEAN );
+    g_value_set_boolean( &aDiscoverableGValue, aDiscoverable );
+    aResult = dbus_g_proxy_call( aAdapter, "SetProperty", &aError,
+                                G_TYPE_STRING, "Discoverable",
+                                 G_TYPE_VALUE, &aDiscoverableGValue, G_TYPE_INVALID, G_TYPE_INVALID);
+    if ( !aResult || aError )
+    {
+        if ( aError )
+            g_error_free( aError );
+        return;
+    }
+
+    g_object_unref( G_OBJECT( aAdapter ));
+    dbus_g_connection_unref( aConnection );
+#else // defined(LINUX) && defined(ENABLE_DBUS)
+    return;
+#endif
+}
+
+void BluetoothServer::execute()
+{
+#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+    g_type_init();
+
+    GError *aError = NULL;
+
+    DBusGConnection *aConnection = NULL;
+    aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
+
+    if ( aError != NULL ) {
+        g_error_free (aError);
+        return;
+    }
+
+    DBusGProxy* aAdapter = bluezGetDefaultAdapter( aConnection, "org.bluez.Service" );
     if ( aAdapter == NULL )
     {
         dbus_g_connection_unref( aConnection );
@@ -105,7 +240,7 @@ void BluetoothServer::execute()
     // Add the record -- the handle can be used to release it again, but we
     // don't bother as the record is automatically released when LO exits.
     guint aHandle;
-    aResult = dbus_g_proxy_call( aAdapter, "AddRecord", &aError,
+    gboolean aResult = dbus_g_proxy_call( aAdapter, "AddRecord", &aError,
                                 G_TYPE_STRING, BLUETOOTH_SERVICE_RECORD ,
                                 G_TYPE_INVALID,
                                 G_TYPE_UINT, &aHandle,

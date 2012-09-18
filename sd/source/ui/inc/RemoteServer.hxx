@@ -69,6 +69,9 @@ namespace sd
             SD_DLLPUBLIC static sal_Bool connectClient( ClientInfo *pClient,
                                                         rtl::OUString aPin );
 
+            SD_DLLPUBLIC static bool isBluetoothDiscoverable();
+            SD_DLLPUBLIC static void setBluetoothDiscoverable( bool aDiscoverable );
+
             // For the communicator
             static void removeCommunicator( Communicator* pCommunicator );
         private:

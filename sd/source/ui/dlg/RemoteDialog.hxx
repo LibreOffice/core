@@ -27,8 +27,11 @@ private:
     OKButton        mButtonConnect;
     CancelButton    mButtonCancel;
     ClientBox       mClientBox;
+    // Whether discoverability was enabled befor the dialog started.
+    bool            mPreviouslyDiscoverable;
 
     DECL_DLLPRIVATE_LINK( HandleConnectButton, void * );
+    DECL_LINK( CloseHdl, void * );
 public:
     RemoteDialog( Window* pWindow );
     ~RemoteDialog();
