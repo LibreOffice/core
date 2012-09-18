@@ -765,19 +765,19 @@ void ScFiltersTest::testBorderXLS()
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
             table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),6L);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),4L);
 
     pDoc->GetBorderLines( 3, 5, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
             table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),18L);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),12L);
 
     pDoc->GetBorderLines( 5, 7, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
             table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),24L);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),16L);
 }
 struct Border
 {
