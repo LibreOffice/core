@@ -96,6 +96,7 @@ public:
 
     void                SetFocusRect( const Rectangle& rFocusRect );
     bool IsSmallSymbol () const;
+    virtual void take_properties(Window &rOther);
 };
 
 // --------------------

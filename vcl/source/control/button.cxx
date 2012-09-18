@@ -105,6 +105,13 @@ Button::Button( WindowType nType ) :
     mpButtonData = new ImplCommonButtonData;
 }
 
+void Button::take_properties(Window &rOther)
+{
+    Control::take_properties(rOther);
+    Button &rOtherButton = static_cast<Button&>(rOther);
+    *mpButtonData = *rOtherButton.mpButtonData;
+}
+
 // -----------------------------------------------------------------------
 
 Button::~Button()
