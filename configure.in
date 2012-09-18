@@ -872,7 +872,7 @@ AC_ARG_ENABLE(packagekit,
 AC_ARG_ENABLE(sdremote,
     AS_HELP_STRING([--disable-sdremote],
         [Determines whether to enable Impress remote control.
-         Uses dbus and bluetooth (bluez(.]),
+         Uses dbus and bluetooth (bluez).]),
 ,enable_sdremote=yes)
 
 AC_ARG_ENABLE(gconf,
