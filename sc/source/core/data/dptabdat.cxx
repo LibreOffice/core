@@ -221,8 +221,12 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable,
     sal_Int32 nRowSize = rCacheTable.getRowSize();
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
     {
-        if (!rCacheTable.isRowActive(nRow))
+        sal_Int32 nLastRow;
+        if (!rCacheTable.isRowActive(nRow, &nLastRow))
+        {
+            nRow = nLastRow;
             continue;
+        }
 
         CalcRowData aData;
         FillRowDataFromCacheTable(nRow, rCacheTable, rInfo, aData);
