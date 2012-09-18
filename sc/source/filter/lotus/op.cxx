@@ -397,7 +397,7 @@ void OP_Number123( SvStream& r, sal_uInt16 /*n*/ )
 
     r >> nRow >> nTab >> nCol >> nValue;
 
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab < pDoc->GetMaxTableNumber())
+    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
         double fValue = Snum32ToDouble( nValue );
 
@@ -422,7 +422,7 @@ void OP_Formula123( SvStream& r, sal_uInt16 n )
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab < pDoc->GetMaxTableNumber())
+    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
         ScFormulaCell*		pCell = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
 
@@ -440,7 +440,7 @@ void OP_IEEENumber123( SvStream& r, sal_uInt16 /*n*/ )
 
     r >> nRow >> nTab >> nCol >> dValue;
 
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab < pDoc->GetMaxTableNumber())
+    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
         ScValueCell *pCell = new ScValueCell(dValue);
         pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, true );
