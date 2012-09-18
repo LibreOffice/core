@@ -159,7 +159,7 @@ void EditEngine::UndoActionStart(sal_uInt16 nId, const ESelection& rSel)
 void EditEngine::UndoActionEnd( sal_uInt16 nId )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    DBG_ASSERT( !pImpEditEngine->IsInUndo(), "Calling UndoActionStart in Undomode!" );
+    DBG_ASSERT( !pImpEditEngine->IsInUndo(), "Calling UndoActionEnd in Undomode!" );
     if ( !pImpEditEngine->IsInUndo() )
         pImpEditEngine->UndoActionEnd( nId );
 }
