@@ -222,6 +222,7 @@ private:
 
 protected:
     SfxTabPage( Window *pParent, const ResId &, const SfxItemSet &rAttrSet );
+    SfxTabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet &rAttrSet);
     SfxTabPage( Window *pParent, WinBits nStyle, const SfxItemSet &rAttrSet );
 
     sal_uInt16              GetSlot( sal_uInt16 nWhich ) const

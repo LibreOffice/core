@@ -229,6 +229,17 @@ SfxTabPage::SfxTabPage( Window *pParent,
 
 {
 }
+
+
+SfxTabPage::SfxTabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
+    : TabPage(pParent, rID, rUIXMLDescription)
+    , pSet                ( &rAttrSet )
+    , bHasExchangeSupport ( sal_False )
+    , pTabDlg             ( NULL )
+    , pImpl               ( new TabPageImpl )
+{
+}
+
 // -----------------------------------------------------------------------
 SfxTabPage:: SfxTabPage( Window *pParent, WinBits nStyle, const SfxItemSet &rAttrSet ) :
     TabPage(pParent, nStyle),

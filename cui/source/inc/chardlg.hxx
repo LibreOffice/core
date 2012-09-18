@@ -62,6 +62,8 @@ protected:
     sal_Bool                m_bPreviewBackgroundToCharacter;
 
     SvxCharBasePage(Window* pParent, const ResId& rResIdTabPage, const SfxItemSet&);
+    SvxCharBasePage(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet& rItemset);
+
     virtual             ~SvxCharBasePage();
 
     void makeWidgets(Window *pParent, const ResId& rResId,
@@ -364,17 +366,10 @@ public:
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {
 private:
-    VclVBox m_aBox;
-    VclGrid m_aGrid;
-
-    FixedLine           m_aSwitchOnLine;
-    CheckBox            m_aTwoLinesBtn;
-
-    FixedLine           m_aEncloseLine;
-    FixedText           m_aStartBracketFT;
-    ListBox             m_aStartBracketLB;
-    FixedText           m_aEndBracketFT;
-    ListBox             m_aEndBracketLB;
+    CheckBox*           m_pTwoLinesBtn;
+    VclContainer*       m_pEnclosingFrame;
+    ListBox*            m_pStartBracketLB;
+    ListBox*            m_pEndBracketLB;
 
     sal_uInt16              m_nStartBracketPosition;
     sal_uInt16              m_nEndBracketPosition;

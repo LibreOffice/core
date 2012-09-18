@@ -520,6 +520,18 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     Init();
 }
 
+SvxFontPrevWindow::SvxFontPrevWindow(Window* pParent) :
+    Window(pParent)
+{
+    Init();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontPrevWindow(Window *pParent)
+{
+    SvxFontPrevWindow *pWindow = new SvxFontPrevWindow(pParent);
+    return pWindow;
+}
+
 SvxFontPrevWindow::~SvxFontPrevWindow()
 {
     delete pImpl;

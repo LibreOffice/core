@@ -51,6 +51,8 @@ private:
 
 public:
                     TabPage( Window* pParent, WinBits nStyle = 0 );
+                    TabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription);
+
                     TabPage( Window* pParent, const ResId& rResId );
 
     virtual void    Paint( const Rectangle& rRect );

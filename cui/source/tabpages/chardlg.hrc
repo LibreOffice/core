@@ -147,20 +147,6 @@
 #define WIN_POS_PREVIEW         331
 #define FT_POS_FONTTYPE         332
 
-// TwoLinesPage -------------------------------------------------------------
-
-#define FL_SWITCHON             400
-#define CB_TWOLINES             401
-
-#define FL_ENCLOSE              410
-#define FT_STARTBRACKET         411
-#define ED_STARTBRACKET         412
-#define FT_ENDBRACKET           413
-#define ED_ENDBRACKET           414
-
-#define WIN_TWOLINES_PREVIEW    421
-#define FT_TWOLINES_FONTTYPE    422
-
 #define FT_WEST_NAME_NOCJK                    423
 #define LB_WEST_NAME_NOCJK                    424
 #define FT_WEST_STYLE_NOCJK                   425

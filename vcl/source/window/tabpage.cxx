@@ -113,6 +113,13 @@ TabPage::TabPage( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+TabPage::TabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
+    : Window(WINDOW_TABPAGE)
+{
+    ImplInit(pParent, 0);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+}
+
 // -----------------------------------------------------------------------
 
 void TabPage::StateChanged( StateChangedType nType )
