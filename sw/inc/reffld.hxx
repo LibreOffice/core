@@ -48,30 +48,30 @@ enum REFERENCESUBTYPE
 enum REFERENCEMARK
 {
     REF_BEGIN,
-    REF_PAGE = REF_BEGIN, // "Page"
-    REF_CHAPTER,          // "Chapter"
-    REF_CONTENT,          // "Reference"
-    REF_UPDOWN,           // "Above/Below"
-    REF_PAGE_PGDESC,      // "As Page Style"
-    REF_ONLYNUMBER,       // "Category and Number"
-    REF_ONLYCAPTION,      // "Caption Text"
-    REF_ONLYSEQNO,        // "Numbering"
+    REF_PAGE = REF_BEGIN, ///< "Page"
+    REF_CHAPTER,          ///< "Chapter"
+    REF_CONTENT,          ///< "Reference"
+    REF_UPDOWN,           ///< "Above/Below"
+    REF_PAGE_PGDESC,      ///< "As Page Style"
+    REF_ONLYNUMBER,       ///< "Category and Number"
+    REF_ONLYCAPTION,      ///< "Caption Text"
+    REF_ONLYSEQNO,        ///< "Numbering"
     // --> #i81002#
-    // new reference format types for referencing bookmarks and set references
-    REF_NUMBER,              // "Number"
-    REF_NUMBER_NO_CONTEXT,   // "Number (no context)"
-    REF_NUMBER_FULL_CONTEXT, // "Number (full context)"
+    /// new reference format types for referencing bookmarks and set references
+    REF_NUMBER,              ///< "Number"
+    REF_NUMBER_NO_CONTEXT,   ///< "Number (no context)"
+    REF_NUMBER_FULL_CONTEXT, ///< "Number (full context)"
     REF_END
 };
 
 
-// Get reference.
+/// Get reference.
 
 class SwGetRefFieldType : public SwFieldType
 {
     SwDoc* pDoc;
 protected:
-    // Overlay in order to update all ref-fields.
+    /// Overlay in order to update all ref-fields.
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 public:
     SwGetRefFieldType(SwDoc* pDoc );
@@ -114,17 +114,17 @@ public:
     const rtl::OUString& GetSetRefName() const { return sSetRefName; }
 
     // #i81002#
-    // The <SwTxtFld> instance, which represents the text attribute for the
-    // <SwGetRefField> instance, has to be passed to the method.
-    // This <SwTxtFld> instance is needed for the reference format type REF_UPDOWN
-    // and REF_NUMBER.
-    // Note: This instance may be NULL (field in Undo/Redo). This will cause
-    // no update for these reference format types.
+    /** The <SwTxtFld> instance, which represents the text attribute for the
+       <SwGetRefField> instance, has to be passed to the method.
+       This <SwTxtFld> instance is needed for the reference format type REF_UPDOWN
+       and REF_NUMBER.
+       Note: This instance may be NULL (field in Undo/Redo). This will cause
+       no update for these reference format types. */
     void                UpdateField( const SwTxtFld* pFldTxtAttr );
 
     void                SetExpand( const String& rStr ) { sTxt = rStr; }
 
-    // Get/set sub type.
+    /// Get/set sub type.
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType( sal_uInt16 n );
 
@@ -136,7 +136,7 @@ public:
     String GetExpandedTxtOfReferencedTxtNode() const;
 
 
-    // Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
+    /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return nSeqNo; }
     void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
 
@@ -154,6 +154,6 @@ public:
 };
 
 
-#endif // SW_REFFLD_HXX
+#endif /// SW_REFFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

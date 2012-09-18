@@ -28,13 +28,13 @@
 #ifndef _PAM_HXX
 #define _PAM_HXX
 
-#include <stddef.h>         // For MemPool.
+#include <stddef.h>         ///< For MemPool.
 #include <tools/gen.hxx>
 #include <tools/mempool.hxx>
-#include <cshtyp.hxx>       // For function definitions.
-#include <ring.hxx>         // Super class.
-#include <index.hxx>        // For SwIndex.
-#include <ndindex.hxx>      // For SwNodeIndex.
+#include <cshtyp.hxx>       ///< For function definitions.
+#include <ring.hxx>         ///< Super class.
+#include <index.hxx>        ///< For SwIndex.
+#include <ndindex.hxx>      ///< For SwNodeIndex.
 #include "swdllapi.h"
 
 class SwFmt;
@@ -85,15 +85,15 @@ struct SW_DLLPUBLIC SwPosition
 
 // Result of comparing positions.
 enum SwComparePosition {
-    POS_BEFORE,             // Pos1 before Pos2.
-    POS_BEHIND,             // Pos1 behind Pos2.
-    POS_INSIDE,             // Pos1 completely contained in Pos2.
-    POS_OUTSIDE,            // Pos2 completely contained in Pos1.
-    POS_EQUAL,              // Pos1 is as large as Pos2.
-    POS_OVERLAP_BEFORE,     // Pos1 overlaps Pos2 at the beginning.
-    POS_OVERLAP_BEHIND,     // Pos1 overlaps Pos2 at the end.
-    POS_COLLIDE_START,      // Pos1 start touches at Pos2 end.
-    POS_COLLIDE_END         // Pos1 end touches at Pos2 start.
+    POS_BEFORE,             ///< Pos1 before Pos2.
+    POS_BEHIND,             ///< Pos1 behind Pos2.
+    POS_INSIDE,             ///< Pos1 completely contained in Pos2.
+    POS_OUTSIDE,            ///< Pos2 completely contained in Pos1.
+    POS_EQUAL,              ///< Pos1 is as large as Pos2.
+    POS_OVERLAP_BEFORE,     ///< Pos1 overlaps Pos2 at the beginning.
+    POS_OVERLAP_BEHIND,     ///< Pos1 overlaps Pos2 at the end.
+    POS_COLLIDE_START,      ///< Pos1 start touches at Pos2 end.
+    POS_COLLIDE_END         ///< Pos1 end touches at Pos2 start.
 };
 
 template<typename T>
@@ -141,17 +141,17 @@ SwComparePosition ComparePosition(
     return nRet;
 }
 
-// SwPointAndMark / SwPaM
+/// SwPointAndMark / SwPaM
 struct SwMoveFnCollection;
 typedef SwMoveFnCollection* SwMoveFn;
-SW_DLLPUBLIC extern SwMoveFn fnMoveForward; // SwPam::Move()/Find() default argument.
+SW_DLLPUBLIC extern SwMoveFn fnMoveForward; ///< SwPam::Move()/Find() default argument.
 SW_DLLPUBLIC extern SwMoveFn fnMoveBackward;
 
 typedef sal_Bool (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
 SW_DLLPUBLIC extern SwGoInDoc fnGoDoc;
 extern SwGoInDoc fnGoSection;
 SW_DLLPUBLIC extern SwGoInDoc fnGoNode;
-SW_DLLPUBLIC extern SwGoInDoc fnGoCntnt; // SwPam::Move() default argument.
+SW_DLLPUBLIC extern SwGoInDoc fnGoCntnt; ///< SwPam::Move() default argument.
 extern SwGoInDoc fnGoCntntCells;
 extern SwGoInDoc fnGoCntntSkipHidden;
 extern SwGoInDoc fnGoCntntCellsSkipHidden;
@@ -163,8 +163,8 @@ class SW_DLLPUBLIC SwPaM : public Ring
 {
     SwPosition   m_Bound1;
     SwPosition   m_Bound2;
-    SwPosition * m_pPoint; // points at either m_Bound1 or m_Bound2
-    SwPosition * m_pMark;  // points at either m_Bound1 or m_Bound2
+    SwPosition * m_pPoint; ///< points at either m_Bound1 or m_Bound2
+    SwPosition * m_pMark;  ///< points at either m_Bound1 or m_Bound2
     bool m_bIsInFrontOfLabel;
 
     SwPaM* MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg = 0 );
@@ -184,16 +184,16 @@ public:
     SwPaM( const SwNodeIndex& rNd, xub_StrLen nCntnt = 0, SwPaM* pRing = 0 );
     virtual ~SwPaM();
 
-    // @@@ semantic: no copy ctor.
+    /// @@@ semantic: no copy ctor.
     SwPaM( SwPaM & );
-    // @@@ semantic: no copy assignment for super class Ring.
+    /// @@@ semantic: no copy assignment for super class Ring.
     SwPaM& operator=( const SwPaM & );
 
-    // Movement of cursor.
+    /// Movement of cursor.
     sal_Bool Move( SwMoveFn fnMove = fnMoveForward,
                     SwGoInDoc fnGo = fnGoCntnt );
 
-    // Search.
+    /// Search.
     sal_uInt8 Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 sal_Bool bSearchInNotes,
                 utl::TextSearch& rSTxt,
@@ -222,8 +222,8 @@ public:
     {
         if (m_pMark != m_pPoint)
         {
-            // clear the mark position; this helps if mark's SwIndex is
-            // registered at some node, and that node is then deleted
+            /** clear the mark position; this helps if mark's SwIndex is
+               registered at some node, and that node is then deleted */
             *m_pMark = SwPosition( SwNodeIndex( GetNode()->GetNodes() ) );
             m_pMark = m_pPoint;
         }
@@ -291,11 +291,11 @@ public:
     const SwPosition& GetBound( bool bOne = true ) const
                             { return bOne ? m_Bound1 : m_Bound2; }
 
-    // Get number of page which contains cursor.
+    /// Get number of page which contains cursor.
     sal_uInt16 GetPageNum( sal_Bool bAtPoint = sal_True, const Point* pLayPos = 0 );
 
-    // Is in something protected (readonly) or selection contains
-    // something protected.
+    /** Is in something protected (readonly) or selection contains
+       something protected. */
     sal_Bool HasReadonlySel( bool bFormView ) const;
 
     sal_Bool ContainsPosition(const SwPosition & rPos)

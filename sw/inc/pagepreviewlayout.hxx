@@ -27,26 +27,26 @@ class SwPagePreviewLayout
 private:
     friend class ViewShell;
 
-    // number of horizontal and vertical twips for spacing between the pages.
+    /// number of horizontal and vertical twips for spacing between the pages.
     const SwTwips mnXFree;
     const SwTwips mnYFree;
 
-    // view shell the print preview is generated for.
+    /// view shell the print preview is generated for.
     ViewShell& mrParentViewShell;
-    // top layout frame of the layout for accessing the pages
+    /// top layout frame of the layout for accessing the pages
     const SwRootFrm& mrLayoutRootFrm;
 
-    // boolean indicating, if the layout information (number of columns and rows)
-    // are valid.
+    /** boolean indicating, if the layout information (number of columns and rows)
+       are valid. */
     bool        mbLayoutInfoValid;
-    // boolean indicating, if the the calculated print preview layout sizes
-    // ( windows size in twips, maximal page size, column width, row height,
-    //   width and height of a print preview page, size of the print preview
-    //   document ) are valid
+    /** boolean indicating, if the the calculated print preview layout sizes
+       ( windows size in twips, maximal page size, column width, row height,
+         width and height of a print preview page, size of the print preview
+         document ) are valid */
     bool        mbLayoutSizesValid;
-    // boolean indicating, if the the paint information ( physical number of
-    //   start page, start column and row, paint offsets, rectangle visible of
-    //   the print preview document.
+    /** boolean indicating, if the the paint information ( physical number of
+         start page, start column and row, paint offsets, rectangle visible of
+         the print preview document. */
     bool        mbPaintInfoValid;
 
     Size        maWinSize;
@@ -78,8 +78,8 @@ private:
 
     std::vector<PrevwPage*> maPrevwPages;
 
-    // #i22014# - internal booleans to indicate, that a new print
-    // preview layout has been created during a paint.
+    /** #i22014# - internal booleans to indicate, that a new print
+       preview layout has been created during a paint. */
     mutable bool mbInPaint;
     mutable bool mbNewLayoutDuringPaint;
 
