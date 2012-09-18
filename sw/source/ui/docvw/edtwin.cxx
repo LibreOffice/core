@@ -578,7 +578,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             eStyle = POINTER_ARROW;
         else
         {
-            if( bCntAtPos )
+            // Even if we already have something, prefer URLs if possible.
+            SwContentAtPos aUrlPos(SwContentAtPos::SW_INETATTR);
+            if (bCntAtPos || rSh.GetContentAtPos(rLPt, aUrlPos))
             {
                 SwContentAtPos aSwContentAtPos(
                     SwContentAtPos::SW_CLICKFIELD|
