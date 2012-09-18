@@ -308,6 +308,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
+                                <property name="adjustment">adjustment1</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -379,5 +380,11 @@
       <action-widget response="0">29</action-widget>
       <action-widget response="0">30</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
