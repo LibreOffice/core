@@ -373,7 +373,7 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
 void ScFiltersTest::testContentODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, ODS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -384,7 +384,7 @@ void ScFiltersTest::testContentODS()
 void ScFiltersTest::testContentXLS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 1);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, XLS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -395,7 +395,7 @@ void ScFiltersTest::testContentXLS()
 void ScFiltersTest::testContentXLSX()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 2);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, XLSX);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -406,7 +406,7 @@ void ScFiltersTest::testContentXLSX()
 void ScFiltersTest::testContentLotus123()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 3);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, LOTUS123);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
