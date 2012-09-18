@@ -659,11 +659,11 @@ void ScDPCache::PostInit()
 
     maEmptyRows.build_tree();
     typedef mdds::flat_segment_tree<SCROW, bool>::const_reverse_iterator itr_type;
-    itr_type it = maEmptyRows.rbegin(), itEnd = maEmptyRows.rend();
-    OSL_ENSURE(it != itEnd, "corrupt flat_segment_tree instance!");
+    itr_type it = maEmptyRows.rbegin();
+    OSL_ENSURE(it != maEmptyRows.rend(), "corrupt flat_segment_tree instance!");
     mnDataSize = maFields[0].maData.size();
     ++it; // Skip the first position.
-    OSL_ENSURE(it != itEnd, "buggy version of flat_segment_tree is used.");
+    OSL_ENSURE(it != maEmptyRows.rend(), "buggy version of flat_segment_tree is used.");
     if (it->second)
     {
         SCROW nLastNonEmpty = it->first - 1;
