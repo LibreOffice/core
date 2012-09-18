@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "officecfg/Office/Common.hxx"
-#include "officecfg/Office/Impress.hxx"
+#include "officecfg/Office/Impress-sdremote.hxx"
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -125,7 +125,7 @@ void RemoteServer::execute()
             while ( aLine.getLength() > 0 );
 
             // Check if we already have this server.
-            Reference< XNameAccess > xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
+            Reference< XNameAccess > xConfig = officecfg::Office::Impress-sdremote::Content::AuthorisedRemotes::get();
             Sequence< OUString > aNames = xConfig->getElementNames();
             bool aFound = false;
             for ( int i = 0; i < aNames.getLength(); i++ )
@@ -232,7 +232,7 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
     {
         // Save in settings first
         boost::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
-        Reference< XNameContainer > xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get( aChanges );
+        Reference< XNameContainer > xConfig = officecfg::Office::Impress-sdremote::Content::AuthorisedRemotes::get( aChanges );
 
         Reference<XSingleServiceFactory> xChildFactory (
             xConfig, UNO_QUERY);
