@@ -264,6 +264,9 @@ void ScBaseCell::Delete()
 
 bool ScBaseCell::IsBlank() const
 {
+    if(eCellType == CELLTYPE_NOTE)
+        return true;
+
     return false;
 }
 
