@@ -132,11 +132,8 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
     return pTypeCollection->getTypes();
 }
 
-#define DECLARE_ASCII( SASCIIVALUE ) \
-        OUString( SASCIIVALUE  )
-
-#define IMPLEMENTATIONNAME_SOUNDHANDLER DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler")
-#define SERVICENAME_CONTENTHANDLER DECLARE_ASCII("com.sun.star.frame.ContentHandler")
+#define IMPLEMENTATIONNAME_SOUNDHANDLER OUString("com.sun.star.comp.framework.SoundHandler")
+#define SERVICENAME_CONTENTHANDLER OUString("com.sun.star.frame.ContentHandler")
 
 /*===========================================================================================================*/
 /* XServiceInfo */
@@ -152,7 +149,7 @@ OUString SAL_CALL SoundHandler::getImplementationName() throw( css::uno::Runtime
 sal_Bool SAL_CALL SoundHandler::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )
 {
     /* Set default return value. */
-    sal_Bool bReturn = sal_False ;
+    bool bReturn = sal_False ;
     /* Get names of all supported servicenames. */
     css::uno::Sequence < OUString >  seqServiceNames       =   getSupportedServiceNames();
     const OUString*                        pArray          =   seqServiceNames.getConstArray();

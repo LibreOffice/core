@@ -47,12 +47,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_C
 
     if( rtl_str_compare( pImplName, "com.sun.star.comp.avmedia.Manager_DirectX" ) == 0 )
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString("com.sun.star.media.Manager_DirectX" ) );
+        const OUString aServiceName( "com.sun.star.media.Manager_DirectX" );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString("com.sun.star.comp.avmedia.Manager_DirectX" ),
-                        create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
+                        OUString("com.sun.star.comp.avmedia.Manager_DirectX" ),
+                        create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );
     }
 
     if( xFactory.is() )
