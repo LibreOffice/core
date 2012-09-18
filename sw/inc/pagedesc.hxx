@@ -32,7 +32,7 @@
 #include <tools/color.hxx>
 #include <tools/string.hxx>
 #include "swdllapi.h"
-#include <swtypes.hxx>  // For SwTwips.
+#include <swtypes.hxx>  ///< For SwTwips.
 #include <frmfmt.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>
@@ -41,7 +41,7 @@ class SfxPoolItem;
 class SwTxtFmtColl;
 class SwNode;
 
-// Separator line adjustment.
+/// Separator line adjustment.
 enum SwFtnAdj
 {
     FTNADJ_LEFT,
@@ -49,17 +49,17 @@ enum SwFtnAdj
     FTNADJ_RIGHT
 };
 
-// Footnote information.
+/// Footnote information.
 class SW_DLLPUBLIC SwPageFtnInfo
 {
-    SwTwips     nMaxHeight;     //maximum height of the footnote area.
-    sal_uLong   nLineWidth;     //width of separator line
-    editeng::SvxBorderStyle eLineStyle;  // Style of the separator line
-    Color       aLineColor;     //color of the separator line
-    Fraction    aWidth;         //percentage width of the separator line.
-    SwFtnAdj    eAdj;           //line adjustment.
-    SwTwips     nTopDist;       //distance between body and separator.
-    SwTwips     nBottomDist;    //distance between separator and first footnote
+    SwTwips     nMaxHeight;              ///< maximum height of the footnote area.
+    sal_uLong   nLineWidth;              ///< width of separator line
+    editeng::SvxBorderStyle eLineStyle;  ///< Style of the separator line
+    Color       aLineColor;              ///< color of the separator line
+    Fraction    aWidth;                  ///< percentage width of the separator line.
+    SwFtnAdj    eAdj;                    ///< line adjustment.
+    SwTwips     nTopDist;                ///< distance between body and separator.
+    SwTwips     nBottomDist;             ///< distance between separator and first footnote
 
 public:
     SwTwips     GetHeight() const       { return nMaxHeight; }
@@ -124,7 +124,7 @@ public:
 typedef sal_uInt16 UseOnPage;
 namespace nsUseOnPage
 {
-    const UseOnPage PD_NONE           = 0x0000; // For internal use only.
+    const UseOnPage PD_NONE           = 0x0000; ///< For internal use only.
     const UseOnPage PD_LEFT           = 0x0001;
     const UseOnPage PD_RIGHT          = 0x0002;
     const UseOnPage PD_FIRST          = 0x0004;
@@ -132,8 +132,8 @@ namespace nsUseOnPage
     const UseOnPage PD_MIRROR         = 0x000F;
     const UseOnPage PD_HEADERSHARE    = 0x0040;
     const UseOnPage PD_FOOTERSHARE    = 0x0080;
-    const UseOnPage PD_NOHEADERSHARE  = 0xFFBF; // For internal use only.
-    const UseOnPage PD_NOFOOTERSHARE  = 0xFF7F; // For internal use only.
+    const UseOnPage PD_NOHEADERSHARE  = 0xFFBF; ///< For internal use only.
+    const UseOnPage PD_NOFOOTERSHARE  = 0xFF7F; ///< For internal use only.
     const UseOnPage PD_FIRSTSHARE = 0x0100;
     const UseOnPage PD_NOFIRSTSHARE = 0xFEFF;
 }
@@ -147,18 +147,18 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     SwFrmFmt    aMaster;
     SwFrmFmt    aLeft;
     SwFrmFmt    aFirst;
-    SwDepend    aDepend;    // Because of grid alignment (Registerhaltigkeit).
+    SwDepend    aDepend;    ///< Because of grid alignment (Registerhaltigkeit).
     SwPageDesc *pFollow;
-    sal_uInt16  nRegHeight; // Sentence spacing and fontascent of style.
-    sal_uInt16  nRegAscent; // For grid alignment (Registerhaltigkeit).
+    sal_uInt16  nRegHeight; ///< Sentence spacing and fontascent of style.
+    sal_uInt16  nRegAscent; ///< For grid alignment (Registerhaltigkeit).
     UseOnPage   eUse;
     sal_Bool        bLandscape;
 
-    // Footnote information.
+    /// Footnote information.
     SwPageFtnInfo aFtnInfo;
 
-    // Called for mirroring of Chg (doc).
-    // No adjustment at any other place.
+    /** Called for mirroring of Chg (doc).
+       No adjustment at any other place. */
     SW_DLLPRIVATE void Mirror();
 
     SW_DLLPRIVATE void ResetAllAttr( sal_Bool bLeft );
@@ -202,13 +202,13 @@ public:
     const SwFrmFmt &GetLeft()   const { return aLeft; }
     const SwFrmFmt &GetFirst()   const { return aFirst; }
 
-    // Reset all attrs of the format but keep the ones a pagedesc
-    // cannot live without.
+    /** Reset all attrs of the format but keep the ones a pagedesc
+       cannot live without. */
     inline void ResetAllMasterAttr();
     inline void ResetAllLeftAttr();
 
-    // Layout uses the following methods to obtain a format in order
-    // to be able to create a page.
+    /** Layout uses the following methods to obtain a format in order
+       to be able to create a page. */
     inline SwFrmFmt *GetRightFmt();
     inline const SwFrmFmt *GetRightFmt() const;
     inline SwFrmFmt *GetLeftFmt();
@@ -229,7 +229,7 @@ public:
     const SwTxtFmtColl* GetRegisterFmtColl() const;
     void RegisterChange();
 
-    // Query and set PoolFormat-Id.
+    /// Query and set PoolFormat-Id.
     sal_uInt16 GetPoolFmtId() const         { return aMaster.GetPoolFmtId(); }
     void SetPoolFmtId( sal_uInt16 nId )     { aMaster.SetPoolFmtId( nId ); }
     sal_uInt16 GetPoolHelpId() const        { return aMaster.GetPoolHelpId(); }
@@ -237,14 +237,14 @@ public:
     sal_uInt8 GetPoolHlpFileId() const      { return aMaster.GetPoolHlpFileId(); }
     void SetPoolHlpFileId( sal_uInt8 nId )  { aMaster.SetPoolHlpFileId( nId ); }
 
-    // Query information from Client.
+    /// Query information from Client.
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
     const SwFrmFmt* GetPageFmtOfNode( const SwNode& rNd,
                                     sal_Bool bCheckForThisPgDc = sal_True ) const;
     sal_Bool IsFollowNextPageOfNode( const SwNode& rNd ) const;
 
-    //Given a SwNode return the pagedesc in use at that location.
+    /// Given a SwNode return the pagedesc in use at that location.
     static const SwPageDesc* GetPageDescOfNode(const SwNode& rNd);
 
     SwPageDesc& operator=( const SwPageDesc& );

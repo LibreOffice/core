@@ -52,7 +52,7 @@ class SwDoc;
 class SwFmtVertOrient;
 class SwTxtNode;
 
-const sal_Unicode cBulletChar = 0x2022; // Character for lists.
+const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 
 class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
 {
@@ -116,7 +116,7 @@ private:
 
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
     static sal_uInt16 aDefNumIndents[ MAXLEVEL ];
-    // default list level properties for position-and-space mode LABEL_ALIGNMENT
+    /// default list level properties for position-and-space mode LABEL_ALIGNMENT
     static SwNumFmt* aLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
     static sal_uInt16 nRefCount;
     static char* pDefOutlineName;
@@ -134,20 +134,20 @@ private:
 
     String sName;
     SwNumRuleType eRuleType;
-    sal_uInt16 nPoolFmtId;      // Id-for NumRules created "automatically"
-    sal_uInt16 nPoolHelpId;     // HelpId for this Pool-style.
-    sal_uInt8 nPoolHlpFileId;   // FilePos at Doc on style helps.
+    sal_uInt16 nPoolFmtId;      ///< Id-for NumRules created "automatically"
+    sal_uInt16 nPoolHelpId;     ///< HelpId for this Pool-style.
+    sal_uInt8 nPoolHlpFileId;   ///< FilePos at Doc on style helps.
     sal_Bool bAutoRuleFlag : 1;
     sal_Bool bInvalidRuleFlag : 1;
-    sal_Bool bContinusNum : 1;  // Continuous numbering without levels.
-    sal_Bool bAbsSpaces : 1;    // Levels represent absolute indents.
+    sal_Bool bContinusNum : 1;  ///< Continuous numbering without levels.
+    sal_Bool bAbsSpaces : 1;    ///< Levels represent absolute indents.
     bool mbCountPhantoms;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
     String msDefaultListId;
 
 public:
-    // add parameter <eDefaultNumberFormatPositionAndSpaceMode>
+    /// add parameter <eDefaultNumberFormatPositionAndSpaceMode>
     SwNumRule( const String& rNm,
                const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                SwNumRuleType = NUM_RULE,
@@ -167,8 +167,8 @@ public:
     void Set( sal_uInt16 i, const SwNumFmt& );
     String MakeNumString( const SwNodeNum&, sal_Bool bInclStrings = sal_True,
                             sal_Bool bOnlyArabic = sal_False ) const;
-    // - add optional parameter <_nRestrictToThisLevel> in order to
-    //   restrict returned string to this level.
+    /** - add optional parameter <_nRestrictToThisLevel> in order to
+         restrict returned string to this level. */
     String MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                           const sal_Bool bInclStrings = sal_True,
                           const sal_Bool bOnlyArabic = sal_False,
@@ -178,7 +178,7 @@ public:
                              const bool bInclSuperiorNumLabels = false,
                              const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;
 
-    /** Returns list of associated text nodes.
+    /**
 
        @return list of associated text nodes
     */
@@ -217,13 +217,13 @@ public:
     void SetRuleType( SwNumRuleType eNew )      { eRuleType = eNew;
                                                   bInvalidRuleFlag = sal_True; }
 
-    // A kind of copy-constructor to make sure the num formats are
-    // attached to the correctCharFormats of a document!!
-    // (Copies the NumFormats and returns itself).
+    /** A kind of copy-constructor to make sure the num formats are
+       attached to the correctCharFormats of a document!!
+       (Copies the NumFormats and returns itself). */
     SwNumRule& CopyNumRule( SwDoc*, const SwNumRule& );
 
-    // Tests whether the CharFormats are from the given doc
-    // and copies them if appropriate.
+    /** Tests whether the CharFormats are from the given doc
+       and copies them if appropriate. */
     void CheckCharFmts( SwDoc* pDoc );
 
     const String& GetName() const       { return sName; }
@@ -248,11 +248,11 @@ public:
     bool IsCountPhantoms() const;
     void SetCountPhantoms(bool bCountPhantoms);
 
-    // Query and set PoolFormat IDs.
+    /// Query and set PoolFormat IDs.
     sal_uInt16 GetPoolFmtId() const         { return nPoolFmtId; }
     void SetPoolFmtId( sal_uInt16 nId )     { nPoolFmtId = nId; }
 
-    // Query and set Help-IDs for document styles.
+    /// Query and set Help-IDs for document styles.
     sal_uInt16 GetPoolHelpId() const        { return nPoolHelpId; }
     void SetPoolHelpId( sal_uInt16 nId )    { nPoolHelpId = nId; }
     sal_uInt8 GetPoolHlpFileId() const      { return nPoolHlpFileId; }
@@ -261,19 +261,19 @@ public:
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
 
-    // change indent of all list levels by given difference
+    /// change indent of all list levels by given difference
     void ChangeIndent( const short nDiff );
-    // set indent of certain list level to given value
+    /// set indent of certain list level to given value
     void SetIndent( const short nNewIndent,
                     const sal_uInt16 nListLevel );
-    // set indent of first list level to given value and change other list level's
-    // indents accordingly
+    /** set indent of first list level to given value and change other list level's
+       indents accordingly */
     void SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent );
 
     void Validate();
 };
 
-// namespace for static functions and methods for numbering and bullets
+/// namespace for static functions and methods for numbering and bullets
 namespace numfunc
 {
     /** retrieve font family name used for the default bullet list characters

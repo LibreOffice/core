@@ -34,7 +34,7 @@
 class SW_DLLPUBLIC Ring
 {
     Ring *pNext;
-    Ring* pPrev;    // In order to speed up inserting and deleting.
+    Ring* pPrev;    ///< In order to speed up inserting and deleting.
 
 protected:
     Ring()          { pNext = this; pPrev = this; }

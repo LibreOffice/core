@@ -42,21 +42,21 @@ class IntlWrapper;
 
 #define DROP_WHOLEWORD ((sal_uInt16)0x0001)
 
-// If SwFmtDrop is a Client, it is the CharFmt that describes the font for the
-// DropCaps. If it is not a Client, formating uses the CharFmt of the paragraph.
-// If the CharFmt is modified, this change is propagated to the paragraphs
-// via the Modify of SwFmtDrop.
+/** If SwFmtDrop is a Client, it is the CharFmt that describes the font for the
+   DropCaps. If it is not a Client, formating uses the CharFmt of the paragraph.
+   If the CharFmt is modified, this change is propagated to the paragraphs
+   via the Modify of SwFmtDrop. */
 class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
 {
-    SwModify* pDefinedIn;   // Modify-Object, that contains DropCaps.
-                            // Can only be TxtFmtCollection/TxtNode.
-    sal_uInt16 nDistance;       // Distance to beginning of text.
-    sal_uInt16 nReadFmt;        // For Sw3-Reader: CharFormat-Id (load Pool!).
-    sal_uInt8  nLines;          // Line count.
-    sal_uInt8  nChars;          // Character count.
-    sal_Bool   bWholeWord;      // First word with initials.
+    SwModify* pDefinedIn;       /**< Modify-Object, that contains DropCaps.
+                                  Can only be TxtFmtCollection/TxtNode. */
+    sal_uInt16 nDistance;       ///< Distance to beginning of text.
+    sal_uInt16 nReadFmt;        ///< For Sw3-Reader: CharFormat-Id (load Pool!).
+    sal_uInt8  nLines;          ///< Line count.
+    sal_uInt8  nChars;          ///< Character count.
+    sal_Bool   bWholeWord;      ///< First word with initials.
 public:
-    TYPEINFO(); // Already in base class SwClient.
+    TYPEINFO(); ///< Already in base class SwClient.
 
     SwFmtDrop();
     virtual ~SwFmtDrop();
@@ -72,7 +72,7 @@ protected:
 
 public:
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -98,10 +98,10 @@ public:
    inline const SwCharFmt *GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt *pNew );
-    // Get information from Client.
+    /// Get information from Client.
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
-    // Get and set Modify pointer.
+    /// Get and set Modify pointer.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
     { pDefinedIn = (SwModify*)pNew; }
@@ -114,10 +114,10 @@ public:
 
     inline SwRegisterItem( const sal_Bool bRegister = sal_False );
 
-    // @@@ public copy assignment, but no copy ctor?
+    /// @@@ public copy assignment, but no copy ctor?
     inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -154,7 +154,7 @@ public:
     SwNumRuleItem& operator=( const SwNumRuleItem& rCpy )
     { SetValue( rCpy.GetValue() ); return *this; }
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -174,10 +174,10 @@ public:
 
     inline SwParaConnectBorderItem( const sal_Bool bConnect = sal_True );
 
-    // @@@ public copy assignment, but no copy ctor?
+    /// @@@ public copy assignment, but no copy ctor?
     inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
 
-    // "pure virtual methods" of SfxPoolItem
+    /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
