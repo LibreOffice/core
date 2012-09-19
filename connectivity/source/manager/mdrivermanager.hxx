@@ -25,7 +25,8 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+//#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/stl_types.hxx>
@@ -43,11 +44,13 @@ namespace drivermanager
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                     SdbcDriver;
     DECLARE_STL_USTRINGACCESS_MAP( SdbcDriver, DriverCollection );
 
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >       DriverFactory;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >     DriverFactory;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            UNOContext;
     struct DriverAccess
     {
         OUString     sImplementationName;        /// the implementation name of the driver
         DriverFactory       xComponentFactory;          /// the factory to create the driver component (if not already done so)
+        UNOContext          xUNOContext;                /// ensure UNO context propagation
         SdbcDriver          xDriver;                    /// the driver itself
     };
 
