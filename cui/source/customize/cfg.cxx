@@ -65,7 +65,6 @@
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
@@ -915,7 +914,7 @@ SaveInData::SaveInData(
 
     uno::Reference< container::XNameAccess > xNameAccess(
         css::frame::UICommandDescription::create(
-            comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
+            comphelper::getComponentContext(m_xServiceManager)) );
 
     xNameAccess->getByName( aModuleId ) >>= m_xCommandToLabelMap;
 
@@ -1915,7 +1914,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         }
 
         uno::Reference< css::frame::XModuleManager2 > xModuleManager(
-                css::frame::ModuleManager::create( comphelper::ComponentContext(xServiceManager).getUNOContext() ) );
+                css::frame::ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) );
 
         try
         {

@@ -30,7 +30,7 @@
 #include "shell.hxx"
 #include "prov.hxx"
 #include <com/sun/star/script/Converter.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -53,7 +53,7 @@ sal_Bool convert( shell* pShell,
         if( ! xConverter.is() )
         {
             xConverter = uno::Reference< script::XTypeConverter >(
-                script::Converter::create(comphelper::ComponentContext(pShell->m_xMultiServiceFactory).getUNOContext()) );
+                script::Converter::create(comphelper::getComponentContext(pShell->m_xMultiServiceFactory)) );
         }
 
         try

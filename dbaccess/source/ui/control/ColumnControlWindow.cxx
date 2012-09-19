@@ -23,7 +23,7 @@
 #include <connectivity/dbtools.hxx>
 #include "UITools.hxx"
 #include "dbu_resource.hrc"
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
 
@@ -105,7 +105,7 @@ Reference< XNumberFormatter > OColumnControlWindow::GetFormatter() const
             if ( xSupplier.is() )
             {
                 // create a new formatter
-                m_xFormatter.set( NumberFormatter::create(comphelper::ComponentContext(m_xORB).getUNOContext()), UNO_QUERY_THROW);
+                m_xFormatter.set( NumberFormatter::create(comphelper::getComponentContext(m_xORB)), UNO_QUERY_THROW);
                 m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
         }

@@ -41,7 +41,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
@@ -102,7 +101,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
         {
             pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
             uno::Reference < registry::XImplementationRegistration > xReg(
-                registry::ImplementationRegistration::create( comphelper::ComponentContext(pSVData->maAppData.mxMSF).getUNOContext() ) );
+                registry::ImplementationRegistration::create( comphelper::getComponentContext(pSVData->maAppData.mxMSF) ) );
 
             if( xReg.is() )
             {

@@ -46,7 +46,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <rtl/logfile.hxx>
 
@@ -323,7 +323,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                         uno::Reference< embed::XComponentSupplier > xCompSupl( m_xClientSite, uno::UNO_QUERY_THROW );
                         uno::Reference< uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
 
-                        uno::Reference< frame::XModuleManager2 > xManager( frame::ModuleManager::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+                        uno::Reference< frame::XModuleManager2 > xManager( frame::ModuleManager::create(comphelper::getComponentContext(m_xFactory)) );
 
                         aModuleName = xManager->identify( xContDoc );
                     }

@@ -38,7 +38,7 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 //........................................................................
 namespace svt
@@ -154,7 +154,7 @@ namespace svt
         try
         {
             // get a GraphicProvider
-            Reference< XGraphicProvider > xProvider = ::com::sun::star::graphic::GraphicProvider::create(comphelper::ComponentContext(_rxORB).getUNOContext());
+            Reference< XGraphicProvider > xProvider = ::com::sun::star::graphic::GraphicProvider::create(comphelper::getComponentContext(_rxORB));
 
             // let it create a graphic from the given URL
             Sequence< PropertyValue > aMediaProperties( 1 );

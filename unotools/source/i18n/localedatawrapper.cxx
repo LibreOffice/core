@@ -37,7 +37,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
@@ -71,7 +71,7 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         xSMgr( xSF ),
-        xLD( LocaleData::create(comphelper::ComponentContext(xSMgr).getUNOContext()) ),
+        xLD( LocaleData::create(comphelper::getComponentContext(xSMgr)) ),
         bLocaleDataItemValid( sal_False ),
         bReservedWordValid( sal_False )
 {

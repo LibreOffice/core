@@ -76,9 +76,9 @@
 
 
 #include <svl/filenotation.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
@@ -841,7 +841,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
         else if ( m_pCollection->isFileSystemBased(eType) )
         {
-            Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::ComponentContext(getORB()).getUNOContext()));
+            Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
@@ -909,7 +909,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
-        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::ComponentContext(getORB()).getUNOContext()));
+        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
         :: rtl::OUString sLastSegmentName = pURL->getName();
         sal_Bool bFolderExists = sal_True;
         sal_Int32 i = 1;
@@ -927,7 +927,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
-        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::ComponentContext(getORB()).getUNOContext()));
+        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
         :: rtl::OUString sFilename = _rURL.getName();
         ::rtl::OUString BaseName = _rURL.getBase();
         ::rtl::OUString sExtension = _rURL.getExtension();

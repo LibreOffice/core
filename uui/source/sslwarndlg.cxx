@@ -23,7 +23,7 @@
 #include <sslwarndlg.hrc>
 #include <sslwarndlg.hxx>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 // -----------------------------------------------------------------------
@@ -40,7 +40,7 @@ IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl_Impl)
 {
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
-    xDocumentDigitalSignatures = ::com::sun::star::security::DocumentDigitalSignatures::createDefault( comphelper::ComponentContext(getServiceFactory()).getUNOContext() );
+    xDocumentDigitalSignatures = ::com::sun::star::security::DocumentDigitalSignatures::createDefault( comphelper::getComponentContext(getServiceFactory()) );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 

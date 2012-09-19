@@ -37,7 +37,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 
@@ -65,7 +65,7 @@ uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
     if ( !pStream )
         return xResult;
 
-    uno::Reference < io::XOutputStream > xTempOut( io::TempFile::create(comphelper::ComponentContext(xFactory).getUNOContext()),
+    uno::Reference < io::XOutputStream > xTempOut( io::TempFile::create(comphelper::getComponentContext(xFactory)),
                                                             uno::UNO_QUERY_THROW );
     ULARGE_INTEGER nNewPos;
     LARGE_INTEGER aZero = { 0L, 0L };
@@ -216,7 +216,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
         rtl::OUString sDocUrl;
         if ( pFilePath )
         {
-            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
             util::URL aURL;
 
             aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pFilePath) );
@@ -616,7 +616,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 
     HRESULT hr = E_FAIL;
 
-    uno::Reference < io::XOutputStream > xTempOut( io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+    uno::Reference < io::XOutputStream > xTempOut( io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
                                                             uno::UNO_QUERY_THROW );
 
     uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
@@ -872,7 +872,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
             util::URL aURL;
             aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>( pszFileName ) );
 
-            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
 
             if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) && aURL.Complete.getLength() )
             {

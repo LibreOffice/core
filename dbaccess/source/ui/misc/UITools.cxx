@@ -1627,7 +1627,7 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
         {
             // create a new formatter
             xFormatter = Reference< util::XNumberFormatter > (
-                util::NumberFormatter::create(comphelper::ComponentContext(_rMF).getUNOContext()), UNO_QUERY_THROW);
+                util::NumberFormatter::create(comphelper::getComponentContext(_rMF)), UNO_QUERY_THROW);
             xFormatter->attachNumberFormatsSupplier(xSupplier);
         }
     }

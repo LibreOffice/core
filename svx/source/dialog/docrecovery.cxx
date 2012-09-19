@@ -34,7 +34,6 @@
 #include "docrecovery.hxx"
 #include "docrecovery.hrc"
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -584,7 +583,7 @@ void RecoveryCore::impl_startListening()
         aURL.Complete = RECOVERY_CMD_DO_EMERGENCY_SAVE;
     else
         aURL.Complete = RECOVERY_CMD_DO_RECOVERY;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
     xParser->parseStrict(aURL);
 
     /* Note: addStatusListener() call us synchronous back ... so we
@@ -604,7 +603,7 @@ void RecoveryCore::impl_stopListening()
         aURL.Complete = RECOVERY_CMD_DO_EMERGENCY_SAVE;
     else
         aURL.Complete = RECOVERY_CMD_DO_RECOVERY;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
     xParser->parseStrict(aURL);
 
     m_xRealCore->removeStatusListener(static_cast< css::frame::XStatusListener* >(this), aURL);
@@ -617,7 +616,7 @@ css::util::URL RecoveryCore::impl_getParsedURL(const ::rtl::OUString& sURL)
     css::util::URL aURL;
     aURL.Complete = sURL;
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
     xParser->parseStrict(aURL);
 
     return aURL;

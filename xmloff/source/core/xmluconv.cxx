@@ -50,7 +50,7 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <basegfx/vector/b3dvector.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -98,7 +98,7 @@ void SvXMLUnitConverter::Impl::createNumTypeInfo() const
 {
     if (m_xServiceFactory.is())
     {
-        Reference<XComponentContext>         xContext( comphelper::ComponentContext(m_xServiceFactory).getUNOContext() );
+        Reference<XComponentContext>         xContext( comphelper::getComponentContext(m_xServiceFactory) );
         Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create(xContext);
         const_cast<Impl*>(this)->m_xNumTypeInfo =
             Reference<XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);

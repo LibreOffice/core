@@ -37,7 +37,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
@@ -543,7 +542,7 @@ SbError SbiStream::Open
         if( xSMgr.is() )
         {
             Reference< XSimpleFileAccess2 >
-                xSFI( SimpleFileAccess::create( comphelper::ComponentContext(xSMgr).getUNOContext() ) );
+                xSFI( SimpleFileAccess::create( comphelper::getComponentContext(xSMgr) ) );
             try
             {
 

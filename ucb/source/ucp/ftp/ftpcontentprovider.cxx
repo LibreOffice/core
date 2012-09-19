@@ -34,7 +34,7 @@
  *************************************************************************/
 
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/socket.hxx>
 #include "ftpcontentprovider.hxx"
 #include "ftpcontent.hxx"
@@ -261,7 +261,7 @@ FTPContentProvider::getHttpProvider()
     // used for access to ftp-proxy
     return
         UniversalContentBroker::create(
-            comphelper::ComponentContext(m_xSMgr).getUNOContext())->
+            comphelper::getComponentContext(m_xSMgr))->
         queryContentProvider("http:");
 }
 

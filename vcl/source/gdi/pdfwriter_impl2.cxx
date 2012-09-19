@@ -42,7 +42,6 @@
 #include "unotools/streamwrap.hxx"
 
 #include "comphelper/processfactory.hxx"
-#include "comphelper/componentcontext.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/io/XSeekable.hpp"
@@ -196,7 +195,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 {
                     uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
                     uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
-                    uno::Reference< uno::XComponentContext > xContext( comphelper::ComponentContext(ImplGetSVData()->maAppData.mxMSF).getUNOContext() );
+                    uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(ImplGetSVData()->maAppData.mxMSF) );
                     uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
                     uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
                     uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );

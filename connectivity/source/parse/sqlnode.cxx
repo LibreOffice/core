@@ -1286,7 +1286,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         s_pGarbageCollector = new OSQLParseNodesGarbageCollector();
 
         if(!s_xLocaleData.is())
-            s_xLocaleData = LocaleData::create(comphelper::ComponentContext(m_xServiceFactory).getUNOContext());
+            s_xLocaleData = LocaleData::create(comphelper::getComponentContext(m_xServiceFactory));
 
         // reset to 0
         memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs[0]) * (OSQLParseNode::rule_count+1));

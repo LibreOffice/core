@@ -54,8 +54,8 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -134,7 +134,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
     uno::Reference< io::XInputStream > xResult;
 
-    uno::Reference < io::XStream > xTempStream( io::TempFile::create(comphelper::ComponentContext(xFactory).getUNOContext()),
+    uno::Reference < io::XStream > xTempStream( io::TempFile::create(comphelper::getComponentContext(xFactory)),
                                                             uno::UNO_QUERY_THROW );
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
@@ -585,7 +585,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
                                                                             const ::rtl::OUString& aHierarchName )
 {
     uno::Reference < io::XOutputStream > xTempOut(
-                io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+                io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
                 uno::UNO_QUERY_THROW );
     uno::Reference< io::XInputStream > aResult( xTempOut, uno::UNO_QUERY );
 

@@ -25,7 +25,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include "xfactory.hxx"
@@ -85,7 +85,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 {
     // TODO: reimplement TempStream service to support XStream interface
     uno::Reference < io::XStream > xTempStream(
-                        io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+                        io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
                         uno::UNO_QUERY_THROW );
 
     return uno::Reference< uno::XInterface >(
@@ -155,7 +155,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 
         uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
             ucb::SimpleFileAccess::create(
-                comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
+                comphelper::getComponentContext(m_xFactory) ) );
 
         if ( nStorageMode & embed::ElementModes::WRITE )
             xStream = xTempAccess->openFileReadWrite( aURL );

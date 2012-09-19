@@ -36,7 +36,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -2149,7 +2149,7 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
         m_bTriedToGetTypeConverter = sal_True;
-        m_xTypeConverter = Reference< XTypeConverter >( Converter::create(comphelper::ComponentContext(m_xSMgr).getUNOContext()) );
+        m_xTypeConverter = Reference< XTypeConverter >( Converter::create(comphelper::getComponentContext(m_xSMgr)) );
 
         OSL_ENSURE( m_xTypeConverter.is(),
                     "PropertyValueSet::getTypeConverter() - "

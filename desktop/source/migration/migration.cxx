@@ -35,7 +35,6 @@
 #include "migration_impl.hxx"
 
 #include <unotools/textsearch.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/bootstrap.hxx>
@@ -275,7 +274,7 @@ sal_Bool MigrationImpl::doMigration()
             lArgs[1] <<= embed::ElementModes::READ;
 
             uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-                     embed::FileSystemStorageFactory::create(comphelper::ComponentContext(m_xFactory).getUNOContext()));
+                     embed::FileSystemStorageFactory::create(comphelper::getComponentContext(m_xFactory)));
             uno::Reference< embed::XStorage >             xModules(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
             uno::Reference< ui::XUIConfigurationManager > xOldCfgManager( m_xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"))), uno::UNO_QUERY );
             uno::Reference< ui::XUIConfigurationStorage > xOldCfgStorage( xOldCfgManager, uno::UNO_QUERY );
@@ -997,7 +996,7 @@ void MigrationImpl::runServices()
     lArgs[1] <<= embed::ElementModes::READ;
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-                     embed::FileSystemStorageFactory::create(comphelper::ComponentContext(m_xFactory).getUNOContext()));
+                     embed::FileSystemStorageFactory::create(comphelper::getComponentContext(m_xFactory)));
     uno::Reference< embed::XStorage >             xModules;
 
     xModules = uno::Reference< embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);

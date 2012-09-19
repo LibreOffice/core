@@ -69,7 +69,7 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/interactionrequest.hxx>
@@ -1450,7 +1450,7 @@ Content::createTempStream(
     // Something badly wrong happened - can't seek => stream to a temporary file
     uno::Reference < io::XOutputStream > xTempOut =
         uno::Reference < io::XOutputStream >
-            ( io::TempFile::create(comphelper::ComponentContext(m_xSMgr).getUNOContext()), uno::UNO_QUERY );
+            ( io::TempFile::create(comphelper::getComponentContext(m_xSMgr)), uno::UNO_QUERY );
 
     if ( !xTempOut.is() )
         cancelCommandExecution( GNOME_VFS_ERROR_IO, xEnv );

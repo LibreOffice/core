@@ -55,7 +55,6 @@
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
@@ -304,8 +303,7 @@ Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
 
     try
     {
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        xMap.set( EnumerableMap::create( aContext.getUNOContext(),
+        xMap.set( EnumerableMap::create( comphelper::getProcessComponentContext(),
             ::cppu::UnoType< XControlModel >::get(),
             ::cppu::UnoType< XControlShape >::get()
         ).get(), UNO_SET_THROW );

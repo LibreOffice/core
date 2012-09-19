@@ -29,7 +29,7 @@
 #include "unourl.hxx"
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 //........................................................................
 namespace pcr
@@ -53,7 +53,7 @@ namespace pcr
         {
             if ( _rxORB.is() )
             {
-                xTransform.set( URLTransformer::create(comphelper::ComponentContext(_rxORB).getUNOContext()) );
+                xTransform.set( URLTransformer::create(comphelper::getComponentContext(_rxORB)) );
                 OSL_ENSURE( xTransform.is(), "UnoURL::UnoURL: could not create an URL transformer!" );
                 if ( xTransform.is() )
                     xTransform->parseStrict( m_aURL );

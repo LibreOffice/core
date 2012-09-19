@@ -74,7 +74,6 @@
 
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -87,7 +86,6 @@
 
 #include <toolkit/unohlp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
@@ -2334,7 +2332,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 
     css::util::URL aURL;
     aURL.Complete = DECLARE_ASCII(".uno:CloseFrame");
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(xFactory).getUNOContext()));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(xFactory)));
     xParser->parseStrict(aURL);
 
     css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_SELF, 0);
@@ -2394,7 +2392,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
         if (bMustBeTriggered)
         {
             css::uno::Reference< css::task::XJobExecutor > xExecutor
-                = css::task::JobExecutor::create( comphelper::ComponentContext(xFactory).getUNOContext() );
+                = css::task::JobExecutor::create( comphelper::getComponentContext(xFactory) );
             xExecutor->trigger( DECLARE_ASCII("onFirstVisibleTask") );
         }
     }

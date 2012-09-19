@@ -31,7 +31,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configurationhelper.hxx>
 
@@ -253,7 +252,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
             aUserTemplateURL += aExt;
 
             uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
-                ucb::SimpleFileAccess::create( ::comphelper::ComponentContext(xFactory).getUNOContext() ) );
+                ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
 
             ::rtl::OUString aBackupURL;
             ::osl::Security().getConfigDir(aBackupURL);

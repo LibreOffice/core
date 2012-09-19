@@ -60,7 +60,6 @@
 #include <svtools/miscopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -1113,7 +1112,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
                 util::URL aURL;
                 aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SetDocumentProperties"));
 
-                uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( ::comphelper::ComponentContext(m_pOwner->GetServiceFactory()).getUNOContext() ) );
+                uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( ::comphelper::getComponentContext(m_pOwner->GetServiceFactory()) ) );
                 if ( xTransformer->parseStrict( aURL ) )
                 {
                     uno::Reference< frame::XDispatch > xDispatch = xFrameDispatch->queryDispatch(
@@ -1280,7 +1279,7 @@ uno::Reference< ::com::sun::star::frame::XModuleManager2 > SfxStoringHelper::Get
     if ( !m_xModuleManager.is() )
     {
         m_xModuleManager = frame::ModuleManager::create(
-            comphelper::ComponentContext(GetServiceFactory()).getUNOContext());
+            comphelper::getComponentContext(GetServiceFactory()));
     }
 
     return m_xModuleManager;

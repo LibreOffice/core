@@ -30,7 +30,6 @@
 #include <svl/itempool.hxx>
 #include <svtools/itemdel.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <svl/smplhint.hxx>
@@ -364,7 +363,7 @@ void SfxRequest_Impl::Record
                 ::comphelper::getProcessServiceFactory(),
                 com::sun::star::uno::UNO_QUERY);
 
-        uno::Reference< util::XURLTransformer > xTransform( util::URLTransformer::create( ::comphelper::ComponentContext(xFactory).getUNOContext() ) );
+        uno::Reference< util::XURLTransformer > xTransform( util::URLTransformer::create( ::comphelper::getComponentContext(xFactory) ) );
 
         com::sun::star::util::URL aURL;
         aURL.Complete = aCmd;

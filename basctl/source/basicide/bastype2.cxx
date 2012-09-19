@@ -39,7 +39,6 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include <map>

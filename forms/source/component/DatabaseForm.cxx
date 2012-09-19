@@ -64,11 +64,11 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/stl_types.hxx>
@@ -2241,7 +2241,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     if (!xFrame.is())
         return;
 
-    Reference<XURLTransformer> xTransformer(URLTransformer::create(comphelper::ComponentContext(m_xServiceFactory).getUNOContext()));
+    Reference<XURLTransformer> xTransformer(URLTransformer::create(comphelper::getComponentContext(m_xServiceFactory)));
 
     // URL encoding
     if( eSubmitEncoding == FormSubmitEncoding_URL )

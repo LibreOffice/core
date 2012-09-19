@@ -53,8 +53,8 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <rtl/logfile.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -706,7 +706,7 @@ namespace
         // the solution is only active for Unix systems
 #ifndef WNT
         uno::Reference <beans::XPropertySet> xNativeTempFile(
-            io::TempFile::create(comphelper::ComponentContext(xFactory).getUNOContext()),
+            io::TempFile::create(comphelper::getComponentContext(xFactory)),
             uno::UNO_QUERY_THROW);
         uno::Reference < io::XStream > xStream(xNativeTempFile, uno::UNO_QUERY_THROW);
 
@@ -740,7 +740,7 @@ namespace
             xNativeTempFile = uno::Reference<beans::XPropertySet>();
 
             uno::Reference < ucb::XSimpleFileAccess2 > xSimpleFileAccess(
-                    ucb::SimpleFileAccess::create( comphelper::ComponentContext(xFactory).getUNOContext() ) );
+                    ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
             xSimpleFileAccess->setReadOnly(sUrl, sal_True);
         }
@@ -879,7 +879,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 if (!m_aTempDumpURL.isEmpty())
                 {
                     uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                        ::com::sun::star::system::SystemShellExecute::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+                        ::com::sun::star::system::SystemShellExecute::create(comphelper::getComponentContext(m_xFactory)) );
                     xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }
                 else

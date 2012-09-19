@@ -43,7 +43,7 @@
 #include "dbtreelistbox.hxx"
 #include "IApplicationController.hxx"
 #include "imageprovider.hxx"
-#include "comphelper/componentcontext.hxx"
+#include "comphelper/processfactory.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -476,7 +476,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
     try
     {
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-            ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(getDetailView()->getBorderWin().getView()->getORB()).getUNOContext()) );
+            ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(getDetailView()->getBorderWin().getView()->getORB())) );
         Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OfficeDatabaseDocument" ) )
         );

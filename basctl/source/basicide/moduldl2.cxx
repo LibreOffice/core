@@ -56,7 +56,6 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include "com/sun/star/packages/manifest/XManifestWriter.hpp"
 #include <unotools/pathoptions.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/util/VetoException.hpp>
@@ -1360,7 +1359,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         // write into pipe:
         Reference<packages::manifest::XManifestWriter> xManifestWriter( xMSF->createInstance
             ( DEFINE_CONST_UNICODE("com.sun.star.packages.manifest.ManifestWriter") ), UNO_QUERY );
-        Reference<io::XOutputStream> xPipe( io::Pipe::create(comphelper::ComponentContext(xMSF).getUNOContext()), UNO_QUERY_THROW );
+        Reference<io::XOutputStream> xPipe( io::Pipe::create(comphelper::getComponentContext(xMSF)), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, Sequence< Sequence<beans::PropertyValue> >(
                 &manifest[ 0 ], manifest.size() ) );

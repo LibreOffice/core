@@ -59,7 +59,6 @@
 #include "cuires.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -587,7 +586,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         m_xGlobalCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICATEGORYDESCRIPTION), css::uno::UNO_QUERY_THROW);
         m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName)   , css::uno::UNO_QUERY_THROW);
         m_xUICmdDescription   = css::frame::UICommandDescription::create(
-                ::comphelper::ComponentContext(m_xSMGR).getUNOContext());
+                ::comphelper::getComponentContext(m_xSMGR));
 
         InitModule();
         InitBasic();

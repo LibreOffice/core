@@ -73,7 +73,7 @@
 #include <vector>
 
 #include <ucbhelper/fileidentifierconverter.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
@@ -177,7 +177,7 @@ sal_Bool ZipPackage::isLocalFile() const
     OUString aSystemPath;
     uno::Reference< XUniversalContentBroker > xUcb(
         UniversalContentBroker::create(
-            comphelper::ComponentContext( m_xFactory ).getUNOContext() ) );
+            comphelper::getComponentContext( m_xFactory ) ) );
     try
     {
         aSystemPath = getSystemPathFromFileURL( xUcb, m_aURL );
@@ -633,7 +633,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 
                     Content aContent(
                         m_aURL, uno::Reference< XCommandEnvironment >(),
-                        comphelper::ComponentContext( m_xFactory ).getUNOContext() );
+                        comphelper::getComponentContext( m_xFactory ) );
                     Any aAny = aContent.getPropertyValue("Size");
                     sal_uInt64 aSize = 0;
                     // kind of optimisation: treat empty files as nonexistent files
@@ -1165,7 +1165,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     if( bUseTemp )
     {
         // create temporary file
-        uno::Reference < io::XStream > xTempFile( io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()), UNO_QUERY_THROW );
+        uno::Reference < io::XStream > xTempFile( io::TempFile::create(comphelper::getComponentContext(m_xFactory)), UNO_QUERY_THROW );
         xTempOut.set( xTempFile->getOutputStream(), UNO_SET_THROW );
         xTempIn.set( xTempFile->getInputStream(), UNO_SET_THROW );
     }
@@ -1320,7 +1320,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
     // open and truncate the original file
     Content aOriginalContent(
         m_aURL, uno::Reference< XCommandEnvironment >(),
-        comphelper::ComponentContext( m_xFactory ).getUNOContext() );
+        comphelper::getComponentContext( m_xFactory ) );
     uno::Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
 
     if ( m_eMode == e_IMode_URL )
@@ -1455,7 +1455,7 @@ void SAL_CALL ZipPackage::commitChanges()
             {
                 // write directly in case of local file
                 uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > xSimpleAccess(
-                    SimpleFileAccess::create( comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
+                    SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
                 OSL_ENSURE( xSimpleAccess.is(), "Can't instatiate SimpleFileAccess service!\n" );
                 uno::Reference< io::XTruncate > xOrigTruncate;
                 if ( xSimpleAccess.is() )
@@ -1503,7 +1503,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     OUString sTargetFolder = m_aURL.copy ( 0, m_aURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
                     Content aContent(
                         sTargetFolder, uno::Reference< XCommandEnvironment >(),
-                        comphelper::ComponentContext( m_xFactory ).getUNOContext() );
+                        comphelper::getComponentContext( m_xFactory ) );
 
                     OUString sTempURL;
                     Any aAny = xPropSet->getPropertyValue ("Uri");

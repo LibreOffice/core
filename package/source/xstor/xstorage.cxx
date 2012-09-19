@@ -145,7 +145,7 @@ uno::Reference< io::XInputStream > GetSeekableTempCopy( uno::Reference< io::XInp
                                                         uno::Reference< lang::XMultiServiceFactory > xFactory )
 {
     uno::Reference < io::XOutputStream > xTempOut(
-                        io::TempFile::create(comphelper::ComponentContext(xFactory).getUNOContext()),
+                        io::TempFile::create(comphelper::getComponentContext(xFactory)),
                         uno::UNO_QUERY );
     uno::Reference < io::XInputStream > xTempIn( xTempOut, uno::UNO_QUERY );
 
@@ -3801,7 +3801,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         uno::Reference < io::XOutputStream > xTempOut(
-                            io::TempFile::create(comphelper::ComponentContext(m_pImpl->GetServiceFactory()).getUNOContext()),
+                            io::TempFile::create(comphelper::getComponentContext(m_pImpl->GetServiceFactory())),
                             uno::UNO_QUERY );
         xTempIn = uno::Reference < io::XInputStream >( xTempOut, uno::UNO_QUERY );
         uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );
@@ -3913,7 +3913,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         uno::Reference < io::XOutputStream > xTempOut(
-                            io::TempFile::create(comphelper::ComponentContext(m_pImpl->GetServiceFactory()).getUNOContext()),
+                            io::TempFile::create(comphelper::getComponentContext(m_pImpl->GetServiceFactory())),
                             uno::UNO_QUERY );
         xTempIn = uno::Reference < io::XInputStream >( xTempOut, uno::UNO_QUERY );
         uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );
@@ -5948,7 +5948,7 @@ void SAL_CALL OStorage::attachToURL( const ::rtl::OUString& sURL,
 
     uno::Reference < ucb::XSimpleFileAccess2 > xAccess(
         ucb::SimpleFileAccess::create(
-            comphelper::ComponentContext(m_pImpl->m_xFactory).getUNOContext() ) );
+            comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
 
     try
     {

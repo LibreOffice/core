@@ -1410,7 +1410,7 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
     sal_Bool bResult = sal_False;
     try {
         uno::Reference< beans::XPropertySet > xTempFile(
-                io::TempFile::create(comphelper::ComponentContext(mxFactory).getUNOContext()),
+                io::TempFile::create(comphelper::getComponentContext(mxFactory)),
                 uno::UNO_QUERY_THROW );
 
         ::rtl::OUString aTempURL;
@@ -1845,7 +1845,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         // get document service name
         uno::Reference< frame::XModuleManager2 > xModuleManager(
-            frame::ModuleManager::create(comphelper::ComponentContext(xFactory).getUNOContext()) );
+            frame::ModuleManager::create(comphelper::getComponentContext(xFactory)) );
         sDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
         if ( sDocServiceName.isEmpty() )
             throw uno::RuntimeException();

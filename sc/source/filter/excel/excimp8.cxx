@@ -113,7 +113,7 @@
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <unotools/streamwrap.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace ::comphelper;
@@ -356,14 +356,14 @@ void ImportExcel8::ReadBasic( void )
         }
         try
         {
-            ::comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
+            uno::Reference< uno::XComponentContext > aCtx( ::comphelper::getProcessComponentContext() );
             SfxMedium& rMedium = GetMedium();
             uno::Reference< io::XInputStream > xIn = rMedium.GetInputStream();
-            oox::ole::OleStorage root( aCtx.getUNOContext(), xIn, false );
+            oox::ole::OleStorage root( aCtx, xIn, false );
             oox::StorageRef vbaStg = root.openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
             if ( vbaStg.get() )
             {
-                oox::ole::VbaProject aVbaPrj( aCtx.getUNOContext(), pShell->GetModel(), CREATE_OUSTRING( "Calc") );
+                oox::ole::VbaProject aVbaPrj( aCtx, pShell->GetModel(), CREATE_OUSTRING( "Calc") );
                 // collect names of embedded form controls, as specified in the VBA project
                 uno::Reference< container::XNameContainer > xOleNameOverrideSink( new OleNameOverrideContainer );
                 aVbaPrj.setOleOverridesSink( xOleNameOverrideSink );

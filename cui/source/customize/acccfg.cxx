@@ -67,7 +67,6 @@
 
 //-----------------------------------------------
 // include other projects
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/svlbitm.hxx>
@@ -853,7 +852,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_xSMGR = ::comphelper::getProcessServiceFactory();
 
         m_xUICmdDescription = css::frame::UICommandDescription::create(
-                comphelper::ComponentContext(m_xSMGR).getUNOContext());
+                comphelper::getComponentContext(m_xSMGR));
 
         // get the current active frame, which should be our "parent"
         // for this session
@@ -866,7 +865,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
 
         // identify module
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
-                 css::frame::ModuleManager::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+                 css::frame::ModuleManager::create(comphelper::getComponentContext(m_xSMGR)));
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         ::comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
         m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_SHORTNAME, ::rtl::OUString());
@@ -877,7 +876,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
 
         // get module accelerator configuration
 
-        css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+        css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(m_xSMGR)));
         css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
         m_xModule = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     }

@@ -33,7 +33,7 @@
 
  *************************************************************************/
 #include <osl/diagnose.h>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustring.h>
@@ -968,7 +968,7 @@ uno::Reference< io::XInputStream > getInputStream(
 
         try
         {
-            uno::Reference< io::XOutputStream > xOutputStream( io::Pipe::create(comphelper::ComponentContext(rContext.xSMgr).getUNOContext()), uno::UNO_QUERY_THROW );
+            uno::Reference< io::XOutputStream > xOutputStream( io::Pipe::create(comphelper::getComponentContext(rContext.xSMgr)), uno::UNO_QUERY_THROW );
 
             ucb::OpenCommandArgument2 aArg;
             aArg.Mode       = ucb::OpenMode::DOCUMENT;

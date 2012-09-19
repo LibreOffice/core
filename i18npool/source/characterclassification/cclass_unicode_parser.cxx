@@ -27,7 +27,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <string.h>     // memcpy()
 
@@ -401,7 +401,7 @@ sal_Bool cclass_Unicode::setupInternational( const Locale& rLocale )
     }
     if ( !mxLocaleData.is() )
     {
-        mxLocaleData.set( LocaleData::create(comphelper::ComponentContext(xMSF).getUNOContext()) );
+        mxLocaleData.set( LocaleData::create(comphelper::getComponentContext(xMSF)) );
     }
     return bChanged;
 }

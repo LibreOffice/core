@@ -49,8 +49,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/configpaths.hxx>
 
 #include <fwkdllapi.h>
@@ -1084,7 +1084,7 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
         // We must replace all used variables inside readed path values.
         // In case we can't do so ... the whole office can't work really.
         // That's why it seams to be OK to throw a RuntimeException then.
-        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::ComponentContext(xSMGR).getUNOContext() );
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getComponentContext(xSMGR) );
         xSubst = css::util::PathSubstitution::create(xContext);
 
         // SAFE ->

@@ -22,7 +22,6 @@
 #include "comphelper/anytostring.hxx"
 #include "comphelper/anycompare.hxx"
 #include "comphelper/componentbase.hxx"
-#include "comphelper/componentcontext.hxx"
 #include "comphelper/extract.hxx"
 
 #include <com/sun/star/container/XEnumerableMap.hpp>
@@ -191,7 +190,7 @@ namespace comphelper
                                     ,public ComponentBase
     {
     protected:
-        EnumerableMap( const ComponentContext& _rContext );
+        EnumerableMap();
         virtual ~EnumerableMap();
 
         // XInitialization
@@ -238,7 +237,6 @@ namespace comphelper
 
     private:
         ::osl::Mutex        m_aMutex;
-        ComponentContext    m_aContext;
         MapData             m_aData;
 
         ::std::vector< ::com::sun::star::uno::WeakReference< XInterface > >
@@ -347,10 +345,9 @@ namespace comphelper
     //= EnumerableMap
     //====================================================================
     //--------------------------------------------------------------------
-    EnumerableMap::EnumerableMap( const ComponentContext& _rContext )
+    EnumerableMap::EnumerableMap()
         :Map_IFace( m_aMutex )
         ,ComponentBase( Map_IFace::rBHelper )
-        ,m_aContext( _rContext )
     {
     }
 
@@ -729,9 +726,9 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL EnumerableMap::Create( const Reference< XComponentContext >& _context )
+    Reference< XInterface > SAL_CALL EnumerableMap::Create( SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
     {
-        return *new EnumerableMap( ComponentContext( _context ) );
+        return *new EnumerableMap;
     }
 
     //====================================================================

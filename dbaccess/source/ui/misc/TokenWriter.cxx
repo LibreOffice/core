@@ -25,6 +25,7 @@
 #include "HtmlReader.hxx"
 #include "dbustrings.hrc"
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
@@ -730,7 +731,7 @@ void OHTMLImportExport::WriteHeader()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteHeader" );
     uno::Reference<document::XDocumentProperties> xDocProps(
-        document::DocumentProperties::create( comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
+        document::DocumentProperties::create( comphelper::getComponentContext(m_xFactory) ) );
     if (xDocProps.is()) {
         xDocProps->setTitle(m_sName);
     }

@@ -83,7 +83,6 @@
 #include <svtools/sfxecode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
@@ -280,7 +279,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
 
     // parse it - because some following code require that
     m_aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
     xParser->parseStrict(m_aURL);
 
     // BTW: Split URL and JumpMark ...
@@ -703,7 +702,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     // (v) Last but not least the UCB is used inside office to
     //     load contents. He has a special configuration to know
     //     which URL schemata can be used inside office.
-    css::uno::Reference< css::ucb::XUniversalContentBroker > xUCB(css::ucb::UniversalContentBroker::create(comphelper::ComponentContext(xSMGR).getUNOContext()));
+    css::uno::Reference< css::ucb::XUniversalContentBroker > xUCB(css::ucb::UniversalContentBroker::create(comphelper::getComponentContext(xSMGR)));
     if (xUCB->queryContentProvider(sURL).is())
         return E_CAN_BE_LOADED;
 
@@ -1248,7 +1247,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     css::util::URL aCmd;
     aCmd.Complete = ::rtl::OUString(".uno:JumpToMark");
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
     xParser->parseStrict(aCmd);
 
     css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch(aCmd, SPECIALTARGET_SELF, 0);

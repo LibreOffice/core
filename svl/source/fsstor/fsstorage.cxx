@@ -46,7 +46,6 @@
 
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -476,7 +475,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             {
                 uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create(
-                        comphelper::ComponentContext(m_pImpl->m_xFactory).getUNOContext() ) );
+                        comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
                 xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
             }
             else
@@ -685,7 +684,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const ::rt
         uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
 
         xTempResult = uno::Reference < io::XStream >(
-                    io::TempFile::create(comphelper::ComponentContext(m_pImpl->m_xFactory).getUNOContext()),
+                    io::TempFile::create(comphelper::getComponentContext(m_pImpl->m_xFactory)),
                     uno::UNO_QUERY_THROW );
         uno::Reference < io::XOutputStream > xTempOut = xTempResult->getOutputStream();
         uno::Reference < io::XInputStream > xTempIn = xTempResult->getInputStream();
@@ -1466,7 +1465,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
             {
                 uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create(
-                        comphelper::ComponentContext(m_pImpl->m_xFactory).getUNOContext() ) );
+                        comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
                 uno::Reference< io::XStream > xStream =
                     xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
 

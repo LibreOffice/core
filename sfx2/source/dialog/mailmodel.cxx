@@ -63,7 +63,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/useroptions.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -548,7 +547,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             css::util::URL aPrepareURL;
             css::uno::Reference< css::frame::XDispatch > xPrepareDispatch;
             css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
-            css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( ::comphelper::ComponentContext(xSMGR).getUNOContext() ) );
+            css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( ::comphelper::getComponentContext(xSMGR) ) );
             if( !bSendAsPDF )
             {
                 try

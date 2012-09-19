@@ -36,7 +36,7 @@
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
@@ -298,7 +298,7 @@ namespace dbaui
             if(xSupplier.is())
             {
                 m_pImpl->m_xFormatter = Reference< XNumberFormatter >(
-                    NumberFormatter::create(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW);
+                    NumberFormatter::create(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW);
                 m_pImpl->m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
             OSL_ENSURE(m_pImpl->m_xFormatter.is(),"No NumberFormatter!");

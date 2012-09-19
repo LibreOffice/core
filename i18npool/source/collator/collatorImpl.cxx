@@ -22,7 +22,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF(rxMSF)
 {
-    mxLocaleData.set(LocaleData::create(comphelper::ComponentContext(xMSF).getUNOContext()));
+    mxLocaleData.set(LocaleData::create(comphelper::getComponentContext(xMSF)));
     cachedItem = NULL;
 }
 

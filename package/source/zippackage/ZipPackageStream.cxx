@@ -38,7 +38,7 @@
 #include <osl/diagnose.h>
 #include "wrapstreamforshare.hxx"
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -177,7 +177,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
 
     // create temporary stream
     uno::Reference < io::XOutputStream > xTempOut(
-                        io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+                        io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
                         uno::UNO_QUERY_THROW );
     uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY_THROW );
     uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );
@@ -282,7 +282,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     {
         // create temporary file
         uno::Reference < io::XStream > xTempStream(
-                            io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+                            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
                             uno::UNO_QUERY_THROW );
 
         // create a package based on it
@@ -339,7 +339,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
 
         // create another temporary file
         uno::Reference < io::XOutputStream > xTempOut(
-                            io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+                            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
                             uno::UNO_QUERY_THROW );
         uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY_THROW );
         uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );

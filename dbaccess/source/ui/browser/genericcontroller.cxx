@@ -28,7 +28,7 @@
 #include <osl/diagnose.h>
 #include "dbustrings.hrc"
 #include <vcl/stdtext.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -199,7 +199,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 
     try
     {
-        m_xUrlTransformer = URLTransformer::create(comphelper::ComponentContext(_rM).getUNOContext());
+        m_xUrlTransformer = URLTransformer::create(comphelper::getComponentContext(_rM));
     }
     catch(Exception&)
     {

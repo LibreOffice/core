@@ -64,7 +64,6 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
@@ -2123,7 +2122,7 @@ void MenuBarManager::SetHdl()
     if ( !m_xURLTransformer.is() && mxServiceFactory.is() )
         m_xURLTransformer.set(
              URLTransformer::create(
-                 ::comphelper::ComponentContext(mxServiceFactory).getUNOContext()) );
+                 ::comphelper::getComponentContext(mxServiceFactory)) );
 }
 
 }

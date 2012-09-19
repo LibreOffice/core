@@ -67,7 +67,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/optitems.hxx>
 #include <editeng/unolingu.hxx>
@@ -1945,7 +1944,7 @@ rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
 {
     rtl::OUString sModule;
     Reference < XFrame > xCurrentFrame( rFrame );
-    Reference < XModuleManager2 > xModuleManager( ModuleManager::create(comphelper::ComponentContext(xMFac).getUNOContext()) );
+    Reference < XModuleManager2 > xModuleManager( ModuleManager::create(comphelper::getComponentContext(xMFac)) );
 
     if ( !xCurrentFrame.is() )
     {

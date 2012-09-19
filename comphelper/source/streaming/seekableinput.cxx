@@ -21,7 +21,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 
 using namespace ::com::sun::star;
@@ -93,7 +93,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
             throw uno::RuntimeException();
 
         uno::Reference< io::XOutputStream > xTempOut(
-                io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+                io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
                 uno::UNO_QUERY_THROW );
 
         copyInputToOutput_Impl( m_xOriginalStream, xTempOut );

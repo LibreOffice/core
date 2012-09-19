@@ -40,7 +40,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -352,7 +352,7 @@ uno::Any SAL_CALL Content::execute(
             delete m_pContent;
             m_pContent = new ::ucbhelper::Content
                                 (sFileURL,NULL,
-                                 comphelper::ComponentContext(m_xSMgr).getUNOContext());
+                                 comphelper::getComponentContext(m_xSMgr));
             if(!m_pContent->isDocument())
             {
                 rtl::OUString sErrorMsg("File: ");
@@ -511,7 +511,7 @@ uno::Any SAL_CALL Content::execute(
         // Create a new Content object for the "shadow" file
         // corresponding to the opened document from the DMS.
         ::ucbhelper::Content aContent(sFileURL.copy(0,nLastIndex),NULL,
-                                      comphelper::ComponentContext(m_xSMgr).getUNOContext());
+                                      comphelper::getComponentContext(m_xSMgr));
         //  aTransferInfo.NameClash = ucb::NameClash::OVERWRITE;
         aTransferInfo.NewTitle = sFileURL.copy( 1 + nLastIndex );
         // Copy our saved backup copy to the "shadow" file.

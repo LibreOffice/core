@@ -40,7 +40,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <xmloff/attrlist.hxx>
 
 #include <ucbhelper/content.hxx>
@@ -323,7 +323,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     {
         try
         {
-            ::ucbhelper::Content aContent(sURL, xEnv, comphelper::ComponentContext(mxMSF).getUNOContext());
+            ::ucbhelper::Content aContent(sURL, xEnv, comphelper::getComponentContext(mxMSF));
             xInputStream = aContent.openStream();
         }
         catch ( Exception& )

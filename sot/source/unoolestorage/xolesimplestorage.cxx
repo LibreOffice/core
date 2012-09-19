@@ -24,8 +24,8 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -258,7 +258,7 @@ void SAL_CALL OLESimpleStorage::initialize( const uno::Sequence< uno::Any >& aAr
     else
     {
         uno::Reference < io::XStream > xTempFile(
-                io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+                io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
                 uno::UNO_QUERY_THROW );
         uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
         uno::Reference< io::XOutputStream > xTempOut = xTempFile->getOutputStream();
@@ -443,7 +443,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const ::rtl::OUString& aName )
     uno::Any aResult;
 
     uno::Reference< io::XStream > xTempFile(
-        io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+        io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
         uno::UNO_QUERY );
     uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
     uno::Reference< io::XOutputStream > xOutputStream = xTempFile->getOutputStream();

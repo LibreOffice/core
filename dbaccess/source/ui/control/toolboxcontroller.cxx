@@ -36,7 +36,7 @@
 #include <osl/mutex.hxx>
 #include "dbu_reghelper.hxx"
 #include "UITools.hxx"
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 extern "C" void SAL_CALL createRegistryInfo_OToolboxController()
@@ -186,7 +186,7 @@ namespace dbaui
 
             try
             {
-                Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(getServiceManager()).getUNOContext()));
+                Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(getServiceManager())));
                 Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
                 Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 

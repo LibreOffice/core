@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/componentcontext.hxx"
+#include "comphelper/processfactory.hxx"
 #include "cppuhelper/factory.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
@@ -416,7 +416,7 @@ PasswordContainerInteractionHandler_CreateInstance(
     throw( uno::Exception )
 {
     lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new PasswordContainerInteractionHandler( comphelper::ComponentContext(rSMgr).getUNOContext() ) );
+        new PasswordContainerInteractionHandler( comphelper::getComponentContext(rSMgr) ) );
     return uno::Reference< uno::XInterface >::query( pX );
 }
 

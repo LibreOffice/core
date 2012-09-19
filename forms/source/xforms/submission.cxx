@@ -58,7 +58,6 @@
 #include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
@@ -663,7 +662,7 @@ Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathOb
 Reference< XDocumentFragment > Submission::createSubmissionDocument(const Reference< XXPathObject >& aObj, sal_Bool bRemoveWSNodes)
 {
     using namespace com::sun::star::xml::xpath;
-    Reference< XDocumentBuilder > aDocBuilder(DocumentBuilder::create(comphelper::ComponentContext(m_aFactory).getUNOContext()));
+    Reference< XDocumentBuilder > aDocBuilder(DocumentBuilder::create(comphelper::getComponentContext(m_aFactory)));
     Reference< XDocument > aDocument = aDocBuilder->newDocument();
     Reference< XDocumentFragment > aFragment = aDocument->createDocumentFragment();
 

@@ -23,7 +23,7 @@
 #include "saxbuilder.hxx"
 
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 namespace DOM
@@ -167,7 +167,7 @@ namespace DOM
         if (!m_aState == SAXDocumentBuilderState_READY)
             throw SAXException();
 
-        Reference< XDocumentBuilder > aBuilder(DocumentBuilder::create(comphelper::ComponentContext(m_aServiceManager).getUNOContext()));
+        Reference< XDocumentBuilder > aBuilder(DocumentBuilder::create(comphelper::getComponentContext(m_aServiceManager)));
         Reference< XDocument > aDocument = aBuilder->newDocument();
         m_aNodeStack.push(Reference< XNode >(aDocument, UNO_QUERY));
         m_aDocument = aDocument;

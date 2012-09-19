@@ -41,7 +41,6 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>
@@ -164,7 +163,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             Reference< XURLTransformer > xTrans;
             try
             {
-                xTrans.set( URLTransformer::create(::comphelper::ComponentContext(m_xServiceFactory).getUNOContext()) );
+                xTrans.set( URLTransformer::create(::comphelper::getComponentContext(m_xServiceFactory)) );
                 m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
                 if ( m_xConfigData.is() )
                 {

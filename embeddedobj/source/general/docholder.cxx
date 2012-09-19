@@ -74,7 +74,6 @@
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
@@ -576,14 +575,14 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     if ( !xResult.is() )
     {
         // no internal document configuration, use the one from the module
-        uno::Reference< frame::XModuleManager2 > xModuleMan( frame::ModuleManager::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+        uno::Reference< frame::XModuleManager2 > xModuleMan( frame::ModuleManager::create(comphelper::getComponentContext(m_xFactory)) );
         ::rtl::OUString aModuleIdent =
             xModuleMan->identify( uno::Reference< uno::XInterface >( m_xComponent, uno::UNO_QUERY ) );
 
         if ( !aModuleIdent.isEmpty() )
         {
             uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
-                    ui::ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+                    ui::ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(m_xFactory)) );
             uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xModUIConfMan(
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );

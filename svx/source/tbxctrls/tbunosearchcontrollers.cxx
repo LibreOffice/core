@@ -31,7 +31,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -62,7 +62,7 @@ static const sal_Int32       REMEMBER_SIZE = 10;
 
 void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
-    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create(::comphelper::ComponentContext(rSMgr).getUNOContext()) );
+    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create(::comphelper::getComponentContext(rSMgr)) );
     css::util::URL aURL;
     aURL.Complete = rtl::OUString(COMMAND_EXECUTESEARCH);
     xURLTransformer->parseStrict(aURL);

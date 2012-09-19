@@ -32,7 +32,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
@@ -105,7 +105,7 @@ throw (::com::sun::star::uno::RuntimeException)
         try
         {
             Reference< XDispatch > xDispatch( pIter->second );
-            Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+            Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
             xURLTransformer->parseStrict( aTargetURL );
@@ -192,7 +192,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( m_xServiceManager.is() && xDispatchProvider.is() )
             {
-                Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+                Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
                 aTargetURL.Complete = aCommandURL;
                 xURLTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
@@ -250,7 +250,7 @@ void FrameStatusListener::bindListener()
             URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
             while ( pIter != m_aListenerMap.end() )
             {
-                Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+                Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
                 com::sun::star::util::URL aTargetURL;
                 aTargetURL.Complete = pIter->first;
                 xURLTransformer->parseStrict( aTargetURL );
@@ -319,7 +319,7 @@ void FrameStatusListener::unbindListener()
         URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
         while ( pIter != m_aListenerMap.end() )
         {
-            Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+            Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
             xURLTransformer->parseStrict( aTargetURL );

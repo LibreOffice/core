@@ -30,7 +30,7 @@
 
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <tools/debug.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 //........................................................................
 namespace frm
@@ -60,7 +60,7 @@ namespace frm
         {
             if ( m_xORB.is() )
             {
-                m_xTransformer.set(URLTransformer::create(comphelper::ComponentContext(m_xORB).getUNOContext()));
+                m_xTransformer.set(URLTransformer::create(comphelper::getComponentContext(m_xORB)));
             }
 
             m_bTriedToCreateTransformer = true;

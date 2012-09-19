@@ -48,8 +48,8 @@
 #include <package/Inflater.hxx>
 #include <package/Deflater.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/factory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -73,7 +73,7 @@ namespace XSLT
 {
     Reference<XStream> SAL_CALL OleHandler::createTempFile() {
         Reference<XStream> tempFile(
-                        TempFile::create(comphelper::ComponentContext(m_msf).getUNOContext()),
+                        TempFile::create(comphelper::getComponentContext(m_msf)),
                         UNO_QUERY);
         OSL_ASSERT(tempFile.is());
         return tempFile;

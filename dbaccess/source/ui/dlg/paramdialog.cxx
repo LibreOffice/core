@@ -25,6 +25,7 @@
 #include "moduledbu.hxx"
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include "dbustrings.hrc"
 #include <vcl/svapp.hxx>
@@ -81,7 +82,7 @@ DBG_NAME(OParameterDialog)
         DBG_CTOR(OParameterDialog,NULL);
 
         if (_rxORB.is())
-            m_xFormatter = Reference< XNumberFormatter>( NumberFormatter::create(comphelper::ComponentContext(_rxORB).getUNOContext()), UNO_QUERY_THROW);
+            m_xFormatter = Reference< XNumberFormatter>( NumberFormatter::create(comphelper::getComponentContext(_rxORB)), UNO_QUERY_THROW);
         else {
             OSL_FAIL("OParameterDialog::OParameterDialog: need a service factory!");
         }

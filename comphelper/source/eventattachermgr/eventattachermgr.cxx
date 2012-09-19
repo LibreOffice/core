@@ -23,8 +23,8 @@
 #endif
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/eventattachermgr.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -45,7 +45,6 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <deque>
 #include <algorithm>
@@ -363,7 +362,7 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
         if ( xIFace.is() )
         {
             Reference< XIntrospection > xIntrospection( xIFace, UNO_QUERY);
-            return new ImplEventAttacherManager( xIntrospection, comphelper::ComponentContext(rSMgr).getUNOContext() );
+            return new ImplEventAttacherManager( xIntrospection, comphelper::getComponentContext(rSMgr) );
         }
     }
 

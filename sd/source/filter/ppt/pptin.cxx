@@ -97,19 +97,10 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
 
 using namespace ::com::sun::star;
-
-uno::Reference< uno::XComponentContext >
-lcl_getUnoCtx()
-{
-    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
-    return aCtx.getUNOContext();
-}
 
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
 {

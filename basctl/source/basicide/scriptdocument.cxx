@@ -57,7 +57,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <osl/mutex.hxx>
 
@@ -183,9 +182,9 @@ namespace basctl
         {
             _out_rModels.clear();
 
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
             FilterDocuments aFilter( _bVisibleOnly );
-            docs::DocumentEnumeration aEnum( aContext, &aFilter );
+            docs::DocumentEnumeration aEnum(
+                comphelper::getProcessComponentContext(), &aFilter );
 
             aEnum.getDocuments( _out_rModels );
         }
@@ -624,20 +623,25 @@ namespace basctl
             if ( _eType == E_DIALOGS )
             {
                 // create dialog model
-                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                Reference< XComponentContext > aContext(
+                    comphelper::getProcessComponentContext() );
                 Reference< XNameContainer > xDialogModel;
                 if ( _rxExistingDialogModel.is() )
                     xDialogModel = _rxExistingDialogModel;
                 else
-                    if ( !aContext.createComponent( "com.sun.star.awt.UnoControlDialogModel", xDialogModel ) )
-                        return false;
+                    xDialogModel.set(
+                        ( aContext->getServiceManager()->
+                          createInstanceWithContext(
+                              "com.sun.star.awt.UnoControlDialogModel",
+                              aContext ) ),
+                        UNO_QUERY_THROW );
 
                 // import dialog model
                 Reference< XInputStreamProvider > xISP( aElement, UNO_QUERY_THROW );
                 if ( !_rxExistingDialogModel.is() )
                 {
                     Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
-                    ::xmlscript::importDialogModel( xInput, xDialogModel, aContext.getUNOContext(), isDocument() ? getDocument() : Reference< XModel >() );
+                    ::xmlscript::importDialogModel( xInput, xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
                 }
 
                 // set new name as property
@@ -645,7 +649,7 @@ namespace basctl
                 xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rNewName ) );
 
                 // export dialog model
-                xISP = ::xmlscript::exportDialogModel( xDialogModel, aContext.getUNOContext(), isDocument() ? getDocument() : Reference< XModel >() );
+                xISP = ::xmlscript::exportDialogModel( xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
                 aElement <<= xISP;
             }
 
@@ -747,17 +751,19 @@ namespace basctl
                 return false;
 
             // create new dialog model
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            Reference< XNameContainer > xDialogModel;
-            if ( !aContext.createComponent( "com.sun.star.awt.UnoControlDialogModel", xDialogModel ) )
-                return false;
+            Reference< XComponentContext > aContext(
+                comphelper::getProcessComponentContext() );
+            Reference< XNameContainer > xDialogModel(
+                aContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.awt.UnoControlDialogModel", aContext ),
+                UNO_QUERY_THROW );
 
             // set name property
             Reference< XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY_THROW );
             xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rDialogName ) );
 
             // export dialog model
-            _out_rDialogProvider = ::xmlscript::exportDialogModel( xDialogModel, aContext.getUNOContext(), isDocument() ? getDocument() : Reference< XModel >() );
+            _out_rDialogProvider = ::xmlscript::exportDialogModel( xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
 
             // insert dialog into library
             xLib->insertByName( _rDialogName, makeAny( _out_rDialogProvider ) );

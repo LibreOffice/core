@@ -83,7 +83,7 @@ void mygetchar()
 
 void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
 {
-    Reference < XPipe > rPipe( Pipe::create(comphelper::ComponentContext(rSmgr).getUNOContext()), UNO_QUERY_THROW );
+    Reference < XPipe > rPipe( Pipe::create(comphelper::getComponentContext(rSmgr)), UNO_QUERY_THROW );
 
     {
         Sequence < sal_Int8 > seq( 10 );

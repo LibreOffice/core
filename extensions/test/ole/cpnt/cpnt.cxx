@@ -33,7 +33,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <osl/diagnose.h>
 #include <uno/environment.h>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 // OPTIONAL is a constant in com.sun.star.beans.PropertyAttributes but it must be
 // undef'd in some header files
@@ -1493,7 +1493,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         }
     case 101:
         {
-        Reference<XIdlReflection> xRefl( theCoreReflection::get(comphelper::ComponentContext(m_rFactory).getUNOContext()) );
+        Reference<XIdlReflection> xRefl( theCoreReflection::get(comphelper::getComponentContext(m_rFactory)) );
         Reference<XIdlClass> xClass= xRefl->forName(L"oletest.SimpleStruct");
         Any any;
         if( xClass.is())

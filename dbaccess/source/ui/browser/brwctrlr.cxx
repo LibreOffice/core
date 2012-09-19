@@ -65,6 +65,7 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
@@ -778,7 +779,7 @@ void SbaXDataBrowserController::initFormatter()
     {
         // create a new formatter
         m_xFormatter = Reference< util::XNumberFormatter > (
-            util::NumberFormatter::create(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW);
+            util::NumberFormatter::create(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW);
         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
     else // clear the formatter

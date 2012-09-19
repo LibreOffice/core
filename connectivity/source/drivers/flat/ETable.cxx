@@ -31,6 +31,7 @@
 #include <stdio.h>      //sprintf
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
@@ -423,7 +424,7 @@ void OFlatTable::construct()
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString("com.sun.star.util.NumberFormatsSupplier"),aArg),UNO_QUERY);
     m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
           ::com::sun::star::util::NumberFormatter::create(
-             comphelper::ComponentContext(m_pConnection->getDriver()->getFactory()).getUNOContext()),
+             comphelper::getComponentContext(m_pConnection->getDriver()->getFactory())),
           UNO_QUERY_THROW);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
     Reference<XPropertySet> xProp(xSupplier->getNumberFormatSettings(),UNO_QUERY);

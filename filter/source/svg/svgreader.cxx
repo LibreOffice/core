@@ -49,7 +49,6 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
@@ -1904,7 +1903,7 @@ SVGReader::SVGReader(const uno::Reference<lang::XMultiServiceFactory>&     xServ
 
 sal_Bool SVGReader::parseAndConvert()
 {
-    uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(comphelper::ComponentContext(m_xServiceFactory).getUNOContext()));
+    uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(comphelper::getComponentContext(m_xServiceFactory)));
 
     uno::Reference<xml::dom::XDocument> xDom(
         xDomBuilder->parse(m_xInputStream),

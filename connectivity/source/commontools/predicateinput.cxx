@@ -19,6 +19,7 @@
 
 
 #include <connectivity/predicateinput.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/i18n/LocaleData.hpp>
@@ -111,7 +112,7 @@ namespace dbtools
             if ( m_xORB.is() )
             {
                 m_xFormatter = Reference< XNumberFormatter >(
-                    NumberFormatter::create(comphelper::ComponentContext(m_xORB).getUNOContext()),
+                    NumberFormatter::create(comphelper::getComponentContext(m_xORB)),
                     UNO_QUERY_THROW
                 );
             }
@@ -125,7 +126,7 @@ namespace dbtools
             // create the locale data
             if ( m_xORB.is() )
             {
-                m_xLocaleData = LocaleData::create( comphelper::ComponentContext(m_xORB).getUNOContext() );
+                m_xLocaleData = LocaleData::create( comphelper::getComponentContext(m_xORB) );
             }
         }
         catch( const Exception& )

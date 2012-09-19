@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -389,7 +389,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     css::uno::Reference< css::frame::XModuleManager2 > xModuleDetection(
-        css::frame::ModuleManager::create(comphelper::ComponentContext(xSMGR).getUNOContext()));
+        css::frame::ModuleManager::create(comphelper::getComponentContext(xSMGR)));
 
     ::rtl::OUString sModule;
     try
@@ -402,7 +402,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
-        css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(xSMGR).getUNOContext()) );
+        css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(xSMGR)) );
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg;
     try
@@ -442,7 +442,7 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XURLTransformer > xParser(
-                css::util::URLTransformer::create( ::comphelper::ComponentContext(xSMGR).getUNOContext() ) );
+                css::util::URLTransformer::create( ::comphelper::getComponentContext(xSMGR) ) );
 
     // SAFE -> ----------------------------------
     aLock.reset();

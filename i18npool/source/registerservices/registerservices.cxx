@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -110,7 +110,7 @@
 {                                                                           \
     return ::com::sun::star::uno::Reference <                               \
             ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* )   \
-                                    new ImplName( comphelper::ComponentContext(rxMSF).getUNOContext() ) );                \
+                                    new ImplName( comphelper::getComponentContext(rxMSF) ) );                \
 }
 
 typedef ::com::sun::star::uno::Reference<

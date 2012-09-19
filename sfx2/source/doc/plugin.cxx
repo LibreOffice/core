@@ -24,7 +24,7 @@
 #include <com/sun/star/plugin/PluginMode.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
@@ -94,7 +94,7 @@ sal_Bool SAL_CALL PluginObject::load(
     const uno::Reference < frame::XFrame >& xFrame )
 throw( uno::RuntimeException )
 {
-    uno::Reference< plugin::XPluginManager > xPMgr( plugin::PluginManager::create(comphelper::ComponentContext(mxFact).getUNOContext()) );
+    uno::Reference< plugin::XPluginManager > xPMgr( plugin::PluginManager::create(comphelper::getComponentContext(mxFact)) );
 
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {

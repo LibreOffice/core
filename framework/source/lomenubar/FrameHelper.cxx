@@ -66,7 +66,7 @@
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <rtl/process.h>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <gio/gio.h>
 //#pragma GCC diagnostic push
@@ -267,8 +267,8 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
     : m_xStatusListener(new MenuItemStatusListener(this))
     , m_pDispatchRegistry(new framework::lomenubar::DispatchRegistry(m_xStatusListener))
     , m_xMSF(rServiceManager)
-    , m_xTrans(util::URLTransformer::create(comphelper::ComponentContext(m_xMSF).getUNOContext()))
-    , m_xMM(frame::ModuleManager(comphelper::ComponentContext(m_xMSF).getUNOContext()),UNO_QUERY)
+    , m_xTrans(util::URLTransformer::create(comphelper::getComponentContext(m_xMSF)))
+    , m_xMM(frame::ModuleManager(comphelper::getComponentContext(m_xMSF)),UNO_QUERY)
     , m_xPCF(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.PopupMenuControllerFactory"))), UNO_QUERY)
     , m_xFrame(xFrame)
     , m_xdp(xFrame, UNO_QUERY)
@@ -280,7 +280,7 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
 {
 
     //Get xUICommands database (to retrieve labels, see FrameJob::getLabelFromCommandURL ())
-    Reference < XNameAccess > xNameAccess (UICommandDescription::create(comphelper::ComponentContext(m_xMSF).getUNOContext()));
+    Reference < XNameAccess > xNameAccess (UICommandDescription::create(comphelper::getComponentContext(m_xMSF)));
     xNameAccess->getByName(m_xMM->identify(xFrame)) >>= m_xUICommands;
 
 
@@ -722,7 +722,7 @@ void
 FrameHelper::dispatchCommand (OUString command)
 {
     OUString target = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
-    Reference < XDispatchHelper > xdh( DispatchHelper::create(comphelper::ComponentContext(m_xMSF).getUNOContext()) );
+    Reference < XDispatchHelper > xdh( DispatchHelper::create(comphelper::getComponentContext(m_xMSF)) );
 
     // This is a special case, we don't want the helper to be disconnected from the frame
     // when PrintPreview dettaches. See the frameAction method.
@@ -795,7 +795,7 @@ FrameHelper::getAcceleratorConfigurations (Reference < XModel >        xModel,
     this->m_docAccelConf = docAccelConf;
 
     //Get module shurtcut database
-    Reference< XModuleUIConfigurationManagerSupplier > modUISupplier( ModuleUIConfigurationManagerSupplier::create(comphelper::ComponentContext(m_xMSF).getUNOContext()) );
+    Reference< XModuleUIConfigurationManagerSupplier > modUISupplier( ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(m_xMSF)) );
     Reference< XUIConfigurationManager >   modUIManager = modUISupplier->getUIConfigurationManager(xModuleManager->identify(m_xFrame));
     Reference< XAcceleratorConfiguration > modAccelConf(modUIManager->getShortCutManager(), UNO_QUERY);
     this->m_modAccelConf = modAccelConf;

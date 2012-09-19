@@ -25,7 +25,6 @@
 #include <vcl/timer.hxx>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/dockwin.hxx>
@@ -181,7 +180,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
             uno::Reference< frame::XModuleManager2 > xModuleManager( m_xModuleManager );
             if ( !xModuleManager.is() )
             {
-                xModuleManager = frame::ModuleManager::create(comphelper::ComponentContext(xServiceManager).getUNOContext());
+                xModuleManager = frame::ModuleManager::create(comphelper::getComponentContext(xServiceManager));
                 m_xModuleManager = xModuleManager;
             }
 

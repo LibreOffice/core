@@ -33,7 +33,7 @@
 
 // InvocationToAllListenerMapper
 #include <com/sun/star/script/XInvocation.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -408,7 +408,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception 
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xReflection.is() )
     {
-        m_xReflection = theCoreReflection::get(comphelper::ComponentContext(m_xSMgr).getUNOContext());
+        m_xReflection = theCoreReflection::get(comphelper::getComponentContext(m_xSMgr));
     }
     return m_xReflection;
 }
@@ -434,7 +434,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xConverter.is() )
     {
-        m_xConverter = Converter::create(comphelper::ComponentContext(m_xSMgr).getUNOContext());
+        m_xConverter = Converter::create(comphelper::getComponentContext(m_xSMgr));
     }
     return m_xConverter;
 }

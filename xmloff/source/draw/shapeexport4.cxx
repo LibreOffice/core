@@ -70,7 +70,7 @@
 
 #include "xmloff/xmlnmspe.hxx"
 #include "XMLBase64Export.hxx"
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -1235,7 +1235,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                     xPictureStream.set( xPictureStorage->openStreamElement( sPictureName, ::embed::ElementModes::READWRITE ), UNO_QUERY_THROW );
                 }
 
-                Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(comphelper::ComponentContext(xSM).getUNOContext()) );
+                Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(comphelper::getComponentContext(xSM)) );
                 Sequence< beans::PropertyValue > aArgs( 2 );
                 aArgs[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) );
                 aArgs[ 0 ].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "image/x-vclgraphic" ) );

@@ -1122,7 +1122,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             sal_Bool bStruct= sal_False;
 
 
-            Reference<XIdlReflection> xRefl = theCoreReflection::get(comphelper::ComponentContext(m_smgr).getUNOContext());
+            Reference<XIdlReflection> xRefl = theCoreReflection::get(comphelper::getComponentContext(m_smgr));
             // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
             CComVariant arg;
             if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )

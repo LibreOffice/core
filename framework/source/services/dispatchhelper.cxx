@@ -35,7 +35,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 namespace framework{
 
@@ -113,7 +113,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     // parse given URL
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()) );
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)) );
     aReadLock.unlock();
     /* } SAFE */
 

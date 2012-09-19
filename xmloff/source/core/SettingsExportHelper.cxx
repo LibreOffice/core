@@ -34,8 +34,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -547,7 +547,7 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
         {
             if( m_rContext.GetServiceFactory().is() ) try
             {
-                uno::Reference< uno::XComponentContext > xContext( comphelper::ComponentContext(m_rContext.GetServiceFactory()).getUNOContext() );
+                uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(m_rContext.GetServiceFactory()) );
                 const_cast< XMLSettingsExportHelper* >(this)->mxStringSubsitution =
                     util::PathSubstitution::create(xContext);
             }

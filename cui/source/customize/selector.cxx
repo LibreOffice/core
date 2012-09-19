@@ -44,7 +44,6 @@
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -352,8 +351,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
 
                 SvLBoxEntry* pNewEntry = InsertEntry( sUIName, _pParentEntry );
 
-                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode );
+                Image aImage = GetImage( theChild, comphelper::getProcessComponentContext(), bIsRootNode );
                 SetExpandedEntryBmp( pNewEntry, aImage );
                 SetCollapsedEntryBmp( pNewEntry, aImage );
 
@@ -400,16 +398,11 @@ void SvxConfigGroupListBox_Impl::Init()
     SetUpdateMode(sal_False);
     ClearAll();
 
-    Reference< XComponentContext > xContext;
-    Reference < beans::XPropertySet > xProps(
-        ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-
-    xContext.set( xProps->getPropertyValue(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
-        UNO_QUERY );
+    Reference< XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
 
     // are we showing builtin commands?
-    if ( m_bShowSlots && xContext.is() && m_xFrame.is() )
+    if ( m_bShowSlots && m_xFrame.is() )
     {
         Reference< lang::XMultiComponentFactory > xMCF =
             xContext->getServiceManager();
@@ -502,45 +495,38 @@ void SvxConfigGroupListBox_Impl::Init()
         }
     }
 
-    if ( xContext.is() )
+    // Add Scripting Framework entries
+    Reference< browse::XBrowseNode > rootNode;
+
+    try
     {
-        // Add Scripting Framework entries
-        Reference< browse::XBrowseNode > rootNode;
-        Reference< XComponentContext> xCtx;
+        Reference< browse::XBrowseNodeFactory > xFac( xContext->getValueByName(
+                                                          OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")) ), UNO_QUERY_THROW );
+        rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
-        try
+    if ( rootNode.is() )
+    {
+        if ( m_bShowSlots )
         {
-            Reference < beans::XPropertySet > _xProps(
-                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            xCtx.set( _xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
-            Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")) ), UNO_QUERY_THROW );
-            rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+            SvxGroupInfo_Impl *pInfo =
+                new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
+
+            String aTitle =
+                String( CUI_RES( STR_SELECTOR_MACROS ) );
+
+            SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
+            pNewEntry->SetUserData( pInfo );
+            pNewEntry->EnableChildrenOnDemand( sal_True );
+            aArr.push_back( pInfo );
         }
-        catch( const Exception& )
+        else
         {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        if ( rootNode.is() )
-        {
-            if ( m_bShowSlots )
-            {
-                SvxGroupInfo_Impl *pInfo =
-                    new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
-
-                String aTitle =
-                    String( CUI_RES( STR_SELECTOR_MACROS ) );
-
-                SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
-                pNewEntry->SetUserData( pInfo );
-                pNewEntry->EnableChildrenOnDemand( sal_True );
-                aArr.push_back( pInfo );
-            }
-            else
-            {
-                fillScriptList( rootNode, NULL, false );
-            }
+            fillScriptList( rootNode, NULL, false );
         }
     }
     MakeVisible( GetEntry( 0,0 ) );

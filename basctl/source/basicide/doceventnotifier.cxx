@@ -27,7 +27,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <osl/mutex.hxx>
@@ -209,9 +208,11 @@ namespace basctl
                 xBroadcaster.set( m_xModel, UNO_QUERY_THROW );
             else
             {
-                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                Reference< com::sun::star::uno::XComponentContext > aContext(
+                    comphelper::getProcessComponentContext() );
                 xBroadcaster.set(
-                    aContext.createComponent( "com.sun.star.frame.GlobalEventBroadcaster" ),
+                    aContext->getServiceManager()->createInstanceWithContext(
+                        "com.sun.star.frame.GlobalEventBroadcaster", aContext ),
                     UNO_QUERY_THROW );
             }
 

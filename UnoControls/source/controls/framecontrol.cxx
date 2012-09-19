@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 
@@ -480,7 +480,7 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
 
         Reference< XURLTransformer >  xTrans (
                URLTransformer::create(
-                   ::comphelper::ComponentContext( impl_getMultiServiceFactory() ).getUNOContext() ) );
+                   ::comphelper::getComponentContext( impl_getMultiServiceFactory() ) ) );
         // load file
         URL aURL ;
 

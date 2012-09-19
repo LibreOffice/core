@@ -237,7 +237,7 @@ const sal_Int32 n_ConstBufferSize = 32000;
     ::rtl::OUString aTempURL;
 
     uno::Reference < beans::XPropertySet > xTempFile(
-            io::TempFile::create(comphelper::ComponentContext(xFactory).getUNOContext()),
+            io::TempFile::create(comphelper::getComponentContext(xFactory)),
             uno::UNO_QUERY_THROW );
 
     try {
@@ -1511,7 +1511,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
         xTempFile = uno::Reference < io::XStream >(
-            io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
             uno::UNO_QUERY );
     else
         xTempFile = xTargetStream;

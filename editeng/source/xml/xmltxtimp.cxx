@@ -200,7 +200,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
                 break;
             }
 
-            uno::Reference< XInterface > xPipe( Pipe::create(comphelper::ComponentContext(xServiceFactory).getUNOContext()), UNO_QUERY );
+            uno::Reference< XInterface > xPipe( Pipe::create(comphelper::getComponentContext(xServiceFactory)), UNO_QUERY );
 
             // connect pipe's output stream to the data source
             xSource->setOutputStream( uno::Reference< io::XOutputStream >::query( xPipe ) );

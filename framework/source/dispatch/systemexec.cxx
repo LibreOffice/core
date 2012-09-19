@@ -38,7 +38,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <vcl/svapp.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 namespace framework{
 
@@ -157,7 +157,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
 
     try
     {
-        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::ComponentContext(xFactory).getUNOContext() );
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
         css::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(xContext) );
 
         ::rtl::OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); // sal_True force an exception if unknown variables exists !

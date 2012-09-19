@@ -34,7 +34,7 @@
 #include <threadhelp/readguard.hxx>
 #include <services.h>
 #include <vcl/svapp.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -132,7 +132,7 @@ DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMulti
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
         , m_xSMGR            ( xSMGR                         )
-        , m_xConverter( css::script::Converter::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()) )
+        , m_xConverter( css::script::Converter::create(comphelper::getComponentContext(m_xSMGR)) )
 {
 }
 

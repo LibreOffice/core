@@ -48,7 +48,6 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -451,7 +450,7 @@ void CGMImpressOutAct::EndGroup()
             if( aAny >>= aXShapeGrouper )
             {
                 uno::Reference< drawing::XShapes >  aXShapes(
-                         drawing::ShapeCollection::create(comphelper::ComponentContext(maXServiceManagerSC).getUNOContext()) );
+                         drawing::ShapeCollection::create(comphelper::getComponentContext(maXServiceManagerSC)) );
                 for ( sal_uInt32 i = mnFirstIndex; i < mnCurrentCount; i++ )
                 {
                     uno::Reference< drawing::XShape >  aXShape = *(uno::Reference< drawing::XShape > *)maXShapes->getByIndex( i ).getValue();

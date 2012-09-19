@@ -37,9 +37,9 @@
 #include "rtl/ref.hxx"
 #include "cppuhelper/weak.hxx"
 
-#include "comphelper/componentcontext.hxx"
-#include "comphelper/namedvaluecollection.hxx"
 #include "comphelper/documentinfo.hxx"
+#include "comphelper/namedvaluecollection.hxx"
+#include "comphelper/processfactory.hxx"
 
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
@@ -703,7 +703,7 @@ bool OfficeDocumentsManager::isBasicIDE(
             try
             {
                 m_xModuleMgr = frame::ModuleManager::create(
-                    comphelper::ComponentContext(m_xSMgr).getUNOContext());
+                    comphelper::getComponentContext(m_xSMgr));
             }
             catch ( uno::Exception const & )
             {

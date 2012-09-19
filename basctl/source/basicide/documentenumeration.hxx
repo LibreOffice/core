@@ -22,11 +22,14 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
-
-#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 //........................................................................
 namespace basctl { namespace docs {
@@ -75,7 +78,7 @@ namespace basctl { namespace docs {
     class DocumentEnumeration
     {
     public:
-        DocumentEnumeration( const ::comphelper::ComponentContext& _rContext, const IDocumentDescriptorFilter* _pFilter = NULL );
+        DocumentEnumeration( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter = NULL );
         ~DocumentEnumeration();
 
         /** retrieves a list of all currently known documents in the application

@@ -132,8 +132,6 @@ using namespace nsHdFtFlags;
 #include <comphelper/mediadescriptor.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
-#include <comphelper/componentcontext.hxx>
-
 
 using ::comphelper::MediaDescriptor;
 using ::comphelper::getProcessServiceFactory;
@@ -145,8 +143,7 @@ class BasicProjImportHelper
 public:
     BasicProjImportHelper( SwDocShell& rShell ) : mrDocShell( rShell )
     {
-        comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
-        mxCtx = aCtx.getUNOContext();
+        mxCtx = comphelper::getProcessComponentContext();
     }
     bool import( const uno::Reference< io::XInputStream >& rxIn );
     rtl::OUString getProjectName();

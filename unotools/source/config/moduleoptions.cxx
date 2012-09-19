@@ -22,7 +22,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -271,7 +270,7 @@ struct FactoryInfo
         {
             if ( !xSubstVars.is() )
             {
-                css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::ComponentContext(xSMgr).getUNOContext() );
+                css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getComponentContext(xSMgr) );
                 xSubstVars
                     = css::uno::Reference< css::util::XStringSubstitution >(
                         css::util::PathSubstitution::create(xContext) );

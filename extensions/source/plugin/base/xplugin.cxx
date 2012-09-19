@@ -43,7 +43,6 @@
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/plugin/PluginManager.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <plugin/impl.hxx>
 #include <tools/fsys.hxx>
@@ -895,7 +894,7 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
 
 PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
 {
-    uno::Reference< XPluginManager >  xPMgr( plugin::PluginManager::create(comphelper::ComponentContext(m_xSMgr).getUNOContext()) );
+    uno::Reference< XPluginManager >  xPMgr( plugin::PluginManager::create(comphelper::getComponentContext(m_xSMgr)) );
 
     Sequence< PluginDescription > aDescrs = xPMgr->getPluginDescriptions();
     const PluginDescription* pDescrs = aDescrs.getConstArray();

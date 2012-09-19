@@ -37,7 +37,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <unotools/bootstrap.hxx>
 
@@ -93,7 +92,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
     try
     {
         uno::Reference< io::XStream > xTempFile(
-            io::TempFile::create(comphelper::ComponentContext(m_xFactory).getUNOContext()),
+            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
             uno::UNO_QUERY_THROW );
         uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
 
