@@ -241,40 +241,37 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     MorkRowMap *Rows = 0;
     MorkRowMap::iterator rowIter;
 
+    // Iterate all tables
     for ( tableIter = Tables->begin(); tableIter != Tables->end(); tableIter++ )
     {
-        // Iterate all tables
-        for ( tableIter = Tables->begin(); tableIter != Tables->end(); tableIter++ )
+        if (tableIter->first != 1) break;
+        Rows =  xConnection->getMorkParser()->getRows( 0x80, &tableIter->second );
+        if ( Rows )
         {
-            if (tableIter->first != 1) break;
-            Rows =  xConnection->getMorkParser()->getRows( 0x80, &tableIter->second );
-            if ( Rows )
+            // Iterate all rows
+            for ( rowIter = Rows->begin(); rowIter != Rows->end(); rowIter++ )
             {
-                // Iterate all rows
-                for ( rowIter = Rows->begin(); rowIter != Rows->end(); rowIter++ )
+                MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
+                for (MorkCells::iterator CellsIter = rowIter->second.begin();
+                     CellsIter != rowIter->second.end(); CellsIter++ )
                 {
-                    MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
-                    for (MorkCells::iterator CellsIter = rowIter->second.begin();
-                         CellsIter != rowIter->second.end(); CellsIter++ )
-                    {
-                        std::string column = xConnection->getMorkParser()->getColumn(CellsIter->first);
-                        std::string value = xConnection->getMorkParser()->getValue(CellsIter->second);
+                    std::string column = xConnection->getMorkParser()->getColumn(CellsIter->first);
+                    std::string value = xConnection->getMorkParser()->getValue(CellsIter->second);
 
-                        //SAL_INFO("connectivity.mork", "key: " << column << " value: " << value);
+                    //SAL_INFO("connectivity.mork", "key: " << column << " value: " << value);
 
-                        OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
-                        OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
-                        rtl::OUString valueOUString = ::rtl::OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
-                        entry->setValue(key, valueOUString);
-                    }
-                    ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &m_aExpr, entry);
-                    sal_Bool result = sal_True;
-                    for (::std::vector<sal_Bool>::iterator iter = vector.begin(); iter != vector.end(); ++iter) {
-                        result = result && *iter;
-                    }
-                    if (result) {
-                        append(entry);
-                    }
+                    OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
+                    OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
+                    rtl::OUString valueOUString = ::rtl::OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
+                    entry->setValue(key, valueOUString);
+                }
+                ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &m_aExpr, entry);
+                sal_Bool result = sal_True;
+                for (::std::vector<sal_Bool>::iterator iter = vector.begin(); iter != vector.end(); ++iter) {
+                    result = result && *iter;
+                }
+                if (result) {
+                    append(entry);
                 }
             }
         }
