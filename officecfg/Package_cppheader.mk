@@ -26,9 +26,7 @@
 ## instead of those above.
 ##
 
-include $(SRCDIR)/officecfg/registry/files.mk
-
 $(eval $(call gb_Package_Package,officecfg_cppheader,$(WORKDIR)/CustomTarget/officecfg/registry))
 
-$(eval $(foreach i,officecfg_qa_allheaders $(officecfg_FILES),$(call \
+$(eval $(foreach i,officecfg_qa_allheaders $(officecfg_XCSFILES),$(call \
     gb_Package_add_file,officecfg_cppheader,inc/officecfg/$(i).hxx,$(i).hxx)))
