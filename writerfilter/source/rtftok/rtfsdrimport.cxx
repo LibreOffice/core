@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 
 #include <ooxml/resourceids.hxx> // NS_ooxml namespace
@@ -347,7 +348,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         if (rShape.nVertOrientRelation != 0)
             xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
         if (rShape.nWrap != -1)
-            xPropertySet->setPropertyValue("Surround", uno::makeAny(rShape.nWrap));
+            xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode(rShape.nWrap)));
     }
 
     // Send it to dmapper
