@@ -2012,26 +2012,27 @@ void SwCrsrShell::Combine()
         return;
 
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    SwCrsrSaveState aSaveState( *pCurCrsr );
+    // rhbz#689053: IsSelOvr must restore the saved stack position, not the
+    // current one, because current point + stack mark may be invalid PaM
+    SwCrsrSaveState aSaveState(*pCrsrStk);
     if( pCrsrStk->HasMark() )           // nur wenn GetMark gesetzt wurde
     {
         bool const bResult =
         CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, sal_True );
         OSL_ENSURE(bResult, "StackCrsr & act. Crsr not in same Section.");
         (void) bResult; // non-debug: unused
-        // kopiere das GetMark
-        if( !pCurCrsr->HasMark() )
-            pCurCrsr->SetMark();
-        *pCurCrsr->GetMark() = *pCrsrStk->GetMark();
-        pCurCrsr->GetMkPos() = pCrsrStk->GetMkPos();
     }
+    *pCrsrStk->GetPoint() = *pCurCrsr->GetPoint();
+    pCrsrStk->GetPtPos() = pCurCrsr->GetPtPos();
 
     SwShellCrsr * pTmp = 0;
     if( pCrsrStk->GetNext() != pCrsrStk )
     {
         pTmp = dynamic_cast<SwShellCrsr*>(pCrsrStk->GetNext());
     }
-    delete pCrsrStk;
+    delete pCurCrsr;
+    pCurCrsr = pCrsrStk;
+    pCrsrStk->MoveTo(0); // remove from ring
     pCrsrStk = pTmp;
     if( !pCurCrsr->IsInProtectTable( sal_True ) &&
         !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
