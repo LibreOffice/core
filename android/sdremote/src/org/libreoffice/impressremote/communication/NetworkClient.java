@@ -56,6 +56,11 @@ public class NetworkClient extends Client {
         // Wait until we get the appropriate string back...
         String aTemp = mReader.readLine();
 
+        if (aTemp == null) {
+            throw new IOException(
+                            "End of stream reached before any data received.");
+        }
+
         while (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
             if (aTemp.equals("LO_SERVER_VALIDATING_PIN")) {
                 // Broadcast that we need a pin screen.
