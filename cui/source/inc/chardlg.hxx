@@ -194,47 +194,39 @@ class SvxCharEffectsPage : public SvxCharBasePage
 {
 
 private:
-    VclVBox m_aBox;
-    VclGrid m_aGrid;
+    FixedText*          m_pFontColorFT;
+    ColorListBox*       m_pFontColorLB;
 
-    FixedText           m_aFontColorFT;
-    ColorListBox        m_aFontColorLB;
+    FixedText*          m_pEffectsFT;
+    ListBox*            m_pEffectsLB;
 
-    FixedText           m_aEffectsFT;
-    ListBox             m_aEffectsLB;
+    FixedText*          m_pReliefFT;
+    ListBox*            m_pReliefLB;
 
-    FixedText           m_aReliefFT;
-    ListBox             m_aReliefLB;
+    TriStateBox*        m_pOutlineBtn;
+    TriStateBox*        m_pShadowBtn;
+    TriStateBox*        m_pBlinkingBtn;
+    TriStateBox*        m_pHiddenBtn;
 
-    TriStateBox         m_aOutlineBtn;
-    TriStateBox         m_aShadowBtn;
-    TriStateBox         m_aBlinkingBtn;
-    TriStateBox         m_aHiddenBtn;
+    ListBox*            m_pOverlineLB;
+    FixedText*          m_pOverlineColorFT;
+    ColorListBox*       m_pOverlineColorLB;
 
-    FixedLine           m_aVerticalLine;
+    ListBox*            m_pStrikeoutLB;
 
-    FixedText           m_aOverlineFT;
-    ListBox             m_aOverlineLB;
-    FixedText           m_aOverlineColorFT;
-    ColorListBox        m_aOverlineColorLB;
+    ListBox*            m_pUnderlineLB;
+    FixedText*          m_pUnderlineColorFT;
+    ColorListBox*       m_pUnderlineColorLB;
 
-    FixedText           m_aStrikeoutFT;
-    ListBox             m_aStrikeoutLB;
+    CheckBox*           m_pIndividualWordsBtn;
 
-    FixedText           m_aUnderlineFT;
-    ListBox             m_aUnderlineLB;
-    FixedText           m_aUnderlineColorFT;
-    ColorListBox        m_aUnderlineColorLB;
+    FixedLine*          m_pAsianLine;
 
-    CheckBox            m_aIndividualWordsBtn;
+    FixedText*          m_pEmphasisFT;
+    ListBox*            m_pEmphasisLB;
 
-    FixedLine           m_aAsianLine;
-
-    FixedText           m_aEmphasisFT;
-    ListBox             m_aEmphasisLB;
-
-    FixedText           m_aPositionFT;
-    ListBox             m_aPositionLB;
+    FixedText*          m_pPositionFT;
+    ListBox*            m_pPositionLB;
 
     sal_uInt16              m_nHtmlMode;
 

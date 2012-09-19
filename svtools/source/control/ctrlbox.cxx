@@ -124,6 +124,13 @@ ColorListBox::ColorListBox( Window* pParent, const ResId& rResId ) :
     ImplInit();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParent)
+{
+    ColorListBox *pListBox = new ColorListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+    pListBox->SetDropDownLineCount(16); //arbitrary
+    return pListBox;
+}
+
 // -----------------------------------------------------------------------
 
 ColorListBox::~ColorListBox()

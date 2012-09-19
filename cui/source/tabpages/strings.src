@@ -131,4 +131,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
 {
     Text [ en-US ] = "The arrowhead was modified without saving.\nWould you like to save the arrowhead now?" ;
 };
-
+String RID_SVXSTR_CHARNAME_TRANSPARENT
+{
+    Text [ en-US ] = "Transparent";
+};

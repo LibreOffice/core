@@ -60,63 +60,10 @@
 #define LB_COLOR2               142
 
 #define STR_CHARNAME_NOSTYLE        150
-#define STR_CHARNAME_TRANSPARENT    151
 #define STR_CHARNAME_FAMILY         152
 #define STR_CHARNAME_FONT           153
 #define STR_CHARNAME_STYLE          154
 #define STR_CHARNAME_TYPEFACE       155
-
-// EffectsPage --------------------------------------------------------------
-
-#define FT_FONTCOLOR            201
-#define LB_FONTCOLOR            202
-
-#define FT_EFFECTS              203
-#define LB_EFFECTS              204
-#define LB_EFFECTS2             205
-
-#define FT_RELIEF               206
-#define LB_RELIEF               207
-
-#define CB_OUTLINE              208
-#define CB_SHADOW               209
-#define CB_BLINKING             210
-#define CB_CHARHIDDEN           211
-
-#define FL_EFFECTS_VERTICAL     220
-
-#define FT_OVERLINE             221
-#define LB_OVERLINE             222
-#define FT_OVERLINE_COLOR       223
-#define LB_OVERLINE_COLOR       224
-
-#define FT_STRIKEOUT            225
-#define LB_STRIKEOUT            226
-
-#define FT_UNDERLINE            227
-#define LB_UNDERLINE            228
-#define FT_UNDERLINE_COLOR      229
-#define LB_UNDERLINE_COLOR      230
-
-#define CB_INDIVIDUALWORDS      231
-
-#define FL_EFFECTS_ASIAN        240
-
-#define FT_EMPHASIS             241
-#define LB_EMPHASIS             242
-#define FT_POSITION             243
-#define LB_POSITION             244
-
-#define WIN_EFFECTS_PREVIEW     251
-#define FT_EFFECTS_FONTTYPE     252
-
-#define STR_EFFECTS_CAPITALS    261
-#define STR_EFFECTS_LOWERCASE   262
-#define STR_EFFECTS_TITLE       263
-#define STR_EFFECTS_SMALL       264
-#define STR_EFFECTS_OUTLINE     265
-#define STR_EFFECTS_SHADOW      266
-#define STR_EFFECTS_BLINKING    267
 
 #define FT_WEST_NAME_NOCJK                    423
 #define LB_WEST_NAME_NOCJK                    424
