@@ -988,6 +988,11 @@ AC_ARG_ENABLE(neon,
         [Disable neon and the compilation of webdav binding.]),
 ,)
 
+AC_ARG_ENABLE(cve-tests,
+    AS_HELP_STRING([--disable-cve-tests],
+        [Prevent CVE tests to be executed]),
+,)
+
 AC_ARG_ENABLE(build-unowinreg,
     AS_HELP_STRING([--enable-build-unowinreg],
         [Do not use the prebuilt unowinreg.dll. Build it instead. The MinGW C++
@@ -8620,6 +8625,18 @@ AC_SUBST(NEON_CFLAGS)
 AC_SUBST([MINGW_GNUTLS_DLL])
 AC_SUBST([MINGW_NEON_DLL])
 AC_SUBST([MINGW_TASN1_DLL])
+fi
+
+dnl ===================================================================
+dnl Check for disabling cve_tests
+dnl ===================================================================
+AC_MSG_CHECKING([whether to execute CVE tests])
+if test "$enable_cve_tests" = "no"; then
+    AC_MSG_RESULT([no])
+    DISABLE_CVE_TESTS=TRUE
+    AC_SUBST(DISABLE_CVE_TESTS)
+else
+    AC_MSG_RESULT([yes])
 fi
 
 dnl ===================================================================

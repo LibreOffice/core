@@ -33,6 +33,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_filters_test, \
     sd/qa/unit/filters-test \
 ))
 
+ifeq ($(DISABLE_CVE_TESTS),TRUE)
+$(eval $(call gb_CppunitTest_add_defs,sd_filters_test,\
+    -DDISABLE_CVE_TESTS \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
     avmedia \
     basegfx \

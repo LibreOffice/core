@@ -50,7 +50,6 @@ $(eval $(call gb_Module_add_check_targets,sw,\
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
-    CppunitTest_sw_filters_test \
     CppunitTest_sw_macros_test \
     CppunitTest_sw_subsequent_ooxmlexport \
     CppunitTest_sw_subsequent_ooxmlimport \
@@ -61,6 +60,12 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_subsequent_odfexport \
     CppunitTest_sw_subsequent_odfimport \
 ))
+
+ifneq ($(DISABLE_CVE_TESTS),TRUE)
+$(eval $(call gb_Module_add_slowcheck_targets,sw,\
+    CppunitTest_sw_filters_test \
+))
+endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     JunitTest_sw_complex \
