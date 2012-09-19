@@ -12,6 +12,7 @@ $(eval $(call gb_UI_UI,cui))
 $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/10000 \
 	cui/uiconfig/ui/effectspage \
+	cui/uiconfig/ui/charnamepage \
 	cui/uiconfig/ui/positionpage \
 	cui/uiconfig/ui/twolinespage \
 ))

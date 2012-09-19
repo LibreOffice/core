@@ -135,3 +135,23 @@ String RID_SVXSTR_CHARNAME_TRANSPARENT
 {
     Text [ en-US ] = "Transparent";
 };
+String RID_SVXSTR_CHARNAME_NOSTYLE
+{
+    Text [ en-US ] = "No %1";
+};
+String RID_SVXSTR_CHARNAME_FAMILY
+{
+    Text [ en-US ] = "Family";
+};
+String RID_SVXSTR_CHARNAME_FONT
+{
+    Text [ en-US ] = "Font";
+};
+String RID_SVXSTR_CHARNAME_STYLE
+{
+    Text [ en-US ] = "Style";
+};
+String RID_SVXSTR_CHARNAME_TYPEFACE
+{
+    Text [ en-US ] = "Typeface";
+};

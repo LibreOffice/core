@@ -57,7 +57,6 @@ class SvxCharBasePage : public SfxTabPage
 {
 protected:
     SvxFontPrevWindow*  m_pPreviewWin;
-    FixedInfo*          m_pFontTypeFT;
 
     sal_Bool                m_bPreviewBackgroundToCharacter;
 
@@ -65,9 +64,6 @@ protected:
     SvxCharBasePage(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet& rItemset);
 
     virtual             ~SvxCharBasePage();
-
-    void makeWidgets(Window *pParent, const ResId& rResId,
-        sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT);
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
     void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -92,10 +88,7 @@ class SvxCharNamePage : public SvxCharBasePage
 {
 
 private:
-    VclVBox m_aBox;
-    VclGrid m_aGrid;
-
-    FixedLine*          m_pWestLine;
+    VclContainer*       m_pWestFrame;
     FixedText*          m_pWestFontNameFT;
     FontNameBox*        m_pWestFontNameLB;
     FixedText*          m_pWestFontStyleFT;
@@ -105,7 +98,7 @@ private:
     FixedText*          m_pWestFontLanguageFT;
     SvxLanguageBox*     m_pWestFontLanguageLB;
 
-    FixedLine*          m_pEastLine;
+    VclContainer*       m_pEastFrame;
     FixedText*          m_pEastFontNameFT;
     FontNameBox*        m_pEastFontNameLB;
     FixedText*          m_pEastFontStyleFT;
@@ -115,7 +108,7 @@ private:
     FixedText*          m_pEastFontLanguageFT;
     SvxLanguageBox*     m_pEastFontLanguageLB;
 
-    FixedLine*          m_pCTLLine;
+    VclContainer*       m_pCTLFrame;
     FixedText*          m_pCTLFontNameFT;
     FontNameBox*        m_pCTLFontNameLB;
     FixedText*          m_pCTLFontStyleFT;
@@ -124,10 +117,6 @@ private:
     FontSizeBox*        m_pCTLFontSizeLB;
     FixedText*          m_pCTLFontLanguageFT;
     SvxLanguageBox*     m_pCTLFontLanguageLB;
-
-    FixedLine*          m_pColorFL;
-    FixedText*          m_pColorFT;
-    ColorListBox*       m_pColorLB;
 
     SvxCharNamePage_Impl*   m_pImpl;
 
@@ -155,12 +144,10 @@ private:
     };
 
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
-    sal_Bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
-    void                ResetColor_Impl( const SfxItemSet& rSet );
+    sal_Bool            FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
     DECL_LINK(UpdateHdl_Impl, void *);
     DECL_LINK(          FontModifyHdl_Impl, void* );
-    DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
 public:
     using SfxTabPage::ActivatePage;

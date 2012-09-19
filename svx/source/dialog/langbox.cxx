@@ -42,6 +42,7 @@
 #include <svx/langbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <vcl/builder.hxx>
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -137,6 +138,22 @@ SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, sal_Bool b
 {
     Init();
 }
+
+SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, sal_Bool bCheck )
+    : ListBox( pParent, nBits )
+    , m_pSpellUsedLang( NULL )
+    , m_bWithCheckmark( bCheck )
+{
+    Init();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pParent, VclBuilder::stringmap &)
+{
+    SvxLanguageBox *pListBox = new SvxLanguageBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+    pListBox->SetBestDropDownLineCount();
+    return pListBox;
+}
+
 //------------------------------------------------------------------------
 void SvxLanguageBox::Init()
 {

@@ -42,7 +42,7 @@ class VCL_DLLPUBLIC VclBuilder
 {
 public:
     typedef std::map<rtl::OString, rtl::OString> stringmap;
-    typedef Window* (*customMakeWidget)(Window *pParent);
+    typedef Window* (*customMakeWidget)(Window *pParent, stringmap &rVec);
 private:
     struct WinAndId
     {
@@ -236,6 +236,10 @@ public:
     }
 };
 
+/*
+ * @return true if rValue is "True", "true", "1", etc.
+ */
+bool VCL_DLLPUBLIC toBool(const rtl::OString &rValue);
 
 #endif
 

@@ -496,14 +496,14 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     {
         extractModel(id, rMap);
         ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-        pListBox->SetDropDownLineCount(16); //arbitrary
+        pListBox->SetBestDropDownLineCount();
         pWindow = pListBox;
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBoxText")))
     {
         extractModel(id, rMap);
         ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-        pComboBox->SetDropDownLineCount(16); //arbitrary
+        pComboBox->SetBestDropDownLineCount();
         pWindow = pComboBox;
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkTreeView")))
@@ -549,7 +549,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
             aModule.loadRelative(&thisModule, sModule.makeStringAndClear());
             customMakeWidget pFunction = (customMakeWidget)aModule.getFunctionSymbol(sFunction);
             if (pFunction)
-                pWindow = (*pFunction)(pParent);
+                pWindow = (*pFunction)(pParent, rMap);
         }
     }
     if (!pWindow)

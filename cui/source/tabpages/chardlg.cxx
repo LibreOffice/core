@@ -41,9 +41,6 @@
 #include <svx/dialogs.hrc>
 #include <svtools/unitconv.hxx>
 #include <svl/languageoptions.hxx>
-
-#include "chardlg.hrc"
-
 #include <svx/xtable.hxx>       // XColorList
 #include "chardlg.hxx"
 #include "editeng/fontitem.hxx"
@@ -190,7 +187,6 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 SvxCharBasePage::SvxCharBasePage( Window* pParent, const ResId& rResId, const SfxItemSet& rItemset)
     : SfxTabPage( pParent, rResId, rItemset )
     , m_pPreviewWin(NULL)
-    , m_pFontTypeFT(NULL)
     , m_bPreviewBackgroundToCharacter( sal_False )
 {
 }
@@ -198,26 +194,14 @@ SvxCharBasePage::SvxCharBasePage( Window* pParent, const ResId& rResId, const Sf
 SvxCharBasePage::SvxCharBasePage( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet& rItemset)
     : SfxTabPage( pParent, rID, rUIXMLDescription, rItemset )
     , m_pPreviewWin(NULL)
-    , m_pFontTypeFT(NULL)
     , m_bPreviewBackgroundToCharacter( sal_False )
 {
-}
-
-void SvxCharBasePage::makeWidgets(Window *pParent, const ResId& rResId,
-    sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT)
-{
-    m_pFontTypeFT = new FixedInfo(pParent, ResId( nResIdFontTypeFT, *rResId.GetResMgr()));
-    m_pPreviewWin = new SvxFontPrevWindow(pParent, ResId( nResIdPrewievWin, *rResId.GetResMgr()));
-
-    m_pPreviewWin->set_expand(true);
 }
 
 // -----------------------------------------------------------------------
 
 SvxCharBasePage::~SvxCharBasePage()
 {
-    delete m_pPreviewWin;
-    delete m_pFontTypeFT;
 }
 
 // -----------------------------------------------------------------------
@@ -293,17 +277,27 @@ struct SvxCharNamePage_Impl
     }
 };
 
+namespace
+{
+    void equalize_width_requests(Window *pA, Window *pB, Window *pC)
+    {
+        long nWidthWest = pA->GetOptimalSize(WINDOWSIZE_PREFERRED).Width();
+        long nWidthEast = pB->GetOptimalSize(WINDOWSIZE_PREFERRED).Width();
+        long nWidthCTL = pC->GetOptimalSize(WINDOWSIZE_PREFERRED).Width();
+        long nLargest = std::max(nWidthWest, std::max(nWidthEast, nWidthCTL));
+        pA->set_width_request(nLargest);
+        pB->set_width_request(nLargest);
+        pC->set_width_request(nLargest);
+    }
+}
+
 // class SvxCharNamePage -------------------------------------------------
 
 SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
-    : SvxCharBasePage(pParent, CUI_RES( RID_SVXPAGE_CHAR_NAME ), rInSet)
-    , m_aBox(this, false, 7)
-    , m_aGrid(&m_aBox)
+    : SvxCharBasePage(pParent, "CharNamePage", "cui/ui/charnamepage.ui", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
 {
-    m_aBox.set_expand(true);
-
-    m_pImpl->m_aNoStyleText = String( CUI_RES( STR_CHARNAME_NOSTYLE ) );
+    m_pImpl->m_aNoStyleText = String( CUI_RES( RID_SVXSTR_CHARNAME_NOSTYLE ) );
     m_pImpl->m_aTransparentText = String( CUI_RES( RID_SVXSTR_CHARNAME_TRANSPARENT ) );
 
     SvtLanguageOptions aLanguageOptions;
@@ -311,95 +305,52 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     sal_Bool bShowCTL = aLanguageOptions.IsCTLFontEnabled();
     sal_Bool bShowNonWestern = bShowCJK || bShowCTL;
 
-    m_aGrid.set_column_spacing(7);
-    m_aGrid.set_row_spacing(2);
-
-    m_pWestLine = new FixedLine(&m_aGrid, CUI_RES(FL_WEST));
-    setGridAttach(*m_pWestLine, 0, 0, 4);
-
-    m_pWestFontNameFT = new FixedText(&m_aGrid, CUI_RES( bShowNonWestern ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
-    setGridAttach(*m_pWestFontNameFT, 0, 1);
-
-    m_pWestFontNameLB = new FontNameBox(&m_aGrid, CUI_RES( bShowNonWestern ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
-    setGridAttach(*m_pWestFontNameLB, 0, 2);
-
-    m_pWestFontStyleFT = new FixedText(&m_aGrid, CUI_RES( bShowNonWestern ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
-    setGridAttach(*m_pWestFontStyleFT, 1, 1);
-    m_pWestFontStyleLB = new FontStyleBox(&m_aGrid, CUI_RES( bShowNonWestern ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
-    setGridAttach(*m_pWestFontStyleLB, 1, 2);
-    m_pWestFontSizeFT = new FixedText(&m_aGrid, CUI_RES( bShowNonWestern ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
-    setGridAttach(*m_pWestFontSizeFT, 2, 1);
-    m_pWestFontSizeLB = new FontSizeBox(&m_aGrid, CUI_RES( bShowNonWestern ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
-    setGridAttach(*m_pWestFontSizeLB, 2, 2);
-
-    if( !bShowNonWestern )
+    if (bShowNonWestern)
     {
-        m_pColorFL  = new FixedLine(&m_aBox, CUI_RES( FL_COLOR2 ) );
-        m_pColorFT  = new FixedText(&m_aBox, CUI_RES( FT_COLOR2 ) );
-        m_pColorLB  = new ColorListBox(&m_aBox, CUI_RES( LB_COLOR2 ) );
+        get(m_pWestFrame, "western");
+        get(m_pWestFontNameFT, "westfontnameft-cjk");
+        get(m_pWestFontNameLB, "westfontnamelb-cjk");
+        get(m_pWestFontStyleFT, "weststyleft-cjk");
+        get(m_pWestFontStyleLB, "weststylelb-cjk");
+        get(m_pWestFontSizeFT, "westsizeft-cjk");
+        get(m_pWestFontSizeLB, "westsizelb-cjk");
+
+        get(m_pWestFontLanguageFT, "westlangft-cjk");
+        get(m_pWestFontLanguageLB, "westlanglb-cjk");
+    }
+    else
+    {
+        get(m_pWestFrame, "simple");
+        get(m_pWestFontNameFT, "westfontnameft-nocjk");
+        get(m_pWestFontNameLB, "westfontnamelb-nocjk");
+        get(m_pWestFontStyleFT, "weststyleft-nocjk");
+        get(m_pWestFontStyleLB, "weststylelb-nocjk");
+        get(m_pWestFontSizeFT, "westsizeft-nocjk");
+        get(m_pWestFontSizeLB, "westsizelb-nocjk");
+
+        get(m_pWestFontLanguageFT, "westlangft-nocjk");
+        get(m_pWestFontLanguageLB, "westlanglb-nocjk");
     }
 
-    m_pWestFontLanguageFT = new FixedText(&m_aGrid, CUI_RES( bShowNonWestern ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
-    setGridAttach(*m_pWestFontLanguageFT, bShowNonWestern ? 3 : 1, bShowNonWestern ? 1 : 3);
-    m_pWestFontLanguageLB = new SvxLanguageBox(&m_aGrid, CUI_RES( bShowNonWestern ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
-    setGridAttach(*m_pWestFontLanguageLB, bShowNonWestern ? 3 : 1, bShowNonWestern ? 2 : 4);
+    get(m_pEastFrame, "asian");
+    get(m_pEastFontNameFT, "eastfontnameft");
+    get(m_pEastFontNameLB, "eastfontnamelb");
+    get(m_pEastFontStyleFT, "eaststyleft");
+    get(m_pEastFontStyleLB, "eaststylelb");
+    get(m_pEastFontSizeFT, "eastsizeft");
+    get(m_pEastFontSizeLB, "eastsizelb");
+    get(m_pEastFontLanguageFT, "eastlangft");
+    get(m_pEastFontLanguageLB, "eastlanglb");
 
-    if (!bShowNonWestern)
-    {
-        //10 lines
-        sal_Int32 nHeight = m_pWestFontSizeLB->CalcWindowSizePixel(10);
-
-        m_pWestFontNameLB->set_height_request(nHeight);
-        m_pWestFontStyleLB->set_height_request(nHeight);
-        m_pWestFontSizeLB->set_height_request(nHeight);
-    }
-
-    m_pEastLine = new FixedLine(&m_aGrid, CUI_RES( FL_EAST ) );
-    setGridAttach(*m_pEastLine, 0, 3, 4);
-
-    m_pEastFontNameFT = new FixedText(&m_aGrid, CUI_RES( FT_EAST_NAME ) );
-    setGridAttach(*m_pEastFontNameFT, 0, 4);
-    m_pEastFontNameLB = new FontNameBox(&m_aGrid, CUI_RES( LB_EAST_NAME ) );
-    setGridAttach(*m_pEastFontNameLB, 0, 5);
-    m_pEastFontStyleFT = new FixedText(&m_aGrid, CUI_RES( FT_EAST_STYLE ) );
-    setGridAttach(*m_pEastFontStyleFT, 1, 4);
-    m_pEastFontStyleLB = new FontStyleBox(&m_aGrid, CUI_RES( LB_EAST_STYLE ) );
-    setGridAttach(*m_pEastFontStyleLB, 1, 5);
-    m_pEastFontSizeFT = new FixedText(&m_aGrid, CUI_RES( FT_EAST_SIZE ) );
-    setGridAttach(*m_pEastFontSizeFT, 2, 4);
-    m_pEastFontSizeLB = new FontSizeBox(&m_aGrid, CUI_RES( LB_EAST_SIZE ) );
-    setGridAttach(*m_pEastFontSizeLB, 2, 5);
-    m_pEastFontLanguageFT = new FixedText(&m_aGrid, CUI_RES( FT_EAST_LANG ) );
-    setGridAttach(*m_pEastFontLanguageFT, 3, 4);
-    m_pEastFontLanguageLB = new SvxLanguageBox(&m_aGrid, CUI_RES( LB_EAST_LANG ) );
-    setGridAttach(*m_pEastFontLanguageLB, 3, 5);
-
-    m_pCTLLine = new FixedLine(&m_aGrid, CUI_RES( FL_CTL ) );
-    setGridAttach(*m_pCTLLine, 0, 6, 4);
-
-    m_pCTLFontNameFT = new FixedText(&m_aGrid, CUI_RES( FT_CTL_NAME ) );
-    setGridAttach(*m_pCTLFontNameFT, 0, 7);
-    m_pCTLFontNameLB = new FontNameBox(&m_aGrid, CUI_RES( LB_CTL_NAME ) );
-    setGridAttach(*m_pCTLFontNameLB, 0, 8);
-    m_pCTLFontStyleFT = new FixedText(&m_aGrid, CUI_RES( FT_CTL_STYLE ) );
-    setGridAttach(*m_pCTLFontStyleFT, 1, 7);
-    m_pCTLFontStyleLB = new FontStyleBox(&m_aGrid, CUI_RES( LB_CTL_STYLE ) );
-    setGridAttach(*m_pCTLFontStyleLB, 1, 8);
-    m_pCTLFontSizeFT = new FixedText(&m_aGrid, CUI_RES( FT_CTL_SIZE ) );
-    setGridAttach(*m_pCTLFontSizeFT, 2, 7);
-    m_pCTLFontSizeLB = new FontSizeBox(&m_aGrid, CUI_RES( LB_CTL_SIZE ) );
-    setGridAttach(*m_pCTLFontSizeLB, 2, 8);
-    m_pCTLFontLanguageFT = new FixedText(&m_aGrid, CUI_RES( FT_CTL_LANG ) );
-    setGridAttach(*m_pCTLFontLanguageFT, 3, 7);
-    m_pCTLFontLanguageLB = new SvxLanguageBox(&m_aGrid, CUI_RES( LB_CTL_LANG ) );
-    setGridAttach(*m_pCTLFontLanguageLB, 3, 8);
-
-    if( bShowNonWestern )
-    {
-        m_pColorFL  = new FixedLine(&m_aBox, CUI_RES( FL_COLOR2 ) );
-        m_pColorFT  = new FixedText(&m_aBox, CUI_RES( FT_COLOR2 ) );
-        m_pColorLB  = new ColorListBox(&m_aBox, CUI_RES( LB_COLOR2 ) );
-    }
+    get(m_pCTLFrame, "ctl");
+    get(m_pCTLFontNameFT, "ctlfontnameft");
+    get(m_pCTLFontNameLB, "ctlfontnamelb");
+    get(m_pCTLFontStyleFT, "ctlstyleft");
+    get(m_pCTLFontStyleLB, "ctlstylelb");
+    get(m_pCTLFontSizeFT, "ctlsizeft");
+    get(m_pCTLFontSizeLB, "ctlsizelb");
+    get(m_pCTLFontLanguageFT, "ctllangft");
+    get(m_pCTLFontLanguageLB, "ctllanglb");
 
     //In MacOSX the standard dialogs name font-name, font-style as
     //Family, Typeface
@@ -408,53 +359,45 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     //In Windows the standard dialogs name font-name, font-style as
     //Font, Style
 #ifdef WNT
-    String sFontFamilyString(CUI_RES(STR_CHARNAME_FONT));
+    String sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FONT));
 #else
-    String sFontFamilyString(CUI_RES(STR_CHARNAME_FAMILY));
+    String sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FAMILY));
 #endif
     m_pWestFontNameFT->SetText(sFontFamilyString);
     m_pEastFontNameFT->SetText(sFontFamilyString);
     m_pCTLFontNameFT->SetText(sFontFamilyString);
 
 #ifdef MACOSX
-    String sFontStyleString(CUI_RES(STR_CHARNAME_TYPEFACE));
+    String sFontStyleString(CUI_RES(RID_SVXSTR_CHARNAME_TYPEFACE));
 #else
-    String sFontStyleString(CUI_RES(STR_CHARNAME_STYLE));
+    String sFontStyleString(CUI_RES(RID_SVXSTR_CHARNAME_STYLE));
 #endif
     m_pWestFontStyleFT->SetText(sFontStyleString);
     m_pEastFontStyleFT->SetText(sFontStyleString);
     m_pCTLFontStyleFT->SetText(sFontStyleString);
 
-    m_pWestLine             ->Show( bShowNonWestern );
-    m_pColorFL              ->Show( bShowNonWestern );
+    m_pWestFrame->Show(true);
+    m_pEastFrame->Show(bShowCJK);
+    m_pCTLFrame->Show(bShowCTL);
 
-    m_pEastLine             ->Show( bShowCJK );
-    m_pEastFontNameFT       ->Show( bShowCJK );
-    m_pEastFontNameLB       ->Show( bShowCJK );
-    m_pEastFontStyleFT      ->Show( bShowCJK );
-    m_pEastFontStyleLB      ->Show( bShowCJK );
-    m_pEastFontSizeFT       ->Show( bShowCJK );
-    m_pEastFontSizeLB       ->Show( bShowCJK );
-    m_pEastFontLanguageFT   ->Show( bShowCJK );
-    m_pEastFontLanguageLB   ->Show( bShowCJK );
+    get(m_pPreviewWin, "preview");
 
-    m_pCTLLine             ->Show( bShowCTL );
-    m_pCTLFontNameFT       ->Show( bShowCTL );
-    m_pCTLFontNameLB       ->Show( bShowCTL );
-    m_pCTLFontStyleFT      ->Show( bShowCTL );
-    m_pCTLFontStyleLB      ->Show( bShowCTL );
-    m_pCTLFontSizeFT       ->Show( bShowCTL );
-    m_pCTLFontSizeLB       ->Show( bShowCTL );
-    m_pCTLFontLanguageFT   ->Show( bShowCTL );
-    m_pCTLFontLanguageLB   ->Show( bShowCTL );
+    m_pWestFontLanguageLB->SetLanguageList(LANG_LIST_WESTERN, sal_True, sal_False, sal_True);
+    m_pEastFontLanguageLB->SetLanguageList(LANG_LIST_CJK, sal_True, sal_False, sal_True);
+    m_pCTLFontLanguageLB->SetLanguageList(LANG_LIST_CTL, sal_True, sal_False, sal_True);
 
-    makeWidgets(&m_aBox, CUI_RES(RID_SVXPAGE_CHAR_NAME), WIN_CHAR_PREVIEW, FT_CHAR_FONTTYPE);
-
-    FreeResource();
-
-    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN,  sal_True, sal_False, sal_True );
-    m_pEastFontLanguageLB->SetLanguageList( LANG_LIST_CJK,      sal_True, sal_False, sal_True );
-    m_pCTLFontLanguageLB->SetLanguageList( LANG_LIST_CTL,       sal_True, sal_False, sal_True );
+    if (!bShowNonWestern)
+    {
+        //10 lines
+        sal_Int32 nHeight = m_pWestFontSizeLB->CalcWindowSizePixel(10);
+        m_pWestFontNameLB->set_height_request(nHeight);
+        m_pWestFontStyleLB->set_height_request(nHeight);
+        m_pWestFontSizeLB->set_height_request(nHeight);
+    }
+    else
+    {
+        equalize_width_requests(m_pWestFontLanguageLB, m_pEastFontLanguageLB, m_pCTLFontLanguageLB);
+    }
 
     Initialize();
 }
@@ -464,43 +407,6 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
 SvxCharNamePage::~SvxCharNamePage()
 {
     delete m_pImpl;
-
-    delete m_pWestLine;
-    delete m_pWestFontNameFT;
-    delete m_pWestFontNameLB;
-    delete m_pWestFontStyleFT;
-    delete m_pWestFontStyleLB;
-    delete m_pWestFontSizeFT;
-    delete m_pWestFontSizeLB;
-    delete m_pWestFontLanguageFT;
-    delete m_pWestFontLanguageLB;
-
-    delete m_pEastLine;
-    delete m_pEastFontNameFT;
-    delete m_pEastFontNameLB;
-    delete m_pEastFontStyleFT;
-    delete m_pEastFontStyleLB;
-    delete m_pEastFontSizeFT;
-    delete m_pEastFontSizeLB;
-    delete m_pEastFontLanguageFT;
-    delete m_pEastFontLanguageLB;
-
-    delete m_pCTLLine;
-    delete m_pCTLFontNameFT;
-    delete m_pCTLFontNameLB;
-    delete m_pCTLFontStyleFT;
-    delete m_pCTLFontStyleLB;
-    delete m_pCTLFontSizeFT;
-    delete m_pCTLFontSizeLB;
-    delete m_pCTLFontLanguageFT;
-    delete m_pCTLFontLanguageLB;
-
-    delete m_pColorFL;
-    delete m_pColorFT;
-    delete m_pColorLB;
-
-    delete m_pPreviewWin, m_pPreviewWin = NULL;
-    delete m_pFontTypeFT, m_pFontTypeFT = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -509,40 +415,6 @@ void SvxCharNamePage::Initialize()
 {
     // to handle the changes of the other pages
     SetExchangeSupport();
-
-    // fill the color box
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    XColorListRef pColorTable;
-    const SfxPoolItem* pItem = NULL;
-
-    if ( pDocSh )
-    {
-        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-        if ( pItem != NULL )
-            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
-    }
-
-    if ( !pColorTable.is() )
-        pColorTable = XColorList::CreateStdColorList();
-
-    m_pColorLB->SetUpdateMode( sal_False );
-
-    {
-        SfxPoolItem* pDummy;
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
-        if( !pFrame || SFX_ITEM_DEFAULT > pFrame->GetBindings().QueryState(
-                                    SID_ATTR_AUTO_COLOR_INVALID, pDummy ))
-            m_pColorLB->InsertEntry( Color( COL_AUTO ),
-                                     SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
-    }
-    for ( long i = 0; i < pColorTable->Count(); i++ )
-    {
-        XColorEntry* pEntry = pColorTable->GetColor(i);
-        m_pColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-    }
-
-    m_pColorLB->SetUpdateMode( sal_True );
-    m_pColorLB->SetSelectHdl( LINK( this, SvxCharNamePage, ColorBoxSelectHdl_Impl ) );
 
     Link aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
     m_pWestFontNameLB->SetModifyHdl( aLink );
@@ -559,10 +431,6 @@ void SvxCharNamePage::Initialize()
     m_pCTLFontLanguageLB->SetSelectHdl( aLink );
 
     m_pImpl->m_aUpdateTimer.SetTimeoutHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
-
-    m_pColorFL->Hide();
-    m_pColorFT->Hide();
-    m_pColorLB->Hide();
 }
 
 // -----------------------------------------------------------------------
@@ -684,15 +552,14 @@ void SvxCharNamePage::UpdatePreview_Impl()
     aCTLSize.Width() = 0;
     // Font
     const FontList* pFontList = GetFontList();
-    FontInfo aFontInfo =
-        calcFontInfo(rFont,this,m_pWestFontNameLB,m_pWestFontStyleLB,m_pWestFontSizeLB,m_pWestFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_FONT ),GetWhich( SID_ATTR_CHAR_FONTHEIGHT ));
+
+    calcFontInfo(rFont,this,m_pWestFontNameLB,m_pWestFontStyleLB,m_pWestFontSizeLB,m_pWestFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_FONT ),GetWhich( SID_ATTR_CHAR_FONTHEIGHT ));
 
     calcFontInfo(rCJKFont,this,m_pEastFontNameLB,m_pEastFontStyleLB,m_pEastFontSizeLB,m_pEastFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CJK_FONT ),GetWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT ));
 
     calcFontInfo(rCTLFont,this,m_pCTLFontNameLB,m_pCTLFontStyleLB,m_pCTLFontSizeLB,m_pCTLFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CTL_FONT ),GetWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT ));
 
     m_pPreviewWin->Invalidate();
-    m_pFontTypeFT->SetText( pFontList->GetFontMapText( aFontInfo ) );
 }
 
 // -----------------------------------------------------------------------
@@ -967,10 +834,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             break;
         }
     }
-
-    if ( Western == eLangGrp )
-        m_pFontTypeFT->SetText( pFontList->GetFontMapText(
-            pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) ) );
 
     // save these settings
     pNameBox->SaveValue();
@@ -1255,60 +1118,6 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
 
 // -----------------------------------------------------------------------
 
-void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
-{
-    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
-    SfxItemState eState = rSet.GetItemState( nWhich );
-
-    switch ( eState )
-    {
-        case SFX_ITEM_UNKNOWN:
-            m_pColorLB->Hide();
-            break;
-
-        case SFX_ITEM_DISABLED:
-        case SFX_ITEM_READONLY:
-            m_pColorLB->Disable();
-            break;
-
-        case SFX_ITEM_DONTCARE:
-            m_pColorLB->SetNoSelection();
-            break;
-
-        case SFX_ITEM_DEFAULT:
-        case SFX_ITEM_SET:
-        {
-            SvxFont& rFont = GetPreviewFont();
-            SvxFont& rCJKFont = GetPreviewCJKFont();
-            SvxFont& rCTLFont = GetPreviewCTLFont();
-            const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
-            Color aColor = rItem.GetValue();
-            rFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
-            rCJKFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
-            rCTLFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
-            m_pPreviewWin->Invalidate();
-            sal_uInt16 nSelPos = m_pColorLB->GetEntryPos( aColor );
-            if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
-                nSelPos = m_pColorLB->GetEntryPos( m_pImpl->m_aTransparentText );
-
-            if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-                m_pColorLB->SelectEntryPos( nSelPos );
-            else
-            {
-                nSelPos = m_pColorLB->GetEntryPos( aColor );
-                if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-                    m_pColorLB->SelectEntryPos( nSelPos );
-                else
-                    m_pColorLB->SelectEntryPos(
-                        m_pColorLB->InsertEntry( aColor, String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
-            }
-            break;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 IMPL_LINK_NOARG(SvxCharNamePage, UpdateHdl_Impl)
 {
     UpdatePreview_Impl();
@@ -1326,25 +1135,6 @@ IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pNameBox )
         FillStyleBox_Impl( (FontNameBox*)pNameBox );
         FillSizeBox_Impl( (FontNameBox*)pNameBox );
     }
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SvxCharNamePage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
-{
-    SvxFont& rFont = GetPreviewFont();
-    SvxFont& rCJKFont = GetPreviewCJKFont();
-    SvxFont& rCTLFont = GetPreviewCTLFont();
-    Color aSelectedColor;
-    if ( pBox->GetSelectEntry() == m_pImpl->m_aTransparentText )
-        aSelectedColor = Color( COL_TRANSPARENT );
-    else
-        aSelectedColor = pBox->GetSelectEntryColor();
-    rFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
-    rCJKFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
-    rCTLFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
-    m_pPreviewWin->Invalidate();
     return 0;
 }
 
@@ -1387,8 +1177,10 @@ void SvxCharNamePage::Reset( const SfxItemSet& rSet )
     Reset_Impl( rSet, Western );
     Reset_Impl( rSet, Asian );
     Reset_Impl( rSet, Ctl );
-    ResetColor_Impl( rSet );
-    m_pColorLB->SaveValue();
+
+    equalize_width_requests(m_pWestFontNameLB, m_pEastFontNameLB, m_pCTLFontNameLB);
+    equalize_width_requests(m_pWestFontStyleLB, m_pEastFontStyleLB, m_pCTLFontStyleLB);
+    equalize_width_requests(m_pWestFontSizeLB, m_pEastFontSizeLB, m_pCTLFontSizeLB);
 
     SetPrevFontWidthScale( rSet );
     UpdatePreview_Impl();
@@ -1640,7 +1432,6 @@ void SvxCharEffectsPage::Initialize()
 
 SvxCharEffectsPage::~SvxCharEffectsPage()
 {
-    m_pPreviewWin = NULL; //to-do, when all of these tab pages are converted to .ui this and the parent delete can go
 }
 
 // -----------------------------------------------------------------------
@@ -2835,7 +2626,6 @@ void SvxCharPositionPage::Initialize()
 
 SvxCharPositionPage::~SvxCharPositionPage()
 {
-    m_pPreviewWin = NULL; //to-do, when all of these tab pages are converted to .ui this and the parent delete can go
 }
 
 // -----------------------------------------------------------------------
@@ -3521,7 +3311,6 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(Window* pParent, const SfxItemSet& rInS
 
 SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
 {
-    m_pPreviewWin = NULL; //to-do, when all of these tab pages are converted to .ui this and the parent delete can go
 }
 
 // -----------------------------------------------------------------------

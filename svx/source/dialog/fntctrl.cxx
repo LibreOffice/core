@@ -28,6 +28,7 @@
 
 #include <sfx2/viewsh.hxx>      // SfxViewShell
 #include <sfx2/printer.hxx>     // Printer
+#include <vcl/builder.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <unicode/uchar.h>
@@ -526,7 +527,7 @@ SvxFontPrevWindow::SvxFontPrevWindow(Window* pParent) :
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontPrevWindow(Window *pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontPrevWindow(Window *pParent, VclBuilder::stringmap &)
 {
     SvxFontPrevWindow *pWindow = new SvxFontPrevWindow(pParent);
     return pWindow;

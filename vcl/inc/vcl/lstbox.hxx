@@ -111,7 +111,8 @@ public:
     Rectangle           GetDropDownPosSizePixel() const;
 
     void                SetDropDownLineCount( sal_uInt16 nLines );
-    sal_uInt16              GetDropDownLineCount() const;
+    sal_uInt16          GetDropDownLineCount() const;
+    void                SetBestDropDownLineCount() { SetDropDownLineCount(16);  }
 
     void                EnableAutoSize( sal_Bool bAuto );
     sal_Bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }

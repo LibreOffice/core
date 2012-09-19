@@ -29,6 +29,7 @@
 
 #define _CTRLBOX_CXX
 #include <tools/stream.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
 #include <vcl/helper.hxx>
@@ -124,10 +125,30 @@ ColorListBox::ColorListBox( Window* pParent, const ResId& rResId ) :
     ImplInit();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParent)
+namespace
 {
-    ColorListBox *pListBox = new ColorListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-    pListBox->SetDropDownLineCount(16); //arbitrary
+    bool extractDropdown(VclBuilder::stringmap &rMap)
+    {
+        bool bDropdown = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("dropdown")));
+        if (aFind != rMap.end())
+        {
+            bDropdown = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bDropdown;
+    }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    ColorListBox *pListBox = new ColorListBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->SetBestDropDownLineCount();
     return pListBox;
 }
 
@@ -1040,6 +1061,18 @@ FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
     InitFontMRUEntriesFile();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    FontNameBox *pListBox = new FontNameBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->SetBestDropDownLineCount();
+    return pListBox;
+}
+
 // -------------------------------------------------------------------
 
 FontNameBox::~FontNameBox()
@@ -1483,7 +1516,23 @@ FontStyleBox::FontStyleBox( Window* pParent, const ResId& rResId ) :
     aLastStyle = GetText();
 }
 
-// -------------------------------------------------------------------
+FontStyleBox::FontStyleBox( Window* pParent, WinBits nBits ) :
+    ComboBox( pParent, nBits )
+{
+    aLastStyle = GetText();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontStyleBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    FontStyleBox *pListBox = new FontStyleBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->SetBestDropDownLineCount();
+    return pListBox;
+}
 
 FontStyleBox::~FontStyleBox()
 {
@@ -1691,6 +1740,18 @@ FontSizeBox::FontSizeBox( Window* pParent, const ResId& rResId ) :
     MetricBox( pParent, rResId )
 {
     ImplInit();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    FontSizeBox* pListBox = new FontSizeBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->SetBestDropDownLineCount();
+    return pListBox;
 }
 
 // -----------------------------------------------------------------------

@@ -77,10 +77,10 @@ bool SwNumberingTypeListBox::set_property(const rtl::OString &rKey, const rtl::O
     return true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwNumberingTypeListBox(Window *pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwNumberingTypeListBox(Window *pParent, VclBuilder::stringmap &)
 {
     SwNumberingTypeListBox *pListBox = new SwNumberingTypeListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-    pListBox->SetDropDownLineCount(16);
+    pListBox->SetBestDropDownLineCount();
     return pListBox;
 }
 

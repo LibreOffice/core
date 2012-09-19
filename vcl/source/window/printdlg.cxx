@@ -62,12 +62,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makePrintPreviewWindow(Window *pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makePrintPreviewWindow(Window *pParent, VclBuilder::stringmap &)
 {
     return new PrintDialog::PrintPreviewWindow(pParent);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeShowNupOrderWindow(Window *pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeShowNupOrderWindow(Window *pParent, VclBuilder::stringmap &)
 {
     return new PrintDialog::ShowNupOrderWindow(pParent);
 }

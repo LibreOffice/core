@@ -471,11 +471,6 @@ private:
 };
 
 
-/*
- * @return true if rValue is "True", "true", "1", etc.
- */
-bool toBool(const rtl::OString &rValue);
-
 // retro-fitting utilities //
 
 //Get a Size which is large enough to contain all children with

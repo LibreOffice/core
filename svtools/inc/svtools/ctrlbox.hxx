@@ -486,6 +486,7 @@ private:
     using ComboBox::SetText;
 public:
                     FontStyleBox( Window* pParent, const ResId& rResId );
+                    FontStyleBox( Window* pParent, WinBits nBits );
     virtual         ~FontStyleBox();
 
     virtual void    Select();

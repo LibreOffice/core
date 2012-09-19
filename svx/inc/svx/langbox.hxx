@@ -78,7 +78,8 @@ private:
     SVX_DLLPRIVATE sal_uInt16                  ImplInsertLanguage(LanguageType, sal_uInt16, sal_Int16 );
 
 public:
-    SvxLanguageBox( Window* pParent, const ResId& rResId, sal_Bool bCheck = sal_False);
+    SvxLanguageBox(Window* pParent, const ResId& rResId, sal_Bool bCheck = sal_False);
+    SvxLanguageBox(Window* pParent, WinBits nBits, sal_Bool bCheck = sal_False);
     ~SvxLanguageBox();
 
     void            SetLanguageList( sal_Int16 nLangList,

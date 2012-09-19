@@ -116,7 +116,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/tabpages/backgrnd.src \
     cui/source/tabpages/bbdlg.src \
     cui/source/tabpages/border.src \
-    cui/source/tabpages/chardlg.src \
     cui/source/tabpages/connect.src \
     cui/source/tabpages/dstribut.src \
     cui/source/tabpages/frmdirlbox.src \
