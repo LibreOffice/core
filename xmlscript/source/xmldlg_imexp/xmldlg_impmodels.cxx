@@ -1628,7 +1628,6 @@ void CheckBoxElement::endElement()
     }
 
     ctx.importEvents( _events );
-    ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
