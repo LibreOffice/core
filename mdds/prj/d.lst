@@ -1,5 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\mdds
+mkdir: %_DEST%\inc%_EXT%\mdds\hash_container
 
 ..\%__SRC%\inc\mdds\* %_DEST%\inc%_EXT%\mdds
-
-
+..\%__SRC%\inc\mdds\hash_container\* %_DEST%\inc%_EXT%\mdds\hash_container
