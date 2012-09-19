@@ -996,8 +996,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
             /* break type
             0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
-                xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
-                    uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
+                if ((m_bTitlePage && m_bIsFirstSection) || !m_bTitlePage)
+                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
+                            uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
                 // handle page breaks with odd/even page numbering
                 style::PageStyleLayout nPageStyleLayout(style::PageStyleLayout_ALL);
                 if (m_nBreakType == 3)
