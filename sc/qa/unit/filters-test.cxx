@@ -196,6 +196,7 @@ void ScFiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString&
 
 void ScFiltersTest::testCVEs()
 {
+#ifndef DISABLE_CVE_TESTS
     testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
         getURLFromSrc("/sc/qa/unit/data/qpro/"), rtl::OUString());
 
@@ -207,6 +208,7 @@ void ScFiltersTest::testCVEs()
 
     testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Excel 97")),
         getURLFromSrc("/sc/qa/unit/data/xls/"), rtl::OUString());
+#endif
 }
 
 #if TEST_BUG_FILES

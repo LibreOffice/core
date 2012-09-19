@@ -196,9 +196,11 @@ bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
 
 void SdFiltersTest::testCVEs()
 {
+#ifndef DISABLE_CVE_TESTS
     testDir(rtl::OUString("MS PowerPoint 97"),
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
             rtl::OUString("sdfilt"));
+#endif
 }
 
 SdFiltersTest::SdFiltersTest()

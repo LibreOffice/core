@@ -31,6 +31,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_filters_test, \
     sc/qa/unit/filters-test \
 ))
 
+ifeq ($(DISABLE_CVE_TESTS),TRUE)
+$(eval $(call gb_CppunitTest_add_defs,sc_filters_test,\
+    -DDISABLE_CVE_TESTS \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_externals,sc_filters_test, \
 	mdds_headers \
 	orcus \
