@@ -134,6 +134,12 @@ private:
     void                setFrom( const ::rtl::OUString& rPoints );
     /** Processes the 'to' attribute. */
     void                setTo( const ::rtl::OUString& rPoints );
+    /** Processes the 'control1' attribute. */
+    void                setControl1( const ::rtl::OUString& rPoints );
+    /** Processes the 'control2' attribute. */
+    void                setControl2( const ::rtl::OUString& rPoints );
+    /** Processes the 'path' attribute. */
+    void                setVmlPath( const ::rtl::OUString& rPath );
 
 protected:
     ShapeBase&          mrShape;

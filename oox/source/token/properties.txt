@@ -334,6 +334,7 @@ PercentageNumberFormat
 PersistName
 Perspective
 PolyPolygon
+PolyPolygonBezier
 PolygonKind
 Position
 PositionBottom
