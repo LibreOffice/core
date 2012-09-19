@@ -84,16 +84,24 @@ CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(
 # force 64-bit buildmode
 USE_64:=1
 .EXPORT : USE_64
-.ENDIF			# "$(CPUNAME)"=="X86_64"
-.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
+.ENDIF
+.ENDIF
+
+.IF "$(OS)$(COM)"=="MACOSXGCC"
+.IF "$(BUILD64)"=="1"
+# force 64-bit buildmode
+USE_64:=1
+.EXPORT : USE_64
+.ENDIF
+.ENDIF
 
 .IF "$(OS)$(COM)"=="FREEBSDGCC"
 .IF "$(CPUNAME)"=="X86_64"
 # force 64-bit buildmode
 USE_64:=1
 .EXPORT : USE_64
-.ENDIF			# "$(CPUNAME)"=="X86_64"
-.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
+.ENDIF
+.ENDIF
 
 .IF "$(OS)"=="MACOSX"
 MACOS_SDK_DIR:=$(MACOSX_SDK_PATH)

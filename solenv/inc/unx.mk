@@ -123,6 +123,10 @@
 .INCLUDE : unxmacxi.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXX"
+.INCLUDE : unxmacxx.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCIOSR"
 .INCLUDE : unxiosr.mk
 .ENDIF

@@ -75,7 +75,7 @@ while [ $# != 0 ]; do
 		# Do nothing as this step is obsolete
         :
 
-	elif printf "$filetype" | grep -q 'Mach-O dynamically linked shared library'; then
+	elif printf "$filetype" | grep -q 'dynamically linked shared library'; then
 		# Screen out lib\w+static libraries as they are not used directly
 		if ! printf "$inputfilename" | grep -q -x -E 'lib\w+static.*\.dylib'; then
 			# Create jnilib link

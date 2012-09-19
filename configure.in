@@ -1042,11 +1042,11 @@ AC_ARG_ENABLE(ccache,
 ]),
 ,)
 
-AC_ARG_ENABLE(cl-x64,
-    AS_HELP_STRING([--enable-cl-x64],
-        [Build a 64-bit LibreOffice using the Microsoft C/C++ x64
-        compiler. Incomplete and doesn't work, use only if you are
-        hacking on it.]), ,)
+AC_ARG_ENABLE(64-bit,
+    AS_HELP_STRING([--enable-64-bit],
+        [Build a 64-bit LibreOffice on platforms where the normal and only supported build
+         is 32-bit. In other words, this option is experimental and possibly quite broken,
+         use only if you are hacking on 64-bit support.]), ,)
 
 AC_ARG_ENABLE(extra-gallery,
     AS_HELP_STRING([--enable-extra-gallery],
@@ -2558,6 +2558,13 @@ dnl Check / find MacOSX SDK and compiler, version checks
 dnl ===================================================================
 if test "$_os" = "Darwin"; then
 
+    if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
+        bitness=-m32
+    else
+        bitness=-m64
+        BITNESS_OVERRIDE=64
+    fi
+
     # If no --with-macosx-sdk option is given, first look for the 10.4u
     # SDK (which is distributed with the obsolete Xcode 3), then the
     # 10.6, 10.7 and 10.8 SDKs, in that order. (Don't bother looking
@@ -2689,6 +2696,14 @@ if test "$_os" = "Darwin"; then
         ;;
     esac
 
+    if "$BITNESS_OVERRIDE" = 64; then
+        case $with_macosx_version_min_required in
+        10.4|10.5)
+            AC_MSG_ERROR([Can't build 64-bit code for with-macosx-version-min-required=$with_macosx_version_min_required])
+            ;;
+        esac
+    fi
+
     case "$with_macosx_version_min_required" in
     10.4)
         case "$with_macosx_sdk" in
@@ -2732,12 +2747,12 @@ if test "$_os" = "Darwin"; then
             # Is similar logic as above needed? Is it likely somebody
             # has both an older Xcode with the 10.6 SDK and a current
             # Xcode?
-            CC="gcc-4.2 -m32 -mmacosx-version-min=$with_macosx_version_min_required"
-            CXX="g++-4.2 -m32 -mmacosx-version-min=$with_macosx_version_min_required"
+            CC="gcc-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required"
+            CXX="g++-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required"
             ;;
         10.7|10.8)
-            CC="`xcrun -find clang` -m32 -mmacosx-version-min=$with_macosx_version_min_required"
-            CXX="`xcrun -find clang++` -m32 -mmacosx-version-min=$with_macosx_version_min_required"
+            CC="`xcrun -find clang` $bitness -mmacosx-version-min=$with_macosx_version_min_required"
+            CXX="`xcrun -find clang++` $bitness -mmacosx-version-min=$with_macosx_version_min_required"
             ;;
         esac
         AC_MSG_RESULT([$CC and $CXX])
@@ -2791,14 +2806,12 @@ dnl ===================================================================
 dnl Windows specific tests and stuff
 dnl ===================================================================
 if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
-    dnl Set the CL_X64 variable if we are building a 64-bit LibreOffice.
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
-    if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
-        CL_X64=""
+    if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         AC_MSG_RESULT([no])
     else
-        CL_X64="TRUE"
         AC_MSG_RESULT([yes])
+        BITNESS_OVERRIDE=64
     fi
 
     AC_MSG_CHECKING([whether to use DirectX])
@@ -2829,16 +2842,16 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
         AC_MSG_RESULT([no])
     fi
 else
-    CL_X64=""
     ENABLE_DIRECTX=""
     DISABLE_ACTIVEX="TRUE"
     DISABLE_ATL="TRUE"
 fi
 
-AC_SUBST(CL_X64)
 AC_SUBST(ENABLE_DIRECTX)
 AC_SUBST(DISABLE_ACTIVEX)
 AC_SUBST(DISABLE_ATL)
+
+AC_SUBST(BITNESS_OVERRIDE)
 
 if test "$cross_compiling" = "yes"; then
     CROSS_COMPILING=YES
@@ -3027,7 +3040,7 @@ if test "$_os" = "WINNT"; then
         AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
         if test -z "$with_cl_home"; then
             vctest=`./oowintool --msvc-productdir`
-            if test "$CL_X64" = ""; then
+            if test "$BITNESS_OVERRIDE" = ""; then
                 if test -x "$vctest/bin/cl.exe"; then
                     with_cl_home=$vctest
                 fi
@@ -3088,7 +3101,7 @@ if test "$_os" = "WINNT"; then
 
         AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
         if test -z "$CC"; then
-            if test "$CL_X64" = ""; then
+            if test "$BITNESS_OVERRIDE" = ""; then
                 if test -x "$with_cl_home/bin/cl.exe"; then
                     CC="$with_cl_home/bin/cl.exe"
                 fi
@@ -3108,7 +3121,7 @@ if test "$_os" = "WINNT"; then
         if test -n "$CC"; then
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found ($CC)])
-            if test "$CL_X64" = ""; then
+            if test "$BITNESS_OVERRIDE" = ""; then
                 COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
             else
                 if test -n "$with_cl_home"; then
@@ -3174,7 +3187,7 @@ if test "$_os" = "WINNT"; then
         LIBMGR_X64_BINARY=
 
         AC_MSG_CHECKING([for a x64 compiler and libraries for 64bit ActiveX component])
-        if test "$CL_X64" = "" -a -f "$with_cl_home/atlmfc/lib/amd64/atls.lib"; then
+        if test "$BITNESS_OVERRIDE" = "" -a -f "$with_cl_home/atlmfc/lib/amd64/atls.lib"; then
             # Prefer native x64 compiler to cross-compiler, in case we are running
             # the build on a 64-bit OS.
             if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
@@ -3278,7 +3291,7 @@ cygwin*)
 
     case "$host_cpu" in
     i*86|x86_64)
-        if test "$CL_X64" != ""; then
+        if test "$BITNESS_OVERRIDE" = 64; then
             CPU=X
             CPUNAME=X86_64
             RTL_ARCH=X86_64
@@ -3324,11 +3337,27 @@ darwin*)
         RTL_ARCH=PowerPC
         OUTPATH=unxmacxp
         ;;
-    i*86|x86_64)
+    i*86)
+        if test "$BITNESS_OVERRIDE" = 64; then
+            AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
+        fi
         CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         OUTPATH=unxmacxi
+        ;;
+    x86_64)
+        if test "$BITNESS_OVERRIDE" = 64; then
+            CPU=X
+            CPUNAME=X86_64
+            RTL_ARCH=X86_64
+            OUTPATH=unxmacxx
+        else
+            CPU=I
+            CPUNAME=INTEL
+            RTL_ARCH=x86
+            OUTPATH=unxmacxi
+        fi
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -3603,7 +3632,7 @@ mingw*)
 
     case "$host_cpu" in
     i*86|x86_64)
-        if test "$CL_X64" != ""; then
+        if test "$BITNESS_OVERRIDE" = 64; then
             CPU=X
             CPUNAME=X86_64
             RTL_ARCH=X86_84
@@ -4797,7 +4826,7 @@ else
     SIZEOF_INT=4
     SIZEOF_LONG=4
     SIZEOF_LONGLONG=8
-    if test "$CL_X64" = ""; then
+    if test "$BITNESS_OVERRIDE" = ""; then
         SIZEOF_POINTER=4
     else
         SIZEOF_POINTER=8
@@ -5547,7 +5576,7 @@ if test "$SOLAR_JAVA" != ""; then
 
     # Windows-specific tests
     if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
-        if test "$CL_X64" != ""; then
+        if test "$BITNESS_OVERRIDE" = 64; then
             bitness="64-bit"
             otherbitness="32-bit"
         else
@@ -5591,10 +5620,10 @@ if test "$SOLAR_JAVA" != ""; then
         # Why is this necessary, we don't link with any library from the JDK I think,
 
         shortjdkhome=`cygpath -d "$with_jdk_home"`
-        if test "$CL_X64" != "" -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
+        if test "$BITNESS_OVERRIDE" = 64 -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
             AC_MSG_WARN([You are building 64-bit binaries but the JDK $howfound is 32-bit])
             AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
-        elif test "$CL_X64" = "" -a -f "$_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" != ""  >/dev/null; then
+        elif test "$BITNESS_OVERRIDE" = "" -a -f "$_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" != ""  >/dev/null; then
             AC_MSG_WARN([You are building 32-bit binaries but the JDK $howfound is 64-bit])
             AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a (32-bit) JDK])
         fi
@@ -9121,7 +9150,7 @@ dnl testing assembler path
 dnl ***************************************
 ML_EXE=""
 if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-    if test "$CL_X64" = ""; then
+    if test "$BITNESS_OVERRIDE" = ""; then
         assembler=ml.exe
         assembler_bin=bin
     else
@@ -12245,7 +12274,7 @@ if test "$build_os" = "cygwin"; then
     if test -n "$JAVA_HOME" -a "$JAVA_HOME" != "NO_JAVA_HOME"; then
         ILIB="$ILIB;$JAVA_HOME/lib"
     fi
-    if test "$CL_X64" = "TRUE"; then
+    if test "$BITNESS_OVERRIDE" = 64; then
         ILIB="$ILIB;$COMPATH/lib/amd64"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib64"
     else
@@ -12359,7 +12388,7 @@ if test "$build_os" = "cygwin"; then
         MFC_LIB="$COMPATH/atlmfc/lib"
         MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc"
     fi
-    if test "$CL_X64" = "YES"; then
+    if test "$BITNESS_OVERRIDE" = 64; then
         ATL_LIB="$ATL_LIB/amd64"
         MFC_LIB="$MFC_LIB/amd64"
     fi
@@ -12439,7 +12468,7 @@ else
         pathmunge "$CSC_PATH" "before"
         pathmunge "$MIDL_PATH" "before"
         pathmunge "$MSPDB_PATH" "before"
-        if test "$CL_X64" = "TRUE"; then
+        if test "$BITNESS_OVERRIDE" = 64; then
             pathmunge "$COMPATH/bin/amd64" "before"
         else
             pathmunge "$COMPATH/bin" "before"
