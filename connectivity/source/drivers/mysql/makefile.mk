@@ -55,7 +55,8 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # --- Library -----------------------------------
 
-SHL1TARGET=	$(MYSQL_TARGET)$(DLLPOSTFIX)
+REALNAME:=$(MYSQL_TARGET).uno
+SHL1TARGET=$(REALNAME)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\

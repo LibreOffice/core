@@ -1058,8 +1058,8 @@ End
 #endif
 #endif
 
-STD_LIB_FILE(gid_File_Lib_Mysql,mysql)
-STD_LIB_FILE(gid_File_Lib_Odbc,odbc)
+STD_LIB_FILE(gid_File_Lib_Mysql,mysql.uno)
+STD_LIB_FILE(gid_File_Lib_Odbc,odbc.uno)
 
 // STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
 
