@@ -45,7 +45,6 @@ private:
     sal_uInt16          nPageCount;     // page count for progress view
     sal_uInt16          nPageStart;     // 1st checked page
     sal_Bool            bInSelection : 1; // seperating selected text
-    sal_Bool            bShowError : 1; // report non existing language
     sal_Bool            bAutomatic : 1; // insert seperators without further inquiry
     sal_Bool            bInfoBox : 1;   // display info-box when ending
 
