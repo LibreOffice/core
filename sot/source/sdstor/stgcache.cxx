@@ -45,10 +45,7 @@ StgPage::StgPage( StgCache* p, short n )
     bDirty = sal_False;
     nPage  = 0;
     pData  = new sal_uInt8[ nData ];
-    pNext1 =
-    pNext2 =
-    pLast1 =
-    pLast2 = NULL;
+    pNext2 = pLast2 = NULL;
 }
 
 StgPage::~StgPage()
@@ -84,7 +81,7 @@ StgCache::StgCache()
 {
     nRef = 0;
     pStrm = NULL;
-    pCur = pElem1 = NULL;
+    pElem1 = NULL;
     nPageSize = 512;
     nError = SVSTREAM_OK;
     bMyStream = sal_False;
@@ -112,7 +109,6 @@ void StgCache::SetPhysPageSize( short n )
 }
 
 // Create a new cache element
-// pCur points to this element
 
 StgPage* StgCache::Create( sal_Int32 nPg )
 {
@@ -121,18 +117,7 @@ StgPage* StgCache::Create( sal_Int32 nPg )
     // For data security, clear the buffer contents
     memset( pElem->pData, 0, pElem->nData );
 
-    // insert to LRU
-    if( pCur )
-    {
-        pElem->pNext1 = pCur;
-        pElem->pLast1 = pCur->pLast1;
-        pElem->pNext1->pLast1 =
-        pElem->pLast1->pNext1 = pElem;
-    }
-    else
-        pElem->pNext1 = pElem->pLast1 = pElem;
     maLRUCache[pElem->nPage] = pElem;
-    pCur = pElem;
 
     // insert to Sorted
     if( !pElem1 )
@@ -163,12 +148,6 @@ void StgCache::Erase( StgPage* pElem )
     OSL_ENSURE( pElem, "The pointer should not be NULL!" );
     if ( pElem )
     {
-        OSL_ENSURE( pElem->pNext1 && pElem->pLast1, "The pointers may not be NULL!" );
-        //remove from LRU
-        pElem->pNext1->pLast1 = pElem->pLast1;
-        pElem->pLast1->pNext1 = pElem->pNext1;
-        if( pCur == pElem )
-            pCur = ( pElem->pNext1 == pElem ) ? NULL : pElem->pNext1;
         maLRUCache.erase( pElem->nPage );
         // remove from Sorted
         pElem->pNext2->pLast2 = pElem->pLast2;
@@ -183,15 +162,14 @@ void StgCache::Erase( StgPage* pElem )
 
 void StgCache::Clear()
 {
-    StgPage* pElem = pCur;
-    if( pCur ) do
+    StgPage *pElem = pElem1;
+    if( pElem ) do
     {
         StgPage* pDelete = pElem;
-        pElem = pElem->pNext1;
+        pElem = pElem->pNext2;
         delete pDelete;
     }
-    while( pCur != pElem );
-    pCur = NULL;
+    while( pElem != pElem1 );
     pElem1 = NULL;
     maLRUCache.clear();
 }
@@ -206,19 +184,6 @@ StgPage* StgCache::Find( sal_Int32 nPage )
         // page found
         StgPage* pFound = (*aIt).second;
         OSL_ENSURE( pFound, "The pointer may not be NULL!" );
-
-        if( pFound != pCur )
-        {
-            OSL_ENSURE( pFound->pNext1 && pFound->pLast1, "The pointers may not be NULL!" );
-            // remove from LRU
-            pFound->pNext1->pLast1 = pFound->pLast1;
-            pFound->pLast1->pNext1 = pFound->pNext1;
-            // insert to LRU
-            pFound->pNext1 = pCur;
-            pFound->pLast1 = pCur->pLast1;
-            pFound->pNext1->pLast1 =
-            pFound->pLast1->pNext1 = pFound;
-        }
         return pFound;
     }
     return NULL;
@@ -283,34 +248,6 @@ sal_Bool StgCache::Commit()
     } while( p != pElem1 );
     pStrm->Flush();
     SetError( pStrm->GetError() );
-#ifdef CHECK_DIRTY
-    p = pElem1;
-    if( p ) do
-    {
-        if( p->bDirty )
-        {
-            ErrorBox( NULL, WB_OK, String("SO2: Dirty Block in Ordered List") ).Execute();
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
-            if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
-        }
-        p = p->pNext2;
-    } while( p != pElem1 );
-    p = pElem1;
-    if( p ) do
-    {
-        if( p->bDirty )
-        {
-            ErrorBox( NULL, WB_OK, String("SO2: Dirty Block in LRU List") ).Execute();
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
-            if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
-        }
-        p = p->pNext1;
-    } while( p != pElem1 );
-#endif
     return sal_True;
 }
 

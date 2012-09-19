@@ -91,7 +91,6 @@ public:
 class StgPage {
     friend class StgCache;
     StgCache* pCache;                       // the cache
-    StgPage *pNext1, *pLast1;               // LRU chain
     StgPage *pNext2, *pLast2;               // ordered chain
     sal_Int32   nPage;                          // page #
     sal_uInt8*  pData;                          // nPageSize characters
