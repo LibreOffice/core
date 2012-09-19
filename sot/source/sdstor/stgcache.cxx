@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <osl/endian.h>
 #include <tools/string.hxx>
@@ -37,32 +36,38 @@
 // a page buffer, even if a read fails. It is up to the caller to determine
 // the correctness of the I/O.
 
-StgPage::StgPage( StgCache* p, short n )
+StgPage::StgPage( short nSize, sal_Int32 nPage )
+    : mnPage( nPage )
+    , mpData( new sal_uInt8[ nSize ] )
+    , mnSize( nSize )
+    , mbDirty( false )
 {
-    OSL_ENSURE( n >= 512, "Unexpected page size is provided!" );
-    pCache = p;
-    nData  = n;
-    bDirty = sal_False;
-    nPage  = 0;
-    pData  = new sal_uInt8[ nData ];
-    pNext2 = pLast2 = NULL;
+    OSL_ENSURE( mnSize >= 512, "Unexpected page size is provided!" );
+    // We will write this data to a permanant file later
+    // best to clear if first.
+    memset( mpData, 0, mnSize );
 }
 
 StgPage::~StgPage()
 {
-    delete [] pData;
+    delete [] mpData;
 }
 
 void StgPage::SetPage( short nOff, sal_Int32 nVal )
 {
-    if( ( nOff < (short) ( nData / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
+    if( ( nOff < (short) ( mnSize / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
     {
 #ifdef OSL_BIGENDIAN
-      nVal = OSL_SWAPDWORD(nVal);
+        nVal = OSL_SWAPDWORD(nVal);
 #endif
-        ((sal_Int32*) pData )[ nOff ] = nVal;
-        bDirty = sal_True;
+        ((sal_Int32*) mpData )[ nOff ] = nVal;
+        mbDirty = true;
     }
+}
+
+bool StgPage::IsPageGreater( const StgPage *pA, const StgPage *pB )
+{
+    return pA->mnPage < pB->mnPage;
 }
 
 //////////////////////////////// class StgCache ////////////////////////////
@@ -81,7 +86,6 @@ StgCache::StgCache()
 {
     nRef = 0;
     pStrm = NULL;
-    pElem1 = NULL;
     nPageSize = 512;
     nError = SVSTREAM_OK;
     bMyStream = sal_False;
@@ -112,32 +116,10 @@ void StgCache::SetPhysPageSize( short n )
 
 StgPage* StgCache::Create( sal_Int32 nPg )
 {
-    StgPage* pElem = new StgPage( this, nPageSize );
-    pElem->nPage = nPg;
-    // For data security, clear the buffer contents
-    memset( pElem->pData, 0, pElem->nData );
+    StgPage* pElem = new StgPage( nPageSize, nPg );
 
-    maLRUCache[pElem->nPage] = pElem;
+    maLRUCache[pElem->GetPage()] = pElem;
 
-    // insert to Sorted
-    if( !pElem1 )
-        pElem1 = pElem->pNext2 = pElem->pLast2 = pElem;
-    else
-    {
-        StgPage* p = pElem1;
-        do
-        {
-            if( pElem->nPage < p->nPage )
-                break;
-            p = p->pNext2;
-        } while( p != pElem1 );
-        pElem->pNext2 = p;
-        pElem->pLast2 = p->pLast2;
-        pElem->pNext2->pLast2 =
-        pElem->pLast2->pNext2 = pElem;
-        if( p->nPage < pElem1->nPage )
-            pElem1 = pElem;
-    }
     return pElem;
 }
 
@@ -148,12 +130,7 @@ void StgCache::Erase( StgPage* pElem )
     OSL_ENSURE( pElem, "The pointer should not be NULL!" );
     if ( pElem )
     {
-        maLRUCache.erase( pElem->nPage );
-        // remove from Sorted
-        pElem->pNext2->pLast2 = pElem->pLast2;
-        pElem->pLast2->pNext2 = pElem->pNext2;
-        if( pElem1 == pElem )
-            pElem1 = ( pElem->pNext2 == pElem ) ? NULL : pElem->pNext2;
+        maLRUCache.erase( pElem->GetPage() );
         delete pElem;
     }
 }
@@ -162,15 +139,6 @@ void StgCache::Erase( StgPage* pElem )
 
 void StgCache::Clear()
 {
-    StgPage *pElem = pElem1;
-    if( pElem ) do
-    {
-        StgPage* pDelete = pElem;
-        pElem = pElem->pNext2;
-        delete pDelete;
-    }
-    while( pElem != pElem1 );
-    pElem1 = NULL;
     maLRUCache.clear();
 }
 
@@ -197,7 +165,7 @@ StgPage* StgCache::Get( sal_Int32 nPage, sal_Bool bForce )
     if( !p )
     {
         p = Create( nPage );
-        if( !Read( nPage, p->pData, 1 ) && bForce )
+        if( !Read( nPage, p->GetData(), 1 ) && bForce )
         {
             Erase( p );
             p = NULL;
@@ -222,32 +190,39 @@ StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
         StgPage* q = Get( nOld, sal_True );
         if( q )
         {
-            OSL_ENSURE( p->nData == q->nData, "Unexpected page size!" );
-            memcpy( p->pData, q->pData, p->nData );
+            OSL_ENSURE( p->GetSize() == q->GetSize(), "Unexpected page size!" );
+            memcpy( p->GetData(), q->GetData(), p->GetSize() );
         }
     }
-    p->SetDirty();
+    p->SetDirty( true );
     return p;
 }
 
-// Flush the cache whose owner is given. NULL flushes all.
-
+// Historically this wrote pages in a sorted, ascending order;
+// continue that tradition.
 sal_Bool StgCache::Commit()
 {
-    StgPage* p = pElem1;
-    if( p ) do
+    std::vector< StgPage * > aToWrite;
+    for ( IndexToStgPage::iterator aIt = maLRUCache.begin();
+          aIt != maLRUCache.end(); aIt++ )
     {
-        if( p->bDirty )
-        {
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
-            if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
-        }
-        p = p->pNext2;
-    } while( p != pElem1 );
+        if ( aIt->second->IsDirty() )
+            aToWrite.push_back( aIt->second );
+    }
+
+    std::sort( aToWrite.begin(), aToWrite.end(), StgPage::IsPageGreater );
+    for (std::vector< StgPage * >::iterator aWr = aToWrite.begin();
+         aWr != aToWrite.end(); aWr++)
+    {
+        StgPage *pPage = *aWr;
+        if ( !Write( pPage->GetPage(), pPage->GetData(), 1 ) )
+            return sal_False;
+        pPage->SetDirty( false );
+    }
+
     pStrm->Flush();
     SetError( pStrm->GetError() );
+
     return sal_True;
 }
 

@@ -869,7 +869,7 @@ void* StgDataStrm::GetPtr( sal_Int32 Pos, sal_Bool bForce, sal_Bool bDirty )
         if (pPg && nOffset < pPg->GetSize())
         {
             if( bDirty )
-                pPg->SetDirty();
+                pPg->SetDirty( true );
             return ((sal_uInt8 *)pPg->GetData()) + nOffset;
         }
     }
@@ -964,7 +964,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 {
                     // data is present, so use the cached data
                     memcpy( pPg->GetData(), p, nBytes );
-                    pPg->SetDirty();
+                    pPg->SetDirty( true );
                     nRes = nBytes;
                 }
                 else
@@ -978,7 +978,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 if( !pPg )
                     break;
                 memcpy( (sal_uInt8*)pPg->GetData() + nOffset, p, nBytes );
-                pPg->SetDirty();
+                pPg->SetDirty( true );
                 nRes = nBytes;
             }
             nDone += nRes;

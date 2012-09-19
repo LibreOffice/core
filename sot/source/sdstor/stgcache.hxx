@@ -40,24 +40,20 @@ typedef boost::unordered_map
 > IndexToStgPage;
 
 class StgCache {
-    StgPage* pCur;                          // top of LRU list
-    StgPage* pElem1;                        // top of ordered list
-    sal_uLong nError;                           // error code
-    sal_Int32 nPages;                           // size of data area in pages
-    sal_uInt16 nRef;                            // reference count
+    sal_uLong nError;                       // error code
+    sal_Int32 nPages;                       // size of data area in pages
+    sal_uInt16 nRef;                        // reference count
     IndexToStgPage maLRUCache;              // hash of index to cached pages
     short nPageSize;                        // page size of the file
     UCBStorageStream* pStorageStream;       // holds reference to UCB storage stream
 
     void Erase( StgPage* );                 // delete a cache element
-    void InsertToLRU( StgPage* );           // insert into LRU list
-    void InsertToOrdered( StgPage* );       // insert into ordered list
-    StgPage* Create( sal_Int32 );               // create a cached page
+    StgPage* Create( sal_Int32 );           // create a cached page
 protected:
     SvStream* pStrm;                        // physical stream
-    sal_Bool  bMyStream;                        // sal_True: delete stream in dtor
-    sal_Bool  bFile;                            // sal_True: file stream
-    sal_Int32 Page2Pos( sal_Int32 );                // page address --> file position
+    sal_Bool  bMyStream;                    // sal_True: delete stream in dtor
+    sal_Bool  bFile;                        // sal_True: file stream
+    sal_Int32 Page2Pos( sal_Int32 );        // page address --> file position
 public:
     StgCache();
     ~StgCache();
@@ -89,27 +85,26 @@ public:
 };
 
 class StgPage {
-    friend class StgCache;
-    StgCache* pCache;                       // the cache
-    StgPage *pNext2, *pLast2;               // ordered chain
-    sal_Int32   nPage;                          // page #
-    sal_uInt8*  pData;                          // nPageSize characters
-    short   nData;                          // size of this page
-    sal_Bool    bDirty;                         // dirty flag
-    StgPage( StgCache*, short );
-    ~StgPage();
+    const sal_Int32 mnPage;                // page index
+    sal_uInt8*      mpData;                // nSize bytes
+    short           mnSize;                // size of this page
+    bool            mbDirty;               // dirty flag
 public:
-    void  SetDirty()                    { bDirty = sal_True;            }
-    sal_Int32 GetPage()                     { return nPage;             }
-    void* GetData()                     { return pData;             }
-    short GetSize()                     { return nData;             }
+    StgPage( short nData, sal_Int32 nPage );
+    ~StgPage();
+
+    sal_Int32 GetPage() { return mnPage; }
+    void*     GetData() { return mpData; }
+    short     GetSize() { return mnSize; }
+    bool      IsDirty() { return mbDirty; }
+    void      SetDirty( bool bDirty ) { mbDirty = bDirty; }
     // routines for accessing FAT pages
     // Assume that the data is a FAT page and get/put FAT data.
     sal_Int32 GetPage( short nOff )
     {
-        if( ( nOff >= (short) ( nData / sizeof( sal_Int32 ) ) ) || nOff < 0 )
+        if( ( nOff >= (short) ( mnSize / sizeof( sal_Int32 ) ) ) || nOff < 0 )
             return -1;
-        sal_Int32 n = ((sal_Int32*) pData )[ nOff ];
+        sal_Int32 n = ((sal_Int32*) mpData )[ nOff ];
 #ifdef OSL_BIGENDIAN
         return OSL_SWAPDWORD(n);
 #else
@@ -117,6 +112,7 @@ public:
 #endif
     }
     void  SetPage( short, sal_Int32 );      // put an element
+    static bool IsPageGreater( const StgPage *pA, const StgPage *pB );
 };
 
 #endif
