@@ -20,15 +20,17 @@ void TemporaryFonts::clear()
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/fonts/";
     osl::Directory dir( path );
-    dir.reset();
-    for(;;)
+    if( dir.reset() == osl::Directory::E_None )
     {
-        osl::DirectoryItem item;
-        if( dir.getNextItem( item ) != osl::Directory::E_None )
-            break;
-        osl::FileStatus status( osl_FileStatus_Mask_FileURL );
-        if( item.getFileStatus( status ) == osl::File::E_None )
-            osl::File::remove( status.getFileURL());
+        for(;;)
+        {
+            osl::DirectoryItem item;
+            if( dir.getNextItem( item ) != osl::Directory::E_None )
+                break;
+            osl::FileStatus status( osl_FileStatus_Mask_FileURL );
+            if( item.getFileStatus( status ) == osl::File::E_None )
+                osl::File::remove( status.getFileURL());
+        }
     }
 }
 
