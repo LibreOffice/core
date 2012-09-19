@@ -1499,7 +1499,7 @@ sal_Bool SvxAutoCorrect::AddWrtSttException( const String& rNew,
         else if(CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
             pLists = pLangTable->find(LANGUAGE_DONTKNOW)->second;
     }
-    OSL_ENSURE(pLists, "keine Autokorrekturdatei");
+    OSL_ENSURE(pLists, "No auto correction file!");
     return pLists->AddToWrdSttExceptList(rNew);
 }
 
@@ -1552,8 +1552,9 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
 {
     OSL_ENSURE(pLangTable->find(eLang) == pLangTable->end(), "Language already exists ");
 
-    String sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False )),
-           sShareDirFile( sUserDirFile );
+    String sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ));
+    String sShareDirFile( sUserDirFile );
+
     SvxAutoCorrectLanguageListsPtr pLists = 0;
 
     Time nMinTime( 0, 2 ), nAktTime( Time::SYSTEM ), nLastCheckTime( Time::EMPTY );
@@ -1568,8 +1569,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         if( bNewFile )
         {
             sShareDirFile = sUserDirFile;
-            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
-                                                        sUserDirFile );
+            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
             pLangTable->insert(eLang, pLists);
             aLastFileTable.erase(nFndPos);
         }
@@ -1579,8 +1579,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
                               GetAutoCorrFileName( eLang, sal_False, sal_False ) ) ) ||
         ( sShareDirFile = sUserDirFile, bNewFile ))
     {
-        pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
-                                                    sUserDirFile );
+        pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
         pLangTable->insert(eLang, pLists);
         if (nFndPos != aLastFileTable.end())
             aLastFileTable.erase(nFndPos);
@@ -1683,7 +1682,7 @@ static const SvxAutocorrWord* lcl_SearchWordsInList(
 }
 
 
-// the search or the words in the substitution table
+// the search for the words in the substitution table
 const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
                 const String& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos,
                 SvxAutoCorrDoc& rDoc, LanguageType& rLang )
