@@ -157,9 +157,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	$(if $(filter YES,$(SYSTEM_HSQLDB)),\
 		-DHSQLDB_JAR=\""$(call gb_Helper_make_path,$(HSQLDB_JAR))"\" \
 	) \
-	$(if $(filter YES,$(SYSTEM_SAXON)),\
-		-DSAXON_JAR=\""$(call gb_Helper_make_path,$(SAXON_JAR))"\" \
-	) \
 	$(if $(filter-out YES,$(WITH_MOZILLA)),\
 		-DWITHOUT_MOZILLA \
 	) \

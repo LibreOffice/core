@@ -1442,7 +1442,6 @@ STD_LIB_FILE( gid_File_Lib_Textfd, textfd )
 STD_LIB_FILE( gid_File_Lib_Odfflatxml, odfflatxml )
 
 #ifdef SOLAR_JAVA
-STD_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
 STD_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
 #endif
 

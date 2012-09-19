@@ -137,7 +137,6 @@ Module gid_Module_Root_Files_3
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root3,
-	gid_File_Jar_Saxon,
 	gid_File_Jar_Unoil,
 	gid_File_Jar_Hsqldb,
 	gid_File_Jar_Hsqldb_Sdbc,

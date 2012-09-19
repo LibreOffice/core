@@ -1257,9 +1257,6 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Classpath_Urls
 #ifdef SYSTEM_HSQLDB
     ValueList1 = HSQLDB_JAR;
 #endif
-#ifdef SYSTEM_SAXON
-    ValueList2 = SAXON_JAR;
-#endif
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
