@@ -182,6 +182,20 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    uno::Reference< beans::XPropertySet > xSettings( xFactory->createInstance(
                rtl::OUString::createFromAscii( "com.sun.star.document.Settings" ) ), uno::UNO_QUERY );
 
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("AddFrameOffsets"), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("UseOldNumbering"), uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("IgnoreFirstLineIndentInNumbering"), uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("DoNotResetParaAttrsForNumFont"), uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("UseFormerLineSpacing"), uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("AddParaSpacingToTableCells"), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("UseFormerObjectPositioning"), uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("ConsiderTextWrapOnObjPos"), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("UseFormerTextWrapping"), uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("TableRowKeep"), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("IgnoreTabsAndBlanksForLineCalculation"), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("InvertBorderSpacing"), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("CollapseEmptyCellPara"), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( rtl::OUString::createFromAscii("TabOverflow"), uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( rtl::OUString::createFromAscii( "UnbreakableNumberings" ), uno::makeAny( sal_True ) );
    xSettings->setPropertyValue(rtl::OUString::createFromAscii("FloattableNomargins"), uno::makeAny( sal_True ));
    xSettings->setPropertyValue( rtl::OUString::createFromAscii("BackgroundParaOverDrawings"), uno::makeAny( sal_True ) );
