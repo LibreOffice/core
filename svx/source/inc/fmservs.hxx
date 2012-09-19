@@ -21,7 +21,6 @@
 
 #include <svx/svxdllapi.h>
 
-#define FM_NUMBER_FORMATTER             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter" ) )
 #define FM_COMPONENT_EDIT               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "stardiv.one.form.component.Edit" ) )
 #define FM_COMPONENT_TEXTFIELD          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "stardiv.one.form.component.TextField" ) )
 #define FM_COMPONENT_LISTBOX            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "stardiv.one.form.component.ListBox" ) )

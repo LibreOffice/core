@@ -19,6 +19,7 @@
 
 #include "analysis.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -155,13 +156,13 @@ void AnalysisAddIn::InitData( void )
 }
 
 
-AnalysisAddIn::AnalysisAddIn( const uno::Reference< lang::XMultiServiceFactory >& xServiceFact ) :
+AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xContext ) :
     pDefLocales( NULL ),
     pFD( NULL ),
     pFactDoubles( NULL ),
     pCDL( NULL ),
     pResMgr( NULL ),
-    aAnyConv( xServiceFact )
+    aAnyConv( xContext )
 {
 }
 
@@ -259,7 +260,7 @@ SEQ( STRING ) AnalysisAddIn::getSupportedServiceNames_Static()
 REF( uno::XInterface ) SAL_CALL AnalysisAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& xServiceFact )
 {
-    static uno::Reference< uno::XInterface > xInst = (cppu::OWeakObject*) new AnalysisAddIn( xServiceFact );
+    static uno::Reference< uno::XInterface > xInst = (cppu::OWeakObject*) new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) );
     return xInst;
 }
 

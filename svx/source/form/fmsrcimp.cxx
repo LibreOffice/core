@@ -49,7 +49,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
@@ -710,10 +710,10 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
-    m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (::comphelper::getProcessServiceFactory()
-                    ->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
-    if (m_xFormatter.is())
-        m_xFormatter->attachNumberFormatsSupplier(m_xFormatSupplier);
+    m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
+                    ::com::sun::star::util::NumberFormatter::create( ::comphelper::getProcessComponentContext() ),
+                    UNO_QUERY_THROW);
+    m_xFormatter->attachNumberFormatsSupplier(m_xFormatSupplier);
 
     Init(sVisibleFields);
 }

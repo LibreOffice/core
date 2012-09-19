@@ -23,8 +23,9 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/XNumberFormatter2.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/sheet/addin/XAnalysis.hpp>
@@ -1030,7 +1031,7 @@ inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( ::com::sun::star::l
 class ScaAnyConverter
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > xFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter2 > xFormatter;
     sal_Int32                   nDefaultFormat;
     sal_Bool                    bHasValidFormat;
 
@@ -1045,7 +1046,7 @@ private:
 
 public:
                                 ScaAnyConverter(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFact );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
                                 ~ScaAnyConverter();
 
                                 /// Initializing with current language settings

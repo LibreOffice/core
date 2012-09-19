@@ -27,7 +27,7 @@
 
 #include "cellvalueconversion.hxx"
 
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -54,6 +54,8 @@ namespace svt
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::util::XNumberFormatter;
+    using ::com::sun::star::util::XNumberFormatter2;
+    using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::beans::XPropertySet;
@@ -343,8 +345,7 @@ namespace svt
             try
             {
                 // a number formatter
-                Reference< XNumberFormatter > const xFormatter(
-                    io_data.aContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY_THROW );
+                Reference< XNumberFormatter > const xFormatter( NumberFormatter::create( io_data.aContext.getUNOContext() ), UNO_QUERY_THROW );
 
                 // a supplier of number formats
                 Sequence< Any > aInitArgs(1);

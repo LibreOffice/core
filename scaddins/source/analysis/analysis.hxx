@@ -76,7 +76,7 @@ private:
 
 public:
                                 AnalysisAddIn(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFact );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
     virtual                     ~AnalysisAddIn();
 
     double                      FactDouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;

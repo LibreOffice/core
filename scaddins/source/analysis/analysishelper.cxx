@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 
 #include <string.h>
 #include <stdio.h>
@@ -2845,15 +2846,10 @@ sal_Bool ScaDate::operator<( const ScaDate& rCmp ) const
 
 //-----------------------------------------------------------------------------
 
-ScaAnyConverter::ScaAnyConverter( const uno::Reference< lang::XMultiServiceFactory >& xServiceFact ) :
+ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >& xContext ) :
     bHasValidFormat( sal_False )
 {
-    if( xServiceFact.is() )
-    {
-        uno::Reference< uno::XInterface > xInstance = xServiceFact->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter" )) );
-        xFormatter = uno::Reference< util::XNumberFormatter >( xInstance, uno::UNO_QUERY );
-    }
+    xFormatter = util::NumberFormatter::create(xContext);
 }
 
 ScaAnyConverter::~ScaAnyConverter()

@@ -38,9 +38,10 @@
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -103,6 +104,8 @@ namespace svxform
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::util::XNumberFormatter;
+    using ::com::sun::star::util::XNumberFormatter2;
+    using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::sdb::SQLContext;
@@ -895,7 +898,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
         // obtain a number formatter for this connection
         // TODO: shouldn't this be cached?
         Reference< XNumberFormatsSupplier > xFormatSupplier = aStaticTools.getNumberFormats( xConnection, sal_True );
-        Reference< XNumberFormatter > xFormatter( m_xORB->createInstance( FM_NUMBER_FORMATTER ), UNO_QUERY );
+        Reference< XNumberFormatter > xFormatter( NumberFormatter::create( comphelper::getComponentContext(m_xORB) ), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
 
         // get the field (database column) which the item is responsible for

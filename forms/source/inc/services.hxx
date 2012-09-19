@@ -210,7 +210,6 @@ namespace frm
     // -----------------------
     FORMS_CONSTASCII_STRING( SRV_AWT_POINTER, "com.sun.star.awt.Pointer" );
     FORMS_CONSTASCII_STRING( SRV_AWT_IMAGEPRODUCER, "com.sun.star.awt.ImageProducer" );
-    FORMS_CONSTASCII_STRING( FRM_NUMBER_FORMATTER, "com.sun.star.util.NumberFormatter" );
     FORMS_CONSTASCII_STRING( FRM_NUMBER_FORMATS_SUPPLIER, "com.sun.star.util.NumberFormatsSupplier" );
 
     FORMS_CONSTASCII_STRING( SRV_SDB_ROWSET, "com.sun.star.sdb.RowSet" );
