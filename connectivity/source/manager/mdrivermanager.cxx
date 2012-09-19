@@ -125,7 +125,8 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
                 // we did not load this driver, yet
                 if ( _rDescriptor.xComponentFactory.is() )
                     // we have a factory for it
-                    const_cast< DriverAccess& >( _rDescriptor ).xDriver = _rDescriptor.xDriver.query( _rDescriptor.xComponentFactory->createInstance() );
+                    const_cast< DriverAccess& >( _rDescriptor ).xDriver = _rDescriptor.xDriver.query(
+                        _rDescriptor.xComponentFactory->createInstanceWithContext( _rDescriptor.xUNOContext ) );
             return _rDescriptor;
         }
     };
@@ -318,7 +319,7 @@ void OSDBCDriverManager::bootstrapDrivers()
     OSL_ENSURE( xEnumDrivers.is(), "OSDBCDriverManager::bootstrapDrivers: no enumeration for the drivers available!" );
     if (xEnumDrivers.is())
     {
-        Reference< XSingleServiceFactory > xFactory;
+        Reference< XSingleComponentFactory > xFactory;
         Reference< XServiceInfo > xSI;
         while (xEnumDrivers->hasMoreElements())
         {
@@ -337,6 +338,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 {   // yes -> no need to load the driver immediately (load it later when needed)
                     aDriverDescriptor.sImplementationName = xSI->getImplementationName();
                     aDriverDescriptor.xComponentFactory = xFactory;
+                    aDriverDescriptor.xUNOContext = m_aContext.getUNOContext();
                     bValidDescriptor = sal_True;
 
                     m_aEventLogger.log( LogLevel::CONFIG,
@@ -347,7 +349,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 else
                 {
                     // no -> create the driver
-                    Reference< XDriver > xDriver( xFactory->createInstance(), UNO_QUERY );
+                    Reference< XDriver > xDriver( xFactory->createInstanceWithContext( m_aContext.getUNOContext() ), UNO_QUERY );
                     OSL_ENSURE( xDriver.is(), "OSDBCDriverManager::bootstrapDrivers: a driver which is no driver?!" );
 
                     if ( xDriver.is() )
