@@ -36,6 +36,9 @@
 
 #include "com/sun/star/ucb/XSimpleFileAccess2.hpp"
 
+#ifndef HAVE_CXX0X
+#define BOOST_NO_0X_HDR_TYPEINDEX
+#endif
 #include <boost/unordered_map.hpp>
 #include <rtl/string.hxx>
 

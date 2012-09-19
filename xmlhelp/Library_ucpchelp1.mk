@@ -91,4 +91,10 @@ $(eval $(call gb_Library_add_exception_objects,ucpchelp1,\
     xmlhelp/source/cxxhelp/util/Decompressor \
 ))
 
+ifeq ($(HAVE_CXX0X),TRUE)
+$(eval $(call gb_Library_add_defs,ucpchelp1,\
+    -DHAVE_CXX0X \
+))
+endif
+
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

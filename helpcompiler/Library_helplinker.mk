@@ -35,6 +35,12 @@ $(eval $(call gb_Library_add_defs,helplinker,\
     -DHELPLINKER_DLLIMPLEMENTATION \
 ))
 
+ifeq ($(HAVE_CXX0X),TRUE)
+$(eval $(call gb_Library_add_defs,helplinker,\
+    -DHAVE_CXX0X \
+))
+endif
+
 $(eval $(call gb_Library_use_libraries,helplinker,\
     sal \
 ))
