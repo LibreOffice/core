@@ -91,6 +91,7 @@ public:
     void testN777337();
     void testN778836();
     void testN778140();
+    void testN778828();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -124,6 +125,7 @@ public:
     CPPUNIT_TEST(testN777337);
     CPPUNIT_TEST(testN778836);
     CPPUNIT_TEST(testN778140);
+    CPPUNIT_TEST(testN778828);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -828,6 +830,21 @@ void Test::testN778140()
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
+}
+
+void Test::testN778828()
+{
+    /*
+     * The problem was that a page break after a continous section break caused
+     * double page break on title page.
+     */
+    load("n778828.docx");
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
