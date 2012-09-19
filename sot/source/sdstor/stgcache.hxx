@@ -21,9 +21,11 @@
 #define _STGCACHE_HXX
 
 #include <osl/endian.h>
+#include <rtl/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <stgelem.hxx>
+#include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
 
 class UCBStorageStream;
@@ -34,7 +36,7 @@ class StorageBase;
 typedef boost::unordered_map
 <
     sal_Int32,
-    StgPage *,
+    rtl::Reference< StgPage >,
     boost::hash< sal_Int32 >,
     std::equal_to< sal_Int32 >
 > IndexToStgPage;
@@ -43,12 +45,13 @@ class StgCache {
     sal_uLong nError;                       // error code
     sal_Int32 nPages;                       // size of data area in pages
     sal_uInt16 nRef;                        // reference count
+    IndexToStgPage maDirtyPages;            // hash of all dirty pages
     IndexToStgPage maLRUCache;              // hash of index to cached pages
     short nPageSize;                        // page size of the file
     UCBStorageStream* pStorageStream;       // holds reference to UCB storage stream
 
-    void Erase( StgPage* );                 // delete a cache element
-    StgPage* Create( sal_Int32 );           // create a cached page
+    void Erase( const rtl::Reference< StgPage >& ); // delete a cache element
+    rtl::Reference< StgPage > Create( sal_Int32  ); // create a cached page
 protected:
     SvStream* pStrm;                        // physical stream
     sal_Bool  bMyStream;                    // sal_True: delete stream in dtor
@@ -57,12 +60,12 @@ protected:
 public:
     StgCache();
     ~StgCache();
-    void  IncRef()                      { nRef++;           }
+    void  IncRef()                          { nRef++;           }
     sal_uInt16 DecRef()                     { return --nRef;    }
     void  SetPhysPageSize( short );
     sal_Int32 GetPhysPages()                { return nPages;    }
-    short GetPhysPageSize()             { return nPageSize; }
-    SvStream* GetStrm()                 { return pStrm;     }
+    short GetPhysPageSize()                 { return nPageSize; }
+    SvStream* GetStrm()                     { return pStrm;     }
     void  SetStrm( SvStream*, sal_Bool );
     void  SetStrm( UCBStorageStream* );
     sal_Bool  IsWritable()                  { return ( pStrm && pStrm->IsWritable() ); }
@@ -74,46 +77,64 @@ public:
     void  ResetError();
     sal_Bool  Open( const String& rName, StreamMode );
     void  Close();
-    sal_Bool  Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPages );
-    sal_Bool  Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPages );
+    sal_Bool  Read        ( sal_Int32 nPage, void* pBuf, sal_Int32 nPages );
+    sal_Bool  Write       ( sal_Int32 nPage, void* pBuf, sal_Int32 nPages );
+
+    // two routines for accessing FAT pages
+    // Assume that the data is a FAT page and get/put FAT data.
+    void             SetToPage   ( const rtl::Reference< StgPage > xPage, short nOff, sal_Int32 nVal );
+    inline sal_Int32 GetFromPage ( const rtl::Reference< StgPage > xPage, short nOff );
+    void      SetDirty    ( const rtl::Reference< StgPage > &xPage );
     sal_Bool  SetSize( sal_Int32 nPages );
-    StgPage* Find( sal_Int32 );                 // find a cached page
-    StgPage* Get( sal_Int32, sal_Bool );            // get a cached page
-    StgPage* Copy( sal_Int32, sal_Int32=STG_FREE ); // copy a page
+    rtl::Reference< StgPage > Find( sal_Int32 );                 // find a cached page
+    rtl::Reference< StgPage > Get( sal_Int32, sal_Bool );            // get a cached page
+    rtl::Reference< StgPage > Copy( sal_Int32, sal_Int32=STG_FREE ); // copy a page
     sal_Bool Commit(); // flush all pages
     void Clear();                           // clear the cache
 };
 
-class StgPage {
+class StgPage : public rtl::IReference, private boost::noncopyable {
+    sal_uInt32      mnRefCount;
     const sal_Int32 mnPage;                // page index
     sal_uInt8*      mpData;                // nSize bytes
     short           mnSize;                // size of this page
-    bool            mbDirty;               // dirty flag
+             StgPage( short nData, sal_Int32 nPage );
+    virtual ~StgPage();
 public:
-    StgPage( short nData, sal_Int32 nPage );
-    ~StgPage();
+    static rtl::Reference< StgPage > Create( short nData, sal_Int32 nPage );
 
-    sal_Int32 GetPage() { return mnPage; }
-    void*     GetData() { return mpData; }
-    short     GetSize() { return mnSize; }
-    bool      IsDirty() { return mbDirty; }
-    void      SetDirty( bool bDirty ) { mbDirty = bDirty; }
-    // routines for accessing FAT pages
-    // Assume that the data is a FAT page and get/put FAT data.
-    sal_Int32 GetPage( short nOff )
+    sal_Int32 GetPage()  { return mnPage; }
+    void*     GetData()  { return mpData; }
+    short     GetSize()  { return mnSize; }
+
+public:
+    virtual oslInterlockedCount SAL_CALL acquire()
     {
-        if( ( nOff >= (short) ( mnSize / sizeof( sal_Int32 ) ) ) || nOff < 0 )
-            return -1;
-        sal_Int32 n = ((sal_Int32*) mpData )[ nOff ];
-#ifdef OSL_BIGENDIAN
-        return OSL_SWAPDWORD(n);
-#else
-        return n;
-#endif
+        return ++mnRefCount;
     }
-    void  SetPage( short, sal_Int32 );      // put an element
+    virtual oslInterlockedCount SAL_CALL release()
+    {
+        if ( --mnRefCount == 0)
+        {
+            delete this;
+            return 0;
+        }
+        return mnRefCount;
+    }
     static bool IsPageGreater( const StgPage *pA, const StgPage *pB );
 };
+
+inline sal_Int32 StgCache::GetFromPage ( const rtl::Reference< StgPage > xPage, short nOff )
+{
+    if( ( nOff >= (short) ( xPage->GetSize() / sizeof( sal_Int32 ) ) ) || nOff < 0 )
+        return -1;
+    sal_Int32 n = ((sal_Int32*) xPage->GetData() )[ nOff ];
+#ifdef OSL_BIGENDIAN
+    return OSL_SWAPDWORD(n);
+#else
+    return n;
+#endif
+}
 
 #endif
 

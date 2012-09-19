@@ -37,10 +37,10 @@
 // the correctness of the I/O.
 
 StgPage::StgPage( short nSize, sal_Int32 nPage )
-    : mnPage( nPage )
+    : mnRefCount( 0 )
+    , mnPage( nPage )
     , mpData( new sal_uInt8[ nSize ] )
     , mnSize( nSize )
-    , mbDirty( false )
 {
     OSL_ENSURE( mnSize >= 512, "Unexpected page size is provided!" );
     // We will write this data to a permanant file later
@@ -53,15 +53,20 @@ StgPage::~StgPage()
     delete [] mpData;
 }
 
-void StgPage::SetPage( short nOff, sal_Int32 nVal )
+rtl::Reference< StgPage > StgPage::Create( short nData, sal_Int32 nPage )
 {
-    if( ( nOff < (short) ( mnSize / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
+    return rtl::Reference< StgPage >( new StgPage( nData, nPage ) );
+}
+
+void StgCache::SetToPage ( const rtl::Reference< StgPage > xPage, short nOff, sal_Int32 nVal )
+{
+    if( ( nOff < (short) ( xPage->GetSize() / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
     {
 #ifdef OSL_BIGENDIAN
         nVal = OSL_SWAPDWORD(nVal);
 #endif
-        ((sal_Int32*) mpData )[ nOff ] = nVal;
-        mbDirty = true;
+        ((sal_Int32*) xPage->GetData() )[ nOff ] = nVal;
+        SetDirty( xPage );
     }
 }
 
@@ -114,61 +119,52 @@ void StgCache::SetPhysPageSize( short n )
 
 // Create a new cache element
 
-StgPage* StgCache::Create( sal_Int32 nPg )
+rtl::Reference< StgPage > StgCache::Create( sal_Int32 nPg )
 {
-    StgPage* pElem = new StgPage( nPageSize, nPg );
-
-    maLRUCache[pElem->GetPage()] = pElem;
-
-    return pElem;
+    rtl::Reference< StgPage > xElem( StgPage::Create( nPageSize, nPg ) );
+    maLRUCache[ xElem->GetPage() ] = xElem;
+    return xElem;
 }
 
 // Delete the given element
 
-void StgCache::Erase( StgPage* pElem )
+void StgCache::Erase( const rtl::Reference< StgPage > &xElem )
 {
-    OSL_ENSURE( pElem, "The pointer should not be NULL!" );
-    if ( pElem )
-    {
-        maLRUCache.erase( pElem->GetPage() );
-        delete pElem;
-    }
+    OSL_ENSURE( xElem.is(), "The pointer should not be NULL!" );
+    if ( xElem.is() )
+        maLRUCache.erase( xElem->GetPage() );
 }
 
 // remove all cache elements without flushing them
 
 void StgCache::Clear()
 {
+    maDirtyPages.clear();
     maLRUCache.clear();
 }
 
 // Look for a cached page
 
-StgPage* StgCache::Find( sal_Int32 nPage )
+rtl::Reference< StgPage > StgCache::Find( sal_Int32 nPage )
 {
     IndexToStgPage::iterator aIt = maLRUCache.find( nPage );
     if( aIt != maLRUCache.end() )
-    {
-        // page found
-        StgPage* pFound = (*aIt).second;
-        OSL_ENSURE( pFound, "The pointer may not be NULL!" );
-        return pFound;
-    }
-    return NULL;
+        return (*aIt).second;
+    return rtl::Reference< StgPage >();
 }
 
 // Load a page into the cache
 
-StgPage* StgCache::Get( sal_Int32 nPage, sal_Bool bForce )
+rtl::Reference< StgPage > StgCache::Get( sal_Int32 nPage, sal_Bool bForce )
 {
-    StgPage* p = Find( nPage );
-    if( !p )
+    rtl::Reference< StgPage > p = Find( nPage );
+    if( !p.is() )
     {
         p = Create( nPage );
         if( !Read( nPage, p->GetData(), 1 ) && bForce )
         {
             Erase( p );
-            p = NULL;
+            p.clear();
             SetError( SVSTREAM_READ_ERROR );
         }
     }
@@ -179,22 +175,23 @@ StgPage* StgCache::Get( sal_Int32 nPage, sal_Bool bForce )
 // to duplicate an existing stream or to create new entries.
 // The new page is initially marked dirty. No owner is copied.
 
-StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
+rtl::Reference< StgPage > StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
 {
-    StgPage* p = Find( nNew );
-    if( !p )
+    rtl::Reference< StgPage > p = Find( nNew );
+    if( !p.is() )
         p = Create( nNew );
     if( nOld >= 0 )
     {
         // old page: we must have this data!
-        StgPage* q = Get( nOld, sal_True );
-        if( q )
+        rtl::Reference< StgPage > q = Get( nOld, sal_True );
+        if( q.is() )
         {
             OSL_ENSURE( p->GetSize() == q->GetSize(), "Unexpected page size!" );
             memcpy( p->GetData(), q->GetData(), p->GetSize() );
         }
     }
-    p->SetDirty( true );
+    SetDirty( p );
+
     return p;
 }
 
@@ -203,22 +200,20 @@ StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
 sal_Bool StgCache::Commit()
 {
     std::vector< StgPage * > aToWrite;
-    for ( IndexToStgPage::iterator aIt = maLRUCache.begin();
-          aIt != maLRUCache.end(); aIt++ )
-    {
-        if ( aIt->second->IsDirty() )
-            aToWrite.push_back( aIt->second );
-    }
+    for ( IndexToStgPage::iterator aIt = maDirtyPages.begin();
+          aIt != maDirtyPages.end(); aIt++ )
+        aToWrite.push_back( aIt->second.get() );
 
     std::sort( aToWrite.begin(), aToWrite.end(), StgPage::IsPageGreater );
     for (std::vector< StgPage * >::iterator aWr = aToWrite.begin();
          aWr != aToWrite.end(); aWr++)
     {
-        StgPage *pPage = *aWr;
+        const rtl::Reference< StgPage > &pPage = *aWr;
         if ( !Write( pPage->GetPage(), pPage->GetData(), 1 ) )
             return sal_False;
-        pPage->SetDirty( false );
     }
+
+    maDirtyPages.clear();
 
     pStrm->Flush();
     SetError( pStrm->GetError() );
@@ -260,6 +255,11 @@ void StgCache::SetStrm( UCBStorageStream* pStgStream )
     }
 
     bMyStream = sal_False;
+}
+
+void StgCache::SetDirty( const rtl::Reference< StgPage > &xPage )
+{
+    maDirtyPages[ xPage->GetPage() ] = xPage;
 }
 
 // Open/close the disk file

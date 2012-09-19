@@ -72,7 +72,7 @@ public:
     sal_Bool Store( StgDirStrm& );              // save entry into dir strm
     sal_Bool IsContained( StgDirEntry* );       // check if subentry
 
-    void SetDirty()  { bDirty = sal_True;     }
+    void SetDirty()  { bDirty = sal_True; }
     sal_Bool IsDirty();
     void ClearDirty();
 

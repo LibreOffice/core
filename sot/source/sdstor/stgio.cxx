@@ -171,7 +171,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
     pFat = new sal_Int32[ nPages ];
     pFree = new sal_Bool[ nPages ];
 
-    StgPage *pPage = NULL;
+    rtl::Reference< StgPage > pPage;
     sal_Int32 nFatPageSize = (1 << rIo.aHdr.GetPageSize()) - 2;
 
     for( sal_Int32 nPage = 0; nPage < nPages; nPage++ )
@@ -183,7 +183,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
             pPage = rIo.Get( nPhysPage, sal_True );
         }
 
-        pFat[ nPage ] = pPage->GetPage( short( nPage % nFatPageSize ) );
+        pFat[ nPage ] = rIo.GetFromPage( pPage, short( nPage % nFatPageSize ) );
         pFree[ nPage ] = sal_True;
     }
 }
