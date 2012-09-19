@@ -35,6 +35,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <rtl/tencinfo.h>
 #include <svtools/wmf.hxx>
 #include <svl/lngmisc.hxx>
@@ -597,7 +598,6 @@ int RTFDocumentImpl::resolvePict(bool bInline)
 {
     SvMemoryStream aStream;
     SvStream *pStream = 0;
-
     if (!m_pBinaryData.get())
     {
         pStream = &aStream;
@@ -2746,6 +2746,23 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_WrapSquare_wrapText, pValue);
             }
             break;
+        case RTF_SHPWR:
+            {
+                switch (nParam)
+                {
+                case 1:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_NONE; break;
+                case 2:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_PARALLEL; break;
+                case 3:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_THROUGHT; break;
+                case 4:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_PARALLEL; break;
+                case 5:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_THROUGHT; break;
+                }
+            }
+            break;
         case RTF_CELLX:
             {
                 int nCellX = nParam - m_aStates.top().nCellX;
@@ -4059,7 +4076,8 @@ RTFShape::RTFShape()
     nRight(0),
     nBottom(0),
     nHoriOrientRelation(0),
-    nVertOrientRelation(0)
+    nVertOrientRelation(0),
+    nWrap(-1)
 {
 }
 

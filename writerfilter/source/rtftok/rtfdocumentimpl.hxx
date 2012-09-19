@@ -257,6 +257,7 @@ namespace writerfilter {
                 int nBottom;
                 sal_Int16 nHoriOrientRelation;
                 sal_Int16 nVertOrientRelation;
+                int nWrap;
         };
 
         /// Stores the properties of a drawing object.

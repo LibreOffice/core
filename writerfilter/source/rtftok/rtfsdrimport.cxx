@@ -346,6 +346,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             xPropertySet->setPropertyValue("HoriOrientRelation", uno::makeAny(rShape.nHoriOrientRelation));
         if (rShape.nVertOrientRelation != 0)
             xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
+        if (rShape.nWrap != -1)
+            xPropertySet->setPropertyValue("Surround", uno::makeAny(rShape.nWrap));
     }
 
     // Send it to dmapper
