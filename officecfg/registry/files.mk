@@ -22,7 +22,7 @@ officecfg_FILES := \
     Office/FormWizard \
     Office/Histories \
     Office/Impress \
-	$(if $(filter YES,$(ENABLE_SDREMOTE)),Office/Impress-sdremote) \
+	$(if $(filter YES,$(ENABLE_SDREMOTE)),Office/ImpressSdRemote) \
     Office/Java \
     Office/Jobs \
     Office/Labels \

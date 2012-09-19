@@ -121,7 +121,7 @@ $(eval $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
 
 ifeq ($(ENABLE_SDREMOTE),YES)
 $(eval $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
-        org/openoffice/Office/Impress-sdremote.xcs \
+    org/openoffice/Office/ImpressSdRemote.xcs \
 ))
 endif
 
