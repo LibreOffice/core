@@ -50,7 +50,6 @@
 
 #include <globals.hrc>
 #include <chrdlg.hrc>
-#include <chardlg.hrc>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <SwStyleNameMapper.hxx>
@@ -148,62 +147,21 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 }
 
 SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, SW_RES(TP_CHAR_URL), rCoreSet)
-    , m_aBox(this, false, 7)
-    , m_aGrid(&m_aBox)
-    , aURLFL(&m_aGrid, SW_RES(FL_URL))
-    , aURLFT(&m_aGrid, SW_RES(FT_URL))
-    , aURLED(&m_aGrid, SW_RES(ED_URL))
-    , aTextFT(&m_aGrid, SW_RES(FT_TEXT))
-    , aTextED(&m_aGrid, SW_RES(ED_TEXT))
-    , aNameFT(&m_aGrid, SW_RES(FT_NAME))
-    , aNameED(&m_aGrid, SW_RES(ED_NAME))
-    , aTargetFrmFT(&m_aGrid, SW_RES(FT_TARGET))
-    , aTargetFrmLB(&m_aGrid, SW_RES(LB_TARGET))
-    , aURLPB(&m_aGrid, SW_RES(PB_URL))
-    , aEventPB(&m_aGrid, SW_RES(PB_EVENT))
-    , aStyleFL(&m_aGrid, SW_RES(FL_STYLE))
-    , aVisitedFT(&m_aGrid, SW_RES(FT_VISITED))
-    , aVisitedLB(&m_aGrid, SW_RES(LB_VISITED))
-    , aNotVisitedFT(&m_aGrid, SW_RES(FT_NOT_VISITED))
-    , aNotVisitedLB(&m_aGrid, SW_RES(LB_NOT_VISITED))
+    : SfxTabPage(pParent, "CharURLPage", "modules/swriter/ui/charurlpage.ui", rCoreSet)
     , pINetItem(0)
     , bModified(sal_False)
 
 {
-    FreeResource();
-
-    m_aBox.set_expand(true);
-
-    m_aGrid.set_column_spacing(7);
-    m_aGrid.set_row_spacing(2);
-
-    setGridAttach(aURLFL, 0, 0, 3);
-
-    setGridAttach(aURLFT, 0, 1);
-    setGridAttach(aURLED, 1, 1);
-    setGridAttach(aURLPB, 2, 1);
-
-    setGridAttach(aTextFT, 0, 2);
-    setGridAttach(aTextED, 1, 2);
-
-    setGridAttach(aNameFT, 0, 3);
-    setGridAttach(aNameED, 1, 3);
-
-    setGridAttach(aTargetFrmFT, 0, 4);
-    setGridAttach(aTargetFrmLB, 1, 4);
-
-    setGridAttach(aEventPB, 0, 5);
-
-    setGridAttach(aStyleFL, 0, 6, 3);
-
-    setGridAttach(aVisitedFT, 0, 7);
-    setGridAttach(aVisitedLB, 1, 7);
-
-    setGridAttach(aNotVisitedFT, 0, 8);
-    setGridAttach(aNotVisitedLB, 1, 8);
-
-    aEventPB.SetAccessibleRelationMemberOf(&aURLFL);
+    get(m_pURLED, "urled");
+    get(m_pTextFT, "textft");
+    get(m_pTextED, "texted");
+    get(m_pNameED, "nameed");
+    get(m_pTargetFrmLB, "targetfrmlb");
+    get(m_pURLPB, "urlpb");
+    get(m_pEventPB, "eventpb");
+    get(m_pVisitedLB, "visitedlb");
+    get(m_pNotVisitedLB, "unvisitedlb");
+    get(m_pCharStyleContainer, "charstyle");
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
@@ -213,21 +171,15 @@ SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
     {
         sal_uInt16 nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
         if(HTMLMODE_ON & nHtmlMode)
-        {
-            aStyleFL.Hide();
-            aVisitedFT.Hide();
-            aVisitedLB.Hide();
-            aNotVisitedFT.Hide();
-            aNotVisitedLB.Hide();
-        }
+            m_pCharStyleContainer->Hide();
     }
 
-    aURLPB.SetClickHdl  (LINK( this, SwCharURLPage, InsertFileHdl));
-    aEventPB.SetClickHdl(LINK( this, SwCharURLPage, EventHdl ));
+    m_pURLPB->SetClickHdl  (LINK( this, SwCharURLPage, InsertFileHdl));
+    m_pEventPB->SetClickHdl(LINK( this, SwCharURLPage, EventHdl ));
 
     SwView *pView = ::GetActiveView();
-    ::FillCharStyleListBox(aVisitedLB, pView->GetDocShell());
-    ::FillCharStyleListBox(aNotVisitedLB, pView->GetDocShell());
+    ::FillCharStyleListBox(*m_pVisitedLB, pView->GetDocShell());
+    ::FillCharStyleListBox(*m_pNotVisitedLB, pView->GetDocShell());
 
     TargetList* pList = new TargetList;
     const SfxFrame& rFrame = pView->GetViewFrame()->GetTopFrame();
@@ -239,7 +191,7 @@ SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
 
         for ( i = 0; i < nCount; i++ )
         {
-            aTargetFrmLB.InsertEntry( *pList->at( i ) );
+            m_pTargetFrmLB->InsertEntry( *pList->at( i ) );
         }
         for ( i = nCount; i; )
         {
@@ -260,25 +212,25 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
     if(SFX_ITEM_SET == rSet.GetItemState(RES_TXTATR_INETFMT, sal_False, &pItem))
     {
         const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
-        aURLED.SetText( INetURLObject::decode( pINetFmt->GetValue(),
+        m_pURLED->SetText( INetURLObject::decode( pINetFmt->GetValue(),
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
-        aURLED.SaveValue();
-        aNameED.SetText(pINetFmt->GetName());
+        m_pURLED->SaveValue();
+        m_pNameED->SetText(pINetFmt->GetName());
         String sEntry = pINetFmt->GetVisitedFmt();
         if( !sEntry.Len() )
             SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_VISIT, sEntry );
-        aVisitedLB.SelectEntry(sEntry);
+        m_pVisitedLB->SelectEntry(sEntry);
         sEntry = pINetFmt->GetINetFmt();
         if(!sEntry.Len())
             SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_NORMAL, sEntry );
-        aNotVisitedLB.SelectEntry(sEntry);
+        m_pNotVisitedLB->SelectEntry(sEntry);
 
-        aTargetFrmLB.SetText(pINetFmt->GetTargetFrame());
-        aVisitedLB.   SaveValue();
-        aNotVisitedLB.SaveValue();
-        aTargetFrmLB. SaveValue();
+        m_pTargetFrmLB->SetText(pINetFmt->GetTargetFrame());
+        m_pVisitedLB->   SaveValue();
+        m_pNotVisitedLB->SaveValue();
+        m_pTargetFrmLB-> SaveValue();
         pINetItem = new SvxMacroItem(FN_INET_FIELD_MACRO);
 
         if( pINetFmt->GetMacroTbl() )
@@ -286,15 +238,15 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
     }
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_SELECTION, sal_False, &pItem))
     {
-        aTextED.SetText(((const SfxStringItem*)pItem)->GetValue());
-        aTextFT.Enable( sal_False );
-        aTextED.Enable( sal_False );
+        m_pTextED->SetText(((const SfxStringItem*)pItem)->GetValue());
+        m_pTextFT->Enable( sal_False );
+        m_pTextED->Enable( sal_False );
     }
 }
 
 sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
-   ::rtl::OUString sURL = aURLED.GetText();
+   ::rtl::OUString sURL = m_pURLED->GetText();
    if(!sURL.isEmpty())
     {
         sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
@@ -305,19 +257,19 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
             sURL = URIHelper::simpleNormalizedMakeRelative(::rtl::OUString(), sURL);
     }
 
-    SwFmtINetFmt aINetFmt(sURL, aTargetFrmLB.GetText());
-    aINetFmt.SetName(aNameED.GetText());
-    bModified |= aURLED.GetText() != aURLED.GetSavedValue();
-    bModified |= aNameED.IsModified();
-    bModified |= aTargetFrmLB.GetSavedValue() != aTargetFrmLB.GetText();
+    SwFmtINetFmt aINetFmt(sURL, m_pTargetFrmLB->GetText());
+    aINetFmt.SetName(m_pNameED->GetText());
+    bModified |= m_pURLED->GetText() != m_pURLED->GetSavedValue();
+    bModified |= m_pNameED->IsModified();
+    bModified |= m_pTargetFrmLB->GetSavedValue() != m_pTargetFrmLB->GetText();
 
     // set valid settings first
-    String sEntry = aVisitedLB.GetSelectEntry();
+    String sEntry = m_pVisitedLB->GetSelectEntry();
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetVisitedFmtId(nId);
     aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? aEmptyStr : sEntry);
 
-    sEntry = aNotVisitedLB.GetSelectEntry();
+    sEntry = m_pNotVisitedLB->GetSelectEntry();
     nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetINetFmtId( nId );
     aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyStr : sEntry);
@@ -325,16 +277,16 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     if( pINetItem && !pINetItem->GetMacroTable().empty() )
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );
 
-    if(aVisitedLB.GetSavedValue() != aVisitedLB.GetSelectEntryPos())
+    if(m_pVisitedLB->GetSavedValue() != m_pVisitedLB->GetSelectEntryPos())
         bModified = sal_True;
 
-    if(aNotVisitedLB.GetSavedValue() != aNotVisitedLB.GetSelectEntryPos())
+    if(m_pNotVisitedLB->GetSavedValue() != m_pNotVisitedLB->GetSelectEntryPos())
         bModified = sal_True;
 
-    if(aTextED.IsModified())
+    if(m_pTextED->IsModified())
     {
         bModified = sal_True;
-        rSet.Put(SfxStringItem(FN_PARAM_SELECTION, aTextED.GetText()));
+        rSet.Put(SfxStringItem(FN_PARAM_SELECTION, m_pTextED->GetText()));
     }
     if(bModified)
         rSet.Put(aINetFmt);
@@ -353,7 +305,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl)
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-        aURLED.SetText(xFP->getFiles().getConstArray()[0]);
+        m_pURLED->SetText(xFP->getFiles().getConstArray()[0]);
     }
     return 0;
 }

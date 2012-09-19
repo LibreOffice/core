@@ -175,7 +175,6 @@
 #define HID_ENV_ENV                                             "SW_HID_ENV_ENV"
 #define HID_ENV_FMT                                             "SW_HID_ENV_FMT"
 #define HID_FRM_URL                                             "SW_HID_FRM_URL"
-#define HID_CHAR_URL                                            "SW_HID_CHAR_URL"
 #define HID_CONTENT_OPT                                         "SW_HID_CONTENT_OPT"
 #define HID_STD_FONT                                            "SW_HID_STD_FONT"
 #define HID_COND_COLL                                           "SW_HID_COND_COLL"
