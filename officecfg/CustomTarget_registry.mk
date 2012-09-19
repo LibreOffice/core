@@ -36,6 +36,7 @@ $(call gb_CustomTarget_get_target,officecfg/registry) : \
 $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg_qa_allheaders.hxx: \
 		$(SRCDIR)/officecfg/registry/files.mk
 	$(call gb_Output_announce,officecfg_qa_allheaders.hxx,$(true),CAT,1)
+	mkdir -p $(dir $@) && \
 	rm -f $@ \
 	$(foreach file,$(officecfg_XCSFILES),\
 		&& echo "#include <officecfg/$(file).hxx>" >> $@)
