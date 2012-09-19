@@ -52,10 +52,6 @@
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
-
-
-using rtl::OString;
-using rtl::OUString;
 using rtl::OUStringBuffer;
 
 class Test : public SwModelTestBase
@@ -92,6 +88,7 @@ public:
     void testN778836();
     void testN778140();
     void testN778828();
+    void testInk();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -126,6 +123,7 @@ public:
     CPPUNIT_TEST(testN778836);
     CPPUNIT_TEST(testN778140);
     CPPUNIT_TEST(testN778828);
+    CPPUNIT_TEST(testInk);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -845,6 +843,20 @@ void Test::testN778828()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+}
+
+void Test::testInk()
+{
+    /*
+     * The problem was that ~nothing was imported, except an empty CustomShape.
+     *
+     * xray ThisComponent.DrawPage(0).supportsService("com.sun.star.drawing.OpenBezierShape")
+     */
+    load("ink.docx");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.OpenBezierShape"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
