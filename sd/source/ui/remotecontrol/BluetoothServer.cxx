@@ -17,6 +17,10 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 #define DBUS_TYPE_G_STRING_ANY_HASHTABLE (dbus_g_type_get_map( "GHashTable", G_TYPE_STRING, G_TYPE_VALUE ))
+
+#ifndef G_VALUE_INIT
+  #define G_VALUE_INIT {0,{{0}}} // G_VALUE_INIT only present in glib >= 2.30
+#endif
 #endif
 
 #ifdef WIN32
