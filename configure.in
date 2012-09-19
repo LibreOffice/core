@@ -12545,11 +12545,15 @@ if test "$build_os" = "cygwin"; then
     if test "$BITNESS_OVERRIDE" = 64; then
         ILIB="$ILIB;$COMPATH/lib/amd64"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib64"
-		ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x64"
+		if test "$WINDOWS_SDK_VERSION" = "80"; then
+			ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x64"
+		fi
     else
         ILIB="$ILIB;$COMPATH/lib"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib"
-		ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x86"
+		if test "$WINDOWS_SDK_VERSION" = "80"; then
+			ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x86"
+		fi
     fi
     ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
 
