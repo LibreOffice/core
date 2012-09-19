@@ -1,0 +1,476 @@
+--- misc/boost_1_48_0/boost/foreach.hpp	(revision 75077)
++++ misc/build/boost_1_48_0/boost/foreach.hpp	(revision 75540)
+@@ -166,5 +166,5 @@
+ //   at the global namespace for your type.
+ template<typename T>
+-inline boost::foreach::is_lightweight_proxy<T> *
++inline boost::BOOST_FOREACH::is_lightweight_proxy<T> *
+ boost_foreach_is_lightweight_proxy(T *&, BOOST_FOREACH_TAG_DEFAULT) { return 0; }
+ 
+@@ -191,5 +191,5 @@
+ //   at the global namespace for your type.
+ template<typename T>
+-inline boost::foreach::is_noncopyable<T> *
++inline boost::BOOST_FOREACH::is_noncopyable<T> *
+ boost_foreach_is_noncopyable(T *&, BOOST_FOREACH_TAG_DEFAULT) { return 0; }
+ 
+--- misc/boost_1_48_0/boost/foreach_fwd.hpp	(revision 62661)
++++ misc/build/boost_1_48_0/boost/foreach_fwd.hpp	(revision 75540)
+@@ -15,4 +15,6 @@
+ #define BOOST_FOREACH_FWD_HPP
+ 
++#include <utility> // for std::pair
++
+ // This must be at global scope, hence the uglified name
+ enum boost_foreach_argument_dependent_lookup_hack
+@@ -26,4 +28,7 @@
+ namespace foreach
+ {
++    template<typename T>
++    std::pair<T, T> in_range(T begin, T end);
++
+     ///////////////////////////////////////////////////////////////////////////////
+     // boost::foreach::tag
+@@ -47,4 +52,22 @@
+ } // namespace foreach
+ 
++// Workaround for unfortunate https://svn.boost.org/trac/boost/ticket/6131
++namespace BOOST_FOREACH
++{
++    using foreach::in_range;
++    using foreach::tag;
++
++    template<typename T>
++    struct is_lightweight_proxy
++      : foreach::is_lightweight_proxy<T>
++    {};
++
++    template<typename T>
++    struct is_noncopyable
++      : foreach::is_noncopyable<T>
++    {};
++
++} // namespace BOOST_FOREACH
++
+ } // namespace boost
+ 
+--- misc/boost_1_48_0/boost/interprocess/shared_memory_object.hpp.orig	2012-07-12 15:27:30.607506166 +0200
++++ misc/build/boost_1_48_0/boost/interprocess/shared_memory_object.hpp	2012-07-12 15:30:22.481507868 +0200
+@@ -1,6 +1,6 @@
+ //////////////////////////////////////////////////////////////////////////////
+ //
+-// (C) Copyright Ion Gaztanaga 2005-2009. Distributed under the Boost
++// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+ // Software License, Version 1.0. (See accompanying file
+ // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ //
+@@ -251,7 +251,7 @@
+ 
+ #if defined(__FreeBSD__)
+ 
+-inline bool use_filesistem_based_posix()
++inline bool use_filesystem_based_posix()
+ {
+    int jailed = 0;
+    std::size_t len = sizeof(jailed);
+@@ -275,7 +275,7 @@
+    #if defined(BOOST_INTERPROCESS_FILESYSTEM_BASED_POSIX_SHARED_MEMORY)
+    const bool add_leading_slash = false;
+    #elif defined(BOOST_INTERPROCESS_RUNTIME_FILESYSTEM_BASED_POSIX_SHARED_MEMORY)
+-   const bool add_leading_slash = !shared_memory_object_ipcdetail::use_filesistem_based_posix();
++   const bool add_leading_slash = !shared_memory_object_detail::use_filesystem_based_posix();
+    #else
+    const bool add_leading_slash = true;
+    #endif
+@@ -361,7 +361,7 @@
+       #if defined(BOOST_INTERPROCESS_FILESYSTEM_BASED_POSIX_SHARED_MEMORY)
+       const bool add_leading_slash = false;
+       #elif defined(BOOST_INTERPROCESS_RUNTIME_FILESYSTEM_BASED_POSIX_SHARED_MEMORY)
+-      const bool add_leading_slash = !shared_memory_object_ipcdetail::use_filesistem_based_posix();
++      const bool add_leading_slash = !shared_memory_object_detail::use_filesystem_based_posix();
+       #else
+       const bool add_leading_slash = true;
+       #endif
+--- misc/boost_1_48_0/boost/config/compiler/clang.hpp.orig	2010-10-01 11:19:44.000000000 +0200
++++ misc/build/boost_1_48_0/boost/config/compiler/clang.hpp	2012-02-29 15:20:25.157457434 +0100
+@@ -60,4 +60,4 @@
+ 
+ // Macro used to identify the Clang compiler.
+ #define BOOST_CLANG 1
+-
++#define BOOST_HAS_LONG_LONG 1
+--- misc/boost_1_48_0/boost/config/compiler/gcc.hpp.orig	2010-10-01 09:19:44.000000000 +0000
++++ misc/build/boost_1_48_0/boost/config/compiler/gcc.hpp	2010-11-20 10:59:22.000000000 +0000
+@@ -146,6 +149,13 @@
+ #  endif
+ #endif
+ 
++//
++// gcc previous to 4.3.x does not implement inclass member initialization
++//
++#if (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 2))
++#  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
++#endif
++
+ // C++0x features not implemented in any GCC version
+ //
+ #define BOOST_NO_CONSTEXPR
+Index: boost/archive/shared_ptr_helper.hpp
+===================================================================
+--- misc/boost_1_48_0/boost/archive/shared_ptr_helper.hpp (revision 55789)
++++ misc/build/boost_1_48_0/boost/archive/shared_ptr_helper.hpp (revision 57981)
+@@ -109,5 +110,5 @@
+         static const boost::serialization::extended_type_info * 
+         get_object_identifier(T & t){
+-            return boost::serialization::singleton<
++            return & boost::serialization::singleton<
+                 BOOST_DEDUCED_TYPENAME 
+                 boost::serialization::type_info_implementation<T>::type
+--- misc/boost_1_48_0/boost/asio/detail/io_control.hpp.orig	2011-06-06 03:21:43.000000000 +0400
++++ misc/build/boost_1_48_0/boost/asio/detail/io_control.hpp	2012-07-10 13:24:45.000000000 +0400
+@@ -44,9 +44,9 @@
+   }
+ 
+   // Get the name of the IO control command.
+-  int name() const
++  ioctl_cmd_type name() const
+   {
+-    return static_cast<int>(FIONBIO);
++    return static_cast<ioctl_cmd_type>(FIONBIO);
+   }
+ 
+   // Set the value of the I/O control command.
+@@ -94,9 +94,9 @@
+   }
+ 
+   // Get the name of the IO control command.
+-  int name() const
++  ioctl_cmd_type name() const
+   {
+-    return static_cast<int>(FIONREAD);
++    return static_cast<ioctl_cmd_type>(FIONREAD);
+   }
+ 
+   // Set the value of the I/O control command.
+--- misc/boost_1_48_0/boost/asio/detail/descriptor_ops.hpp.orig	2010-12-06 01:55:08.000000000 +0300
++++ misc/build/boost_1_48_0/boost/asio/detail/descriptor_ops.hpp	2010-12-06 01:55:39.000000000 +0300
+@@ -79,7 +79,7 @@
+     const buf* bufs, std::size_t count,
+     boost::system::error_code& ec, std::size_t& bytes_transferred);
+ 
+-BOOST_ASIO_DECL int ioctl(int d, state_type& state, long cmd,
++BOOST_ASIO_DECL int ioctl(int d, state_type& state, ioctl_cmd_type cmd,
+     ioctl_arg_type* arg, boost::system::error_code& ec);
+ 
+ BOOST_ASIO_DECL int fcntl(int d, long cmd, boost::system::error_code& ec);
+--- misc/boost_1_48_0/boost/asio/detail/socket_ops.hpp.orig	2010-12-06 01:58:36.000000000 +0300
++++ misc/build/boost_1_48_0/boost/asio/detail/socket_ops.hpp	2010-12-06 01:59:42.000000000 +0300
+@@ -222,7 +222,7 @@
+     std::size_t* addrlen, boost::system::error_code& ec);
+ 
+ BOOST_ASIO_DECL int ioctl(socket_type s, state_type& state,
+-    int cmd, ioctl_arg_type* arg, boost::system::error_code& ec);
++    ioctl_cmd_type cmd, ioctl_arg_type* arg, boost::system::error_code& ec);
+ 
+ BOOST_ASIO_DECL int select(int nfds, fd_set* readfds, fd_set* writefds,
+     fd_set* exceptfds, timeval* timeout, boost::system::error_code& ec);
+--- misc/boost_1_48_0/boost/asio/detail/impl/descriptor_ops.ipp.orig	2010-12-06 01:44:38.000000000 +0300
++++ misc/build/boost_1_48_0/boost/asio/detail/impl/descriptor_ops.ipp	2010-12-06 01:41:33.000000000 +0300
+@@ -251,7 +251,7 @@
+   }
+ }
+ 
+-int ioctl(int d, state_type& state, long cmd,
++int ioctl(int d, state_type& state, ioctl_cmd_type cmd,
+     ioctl_arg_type* arg, boost::system::error_code& ec)
+ {
+   if (d == -1)
+@@ -273,7 +273,7 @@
+     // descriptor is put into the state that has been requested by the user. If
+     // the ioctl syscall was successful then we need to update the flags to
+     // match.
+-    if (cmd == static_cast<long>(FIONBIO))
++    if (cmd == static_cast<ioctl_cmd_type>(FIONBIO))
+     {
+       if (*arg)
+       {
+--- misc/boost_1_48_0/boost/asio/detail/impl/socket_ops.ipp.orig	2010-12-06 01:46:05.000000000 +0300
++++ misc/build/boost_1_48_0/boost/asio/detail/impl/socket_ops.ipp	2010-12-06 01:49:39.000000000 +0300
+@@ -1414,7 +1414,7 @@
+   return result;
+ }
+ 
+-int ioctl(socket_type s, state_type& state, int cmd,
++int ioctl(socket_type s, state_type& state, ioctl_cmd_type cmd,
+     ioctl_arg_type* arg, boost::system::error_code& ec)
+ {
+   if (s == invalid_socket)
+@@ -1424,15 +1424,10 @@
+   }
+ 
+   clear_last_error();
+-#if defined(BOOST_WINDOWS) || defined(__CYGWIN__)
+-  int result = error_wrapper(::ioctlsocket(s, cmd, arg), ec);
+-#elif defined(__MACH__) && defined(__APPLE__) \
+-  || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
++
+   int result = error_wrapper(::ioctl(s,
+-        static_cast<unsigned int>(cmd), arg), ec);
+-#else
+-  int result = error_wrapper(::ioctl(s, cmd, arg), ec);
+-#endif
++        static_cast<ioctl_cmd_type>(cmd), arg), ec);
++
+   if (result >= 0)
+   {
+     ec = boost::system::error_code();
+@@ -1442,7 +1437,7 @@
+     // the correct state. This ensures that the underlying socket is put into
+     // the state that has been requested by the user. If the ioctl syscall was
+     // successful then we need to update the flags to match.
+-    if (cmd == static_cast<int>(FIONBIO))
++    if (cmd == static_cast<ioctl_cmd_type>(FIONBIO))
+     {
+       if (*arg)
+       {
+--- misc/boost_1_48_0/boost/asio/detail/socket_types.hpp.orig	2010-12-06 01:35:39.000000000 +0300
++++ misc/build/boost_1_48_0/boost/asio/detail/socket_types.hpp	2010-12-06 01:36:05.000000000 +0300
+@@ -147,6 +147,12 @@
+ typedef sockaddr_storage sockaddr_storage_type;
+ typedef sockaddr_un sockaddr_un_type;
+ typedef addrinfo addrinfo_type;
++#if (defined(__MACH__) && defined(__APPLE__)) || defined(__DragonFly__) || \
++    defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
++typedef unsigned long ioctl_cmd_type;
++#else
++typedef int ioctl_cmd_type;
++#endif
+ typedef int ioctl_arg_type;
+ typedef uint32_t u_long_type;
+ typedef uint16_t u_short_type;
+--- misc/boost_1_48_0/boost/pool/pool.hpp.orig	2011-12-15 18:21:40.000000000 +0300
++++ misc/build/boost_1_48_0/boost/pool/pool.hpp	2011-12-15 18:22:05.000000000 +0300
+@@ -346,7 +346,7 @@
+       // For alignment reasons, this used to be defined to be lcm(requested_size, sizeof(void *), sizeof(size_type)),
+       // but is now more parsimonious: just rounding up to the minimum required alignment of our housekeeping data
+       // when required.  This works provided all alignments are powers of two.
+-      size_type s = (std::max)(requested_size, min_alloc_size);
++      size_type s = (std::max)(requested_size, static_cast <size_type> (min_alloc_size));
+       size_type rem = s % min_align;
+       if(rem)
+          s += min_align - rem;
+--- misc/boost_1_48_0/boost/test/impl/execution_monitor.ipp.orig	2009-09-23 16:44:57.000000000 +0400
++++ misc/build/boost_1_48_0/boost/test/impl/execution_monitor.ipp	2009-09-23 16:59:44.000000000 +0400
+@@ -319,48 +319,7 @@
+     switch( m_sig_info->si_signo ) {
+     case SIGILL:
+         switch( m_sig_info->si_code ) {
+-#ifndef BOOST_TEST_LIMITED_SIGNAL_DETAILS
+-        case ILL_ILLOPC:
+-            report_error( execution_exception::system_fatal_error,
+-                          "signal: illegal opcode; address of failing instruction: 0x%08lx",
+-                          m_sig_info->si_addr );
+-            break;
+-        case ILL_ILLTRP:
+-            report_error( execution_exception::system_fatal_error,
+-                          "signal: illegal trap; address of failing instruction: 0x%08lx",
+-                          m_sig_info->si_addr );
+-            break;
+-        case ILL_PRVREG:
+-            report_error( execution_exception::system_fatal_error,
+-                          "signal: privileged register; address of failing instruction: 0x%08lx",
+-                          m_sig_info->si_addr );
+-            break;
+-        case ILL_BADSTK:
+-            report_error( execution_exception::system_fatal_error,
+-                          "signal: internal stack error; address of failing instruction: 0x%08lx",
+-                          m_sig_info->si_addr );
+-            break;
+-#endif
+-        case ILL_ILLOPN:
+-            report_error( execution_exception::system_fatal_error,
+-                          "signal: illegal operand; address of failing instruction: 0x%08lx",
+-                          m_sig_info->si_addr );
+-            break;
+-        case ILL_ILLADR:
+-            report_error( execution_exception::system_fatal_error,
+-                          "signal: illegal addressing mode; address of failing instruction: 0x%08lx",
+-                          m_sig_info->si_addr );
+-            break;
+-        case ILL_PRVOPC:
+-            report_error( execution_exception::system_fatal_error,
+-                          "signal: privileged opcode; address of failing instruction: 0x%08lx",
+-                          m_sig_info->si_addr );
+-            break;
+-        case ILL_COPROC:
+-            report_error( execution_exception::system_fatal_error,
+-                          "signal: co-processor error; address of failing instruction: 0x%08lx",
+-                          m_sig_info->si_addr );
+-            break;
++	  // FreeBSD 6.x does not provide details for this signal as required by SUSv3
+         default: 
+             report_error( execution_exception::system_fatal_error, 
+                           "signal: SIGILL, si_code: %d (illegal instruction; address of failing instruction: 0x%08lx)", 
+@@ -421,18 +380,7 @@
+ 
+     case SIGSEGV:
+         switch( m_sig_info->si_code ) {
+-#ifndef BOOST_TEST_LIMITED_SIGNAL_DETAILS
+-        case SEGV_MAPERR:
+-            report_error( execution_exception::system_fatal_error,
+-                          "memory access violation at address: 0x%08lx: no mapping at fault address",
+-                          m_sig_info->si_addr );
+-            break;
+-        case SEGV_ACCERR:
+-            report_error( execution_exception::system_fatal_error,
+-                          "memory access violation at address: 0x%08lx: invalid permissions",
+-                          m_sig_info->si_addr );
+-            break;
+-#endif
++	  // FreeBSD 6.x does not provide details for this signal as required by SUSv3
+         default:
+             report_error( execution_exception::system_fatal_error,
+                           "signal: SIGSEGV, si_code: %d (memory access violation at address: 0x%08lx)",
+@@ -443,23 +391,7 @@
+ 
+     case SIGBUS:
+         switch( m_sig_info->si_code ) {
+-#ifndef BOOST_TEST_LIMITED_SIGNAL_DETAILS
+-        case BUS_ADRALN:
+-            report_error( execution_exception::system_fatal_error,
+-                          "memory access violation at address: 0x%08lx: invalid address alignment",
+-                          m_sig_info->si_addr );
+-            break;
+-        case BUS_ADRERR:
+-            report_error( execution_exception::system_fatal_error,
+-                          "memory access violation at address: 0x%08lx: non-existent physical address",
+-                          m_sig_info->si_addr );
+-            break;
+-        case BUS_OBJERR:
+-            report_error( execution_exception::system_fatal_error,
+-                          "memory access violation at address: 0x%08lx: object specific hardware error",
+-                          m_sig_info->si_addr );
+-            break;
+-#endif
++	  // FreeBSD 6.x does not provide details for this signal as required by SUSv3
+         default:
+             report_error( execution_exception::system_fatal_error,
+                           "signal: SIGSEGV, si_code: %d (memory access violation at address: 0x%08lx)",
+@@ -470,38 +402,7 @@
+ 
+     case SIGCHLD:
+         switch( m_sig_info->si_code ) {
+-#ifndef BOOST_TEST_LIMITED_SIGNAL_DETAILS
+-        case CLD_EXITED:
+-            report_error( execution_exception::system_error,
+-                          "child has exited; pid: %d; uid: %d; exit value: %d",
+-                          (int)m_sig_info->si_pid, (int)m_sig_info->si_uid, (int)m_sig_info->si_status );
+-            break;
+-        case CLD_KILLED:
+-            report_error( execution_exception::system_error,
+-                          "child was killed; pid: %d; uid: %d; exit value: %d",
+-                          (int)m_sig_info->si_pid, (int)m_sig_info->si_uid, (int)m_sig_info->si_status );
+-            break;
+-        case CLD_DUMPED:
+-            report_error( execution_exception::system_error,
+-                          "child terminated abnormally; pid: %d; uid: %d; exit value: %d",
+-                          (int)m_sig_info->si_pid, (int)m_sig_info->si_uid, (int)m_sig_info->si_status );
+-            break;
+-        case CLD_TRAPPED:
+-            report_error( execution_exception::system_error,
+-                          "traced child has trapped; pid: %d; uid: %d; exit value: %d",
+-                          (int)m_sig_info->si_pid, (int)m_sig_info->si_uid, (int)m_sig_info->si_status );
+-            break;
+-        case CLD_STOPPED:
+-            report_error( execution_exception::system_error,
+-                          "child has stopped; pid: %d; uid: %d; exit value: %d",
+-                          (int)m_sig_info->si_pid, (int)m_sig_info->si_uid, (int)m_sig_info->si_status );
+-            break;
+-        case CLD_CONTINUED:
+-            report_error( execution_exception::system_error,
+-                          "stopped child had continued; pid: %d; uid: %d; exit value: %d",
+-                          (int)m_sig_info->si_pid, (int)m_sig_info->si_uid, (int)m_sig_info->si_status );
+-            break;
+-#endif
++	  // FreeBSD 6.x does not provide details for this signal as required by SUSv3
+         default:
+             report_error( execution_exception::system_error,
+                           "signal: SIGCHLD, si_code: %d (child process has terminated; pid: %d; uid: %d; exit value: %d)",
+@@ -771,15 +672,7 @@
+ 
+ static bool ignore_sigchild( siginfo_t* info )
+ {
+-    return info->si_signo == SIGCHLD
+-#ifndef BOOST_TEST_LIMITED_SIGNAL_DETAILS
+-            && info->si_code == CLD_EXITED 
+-#endif
+-#ifdef BOOST_TEST_IGNORE_NON_ZERO_CHILD_CODE
+-            ;
+-#else
+-            && (int)info->si_status == 0;
+-#endif
++    return info->si_signo == SIGCHLD && (int)info->si_status == 0;
+ }
+ 
+ //____________________________________________________________________________//
+--- misc/boost_1_48_0/boostcpp.jam.orig	2011-12-15 18:33:48.000000000 +0300
++++ misc/build/boost_1_48_0/boostcpp.jam	2011-12-15 18:34:05.000000000 +0300
+@@ -154,7 +154,7 @@
+         # suffixes either. Pgi compilers can not accept library with version
+         # suffix.
+         if $(type) = SHARED_LIB &&
+-          ( ! ( [ $(property-set).get <target-os> ] in windows cygwin darwin aix ) &&
++          ( ! ( [ $(property-set).get <target-os> ] in windows cygwin darwin aix freebsd ) &&
+             ! ( [ $(property-set).get <toolset> ] in pgi ) )
+         {
+             result = $(result).$(BOOST_VERSION)  ;
+--- misc/boost_1_48_0/libs/filesystem/v2/src/v2_path.cpp.orig	2010-12-29 19:23:18.000000000 +0100
++++ misc/build/boost_1_48_0/libs/filesystem/v2/src/v2_path.cpp	2010-12-29 19:23:54.000000000 +0100
+@@ -45,7 +45,7 @@
+   {
+ #if !defined(macintosh) && !defined(__APPLE__) && !defined(__APPLE_CC__) 
+     // ISO C calls this "the locale-specific native environment":
+-    static std::locale lc("");
++    static std::locale lc;
+ #else  // Mac OS
+     // "All BSD system functions expect their string parameters to be in UTF-8 encoding
+     // and nothing else."
+--- misc/boost_1_48_0/libs/filesystem/v3/src/path.cpp.orig	2011-12-15 17:38:14.000000000 +0300
++++ misc/build/boost_1_48_0/libs/filesystem/v3/src/path.cpp	2011-12-15 17:51:50.000000000 +0300
+@@ -767,7 +767,7 @@
+     // or LANG are wrong, for example), so dynamic initialization is used to ensure
+     // that exceptions can be caught.
+ 
+-    return std::locale("");
++    return std::locale();
+ 
+ #   endif
+   }
+--- misc/boost_1_48_0/tools/build/v2/engine/build.jam.orig	Tue Jul 29 15:43:31 2008
++++ misc/build/boost_1_48_0/tools/build/v2/engine/build.jam	Tue Nov 11 23:52:09 2008
+@@ -176,7 +176,7 @@
+ ## GCC 2.x, 3.x, 4.x
+ toolset gcc gcc : "-o " : -D
+     : -pedantic -fno-strict-aliasing
+-    [ opt --release : [ opt --symbols : -g : -s ] -O3 ]
++    [ opt --release : [ opt --symbols : -g : -s ] -O3 -fno-strict-aliasing ]
+     [ opt --debug : -g -O0 -fno-inline ]
+     -I$(--python-include) -I$(--extra-include) -Wno-long-long
+     : -L$(--python-lib[1]) -l$(--python-lib[2]) ;
+--- misc/boost_1_48_0/tools/build/v2/tools/common.jam.orig	2009-09-23 16:39:31.000000000 +0400
++++ misc/build/boost_1_48_0/tools/build/v2/tools/common.jam	2009-09-23 16:39:33.000000000 +0400
+@@ -765,14 +765,6 @@
+                 result += [ join-tag $(f:G=) : [ toolset-tag $(name) : $(type) :
+                 $(property-set) ] ] ;
+             
+-            case <threading> :
+-                result += [ join-tag $(f:G=) : [ threading-tag $(name) : $(type)
+-                : $(property-set) ] ] ;
+-            
+-            case <runtime> :
+-                result += [ join-tag $(f:G=) : [ runtime-tag $(name) : $(type) :
+-                $(property-set) ] ] ;
+-            
+             case <qt> :
+             result += [ join-tag $(f:G=) : [ qt-tag $(name) : $(type) :
+                 $(property-set) ] ] ;
