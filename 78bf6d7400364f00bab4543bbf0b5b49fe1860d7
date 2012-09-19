@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn///6M\u003d",
+        "filename": "avmedia/source/quicktime/framegrabber.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2012-09-19T09:53:32Z",
+      "side": 1,
+      "message": "Did you test this?\n\nOUString::equalsAsciiL() takes two parameters, so I don\u0027t think this will work. (I don\u0027t have a Mac build to test.)",
+      "revId": "78bf6d7400364f00bab4543bbf0b5b49fe1860d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
