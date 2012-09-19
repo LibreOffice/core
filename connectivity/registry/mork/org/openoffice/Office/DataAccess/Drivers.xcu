@@ -18,28 +18,6 @@
  -->
 <oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <node oor:name="Installed" install:module="mork">
-    <node oor:name="sdbc:address:mozilla:" oor:op="replace">
-      <prop oor:name="Driver">
-        <value>com.sun.star.comp.sdbc.MozabDriver</value>
-      </prop>
-      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">SeaMonkey Address Book</value>
-      </prop>
-      <node oor:name="Features">
-        <node oor:name="EscapeDateTime" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
-          </prop>
-        </node>
-      </node>
-      <node oor:name="MetaData">
-        <node oor:name="SupportsBrowsing" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:boolean">
-            <value>true</value>
-          </prop>
-        </node>
-      </node>
-    </node>
     <node oor:name="sdbc:address:thunderbird:" oor:op="replace">
       <prop oor:name="Driver">
         <value>com.sun.star.comp.sdbc.MorkDriver</value>

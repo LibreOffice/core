@@ -20,10 +20,10 @@
 #include <sal/macros.h>
 #include "MColumnAlias.hxx"
 #include "MConnection.hxx"
-#include "MExtConfigAccess.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <officecfg/Office/DataAccess.hxx>
 
 #include <tools/diagnose_ex.h>
 
@@ -90,70 +90,38 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
 //------------------------------------------------------------------------------
 void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
-    // open our driver settings config node
-
-    // the config path for our own driver's settings
-    Reference< XPropertySet > xDriverNode = createDriverConfigNode( _rxORB );
-    if ( xDriverNode.is() )
-    {
-        try
+    Reference< XNameAccess > xAliasesNode(
+        officecfg::Office::DataAccess::DriverSettings::
+        com_sun_star_comp_sdbc_MozabDriver::ColumnAliases::get(
+            comphelper::getComponentContext(_rxORB)),
+        UNO_QUERY_THROW);
+    Sequence< OUString > aProgrammaticNames(xAliasesNode->getElementNames());
+    for (sal_Int32 i = 0; i != aProgrammaticNames.getLength(); ++i) {
+        OString sAsciiProgrammaticName(
+            OUStringToOString(
+                aProgrammaticNames[i], RTL_TEXTENCODING_ASCII_US));
+        bool bFound = false;
+        for (AliasMap::iterator j(m_aAliasMap.begin()); j != m_aAliasMap.end();
+             ++j)
         {
-            //.............................................................
-            Reference< XNameAccess > xAliasesNode;
-            xDriverNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ColumnAliases")) ) >>= xAliasesNode;
-            OSL_ENSURE( xAliasesNode.is(), "OColumnAlias::setAlias: missing the aliases node!" );
-
-            // this is a set of string nodes
-            Sequence< ::rtl::OUString > aProgrammaticNames;
-            if ( xAliasesNode.is() )
-                aProgrammaticNames = xAliasesNode->getElementNames();
-
-            //.............................................................
-            // travel through all the set elements
-            const ::rtl::OUString* pProgrammaticNames = aProgrammaticNames.getConstArray();
-            const ::rtl::OUString* pProgrammaticNamesEnd = pProgrammaticNames + aProgrammaticNames.getLength();
-            ::rtl::OUString sAssignedAlias;
-
-            for ( ; pProgrammaticNames < pProgrammaticNamesEnd; ++pProgrammaticNames )
-            {
-                OSL_VERIFY( xAliasesNode->getByName( *pProgrammaticNames ) >>= sAssignedAlias );
-
-                // normalize in case the config data is corrupted
-                // (what we really don't need is an empty alias ...)
-                if ( sAssignedAlias.isEmpty() )
-                      sAssignedAlias = *pProgrammaticNames;
-
-                ::rtl::OString sAsciiProgrammaticName( ::rtl::OUStringToOString( *pProgrammaticNames, RTL_TEXTENCODING_ASCII_US ) );
-                //.............................................................
-            #if OSL_DEBUG_LEVEL > 0
-                bool bFound = false;
-            #endif
-                for (   AliasMap::iterator search = m_aAliasMap.begin();
-                        ( search != m_aAliasMap.end() );
-                        ++search
-                    )
-                {
-                    if ( search->second.programmaticAsciiName.equals( sAsciiProgrammaticName ) )
-                    {
-                        AliasEntry entry( search->second );
-                        m_aAliasMap.erase( search );
-                        m_aAliasMap[ sAssignedAlias ] = entry;
-
-                    #if OSL_DEBUG_LEVEL > 0
-                        bFound = true;
-                    #endif
-
-                        break;
-                    }
+            if (j->second.programmaticAsciiName == sAsciiProgrammaticName) {
+                OUString sAssignedAlias;
+                xAliasesNode->getByName(aProgrammaticNames[i]) >>=
+                    sAssignedAlias;
+                if (sAssignedAlias.isEmpty()) {
+                    sAssignedAlias = aProgrammaticNames[i];
                 }
-
-                OSL_ENSURE( bFound, "OColumnAlias::setAlias: did not find a programmatic name which exists in the configuration!" );
+                AliasEntry entry(j->second);
+                m_aAliasMap.erase(j);
+                m_aAliasMap[sAssignedAlias] = entry;
+                bFound = true;
+                break;
             }
         }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+        SAL_WARN_IF(
+            !bFound, "connectivity.mork",
+            "unknown programmatic name " << aProgrammaticNames[i]
+                <<" from configuration");
     }
 }
 

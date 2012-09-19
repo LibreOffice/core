@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_sdk_api,mork))
 
 $(eval $(call gb_Library_add_exception_objects,mork, \
     connectivity/source/drivers/mork/MColumns \
-    connectivity/source/drivers/mork/MConfigAccess \
     connectivity/source/drivers/mork/MColumnAlias \
     connectivity/source/drivers/mork/MNSFolders \
     connectivity/source/drivers/mork/MNSINIParser \
