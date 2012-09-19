@@ -32,8 +32,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bestreversemap \
     bmp \
     bmpsum \
-    checksingleton \
     cfgex \
+    checksingleton \
     cppunit/cppunittester \
     g2g \
     gencoll_rule \
@@ -45,8 +45,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     idxdict \
     lngconvex \
     localize \
-    mork_helper \
     mkunroll \
+    mork_helper \
     osl_process_child \
     pdf2xml \
     pdfunzip \
@@ -62,12 +62,12 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     svidl \
     transex3 \
     typesconfig \
-	ucpp \
+    ucpp \
     ulfconv \
     ulfex \
     xml2cmp \
-    xrmex \
     xpdfimport \
+    xrmex \
 ))
 
 $(eval $(call gb_Helper_register_executables,SDK, \
