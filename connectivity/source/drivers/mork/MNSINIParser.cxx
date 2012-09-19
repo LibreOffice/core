@@ -23,21 +23,20 @@
 IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException )
 {
     OUString iniUrl;
-    if (osl_File_E_None != osl_getFileURLFromSystemPath(rIniName.pData, &iniUrl.pData))
+    oslFileError fileError = osl_getFileURLFromSystemPath(
+        rIniName.pData, &iniUrl.pData);
+    if (fileError != osl_File_E_None)
+    {
+        SAL_WARN(
+            "connectivity.mork",
+            "InitParser, getFileURLFromSystemPath(" << rIniName << "): "
+                << +fileError);
         return;
+    }
 
     SAL_INFO("connectivity.mork", "IniParser: " << iniUrl);
     oslFileHandle handle=NULL;
-    oslFileError fileError = osl_File_E_INVAL;
-    try{
-        if (!iniUrl.isEmpty())
-            fileError = osl_openFile(iniUrl.pData, &handle, osl_File_OpenFlag_Read);
-    }
-    catch(const ::com::sun::star::io::IOException&)
-    {
-        SAL_WARN("connectivity.mork", "IniParser -- couldn't open file: " << iniUrl);
-        return;
-    }
+    fileError = osl_openFile(iniUrl.pData, &handle, osl_File_OpenFlag_Read);
 
     if (osl_File_E_None == fileError)
     {
@@ -85,12 +84,12 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
         }
         osl_closeFile(handle);
     }
-#if OSL_DEBUG_LEVEL > 0
     else
     {
-        SAL_WARN("connectivity.mork", "IniParser -- couldn't open file: " << iniUrl);
+        SAL_INFO(
+            "connectivity.mork",
+            "IniParser couldn't open file " << iniUrl << ": " << +fileError);
     }
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
