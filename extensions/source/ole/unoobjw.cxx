@@ -54,7 +54,7 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <osl/interlck.h>
 #include <com/sun/star/uno/genfunc.h>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include "comifaces.hxx"
