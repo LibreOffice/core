@@ -130,6 +130,8 @@ static void UpdateNativeMenu2( GtkSalMenu *pMenu )
 
         if ( pSubmenu && pSubmenu->GetMenu() )
         {
+            pMenu->NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+
             GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
 
             if ( pSubMenuModel == NULL )
@@ -138,7 +140,8 @@ static void UpdateNativeMenu2( GtkSalMenu *pMenu )
                 g_lo_menu_set_submenu_to_item_in_section( pLOMenu, nSection, nItemPos, G_MENU_MODEL( pSubMenuModel ) );
             }
 
-            pMenu->NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+            g_object_unref( pSubMenuModel );
+
             pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
             pSubmenu->SetActionGroup( pActionGroup );
         }
@@ -230,6 +233,8 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
 
         if ( pSubmenu && pSubmenu->GetMenu() )
         {
+            pMenu->NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+
             GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
 
             if ( pSubMenuModel == NULL )
@@ -238,7 +243,7 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
                 g_lo_menu_set_submenu_to_item_in_section( pLOMenu, nSection, nItemPos, G_MENU_MODEL( pSubMenuModel ) );
             }
 
-            pMenu->NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+            g_object_unref( pSubMenuModel );
 
             pSubmenu->GetMenu()->Activate();
             pSubmenu->GetMenu()->Deactivate();
