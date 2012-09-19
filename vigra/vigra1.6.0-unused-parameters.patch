@@ -1,5 +1,5 @@
---- misc/vigra1.4.0/include/vigra/basicimage.hxx	2012-01-19 22:49:11.232074631 +0100
-+++ misc/build/vigra1.4.0/include/vigra/basicimage.hxx	2012-01-19 22:48:12.997439136 +0100
+--- misc/vigra1.6.0/include/vigra/basicimage.hxx	2012-01-19 22:49:11.232074631 +0100
++++ misc/build/vigra1.6.0/include/vigra/basicimage.hxx	2012-01-19 22:48:12.997439136 +0100
 @@ -72,7 +72,7 @@
          difference_type offset_;
      };
@@ -9,8 +9,8 @@
  
      static reference dereference(BaseType const & d)
          { return const_cast<reference>(*(*d.line_start_ + d.offset_)); }
---- misc/vigra1.4.0/include/vigra/diff2d.hxx	2012-01-19 22:49:11.280074335 +0100
-+++ misc/build/vigra1.4.0/include/vigra/diff2d.hxx	2012-01-19 22:49:00.129144170 +0100
+--- misc/vigra1.6.0/include/vigra/diff2d.hxx	2012-01-19 22:49:11.280074335 +0100
++++ misc/build/vigra1.6.0/include/vigra/diff2d.hxx	2012-01-19 22:49:00.129144170 +0100
 @@ -60,7 +60,7 @@
      typedef Diff const *                    pointer;
      typedef std::random_access_iterator_tag iterator_category;

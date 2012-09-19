@@ -1,7 +1,7 @@
-diff -uprN misc/vigra1.4.0/configure misc/build/vigra1.4.0/configure
---- misc/vigra1.4.0/configure	Tue Dec 20 23:53:28 2005
-+++ misc/build/vigra1.4.0/configure	Wed Apr  4 20:35:48 2007
-@@ -7259,7 +7259,7 @@ kfreebsd*-gnu)
+diff -uprN misc/vigra1.6.0/configure misc/build/vigra1.6.0/configure
+--- misc/vigra1.6.0/configure	2008-08-13 08:15:32.000000000 -0500
++++ misc/build/vigra1.6.0/configure	2012-09-19 17:30:24.000000000 -0500
+@@ -7843,7 +7843,7 @@ kfreebsd*-gnu)
    ;;
  
  freebsd*)
@@ -10,7 +10,7 @@ diff -uprN misc/vigra1.4.0/configure misc/build/vigra1.4.0/configure
    version_type=freebsd-$objformat
    case $version_type in
      freebsd-elf*)
-@@ -10961,7 +10961,7 @@ kfreebsd*-gnu)
+@@ -11504,7 +11504,7 @@ kfreebsd*-gnu)
    ;;
  
  freebsd*)
@@ -19,7 +19,7 @@ diff -uprN misc/vigra1.4.0/configure misc/build/vigra1.4.0/configure
    version_type=freebsd-$objformat
    case $version_type in
      freebsd-elf*)
-@@ -14110,7 +14110,7 @@ kfreebsd*-gnu)
+@@ -14616,7 +14616,7 @@ kfreebsd*-gnu)
    ;;
  
  freebsd*)
@@ -28,7 +28,7 @@ diff -uprN misc/vigra1.4.0/configure misc/build/vigra1.4.0/configure
    version_type=freebsd-$objformat
    case $version_type in
      freebsd-elf*)
-@@ -16461,7 +16461,7 @@ kfreebsd*-gnu)
+@@ -16958,7 +16958,7 @@ kfreebsd*-gnu)
    ;;
  
  freebsd*)
@@ -37,10 +37,10 @@ diff -uprN misc/vigra1.4.0/configure misc/build/vigra1.4.0/configure
    version_type=freebsd-$objformat
    case $version_type in
      freebsd-elf*)
-diff -uprN misc/vigra1.4.0/include/vigra/array_vector.hxx misc/build/vigra1.4.0/include/vigra/array_vector.hxx
---- misc/vigra1.4.0/include/vigra/array_vector.hxx	2005-12-21 05:53:30.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/array_vector.hxx	2006-08-31 12:08:15.172679000 +0200
-@@ -196,7 +196,38 @@ public:
+diff -uprN misc/vigra1.6.0/include/vigra/array_vector.hxx misc/build/vigra1.6.0/include/vigra/array_vector.hxx
+--- misc/vigra1.6.0/include/vigra/array_vector.hxx	2008-08-13 08:15:34.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/array_vector.hxx	2012-09-19 17:30:24.000000000 -0500
+@@ -578,7 +578,38 @@ public:
      iterator insert(iterator p, size_type n, value_type const & v);
  
      template <class InputIterator>
@@ -80,150 +80,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/array_vector.hxx misc/build/vigra1.4.0/
  
      iterator erase(iterator p);
  
-@@ -260,23 +291,23 @@ ArrayVector<T, Alloc>::ArrayVector(Alloc
- {}
- 
- template <class T, class Alloc>
--ArrayVector<T, Alloc>::ArrayVector( size_type size, Alloc const & alloc)
-+ArrayVector<T, Alloc>::ArrayVector( size_type sz, Alloc const & alloc)
- : alloc_(alloc),
--  size_(size),
--  capacity_(size),
--  data_(reserve_raw(size))
-+  size_(sz),
-+  capacity_(sz),
-+  data_(reserve_raw(sz))
- {
-     if(size_ > 0)
-         std::uninitialized_fill(data_, data_+size_, value_type());
- }
- 
- template <class T, class Alloc>
--ArrayVector<T, Alloc>::ArrayVector( size_type size, 
-+ArrayVector<T, Alloc>::ArrayVector( size_type sz, 
-                          value_type const & initial, Alloc const & alloc)
- : alloc_(alloc),
--  size_(size),
--  capacity_(size),
--  data_(reserve_raw(size))
-+  size_(sz),
-+  capacity_(sz),
-+  data_(reserve_raw(sz))
- {
-     if(size_ > 0)
-         std::uninitialized_fill(data_, data_+size_, initial);
-@@ -295,24 +326,24 @@ ArrayVector<T, Alloc>::ArrayVector( this
- 
- template <class T, class Alloc>
- template <class InputIterator>
--ArrayVector<T, Alloc>::ArrayVector(InputIterator i, InputIterator end)
-+ArrayVector<T, Alloc>::ArrayVector(InputIterator i, InputIterator iend)
- : alloc_(),
--  size_(std::distance(i, end)),
-+  size_(std::distance(i, iend)),
-   capacity_(size_),
-   data_(reserve_raw(size_))
- {
--    std::uninitialized_copy(i, end, data_);
-+    std::uninitialized_copy(i, iend, data_);
- }
- 
- template <class T, class Alloc>
- template <class InputIterator>
--ArrayVector<T, Alloc>::ArrayVector(InputIterator i, InputIterator end, Alloc const & alloc)
-+ArrayVector<T, Alloc>::ArrayVector(InputIterator i, InputIterator iend, Alloc const & alloc)
- : alloc_(alloc),
--  size_(std::distance(i, end)),
-+  size_(std::distance(i, iend)),
-   capacity_(size_),
-   data_(reserve_raw(size_))
- {
--    std::uninitialized_copy(i, end, data_);
-+    std::uninitialized_copy(i, iend, data_);
- }
- 
- 
-@@ -409,42 +440,6 @@ ArrayVector<T, Alloc>::insert(iterator p
- }
- 
- template <class T, class Alloc>
--template <class InputIterator>
--typename ArrayVector<T, Alloc>::iterator
--ArrayVector<T, Alloc>::insert(iterator p, InputIterator i, InputIterator iend)
--{
--    difference_type n = iend - i;
--    difference_type pos = p - begin();
--    size_type new_size = size() + n;
--    if(new_size >= capacity_)
--    {
--        pointer new_data = reserve_raw(new_size);
--        std::uninitialized_copy(begin(), p, new_data);
--        std::uninitialized_copy(i, iend, new_data + pos);
--        std::uninitialized_copy(p, end(), new_data + pos + n);
--        deallocate(data_, size_);
--        capacity_ = new_size;
--        data_ = new_data;
--    }
--    else if(pos + n >= size_)
--    {
--        size_type diff = pos + n - size_;
--        std::uninitialized_copy(p, end(), end() + diff);
--        std::uninitialized_copy(iend - diff, iend, end());
--        std::copy(i, iend - diff, p);
--    }
--    else
--    {
--        size_type diff = size_ - (pos + n);
--        std::uninitialized_copy(end() - n, end(), end());
--        std::copy_backward(p, p + diff, end());
--        std::copy(i, iend, p);
--    }
--    size_ = new_size;
--    return begin() + pos;
--}
--
--template <class T, class Alloc>
- typename ArrayVector<T, Alloc>::iterator
- ArrayVector<T, Alloc>::erase(iterator p)
- {
-@@ -504,25 +499,25 @@ void ArrayVector<T, Alloc>::swap(this_ty
- }
- 
- template <class T, class Alloc>
--void ArrayVector<T, Alloc>::deallocate(pointer data, size_type size)
-+void ArrayVector<T, Alloc>::deallocate(pointer target_data, size_type sz)
- {
-     if(data)
-     {
--        detail::destroy_n(data, size);
--        alloc_.deallocate(data, size);
-+        detail::destroy_n(target_data, sz);
-+        alloc_.deallocate(target_data, sz);
-     }
- }
- 
- template <class T, class Alloc>
- typename ArrayVector<T, Alloc>::pointer
--ArrayVector<T, Alloc>::reserve_raw(size_type capacity)
-+ArrayVector<T, Alloc>::reserve_raw(size_type cap)
- {
--    pointer data = 0;
--    if(capacity)
-+    pointer new_data = 0;
-+    if(cap)
-     {
--        data = alloc_.allocate(capacity);
-+        new_data = alloc_.allocate(cap);
-     }
--    return data;
-+    return new_data;
- }
- 
- } // namespace vigra
-diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/include/vigra/basicimage.hxx
---- misc/vigra1.4.0/include/vigra/basicimage.hxx	2005-12-21 05:53:30.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/basicimage.hxx	2006-08-31 12:08:15.194050000 +0200
-@@ -552,7 +552,11 @@ class BasicImage
+diff -uprN misc/vigra1.6.0/include/vigra/basicimage.hxx misc/build/vigra1.6.0/include/vigra/basicimage.hxx
+--- misc/vigra1.6.0/include/vigra/basicimage.hxx	2008-08-13 08:15:34.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/basicimage.hxx	2012-09-19 17:46:22.000000000 -0500
+@@ -572,7 +572,11 @@ class BasicImage
      typedef Alloc allocator_type;
  
      typedef Alloc Allocator;
@@ -235,7 +95,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
  
          /** construct image of size 0x0
          */
-@@ -569,39 +573,51 @@ class BasicImage
+@@ -589,39 +593,51 @@ class BasicImage
        width_(0),
        height_(0),
        allocator_(alloc),
@@ -297,7 +157,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
      }
  
          /** construct image of size width*height and initialize every
-@@ -609,71 +625,87 @@ class BasicImage
+@@ -629,71 +645,87 @@ class BasicImage
          value_type doesn't have a default constructor). 
          Use the specified allocator.
          */
@@ -405,7 +265,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
      }
  
          /** copy rhs image
-@@ -710,20 +742,20 @@ class BasicImage
+@@ -730,20 +762,20 @@ class BasicImage
          /** reset image to specified size (dimensions must not be negative)
              (old data are kept if new size matches old size)
          */
@@ -432,7 +292,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
          }
      }
  
-@@ -732,12 +764,12 @@ class BasicImage
+@@ -752,12 +784,12 @@ class BasicImage
              constructor, dimensions must not be negative,
              old data are kept if new size matches old size)
          */
@@ -447,7 +307,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
  
          /** resize image to size of other image and copy it's data
          */
-@@ -1046,30 +1078,30 @@ BasicImage<PIXELTYPE, Alloc>::init(value
+@@ -1066,30 +1098,30 @@ BasicImage<PIXELTYPE, Alloc>::init(value
  
  template <class PIXELTYPE, class Alloc>
  void
@@ -471,10 +331,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
 -            if (width*height != width_*height_) // different sizes, must reallocate
 +            if (w*h != width_*height_) // different sizes, must reallocate
              {
--                newdata = allocator_.allocate(width*height);
+-                newdata = allocator_.allocate(typename Alloc::size_type(width*height));
 -                std::uninitialized_fill_n(newdata, width*height, d);
 -                newlines = initLineStartArray(newdata, width, height);
-+                newdata = allocator_.allocate(w*h);
++                newdata = allocator_.allocate(typename Alloc::size_type(w*h));
 +                std::uninitialized_fill_n(newdata, w*h, d);
 +                newlines = initLineStartArray(newdata, w, h);
                  deallocate();
@@ -486,10 +346,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
 -                newlines = initLineStartArray(newdata, width, height);
 +                std::fill_n(newdata, w*h, d);
 +                newlines = initLineStartArray(newdata, w, h);
-                 pallocator_.deallocate(lines_, height_);
+                 pallocator_.deallocate(lines_, typename Alloc::size_type(height_));
              }
          }
-@@ -1080,22 +1112,22 @@ BasicImage<PIXELTYPE, Alloc>::resize(int
+@@ -1100,22 +1132,22 @@ BasicImage<PIXELTYPE, Alloc>::resize(int
  
          data_ = newdata;
          lines_ = newlines;
@@ -519,10 +379,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
      {
          value_type * newdata = 0;
          value_type ** newlines = 0;
-@@ -1104,15 +1136,15 @@ BasicImage<PIXELTYPE, Alloc>::resizeCopy
+@@ -1124,15 +1156,15 @@ BasicImage<PIXELTYPE, Alloc>::resizeCopy
              if (newsize != width_*height_) // different sizes, must reallocate
              {
-                 newdata = allocator_.allocate(newsize);
+                 newdata = allocator_.allocate(typename Alloc::size_type(newsize));
 -                std::uninitialized_copy(data, data + newsize, newdata);
 -                newlines = initLineStartArray(newdata, width, height);
 +                std::uninitialized_copy(src_data, src_data + newsize, newdata);
@@ -536,10 +396,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
 -                newlines = initLineStartArray(newdata, width, height);
 +                std::copy(src_data, src_data + newsize, newdata);
 +                newlines = initLineStartArray(newdata, w, h);
-                 pallocator_.deallocate(lines_, height_);
+                 pallocator_.deallocate(lines_, typename Alloc::size_type(height_));
              }
          }
-@@ -1123,12 +1155,12 @@ BasicImage<PIXELTYPE, Alloc>::resizeCopy
+@@ -1143,12 +1175,12 @@ BasicImage<PIXELTYPE, Alloc>::resizeCopy
  
          data_ = newdata;
          lines_ = newlines;
@@ -555,25 +415,25 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimage.hxx misc/build/vigra1.4.0/in
      }
  }
  
-@@ -1163,11 +1195,11 @@ BasicImage<PIXELTYPE, Alloc>::deallocate
+@@ -1183,11 +1215,11 @@ BasicImage<PIXELTYPE, Alloc>::deallocate
  
  template <class PIXELTYPE, class Alloc>
  PIXELTYPE **
 -BasicImage<PIXELTYPE, Alloc>::initLineStartArray(value_type * data, int width, int height)
 +BasicImage<PIXELTYPE, Alloc>::initLineStartArray(value_type * src_data, int w, int h)
  {
--    value_type ** lines = pallocator_.allocate(height);
+-    value_type ** lines = pallocator_.allocate(typename Alloc::size_type(height));
 -    for(int y=0; y<height; ++y)
 -         lines[y] = data + y*width;
-+    value_type ** lines = pallocator_.allocate(h);
++    value_type ** lines = pallocator_.allocate(typename Alloc::size_type(h));
 +    for(int y=0; y<h; ++y)
 +         lines[y] = src_data + y*w;
      return lines;
  }
  
-diff -uprN misc/vigra1.4.0/include/vigra/basicimageview.hxx misc/build/vigra1.4.0/include/vigra/basicimageview.hxx
---- misc/vigra1.4.0/include/vigra/basicimageview.hxx	2005-12-21 05:53:30.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/basicimageview.hxx	2006-08-31 12:08:15.219210000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/basicimageview.hxx misc/build/vigra1.6.0/include/vigra/basicimageview.hxx
+--- misc/vigra1.6.0/include/vigra/basicimageview.hxx	2008-08-13 08:15:34.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/basicimageview.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -176,20 +176,20 @@ class BasicImageView
  
          /** construct view of size w x h
@@ -603,9 +463,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/basicimageview.hxx misc/build/vigra1.4.
      {}
  
          /** set Image with const value
-diff -uprN misc/vigra1.4.0/include/vigra/boundarytensor.hxx misc/build/vigra1.4.0/include/vigra/boundarytensor.hxx
---- misc/vigra1.4.0/include/vigra/boundarytensor.hxx	2005-12-21 05:53:31.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/boundarytensor.hxx	2006-08-31 12:08:15.240695000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/boundarytensor.hxx misc/build/vigra1.6.0/include/vigra/boundarytensor.hxx
+--- misc/vigra1.6.0/include/vigra/boundarytensor.hxx	2008-08-13 08:15:34.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/boundarytensor.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -71,8 +71,8 @@ initGaussianPolarFilters1(double std_dev
      int radius = (int)(4.0*std_dev + 0.5);
      std_dev *= 1.08179074376;
@@ -626,18 +486,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/boundarytensor.hxx misc/build/vigra1.4.
  
      for(unsigned int i=0; i<k.size(); ++i)
      {
-@@ -183,7 +183,7 @@ initGaussianPolarFilters3(double std_dev
-         k[i].setBorderTreatment(BORDER_TREATMENT_REFLECT);
-     }
-         
--    double b = -1.3786348292 / VIGRA_CSTD::pow(std_dev, 3);
-+    double b = -1.3786348292 / VIGRA_CSTD::pow(std_dev, 3.0);
- 
-     int ix;
-     iterator c = k[0].center();
-diff -uprN misc/vigra1.4.0/include/vigra/config.hxx misc/build/vigra1.4.0/include/vigra/config.hxx
---- misc/vigra1.4.0/include/vigra/config.hxx	2005-12-21 05:53:31.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/config.hxx	2006-08-31 12:08:15.261488000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/config.hxx misc/build/vigra1.6.0/include/vigra/config.hxx
+--- misc/vigra1.6.0/include/vigra/config.hxx	2008-08-13 08:15:35.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/config.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -84,6 +84,12 @@
  		#endif // VIGRA_NO_STD_MINMAX
  	#endif // (_MSC_VER < 1300)
@@ -651,9 +502,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/config.hxx misc/build/vigra1.4.0/includ
      #if _MSC_VER < 1310
          #define NO_PARTIAL_TEMPLATE_SPECIALIZATION
          #define NO_OUT_OF_LINE_MEMBER_TEMPLATES
-diff -uprN misc/vigra1.4.0/include/vigra/diff2d.hxx misc/build/vigra1.4.0/include/vigra/diff2d.hxx
---- misc/vigra1.4.0/include/vigra/diff2d.hxx	2005-12-21 05:53:33.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/diff2d.hxx	2006-08-31 12:08:15.282334000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/diff2d.hxx misc/build/vigra1.6.0/include/vigra/diff2d.hxx
+--- misc/vigra1.6.0/include/vigra/diff2d.hxx	2008-08-13 08:15:35.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/diff2d.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -490,8 +490,8 @@ public:
  
          /** Construct point at given position.
@@ -665,7 +516,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/diff2d.hxx misc/build/vigra1.4.0/includ
      {}
  
          /** Copy Constructor.
-@@ -606,8 +606,8 @@ public:
+@@ -620,8 +620,8 @@ public:
  
          /** Construct point at given position.
          */
@@ -676,7 +527,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/diff2d.hxx misc/build/vigra1.4.0/includ
      {}
  
          /** Copy Constructor.
-@@ -870,26 +870,26 @@ public:
+@@ -884,26 +884,26 @@ public:
           * (lowerRight is considered to be outside the rectangle as
           * usual in the VIGRA)
           */
@@ -711,7 +562,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/diff2d.hxx misc/build/vigra1.4.0/includ
      {}
  
          /** Return the first point (scan-order wise) which is
-@@ -936,9 +936,9 @@ public:
+@@ -950,9 +950,9 @@ public:
          /** Move the whole rectangle so that upperLeft() will become
           * Point2D(left, top) afterwards.
           */
@@ -723,7 +574,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/diff2d.hxx misc/build/vigra1.4.0/includ
      }
  
          /** Move the whole rectangle by the given 2D offset.
-@@ -1023,17 +1023,17 @@ public:
+@@ -1037,17 +1037,17 @@ public:
          /** Resize this rectangle to the given extents. This will move
           * the lower right corner only.
           */
@@ -745,9 +596,18 @@ diff -uprN misc/vigra1.4.0/include/vigra/diff2d.hxx misc/build/vigra1.4.0/includ
      }
  
          /** Increase the size of the rectangle by the given offset. This
-diff -uprN misc/vigra1.4.0/include/vigra/fftw.hxx misc/build/vigra1.4.0/include/vigra/fftw.hxx
---- misc/vigra1.4.0/include/vigra/fftw.hxx	2005-12-21 05:53:34.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/fftw.hxx	2006-08-31 12:08:15.308081000 +0200
+@@ -1131,7 +1131,7 @@ public:
+     bool contains(Rect2D const &r) const
+     {
+         return r.isEmpty() ||
+-            contains(r.upperLeft()) && contains(r.lowerRight()-Diff2D(1,1));
++            (contains(r.upperLeft()) && contains(r.lowerRight()-Diff2D(1,1)));
+     }
+ 
+         /** Return whether this rectangle overlaps with the given
+diff -uprN misc/vigra1.6.0/include/vigra/fftw.hxx misc/build/vigra1.6.0/include/vigra/fftw.hxx
+--- misc/vigra1.6.0/include/vigra/fftw.hxx	2008-08-13 08:15:36.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/fftw.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -399,8 +399,6 @@ inline FFTWComplex operator /(FFTWComple
      return a;
  }
@@ -757,9 +617,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/fftw.hxx misc/build/vigra1.4.0/include/
  inline FFTWComplex::value_type abs(const FFTWComplex &a)
  {
      return a.magnitude();
-diff -uprN misc/vigra1.4.0/include/vigra/fftw3.hxx misc/build/vigra1.4.0/include/vigra/fftw3.hxx
---- misc/vigra1.4.0/include/vigra/fftw3.hxx	2005-12-21 05:53:34.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/fftw3.hxx	2006-08-31 12:08:15.337248000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/fftw3.hxx misc/build/vigra1.6.0/include/vigra/fftw3.hxx
+--- misc/vigra1.6.0/include/vigra/fftw3.hxx	2008-08-13 08:15:36.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/fftw3.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -572,8 +572,6 @@ inline FFTWComplex operator /(FFTWComple
      return a;
  }
@@ -769,9 +629,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/fftw3.hxx misc/build/vigra1.4.0/include
      /// absolute value (= magnitude)
  inline FFTWComplex::value_type abs(const FFTWComplex &a)
  {
-diff -uprN misc/vigra1.4.0/include/vigra/fixedpoint.hxx misc/build/vigra1.4.0/include/vigra/fixedpoint.hxx
---- misc/vigra1.4.0/include/vigra/fixedpoint.hxx	2005-12-21 05:53:34.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/fixedpoint.hxx	2006-08-31 12:08:15.367651000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/fixedpoint.hxx misc/build/vigra1.6.0/include/vigra/fixedpoint.hxx
+--- misc/vigra1.6.0/include/vigra/fixedpoint.hxx	2008-08-13 08:15:36.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/fixedpoint.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -118,20 +118,18 @@ enum FixedPointNoShift { FPNoShift };
  
  namespace detail {
@@ -834,29 +694,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/fixedpoint.hxx misc/build/vigra1.4.0/in
          return *this;
      }
      
-@@ -428,12 +426,12 @@ struct FixedPointCast<type> \
-     } \
- };
- 
--VIGRA_FIXED_POINT_CAST(Int8);
--VIGRA_FIXED_POINT_CAST(UInt8);
--VIGRA_FIXED_POINT_CAST(Int16);
--VIGRA_FIXED_POINT_CAST(UInt16);
--VIGRA_FIXED_POINT_CAST(Int32);
--VIGRA_FIXED_POINT_CAST(UInt32);
-+VIGRA_FIXED_POINT_CAST(Int8)
-+VIGRA_FIXED_POINT_CAST(UInt8)
-+VIGRA_FIXED_POINT_CAST(Int16)
-+VIGRA_FIXED_POINT_CAST(UInt16)
-+VIGRA_FIXED_POINT_CAST(Int32)
-+VIGRA_FIXED_POINT_CAST(UInt32)
- 
- #undef VIGRA_FIXED_POINT_CAST
- 
-diff -uprN misc/vigra1.4.0/include/vigra/gaborfilter.hxx misc/build/vigra1.4.0/include/vigra/gaborfilter.hxx
---- misc/vigra1.4.0/include/vigra/gaborfilter.hxx	2005-12-21 05:53:35.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/gaborfilter.hxx	2006-08-31 12:08:15.389636000 +0200
-@@ -289,7 +289,11 @@ inline double angularGaborSigma(int dire
+diff -uprN misc/vigra1.6.0/include/vigra/gaborfilter.hxx misc/build/vigra1.6.0/include/vigra/gaborfilter.hxx
+--- misc/vigra1.6.0/include/vigra/gaborfilter.hxx	2008-08-13 08:15:36.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/gaborfilter.hxx	2012-09-19 17:30:24.000000000 -0500
+@@ -287,7 +287,11 @@ inline double angularGaborSigma(int dire
      Namespace: vigra
  */
  template <class ImageType, 
@@ -868,9 +709,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/gaborfilter.hxx misc/build/vigra1.4.0/i
  class GaborFilterFamily 
  : public ImageArray<ImageType, Alloc>
  {
-diff -uprN misc/vigra1.4.0/include/vigra/gaussians.hxx misc/build/vigra1.4.0/include/vigra/gaussians.hxx
---- misc/vigra1.4.0/include/vigra/gaussians.hxx	2005-12-21 05:53:35.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/gaussians.hxx	2006-08-31 12:08:15.409790000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/gaussians.hxx misc/build/vigra1.6.0/include/vigra/gaussians.hxx
+--- misc/vigra1.6.0/include/vigra/gaussians.hxx	2008-08-13 08:15:36.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/gaussians.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -88,26 +88,26 @@ class Gaussian
              sigma > 0.0
              \endcode
@@ -907,62 +748,32 @@ diff -uprN misc/vigra1.4.0/include/vigra/gaussians.hxx misc/build/vigra1.4.0/inc
          }
          calculateHermitePolynomial();
      }
-diff -uprN misc/vigra1.4.0/include/vigra/imagecontainer.hxx misc/build/vigra1.4.0/include/vigra/imagecontainer.hxx
---- misc/vigra1.4.0/include/vigra/imagecontainer.hxx	2005-12-21 05:53:36.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/imagecontainer.hxx	2006-08-31 12:08:15.429159000 +0200
-@@ -70,7 +70,11 @@ namespace vigra {
-     Namespace: vigra
- */
- template <class ImageType, 
-+#ifndef VIGRA_WITHOUT_NESTED_TEMPLATE_PARAMS
-       class Alloc = typename ImageType::allocator_type::template rebind<ImageType>::other >
-+#else
-+      class Alloc = std::allocator<ImageType> >
-+#endif
- class ImageArray
- {
-     Size2D imageSize_;
-diff -uprN misc/vigra1.4.0/include/vigra/mathutil.hxx misc/build/vigra1.4.0/include/vigra/mathutil.hxx
---- misc/vigra1.4.0/include/vigra/mathutil.hxx	2005-12-21 05:53:39.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/mathutil.hxx	2006-08-31 12:08:15.449199000 +0200
-@@ -73,8 +73,6 @@
+--- misc/vigra1.6.0/include/vigra/mathutil.hxx	2008-08-13 08:15:38.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/mathutil.hxx	2012-09-21 02:16:23.000000000 -0500
+@@ -88,7 +88,7 @@ using VIGRA_CSTD::ceil;  
  
- namespace vigra {
- 
--#ifndef __sun 
--
- /** \addtogroup MathFunctions Mathematical Functions
- 
-     Useful mathematical functions and functors.
-@@ -109,18 +107,11 @@ double erf(T x)
-         return ans - 1.0;
- }
- 
--#else
--
--using VIGRA_CSTD::erf;
--
--#endif
--
- // import functions into namespace vigra which VIGRA is going to overload
- 
- using VIGRA_CSTD::pow;  
- using VIGRA_CSTD::floor;  
- using VIGRA_CSTD::ceil;  
+ // import abs(float), abs(double), abs(long double) from <cmath>
+ //    and abs(int), abs(long), abs(long long) from <cstdlib>
 -using std::abs;  
++//using std::abs;  
  
- #define VIGRA_DEFINE_UNSIGNED_ABS(T) \
-     inline T abs(T t) { return t; }
-@@ -130,9 +121,39 @@ VIGRA_DEFINE_UNSIGNED_ABS(unsigned char)
+ // define the missing variants of abs() to avoid 'ambigous overload'
+ // errors in template functions
+@@ -100,17 +100,41 @@ VIGRA_DEFINE_UNSIGNED_ABS(unsigned char)
  VIGRA_DEFINE_UNSIGNED_ABS(unsigned short)
  VIGRA_DEFINE_UNSIGNED_ABS(unsigned int)
  VIGRA_DEFINE_UNSIGNED_ABS(unsigned long)
 +#ifdef VIGRA_HAS_LONG_LONG
-+VIGRA_DEFINE_UNSIGNED_ABS(unsigned long long)
+ VIGRA_DEFINE_UNSIGNED_ABS(unsigned long long)
 +#endif
  
  #undef VIGRA_DEFINE_UNSIGNED_ABS
  
+ #define VIGRA_DEFINE_MISSING_ABS(T) \
+     inline T abs(T t) { return t < 0 ? -t : t; }
+ 
+-VIGRA_DEFINE_MISSING_ABS(signed char)
+-VIGRA_DEFINE_MISSING_ABS(signed short)
 +#define VIGRA_DEFINE_SIGNED_ABS(T) \
 +    inline T abs(T t) { return (T)abs(t); }
 +#define VIGRA_DEFINE_SIGNED_LABS(T) \
@@ -984,31 +795,31 @@ diff -uprN misc/vigra1.4.0/include/vigra/mathutil.hxx misc/build/vigra1.4.0/incl
 +#ifdef VIGRA_HAS_LONG_DOUBLE
 +VIGRA_DEFINE_FABS(long double)
 +#endif
-+
+ 
+-#undef VIGRA_DEFINE_MISSING_ABS
 +#undef VIGRA_DEFINE_SIGNED_ABS
 +#undef VIGRA_DEFINE_SIGNED_LABS
 +#undef VIGRA_DEFINE_SIGNED_LLABS
 +#undef VIGRA_DEFINE_FABS
-+
+ 
      /*! The rounding function.
  
-         Defined for all floating point types. Rounds towards the nearest integer for both 
-@@ -155,12 +176,14 @@ inline double round(double t)
-                : ceil(t - 0.5);
+@@ -134,12 +158,14 @@ inline double round(double t)
+                 : ceil(t - 0.5);
  }
  
 +#ifdef VIGRA_HAS_LONG_DOUBLE
  inline long double round(long double t)
  {
-     return t >= 0.0
-                ? floor(t + 0.5)
-                : ceil(t - 0.5);
+      return t >= 0.0
+                 ? floor(t + 0.5)
+                 : ceil(t - 0.5);
  }
 +#endif
  
-     /*! The square function.
+     /*! Round up to the nearest power of 2.
  
-@@ -371,9 +394,15 @@ VIGRA_DEFINE_NORM(int)
+@@ -440,9 +466,15 @@ VIGRA_DEFINE_NORM(int)
  VIGRA_DEFINE_NORM(unsigned int)
  VIGRA_DEFINE_NORM(long)
  VIGRA_DEFINE_NORM(unsigned long)
@@ -1024,10 +835,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/mathutil.hxx misc/build/vigra1.4.0/incl
  
  #undef VIGRA_DEFINE_NORM
  
-diff -uprN misc/vigra1.4.0/include/vigra/numerictraits.hxx misc/build/vigra1.4.0/include/vigra/numerictraits.hxx
---- misc/vigra1.4.0/include/vigra/numerictraits.hxx	2005-12-21 05:53:41.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/numerictraits.hxx	2006-08-31 12:08:15.474422000 +0200
-@@ -891,6 +891,90 @@ struct NumericTraits<unsigned long>
+diff -uprN misc/vigra1.6.0/include/vigra/numerictraits.hxx misc/build/vigra1.6.0/include/vigra/numerictraits.hxx
+--- misc/vigra1.6.0/include/vigra/numerictraits.hxx	2008-08-13 08:15:39.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/numerictraits.hxx	2012-09-19 17:30:24.000000000 -0500
+@@ -863,6 +863,90 @@ struct NumericTraits<long>
      }
  };
  
@@ -1116,9 +927,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/numerictraits.hxx misc/build/vigra1.4.0
 +#endif
 +
  template<>
- struct NumericTraits<float>
+ struct NumericTraits<unsigned long>
  {
-@@ -949,6 +1033,7 @@ struct NumericTraits<double>
+@@ -1050,6 +1134,7 @@ struct NumericTraits<double>
      static double fromRealPromote(RealPromote v) { return v; }
  };
  
@@ -1126,7 +937,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/numerictraits.hxx misc/build/vigra1.4.0
  template<>
  struct NumericTraits<long double>
  {
-@@ -977,6 +1062,7 @@ struct NumericTraits<long double>
+@@ -1079,6 +1164,7 @@ struct NumericTraits<long double>
      static long double fromPromote(Promote v) { return v; }
      static long double fromRealPromote(RealPromote v) { return v; }
  };
@@ -1134,7 +945,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/numerictraits.hxx misc/build/vigra1.4.0
  
  #ifndef NO_PARTIAL_TEMPLATE_SPECIALIZATION
  
-@@ -1055,9 +1141,15 @@ VIGRA_DEFINE_NORM_TRAITS(int)
+@@ -1158,9 +1244,15 @@ VIGRA_DEFINE_NORM_TRAITS(int)
  VIGRA_DEFINE_NORM_TRAITS(unsigned int)
  VIGRA_DEFINE_NORM_TRAITS(long)
  VIGRA_DEFINE_NORM_TRAITS(unsigned long)
@@ -1148,12 +959,12 @@ diff -uprN misc/vigra1.4.0/include/vigra/numerictraits.hxx misc/build/vigra1.4.0
  VIGRA_DEFINE_NORM_TRAITS(long double)
 +#endif
  
- #undef VIGRA_DEFINE_NORM_TRAITS
- 
-diff -uprN misc/vigra1.4.0/include/vigra/orientedtensorfilters.hxx misc/build/vigra1.4.0/include/vigra/orientedtensorfilters.hxx
---- misc/vigra1.4.0/include/vigra/orientedtensorfilters.hxx	2005-12-21 05:53:42.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/orientedtensorfilters.hxx	2006-08-31 12:08:15.503678000 +0200
-@@ -434,7 +434,7 @@ class Sin6RingKernel
+ #ifdef LLONG_MAX
+ VIGRA_DEFINE_NORM_TRAITS(long long)
+diff -uprN misc/vigra1.6.0/include/vigra/orientedtensorfilters.hxx misc/build/vigra1.6.0/include/vigra/orientedtensorfilters.hxx
+--- misc/vigra1.6.0/include/vigra/orientedtensorfilters.hxx	2008-08-13 08:15:40.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/orientedtensorfilters.hxx	2012-09-19 17:30:24.000000000 -0500
+@@ -435,7 +435,7 @@ class Sin6RingKernel
          if(x == 0 && y == 0)
              return weights_(radius_, radius_);
          double d = dot(vectors_(x+radius_, y+radius_), v);
@@ -1162,7 +973,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/orientedtensorfilters.hxx misc/build/vi
      }
  };
  
-@@ -455,7 +455,7 @@ class Sin6Kernel
+@@ -456,7 +456,7 @@ class Sin6Kernel
          if(x == 0 && y == 0)
              return weights_(radius_, radius_);
          double d = dot(vectors_(x+radius_, y+radius_), v);
@@ -1171,7 +982,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/orientedtensorfilters.hxx misc/build/vi
      }
  };
  
-@@ -476,7 +476,7 @@ class Cos6RingKernel
+@@ -477,7 +477,7 @@ class Cos6RingKernel
          if(x == 0 && y == 0)
              return weights_(radius_, radius_);
          double d = dot(vectors_(x+radius_, y+radius_), v);
@@ -1180,7 +991,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/orientedtensorfilters.hxx misc/build/vi
      }
  };
  
-@@ -497,7 +497,7 @@ class Cos6Kernel
+@@ -498,7 +498,7 @@ class Cos6Kernel
          if(x == 0 && y == 0)
              return weights_(radius_, radius_);
          double d = dot(vectors_(x+radius_, y+radius_), v);
@@ -1189,10 +1000,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/orientedtensorfilters.hxx misc/build/vi
      }
  };
  
-diff -uprN misc/vigra1.4.0/include/vigra/polynomial.hxx misc/build/vigra1.4.0/include/vigra/polynomial.hxx
---- misc/vigra1.4.0/include/vigra/polynomial.hxx	2005-12-21 05:53:42.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/polynomial.hxx	2006-08-31 12:08:15.526572000 +0200
-@@ -118,10 +118,10 @@ class PolynomialView
+diff -uprN misc/vigra1.6.0/include/vigra/polynomial.hxx misc/build/vigra1.6.0/include/vigra/polynomial.hxx
+--- misc/vigra1.6.0/include/vigra/polynomial.hxx	2008-08-13 08:15:40.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/polynomial.hxx	2012-09-19 17:30:24.000000000 -0500
+@@ -119,10 +119,10 @@ class PolynomialView
              of subsequent algorithms (especially root finding) performed on the
              polynomial.
          */
@@ -1206,7 +1017,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/polynomial.hxx misc/build/vigra1.4.0/in
      {}
      
          /// Access the coefficient of x^i
-@@ -244,16 +244,16 @@ class PolynomialView
+@@ -245,16 +245,16 @@ class PolynomialView
          { epsilon_ = eps; }
  
    protected:
@@ -1227,7 +1038,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/polynomial.hxx misc/build/vigra1.4.0/in
      }
    
      T * coeffs_;
-@@ -396,9 +396,9 @@ PolynomialView<T>::deflateConjugatePair(
+@@ -397,9 +397,9 @@ PolynomialView<T>::deflateConjugatePair(
      
  template <class T>
  void 
@@ -1239,10 +1050,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/polynomial.hxx misc/build/vigra1.4.0/in
              --order_;
  }
  
-diff -uprN misc/vigra1.4.0/include/vigra/recursiveconvolution.hxx misc/build/vigra1.4.0/include/vigra/recursiveconvolution.hxx
---- misc/vigra1.4.0/include/vigra/recursiveconvolution.hxx	2005-12-21 05:53:42.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/recursiveconvolution.hxx	2006-08-31 12:08:15.553556000 +0200
-@@ -259,16 +259,16 @@ void recursiveFilterLine(SrcIterator is,
+diff -uprN misc/vigra1.6.0/include/vigra/recursiveconvolution.hxx misc/build/vigra1.6.0/include/vigra/recursiveconvolution.hxx
+--- misc/vigra1.6.0/include/vigra/recursiveconvolution.hxx	2008-08-13 08:15:40.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/recursiveconvolution.hxx	2012-09-19 17:30:24.000000000 -0500
+@@ -261,16 +261,16 @@ void recursiveFilterLine(SrcIterator is,
      {    
         // correction factors for b
          double bright = b;
@@ -1262,9 +1073,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/recursiveconvolution.hxx misc/build/vig
          }
      }
      else if(border == BORDER_TREATMENT_AVOID)
-diff -uprN misc/vigra1.4.0/include/vigra/rgbvalue.hxx misc/build/vigra1.4.0/include/vigra/rgbvalue.hxx
---- misc/vigra1.4.0/include/vigra/rgbvalue.hxx	2005-12-21 05:53:43.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/rgbvalue.hxx	2006-08-31 12:31:37.392094000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/rgbvalue.hxx misc/build/vigra1.6.0/include/vigra/rgbvalue.hxx
+--- misc/vigra1.6.0/include/vigra/rgbvalue.hxx	2008-08-13 08:15:41.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/rgbvalue.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -39,6 +39,10 @@
  #ifndef VIGRA_RGBVALUE_HXX
  #define VIGRA_RGBVALUE_HXX
@@ -1275,8 +1086,8 @@ diff -uprN misc/vigra1.4.0/include/vigra/rgbvalue.hxx misc/build/vigra1.4.0/incl
 +
  #include <cmath>    // abs(double)
  #include <cstdlib>  // abs(int)
- #include "vigra/config.hxx"
-@@ -700,8 +704,6 @@ operator/=(RGBValue<V, RIDX, GIDX, BIDX>
+ #include "config.hxx"
+@@ -702,8 +706,6 @@ operator/=(RGBValue<V, RIDX, GIDX, BIDX>
      return l;
  }
  
@@ -1285,10 +1096,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/rgbvalue.hxx misc/build/vigra1.4.0/incl
      /// component-wise absolute value
  template <class T, unsigned int RIDX, unsigned int GIDX, unsigned int BIDX>
  inline
-diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vigra1.4.0/include/vigra/separableconvolution.hxx
---- misc/vigra1.4.0/include/vigra/separableconvolution.hxx	2005-12-21 05:53:44.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/separableconvolution.hxx	2006-08-31 12:08:15.610465000 +0200
-@@ -1017,11 +1017,11 @@ class Kernel1D
+diff -uprN misc/vigra1.6.0/include/vigra/separableconvolution.hxx misc/build/vigra1.6.0/include/vigra/separableconvolution.hxx
+--- misc/vigra1.6.0/include/vigra/separableconvolution.hxx	2008-08-13 08:15:41.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/separableconvolution.hxx	2012-09-19 17:30:24.000000000 -0500
+@@ -1022,11 +1022,11 @@ class Kernel1D
          */
      InitProxy operator=(value_type const & v)
      {
@@ -1303,31 +1114,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
      }
  
          /** Destructor.
-@@ -1235,17 +1235,17 @@ class Kernel1D
-                is 1 or equals the size of the kernel.
-             \endcode
-         */
--    Kernel1D & initExplicitly(int left, int right)
-+    Kernel1D & initExplicitly(int l, int r)
-     {
--        vigra_precondition(left <= 0,
-+        vigra_precondition(l <= 0,
-                      "Kernel1D::initExplicitly(): left border must be <= 0.");
--        vigra_precondition(right >= 0,
-+        vigra_precondition(r >= 0,
-                      "Kernel1D::initExplicitly(): right border must be <= 0.");
- 
--        right_ = right;
--        left_ = left;
-+        right_ = r;
-+        left_ = l;
- 
--        kernel_.resize(right - left + 1);
-+        kernel_.resize(r - l + 1);
- 
-         return *this;
-     }
-@@ -1342,8 +1342,8 @@ class Kernel1D
+@@ -1663,8 +1663,8 @@ class Kernel1D
  };
  
  template <class ARITHTYPE>
@@ -1338,7 +1125,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
                            double offset)
  {
      typedef typename NumericTraits<value_type>::RealPromote TmpType;
-@@ -1352,7 +1352,7 @@ void Kernel1D<ARITHTYPE>::normalize(valu
+@@ -1673,7 +1673,7 @@ void Kernel1D<ARITHTYPE>::normalize(valu
      Iterator k = kernel_.begin();
      TmpType sum = NumericTraits<TmpType>::zero();
  
@@ -1347,7 +1134,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
      {
          for(; k < kernel_.end(); ++k)
          {
-@@ -1362,11 +1362,11 @@ void Kernel1D<ARITHTYPE>::normalize(valu
+@@ -1683,11 +1683,11 @@ void Kernel1D<ARITHTYPE>::normalize(valu
      else
      {
          unsigned int faculty = 1;
@@ -1361,7 +1148,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
          }
      }
  
-@@ -1374,21 +1374,21 @@ void Kernel1D<ARITHTYPE>::normalize(valu
+@@ -1695,21 +1695,21 @@ void Kernel1D<ARITHTYPE>::normalize(valu
                      "Kernel1D<ARITHTYPE>::normalize(): "
                      "Cannot normalize a kernel with sum = 0");
      // normalize
@@ -1386,7 +1173,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
  {
      vigra_precondition(std_dev >= 0.0,
                "Kernel1D::initGaussian(): Standard deviation must be >= 0.");
-@@ -1421,8 +1421,8 @@ void Kernel1D<ARITHTYPE>::initGaussian(d
+@@ -1742,8 +1742,8 @@ void Kernel1D<ARITHTYPE>::initGaussian(d
          right_ = 0;
      }
  
@@ -1397,7 +1184,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
      else
          norm_ = 1.0;
  
-@@ -1434,7 +1434,7 @@ void Kernel1D<ARITHTYPE>::initGaussian(d
+@@ -1755,7 +1755,7 @@ void Kernel1D<ARITHTYPE>::initGaussian(d
  
  template <class ARITHTYPE>
  void Kernel1D<ARITHTYPE>::initDiscreteGaussian(double std_dev,
@@ -1406,7 +1193,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
  {
      vigra_precondition(std_dev >= 0.0,
                "Kernel1D::initDiscreteGaussian(): Standard deviation must be >= 0.");
-@@ -1476,7 +1476,7 @@ void Kernel1D<ARITHTYPE>::initDiscreteGa
+@@ -1797,7 +1797,7 @@ void Kernel1D<ARITHTYPE>::initDiscreteGa
              er += warray[i];
          }
  
@@ -1415,7 +1202,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
  
          initExplicitly(-radius, radius);
          iterator c = center();
-@@ -1489,12 +1489,12 @@ void Kernel1D<ARITHTYPE>::initDiscreteGa
+@@ -1810,12 +1810,12 @@ void Kernel1D<ARITHTYPE>::initDiscreteGa
      else
      {
          kernel_.erase(kernel_.begin(), kernel_.end());
@@ -1430,7 +1217,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
  
      // best border treatment for Gaussians is BORDER_TREATMENT_REFLECT
      border_treatment_ = BORDER_TREATMENT_REFLECT;
-@@ -1505,15 +1505,15 @@ void Kernel1D<ARITHTYPE>::initDiscreteGa
+@@ -1826,15 +1826,15 @@ void Kernel1D<ARITHTYPE>::initDiscreteGa
  template <class ARITHTYPE>
  void
  Kernel1D<ARITHTYPE>::initGaussianDerivative(double std_dev,
@@ -1449,7 +1236,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
          return;
      }
  
-@@ -1544,7 +1544,7 @@ Kernel1D<ARITHTYPE>::initGaussianDerivat
+@@ -1865,7 +1865,7 @@ Kernel1D<ARITHTYPE>::initGaussianDerivat
  
      // remove DC, but only if kernel correction is permitted by a non-zero
      // value for norm
@@ -1458,7 +1245,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
      {
          for(unsigned int i=0; i < kernel_.size(); ++i)
          {
-@@ -1555,8 +1555,8 @@ Kernel1D<ARITHTYPE>::initGaussianDerivat
+@@ -1876,8 +1876,8 @@ Kernel1D<ARITHTYPE>::initGaussianDerivat
      left_ = -radius;
      right_ = radius;
  
@@ -1469,7 +1256,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
      else
          norm_ = 1.0;
  
-@@ -1570,7 +1570,7 @@ Kernel1D<ARITHTYPE>::initGaussianDerivat
+@@ -1891,7 +1891,7 @@ Kernel1D<ARITHTYPE>::initGaussianDerivat
  template <class ARITHTYPE>
  void
  Kernel1D<ARITHTYPE>::initBinomial(int radius,
@@ -1478,7 +1265,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
  {
      vigra_precondition(radius > 0,
                "Kernel1D::initBinomial(): Radius must be > 0.");
-@@ -1600,12 +1600,12 @@ Kernel1D<ARITHTYPE>::initBinomial(int ra
+@@ -1921,12 +1921,12 @@ Kernel1D<ARITHTYPE>::initBinomial(int ra
  
      for(i=0; i<=radius*2+1; ++i)
      {
@@ -1493,7 +1280,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
  
      // best border treatment for Binomial is BORDER_TREATMENT_REFLECT
      border_treatment_ = BORDER_TREATMENT_REFLECT;
-@@ -1615,7 +1615,7 @@ Kernel1D<ARITHTYPE>::initBinomial(int ra
+@@ -1936,7 +1936,7 @@ Kernel1D<ARITHTYPE>::initBinomial(int ra
  
  template <class ARITHTYPE>
  void Kernel1D<ARITHTYPE>::initAveraging(int radius,
@@ -1502,7 +1289,7 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
  {
      vigra_precondition(radius > 0,
                "Kernel1D::initAveraging(): Radius must be > 0.");
-@@ -1629,12 +1629,12 @@ void Kernel1D<ARITHTYPE>::initAveraging(
+@@ -1950,12 +1950,12 @@ void Kernel1D<ARITHTYPE>::initAveraging(
  
      for(int i=0; i<=radius*2+1; ++i)
      {
@@ -1517,34 +1304,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/separableconvolution.hxx misc/build/vig
  
      // best border treatment for Averaging is BORDER_TREATMENT_CLIP
      border_treatment_ = BORDER_TREATMENT_CLIP;
-@@ -1644,18 +1644,18 @@ void Kernel1D<ARITHTYPE>::initAveraging(
- 
- template <class ARITHTYPE>
- void
--Kernel1D<ARITHTYPE>::initSymmetricGradient(value_type norm)
-+Kernel1D<ARITHTYPE>::initSymmetricGradient(value_type normFactor)
- {
-     kernel_.erase(kernel_.begin(), kernel_.end());
-     kernel_.reserve(3);
- 
--    kernel_.push_back(0.5 * norm);
--    kernel_.push_back(0.0 * norm);
--    kernel_.push_back(-0.5 * norm);
-+    kernel_.push_back(0.5 * normFactor);
-+    kernel_.push_back(0.0 * normFactor);
-+    kernel_.push_back(-0.5 * normFactor);
- 
-     left_ = -1;
-     right_ = 1;
--    norm_ = norm;
-+    norm_ = normFactor;
- 
-     // best border treatment for SymmetricGradient is
-     // BORDER_TREATMENT_REPEAT
-diff -uprN misc/vigra1.4.0/include/vigra/sized_int.hxx misc/build/vigra1.4.0/include/vigra/sized_int.hxx
---- misc/vigra1.4.0/include/vigra/sized_int.hxx	2005-12-21 05:53:44.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/sized_int.hxx	2006-08-31 12:26:31.937797000 +0200
-@@ -73,6 +73,10 @@ struct SelectIntegerType<SIZE, Int_type_
+diff -uprN misc/vigra1.6.0/include/vigra/sized_int.hxx misc/build/vigra1.6.0/include/vigra/sized_int.hxx
+--- misc/vigra1.6.0/include/vigra/sized_int.hxx	2008-08-13 08:15:41.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/sized_int.hxx	2012-09-19 17:30:24.000000000 -0500
+@@ -73,11 +73,15 @@ struct SelectIntegerType<SIZE, Int_type_
      typedef Int_type_not_supported_on_this_platform type;
  };
  
@@ -1555,6 +1318,13 @@ diff -uprN misc/vigra1.4.0/include/vigra/sized_int.hxx misc/build/vigra1.4.0/inc
  template<class LIST>
  struct SelectBiggestIntegerType
  {
+-    enum { cursize = LIST::size, 
+-           nextsize = SelectBiggestIntegerType<typename LIST::next>::size,
++    enum { cursize = static_cast< int >(LIST::size), 
++           nextsize = static_cast< int >(SelectBiggestIntegerType<typename LIST::next>::size),
+            size = (cursize < nextsize) ? nextsize : cursize };
+     typedef typename 
+        IfBool<(cursize < nextsize), 
 @@ -86,6 +90,10 @@ struct SelectBiggestIntegerType
         type;
  };
@@ -1566,22 +1336,22 @@ diff -uprN misc/vigra1.4.0/include/vigra/sized_int.hxx misc/build/vigra1.4.0/inc
  template<>
  struct SelectBiggestIntegerType<Int_type_not_supported_on_this_platform>
  {
-diff -uprN misc/vigra1.4.0/include/vigra/splines.hxx misc/build/vigra1.4.0/include/vigra/splines.hxx
---- misc/vigra1.4.0/include/vigra/splines.hxx	2005-12-21 05:53:44.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/splines.hxx	2006-08-31 12:08:15.655906000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/splines.hxx misc/build/vigra1.6.0/include/vigra/splines.hxx
+--- misc/vigra1.6.0/include/vigra/splines.hxx	2008-08-13 08:15:41.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/splines.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -108,8 +108,8 @@ class BSplineBase
          /** Create functor for gevine derivative of the spline. The spline's order
-             is specified spline by the template argument <TT>ORDER</tt>. 
+             is specified spline by the template argument <TT>ORDER</tt>.
          */
 -    explicit BSplineBase(unsigned int derivativeOrder = 0)
 -    : s1_(derivativeOrder)
 +    explicit BSplineBase(unsigned int derivOrder = 0)
 +    : s1_(derivOrder)
      {}
-     
+ 
          /** Unary function call.
 @@ -280,8 +280,8 @@ class BSplineBase<0, T>
-     typedef T            result_type; 
+     typedef T            result_type;
      enum StaticOrder { order = 0 };
  
 -    explicit BSplineBase(unsigned int derivativeOrder = 0)
@@ -1589,10 +1359,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/splines.hxx misc/build/vigra1.4.0/inclu
 +    explicit BSplineBase(unsigned int derivOrder = 0)
 +    : derivativeOrder_(derivOrder)
      {}
-     
+ 
      result_type operator()(argument_type x) const
 @@ -357,8 +357,8 @@ class BSpline<1, T>
-     typedef T            result_type; 
+     typedef T            result_type;
      enum  StaticOrder { order = 1 };
  
 -    explicit BSpline(unsigned int derivativeOrder = 0)
@@ -1600,10 +1370,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/splines.hxx misc/build/vigra1.4.0/inclu
 +    explicit BSpline(unsigned int derivOrder = 0)
 +    : derivativeOrder_(derivOrder)
      {}
-     
+ 
      result_type operator()(argument_type x) const
 @@ -454,8 +454,8 @@ class BSpline<2, T>
-     typedef T            result_type; 
+     typedef T            result_type;
      enum StaticOrder { order = 2 };
  
 -    explicit BSpline(unsigned int derivativeOrder = 0)
@@ -1611,10 +1381,10 @@ diff -uprN misc/vigra1.4.0/include/vigra/splines.hxx misc/build/vigra1.4.0/inclu
 +    explicit BSpline(unsigned int derivOrder = 0)
 +    : derivativeOrder_(derivOrder)
      {}
-     
+ 
      result_type operator()(argument_type x) const
-@@ -580,8 +580,8 @@ class BSpline<3, T>
-     typedef T            result_type; 
+@@ -583,8 +583,8 @@ class BSpline<3, T>
+     typedef T            result_type;
      enum StaticOrder { order = 3 };
  
 -    explicit BSpline(unsigned int derivativeOrder = 0)
@@ -1622,22 +1392,22 @@ diff -uprN misc/vigra1.4.0/include/vigra/splines.hxx misc/build/vigra1.4.0/inclu
 +    explicit BSpline(unsigned int derivOrder = 0)
 +    : derivativeOrder_(derivOrder)
      {}
-     
+ 
      result_type operator()(argument_type x) const
-@@ -732,8 +732,8 @@ class BSpline<5, T>
-     typedef T            result_type; 
-     enum StaticOrder { order = 5 };
+@@ -735,8 +735,8 @@ class BSpline<4, T>
+     typedef T            result_type;
+     enum StaticOrder { order = 4 };
  
 -    explicit BSpline(unsigned int derivativeOrder = 0)
 -    : derivativeOrder_(derivativeOrder)
 +    explicit BSpline(unsigned int derivOrder = 0)
 +    : derivativeOrder_(derivOrder)
      {}
-     
+ 
      result_type operator()(argument_type x) const
-diff -uprN misc/vigra1.4.0/include/vigra/static_assert.hxx misc/build/vigra1.4.0/include/vigra/static_assert.hxx
---- misc/vigra1.4.0/include/vigra/static_assert.hxx	2005-12-21 05:53:45.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/static_assert.hxx	2006-08-31 12:08:15.677548000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/static_assert.hxx misc/build/vigra1.6.0/include/vigra/static_assert.hxx
+--- misc/vigra1.6.0/include/vigra/static_assert.hxx	2008-08-13 08:15:41.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/static_assert.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -115,7 +115,7 @@ assertImpl( void (*)(Predicate), typenam
      
  TODO: provide more assertion base classes for other (non boolean) types of tests
@@ -1647,9 +1417,9 @@ diff -uprN misc/vigra1.4.0/include/vigra/static_assert.hxx misc/build/vigra1.4.0
  #define VIGRA_STATIC_ASSERT(Predicate) \
  enum { \
      VIGRA_PREPROCESSOR_CONCATENATE(vigra_assertion_in_line_, __LINE__) = sizeof( \
-diff -uprN misc/vigra1.4.0/include/vigra/tinyvector.hxx misc/build/vigra1.4.0/include/vigra/tinyvector.hxx
---- misc/vigra1.4.0/include/vigra/tinyvector.hxx	2005-12-21 05:53:46.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/tinyvector.hxx	2006-08-31 12:31:25.140791000 +0200
+diff -uprN misc/vigra1.6.0/include/vigra/tinyvector.hxx misc/build/vigra1.6.0/include/vigra/tinyvector.hxx
+--- misc/vigra1.6.0/include/vigra/tinyvector.hxx	2008-08-13 08:15:42.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/tinyvector.hxx	2012-09-19 17:30:24.000000000 -0500
 @@ -39,6 +39,10 @@
  #ifndef VIGRA_TINYVECTOR_HXX
  #define VIGRA_TINYVECTOR_HXX
@@ -1681,33 +1451,3 @@ diff -uprN misc/vigra1.4.0/include/vigra/tinyvector.hxx misc/build/vigra1.4.0/in
              "TinyVector::init(): Sequence has wrong size.");
          Loop::assignCast(data_, i);
      }
-diff -uprN misc/vigra1.4.0/include/vigra/transformimage.hxx misc/build/vigra1.4.0/include/vigra/transformimage.hxx
---- misc/vigra1.4.0/include/vigra/transformimage.hxx	2005-12-21 05:53:46.000000000 +0100
-+++ misc/build/vigra1.4.0/include/vigra/transformimage.hxx	2006-08-31 12:08:15.727415000 +0200
-@@ -986,11 +986,11 @@ class BrightnessContrastFunctor
-     result_type operator()(argument_type const & v) const
-     {
-         promote_type v1 = (v - min_) / diff_;
--        promote_type brighter = pow(v1, b_);
-+        promote_type brighter = pow((promote_type)v1, b_);
-         promote_type v2 = 2.0 * brighter - one_;
-         promote_type contrasted = (v2 < zero_) ?
--                                     -pow(-v2, c_) :
--                                      pow(v2, c_);
-+                                     -pow((promote_type)-v2, c_) :
-+                                      pow((promote_type)v2, c_);
-         return result_type(0.5 * diff_ * (contrasted + one_) + min_);
-     }
- 
-diff -uprN misc/vigra1.4.0/include/vigra/diff2d.hxx misc/build/vigra1.4.0/include/vigra/diff2d.hxx
---- misc/vigra1.4.0/include/vigra/diff2d.hxx	2009-03-02 09:27:34.000000000 +0000
-+++ misc/build/vigra1.4.0/include/vigra/diff2d.hxx	2009-03-02 09:27:57.000000000 +0000
-@@ -1117,7 +1117,7 @@
-     bool contains(Rect2D const &r) const
-     {
-         return r.isEmpty() ||
--            contains(r.upperLeft()) && contains(r.lowerRight()-Diff2D(1,1));
-+            (contains(r.upperLeft()) && contains(r.lowerRight()-Diff2D(1,1)));
-     }
- 
-         /** Return whether this rectangle overlaps with the given
