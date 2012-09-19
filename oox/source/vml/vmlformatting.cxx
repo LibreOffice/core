@@ -291,9 +291,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
             // Store coordinate from current token
             if ( state != START )
             {
-                bool isX = aCoordList.size() % 2 == 0;
                 if ( nTokenLen > 0 )
-                    //aCoordList.push_back(decodeMeasureToHmm( rGraphicHelper, rPath.copy(nTokenStart, nTokenLen), 0, isX, true ));
                     aCoordList.push_back( rPath.copy( nTokenStart, nTokenLen ).toInt32() );
                 else
                     aCoordList.push_back( 0 );
@@ -363,6 +361,9 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
                 case END:
                     rPointLists.push_back( ::std::vector< Point >() );
                     rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                    break;
+
+                case START:
                     break;
                 }
 
