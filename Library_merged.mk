@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,merged,\
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
+	cups \
 	icui18n \
 	icule \
 	icuuc \
