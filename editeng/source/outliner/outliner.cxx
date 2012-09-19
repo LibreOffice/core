@@ -1888,9 +1888,15 @@ sal_uInt16 Outliner::ImplGetNumbering( sal_uInt16 nPara, const SvxNumberFormat* 
         if( pFmt == 0 )
             continue; // ignore paragraphs without bullets
 
-        // check if numbering is the same
-        if( !isSameNumbering( *pFmt, *pParaFmt ) )
+        // check if numbering less than or equal to pParaFmt
+        if( !isSameNumbering( *pFmt, *pParaFmt ) || ( pFmt->GetStart() < pParaFmt->GetStart() ) )
             break;
+
+        if (  pFmt->GetStart() > pParaFmt->GetStart() )
+        {
+           nNumber += pFmt->GetStart() - pParaFmt->GetStart();
+           pParaFmt = pFmt;
+        }
 
         const SfxBoolItem& rBulletState = (const SfxBoolItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE );
 
