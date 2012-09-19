@@ -968,8 +968,6 @@ public class DocumentLoader
 
             Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
 
-            Bootstrap.initUCBHelper();
-
             componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 
             Log.i(TAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");

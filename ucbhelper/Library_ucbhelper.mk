@@ -30,7 +30,6 @@ $(eval $(call gb_Library_add_exception_objects,ucbhelper,\
     ucbhelper/source/client/activedatastreamer \
     ucbhelper/source/client/commandenvironment \
     ucbhelper/source/client/content \
-    ucbhelper/source/client/contentbroker \
     ucbhelper/source/client/fileidentifierconverter \
     ucbhelper/source/client/interceptedinteraction \
     ucbhelper/source/client/proxydecider \
