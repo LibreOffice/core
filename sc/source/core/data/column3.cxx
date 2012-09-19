@@ -425,7 +425,10 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 else
                 {
                     aHint.GetAddress().SetRow( nOldRow );
-                    aHint.SetCell( pOldCell );
+                    if(bKeepBC)
+                        aHint.SetCell( pNoteCell );
+                    else
+                        aHint.SetCell( pOldCell );
                     pDocument->Broadcast( aHint );
                     if (pNoteCell != pOldCell)
                     {
