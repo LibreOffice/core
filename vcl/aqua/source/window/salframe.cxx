@@ -1199,7 +1199,7 @@ static Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin
         NSColor* pRBGColor = [pSysColor colorUsingColorSpaceName: NSDeviceRGBColorSpace device: [pWin deviceDescription]];
         if( pRBGColor )
         {
-            float r = 0, g = 0, b = 0, a = 0;
+            CGFloat r = 0, g = 0, b = 0, a = 0;
             [pRBGColor getRed: &r green: &g blue: &b alpha: &a];
             aRet = Color( int(r*255.999), int(g*255.999), int(b*255.999) );
             /*
@@ -1227,7 +1227,7 @@ static Font getFont( NSFont* pFont, long nDPIY, const Font& rDefault )
     return aResult;
 }
 
-void AquaSalFrame::getResolution( long& o_rDPIX, long& o_rDPIY )
+void AquaSalFrame::getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY )
 {
     if( ! mpGraphics )
     {
@@ -1271,7 +1271,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // get the system font settings
     Font aAppFont = aStyleSettings.GetAppFont();
-    long nDPIX = 72, nDPIY = 72;
+    sal_Int32 nDPIX = 72, nDPIY = 72;
     getResolution( nDPIX, nDPIY );
     aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
 

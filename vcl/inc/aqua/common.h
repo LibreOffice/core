@@ -26,6 +26,6 @@
 //    fprintf(stderr, "%s::%s(%p:%04.4x)\n", this, #c, __func__, 0, __VA_ARGS__ )
 
 #define msgs_debug(c,f,...)                                             \
-    fprintf(stderr, "%s::%s(%p:%4.4u)" f "\n", #c, __func__, this, ((unsigned int)pthread_self() & 8191), ##__VA_ARGS__ );
+    fprintf(stderr, "%s::%s(%p:%4.4u)" f "\n", #c, __func__, this, (unsigned int)((sal_uInt64)pthread_self() & 0x1FFF), ##__VA_ARGS__ );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

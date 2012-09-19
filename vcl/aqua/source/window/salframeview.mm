@@ -133,9 +133,9 @@ static const struct ExceptionalKey
 
 static AquaSalFrame* getMouseContainerFrame()
 {
-    int nWindows = 0;
+    NSInteger nWindows = 0;
     NSCountWindows( &nWindows );
-    int* pWindows = (int*)alloca( nWindows * sizeof(int) );
+    NSInteger* pWindows = (NSInteger*)alloca( nWindows * sizeof(NSInteger) );
     // note: NSWindowList is supposed to be in z-order front to back
     NSWindowList( nWindows, pWindows );
     AquaSalFrame* pDispatchFrame = NULL;
@@ -1589,7 +1589,7 @@ private:
     return nil;
 }
 
-- (unsigned int)characterIndexForPoint:(NSPoint)thePoint
+- (NSUInteger)characterIndexForPoint:(NSPoint)thePoint
 {
     (void)thePoint;
     // FIXME

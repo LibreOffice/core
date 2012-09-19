@@ -9,11 +9,11 @@ class RGBAColor
 public:
     RGBAColor( SalColor );
     RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha ); //NOTUSEDYET
-    const float* AsArray() const { return m_fRGBA; }
+    const CGFloat* AsArray() const { return m_fRGBA; }
     bool IsVisible() const { return m_fRGBA[3] > 0; }
     void SetAlpha( float fAlpha ) { m_fRGBA[3] = fAlpha; }
 private:
-    float m_fRGBA[4]; // red, green, blue, alpha
+    CGFloat m_fRGBA[4]; // red, green, blue, alpha
 };
 
 inline RGBAColor::RGBAColor( SalColor nSalColor )

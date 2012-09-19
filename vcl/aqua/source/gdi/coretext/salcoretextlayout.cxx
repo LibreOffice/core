@@ -134,7 +134,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 // not needed. CoreText manage fallback directly
 void CoreTextLayout::DropGlyph( int /*nStart*/ ) {}
 
-long CoreTextLayout::FillDXArray( long* pDXArray ) const
+long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
     msgs_debug(layout,"-->");
     // short circuit requests which don't need full details
@@ -188,7 +188,7 @@ bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect )
     return true;
 }
 
-void CoreTextLayout::GetCaretPositions( int max_index, long* caret_position) const
+void CoreTextLayout::GetCaretPositions( int max_index, sal_Int32* caret_position) const
 {
     msgs_debug(layout,"max_index %d -->", max_index);
     int local_max = max_index < m_chars_count * 2 ? max_index : m_chars_count;

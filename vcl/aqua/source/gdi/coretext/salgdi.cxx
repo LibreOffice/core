@@ -167,7 +167,7 @@ const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
     if( !m_style )
     {
-        return false;
+        return NULL;
     }
     CoreTextPhysicalFontFace* font_face = m_style->GetFontFace();
     if( !font_face)
