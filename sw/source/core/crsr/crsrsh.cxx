@@ -1987,13 +1987,10 @@ void SwCrsrShell::Combine()
     // rhbz#689053: IsSelOvr must restore the saved stack position, not the
     // current one, because current point + stack mark may be invalid PaM
     SwCrsrSaveState aSaveState(*pCrsrStk);
-    if( pCrsrStk->HasMark() ) // only if GetMark was set
-    {
-        bool const bResult =
-        CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, sal_True );
-        OSL_ENSURE(bResult, "StackCrsr & current Crsr not in same Section.");
-        (void) bResult; // non-debug: unused
-    }
+    // stack cursor & current cursor in same Section?
+    assert(!pCrsrStk->HasMark() ||
+            CheckNodesRange(pCrsrStk->GetMark()->nNode,
+                            pCurCrsr->GetPoint()->nNode, true));
     *pCrsrStk->GetPoint() = *pCurCrsr->GetPoint();
     pCrsrStk->GetPtPos() = pCurCrsr->GetPtPos();
 
@@ -2009,7 +2006,9 @@ void SwCrsrShell::Combine()
     if( !pCurCrsr->IsInProtectTable( sal_True ) &&
         !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
+    {
         UpdateCrsr(); // update current cursor
+    }
 }
 
 
