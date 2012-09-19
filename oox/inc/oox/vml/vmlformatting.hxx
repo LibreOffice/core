@@ -25,6 +25,8 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 
+#include <vector>
+
 namespace oox {
     class GraphicHelper;
     namespace drawingml { class Color; }
