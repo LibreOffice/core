@@ -76,12 +76,11 @@
 #include <svl/srchitem.hxx>
 #include <osl/socket.hxx>
 
-#if defined(LIBO_MERGELIBS) || defined(DISABLE_DYNLOADING)
+#if defined(LIBO_MERGELIBS) || defined(IOS)
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */
 #define aSfxBoolItem_Impl sfx2_source_appl_appbas_aSfxBoolItem_Impl
-#ifdef DISABLE_DYNLOADING
+#ifdef IOS
 #define aSfxInt16Item_Impl sfx2_source_appl_appbas_aSfxInt16Item_Impl
-#define aSfxUnoFrameItem_Impl sfx2_source_appl_appbas_aSfxUnoFrameItem_Impl
 #endif
 #define aSfxStringItem_Impl sfx2_source_appl_appbas_aSfxStringItem_Impl
 #define aSfxUInt16Item_Impl sfx2_source_appl_appbas_aSfxUInt16Item_Impl
@@ -93,11 +92,10 @@
 #define Selection
 #include "sfxslots.hxx"
 
-#if defined(LIBO_MERGELIBS) || defined(DISABLE_DYNLOADING)
+#if defined(LIBO_MERGELIBS) || defined(IOS)
 #undef aSfxBoolItem_Impl
-#ifdef DISABLE_DYNLOADING
+#ifdef IOS
 #undef aSfxInt16Item_Impl
-#undef aSfxUnoFrameItem_Impl
 #endif
 #undef aSfxStringItem_Impl
 #undef aSfxUInt16Item_Impl
