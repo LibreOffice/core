@@ -24,12 +24,20 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <stgelem.hxx>
+#include <boost/unordered_map.hpp>
 
 class UCBStorageStream;
-
 class StgPage;
 class StgDirEntry;
 class StorageBase;
+
+typedef boost::unordered_map
+<
+    sal_Int32,
+    StgPage *,
+    boost::hash< sal_Int32 >,
+    std::equal_to< sal_Int32 >
+> IndexToStgPage;
 
 class StgCache {
     StgPage* pCur;                          // top of LRU list
@@ -37,7 +45,7 @@ class StgCache {
     sal_uLong nError;                           // error code
     sal_Int32 nPages;                           // size of data area in pages
     sal_uInt16 nRef;                            // reference count
-    void * pLRUCache;                       // hash table of cached objects
+    IndexToStgPage maLRUCache;              // hash of index to cached pages
     short nPageSize;                        // page size of the file
     UCBStorageStream* pStorageStream;       // holds reference to UCB storage stream
 

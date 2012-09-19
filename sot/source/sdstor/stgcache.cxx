@@ -18,14 +18,6 @@
  */
 
 
-#if defined(_MSC_VER) && (_MSC_VER<1200)
-#include <tools/presys.h>
-#endif
-#include <boost/unordered_map.hpp>
-#if defined(_MSC_VER) && (_MSC_VER<1200)
-#include <tools/postsys.h>
-#endif
-
 #include <string.h>
 #include <osl/endian.h>
 #include <tools/string.hxx>
@@ -36,19 +28,6 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
-
-/*************************************************************************/
-//-----------------------------------------------------------------------------
-typedef boost::unordered_map
-<
-    sal_Int32,
-    StgPage *,
-    boost::hash< sal_Int32 >,
-    std::equal_to< sal_Int32 >
-> UsrStgPagePtr_Impl;
-#ifdef _MSC_VER
-#pragma warning( disable: 4786 )
-#endif
 
 //#define   CHECK_DIRTY 1
 //#define   READ_AFTER_WRITE 1
@@ -110,7 +89,6 @@ StgCache::StgCache()
     nError = SVSTREAM_OK;
     bMyStream = sal_False;
     bFile = sal_False;
-    pLRUCache = NULL;
     pStorageStream = NULL;
 }
 
@@ -118,7 +96,6 @@ StgCache::~StgCache()
 {
     Clear();
     SetStrm( NULL, sal_False );
-    delete (UsrStgPagePtr_Impl*)pLRUCache;
 }
 
 void StgCache::SetPhysPageSize( short n )
@@ -154,9 +131,7 @@ StgPage* StgCache::Create( sal_Int32 nPg )
     }
     else
         pElem->pNext1 = pElem->pLast1 = pElem;
-    if( !pLRUCache )
-        pLRUCache = new UsrStgPagePtr_Impl();
-    (*(UsrStgPagePtr_Impl*)pLRUCache)[pElem->nPage] = pElem;
+    maLRUCache[pElem->nPage] = pElem;
     pCur = pElem;
 
     // insert to Sorted
@@ -194,8 +169,7 @@ void StgCache::Erase( StgPage* pElem )
         pElem->pLast1->pNext1 = pElem->pNext1;
         if( pCur == pElem )
             pCur = ( pElem->pNext1 == pElem ) ? NULL : pElem->pNext1;
-        if( pLRUCache )
-            ((UsrStgPagePtr_Impl*)pLRUCache)->erase( pElem->nPage );
+        maLRUCache.erase( pElem->nPage );
         // remove from Sorted
         pElem->pNext2->pLast2 = pElem->pLast2;
         pElem->pLast2->pNext2 = pElem->pNext2;
@@ -219,18 +193,15 @@ void StgCache::Clear()
     while( pCur != pElem );
     pCur = NULL;
     pElem1 = NULL;
-    delete (UsrStgPagePtr_Impl*)pLRUCache;
-    pLRUCache = NULL;
+    maLRUCache.clear();
 }
 
 // Look for a cached page
 
 StgPage* StgCache::Find( sal_Int32 nPage )
 {
-    if( !pLRUCache )
-        return NULL;
-    UsrStgPagePtr_Impl::iterator aIt = ((UsrStgPagePtr_Impl*)pLRUCache)->find( nPage );
-    if( aIt != ((UsrStgPagePtr_Impl*)pLRUCache)->end() )
+    IndexToStgPage::iterator aIt = maLRUCache.find( nPage );
+    if( aIt != maLRUCache.end() )
     {
         // page found
         StgPage* pFound = (*aIt).second;
