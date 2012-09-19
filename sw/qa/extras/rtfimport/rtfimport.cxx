@@ -28,6 +28,7 @@
 #include "../swmodeltestbase.hxx"
 #include "bordertest.hxx"
 
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -47,6 +48,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <rtl/ustring.hxx>
@@ -107,6 +109,7 @@ public:
     void testFdo47495();
     void testAllGapsWord();
     void testFdo52052();
+    void testInk();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -155,6 +158,7 @@ public:
     CPPUNIT_TEST(testFdo47495);
     CPPUNIT_TEST(testAllGapsWord);
     CPPUNIT_TEST(testFdo52052);
+    CPPUNIT_TEST(testInk);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -922,6 +926,39 @@ void Test::testFdo52052()
     load("fdo52052.rtf");
     // Make sure the textframe containing the text "third" appears on the 3rd page.
     CPPUNIT_ASSERT_EQUAL(OUString("third"), parseDump("/root/page[3]/body/txt/anchored/fly/txt/text()"));
+}
+
+void Test::testInk()
+{
+    /*
+     * The problem was that the second segment had wrong command count and wrap type.
+     *
+     * oShape = ThisComponent.DrawPage(0)
+     * oPathPropVec = oShape.CustomShapeGeometry(1).Value
+     * oSegments = oPathPropVec(1).Value
+     * msgbox oSegments(1).Count ' was 0x2000 | 10, should be 10
+     * msgbox oShape.Surround ' was 2, should be 1
+     */
+    load("ink.rtf");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xDraws->getByIndex(0), "CustomShapeGeometry");
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Path")
+            rProp.Value >>= aProps;
+    }
+    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Segments")
+            rProp.Value >>= aSegments;
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(10), aSegments[1].Count);
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xDraws->getByIndex(0), "Surround"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
