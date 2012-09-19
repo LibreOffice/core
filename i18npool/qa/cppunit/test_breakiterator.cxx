@@ -898,14 +898,32 @@ void TestBreakIterator::testJapanese()
     lang::Locale aLocale;
     aLocale.Language = OUString("ja");
     aLocale.Country = OUString("JP");
+    i18n::Boundary aBounds;
 
-    const sal_Unicode JAPANESE[] = { 0x30B7, 0x30E3, 0x30C3, 0x30C8, 0x30C0, 0x30A6, 0x30F3 };
+    {
+        const sal_Unicode JAPANESE[] = { 0x30B7, 0x30E3, 0x30C3, 0x30C8, 0x30C0, 0x30A6, 0x30F3 };
 
-    rtl::OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
-    i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
-        i18n::WordType::DICTIONARY_WORD, true);
+        rtl::OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
+        aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
+            i18n::WordType::DICTIONARY_WORD, true);
 
-    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
+    }
+
+    {
+        const sal_Unicode JAPANESE[] = { 0x9EBB, 0x306E, 0x8449, 0x9EBB, 0x306E, 0x8449 };
+
+        rtl::OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
+        aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale,
+            i18n::WordType::DICTIONARY_WORD, true);
+
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 3);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
+            i18n::WordType::DICTIONARY_WORD, true);
+
+        CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 6);
+    }
 }
 
 void TestBreakIterator::setUp()

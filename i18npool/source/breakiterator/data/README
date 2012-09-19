@@ -495,13 +495,6 @@ Date:   Fri May 28 15:33:02 2004 +0000
     2004/04/30 11:25:47 er 1.13.22.2: RESYNC: (1.13-1.14); FILE MERGED
     2004/04/13 11:55:32 er 1.13.22.1: #i27711# Hungarian breakiterator
 
-commit 170eb11a6d894ace40b2e4708264b0142ac4e603
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Wed Mar 17 08:02:36 2004 +0000
-
-    INTEGRATION: CWS i18n11 (1.1.124); FILE MERGED
-    2004/01/06 19:36:16 khong 1.1.124.1: #112623# update Japanese word breakiterator dictionary
-
 commit f5bc5f04e4de8fa502d498a99f4ef6a340d796c0
 Author: Oliver Bolte <obo@openoffice.org>
 Date:   Wed Mar 17 08:02:14 2004 +0000
@@ -529,6 +522,7 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
 
 done, regression tests added:
 
+#112623# update Japanese word breakiterator dictionary
 #i50172# add cell breakiterator rule for Tamil
 #i80412# indic cursoring
 #i107843# em-dash/en-dash breakiterator fix for spell checking
