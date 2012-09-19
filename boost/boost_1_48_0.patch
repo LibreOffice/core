@@ -12,16 +12,6 @@ diff -ru misc/boost_1_48_0/boost/config/compiler/visualc.hpp misc/build/boost_1_
  
  #if (_MSC_VER <= 1600)
  // MSVC (including the latest checked version) has not yet completely 
-@@ -144,6 +148,9 @@
- #  define BOOST_NO_EXCEPTIONS   
- #endif 
- 
-+// disable WORKAROUND macro - gives warning for undefined macros
-+#define BOOST_STRICT_CONFIG 1
-+
- //
- // __int64 support:
- //
 @@ -169,6 +176,9 @@
  #  define BOOST_NO_RTTI
  #endif
