@@ -511,9 +511,7 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 
 void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException)
 {
-    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::close" );
-    OSL_FAIL( "OResultSet::close: going to dispose()" );
     dispose();
 }
 // -------------------------------------------------------------------------

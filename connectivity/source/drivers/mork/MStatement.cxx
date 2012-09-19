@@ -305,16 +305,7 @@ void OCommonStatement::clearCachedResultSet()
     if ( !xResultSet.is() )
         return;
 
-    try
-    {
-        Reference< XCloseable > xCloseable( xResultSet, UNO_QUERY_THROW );
-        xCloseable->close();
-    }
-    catch( const DisposedException& )
-    {
-        SAL_INFO("connectivity.mork", "=>  OCommonStatement::clearCachedResultSet()" );
-        DBG_UNHANDLED_EXCEPTION();
-    }
+    Reference< XCloseable >( xResultSet, UNO_QUERY_THROW )->close();
 
     m_xResultSet = Reference< XResultSet >();
 }
