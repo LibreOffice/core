@@ -458,6 +458,13 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
     for (unsigned i = 0; i != nInits; ++i)
         if (&vFields[rNameRow.nFirstField + i]->aEdit == pEdit)
             nField = i;
+	// Since middle names are not supported, clear shortname if it
+	// contains a middle initial
+	if (rtl::OUString(rShortName.aEdit.GetText()).getLength() > 2)
+	{
+		rtl::OUString sEmptyString;
+		rShortName.aEdit.SetText(sEmptyString);
+	}
     // updating the initial
     if (nField < nInits && rShortName.aEdit.IsEnabled())
     {
