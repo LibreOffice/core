@@ -22,6 +22,8 @@
 
 #include "oox/helper/helper.hxx"
 #include "oox/dllapi.h"
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 
 namespace oox {
     class GraphicHelper;
@@ -134,6 +136,23 @@ public:
                             const OptValue< double >& roVmlOpacity,
                             sal_Int32 nDefaultRgb,
                             sal_Int32 nPrimaryRgb = API_RGB_TRANSPARENT );
+
+    /** Converts VML path string into point and flag vectors.
+
+        @param rPoints  The point vector to fill with coordinates.
+
+        @param rFlags  The flag vector to fill. PolygonFlags_NORMAL indicates
+            a corresponding plain shape coordinate in rPoints and
+            PolygonFlags_CONTROL indicates a bezier curve control point.
+
+        @param rPath  The VML path string.
+
+        @param rGraphicHelper  See above.
+    */
+    static void         decodeVmlPath(
+                            ::std::vector< ::std::vector< ::com::sun::star::awt::Point > >& rPoints,
+                            ::std::vector< ::std::vector< ::com::sun::star::drawing::PolygonFlags > >& rFlags,
+                            const OUString& rPath );
 
 private:
                         ConversionHelper();
