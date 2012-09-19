@@ -70,7 +70,6 @@ StgPage::StgPage( StgCache* p, short n )
     pNext2 =
     pLast1 =
     pLast2 = NULL;
-    pOwner = NULL;
 }
 
 StgPage::~StgPage()

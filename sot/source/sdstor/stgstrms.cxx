@@ -868,7 +868,6 @@ void* StgDataStrm::GetPtr( sal_Int32 Pos, sal_Bool bForce, sal_Bool bDirty )
         StgPage* pPg = rIo.Get( nPage, bForce );
         if (pPg && nOffset < pPg->GetSize())
         {
-            pPg->SetOwner( pEntry );
             if( bDirty )
                 pPg->SetDirty();
             return ((sal_uInt8 *)pPg->GetData()) + nOffset;
@@ -905,7 +904,6 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
                 if( pPg )
                 {
                     // data is present, so use the cached data
-                    pPg->SetOwner( pEntry );
                     memcpy( p, pPg->GetData(), nBytes );
                     nRes = nBytes;
                 }
@@ -919,7 +917,6 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
                 pPg = rIo.Get( nPage, sal_False );
                 if( !pPg )
                     break;
-                pPg->SetOwner( pEntry );
                 memcpy( p, (sal_uInt8*)pPg->GetData() + nOffset, nBytes );
                 nRes = nBytes;
             }
@@ -966,7 +963,6 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 if( pPg )
                 {
                     // data is present, so use the cached data
-                    pPg->SetOwner( pEntry );
                     memcpy( pPg->GetData(), p, nBytes );
                     pPg->SetDirty();
                     nRes = nBytes;
@@ -981,7 +977,6 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 pPg = rIo.Get( nPage, sal_False );
                 if( !pPg )
                     break;
-                pPg->SetOwner( pEntry );
                 memcpy( (sal_uInt8*)pPg->GetData() + nOffset, p, nBytes );
                 pPg->SetDirty();
                 nRes = nBytes;
