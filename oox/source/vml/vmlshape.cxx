@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -549,6 +550,89 @@ Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxSh
     aShapeRect.Height = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, false, true) - aShapeRect.Y;
 
     return SimpleShape::implConvertAndInsert(rxShapes, aShapeRect);
+}
+
+// ============================================================================
+
+BezierShape::BezierShape(Drawing& rDrawing)
+    : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape")
+{
+}
+
+Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
+    Rectangle aCoordSys = getCoordSystem();
+
+    if( (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
+    {
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+
+        // Bezier paths may consist of one or more sub-paths
+        typedef ::std::vector< ::std::vector< Point > > SubPathList;
+        typedef ::std::vector< ::std::vector< PolygonFlags > > FlagsList;
+        SubPathList aCoordLists;
+        FlagsList aFlagLists;
+        sal_Int32 nIndex = 0;
+
+        // Curve defined by to, from, control1 and control2 attributes
+        if ( maShapeModel.maVmlPath.isEmpty() )
+        {
+            aCoordLists.push_back( ::std::vector< Point >() );
+            aFlagLists.push_back( ::std::vector< PolygonFlags >() );
+
+            // Start point
+            aCoordLists[ 0 ].push_back(
+                Point(ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maFrom.getToken( 0, ',', nIndex ), 0, true, true ),
+                  ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maFrom.getToken( 0, ',', nIndex ), 0, false, true ) ) );
+            // Control point 1
+            aCoordLists[ 0 ].push_back(
+                Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl1.getToken( 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl1.getToken( 0, ',', nIndex ), 0, false, true ) ) );
+            // Control point 2
+            aCoordLists[ 0 ].push_back(
+                Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl2.getToken( 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl2.getToken( 0, ',', nIndex ), 0, false, true ) ) );
+            // End point
+            aCoordLists[ 0 ].push_back(
+                Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maTo.getToken( 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maTo.getToken( 0, ',', nIndex ), 0, false, true ) ) );
+
+            // First and last points are normals, points 2 and 4 are controls
+            aFlagLists[ 0 ].resize( aCoordLists[ 0 ].size(), PolygonFlags_CONTROL );
+            aFlagLists[ 0 ][ 0 ] = PolygonFlags_NORMAL;
+            aFlagLists[ 0 ].back() = PolygonFlags_NORMAL;
+        }
+        // Curve defined by path attribute
+        else
+        {
+            // Parse VML path string and convert to absolute coordinates
+            ConversionHelper::decodeVmlPath( aCoordLists, aFlagLists, maShapeModel.maVmlPath );
+
+            for ( SubPathList::iterator aListIt = aCoordLists.begin(); aListIt != aCoordLists.end(); aListIt++ )
+                for ( ::std::vector< Point >::iterator aPointIt = (*aListIt).begin(); aPointIt != (*aListIt).end(); aPointIt++)
+                {
+                    (*aPointIt) = lclGetAbsPoint( (*aPointIt), rShapeRect, aCoordSys );
+                }
+        }
+
+        PolyPolygonBezierCoords aBezierCoords;
+        aBezierCoords.Coordinates.realloc( aCoordLists.size() );
+        for ( unsigned int i = 0; i < aCoordLists.size(); i++ )
+            aBezierCoords.Coordinates[i] = ContainerHelper::vectorToSequence( aCoordLists[i] );
+
+        aBezierCoords.Flags.realloc( aFlagLists.size() );
+        for ( unsigned int i = 0; i < aFlagLists.size(); i++ )
+            aBezierCoords.Flags[i] = ContainerHelper::vectorToSequence( aFlagLists[i] );
+
+        PropertySet aPropSet( xShape );
+        aPropSet.setProperty( PROP_PolyPolygonBezier, aBezierCoords );
+    }
+
+    // Hacky way of ensuring the shape is correctly sized/positioned
+    xShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
+    xShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+    return xShape;
 }
 
 // ============================================================================
