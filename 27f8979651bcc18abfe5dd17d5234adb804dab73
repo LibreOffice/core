@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn///64\u003d",
+        "filename": "solenv/gbuild/InstallModuleTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-09-19T08:09:49Z",
+      "side": 1,
+      "message": "I do not like putting details of use into the impl. I would prefer to have gb_InstallModule_use_custom_headers that would work in similar way to _use_packages now.",
+      "revId": "27f8979651bcc18abfe5dd17d5234adb804dab73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn///60\u003d",
+        "filename": "solenv/gbuild/InstallScript.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-09-19T08:09:49Z",
+      "side": 1,
+      "message": "IIRC this needs comma-separated list of dirs.",
+      "revId": "27f8979651bcc18abfe5dd17d5234adb804dab73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
