@@ -1233,6 +1233,19 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
                     {
                         mpClone = pObj->getFullDragClone();
                         mpClone->applySpecialDrag(DragStat());
+
+                        // #120999# AutoGrowWidth may change for SdrTextObj due to the automatism used
+                        // with bDisableAutoWidthOnDragging, so not only geometry changes but
+                        // also this (pretty indirect) property change is possible. If it gets
+                        // changed, it needs to be copied to the original since nothing will
+                        // happen when it only changes in the drag clone
+                        const bool bOldAutoGrowWidth(((SdrTextAutoGrowWidthItem&)pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+                        const bool bNewAutoGrowWidth(((SdrTextAutoGrowWidthItem&)mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+
+                        if(bOldAutoGrowWidth != bNewAutoGrowWidth)
+                        {
+                            GetDragObj()->SetMergedItem(SdrTextAutoGrowWidthItem(bNewAutoGrowWidth));
+                        }
                     }
 
                     Show();
