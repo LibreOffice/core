@@ -214,6 +214,18 @@ namespace
         return bVertical;
     }
 
+    bool extractInconsistent(VclBuilder::stringmap &rMap)
+    {
+        bool bInconsistent = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("inconsistent")));
+        if (aFind != rMap.end())
+        {
+            bInconsistent = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bInconsistent;
+    }
+
     Window * extractStockAndBuildButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
@@ -436,7 +448,16 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkCheckButton")))
-        pWindow = new CheckBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+    {
+        //maybe always import as TriStateBox and enable/disable tristate
+        bool bIsTriState = extractInconsistent(rMap);
+        CheckBox *pCheckBox = bIsTriState ?
+            new TriStateBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK) :
+            new CheckBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+        if (bIsTriState)
+            pCheckBox->SetState(STATE_DONTKNOW);
+        pWindow = pCheckBox;
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
     {
         extractAdjustment(id, rMap);
