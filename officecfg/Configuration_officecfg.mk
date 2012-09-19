@@ -119,12 +119,6 @@ $(eval $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
 	org/openoffice/ucb/Store.xcs \
 ))
 
-ifeq ($(ENABLE_SDREMOTE),YES)
-$(eval $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
-    org/openoffice/Office/ImpressSdRemote.xcs \
-))
-endif
-
 $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Inet.xcu \
 	org/openoffice/System.xcu \

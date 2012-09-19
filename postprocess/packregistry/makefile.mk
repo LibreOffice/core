@@ -152,7 +152,6 @@ MY_FILES_main = \
     $(MY_XCS)/Office/FormWizard.xcs \
     $(MY_XCS)/Office/Histories.xcs \
     $(MY_XCS)/Office/Impress.xcs \
-    $(MY_XCS)/Office/ImpressSdRemote.xcs \
     $(MY_XCS)/Office/Java.xcs \
     $(MY_XCS)/Office/Jobs.xcs \
     $(MY_XCS)/Office/Labels.xcs \
