@@ -493,8 +493,10 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
     if( bCheckNumFmt )
     {
         SwTableSortBoxes& rBxs = pTblNd->GetTable().GetTabSortBoxes();
-        for( sal_uInt16 nBoxes = rBxs.size(); nBoxes; )
+        for (size_t nBoxes = rBxs.size(); nBoxes; )
+        {
             rDoc.ChkBoxNumFmt( *rBxs[ --nBoxes ], sal_False );
+        }
     }
 
     if( pHistory )
@@ -1539,13 +1541,12 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 {
     const SwTable& rTbl = rTblNd.GetTable();
     const SwTableSortBoxes& rTblBoxes = rTbl.GetTabSortBoxes();
-    sal_uInt16 n;
-    sal_uInt16 i;
 
     OSL_ENSURE( ! IsDelBox(), "wrong Action" );
     pNewSttNds.reset( new std::set<_BoxMove> );
 
-    for( n = 0, i = 0; n < rOld.size(); ++i )
+    size_t i = 0;
+    for (size_t  n = 0; n < rOld.size(); ++i)
     {
         if( rOld[ n ] == rTblBoxes[ i ] )
             ++n;
@@ -1599,7 +1600,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     OSL_ENSURE( rTbl.IsNewModel() || rOld.size() + nCount * rBoxes.size() == rTblBoxes.size(),
         "unexpected boxes" );
     OSL_ENSURE( rOld.size() <= rTblBoxes.size(), "more unexpected boxes" );
-    for( sal_uInt16 n = 0, i = 0; i < rTblBoxes.size(); ++i )
+    for (size_t n = 0, i = 0; i < rTblBoxes.size(); ++i)
     {
         if( ( n < rOld.size() ) &&
             ( rOld[ n ] == rTblBoxes[ i ] ) )
@@ -1726,8 +1727,9 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         std::vector<_BoxMove> aTmp( pNewSttNds->begin(), pNewSttNds->end() );
 
         // backwards
-        for( int n = aTmp.size() - 1; n >= 0 ; --n)
+        for (size_t n = aTmp.size(); n > 0 ; )
         {
+            --n;
             // delete box from table structure
             sal_uLong nIdx = aTmp[n].index;
             SwTableBox* pBox = pTblNd->GetTable().GetTblBox( nIdx );
@@ -1746,7 +1748,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwNodeIndex aInsPos( *(pLine->GetTabBoxes()[0]->GetSttNd()), 2 );
 
                 // adjust all StartNode indices
-                sal_uInt16 i = n;
+                size_t i = n;
                 sal_uLong nSttIdx = aInsPos.GetIndex() - 2,
                        nNdCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
                 while( i && aTmp[ --i ].index > nSttIdx )
@@ -3108,7 +3110,7 @@ void CheckTable( const SwTable& rTbl )
 {
     const SwNodes& rNds = rTbl.GetFrmFmt()->GetDoc()->GetNodes();
     const SwTableSortBoxes& rSrtArr = rTbl.GetTabSortBoxes();
-    for( sal_uInt16 n = 0; n < rSrtArr.size(); ++n )
+    for (size_t n = 0; n < rSrtArr.size(); ++n)
     {
         const SwTableBox* pBox = rSrtArr[ n ];
         const SwNode* pNd = pBox->GetSttNd();

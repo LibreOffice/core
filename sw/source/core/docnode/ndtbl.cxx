@@ -862,8 +862,10 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     // JP 03.04.97: Inhalt der Boxen auf Zahlen abpruefen
     if( IsInsTblFormatNum() )
     {
-        for( sal_uInt16 nBoxes = pNdTbl->GetTabSortBoxes().size(); nBoxes; )
+        for (size_t nBoxes = pNdTbl->GetTabSortBoxes().size(); nBoxes; )
+        {
             ChkBoxNumFmt( *pNdTbl->GetTabSortBoxes()[ --nBoxes ], sal_False );
+        }
     }
 
     sal_uLong nIdx = pTblNd->GetIndex();
@@ -4420,7 +4422,7 @@ sal_Bool SwDoc::_UnProtectTblCells( SwTable& rTbl )
         :   0;
 
     SwTableSortBoxes& rSrtBox = rTbl.GetTabSortBoxes();
-    for( sal_uInt16 i = rSrtBox.size(); i; )
+    for (size_t i = rSrtBox.size(); i; )
     {
         SwFrmFmt *pBoxFmt = rSrtBox[ --i ]->GetFrmFmt();
         if( pBoxFmt->GetProtect().IsCntntProtected() )
@@ -4561,7 +4563,7 @@ sal_Bool SwDoc::HasTblAnyProtection( const SwPosition* pPos,
     if( pTbl )
     {
         SwTableSortBoxes& rSrtBox = pTbl->GetTabSortBoxes();
-        for( sal_uInt16 i = rSrtBox.size(); i; )
+        for (size_t i = rSrtBox.size(); i; )
         {
             SwFrmFmt *pBoxFmt = rSrtBox[ --i ]->GetFrmFmt();
             if( pBoxFmt->GetProtect().IsCntntProtected() )

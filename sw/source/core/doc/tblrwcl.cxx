@@ -708,7 +708,8 @@ void _FndBoxAppendRowLine( SwTableLine* pLine, _FndPara* pFndPara )
 
 sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
 {
-    SwTableNode* pTblNd = (SwTableNode*)aSortCntBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode *const pTblNd = const_cast<SwTableNode*>(
+        m_TabSortContentBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return sal_False;
 
@@ -3663,8 +3664,8 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 {
                     pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo,
                                                     aTmpLst, nDistStt );
-                    if( aParam.bBigger && aParam.aBoxes.size() ==
-                                    aSortCntBoxes.size() )
+                    if (aParam.bBigger &&
+                        aParam.aBoxes.size() == m_TabSortContentBoxes.size())
                     {
                         // This whole Table is to be deleted!
                         GetFrmFmt()->GetDoc()->DeleteRowCol( aParam.aBoxes );
@@ -4366,7 +4367,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
                         // delete complete table when last row is deleted
                         if( !bBigger &&
-                            aParam.aBoxes.size() == aSortCntBoxes.size() )
+                            aParam.aBoxes.size() == m_TabSortContentBoxes.size())
                         {
                             GetFrmFmt()->GetDoc()->DeleteRowCol( aParam.aBoxes );
                             return sal_False;

@@ -97,7 +97,8 @@ class SwXCell : public SwXCellBaseClass,
     const SwStartNode*      pStartNode; // only set in XML import
 
     // table position where pBox was found last
-    sal_uInt16              nFndPos;
+    size_t nFndPos;
+    static size_t const NOTFOUND = ::std::numeric_limits<size_t>::max();
 
 protected:
     virtual const SwStartNode *GetStartNode() const;
@@ -115,7 +116,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-    SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, sal_uInt16 nPos=USHRT_MAX );
+    SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, size_t nPos = NOTFOUND);
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
 
 

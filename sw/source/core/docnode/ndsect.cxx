@@ -121,7 +121,7 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
     // dann suche den StartNode der Box
     const SwTableSortBoxes& rSortBoxes = pTblNd->GetTable().GetTabSortBoxes();
     sal_uLong nIdx = _rNd.GetIndex();
-    for( sal_uInt16 n = 0; n < rSortBoxes.size(); ++n )
+    for (size_t n = 0; n < rSortBoxes.size(); ++n)
     {
         const SwStartNode* pNd = rSortBoxes[ n ]->GetSttNd();
         if ( pNd->GetIndex() < nIdx && nIdx < pNd->EndOfSectionIndex() )
