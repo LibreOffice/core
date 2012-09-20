@@ -54,7 +54,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	) && \
 	$(gb_InstallScriptTarget_COMMAND) \
 		$(call gb_InstallScriptTarget__if_silent,-q) \
-		-i $(call gb_InstallScriptTarget__get_dirs,$(SCP_MODULES)) \
+		-i $(call gb_InstallScriptTarget__make_arglist,$(call gb_InstallScriptTarget__get_dirs,$(SCP_MODULES))) \
 	   	-o $(1) \
 	   	@@$${RESPONSEFILE} && \
 	rm -f $${RESPONSEFILE} \
