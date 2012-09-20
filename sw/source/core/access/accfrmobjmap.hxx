@@ -80,7 +80,7 @@ public:
                           const SwFrm& rFrm,
                           SwAccessibleMap& rAccMap );
 
-    static sal_Bool IsSortingRequired( const SwFrm& rFrm );
+    static bool IsSortingRequired( const SwFrm& rFrm );
 };
 
 #endif
