@@ -47,7 +47,7 @@ struct FPtrHash
 
 class CUPSManager : public PrinterInfoManager
 {
-    boost::unordered_map< FILE*, rtl::OString, FPtrHash >               m_aSpoolFiles;
+    boost::unordered_map< FILE*, rtl::OString, FPtrHash >       m_aSpoolFiles;
     int                                                         m_nDests;
     void*                                                       m_pDests;
     bool                                                        m_bNewDests;
