@@ -390,9 +390,8 @@ endef
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
 printf 'if [ -e $(DEVINSTALLDIR)/opt/program/ooenv ]; then . $(DEVINSTALLDIR)/opt/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
-printf "gdb --tui $(DEVINSTALLDIR)/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
+printf "gdb $(DEVINSTALLDIR)/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
 printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=file://$(DEVINSTALLDIR)/\"" >> $${OFFICESCRIPT} && \
-printf " -ex \"r\"\\n" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}
 endef
