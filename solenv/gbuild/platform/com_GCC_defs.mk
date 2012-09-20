@@ -79,6 +79,13 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 
+ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
+gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE -fvisibility=hidden
+ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
+gb_CXXFLAGS_COMMON += -fvisibility-inlines-hidden
+endif
+endif
+
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
 gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR

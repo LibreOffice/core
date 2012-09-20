@@ -78,24 +78,6 @@ else
 gb_CXXFLAGS += -Wnon-virtual-dtor
 endif
 
-ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
-gb_COMPILERDEFS += \
-        -DHAVE_GCC_VISIBILITY_FEATURE \
-
-gb_CFLAGS += \
-        -fvisibility=hidden
-
-gb_CXXFLAGS += \
-	-fvisibility=hidden \
-
-ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
-gb_CXXFLAGS += \
-        -fvisibility-inlines-hidden \
-
-endif
-
-endif
-
 ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
 gb_COMPILERDEFS += \
         -DHAVE_SFINAE_ANONYMOUS_BROKEN \
