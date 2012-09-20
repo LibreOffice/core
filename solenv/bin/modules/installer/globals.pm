@@ -232,11 +232,9 @@ BEGIN
 
     $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
-    $cab_file_per_component = 0;
     $cabfilecompressionlevel = 21; # Using LZX compression, possible values are: 15 | 16 | ... | 21 (best compression)
     $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 1;
-    $use_packages_for_cabs = 0;
     $msidatabasename = "";
     $prepare_winpatch = 0;
     $previous_idt_dir = "";

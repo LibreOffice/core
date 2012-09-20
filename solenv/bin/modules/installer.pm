@@ -1685,7 +1685,6 @@ sub run {
 
                     # if there are Merge Modules, they have to be integrated now
                     $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $msifilename, $languagestringref, $onelanguage, $languagefile, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
-                    if ( $installer::globals::use_packages_for_cabs ) { installer::windows::media::create_media_table($filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref, $allupdatelastsequences, $allupdatediskids); }
 
                     # copy msi database into installation directory
 

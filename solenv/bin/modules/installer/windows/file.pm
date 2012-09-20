@@ -634,10 +634,6 @@ sub get_sequence_for_file
             $installer::globals::newfilesexist = 1;
         }
     }
-    elsif (( $onefile->{'assignedsequencenumber'} ) && ( $installer::globals::use_packages_for_cabs ))
-    {
-        $sequence = $onefile->{'assignedsequencenumber'};
-    }
     else
     {
         $sequence = $number;
