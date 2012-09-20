@@ -54,11 +54,13 @@
 #include "helpids.h"
 #include "../ui/inc/DrawViewShell.hxx"
 #include "../ui/inc/ViewShellBase.hxx"
+#include <editeng/boxitem.hxx>
 
 
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;
+using ::com::sun::star::table::BorderLine;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -89,6 +91,10 @@ static SvxItemPropertySet& GetStylePropertySet()
         TEXT_PROPERTIES_DEFAULTS
         CONNECTOR_PROPERTIES
         SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
+        { MAP_CHAR_LEN("TopBorder"),                    SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
+        { MAP_CHAR_LEN("BottomBorder"),                 SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
+        { MAP_CHAR_LEN("LeftBorder"),                   SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
+        { MAP_CHAR_LEN("RightBorder"),                  SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
         {0,0,0,0,0,0}
     };
 
