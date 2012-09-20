@@ -24,8 +24,17 @@
 #include <cuires.hrc>
 
 #define RID_CUI_ABOUT_BTN_OK                        1
-#define RID_CUI_ABOUT_FTXT_VERSION                  2
-#define RID_CUI_ABOUT_FTXT_COPYRIGHT                3
-#define RID_CUI_ABOUT_FTXT_BUILDDATA                4
-#define RID_CUI_ABOUT_STR_COPYRIGHT                 5
-#define RID_CUI_ABOUT_FTXT_WELCOME_LINK             6
+#define RID_CUI_ABOUT_BTN_README                    2
+#define RID_CUI_ABOUT_FTXT_VERSION                  3
+#define RID_CUI_ABOUT_FTXT_COPYRIGHT                4
+#define RID_CUI_ABOUT_FTXT_BUILDDATA                5
+#define RID_CUI_ABOUT_STR_COPYRIGHT                 6
+#define RID_CUI_ABOUT_FTXT_WELCOME_LINK             7
+#define RID_CUI_ABOUT_LOGO                           8
+
+#define RID_CUI_README_TBCTL                        9
+#define RID_CUI_README_OKBTN                        10
+#define RID_CUI_READMEPAGE                          11
+#define RID_CUI_LICENSEPAGE                         12
+#define RID_CUI_NOTICEPAGE                          13
+#define RID_CUI_README_TBPAGE_EDIT                  14

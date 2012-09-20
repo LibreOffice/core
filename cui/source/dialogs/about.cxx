@@ -24,62 +24,218 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-// include ---------------------------------------------------------------
-
-#include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
-#include <tools/stream.hxx>
-#include <tools/urlobj.hxx>
-#include <rtl/bootstrap.hxx>
-#include <unotools/configmgr.hxx>
-#include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <vcl/graph.hxx>
-#include <svtools/filter.hxx>
-#include <sfx2/sfxuno.hxx>
-#include "about.hxx"
-#include <sfx2/sfxdefs.hxx>
+#include <comphelper/processfactory.hxx>
+#include <dialmgr.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxcommands.h>
-#include "about.hrc"
-#include <dialmgr.hxx>
+#include <sfx2/sfxdefs.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <svtools/filter.hxx>
 #include <svtools/svtools.hrc>
+#include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/bootstrap.hxx>
+#include <unotools/configmgr.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabdlg.hxx>
+#include <vcl/tabpage.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
-// defines ---------------------------------------------------------------
+#include "about.hxx"
+#include "about.hrc"
 
 #define _STRINGIFY(x) #x
 #define STRINGIFY(x) _STRINGIFY(x)
 
-// -----------------------------------------------------------------------
-
-static void layoutFixedText( FixedText &rControl, const Point& aPos, Size &aSize, const long nTextWidth )
+namespace
 {
-    aSize = rControl.GetSizePixel();
-    // change the width
-    aSize.Width() = nTextWidth;
-    // set Position and Size, to calculate the minimum size
-    // this will update the Height
-    rControl.SetPosSizePixel( aPos, aSize );
-    aSize = rControl.CalcMinimumSize();
-    // update the size with the right Height
-    rControl.SetSizePixel( aSize );
-}
 
-static void layoutEdit( Edit &rControl, const Point& aPos, Size &aSize, const long nTextWidth )
-{
-    aSize = rControl.GetSizePixel();
-    // change the width
-    aSize.Width() = nTextWidth;
-    // set Position and Size, to calculate the minimum size
-    // this will update the Height
-    rControl.SetPosSizePixel( aPos, aSize );
-    aSize = rControl.CalcMinimumSize();
-    // update the size with the right Height
-    rControl.SetSizePixel( aSize );
+    static void lcl_layoutFixedText( FixedText &rControl,
+                                     const Point& aPos,
+                                     Size &aSize,
+                                     const long nTextWidth )
+    {
+        aSize = rControl.GetSizePixel();
+        // change the width
+        aSize.Width() = nTextWidth;
+        // set Position and Size, to calculate the minimum size
+        // this will update the Height
+        rControl.SetPosSizePixel( aPos, aSize );
+        aSize = rControl.CalcMinimumSize();
+        // update the size with the right Height
+        rControl.SetSizePixel( aSize );
+    }
+
+    static void lcl_layoutEdit( Edit &rControl,
+                                const Point& aPos,
+                                Size &aSize,
+                                const long nTextWidth )
+    {
+        aSize = rControl.GetSizePixel();
+        // change the width
+        aSize.Width() = nTextWidth;
+        // set Position and Size, to calculate the minimum size
+        // this will update the Height
+        rControl.SetPosSizePixel( aPos, aSize );
+        aSize = rControl.CalcMinimumSize();
+        // update the size with the right Height
+        rControl.SetSizePixel( aSize );
+    }
+
+    static  void lcl_readTxtFile( const rtl::OUString &rFile, rtl::OUString &sText )
+    {
+        rtl::OUString sFile( rFile );
+        rtl::Bootstrap::expandMacros( sFile );
+        osl::File aFile(sFile);
+        if ( aFile.open(OpenFlag_Read) == osl::FileBase::E_None )
+        {
+            osl::DirectoryItem aItem;
+            osl::DirectoryItem::get(sFile, aItem);
+
+            osl::FileStatus aStatus(FileStatusMask_FileSize);
+            aItem.getFileStatus(aStatus);
+
+            sal_uInt64 nBytesRead = 0;
+            sal_uInt64 nPosition = 0;
+            sal_uInt32 nBytes = (sal_uInt32)aStatus.getFileSize();
+
+            sal_Char *pBuffer = new sal_Char[nBytes];
+
+            while ( aFile.read( pBuffer + nPosition,
+                                nBytes-nPosition,
+                                nBytesRead ) == osl::FileBase::E_None
+                    && nPosition + nBytesRead < nBytes)
+            {
+                nPosition += nBytesRead;
+            }
+
+            OSL_ENSURE( nBytes < STRING_MAXLEN, "Text file has too much bytes!" );
+            if ( nBytes > STRING_MAXLEN )
+                nBytes = STRING_MAXLEN - 1;
+
+            sText = rtl::OUString( pBuffer,
+                                nBytes,
+                                RTL_TEXTENCODING_UTF8,
+                                OSTRING_TO_OUSTRING_CVTFLAGS
+                                | RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE);
+            delete[] pBuffer;
+        }
+    }
+
+    class ReadmeDialog;
+
+    class ReadmeTabPage : public TabPage
+    {
+    private:
+        MultiLineEdit maText;
+        String        msText;
+
+    public:
+        ReadmeTabPage(Window *pParent, const String &sText);
+        ~ReadmeTabPage();
+
+        void Adjust(const Size &aSz, const Size &a6Size);
+    };
+
+    ReadmeTabPage::ReadmeTabPage(Window *pParent, const String &sText)
+        : TabPage(pParent, CUI_RES( RID_CUI_README_TBPAGE))
+        ,maText( this, CUI_RES( RID_CUI_README_TBPAGE_EDIT ))
+        ,msText( sText )
+    {
+        FreeResource();
+
+        maText.SetText(msText);
+        maText.Show();
+    }
+
+    ReadmeTabPage::~ReadmeTabPage()
+    {
+    }
+
+    void ReadmeTabPage::Adjust(const Size &aSz, const Size &a6Size)
+    {
+        long nDlgMargin  = a6Size.Width() * 2;
+        long nCtrlMargin = a6Size.Height() * 2;
+        maText.SetPosPixel( Point(a6Size.Width(), a6Size.Height()) );
+        maText.SetSizePixel( Size(aSz.Width() - nDlgMargin, aSz.Height() - nCtrlMargin) );
+    }
+
+    class ReadmeDialog : public ModalDialog
+    {
+    private:
+        TabControl      maTabCtrl;
+        OKButton        maBtnOK;
+
+        ReadmeTabPage  *maReadmeTabPage;
+        ReadmeTabPage  *maLicenseTabPage;
+        ReadmeTabPage  *maNoticeTabPage;
+
+        DECL_LINK( ActivatePageHdl, TabControl * );
+        DECL_LINK( DeactivatePageHdl, TabControl * );
+
+    public:
+        ReadmeDialog( Window* );
+        ~ReadmeDialog();
+    };
+
+    ReadmeDialog::ReadmeDialog( Window * pParent )
+        : ModalDialog( pParent, CUI_RES( RID_CUI_README_DLG ) )
+        , maTabCtrl( this, CUI_RES(RID_CUI_README_TBCTL) )
+        , maBtnOK( this, CUI_RES(RID_CUI_README_OKBTN) )
+        , maReadmeTabPage(0)
+        , maLicenseTabPage(0)
+        , maNoticeTabPage(0)
+    {
+        FreeResource();
+
+        maTabCtrl.Show();
+
+        const rtl::OUString sReadme( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/README" ) );
+        const rtl::OUString sLicense( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program/LICENSE" ) );
+        const rtl::OUString sNotice( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program/NOTICE" ) );
+
+        rtl::OUString sReadmeTxt, sLicenseTxt, sNoticeTxt;
+        lcl_readTxtFile( sReadme, sReadmeTxt );
+        lcl_readTxtFile( sLicense, sLicenseTxt );
+        lcl_readTxtFile( sNotice, sNoticeTxt );
+
+        maReadmeTabPage = new ReadmeTabPage( &maTabCtrl, sReadmeTxt );
+        maLicenseTabPage = new ReadmeTabPage( &maTabCtrl, sLicenseTxt );
+        maNoticeTabPage = new ReadmeTabPage( &maTabCtrl, sNoticeTxt );
+
+        maTabCtrl.SetTabPage( RID_CUI_READMEPAGE, maReadmeTabPage );
+        maTabCtrl.SetTabPage( RID_CUI_LICENSEPAGE, maLicenseTabPage );
+        maTabCtrl.SetTabPage( RID_CUI_NOTICEPAGE, maNoticeTabPage );
+
+        maTabCtrl.SelectTabPage( RID_CUI_READMEPAGE );
+
+        Size aTpSz  = maReadmeTabPage->GetOutputSizePixel();
+        Size a6Size = maReadmeTabPage->LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+
+        maReadmeTabPage->Adjust( aTpSz, a6Size );
+        maLicenseTabPage->Adjust( aTpSz, a6Size );
+        maNoticeTabPage->Adjust( aTpSz, a6Size );
+
+        Size aDlgSize = GetOutputSizePixel();
+        Size aOkBtnSz = maBtnOK.GetSizePixel();
+        Point aOKPnt( aDlgSize.Width() / 2 - aOkBtnSz.Width() / 2 , maBtnOK.GetPosPixel().Y() );
+        maBtnOK.SetPosPixel( aOKPnt );
+    }
+
+    ReadmeDialog::~ReadmeDialog()
+    {
+        delete maReadmeTabPage;
+        delete maLicenseTabPage;
+        delete maNoticeTabPage;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -87,10 +243,12 @@ static void layoutEdit( Edit &rControl, const Point& aPos, Size &aSize, const lo
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     SfxModalDialog( pParent, rId ),
     maOKButton( this, ResId( RID_CUI_ABOUT_BTN_OK, *rId.GetResMgr() ) ),
+    maReadmeButton( this, ResId( RID_CUI_ABOUT_BTN_README, *rId.GetResMgr() ) ),
     maVersionText( this, ResId( RID_CUI_ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     maBuildInfoEdit( this, ResId( RID_CUI_ABOUT_FTXT_BUILDDATA, *rId.GetResMgr() ) ),
     maCopyrightEdit( this, ResId( RID_CUI_ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
     maCreditsLink( this, ResId( RID_CUI_ABOUT_FTXT_WELCOME_LINK, *rId.GetResMgr() )  ),
+    maMainLogo( ResId( RID_CUI_ABOUT_LOGO, *rId.GetResMgr() ) ),
     maCopyrightTextStr( ResId( RID_CUI_ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) )
 {
     // load image from module path
@@ -99,6 +257,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     InitControls();
 
     // set links
+    maReadmeButton.SetClickHdl( LINK( this, AboutDialog, ShowReadme_Impl ) );
     maCreditsLink.SetClickHdl( LINK( this, AboutDialog, OpenLinkHdl_Impl ) );
 
     FreeResource();
@@ -187,46 +346,57 @@ void AboutDialog::ApplyStyleSettings()
 
 void AboutDialog::LayoutControls( Size& aDlgSize )
 {
+    Size aMainLogoSz = maMainLogo.GetSizePixel();
     Size aAppLogoSiz = maAppLogo.GetSizePixel();
 
+    long nLeftOffset = aMainLogoSz.Width();
+
     aDlgSize = GetOutputSizePixel();
-    aDlgSize.Width() = aAppLogoSiz.Width();
 
     Size a6Size      = maVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
     long nDlgMargin  = a6Size.Width() * 2;
     long nCtrlMargin = a6Size.Height() * 2;
-    long nTextWidth  = aDlgSize.Width() - ( nDlgMargin * 2 );
+    long nTextWidth  = aAppLogoSiz.Width() - nDlgMargin;
+    long nY          = aAppLogoSiz.Height() + a6Size.Height();
 
-    Point aPos( nDlgMargin, nY );
+    aDlgSize.Width() = nLeftOffset + a6Size.Width() + aAppLogoSiz.Width();
+
+    Point aPos( nLeftOffset + a6Size.Width(), nY );
     Size aSize;
     // layout fixed text control
-    layoutFixedText( maVersionText, aPos, aSize, nTextWidth );
-    // set the next control closer
-    nY += aSize.Height() + (nCtrlMargin / 2);
+    lcl_layoutFixedText( maVersionText, aPos, aSize, nTextWidth );
+    nY += aSize.Height() + a6Size.Height();
 
     // Multiline edit with Build info
     aPos.Y() = nY;
-    layoutEdit( maBuildInfoEdit, aPos, aSize, nTextWidth );
-    nY += aSize.Height() + nCtrlMargin;
+    lcl_layoutEdit( maBuildInfoEdit, aPos, aSize, nTextWidth );
+    nY += aSize.Height() + a6Size.Height();
 
     // Multiline edit with Copyright-Text
     aPos.Y() = nY;
-    layoutEdit( maCopyrightEdit, aPos, aSize, nTextWidth );
-    // set the next control closer
-    nY += aSize.Height() + (nCtrlMargin/2);
+    lcl_layoutEdit( maCopyrightEdit, aPos, aSize, nTextWidth );
+    nY += aSize.Height() + a6Size.Height();
 
     // Hyperlink
     aPos.Y() = nY;
-    layoutFixedText( maCreditsLink, aPos, aSize, nTextWidth );
-    nY += aSize.Height() + nCtrlMargin;
+    lcl_layoutFixedText( maCreditsLink, aPos, aSize, nTextWidth );
+    nY += aSize.Height();
+
+    nY = std::max( nY, aMainLogoSz.Height() );
+    nY += nCtrlMargin;
+
+    // logos position
+    maMainLogoPos = Point( 0, nY / 2 - aMainLogoSz.Height() / 2 );
+    maAppLogoPos = Point( nLeftOffset + a6Size.Width(), 0 );
 
     // OK-Button-Position (at the bottom and centered)
     Size aOKSiz = maOKButton.GetSizePixel();
-    Point aOKPnt( ( aDlgSize.Width() - aOKSiz.Width() ) / 2, nY );
+    Point aOKPnt( ( aDlgSize.Width() - aOKSiz.Width() ) - a6Size.Width(), nY );
     maOKButton.SetPosPixel( aOKPnt );
 
-    aDlgSize.Height() = aOKPnt.Y() + aOKSiz.Height() + nCtrlMargin;
+    maReadmeButton.SetPosPixel( Point(a6Size.Width(), nY) );
+
+    aDlgSize.Height() = aOKPnt.Y() + aOKSiz.Height() + a6Size.Width();
 }
 
 // -----------------------------------------------------------------------
@@ -302,8 +472,8 @@ sal_Bool AboutDialog::Close()
 void AboutDialog::Paint( const Rectangle& rRect )
 {
     SetClipRegion( rRect );
-    Point aPos( 0, 0 );
-    DrawImage( aPos, maAppLogo );
+    DrawImage( maMainLogoPos, maMainLogo );
+    DrawImage( maAppLogoPos, maAppLogo );
 
     return;
 }
@@ -332,5 +502,13 @@ IMPL_LINK ( AboutDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
+    return 0;
+}
+
+IMPL_LINK ( AboutDialog, ShowReadme_Impl, PushButton*, EMPTYARG )
+{
+    ReadmeDialog aDlg( this );
+    aDlg.Execute();
+
     return 0;
 }

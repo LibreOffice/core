@@ -436,4 +436,7 @@
 
 #define RID_CUI_DIALOG_COLORPICKER                          (RID_SVX_START + 3)
 
+#define RID_CUI_README_DLG                                  (RID_SVX_START + 400)
+#define RID_CUI_README_TBPAGE                               (RID_SVX_START + 401)
+
 #endif

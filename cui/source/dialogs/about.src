@@ -23,6 +23,9 @@
 
 #include "about.hrc"
 
+#define BTN_WIDTH   50
+#define BTN_HEIGHT  14
+
 ModalDialog RID_DEFAULTABOUT
 {
     HelpID = "cui:ModalDialog:RID_DEFAULTABOUT";
@@ -33,7 +36,13 @@ ModalDialog RID_DEFAULTABOUT
     OKButton RID_CUI_ABOUT_BTN_OK
     {
         DefButton = TRUE ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( BTN_WIDTH , BTN_HEIGHT ) ;
+    };
+    PushButton RID_CUI_ABOUT_BTN_README
+    {
+        DefButton = FALSE ;
+        Size = MAP_APPFONT ( BTN_WIDTH , BTN_HEIGHT ) ;
+        Text [ en-US ] = "License..." ;
     };
     FixedText RID_CUI_ABOUT_FTXT_VERSION
     {
@@ -64,6 +73,82 @@ ModalDialog RID_DEFAULTABOUT
     String RID_CUI_ABOUT_STR_COPYRIGHT
     {
         Text[ en-US ] = "Copyright © 2012 Apache Software Foundation.\nAll rights reserved.\n\nThis product was created by %OOOVENDOR, based on Apache OpenOffice.\nApache OpenOffice acknowledges all community members, especially those mentioned at";
+    };
+
+    Image RID_CUI_ABOUT_LOGO
+    {
+        ImageBitmap = Bitmap { File = "orb.png"; };
+    };
+};
+
+
+#define TAB_WIDTH   290
+#define TAB_HEIGHT  270
+
+#define CTRL_MARGIN 3
+#define DLG_WIDTH   CTRL_MARGIN + TAB_WIDTH + CTRL_MARGIN
+#define DLG_HEIGHT  CTRL_MARGIN + TAB_HEIGHT + CTRL_MARGIN + BTN_HEIGHT + CTRL_MARGIN
+
+ModalDialog RID_CUI_README_DLG
+{
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
+    Text [ en-US ] = "Readme, License and Notice" ;
+
+    TabControl RID_CUI_README_TBCTL
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT( CTRL_MARGIN , CTRL_MARGIN );
+        Size = MAP_APPFONT( TAB_WIDTH , TAB_HEIGHT );
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_CUI_READMEPAGE ;
+                PageResID = RID_CUI_README_TBPAGE ;
+                Text [ en-US ] = "Readme" ;
+            };
+            PageItem
+            {
+                Identifier = RID_CUI_LICENSEPAGE ;
+                PageResID = RID_CUI_README_TBPAGE ;
+                Text [ en-US ] = "License" ;
+            };
+            PageItem
+            {
+                Identifier = RID_CUI_NOTICEPAGE ;
+                PageResID = RID_CUI_README_TBPAGE ;
+                Text [ en-US ] = "Notice" ;
+            };
+        };
+    };
+
+    OKButton RID_CUI_README_OKBTN
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT( 0, CTRL_MARGIN + TAB_HEIGHT + CTRL_MARGIN );
+        Size = MAP_APPFONT ( BTN_WIDTH , BTN_HEIGHT ) ;
+    };
+};
+
+TabPage RID_CUI_README_TBPAGE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( TAB_WIDTH , TAB_HEIGHT ) ;
+
+    MultiLineEdit RID_CUI_README_TBPAGE_EDIT
+   {
+        Border = TRUE ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        AutoVScroll = TRUE ;
+        Pos = MAP_APPFONT( CTRL_MARGIN , CTRL_MARGIN );
+        Size = MAP_APPFONT( TAB_WIDTH - CTRL_MARGIN - CTRL_MARGIN, TAB_HEIGHT - CTRL_MARGIN - CTRL_MARGIN );
     };
 };
 
