@@ -227,6 +227,7 @@ MY_FILES_main = \
     $(MY_XCU)/Office/FormWizard.xcu \
     $(MY_XCU)/Office/Histories.xcu \
     $(MY_XCU)/Office/Impress.xcu \
+    $(MY_XCU)/Office/Jobs.xcu \
     $(MY_XCU)/Office/Labels.xcu \
     $(MY_XCU)/Office/Logging.xcu \
     $(MY_XCU)/Office/Math.xcu \
