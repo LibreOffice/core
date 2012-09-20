@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn///2g\u003d",
+        "filename": "solenv/gbuild/Configuration.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-20T18:46:11Z",
+      "side": 1,
+      "message": "this should work, but perhaps could be simpler...",
+      "revId": "83aa2db85f85d6e2a18f601bbf9cafc1e9134e22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
