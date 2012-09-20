@@ -193,6 +193,10 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // clean up resource stack
     FreeResource();
 
+    // fdo#34392: we do the layout dynamically, the layout depends on the font,
+    // so we should handle data changed events (font changing) of the last child
+    // control, at this point all the controls have updated settings (i.e. font).
+    maToolbox.AddEventListener( LINK( this, BackingWindow, WindowEventListener ) );
     EnableChildTransparentMode();
 
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
@@ -249,6 +253,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
 BackingWindow::~BackingWindow()
 {
+    maToolbox.RemoveEventListener( LINK( this, BackingWindow, WindowEventListener ) );
     delete mpRecentMenu;
     delete mpAccExec;
 }
@@ -267,17 +272,22 @@ class ImageContainerRes : public Resource
     ~ImageContainerRes() { FreeResource(); }
 };
 
-void BackingWindow::DataChanged( const DataChangedEvent& rDCEvt )
+IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    Window::DataChanged( rDCEvt );
-
-    if ( rDCEvt.GetFlags() & SETTINGS_STYLE )
+    VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>( pEvent );
+    if ( pWinEvent && pWinEvent->GetId() == VCLEVENT_WINDOW_DATACHANGED )
     {
-        initBackground();
-        Invalidate();
-        // fdo#34392: Resize buttons to match the new text size.
-        Resize();
+        DataChangedEvent* pDCEvt =
+            static_cast<DataChangedEvent*>( pWinEvent->GetData() );
+        if ( pDCEvt->GetFlags() & SETTINGS_STYLE )
+        {
+            initBackground();
+            Invalidate();
+            // fdo#34392: Resize buttons to match the new text size.
+            Resize();
+        }
     }
+    return 0;
 }
 
 void BackingWindow::prepareRecentFileMenu()
