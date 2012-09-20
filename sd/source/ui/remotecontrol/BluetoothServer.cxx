@@ -12,17 +12,19 @@
 #include <sal/log.hxx>
 
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
-#include <glib.h>
-#include <dbus/dbus-glib.h>
-#include <sys/unistd.h>
-#include <sys/socket.h>
-#include <bluetooth/bluetooth.h>
-#include <bluetooth/rfcomm.h>
-#define DBUS_TYPE_G_STRING_ANY_HASHTABLE (dbus_g_type_get_map( "GHashTable", G_TYPE_STRING, G_TYPE_VALUE ))
-
-#ifndef G_VALUE_INIT
-  #define G_VALUE_INIT {0,{{0}}} // G_VALUE_INIT only present in glib >= 2.30
-#endif
+  #include <glib.h>
+  #include <dbus/dbus-glib.h>
+  #include <sys/unistd.h>
+  #include <sys/socket.h>
+  #include <bluetooth/bluetooth.h>
+  #include <bluetooth/rfcomm.h>
+  #define DBUS_TYPE_G_STRING_ANY_HASHTABLE (dbus_g_type_get_map( "GHashTable", G_TYPE_STRING, G_TYPE_VALUE ))
+  #ifndef G_VALUE_INIT
+    #define G_VALUE_INIT {0,{{0}}} // G_VALUE_INIT only present in glib >= 2.30
+  #endif
+  #ifndef DBusGObjectPath
+    #define DBusGObjectPath char // DBusGObjectPath is only present in newer version of dbus-glib
+  #endif
 #endif
 
 #ifdef WIN32
@@ -59,9 +61,7 @@ DBusGProxy* bluezGetDefaultAdapter( DBusGConnection* aConnection,
     }
 
     gboolean aResult;
-    // The following should be a DBusGObjectPath, however the necessary
-    // typedef is missing in older version of dbus-glib.
-    char *aAdapterPath = NULL;
+    DBusGObjectPath* aAdapterPath = NULL;
     aResult = dbus_g_proxy_call( aManager, "DefaultAdapter", &aError,
                                  G_TYPE_INVALID,
                                  DBUS_TYPE_G_OBJECT_PATH, &aAdapterPath,
