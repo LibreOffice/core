@@ -79,24 +79,6 @@ gb_CXXFLAGS := \
 	-Woverloaded-virtual \
 	-Wno-non-virtual-dtor \
 
-ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
-gb_COMPILERDEFS += \
-        -DHAVE_GCC_VISIBILITY_FEATURE \
-
-gb_CFLAGS += \
-        -fvisibility=hidden
-
-gb_CXXFLAGS += \
-	-fvisibility=hidden \
-
-ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
-gb_CXXFLAGS += \
-        -fvisibility-inlines-hidden \
-
-endif
-
-endif
-
 # enable debug STL
 ifeq ($(gb_PRODUCT),$(false))
 gb_COMPILERDEFS += \

@@ -69,24 +69,6 @@ gb_CXXFLAGS := \
 	#-fsigned-char \ might be removed?
 	#-malign-natural \ might be removed?
 
-ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
-gb_COMPILERDEFS += \
-	-DHAVE_GCC_VISIBILITY_FEATURE \
-
-gb_CFLAGS += \
-    -fvisibility=hidden
-
-gb_CXXFLAGS += \
-	-fvisibility=hidden \
-
-ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
-gb_CXXFLAGS += \
-    -fvisibility-inlines-hidden \
-
-endif
-
-endif
-
 ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
 gb_COMPILERDEFS += \
         -DHAVE_SFINAE_ANONYMOUS_BROKEN \
@@ -124,6 +106,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
 		$(DEFS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		$(T_OBJCXXFLAGS) \
 		-c $(3) \
@@ -142,6 +125,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(T_OBJCFLAGS) \
 		-c $(3) \
