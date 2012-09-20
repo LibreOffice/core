@@ -571,7 +571,7 @@ sub generate_cab_file_list
     }
     else
     {
-        installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "create_media_table");
+        installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "generate_cab_file_list");
     }
 
     installer::logger::include_timestamp_into_logfile("Performance Info: ddf file generation end");
