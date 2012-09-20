@@ -73,4 +73,20 @@
  
      ::std::string str() const { return ::std::string(m_pos, m_size); }
  
+@@ -110,11 +110,11 @@
+ 
+     bool operator< (const pstring& r) const;
+ 
+-    bool operator== (const char* str) const;
++    bool operator== (const char* str_) const;
+ 
+-    bool operator!= (const char* str) const
++    bool operator!= (const char* str_) const
+     {
+-        return !operator==(str);
++        return !operator==(str_);
+     }
+ 
+     pstring trim() const;
+
 
