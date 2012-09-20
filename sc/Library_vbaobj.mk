@@ -85,7 +85,6 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/vbaformat \
 	sc/source/ui/vba/vbaformatcondition \
 	sc/source/ui/vba/vbaformatconditions \
-	sc/source/ui/vba/vbafoundfiles \
 	sc/source/ui/vba/vbaglobals \
 	sc/source/ui/vba/vbahyperlink \
 	sc/source/ui/vba/vbahyperlinks \

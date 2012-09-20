@@ -95,7 +95,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
 	XErrObject \
 	XExecutableDialog \
 	XFontBase \
-	XFoundFiles \
 	XGlobalsBase \
 	XHelperInterface \
 	XPageSetupBase \
