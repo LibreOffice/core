@@ -87,7 +87,7 @@ private:
     SCCOL           mnMaxCol;
 
     void CompileRangeData( const String& rSymbol, bool bSetError );
-
+    void InitCode();
 public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
 
@@ -120,6 +120,7 @@ public:
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
     sal_uInt16    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
+    SC_DLLPUBLIC void   SetCode( ScTokenArray& );
     const ScTokenArray* GetCode() const             { return pCode; }
     SC_DLLPUBLIC sal_uInt16 GetErrCode() const;
     bool            HasReferences() const;
