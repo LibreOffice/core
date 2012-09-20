@@ -1058,6 +1058,10 @@ static bool loadEnv(OUString const  & cLibStem,
 
     if ( cLibStem == CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" )
         fpInit = CPPU_ENV_uno_initEnvironment;
+#ifdef SOLAR_JAVA
+    else if ( cLibStem == "java_uno" )
+        fpInit = java_uno_initEnvironment;
+#endif
     else
     {
 #if OSL_DEBUG_LEVEL > 1

@@ -258,9 +258,14 @@ typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
 #define UNO_INIT_ENVIRONMENT "uno_initEnvironment"
 
 #ifdef DISABLE_DYNLOADING
-/* We link statically and have just one kind of environment */
+/* We link statically and have just the C++ environment */
 void SAL_CALL CPPU_ENV_uno_initEnvironment( uno_Environment * Env )
      SAL_THROW_EXTERN_C();
+#ifdef SOLAR_JAVA
+/* We also have the Java environment */
+void SAL_CALL java_uno_initEnvironment( uno_Environment * Env )
+     SAL_THROW_EXTERN_C();
+#endif
 #endif
 
 /** Gets a specific environment. If the specified environment does not exist, then a default one

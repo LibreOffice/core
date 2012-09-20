@@ -456,6 +456,10 @@ void SAL_CALL java_env_disposing( uno_Environment * java_env )
 }
 }
 
+#ifdef DISABLE_DYNLOADING
+#define uno_initEnvironment java_uno_initEnvironment
+#endif
+
 //------------------------------------------------------------------------------
 void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
@@ -554,12 +558,17 @@ void SAL_CALL uno_ext_getMapping(
     }
 }
 
+#ifndef DISABLE_DYNLOADING
+
 //------------------------------------------------------------------------------
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
     SAL_THROW_EXTERN_C()
 {
     return (*g_moduleCount.canUnload)( &g_moduleCount, pTime );
 }
+
+#endif
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
