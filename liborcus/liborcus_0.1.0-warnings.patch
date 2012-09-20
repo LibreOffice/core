@@ -60,3 +60,17 @@
      }
      else
      {
+--- include/orcus/pstring.hpp
++++ include/orcus/pstring.hpp
+@@ -82,8 +82,8 @@
+     };
+ 
+     pstring() : m_pos(NULL), m_size(0) {}
+-    pstring(const char* pos) : m_pos(pos) { m_size = ::std::strlen(pos); }
+-    pstring(const char* pos, size_t size) : m_pos(pos), m_size(size) {}
++    pstring(const char* pos_) : m_pos(pos_) { m_size = ::std::strlen(pos_); }
++    pstring(const char* pos_, size_t size_) : m_pos(pos_), m_size(size_) {}
+ 
+     ::std::string str() const { return ::std::string(m_pos, m_size); }
+ 
+
