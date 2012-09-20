@@ -1801,7 +1801,8 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
             FSEND );
         pFS->startElement( FSNS( XML_c, XML_v ),
             FSEND );
-        pFS->write( aValues[i] );
+        if (aValues[i] == aValues[i])
+            pFS->write( aValues[i] );
         pFS->endElement( FSNS( XML_c, XML_v ) );
         pFS->endElement( FSNS( XML_c, XML_pt ) );
     }
