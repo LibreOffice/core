@@ -262,6 +262,7 @@ struct WRITERFILTER_DLLPRIVATE TableInfo
     sal_Int32 nRightBorderDistance;
     sal_Int32 nTopBorderDistance;
     sal_Int32 nBottomBorderDistance;
+    sal_Int32 nNestLevel;
     PropertyMapPtr pTableDefaults;
     PropertyMapPtr pTableBorders;
     TableStyleSheetEntry* pTableStyle;
@@ -272,6 +273,7 @@ struct WRITERFILTER_DLLPRIVATE TableInfo
     , nRightBorderDistance(DEF_BORDER_DIST)
     , nTopBorderDistance(0)
     , nBottomBorderDistance(0)
+    , nNestLevel(0)
     , pTableDefaults(new PropertyMap)
     , pTableBorders(new PropertyMap)
     , pTableStyle(NULL)
@@ -433,7 +435,24 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         lcl_debug_TableBorder(aTableBorder);
 #endif
 
-        m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance));
+        // Mimic Office behavior : if tlbInd is defined, use it place table.
+        // Otherwise, top-level table's position depends w:tblCellMar attribute (but not nested tables)
+        if (nLeftMargin)
+        {
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf));
+        }
+        else
+        {
+            // TODO: top-level position depends on w:tblCellMar attribute, not w:cellMar
+            if (rInfo.nNestLevel > 1)
+            {
+                m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( - nGapHalf));
+            }
+            else
+            {
+                m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( - nGapHalf - rInfo.nLeftBorderDistance));
+            }
+        }
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
         if( nTableWidth > 0 )
@@ -672,13 +691,14 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
     return aRowProperties;
 }
 
-void DomainMapperTableHandler::endTable()
+void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("tablehandler.endTable");
 #endif
 
     TableInfo aTableInfo;
+    aTableInfo.nNestLevel = nestedTableLevel;
     aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo);
     //  expands to uno::Sequence< Sequence< beans::PropertyValues > >
 
