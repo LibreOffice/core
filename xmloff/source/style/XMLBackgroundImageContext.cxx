@@ -82,14 +82,14 @@ const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 
 
 
-SvXMLEnumMapEntry psXML_BrushHoriPos[] =
+static SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
     { XML_LEFT,         GraphicLocation_LEFT_MIDDLE },
     { XML_RIGHT,        GraphicLocation_RIGHT_MIDDLE    },
     { XML_TOKEN_INVALID,                    0           }
 };
 
-SvXMLEnumMapEntry psXML_BrushVertPos[] =
+static SvXMLEnumMapEntry psXML_BrushVertPos[] =
 {
     { XML_TOP,          GraphicLocation_MIDDLE_TOP  },
     { XML_BOTTOM,       GraphicLocation_MIDDLE_BOTTOM   },
