@@ -44,12 +44,12 @@ using namespace ::com::sun::star;
 
 using ::rtl::OUString;
 
-const char* cURLStart           = ".uno:DataSourceBrowser/";
-const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
-const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields
-const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";//data into text
-const char* cURLDocumentDataSource  = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
-const sal_Char* cInternalDBChangeNotification = ".uno::Writer/DataSourceChanged";
+static const char* cURLStart           = ".uno:DataSourceBrowser/";
+static const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
+static const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields
+static const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";//data into text
+static const char* cURLDocumentDataSource  = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
+static const sal_Char* cInternalDBChangeNotification = ".uno::Writer/DataSourceChanged";
 
 SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     m_pView(&rVw)

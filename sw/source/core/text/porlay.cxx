@@ -99,7 +99,7 @@ sal_Bool isTransparentChar ( xub_Unicode cCh )
  * Checks if cCh + cNectCh builds a ligature (used for Kashidas)
  *************************************************************************/
 
-sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
+static sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
 {
             // Lam + Alef
     return ( isLamChar ( cCh ) && isAlefChar ( cNextCh ));
@@ -111,7 +111,7 @@ sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
  * Checks if cCh is connectable to cPrevCh (used for Kashidas)
  *************************************************************************/
 
-sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
+static sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
 {
     const int32_t nJoiningType = u_getIntPropertyValue( cPrevCh, UCHAR_JOINING_TYPE );
     sal_Bool bRet = nJoiningType != U_JT_RIGHT_JOINING && nJoiningType != U_JT_NON_JOINING;
@@ -126,7 +126,7 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
 /*************************************************************************
  * lcl_HasStrongLTR
  *************************************************************************/
- bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
+static  bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
  {
      for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {

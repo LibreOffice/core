@@ -102,7 +102,7 @@ extern void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 
 
 // tries to determine the language of 'rText'
 //
-LanguageType lcl_CheckLanguage(
+static LanguageType lcl_CheckLanguage(
     const OUString &rText,
     uno::Reference< linguistic2::XSpellChecker1 > xSpell,
     uno::Reference< linguistic2::XLanguageGuessing > xLangGuess,
