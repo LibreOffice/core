@@ -45,32 +45,26 @@
 
 class SdrPage;
 
-//.............................................................................
-namespace chart
-{
-//.............................................................................
+namespace chart {
 
 class VCoordinateSystem;
 class DrawModelWrapper;
 class SeriesPlotterContainer;
 
-//-----------------------------------------------------------------------------
-/** The ChartView is responsible to manage the generation of Drawing Objects
-for visualization on a given OutputDevice. The ChartModel is responsible to notify changes to the view.
-The view than changes to state dirty. The view can be updated with call 'update'.
-
-The View is not responsible to handle single user events (that is instead done by the ChartWindow).
-*/
-
+/**
+ * The ChartView is responsible to manage the generation of Drawing Objects
+ * for visualization on a given OutputDevice. The ChartModel is responsible
+ * to notify changes to the view. The view than changes to state dirty. The
+ * view can be updated with call 'update'.
+ *
+ * The View is not responsible to handle single user events (that is instead
+ * done by the ChartWindow).
+ */
 class ChartView : public ::cppu::WeakImplHelper10<
     ::com::sun::star::lang::XInitialization
-        , ::com::sun::star::lang::XServiceInfo
-        , ::com::sun::star::datatransfer::XTransferable
+        ,::com::sun::star::lang::XServiceInfo
+        ,::com::sun::star::datatransfer::XTransferable
         ,::com::sun::star::lang::XUnoTunnel
-        //::com::sun::star::lang::XComponent ???
-        //::com::sun::star::uno::XWeak          // implemented by WeakImplHelper(optional interface)
-        //::com::sun::star::uno::XInterface     // implemented by WeakImplHelper(optional interface)
-        //::com::sun::star::lang::XTypeProvider // implemented by WeakImplHelper
         ,::com::sun::star::util::XModifyListener
         ,::com::sun::star::util::XModeChangeBroadcaster
         ,::com::sun::star::util::XUpdatable
@@ -252,9 +246,7 @@ private: //member
     ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 };
 
-//.............................................................................
-} //namespace chart
-//.............................................................................
+}
 
 #endif
 
