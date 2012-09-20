@@ -71,7 +71,7 @@ public:
     /**
        Handle end of table.
      */
-    virtual void endTable() = 0;
+    virtual void endTable(unsigned int nestedTableLevel) = 0;
 
     /**
        Handle start of row.
@@ -1003,7 +1003,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
                 mpTableDataHandler->endRow();
             }
 
-            mpTableDataHandler->endTable();
+            mpTableDataHandler->endTable(mTableDataStack.size() - 1);
         }
         catch (uno::Exception const& e)
         {
