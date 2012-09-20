@@ -101,7 +101,7 @@ public:
     typedef boost::shared_ptr<WW8TableDataHandler> Pointer_t;
     virtual void startTable(unsigned int nRows, unsigned int nDepth,
                             TablePropsRef_t pProps);
-    virtual void endTable();
+    virtual void endTable(unsigned int nestedTableLevel);
     virtual void startRow(unsigned int nCols,
                           TablePropsRef_t pProps);
     virtual void endRow();
@@ -125,7 +125,7 @@ void WW8TableDataHandler::startTable(unsigned int nRows, unsigned int nDepth,
     output.addItem(tmpStr);
 }
 
-void WW8TableDataHandler::endTable()
+void WW8TableDataHandler::endTable(unsigned int /*nestedTableLevel*/)
 {
     output.addItem("</tabledata.table>");
 }

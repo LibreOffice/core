@@ -78,7 +78,7 @@ public:
 
     virtual void startTable(unsigned int nRows, unsigned int nDepth,
                             TablePropertyMapPtr pProps);
-    virtual void endTable();
+    virtual void endTable(unsigned int nestedTableLevel);
     virtual void startRow(unsigned int nCells, TablePropertyMapPtr pProps);
     virtual void endRow();
     virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps);
