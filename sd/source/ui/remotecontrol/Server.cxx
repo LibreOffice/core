@@ -19,6 +19,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
+#include <sal/log.hxx>
 
 #include "sddll.hxx"
 
@@ -75,23 +76,26 @@ RemoteServer::~RemoteServer()
 
 void RemoteServer::execute()
 {
+    SAL_INFO( "sdremote", "RemoteServer::execute called" );
     osl::SocketAddr aAddr( "0", PORT );
     if ( !mSocket.bind( aAddr ) )
     {
-        // Error binding
+        SAL_WARN( "sdremote", "bind failed" << mSocket.getErrorAsString() );
         return;
     }
 
     if ( !mSocket.listen(3) )
     {
-        // Error listening
+        SAL_WARN( "sdremote", "listen failed" << mSocket.getErrorAsString() );
         return;
     }
     while ( true )
     {
         StreamSocket aSocket;
+        SAL_INFO( "sdremote", "waiting on accept" );
         if ( mSocket.acceptConnection( aSocket ) == osl_Socket_Error )
         {
+            SAL_WARN( "sdremote", "accept failed" << mSocket.getErrorAsString() );
             return; // Closed, or other issue.
         }
         BufferedStreamSocket *pSocket = new BufferedStreamSocket( aSocket);
@@ -138,6 +142,7 @@ void RemoteServer::execute()
                     axPin >>= sPin;
 
                     if ( sPin.equals( pClient->mPin ) ) {
+                        SAL_INFO( "sdremote", "client found on validated list -- connecting" );
                         connectClient( pClient, sPin );
                         aFound = true;
                         break;
@@ -147,13 +152,17 @@ void RemoteServer::execute()
             }
             // Pin not found so inform the client.
             if ( !aFound )
+            {
+                SAL_INFO( "sdremote", "client not found on validated list" );
                 pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
                             strlen( "LO_SERVER_VALIDATING_PIN\n\n" ) );
+            }
         } else {
+            SAL_INFO( "sdremote", "client failed to send LO_SERVER_CLIENT_PAIR, ignoring" );
             delete pSocket;
         }
     }
-
+    spServer = NULL; // Object is destroyed when Thread::execute() ends.
 }
 
 RemoteServer *sd::RemoteServer::spServer = NULL;
@@ -224,6 +233,7 @@ std::vector<ClientInfo*> RemoteServer::getClients()
 
 sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
 {
+    SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )
         return false;
 
@@ -285,6 +295,7 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
 void SdDLL::RegisterRemotes()
 {
     // Disable unless in experimental mode for now
+    SAL_INFO( "sdremote", "SdDLL::RegisterRemotes called" );
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
         return;
