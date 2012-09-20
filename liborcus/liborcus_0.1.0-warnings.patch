@@ -90,3 +90,18 @@
      pstring trim() const;
 
 
+--- include/orcus/sax_parser.hpp
++++ include/orcus/sax_parser.hpp
+@@ -159,9 +159,9 @@
+ 
+ template<typename _Handler>
+ sax_parser<_Handler>::sax_parser(
+-    const char* content, const size_t size, handler_type& handler) :
+-    m_content(content),
+-    m_char(content),
++    const char* content_, const size_t size, handler_type& handler) :
++    m_content(content_),
++    m_char(content_),
+     m_size(size),
+     m_pos(0),
+     m_nest_level(0),
