@@ -1,3 +1,5 @@
+// -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+
 /*
  * This file is part of the LibreOffice project.
  *
@@ -191,7 +193,33 @@ public class Bootstrap {
 
         if (! m_loaded_juh)
         {
-            NativeLibraryLoader.loadLibrary( Bootstrap.class.getClassLoader(), "juh" );
+            if (System.getProperty("java.vendor") == "The Android Project")
+            {
+                // Find out if we are configured with DISABLE_DYNLOADING or
+                // not. Try to load the lo-bootstrap shared library which
+                // won't exist in the DISABLE_DYNLOADING case. (And which will
+                // be already loaded otherwise, so nothing unexpected happens
+                // that case.) Yeah, this would be simpler if I just could be
+                // bothered to keep a separate branch for DISABLE_DYNLOADING
+                // on Android, merging in master periodically, until I know
+                // for sure whether it is what I want, or not.
+
+                boolean disable_dynloading = false;
+                try {
+                    System.loadLibrary( "lo-bootstrap" );
+                } catch ( UnsatisfiedLinkError e ) {
+                    disable_dynloading = true;
+                }
+
+                if (!disable_dynloading)
+                    {
+                        NativeLibraryLoader.loadLibrary( Bootstrap.class.getClassLoader(), "juh" );
+                    }
+            }
+            else
+            {
+                NativeLibraryLoader.loadLibrary( Bootstrap.class.getClassLoader(), "juh" );
+            }
             m_loaded_juh = true;
         }
         return UnoRuntime.queryInterface(
@@ -318,3 +346,5 @@ public class Bootstrap {
         }.start();
     }
 }
+
+// vim:set shiftwidth=4 softtabstop=4 expandtab:

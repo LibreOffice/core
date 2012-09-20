@@ -28,12 +28,19 @@
 $(eval $(call gb_Module_Module,javaunohelper))
 
 ifneq ($(SOLAR_JAVA),)
+
 $(eval $(call gb_Module_add_targets,javaunohelper,\
     Library_juh \
-    Library_juhx \
     Jar_juh \
     Zip_juh \
 ))
+
+ifneq ($(DISABLE_DYNLOADING),TRUE)
+$(eval $(call gb_Module_add_targets,javaunohelper,\
+    Library_juhx \
+))
+endif
+
 endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
