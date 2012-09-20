@@ -33,20 +33,21 @@ class StgPage;
 class StgDirEntry;
 class StorageBase;
 
-typedef boost::unordered_map
-<
-    sal_Int32,
-    rtl::Reference< StgPage >,
-    boost::hash< sal_Int32 >,
-    std::equal_to< sal_Int32 >
-> IndexToStgPage;
-
 class StgCache {
+    typedef boost::unordered_map
+    <
+        sal_Int32, rtl::Reference< StgPage >,
+        boost::hash< sal_Int32 >, std::equal_to< sal_Int32 >
+    > IndexToStgPage;
+
+    typedef std::vector< rtl::Reference< StgPage > > LRUList;
+
     sal_uLong nError;                       // error code
     sal_Int32 nPages;                       // size of data area in pages
     sal_uInt16 nRef;                        // reference count
     IndexToStgPage maDirtyPages;            // hash of all dirty pages
-    IndexToStgPage maLRUCache;              // hash of index to cached pages
+    int     nReplaceIdx;                    // index into maLRUPages to replace next
+    LRUList maLRUPages;                     // list of last few non-dirty pages.
     short nPageSize;                        // page size of the file
     UCBStorageStream* pStorageStream;       // holds reference to UCB storage stream
 

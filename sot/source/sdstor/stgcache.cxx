@@ -88,14 +88,17 @@ sal_Int32 lcl_GetPageCount( sal_uLong nFileSize, short nPageSize )
 }
 
 StgCache::StgCache()
+   : nError( SVSTREAM_OK )
+   , nPages( 0 )
+   , nRef( 0 )
+   , nReplaceIdx( 0 )
+   , maLRUPages( 8 ) // entries in the LRU lookup
+   , nPageSize( 512 )
+   , pStorageStream( NULL )
+   , pStrm( NULL )
+   , bMyStream( sal_False )
+   , bFile( sal_False )
 {
-    nRef = 0;
-    pStrm = NULL;
-    nPageSize = 512;
-    nError = SVSTREAM_OK;
-    bMyStream = sal_False;
-    bFile = sal_False;
-    pStorageStream = NULL;
 }
 
 StgCache::~StgCache()
@@ -122,7 +125,7 @@ void StgCache::SetPhysPageSize( short n )
 rtl::Reference< StgPage > StgCache::Create( sal_Int32 nPg )
 {
     rtl::Reference< StgPage > xElem( StgPage::Create( nPageSize, nPg ) );
-    maLRUCache[ xElem->GetPage() ] = xElem;
+    maLRUPages[ nReplaceIdx++ % maLRUPages.size() ] = xElem;
     return xElem;
 }
 
@@ -131,8 +134,14 @@ rtl::Reference< StgPage > StgCache::Create( sal_Int32 nPg )
 void StgCache::Erase( const rtl::Reference< StgPage > &xElem )
 {
     OSL_ENSURE( xElem.is(), "The pointer should not be NULL!" );
-    if ( xElem.is() )
-        maLRUCache.erase( xElem->GetPage() );
+    if ( xElem.is() ) {
+        for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); it++ ) {
+            if ( it->is() && (*it)->GetPage() == xElem->GetPage() ) {
+                it->clear();
+                break;
+            }
+        }
+    }
 }
 
 // remove all cache elements without flushing them
@@ -140,16 +149,20 @@ void StgCache::Erase( const rtl::Reference< StgPage > &xElem )
 void StgCache::Clear()
 {
     maDirtyPages.clear();
-    maLRUCache.clear();
+    for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); it++ )
+        it->clear();
 }
 
 // Look for a cached page
 
 rtl::Reference< StgPage > StgCache::Find( sal_Int32 nPage )
 {
-    IndexToStgPage::iterator aIt = maLRUCache.find( nPage );
-    if( aIt != maLRUCache.end() )
-        return (*aIt).second;
+    for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); it++ )
+        if ( it->is() && (*it)->GetPage() == nPage )
+            return *it;
+    IndexToStgPage::iterator it2 = maDirtyPages.find( nPage );
+    if ( it2 != maDirtyPages.end() )
+        return it2->second;
     return rtl::Reference< StgPage >();
 }
 
@@ -199,18 +212,21 @@ rtl::Reference< StgPage > StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
 // continue that tradition.
 sal_Bool StgCache::Commit()
 {
-    std::vector< StgPage * > aToWrite;
-    for ( IndexToStgPage::iterator aIt = maDirtyPages.begin();
-          aIt != maDirtyPages.end(); aIt++ )
-        aToWrite.push_back( aIt->second.get() );
-
-    std::sort( aToWrite.begin(), aToWrite.end(), StgPage::IsPageGreater );
-    for (std::vector< StgPage * >::iterator aWr = aToWrite.begin();
-         aWr != aToWrite.end(); aWr++)
+    if ( Good() ) // otherwise Write does nothing
     {
-        const rtl::Reference< StgPage > &pPage = *aWr;
-        if ( !Write( pPage->GetPage(), pPage->GetData(), 1 ) )
-            return sal_False;
+        std::vector< StgPage * > aToWrite;
+        for ( IndexToStgPage::iterator aIt = maDirtyPages.begin();
+              aIt != maDirtyPages.end(); aIt++ )
+            aToWrite.push_back( aIt->second.get() );
+
+        std::sort( aToWrite.begin(), aToWrite.end(), StgPage::IsPageGreater );
+        for ( std::vector< StgPage * >::iterator aWr = aToWrite.begin();
+              aWr != aToWrite.end(); aWr++)
+        {
+            const rtl::Reference< StgPage > &pPage = *aWr;
+            if ( !Write( pPage->GetPage(), pPage->GetData(), 1 ) )
+                return sal_False;
+        }
     }
 
     maDirtyPages.clear();
@@ -259,6 +275,7 @@ void StgCache::SetStrm( UCBStorageStream* pStgStream )
 
 void StgCache::SetDirty( const rtl::Reference< StgPage > &xPage )
 {
+    assert( IsWritable() );
     maDirtyPages[ xPage->GetPage() ] = xPage;
 }
 
