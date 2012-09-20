@@ -28,6 +28,8 @@
 #include <string>
 #include <string.h>
 
+#include "resource/mork_res.hrc"
+#include "resource/common_res.hrc"
 
 #include <connectivity/dbexception.hxx>
 
@@ -80,6 +82,7 @@ MQueryHelper::MQueryHelper(const OColumnAlias& _ca)
     ,m_bHasMore( sal_True )
     ,m_bAtEnd( sal_False )
     ,m_rColumnAlias( _ca )
+    ,m_aError()
 {
     m_aResults.clear();
 }
@@ -141,6 +144,7 @@ void MQueryHelper::reset()
     m_bHasMore = sal_True;
     m_bAtEnd = sal_False;
     clear_results();
+    m_aError.reset();
 }
 
 MQueryHelperResultEntry* MQueryHelper::next()
@@ -290,97 +294,55 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     {
         if ( (*evIter)->isStringExpr() ) {
             MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (*evIter);
-
             // Set the 'name' property of the boolString.
-            // Check if it's an alias first...
             rtl::OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
-            //OSL_TRACE("Name = %s ;", attrName.getStr() );
             SAL_INFO("connectivity.mork", "Name = " << attrName.getStr());
-            // Set the 'matchType' property of the boolString. Check for equal length.
             sal_Bool requiresValue = sal_True;
-            switch(evStr->getCond()) {
-                case MQueryOp::Exists:
-                    SAL_INFO("connectivity.mork", "MQueryOp::Exists; done");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::Exists);
-                    requiresValue = sal_False;
-                    break;
-                case MQueryOp::DoesNotExist:
-                    SAL_INFO("connectivity.mork", "MQueryOp::DoesNotExist; done");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::DoesNotExist);
-                    requiresValue = sal_False;
-                    break;
-                case MQueryOp::Contains:
-                    SAL_INFO("connectivity.mork", "MQueryOp::Contains; done");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::Contains);
-                    break;
-                case MQueryOp::DoesNotContain:
-                    SAL_INFO("connectivity.mork", "MQueryOp::DoesNotContain; done");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::DoesNotContain);
-                    break;
-                case MQueryOp::Is:
-                    SAL_INFO("connectivity.mork", "MQueryOp::Is; done");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
-                    break;
-                case MQueryOp::IsNot:
-                    SAL_INFO("connectivity.mork", "MQueryOp::IsNot; done");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::IsNot);
-                    break;
-                case MQueryOp::BeginsWith:
-                    SAL_INFO("connectivity.mork", "MQueryOp::BeginsWith; done");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::BeginsWith);
-                    break;
-                case MQueryOp::EndsWith:
-                    SAL_INFO("connectivity.mork", "MQueryOp::EndsWith; done");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::EndsWith);
-                    break;
-                case MQueryOp::SoundsLike:
-                    SAL_INFO("connectivity.mork", "MQueryOp::SoundsLike; TODO");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::SoundsLike);
-                    break;
-                case MQueryOp::RegExp:
-                    SAL_INFO("connectivity.mork", "MQueryOp::RegExp; TODO");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::RegExp);
-                    break;
-                default:
-                    SAL_INFO("connectivity.mork", "(default) MQueryOp::Is; ");
-                    //boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
-                    break;
-            }
             rtl::OUString currentValue = entry->getValue(attrName);
-            // Set the 'matchValue' property of the boolString. Value returned in unicode.
-            if ( requiresValue )
+            if (evStr->getCond() == MQueryOp::Exists || evStr->getCond() == MQueryOp::DoesNotExist)
+            {
+                requiresValue = sal_False;
+            }
+            if (requiresValue)
             {
                 SAL_INFO("connectivity.mork", "Value = " << evStr->getValue() );
                 rtl::OUString searchedValue = evStr->getValue();
                 if (evStr->getCond() == MQueryOp::Is) {
+                    SAL_INFO("connectivity.mork", "MQueryOp::Is; done");
                     resultVector.push_back((currentValue == searchedValue) ? sal_True : sal_False);
                 } else if (evStr->getCond() == MQueryOp::IsNot) {
+                    SAL_INFO("connectivity.mork", "MQueryOp::IsNot; done");
                     resultVector.push_back((currentValue == searchedValue) ? sal_False : sal_True);
                 } else if (evStr->getCond() == MQueryOp::EndsWith) {
+                    SAL_INFO("connectivity.mork", "MQueryOp::EndsWith; done");
                     resultVector.push_back((currentValue.endsWith(searchedValue)) ? sal_True : sal_False);
                 } else if (evStr->getCond() == MQueryOp::BeginsWith) {
+                    SAL_INFO("connectivity.mork", "MQueryOp::BeginsWith; done");
                     resultVector.push_back((currentValue.indexOf(searchedValue) == 0) ? sal_True : sal_False);
                 } else if (evStr->getCond() == MQueryOp::Contains) {
+                    SAL_INFO("connectivity.mork", "MQueryOp::Contains; done");
                     resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? sal_False : sal_True);
                 } else if (evStr->getCond() == MQueryOp::DoesNotContain) {
+                    SAL_INFO("connectivity.mork", "MQueryOp::DoesNotContain; done");
                     resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? sal_True : sal_False);
-                } else {
-                    OSL_FAIL("not yet implemented");
+                } else if (evStr->getCond() == MQueryOp::RegExp) {
+                    SAL_WARN("connectivity.mork", "MQueryOp::RegExp; TODO");
+                    OSL_FAIL("regexp criterion is not yet implemented");
+                    _aQuery->getError().setResId(STR_ERROR_GET_ROW);
                 }
-            }
-
-            // Find it and change it ;-)
-            // class rtl::OUString "has no element named" isEmtpy
-            if (evStr->getCond() == MQueryOp::Exists) {
-                resultVector.push_back((currentValue.getLength() == 0) ? sal_False : sal_True);
+            } else if (evStr->getCond() == MQueryOp::Exists) {
+                SAL_INFO("connectivity.mork", "MQueryOp::Exists; done");
+                resultVector.push_back((currentValue.isEmpty()) ? sal_False : sal_True);
             } else if (evStr->getCond() == MQueryOp::DoesNotExist) {
-                resultVector.push_back((currentValue.getLength() == 0) ? sal_True : sal_False);
+                SAL_INFO("connectivity.mork", "MQueryOp::DoesNotExist; done");
+                resultVector.push_back((currentValue.isEmpty()) ? sal_True : sal_False);
             }
         }
         else if ( (*evIter)->isExpr() ) {
             SAL_INFO("connectivity.mork", "Appending Subquery Expression");
             MQueryExpression* queryExpression = static_cast<MQueryExpression*> (*evIter);
-             ::std::vector<sal_Bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
+            // recursive call
+            ::std::vector<sal_Bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
             MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
             if (condition == MQueryExpression::OR) {
                 sal_Bool result = sal_False;
@@ -400,8 +362,8 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
         }
         else {
             // Should never see this...
-            // OSL_FAIL("Unknown Expression Type!");
             SAL_WARN("connectivity.mork", "Unknown Expression Type!");
+            _aQuery->getError().setResId(STR_ERROR_GET_ROW);
             return resultVector;
         }
     }

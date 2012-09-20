@@ -101,7 +101,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< conne
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
     ,m_pSQLIterator( _pSQLIterator )
     ,m_pParseTree( _pSQLIterator->getParseTree() )
-      //,m_aQuery( pStmt->getOwnConnection()->getColumnAlias() )
     ,m_aQueryHelper(pStmt->getOwnConnection()->getColumnAlias())
     ,m_pTable(NULL)
     ,m_CurrentRowCount(0)
@@ -1035,7 +1034,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             op = MQueryOp::Exists;
         }
         else
+        {
             op = MQueryOp::DoesNotExist;
+        }
 
         ::rtl::OUString sTableRange;
         m_pSQLIterator->getColumnRange(parseTree->getChild(0),columnName,sTableRange);
@@ -1090,29 +1091,6 @@ void OResultSet::fillRowData()
 
         analyseWhereClause( pParseTree, queryExpression );
     }
-#if 0
-    else
-    {
-        OSL_TRACE("\tDon't have a Where Clause");
-
-        MQueryExpression::ExprVector    eVector;
-
-        // LDAP does not allow a query without restriction, so we add a dummy
-        // for PrimaryEmail
-        // For other types we stick to the old behaviour of using
-        // card:nsIAbCard.
-        OSL_ENSURE(m_pStatement, "Cannot determine Parent Statement");
-        ::rtl::OUString aStr;
-        if (xConnection->isLDAP())
-            aStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PrimaryEmail"));
-        else
-            aStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("card:nsIAbCard"));
-        eVector.push_back( new MQueryExpressionString(aStr, MQueryOp::Exists) );
-
-        queryExpression.setExpressions( eVector );
-    }
-#endif
-
     // If the query is a 0=1 then set Row count to 0 and return
     if ( m_bIsAlwaysFalseQuery )
     {
@@ -1126,9 +1104,11 @@ void OResultSet::fillRowData()
     m_aQueryHelper.setAddressbook( aStr );
 
     sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection);
-    if ( rv == -1 ) {
-        m_pStatement->getOwnConnection()->throwSQLException( STR_ERR_EXECUTING_QUERY, *this );
+    if (m_aQueryHelper.hadError())
+    {
+        m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
     }
+
     //determine whether the address book is readonly
     determineReadOnly();
 
@@ -1138,108 +1118,6 @@ void OResultSet::fillRowData()
     OSL_TRACE( "\tOUT OResultSet::fillRowData()" );
 #endif
 }
-
-#if 0
-// -----------------------------------------------------------------------------
-void OResultSet::fillRowData()
-    throw( ::com::sun::star::sdbc::SQLException )
-{
-    SAL_INFO("connectivity.mork", "=> OResultSet::fillRowData()" );
-    OSL_ENSURE( m_pStatement, "Require a statement" );
-
-    m_xColumns = m_pSQLIterator->getSelectColumns();
-
-    OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
-
-    OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
-    sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection);
-
-    if (rv == -1)
-    {
-        OSL_FAIL( "Error in executeQuery!" );
-    }
-
-    MQueryExpression queryExpression;
-
-    OSQLColumns::Vector::const_iterator aIter = m_xColumns->get().begin();
-    const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-    ::rtl::OUString sName;
-    m_aAttributeStrings.clear();
-    m_aAttributeStrings.reserve(m_xColumns->get().size());
-    for (sal_Int32 i = 1; aIter != m_xColumns->get().end();++aIter, i++)
-    {
-        (*aIter)->getPropertyValue(sProprtyName) >>= sName;
-#if OSL_DEBUG_LEVEL > 0
-        OSL_TRACE("Query Columns : (%d) %s", i, OUtoCStr(sName) );
-#endif
-        m_aAttributeStrings.push_back( sName );
-    }
-
-
-    // Generate Match Conditions for Query
-    const OSQLParseNode*  pParseTree = m_pSQLIterator->getWhereTree();
-
-    // const OSQLParseNode*  pParseTree = NULL;
-
-    m_bIsAlwaysFalseQuery = sal_False;
-    if ( pParseTree != NULL )
-    {
-        // Extract required info
-
-        OSL_TRACE("\tHave a Where Clause");
-
-        analyseWhereClause( pParseTree, queryExpression );
-    }
-#if 0
-    else
-    {
-        OSL_TRACE("\tDon't have a Where Clause");
-
-        MQueryExpression::ExprVector    eVector;
-
-        // LDAP does not allow a query without restriction, so we add a dummy
-        // for PrimaryEmail
-        // For other types we stick to the old behaviour of using
-        // card:nsIAbCard.
-        OSL_ENSURE(m_pStatement, "Cannot determine Parent Statement");
-        ::rtl::OUString aStr;
-        if (xConnection->isLDAP())
-            aStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PrimaryEmail"));
-        else
-            aStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("card:nsIAbCard"));
-        eVector.push_back( new MQueryExpressionString(aStr, MQueryOp::Exists) );
-
-        queryExpression.setExpressions( eVector );
-    }
-#endif
-
-    // If the query is a 0=1 then set Row count to 0 and return
-    if ( m_bIsAlwaysFalseQuery )
-    {
-        m_bIsReadOnly = 1;
-        return;
-    }
-
-    m_aQueryHelper.setExpression( queryExpression );
-
-    rtl::OUString aStr(  m_pTable->getName() );
-    m_aQueryHelper.setAddressbook( aStr );
-
-    sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection);
-    if ( rv == -1 ) {
-        m_pStatement->getOwnConnection()->throwSQLException( STR_ERR_EXECUTING_QUERY, *this );
-    }
-    //determine whether the address book is readonly
-    determineReadOnly();
-
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "executeQuery returned %d", rv );
-
-    OSL_TRACE( "\tOUT OResultSet::fillRowData()" );
-#endif
-
-}
-#endif
 
 // -----------------------------------------------------------------------------
 static sal_Bool matchRow( OValueRow& row1, OValueRow& row2 )
@@ -1282,192 +1160,6 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
 
     return 0;
 }
-
-#if 0
-// -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLException,
-                                                ::com::sun::star::uno::RuntimeException)
-{
-    SAL_INFO("connectivity.mork", "=> OResultSet::executeQuery()" );
-
-    ResultSetEntryGuard aGuard( *this );
-
-    OSL_ENSURE( m_pTable, "Need a Table object");
-    if(!m_pTable)
-    {
-        const OSQLTables& xTabs = m_pSQLIterator->getTables();
-        if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is()) {
-            m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
-        }
-
-        m_pTable = static_cast< OTable* > ((xTabs.begin()->second).get());
-
-    }
-
-    m_nRowPos = 0;
-
-    fillRowData();
-
-    m_pKeySet = new OKeySet();
-    m_pSortIndex = new OSortIndex(SQL_ORDERBYKEY_DOUBLE, m_aOrderbyAscending);
-    m_pKeySet = m_pSortIndex->CreateKeySet();
-
-    OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
-
-    switch( m_pSQLIterator->getStatementType() )
-    {
-        case SQL_STATEMENT_SELECT:
-        {
-            if(m_bIsAlwaysFalseQuery) {
-                break;
-            }
-            else if(isCount())
-            {
-                OSL_FAIL( "STR_NO_COUNT_SUPPORT!" );
-                m_pStatement->getOwnConnection()->throwSQLException( STR_NO_COUNT_SUPPORT, *this );
-            }
-            else
-            {
-                sal_Bool bDistinct = sal_False;
-                OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
-                if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT)
-                {
-                    if(!IsSorted())
-                    {
-                        m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
-                        m_aOrderbyAscending.push_back(SQL_DESC);
-                    }
-                    bDistinct = sal_True;
-                }
-
-                OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-                ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
-                for ( ::std::vector<sal_Int16>::size_type i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
-                {
-                    OSL_ENSURE((sal_Int32)m_aRow->get().size() > *aOrderByIter,"Invalid Index");
-                    switch ((m_aRow->get().begin()+*aOrderByIter)->getTypeKind())
-                    {
-                    case DataType::CHAR:
-                        case DataType::VARCHAR:
-                            eKeyType[i] = SQL_ORDERBYKEY_STRING;
-                            break;
-
-                        case DataType::OTHER:
-                        case DataType::TINYINT:
-                        case DataType::SMALLINT:
-                        case DataType::INTEGER:
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
-                        case DataType::REAL:
-                        case DataType::DOUBLE:
-                        case DataType::DATE:
-                        case DataType::TIME:
-                        case DataType::TIMESTAMP:
-                        case DataType::BIT:
-                            eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
-                            break;
-
-                    // Other types aren't implemented (so they are always FALSE)
-                        default:
-                            eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                            OSL_FAIL("MResultSet::executeQuery: Order By Data Type not implemented");
-                            break;
-                    }
-                }
-
-                if (IsSorted())
-                {
-                    // Implement Sorting
-
-                    // So that we can sort we need to wait until the executed
-                    // query to the mozilla addressbooks has returned all
-                    // values.
-
-                    OSL_TRACE("Query is to be sorted");
-                    if( ! m_aQueryHelper.queryComplete() )
-                        if ( !m_aQueryHelper.waitForQueryComplete() )
-                        {
-                            m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
-                        }
-
-                    OSL_ENSURE( m_aQueryHelper.queryComplete(), "Query not complete!!");
-
-                    m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
-
-                    OSL_TRACE("OrderbyColumnNumber->size() = %d",m_aOrderbyColumnNumber.size());
-#if OSL_DEBUG_LEVEL > 0
-                    for ( ::std::vector<sal_Int32>::size_type i = 0; i < m_aColMapping.size(); i++ )
-                        OSL_TRACE("Mapped: %d -> %d", i, m_aColMapping[i] );
-#endif
-                    for ( sal_Int32 nRow = 1; nRow <= m_aQueryHelper.getRowCount(); nRow++ ) {
-
-                        OKeyValue* pKeyValue = OKeyValue::createKeyValue((nRow));
-
-                        ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
-                        for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
-                        {
-                            const ORowSetValue& value = getValue(nRow, *aIter);
-
-                            OSL_TRACE( "Adding Value: (%d,%d) : %s", nRow, *aIter,OUtoCStr( value ));
-
-                            pKeyValue->pushKey(new ORowSetValueDecorator(value));
-                        }
-
-                        m_pSortIndex->AddKeyValue( pKeyValue );
-                    }
-
-                    m_pKeySet = m_pSortIndex->CreateKeySet();
-                    m_CurrentRowCount = static_cast<sal_Int32>(m_pKeySet->get().size());
-#if OSL_DEBUG_LEVEL > 0
-                    for( OKeySet::Vector::size_type i = 0; i < m_pKeySet->get().size(); i++ )
-                        OSL_TRACE("Sorted: %d -> %d", i, (m_pKeySet->get())[i] );
-#endif
-
-                    m_pSortIndex = NULL;
-                    beforeFirst(); // Go back to start
-                }
-                else  //we always need m_pKeySet now
-                    m_pKeySet = new OKeySet();
-
-                // Handle the DISTINCT case
-                if ( bDistinct && m_pKeySet.is() )
-                {
-                    OValueRow aSearchRow = new OValueVector( m_aRow->get().size() );
-
-                    for( OKeySet::Vector::size_type i = 0; i < m_pKeySet->get().size(); i++ )
-                    {
-                        fetchRow( (m_pKeySet->get())[i] );        // Fills m_aRow
-                        if ( matchRow( m_aRow, aSearchRow ) )
-                        {
-                            (m_pKeySet->get())[i] = 0;   // Marker for later to be removed
-                        }
-                        else
-                        {
-                            // They don't match, so it's not a duplicate.
-                            // Use the current Row as the next one to match against
-                            *aSearchRow = *m_aRow;
-                        }
-                    }
-                    // Now remove any keys marked with a 0
-                    m_pKeySet->get().erase(::std::remove_if(m_pKeySet->get().begin(),m_pKeySet->get().end()
-                                    ,::std::bind2nd(::std::equal_to<sal_Int32>(),0))
-                                     ,m_pKeySet->get().end());
-
-                }
-            }
-        }   break;
-
-        case SQL_STATEMENT_UPDATE:
-        case SQL_STATEMENT_DELETE:
-        case SQL_STATEMENT_INSERT:
-            break;
-        default:
-            m_pStatement->getOwnConnection()->throwSQLException( STR_STMT_TYPE_NOT_SUPPORTED, *this );
-            break;
-    }
-}
-// -----------------------------------------------------------------------------
-#endif
 
 // -----------------------------------------------------------------------------
 void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLException,
