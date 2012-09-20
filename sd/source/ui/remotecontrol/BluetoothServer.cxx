@@ -9,6 +9,8 @@
 #include "BluetoothServer.hxx"
 #include <stdio.h>
 
+#include <sal/log.hxx>
+
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
 #include <glib.h>
 #include <dbus/dbus-glib.h>
@@ -51,6 +53,7 @@ DBusGProxy* bluezGetDefaultAdapter( DBusGConnection* aConnection,
 
     if ( aManager == NULL )
     {
+        SAL_WARN( "sdremote.bluetooth", "getting org.bluez.Manager failed" );
         dbus_g_connection_unref( aConnection );
         return NULL;
     }
@@ -67,6 +70,7 @@ DBusGProxy* bluezGetDefaultAdapter( DBusGConnection* aConnection,
     g_object_unref( G_OBJECT( aManager ));
     if ( !aResult || aError )
     {
+        SAL_WARN( "sdremote.bluetooth", "getting DefaultAdapter path failed" );
         if ( aError )
             g_error_free( aError );
         return NULL;
@@ -77,6 +81,7 @@ DBusGProxy* bluezGetDefaultAdapter( DBusGConnection* aConnection,
                                           aAdapterPath, aInterfaceType );
     g_free( aAdapterPath );
 
+    SAL_INFO( "sdremote.bluetooth", "DefaultAdapter retrieved" );
     return aAdapter;
 }
 #endif // defined(LINUX) && defined(ENABLE_DBUS)
@@ -94,6 +99,7 @@ BluetoothServer::~BluetoothServer()
 bool BluetoothServer::isDiscoverable()
 {
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::isDiscoverable called" );
     g_type_init();
     gboolean aResult;
 
@@ -141,6 +147,7 @@ bool BluetoothServer::isDiscoverable()
 void BluetoothServer::setDiscoverable( bool aDiscoverable )
 {
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::isDiscoverable called" );
     g_type_init();
     gboolean aResult;
 
@@ -170,8 +177,12 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
 
     if ( !aResult || aError )
     {
+        SAL_WARN( "sdremote.bluetooth", "GetProperties failed" );
         if ( aError )
+        {
             g_error_free( aError );
+            SAL_WARN( "sdremote.bluetooth", "with error " << aError->message );
+        }
         return;
     }
 
@@ -181,6 +192,7 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
     g_free( aProperties );
     if ( !aPowered )
     {
+        SAL_INFO( "sdremote.bluetooth", "Bluetooth adapter not powered, returning" );
         g_object_unref( G_OBJECT( aAdapter ));
         return;
     }
@@ -193,8 +205,12 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
                                  G_TYPE_VALUE, &aTimeout, G_TYPE_INVALID, G_TYPE_INVALID);
     if ( !aResult || aError )
     {
+        SAL_WARN( "sdremote.bluetooth", "SetProperty(DiscoverableTimeout) failed" );
         if ( aError )
+        {
             g_error_free( aError );
+            SAL_WARN( "sdremote.bluetooth", "with error " << aError->message );
+        }
         return;
     }
 
@@ -206,8 +222,12 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
                                  G_TYPE_VALUE, &aDiscoverableGValue, G_TYPE_INVALID, G_TYPE_INVALID);
     if ( !aResult || aError )
     {
+        SAL_WARN( "sdremote.bluetooth", "SetProperty(Discoverable) failed" );
         if ( aError )
+        {
             g_error_free( aError );
+            SAL_WARN( "sdremote.bluetooth", "with error " << aError->message );
+        }
         return;
     }
 
@@ -220,6 +240,7 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
 
 void BluetoothServer::execute()
 {
+    SAL_INFO( "sdremote.bluetooth", "BluetoothServer::execute called" );
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
     g_type_init();
 
@@ -229,6 +250,7 @@ void BluetoothServer::execute()
     aConnection = dbus_g_bus_get( DBUS_BUS_SYSTEM, &aError );
 
     if ( aError != NULL ) {
+        SAL_WARN( "sdremote.bluetooth", "failed to get dbus system bus" );
         g_error_free (aError);
         return;
     }
@@ -236,6 +258,7 @@ void BluetoothServer::execute()
     DBusGProxy* aAdapter = bluezGetDefaultAdapter( aConnection, "org.bluez.Service" );
     if ( aAdapter == NULL )
     {
+        SAL_WARN( "sdremote.bluetooth", "failed to retrieve default adapter" );
         dbus_g_connection_unref( aConnection );
         return;
     }
@@ -253,6 +276,7 @@ void BluetoothServer::execute()
     dbus_g_connection_unref( aConnection );
     if ( !aResult)
     {
+        SAL_WARN( "sdremote.bluetooth", "SDP registration failed" );
         return;
     }
 
@@ -260,6 +284,7 @@ void BluetoothServer::execute()
     int aSocket;
     if ( (aSocket = socket( AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM )) < 0 )
     {
+        SAL_WARN( "sdremote.bluetooth", "failed to open bluetooth socket with error " << aSocket );
         return;
     }
 
@@ -269,13 +294,16 @@ void BluetoothServer::execute()
     memset( &aAddr.rc_bdaddr, 0, sizeof( aAddr.rc_bdaddr ) );
     aAddr.rc_channel = 5;
 
-    if ( bind( aSocket, (sockaddr*) &aAddr, sizeof(aAddr)) < 0 ) {
+    int a;
+    if ( ( a = bind( aSocket, (sockaddr*) &aAddr, sizeof(aAddr) ) ) < 0 ) {
+        SAL_WARN( "sdremote.bluetooth", "bind failed with error" << a );
         close( aSocket );
         return;
     }
 
-    if ( listen( aSocket, 1 ) < 0 )
+    if ( ( a = listen( aSocket, 1 ) ) < 0 )
     {
+        SAL_WARN( "sdremote.bluetooth", "listen failed with error" << a );
         close( aSocket );
         return;
     }
@@ -285,11 +313,14 @@ void BluetoothServer::execute()
     while ( true )
     {
         int bSocket;
+        SAL_INFO( "sdremote.bluetooth", "waiting on accept" );
         if ( (bSocket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 )
         {
+            SAL_WARN( "sdremote.bluetooth", "accept failed with error" << bSocket );
             close( aSocket );
             return;
         } else {
+            SAL_INFO( "sdremote.bluetooth", "connection accepted" );
             Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket) );
             mpCommunicators->push_back( pCommunicator );
             pCommunicator->launch();
