@@ -20,16 +20,22 @@
 #ifndef _CHART2_VIEW_LabelAlignment_HXX
 #define _CHART2_VIEW_LabelAlignment_HXX
 
-//.............................................................................
-namespace chart
-{
-//.............................................................................
+namespace chart {
 
-enum LabelAlignment { LABEL_ALIGN_CENTER, LABEL_ALIGN_LEFT, LABEL_ALIGN_TOP, LABEL_ALIGN_RIGHT, LABEL_ALIGN_BOTTOM, LABEL_ALIGN_LEFT_TOP, LABEL_ALIGN_LEFT_BOTTOM, LABEL_ALIGN_RIGHT_TOP, LABEL_ALIGN_RIGHT_BOTTOM };
+enum LabelAlignment {
+    LABEL_ALIGN_CENTER,
+    LABEL_ALIGN_LEFT,
+    LABEL_ALIGN_TOP,
+    LABEL_ALIGN_RIGHT,
+    LABEL_ALIGN_BOTTOM,
+    LABEL_ALIGN_LEFT_TOP,
+    LABEL_ALIGN_LEFT_BOTTOM,
+    LABEL_ALIGN_RIGHT_TOP,
+    LABEL_ALIGN_RIGHT_BOTTOM
+};
 
-//.............................................................................
-} //namespace chart
-//.............................................................................
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

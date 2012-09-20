@@ -75,9 +75,6 @@ VCartesianAxis::~VCartesianAxis()
     m_pPosHelper = NULL;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 Reference< drawing::XShape > createSingleLabel(
             const Reference< lang::XMultiServiceFactory>& xShapeFactory
           , const Reference< drawing::XShapes >& xTarget
@@ -100,7 +97,6 @@ Reference< drawing::XShape > createSingleLabel(
     Reference< drawing::XShape > xShape2DText = ShapeFactory(xShapeFactory)
                     .createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
 
-    //correctPositionForRotation
     LabelPositionHelper::correctPositionForRotation( xShape2DText
         , rAxisProperties.m_aLabelAlignment, rAxisLabelProperties.fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
 
