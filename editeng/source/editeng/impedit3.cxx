@@ -254,7 +254,7 @@ Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCo
     return aTranslatedPos;
 }
 
-sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Kashidas from sw/source/core/text/porlay.txt
+static sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Kashidas from sw/source/core/text/porlay.txt
 {
             // Lam + Alef
     return ( 0x644 == cCh && 0x627 == cNextCh ) ||
@@ -262,7 +262,7 @@ sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Kashidas 
            ( 0x628 == cCh && 0x631 == cNextCh );
 }
 
-sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )  // For Kashidas from sw/source/core/text/porlay.txt
+static sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )  // For Kashidas from sw/source/core/text/porlay.txt
 {
     // Alef, Dal, Thal, Reh, Zain, and Waw do not connect to the left
     sal_Bool bRet = 0x627 != cPrevCh && 0x62F != cPrevCh && 0x630 != cPrevCh &&

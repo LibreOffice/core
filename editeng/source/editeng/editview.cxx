@@ -85,7 +85,7 @@ DBG_NAME( EditView )
 
 
 // From SW => Create common method
-LanguageType lcl_CheckLanguage(
+static LanguageType lcl_CheckLanguage(
     const OUString &rText,
     Reference< XSpellChecker1 > xSpell,
     Reference< linguistic2::XLanguageGuessing > xLangGuess,

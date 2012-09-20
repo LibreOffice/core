@@ -1675,7 +1675,7 @@ sal_Bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, cons
     return bIsSequenceChecking;
 }
 
- bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
+static  bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
  {
      for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {
