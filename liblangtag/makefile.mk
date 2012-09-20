@@ -42,6 +42,7 @@ PATCH_FILES+=liblangtag-0.2-configure.patch
 PATCH_FILES+=liblangtag-0.2-datadir.patch
 PATCH_FILES+=liblangtag-0.2-msvc-warning.patch
 PATCH_FILES+=liblangtag-0.2-reg2xml-encoding-problem.patch
+PATCH_FILES+=liblangtag-0.2-xmlCleanupParser.patch
 
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
