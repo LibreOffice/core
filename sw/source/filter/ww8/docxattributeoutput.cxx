@@ -1736,10 +1736,9 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
 
     // Output the table prefered width
-    if ( nPageSize != 0 )
-        m_pSerializer->singleElementNS( XML_w, XML_tblW,
+    m_pSerializer->singleElementNS( XML_w, XML_tblW,
                 FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nPageSize ) ).getStr( ),
-                FSNS( XML_w, XML_type ), "dxa",
+                FSNS( XML_w, XML_type ), (nPageSize != 0) ? "dxa" : "auto",
                 FSEND );
 
     // Output the table alignement
