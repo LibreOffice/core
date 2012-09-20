@@ -311,8 +311,6 @@ OUString SvtUserOptions::GetTelephoneWork  () const { return GetToken(USER_OPT_T
 OUString SvtUserOptions::GetFax            () const { return GetToken(USER_OPT_FAX); }
 OUString SvtUserOptions::GetEmail          () const { return GetToken(USER_OPT_EMAIL); }
 OUString SvtUserOptions::GetCustomerNumber () const { return GetToken(USER_OPT_CUSTOMERNUMBER); }
-OUString SvtUserOptions::GetFathersName    () const { return GetToken(USER_OPT_FATHERSNAME); }
-OUString SvtUserOptions::GetApartment      () const { return GetToken(USER_OPT_APARTMENT); }
 
 // -----------------------------------------------------------------------
 
@@ -324,19 +322,15 @@ void SvtUserOptions::SetFirstName (OUString const& sToken) { SetToken(USER_OPT_F
 void SvtUserOptions::SetLastName  (OUString const& sToken) { SetToken(USER_OPT_LASTNAME,  sToken); }
 void SvtUserOptions::SetID        (OUString const& sToken) { SetToken(USER_OPT_ID,        sToken); }
 void SvtUserOptions::SetStreet    (OUString const& sToken) { SetToken(USER_OPT_STREET,    sToken); }
-void SvtUserOptions::SetCity      (OUString const& sToken) { SetToken(USER_OPT_CITY,      sToken); }
 void SvtUserOptions::SetState     (OUString const& sToken) { SetToken(USER_OPT_STATE,     sToken); }
 void SvtUserOptions::SetZip       (OUString const& sToken) { SetToken(USER_OPT_ZIP,       sToken); }
 void SvtUserOptions::SetCountry   (OUString const& sToken) { SetToken(USER_OPT_COUNTRY,   sToken); }
 void SvtUserOptions::SetPosition  (OUString const& sToken) { SetToken(USER_OPT_POSITION,  sToken); }
 void SvtUserOptions::SetTitle     (OUString const& sToken) { SetToken(USER_OPT_TITLE,     sToken); }
 void SvtUserOptions::SetFax       (OUString const& sToken) { SetToken(USER_OPT_FAX,       sToken); }
-void SvtUserOptions::SetEmail     (OUString const& sToken) { SetToken(USER_OPT_EMAIL,     sToken); }
 void SvtUserOptions::SetTelephoneHome  (OUString const& sToken) { SetToken(USER_OPT_TELEPHONEHOME,  sToken); }
 void SvtUserOptions::SetTelephoneWork  (OUString const& sToken) { SetToken(USER_OPT_TELEPHONEWORK,  sToken); }
 void SvtUserOptions::SetCustomerNumber (OUString const& sToken) { SetToken(USER_OPT_CUSTOMERNUMBER, sToken); }
-void SvtUserOptions::SetFathersName    (OUString const& sToken) { SetToken(USER_OPT_FATHERSNAME,    sToken); }
-void SvtUserOptions::SetApartment      (OUString const& sToken) { SetToken(USER_OPT_APARTMENT,      sToken); }
 
 // -----------------------------------------------------------------------
 

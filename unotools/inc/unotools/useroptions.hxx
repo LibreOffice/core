@@ -74,8 +74,6 @@ public:
     rtl::OUString GetFax            () const;
     rtl::OUString GetEmail          () const;
     rtl::OUString GetCustomerNumber () const;
-    rtl::OUString GetFathersName    () const;
-    rtl::OUString GetApartment      () const;
 
     rtl::OUString GetFullName       () const;
 
@@ -85,7 +83,6 @@ public:
     void SetLastName       (rtl::OUString const&);
     void SetID             (rtl::OUString const&);
     void SetStreet         (rtl::OUString const&);
-    void SetCity           (rtl::OUString const&);
     void SetState          (rtl::OUString const&);
     void SetZip            (rtl::OUString const&);
     void SetCountry        (rtl::OUString const&);
@@ -94,10 +91,7 @@ public:
     void SetTelephoneHome  (rtl::OUString const&);
     void SetTelephoneWork  (rtl::OUString const&);
     void SetFax            (rtl::OUString const&);
-    void SetEmail          (rtl::OUString const&);
     void SetCustomerNumber (rtl::OUString const&);
-    void SetFathersName    (rtl::OUString const&);
-    void SetApartment      (rtl::OUString const&);
 
     sal_Bool      IsTokenReadonly (sal_uInt16 nToken) const;
     rtl::OUString GetToken (sal_uInt16 nToken) const;
