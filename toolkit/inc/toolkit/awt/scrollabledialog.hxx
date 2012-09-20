@@ -76,7 +76,6 @@ namespace toolkit
         virtual void    SetScrollTop( long Top );
         virtual long    GetScrollTop() { return mnScrollPos.Y() ; }
 
-        ScrollBarVisibility getScrollVisibility() { return maScrollVis; }
         void setScrollVisibility( ScrollBarVisibility rState );
         DECL_LINK( ScrollBarHdl, ScrollBar* );
         virtual void ResetScrollBars();
