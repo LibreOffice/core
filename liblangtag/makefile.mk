@@ -101,6 +101,14 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) && \
 			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install DESTDIR=$(my_destdir)
 
+.IF "$(SYSTEM_LIBXML)"!="YES" || "$(SYSTEM_GLIB)"!="YES"
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="LINUX"
+CONFIGURE_FLAGS+= \
+ LDFLAGS=-Wl,-z,origin\ -Wl,-rpath,\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
+.ELIF "$(OS)"=="SOLARIS"
+CONFIGURE_FLAGS+= LDFLAGS=-Wl,-R\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
+.END
+.END
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
