@@ -28,6 +28,7 @@
 
 #include <string.h>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
@@ -639,7 +640,7 @@ void ScRangeData::ValidateTabRefs()
 
 void ScRangeData::SetCode( ScTokenArray& rArr )
 {
-    ::std::auto_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
+    boost::scoped_ptr<ScTokenArray> pOldCode( pCode); // old pCode will be deleted
     pCode = new ScTokenArray( rArr );
     InitCode();
 }
