@@ -49,7 +49,6 @@ gb_OSDEFS := \
 
 
 gb_CFLAGS := \
-	-isysroot $(gb_SDKDIR) \
 	$(gb_CFLAGS_COMMON) \
 	-fPIC \
 	-fno-strict-aliasing \
@@ -59,7 +58,6 @@ gb_CFLAGS := \
 # "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
 # Feb 1, 2006:
 gb_CXXFLAGS := \
-	-isysroot $(gb_SDKDIR) \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
 	-Wno-ctor-dtor-privacy \

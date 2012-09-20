@@ -2740,19 +2740,19 @@ if test "$_os" = "Darwin"; then
                 AC_MSG_ERROR([Cannot guess gcc location for this SDK])
                 ;;
             esac
-            CC="${gccprefix}gcc-4.0 -mmacosx-version-min=$with_macosx_version_min_required"
-            CXX="${gccprefix}g++-4.0 -mmacosx-version-min=$with_macosx_version_min_required"
+            CC="${gccprefix}gcc-4.0 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="${gccprefix}g++-4.0 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             ;;
         10.6)
             # Is similar logic as above needed? Is it likely somebody
             # has both an older Xcode with the 10.6 SDK and a current
             # Xcode?
-            CC="gcc-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required"
-            CXX="g++-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required"
+            CC="gcc-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="g++-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             ;;
         10.7|10.8)
-            CC="`xcrun -find clang` $bitness -mmacosx-version-min=$with_macosx_version_min_required"
-            CXX="`xcrun -find clang++` $bitness -mmacosx-version-min=$with_macosx_version_min_required"
+            CC="`xcrun -find clang` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="`xcrun -find clang++` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             ;;
         esac
         AC_MSG_RESULT([$CC and $CXX])
