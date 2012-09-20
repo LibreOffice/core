@@ -405,13 +405,21 @@ void BackingWindow::prepareRecentFileMenu()
     maOpenButton.SetPopupMenu( mpRecentMenu );
 }
 
+namespace
+{
+static void lcl_SetBlackButtonTextColor( PushButton& rButton )
+{
+    AllSettings aSettings = rButton.GetSettings();
+    StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+    aStyleSettings.SetButtonTextColor( Color(COL_BLACK) );
+    aSettings.SetStyleSettings( aStyleSettings );
+    rButton.SetSettings( aSettings );
+}
+}
+
 void BackingWindow::initBackground()
 {
     SetBackground();
-
-    bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
     // select image set
     ImageContainerRes aRes( FwkResId( RES_BACKING_IMAGES ) );
@@ -456,6 +464,16 @@ void BackingWindow::initBackground()
     maOpenButton.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     maOpenButton.SetSelectHdl( LINK( this, BackingWindow, SelectHdl ) );
     maOpenButton.SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
+
+    // fdo#41440: force black text color, since the background image is white.
+    lcl_SetBlackButtonTextColor( maWriterButton );
+    lcl_SetBlackButtonTextColor( maCalcButton );
+    lcl_SetBlackButtonTextColor( maImpressButton );
+    lcl_SetBlackButtonTextColor( maOpenButton );
+    lcl_SetBlackButtonTextColor( maDrawButton );
+    lcl_SetBlackButtonTextColor( maDBButton );
+    lcl_SetBlackButtonTextColor( maMathButton );
+    lcl_SetBlackButtonTextColor( maTemplateButton );
 }
 
 void BackingWindow::initControls()
