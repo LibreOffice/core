@@ -314,9 +314,9 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         }
     }
 
-    // Vorhandensein von Tabulatoren anzeigen ... ist nicht mehr noetig
+    // Show existence of tabs "..." is not necessary anymore
     // pCurr->SetTabulation();
-    // Aus Sicherheitsgruenden lassen wir uns die Daten errechnen
+    // We calculate the data as a precaution
     // pTabPor->Height( pLast->Height() );
     // pTabPor->SetAscent( pLast->GetAscent() );
     return pTabPor;
@@ -375,13 +375,13 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 {
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
-    // Hier lassen wir uns nieder...
+    // Here we settle down ...
     Fix( static_cast<sal_uInt16>(rInf.X()) );
 
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
     const bool bTabOverflow = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVERFLOW);
 
-    // Die Mindestbreite eines Tabs ist immer mindestens ein Blank
+    // The minimal width of a tab is one blank at least.
     // #i37686# In compatibility mode, the minimum width
     // should be 1, even for non-left tab stops.
     sal_uInt16 nMinimumTabWidth = 1;
@@ -457,8 +457,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 
     if( bFull )
     {
-        // Wir muessen aufpassen, dass wir nicht endlos schleifen,
-        // wenn die Breite kleiner ist, als ein Blank ...
+        // We have to look for endless loops, if the width is smaller than one blank
         if( rInf.GetIdx() == rInf.GetLineStart() &&
             // #119175# TabStop should be forced to current
             // line if there is a fly reducing the line width:
@@ -479,8 +478,8 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     }
     else
     {
-        // Ein Kunstgriff mit Effekt: Die neuen Tabportions verhalten sich nun
-        // so, wie FlyFrms, die in der Zeile stehen - inklusive Adjustment !
+        // A trick with impact: The new Tabportions now behave like
+        // FlyFrms, located in the line - including adjustment !
         SetFixWidth( PrtWidth() );
         return sal_False;
     }
@@ -527,8 +526,8 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 
     if( POR_TABCENTER == nWhich )
     {
-        // zentrierte Tabs bereiten Probleme:
-        // Wir muessen den Anteil herausfinden, der noch auf die Zeile passt.
+        // centered tabs are problematic:
+        // We have to detect how much fits into the line.
         KSHORT nNewWidth = nPorWidth /2;
         if( nNewWidth > rInf.Width() - nRight )
             nNewWidth = nPorWidth - (rInf.Width() - nRight);
@@ -543,14 +542,13 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
         const KSHORT nAdjDiff = nDiffWidth - nPorWidth;
         if( nAdjDiff > GetFixWidth() )
             PrtWidth( nAdjDiff );
-        // Nicht erschrecken: wir muessen rInf weiterschieben.
-        // Immerhin waren wir als Rechtstab bislang nur ein Blank breit.
-        // Da wir uns jetzt aufgespannt haben, muss der Differenzbetrag
-        // auf rInf.X() addiert werden !
+        // Dont be afraid: we have to move rInf further.
+        // The right-tab till now only had the width of one blank.
+        // Now that we stretched, the difference had to be added to rInf.X() !
         rInf.X( rInf.X() + PrtWidth() - nOldWidth );
     }
     SetFixWidth( PrtWidth() );
-    // letzte Werte zuruecksetzen
+    // reset last values
     rInf.SetLastTab(0);
     if( POR_TABDECIMAL == nWhich )
         rInf.SetTabDecimal(0);
@@ -567,7 +565,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
 #if OSL_DEBUG_LEVEL > 1
-    // Wir wollen uns die Fixbreite anzeigen
+    // We want to view the fixed width
     if( rInf.OnWin() && OPTDBG( rInf ) &&
         !rInf.GetOpt().IsPagePreview() && \
         !rInf.GetOpt().IsReadonly() && \
@@ -605,45 +603,45 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( rInf.OnWin() && pPortion && !pPortion->Width() )
         pPortion->PrePaint( rInf, this );
 
-    // Darstellung von Sonderzeichen
+    // display special characters
     if( rInf.OnWin() && rInf.GetOpt().IsTab() )
     {
-        // gefuellte Tabs werden grau hinterlegt.
+        // filled tabs are shaded in gray
         if( IsFilled() )
             rInf.DrawViewOpt( *this, POR_TAB );
         else
             rInf.DrawTab( *this );
     }
 
-    // 6842: Tabs sollen auf einmal wieder unterstrichen werden.
+    // 6842: Tabs should be underlined at once.
     if( rInf.GetFont()->IsPaintBlank() )
     {
-        // Tabs mit Fuellung
+        // tabs with filling / filled tabs
         UniString aTxt = rtl::OUString(' ');
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
         // robust:
         if( nCharWidth )
         {
-            // 6864: immer mit Kerning, auch auf dem Drucker!
+            // 6864: always with kerning, also on printer!
             KSHORT nChar = Width() / nCharWidth;
             rInf.DrawText( aTxt.Fill( nChar, ' ' ), *this, 0, nChar, sal_True );
         }
     }
 
-    // Ausgabe von Fuellzeichen
+    // Display fill characters
     if( IsFilled() )
     {
-        // Tabs mit Fuellung
+        // tabs with filling / filled tabs
         UniString aTxt = rtl::OUString(cFill);
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
         OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
         // robust:
         if( nCharWidth )
         {
-            // 6864: immer mit Kerning, auch auf dem Drucker!
+            // 6864: always with kerning, also on printer!
             KSHORT nChar = Width() / nCharWidth;
             if ( cFill == '_' )
-                ++nChar; // damit keine Luecken entstehen (Bug 13430)
+                ++nChar; // to avoid gaps (Bug 13430)
             rInf.DrawText( aTxt.Fill( nChar, cFill ), *this, 0, nChar, sal_True );
         }
     }
