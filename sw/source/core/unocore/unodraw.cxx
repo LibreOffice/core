@@ -27,17 +27,13 @@
  ************************************************************************/
 
 
-#include <swtypes.hxx>
 #include <cmdid.h>
 
-#include <unomid.h>
 #include <unodraw.hxx>
 #include <unocoll.hxx>
 #include <unoframe.hxx>
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
-#include <unoprnms.hxx>
-#include <editeng/unoprnms.hxx>
 #include <svx/svditer.hxx>
 #include <swunohelper.hxx>
 #include <doc.hxx>
@@ -48,9 +44,7 @@
 #include <docsh.hxx>
 #include <unomap.hxx>
 #include <unoport.hxx>
-#include <unocrsr.hxx>
 #include <TextCursorHelper.hxx>
-#include <swundo.hxx>
 #include <dflyobj.hxx>
 #include <ndtxt.hxx>
 #include <svx/svdview.hxx>
@@ -58,7 +52,6 @@
 #include <dcontact.hxx>
 #include <svx/fmglob.hxx>
 #include <fmtornt.hxx>
-#include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <rootfrm.hxx>
@@ -66,26 +59,15 @@
 #include <editeng/ulspitem.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/makesequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <svx/scene3d.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
-#include <basegfx/numeric/ftools.hxx>
-#include <algorithm>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
-#include <vcl/svapp.hxx>
-#include <list>
-#include <iterator>
 #include <switerator.hxx>
 
 using ::rtl::OUString;
