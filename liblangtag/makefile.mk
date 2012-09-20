@@ -37,6 +37,7 @@ PATCH_FILES=liblangtag-0.2-0001-Fix-a-memory-leak.patch
 PATCH_FILES+=liblangtag-0.2-0002-Fix-invalid-memory-access.patch
 PATCH_FILES+=liblangtag-0.2-configure.patch
 PATCH_FILES+=liblangtag-0.2-datadir.patch
+PATCH_FILES+=liblangtag-0.2-xmlCleanupParser.patch
 
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
