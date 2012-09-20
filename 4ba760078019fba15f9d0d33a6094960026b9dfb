@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn///2w\u003d",
+        "filename": "sw/source/core/text/widorp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-20T18:27:09Z",
+      "side": 0,
+      "message": "i bet I.A. means Im Allgemeinen",
+      "revId": "4ba760078019fba15f9d0d33a6094960026b9dfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAOn///3A\u003d",
+        "filename": "sw/source/core/text/widorp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-20T18:27:09Z",
+      "side": 1,
+      "message": "ancestor is a bit ambiguous here, predecessor is better",
+      "revId": "32f378ca80733445606d410e971cf95447ce2330",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn///28\u003d",
+        "filename": "sw/source/core/text/widorp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-20T18:27:09Z",
+      "side": 1,
+      "message": "grammatically questionable",
+      "revId": "32f378ca80733445606d410e971cf95447ce2330",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAOn///24\u003d",
+        "filename": "sw/source/core/text/widorp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-09-20T18:27:09Z",
+      "side": 1,
+      "message": "s/splited/split/",
+      "revId": "32f378ca80733445606d410e971cf95447ce2330",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
