@@ -2473,10 +2473,6 @@ void ChartView::createShapes()
 
         uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
 
-        //------------ create some titles
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr<VTitle> apVTitle(0);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
         bool bAutoPositionDummy = true;
 
         //------------ create main title shape
