@@ -80,16 +80,11 @@ public:
     // set the address token
     void SetCompany        (rtl::OUString const&);
     void SetFirstName      (rtl::OUString const&);
-    void SetLastName       (rtl::OUString const&);
     void SetID             (rtl::OUString const&);
-    void SetStreet         (rtl::OUString const&);
     void SetState          (rtl::OUString const&);
-    void SetZip            (rtl::OUString const&);
     void SetCountry        (rtl::OUString const&);
     void SetPosition       (rtl::OUString const&);
     void SetTitle          (rtl::OUString const&);
-    void SetTelephoneHome  (rtl::OUString const&);
-    void SetTelephoneWork  (rtl::OUString const&);
     void SetFax            (rtl::OUString const&);
     void SetCustomerNumber (rtl::OUString const&);
 
