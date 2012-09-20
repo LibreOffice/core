@@ -445,7 +445,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         case NS_ooxml::LN_CT_Style_styleId:
             m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = sValue;
-            fprintf( stderr, "sStyleIdentifierI: %s\n", OUStringToOString( m_pImpl->m_pCurrentEntry->sStyleIdentifierI, RTL_TEXTENCODING_UTF8 ).getStr( ) );
         break;
         case NS_ooxml::LN_CT_TblWidth_w:
             dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_w( nIntValue );
