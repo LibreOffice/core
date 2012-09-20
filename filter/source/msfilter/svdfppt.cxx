@@ -2415,7 +2415,6 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 rOutliner.SetStyleSheet( 0, pSheet );
         }
         rOutliner.SetVertical( pTextObj->GetVertical() );
-        sal_Int16 nLastStartNumbering = -1;
         const PPTParagraphObj* pPreviousParagraph = NULL;
         for ( PPTParagraphObj* pPara = pTextObj->First(); pPara; pPara = pTextObj->Next() )
         {
