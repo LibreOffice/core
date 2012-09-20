@@ -94,10 +94,10 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
 
 /* BP 18.6.93: Widows.
  * In contrast to the first implementation the Widows are not calculated
- * in advance but detected when formating the splitted Follow.
+ * in advance but detected when formating the split Follow.
  * In Master the Widows-calculation is dropped completely
  * (nWidows is manipulated). If the Follow detects that the
- * Widows rule applies it sends a Prepare to its ancestor.
+ * Widows rule applies it sends a Prepare to its predecessor.
  * A special problem is when the Widow rule applies but in Master
  * there are some lines available.
  *
@@ -113,9 +113,9 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  * One difficulty with Widows and different formats between
  * Master- and Follow-Frame:
  * Example: If the first column is 3cm and the second is 4cm and
- * Widows is set to 3. The decision if the Widows rule matches can not
+ * Widows is set to 3, the decision if the Widows rule matches can not
  * be done until the Follow is formated. Unfortunately this is crucial
- * sto decide if the whole paragraph goes to the next page or not.
+ * to decide if the whole paragraph goes to the next page or not.
  */
 
 sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
@@ -167,9 +167,9 @@ sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
             // grow the requested area.
             nHeight += pFrm->GrowTst( LONG_MAX );
 
-            // The Grow() returnes the height, that the Upper of the TxtFrm
-            // would grow the TxtFrm.
-            // The TxtFrm itself can grow as much as it want.
+            // The Grow() returns the height by which the Upper of the TxtFrm
+            // would let the TxtFrm grow.
+            // The TxtFrm itself can grow as much as it wants.
             bFit = nHeight >= nLineHeight;
         }
     }
@@ -188,7 +188,7 @@ sal_Bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
     SWAP_IF_SWAPPED( pFrm )
 
     // bKeep is stronger than IsBreakNow()
-    // Is enough space ?
+    // Is there enough space ?
     if( bKeep || IsInside( rLine ) )
         bBreak = sal_False;
     else
@@ -255,13 +255,13 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
 
     if( bKeep )
     {
-        // 5652: If pararagraph should not be splited but is larger than
+        // 5652: If pararagraph should not be split but is larger than
         // the page, then bKeep is overruled.
         if( bChkKeep && !pFrm->GetPrev() && !pFrm->IsInFtn() &&
             pFrm->IsMoveable() &&
             ( !pFrm->IsInSct() || pFrm->FindSctFrm()->MoveAllowed(pFrm) ) )
             bKeep = sal_False;
-        // Even if Keep is set, the Orphans has to be regarded
+        // Even if Keep is set, Orphans has to be respected.
         // e.g. if there are chained frames where a Follow in the last frame
         // receives a Keep, because it is not (forward) movable -
         // nevertheless the paragraph can request lines from the Master
@@ -360,8 +360,8 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
             else
                 break;
         }
-        // Normaly Orphans are not taken into account for HasToFit.
-        // But if Dummy-Lines are concerned and they violate the orphans rules
+        // Usually Orphans are not taken into account for HasToFit.
+        // But if Dummy-Lines are concerned and the Orphans rule is violated
         // we make an exception: We leave behind one Dummyline and take
         // the whole text to the next page/column.
         if( rLine.GetLineNr() <= nOldOrphans &&
@@ -383,10 +383,10 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
  *                  WidowsAndOrphans::FindWidows()
  *************************************************************************/
 
-/*  FindWidows positiones the SwTxtMargin of the Master to the line where to
+/*  FindWidows positions the SwTxtMargin of the Master to the line where to
  *  break by examining and formatting the Follow.
  *  Returns sal_True if the Widows-rule matches, that means that the
- *  paragraph should be not splitted (keep) !
+ *  paragraph should not be split (keep) !
  */
 
 sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
@@ -433,13 +433,13 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
         // 8575: Follow to Master I
         // If the Follow *grows*, there is the chance for the Master to
         // receive lines, that it was forced to hand over to the Follow lately:
-        // Prepare(Need); This query below of nChg!
+        // Prepare(Need); check that below nChg!
         // (0W, 2O, 2M, 2F) + 1F = 3M, 2F
         if( rLine.GetLineNr() > nWidLines && pFrame->IsJustWidow() )
         {
-            // Wenn der Master gelockt ist, so hat er vermutlich gerade erst
-            // eine Zeile an uns abgegeben, diese geben nicht zurueck, nur
-            // weil bei uns daraus mehrere geworden sind (z.B. durch Rahmen).
+            // If the Master is locked, it has probably just donated a line
+            // to us, we don't return that just because we turned it into
+            // multiple lines (e.g. via frames).
             if( !pMaster->IsLocked() && pMaster->GetUpper() )
             {
                 const SwTwips nTmpRstHeight = (pMaster->Frm().*fnRect->fnBottomDist)
@@ -549,7 +549,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     // Check the Widows-rule
     if( !nWidLines && !pFrm->IsFollow() )
     {
-        // I.A. We only have to check for Widows if we are a Follow.
+        // Usually we only have to check for Widows if we are a Follow.
         // On WouldFit the rule has to be checked for the Master too,
         // because we are just in the middle of calculating the break.
         // In Ctor of WidowsAndOrphans the nWidLines are only calced for
@@ -558,7 +558,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
         nWidLines = rSet.GetWidows().GetValue();
     }
 
-    // Remain after Orphans/Initials enough lines for Widows?
+    // After Orphans/Initials, do enough lines remain for Widows?
     // #111937#: If we are currently doing a test formatting, we may not
     // consider the widows rule for two reasons:
     // 1. The columns may have different widths.
