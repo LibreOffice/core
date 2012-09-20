@@ -311,35 +311,6 @@ sub create_media_table
             }
         }
     }
-    elsif ( $installer::globals::one_cab_file )
-    {
-        my %media = ();
-        $diskid++;
-
-        my $maximumfile = $#{$filesref};
-
-        $media{'DiskId'} = get_media_diskid($diskid);
-        $media{'LastSequence'} = $maximumfile + 1; # This works also for unsorted file collector
-        $media{'DiskPrompt'} = get_media_diskprompt();
-        $media{'Cabinet'} = generate_cab_filename($allvariables);
-        $media{'VolumeLabel'} = get_media_volumelabel();
-        $media{'Source'} = get_media_source();
-
-        my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                    . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
-
-        push(@mediatable, $oneline);
-
-        # Saving the cabinet file name in the file collector
-
-        $media{'Cabinet'} =~ s/^\s*\#//;    # removing leading hash
-
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-        {
-            my $onefile = ${$filesref}[$i];
-            $onefile->{'cabinet'} = $media{'Cabinet'};
-        }
-    }
     else
     {
         installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "create_media_table");

@@ -230,7 +230,6 @@ BEGIN
     %usedtreeconditions = ();
     %moduledestination = ();
 
-    $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
     $cabfilecompressionlevel = 21; # Using LZX compression, possible values are: 15 | 16 | ... | 21 (best compression)
     $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
