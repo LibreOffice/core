@@ -32,6 +32,7 @@
 
 #include <string.h>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
@@ -110,18 +111,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
-    if( !pCode->GetCodeError() )
-    {
-        pCode->Reset();
-        FormulaToken* p = pCode->GetNextReference();
-        if( p )// genau eine Referenz als erstes
-        {
-            if( p->GetType() == svSingleRef )
-                eType = eType | RT_ABSPOS;
-            else
-                eType = eType | RT_ABSAREA;
-        }
-    }
+    InitCode();
 }
 
 ScRangeData::ScRangeData( ScDocument* pDok,
@@ -680,6 +670,29 @@ void ScRangeData::ValidateTabRefs()
                 if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
                     rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab - nMove );
             }
+        }
+    }
+}
+
+void ScRangeData::SetCode( ScTokenArray& rArr )
+{
+    boost::scoped_ptr<ScTokenArray> pOldCode( pCode); // old pCode will be deleted
+    pCode = new ScTokenArray( rArr );
+    InitCode();
+}
+
+void ScRangeData::InitCode()
+{
+    if( !pCode->GetCodeError() )
+    {
+        pCode->Reset();
+        FormulaToken* p = pCode->GetNextReference();
+        if( p )   // exact one reference at first
+        {
+            if( p->GetType() == svSingleRef )
+                eType = eType | RT_ABSPOS;
+            else
+                eType = eType | RT_ABSAREA;
         }
     }
 }
