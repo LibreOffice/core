@@ -45,8 +45,8 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-const char* cURLInsertColumns = ".uno:DataSourceBrowser/InsertColumns"; //data into text
-const char* cURLDocDataSource = ".uno:DataSourceBrowser/DocumentDataSource";
+static const char* cURLInsertColumns = ".uno:DataSourceBrowser/InsertColumns"; //data into text
+static const char* cURLDocDataSource = ".uno:DataSourceBrowser/DocumentDataSource";
 
 //------------------------------------------------------------------------
 
