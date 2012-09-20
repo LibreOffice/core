@@ -170,7 +170,7 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
 
     OUString aAdapterService( getSubdata( 0, aDelim, aFilterUserData ) );
     //Import/ExportService
-    pFilter->maXSLTTransformerImpl = getSubdata( 1, aDelim, aFilterUserData );
+    pFilter->mbNeedsXSLT2 = getSubdata( 1, aDelim, aFilterUserData ).toBoolean();
     pFilter->maImportService = getSubdata( 2, aDelim, aFilterUserData );
     pFilter->maExportService = getSubdata( 3, aDelim, aFilterUserData );
     pFilter->maImportXSLT = getSubdata( 4, aDelim, aFilterUserData );

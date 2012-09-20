@@ -1152,7 +1152,7 @@ void XMLFilterSettingsDialog::initFilterList()
                     continue;
 
                 // get filter information from userdata
-                pTempFilter->maXSLTTransformerImpl = aUserData[1];
+                pTempFilter->mbNeedsXSLT2 = aUserData[1].toBoolean();
                 pTempFilter->maImportService = aUserData[2];
                 pTempFilter->maExportService = aUserData[3];
                 pTempFilter->maImportXSLT = aUserData[4];
@@ -1572,7 +1572,8 @@ filter_info_impl::filter_info_impl()
 :   maFlags(0x00080040),
     maFileFormatVersion(0),
     mnDocumentIconID(0),
-    mbReadonly(sal_False)
+    mbReadonly(sal_False),
+    mbNeedsXSLT2(sal_False)
 {
 }
 
@@ -1597,7 +1598,7 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maFileFormatVersion( rInfo.maFileFormatVersion ),
     mnDocumentIconID( rInfo.mnDocumentIconID ),
     mbReadonly( rInfo.mbReadonly ),
-    maXSLTTransformerImpl( rInfo.maXSLTTransformerImpl )
+    mbNeedsXSLT2( rInfo.mbNeedsXSLT2 )
 {
 }
 
@@ -1621,7 +1622,7 @@ int filter_info_impl::operator==( const filter_info_impl& r ) const
         maImportTemplate != r.maImportTemplate ||
         maFlags != r.maFlags ||
         maFileFormatVersion != r.maFileFormatVersion ||
-        maXSLTTransformerImpl != r.maXSLTTransformerImpl
+        mbNeedsXSLT2 != r.mbNeedsXSLT2
         )
         return false;
 
@@ -1635,7 +1636,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     Sequence< OUString > aUserData(8);
 
     aUserData[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" ) );
-    aUserData[1] = maXSLTTransformerImpl;
+    aUserData[1] = OUString::valueOf( mbNeedsXSLT2 );
     aUserData[2] = maImportService;
     aUserData[3] = maExportService;
     aUserData[4] = maImportXSLT;

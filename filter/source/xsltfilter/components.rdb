@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <components xmlns="http://openoffice.org/2010/uno-components">
     <component loader="com.sun.star.loader.Java2" uri="./XSLTFilter.jar">
-        <implementation name="XSLTransformer">
-            <service name="com.sun.star.comp.JAXTHelper"/>
+        <implementation name="com.sun.star.comp.xsltfilter.XSLTransformer">
+            <service name="com.sun.star.xml.xslt.XSLT2Transformer"/>
         </implementation>
     </component>
 </components>

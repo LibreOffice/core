@@ -183,7 +183,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 sValue += sComma;
                 sValue += sXSLTFilterService;
                 sValue += sDelim;
-                sValue += pFilter->maXSLTTransformerImpl;
+                sValue += OUString::valueOf( pFilter->mbNeedsXSLT2 );
                 sValue += sDelim;
 
                 const application_info_impl* pAppInfo = getApplicationInfo( pFilter->maExportService );

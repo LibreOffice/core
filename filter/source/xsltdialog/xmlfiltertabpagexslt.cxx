@@ -59,9 +59,8 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     maEDImportTemplate( this, ResId( ED_XML_IMPORT_TEMPLATE, rResMgr ), INET_PROT_FILE ),
     maPBImportTemplate( this, ResId( PB_XML_IMPORT_TEMPLATE_BROWSE, rResMgr ) ),
 
-    maFTTransformationService( this, ResId (FT_XML_TRANSFORM_SERVICE, rResMgr ) ),
-    maRBTransformationServiceLibXSLT( this, ResId (RB_XML_TRANSFORM_SERVICE_LIBXSLT, rResMgr ) ),
-    maRBTransformationServiceSaxonJ( this, ResId (RB_XML_TRANSFORM_SERVICE_SAXON_J, rResMgr ) ),
+    maFTNeedsXSLT2( this, ResId (FT_XML_NEEDS_XSLT2, rResMgr ) ),
+    maCBNeedsXSLT2( this, ResId (CB_XML_NEEDS_XSLT2, rResMgr ) ),
 
     sHTTPSchema( RTL_CONSTASCII_USTRINGPARAM( "http://" ) ),
     sSHTTPSchema( RTL_CONSTASCII_USTRINGPARAM( "shttp://" ) ),
@@ -91,8 +90,7 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     maEDExportXSLT.SetHelpId( HID_XML_FILTER_EXPORT_XSLT );
     maEDImportXSLT.SetHelpId( HID_XML_FILTER_IMPORT_XSLT );
     maEDImportTemplate.SetHelpId( HID_XML_FILTER_IMPORT_TEMPLATE );
-    maRBTransformationServiceLibXSLT.SetHelpId( HID_XML_FILTER_TRANSFORM_SERVICE_LIBXSLT );
-    maRBTransformationServiceSaxonJ.SetHelpId( HID_XML_FILTER_TRANSFORM_SERVICE_SAXON_J );
+    maCBNeedsXSLT2.SetHelpId( HID_XML_FILTER_NEEDS_XSLT2 );
 }
 
 XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()
@@ -108,10 +106,7 @@ bool XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
         pInfo->maExportXSLT = GetURL( maEDExportXSLT );
         pInfo->maImportXSLT = GetURL( maEDImportXSLT );
         pInfo->maImportTemplate = GetURL( maEDImportTemplate );
-        pInfo->maXSLTTransformerImpl
-                = maRBTransformationServiceSaxonJ.IsChecked() ? OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.JAXTHelper" ))
-                        : OUString(RTL_CONSTASCII_USTRINGPARAM( "" ));
+        pInfo->mbNeedsXSLT2 = maCBNeedsXSLT2.IsChecked();
     }
 
     return true;
@@ -127,12 +122,7 @@ void XMLFilterTabPageXSLT::SetInfo(const filter_info_impl* pInfo)
         SetURL( maEDExportXSLT, pInfo->maExportXSLT );
         SetURL( maEDImportXSLT, pInfo->maImportXSLT );
         SetURL( maEDImportTemplate, pInfo->maImportTemplate );
-        if (pInfo->maXSLTTransformerImpl.equals(OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.JAXTHelper" )))) {
-            maRBTransformationServiceSaxonJ.Check();
-        } else {
-            maRBTransformationServiceLibXSLT.Check();
-        }
+        maCBNeedsXSLT2.Check( pInfo->mbNeedsXSLT2 );
     }
 }
 

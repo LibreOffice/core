@@ -68,6 +68,7 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.xml.xslt.XXSLTTransformer;
 
 //Uno to java Adaptor
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
@@ -81,8 +82,8 @@ import net.sf.saxon.FeatureKeys;
  * component on demand (__getServiceFactory()).
  */
 public class XSLTransformer
-        implements XTypeProvider, XServiceName, XServiceInfo, XActiveDataSink,
-        XActiveDataSource, XActiveDataControl, XInitialization, URIResolver, EntityResolver {
+        implements XTypeProvider, XServiceName, XServiceInfo, XXSLTTransformer,
+        URIResolver, EntityResolver {
 
     /**
      * This component provides java based XSL transformations
@@ -125,7 +126,7 @@ public class XSLTransformer
         svcfactory = msf;
     }
 
-    public void initialize(Object[] values) throws com.sun.star.uno.Exception {
+    public void initialize(Object[] args) throws com.sun.star.uno.Exception {
         // some configurable debugging
         String statsfilepath = null;
         if ((statsfilepath = System.getProperty(STATSPROP)) != null) {
@@ -138,6 +139,8 @@ public class XSLTransformer
                 System.err.println("   output disabled");
             }
         }
+
+        Object[] values = (Object[]) args[0];
 
         // reading the values
         NamedValue nv = null;
@@ -437,7 +440,7 @@ public class XSLTransformer
             }
         }
     }    // --- component management interfaces... ---
-    private final static String _serviceName = "com.sun.star.comp.JAXTHelper";
+    private final static String _serviceName = "com.sun.star.xml.xslt.XSLT2Transformer";
 
     // Implement methods from interface XTypeProvider
     public byte[] getImplementationId() {
@@ -487,7 +490,7 @@ public class XSLTransformer
     public static XSingleServiceFactory __getServiceFactory(
             String implName, XMultiServiceFactory multiFactory, XRegistryKey regKey) {
         XSingleServiceFactory xSingleServiceFactory = null;
-        if (implName.indexOf("XSLTransformer") != -1) {
+        if (implName.equals(XSLTransformer.class.getName())) {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(XSLTransformer.class,
                     _serviceName, multiFactory, regKey);
         }

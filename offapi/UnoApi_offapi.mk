@@ -326,6 +326,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	Parser \
     Writer \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xslt,\
+	XSLTTransformer \
+	XSLT2Transformer \
+))
 
 
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star,\
@@ -4272,6 +4276,11 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xpath,\
 	XXPathExtension \
 	XXPathObject \
 ))
+
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xslt,\
+	XXSLTTransformer \
+))
+
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xsd,\
 	DataTypeClass \
 	WhiteSpaceTreatment \
