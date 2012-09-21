@@ -1104,6 +1104,10 @@ void OResultSet::fillRowData()
     m_aQueryHelper.setAddressbook( aStr );
 
     sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection);
+    if ( rv == -1 ) {
+        m_pStatement->getOwnConnection()->throwSQLException( STR_ERR_EXECUTING_QUERY, *this );
+    }
+
     if (m_aQueryHelper.hadError())
     {
         m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
