@@ -1,3 +1,4 @@
+// -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 /*
  * This file is part of the LibreOffice project.
  *
@@ -31,7 +32,22 @@ import com.sun.star.uno.RuntimeException;
 */
 public class RegistryServiceFactory {
     static {
-        System.loadLibrary("juh");
+        if (System.getProperty("java.vendor") == "The Android Project") {
+            // See corresponding code in
+            // javaunohelper/com/sun/star/comp/helper/Bootstrap.java for more
+            // comments.
+
+            boolean disable_dynloading = false;
+            try {
+                System.loadLibrary("lo-bootstrap");
+            } catch (UnsatisfiedLinkError e) {
+                disable_dynloading = true;
+            }
+
+            if (!disable_dynloading)
+                System.loadLibrary("juh");
+        } else
+            System.loadLibrary("juh");
     }
 
     private static native Object createRegistryServiceFactory(
@@ -157,3 +173,4 @@ public class RegistryServiceFactory {
     }
 }
 
+// vim:set shiftwidth=4 softtabstop=4 expandtab:
