@@ -1637,8 +1637,7 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     {
                         Reference< XInputStream > aTempInput = aTempCont.openStream();
                         bTransactStarted = true;
-                        aOriginalContent.setPropertyValue( ::rtl::OUString("Size"),
-                                                            uno::makeAny( (sal_Int64)0 ) );
+                        aOriginalContent.setPropertyValue( "Size", uno::makeAny( (sal_Int64)0 ) );
                         aOriginalContent.writeStream( aTempInput, bOverWrite );
                         bResult = true;
                     }

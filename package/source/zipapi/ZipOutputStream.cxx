@@ -103,7 +103,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
         m_pCurrentStream = pStream;
     }
     sal_Int32 nLOCLength = writeLOC(rEntry);
-    rEntry.nOffset = static_cast < sal_Int32 > (aChucker.GetPosition()) - nLOCLength;
+    rEntry.nOffset = aChucker.GetPosition() - nLOCLength;
     aZipList.push_back( &rEntry );
     pCurrentEntry = &rEntry;
 }
@@ -258,6 +258,7 @@ void ZipOutputStream::doDeflate()
                 mnDigested = mnDigested + static_cast< sal_Int16 >( nEat );
             }
 
+            // FIXME64: uno::Sequence not 64bit safe.
             uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
             aChucker.WriteBytes( aEncryptionBuffer );
@@ -275,6 +276,7 @@ void ZipOutputStream::doDeflate()
 
     if ( aDeflater.finished() && bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
     {
+        // FIXME64: sequence not 64bit safe.
         uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
         if ( aEncryptionBuffer.getLength() )
         {
@@ -300,6 +302,18 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     aChucker << nOffset;
     aChucker << static_cast < sal_Int16 > ( 0 );
 }
+
+static sal_uInt32 getTruncated( sal_Int64 nNum, bool *pIsTruncated )
+{
+    if( nNum >= 0xffffffff )
+    {
+        *pIsTruncated = true;
+        return 0xffffffff;
+    }
+    else
+        return static_cast< sal_uInt32 >( nNum );
+}
+
 void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
@@ -325,17 +339,28 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
         aChucker << rEntry.nFlag;
         aChucker << rEntry.nMethod;
     }
+    bool bWrite64Header = false;
+
     aChucker << static_cast < sal_uInt32> ( rEntry.nTime );
     aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
-    aChucker << rEntry.nCompressedSize;
-    aChucker << rEntry.nSize;
+    aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
+    aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
     aChucker << nNameLength;
     aChucker << static_cast < sal_Int16> (0);
     aChucker << static_cast < sal_Int16> (0);
     aChucker << static_cast < sal_Int16> (0);
     aChucker << static_cast < sal_Int16> (0);
     aChucker << static_cast < sal_Int32> (0);
-    aChucker << rEntry.nOffset;
+    aChucker << getTruncated( rEntry.nOffset, &bWrite64Header );
+
+    if( bWrite64Header )
+    {
+        // FIXME64: need to append a ZIP64 header instead of throwing
+        // We're about to silently loose people's data - which they are
+        // unlikely to appreciate so fail instead:
+        throw IOException( "File contains streams that are too large.",
+                           uno::Reference< XInterface >() );
+    }
 
     Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
     aChucker.WriteBytes( aSequence );
@@ -343,10 +368,21 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
 void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
+    bool bWrite64Header = false;
+
     aChucker << EXTSIG;
     aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
-    aChucker << rEntry.nCompressedSize;
-    aChucker << rEntry.nSize;
+    aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
+    aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
+
+    if( bWrite64Header )
+    {
+        // FIXME64: need to append a ZIP64 header instead of throwing
+        // We're about to silently loose people's data - which they are
+        // unlikely to appreciate so fail instead:
+        throw IOException( "File contains streams that are too large.",
+                           uno::Reference< XInterface >() );
+    }
 }
 
 sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
@@ -375,6 +411,8 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
         aChucker << rEntry.nMethod;
     }
 
+    bool bWrite64Header = false;
+
     aChucker << static_cast < sal_uInt32 > (rEntry.nTime);
     if ((rEntry.nFlag & 8) == 8 )
     {
@@ -385,11 +423,20 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     else
     {
         aChucker << static_cast < sal_uInt32 > (rEntry.nCrc);
-        aChucker << rEntry.nCompressedSize;
-        aChucker << rEntry.nSize;
+        aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
+        aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
     }
     aChucker << nNameLength;
     aChucker << static_cast < sal_Int16 > (0);
+
+    if( bWrite64Header )
+    {
+        // FIXME64: need to append a ZIP64 header instead of throwing
+        // We're about to silently loose people's data - which they are
+        // unlikely to appreciate so fail instead:
+        throw IOException( "File contains streams that are too large.",
+                           uno::Reference< XInterface >() );
+    }
 
     Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
     aChucker.WriteBytes( aSequence );

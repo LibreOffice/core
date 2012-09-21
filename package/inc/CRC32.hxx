@@ -33,7 +33,7 @@ public:
     CRC32();
     ~CRC32();
 
-    sal_Int32 SAL_CALL updateStream (::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > & xStream)
+    sal_Int64 SAL_CALL updateStream (::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > & xStream)
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL updateSegment(const ::com::sun::star::uno::Sequence< sal_Int8 > &b, sal_Int32 off, sal_Int32 len)
         throw(::com::sun::star::uno::RuntimeException);

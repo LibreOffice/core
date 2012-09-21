@@ -289,7 +289,9 @@ void ZipPackage::parseManifest()
                                         if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
                                         {
                                             uno::Sequence < sal_Int8 > aSequence;
-                                            sal_Int32 nCount = 0, nSize = 0, nDigestAlg = 0, nEncryptionAlg = 0, nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
+                                            sal_Int64 nSize = 0;
+                                            sal_Int32 nCount = 0, nDigestAlg = 0, nEncryptionAlg = 0;
+                                            sal_Int32 nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
 
                                             pStream->SetToBeEncrypted ( sal_True );
 
@@ -984,7 +986,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     sal_Int32 nBufferLength = m_pRootFolder->GetMediaType().getLength();
     OString sMediaType = OUStringToOString( m_pRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
     uno::Sequence< sal_Int8 > aType( ( sal_Int8* )sMediaType.getStr(),
-                                nBufferLength );
+                                     nBufferLength );
 
 
     pEntry->sPath = sMime;
@@ -1025,7 +1027,8 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
 
         pEntry->sPath = "META-INF/manifest.xml";
         pEntry->nMethod = DEFLATED;
-        pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
+        pEntry->nCrc = -1;
+        pEntry->nSize = pEntry->nCompressedSize = -1;
         pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
         // Convert vector into a uno::Sequence
@@ -1070,7 +1073,8 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
 
     pEntry->sPath = "[Content_Types].xml";
     pEntry->nMethod = DEFLATED;
-    pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
+    pEntry->nCrc = -1;
+    pEntry->nSize = pEntry->nCompressedSize = -1;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     // Convert vector into a uno::Sequence

@@ -93,9 +93,9 @@ protected:
 
     sal_Bool checkSizeAndCRC( const ZipEntry& aEntry );
 
-    sal_Int32 getCRC( sal_Int32 nOffset, sal_Int32 nSize );
+    sal_Int32 getCRC( sal_Int64 nOffset, sal_Int64 nSize );
 
-    void getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_Int32 *nSize, sal_Int32 *nCRC );
+    void getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_Int64 *nSize, sal_Int32 *nCRC );
 
 public:
 
@@ -136,7 +136,7 @@ public:
             bool bEncrypt );
 
     static void StaticFillHeader ( const ::rtl::Reference < EncryptionData > & rData,
-                                    sal_Int32 nSize,
+                                    sal_Int64 nSize,
                                     const ::rtl::OUString& aMediaType,
                                     sal_Int8 * & pHeader );
 

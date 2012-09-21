@@ -428,7 +428,7 @@ public class TestHelper  {
             {
                 // get "MediaType" and "Size" properties and control there values
                 String sPropMediaType = AnyConverter.toString( xPropSet.getPropertyValue( "MediaType" ) );
-                int nPropSize = AnyConverter.toInt( xPropSet.getPropertyValue( "Size" ) );
+                long nPropSize = AnyConverter.toLong( xPropSet.getPropertyValue( "Size" ) );
 
                 bOk = true;
                 if ( !sPropMediaType.equals( sMediaType ) )

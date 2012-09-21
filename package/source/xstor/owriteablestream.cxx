@@ -914,7 +914,7 @@ void OWriteStream_Impl::Commit()
         {
             if ( m_pAntiImpl && !m_bHasInsertedStreamOptimization && m_pAntiImpl->m_xSeekable.is() )
             {
-                m_aProps[nInd].Value <<= ((sal_Int32)m_pAntiImpl->m_xSeekable->getLength());
+                m_aProps[nInd].Value <<= m_pAntiImpl->m_xSeekable->getLength();
                 xPropertySet->setPropertyValue( m_aProps[nInd].Name, m_aProps[nInd].Value );
             }
         }
@@ -1136,18 +1136,17 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        aResult[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType") );
-        aResult[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed") );
-        aResult[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size") );
+        aResult[0].Name = "MediaType";
+        aResult[1].Name = "Compressed";
+        aResult[2].Name = "Size";
 
         if ( m_nStorageType == embed::StorageFormats::PACKAGE )
-            aResult[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
+            aResult[3].Name = "Encrypted";
     }
     else
     {
-        aResult[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed") );
-        aResult[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size") );
-
+        aResult[0].Name = "Compressed";
+        aResult[1].Name = "Size";
     }
 
     // TODO: may be also raw stream should be marked
@@ -2414,7 +2413,7 @@ void OWriteStream::CloseOutput_Impl()
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
             if ( m_pImpl->m_aProps[nInd].Name == "Size" )
-                m_pImpl->m_aProps[nInd].Value <<= ((sal_Int32)m_xSeekable->getLength());
+                m_pImpl->m_aProps[nInd].Value <<= m_xSeekable->getLength();
         }
     }
 }
@@ -3283,7 +3282,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
         if ( !m_xSeekable.is() )
             throw uno::RuntimeException();
 
-        return uno::makeAny( (sal_Int32)m_xSeekable->getLength() );
+        return uno::makeAny( m_xSeekable->getLength() );
     }
 
     throw beans::UnknownPropertyException(); // TODO

@@ -897,7 +897,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
 }
 
 //--------------------------------------------------------------------------
-void ZipPackageStream::setSize ( const sal_Int32 nNewSize )
+void ZipPackageStream::setSize ( const sal_Int64 nNewSize )
 {
     if ( aEntry.nCompressedSize != nNewSize )
         aEntry.nMethod = DEFLATED;

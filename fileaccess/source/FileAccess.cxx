@@ -452,7 +452,7 @@ sal_Int32 OFileAccess::getSize( const rtl::OUString& FileURL )
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    aCnt.getPropertyValue( rtl::OUString("Size" ) ) >>= nTemp;
+    aCnt.getPropertyValue( "Size" ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
 }

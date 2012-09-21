@@ -99,7 +99,7 @@ public class TestHelper  {
         // check size property of the stream
         try
         {
-            int nSize = AnyConverter.toInt( xPropSet.getPropertyValue( "Size" ) );
+            long nSize = AnyConverter.toLong( xPropSet.getPropertyValue( "Size" ) );
             if ( nSize != pBytes.length )
             {
                 Error( "The 'Size' property of substream '" + sStreamName + "' contains wrong value!" );
@@ -466,7 +466,7 @@ public class TestHelper  {
             {
                 // get "MediaType" and "Size" properties and control there values
                 String sPropMediaType = AnyConverter.toString( xPropSet.getPropertyValue( "MediaType" ) );
-                int nPropSize = AnyConverter.toInt( xPropSet.getPropertyValue( "Size" ) );
+                long nPropSize = AnyConverter.toLong( xPropSet.getPropertyValue( "Size" ) );
 
                 bOk = true;
                 if ( !sPropMediaType.equals( sMediaType ) )

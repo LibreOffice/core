@@ -198,7 +198,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
 }
 
 void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
-                                sal_Int32 nSize,
+                                sal_Int64 nSize,
                                 const ::rtl::OUString& aMediaType,
                                 sal_Int8 * & pHeader )
 {
@@ -225,7 +225,8 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nIterationCount >> 24 ) & 0xFF);
 
-    // Then the size
+    // FIXME64: need to handle larger sizes
+    // Then the size:
     *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 8 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nSize >> 16 ) & 0xFF);
@@ -499,7 +500,7 @@ sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< 
     if ( rData.is() && rData->m_aKey.getLength() )
     {
         xSeek->seek( rEntry.nOffset );
-        sal_Int32 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
+        sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
 
         // Only want to read enough to verify the digest
         if ( nSize > n_ConstDigestDecrypt )
@@ -645,7 +646,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
 
     sal_Int32 nTestSig, nTime, nCRC, nSize, nCompressedSize;
     sal_Int16 nVersion, nFlag, nHow, nPathLen, nExtraLen;
-    sal_Int32 nPos = -rEntry.nOffset;
+    sal_Int64 nPos = -rEntry.nOffset;
 
     aGrabber.seek(nPos);
     aGrabber >> nTestSig;
@@ -661,7 +662,9 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber >> nSize;
     aGrabber >> nPathLen;
     aGrabber >> nExtraLen;
-    rEntry.nOffset = static_cast < sal_Int32 > (aGrabber.getPosition()) + nPathLen + nExtraLen;
+    rEntry.nOffset = aGrabber.getPosition() + nPathLen + nExtraLen;
+
+    // FIXME64: need to read 64bit LOC
 
     sal_Bool bBroken = sal_False;
 
@@ -674,8 +677,8 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
                 aNameBuffer.realloc( nRead );
 
         ::rtl::OUString sLOCPath = rtl::OUString::intern( (sal_Char *) aNameBuffer.getArray(),
-                                                            aNameBuffer.getLength(),
-                                                            RTL_TEXTENCODING_UTF8 );
+                                                          aNameBuffer.getLength(),
+                                                          RTL_TEXTENCODING_UTF8 );
 
         if ( rEntry.nPathLen == -1 ) // the file was created
         {
@@ -814,13 +817,27 @@ sal_Int32 ZipFile::readCEN()
 
             aMemGrabber >> aEntry.nTime;
             aMemGrabber >> aEntry.nCrc;
-            aMemGrabber >> aEntry.nCompressedSize;
-            aMemGrabber >> aEntry.nSize;
+
+            sal_uInt32 nCompressedSize, nSize, nOffset;
+
+            aMemGrabber >> nCompressedSize;
+            aMemGrabber >> nSize;
             aMemGrabber >> aEntry.nPathLen;
             aMemGrabber >> aEntry.nExtraLen;
             aMemGrabber >> nCommentLen;
             aMemGrabber.skipBytes ( 8 );
-            aMemGrabber >> aEntry.nOffset;
+            aMemGrabber >> nOffset;
+
+            // FIXME64: need to read the 64bit header instead
+            if ( nSize == 0xffffffff ||
+                 nOffset == 0xffffffff ||
+                 nCompressedSize == 0xffffffff ) {
+                throw ZipException("PK64 zip file entry", uno::Reference < XInterface > () );
+            } else {
+                aEntry.nCompressedSize = nCompressedSize;
+                aEntry.nSize = nSize;
+                aEntry.nOffset = nOffset;
+            }
 
             aEntry.nOffset += nLocPos;
             aEntry.nOffset *= -1;
@@ -862,25 +879,25 @@ sal_Int32 ZipFile::recover()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nLength;
+    sal_Int64 nLength;
     Sequence < sal_Int8 > aBuffer;
     Sequence < sal_Int32 > aHeaderOffsets;
 
     try
     {
-        nLength = static_cast <sal_Int32 > (aGrabber.getLength());
+        nLength = aGrabber.getLength();
         if (nLength == 0 || nLength < ENDHDR)
             return -1;
 
         aGrabber.seek( 0 );
 
-        const sal_Int32 nToRead = 32000;
-        for( sal_Int32 nGenPos = 0; aGrabber.readBytes( aBuffer, nToRead ) && aBuffer.getLength() > 16; )
+        const sal_Int64 nToRead = 32000;
+        for( sal_Int64 nGenPos = 0; aGrabber.readBytes( aBuffer, nToRead ) && aBuffer.getLength() > 16; )
         {
             const sal_Int8 *pBuffer = aBuffer.getConstArray();
             sal_Int32 nBufSize = aBuffer.getLength();
 
-            sal_Int32 nPos = 0;
+            sal_Int64 nPos = 0;
             // the buffer should contain at least one header,
             // or if it is end of the file, at least the postheader with sizes and hash
             while( nPos < nBufSize - 30
@@ -900,44 +917,45 @@ sal_Int32 ZipFile::recover()
 
                         if ( aEntry.nMethod == STORED || aEntry.nMethod == DEFLATED )
                         {
+                            sal_uInt32 nCompressedSize, nSize;
+
                             aMemGrabber >> aEntry.nTime;
                             aMemGrabber >> aEntry.nCrc;
-                            aMemGrabber >> aEntry.nCompressedSize;
-                            aMemGrabber >> aEntry.nSize;
+                            aMemGrabber >> nCompressedSize;
+                            aMemGrabber >> nSize;
                             aMemGrabber >> aEntry.nPathLen;
                             aMemGrabber >> aEntry.nExtraLen;
 
+                            // FIXME64: need to read the 64bit header instead
+                            if ( nSize == 0xffffffff ||
+                                 nCompressedSize == 0xffffffff ) {
+                                throw ZipException("PK64 zip file entry", uno::Reference < XInterface > () );
+                            } else {
+                                aEntry.nCompressedSize = nCompressedSize;
+                                aEntry.nSize = nSize;
+                            }
+
                             sal_Int32 nDescrLength =
-                                ( aEntry.nMethod == DEFLATED && ( aEntry.nFlag & 8 ) ) ?
-                                                        16 : 0;
+                                ( aEntry.nMethod == DEFLATED && ( aEntry.nFlag & 8 ) ) ? 16 : 0;
 
-
-                            // This is a quick fix for OOo1.1RC
-                            // For OOo2.0 the whole package must be switched to unsigned values
-                            if ( aEntry.nCompressedSize < 0 ) aEntry.nCompressedSize = 0x7FFFFFFF;
-                            if ( aEntry.nSize < 0 ) aEntry.nSize = 0x7FFFFFFF;
-                            if ( aEntry.nPathLen < 0 ) aEntry.nPathLen = 0x7FFF;
-                            if ( aEntry.nExtraLen < 0 ) aEntry.nExtraLen = 0x7FFF;
-                            // End of quick fix
-
-                            sal_Int32 nDataSize = ( aEntry.nMethod == DEFLATED ) ? aEntry.nCompressedSize : aEntry.nSize;
-                            sal_Int32 nBlockLength = nDataSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
+                            sal_Int64 nDataSize = ( aEntry.nMethod == DEFLATED ) ? aEntry.nCompressedSize : aEntry.nSize;
+                            sal_Int64 nBlockLength = nDataSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
                             if ( aEntry.nPathLen >= 0 && aEntry.nExtraLen >= 0
                                 && ( nGenPos + nPos + nBlockLength ) <= nLength )
                             {
                                 // read always in UTF8, some tools seem not to set UTF8 bit
                                 if( nPos + 30 + aEntry.nPathLen <= nBufSize )
                                     aEntry.sPath = OUString ( (sal_Char *) &pBuffer[nPos + 30],
-                                                                  aEntry.nPathLen,
-                                                                RTL_TEXTENCODING_UTF8 );
+                                                              aEntry.nPathLen,
+                                                              RTL_TEXTENCODING_UTF8 );
                                 else
                                 {
                                     Sequence < sal_Int8 > aFileName;
                                     aGrabber.seek( nGenPos + nPos + 30 );
                                     aGrabber.readBytes( aFileName, aEntry.nPathLen );
                                     aEntry.sPath = OUString ( (sal_Char *) aFileName.getArray(),
-                                                                aFileName.getLength(),
-                                                                RTL_TEXTENCODING_UTF8 );
+                                                              aFileName.getLength(),
+                                                              RTL_TEXTENCODING_UTF8 );
                                     aEntry.nPathLen = static_cast< sal_Int16 >(aFileName.getLength());
                                 }
 
@@ -960,11 +978,17 @@ sal_Int32 ZipFile::recover()
                 }
                 else if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 7 && pBuffer[nPos+3] == 8 )
                 {
-                    sal_Int32 nCompressedSize, nSize, nCRC32;
+                    sal_Int32 nCRC32;
+                    sal_uInt32 nCompressedSize32, nSize32;
+                    sal_Int64 nCompressedSize, nSize;
                     MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( ((sal_Int8*)(&(pBuffer[nPos+4]))), 12 ) );
                     aMemGrabber >> nCRC32;
-                    aMemGrabber >> nCompressedSize;
-                    aMemGrabber >> nSize;
+                    aMemGrabber >> nCompressedSize32;
+                    aMemGrabber >> nSize32;
+
+                    // FIXME64: work to be done here ...
+                    nCompressedSize = nCompressedSize32;
+                    nSize = nSize32;
 
                     for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); ++aIter )
                     {
@@ -973,7 +997,7 @@ sal_Int32 ZipFile::recover()
                         // this is a broken package, accept this block not only for DEFLATED streams
                         if( (*aIter).second.nFlag & 8 )
                         {
-                            sal_Int32 nStreamOffset = nGenPos + nPos - nCompressedSize;
+                            sal_Int64 nStreamOffset = nGenPos + nPos - nCompressedSize;
                             if ( nStreamOffset == (*aIter).second.nOffset && nCompressedSize > (*aIter).second.nCompressedSize )
                             {
                                 // only DEFLATED blocks need to be checked
@@ -981,7 +1005,8 @@ sal_Int32 ZipFile::recover()
 
                                 if ( !bAcceptBlock )
                                 {
-                                    sal_Int32 nRealSize = 0, nRealCRC = 0;
+                                    sal_Int64 nRealSize = 0;
+                                    sal_Int32 nRealCRC = 0;
                                     getSizeAndCRC( nStreamOffset, nCompressedSize, &nRealSize, &nRealCRC );
                                     bAcceptBlock = ( nRealSize == nSize && nRealCRC == nCRC32 );
                                 }
@@ -1036,7 +1061,8 @@ sal_Bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nSize = 0, nCRC = 0;
+    sal_Int32 nCRC = 0;
+    sal_Int64 nSize = 0;
 
     if( aEntry.nMethod == STORED )
         return ( getCRC( aEntry.nOffset, aEntry.nSize ) == aEntry.nCrc );
@@ -1045,34 +1071,36 @@ sal_Bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
     return ( aEntry.nSize == nSize && aEntry.nCrc == nCRC );
 }
 
-sal_Int32 ZipFile::getCRC( sal_Int32 nOffset, sal_Int32 nSize )
+sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
-    sal_Int32 nBlockSize = ::std::min( nSize, static_cast< sal_Int32 >( 32000 ) );
+    sal_Int32 nBlockSize = static_cast< sal_Int32 > (::std::min( nSize, static_cast< sal_Int64 >( 32000 ) ) );
 
     aGrabber.seek( nOffset );
     for ( int ind = 0;
           aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nSize;
           ind++ )
     {
-        aCRC.updateSegment( aBuffer, 0, ::std::min( nBlockSize, nSize - ind * nBlockSize ) );
+        sal_Int64 nLen = ::std::min( static_cast< sal_Int64 >( nBlockSize ),
+                                     nSize - ind * nBlockSize );
+        aCRC.updateSegment( aBuffer, 0, static_cast< sal_Int32 >( nLen ) );
     }
 
     return aCRC.getValue();
 }
 
-void ZipFile::getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_Int32 *nSize, sal_Int32 *nCRC )
+void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_Int64 *nSize, sal_Int32 *nCRC )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
-    sal_Int32 nRealSize = 0;
+    sal_Int64 nRealSize = 0;
     Inflater aInflaterLocal( sal_True );
-    sal_Int32 nBlockSize = ::std::min( nCompressedSize, static_cast< sal_Int32 >( 32000 ) );
+    sal_Int32 nBlockSize = static_cast< sal_Int32 > (::std::min( nCompressedSize, static_cast< sal_Int64 >( 32000 ) ) );
 
     aGrabber.seek( nOffset );
     for ( int ind = 0;
@@ -1081,7 +1109,7 @@ void ZipFile::getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_I
     {
         Sequence < sal_Int8 > aData( nBlockSize );
         sal_Int32 nLastInflated = 0;
-        sal_Int32 nInBlock = 0;
+        sal_Int64 nInBlock = 0;
 
         aInflaterLocal.setInput( aBuffer );
         do
