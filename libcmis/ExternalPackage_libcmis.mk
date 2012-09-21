@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,libcmis_inc,$(call gb_UnpackedTarball_get_dir,cmis/src/libcmis)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libcmis_inc,cmis))
 
-$(eval $(call gb_Package_use_unpacked,libcmis_inc,cmis))
-
-$(eval $(call gb_Package_add_files,libcmis_inc,inc/external/libcmis,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libcmis_inc,inc/external/libcmis,\
 	allowable-actions.hxx \
 	document.hxx \
 	exception.hxx \

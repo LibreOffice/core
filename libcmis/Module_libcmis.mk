@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,libcmis))
 ifeq ($(SYSTEM_LIBCMIS),NO)
 
 $(eval $(call gb_Module_add_targets,libcmis,\
-	Package_libcmis \
+	ExternalPackage_libcmis \
 	StaticLibrary_cmis \
 	UnpackedTarball_cmis \
 ))

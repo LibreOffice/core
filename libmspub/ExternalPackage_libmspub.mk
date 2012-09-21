@@ -7,14 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,libvisio_inc,$(call gb_UnpackedTarball_get_dir,visio/src/lib)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libmspub_inc,mspub))
 
-$(eval $(call gb_Package_use_unpacked,libvisio_inc,visio))
-
-$(eval $(call gb_Package_add_files,libvisio_inc,inc/external/libvisio,\
-	libvisio.h \
-	VisioDocument.h \
-	VSDStringVector.h \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libmspub_inc,inc/external/libmspub,\
+	libmspub.h \
+	MSPUBDocument.h \
+	MSPUBStringVector.h \
 ))
 
 # vim: set noet sw=4 ts=4:

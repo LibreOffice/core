@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,libwps_inc,$(call gb_UnpackedTarball_get_dir,wps/src/lib)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libpng_inc,png))
 
-$(eval $(call gb_Package_use_unpacked,libwps_inc,wps))
-
-$(eval $(call gb_Package_add_files,libwps_inc,inc/external/libwps,\
-	libwps.h \
-	WPSDocument.h \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libpng_inc,inc/external/libpng,\
+	png.h \
+	pngconf.h \
+	pnglibconf.h \
+	pngstruct.h \
 ))
 
 # vim: set noet sw=4 ts=4:

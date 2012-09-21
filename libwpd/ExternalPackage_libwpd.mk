@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,libwpd_inc,$(call gb_UnpackedTarball_get_dir,wpd/src/lib)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libwpd_inc,wpd))
 
-$(eval $(call gb_Package_use_unpacked,libwpd_inc,wpd))
-
-$(eval $(call gb_Package_add_files,libwpd_inc,inc/external/libwpd,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd_inc,inc/external/libwpd,\
 	libwpd.h \
 	WPDocument.h \
 	WPXBinaryData.h \
@@ -22,7 +20,7 @@ $(eval $(call gb_Package_add_files,libwpd_inc,inc/external/libwpd,\
 	WPXPropertyListVector.h \
 ))
 
-$(eval $(call gb_Package_add_files,libwpd_inc,inc/external/libwpd-stream,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd_inc,inc/external/libwpd-stream,\
 	libwpd-stream.h \
 	WPXStream.h \
 	WPXStreamImplementation.h \

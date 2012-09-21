@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,libwpg_inc,$(call gb_UnpackedTarball_get_dir,wpg/src/lib)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libwpg_inc,wpg))
 
-$(eval $(call gb_Package_use_unpacked,libwpg_inc,wpg))
-
-$(eval $(call gb_Package_add_files,libwpg_inc,inc/external/libwpg,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libwpg_inc,inc/external/libwpg,\
 	libwpg.h \
 	WPGPaintInterface.h \
 	WPGraphics.h \

@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,libcdr_inc,$(call gb_UnpackedTarball_get_dir,cdr/src/lib)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libcdr_inc,cdr))
 
-$(eval $(call gb_Package_use_unpacked,libcdr_inc,cdr))
-
-$(eval $(call gb_Package_add_files,libcdr_inc,inc/external/libcdr,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr_inc,inc/external/libcdr,\
 	libcdr.h \
 	CDRDocument.h \
 	CDRStringVector.h \
