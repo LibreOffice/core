@@ -1821,6 +1821,15 @@ File gid_File_Moz_Msvcr80
 End
 #endif
 
+#if defined(WNT)
+File gid_File_Lib_Msvcr100
+    TXT_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = SCP2_URE_DL_NORMAL("msvcr100");
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+#endif
+
 #ifndef SYSTEM_REDLAND
 File gid_File_Lib_Raptor
     TXT_FILE_BODY;

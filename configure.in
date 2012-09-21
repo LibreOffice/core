@@ -6106,6 +6106,22 @@ You may have to search Microsoft's website. Last time it was seen at:
 fi
 
 dnl ===================================================================
+dnl Windows builds need msvcr100.dll in external/msvcp100/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for msvcr100.dll])
+   if test -x ./external/msvcp100/msvcr100.dll; then
+      AC_MSG_RESULT([found and executable])
+   else
+      AC_MSG_ERROR([msvcr100.dll is missing in external/msvcp100/.
+Get it from the Microsoft Visual C++ 2010 Redistributable Package (x86),
+from the Microsoft site and put it into external/msvcp100.
+You may have to search Microsoft's website. Last time it was seen at:
+<http://www.microsoft.com/en-us/download/search.aspx?q=Microsoft+Visual+C%2b%2b+2010+Redistributable>.])
+   fi
+fi
+
+dnl ===================================================================
 dnl Test which vclplugs have to be built.
 dnl ===================================================================
 AC_MSG_CHECKING([which VCLplugs shall be built])

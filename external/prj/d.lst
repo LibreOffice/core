@@ -36,6 +36,8 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 ..\msvcp90\Microsoft.VC90.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC90.DebugCRT.manifest
 ..\msm90\*.msm %_DEST%\bin%_EXT%
 
+..\msvcp100\msvcr100*.dll %_DEST%\bin%_EXT%
+
 ..\unowinreg\unowinreg.dll %_DEST%\bin%_EXT%\unowinreg.dll
 
 ..\vcredist\vcredist_x86.exe %_DEST%\bin%_EXT%\vcredist_x86.exe
