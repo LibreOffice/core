@@ -1601,6 +1601,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         }
 
         appendTableManager( );
+        appendTableHandler( );
         getTableManager().startLevel();
     }
     catch ( const uno::Exception& e )
