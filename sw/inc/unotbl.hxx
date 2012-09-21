@@ -25,8 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNOTBL_HXX
-#define _UNOTBL_HXX
+
+#ifndef SW_UNOTBL_HXX
+#define SW_UNOTBL_HXX
+
+#include <stdint.h>
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
