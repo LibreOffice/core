@@ -2701,7 +2701,7 @@ if test "$_os" = "Darwin"; then
         ;;
     esac
 
-    if "$BITNESS_OVERRIDE" = 64; then
+    if test "$BITNESS_OVERRIDE" = 64; then
         case $with_macosx_version_min_required in
         10.4|10.5)
             AC_MSG_ERROR([Can't build 64-bit code for with-macosx-version-min-required=$with_macosx_version_min_required])
