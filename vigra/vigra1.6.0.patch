@@ -739,9 +739,8 @@ diff -uprN misc/vigra1.6.0/include/vigra/gaussians.hxx misc/build/vigra1.6.0/inc
          }
          calculateHermitePolynomial();
      }
-diff -uprN misc/vigra1.6.0/include/vigra/mathutil.hxx misc/build/vigra1.6.0/include/vigra/mathutil.hxx
 --- misc/vigra1.6.0/include/vigra/mathutil.hxx	2008-08-13 08:15:38.000000000 -0500
-+++ misc/build/vigra1.6.0/include/vigra/mathutil.hxx	2012-09-20 22:05:29.000000000 -0500
++++ misc/build/vigra1.6.0/include/vigra/mathutil.hxx	2012-09-21 02:16:23.000000000 -0500
 @@ -88,7 +88,7 @@ using VIGRA_CSTD::ceil;  
  
  // import abs(float), abs(double), abs(long double) from <cmath>
@@ -751,7 +750,7 @@ diff -uprN misc/vigra1.6.0/include/vigra/mathutil.hxx misc/build/vigra1.6.0/incl
  
  // define the missing variants of abs() to avoid 'ambigous overload'
  // errors in template functions
-@@ -100,10 +100,39 @@ VIGRA_DEFINE_UNSIGNED_ABS(unsigned char)
+@@ -100,17 +100,41 @@ VIGRA_DEFINE_UNSIGNED_ABS(unsigned char)
  VIGRA_DEFINE_UNSIGNED_ABS(unsigned short)
  VIGRA_DEFINE_UNSIGNED_ABS(unsigned int)
  VIGRA_DEFINE_UNSIGNED_ABS(unsigned long)
@@ -761,6 +760,11 @@ diff -uprN misc/vigra1.6.0/include/vigra/mathutil.hxx misc/build/vigra1.6.0/incl
  
  #undef VIGRA_DEFINE_UNSIGNED_ABS
  
+ #define VIGRA_DEFINE_MISSING_ABS(T) \
+     inline T abs(T t) { return t < 0 ? -t : t; }
+ 
+-VIGRA_DEFINE_MISSING_ABS(signed char)
+-VIGRA_DEFINE_MISSING_ABS(signed short)
 +#define VIGRA_DEFINE_SIGNED_ABS(T) \
 +    inline T abs(T t) { return (T)abs(t); }
 +#define VIGRA_DEFINE_SIGNED_LABS(T) \
@@ -782,16 +786,16 @@ diff -uprN misc/vigra1.6.0/include/vigra/mathutil.hxx misc/build/vigra1.6.0/incl
 +#ifdef VIGRA_HAS_LONG_DOUBLE
 +VIGRA_DEFINE_FABS(long double)
 +#endif
-+
+ 
+-#undef VIGRA_DEFINE_MISSING_ABS
 +#undef VIGRA_DEFINE_SIGNED_ABS
 +#undef VIGRA_DEFINE_SIGNED_LABS
 +#undef VIGRA_DEFINE_SIGNED_LLABS
 +#undef VIGRA_DEFINE_FABS
-+
- #define VIGRA_DEFINE_MISSING_ABS(T) \
-     inline T abs(T t) { return t < 0 ? -t : t; }
  
-@@ -134,12 +163,14 @@ inline double round(double t)
+     /*! The rounding function.
+ 
+@@ -134,12 +158,14 @@ inline double round(double t)
                  : ceil(t - 0.5);
  }
  
@@ -806,7 +810,7 @@ diff -uprN misc/vigra1.6.0/include/vigra/mathutil.hxx misc/build/vigra1.6.0/incl
  
      /*! Round up to the nearest power of 2.
  
-@@ -440,9 +471,15 @@ VIGRA_DEFINE_NORM(int)
+@@ -440,9 +466,15 @@ VIGRA_DEFINE_NORM(int)
  VIGRA_DEFINE_NORM(unsigned int)
  VIGRA_DEFINE_NORM(long)
  VIGRA_DEFINE_NORM(unsigned long)
