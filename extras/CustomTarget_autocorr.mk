@@ -167,6 +167,7 @@ extras_AUTOCORR_XMLFILES := \
 	pt-BR/acor/DocumentList.xml \
 	pt-BR/acor/META-INF/manifest.xml \
 	pt-BR/acor/WordExceptList.xml \
+	pt-BR/acor/SentenceExceptList.xml \
 	pt/acor/BlockList.xml \
 	pt/acor/DocumentList.xml \
 	pt/acor/META-INF/manifest.xml \
