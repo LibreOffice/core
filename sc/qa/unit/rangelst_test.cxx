@@ -184,6 +184,10 @@ void Test::testUpdateReference_DeleteRow()
         CPPUNIT_ASSERT(!aList.In(ScRange(nCol, 4, 0)));
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), aList.GetCellCount());
+
+    ScRangeList aList2(ScRange(2,2,0,2,2,0));
+    aList2.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,MAXCOL,MAXROW,0), 0, -1, 0);
+    CPPUNIT_ASSERT(aList2.empty());
 }
 
 void Test::testUpdateReference_DeleteCol()
