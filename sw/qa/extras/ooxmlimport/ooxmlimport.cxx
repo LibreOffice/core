@@ -90,6 +90,7 @@ public:
     void testN778828();
     void testInk();
     void testN779834();
+    void testN779627();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -126,6 +127,7 @@ public:
     CPPUNIT_TEST(testN778828);
     CPPUNIT_TEST(testInk);
     CPPUNIT_TEST(testN779834);
+    CPPUNIT_TEST(testN779627);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -865,6 +867,22 @@ void Test::testN779834()
 {
     // This document simply crashed the importer.
     load("n779834.docx");
+}
+
+void Test::testN779627()
+{
+    /*
+     * The problem was that the table left position was based on the tableCellMar left value
+     * even for nested tables, while it shouldn't.
+     */
+    load("n779627.docx");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Any aValue = xTableProperties->getPropertyValue("LeftMargin");
+    sal_Int32 nLeftMargin;
+    aValue >>= nLeftMargin;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
