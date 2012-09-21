@@ -158,7 +158,9 @@ void ScrollableWrapper<T>::ResetScrollBars()
 }
 
 template class ScrollableWrapper< Dialog >;
+#if SCROLLABLEFRAME
 template class ScrollableWrapper< GroupBox >;
+#endif
 
 } // toolkit
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
