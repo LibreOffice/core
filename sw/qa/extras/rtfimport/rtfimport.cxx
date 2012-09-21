@@ -110,6 +110,7 @@ public:
     void testAllGapsWord();
     void testFdo52052();
     void testInk();
+    void testFdo52389();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -159,6 +160,7 @@ public:
     CPPUNIT_TEST(testAllGapsWord);
     CPPUNIT_TEST(testFdo52052);
     CPPUNIT_TEST(testInk);
+    CPPUNIT_TEST(testFdo52389);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -959,6 +961,13 @@ void Test::testInk()
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int16(10), aSegments[1].Count);
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xDraws->getByIndex(0), "Surround"));
+}
+
+void Test::testFdo52389()
+{
+    // The last '!' character at the end of the document was lost
+    load("fdo52389.rtf");
+    CPPUNIT_ASSERT_EQUAL(6, getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

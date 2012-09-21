@@ -3774,6 +3774,8 @@ int RTFDocumentImpl::popState()
     // This is the end of the doc, see if we need to close the last section.
     if (m_pTokenizer->getGroup() == 1 && !m_bFirstRun)
     {
+        if (m_bNeedCr)
+            dispatchSymbol(RTF_PAR);
         m_bDeferredContSectBreak = false;
         sectBreak(true);
     }
