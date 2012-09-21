@@ -636,6 +636,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         sal_uLong nKey = 0;
         mxScCondFmt.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
+        mxScCondFmt->AddRange(maRanges);
     }
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry( eMode, xTokArr1.get(), pTokArr2.get(), GetDocPtr(), rPos, aStyleName );
