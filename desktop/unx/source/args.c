@@ -126,14 +126,16 @@ Args *args_parse (void)
         }
 
         for ( j = 0; j < SAL_N_ELEMENTS (pArgDescr); ++j ) {
-            if (!rtl_ustr_indexOfAscii_WithLength
-                    (arg, length, pArgDescr[j].name, strlen (pArgDescr[j].name))) {
-
+            if (rtl_ustr_ascii_compare_WithLength(
+                    arg, length, pArgDescr[j].name)
+                == 0)
+            {
                 args->bInhibitSplash  |= pArgDescr[j].bInhibitSplash;
                 args->bInhibitPagein  |= pArgDescr[j].bInhibitPagein;
                 args->bInhibitJavaLdx |= pArgDescr[j].bInhibitJavaLdx;
                 if (pArgDescr[j].pPageinType)
                     args->pPageinType = pArgDescr[j].pPageinType;
+                break;
             }
         }
     }
