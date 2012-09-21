@@ -2658,12 +2658,13 @@ sal_Bool SwCrsrShell::ShouldWait() const
             pPam->End()->nNode.GetIndex();
 }
 
-
-sal_uInt16 SwCrsrShell::UpdateTblSelBoxes()
+size_t SwCrsrShell::UpdateTblSelBoxes()
 {
-    if( pTblCrsr && ( pTblCrsr->IsChgd() || !pTblCrsr->GetBoxesCount() ))
+    if (pTblCrsr && (pTblCrsr->IsChgd() || !pTblCrsr->GetSelectedBoxesCount()))
+    {
          GetLayout()->MakeTblCrsrs( *pTblCrsr );
-    return pTblCrsr ? pTblCrsr->GetBoxesCount() : 0;
+    }
+    return (pTblCrsr) ? pTblCrsr->GetSelectedBoxesCount() : 0;
 }
 
 /// show the current selected "object"

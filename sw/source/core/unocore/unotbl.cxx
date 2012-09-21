@@ -1517,10 +1517,12 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
         pUnoCrsr->SetMark();
         *pUnoCrsr->GetMark() = *pTableSelection->GetMark();
     }
-    const SwSelBoxes& rBoxes = pTableSelection->GetBoxes();
+    const SwSelBoxes& rBoxes = pTableSelection->GetSelectedBoxes();
     SwTableCursor* pTableCrsr = dynamic_cast<SwTableCursor*>(pUnoCrsr);
-    for(sal_uInt16 i = 0; i < rBoxes.size(); i++)
+    for (size_t i = 0; i < rBoxes.size(); i++)
+    {
         pTableCrsr->InsertBox( *rBoxes[i] );
+    }
 
     pUnoCrsr->Add(&aCrsrDepend);
     SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
@@ -1689,9 +1691,11 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
             bRet = TBLMERGE_OK == pTblCrsr->GetDoc()->MergeTbl(*pTblCrsr);
             if(bRet)
             {
-                sal_uInt16 nCount = pTblCrsr->GetBoxesCount();
-                while(nCount--)
+                size_t nCount = pTblCrsr->GetSelectedBoxesCount();
+                while (--nCount)
+                {
                     pTblCrsr->DeleteBox(nCount);
+                }
             }
         }
         pTblCrsr->MakeBoxSels();
@@ -1716,7 +1720,8 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal) th
         pTblCrsr->MakeBoxSels();
         {
             UnoActionContext aContext(pUnoCrsr->GetDoc());
-            bRet = pTblCrsr->GetDoc()->SplitTbl( pTblCrsr->GetBoxes(), !Horizontal, Count );
+            bRet = pTblCrsr->GetDoc()->SplitTbl(
+                    pTblCrsr->GetSelectedBoxes(), !Horizontal, Count);
         }
         pTblCrsr->MakeBoxSels();
     }
@@ -4595,7 +4600,7 @@ void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rD
         SwUnoTableCrsr* pTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
         pTableCrsr->MakeBoxSels();
         UnoActionContext aContext( pFmt->GetDoc() );
-        pFmt->GetDoc()->SortTbl(pTableCrsr->GetBoxes(), aSortOpt);
+        pFmt->GetDoc()->SortTbl(pTableCrsr->GetSelectedBoxes(), aSortOpt);
     }
 }
 

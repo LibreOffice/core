@@ -1523,11 +1523,13 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
 
 void SwUndoTblNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
 {
-    if( rBoxes.size() != aBoxes.size() )
+    if (rBoxes.size() != m_Boxes.size())
     {
-        aBoxes.clear();
-        for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
-            aBoxes.insert( rBoxes[n]->GetSttIdx() );
+        m_Boxes.clear();
+        for (size_t n = 0; n < rBoxes.size(); ++n)
+        {
+            m_Boxes.insert( rBoxes[n]->GetSttIdx() );
+        }
     }
 }
 
@@ -1622,7 +1624,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             const SwTableLine* pBoxLine = pBox->GetUpper();
             sal_uInt16 nLineDiff = lcl_FindParentLines(rTbl,*pBox).GetPos(pBoxLine);
             sal_uInt16 nLineNo = 0;
-            for( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
+            for (size_t j = 0; j < rBoxes.size(); ++j)
             {
                 pCheckBox = rBoxes[j];
                 if( pCheckBox->GetUpper()->GetUpper() == pBox->GetUpper()->GetUpper() )
@@ -1644,7 +1646,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             OSL_ENSURE( pSourceBox, "Splitted source box not found!" );
             // find out how many nodes the source box used to have
             // (to help determine bNodesMoved flag below)
-            sal_uInt16 nNdsPos = 0;
+            size_t nNdsPos = 0;
             while( rBoxes[ nNdsPos ] != pSourceBox )
                 ++nNdsPos;
             sal_uLong nNodes = rNodeCnts[ nNdsPos ];
@@ -1814,7 +1816,8 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     CHECK_TABLE( pTblNd->GetTable() )
 
     SwSelBoxes aSelBoxes;
-    for( std::set<sal_uLong>::iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
+    for (std::set<sal_uLong>::iterator it = m_Boxes.begin();
+            it != m_Boxes.end(); ++it)
     {
         SwTableBox* pBox = pTblNd->GetTable().GetTblBox( *it );
         aSelBoxes.insert( pBox );
@@ -1961,7 +1964,7 @@ CHECKTABLE(pTblNd->GetTable())
     sal_uInt16 n;
 
     std::set<sal_uLong>::iterator it;
-    for( it = aBoxes.begin(); it != aBoxes.end(); ++it )
+    for (it = m_Boxes.begin(); it != m_Boxes.end(); ++it)
     {
         aIdx = *it;
         SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx,
@@ -2104,8 +2107,10 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
 void SwUndoTblMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
 {
     // memorize selection
-    for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
-        aBoxes.insert( rBoxes[n]->GetSttIdx() );
+    for (size_t n = 0; n < rBoxes.size(); ++n)
+    {
+        m_Boxes.insert(rBoxes[n]->GetSttIdx());
+    }
 
     // as separator for inserts of new boxes after shifting
     aNewSttNds.push_back( (sal_uLong)0 );

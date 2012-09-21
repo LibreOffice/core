@@ -603,7 +603,7 @@ const SwSelBoxes *SwAccessibleTable::GetSelBoxes() const
     const SwCrsrShell *pCSh = GetCrsrShell();
     if( (pCSh != NULL) && pCSh->IsTableMode() )
     {
-        pSelBoxes = &pCSh->GetTableCrsr()->GetBoxes();
+        pSelBoxes = &pCSh->GetTableCrsr()->GetSelectedBoxes();
     }
 
     return pSelBoxes;

@@ -2170,7 +2170,7 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
         aTmpLst.insert( rTbl.GetTabSortBoxes() );
         if( !bVert )
         {
-            for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
+            for (size_t n = 0; n < rBoxes.size(); ++n)
             {
                 const SwStartNode* pSttNd = rBoxes[ n ]->GetSttNd();
                 aNdsCnts.push_back( pSttNd->EndOfSectionIndex() -
@@ -2546,7 +2546,7 @@ bool FuzzyCompare::operator() ( long s1, long s2 ) const
 
 bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
 {
-    for( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
+    for (size_t i = 0; i < rBoxes.size(); ++i)
     {
         if ( rFrm.GetTabBox() == rBoxes[ i ] )
             return true;
@@ -4469,7 +4469,7 @@ sal_Bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
                 : 0;
 
         std::vector<SwFrmFmt*> aFmts, aNewFmts;
-        for( sal_uInt16 i = rBoxes.size(); i; )
+        for (size_t i = rBoxes.size(); i; )
         {
             SwTableBox* pBox = rBoxes[ --i ];
             SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();

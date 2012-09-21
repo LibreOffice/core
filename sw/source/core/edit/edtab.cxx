@@ -272,7 +272,7 @@ sal_Bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
         } while( sal_False );
     }
 
-    for( sal_uInt16 n = 0; n < aBoxes.size(); ++n )
+    for (size_t n = 0; n < aBoxes.size(); ++n)
     {
         const SwTableBox* pSelBox = aBoxes[ n ];
         const SwTableBoxFmt* pTblFmt = (SwTableBoxFmt*)pSelBox->GetFrmFmt();
@@ -320,8 +320,10 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
 
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-    for( sal_uInt16 n = 0; n < aBoxes.size(); ++n )
+    for (size_t n = 0; n < aBoxes.size(); ++n)
+    {
         GetDoc()->SetTblBoxFormulaAttrs( *aBoxes[ n ], rSet );
+    }
     GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     EndAllAction();
 }

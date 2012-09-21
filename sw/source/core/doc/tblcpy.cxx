@@ -1011,9 +1011,11 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     if( 1 == rCpyTbl.GetTabSortBoxes().size() )
     {
         SwTableBox *pTmpBx = rCpyTbl.GetTabSortBoxes()[0];
-        for( sal_uInt16 n = 0; n < rSelBoxes.size(); ++n )
+        for (size_t n = 0; n < rSelBoxes.size(); ++n)
+        {
             lcl_CpyBox( rCpyTbl, pTmpBx, *this,
                         (SwTableBox*)rSelBoxes[n], sal_True, pUndo );
+        }
     }
     else
         for( nLn = 0; nLn < aFndBox.GetLines().size(); ++nLn )

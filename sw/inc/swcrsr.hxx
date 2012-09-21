@@ -270,7 +270,7 @@ class SwTableCursor : public virtual SwCursor
 protected:
     sal_uLong nTblPtNd, nTblMkNd;
     xub_StrLen nTblPtCnt, nTblMkCnt;
-    SwSelBoxes aSelBoxes;
+    SwSelBoxes m_SelectedBoxes;
     sal_Bool bChg : 1;
     sal_Bool bParked : 1;       // Table-cursor was parked.
 
@@ -286,9 +286,9 @@ public:
     virtual sal_Bool GotoTable( const String& rName );
 
     void InsertBox( const SwTableBox& rTblBox );
-    void DeleteBox( sal_uInt16 nPos ) { aSelBoxes.erase( aSelBoxes.begin() + nPos ); bChg = sal_True; }
-    sal_uInt16 GetBoxesCount() const { return aSelBoxes.size(); }
-    const SwSelBoxes& GetBoxes() const { return aSelBoxes; }
+    void DeleteBox(size_t nPos);
+    size_t GetSelectedBoxesCount() const { return m_SelectedBoxes.size(); }
+    const SwSelBoxes& GetSelectedBoxes() const { return m_SelectedBoxes; }
 
     // Creates cursor for all boxes.
     SwCursor* MakeBoxSels( SwCursor* pAktCrsr );

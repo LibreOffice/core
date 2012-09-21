@@ -95,11 +95,11 @@ class TblWait
 {
     SwWait *pWait;
 public:
-    TblWait( sal_uInt16 nCnt, SwFrm *pFrm, SwDocShell &rDocShell, sal_uInt16 nCnt2 = 0);
+    TblWait(size_t nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t nCnt2 = 0);
     ~TblWait() { delete pWait; }
 };
 
-TblWait::TblWait( sal_uInt16 nCnt, SwFrm *pFrm, SwDocShell &rDocShell, sal_uInt16 nCnt2):
+TblWait::TblWait(size_t const nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t const nCnt2):
     pWait( 0 )
 {
     sal_Bool bWait = 20 < nCnt || 20 < nCnt2 || (pFrm &&
@@ -478,7 +478,8 @@ sal_uInt16 SwFEShell::MergeTab()
             SET_CURR_SHELL( this );
             StartAllAction();
 
-            TblWait( pTableCrsr->GetBoxesCount(), 0, *GetDoc()->GetDocShell(),
+            TblWait(pTableCrsr->GetSelectedBoxesCount(), 0,
+                    *GetDoc()->GetDocShell(),
                      pTblNd->GetTable().GetTabLines().size() );
 
             nRet = GetDoc()->MergeTbl( *pTableCrsr );
@@ -1207,7 +1208,8 @@ void SwFEShell::AdjustCellWidth( sal_Bool bBalance )
 
     // switch on wait-cursor, as we do not know how
     // much content is affected
-    TblWait aWait( USHRT_MAX, 0, *GetDoc()->GetDocShell() );
+    TblWait aWait(::std::numeric_limits<size_t>::max(), 0,
+                  *GetDoc()->GetDocShell());
 
     GetDoc()->AdjustCellWidth( *getShellCrsr( false ), bBalance );
     EndAllActionAndCall();
@@ -1236,7 +1238,7 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
         aBoxes.insert( pBox );
     }
 
-    for ( sal_uInt16 i = 0; i < aBoxes.size(); ++i )
+    for (size_t i = 0; i < aBoxes.size(); ++i)
     {
         SwTableBox *pBox = aBoxes[i];
         if ( pBox->GetSttNd() )
@@ -2337,8 +2339,8 @@ sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml
 {
     SwTblBoxFormula aTmp( rFml );
     SwSelBoxes aBoxes;
-
-    for( sal_uInt16 nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes ); nSelBoxes; )
+    aTmp.GetBoxesOfFormula(rTbl, aBoxes);
+    for (size_t nSelBoxes = aBoxes.size(); nSelBoxes; )
     {
         SwTableBox* pBox = aBoxes[ --nSelBoxes ];
         SwCellFrms::iterator iC;

@@ -1684,7 +1684,7 @@ void SwChartDataProvider::AddRowCols(
     if (rTable.IsTblComplex())
         return;
 
-    const sal_uInt16 nBoxes = rBoxes.size();
+    const size_t nBoxes = rBoxes.size();
     if (nBoxes < 1 || nLines < 1)
         return;
 

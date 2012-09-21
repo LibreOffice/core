@@ -176,7 +176,7 @@ public:
 class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable
 {
     _SaveTable* pSaveTbl;
-    std::set<sal_uLong> aBoxes;
+    std::set<sal_uLong> m_Boxes;
     struct _BoxMove
     {
         sal_uLong index;    ///< Index of this box.
@@ -229,7 +229,7 @@ class SwUndoTblMerge : public SwUndo, private SwUndRng
 {
     sal_uLong nTblNode;
     _SaveTable* pSaveTbl;
-    std::set<sal_uLong> aBoxes;
+    std::set<sal_uLong> m_Boxes;
     std::vector<sal_uLong> aNewSttNds;
     SwUndoMoves* pMoves;
     SwHistory* pHistory;

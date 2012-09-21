@@ -655,7 +655,7 @@ public:
 
     const SwShellTableCrsr* GetTableCrsr() const { return pTblCrsr; }
     SwShellTableCrsr* GetTableCrsr() { return pTblCrsr; }
-    sal_uInt16 UpdateTblSelBoxes();
+    size_t UpdateTblSelBoxes();
 
     sal_Bool GotoFtnTxt();      ///< jump from content to footnote
     sal_Bool GotoFtnAnchor();   ///< jump from footnote to anchor

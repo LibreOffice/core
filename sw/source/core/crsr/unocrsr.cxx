@@ -233,16 +233,17 @@ void SwUnoTableCrsr::MakeBoxSels()
 
     if ( !bMakeTblCrsrs )
     {
-        SwSelBoxes& rTmpBoxes = (SwSelBoxes&)GetBoxes();
-        sal_uInt16 nCount = 0;
-        while( nCount < rTmpBoxes.size() )
-            DeleteBox( nCount );
+        SwSelBoxes const& rTmpBoxes = GetSelectedBoxes();
+        while (!rTmpBoxes.empty())
+        {
+            DeleteBox(0);
+        }
     }
 
     if( IsChgd() )
     {
         SwTableCursor::MakeBoxSels( &aTblSel );
-        if( !GetBoxesCount() )
+        if (!GetSelectedBoxesCount())
         {
             const SwTableBox* pBox;
             const SwNode* pBoxNd = GetPoint()->nNode.GetNode().FindTableBoxStartNode();
