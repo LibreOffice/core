@@ -29,6 +29,7 @@
 #ifndef SW_UNOTBL_HXX
 #define SW_UNOTBL_HXX
 
+#include <limits.h>
 #include <stdint.h>
 
 #include <com/sun/star/container/XNamed.hpp>
