@@ -287,10 +287,9 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         const SwCellFrm* pCurrentTopRightFrm    = 0;
         const SwCellFrm* pCurrentBottomLeftFrm  = 0;
         const SwCellFrm* pCurrentBottomRightFrm  = 0;
-        size_t i = 0;
 
         // Now find boxes for each entry and emit
-        for ( ; i < aUnions.size() && bTblIsValid; ++i)
+        for (size_t i = 0; i < aUnions.size() && bTblIsValid; ++i)
         {
             SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
@@ -425,8 +424,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             break;
         }
 
-        i = 0;
-        rBoxes.erase( rBoxes.begin() + i, rBoxes.end() );
+        rBoxes.clear();
         --nLoopMax;
 
     } while( sal_True );
