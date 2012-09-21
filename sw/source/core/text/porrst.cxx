@@ -330,7 +330,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
         SwTxtFly aTxtFly( this );
         SwRect aRect;
         sal_Bool bFirstFlyCheck = 0 != Prt().Height();
-        if ( bFirstFlyCheck &&
+        if ( !bCollapse && bFirstFlyCheck &&
              aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
             return sal_False;
         else
@@ -363,7 +363,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
                 SetEmpty( sal_True );
                 SetCompletePaint();
             }
-            if( !bFirstFlyCheck &&
+            if( !bCollapse && !bFirstFlyCheck &&
                  aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
                  return sal_False;
 
