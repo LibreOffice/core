@@ -80,7 +80,9 @@ SHL1STDLIBS=\
 .IF "$(COM)"!="GCC"
 .IF "$(CCNUMVER)" > "001300000000"
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
+.IF "$(HAVE_ATLTHUNK)" == "YES"
     SHL1STDLIBS+= $(ATL_LIB)$/atlthunk.lib
+.ENDIF
 .ENDIF
 .ENDIF
 

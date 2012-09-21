@@ -167,12 +167,61 @@ AC_ARG_ENABLE(directx,
 AC_ARG_ENABLE(activex,
 [  --disable-activex       Disable the use of ActiveX for windows build.
                           This switch is mandatory when using VC++ 2005/2008 Express.
+                          Alternatively you can use the Windows Driver Kit (WDK) and
+                          configure with the following switches:
+                          --with-atl-include-dir=$WDK_HOME\inc\atl71
+                          --with-atl-lib-dir=$WDK_HOME\lib\ATL\i386
+                          --with-mfc-include-dir=$WDK_HOME\inc\mfc42
+                          --with-mfc-lib-dir=$WDK_HOME\lib\Mfc\i386
 ],,)
 
 AC_ARG_ENABLE(atl,
 [  --disable-atl          Disable the use of ATL for windows build.
                           This switch is mandatory when using VC++ 2005/2008 Express.
+                          Alternatively you can use the Windows Driver Kit (WDK) and
+                          configure with the following switches:
+                          --with-atl-include-dir=$WDK_HOME\inc\atl71
+                          --with-atl-lib-dir=$WDK_HOME\lib\ATL\i386
+                          --with-mfc-include-dir=$WDK_HOME\inc\mfc42
+                          --with-mfc-lib-dir=$WDK_HOME\lib\Mfc\i386
 ],,)
+
+AC_ARG_WITH(atl-include-dir,
+[  --with-atl-include-dir      Path to ATL include directory for windows build.
+                          This switch is mandatory when using VC++ 2008 Express
+                          and configuring with ATL/ActiveX enabled.
+                          You can use the Windows Driver Kit (WDK) and
+                          configure with the following switch:
+                          --with-atl-include-dir=$WDK_HOME\inc\atl71
+],,)
+
+AC_ARG_WITH(atl-lib-dir,
+[  --with-atl-lib-dir          Path to ATL libraries directory for windows build.
+                          This switch is mandatory when using VC++ 2008 Express
+                          and configuring with ATL/ActiveX enabled.
+                          You can use the Windows Driver Kit (WDK) and
+                          configure with the following switch:
+                          --with-atl-lib-dir=$WDK_HOME\lib\ATL\i386
+],,)
+
+AC_ARG_WITH(mfc-include-dir,
+[  --with-mfc-include-dir       Path to MFC include directory for windows build.
+                          This switch is mandatory when using VC++ 2008 Express
+                          and configuring with ATL/ActiveX enabled.
+                          You can use the Windows Driver Kit (WDK) and
+                          configure with the following switch:
+                          --with-mfc-include-dir=$WDK_HOME\inc\mfc42
+],,)
+
+AC_ARG_WITH(mfc-lib-dir,
+[  --with-mfc-lib-dir          Path to MFC libraries directory for windows build.
+                          This switch is mandatory when using VC++ 2008 Express
+                          and configuring with ATL/ActiveX enabled.
+                          You can use the Windows Driver Kit (WDK) and
+                          configure with the following switch:
+                          --with-mfc-lib-dir=$WDK_HOME\lib\Mfc\i386
+],,)
+
 
 AC_ARG_ENABLE(symbols,
 [  --enable-symbols        Include debugging symbols in output.
@@ -5693,6 +5742,97 @@ fi
 AC_SUBST(ENABLE_DIRECT_DRAW)
 AC_SUBST(DIRECTXSDK_HOME)
 AC_SUBST(DIRECTXSDK_LIB)
+
+
+dnl ============================================
+dnl Check for ATL and MFC
+dnl ============================================
+if test \( "$_os" = "WINNT" \) ; then
+    AC_MSG_CHECKING([for ATL and MFC])
+    if test "$DISABLE_ATL" = "TRUE" -o "$DISABLE_ACTIVEX" = "TRUE" ; then
+        AC_MSG_RESULT([ATL/MFC disabled])
+    else
+        AC_MSG_NOTICE([testing ATL/MFC libs and includes])
+        if test -z "$with_atl_include_dir"; then
+            ATL_INCLUDE=$COMPATH/atlmfc/include
+        else
+            ATL_INCLUDE=`cygpath -u "$with_atl_include_dir"`
+        fi
+        if test -z "$with_atl_lib_dir"; then
+            ATL_LIB=$COMPATH/atlmfc/lib
+        else
+            ATL_LIB=`cygpath -u "$with_atl_lib_dir"`
+        fi
+        if test -z "$with_mfc_include_dir"; then
+            MFC_INCLUDE=$COMPATH/atlmfc/include
+        else
+            MFC_INCLUDE=`cygpath -u "$with_mfc_include_dir"`
+        fi
+        if test -z "$with_mfc_lib_dir"; then
+            MFC_LIB=$COMPATH/atlmfc/lib
+        else
+            MFC_LIB=`cygpath -u "$with_mfc_lib_dir"`
+        fi
+
+        ATL_INCLUDE=`echo $ATL_INCLUDE | $SED 's/\/$//'`
+        ATL_LIB=`echo $ATL_LIB | $SED 's/\/$//'`
+        MFC_INCLUDE=`echo $MFC_INCLUDE | $SED 's/\/$//'`
+        MFC_LIB=`echo $MFC_LIB | $SED 's/\/$//'`
+
+        if test -f "$ATL_INCLUDE/atlase.h"; then
+            HAVE_ATL_H="yes"
+        else
+            HAVA_ATL_H="no"
+        fi
+        if test -f "$MFC_INCLUDE/afx.h"; then
+            HAVE_MFC_H="yes"
+        else
+            HAVA_MFC_H="no"
+        fi
+        if test -f "$ATL_LIB/atls.lib"; then
+            HAVE_ATL_LIB="yes"
+            if test -f "$ATL_LIB/atlthunk.lib"; then
+                HAVE_ATLTHUNK="YES"
+            else
+                HAVE_ATLTHUNK="NO"
+            fi
+        else
+            HAVE_ATL_LIB="no"
+        fi
+
+        dnl TODO check also MFC libraries, they seem to have diferent names
+        dnl mfc42.lib mfc90.lib
+        if test -d "$MFC_LIB"; then
+            HAVE_MFC_LIB="yes"
+        else
+            HAVE_MFC_LIB="no"
+        fi
+
+        if test "$HAVE_ATL_H" = "no" -o "$HAVE_MFC_H" = "no" -o "$HAVE_ATL_LIB" = "no" -o "$HAVE_MFC_LIB" = "no"; then
+            ATL_INCLUDE=
+            ATL_LIB=
+            MFC_INCLUDE=
+            MFC_LIB=
+            HAVE_ATL_LIB=
+            dnl TODO shouldn't this be an error?
+            DISABLE_ACTIVEX="TRUE"
+            DISABLE_ATL="TRUE"
+            AC_MSG_RESULT([ATL/MFC disabled])
+        else
+            ATL_INCLUDE=`cygpath -dm "$ATL_INCLUDE"`
+            ATL_LIB=`cygpath -dm "$ATL_LIB"`
+            MFC_INCLUDE=`cygpath -dm "$MFC_INCLUDE"`
+            MFC_LIB=`cygpath -dm "$MFC_LIB"`
+            AC_MSG_RESULT([ATL/MFC enabled])
+        fi
+    fi
+fi
+AC_SUBST(ATL_INCLUDE)
+AC_SUBST(ATL_LIB)
+AC_SUBST(HAVE_ATLTHUNK)
+AC_SUBST(MFC_INCLUDE)
+AC_SUBST(MFC_LIB)
+
 
 dnl ============================================
 dnl Check for Nullsoft Scriptable Install System

@@ -107,7 +107,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
-     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
+     $USE_DIRECTX5, $ATL_LIB, $HAVE_ATLTHUNK, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
@@ -701,10 +701,6 @@ elsif ( $platform =~ m/cygwin/ )
       $COMEX          = '@COMEX@';
       if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
           $CVER        = "M1310";
-          $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-          $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
-          $MFC_LIB     = "";
-          $MFC_INCLUDE = "";
       } elsif ( "@COMEX@" ge "11" ) { # .NET 2005 needs M1400
 	  if ( "@COMEX@" eq "11" ) {
 	      $CVER        = "M1400";
@@ -713,17 +709,6 @@ elsif ( $platform =~ m/cygwin/ )
 	  } else {                   # Unsupported
 	      die "Unsupported value for COMEX variable.\n";
 	  }
-          if ( "@DISABLE_ACTIVEX@" ) {
-              $ATL_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
-              $ATL_INCLUDE = $PSDK_HOME.$ds."include".$ds."atl";
-              $MFC_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
-              $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
-          } else {
-              $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-              $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
-              $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-              $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
-          }
       }
 	  print "Setting W32 build with bash shell specific values... ";
 	  # No speacial treatment for CC an CXX anymore.
@@ -1782,15 +1767,14 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "WINDOWS_VISTA_PSDK","@WINDOWS_VISTA_PSDK@","e" );
    ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
    ToFile( "USE_DIRECTX5",      $USE_DIRECTX5,      "e" );
-   ToFile( "ATL_LIB",           $ATL_LIB,         "e" );
-   if ( $MINGW ne "yes" )
-   {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
-   }
-   ToFile( "MFC_LIB",           $MFC_LIB,         "e" );
-   ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
+   ToFile( "ATL_LIB",           "@ATL_LIB@",        "e" );
+   ToFile( "ATL_INCLUDE",       "@ATL_INCLUDE@",    "e" );
+   ToFile( "HAVE_ATLTHUNK",     "@HAVE_ATLTHUNK@",  "e" );
+   ToFile( "MFC_LIB",           "@MFC_LIB@",        "e" );
+   ToFile( "MFC_INCLUDE",       "@MFC_INCLUDE@",    "e" );
    ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
-   ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
+   ToFile( "DISABLE_ATL",       "@DISABLE_ATL@",    "e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
 
    # Hack around dmake's mktmp not generating DOS paths.
