@@ -510,7 +510,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
     return g_moduleCount.canUnload( &g_moduleCount, pTime );
 }
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL proxyfac_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
