@@ -88,7 +88,8 @@ struct _PageSz
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< io::XInputStream > xInputStream,
                             uno::Reference< lang::XComponent > xModel,
-                            SourceDocumentType eDocumentType) :
+                            bool bRepairStorage,
+                            SourceDocumentType eDocumentType ) :
 LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
 LoggedStream(dmapper_logger, "DomainMapper"),
@@ -101,12 +102,11 @@ LoggedStream(dmapper_logger, "DomainMapper"),
         uno::makeAny( false ) );
 
     //import document properties
-
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
         uno::Reference< embed::XStorage > xDocumentStorage =
-            (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream));
+            (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xFactory, bRepairStorage ));
 
         uno::Reference< uno::XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
                                 "com.sun.star.document.OOXMLDocumentPropertiesImporter",

@@ -33,6 +33,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAskLater.hpp>
 #include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
@@ -2219,7 +2220,12 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
         }
 
         return xLoader->filter( aArgs );
-        }catch(...)
+        }
+        catch (const packages::zip::ZipIOException&)
+        {
+            SetError( ERRCODE_IO_BROKENPACKAGE, "Badness in the underlying package format." );
+        }
+        catch(...)
         {}
     }
 

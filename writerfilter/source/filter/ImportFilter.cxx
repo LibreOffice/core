@@ -63,6 +63,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     else if (m_xDstDoc.is())
     {
         MediaDescriptor aMediaDesc( aDescriptor );
+        bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
         OUString sFilterName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FILTERNAME(), OUString() );
 
         uno::Reference< io::XInputStream > xInputStream;
@@ -77,9 +78,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         }
 
         if ( !xInputStream.is() )
-        {
             return sal_False;
-        }
 
 #ifdef DEBUG_IMPORT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
@@ -101,11 +100,11 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
          m_sFilterName == "writer_OOXML" || m_sFilterName == "writer_OOXML_Text_Template" ) ?
             writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
 
-    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, eType));
+    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType));
     //create the tokenizer and domain mapper
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
-        writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream);
+        writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
         writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
 
         uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);

@@ -88,7 +88,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< OUString >& aAr
     uno::Reference<io::XInputStream> xInputStream =
         xFileAccess->openFileRead(absFileUrl);
     ooxml::OOXMLStream::Pointer_t pDocStream =
-        ooxml::OOXMLDocumentFactory::createStream(xContext, xInputStream);
+        ooxml::OOXMLDocumentFactory::createStream(xContext, xInputStream, false);
 
     ooxml::OOXMLDocument::Pointer_t pDocument
         (ooxml::OOXMLDocumentFactory::createDocument(pDocStream));

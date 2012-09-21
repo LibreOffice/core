@@ -173,7 +173,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
             {
                 ooxml::OOXMLStream::Pointer_t pDocStream =
                     ooxml::OOXMLDocumentFactory::createStream
-                    (xContext, xInputStream);
+                    (xContext, xInputStream, false);
 
                 if (pDocStream.get() != NULL)
                 {

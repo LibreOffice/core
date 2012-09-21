@@ -61,7 +61,7 @@ public:
     OOXMLStreamImpl
     (uno::Reference<uno::XComponentContext> xContext,
      uno::Reference<io::XInputStream> xStorageStream,
-     StreamType_t nType);
+     StreamType_t nType, bool bRepairStorage);
     OOXMLStreamImpl(OOXMLStreamImpl & rStream, const OUString & rId);
 
     virtual ~OOXMLStreamImpl();
