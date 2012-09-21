@@ -511,8 +511,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     $(if $(filter TRUE,$(ENABLE_CUPS)),\
         vcl/unx/generic/printer/cupsmgr \
-        vcl/unx/generic/printer/printerinfomanager, \
-      else \
+        vcl/unx/generic/printer/printerinfomanager \
+		, \
         vcl/null/printerinfomanager \
     ) \
 ))
