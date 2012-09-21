@@ -289,8 +289,8 @@ void SwFrm::PrepareMake()
         if ( !GetUpper() )
             return;
 
-        const sal_Bool bCnt = IsCntntFrm();
-        const sal_Bool bTab = IsTabFrm();
+        const bool bCnt = IsCntntFrm();
+        const bool bTab = IsTabFrm();
         sal_Bool bNoSect = IsInSct();
         sal_Bool bOldTabLock = sal_False, bFoll = sal_False;
         SwFlowFrm* pThis = bCnt ? (SwCntntFrm*)this : NULL;
@@ -418,8 +418,8 @@ void SwFrm::PrepareCrsr()
         if ( !GetUpper() )
             return;
 
-        const sal_Bool bCnt = IsCntntFrm();
-        const sal_Bool bTab = IsTabFrm();
+        const bool bCnt = IsCntntFrm();
+        const bool bTab = IsTabFrm();
         sal_Bool bNoSect = IsInSct();
 
         sal_Bool bOldTabLock = sal_False, bFoll;
@@ -966,7 +966,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         bValidPrtArea = sal_True;
 
         SWRECTFN( this )
-        const sal_Bool bTxtFrm = IsTxtFrm();
+        const bool bTxtFrm = IsTxtFrm();
         SwTwips nUpper = 0;
         if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
         {

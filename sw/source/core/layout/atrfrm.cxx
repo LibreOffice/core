@@ -2843,7 +2843,7 @@ void SwFlyFrmFmt::MakeFrms()
         SwIterator<SwFrm,SwModify> aIter( *pModify );
         for( SwFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
-            sal_Bool bAdd = !pFrm->IsCntntFrm() ||
+            bool bAdd = !pFrm->IsCntntFrm() ||
                             !((SwCntntFrm*)pFrm)->IsFollow();
 
             if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )
@@ -2877,7 +2877,7 @@ void SwFlyFrmFmt::MakeFrms()
                     if( pObj->ISA(SwFlyFrm) &&
                         (&pObj->GetFrmFmt()) == this )
                     {
-                        bAdd = sal_False;
+                        bAdd = false;
                         break;
                     }
                 }

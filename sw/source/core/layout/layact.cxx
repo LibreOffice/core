@@ -1398,12 +1398,12 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
                 aPaint = pPageFrm->GetBoundRect();
             }
 
-            sal_Bool bPageInBrowseMode = pLay->IsPageFrm();
+            bool bPageInBrowseMode = pLay->IsPageFrm();
             if( bPageInBrowseMode )
             {
                 const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
                 if( !pSh || !pSh->GetViewOptions()->getBrowseMode() )
-                    bPageInBrowseMode = sal_False;
+                    bPageInBrowseMode = false;
             }
             if( bPageInBrowseMode )
             {

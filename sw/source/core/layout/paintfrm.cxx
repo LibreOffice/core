@@ -6088,7 +6088,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     SvxBrushItem* pTmpBackBrush = 0;
     const Color* pCol;
     SwRect aOrigBackRect;
-    const sal_Bool bPageFrm = IsPageFrm();
+    const bool bPageFrm = IsPageFrm();
     sal_Bool bLowMode = sal_True;
 
     sal_Bool bBack = GetBackgroundBrush( pItem, pCol, aOrigBackRect, bLowerMode );
@@ -6612,7 +6612,7 @@ void SwColumnFrm::PaintSubsidiaryLines( const SwPageFrm *,
 void SwSectionFrm::PaintSubsidiaryLines( const SwPageFrm * pPage,
                                         const SwRect & rRect ) const
 {
-    const sal_Bool bNoLowerColumn = !Lower() || !Lower()->IsColumnFrm();
+    const bool bNoLowerColumn = !Lower() || !Lower()->IsColumnFrm();
     if ( bNoLowerColumn )
     {
         SwLayoutFrm::PaintSubsidiaryLines( pPage, rRect );
@@ -6681,7 +6681,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 
     const bool bFlys = pPage->GetSortedObjs() ? true : false;
 
-    const bool bCell = IsCellFrm() ? true : false;
+    const bool bCell = IsCellFrm();
     // use frame area for cells
     // OD 13.02.2003 #i3662# - for section use also frame area
     const bool bUseFrmArea = bCell || IsSctFrm();

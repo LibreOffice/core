@@ -386,7 +386,7 @@ void SwFlyAtCntFrm::MakeAll()
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
             bool bOsz = false;
-            sal_Bool bExtra = Lower() && Lower()->IsColumnFrm();
+            bool bExtra = Lower() && Lower()->IsColumnFrm();
             // #i3317# - boolean, to apply temporarly the
             // 'straightforward positioning process' for the frame due to its
             // overlapping with a previous column.
@@ -501,7 +501,7 @@ void SwFlyAtCntFrm::MakeAll()
                     // a position change, we loop once more and format
                     // our content using FormatWidthCols again.
                     _InvalidateSize();
-                    bExtra = sal_False; // Ensure only one additional loop run
+                    bExtra = false; // Ensure only one additional loop run
                 }
             } while ( !IsValid() && !bOsz &&
                       // #i3317#

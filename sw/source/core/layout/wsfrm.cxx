@@ -1551,7 +1551,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
     }
     else
     {
-        const sal_Bool bFtnPage = pBoss->IsPageFrm() && ((SwPageFrm*)pBoss)->IsFtnPage();
+        const bool bFtnPage = pBoss->IsPageFrm() && ((SwPageFrm*)pBoss)->IsFtnPage();
         if ( bFtnPage && !IsFtnContFrm() )
             pFrm = (SwFrm*)pBoss->FindFtnCont();
         if ( !pFrm )
@@ -3110,7 +3110,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 
     const sal_uInt16 nRight = (sal_uInt16)((SwBorderAttrs*)pAttrs)->CalcRight( this );
     const sal_uInt16 nLower = pAttrs->CalcBottom();
-    sal_Bool bVert = IsVertical() && !IsPageFrm();
+    bool bVert = IsVertical() && !IsPageFrm();
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     if ( !bValidPrtArea )

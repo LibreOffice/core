@@ -798,33 +798,33 @@ public:
                           const void *pVoid = 0, sal_Bool bNotify = sal_True );
 
     // sal_True if it is the correct class, sal_False otherwise
-    inline sal_Bool IsLayoutFrm() const;
-    inline sal_Bool IsRootFrm() const;
-    inline sal_Bool IsPageFrm() const;
-    inline sal_Bool IsColumnFrm() const;
-    inline sal_Bool IsFtnBossFrm() const;  // footnote bosses might be PageFrms or ColumnFrms
-    inline sal_Bool IsHeaderFrm() const;
-    inline sal_Bool IsFooterFrm() const;
-    inline sal_Bool IsFtnContFrm() const;
-    inline sal_Bool IsFtnFrm() const;
-    inline sal_Bool IsBodyFrm() const;
-    inline sal_Bool IsColBodyFrm() const;  // implemented in layfrm.hxx, BodyFrm above ColumnFrm
-    inline sal_Bool IsPageBodyFrm() const; // implemented in layfrm.hxx, BodyFrm above PageFrm
-    inline sal_Bool IsFlyFrm() const;
-    inline sal_Bool IsSctFrm() const;
-    inline sal_Bool IsTabFrm() const;
-    inline sal_Bool IsRowFrm() const;
-    inline sal_Bool IsCellFrm() const;
-    inline sal_Bool IsCntntFrm() const;
-    inline sal_Bool IsTxtFrm() const;
-    inline sal_Bool IsNoTxtFrm() const;
+    inline bool IsLayoutFrm() const;
+    inline bool IsRootFrm() const;
+    inline bool IsPageFrm() const;
+    inline bool IsColumnFrm() const;
+    inline bool IsFtnBossFrm() const;  // footnote bosses might be PageFrms or ColumnFrms
+    inline bool IsHeaderFrm() const;
+    inline bool IsFooterFrm() const;
+    inline bool IsFtnContFrm() const;
+    inline bool IsFtnFrm() const;
+    inline bool IsBodyFrm() const;
+    inline bool IsColBodyFrm() const;  // implemented in layfrm.hxx, BodyFrm above ColumnFrm
+    inline bool IsPageBodyFrm() const; // implemented in layfrm.hxx, BodyFrm above PageFrm
+    inline bool IsFlyFrm() const;
+    inline bool IsSctFrm() const;
+    inline bool IsTabFrm() const;
+    inline bool IsRowFrm() const;
+    inline bool IsCellFrm() const;
+    inline bool IsCntntFrm() const;
+    inline bool IsTxtFrm() const;
+    inline bool IsNoTxtFrm() const;
     // Frms where its PrtArea depends on their neighbors and that are
     // positioned in the content flow
-    inline sal_Bool IsFlowFrm() const;
+    inline bool IsFlowFrm() const;
     // Frms that are capable of retouching or that might need to retouch behind
     // themselves
-    inline sal_Bool IsRetoucheFrm() const;
-    inline sal_Bool IsAccessibleFrm() const;
+    inline bool IsRetoucheFrm() const;
+    inline bool IsAccessibleFrm() const;
 
     void PrepareCrsr();                 // CrsrShell is allowed to call this
 
@@ -1141,89 +1141,89 @@ inline const SwFrm *SwFrm::FindPrev() const
 }
 
 
-inline sal_Bool SwFrm::IsLayoutFrm() const
+inline bool SwFrm::IsLayoutFrm() const
 {
-    return GetType() & FRM_LAYOUT ? sal_True : sal_False;
+    return GetType() & FRM_LAYOUT;
 }
-inline sal_Bool SwFrm::IsRootFrm() const
+inline bool SwFrm::IsRootFrm() const
 {
     return nType == FRMC_ROOT;
 }
-inline sal_Bool SwFrm::IsPageFrm() const
+inline bool SwFrm::IsPageFrm() const
 {
     return nType == FRMC_PAGE;
 }
-inline sal_Bool SwFrm::IsColumnFrm() const
+inline bool SwFrm::IsColumnFrm() const
 {
     return nType == FRMC_COLUMN;
 }
-inline sal_Bool SwFrm::IsFtnBossFrm() const
+inline bool SwFrm::IsFtnBossFrm() const
 {
-    return GetType() & FRM_FTNBOSS ? sal_True : sal_False;
+    return GetType() & FRM_FTNBOSS;
 }
-inline sal_Bool SwFrm::IsHeaderFrm() const
+inline bool SwFrm::IsHeaderFrm() const
 {
     return nType == FRMC_HEADER;
 }
-inline sal_Bool SwFrm::IsFooterFrm() const
+inline bool SwFrm::IsFooterFrm() const
 {
     return nType == FRMC_FOOTER;
 }
-inline sal_Bool SwFrm::IsFtnContFrm() const
+inline bool SwFrm::IsFtnContFrm() const
 {
     return nType == FRMC_FTNCONT;
 }
-inline sal_Bool SwFrm::IsFtnFrm() const
+inline bool SwFrm::IsFtnFrm() const
 {
     return nType == FRMC_FTN;
 }
-inline sal_Bool SwFrm::IsBodyFrm() const
+inline bool SwFrm::IsBodyFrm() const
 {
     return nType == FRMC_BODY;
 }
-inline sal_Bool SwFrm::IsFlyFrm() const
+inline bool SwFrm::IsFlyFrm() const
 {
     return nType == FRMC_FLY;
 }
-inline sal_Bool SwFrm::IsSctFrm() const
+inline bool SwFrm::IsSctFrm() const
 {
     return nType == FRMC_SECTION;
 }
-inline sal_Bool SwFrm::IsTabFrm() const
+inline bool SwFrm::IsTabFrm() const
 {
     return nType == FRMC_TAB;
 }
-inline sal_Bool SwFrm::IsRowFrm() const
+inline bool SwFrm::IsRowFrm() const
 {
     return nType == FRMC_ROW;
 }
-inline sal_Bool SwFrm::IsCellFrm() const
+inline bool SwFrm::IsCellFrm() const
 {
     return nType == FRMC_CELL;
 }
-inline sal_Bool SwFrm::IsCntntFrm() const
+inline bool SwFrm::IsCntntFrm() const
 {
-    return GetType() & FRM_CNTNT ? sal_True : sal_False;
+    return GetType() & FRM_CNTNT;
 }
-inline sal_Bool SwFrm::IsTxtFrm() const
+inline bool SwFrm::IsTxtFrm() const
 {
     return nType == FRMC_TXT;
 }
-inline sal_Bool SwFrm::IsNoTxtFrm() const
+inline bool SwFrm::IsNoTxtFrm() const
 {
     return nType == FRMC_NOTXT;
 }
-inline sal_Bool SwFrm::IsFlowFrm() const
+inline bool SwFrm::IsFlowFrm() const
 {
-    return GetType() & 0xCA00 ? sal_True : sal_False;   //TabFrm, CntntFrm, SectionFrm
+    return GetType() & 0xCA00;   //TabFrm, CntntFrm, SectionFrm
 }
-inline sal_Bool SwFrm::IsRetoucheFrm() const
+inline bool SwFrm::IsRetoucheFrm() const
 {
-    return GetType() & 0xCA40 ? sal_True : sal_False;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
+    return GetType() & 0xCA40;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
 }
-inline sal_Bool SwFrm::IsAccessibleFrm() const
+inline bool SwFrm::IsAccessibleFrm() const
 {
-    return GetType() & FRM_ACCESSIBLE ? sal_True : sal_False;
+    return GetType() & FRM_ACCESSIBLE;
 }
 #endif
 
