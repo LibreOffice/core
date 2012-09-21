@@ -60,7 +60,7 @@ MediaWindowBaseImpl::~MediaWindowBaseImpl()
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const OUString& rURL )
 {
     uno::Reference< lang::XMultiServiceFactory >    xFactory( ::comphelper::getProcessServiceFactory() );
     uno::Reference< media::XPlayer >                xPlayer;
@@ -112,8 +112,8 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
     return xPlayer;
 }
 
-void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL,
-        ::rtl::OUString const& rTempURL)
+void MediaWindowBaseImpl::setURL( const OUString& rURL,
+        OUString const& rTempURL)
 {
     if( rURL != getURL() )
     {
@@ -127,7 +127,7 @@ void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL,
         }
 
         mxPlayer.clear();
-        mTempFileURL = ::rtl::OUString();
+        mTempFileURL = OUString();
 
         if (rTempURL.getLength())
         {
@@ -158,7 +158,7 @@ void MediaWindowBaseImpl::onURLChanged()
 
 // ---------------------------------------------------------------------
 
-const ::rtl::OUString& MediaWindowBaseImpl::getURL() const
+const OUString& MediaWindowBaseImpl::getURL() const
 {
     return maFileURL;
 }
