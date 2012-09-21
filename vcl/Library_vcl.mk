@@ -445,7 +445,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     AppleRemote \
 ))
 $(eval $(call gb_Library_use_externals,vcl,\
-    quicktime \
+    $(if $(filter 64,$(BITNESS_OVERRIDE)),,quicktime) \
     cocoa \
     carbon \
     corefoundation \
