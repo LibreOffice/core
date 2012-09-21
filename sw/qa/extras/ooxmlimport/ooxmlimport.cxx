@@ -89,6 +89,7 @@ public:
     void testN778140();
     void testN778828();
     void testInk();
+    void testN779834();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -124,6 +125,7 @@ public:
     CPPUNIT_TEST(testN778140);
     CPPUNIT_TEST(testN778828);
     CPPUNIT_TEST(testInk);
+    CPPUNIT_TEST(testN779834);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -857,6 +859,12 @@ void Test::testInk()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.OpenBezierShape"));
+}
+
+void Test::testN779834()
+{
+    // This document simply crashed the importer.
+    load("n779834.docx");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
