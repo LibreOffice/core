@@ -22,6 +22,8 @@
     4098 19545 -2132340659 0 6 13 3265 0
     <!-- ATI Mobility 128 AGP 2X - blank screen -->
     4098 19526 11604008 2 5 10 0 1028
+    <!-- CPU-integrated HD4000 Graphic - busted max texture size - fdo#54417 -->
+    32902 354 -2067132349 9 9 17 10 2828
    </value>
   </prop>
  </node>
