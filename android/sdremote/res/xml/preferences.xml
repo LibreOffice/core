@@ -2,11 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <!-- <SwitchPreference android:defaultValue="false" android:title="@string/options_autodecline" android:key="option_autodecline"/> -->
-    <SwitchPreference
+    <CheckBoxPreference
         android:defaultValue="false"
         android:key="option_volumeswitching"
-        android:title="@string/options_volumeswitching"
-         android:summary="@string/options_volumeswitching_descripton"/>
+        android:summary="@string/options_volumeswitching_descripton"
+        android:title="@string/options_volumeswitching" />
 
     <Preference
         android:key="option_switchcomputer"

@@ -32,6 +32,7 @@
         <activity
             android:name=".PairingActivity"
             android:icon="@drawable/actionbar_icon_computer"
+            android:logo="@drawable/actionbar_icon_computer"
             android:noHistory="true" >
         </activity>
 
