@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
   <block-list:block block-list:abbreviated-name="--" block-list:name="–"/>
   <block-list:block block-list:abbreviated-name="--&gt;" block-list:name="→"/>
@@ -11,6 +11,9 @@
   <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
   <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
   <block-list:block block-list:abbreviated-name="á" block-list:name="à"/>
   <block-list:block block-list:abbreviated-name="à alguém" block-list:name="a alguém"/>
   <block-list:block block-list:abbreviated-name="à alguma" block-list:name="a alguma"/>
@@ -396,7 +399,6 @@
   <block-list:block block-list:abbreviated-name="baxarel" block-list:name="bacharel"/>
   <block-list:block block-list:abbreviated-name="bazam" block-list:name="vazam"/>
   <block-list:block block-list:abbreviated-name="bechiga" block-list:name="bexiga"/>
-  <block-list:block block-list:abbreviated-name="beijo à beijo" block-list:name="beijo a beijo"/>
   <block-list:block block-list:abbreviated-name="ben" block-list:name="bem"/>
   <block-list:block block-list:abbreviated-name="beringela" block-list:name="berinjela"/>
   <block-list:block block-list:abbreviated-name="bibkioteca" block-list:name="biblioteca"/>
@@ -539,8 +541,6 @@
   <block-list:block block-list:abbreviated-name="comparessa" block-list:name="compareça"/>
   <block-list:block block-list:abbreviated-name="comparessam" block-list:name="compareçam"/>
   <block-list:block block-list:abbreviated-name="comparesso" block-list:name="compareço"/>
-  <block-list:block block-list:abbreviated-name="compra à vista" block-list:name="compra a vista"/>
-  <block-list:block block-list:abbreviated-name="compras à vista" block-list:name="compras a vista"/>
   <block-list:block block-list:abbreviated-name="compreenssão" block-list:name="compreensão"/>
   <block-list:block block-list:abbreviated-name="comprenção" block-list:name="compreensão"/>
   <block-list:block block-list:abbreviated-name="comprensão" block-list:name="compreensão"/>
@@ -612,8 +612,6 @@
   <block-list:block block-list:abbreviated-name="das mos" block-list:name="das mãos"/>
   <block-list:block block-list:abbreviated-name="de celebro" block-list:name="de cérebro"/>
   <block-list:block block-list:abbreviated-name="de celebros" block-list:name="de cérebros"/>
-  <block-list:block block-list:abbreviated-name="de ponta à ponta " block-list:name="de ponta a ponta "/>
-  <block-list:block block-list:abbreviated-name="de segunda à sexta " block-list:name="de segunda a sexta "/>
   <block-list:block block-list:abbreviated-name="decer" block-list:name="descer"/>
   <block-list:block block-list:abbreviated-name="definitamente" block-list:name="definitivamente"/>
   <block-list:block block-list:abbreviated-name="deicham" block-list:name="deixam"/>
@@ -724,6 +722,7 @@
   <block-list:block block-list:abbreviated-name="elicopteros" block-list:name="helicópteros"/>
   <block-list:block block-list:abbreviated-name="else" block-list:name="eles"/>
   <block-list:block block-list:abbreviated-name="em fim sóis" block-list:name="enfim sós"/>
+  <block-list:block block-list:abbreviated-name="em fim sós" block-list:name="enfim sós"/>
   <block-list:block block-list:abbreviated-name="em mos" block-list:name="em mãos"/>
   <block-list:block block-list:abbreviated-name="email" block-list:name="e-mail"/>
   <block-list:block block-list:abbreviated-name="emails" block-list:name="e-mails"/>
@@ -1149,8 +1148,6 @@
   <block-list:block block-list:abbreviated-name="horivel" block-list:name="horrível"/>
   <block-list:block block-list:abbreviated-name="horível" block-list:name="horrível"/>
   <block-list:block block-list:abbreviated-name="http:\\" block-list:name="http://"/>
-  <block-list:block block-list:abbreviated-name="idéia" block-list:name="ideia"/>
-  <block-list:block block-list:abbreviated-name="idéias" block-list:name="ideias"/>
   <block-list:block block-list:abbreviated-name="ilária" block-list:name="hilária"/>
   <block-list:block block-list:abbreviated-name="ilárias" block-list:name="hilárias"/>
   <block-list:block block-list:abbreviated-name="ilário" block-list:name="hilário"/>
@@ -1272,7 +1269,6 @@
   <block-list:block block-list:abbreviated-name="longa metragem" block-list:name="longa-metragem"/>
   <block-list:block block-list:abbreviated-name="losta" block-list:name="lista"/>
   <block-list:block block-list:abbreviated-name="lostas" block-list:name="listas"/>
-  <block-list:block block-list:abbreviated-name="lua de mel" block-list:name="lua-de-mel"/>
   <block-list:block block-list:abbreviated-name="luchúria" block-list:name="luxúria"/>
   <block-list:block block-list:abbreviated-name="luso brasileira" block-list:name="luso-brasileira"/>
   <block-list:block block-list:abbreviated-name="luso brasileiro" block-list:name="luso-brasileiro"/>
@@ -1374,6 +1370,7 @@
   <block-list:block block-list:abbreviated-name="maxi desvalorizações" block-list:name="maxidesvalorizações"/>
   <block-list:block block-list:abbreviated-name="maxucar" block-list:name="machucar"/>
   <block-list:block block-list:abbreviated-name="maz" block-list:name="mas"/>
+  <block-list:block block-list:abbreviated-name="mea culpa" block-list:name="mea-culpa"/>
   <block-list:block block-list:abbreviated-name="mecher" block-list:name="mexer"/>
   <block-list:block block-list:abbreviated-name="mecherica" block-list:name="mexerica"/>
   <block-list:block block-list:abbreviated-name="mecherico" block-list:name="mexerico"/>
@@ -1698,6 +1695,7 @@
   <block-list:block block-list:abbreviated-name="moto bóis" block-list:name="motobóis"/>
   <block-list:block block-list:abbreviated-name="moto bomba" block-list:name="motobomba"/>
   <block-list:block block-list:abbreviated-name="moto bombas" block-list:name="motobombas"/>
+  <block-list:block block-list:abbreviated-name="moto boy" block-list:name="motoboy"/>
   <block-list:block block-list:abbreviated-name="moto ciclismo" block-list:name="motociclismo"/>
   <block-list:block block-list:abbreviated-name="moto ciclista" block-list:name="motociclista"/>
   <block-list:block block-list:abbreviated-name="moto ciclistas" block-list:name="motociclistas"/>
@@ -4947,7 +4945,4 @@
   <block-list:block block-list:abbreviated-name="zuando" block-list:name="zoando"/>
   <block-list:block block-list:abbreviated-name="zuar" block-list:name="zoar"/>
   <block-list:block block-list:abbreviated-name="zuei" block-list:name="zoei"/>
-  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
-  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
-  <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
 </block-list:block-list>
