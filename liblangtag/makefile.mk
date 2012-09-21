@@ -43,6 +43,8 @@ PATCH_FILES+=liblangtag-0.2-datadir.patch
 PATCH_FILES+=liblangtag-0.2-msvc-warning.patch
 PATCH_FILES+=liblangtag-0.2-reg2xml-encoding-problem.patch
 PATCH_FILES+=liblangtag-0.2-xmlCleanupParser.patch
+    # addressed upstream as <https://github.com/tagoh/liblangtag/pull/7> "Do not
+    # call xmlCleanupParser from liblangtag"
 
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
