@@ -70,15 +70,15 @@ MediaWindow::~MediaWindow()
 
 // -------------------------------------------------------------------------
 
-void MediaWindow::setURL( const ::rtl::OUString& rURL )
+void MediaWindow::setURL( const OUString& rURL )
 {
     if( mpImpl )
-        mpImpl->setURL( rURL, ::rtl::OUString() );
+        mpImpl->setURL( rURL, OUString() );
 }
 
 // -------------------------------------------------------------------------
 
-const ::rtl::OUString& MediaWindow::getURL() const
+const OUString& MediaWindow::getURL() const
 {
     return mpImpl->getURL();
 }
@@ -238,24 +238,24 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
     for( size_t i = 0; i < SAL_N_ELEMENTS(pFilters); i += 2 )
     {
-        rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
-                                        ::rtl::OUString::createFromAscii(pFilters[i]),
-                                        ::rtl::OUString::createFromAscii(pFilters[i+1]) ) );
+        rFilterNameVector.push_back( ::std::make_pair< OUString, OUString >(
+                                        OUString::createFromAscii(pFilters[i]),
+                                        OUString::createFromAscii(pFilters[i+1]) ) );
     }
 }
 
 // -------------------------------------------------------------------------
 
 bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
-        ::rtl::OUString& rURL, bool *const o_pbLink)
+        OUString& rURL, bool *const o_pbLink)
 {
     ::sfx2::FileDialogHelper        aDlg( (o_pbLink)
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
             : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    static const ::rtl::OUString    aWildcard( "*."  );
+    static const OUString           aWildcard( "*."  );
     FilterNameVector                aFilters;
-    const ::rtl::OUString           aSeparator( ";"  );
-    ::rtl::OUString                 aAllTypes;
+    const OUString                  aSeparator( ";"  );
+    OUString                        aAllTypes;
 
     aDlg.SetTitle( AVMEDIA_RESID( (o_pbLink)
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
@@ -279,7 +279,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
 
     for( i = 0; i < aFilters.size(); ++i )
     {
-        ::rtl::OUString aTypes;
+        OUString aTypes;
 
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
@@ -328,7 +328,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
         }
     }
     else if( !rURL.isEmpty() )
-        rURL = ::rtl::OUString();
+        rURL = OUString();
 
     return( !rURL.isEmpty() );
 }
@@ -344,7 +344,7 @@ void MediaWindow::executeFormatErrorBox( Window* pParent )
 
 // -------------------------------------------------------------------------
 
-bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPreferredSizePixel )
+bool MediaWindow::isMediaURL( const OUString& rURL, bool bDeep, Size* pPreferredSizePixel )
 {
     const INetURLObject aURL( rURL );
     bool                bRet = false;
@@ -378,7 +378,7 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
         else
         {
             FilterNameVector        aFilters;
-            const ::rtl::OUString   aExt( aURL.getExtension() );
+            const OUString          aExt( aURL.getExtension() );
 
             getMediaFilters( aFilters );
 
@@ -399,14 +399,14 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindow::createPlayer( const ::rtl::OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL )
 {
     return priv::MediaWindowImpl::createPlayer( rURL );
 }
 
 // -------------------------------------------------------------------------
 
-uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const ::rtl::OUString& rURL,
+uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
                                                             bool bAllowToCreateReplacementGraphic,
                                                             double fMediaTime )
 {
