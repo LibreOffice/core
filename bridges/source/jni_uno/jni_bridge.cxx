@@ -474,6 +474,10 @@ void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     machine->acquire();
 }
 
+#ifdef DISABLE_DYNLOADING
+#define uno_ext_getMapping java_uno_ext_getMapping
+#endif
+
 //------------------------------------------------------------------------------
 void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )

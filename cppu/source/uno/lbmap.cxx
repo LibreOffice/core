@@ -329,6 +329,11 @@ static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
 {
     if (rBridgeName.equalsAscii( CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" ))
         return CPPU_ENV_uno_ext_getMapping;
+#ifdef SOLAR_JAVA
+    if (rBridgeName.equalsAscii( "java" "_uno" ))
+        return java_uno_ext_getMapping;
+#endif
+
 #if 0
     // I don't think the affine or log bridges will be needed on any
     // DISABLE_DYNLOADING platform (iOS at least, possibly Android), but if
