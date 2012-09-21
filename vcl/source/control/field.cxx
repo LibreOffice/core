@@ -821,6 +821,15 @@ NumericField::NumericField( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+bool NumericField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("digits")))
+        SetDecimalDigits(rValue.toInt32());
+    else
+        return SpinField::set_property(rKey, rValue);
+    return true;
+}
+
 // -----------------------------------------------------------------------
 
 void NumericField::ImplLoadRes( const ResId& rResId )

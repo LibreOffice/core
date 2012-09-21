@@ -529,6 +529,7 @@ public:
     virtual void            Down();
     virtual void            First();
     virtual void            Last();
+    virtual bool            set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 
