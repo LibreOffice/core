@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 // INCLUDE ---------------------------------------------------------------
@@ -62,6 +60,7 @@
 #include "parclass.hxx"
 #include "externalrefmgr.hxx"
 #include "doubleref.hxx"
+#include "token.hxx"
 
 #include <math.h>
 #include <float.h>
@@ -1170,6 +1169,9 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
                 SingleRefToVars( static_cast<ScToken*>(p)->GetSingleRef(), rCol, rRow, rTab);
                 if ( pDok->aTableOpList.Count() > 0 )
                     ReplaceCell( rCol, rRow, rTab );
+                DELETEZ(pLastStackRefToken);
+                pLastStackRefToken = static_cast<ScToken*>(p->Clone());
+                ((ScSingleRefToken*)pLastStackRefToken)->GetSingleRef().SetFlag3D(sal_True);
                 break;
             default:
                 SetError( errIllegalParameter);
@@ -1201,6 +1203,9 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                     rAdr.Set( nCol, nRow, nTab );
                     if ( pDok->aTableOpList.Count() > 0 )
                         ReplaceCell( rAdr );
+                    DELETEZ(pLastStackRefToken);
+                    pLastStackRefToken = static_cast<ScToken*>(p->Clone());
+                    ((ScSingleRefToken*)pLastStackRefToken)->GetSingleRef().SetFlag3D(sal_True);
                 }
                 break;
             default:
@@ -1283,6 +1288,9 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
             case svDoubleRef:
                 DoubleRefToVars( static_cast<ScToken*>(p), rCol1, rRow1, rTab1, rCol2, rRow2, rTab2,
                         bDontCheckForTableOp);
+                DELETEZ(pLastStackRefToken);
+                pLastStackRefToken = static_cast<ScToken*>(p->Clone());
+                ((ScDoubleRefToken*)pLastStackRefToken)->GetSingleRef().SetFlag3D(sal_True);
                 break;
             default:
                 SetError( errIllegalParameter);
@@ -1327,6 +1335,9 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
             case svDoubleRef:
                 --sp;
                 DoubleRefToRange( p->GetDoubleRef(), rRange);
+                DELETEZ(pLastStackRefToken);
+                pLastStackRefToken = static_cast<ScToken*>(p->Clone());
+                ((ScDoubleRefToken*)pLastStackRefToken)->GetSingleRef().SetFlag3D(sal_True);
                 break;
             case svRefList:
                 {
@@ -1373,6 +1384,9 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, sal_Bool bDontCheckForTableOp
                 break;
             case svDoubleRef:
                 DoubleRefToRange( static_cast<ScToken*>(p)->GetDoubleRef(), rRange, bDontCheckForTableOp);
+                DELETEZ(pLastStackRefToken);
+                pLastStackRefToken = static_cast<ScToken*>(p->Clone());
+                ((ScDoubleRefToken*)pLastStackRefToken)->GetSingleRef().SetFlag3D(sal_True);
                 break;
             default:
                 SetError( errIllegalParameter);
@@ -3286,6 +3300,8 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pMyFormulaCell( pCell ),
     pFormatter( pDoc->GetFormatTable() ),
     mnStringNoValueError( errNoValue),
+    pLastStackRefToken( NULL ),
+    bRefFunc( false ),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
@@ -3317,6 +3333,7 @@ ScInterpreter::~ScInterpreter()
         delete pStackObj;
     if (pTokenMatrixMap)
         delete pTokenMatrixMap;
+    DELETEZ(pLastStackRefToken);
 }
 
 
@@ -3865,6 +3882,7 @@ StackVar ScInterpreter::Interpret()
 
     // End: obtain result
 
+    bRefFunc = false;
     if( sp )
     {
         pCur = pStack[ sp-1 ];
@@ -3891,6 +3909,7 @@ StackVar ScInterpreter::Interpret()
                 break;
                 case svSingleRef :
                 {
+                    bRefFunc = true;
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
                     if( !nGlobalError )
@@ -3911,6 +3930,7 @@ StackVar ScInterpreter::Interpret()
                     }
                     else
                     {
+                        bRefFunc = true;
                         ScRange aRange;
                         PopDoubleRef( aRange );
                         ScAddress aAdr;

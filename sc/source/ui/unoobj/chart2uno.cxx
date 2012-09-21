@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
@@ -39,6 +37,7 @@
 #include "compiler.hxx"
 #include "reftokenhelper.hxx"
 #include "chartlis.hxx"
+#include "rangenam.hxx"
 
 #include <sfx2/objsh.hxx>
 #include <tools/table.hxx>
@@ -2035,6 +2034,53 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
 
     vector<ScSharedTokenRef> aRefTokens;
     ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument);
+    if (aRefTokens.empty()) // i120962: If haven't get reference, that means aRangeRepresentation is not a simple address, then try formulas
+    {
+        ScRangeName aLocalRangeName(*(m_pDocument->GetRangeName()));
+        sal_uInt16  nCurPos = 0;
+        sal_Bool    bFindName = aLocalRangeName.SearchName(aRangeRepresentation, nCurPos);  // Find global name first
+
+        for (SCTAB Scope = 0; Scope < MAXTABCOUNT && !bFindName; Scope++ )  // Find name in sheet scope
+            bFindName = aLocalRangeName.SearchName(aRangeRepresentation, nCurPos, Scope);
+
+        if (bFindName)
+        {
+            ScRangeData*    pData =(ScRangeData*)(aLocalRangeName.At(nCurPos));
+            ScTokenArray*   pArray = pData->GetCode();
+            sal_uInt16 nLen = pArray->GetLen();
+            if (!nLen)
+                ;
+            else if (nLen == 1) // range names
+            {
+                pArray->Reset();
+                const FormulaToken* p = pArray->GetNextReference();
+                if (p)
+                    aRefTokens.push_back(
+                            ScSharedTokenRef(static_cast<ScToken*>(p->Clone())));
+            }
+            else    // formulas
+            {
+                String  aSymbol;
+                pData->GetSymbol(aSymbol, FormulaGrammar::GRAM_ENGLISH);
+
+                String  aFormulaStr('=');
+                aFormulaStr += aSymbol;
+
+                ScAddress   aAddr;
+                ScFormulaCell*  pCell = new ScFormulaCell(m_pDocument, aAddr, aFormulaStr, FormulaGrammar::GRAM_ENGLISH);
+                pCell->Interpret();
+
+                if (pCell->GetValidRefToken())
+                {
+                    aRefTokens.push_back(
+                        ScSharedTokenRef(static_cast<ScToken*>(pCell->GetValidRefToken()->Clone())));
+                }
+
+                DELETEZ( pCell );
+            }
+        }
+    }
+
     if (aRefTokens.empty())
         return xResult;
 

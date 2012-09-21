@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef SC_CELL_HXX
 #define SC_CELL_HXX
 
@@ -309,6 +307,7 @@ private:
     sal_Bool            bInChangeTrack : 1; // Cell is in ChangeTrack
     sal_Bool            bTableOpDirty  : 1; // Dirty flag for TableOp
     sal_Bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
+    ScToken*            pValidRefToken; // i120962, get the valid reference token if the cell was applied a reference formula
 
                     enum ScInterpretTailParameter
                     {
@@ -485,6 +484,7 @@ public:
 
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();
+    ScToken*        GetValidRefToken() { return pValidRefToken; }   // i120962
 };
 
 //          Iterator fuer Referenzen in einer Formelzelle

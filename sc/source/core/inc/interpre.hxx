@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef SC_INTERPRE_HXX
 #define SC_INTERPRE_HXX
 
@@ -146,7 +144,7 @@ public:
     ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
 private:
     static ScTokenStack*    pGlobalStack;
-    static sal_Bool             bGlobalStackInUse;
+    static sal_Bool         bGlobalStackInUse;
 
     formula::FormulaTokenIterator aCode;
     ScAddress   aPos;
@@ -160,6 +158,8 @@ private:
 
     const formula::FormulaToken*
                 pCur;                // current token
+    ScToken*    pLastStackRefToken;     // i120962: current valid reference token
+    bool        bRefFunc;               // i120962: is a reference function
     String      aTempStr;               // for GetString()
     ScTokenStack* pStackObj;            // contains the stacks
     formula::FormulaToken**   pStack;                 // the current stack
@@ -812,14 +812,16 @@ public:
     void SetError(sal_uInt16 nError)
             { if (nError && !nGlobalError) nGlobalError = nError; }
 
-    sal_uInt16 GetError()                               const   { return nGlobalError; }
+    sal_uInt16 GetError()                           const   { return nGlobalError; }
     formula::StackVar  GetResultType()              const   { return xResult->GetType(); }
     const String&   GetStringResult()               const   { return xResult->GetString(); }
     double          GetNumResult()                  const   { return xResult->GetDouble(); }
     formula::FormulaTokenRef
                     GetResultToken()                const   { return xResult; }
     short           GetRetFormatType()              const   { return nRetFmtType; }
-    sal_uLong           GetRetFormatIndex()             const   { return nRetFmtIndex; }
+    sal_uLong       GetRetFormatIndex()             const   { return nRetFmtIndex; }
+    ScToken*        GetLastStackRefToken() { return pLastStackRefToken; }
+    bool            IsReferenceFunc() { return bRefFunc; }
 };
 
 
