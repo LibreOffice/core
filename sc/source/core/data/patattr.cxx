@@ -118,6 +118,7 @@ ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
 __EXPORT ScPatternAttr::~ScPatternAttr()
 {
     delete pName;
+    Broadcast(SfxHint());
 }
 
 SfxPoolItem* __EXPORT ScPatternAttr::Clone( SfxItemPool *pPool ) const

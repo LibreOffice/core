@@ -26,6 +26,7 @@
 
 #include <list>
 #include <tools/mempool.hxx>
+#include <svl/lstner.hxx>
 #include "rangelst.hxx"
 #include "patattr.hxx"
 #include "xladdress.hxx"
@@ -387,7 +388,7 @@ inline bool operator!=( const XclImpXFIndex& rLeft, const XclImpXFIndex& rRight 
 // ----------------------------------------------------------------------------
 
 /** Contains all data of a XF record and a Calc item set. */
-class XclImpXF : public XclXFBase, protected XclImpRoot, ScfNoCopy
+class XclImpXF : public XclXFBase, protected XclImpRoot, ScfNoCopy, public SfxListener
 {
 public:
     explicit            XclImpXF( const XclImpRoot& rRoot );
@@ -413,7 +414,7 @@ public:
                             SCCOL nScCol2, SCROW nScRow2,
                             SCTAB nScTab,
                             sal_uLong nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
-
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     /** Converts formatting information from BIFF2 cell record data directly. */
     static void         ApplyPatternForBiff2CellFormat(
                             const XclImpRoot& rRoot, const ScAddress& rScPos,
@@ -435,6 +436,7 @@ private:
     typedef ::std::auto_ptr< ScPatternAttr > ScPatternAttrPtr;
 
     ScPatternAttrPtr    mpPattern;          /// Calc item set.
+    const ScPatternAttr*    mpPooledPattern;
     ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.
 
     XclImpCellProt      maProtection;       /// Cell protection flags.

@@ -1228,6 +1228,9 @@ public:
     SC_DLLPUBLIC void           ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
                                             const ScPatternAttr& rAttr );
+    SC_DLLPUBLIC void           ApplyPooledPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
+                                            SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
+                                            const ScPatternAttr& rPooledAttr, const ScPatternAttr& rAttr );
     SC_DLLPUBLIC void           ApplyPatternIfNumberformatIncompatible(
                             const ScRange& rRange, const ScMarkData& rMark,
                             const ScPatternAttr& rPattern, short nNewType );

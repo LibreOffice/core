@@ -547,6 +547,8 @@ public:
     void        ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr );
     void        ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScPatternAttr& rAttr );
+    void        ApplyPooledPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScPatternAttr& rPooledAttr, const ScPatternAttr& rAttr );
+
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, sal_Bool bPutToPool = sal_False )
                     {
                         if (ValidColRow(rPos.Col(),rPos.Row()))

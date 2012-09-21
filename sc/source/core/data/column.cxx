@@ -319,6 +319,10 @@ const ScPatternAttr* ScColumn::GetPattern( SCROW nRow ) const
     return pAttrArray->GetPattern( nRow );
 }
 
+const ScPatternAttr* ScColumn::GetPatternRange( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const
+{
+    return pAttrArray->GetPatternRange( rStartRow, rEndRow, nRow );
+}
 
 const SfxPoolItem* ScColumn::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
 {

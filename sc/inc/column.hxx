@@ -295,6 +295,7 @@ public:
 
     const SfxPoolItem*      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
+    const ScPatternAttr* GetPatternRange( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
 
     sal_uLong       GetNumberFormat( SCROW nRow ) const;

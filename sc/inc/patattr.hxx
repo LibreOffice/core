@@ -26,6 +26,7 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/brdcst.hxx>
 #include <unotools/fontcvt.hxx>
 #include <editeng/svxenum.hxx>
 #include "scdllapi.h"
@@ -52,7 +53,7 @@ enum ScAutoFontColorMode
 };
 
 
-class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
+class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem, public SfxBroadcaster
 {
     String*         pName;
     ScStyleSheet*   pStyle;

@@ -3941,6 +3941,14 @@ void ScDocument::ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
             pTab[nTab]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr );
 }
 
+void ScDocument::ApplyPooledPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
+                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, const ScPatternAttr& rPooledAttr, const ScPatternAttr& rAttr )
+{
+    if (VALIDTAB(nTab))
+        if (pTab[nTab])
+            pTab[nTab]->ApplyPooledPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rPooledAttr, rAttr );
+}
+
 void ScDocument::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScMarkData& rMark, const ScPatternAttr& rPattern, short nNewType )
 {

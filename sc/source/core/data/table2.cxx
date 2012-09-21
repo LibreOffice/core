@@ -1906,6 +1906,29 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
     }
 }
 
+void ScTable::ApplyPooledPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                     const ScPatternAttr& rPooledAttr, const ScPatternAttr& rAttr )
+{
+    if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
+    {
+        PutInOrder(nStartCol, nEndCol);
+        PutInOrder(nStartRow, nEndRow);
+        for (SCCOL i = nStartCol; i <= nEndCol; i++)
+        {
+            sal_Bool bSet = sal_True;
+            SCROW nStar, nEnd;
+            const ScPatternAttr* pAttr = aCol[i].GetPatternRange(nStar, nEnd, nStartRow);
+            if (nStar >nStartRow || nEnd < nEndRow || pAttr!=pDocument->GetDefPattern())
+                bSet = sal_False;
+
+            if (bSet)
+                aCol[i].SetPatternArea(nStartRow, nEndRow, rPooledAttr);
+            else
+                aCol[i].ApplyPatternArea(nStartRow, nEndRow, rAttr);
+        }
+    }
+}
+
 void ScTable::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScPatternAttr& rPattern, short nNewType )
 {
