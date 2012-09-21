@@ -134,14 +134,13 @@ public:
         return (ret.second) ? ret.first : end();
     }
 
-    void insert( sorted_vector<Value,Compare,Find> &rOther )
+    void insert(sorted_vector<Value,Compare,Find> const& rOther)
     {
        // optimisation for the rather common case that we are overwriting this with the contents
        // of another sorted vector
        if ( empty() )
        {
-           base_t::insert( begin_nonconst(),
-                   rOther.begin_nonconst(), rOther.end_nonconst() );
+           base_t::insert(begin_nonconst(), rOther.begin(), rOther.end());
        }
        else
            for( const_iterator it = rOther.begin(); it != rOther.end(); ++it )
