@@ -313,6 +313,7 @@ include $(foreach class, \
 	Executable \
 	SdiTarget \
 	Package \
+	ExternalPackage \
 	CustomTarget \
 	ExternalProject \
 	Pagein \

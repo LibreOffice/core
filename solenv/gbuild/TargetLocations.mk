@@ -102,6 +102,7 @@ gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
 gb_ExtensionTarget_get_target = $(WORKDIR)/ExtensionTarget/$(1).oxt
 gb_ExtensionTarget_get_rootdir = $(WORKDIR)/ExtensionTarget/$(1)/root
 gb_ExtensionTarget_get_workdir = $(WORKDIR)/ExtensionTarget/$(1)
+gb_ExternalPackage_get_target = $(WORKDIR)/ExternalPackage/$(1)
 gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
 gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
 gb_ExternalProject_get_state_target = $(WORKDIR)/ExternalProject/$(1)/$(2)
@@ -166,6 +167,7 @@ gb_UnoApiHeadersTarget_get_comprehensive_target = $(WORKDIR)/UnoApiHeadersTarget
 gb_UnoApiHeadersTarget_get_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/normal.done
 gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
 gb_UnpackedTarball_get_dir = $(WORKDIR)/UnpackedTarball/$(1)
+gb_UnpackedTarball_get_final_target = $(WORKDIR)/UnpackedTarball/$(1).update
 gb_UnpackedTarball_get_target = $(WORKDIR)/UnpackedTarball/$(1).done
 gb_UnpackedTarball_get_preparation_target = $(WORKDIR)/UnpackedTarball/$(1).prepare
 gb_UnpackedTarget_get_target = $(WORKDIR)/UnpackedTarget/$(1)
@@ -217,6 +219,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CliUnoApiTarget \
 	ComponentTarget \
 	ComponentsTarget \
+	ExternalPackage \
 	ExtensionTarget \
 	InstallModule \
 	InstallModuleTarget \

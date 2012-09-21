@@ -12,10 +12,12 @@
 # Handles build of an external project
 
 # Build of an external typically uses three gbuild classes:
-# ExternalProject, Package and UnpackedTarball. The first step is to
-# prepare sources using UnpackedTarball. The tarball is passed to an
-# ExternalProject, which handles the build proper and the results are
-# delivered by a Package.
+# ExternalProject, ExternalPackage or Package, and UnpackedTarball. The
+# first step is to prepare sources using UnpackedTarball. The tarball is
+# passed to an ExternalProject, which handles the build proper and the
+# results are delivered by an ExternalPackage (or Package, again;
+# Package is sufficient if no files--e.g., headers--from the unpacked
+# tarball need to be delivered.)
 #
 # ExternalProject has no gbuild abstraction for actually building the
 # external code, so it is necessary to define rule(s) and recipe(s) to

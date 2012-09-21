@@ -1100,7 +1100,7 @@ endef
 
 # Use sources from unpacked tarball of an external project
 define gb_LinkTarget_use_unpacked
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_target,$(2))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,$(2))
 
 endef
 

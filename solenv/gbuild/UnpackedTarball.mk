@@ -163,6 +163,9 @@ $(call gb_UnpackedTarball_get_preparation_target,%) :
 $(call gb_UnpackedTarball_get_target,%) :
 	$(call gb_UnpackedTarball__command,$@,$*,$(call gb_UnpackedTarball_get_dir,$*))
 
+$(call gb_UnpackedTarball_get_final_target,%) :
+	touch $@
+
 .PHONY : $(call gb_UnpackedTarball_get_clean_target,%)
 $(call gb_UnpackedTarball_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PAT,2)
@@ -194,6 +197,9 @@ $(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(call gb_UnpackedTarba
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
 $(call gb_UnpackedTarball_get_target,$(1)) : $(call gb_UnpackedTarball_get_preparation_target,$(1))
 $(call gb_UnpackedTarball_get_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
+$(call gb_UnpackedTarball_get_final_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(1))
+
+private gb_UnpackedTarball_PATTERN_RULES_$(1) :=
 
 endef
 
@@ -201,7 +207,7 @@ endef
 define gb_UnpackedTarball_UnpackedTarball
 $(call gb_UnpackedTarball_UnpackedTarball_internal,$(1))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_UnpackedTarball_get_target,$(1)),$(call gb_UnpackedTarball_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,$(call gb_UnpackedTarball_get_final_target,$(1)),$(call gb_UnpackedTarball_get_clean_target,$(1))))
 
 endef
 
@@ -308,6 +314,52 @@ endef
 # gb_UnpackedTarball_set_post_action unpacked shell-command
 define gb_UnpackedTarball_set_post_action
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_POST_ACTION := $(strip $(2))
+
+endef
+
+define gb_UnpackedTarbal__make_pattern_rule
+$(call gb_UnpackedTarball_get_dir,$(1))/%$(2) :
+	touch $$@
+
+$(eval gb_UnpackedTarball_PATTERN_RULES_$(1) += $(2))
+
+endef
+
+define gb_UnpackedTarbal__ensure_pattern_rule
+$(if $(filter $(2),$(gb_UnpackedTarball_PATTERN_RULES_$(1))),,$(call gb_UnpackedTarbal__make_pattern_rule,$(1),$(2)))
+
+endef
+
+define gb_UnpackedTarbal__make_file_rule
+$(call gb_UnpackedTarball_get_dir,$(1))/$(2) :
+	touch $$@
+
+endef
+
+# Mark a source file to be used outside of this module
+#
+# This results in the timestamp of the file being updated, so a possible
+# change is recognized properly by other files depending on it. The
+# update is run after possible post action.
+#
+# See description of class ExternalPackage for more information.
+#
+# gb_UnpackedTarball_mark_output_file unpacked file
+define gb_UnpackedTarball_mark_output_file
+$(call gb_UnpackedTarball_get_final_target,$(1)) : $(call gb_UnpackedTarball_get_dir,$(1))/$(2)
+$(call gb_UnpackedTarball_get_dir,$(1))/$(2) : $(call gb_UnpackedTarball_get_target,$(1))
+$(if $(suffix $(2)),\
+	$(call gb_UnpackedTarbal__ensure_pattern_rule,$(1),$(suffix $(2))),\
+	$(call gb_UnpackedTarbal__make_file_rule,$(1),$(2)) \
+)
+
+endef
+
+# Mark several source files to be used outside of this module
+#
+# gb_UnpackedTarball_mark_output_files unpacked file(s)
+define gb_UnpackedTarball_mark_output_files
+$(foreach file,$(2),$(call gb_UnpackedTarball_mark_output_file,$(1),$(file)))
 
 endef
 
