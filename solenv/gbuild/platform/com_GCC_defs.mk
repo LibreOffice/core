@@ -152,7 +152,7 @@ else
 gb_Helper_LIBRARY_PATH_VAR := LD_LIBRARY_PATH
 endif
 
-gb_Helper_set_ld_path := $(gb_Helper_LIBRARY_PATH_VAR)="$(OUTDIR_FOR_BUILD)/lib"
+gb_Helper_set_ld_path := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+:$$$(gb_Helper_LIBRARY_PATH_VAR)}"$(OUTDIR_FOR_BUILD)/lib"
 
 # $(1): list of directory pathnames to append at the end of the ld path
 define gb_Helper_extend_ld_path
