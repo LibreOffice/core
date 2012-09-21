@@ -424,11 +424,11 @@ bool ScRangeList::UpdateReference(
         {
             if(nDx < 0)
             {
-                DeleteArea(nCol1+nDx, nRow1, nTab1, nCol1-1, nRow1, nTab2);
+                DeleteArea(nCol1+nDx, nRow1, nTab1, nCol1-1, nRow2, nTab2);
             }
             if(nDy < 0)
             {
-                DeleteArea(nCol1, nRow1+nDy, nTab1, nCol1, nRow1-1, nTab2);
+                DeleteArea(nCol1, nRow1+nDy, nTab1, nCol2, nRow1-1, nTab2);
             }
             SAL_WARN_IF(nDx < 0 && nDy < 0, "sc", "nDx and nDy are negative, check why");
         }
