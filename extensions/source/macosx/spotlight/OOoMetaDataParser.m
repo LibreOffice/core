@@ -215,9 +215,9 @@ static NSDictionary *metaXML2MDIKeys;
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     //NSLog(@"parsing finished with error");
-    NSLog(@"Error %i, Description: %@, Line: %i, Column: %i", [parseError code], 
-        [[parser parserError] localizedDescription], [parser lineNumber],
-        [parser columnNumber]);
+    NSLog(@"Error %li, Description: %@, Line: %li, Column: %li", (long) [parseError code], 
+          [[parser parserError] localizedDescription], (long) [parser lineNumber],
+          (long) [parser columnNumber]);
 }
 
 @end
