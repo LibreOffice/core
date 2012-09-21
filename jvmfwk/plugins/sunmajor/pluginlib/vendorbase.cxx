@@ -19,6 +19,9 @@
 
 
 #include "osl/file.hxx"
+#include "osl/diagnose.h"
+#include "osl/module.hxx"
+#include "osl/thread.hxx"
 
 #include "vendorbase.hxx"
 #include "util.hxx"
@@ -157,6 +160,25 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     }
     if (!bRt)
         return false;
+
+#if defined(WNT)
+    oslModule moduleRt = 0;
+    rtl::OUString sRuntimeLib;
+    if( File::getSystemPathFromFileURL( m_sRuntimeLibrary, sRuntimeLib ) == File::E_None )
+    {
+        if ( ( moduleRt = osl_loadModule( sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT ) ) == 0 )
+        {
+            OSL_TRACE( "jfw_plugin::VendorBase::initialize - cannot load library %s",
+                       rtl::OUStringToOString( sRuntimeLib, osl_getThreadTextEncoding() ).getStr() );
+            return false;
+        }
+        else
+        {
+            // do not leave the module loaded!
+            osl_unloadModule( moduleRt );
+        }
+    }
+#endif
 
     // init m_sLD_LIBRARY_PATH
     OSL_ASSERT(!m_sHome.isEmpty());
