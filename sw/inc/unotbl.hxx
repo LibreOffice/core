@@ -29,9 +29,6 @@
 #ifndef SW_UNOTBL_HXX
 #define SW_UNOTBL_HXX
 
-#include <limits.h>
-#include <stdint.h>
-
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/util/XSortable.hpp>
@@ -102,7 +99,7 @@ class SwXCell : public SwXCellBaseClass,
 
     // table position where pBox was found last
     size_t nFndPos;
-    static size_t const NOTFOUND = SIZE_MAX;
+    static size_t const NOTFOUND = SAL_MAX_SIZE;
 
 protected:
     virtual const SwStartNode *GetStartNode() const;
