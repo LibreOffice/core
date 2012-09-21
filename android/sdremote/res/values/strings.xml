@@ -33,6 +33,7 @@
     <string name="pairing_instructions_3">Then input this PIN:</string>
     <string name="startpresentation_instruction">No presentation is currently running.</string>
     <string name="startpresentation_button">Start Presentation</string>
+    <string name="startpresentation_title">Start Presentation</string>
     <string name="about">About</string>
     <string name="about_close">Close</string>
     <string name="about_versionstring">Version: {0} (Build ID: {1})</string>

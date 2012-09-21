@@ -36,10 +36,16 @@
             android:noHistory="true" >
         </activity>
 
-        <service android:name=".communication.CommunicationService" >
+        <service
+            android:name=".communication.CommunicationService"
+            android:label="@string/startpresentation_title"
+            android:logo="@drawable/actionbar_icon_computer" >
         </service>
 
-        <activity android:name=".StartPresentationActivity" >
+        <activity
+            android:name=".StartPresentationActivity"
+            android:logo="@drawable/actionbar_icon_computer"
+            android:label="@string/startpresentation_title" >
         </activity>
         <activity
             android:name=".PresentationActivity"

@@ -40,10 +40,11 @@ public class CommunicationService extends Service implements Runnable {
     public static String getDeviceName() {
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
         if (aAdapter != null) {
-            return aAdapter.getName();
-        } else {
-            return android.os.Build.MODEL;
+            String aName = aAdapter.getName();
+            if (aName != null)
+                return aName;
         }
+        return android.os.Build.MODEL;
     }
 
     /**
