@@ -102,23 +102,6 @@ getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw 
     return getUnoSheetModuleObj( xSheet );
 }
 
-ScDocShell* GetDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges ) throw ( uno::RuntimeException )
-{
-    // need the ScCellRangesBase to get docshell
-    uno::Reference< uno::XInterface > xIf( xRanges, uno::UNO_QUERY_THROW );
-    return GetDocShellFromRange( xIf );
-}
-
-ScDocument* GetDocumentFromRange( const uno::Reference< uno::XInterface >& xRange ) throw ( uno::RuntimeException )
-{
-        ScDocShell* pDocShell = GetDocShellFromRange( xRange );
-        if ( !pDocShell )
-        {
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying document from uno range object" ) ), uno::Reference< uno::XInterface >() );
-        }
-        return pDocShell->GetDocument();
-}
-
 void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs )
 {
     ScTabViewShell* pViewSh = excel::getBestViewShell( xModel );

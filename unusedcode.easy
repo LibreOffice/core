@@ -84,8 +84,6 @@ dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString
 formula::FormulaTokenIterator::First()
 framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
-ooo::vba::excel::GetDocShellFromRanges(com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRangeContainer> const&)
-ooo::vba::excel::GetDocumentFromRange(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
 oox::drawingml::TextListStyle::dump() const
 oox::ole::AxFormPageModel::AxFormPageModel()
 oox::ole::AxMultiPageModel::AxMultiPageModel()
