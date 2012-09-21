@@ -91,6 +91,7 @@ public:
     void testInk();
     void testN779834();
     void testN779627();
+    void testFdo55187();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -128,6 +129,7 @@ public:
     CPPUNIT_TEST(testInk);
     CPPUNIT_TEST(testN779834);
     CPPUNIT_TEST(testN779627);
+    CPPUNIT_TEST(testFdo55187);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -883,6 +885,13 @@ void Test::testN779627()
     sal_Int32 nLeftMargin;
     aValue >>= nLeftMargin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
+}
+
+void Test::testFdo55187()
+{
+    // 0x010d was imported as a newline.
+    load("fdo55187.docx");
+    getParagraph(1, OUString("lupčka", 7, RTL_TEXTENCODING_UTF8));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

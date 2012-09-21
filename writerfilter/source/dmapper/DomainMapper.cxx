@@ -3523,8 +3523,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         m_pImpl->getTableManager().utext(data_, len);
 
-        // RTF always uses text() instead of utext() for run break
-        if(len == 1 && ((*data_) == 0x0d || (*data_) == 0x07) && !IsRTFImport())
+        if(len == 1 && (sText[0] == 0x0d || sText[0] == 0x07))
         {
             bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
             // If the paragraph contains only the section properties and it has
