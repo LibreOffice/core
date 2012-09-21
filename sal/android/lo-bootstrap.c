@@ -1603,7 +1603,10 @@ Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
         if (slash != NULL)
             *slash = '\0';
         slash = strrchr(new_argv0, '/');
-        strcpy(slash+1, c_argv[0]);
+        if (slash != NULL)
+            strcpy(slash+1, c_argv[0]);
+        else
+            strcpy(new_argv0, c_argv[0]);
         free(c_argv[0]);
         c_argv[0] = new_argv0;
     }
