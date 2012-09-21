@@ -43,6 +43,7 @@
 #include <set>
 #include <list>
 #include <memory>
+#include <boost/scoped_array.hpp>
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
@@ -1097,10 +1098,10 @@ void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
         return;
     if( nCnt > nCount )
         nCnt = nCount;
-    size_t *const pSplitIdx = new size_t[ nCnt ];
+    ::boost::scoped_array<size_t> const pSplitIdx(new size_t[nCnt]);
     if( bSameHeight )
     {
-        SwTwips *pHeights = new SwTwips[ nCount ];
+        ::boost::scoped_array<SwTwips> const pHeights(new SwTwips[nCount]);
         SwTwips nHeight = 0;
         for (size_t i = 0; i < nCount; ++i)
         {
@@ -1118,7 +1119,6 @@ void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
                 nSumH += pHeights[ nIdx++ ];
             pSplitIdx[ i - 1 ] = nIdx;
         }
-        delete[] pHeights;
     }
     else
     {
@@ -1136,7 +1136,6 @@ void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
         while( ++nIdx < nNextIdx )
             aBoxes[ nIdx ]->setRowSpan( nIdx - nNextIdx );
     }
-    delete[] pSplitIdx;
 }
 
 /** lcl_FillSelBoxes(..) puts all boxes of a given line into the selection structure
