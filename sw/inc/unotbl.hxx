@@ -98,7 +98,7 @@ class SwXCell : public SwXCellBaseClass,
 
     // table position where pBox was found last
     size_t nFndPos;
-    static size_t const NOTFOUND = ::std::numeric_limits<size_t>::max();
+    static size_t const NOTFOUND = SIZE_MAX;
 
 protected:
     virtual const SwStartNode *GetStartNode() const;
