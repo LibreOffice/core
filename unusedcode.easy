@@ -6,8 +6,6 @@ ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Loca
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
-SvtSlideSorterBarOptions::AddListenerLink(Link const&)
-SvtSlideSorterBarOptions::RemoveListenerLink(Link const&)
 SvtUserOptions::SetCompany(rtl::OUString const&)
 SvtUserOptions::SetCountry(rtl::OUString const&)
 SvtUserOptions::SetFax(rtl::OUString const&)
