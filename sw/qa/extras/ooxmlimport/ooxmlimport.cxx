@@ -92,6 +92,7 @@ public:
     void testN779834();
     void testN779627();
     void testFdo55187();
+    void testN780563();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -130,6 +131,7 @@ public:
     CPPUNIT_TEST(testN779834);
     CPPUNIT_TEST(testN779627);
     CPPUNIT_TEST(testFdo55187);
+    CPPUNIT_TEST(testN780563);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -892,6 +894,17 @@ void Test::testFdo55187()
     // 0x010d was imported as a newline.
     load("fdo55187.docx");
     getParagraph(1, OUString("lupčka", 7, RTL_TEXTENCODING_UTF8));
+}
+
+void Test::testN780563()
+{
+    /*
+     * Make sure we have the table in the fly frame created
+     */
+    load("n780563.docx");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount( ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
