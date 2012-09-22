@@ -73,7 +73,7 @@ ScAccessiblePreviewTable::~ScAccessiblePreviewTable()
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
         // increment refcount to prevent double call off dtor
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }

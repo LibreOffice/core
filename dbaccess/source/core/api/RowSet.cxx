@@ -216,7 +216,7 @@ ORowSet::~ORowSet()
     if ( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose )
     {
         OSL_FAIL("Please check who doesn't dispose this component!");
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }

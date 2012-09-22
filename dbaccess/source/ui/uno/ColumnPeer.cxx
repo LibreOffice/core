@@ -37,13 +37,13 @@ OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XMultiServiceFactory>&
     :m_xORB(_rxFactory)
     ,m_pActFieldDescr(NULL)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         OColumnControlWindow* pFieldControl = new OColumnControlWindow(_pParent,m_xORB);
         pFieldControl->SetComponentInterface(this);
         pFieldControl->Show();
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 void OColumnPeer::setEditWidth(sal_Int32 _nWidth)

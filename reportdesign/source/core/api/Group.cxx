@@ -54,11 +54,11 @@ OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
 ,m_xParent(_xParent)
 {
     DBG_CTOR( rpt_OGroup,NULL);
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_xFunctions = new OFunctions(this,m_xContext);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 //--------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!

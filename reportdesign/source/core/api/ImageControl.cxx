@@ -146,11 +146,11 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
     DBG_CTOR( rpt_OImageControl,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_aProps.aComponent.setShape(_xShape,this,m_refCount);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OImageControl::~OImageControl()

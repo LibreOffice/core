@@ -45,7 +45,7 @@ OConnectionWrapper::OConnectionWrapper()
 void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount)
 {
     OSL_ENSURE(_rxProxyConnection.is(),"OConnectionWrapper: Connection must be valid!");
-    osl_incrementInterlockedCount( &_rRefCount );
+    osl_atomic_increment( &_rRefCount );
     if (_rxProxyConnection.is())
     {
         // transfer the (one and only) real ref to the aggregate to our member
@@ -61,7 +61,7 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
         m_xProxyConnection->setDelegator( xIf );
 
     }
-    osl_decrementInterlockedCount( &_rRefCount );
+    osl_atomic_decrement( &_rRefCount );
 }
 // -----------------------------------------------------------------------------
 void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnection
@@ -69,7 +69,7 @@ void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnect
                                        ,oslInterlockedCount& _rRefCount)
 {
     OSL_ENSURE(_xConnection.is(),"OConnectionWrapper: Connection must be valid!");
-    osl_incrementInterlockedCount( &_rRefCount );
+    osl_atomic_increment( &_rRefCount );
 
     m_xConnection = _xConnection;
     m_xTypeProvider.set(m_xConnection,UNO_QUERY);
@@ -88,7 +88,7 @@ void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnect
         m_xProxyConnection->setDelegator( xIf );
 
     }
-    osl_decrementInterlockedCount( &_rRefCount );
+    osl_atomic_decrement( &_rRefCount );
 }
 // -----------------------------------------------------------------------------
 void OConnectionWrapper::disposing()

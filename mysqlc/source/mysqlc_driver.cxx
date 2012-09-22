@@ -309,8 +309,8 @@ void release(oslInterlockedCount& _refCount,
              Reference< XInterface >& _xInterface,
              ::com::sun::star::lang::XComponent* _pObject)
 {
-    if (osl_decrementInterlockedCount(&_refCount) == 0) {
-        osl_incrementInterlockedCount(&_refCount);
+    if (osl_atomic_decrement(&_refCount) == 0) {
+        osl_atomic_increment(&_refCount);
 
         if (!rBHelper.bDisposed && !rBHelper.bInDispose) {
             // remember the parent
@@ -334,7 +334,7 @@ void release(oslInterlockedCount& _refCount,
             }
         }
     } else {
-        osl_incrementInterlockedCount(&_refCount);
+        osl_atomic_increment(&_refCount);
     }
 }
 /* }}} */

@@ -42,7 +42,7 @@ inline Object3::~Object3() SAL_THROW(())
 
 void Object3::release() SAL_THROW(())
 {
-    if (osl_decrementInterlockedCount(&m_nRefCount) == 0)
+    if (osl_atomic_decrement(&m_nRefCount) == 0)
     {
         m_xContainer->releaseElement(this);
         delete this;
@@ -75,15 +75,15 @@ rtl::Reference< Object3 > ObjectContainer3::get(rtl::OUString const & rKey)
         xElement.release();
         return aIt->second;
     }
-    else if (osl_incrementInterlockedCount(&aIt->second->m_nRefCount) > 1)
+    else if (osl_atomic_increment(&aIt->second->m_nRefCount) > 1)
     {
         rtl::Reference< Object3 > xElement(aIt->second);
-        osl_decrementInterlockedCount(&aIt->second->m_nRefCount);
+        osl_atomic_decrement(&aIt->second->m_nRefCount);
         return xElement;
     }
     else
     {
-        osl_decrementInterlockedCount(&aIt->second->m_nRefCount);
+        osl_atomic_decrement(&aIt->second->m_nRefCount);
         aIt->second->m_aContainerIt = m_aMap.end();
         aIt->second = new Object3(this);
         aIt->second->m_aContainerIt = aIt;

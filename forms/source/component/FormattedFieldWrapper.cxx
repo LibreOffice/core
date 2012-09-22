@@ -56,9 +56,9 @@ namespace {
 class RefCountGuard: private boost::noncopyable {
 public:
     explicit RefCountGuard(oslInterlockedCount & count): count_(count)
-    { osl_incrementInterlockedCount(&count_); }
+    { osl_atomic_increment(&count_); }
 
-    ~RefCountGuard() { osl_decrementInterlockedCount(&count_); }
+    ~RefCountGuard() { osl_atomic_decrement(&count_); }
 
 private:
     oslInterlockedCount & count_;

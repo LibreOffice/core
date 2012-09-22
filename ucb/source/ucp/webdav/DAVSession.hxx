@@ -56,12 +56,12 @@ class DAVSession
 public:
     inline void acquire() SAL_THROW(())
     {
-        osl_incrementInterlockedCount( &m_nRefCount );
+        osl_atomic_increment( &m_nRefCount );
     }
 
     void release() SAL_THROW(())
     {
-        if ( osl_decrementInterlockedCount( &m_nRefCount ) == 0 )
+        if ( osl_atomic_decrement( &m_nRefCount ) == 0 )
         {
             m_xFactory->releaseElement( this );
             delete this;

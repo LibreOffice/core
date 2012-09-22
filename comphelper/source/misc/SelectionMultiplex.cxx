@@ -76,12 +76,12 @@ OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListene
             ,m_bAutoSetRelease(_bAutoReleaseSet)
 {
     m_pListener->setAdapter(this);
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         Reference< XSelectionChangeListener> xPreventDelete(this);
         m_xSet->addSelectionChangeListener(xPreventDelete);
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 //------------------------------------------------------------------

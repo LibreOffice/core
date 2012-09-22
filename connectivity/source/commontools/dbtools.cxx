@@ -2063,9 +2063,9 @@ void release(oslInterlockedCount& _refCount,
              Reference< XInterface >& _xInterface,
              ::com::sun::star::lang::XComponent* _pObject)
 {
-    if (osl_decrementInterlockedCount( &_refCount ) == 0)
+    if (osl_atomic_decrement( &_refCount ) == 0)
     {
-        osl_incrementInterlockedCount( &_refCount );
+        osl_atomic_increment( &_refCount );
 
         if (!rBHelper.bDisposed && !rBHelper.bInDispose)
         {
@@ -2095,7 +2095,7 @@ void release(oslInterlockedCount& _refCount,
         }
     }
     else
-        osl_incrementInterlockedCount( &_refCount );
+        osl_atomic_increment( &_refCount );
 }
 
 void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )

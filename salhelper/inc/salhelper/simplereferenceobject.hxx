@@ -67,10 +67,10 @@ public:
         (which, hopefully, is quite large).
      */
     inline void acquire() SAL_THROW(())
-    { osl_incrementInterlockedCount(&m_nCount); }
+    { osl_atomic_increment(&m_nCount); }
 
     inline void release() SAL_THROW(())
-    { if (osl_decrementInterlockedCount(&m_nCount) == 0) delete this; }
+    { if (osl_atomic_decrement(&m_nCount) == 0) delete this; }
 
     /** see general class documentation
      */

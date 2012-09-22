@@ -104,19 +104,19 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
 // -----------------------------------------------------------------------------
 void OResultSet::construct()
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     if (!m_pRecordSet)
     {
         OSL_FAIL( "OResultSet::construct: no RecordSet!" );
         Reference< XInterface > xInt( *this );
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
         ::dbtools::throwFunctionSequenceException( xInt );
     }
     m_pRecordSet->AddRef();
     VARIANT_BOOL bIsAtBOF;
     CHECK_RETURN(m_pRecordSet->get_BOF(&bIsAtBOF))
     m_bOnFirstAfterOpen = bIsAtBOF != VARIANT_TRUE;
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()

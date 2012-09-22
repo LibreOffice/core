@@ -134,7 +134,7 @@ namespace io_acceptor
         throw( ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException)
     {
-        if(  1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
+        if(  1 == osl_atomic_increment( (&m_nStatus) ) )
         {
             m_pipe.close();
         }

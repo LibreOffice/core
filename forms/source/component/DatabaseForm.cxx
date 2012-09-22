@@ -370,7 +370,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
 
     impl_construct();
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         // our aggregated rowset itself is not cloneable, so simply copy the properties
         ::comphelper::copyProperties( _cloneSource.m_xAggregateSet, m_xAggregateSet );
@@ -419,7 +419,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
             );
         }
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 //------------------------------------------------------------------
@@ -1480,9 +1480,9 @@ void SAL_CALL ODatabaseForm::clearWarnings(  ) throw (SQLException, RuntimeExcep
 Reference< XCloneable > SAL_CALL ODatabaseForm::createClone(  ) throw (RuntimeException)
 {
     ODatabaseForm* pClone = new ODatabaseForm( *this );
-    osl_incrementInterlockedCount( &pClone->m_refCount );
+    osl_atomic_increment( &pClone->m_refCount );
     pClone->clonedFrom( *this );
-    osl_decrementInterlockedCount( &pClone->m_refCount );
+    osl_atomic_decrement( &pClone->m_refCount );
     return pClone;
 }
 

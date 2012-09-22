@@ -104,7 +104,7 @@ OFormatProperties::OFormatProperties()
 // -----------------------------------------------------------------------------
 void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xShape,const uno::Reference< report::XReportComponent>& _xTunnel,oslInterlockedCount& _rRefCount)
 {
-    osl_incrementInterlockedCount( &_rRefCount );
+    osl_atomic_increment( &_rRefCount );
     {
         m_xProxy.set(_xShape,uno::UNO_QUERY);
         ::comphelper::query_aggregation(m_xProxy,m_xShape);
@@ -118,7 +118,7 @@ void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xS
         if ( m_xProxy.is() )
             m_xProxy->setDelegator( _xTunnel );
     }
-    osl_decrementInterlockedCount( &_rRefCount );
+    osl_atomic_decrement( &_rRefCount );
 }
 // -----------------------------------------------------------------------------
 OReportComponentProperties::~OReportComponentProperties()

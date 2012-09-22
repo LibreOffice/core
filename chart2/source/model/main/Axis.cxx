@@ -312,7 +312,7 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
         m_aSubGridProperties(),
         m_xTitle()
 {
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     setFastPropertyValue_NoBroadcast(
         ::chart::LineProperties::PROP_LINE_COLOR, uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
 
@@ -322,7 +322,7 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ModifyListenerHelper::addListener( m_aScaleData.Categories, m_xModifyEventForwarder );
 
     AllocateSubGrids();
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 Axis::Axis( const Axis & rOther ) :

@@ -61,12 +61,12 @@ void SAL_CALL MacabConnection::release() throw()
 // -----------------------------------------------------------------------------
 void MacabConnection::construct(const ::rtl::OUString&, const Sequence< PropertyValue >&) throw(SQLException)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     // get the Mac OS X shared address book
     m_pAddressBook = new MacabAddressBook();
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // XServiceInfo
 // --------------------------------------------------------------------------------

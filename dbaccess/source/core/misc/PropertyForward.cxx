@@ -53,7 +53,7 @@ namespace dbaccess
     {
         DBG_CTOR(OPropertyForward,NULL);
 
-        osl_incrementInterlockedCount(&m_refCount);
+        osl_atomic_increment(&m_refCount);
         try
         {
             if ( _aPropertyList.empty() )
@@ -70,7 +70,7 @@ namespace dbaccess
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     // -----------------------------------------------------------------------------

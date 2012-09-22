@@ -164,8 +164,8 @@ public:
     //  virtual sal_Bool queryInterface(UsrUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>&);
     //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass>>    getIdlClasses(void);
 
-    void Lock() { osl_incrementInterlockedCount( &m_Locks ); }
-    void UnLock() { osl_decrementInterlockedCount( &m_Locks ); }
+    void Lock() { osl_atomic_increment( &m_Locks ); }
+    void UnLock() { osl_atomic_decrement( &m_Locks ); }
     sal_Bool IsLocked() const { return m_Locks != 0; }
 
     // access control

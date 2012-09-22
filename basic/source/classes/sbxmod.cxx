@@ -173,7 +173,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
 
             if ( m_xAggProxy.is() )
             {
-                osl_incrementInterlockedCount( &m_refCount );
+                osl_atomic_increment( &m_refCount );
 
                 /* i35609 - Fix crash on Solaris. The setDelegator call needs
                     to be in its own block to ensure that all temporary Reference
@@ -183,7 +183,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
                     m_xAggProxy->setDelegator( static_cast< cppu::OWeakObject * >( this ) );
                 }
 
-                 osl_decrementInterlockedCount( &m_refCount );
+                 osl_atomic_decrement( &m_refCount );
             }
         }
     }
@@ -192,13 +192,13 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
 void SAL_CALL
 DocObjectWrapper::acquire() throw ()
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     OSL_TRACE("DocObjectWrapper::acquire(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
 }
 void SAL_CALL
 DocObjectWrapper::release() throw ()
 {
-    if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
+    if ( osl_atomic_decrement( &m_refCount ) == 0 )
     {
         OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
         delete this;

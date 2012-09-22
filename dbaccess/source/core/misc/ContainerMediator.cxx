@@ -53,7 +53,7 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
 
     if ( _xSettings.is() && _xContainer.is() )
     {
-        osl_incrementInterlockedCount(&m_refCount);
+        osl_atomic_increment(&m_refCount);
         try
         {
             m_xContainer->addContainerListener(this);
@@ -65,7 +65,7 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
         {
             OSL_FAIL("OContainerMediator::OContainerMediator: caught an exception!");
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
     else
     {

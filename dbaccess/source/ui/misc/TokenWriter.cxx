@@ -108,7 +108,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 
     m_eDestEnc = osl_getThreadTextEncoding();
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     impl_initFromDescriptor( _aDataDescriptor, false );
 
     xub_StrLen nCount = comphelper::string::getTokenCount(rExchange, char(11));
@@ -118,7 +118,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
         for(xub_StrLen i=SBA_FORMAT_SELECTION_COUNT;i<nCount;++i)
             m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.GetToken(i,char(11)).ToInt32();
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 // import data

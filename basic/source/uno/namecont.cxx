@@ -578,9 +578,9 @@ void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::
     // this might be called from within the ctor, and the impl_init might (indirectly) create
     // an UNO reference to ourself.
     // Ensure that we're not destroyed while we're in here
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     init_Impl( rInitialDocumentURL, rxInitialStorage );
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,

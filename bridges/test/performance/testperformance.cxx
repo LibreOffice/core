@@ -95,7 +95,7 @@ void main()
         oslInterlockedCount count;
         for( int i = 0 ; i < 1000*10000 ; i ++  )
         {
-            osl_incrementInterlockedCount( &count );
+            osl_atomic_increment( &count );
         }
     }
     {

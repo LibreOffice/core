@@ -297,11 +297,11 @@ ConfigurationListener::ConfigurationListener( ToolPanelViewShell_Impl& i_rShellI
         xBroadcaster.set( pFrameworkHelper->GetConfigurationController().get() );
     ENSURE_OR_THROW( pFrameworkHelper.get(), "no access to the config controller" );
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         xBroadcaster->addConfigurationChangeListener( this, ::rtl::OUString(), Any() );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -64,7 +64,7 @@ namespace toolkit
         :SpinningProgressControlModel_Base( i_factory )
     {
         // default image sets
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             try
             {
@@ -84,7 +84,7 @@ namespace toolkit
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //------------------------------------------------------------------------------------------------------------------

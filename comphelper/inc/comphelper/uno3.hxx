@@ -35,8 +35,8 @@ namespace comphelper
 //=========================================================================
 
     /// manipulate ref counts without calling acquire/release
-    inline oslInterlockedCount increment(oslInterlockedCount& _counter) { return osl_incrementInterlockedCount(&_counter); }
-    inline oslInterlockedCount decrement(oslInterlockedCount& _counter) { return osl_decrementInterlockedCount(&_counter); }
+    inline oslInterlockedCount increment(oslInterlockedCount& _counter) { return osl_atomic_increment(&_counter); }
+    inline oslInterlockedCount decrement(oslInterlockedCount& _counter) { return osl_atomic_decrement(&_counter); }
 
 //=========================================================================
 

@@ -80,11 +80,11 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
     DBG_CTOR( rpt_OFormattedField,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FORMATTEDFIELD,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_aProps.aComponent.setShape(_xShape,this,m_refCount);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OFormattedField::~OFormattedField()

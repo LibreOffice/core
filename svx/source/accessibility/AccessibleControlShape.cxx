@@ -135,11 +135,11 @@ AccessibleControlShape::AccessibleControlShape (
     m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessServiceFactory() );
     m_pChildManager->acquire();
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_pChildManager->setOwningAccessible( this );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 //-----------------------------------------------------------------------------
@@ -280,14 +280,14 @@ void AccessibleControlShape::Init()
                     OSL_VERIFY( xNativeControlContext->queryInterface( ::getCppuType( &m_xControlContextComponent ) ) >>= m_xControlContextComponent );
 
                     // aggregate the proxy
-                    osl_incrementInterlockedCount( &m_refCount );
+                    osl_atomic_increment( &m_refCount );
                     if ( m_xControlContextProxy.is() )
                     {
                         // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
                         // Remember to _not_ reset this member unles the delegator of the proxy has been reset, too!
                         m_xControlContextProxy->setDelegator( *this );
                     }
-                    osl_decrementInterlockedCount( &m_refCount );
+                    osl_atomic_decrement( &m_refCount );
 
                     m_bDisposeNativeContext = sal_True;
 

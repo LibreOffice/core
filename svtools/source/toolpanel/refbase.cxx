@@ -31,13 +31,13 @@ namespace svt
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL RefBase::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL RefBase::release()
     {
-        oslInterlockedCount newCount = osl_decrementInterlockedCount( &m_refCount );
+        oslInterlockedCount newCount = osl_atomic_decrement( &m_refCount );
         if ( 0 == newCount )
             delete this;
         return newCount;

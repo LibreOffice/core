@@ -39,12 +39,12 @@ OCatalog::OCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
                 ,m_xMetaData(m_pConnection->getMetaData(  ))
 {
-//  osl_incrementInterlockedCount( &m_refCount );
+//  osl_atomic_increment( &m_refCount );
 //  refreshTables();
 //  refreshViews();
 //  refreshGroups();
 //  refreshUsers();
-//  osl_decrementInterlockedCount( &m_refCount );
+//  osl_atomic_decrement( &m_refCount );
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshTables()

@@ -95,12 +95,12 @@ public:
     inline void acquire()
     {
         if (m_pImpl)
-            osl_incrementInterlockedCount(&m_pImpl->m_refCount);
+            osl_atomic_increment(&m_pImpl->m_refCount);
     }
 
     inline void release()
     {
-        if (m_pImpl && 0 == osl_decrementInterlockedCount(&m_pImpl->m_refCount))
+        if (m_pImpl && 0 == osl_atomic_decrement(&m_pImpl->m_refCount))
         {
             delete m_pImpl;
         }

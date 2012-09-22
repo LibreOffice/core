@@ -312,7 +312,7 @@ ScCellFieldsObj::~ScCellFieldsObj()
     delete mpEditSource;
 
     // increment refcount to prevent double call off dtor
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     if (mpRefreshListeners)
     {
@@ -492,7 +492,7 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
     delete mpEditSource;
 
     // increment refcount to prevent double call off dtor
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     if (mpRefreshListeners)
     {

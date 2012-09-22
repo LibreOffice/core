@@ -57,11 +57,11 @@ SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : 
 ,mpParent( pParent )
 ,m_pTable(NULL)
 {
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         lateInit(this);
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 // -----------------------------------------------------------------------------
@@ -298,11 +298,11 @@ void SvxShowCharSetItem::ClearAccessible()
 SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAccessibleSelectionHelper(new VCLExternalSolarLock())
   ,m_pParent( _pParent )
 {
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         lateInit(this);
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 // -----------------------------------------------------------------------------
@@ -641,11 +641,11 @@ SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : OA
 ,mpParent( pParent )
 {
     OSL_ENSURE(pParent,"NO parent supplied!");
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     { // #b6211265 #
         lateInit(this);
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 // -----------------------------------------------------------------------------

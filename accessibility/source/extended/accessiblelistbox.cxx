@@ -59,7 +59,7 @@ namespace accessibility
         if ( isAlive() )
         {
             // increment ref count to prevent double call of Dtor
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             dispose();
         }
     }

@@ -84,13 +84,13 @@ namespace accessibility
         m_xParent       ( _xParent )
 
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             Reference< XComponent > xComp( m_xParent, UNO_QUERY );
             if ( xComp.is() )
                 xComp->addEventListener( this );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
     // -----------------------------------------------------------------------------
     void AccessibleIconChoiceCtrlEntry::disposing( const EventObject& _rSource )
@@ -108,7 +108,7 @@ throw(RuntimeException)
         if ( IsAlive_Impl() )
         {
             // increment ref count to prevent double call of Dtor
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             dispose();
         }
     }

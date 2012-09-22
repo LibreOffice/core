@@ -74,15 +74,15 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         xElement.release();
         return aIt->second;
     }
-    else if ( osl_incrementInterlockedCount( &aIt->second->m_nRefCount ) > 1 )
+    else if ( osl_atomic_increment( &aIt->second->m_nRefCount ) > 1 )
     {
         rtl::Reference< DAVSession > xElement( aIt->second );
-        osl_decrementInterlockedCount( &aIt->second->m_nRefCount );
+        osl_atomic_decrement( &aIt->second->m_nRefCount );
         return xElement;
     }
     else
     {
-        osl_decrementInterlockedCount( &aIt->second->m_nRefCount );
+        osl_atomic_decrement( &aIt->second->m_nRefCount );
         aIt->second->m_aContainerIt = m_aMap.end();
 
         // If URL scheme is different from http or https we definitely

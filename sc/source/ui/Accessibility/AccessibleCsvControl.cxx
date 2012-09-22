@@ -272,7 +272,7 @@ void ScAccessibleCsvControl::implDispose()
     if( implIsAlive() )
     {
         // prevent multiple call of dtor
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }

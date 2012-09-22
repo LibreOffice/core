@@ -50,13 +50,13 @@ namespace o3tl
     struct ThreadSafeRefCountingPolicy
     {
         typedef oslInterlockedCount ref_count_t;
-        static void incrementCount( ref_count_t& rCount ) { osl_incrementInterlockedCount(&rCount); }
+        static void incrementCount( ref_count_t& rCount ) { osl_atomic_increment(&rCount); }
         static bool decrementCount( ref_count_t& rCount )
         {
             if( rCount == 1 ) // caller is already the only/last reference
                 return false;
             else
-                return osl_decrementInterlockedCount(&rCount) != 0;
+                return osl_atomic_decrement(&rCount) != 0;
         }
     };
 

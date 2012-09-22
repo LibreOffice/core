@@ -85,7 +85,7 @@ namespace comphelper
     void OModule::registerClient( OModule::ClientAccess )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        if ( 1 == osl_incrementInterlockedCount( &m_nClients ) )
+        if ( 1 == osl_atomic_increment( &m_nClients ) )
             onFirstClient();
     }
 
@@ -93,7 +93,7 @@ namespace comphelper
     void OModule::revokeClient( OModule::ClientAccess )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        if ( 0 == osl_decrementInterlockedCount( &m_nClients ) )
+        if ( 0 == osl_atomic_decrement( &m_nClients ) )
             onLastClient();
     }
 

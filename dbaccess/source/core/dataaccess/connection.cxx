@@ -301,7 +301,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::OConnection" );
     DBG_CTOR(OConnection,NULL);
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
 
     try
     {
@@ -377,7 +377,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 OConnection::~OConnection()

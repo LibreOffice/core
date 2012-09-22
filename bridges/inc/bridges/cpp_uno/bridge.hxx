@@ -102,7 +102,7 @@ inline void SAL_CALL cppu_Mapping_uno2cpp(
 //__________________________________________________________________________________________________
 inline void cppu_cppInterfaceProxy::acquireProxy() SAL_THROW(())
 {
-    if (1 == osl_incrementInterlockedCount( &nRef ))
+    if (1 == osl_atomic_increment( &nRef ))
     {
         // rebirth of proxy zombie
         // register at cpp env
@@ -116,7 +116,7 @@ inline void cppu_cppInterfaceProxy::acquireProxy() SAL_THROW(())
 //__________________________________________________________________________________________________
 inline void cppu_cppInterfaceProxy::releaseProxy() SAL_THROW(())
 {
-    if (! osl_decrementInterlockedCount( &nRef )) // last release
+    if (! osl_atomic_decrement( &nRef )) // last release
     {
         // revoke from cpp env
         (*pBridge->pCppEnv->revokeInterface)(
@@ -170,7 +170,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
 //--------------------------------------------------------------------------------------------------
 inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) SAL_THROW(())
 {
-    if (1 == osl_incrementInterlockedCount( & static_cast< cppu_unoInterfaceProxy * >( pUnoI )->nRef ))
+    if (1 == osl_atomic_increment( & static_cast< cppu_unoInterfaceProxy * >( pUnoI )->nRef ))
     {
         // rebirth of proxy zombie
         // register at uno env
@@ -191,7 +191,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) SAL
 //--------------------------------------------------------------------------------------------------
 inline void SAL_CALL cppu_unoInterfaceProxy_release( uno_Interface * pUnoI ) SAL_THROW(())
 {
-    if (! osl_decrementInterlockedCount( & static_cast< cppu_unoInterfaceProxy * >( pUnoI )->nRef ))
+    if (! osl_atomic_decrement( & static_cast< cppu_unoInterfaceProxy * >( pUnoI )->nRef ))
     {
         // revoke from uno env on last release
         (*static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pBridge->pUnoEnv->revokeInterface)(
@@ -320,7 +320,7 @@ inline void SAL_CALL cppu_Bridge_free( uno_Mapping * pMapping ) SAL_THROW(())
 //__________________________________________________________________________________________________
 inline void cppu_Bridge::acquire() SAL_THROW(())
 {
-    if (1 == osl_incrementInterlockedCount( &nRef ))
+    if (1 == osl_atomic_increment( &nRef ))
     {
         if (bExportCpp2Uno)
         {
@@ -341,7 +341,7 @@ inline void cppu_Bridge::acquire() SAL_THROW(())
 //__________________________________________________________________________________________________
 inline void cppu_Bridge::release() SAL_THROW(())
 {
-    if (! osl_decrementInterlockedCount( &nRef ))
+    if (! osl_atomic_decrement( &nRef ))
     {
         ::uno_revokeMapping( bExportCpp2Uno ? &aCpp2Uno : &aUno2Cpp );
     }

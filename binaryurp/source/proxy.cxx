@@ -84,13 +84,13 @@ css::uno::TypeDescription Proxy::getType() const {
 }
 
 void Proxy::do_acquire() {
-    if (osl_incrementInterlockedCount(&references_) == 1) {
+    if (osl_atomic_increment(&references_) == 1) {
         bridge_->resurrectProxy(*this);
     }
 }
 
 void Proxy::do_release() {
-    if (osl_decrementInterlockedCount(&references_) == 0) {
+    if (osl_atomic_decrement(&references_) == 0) {
         bridge_->revokeProxy(*this);
     }
 }
