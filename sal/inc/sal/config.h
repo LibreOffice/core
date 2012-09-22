@@ -44,6 +44,8 @@
 
 #ifdef _MSC_VER
 
+#include <Intrin.h> // define intrinsic functions supported by the compiler
+
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES // needed by Visual C++ for math constants
 #endif
