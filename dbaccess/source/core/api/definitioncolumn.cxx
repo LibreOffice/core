@@ -210,11 +210,11 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     }
 
     // determine the table column we're based on
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_xOriginalTableColumn = impl_determineOriginalTableColumn( _rxConnection );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 OQueryColumn::~OQueryColumn()
@@ -568,7 +568,7 @@ OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol,
             const bool _bPureWrap )
     :OTableColumnDescriptorWrapper( rCol, _bPureWrap, false )
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     if ( _xColDefintion.is() )
     {
         try
@@ -580,7 +580,7 @@ OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol,
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 OTableColumnWrapper::~OTableColumnWrapper()

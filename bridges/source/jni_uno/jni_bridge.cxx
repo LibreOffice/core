@@ -214,7 +214,7 @@ namespace jni_uno
 //______________________________________________________________________________
 void Bridge::acquire() const SAL_THROW(())
 {
-    if (1 == osl_incrementInterlockedCount( &m_ref ))
+    if (1 == osl_atomic_increment( &m_ref ))
     {
         if (m_registered_java2uno)
         {
@@ -236,7 +236,7 @@ void Bridge::acquire() const SAL_THROW(())
 //______________________________________________________________________________
 void Bridge::release() const SAL_THROW(())
 {
-    if (! osl_decrementInterlockedCount( &m_ref ))
+    if (! osl_atomic_decrement( &m_ref ))
     {
         uno_revokeMapping(
             m_registered_java2uno

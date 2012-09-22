@@ -222,7 +222,7 @@ namespace pcr
         OSL_PRECOND( !isActive(),
             "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: already active!" );
         OSL_PRECOND( m_xConnection.is(), "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: this will crash!" );
-        osl_incrementInterlockedCount(&m_refCount);
+        osl_atomic_increment(&m_refCount);
 
         try
         {
@@ -279,7 +279,7 @@ namespace pcr
             DBG_UNHANDLED_EXCEPTION();
             m_xDesigner.clear();
         }
-        osl_decrementInterlockedCount(&m_refCount);
+        osl_atomic_decrement(&m_refCount);
     }
 
     //------------------------------------------------------------------------

@@ -341,7 +341,7 @@ STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv
 
 STDMETHODIMP_(ULONG) EmbedDocument_Impl::AddRef()
 {
-    return osl_incrementInterlockedCount( &m_refCount);
+    return osl_atomic_increment( &m_refCount);
 }
 
 STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
@@ -351,7 +351,7 @@ STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
     if ( m_refCount == 1 )
         m_xOwnAccess->ClearEmbedDocument();
 
-    sal_Int32 nCount = osl_decrementInterlockedCount( &m_refCount );
+    sal_Int32 nCount = osl_atomic_decrement( &m_refCount );
     if ( nCount == 0 )
         delete this;
     return nCount;

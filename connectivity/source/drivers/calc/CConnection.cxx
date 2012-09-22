@@ -108,7 +108,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcConnection::acquireDoc" );
     if ( m_xDoc.is() )
     {
-        osl_incrementInterlockedCount(&m_nDocCount);
+        osl_atomic_increment(&m_nDocCount);
         return m_xDoc;
     }
     //  open read-only as long as updating isn't implemented
@@ -172,14 +172,14 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
          ) );
         ::dbtools::throwGenericSQLException( sError, *this, aErrorDetails );
     }
-    osl_incrementInterlockedCount(&m_nDocCount);
+    osl_atomic_increment(&m_nDocCount);
     return m_xDoc;
 }
 // -----------------------------------------------------------------------------
 void OCalcConnection::releaseDoc()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcConnection::releaseDoc" );
-    if ( osl_decrementInterlockedCount(&m_nDocCount) == 0 )
+    if ( osl_atomic_decrement(&m_nDocCount) == 0 )
         ::comphelper::disposeComponent( m_xDoc );
 }
 // -----------------------------------------------------------------------------

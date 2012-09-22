@@ -38,12 +38,12 @@ namespace nullcanvas
         {
             OSL_TRACE( "%s, %d objects currently in use.\n",
                        BOOST_CURRENT_FUNCTION,
-                       osl_incrementInterlockedCount( &s_nCount ) );
+                       osl_atomic_increment( &s_nCount ) );
         }
 
         ~UsageCounter()
         {
-            const sal_Int32 nCount( osl_decrementInterlockedCount( &s_nCount ) );
+            const sal_Int32 nCount( osl_atomic_decrement( &s_nCount ) );
 
             if( !nCount )
             {

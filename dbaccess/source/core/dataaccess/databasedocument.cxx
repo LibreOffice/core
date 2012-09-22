@@ -174,7 +174,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     DBG_CTOR(ODatabaseDocument,NULL);
     OSL_TRACE( "DD: ctor: %p: %p", this, m_pImpl.get() );
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         impl_reparent_nothrow( m_xForms );
         impl_reparent_nothrow( m_xReports );
@@ -183,7 +183,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
 
         m_pEventExecutor = new DocumentEventExecutor( m_pImpl->m_aContext, this );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 
     // if there previously was a document instance for the same Impl which was already initialized,
     // then consider ourself initialized, too.

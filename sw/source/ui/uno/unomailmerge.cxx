@@ -244,7 +244,7 @@ namespace
         ,m_sTemporaryFile( _rTemporaryFile )
         ,m_nPendingDeleteAttempts( 0 )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         try
         {
             if ( m_xDocument.is() )
@@ -261,7 +261,7 @@ namespace
         {
             OSL_FAIL("DelayedFileDeletion::DelayedFileDeletion: could not register as event listener at the model!" );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

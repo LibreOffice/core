@@ -56,7 +56,7 @@ STDMETHODIMP OleWrapperClientSite::QueryInterface( REFIID riid , void** ppv )
 
 STDMETHODIMP_(ULONG) OleWrapperClientSite::AddRef()
 {
-    return osl_incrementInterlockedCount( &m_nRefCount);
+    return osl_atomic_increment( &m_nRefCount);
 }
 
 STDMETHODIMP_(ULONG) OleWrapperClientSite::Release()

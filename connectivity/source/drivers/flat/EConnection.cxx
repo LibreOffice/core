@@ -61,7 +61,7 @@ IMPLEMENT_SERVICE_INFO(OFlatConnection, "com.sun.star.sdbc.drivers.flat.Connecti
 //-----------------------------------------------------------------------------
 void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     const PropertyValue *pBegin  = info.getConstArray();
     const PropertyValue *pEnd    = pBegin + info.getLength();
@@ -99,7 +99,7 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
         }
     }
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
     OConnection::construct(url,info);
     m_bShowDeleted = sal_True; // we do not supported rows for this type
 }

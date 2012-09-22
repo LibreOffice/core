@@ -2076,7 +2076,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
                 // just copy the pointer of the uno_Sequence
                 // nelementSize should be 4 !!!!
                 memcpy( pDest, &p_unoSeq, nelementSize);
-                osl_incrementInterlockedCount( &p_unoSeq->nRefCount);
+                osl_atomic_increment( &p_unoSeq->nRefCount);
             }
             else // Element type is no Sequence -> do one conversion
             {

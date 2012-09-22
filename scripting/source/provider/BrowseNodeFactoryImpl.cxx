@@ -413,7 +413,7 @@ public:
 
         if ( m_xAggProxy.is() )
         {
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
 
             /* i35609 - Fix crash on Solaris. The setDelegator call needs
                to be in its own block to ensure that all temporary Reference
@@ -424,7 +424,7 @@ public:
                     static_cast< cppu::OWeakObject * >( this ) );
             }
 
-            osl_decrementInterlockedCount( &m_refCount );
+            osl_atomic_decrement( &m_refCount );
         }
     }
 
@@ -514,12 +514,12 @@ public:
         throw ()
 
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
     }
     virtual void SAL_CALL release()
         throw ()
     {
-        if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
+        if ( osl_atomic_decrement( &m_refCount ) == 0 )
         {
             delete this;
         }

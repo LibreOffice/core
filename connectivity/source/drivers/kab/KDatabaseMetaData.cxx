@@ -40,9 +40,9 @@ KabDatabaseMetaData::KabDatabaseMetaData(KabConnection* _pCon)
 {
     OSL_ENSURE(_pCon,"KabDatabaseMetaData::KabDatabaseMetaData: No connection set!");
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -------------------------------------------------------------------------
 KabDatabaseMetaData::~KabDatabaseMetaData()

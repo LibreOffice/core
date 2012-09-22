@@ -102,7 +102,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, v
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL pseudo_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
 {
-    if (1 == osl_incrementInterlockedCount( &static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->nRef ))
+    if (1 == osl_atomic_increment( &static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->nRef ))
     {
         // rebirth of proxy zombie
         // register at uno env
@@ -118,7 +118,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL pseudo_unoInterfaceProxy_release( uno_Interface * pUnoI )
 {
-    if (! osl_decrementInterlockedCount( & static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->nRef ))
+    if (! osl_atomic_decrement( & static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->nRef ))
     {
         // revoke from uno env on last release
         (*static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->pPseudoMapping->pTo->revokeInterface)(
@@ -198,7 +198,7 @@ static void SAL_CALL pseudo_Mapping_free( uno_Mapping * pMapping )
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL pseudo_Mapping_acquire( uno_Mapping * pMapping )
 {
-    if (1 == osl_incrementInterlockedCount( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
+    if (1 == osl_atomic_increment( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
     {
         OUString aMappingPurpose( RTL_CONSTASCII_USTRINGPARAM("pseudo") );
         uno_registerMapping( &pMapping,
@@ -211,7 +211,7 @@ static void SAL_CALL pseudo_Mapping_acquire( uno_Mapping * pMapping )
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL pseudo_Mapping_release( uno_Mapping * pMapping )
 {
-    if (! osl_decrementInterlockedCount( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
+    if (! osl_atomic_decrement( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
     {
         uno_revokeMapping( pMapping );
     }

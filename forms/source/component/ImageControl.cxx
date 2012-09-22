@@ -176,13 +176,13 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     DBG_CTOR( OImageControlModel, NULL );
     implConstruct();
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         // simulate a propertyChanged event for the ImageURL
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_handleNewImageURL_lck( eOther );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 //------------------------------------------------------------------

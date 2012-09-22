@@ -60,7 +60,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
     ,m_bEOF(sal_False)
     ,m_bOnFirstAfterOpen(sal_False)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     m_aColMapping.push_back(-1);
     if(_pRecordSet)
     {
@@ -71,7 +71,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
     }
     else
         m_bOnFirstAfterOpen = sal_False;
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
     //  allocBuffer();
 }
 

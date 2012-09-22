@@ -57,7 +57,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
     : OStatement_Base( _pConnection )
     ,m_aTypeInfo(_TypeInfo)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     OSQLParser aParser(_pConnection->getDriver()->getORB());
     ::rtl::OUString sErrorMessage;
@@ -80,7 +80,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
     m_pParameters->AddRef();
     m_pParameters->Refresh();
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 // -------------------------------------------------------------------------

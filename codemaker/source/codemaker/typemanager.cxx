@@ -41,13 +41,13 @@ TypeManager::~TypeManager()
 
 sal_Int32 TypeManager::acquire()
 {
-    return osl_incrementInterlockedCount(&m_pImpl->m_refCount);
+    return osl_atomic_increment(&m_pImpl->m_refCount);
 }
 
 sal_Int32 TypeManager::release()
 {
     sal_Int32 refCount = 0;
-    if (0 == (refCount = osl_decrementInterlockedCount(&m_pImpl->m_refCount)) )
+    if (0 == (refCount = osl_atomic_decrement(&m_pImpl->m_refCount)) )
     {
         delete m_pImpl;
     }

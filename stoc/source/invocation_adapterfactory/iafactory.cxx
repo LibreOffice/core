@@ -193,7 +193,7 @@ inline AdapterImpl::~AdapterImpl()
 inline void AdapterImpl::acquire()
     SAL_THROW(())
 {
-    ::osl_incrementInterlockedCount( &m_nRef );
+    ::osl_atomic_increment( &m_nRef );
 }
 //______________________________________________________________________________
 inline void AdapterImpl::release()
@@ -202,7 +202,7 @@ inline void AdapterImpl::release()
     bool delete_this = false;
     {
     MutexGuard guard( m_pFactory->m_mutex );
-    if (! ::osl_decrementInterlockedCount( &m_nRef ))
+    if (! ::osl_atomic_decrement( &m_nRef ))
     {
         t_ptr_map::iterator iFind(
             m_pFactory->m_receiver2adapters.find( m_key ) );

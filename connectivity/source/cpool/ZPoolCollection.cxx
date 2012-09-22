@@ -88,7 +88,7 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     if ( xProp.is() )
         xProp->addPropertyChangeListener(getEnablePoolingNodeName(),this);
     // attach as desktop listener to know when we have to release our pools
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
 
         m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString("com.sun.star.frame.Desktop") ), UNO_QUERY);
@@ -96,7 +96,7 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
             m_xDesktop->addTerminateListener(this);
 
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OPoolCollection::~OPoolCollection()

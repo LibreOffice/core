@@ -109,7 +109,7 @@ ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
 
     setAggregateSet(m_xAggregateFastSet, getOriginalHandle(PROPERTY_ID_DATEFORMAT));
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     try
     {
         if ( m_xAggregateSet.is() )
@@ -119,7 +119,7 @@ ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
     {
         OSL_FAIL( "ODateModel::ODateModel: caught an exception!" );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 //------------------------------------------------------------------------------

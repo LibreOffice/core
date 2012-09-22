@@ -55,7 +55,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                                 ,m_bInChange(sal_False)
 {
     DBG_CTOR( rpt_OPropertyMediator,NULL);
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     OSL_ENSURE(m_xDest.is(),"Dest is NULL!");
     OSL_ENSURE(m_xSource.is(),"Source is NULL!");
     if ( m_xDest.is() && m_xSource.is() )
@@ -96,7 +96,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
             (void)e;
         }
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 // -----------------------------------------------------------------------------
 OPropertyMediator::~OPropertyMediator()

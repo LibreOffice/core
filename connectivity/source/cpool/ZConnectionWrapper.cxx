@@ -43,7 +43,7 @@ OConnectionWeakWrapper::~OConnectionWeakWrapper()
 {
     if ( !OConnectionWeakWrapper_BASE::rBHelper.bDisposed )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }

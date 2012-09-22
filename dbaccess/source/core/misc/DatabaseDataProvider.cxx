@@ -70,7 +70,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     m_xRangeConversion.set(m_xInternal,uno::UNO_QUERY);
     m_xComplexDescriptionAccess.set(m_xInternal,uno::UNO_QUERY);
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_xRowSet.set( m_xContext->getServiceManager()->createInstanceWithContext(SERVICE_SDB_ROWSET,m_xContext ), uno::UNO_QUERY );
         m_xAggregate.set(m_xRowSet,uno::UNO_QUERY);
@@ -81,7 +81,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
         m_xAggregateSet->setPropertyValue(PROPERTY_COMMAND_TYPE,uno::makeAny(m_CommandType));
         m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,uno::makeAny(m_EscapeProcessing));
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL DatabaseDataProvider::disposing()

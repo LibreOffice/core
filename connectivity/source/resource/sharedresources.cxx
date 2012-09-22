@@ -110,14 +110,14 @@ namespace connectivity
     //--------------------------------------------------------------------
     void SharedResources_Impl::registerClient()
     {
-        osl_incrementInterlockedCount( &s_nClients );
+        osl_atomic_increment( &s_nClients );
     }
 
     //--------------------------------------------------------------------
     void SharedResources_Impl::revokeClient()
     {
         ::osl::MutexGuard aGuard( getMutex() );
-        if ( 0 == osl_decrementInterlockedCount( &s_nClients ) )
+        if ( 0 == osl_atomic_decrement( &s_nClients ) )
         {
             delete s_pInstance;
             s_pInstance = NULL;

@@ -80,7 +80,7 @@ void SAL_CALL OConnection::release() throw()
 //-----------------------------------------------------------------------------
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     // some example code how to get the information out of the sequence
 
@@ -129,7 +129,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     m_sUser = aUID;
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // XServiceInfo
 // --------------------------------------------------------------------------------

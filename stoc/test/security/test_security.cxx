@@ -108,13 +108,13 @@ public:
 void user_CurrentContext::acquire()
     throw ()
 {
-    ::osl_incrementInterlockedCount( &m_refcount );
+    ::osl_atomic_increment( &m_refcount );
 }
 //__________________________________________________________________________________________________
 void user_CurrentContext::release()
     throw ()
 {
-    if (! ::osl_decrementInterlockedCount( &m_refcount ))
+    if (! ::osl_atomic_decrement( &m_refcount ))
     {
         delete this;
     }

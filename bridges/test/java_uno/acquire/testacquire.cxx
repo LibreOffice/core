@@ -99,7 +99,7 @@ public:
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw ()
-    { osl_incrementInterlockedCount(&m_refCount); }
+    { osl_atomic_increment(&m_refCount); }
 
     virtual void SAL_CALL release() throw ();
 
@@ -125,7 +125,7 @@ css::uno::Any Interface::queryInterface(css::uno::Type const & type)
 }
 
 void Interface::release() throw () {
-    if (osl_decrementInterlockedCount(&m_refCount) == 0) {
+    if (osl_atomic_decrement(&m_refCount) == 0) {
         delete this;
     }
 }

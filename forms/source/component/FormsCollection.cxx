@@ -147,9 +147,9 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
 Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (RuntimeException)
 {
     OFormsCollection* pClone = new OFormsCollection( *this );
-    osl_incrementInterlockedCount( &pClone->m_refCount );
+    osl_atomic_increment( &pClone->m_refCount );
     pClone->clonedFrom( *this );
-    osl_decrementInterlockedCount( &pClone->m_refCount );
+    osl_atomic_decrement( &pClone->m_refCount );
     return pClone;
 }
 

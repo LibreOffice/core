@@ -48,11 +48,11 @@ namespace comphelper
         OSL_ENSURE( _rxBroadcaster.is(), "OWeakEventListenerAdapter::OWeakEventListenerAdapter: invalid broadcaster!" );
         if ( _rxBroadcaster.is() )
         {
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             {
                 _rxBroadcaster->addEventListener( this );
             }
-            osl_decrementInterlockedCount( &m_refCount );
+            osl_atomic_decrement( &m_refCount );
             OSL_ENSURE( m_refCount > 0, "OWeakEventListenerAdapter::OWeakEventListenerAdapter: oops - not to be used with implementations which hold their listeners weak!" );
                 // the one and only reason for this adapter class (A) is to add as listener to a component (C) which
                 // holds its listeners hard, and forward all calls then to another listener (L) which is

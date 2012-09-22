@@ -66,7 +66,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_pRowStatusArray(0)
     ,rBHelper(OStatement_BASE::rBHelper)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     m_pConnection->acquire();
     m_aStatementHandle = m_pConnection->createStatementHandle();
 
@@ -80,7 +80,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     // If we ever again encounter a ODBC driver which needs this option, then we should introduce a data source
     // setting for it, instead of unconditionally doing it.
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()

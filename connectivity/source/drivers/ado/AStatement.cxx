@@ -61,7 +61,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
                                                         ,m_eLockType(adLockReadOnly)
                                                         ,m_eCursorType(adOpenForwardOnly)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     m_Command.Create();
     if(m_Command.IsValid())
@@ -74,7 +74,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
 
     m_pConnection->acquire();
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()

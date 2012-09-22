@@ -146,13 +146,13 @@ using ::rtl::OUString;
 sal_Int32 SwDoc::acquire()
 {
     OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
-    return osl_incrementInterlockedCount(&mReferenceCount);
+    return osl_atomic_increment(&mReferenceCount);
 }
 
 sal_Int32 SwDoc::release()
 {
     OSL_PRECOND(mReferenceCount >= 1, "Object is already released! Releasing it again leads to a negative reference count.");
-    return osl_decrementInterlockedCount(&mReferenceCount);
+    return osl_atomic_decrement(&mReferenceCount);
 }
 
 sal_Int32 SwDoc::getReferenceCount() const

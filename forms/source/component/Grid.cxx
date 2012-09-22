@@ -158,12 +158,12 @@ OGridControlModel::~OGridControlModel()
 Reference< XCloneable > SAL_CALL OGridControlModel::createClone( ) throw (RuntimeException)
 {
     OGridControlModel* pClone = new OGridControlModel( this, getContext().getLegacyServiceFactory() );
-    osl_incrementInterlockedCount( &pClone->m_refCount );
+    osl_atomic_increment( &pClone->m_refCount );
     pClone->OControlModel::clonedFrom( this );
     // do not call OInterfaceContainer::clonedFrom, it would clone the elements aka columns, which is
     // already done in the ctor
     //pClone->OInterfaceContainer::clonedFrom( *this );
-    osl_decrementInterlockedCount( &pClone->m_refCount );
+    osl_atomic_decrement( &pClone->m_refCount );
     return static_cast< XCloneable* >( static_cast< OControlModel* >( pClone ) );
 }
 

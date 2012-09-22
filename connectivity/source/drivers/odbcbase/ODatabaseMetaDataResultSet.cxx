@@ -71,10 +71,10 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
     if( SQL_NULL_HANDLE == m_aStatementHandle )
         throw RuntimeException();
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     m_pConnection->acquire();
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
     //  allocBuffer();
 }
 
@@ -84,7 +84,7 @@ ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
     OSL_ENSURE(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed,"Object wasn't disposed!");
     if(!ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
     delete [] m_pRowStatusArray;

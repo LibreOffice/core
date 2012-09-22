@@ -87,7 +87,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
     DBG_CTOR( rpt_OShape,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         uno::Reference<beans::XPropertySet> xProp(_xShape,uno::UNO_QUERY);
         if ( xProp.is() )
@@ -97,7 +97,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
         }
         m_aProps.aComponent.setShape(_xShape,this,m_refCount);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OShape::~OShape()

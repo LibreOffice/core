@@ -137,12 +137,12 @@ namespace dbaccess
 
     void SAL_CALL DocumentEventNotifier_Impl::acquire()
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
     }
 
     void SAL_CALL DocumentEventNotifier_Impl::release()
     {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        if ( 0 == osl_atomic_decrement( &m_refCount ) )
             delete this;
     }
 

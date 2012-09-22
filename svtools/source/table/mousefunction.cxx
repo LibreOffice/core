@@ -43,13 +43,13 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     oslInterlockedCount MouseFunction::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     oslInterlockedCount MouseFunction::release()
     {
-        oslInterlockedCount newCount = osl_decrementInterlockedCount( &m_refCount );
+        oslInterlockedCount newCount = osl_atomic_decrement( &m_refCount );
         if ( newCount == 0 )
         {
             delete this;

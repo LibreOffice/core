@@ -56,7 +56,7 @@ OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeExcepti
                          m_bClosed(sal_False),
                          m_bAutocommit(sal_True)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     IClassFactory2* pIUnknown   = NULL;
     IUnknown        *pOuter     = NULL;
@@ -90,7 +90,7 @@ OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeExcepti
         pIUnknown->Release();
     }
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
@@ -99,7 +99,7 @@ OConnection::~OConnection()
 //-----------------------------------------------------------------------------
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     setConnectionInfo(info);
 
@@ -152,10 +152,10 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     catch(const Exception& )
     {
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
         throw;
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()

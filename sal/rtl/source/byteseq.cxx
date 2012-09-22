@@ -65,7 +65,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
             if ( pNew != 0 )
                 memcpy( pNew->elements, pSequence->elements, nElements );
 
-            if (! osl_decrementInterlockedCount( &pSequence->nRefCount ))
+            if (! osl_atomic_decrement( &pSequence->nRefCount ))
                 rtl_freeMemory( pSequence );
         }
         else
@@ -114,7 +114,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
             }
         }
 
-        if (! osl_decrementInterlockedCount( &pSequence->nRefCount ))
+        if (! osl_atomic_decrement( &pSequence->nRefCount ))
             rtl_freeMemory( pSequence );
         pSequence = pNew;
     }
@@ -138,7 +138,7 @@ void SAL_CALL rtl_byte_sequence_acquire( sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {
     OSL_ASSERT( pSequence );
-    osl_incrementInterlockedCount( &(pSequence->nRefCount) );
+    osl_atomic_increment( &(pSequence->nRefCount) );
 }
 
 //==================================================================================================
@@ -147,7 +147,7 @@ void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence )
 {
     if ( pSequence != 0 )
     {
-        if (! osl_decrementInterlockedCount( &(pSequence->nRefCount )) )
+        if (! osl_atomic_decrement( &(pSequence->nRefCount )) )
         {
             rtl_freeMemory( pSequence );
         }

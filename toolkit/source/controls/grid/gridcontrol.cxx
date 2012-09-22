@@ -122,7 +122,7 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
 UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
     :UnoControlModel( rModel )
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         Reference< XGridDataModel > xDataModel;
         // clone the data model
@@ -160,7 +160,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( xColumnModel ) );
             // same comment as above: do not use our own setPropertyValue here.
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -105,7 +105,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_bRowDeleted(sal_False)
                         ,m_bUseFetchScroll(sal_False)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     try
     {
         m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
@@ -149,7 +149,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         m_bUseFetchScroll = sal_False;
     }
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
@@ -160,9 +160,9 @@ OResultSet::~OResultSet()
 // -----------------------------------------------------------------------------
 void OResultSet::construct()
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     allocBuffer();
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)

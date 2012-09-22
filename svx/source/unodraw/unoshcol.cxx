@@ -67,7 +67,7 @@ void SvxShapeCollection::release() throw()
     uno::Reference< uno::XInterface > x( xDelegator );
     if (! x.is())
     {
-        if (osl_decrementInterlockedCount( &m_refCount ) == 0)
+        if (osl_atomic_decrement( &m_refCount ) == 0)
         {
             if (! mrBHelper.bDisposed)
             {
@@ -89,7 +89,7 @@ void SvxShapeCollection::release() throw()
             }
         }
         // restore the reference count
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
     }
     OWeakAggObject::release();
 }

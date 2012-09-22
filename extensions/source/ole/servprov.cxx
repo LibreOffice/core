@@ -151,7 +151,7 @@ STDMETHODIMP ProviderOleWrapper_Impl::QueryInterface(REFIID riid, void FAR* FAR*
 
 STDMETHODIMP_(ULONG) ProviderOleWrapper_Impl::AddRef()
 {
-    return osl_incrementInterlockedCount( &m_refCount);
+    return osl_atomic_increment( &m_refCount);
 }
 
 STDMETHODIMP_(ULONG) ProviderOleWrapper_Impl::Release()
@@ -297,7 +297,7 @@ STDMETHODIMP OneInstanceOleWrapper_Impl::QueryInterface(REFIID riid, void FAR* F
 
 STDMETHODIMP_(ULONG) OneInstanceOleWrapper_Impl::AddRef()
 {
-    return osl_incrementInterlockedCount( &m_refCount);
+    return osl_atomic_increment( &m_refCount);
 }
 
 STDMETHODIMP_(ULONG) OneInstanceOleWrapper_Impl::Release()

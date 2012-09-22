@@ -58,7 +58,7 @@ class Object3
 {
 public:
     inline void acquire() SAL_THROW(())
-    { osl_incrementInterlockedCount(&m_nRefCount); }
+    { osl_atomic_increment(&m_nRefCount); }
 
     void release() SAL_THROW(());
 

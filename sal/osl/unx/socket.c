@@ -1488,12 +1488,12 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
 
 void SAL_CALL osl_acquireSocket(oslSocket pSocket)
 {
-    osl_incrementInterlockedCount( &(pSocket->m_nRefCount ) );
+    osl_atomic_increment( &(pSocket->m_nRefCount ) );
 }
 
 void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 {
-    if( pSocket && 0 == osl_decrementInterlockedCount( &(pSocket->m_nRefCount) ) )
+    if( pSocket && 0 == osl_atomic_decrement( &(pSocket->m_nRefCount) ) )
     {
 #if defined(LINUX)
     if ( pSocket->m_bIsAccepting == sal_True )

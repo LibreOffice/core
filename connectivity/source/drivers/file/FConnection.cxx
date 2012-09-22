@@ -96,7 +96,7 @@ sal_Bool OConnection::matchesExtension( const String& _rExt ) const
 //-----------------------------------------------------------------------------
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     ::rtl::OUString aExt;
     const PropertyValue *pIter  = info.getConstArray();
@@ -206,11 +206,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     catch(const Exception&)
     {
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
         throw;
     }
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // XServiceInfo
 // --------------------------------------------------------------------------------

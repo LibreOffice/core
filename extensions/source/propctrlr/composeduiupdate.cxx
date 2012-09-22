@@ -232,13 +232,13 @@ namespace pcr
     //----------------------------------------------------------------
     void SAL_CALL CachedInspectorUI::acquire() throw()
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
     }
 
     //----------------------------------------------------------------
     void SAL_CALL CachedInspectorUI::release() throw()
     {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        if ( 0 == osl_atomic_decrement( &m_refCount ) )
             delete this;
     }
 
@@ -789,14 +789,14 @@ namespace pcr
     void SAL_CALL ComposedPropertyUIUpdate::suspendAutoFire()
     {
         impl_checkDisposed();
-        osl_incrementInterlockedCount( &m_nSuspendCounter );
+        osl_atomic_increment( &m_nSuspendCounter );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL ComposedPropertyUIUpdate::resumeAutoFire()
     {
         impl_checkDisposed();
-        if ( 0 == osl_decrementInterlockedCount( &m_nSuspendCounter ) )
+        if ( 0 == osl_atomic_decrement( &m_nSuspendCounter ) )
             impl_fireAll_throw();
     }
 

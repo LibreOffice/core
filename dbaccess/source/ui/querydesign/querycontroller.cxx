@@ -352,7 +352,7 @@ OQueryController::~OQueryController()
     {
         OSL_FAIL("Please check who doesn't dispose this component!");
         // increment ref count to prevent double call of Dtor
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }
