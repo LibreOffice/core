@@ -319,6 +319,7 @@ endef
 
 define gb_UnpackedTarbal__make_pattern_rule
 $(call gb_UnpackedTarball_get_dir,$(1))/%$(2) :
+	$$(if $$(wildcard $$@),,$$(call gb_Output_error,file $$@ does not exist in the tarball))
 	touch $$@
 
 $(eval gb_UnpackedTarball_PATTERN_RULES_$(1) += $(2))
@@ -332,6 +333,7 @@ endef
 
 define gb_UnpackedTarbal__make_file_rule
 $(call gb_UnpackedTarball_get_dir,$(1))/$(2) :
+	$$(if $$(wildcard $$@),,$$(call gb_Output_error,file $$@ does not exist in the tarball))
 	touch $$@
 
 endef
