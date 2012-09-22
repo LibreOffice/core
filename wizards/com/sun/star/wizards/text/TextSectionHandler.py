@@ -17,7 +17,7 @@
 #
 import uno
 import traceback
-from wizards.common.Helper import Helper
+from ..common.Helper import Helper
 
 class TextSectionHandler(object):
     '''Creates a new instance of TextSectionHandler'''

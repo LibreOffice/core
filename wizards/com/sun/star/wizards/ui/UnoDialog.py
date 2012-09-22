@@ -17,10 +17,9 @@
 #
 import uno
 import traceback
-import wizards.ui.UIConsts
-from wizards.common.PropertyNames import PropertyNames
-from wizards.common.Helper import Helper
-from wizards.ui.PeerConfig import PeerConfig
+from .PeerConfig import PeerConfig
+from ..common.PropertyNames import PropertyNames
+from ..common.Helper import Helper
 
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.PosSize import POS

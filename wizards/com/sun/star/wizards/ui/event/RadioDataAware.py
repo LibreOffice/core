@@ -15,15 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.ui.event.DataAware import *
-from wizards.ui.event.DataAware import *
-from wizards.ui.event.UnoDataAware import *
 import time
-'''
-@author rpiterman
-To change the template for this generated type comment go to
-Window>Preferences>Java>Code Generation>Code and Comments
-'''
+from .DataAware import *
+from .DataAware import *
+from .UnoDataAware import *
 
 class RadioDataAware(DataAware):
 

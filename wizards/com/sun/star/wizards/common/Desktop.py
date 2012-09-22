@@ -17,7 +17,7 @@
 #
 import uno
 import traceback
-from wizards.common.NoValidPathException import *
+from .NoValidPathException import *
 
 from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL

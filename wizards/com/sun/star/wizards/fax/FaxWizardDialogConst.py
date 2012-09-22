@@ -15,8 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.common.HelpIds import HelpIds
-
+from ..common.HelpIds import HelpIds
 
 OPTBUSINESSFAX_ITEM_CHANGED = "optBusinessFaxItemChanged"
 LSTBUSINESSSTYLE_ACTION_PERFORMED = None # "lstBusinessStyleActionPerformed"
