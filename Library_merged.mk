@@ -122,6 +122,11 @@ $(eval $(call gb_Library_use_system_win32_libs,merged,\
 	winmm \
 	winspool \
 ))
+# prevent warning spamming
+$(eval $(call gb_Library_add_ldflags,merged,\
+	/ignore:4049 \
+	/ignore:4217 \
+))
 $(eval $(call gb_Library_use_externals,merged,\
 	icuin \
 ))
