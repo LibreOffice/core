@@ -49,9 +49,9 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
 
            sal_Int32
         compareString (
-                const ::rtl::OUString& s1, const ::rtl::OUString& s2) const;
+                const OUString& s1, const OUString& s2) const;
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
         listCollatorAlgorithms (
                 const ::com::sun::star::lang::Locale& rLocale) const;
 
@@ -61,7 +61,7 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
 
         sal_Int32
         loadCollatorAlgorithm (
-                const ::rtl::OUString& rAlgorithm,
+                const OUString& rAlgorithm,
                 const ::com::sun::star::lang::Locale& rLocale, sal_Int32 nOption);
 
     protected:

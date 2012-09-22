@@ -58,9 +58,9 @@ public:
     // wrapper implementations of XCalendar
 
     void loadDefaultCalendar( const ::com::sun::star::lang::Locale& rLocale );
-    void loadCalendar( const ::rtl::OUString& rUniqueID, const ::com::sun::star::lang::Locale& rLocale );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const;
-    ::rtl::OUString getUniqueID() const;
+    void loadCalendar( const OUString& rUniqueID, const ::com::sun::star::lang::Locale& rLocale );
+    ::com::sun::star::uno::Sequence< OUString > getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const;
+    OUString getUniqueID() const;
     /// set UTC date/time
     void setDateTime( double nTimeInDays );
     /// get UTC date/time
