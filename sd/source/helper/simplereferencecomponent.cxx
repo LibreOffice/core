@@ -51,7 +51,7 @@ SimpleReferenceComponent::~SimpleReferenceComponent()
 
 void SimpleReferenceComponent::acquire()
 {
-    osl_incrementInterlockedCount(&m_nCount);
+    osl_atomic_increment(&m_nCount);
 }
 
 void SimpleReferenceComponent::release()
@@ -75,7 +75,7 @@ void SimpleReferenceComponent::release()
         }
     }
 
-    if(osl_decrementInterlockedCount(&m_nCount) == 0) delete this;
+    if(osl_atomic_decrement(&m_nCount) == 0) delete this;
 }
 
 void SimpleReferenceComponent::Dispose()

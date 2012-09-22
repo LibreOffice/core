@@ -162,7 +162,7 @@ class ThreadManager : public IThreadListenerOwner
 
         inline oslInterlockedCount RetrieveNewThreadID()
         {
-            return osl_incrementInterlockedCount( &mnThreadIDCounter );
+            return osl_atomic_increment( &mnThreadIDCounter );
         }
 
         bool StartWaitingThread();

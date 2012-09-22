@@ -166,7 +166,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
     DBG_CTOR(rpt_OFixedLine,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     try
     {
         awt::Size aSize = _xShape->getSize();
@@ -189,7 +189,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
     {
         OSL_FAIL("OFixedLine::OFixedLine: Exception caught!");
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OFixedLine::~OFixedLine()

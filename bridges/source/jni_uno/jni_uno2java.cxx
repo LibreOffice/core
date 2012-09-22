@@ -479,7 +479,7 @@ inline UNO_proxy::UNO_proxy(
 //______________________________________________________________________________
 inline void UNO_proxy::acquire() const
 {
-    if (1 == osl_incrementInterlockedCount( &m_ref ))
+    if (1 == osl_atomic_increment( &m_ref ))
     {
         // rebirth of proxy zombie
         void * that = const_cast< UNO_proxy * >( this );
@@ -497,7 +497,7 @@ inline void UNO_proxy::acquire() const
 //______________________________________________________________________________
 inline void UNO_proxy::release() const
 {
-    if (0 == osl_decrementInterlockedCount( &m_ref ))
+    if (0 == osl_atomic_decrement( &m_ref ))
     {
         // revoke from uno env on last release
         (*m_bridge->m_uno_env->revokeInterface)(

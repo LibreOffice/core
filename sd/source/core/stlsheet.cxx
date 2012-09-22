@@ -764,10 +764,10 @@ SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, 
 
 void SAL_CALL SdStyleSheet::release(  ) throw ()
 {
-    if (osl_decrementInterlockedCount( &m_refCount ) == 0)
+    if (osl_atomic_decrement( &m_refCount ) == 0)
     {
         // restore reference count:
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         if (! mrBHelper.bDisposed) try
         {
             dispose();

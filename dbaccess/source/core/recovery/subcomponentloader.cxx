@@ -120,11 +120,11 @@ namespace dbaccess
         Reference< XController2 > xController( i_rApplicationController, UNO_QUERY_THROW );
         m_pData->xAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             m_pData->xAppComponentWindow->addWindowListener( this );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------
@@ -136,11 +136,11 @@ namespace dbaccess
         Reference< XController2 > xController( i_rApplicationController, UNO_QUERY_THROW );
         m_pData->xAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             m_pData->xAppComponentWindow->addWindowListener( this );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

@@ -150,13 +150,13 @@ OXUndoEnvironment::~OXUndoEnvironment()
 void OXUndoEnvironment::Lock()
 {
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
-    osl_incrementInterlockedCount( &m_pImpl->m_nLocks );
+    osl_atomic_increment( &m_pImpl->m_nLocks );
 }
 void OXUndoEnvironment::UnLock()
 {
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
 
-    osl_decrementInterlockedCount( &m_pImpl->m_nLocks );
+    osl_atomic_decrement( &m_pImpl->m_nLocks );
 }
 sal_Bool OXUndoEnvironment::IsLocked() const { return m_pImpl->m_nLocks != 0; }
 // -----------------------------------------------------------------------------

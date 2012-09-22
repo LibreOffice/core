@@ -117,18 +117,18 @@ Storage::Storage( const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
 
     if ( m_xAggProxy.is() )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             // Solaris compiler problem:
             // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_decrementInterlockedCount is
+            // in next statement _before_ osl_atomic_decrement is
             // called.  Otherwise 'this' will destroy itself even before ctor
             // is completed (See impl. of XInterface::release())!
 
             m_xAggProxy->setDelegator(
                 static_cast< cppu::OWeakObject * >( this ) );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 }
 
@@ -186,7 +186,7 @@ uno::Any SAL_CALL Storage::queryInterface( const uno::Type& aType )
 void SAL_CALL Storage::acquire()
     throw ()
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 }
 
 //=========================================================================
@@ -194,7 +194,7 @@ void SAL_CALL Storage::acquire()
 void SAL_CALL Storage::release()
     throw ()
 {
-    if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
+    if ( osl_atomic_decrement( &m_refCount ) == 0 )
     {
         m_xFactory->releaseElement( this );
         delete this;
@@ -626,18 +626,18 @@ OutputStream::OutputStream(
 
     if ( m_xAggProxy.is() )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             // Solaris compiler problem:
             // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_decrementInterlockedCount is
+            // in next statement _before_ osl_atomic_decrement is
             // called.  Otherwise 'this' will destroy itself even before ctor
             // is completed (See impl. of XInterface::release())!
 
             m_xAggProxy->setDelegator(
                 static_cast< cppu::OWeakObject * >( this ) );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 }
 
@@ -827,18 +827,18 @@ Stream::Stream(
 
     if ( m_xAggProxy.is() )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             // Solaris compiler problem:
             // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_decrementInterlockedCount is
+            // in next statement _before_ osl_atomic_decrement is
             // called.  Otherwise 'this' will destroy itself even before ctor
             // is completed (See impl. of XInterface::release())!
 
             m_xAggProxy->setDelegator(
                 static_cast< cppu::OWeakObject * >( this ) );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 }
 

@@ -41,7 +41,7 @@ namespace connectivity { namespace java { namespace sql {
         sal_Int32 lcl_getFreeID( ConnectionLog::ObjectType _eType )
         {
             static oslInterlockedCount s_nCounts[ ConnectionLog::ObjectTypeCount ] = { 0, 0 };
-            return osl_incrementInterlockedCount( s_nCounts + _eType );
+            return osl_atomic_increment( s_nCounts + _eType );
         }
     }
 

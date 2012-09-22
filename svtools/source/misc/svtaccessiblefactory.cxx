@@ -240,13 +240,13 @@ namespace svt
         //----------------------------------------------------------------
         oslInterlockedCount SAL_CALL AccessibleDummyFactory::acquire()
         {
-            return osl_incrementInterlockedCount( &m_refCount );
+            return osl_atomic_increment( &m_refCount );
         }
 
         //----------------------------------------------------------------
         oslInterlockedCount SAL_CALL AccessibleDummyFactory::release()
         {
-            if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+            if ( 0 == osl_atomic_decrement( &m_refCount ) )
             {
                 delete this;
                 return 0;
@@ -275,7 +275,7 @@ namespace svt
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
-        if ( 1 == osl_incrementInterlockedCount( &s_nAccessibleFactoryAccesss ) )
+        if ( 1 == osl_atomic_increment( &s_nAccessibleFactoryAccesss ) )
         {   // the first client
 #endif // UNLOAD_ON_LAST_CLIENT_DYING
             // load the library implementing the factory
@@ -323,7 +323,7 @@ namespace svt
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
-            if( 0 == osl_decrementInterlockedCount( &s_nAccessibleFactoryAccesss ) )
+            if( 0 == osl_atomic_decrement( &s_nAccessibleFactoryAccesss ) )
             {
                 s_pFactory = NULL;
                 s_pAccessibleFactoryFunc = NULL;

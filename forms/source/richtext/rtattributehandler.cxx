@@ -60,13 +60,13 @@ namespace frm
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL ReferenceBase::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL ReferenceBase::release()
     {
-        return osl_decrementInterlockedCount( &m_refCount );
+        return osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

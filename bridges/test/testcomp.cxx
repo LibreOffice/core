@@ -157,9 +157,9 @@ public:
         return aRet;
     }
     virtual void SAL_CALL acquire() throw()
-        { osl_incrementInterlockedCount( &_nRef ); }
+        { osl_atomic_increment( &_nRef ); }
     virtual void SAL_CALL release() throw()
-        { if (! osl_decrementInterlockedCount( &_nRef )) delete this; }
+        { if (! osl_atomic_decrement( &_nRef )) delete this; }
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);

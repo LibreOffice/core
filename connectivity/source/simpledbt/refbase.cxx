@@ -35,13 +35,13 @@ namespace connectivity
     //----------------------------------------------------------------
     oslInterlockedCount SAL_CALL ORefBase::acquire()
     {
-        return osl_incrementInterlockedCount(&m_refCount);
+        return osl_atomic_increment(&m_refCount);
     }
 
     //----------------------------------------------------------------
     oslInterlockedCount SAL_CALL ORefBase::release()
     {
-        oslInterlockedCount nNewRefCount = osl_decrementInterlockedCount(&m_refCount);
+        oslInterlockedCount nNewRefCount = osl_atomic_decrement(&m_refCount);
         if (0 == nNewRefCount)
             delete this;
 

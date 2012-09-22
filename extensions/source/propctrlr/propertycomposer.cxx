@@ -100,7 +100,7 @@ namespace pcr
         if ( m_aSlaveHandlers.empty() )
             throw IllegalArgumentException();
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             Reference< XPropertyChangeListener > xMeMyselfAndI( this );
             for (   HandlerArray::const_iterator loop = m_aSlaveHandlers.begin();
@@ -113,7 +113,7 @@ namespace pcr
                 (*loop)->addPropertyChangeListener( xMeMyselfAndI );
             }
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

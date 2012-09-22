@@ -55,7 +55,7 @@ STDMETHODIMP OleWrapperAdviseSink::QueryInterface( REFIID riid , void** ppv )
 
 STDMETHODIMP_(ULONG) OleWrapperAdviseSink::AddRef()
 {
-    return osl_incrementInterlockedCount( &m_nRefCount);
+    return osl_atomic_increment( &m_nRefCount);
 }
 
 STDMETHODIMP_(ULONG) OleWrapperAdviseSink::Release()

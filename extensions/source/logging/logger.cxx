@@ -181,11 +181,11 @@ namespace logging
         ,m_nLogLevel( LogLevel::OFF )
         ,m_sName( _rName )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             initializeLoggerFromConfiguration( m_aContext, this );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------
@@ -267,7 +267,7 @@ namespace logging
             m_sName,
             _rMessage,
             _nLevel,
-            osl_incrementInterlockedCount( &m_nEventNumber )
+            osl_atomic_increment( &m_nEventNumber )
         ) );
     }
 
@@ -280,7 +280,7 @@ namespace logging
             _rSourceMethod,
             _rMessage,
             _nLevel,
-            osl_incrementInterlockedCount( &m_nEventNumber )
+            osl_atomic_increment( &m_nEventNumber )
         ) );
     }
 

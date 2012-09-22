@@ -141,12 +141,12 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
     DBG_CTOR( FlushNotificationAdapter, NULL );
     OSL_ENSURE( _rxBroadcaster.is(), "FlushNotificationAdapter::FlushNotificationAdapter: invalid flushable!" );
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         if ( _rxBroadcaster.is() )
             _rxBroadcaster->addFlushListener( this );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
     OSL_ENSURE( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
 }
 
@@ -341,7 +341,7 @@ void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang:
     TSharedConnectionMap::iterator aFind = m_aSharedConnection.find(xConnection);
     if ( m_aSharedConnection.end() != aFind )
     {
-        osl_decrementInterlockedCount(&aFind->second->second.nALiveCount);
+        osl_atomic_decrement(&aFind->second->second.nALiveCount);
         if ( !aFind->second->second.nALiveCount )
         {
             ::comphelper::disposeComponent(aFind->second->second.xMasterConnection);
@@ -404,7 +404,7 @@ void OSharedConnectionManager::addEventListener(const Reference<XConnection>& _r
     Reference<XComponent> xComp(_rxConnection,UNO_QUERY);
     xComp->addEventListener(this);
     OSL_ENSURE( m_aConnections.end() != _rIter , "Iterator is end!");
-    osl_incrementInterlockedCount(&_rIter->second.nALiveCount);
+    osl_atomic_increment(&_rIter->second.nALiveCount);
 }
 
 namespace

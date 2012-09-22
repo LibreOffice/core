@@ -225,7 +225,7 @@ ScVbaWindow::init()
         the own refcount to be non-zero, otherwise this instance will be
         desctructed immediately! Guard the call to ActivePane() in try/catch to
         not miss the decrementation of the reference count on exception. */
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     try
     {
        m_xPane = ActivePane();
@@ -233,7 +233,7 @@ ScVbaWindow::init()
     catch( uno::Exception& )
     {
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 uno::Reference< beans::XPropertySet >

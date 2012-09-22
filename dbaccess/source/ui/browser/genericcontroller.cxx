@@ -189,11 +189,11 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_bCurrentlyModified(sal_False)
     ,m_bExternalTitle(sal_False)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_pData.reset( new OGenericUnoController_Data( *this, getMutex() ) );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 
     DBG_CTOR(OGenericUnoController,NULL);
 

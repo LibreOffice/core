@@ -36,12 +36,12 @@ TypeDependency::~TypeDependency()
 
 void TypeDependency::acquire()
 {
-    osl_incrementInterlockedCount(&m_pImpl->m_refCount);
+    osl_atomic_increment(&m_pImpl->m_refCount);
 }
 
 void TypeDependency::release()
 {
-    if (0 == osl_decrementInterlockedCount(&m_pImpl->m_refCount))
+    if (0 == osl_atomic_decrement(&m_pImpl->m_refCount))
     {
         delete m_pImpl;
     }

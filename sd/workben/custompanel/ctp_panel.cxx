@@ -132,7 +132,7 @@ namespace sd { namespace colortoolpanel
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         if ( xParentWindow.is() )
         {
             m_xWindow = lcl_createPlainWindow_nothrow( m_xContext, xParentPeer );
@@ -144,7 +144,7 @@ namespace sd { namespace colortoolpanel
                 m_xWindow->setVisible( sal_True );
             }
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //------------------------------------------------------------------------------------------------------------------

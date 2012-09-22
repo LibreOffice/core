@@ -153,7 +153,7 @@ uno_Mapping * Bridge::createMapping(
 
 void Bridge::acquire() SAL_THROW(())
 {
-    if (1 == osl_incrementInterlockedCount( &nRef ))
+    if (1 == osl_atomic_increment( &nRef ))
     {
         if (bExportCpp2Uno)
         {
@@ -174,7 +174,7 @@ void Bridge::acquire() SAL_THROW(())
 
 void Bridge::release() SAL_THROW(())
 {
-    if (! osl_decrementInterlockedCount( &nRef ))
+    if (! osl_atomic_decrement( &nRef ))
     {
         ::uno_revokeMapping( bExportCpp2Uno ? &aCpp2Uno : &aUno2Cpp );
     }

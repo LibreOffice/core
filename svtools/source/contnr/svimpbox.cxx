@@ -63,7 +63,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     bAreChildrenTransient( sal_True ),
     m_pStringSorter(NULL)
 {
-    osl_incrementInterlockedCount(&s_nImageRefCount);
+    osl_atomic_increment(&s_nImageRefCount);
     pView = pLBView;
     pTree = pLBTree;
     aSelEng.SetFunctionSet( (FunctionSet*)&aFctSet );
@@ -124,7 +124,7 @@ SvImpLBox::~SvImpLBox()
     StopUserEvent();
 
     delete m_pStringSorter;
-    if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
+    if ( osl_atomic_decrement(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);

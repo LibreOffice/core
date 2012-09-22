@@ -258,7 +258,7 @@ STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void FAR* FA
 
 STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::AddRef()
 {
-    return osl_incrementInterlockedCount( &m_refCount);
+    return osl_atomic_increment( &m_refCount);
 }
 
 STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()

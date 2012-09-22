@@ -155,7 +155,7 @@ void SAL_CALL osl_detail_ObjectRegistry_registerObject(
         static_cast<void>(insertion);
     }
     else {
-        osl_incrementInterlockedCount(&rData.m_nCount);
+        osl_atomic_increment(&rData.m_nCount);
     }
 }
 
@@ -170,7 +170,7 @@ void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
         static_cast<void>(n);
     }
     else {
-        osl_decrementInterlockedCount(&rData.m_nCount);
+        osl_atomic_decrement(&rData.m_nCount);
     }
 }
 

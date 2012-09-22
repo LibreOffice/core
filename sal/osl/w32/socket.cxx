@@ -1144,12 +1144,12 @@ oslSocket SAL_CALL osl_createSocket (
 
 void SAL_CALL osl_acquireSocket( oslSocket pSocket )
 {
-    osl_incrementInterlockedCount( &(pSocket->m_nRefCount) );
+    osl_atomic_increment( &(pSocket->m_nRefCount) );
 }
 
 void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 {
-    if( pSocket && 0 == osl_decrementInterlockedCount( &(pSocket->m_nRefCount) ) )
+    if( pSocket && 0 == osl_atomic_decrement( &(pSocket->m_nRefCount) ) )
     {
         osl_closeSocket( pSocket );
         __osl_destroySocketImpl( pSocket );

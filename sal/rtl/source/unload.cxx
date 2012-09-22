@@ -130,7 +130,7 @@ extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
     (void) that;
 #else
     rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
-    osl_incrementInterlockedCount( &pMod->counter);
+    osl_atomic_increment( &pMod->counter);
 #endif
 }
 
@@ -141,7 +141,7 @@ extern "C" void rtl_moduleCount_release( rtl_ModuleCount * that )
 #else
     rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
     OSL_ENSURE( pMod->counter >0 , "library counter incorrect" );
-    osl_decrementInterlockedCount( &pMod->counter);
+    osl_atomic_decrement( &pMod->counter);
     if( pMod->counter == 0)
     {
         MutexGuard guard( getUnloadingMutex());

@@ -35,7 +35,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
                                            : ODatabaseMetaDataResultSet(eTablePrivileges)
                                            , m_bResetValues(sal_True)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         ::rtl::OUString sUserWorkingFor;
         Sequence< ::rtl::OUString > sTableTypes(3);
@@ -79,7 +79,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
 
         setRows(aRows);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 //------------------------------------------------------------------------------
 const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)

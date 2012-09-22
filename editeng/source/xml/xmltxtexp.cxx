@@ -114,14 +114,14 @@ SvxEditEngineSourceImpl::~SvxEditEngineSourceImpl()
 
 void SAL_CALL SvxEditEngineSourceImpl::acquire()
 {
-    osl_incrementInterlockedCount( &maRefCount );
+    osl_atomic_increment( &maRefCount );
 }
 
 //------------------------------------------------------------------------
 
 void SAL_CALL SvxEditEngineSourceImpl::release()
 {
-    if( ! osl_decrementInterlockedCount( &maRefCount ) )
+    if( ! osl_atomic_decrement( &maRefCount ) )
         delete this;
 }
 

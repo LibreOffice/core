@@ -204,15 +204,15 @@ StorageElementFactory::createStorage( const rtl::OUString & rUri,
         xElement.release();
         return aIt->second;
     }
-    else if ( osl_incrementInterlockedCount( &aIt->second->m_refCount ) > 1 )
+    else if ( osl_atomic_increment( &aIt->second->m_refCount ) > 1 )
     {
         rtl::Reference< Storage > xElement( aIt->second );
-        osl_decrementInterlockedCount( &aIt->second->m_refCount );
+        osl_atomic_decrement( &aIt->second->m_refCount );
         return aIt->second;
     }
     else
     {
-        osl_decrementInterlockedCount( &aIt->second->m_refCount );
+        osl_atomic_decrement( &aIt->second->m_refCount );
         aIt->second->m_aContainerIt = m_aMap.end();
 
         uno::Reference< embed::XStorage > xParentStorage;

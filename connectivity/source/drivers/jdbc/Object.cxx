@@ -79,12 +79,12 @@ oslInterlockedCount& getJavaVMRefCount()
 // -----------------------------------------------------------------------------
 void SDBThreadAttach::addRef()
 {
-    osl_incrementInterlockedCount(&getJavaVMRefCount());
+    osl_atomic_increment(&getJavaVMRefCount());
 }
 // -----------------------------------------------------------------------------
 void SDBThreadAttach::releaseRef()
 {
-    osl_decrementInterlockedCount(&getJavaVMRefCount());
+    osl_atomic_decrement(&getJavaVMRefCount());
     if ( getJavaVMRefCount() == 0 )
     {
         getJavaVM2(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);

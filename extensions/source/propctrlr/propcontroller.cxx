@@ -355,11 +355,11 @@ namespace pcr
     //------------------------------------------------------------------------
     void OPropertyBrowserController::createWithModel( const Reference< XObjectInspectorModel >& _rxModel )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             setInspectorModel( _rxModel );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
 
         m_bConstructed = true;
     }

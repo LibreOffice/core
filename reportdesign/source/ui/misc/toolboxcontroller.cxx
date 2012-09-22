@@ -109,9 +109,9 @@ OToolboxController::OToolboxController(const Reference< XMultiServiceFactory >& 
     ,m_nSlotId(0)
 {
     DBG_CTOR(rpt_OToolboxController,NULL);
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     m_xServiceManager = _rxORB;
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 
 }
 // -----------------------------------------------------------------------------

@@ -106,11 +106,11 @@ namespace frm
         if ( !m_xWindow.is() || !m_xModelProps.is() )
             throw RuntimeException();
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             m_xWindow->addWindowListener( this );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

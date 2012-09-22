@@ -495,14 +495,14 @@ namespace frm
     //------------------------------------------------------------------------------
     void OClickableImageBaseModel::implInitializeImageURL( )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             // simulate a propertyChanged event for the ImageURL
             Any aImageURL;
             getFastPropertyValue( aImageURL, PROPERTY_ID_IMAGE_URL );
             _propertyChanged( PropertyChangeEvent( *this, PROPERTY_IMAGE_URL, sal_False, PROPERTY_ID_IMAGE_URL, Any( ), aImageURL ) );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //------------------------------------------------------------------------------

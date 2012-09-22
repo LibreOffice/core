@@ -54,7 +54,7 @@ namespace svx
         OSL_ENSURE( m_nSlotId,          "FmTextControlFeature::FmTextControlFeature: invalid slot id!"     );
         OSL_ENSURE( m_pInvalidator,     "FmTextControlFeature::FmTextControlFeature: invalid invalidator!" );
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         try
         {
             m_xDispatcher->addStatusListener( this, m_aFeatureURL );
@@ -63,7 +63,7 @@ namespace svx
         {
             OSL_FAIL( "FmTextControlFeature::FmTextControlFeature: caught an exception!" );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

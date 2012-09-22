@@ -284,10 +284,10 @@ void SAL_CALL SdXImpressDocument::acquire() throw ( )
 
 void SAL_CALL SdXImpressDocument::release() throw ( )
 {
-    if (osl_decrementInterlockedCount( &m_refCount ) == 0)
+    if (osl_atomic_decrement( &m_refCount ) == 0)
     {
         // restore reference count:
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         if(!mbDisposed)
         {
             try

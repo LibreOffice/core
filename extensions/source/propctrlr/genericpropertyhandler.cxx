@@ -202,13 +202,13 @@ namespace pcr
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL EnumRepresentation::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL EnumRepresentation::release()
     {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        if ( 0 == osl_atomic_decrement( &m_refCount ) )
         {
            delete this;
            return 0;
@@ -249,11 +249,11 @@ namespace pcr
         if ( !_rxControl.is() )
             throw NullPointerException();
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             _rxControl->addActionListener( this );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
         OSL_ENSURE( m_refCount > 0, "UrlClickHandler::UrlClickHandler: leaking!" );
 
         DBG_CTOR( UrlClickHandler, NULL );

@@ -54,7 +54,7 @@ void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
 
 void acquireProxy(uno_Interface * pUnoI)
 {
-    if (1 == osl_incrementInterlockedCount(
+    if (1 == osl_atomic_increment(
             & static_cast< UnoInterfaceProxy * >( pUnoI )->nRef ))
     {
         // rebirth of proxy zombie
@@ -76,7 +76,7 @@ void acquireProxy(uno_Interface * pUnoI)
 
 void releaseProxy(uno_Interface * pUnoI)
 {
-    if (! osl_decrementInterlockedCount(
+    if (! osl_atomic_decrement(
             & static_cast< UnoInterfaceProxy * >( pUnoI )->nRef ))
     {
         // revoke from uno env on last release

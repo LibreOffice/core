@@ -199,7 +199,7 @@ namespace
 OParseContextClient::OParseContextClient()
 {
     ::osl::MutexGuard aGuard( getSafteyMutex() );
-    if ( 1 == osl_incrementInterlockedCount( &getCounter() ) )
+    if ( 1 == osl_atomic_increment( &getCounter() ) )
     {   // first instance
         getSharedContext( new OSystemParseContext );
     }
@@ -210,7 +210,7 @@ OParseContextClient::~OParseContextClient()
 {
     {
         ::osl::MutexGuard aGuard( getSafteyMutex() );
-        if ( 0 == osl_decrementInterlockedCount( &getCounter() ) )
+        if ( 0 == osl_atomic_decrement( &getCounter() ) )
             delete getSharedContext(NULL,sal_True);
     }
 }

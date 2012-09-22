@@ -72,12 +72,12 @@ namespace dbaccess
             EnsureReset( oslInterlockedCount& _rValueLocation)
                 :m_rValue( _rValueLocation )
             {
-                osl_incrementInterlockedCount(&m_rValue);
+                osl_atomic_increment(&m_rValue);
             }
 
             ~EnsureReset()
             {
-                osl_decrementInterlockedCount(&m_rValue);
+                osl_atomic_decrement(&m_rValue);
             }
 
         private:

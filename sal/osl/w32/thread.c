@@ -355,7 +355,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
         return;
     }
 
-    osl_incrementInterlockedCount(&(pThreadImpl->m_nTerminationRequested));
+    osl_atomic_increment(&(pThreadImpl->m_nTerminationRequested));
 }
 
 

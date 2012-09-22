@@ -105,9 +105,9 @@ namespace basctl
         m_pListener(&rListener),
         m_xModel(rxDocument)
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         impl_listenerAction_nothrow( RegisterListener );
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

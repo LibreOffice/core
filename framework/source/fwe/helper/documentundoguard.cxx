@@ -62,11 +62,11 @@ namespace framework
             ,m_nRelativeContextDepth( 0 )
             ,m_documentDisposed( false )
         {
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             {
                 m_xUndoManager->addUndoManagerListener( this );
             }
-            osl_decrementInterlockedCount( &m_refCount );
+            osl_atomic_decrement( &m_refCount );
         }
 
         UndoManagerContextListener()
@@ -158,35 +158,35 @@ namespace framework
     void SAL_CALL UndoManagerContextListener::enteredContext( const UndoManagerEvent& i_event ) throw (RuntimeException)
     {
         (void)i_event;
-        osl_incrementInterlockedCount( &m_nRelativeContextDepth );
+        osl_atomic_increment( &m_nRelativeContextDepth );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManagerContextListener::enteredHiddenContext( const UndoManagerEvent& i_event ) throw (RuntimeException)
     {
         (void)i_event;
-        osl_incrementInterlockedCount( &m_nRelativeContextDepth );
+        osl_atomic_increment( &m_nRelativeContextDepth );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManagerContextListener::leftContext( const UndoManagerEvent& i_event ) throw (RuntimeException)
     {
         (void)i_event;
-        osl_decrementInterlockedCount( &m_nRelativeContextDepth );
+        osl_atomic_decrement( &m_nRelativeContextDepth );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManagerContextListener::leftHiddenContext( const UndoManagerEvent& i_event ) throw (RuntimeException)
     {
         (void)i_event;
-        osl_decrementInterlockedCount( &m_nRelativeContextDepth );
+        osl_atomic_decrement( &m_nRelativeContextDepth );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManagerContextListener::cancelledContext( const UndoManagerEvent& i_event ) throw (RuntimeException)
     {
         (void)i_event;
-        osl_decrementInterlockedCount( &m_nRelativeContextDepth );
+        osl_atomic_decrement( &m_nRelativeContextDepth );
     }
 
     //------------------------------------------------------------------------------------------------------------------

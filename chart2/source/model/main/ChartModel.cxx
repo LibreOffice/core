@@ -108,7 +108,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
 {
     OSL_TRACE( "ChartModel: CTOR called" );
 
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_xOldModelAgg.set(
             m_xContext->getServiceManager()->createInstanceWithContext(
@@ -122,7 +122,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
         m_xChartTypeManager.set( xContext->getServiceManager()->createInstanceWithContext(
                 C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 ChartModel::ChartModel( const ChartModel & rOther )
@@ -148,7 +148,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_xOldModelAgg.set(
             m_xContext->getServiceManager()->createInstanceWithContext(
@@ -178,7 +178,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
         ModifyListenerHelper::addListener( xNewPageBackground, xListener );
         xListener.clear();
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 ChartModel::~ChartModel()

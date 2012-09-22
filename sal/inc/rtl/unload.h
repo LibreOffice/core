@@ -263,7 +263,7 @@ access to a counter variable, e.g. the <code>rtl_moduleCount_release</code> impl
 extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
 {
     rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
-    osl_incrementInterlockedCount( &pMod->counter);
+    osl_atomic_increment( &pMod->counter);
 }
 </pre>
 The SAL library offers functions that can be used for <code>acquire</code> and <code>release</code>. See struct

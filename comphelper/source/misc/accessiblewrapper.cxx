@@ -401,13 +401,13 @@ namespace comphelper
             componentAggregateProxyFor( xInnerComponent, _rRefCount, _rDelegator );
 
         // add as event listener to the inner context, because we want to multiplex the AccessibleEvents
-        osl_incrementInterlockedCount( &_rRefCount );
+        osl_atomic_increment( &_rRefCount );
         {
             Reference< XAccessibleEventBroadcaster > xBroadcaster( m_xInner, UNO_QUERY );
             if ( xBroadcaster.is() )
                 xBroadcaster->addEventListener( this );
         }
-        osl_decrementInterlockedCount( &_rRefCount );
+        osl_atomic_decrement( &_rRefCount );
     }
 
     //--------------------------------------------------------------------

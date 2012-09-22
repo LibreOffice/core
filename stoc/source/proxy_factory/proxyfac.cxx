@@ -217,7 +217,7 @@ static void SAL_CALL binuno_proxy_free(
 static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
-    if (osl_incrementInterlockedCount( &that->m_nRefCount ) == 1)
+    if (osl_atomic_increment( &that->m_nRefCount ) == 1)
     {
         // rebirth of zombie
         uno_ExtEnvironment * uno_env =
@@ -236,7 +236,7 @@ static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
 static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
-    if (osl_decrementInterlockedCount( &that->m_nRefCount ) == 0)
+    if (osl_atomic_decrement( &that->m_nRefCount ) == 0)
     {
         uno_ExtEnvironment * uno_env =
             that->m_root->m_factory->m_uno_env.get()->pExtEnv;

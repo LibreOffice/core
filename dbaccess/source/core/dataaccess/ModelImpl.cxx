@@ -1015,12 +1015,12 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
 
 oslInterlockedCount SAL_CALL ODatabaseModelImpl::acquire()
 {
-    return osl_incrementInterlockedCount(&m_refCount);
+    return osl_atomic_increment(&m_refCount);
 }
 
 oslInterlockedCount SAL_CALL ODatabaseModelImpl::release()
 {
-    if ( osl_decrementInterlockedCount(&m_refCount) == 0 )
+    if ( osl_atomic_decrement(&m_refCount) == 0 )
     {
         acquire();  // prevent multiple releases
         m_pDBContext->removeFromTerminateListener(*this);

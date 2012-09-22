@@ -377,11 +377,11 @@ void SvxShape::impl_initFromSdrObject()
     if ( !mpObj.is() )
         return;
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         mpObj->setUnoShape(*this);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 
     mpModel = mpObj->GetModel();
 
