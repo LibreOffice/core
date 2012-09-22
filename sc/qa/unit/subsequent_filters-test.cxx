@@ -632,6 +632,21 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
         pFiltersTest->createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
         testCondFile(aCSVFileName, pDoc, 2);
     }
+
+    if( nFormat == ODS )
+    {
+        ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0,0,2);
+        const ScRangeList& rRange = pCondFormat->GetRange();
+        CPPUNIT_ASSERT(rRange == ScRange(0,0,2,3,0,2));
+
+        pCondFormat = pDoc->GetCondFormat(0,1,2);
+        const ScRangeList& rRange2 = pCondFormat->GetRange();
+        CPPUNIT_ASSERT(rRange2 == ScRange(0,1,2,0,1,2));
+
+        pCondFormat = pDoc->GetCondFormat(1,1,2);
+        const ScRangeList& rRange3 = pCondFormat->GetRange();
+        CPPUNIT_ASSERT(rRange3 == ScRange(1,1,2,3,1,2));
+    }
 }
 
 }
