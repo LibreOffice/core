@@ -2877,7 +2877,6 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     (*mpKeywordTable)[ NF_KEY_NNNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
     // Export the Thai T NatNum modifier.
     (*mpKeywordTable)[ NF_KEY_THAI_T ] = String( RTL_CONSTASCII_USTRINGPARAM( "T" ) );
-    sal_Int32 nNumFmtIndex = 0;
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
@@ -2949,9 +2948,8 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         if( rSet.GetItemState( ATTR_VALUE_FORMAT, sal_True, &pPoolItem ) == SFX_ITEM_SET )
                         {
                             sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
-                            sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( EXC_FORMAT_OFFSET8 + nIndex );
+                            sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
                             pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
-                            ++nNumFmtIndex;
                         }
 
                         maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pColor ));
