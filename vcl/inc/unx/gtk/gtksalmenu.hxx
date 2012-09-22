@@ -45,7 +45,6 @@ private:
     std::vector< GtkSalMenuItem* >  maItems;
 
     sal_Bool                        mbMenuBar;
-    sal_Bool                        mbVisible;
     Menu*                           mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
     const GtkSalFrame*              mpFrame;

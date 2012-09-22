@@ -22,11 +22,14 @@
 
 #include <unx/gtk/gtksalmenu.hxx>
 
-//#include <gtk/gtk.h>
 #include <unx/gtk/glomenu.h>
 #include <unx/gtk/gloactiongroup.h>
 #include <vcl/menu.hxx>
 #include <unx/gtk/gtkinst.hxx>
+
+#if GTK_CHECK_VERSION(3,0,0)
+#  include <gdk/gdkkeysyms-compat.h>
+#endif
 
 #include <framework/menuconfiguration.hxx>
 
@@ -47,29 +50,85 @@ static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
     return aCommand;
 }
 
-// FIXME: Check for missing keys. Maybe translating keycodes would be safer...
-rtl::OUString GetGtkKeyName( rtl::OUString keyName )
+static void KeyCodeToGdkKey ( const KeyCode& rKeyCode, guint* pGdkKeyCode, GdkModifierType *pGdkModifiers )
 {
-    rtl::OUString aGtkKeyName("");
+    if ( pGdkKeyCode == NULL || pGdkModifiers == NULL )
+        return;
 
-    sal_Int32 nIndex = 0;
+    // Get GDK key modifiers
+    GdkModifierType nModifiers = (GdkModifierType) 0;
 
-    do
+    if ( rKeyCode.IsShift() )
+        nModifiers = (GdkModifierType) ( nModifiers | GDK_SHIFT_MASK );
+
+    if ( rKeyCode.IsMod1() )
+        nModifiers = (GdkModifierType) ( nModifiers | GDK_CONTROL_MASK );
+
+    if ( rKeyCode.IsMod2() )
+        nModifiers = (GdkModifierType) ( nModifiers | GDK_MOD1_MASK );
+
+    *pGdkModifiers = nModifiers;
+
+    // Get GDK keycode.
+    guint nKeyCode = 0;
+
+    guint nCode = rKeyCode.GetCode();
+
+    if ( nCode >= KEY_0 && nCode <= KEY_9 )
+        nKeyCode = ( nCode - KEY_0 ) + GDK_0;
+    else if ( nCode >= KEY_A && nCode <= KEY_Z )
+        nKeyCode = ( nCode - KEY_A ) + GDK_A;
+    else if ( nCode >= KEY_F1 && nCode <= KEY_F26 )
+        nKeyCode = ( nCode - KEY_F1 ) + GDK_F1;
+    else
     {
-        rtl::OUString token = keyName.getToken( 0, '+', nIndex );
+        switch( nCode )
+        {
+        case KEY_DOWN:          nKeyCode = GDK_Down;            break;
+        case KEY_UP:            nKeyCode = GDK_Up;              break;
+        case KEY_LEFT:          nKeyCode = GDK_Left;            break;
+        case KEY_RIGHT:         nKeyCode = GDK_Right;           break;
+        case KEY_HOME:          nKeyCode = GDK_Home;            break;
+        case KEY_END:           nKeyCode = GDK_End;             break;
+        case KEY_PAGEUP:        nKeyCode = GDK_Page_Up;         break;
+        case KEY_PAGEDOWN:      nKeyCode = GDK_Page_Down;       break;
+        case KEY_RETURN:        nKeyCode = GDK_Return;          break;
+        case KEY_ESCAPE:        nKeyCode = GDK_Escape;          break;
+        case KEY_TAB:           nKeyCode = GDK_Tab;             break;
+        case KEY_BACKSPACE:     nKeyCode = GDK_BackSpace;       break;
+        case KEY_SPACE:         nKeyCode = GDK_space;           break;
+        case KEY_INSERT:        nKeyCode = GDK_Insert;          break;
+        case KEY_DELETE:        nKeyCode = GDK_Delete;          break;
+        case KEY_ADD:           nKeyCode = GDK_plus;            break;
+        case KEY_SUBTRACT:      nKeyCode = GDK_minus;           break;
+        case KEY_MULTIPLY:      nKeyCode = GDK_asterisk;        break;
+        case KEY_DIVIDE:        nKeyCode = GDK_slash;           break;
+        case KEY_POINT:         nKeyCode = GDK_period;          break;
+        case KEY_COMMA:         nKeyCode = GDK_comma;           break;
+        case KEY_LESS:          nKeyCode = GDK_less;            break;
+        case KEY_GREATER:       nKeyCode = GDK_greater;         break;
+        case KEY_EQUAL:         nKeyCode = GDK_equal;           break;
+        case KEY_FIND:          nKeyCode = GDK_Find;            break;
+        case KEY_CONTEXTMENU:   nKeyCode = GDK_Menu;            break;
+        case KEY_HELP:          nKeyCode = GDK_Help;            break;
+        case KEY_UNDO:          nKeyCode = GDK_Undo;            break;
+        case KEY_REPEAT:        nKeyCode = GDK_Redo;            break;
+        case KEY_DECIMAL:       nKeyCode = GDK_KP_Decimal;      break;
+        case KEY_TILDE:         nKeyCode = GDK_asciitilde;      break;
+        case KEY_QUOTELEFT:     nKeyCode = GDK_quoteleft;       break;
+        case KEY_BRACKETLEFT:   nKeyCode = GDK_bracketleft;     break;
+        case KEY_BRACKETRIGHT:  nKeyCode = GDK_bracketright;    break;
+        case KEY_SEMICOLON:     nKeyCode = GDK_semicolon;       break;
 
-        if ( token == "Ctrl" ) {
-            aGtkKeyName += "<Control>";
-        } else if ( token == "Alt" ) {
-            aGtkKeyName += "<Alt>";
-        } else if ( token == "Shift" ) {
-            aGtkKeyName += "<Shift>";
-        } else {
-            aGtkKeyName += token;
+        // Special cases
+        case KEY_COPY:          nKeyCode = GDK_Copy;            break;
+        case KEY_CUT:           nKeyCode = GDK_Cut;             break;
+        case KEY_PASTE:         nKeyCode = GDK_Paste;           break;
+        case KEY_OPEN:          nKeyCode = GDK_Open;            break;
         }
-    } while ( nIndex >= 0 );
+    }
 
-    return aGtkKeyName;
+    *pGdkKeyCode = nKeyCode;
 }
 
 bool GtkSalMenu::PrepUpdate()
@@ -77,15 +136,13 @@ bool GtkSalMenu::PrepUpdate()
     const GtkSalFrame* pFrame = GetFrame();
     if (!pFrame)
     {
-        SAL_INFO("vcl.unity", "not updating menu model, I have no frame " << mpMenuModel);
-        return false;
-    }
     const GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pFrame->getWindow()) ));
     if(!pWindow)
     {
         SAL_INFO("vcl.unity", "not updating menu model, I have no frame " << mpMenuModel);
         return false;
     }
+    
     // the root menu does not have its own model and has to use the one owned by the frame
     if(mbMenuBar)
     {
@@ -241,7 +298,6 @@ void ObjectDestroyedNotify( gpointer data )
 
 GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
-    mbVisible( sal_False ),
     mpVCLMenu( NULL ),
     mpParentSalMenu( NULL ),
     mpFrame( NULL ),
@@ -394,18 +450,23 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
 void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
 {
     SolarMutexGuard aGuard;
+
     if ( rKeyName.isEmpty() )
         return;
 
-    rtl::OString aAccelerator = rtl::OUStringToOString( GetGtkKeyName( rKeyName ), RTL_TEXTENCODING_UTF8 );
+    guint nKeyCode;
+    GdkModifierType nModifiers;
 
-    gchar* aCurrentAccel = g_lo_menu_get_accelerator_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
+    KeyCodeToGdkKey( rKeyCode, &nKeyCode, &nModifiers );
 
-    if ( aCurrentAccel == NULL && g_strcmp0( aCurrentAccel, aAccelerator.getStr() ) != 0 )
-        g_lo_menu_set_accelerator_to_item_in_section ( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aAccelerator.getStr() );
+    gchar* aAccelerator = gtk_accelerator_name( nKeyCode, nModifiers );
 
-    if ( aCurrentAccel )
-        g_free( aCurrentAccel );
+    gchar* aCurrentAccel = g_lo_menu_get_accelerator_from_item_in_section( pMenu, nSection, nItemPos );
+
+    if ( aCurrentAccel == NULL && g_strcmp0( aCurrentAccel, aAccelerator ) != 0 )
+        g_lo_menu_set_accelerator_to_item_in_section ( pMenu, nSection, nItemPos, aAccelerator );
+
+    g_free( aAccelerator );
 }
 
 void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
