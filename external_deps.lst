@@ -132,6 +132,12 @@ if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
     # URL1 = http://archive.apache.org/dist/commons/logging/source/commons-logging-1.1.1-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
+if (SYSTEM_JPEG != YES)
+    MD5 = 52654eb3b2e60c35731ea8fc87f1bd29
+    name = jpeg-8d.tar.gz
+    URL1 = http://www.ijg.org/files/jpegsrc.v8d.tar.gz
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = 625ff5f2f968dd908bca43c9469d6e6b
     name = commons-lang-2.4-src.tar.gz
@@ -197,12 +203,6 @@ if (SOLAR_JAVA == TRUE)
     MD5 = 980143f96b3f6ce45d2e4947da21a5e9
     name = stax-src-1.2.0.zip
     URL1 = http://dist.codehaus.org/stax/distributions/stax-src-1.2.0.zip
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-
-if (SYSTEM_JPEG != YES)
-    MD5 = a2c10c04f396a9ce72894beb18b4e1f9
-    name = jpeg-8c.tar.gz
-    URL1 = http://www.ijg.org/files/jpegsrc.v8c.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_MEDIAWIKI == YES)
@@ -345,6 +345,6 @@ if (ENABLE_CATEGORY_B==YES && SYSTEM_GRAPHITE!=YES && ENABLE_GRAPHITE==TRUE)
 if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && DISABLE_BEANSHELL!=YES)
     MD5 = ea570af93c284aa9e5621cd563f54f4d
     name = bsh-2.0b1-src.tar.gz
-    # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://www.beanshell.org/bsh-2.0b1.jar
+    # This used to be the original host, but the link is broken.
+    # URL1 = http://www.beanshell.org/bsh-2.0b1-src.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
