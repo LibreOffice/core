@@ -15,17 +15,16 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.fax.FaxWizardDialog import *
-from wizards.fax.FaxWizardDialog import *
-from wizards.fax.CGFaxWizard import *
-from wizards.fax.FaxDocument import *
-from wizards.ui.PathSelection import PathSelection
-from wizards.common.FileAccess import FileAccess
-from wizards.ui.event.UnoDataAware import UnoDataAware
-from wizards.ui.event.RadioDataAware import RadioDataAware
-from wizards.text.TextFieldHandler import TextFieldHandler
-from wizards.common.SystemDialog import SystemDialog
-from wizards.common.NoValidPathException import NoValidPathException
+from .FaxWizardDialog import *
+from .CGFaxWizard import *
+from .FaxDocument import *
+from ..ui.PathSelection import PathSelection
+from ..common.FileAccess import FileAccess
+from ..ui.event.UnoDataAware import UnoDataAware
+from ..ui.event.RadioDataAware import RadioDataAware
+from ..text.TextFieldHandler import TextFieldHandler
+from ..common.SystemDialog import SystemDialog
+from ..common.NoValidPathException import NoValidPathException
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.uno import RuntimeException
@@ -66,12 +65,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
             xLocMSF = Desktop.connect(ConnectStr)
             lw = FaxWizardDialogImpl(xLocMSF)
-            lw.startWizard(xLocMSF, None)
-        except RuntimeException, e:
-            # TODO Auto-generated catch block
-            traceback.print_exc()
+            lw.startWizard(xLocMSF)
         except Exception, e:
-            # TODO Auto-generated catch blocksetMaxStep
             traceback.print_exc()
 
     def startWizard(self, xMSF):

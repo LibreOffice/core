@@ -15,11 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.ui.UIConsts import *
-from wizards.ui.UIConsts import *
-from wizards.ui.UnoDialog import *
-from wizards.ui.event.CommonListener import *
-from wizards.common.Desktop import Desktop
+from .UIConsts import *
+from .UnoDialog import *
+from .event.CommonListener import *
+from ..common.Desktop import Desktop
 
 '''
 This class contains convenience methods for inserting components to a dialog.

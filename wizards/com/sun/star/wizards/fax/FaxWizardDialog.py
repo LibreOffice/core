@@ -15,10 +15,9 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import wizards.ui.UIConsts
-from wizards.ui.WizardDialog import *
-from wizards.fax.FaxWizardDialogResources import FaxWizardDialogResources
-from wizards.fax.FaxWizardDialogConst import *
+from .FaxWizardDialogResources import FaxWizardDialogResources
+from .FaxWizardDialogConst import *
+from ..ui.WizardDialog import *
 
 from com.sun.star.awt.FontUnderline import SINGLE
 

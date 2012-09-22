@@ -16,8 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from wizards.common.Configuration import Configuration
-from wizards.common.SystemDialog import SystemDialog
+from .Configuration import Configuration
+from .SystemDialog import SystemDialog
 
 from com.sun.star.awt.VclWindowPeerAttribute import OK
 

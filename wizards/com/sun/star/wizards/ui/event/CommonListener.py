@@ -30,12 +30,10 @@
 #   Change Log
 #   Danny Brewer         Revised 2004-06-05-01
 #
-#**********************************************************************
-
-# OOo's libraries
 import unohelper
 
 from com.sun.star.awt import XActionListener
+
 class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
     def __init__( self, oProcToCall, tParams=() ):
         self.oProcToCall = oProcToCall # a python procedure

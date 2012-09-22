@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-
+import uno
 from com.sun.star.lang import Locale
 from com.sun.star.util.NumberFormat import DATE, LOGICAL, DATETIME, TEXT, NUMBER
 

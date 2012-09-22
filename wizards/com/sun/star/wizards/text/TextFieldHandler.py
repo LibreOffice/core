@@ -18,7 +18,7 @@
 import traceback
 import time
 import unicodedata
-from wizards.common.PropertyNames import PropertyNames
+from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.util import DateTime
 

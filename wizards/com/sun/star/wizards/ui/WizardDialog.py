@@ -15,14 +15,13 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import wizards.ui.UIConsts
-from wizards.ui.UnoDialog2 import *
 from abc import ABCMeta, abstractmethod
-from wizards.common.Resource import Resource
-from wizards.ui.XPathSelectionListener import XPathSelectionListener
-from wizards.common.HelpIds import *
-from wizards.document.OfficeDocument import OfficeDocument
-from wizards.text.TextDocument import TextDocument
+from .UnoDialog2 import *
+from .XPathSelectionListener import XPathSelectionListener
+from ..common.Resource import Resource
+from ..common.HelpIds import *
+from ..document.OfficeDocument import OfficeDocument
+from ..text.TextDocument import TextDocument
 
 from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.lang import IllegalArgumentException
