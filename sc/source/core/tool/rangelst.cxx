@@ -517,6 +517,7 @@ bool handleOneRange( const ScRange& rDeleteRange, ScRange* p )
             // +------+ (xxx) = deleted region
 
             p->aStart.SetRow(nDeleteRow1+1);
+            return true;
         }
         else if (nRow2 <= nDeleteRow2)
         {
@@ -527,9 +528,8 @@ bool handleOneRange( const ScRange& rDeleteRange, ScRange* p )
             // +------+ (xxx) = deleted region
 
             p->aEnd.SetRow(nDeleteRow1-1);
+            return true;
         }
-
-        return true;
     }
     else if (checkForOneRange(nDeleteRow1, nDeleteRow2, nDeleteCol1, nDeleteCol2, nRow1, nRow2, nCol1, nCol2))
     {
@@ -543,6 +543,7 @@ bool handleOneRange( const ScRange& rDeleteRange, ScRange* p )
             // +--+--+ (xxx) = deleted region
 
             p->aStart.SetCol(nDeleteCol2+1);
+            return true;
         }
         else if (nCol2 <= nDeleteCol2)
         {
@@ -553,9 +554,8 @@ bool handleOneRange( const ScRange& rDeleteRange, ScRange* p )
             // +--+--+ (xxx) = deleted region
 
             p->aEnd.SetCol(nDeleteCol1-1);
+            return true;
         }
-
-        return true;
     }
     return false;
 }
@@ -600,7 +600,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
     SCROW nRow2 = aPEnd.Row();
     SCTAB nTab = aPStart.Tab();
 
-    if (nCol1 < nDeleteCol1 && nDeleteCol1 < nCol2 && nCol2 <= nDeleteCol2)
+    if (nCol1 < nDeleteCol1 && nDeleteCol1 <= nCol2 && nCol2 <= nDeleteCol2)
     {
         // column deleted :     |-------|
         // column original: |-------|
@@ -636,32 +636,30 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
             // |   2   |    (xxx) deleted region
             // +-------+
 
-            ScRange aNewRange( aPStart, ScAddress( nCol1-1, nRow2, nTab ) ); // 1 (TODO: looks wrong)
+            ScRange aNewRange( aPStart, ScAddress(nDeleteCol1-1, nRow2, nTab) ); // 1
             rNewRanges.push_back(aNewRange);
 
             p->aStart.SetRow(nDeleteRow2+1); // 2
             return true;
         }
     }
-    else if (nCol1 < nDeleteCol2 && nDeleteCol2 < nCol2 && nDeleteCol1 <= nCol1)
+    else if (nCol1 <= nDeleteCol2 && nDeleteCol2 < nCol2 && nDeleteCol1 <= nCol1)
     {
         // column deleted : |-------|
         // column original:     |-------|
-        if (nRow1 < nDeleteRow1 && nDeleteRow1 < nRow2)
+        if (nRow1 < nDeleteRow1 && nDeleteRow1 < nRow2 && nRow2 <= nDeleteRow2)
         {
-            // row deleted:     |------|        |--|
-            // row original: |------|    or  |--------|
+            // row deleted:     |------|
+            // row original: |------|
             //
-            //     +-------+          +-------+
-            //     |   1   |          |       |
-            // +-------+---+      +---+---+   |
-            // |xxxxxxx| 2 |  or  |xxxxxxx|   |
-            // |xxxxxxx+---+      +---+---+   |
-            // |xxxxxxx|              |       |
-            // +-------+              +-------+
+            //     +-------+
+            //     |   1   |
+            // +-------+---+
+            // |xxxxxxx| 2 |
+            // |xxxxxxx+---+
+            // |xxxxxxx|
+            // +-------+
             //  (xxx) deleted region
-            //
-            // TODO: Is this correct especially on the second case?
 
             ScRange aNewRange( ScAddress( nDeleteCol2+1, nDeleteRow1, nTab ), aPEnd ); // 2
             rNewRanges.push_back(aNewRange);
@@ -669,7 +667,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
             p->aEnd.SetRow(nDeleteRow1-1); // 1
             return true;
         }
-        else if (nRow1 < nDeleteRow2 && nDeleteRow2 < nRow2)
+        else if (nRow1 < nDeleteRow2 && nDeleteRow2 < nRow2 && nDeleteRow1 <= nRow1)
         {
             // row deleted:  |-------|
             // row original:     |--------|
@@ -682,7 +680,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
             //     |   2   |
             //     +-------+ (xxx) deleted region
 
-            ScRange aNewRange( nDeleteCol2 +1, nRow1, nTab, nDeleteCol2, nDeleteRow2, nTab ); // 1 (TODO: this doesn't look right)
+            ScRange aNewRange(nDeleteCol2+1, nRow1, nTab, nCol2, nDeleteRow2, nTab); // 1
             rNewRanges.push_back(aNewRange);
 
             p->aStart.SetRow(nDeleteRow2+1); // 2
@@ -808,10 +806,10 @@ bool handleThreeRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScR
             //     |  3   |   |
             //     +------+---+
 
-            ScRange aNewRange(aPStart, ScAddress(nDeleteCol2-1, nDeleteRow1-1, nTab)); // 1 (TODO: End column should be nDeleteCol2.)
+            ScRange aNewRange(aPStart, ScAddress(nDeleteCol2, nDeleteRow1-1, nTab)); // 1
             rNewRanges.push_back(aNewRange);
 
-            aNewRange = ScRange(nCol1, nDeleteRow2+1, nTab, nDeleteCol2+1, nRow2, nTab); // 3 (TODO: End column should be nDeleteCol2.)
+            aNewRange = ScRange(nCol1, nDeleteRow2+1, nTab, nDeleteCol2, nRow2, nTab); // 3
             rNewRanges.push_back(aNewRange);
 
             p->aStart.SetCol(nDeleteCol2+1); // 2
@@ -854,7 +852,7 @@ bool handleThreeRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScR
             ScRange aNewRange(aPStart, ScAddress(nDeleteCol1-1, nDeleteRow2, nTab)); // 1
             rNewRanges.push_back(aNewRange);
 
-            aNewRange = ScRange(nDeleteCol2+1, nCol1, nTab, nCol2, nDeleteRow2, nTab); // 2 (TODO: start column should be nDeleteCol2+1.)
+            aNewRange = ScRange(nDeleteCol2+1, nRow1, nTab, nCol2, nDeleteRow2, nTab); // 2
             rNewRanges.push_back( aNewRange );
 
             p->aStart.SetRow(nDeleteRow2+1); // 3
