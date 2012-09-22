@@ -10,20 +10,20 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libwpd_inc,wpd))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd_inc,inc/external/libwpd,\
-	libwpd.h \
-	WPDocument.h \
-	WPXBinaryData.h \
-	WPXDocumentInterface.h \
-	WPXProperty.h \
-	WPXPropertyList.h \
-	WPXString.h \
-	WPXPropertyListVector.h \
+	src/lib/libwpd.h \
+	src/lib/WPDocument.h \
+	src/lib/WPXBinaryData.h \
+	src/lib/WPXDocumentInterface.h \
+	src/lib/WPXProperty.h \
+	src/lib/WPXPropertyList.h \
+	src/lib/WPXString.h \
+	src/lib/WPXPropertyListVector.h \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd_inc,inc/external/libwpd-stream,\
-	libwpd-stream.h \
-	WPXStream.h \
-	WPXStreamImplementation.h \
+	src/lib/libwpd-stream.h \
+	src/lib/WPXStream.h \
+	src/lib/WPXStreamImplementation.h \
 ))
 
 # vim: set noet sw=4 ts=4:

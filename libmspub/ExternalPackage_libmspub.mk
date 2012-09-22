@@ -10,9 +10,9 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libmspub_inc,mspub))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libmspub_inc,inc/external/libmspub,\
-	libmspub.h \
-	MSPUBDocument.h \
-	MSPUBStringVector.h \
+	src/lib/libmspub.h \
+	src/lib/MSPUBDocument.h \
+	src/lib/MSPUBStringVector.h \
 ))
 
 # vim: set noet sw=4 ts=4:

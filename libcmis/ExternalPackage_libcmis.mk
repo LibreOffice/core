@@ -10,19 +10,19 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libcmis_inc,cmis))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libcmis_inc,inc/external/libcmis,\
-	allowable-actions.hxx \
-	document.hxx \
-	exception.hxx \
-	folder.hxx \
-	object-type.hxx \
-	object.hxx \
-	property-type.hxx \
-	property.hxx \
-	repository.hxx \
-	session-factory.hxx \
-	session.hxx \
-	xml-utils.hxx \
-	xmlserializable.hxx \
+	src/libcmis/allowable-actions.hxx \
+	src/libcmis/document.hxx \
+	src/libcmis/exception.hxx \
+	src/libcmis/folder.hxx \
+	src/libcmis/object-type.hxx \
+	src/libcmis/object.hxx \
+	src/libcmis/property-type.hxx \
+	src/libcmis/property.hxx \
+	src/libcmis/repository.hxx \
+	src/libcmis/session-factory.hxx \
+	src/libcmis/session.hxx \
+	src/libcmis/xml-utils.hxx \
+	src/libcmis/xmlserializable.hxx \
 ))
 
 # vim: set noet sw=4 ts=4:

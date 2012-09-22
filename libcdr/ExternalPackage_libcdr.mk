@@ -10,10 +10,10 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libcdr_inc,cdr))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr_inc,inc/external/libcdr,\
-	libcdr.h \
-	CDRDocument.h \
-	CDRStringVector.h \
-	CMXDocument.h \
+	src/lib/libcdr.h \
+	src/lib/CDRDocument.h \
+	src/lib/CDRStringVector.h \
+	src/lib/CMXDocument.h \
 ))
 
 # vim: set noet sw=4 ts=4:

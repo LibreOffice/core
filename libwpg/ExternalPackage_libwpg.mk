@@ -10,9 +10,9 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libwpg_inc,wpg))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libwpg_inc,inc/external/libwpg,\
-	libwpg.h \
-	WPGPaintInterface.h \
-	WPGraphics.h \
+	src/lib/libwpg.h \
+	src/lib/WPGPaintInterface.h \
+	src/lib/WPGraphics.h \
 ))
 
 # vim: set noet sw=4 ts=4:

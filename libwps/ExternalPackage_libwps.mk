@@ -10,8 +10,8 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libwps_inc,wps))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libwps_inc,inc/external/libwps,\
-	libwps.h \
-	WPSDocument.h \
+	src/lib/libwps.h \
+	src/lib/WPSDocument.h \
 ))
 
 # vim: set noet sw=4 ts=4:
