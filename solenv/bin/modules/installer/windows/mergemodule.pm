@@ -48,7 +48,7 @@ use installer::windows::language;
 
 sub merge_mergemodules_into_msi_database
 {
-    my ($mergemodules, $filesref, $msifilename, $languagestringref, $language, $languagefile, $allvariables, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids) = @_;
+    my ($mergemodules, $filesref, $msifilename, $languagestringref, $allvariables, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids) = @_;
 
     my $domerge = 0;
     if (( $#{$mergemodules} > -1 ) && ( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack )) { $domerge = 1; }
