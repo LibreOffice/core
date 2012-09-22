@@ -608,7 +608,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
     {
         // column deleted :     |-------|
         // column original: |-------|
-        if (nRow1 < nDeleteRow1 && nDeleteRow1 < nRow2 && nRow2 <= nDeleteRow2)
+        if (nRow1 < nDeleteRow1 && nDeleteRow1 <= nRow2 && nRow2 <= nDeleteRow2)
         {
             // row deleted:     |------|
             // row original: |------|
@@ -627,7 +627,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
             p->aEnd.SetRow(nDeleteRow1-1); // 1
             return true;
         }
-        else if (nRow1 < nDeleteRow2 && nDeleteRow2 < nRow2 && nDeleteRow1 <= nRow1)
+        else if (nRow1 <= nDeleteRow2 && nDeleteRow2 < nRow2 && nDeleteRow1 <= nRow1)
         {
             // row deleted:  |------|
             // row original:    |------|
@@ -651,7 +651,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
     {
         // column deleted : |-------|
         // column original:     |-------|
-        if (nRow1 < nDeleteRow1 && nDeleteRow1 < nRow2 && nRow2 <= nDeleteRow2)
+        if (nRow1 < nDeleteRow1 && nDeleteRow1 <= nRow2 && nRow2 <= nDeleteRow2)
         {
             // row deleted:     |------|
             // row original: |------|
@@ -671,7 +671,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
             p->aEnd.SetRow(nDeleteRow1-1); // 1
             return true;
         }
-        else if (nRow1 < nDeleteRow2 && nDeleteRow2 < nRow2 && nDeleteRow1 <= nRow1)
+        else if (nRow1 <= nDeleteRow2 && nDeleteRow2 < nRow2 && nDeleteRow1 <= nRow1)
         {
             // row deleted:  |-------|
             // row original:     |--------|
@@ -755,10 +755,10 @@ template<typename X, typename Y>
 bool checkForThreeRanges(
    X nDeleteX1, X nDeleteX2, Y nDeleteY1, Y nDeleteY2, X nX1, X nX2, Y nY1, Y nY2)
 {
-    if (nX1 < nDeleteX1 && nX2 <= nDeleteX2 && nY1 < nDeleteY1 && nDeleteY2 < nY2)
+    if (nX1 <= nDeleteX1 && nX2 <= nDeleteX2 && nY1 < nDeleteY1 && nDeleteY2 < nY2)
         return true;
 
-    if (nDeleteX1 <= nX1 && nDeleteX2 < nX2 && nY1 < nDeleteY1 && nDeleteY2 < nY2)
+    if (nDeleteX1 <= nX1 && nDeleteX2 <= nX2 && nY1 < nDeleteY1 && nDeleteY2 < nY2)
         return true;
 
     return false;
