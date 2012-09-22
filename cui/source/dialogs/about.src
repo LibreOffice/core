@@ -74,11 +74,6 @@ ModalDialog RID_DEFAULTABOUT
     {
         Text[ en-US ] = "Copyright © 2012 Apache Software Foundation.\nAll rights reserved.\n\nThis product was created by %OOOVENDOR, based on Apache OpenOffice.\nApache OpenOffice acknowledges all community members, especially those mentioned at";
     };
-
-    Image RID_CUI_ABOUT_LOGO
-    {
-        ImageBitmap = Bitmap { File = "orb.png"; };
-    };
 };
 
 

@@ -24,12 +24,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-#include <com/sun/star/uno/Any.h>
 #include <comphelper/processfactory.hxx>
 #include <dialmgr.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/sfxcommands.h>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -40,20 +38,42 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/imagerepository.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 
-#include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/uno/Any.h>
 
 #include "about.hxx"
 #include "about.hrc"
 
 #define _STRINGIFY(x) #x
 #define STRINGIFY(x) _STRINGIFY(x)
+
+/* On Windows/OS2, all the three files have .txt extension
+   and the README file name is in lowercase
+   Readme files are localized and have the locale in their file name:
+   README_de README_en-US
+*/
+#if defined(WNT) || defined(OS2)
+#define FILE_EXTENSION  ".txt"
+#define README_FILE     "readme"
+#else
+#define FILE_EXTENSION
+#define README_FILE     "README"
+#endif
+#define LICENSE_FILE    "LICENSE" FILE_EXTENSION
+#define NOTICE_FILE     "NOTICE"  FILE_EXTENSION
+
+// Dir where the files are located
+#define BRAND_DIR_SHARE_README  "${BRAND_BASE_DIR}/share/readme/"
+
+using namespace com::sun::star;
 
 namespace
 {
@@ -198,12 +218,31 @@ namespace
 
         maTabCtrl.Show();
 
-        const rtl::OUString sReadme( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/README" ) );
-        const rtl::OUString sLicense( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program/LICENSE" ) );
-        const rtl::OUString sNotice( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program/NOTICE" ) );
+        // Notice and License are not localized
+        const rtl::OUString sLicense( RTL_CONSTASCII_USTRINGPARAM( BRAND_DIR_SHARE_README LICENSE_FILE ) );
+        const rtl::OUString sNotice( RTL_CONSTASCII_USTRINGPARAM(  BRAND_DIR_SHARE_README NOTICE_FILE ) );
+
+        // get localized README
+        rtl::OUStringBuffer aBuff;
+        lang::Locale aLocale = Application::GetSettings().GetUILocale();
+        aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( BRAND_DIR_SHARE_README README_FILE "_" ) );
+        aBuff.append( aLocale.Language );
+        if ( aLocale.Country.getLength() )
+        {
+            aBuff.append( sal_Unicode( '-') );
+            aBuff.append( aLocale.Country );
+            if ( aLocale.Variant.getLength() )
+            {
+                aBuff.append( sal_Unicode( '-' ) );
+                aBuff.append( aLocale.Variant );
+            }
+        }
+#if defined(WNT) || defined(OS2)
+        aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( FILE_EXTENSION ) );
+#endif
 
         rtl::OUString sReadmeTxt, sLicenseTxt, sNoticeTxt;
-        lcl_readTxtFile( sReadme, sReadmeTxt );
+        lcl_readTxtFile( aBuff.makeStringAndClear(), sReadmeTxt );
         lcl_readTxtFile( sLicense, sLicenseTxt );
         lcl_readTxtFile( sNotice, sNoticeTxt );
 
@@ -248,11 +287,17 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     maBuildInfoEdit( this, ResId( RID_CUI_ABOUT_FTXT_BUILDDATA, *rId.GetResMgr() ) ),
     maCopyrightEdit( this, ResId( RID_CUI_ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
     maCreditsLink( this, ResId( RID_CUI_ABOUT_FTXT_WELCOME_LINK, *rId.GetResMgr() )  ),
-    maMainLogo( ResId( RID_CUI_ABOUT_LOGO, *rId.GetResMgr() ) ),
     maCopyrightTextStr( ResId( RID_CUI_ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) )
 {
-    // load image from module path
-    maAppLogo = SfxApplication::GetApplicationLogo();
+    bool bLoad = vcl::ImageRepository::loadBrandingImage(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about")),
+            maAppLogo );
+    OSL_ENSURE( bLoad, "Can't load about image");
+
+    bLoad = vcl::ImageRepository::loadBrandingImage(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logo")),
+            maMainLogo );
+    OSL_ENSURE( bLoad, "Can't load logo image");
 
     InitControls();
 
@@ -302,8 +347,8 @@ void AboutDialog::ApplyStyleSettings()
 
     // set for background and text the correct system color
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    Color aWhiteCol( rSettings.GetWindowColor() );
-    Wallpaper aWall( aWhiteCol );
+    Color aWindowColor( rSettings.GetWindowColor() );
+    Wallpaper aWall( aWindowColor );
     SetBackground( aWall );
     Font aNewFont( maCopyrightEdit.GetFont() );
     aNewFont.SetTransparent( sal_True );
@@ -311,10 +356,10 @@ void AboutDialog::ApplyStyleSettings()
     maVersionText.SetFont( aNewFont );
     maCopyrightEdit.SetFont( aNewFont );
 
-    maVersionText.SetBackground();
-    maCopyrightEdit.SetBackground();
-    maBuildInfoEdit.SetBackground();
-    maCreditsLink.SetBackground();
+    maVersionText.SetBackground(aWall);
+    maCopyrightEdit.SetBackground(aWall);
+    maBuildInfoEdit.SetBackground(aWall);
+    maCreditsLink.SetBackground(aWall);
 
     Color aTextColor( rSettings.GetWindowTextColor() );
     maVersionText.SetControlForeground( aTextColor );
@@ -487,21 +532,23 @@ IMPL_LINK ( AboutDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
     {
         try
         {
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
-            com::sun::star::uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                com::sun::star::uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext =
+                ::comphelper::getProcessComponentContext();
+            uno::Reference< system::XSystemShellExecute > xSystemShell(
+                xContext->getServiceManager()->createInstanceWithContext(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ),
+                    xContext ),
+                uno::UNO_QUERY_THROW );
             if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+                xSystemShell->execute( sURL, rtl::OUString(), system::SystemShellExecuteFlags::DEFAULTS );
         }
-        catch( const com::sun::star::uno::Exception& e )
+        catch( const uno::Exception& e )
         {
              OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
+
     return 0;
 }
 

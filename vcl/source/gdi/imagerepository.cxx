@@ -27,27 +27,81 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/imagerepository.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/image.hxx>
+#include <vcl/pngread.hxx>
+#include <rtl/bootstrap.hxx>
+#include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
 
 #include "impimagetree.hxx"
 
-//........................................................................
 namespace vcl
 {
-//........................................................................
-
-    //====================================================================
-    //= ImageRepository
-    //====================================================================
-    //--------------------------------------------------------------------
-    bool ImageRepository::loadImage( const ::rtl::OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent )
+    bool ImageRepository::loadImage( const ::rtl::OUString& _rName,
+                                     BitmapEx& _out_rImage,
+                                     bool _bSearchLanguageDependent )
     {
-        ::rtl::OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+        ::rtl::OUString sCurrentSymbolsStyle =
+            Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
         ImplImageTreeSingletonRef aImplImageTree;
-        return aImplImageTree->loadImage( _rName, sCurrentSymbolsStyle, _out_rImage, _bSearchLanguageDependent );
+
+        return aImplImageTree->loadImage( _rName,
+                                          sCurrentSymbolsStyle,
+                                          _out_rImage,
+                                          _bSearchLanguageDependent );
     }
 
-//........................................................................
-} // namespace vcl
-//........................................................................
 
+    static bool lcl_loadPNG( const rtl::OUString &rPath,
+                             const rtl::OUString &rImageFileName,
+                             Image &rImage )
+    {
+        INetURLObject aObj( rPath );
+        aObj.insertName( rImageFileName );
+        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+        if ( !aStrm.GetError() )
+        {
+            PNGReader aReader( aStrm );
+            BitmapEx aBmp = aReader.Read();
+            rImage = Image( aBmp );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /* TODO support bSearchLanguageDependent */
+    bool ImageRepository::loadBrandingImage( const rtl::OUString &rName,
+                                             Image &rImage,
+                                             bool /* bSearchLanguageDependent */ )
+    {
+        rtl::OUString sImages;
+        rtl::OUStringBuffer aBuff( rName );
+        rtl::OUString aBasePath( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program" ) );
+        rtl::Bootstrap::expandMacros( aBasePath );
+
+        bool bLoaded = false;
+        sal_Int32 nIndex = 0;
+
+        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        {
+            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( "_hc.png," ) );
+            aBuff.append( rName );
+        }
+
+        aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( ".png" ) );
+        sImages = aBuff.makeStringAndClear();
+
+        do
+        {
+            bLoaded = lcl_loadPNG( aBasePath,
+                                   sImages.getToken( 0, ',', nIndex ),
+                                   rImage );
+        }
+        while ( !bLoaded && ( nIndex >= 0 ) );
+
+        return bLoaded;
+    }
+}

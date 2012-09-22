@@ -44,11 +44,11 @@ private:
     MultiLineEdit       maCopyrightEdit;
     svt::FixedHyperlink maCreditsLink;
 
-    Image               maMainLogo;
-    Image               maAppLogo;
-
     String              maCopyrightTextStr;
     rtl::OUString       maVersionData;
+
+    Image               maMainLogo;
+    Image               maAppLogo;
 
     void                InitControls();
     void                ApplyStyleSettings();

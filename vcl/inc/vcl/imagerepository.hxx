@@ -28,16 +28,15 @@
 #include <rtl/ustring.hxx>
 
 class BitmapEx;
+class Image;
 
-//........................................................................
 namespace vcl
 {
-//........................................................................
 
-    //====================================================================
-    //= ImageRepository
-    //====================================================================
-    // provides access to the application's image repository (image.zip)
+    /**
+        provides access to the application's image repository
+        (packed images and brand images)
+     */
     class VCL_DLLPUBLIC ImageRepository
     {
     public:
@@ -56,11 +55,26 @@ namespace vcl
             BitmapEx& _out_rImage,
             bool bSearchLanguageDependent
         );
-    };
 
-//........................................................................
-} // namespace vcl
-//........................................................................
+        /** load an image from the application's branding directory
+
+            @param rName
+                the name of the image to load, without extension
+            @param rImage
+                will take the image upon successful return.
+            @param bIgnoreHighContrast
+                if true, high contrast mode is not taken into account when
+                searching for the image
+            @param  bSearchLanguageDependent
+                determines whether a language-dependent image is to be searched.
+         */
+        static bool loadBrandingImage(
+            const rtl::OUString &rName,
+            Image &rImage,
+            bool bSearchLanguageDependent = false
+        );
+    };
+}
 
 #endif // VCL_IMAGEREPOSITORY_HXX
 

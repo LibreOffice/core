@@ -48,7 +48,6 @@
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 
@@ -82,6 +81,7 @@
 #include "canvas/prioritybooster.hxx"
 #include "avmedia/mediawindow.hxx"
 #include  "svtools/colrdlg.hxx"
+#include <vcl/imagerepository.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
@@ -3322,7 +3322,12 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
                         {
                             if ( maPresSettings.mbShowPauseLogo )
                             {
-                                Graphic aGraphic( SfxApplication::GetApplicationLogo().GetBitmapEx() );
+                                Image aImage;
+                                bool bLoad = vcl::ImageRepository::loadBrandingImage(
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "logo" ) ),
+                                    aImage );
+                                OSL_ENSURE( bLoad, "Can't load logo image");
+                                Graphic aGraphic(aImage.GetBitmapEx());
                                 mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, &aGraphic );
                             }
                             else
