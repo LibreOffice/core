@@ -51,6 +51,12 @@ $(eval $(call gb_Library_use_libraries,neon,\
 	ws2_32 \
 ))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_ldflags,neon,\
+	/DEF:$(SRCDIR)/neon/neon.def \
+))
+endif
+
 $(eval $(call gb_Library_add_generated_cobjects,neon,\
 	UnpackedTarball/neon/src/ne_sspi \
 ))
