@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_external,scui,mdds_headers))
 $(eval $(call gb_Library_use_libraries,scui,\
 	comphelper \
 	cppu \
+	cppuhelper \
 	editeng \
 	for \
 	forui \
