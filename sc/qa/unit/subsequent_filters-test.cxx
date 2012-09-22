@@ -626,7 +626,7 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SVX_HOR_JUSTIFY_BLOCK, eHorJustify);
 
     //test Sheet3 only for ods
-    if ( nFormat == ODS )
+    if ( nFormat == ODS || nFormat == XLSX )
     {
         rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
         pFiltersTest->createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
