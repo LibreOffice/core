@@ -24,10 +24,16 @@ public:
     void testDeleteArea_3Ranges();
     void testDeleteArea_3Ranges_Case2();
     void testDeleteArea_3Ranges_Case3();
+    void testDeleteArea_3Ranges_Case4();
+    void testDeleteArea_3Ranges_Case5();
     void testDeleteArea_2Ranges();
     void testDeleteArea_2Ranges_Case2();
     void testDeleteArea_2Ranges_Case3();
     void testDeleteArea_2Ranges_Case4();
+    void testDeleteArea_2Ranges_Case5();
+    void testDeleteArea_2Ranges_Case6();
+    void testDeleteArea_2Ranges_Case7();
+    void testDeleteArea_2Ranges_Case8();
     void testDeleteArea_1Range();
     void testDeleteArea_0Ranges();
 
@@ -39,10 +45,16 @@ public:
     CPPUNIT_TEST(testDeleteArea_3Ranges);
     CPPUNIT_TEST(testDeleteArea_3Ranges_Case2);
     CPPUNIT_TEST(testDeleteArea_3Ranges_Case3);
+    CPPUNIT_TEST(testDeleteArea_3Ranges_Case4);
+    CPPUNIT_TEST(testDeleteArea_3Ranges_Case5);
     CPPUNIT_TEST(testDeleteArea_2Ranges);
     CPPUNIT_TEST(testDeleteArea_2Ranges_Case2);
     CPPUNIT_TEST(testDeleteArea_2Ranges_Case3);
     CPPUNIT_TEST(testDeleteArea_2Ranges_Case4);
+    CPPUNIT_TEST(testDeleteArea_2Ranges_Case5);
+    CPPUNIT_TEST(testDeleteArea_2Ranges_Case6);
+    CPPUNIT_TEST(testDeleteArea_2Ranges_Case7);
+    CPPUNIT_TEST(testDeleteArea_2Ranges_Case8);
     CPPUNIT_TEST(testDeleteArea_1Range);
     CPPUNIT_TEST(testDeleteArea_0Ranges);
     CPPUNIT_TEST(testUpdateReference_DeleteRow);
@@ -154,6 +166,46 @@ void Test::testDeleteArea_3Ranges_Case3()
     }
 }
 
+void Test::testDeleteArea_3Ranges_Case4()
+{
+    ScRangeList aList(ScRange(1,5,0,6,11,0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
+    aList.DeleteArea(3,5,0,4,5,0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.size());
+
+    // Column 3-4 && Row 5 should not be in the range list.
+    for (SCCOL nCol = 1; nCol <= 6; ++nCol)
+    {
+        for (SCROW nRow = 5; nRow <= 11; ++nRow)
+        {
+            if ((3 <= nCol && nCol <= 4) && 5 == nRow )
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
+            else
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
+        }
+    }
+}
+
+void Test::testDeleteArea_3Ranges_Case5()
+{
+    ScRangeList aList(ScRange(1,5,0,6,11,0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
+    aList.DeleteArea(6,7,0,6,9,0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.size());
+
+    // Column 6 && Row 7-9 should not be in the range list.
+    for (SCCOL nCol = 1; nCol <= 6; ++nCol)
+    {
+        for (SCROW nRow = 5; nRow <= 11; ++nRow)
+        {
+            if ( nCol == 6 && (7 <= nRow && nRow <= 9))
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
+            else
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
+        }
+    }
+}
+
 void Test::testDeleteArea_2Ranges()
 {
     ScRangeList aList(ScRange(0,0,0,5,5,5));
@@ -225,6 +277,82 @@ void Test::testDeleteArea_2Ranges_Case4()
                 CPPUNIT_ASSERT(!aList.In(ScRange(nCol,nRow,0)));
             else
                 CPPUNIT_ASSERT(aList.In(ScRange(nCol,nRow,0)));
+        }
+    }
+}
+
+void Test::testDeleteArea_2Ranges_Case5()
+{
+    ScRangeList aList(ScRange(2,2,0,5,5,0));
+    aList.DeleteArea(4,5,0,5,5,0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
+
+    // Column 4 and 5 Row 5 shouldn't be in the list.
+    for(SCCOL nCol = 2; nCol <= 5; ++nCol)
+    {
+        for(SCROW nRow = 2; nRow <= 5; ++nRow)
+        {
+            if(nRow == 5 && 4 <= nCol)
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
+            else
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
+        }
+    }
+}
+
+void Test::testDeleteArea_2Ranges_Case6()
+{
+    ScRangeList aList(ScRange(2,2,0,5,5,0));
+    aList.DeleteArea(4,2,0,5,2,0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
+
+    // Column 4 and 5 Row 2 shouldn't be in the list.
+    for(SCCOL nCol = 2; nCol <= 5; ++nCol)
+    {
+        for(SCROW nRow = 2; nRow <= 5; ++nRow)
+        {
+            if(nRow == 2 && 4 <= nCol)
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
+            else
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
+        }
+    }
+}
+
+void Test::testDeleteArea_2Ranges_Case7()
+{
+    ScRangeList aList(ScRange(2,2,0,5,5,0));
+    aList.DeleteArea(2,5,0,2,5,0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
+
+    // Column 2 Row 5 shouldn't be in the list.
+    for(SCCOL nCol = 2; nCol <= 5; ++nCol)
+    {
+        for(SCROW nRow = 2; nRow <= 5; ++nRow)
+        {
+            if(nRow == 5 && nCol == 2)
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
+            else
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
+        }
+    }
+}
+
+void Test::testDeleteArea_2Ranges_Case8()
+{
+    ScRangeList aList(ScRange(2,2,0,5,5,0));
+    aList.DeleteArea(2,2,0,3,2,0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
+
+    // Column 2 & 3 Row 2 shouldn't be in the list.
+    for(SCCOL nCol = 2; nCol <= 5; ++nCol)
+    {
+        for(SCROW nRow = 2; nRow <= 5; ++nRow)
+        {
+            if(nRow == 2 && nCol <= 3)
+                CPPUNIT_ASSERT(!aList.In(ScRange(nCol, nRow, 0)));
+            else
+                CPPUNIT_ASSERT(aList.In(ScRange(nCol, nRow, 0)));
         }
     }
 }
