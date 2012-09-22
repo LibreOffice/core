@@ -100,6 +100,12 @@ if (SYSTEM_REDLAND != YES)
     URL1 = http://download.librdf.org/source/rasqal-0.9.16.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
+if (GUI!=UNX || SYSTEM_ZLIB!=YES)
+    MD5 = 2ab442d169156f34c379c968f3f482dd
+    name = zlib-1.2.7.tar.bz2
+    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
+    URL2 = http://zlib.net/zlib-1.2.7.tar.bz2
+
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = 2c9b0f83ed5890af02c0df1c1776f39b
     name = commons-httpclient-3.1-src.tar.gz
@@ -216,11 +222,6 @@ if (SYSTEM_PYTHON != YES)
     name = Python-2.7.3.tar.bz2
     URL1 = http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-
-if (GUI!=UNX || SYSTEM_ZLIB!=YES)
-    MD5 = c735eab2d659a96e5a594c9e8541ad63
-    name = zlib-1.2.5.tar.gz
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_BOOST!=YES || (OS==SOLARIS && COM!=GCC))
     MD5 = d1e9a7a7f532bb031a3c175d86688d95
