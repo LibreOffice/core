@@ -161,19 +161,19 @@ public:
 
     // Wrapper implementations of class CharacterClassification
 
-    ::rtl::OUString uppercase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
-    ::rtl::OUString lowercase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
-    ::rtl::OUString titlecase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
+    OUString uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
+    OUString lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
+    OUString titlecase( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
 
-    ::rtl::OUString uppercase( const ::rtl::OUString& _rStr ) const
+    OUString uppercase( const OUString& _rStr ) const
     {
         return uppercase(_rStr, 0, _rStr.getLength());
     }
-    ::rtl::OUString lowercase( const ::rtl::OUString& _rStr ) const
+    OUString lowercase( const OUString& _rStr ) const
     {
         return lowercase(_rStr, 0, _rStr.getLength());
     }
-    ::rtl::OUString titlecase( const ::rtl::OUString& _rStr ) const
+    OUString titlecase( const OUString& _rStr ) const
     {
         return titlecase(_rStr, 0, _rStr.getLength());
     }

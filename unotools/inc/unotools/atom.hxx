@@ -35,20 +35,20 @@ namespace utl {
     struct AtomDescription
     {
         int                 atom;
-        ::rtl::OUString     description;
+        OUString            description;
     };
 
     class AtomProvider
     {
         int                                     m_nAtoms;
-        ::boost::unordered_map< int, ::rtl::OUString, ::boost::hash< int > > m_aStringMap;
-        ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >    m_aAtomMap;
+        ::boost::unordered_map< int, OUString, ::boost::hash< int > > m_aStringMap;
+        ::boost::unordered_map< OUString, int, OUStringHash >           m_aAtomMap;
     public:
         AtomProvider();
         ~AtomProvider();
 
-        int getAtom( const ::rtl::OUString&, sal_Bool bCreate = sal_False );
-        const ::rtl::OUString& getString( int ) const;
+        int getAtom( const OUString&, sal_Bool bCreate = sal_False );
+        const OUString& getString( int ) const;
     };
 
 
@@ -59,9 +59,9 @@ namespace utl {
         MultiAtomProvider();
         ~MultiAtomProvider();
 
-        int getAtom( int atomClass, const ::rtl::OUString& rString, sal_Bool bCreate = sal_False );
+        int getAtom( int atomClass, const OUString& rString, sal_Bool bCreate = sal_False );
 
-        const ::rtl::OUString& getString( int atomClass, int atom ) const;
+        const OUString& getString( int atomClass, int atom ) const;
     };
 }
 
