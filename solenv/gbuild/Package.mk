@@ -31,12 +31,7 @@
 
 # a pattern rule with multiple targets is actually executed only once for each
 # match, so define only pattern rules with one target here
-# the .dir is for make 3.81, which ignores trailing /
 define gb_PackagePart__rule
-$(1)/.dir :
-	$$(if $$(wildcard $$(dir $$@)),,mkdir -p $$(dir $$@))
-$(1)/%/.dir :
-	$$(if $$(wildcard $$(dir $$@)),,mkdir -p $$(dir $$@))
 $(1)/% :
 	$$(call gb_Deliver_deliver,$$<,$$@)
 endef

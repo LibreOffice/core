@@ -33,12 +33,6 @@
 # directory is work dir, accessible only from recipes via variable
 # $(EXTERNAL_WORKDIR).
 
-$(dir $(call gb_ExternalProject_get_statedir,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_ExternalProject_get_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_ExternalProject_get_preparation_target,%) :
 	touch $@
 

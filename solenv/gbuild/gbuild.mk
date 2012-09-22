@@ -69,6 +69,13 @@ endif
 
 include $(GBUILDDIR)/Output.mk
 
+# general purpose rules for creating directories
+# the .dir is for make 3.81, which ignores trailing /
+$(OUTDIR)/%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(WORKDIR)/%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)

@@ -55,10 +55,6 @@ $(call gb_ComponentTarget_get_target,%) : \
 		$(call gb_ComponentTarget_get_source,%) $(gb_XSLTPROCTARGET)
 	$(call gb_ComponentTarget__command,$@,$<,$*)
 
-# the .dir is for make 3.81, which ignores trailing /
-$(dir $(call gb_ComponentTarget_get_outdir_target,))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_ComponentTarget_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)
 

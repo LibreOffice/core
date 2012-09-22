@@ -22,12 +22,6 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 	#$(gb_ThesaurusIndexTarget_CHECK_COMMAND) $(THESAURUS_FILE) && \
 
-$(dir $(call gb_ThesaurusIndexTarget_get_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_ThesaurusIndexTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_ThesaurusIndexTarget_get_target,%) : $(gb_ThesaurusIndexTarget_INDEX_TARGET) | $(gb_ThesaurusIndexTarget_CHECK_TARGET)
 	$(call gb_ThesaurusIndexTarget__command,$@,$*)
 

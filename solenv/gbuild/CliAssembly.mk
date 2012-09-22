@@ -21,9 +21,6 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
-$(dir $(call gb_CliConfigTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_CliConfigTarget_get_target,%) :
 	$(call gb_CliConfigTarget__command,$@,$*,$<)
 
@@ -63,12 +60,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) \
 )
 endef
-
-$(dir $(call gb_CliAssemblyTarget_get_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_CliAssemblyTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_CliAssemblyTarget_get_target,%) :
 	$(if $(strip $(CLI_ASSEMBLY_VERSION)),,$(call gb_Output_error,assembly version not set))

@@ -53,9 +53,6 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
-$(dir $(call gb_ScpTemplateTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_ScpTemplateTarget_get_target,%) : $(gb_ScpTemplateTarget_TARGET)
 	$(call gb_ScpTemplateTarget__command,$@,$*)
 
@@ -92,9 +89,6 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
-$(dir $(call gb_ScpPreprocessTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_ScpPreprocessTarget_get_target,%) : $(gb_ScpPreprocessTarget_TARGET)
 	$(call gb_ScpPreprocessTarget__command,$@,$*)
 
@@ -124,9 +118,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_ScpMergeTarget_COMMAND) -p scp2 -i $(SCP_SOURCE) -o $(1) -m $(SCP_SDF) -l all \
 )
 endef
-
-$(dir $(call gb_ScpMergeTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_ScpMergeTarget_get_target,%) : $(gb_ScpMergeTarget_TARGET)
 	$(call gb_ScpMergeTarget__command,$@,$*)
@@ -161,9 +152,6 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
-$(dir $(call gb_ScpConvertTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_ScpConvertTarget_get_target,%) : $(gb_ScpConvertTarget_TARGET)
 	$(call gb_ScpConvertTarget__command,$@,$*)
 
@@ -194,9 +182,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_ScpTarget_COMMAND) -l $(SCP_ULF) -s $(SCP_SOURCE) -o $(1) \
 )
 endef
-
-$(dir $(call gb_ScpTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_ScpTarget_get_target,%) : $(gb_ScpTarget_TARGET)
 	$(call gb_ScpTarget__command,$@,$*)
@@ -252,9 +237,6 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(foreach scpfile,$(SCP_FILES),&& echo $(scpfile) >> $(1)) \
 )
 endef
-
-$(dir $(call gb_InstallModuleTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_InstallModuleTarget_get_target,%) :
 	$(call gb_InstallModuleTarget__command,$@,$*)

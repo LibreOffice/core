@@ -47,11 +47,6 @@ $(call gb_Rdb_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_Rdb_get_outdir_target,$*) $(call gb_Rdb_get_target,$*))
 
-# DO NOT DEFINE: it overwrites the definition from Package.mk for xml/
-# and doesn't work on 3.81
-#$(dir $(call gb_Rdb_get_outdir_target,))%/.dir :
-#	mkdir -p $(dir $@)
-
 $(call gb_Rdb_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)
 

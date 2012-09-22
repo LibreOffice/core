@@ -29,12 +29,6 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
-$(dir $(call gb_CliUnoApiTarget_get_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_CliUnoApiTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 # TODO depending on the whole URE might be overkill, but I do not have a
 # Windows machine to debug it...
 $(call gb_CliUnoApiTarget_get_target,%) : \

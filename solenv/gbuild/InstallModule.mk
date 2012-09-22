@@ -27,9 +27,6 @@
 
 # InstallModule class
 
-$(dir $(call gb_InstallModule_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_InstallModule_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),IMO,3)
 	touch $@

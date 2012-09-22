@@ -42,10 +42,6 @@ gb_UnoApiPartTarget_UCPPTARGET := $(call gb_Executable_get_target_for_build,ucpp
 # invoked with the .idl file corresponding to the .urd in that case.
 # Touch the .urd file, so it is newer than the .done file, causing that to
 # be rebuilt and overwriting the .urd file again.
-# the .dir is for make 3.81, which ignores trailing /
-$(dir $(call gb_UnoApiPartTarget_get_target,))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 $(call gb_UnoApiPartTarget_get_target,%.urd) :
 	touch $@
 
