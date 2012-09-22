@@ -38,11 +38,10 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 
 $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 	cppu \
-	dl \
+	$(if $(filter-out ANDROID,$(OS)),\
+		dl \
+	) \
 	sal \
-))
-
-$(eval $(call gb_Library_add_asmobjects,gcc3_uno,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,gcc3_uno,\
