@@ -69,7 +69,7 @@ namespace utl
             friend class ConfigChangeListener_Impl;
             friend class ConfigManager;
 
-            const rtl::OUString         sSubTree;
+            const OUString              sSubTree;
             com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
                                         m_xHierarchyAccess;
             com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
@@ -79,7 +79,7 @@ namespace utl
             ConfigItem();//
             void                    RemoveChangesListener();
             void                    CallNotify(
-                                const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+                                const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
 
             //***********************************************************************************************************************
             // In special mode ALL_LOCALES we must support reading/writing of localized cfg entries as Sequence< PropertyValue >.
@@ -92,32 +92,32 @@ namespace utl
             //                      LOCALE      VALUE
             //                      "de"        "Mein Name"
             //                      "en-US"     "my name"
-            void impl_packLocalizedProperties   (   const   com::sun::star::uno::Sequence< rtl::OUString >&             lInNames    ,
+            void impl_packLocalizedProperties   (   const   com::sun::star::uno::Sequence< OUString >&                  lInNames    ,
                                                     const   com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
                                                             com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lOutValues  );
-            void impl_unpackLocalizedProperties (   const   com::sun::star::uno::Sequence< rtl::OUString >&             lInNames    ,
+            void impl_unpackLocalizedProperties (   const   com::sun::star::uno::Sequence< OUString >&                  lInNames    ,
                                                     const   com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
-                                                            com::sun::star::uno::Sequence< rtl::OUString >&             lOutNames   ,
+                                                            com::sun::star::uno::Sequence< OUString >&                  lOutNames   ,
                                                             com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lOutValues  );
 
             com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
                                         GetTree();
 
         protected:
-            ConfigItem(const rtl::OUString &rSubTree,
+            ConfigItem(const OUString &rSubTree,
                         sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
 
             void                    SetModified  (); // mark item as modified
             void                    ClearModified(); // reset state after commit!
 
             com::sun::star::uno::Sequence< com::sun::star::uno::Any>
-                                    GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
+                                    GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames);
 
             com::sun::star::uno::Sequence< sal_Bool >
-                                    GetReadOnlyStates(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
+                                    GetReadOnlyStates(const com::sun::star::uno::Sequence< OUString >& rNames);
 
             sal_Bool                PutProperties(
-                                        const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
+                                        const com::sun::star::uno::Sequence< OUString >& rNames,
                                         const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues);
 
             /** enables notifications about changes on selected sub nodes/values
@@ -128,7 +128,7 @@ namespace utl
                 @see Notify
                 @see DisableNotification
             */
-            sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
+            sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< OUString >& rNames,
                                         sal_Bool bEnableInternalNotification = sal_False);
             /** disables notifications about changes on sub nodes/values, which previosly had
                 been enabled with EnableNotification
@@ -139,22 +139,22 @@ namespace utl
             sal_Bool                IsInternalNotification()const {return IsInValueChange();}
 
             //returns all members of a node in a specific format
-            com::sun::star::uno::Sequence< rtl::OUString >
-                                    GetNodeNames(const rtl::OUString& rNode);
+            com::sun::star::uno::Sequence< OUString >
+                                    GetNodeNames(const OUString& rNode);
             //returns all members of a node in a specific format
-            com::sun::star::uno::Sequence< rtl::OUString >
-                                    GetNodeNames(const rtl::OUString& rNode, ConfigNameFormat eFormat);
+            com::sun::star::uno::Sequence< OUString >
+                                    GetNodeNames(const OUString& rNode, ConfigNameFormat eFormat);
             // remove all members of a set
-            sal_Bool                ClearNodeSet(const rtl::OUString& rNode);
+            sal_Bool                ClearNodeSet(const OUString& rNode);
             // remove selected members of a set
-            sal_Bool                ClearNodeElements(const rtl::OUString& rNode,
-                                        com::sun::star::uno::Sequence< rtl::OUString >& rElements);
+            sal_Bool                ClearNodeElements(const OUString& rNode,
+                                        com::sun::star::uno::Sequence< OUString >& rElements);
             // change or add members to a set
-            sal_Bool                SetSetProperties(const rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            sal_Bool                SetSetProperties(const OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
             // remove, change or add members of a set
-            sal_Bool                ReplaceSetProperties(const rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            sal_Bool                ReplaceSetProperties(const OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
             // add a new node without setting any properties
-            sal_Bool                AddNode(const rtl::OUString& rNode, const rtl::OUString& rNewNode);
+            sal_Bool                AddNode(const OUString& rNode, const OUString& rNewNode);
 
             /** get a name for a new element of a set node
                 @param _rSetNode
@@ -165,16 +165,16 @@ namespace utl
                     </ul>
                 @return <TRUE/> if a free name could be generated
             */
-            sal_Bool                getUniqueSetElementName( const rtl::OUString& _rSetNode, rtl::OUString& _rBaseName);
+            sal_Bool                getUniqueSetElementName( const OUString& _rSetNode, OUString& _rBaseName);
 
         public:
             virtual ~ConfigItem();
 
             /** is called from the ConfigManager before application ends of from the
                 PropertyChangeListener if the sub tree broadcasts changes. */
-            virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)=0;
+            virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames)=0;
 
-            const rtl::OUString&    GetSubTreeName() const {return sSubTree;}
+            const OUString&         GetSubTreeName() const {return sSubTree;}
 
             sal_Bool                IsModified() const;
 

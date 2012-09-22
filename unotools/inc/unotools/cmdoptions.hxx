@@ -110,7 +110,7 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool Lookup( CmdOption eOption, const ::rtl::OUString& aCommandURL ) const;
+        sal_Bool Lookup( CmdOption eOption, const OUString& aCommandURL ) const;
 
         /*-****************************************************************************************************//**
             @short      register an office frame, which must update its dispatches if

@@ -137,7 +137,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         void Clear();
 
-        void SetDefault( ::rtl::OUString sName, bool bValue );
+        void SetDefault( OUString sName, bool bValue );
 
         /*-****************************************************************************************************//**
             @short      return complete specified list
@@ -168,8 +168,8 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void AppendItem( const ::rtl::OUString& sName,
-                         const ::rtl::OUString& sModule,
+        void AppendItem( const OUString& sName,
+                         const OUString& sModule,
                          bool bUsePrtMetrics,
                          bool bAddSpacing,
                          bool bAddSpacingAtPages,
