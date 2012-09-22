@@ -12574,7 +12574,7 @@ if test "$enable_mergelibs" = "yes" ; then
         add_warning "--enable-mergelibs conflicts with --enable-binfilter. Disabling mergelibs."
         AC_MSG_RESULT([no])
     else
-        if test $_os != Linux -a $_os != Android; then
+        if test $_os != Linux -a $_os != Android -a $_os != WINNT; then
             add_warning "--enable-mergelibs is not tested for this platform"
         fi
         MERGELIBS="TRUE"
