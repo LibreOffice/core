@@ -176,7 +176,7 @@ void ScColorScaleEntry::dumpInfo(rtl::OUStringBuffer& rBuf) const
         default:
             rBuf.append( "Unsupported Type\n" );
     }
-    rBuf.append( "Color: " ).append( (int)maColor.GetRed() ).append( "," ).append( (int)maColor.GetGreen() ).append( "," ).append( (int)maColor.GetBlue() ).append( "\n" );
+    rBuf.append( "Color: " ).append( (sal_Int32)maColor.GetRed() ).append( "," ).append( (sal_Int32)maColor.GetGreen() ).append( "," ).append( (sal_Int32)maColor.GetBlue() ).append( "\n" );
     if(meType == COLORSCALE_FORMULA)
         rBuf.append( "Formula: " ).append( GetFormula( formula::FormulaGrammar::GRAM_DEFAULT ) ).append("\n");
     else if( meType != COLORSCALE_MIN && meType != COLORSCALE_MAX )
@@ -549,7 +549,7 @@ void ScColorScaleFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
             {
                 boost::scoped_ptr<Color> pColor( GetColor(ScAddress(nCol, nRow, nTab)) );
                 rBuf.append(nCol).append(",").append(nRow).append(",").append(nTab).append(",");
-                rBuf.append(((int)pColor->GetRed())).append(",").append(((int)pColor->GetGreen())).append(",").append(((int)pColor->GetBlue())).append("\n");
+                rBuf.append(((sal_Int32)pColor->GetRed())).append(",").append(((sal_Int32)pColor->GetGreen())).append(",").append(((sal_Int32)pColor->GetBlue())).append("\n");
             }
         }
     }
