@@ -1,5 +1,4 @@
 ro  readlicense_oo : TRANSLATIONS:translations DESKTOP:l10ntools solenv LIBXSLT:libxslt NULL
 ro  readlicense_oo		usr1 - all ro_root NULL
-ro  readlicense_oo\docs\readme	nmake - all ro_readme NULL
-ro  readlicense_oo		nmake - all ro_conv NULL
+ro  readlicense_oo\prj		nmake - all ro_prj NULL
 
