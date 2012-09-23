@@ -46,7 +46,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
 		codemaker \
 	) \
-    clucene \
+	$(if $(filter CLUCENE,$(BUILD_TYPE)),\
+		clucene \
+	) \
     comphelper \
     configmgr \
     connectivity \
@@ -101,7 +103,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     lingucomponent \
     linguistic \
     lotuswordpro \
-    l10ntools \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		l10ntools \
+	) \
     MathMLDTD \
 	mdds \
     Mesa \
