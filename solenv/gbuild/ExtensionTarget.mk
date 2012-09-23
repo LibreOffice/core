@@ -328,7 +328,7 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
 endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        $(if $(filter-out en-US,$(WITH_LANG)),$(gb_ExtensionTarget_UPDATETREETARGET)) | \
+        $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_UPDATETREETARGET)) | \
         $(2)/$(4)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
