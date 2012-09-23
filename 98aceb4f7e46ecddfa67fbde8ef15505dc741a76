@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAO3///+M\u003d",
+        "filename": "sal/inc/sal/config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-09-23T05:26:10Z",
+      "side": 1,
+      "message": "Note: I included this in config.h and not interlck.h because\nthat header contain a number of intrinsic declaration that can\nbe useful in other cases than just atomic functions",
+      "revId": "98aceb4f7e46ecddfa67fbde8ef15505dc741a76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
