@@ -18,13 +18,15 @@
 from .FaxWizardDialog import *
 from .CGFaxWizard import *
 from .FaxDocument import *
+from .FaxWizardDialogConst import HID
 from ..ui.PathSelection import PathSelection
-from ..common.FileAccess import FileAccess
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextFieldHandler import TextFieldHandler
 from ..common.SystemDialog import SystemDialog
 from ..common.NoValidPathException import NoValidPathException
+from ..common.HelpIds import HelpIds
+from ..common.FileAccess import FileAccess
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.uno import RuntimeException
