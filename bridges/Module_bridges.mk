@@ -69,10 +69,10 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	$(if $(and $(filter GCCX,$(COM)$(CPU)),$(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS))),\
 		Library_gcc3_linux_x86-64 \
 	) \
-	$(if $(filter GCCMACOSXI,$(COM)$(OS)$(CPU)$(CPUNAME)),\
+	$(if $(filter GCCMACOSXI,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_macosx_intel \
 	) \
-	$(if $(filter GCCMACOSXP,$(COM)$(OS)$(CPU)$(CPUNAME)),\
+	$(if $(filter GCCMACOSXP,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_macosx_powerpc \
 	) \
 	$(if $(filter GCCSOLARISI,$(COM)$(OS)$(CPU)$(CPUNAME)),\
