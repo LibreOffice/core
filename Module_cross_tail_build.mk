@@ -43,6 +43,9 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	cosv \
 	cppu \
 	cppuhelper \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		helpcompiler \
+	) \
 	i18npool \
 	i18nutil \
 	idl \
@@ -54,7 +57,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	jvmfwk \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
 		l10ntools \
-		helpcompiler \
 	) \
 	o3tl \
 	offapi \

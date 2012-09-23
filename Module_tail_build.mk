@@ -43,11 +43,11 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     canvas \
     chart2 \
 	cli_ure \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		codemaker \
-	) \
 	$(if $(filter CLUCENE,$(BUILD_TYPE)),\
 		clucene \
+	) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		codemaker \
 	) \
     comphelper \
     configmgr \
@@ -77,6 +77,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     formula \
     fpicker \
     framework \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
+	    helpcompiler \
+	) \
 	$(if $(filter HSQLDB,$(BUILD_TYPE)),\
 		hsqldb \
 	) \
@@ -201,8 +204,8 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	) \
     xmerge \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
-	    helpcompiler \
-	    xmlhelp) \
+	    xmlhelp \
+	) \
     xmloff \
 	xmlreader \
     xmlscript \
