@@ -72,17 +72,17 @@ $(call gb_ExtensionTarget_get_workdir,%)/description.xml :
 else
 $(call gb_ExtensionTarget_get_workdir,%)/description.xml : $(gb_ExtensionTarget_XRMEXTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
-	POFILES=`$(gb_MKTEMP)` && \
-	$(call gb_GetPoFiles,$(PO),$${POFILES}) && \
+	MERGEINPUT=`$(gb_MKTEMP)` && \
+	echo $(POFILES) > $${MERGEINPUT} && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_ExtensionTarget_get_workdir,$*) && \
 		$(gb_ExtensionTarget_XRMEXCOMMAND) \
 			-p $(PRJNAME) \
 			-i $(call gb_Helper_symlinked_native,$(filter %.xml,$^)) \
 			-o $@ \
-			-m $${POFILES} \
+			-m $${MERGEINPUT} \
 			-l all) && \
-	rm -rf $${POFILES}
+	rm -rf $${MERGEINPUT}
 
 endif
 
@@ -116,8 +116,10 @@ $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM :=
 $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_ExtensionTarget_get_target,$(1)) : PO := $(2).po
-$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $$(PO)
+$(call gb_ExtensionTarget_get_target,$(1)) : \
+	POFILES := $(foreach lang,$(gb_ExtensionTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
+	$(foreach lang,$(gb_ExtensionTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
 endif
 
 endef
@@ -201,19 +203,21 @@ define gb_ExtensionTarget_localize_properties
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_ExtensionTarget_LANGS)),$(subst en_US,$(lang),$(2)))
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : PO := $(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $$(PO)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
+	POFILES := $(foreach lang,$(gb_ExtensionTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
+	$(foreach lang,$(gb_ExtensionTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po)
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
 		$(gb_ExtensionTarget_PROPMERGETARGET)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
-	POFILES=`$(gb_MKTEMP)` && \
-	$(call gb_GetPoFiles,$$(PO),$$$${POFILES}) && \
+	MERGEINPUT=`$(gb_MKTEMP)` && \
+	echo $$(POFILES) > $$$${MERGEINPUT} && \
 	mkdir -p $$(dir $$@) && \
 	cp -f $$< $$@ \
-	$(if $(strip $(gb_WITH_LANG)),&& $(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$@ -m $$$${POFILES}) && \
-	rm -rf $$$${POFILES}
+	$(if $(strip $(gb_WITH_LANG)),&& $(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$@ -m $$$${MERGEINPUT}) && \
+	rm -rf $$$${MERGEINPUT}
 
 endef
 
@@ -229,16 +233,17 @@ endef
 define gb_ExtensionTarget_localize_help_onelang
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
-	PO := $(patsubst /%/,%,$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(dir $(3))))).po
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $$(PO)
+	POFILE := $(gb_POLOCATION)/$(4)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(dir $(3))))).po
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
+	$(gb_POLOCATION)/$(4)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(dir $(3))))).po
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(gb_ExtensionTarget_HELPEXTARGET)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3)
 	$$(call gb_Output_announce,$(2),$(true),XHP,3)
-	POFILES=`$(gb_MKTEMP)` && \
-	echo $(gb_POLOCATION)/$(4)/$$(PO) > $$$${POFILES} && \
+	MERGEINPUT=`$(gb_MKTEMP)` && \
+	echo $$(POFILE) > $$$${MERGEINPUT} && \
 	mkdir -p $$(dir $$@) && \
-	$(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(4) -m $$$${POFILES} && \
-	rm -rf $$$${POFILES}
+	$(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(4) -m $$$${MERGEINPUT} && \
+	rm -rf $$$${MERGEINPUT}
 
 endef
 

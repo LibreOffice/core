@@ -51,32 +51,26 @@ gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target_for_build
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
 
-
-define gb_GetPoFiles
-echo $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)), $(gb_POLOCATION)/$(lang)/$(1)) > $(2)
-endef
-
 define gb_SrsPartMergeTarget__command
 $(call gb_Output_announce,$(3),$(true),srs,1)
-POFILES=`$(gb_MKTEMP)` && \
-$(call gb_GetPoFiles,$(PO),$${POFILES}) && \
+MERGEINPUT=`$(gb_MKTEMP)` && \
+echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
 		-i $(3) \
 		-o $(1) \
-		-m $${POFILES} \
+		-m $${MERGEINPUT} \
 		-l all) && \
-rm -rf $${POFILES}
+rm -rf $${MERGEINPUT}
 
 endef
 
 $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)  $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-	$(if $(strip $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(if $(wildcard $(gb_POLOCATION)/$(lang)/$(PO)),,x))),\
-		mkdir -p $(dir $@) && cp $< $@,\
-		$(call gb_SrsPartMergeTarget__command,$@,$*,$<))
-
+	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\
+		$(call gb_SrsPartMergeTarget__command,$@,$*,$<),\
+		mkdir -p $(dir $@) && cp $< $@)
 
 # SrsPartTarget class
 
@@ -120,7 +114,8 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : PO := $(patsubst %/,%,$(dir $(1))).po
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : \
+	POFILES := $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
 endif
 
 endef
@@ -133,8 +128,10 @@ $(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_
 	    mkdir -p $$(dir $$@) && \
 	    cp $$< $$@)
 ifneq ($(strip $(WITH_LANG)),)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : PO := $(patsubst %/,%,$(dir $(1))).po
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : $$(PO)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : \
+	POFILES := $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : \
+	$(wildcard $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
 endif
 
 endef
