@@ -38,7 +38,6 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 
 $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 	cppu \
-	dl \
 	sal \
 ))
 
