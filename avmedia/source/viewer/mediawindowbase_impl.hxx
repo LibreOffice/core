@@ -64,11 +64,11 @@ namespace avmedia
             virtual void    cleanUp();
             virtual void    onURLChanged();
 
-            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL);
+            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL);
 
-            void    setURL( const ::rtl::OUString& rURL, ::rtl::OUString const& rTempURL );
+            void    setURL( const OUString& rURL, OUString const& rTempURL );
 
-            const ::rtl::OUString&  getURL() const;
+            const   OUString&  getURL() const;
 
             bool    isValid() const;
 
@@ -117,8 +117,8 @@ namespace avmedia
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > getPlayerWindow() const;
 
         private:
-            ::rtl::OUString                                                             maFileURL;
-            ::rtl::OUString mTempFileURL;
+            OUString                                                                    maFileURL;
+            OUString                                                                    mTempFileURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             MediaWindow*                                                                mpMediaWindow;

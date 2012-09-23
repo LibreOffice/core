@@ -78,13 +78,13 @@ FrameGrabber::~FrameGrabber()
 
 // ------------------------------------------------------------------------------
 
-IMediaDet* FrameGrabber::implCreateMediaDet( const ::rtl::OUString& rURL ) const
+IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
 {
     IMediaDet* pDet = NULL;
 
     if( SUCCEEDED( CoCreateInstance( CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void**) &pDet ) ) )
     {
-        rtl::OUString aLocalStr;
+        OUString aLocalStr;
 
         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, aLocalStr ) && !aLocalStr.isEmpty() )
         {
@@ -101,7 +101,7 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const ::rtl::OUString& rURL ) const
 
 // ------------------------------------------------------------------------------
 
-bool FrameGrabber::create( const ::rtl::OUString& rURL )
+bool FrameGrabber::create( const OUString& rURL )
 {
     // just check if a MediaDet interface can be created with the given URL
     IMediaDet*  pDet = implCreateMediaDet( rURL );
@@ -113,7 +113,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
         pDet = NULL;
     }
     else
-        maURL = ::rtl::OUString();
+        maURL = OUString();
 
     return( maURL.getLength() > 0 );
 }
@@ -218,15 +218,15 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
+OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME ) );
+    return OUString( AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME;
@@ -234,11 +234,11 @@ sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceN
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME ) );
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME ;
 
     return aRet;
 }
