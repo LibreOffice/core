@@ -17,7 +17,7 @@
 #
 import uno
 import traceback
-from .NoValidPathException import *
+from .NoValidPathException import NoValidPathException
 
 from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
@@ -67,7 +67,7 @@ class Desktop(object):
             xDispatch = xFrame.queryDispatch(oURLArray[0], _stargetframe, ALL)
             return xDispatch
         except Exception, e:
-            e.printStackTrace(System.out)
+            traceback.print_exc()
 
         return None
 
@@ -75,7 +75,7 @@ class Desktop(object):
     def connect(self, connectStr):
         localContext = uno.getComponentContext()
         resolver = localContext.ServiceManager.createInstanceWithContext(
-				        "com.sun.star.bridge.UnoUrlResolver", localContext)
+                        "com.sun.star.bridge.UnoUrlResolver", localContext)
         ctx = resolver.resolve( connectStr )
         orb = ctx.ServiceManager
         return orb
@@ -111,7 +111,7 @@ class Desktop(object):
                 _sString, 0, _aLocale, nStartFlags, "", nStartFlags, " ")
             return aResult.EndPos
         except Exception, e:
-            e.printStackTrace(System.out)
+            traceback.print_exc()
             return -1
 
     @classmethod
@@ -204,8 +204,8 @@ class OfficePathRetriever:
         try:
             xPathSubst = xMSF.createInstance(
                 "com.sun.star.util.PathSubstitution")
-        except com.sun.star.uno.Exception, e:
-            e.printStackTrace()
+        except Exception, e:
+            traceback.print_exc()
 
         if xPathSubst != None:
             return xPathSubst
