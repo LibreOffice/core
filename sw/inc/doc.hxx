@@ -343,7 +343,6 @@ class SW_DLLPUBLIC SwDoc :
     SwLineNumberInfo*pLineNumberInfo;
     SwFtnIdxs       *pFtnIdxs;
     SwDocStat       *pDocStat;          ///< Statistics information.
-    SvxMacroTableDtor *pMacroTable;     ///< table of macros.
 
     SwDocShell      *pDocShell;         ///< Ptr to SfxDocShell of Doc.
     SfxObjectShellLock xTmpDocShell;    ///< A temporary shell that is used to copy OLE-Nodes
