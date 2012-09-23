@@ -1725,10 +1725,9 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             Point aCenter( aRect.Center() );
                             Point aStart( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + nXor ) ], sal_True, sal_True ) );
                             Point aEnd( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + ( nXor ^ 1 ) ) ], sal_True, sal_True ) );
-                            double fRatio = (double)aRect.GetHeight() / (double)aRect.GetWidth();
-                            aStart.X() = (sal_Int32)( ( (double)( aStart.X() - aCenter.X() ) ) * fRatio ) + aCenter.X();
+                            aStart.X() = (sal_Int32)( ( (double)( aStart.X() - aCenter.X() ) ) ) + aCenter.X();
                             aStart.Y() = (sal_Int32)( ( (double)( aStart.Y() - aCenter.Y() ) ) ) + aCenter.Y();
-                            aEnd.X() = (sal_Int32)( ( (double)( aEnd.X() - aCenter.X() ) ) * fRatio ) + aCenter.X();
+                            aEnd.X() = (sal_Int32)( ( (double)( aEnd.X() - aCenter.X() ) ) ) + aCenter.X();
                             aEnd.Y() = (sal_Int32)( ( (double)( aEnd.Y() - aCenter.Y() ) ) ) + aCenter.Y();
                             aNewB2DPolygon.append(CreateArc( aRect, aStart, aEnd, bClockwise));
                         }
