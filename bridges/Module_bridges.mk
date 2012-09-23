@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_targets,bridges,\
 		Library_gcc3_linux_alpha \
 	) \
 	$(if $(and $(filter GCCR,$(COM)$(CPU)),$(filter ANDROID LINUX,$(OS))),\
+		CustomTarget_gcc3_linux_arm \
 		Library_gcc3_linux_arm \
 	) \
 	$(if $(filter GCCLINUXH,$(COM)$(OS)$(CPU)),\
