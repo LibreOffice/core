@@ -1,0 +1,2 @@
+bz bluez_bluetooth : NULL
+bz bluez_bluetooth\prj nmake - all bz_prj NULL
