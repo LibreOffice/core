@@ -46,7 +46,8 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
 		codemaker \
 	) \
-	comphelper \
+    clucene \
+    comphelper \
     configmgr \
     connectivity \
 	cosv \
@@ -100,6 +101,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     lingucomponent \
     linguistic \
     lotuswordpro \
+    l10ntools \
     MathMLDTD \
 	mdds \
     Mesa \
@@ -127,9 +129,10 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
 		rdbmaker \
 	) \
-	regexp \
-	registry \
-	remotebridges \
+    readlicense_oo \
+    regexp \
+    registry \
+    remotebridges \
     reportbuilder \
     reportdesign \
 	ridljar \
