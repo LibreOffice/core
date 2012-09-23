@@ -32,6 +32,7 @@
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
+#include <algorithm>
 #include <map>
 #include <list>
 #include <accmap.hxx>
@@ -70,6 +71,7 @@
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
 #include <switerator.hxx>
+#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -2283,12 +2285,8 @@ void SwAccessibleMap::FireEvents()
         if( mpEvents )
         {
             mpEvents->SetFiring();
-            SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
-            while( aIter != mpEvents->end() )
-            {
-                FireEvent( *aIter );
-                ++aIter;
-            }
+            ::std::for_each(mpEvents->begin(), mpEvents->end(),
+                            boost::bind(&SwAccessibleMap::FireEvent, this, _1));
 
             delete mpEventMap;
             mpEventMap = 0;
