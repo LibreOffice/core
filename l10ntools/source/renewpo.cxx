@@ -106,7 +106,7 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
         getline(aSDFInput,s);
         sLine = OString(s.data(),s.length());
         OString sActTrans;
-        if (IsSameEntry(sActUnTrans,sLine))
+        if (!aSDFInput.eof() && IsSameEntry(sActUnTrans,sLine))
         {
             sActTrans = sLine;
             getline(aSDFInput,s);
@@ -134,16 +134,18 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
                     sActUnTrans = DelLocalId(sActUnTrans);
                 }*/
                 PoEntry aPE(sActUnTrans, vTypes[nIndex]);
-                aPE.setTransStr(sActTrans.getToken(vTypes[nIndex],'\t'));
-                aPE.setFuzzy(sActTrans.isEmpty() ? 0 :
-                             bool(sActTrans.getToken(PoEntry::DUMMY,'\t').
-                                            copy(nDummyBit++,1).toInt32()));
+                const OString sActStr =
+                    sActTrans.getToken(vTypes[nIndex],'\t');
+                aPE.setTransStr(sActStr);
+                aPE.setFuzzy( sActStr.isEmpty() ? false :
+                    static_cast<bool>(sActTrans.getToken(PoEntry::DUMMY,'\t').
+                        copy(nDummyBit++,1).toBoolean()));
                 aPE.writeToFile(aOutPut);
             }
         }
-
         //Check wheather next entry is in the same po file
-        OString sNextSourcePath = GetPath(sPath,sLine);
+        OString sNextSourcePath =
+            !aSDFInput.eof() ? GetPath(sPath,sLine) : "";
         if (sNextSourcePath!=sActSourcePath)
         {
             aOutPut.close();
@@ -156,7 +158,6 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
     //Close and remove sdf file
     aSDFInput.close();
     system(("rm " + SDFFileName).getStr());
-    aOutPut.close();
 }
 
 
