@@ -15,13 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import uno
 from .FaxWizardDialogResources import FaxWizardDialogResources
 from .FaxWizardDialogConst import FaxWizardDialogConst, HIDMAIN
-from ..ui.WizardDialog import WizardDialog
-from ..ui.UIConsts import UIConsts
-from ..common.Helper import Helper
-from ..common.PropertyNames import PropertyNames
+from ..ui.WizardDialog import WizardDialog, uno, Helper, UIConsts, \
+	PropertyNames
 
 from com.sun.star.awt.FontUnderline import SINGLE
 
@@ -72,11 +69,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (8, FaxWizardDialogConst.OPTBUSINESSFAX_HID, 
+            (8, FaxWizardDialogConst.OPTBUSINESSFAX_HID,
 				self.resources.resoptBusinessFax_value, 97, 28, 1, 1, 184),
 			self)
         self.lstBusinessStyle = self.insertListBox("lstBusinessStyle",
-            FaxWizardDialogConst.LSTBUSINESSSTYLE_ACTION_PERFORMED, 
+            FaxWizardDialogConst.LSTBUSINESSSTYLE_ACTION_PERFORMED,
             FaxWizardDialogConst.LSTBUSINESSSTYLE_ITEM_CHANGED,
             ("Dropdown", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
@@ -97,7 +94,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (8, FaxWizardDialogConst.OPTPRIVATEFAX_HID, 
+            (8, FaxWizardDialogConst.OPTPRIVATEFAX_HID,
 				self.resources.resoptPrivateFax_value,97, 81, 1, 2, 184), self)
         self.lstPrivateStyle = self.insertListBox("lstPrivateStyle",
             FaxWizardDialogConst.LSTPRIVATESTYLE_ACTION_PERFORMED,
@@ -151,10 +148,10 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (39, self.resources.reslblIntroduction_value, 
+            (39, self.resources.reslblIntroduction_value,
 				True, 104, 145, 1, 55, 199))
         self.ImageControl3 = self.insertInfoImage(92, 145, 1)
-        
+
     def buildStep2(self):
         self.chkUseLogo = self.insertCheckBox("chkUseLogo",
             FaxWizardDialogConst.CHKUSELOGO_ITEM_CHANGED,
