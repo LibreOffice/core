@@ -114,7 +114,7 @@ public:
     bool operator==( const ScFormatEntry& ) const;
 
 #if DUMP_FORMAT_INFO
-    virtual void dumpInfo() const = 0;
+    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const = 0;
 #endif
 protected:
     ScDocument* mpDoc;
@@ -213,7 +213,7 @@ public:
     static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
 
 #if DUMP_FORMAT_INFO
-    virtual void dumpInfo() const {}
+    virtual void dumpInfo(rtl::OUStringBuffer& ) const {}
 #endif
 
 protected:
@@ -319,7 +319,7 @@ public:
     bool            MarkUsedExternalReferences() const;
 
 #if DUMP_FORMAT_INFO
-    void dumpInfo() const;
+    void dumpInfo(rtl::OUStringBuffer& rBuf) const;
 #endif
 
     //  sorted (via PTRARR) by Index

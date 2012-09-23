@@ -1457,11 +1457,11 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
 
 
 #if DUMP_FORMAT_INFO
-void ScConditionalFormat::dumpInfo() const
+void ScConditionalFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
 {
     for(CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->dumpInfo();
+        itr->dumpInfo(rBuf);
     }
 }
 #endif
