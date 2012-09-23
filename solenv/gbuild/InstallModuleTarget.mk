@@ -113,11 +113,11 @@ gb_ScpMergeTarget_get_source = $(SRCDIR)/$(1).ulf
 
 define gb_ScpMergeTarget__command
 $(call gb_Output_announce,$(2),$(true),SUM,1)
-POFILES=`$(gb_MKTEMP)` && \
-$(call gb_GetPoFiles,$(SCP_PO),$${POFILES}) && \
+MERGEINPUT=`$(gb_MKTEMP)` && \
+echo $(SCP_POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpMergeTarget_COMMAND) -p scp2 -i $(3) -o $(1) -m $${POFILES} -l all ) && \
-rm -rf $${POFILES}
+	$(gb_ScpMergeTarget_COMMAND) -p scp2 -i $(3) -o $(1) -m $${MERGEINPUT} -l all ) && \
+rm -rf $${MERGEINPUT}
 
 endef
 
@@ -136,8 +136,10 @@ $(call gb_ScpMergeTarget_get_clean_target,%) :
 define gb_ScpMergeTarget_ScpMergeTarget
 $(call gb_ScpMergeTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_source,$(1))
 $(call gb_ScpMergeTarget_get_target,$(1)) :| $(dir $(call gb_ScpMergeTarget_get_target,$(1))).dir
-$(call gb_ScpMergeTarget_get_target,$(1)) : SCP_PO := $(patsubst %/,%,$(dir $(1))).po
-$(call gb_ScpMergeTarget_get_target,$(1)) : $$(SCP_PO)
+$(call gb_ScpMergeTarget_get_target,$(1)) : \
+	SCP_POFILES := $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
+$(call gb_ScpMergeTarget_get_target,$(1)) : \
+	$(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
 
 endef
 

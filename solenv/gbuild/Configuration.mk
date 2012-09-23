@@ -249,24 +249,24 @@ gb_XcuMergeTarget_CFGEXCOMMAND := $(gb_Helper_set_ld_path) $(gb_XcuMergeTarget_C
 # PRJNAME is computed from the stem (parameter $(2))
 define gb_XcuMergeTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,5)
-POFILES=`$(gb_MKTEMP)` && \
-$(call gb_GetPoFiles,$(PO),$${POFILES}) && \
+MERGEINPUT=`$(gb_MKTEMP)` && \
+echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XcuMergeTarget_CFGEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
 		-i $(call gb_Helper_symlinked_native,$(3)) \
 		-o $(1) \
-		-m $${POFILES} \
+		-m $${MERGEINPUT} \
 		-l all) && \
-rm -rf $${POFILES}
+rm -rf $${MERGEINPUT}
 
 endef
 
 $(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXTARGET)
-	$(if $(strip $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(if $(wildcard $(gb_POLOCATION)/$(lang)/$(PO)),,x))),\
-		mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@,\
-		$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)))
+	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\
+		$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),\
+		mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
 
 $(call gb_XcuMergeTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,5)
@@ -278,7 +278,8 @@ define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
 	$(wildcard $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
-$(call gb_XcuMergeTarget_get_target,$(1)) : PO := $(patsubst %/,%,$(dir $(1))).po
+$(call gb_XcuMergeTarget_get_target,$(1)) : \
+	POFILES := $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
 endef
 
 
