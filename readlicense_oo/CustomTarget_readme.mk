@@ -36,7 +36,7 @@ readlicense_oo_README_XRM := $(readlicense_oo_DIR)/readme.xrm
 $(readlicense_oo_DIR)/readme.xrm : \
 		$(SRCDIR)/readlicense_oo/docs/readme.xrm \
 		$(readlicense_XRMEXTARGET) \
-		$(gb_SDFLOCATION)/readlicense_oo/docs/localize.sdf \
+		$(gb_SDFLOCATION)/readlicense_oo/docs/readme/localize.sdf \
 		| $(readlicense_oo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XRM,1)
 	$(call gb_Helper_abbreviate_dirs, \
