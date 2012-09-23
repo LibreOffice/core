@@ -99,6 +99,12 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
     sal_Int64 tmpOffset = offset;
     if (seekType == WPX_SEEK_CUR)
         tmpOffset += tmpPosition;
+#if defined(LIBWPD_STREAM_VERSION_MAJOR) && defined(LIBWPD_STREAM_VERSION_MINOR) && defined(LIBWPD_STREAM_VERSION_REVISION) \
+    && (LIBWPD_STREAM_VERSION_MAJOR > 0 || (LIBWPD_STREAM_VERSION_MAJOR == 0 && (LIBWPD_STREAM_VERSION_MINOR > 9 \
+    || (LIBWPD_STREAM_VERSION_MINOR == 9 && LIBWPD_STREAM_VERSION_REVISION >= 5))))
+    if (seekType == WPX_SEEK_END)
+        tmpOffset += mnLength;
+#endif
 
     int retVal = 0;
     if (tmpOffset < 0)
