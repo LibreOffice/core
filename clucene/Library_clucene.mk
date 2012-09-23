@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,clucene))
 
 $(eval $(call gb_Library_use_external,clucene,zlib))
 
-$(eval $(call gb_Library_use_package,clucene,clucene_source))
+$(eval $(call gb_Library_use_package,clucene,clucene_inc))
 
 $(eval $(call gb_Library_use_unpacked,clucene,clucene))
 
