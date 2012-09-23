@@ -18,7 +18,7 @@ $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhel
 		| $(dir $(call gb_CustomTarget_get_target,bridges/source/cpp_uno/gcc3_linux_arm)).dir
 	$(gb_CXX) -c -o $@ $< -fPIC
 
-$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist :
+$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist : \
 		| $(dir $(call gb_CustomTarget_get_target,bridges/source/cpp_uno/gcc3_linux_arm)).dir
 	echo $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.o > $@
 
