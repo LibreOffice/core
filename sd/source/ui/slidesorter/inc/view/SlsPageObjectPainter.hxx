@@ -41,7 +41,6 @@ class PageCache;
 
 namespace sd { namespace slidesorter { namespace view {
 
-class ButtonBar;
 class Layouter;
 class PageObjectLayouter;
 class FramePainter;
@@ -96,7 +95,6 @@ private:
     Bitmap maMouseOverBackground;
     Bitmap maMouseOverFocusedBackground;
     Bitmap maMouseOverSelectedAndFocusedBackground;
-    ButtonBar& mrButtonBar;
     Size maSize;
 
     void PaintBackground (

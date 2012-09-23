@@ -471,7 +471,7 @@ bool SlideSorterController::Command (
                         SdResId(nPopupId),
                         pWindow,
                         &aMenuLocation);
-                    mrSlideSorter.GetView().UpdatePageUnderMouse(false);
+                    mrSlideSorter.GetView().UpdatePageUnderMouse();
                     ::rtl::Reference<SelectionFunction> pFunction(GetCurrentSelectionFunction());
                     if (pFunction.is())
                         pFunction->ResetMouseAnchor();
@@ -519,7 +519,7 @@ bool SlideSorterController::Command (
                     ScrollBarManager::Unit_Slide,
                     -pData->GetNotchDelta());
             }
-            mrSlideSorter.GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel(), false);
+            mrSlideSorter.GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel());
 
             bEventHasBeenHandled = true;
         }

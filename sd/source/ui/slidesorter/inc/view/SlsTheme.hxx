@@ -46,16 +46,6 @@ class Properties;
 
 namespace sd { namespace slidesorter { namespace view {
 
-const int Theme_ButtonCornerRadius = 3;
-const int Theme_ButtonMaxAlpha = 0;
-const int Theme_ButtonBarMaxAlpha = 0;
-const int Theme_ButtonPaintType = 1;
-const int Theme_ButtonBorder = 4;
-const int Theme_ButtonGap = 0;
-const int Theme_ButtonFadeInDelay = 800;
-const int Theme_ButtonFadeInDuration = 100;
-const int Theme_ButtonFadeOutDelay = 0;
-const int Theme_ButtonFadeOutDuration = 100;
 const int Theme_ToolTipDelay = 1000;
 const int Theme_FocusIndicatorWidth = 3;
 
@@ -104,7 +94,6 @@ public:
         Gradient_MouseOverPage,
         Gradient_MouseOverSelectedAndFocusedPage,
         Gradient_FocusedPage,
-        Gradient_ButtonBackground,
         _GradientColorType_Size_
     };
     enum GradientColorClass {
@@ -133,39 +122,11 @@ public:
         Icon_RawInsertShadow,
         Icon_HideSlideOverlay,
         Icon_FocusBorder,
-        Icon_ButtonBarLarge,
-        Icon_ButtonBarMedium,
-        Icon_ButtonBarSmall,
-        Icon_Command1Large,
-        Icon_Command1LargeHover,
-        Icon_Command1Medium,
-        Icon_Command1MediumHover,
-        Icon_Command1Small,
-        Icon_Command1SmallHover,
-        Icon_Command2Large,
-        Icon_Command2LargeHover,
-        Icon_Command2Medium,
-        Icon_Command2MediumHover,
-        Icon_Command2Small,
-        Icon_Command2SmallHover,
-        Icon_Command2BLarge,
-        Icon_Command2BLargeHover,
-        Icon_Command2BMedium,
-        Icon_Command2BMediumHover,
-        Icon_Command2BSmall,
-        Icon_Command2BSmallHover,
-        Icon_Command3Large,
-        Icon_Command3LargeHover,
-        Icon_Command3Medium,
-        Icon_Command3MediumHover,
-        Icon_Command3Small,
-        Icon_Command3SmallHover,
         _IconType_Size_
     };
     const BitmapEx& GetIcon (const IconType eType);
 
 private:
-    bool mbIsHighContrastMode;
     class GradientDescriptor
     {
     public:

@@ -73,8 +73,7 @@ ColorData HGBAdapt (
 
 
 Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
-    : mbIsHighContrastMode(false),
-      maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
+    : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
       maPageBackgroundColor(COL_WHITE),
       maGradients(),
       maIcons(),
@@ -101,9 +100,6 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 
 void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 {
-    const bool bSavedHighContrastMode (mbIsHighContrastMode);
-    mbIsHighContrastMode = rpProperties->IsHighContrastModeActive();
-
     // Set up colors.
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
     maPageBackgroundColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
@@ -127,7 +123,6 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     SetGradient(Gradient_MouseOverSelectedAndFocusedPage, aSelectionColor, 75, 75, +100,+100, -50,-75);
     SetGradient(Gradient_FocusedPage, aSelectionColor, -1,-1, 0,0, -50,-75);
 
-    SetGradient(Gradient_ButtonBackground, Black, -1,-1, 0,0, 0,0);
     SetGradient(Gradient_NormalPage, maBackgroundColor, -1,-1, 0,0, 0,0);
 
     // The focused gradient needs special handling because its fill color is
@@ -136,87 +131,14 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     GetGradient(Gradient_FocusedPage).maFillColor2 = GetGradient(Gradient_NormalPage).maFillColor2;
 
     // Set up icons.
-    if (bSavedHighContrastMode != mbIsHighContrastMode || maIcons.empty())
+    if (maIcons.empty())
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);
-
         maIcons.resize(_IconType_Size_);
-        if (mbIsHighContrastMode)
-        {
-            InitializeIcon(Icon_RawShadow, IMAGE_SHADOW);
-            InitializeIcon(Icon_RawInsertShadow, IMAGE_INSERT_SHADOW);
-            InitializeIcon(Icon_HideSlideOverlay, IMAGE_HIDE_SLIDE_OVERLAY);
 
-            InitializeIcon(Icon_ButtonBarLarge, IMAGE_BUTTONBAR_LARGE_HC);
-            InitializeIcon(Icon_ButtonBarMedium, IMAGE_BUTTONBAR_MEDIUM_HC);
-            InitializeIcon(Icon_ButtonBarSmall, IMAGE_BUTTONBAR_SMALL_HC);
-
-            InitializeIcon(Icon_Command1Large, IMAGE_COMMAND1_LARGE_HC);
-            InitializeIcon(Icon_Command1LargeHover, IMAGE_COMMAND1_LARGE_HOVER_HC);
-            InitializeIcon(Icon_Command1Medium, IMAGE_COMMAND1_MEDIUM_HC);
-            InitializeIcon(Icon_Command1MediumHover, IMAGE_COMMAND1_MEDIUM_HOVER_HC);
-            InitializeIcon(Icon_Command1Small, IMAGE_COMMAND1_SMALL_HC);
-            InitializeIcon(Icon_Command1SmallHover, IMAGE_COMMAND1_SMALL_HOVER_HC);
-
-            InitializeIcon(Icon_Command2Large, IMAGE_COMMAND2_LARGE_HC);
-            InitializeIcon(Icon_Command2LargeHover, IMAGE_COMMAND2_LARGE_HOVER_HC);
-            InitializeIcon(Icon_Command2Medium, IMAGE_COMMAND2_MEDIUM_HC);
-            InitializeIcon(Icon_Command2MediumHover, IMAGE_COMMAND2_MEDIUM_HOVER_HC);
-            InitializeIcon(Icon_Command2Small, IMAGE_COMMAND2_SMALL_HC);
-            InitializeIcon(Icon_Command2SmallHover, IMAGE_COMMAND2_SMALL_HOVER_HC);
-
-            InitializeIcon(Icon_Command2BLarge, IMAGE_COMMAND2B_LARGE_HC);
-            InitializeIcon(Icon_Command2BLargeHover, IMAGE_COMMAND2B_LARGE_HOVER_HC);
-            InitializeIcon(Icon_Command2BMedium, IMAGE_COMMAND2B_MEDIUM_HC);
-            InitializeIcon(Icon_Command2BMediumHover, IMAGE_COMMAND2B_MEDIUM_HOVER_HC);
-            InitializeIcon(Icon_Command2BSmall, IMAGE_COMMAND2B_SMALL_HC);
-            InitializeIcon(Icon_Command2BSmallHover, IMAGE_COMMAND2B_SMALL_HOVER_HC);
-
-            InitializeIcon(Icon_Command3Large, IMAGE_COMMAND3_LARGE_HC);
-            InitializeIcon(Icon_Command3LargeHover, IMAGE_COMMAND3_LARGE_HOVER_HC);
-            InitializeIcon(Icon_Command3Medium, IMAGE_COMMAND3_SMALL_HC);
-            InitializeIcon(Icon_Command3MediumHover, IMAGE_COMMAND3_SMALL_HOVER_HC);
-            InitializeIcon(Icon_Command3Small, IMAGE_COMMAND3_SMALL_HC);
-            InitializeIcon(Icon_Command3SmallHover, IMAGE_COMMAND3_SMALL_HOVER_HC);
-        }
-        else
-        {
-            InitializeIcon(Icon_RawShadow, IMAGE_SHADOW);
-            InitializeIcon(Icon_RawInsertShadow, IMAGE_INSERT_SHADOW);
-            InitializeIcon(Icon_HideSlideOverlay, IMAGE_HIDE_SLIDE_OVERLAY);
-
-            InitializeIcon(Icon_ButtonBarLarge, IMAGE_BUTTONBAR_LARGE);
-            InitializeIcon(Icon_ButtonBarMedium, IMAGE_BUTTONBAR_MEDIUM);
-            InitializeIcon(Icon_ButtonBarSmall, IMAGE_BUTTONBAR_SMALL);
-
-            InitializeIcon(Icon_Command1Large, IMAGE_COMMAND1_LARGE);
-            InitializeIcon(Icon_Command1LargeHover, IMAGE_COMMAND1_LARGE_HOVER);
-            InitializeIcon(Icon_Command1Medium, IMAGE_COMMAND1_MEDIUM);
-            InitializeIcon(Icon_Command1MediumHover, IMAGE_COMMAND1_MEDIUM_HOVER);
-            InitializeIcon(Icon_Command1Small, IMAGE_COMMAND1_SMALL);
-            InitializeIcon(Icon_Command1SmallHover, IMAGE_COMMAND1_SMALL_HOVER);
-
-            InitializeIcon(Icon_Command2Large, IMAGE_COMMAND2_LARGE);
-            InitializeIcon(Icon_Command2LargeHover, IMAGE_COMMAND2_LARGE_HOVER);
-            InitializeIcon(Icon_Command2Medium, IMAGE_COMMAND2_MEDIUM);
-            InitializeIcon(Icon_Command2MediumHover, IMAGE_COMMAND2_MEDIUM_HOVER);
-            InitializeIcon(Icon_Command2Small, IMAGE_COMMAND2_SMALL);
-            InitializeIcon(Icon_Command2SmallHover, IMAGE_COMMAND2_SMALL_HOVER);
-
-            InitializeIcon(Icon_Command2BLarge, IMAGE_COMMAND2B_LARGE);
-            InitializeIcon(Icon_Command2BLargeHover, IMAGE_COMMAND2B_LARGE_HOVER);
-            InitializeIcon(Icon_Command2BMedium, IMAGE_COMMAND2B_MEDIUM);
-            InitializeIcon(Icon_Command2BMediumHover, IMAGE_COMMAND2B_MEDIUM_HOVER);
-            InitializeIcon(Icon_Command2BSmall, IMAGE_COMMAND2B_SMALL);
-            InitializeIcon(Icon_Command2BSmallHover, IMAGE_COMMAND2B_SMALL_HOVER);
-
-            InitializeIcon(Icon_Command3Large, IMAGE_COMMAND3_LARGE);
-            InitializeIcon(Icon_Command3LargeHover, IMAGE_COMMAND3_LARGE_HOVER);
-            InitializeIcon(Icon_Command3Medium, IMAGE_COMMAND3_MEDIUM);
-            InitializeIcon(Icon_Command3MediumHover, IMAGE_COMMAND3_MEDIUM_HOVER);
-            InitializeIcon(Icon_Command3Small, IMAGE_COMMAND3_SMALL);
-            InitializeIcon(Icon_Command3SmallHover, IMAGE_COMMAND3_SMALL_HOVER);
-        }
+        InitializeIcon(Icon_RawShadow, IMAGE_SHADOW);
+        InitializeIcon(Icon_RawInsertShadow, IMAGE_INSERT_SHADOW);
+        InitializeIcon(Icon_HideSlideOverlay, IMAGE_HIDE_SLIDE_OVERLAY);
         InitializeIcon(Icon_FocusBorder, IMAGE_FOCUS_BORDER);
     }
 }

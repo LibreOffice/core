@@ -373,7 +373,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/slidesorter/shell/SlideSorterService \
     sd/source/ui/slidesorter/shell/SlideSorterViewShell \
     sd/source/ui/slidesorter/view/SlideSorterView \
-    sd/source/ui/slidesorter/view/SlsButtonBar \
     sd/source/ui/slidesorter/view/SlsFontProvider \
     sd/source/ui/slidesorter/view/SlsFramePainter \
     sd/source/ui/slidesorter/view/SlsInsertAnimator \

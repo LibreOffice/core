@@ -63,7 +63,6 @@ class SlideSorterModel;
 
 namespace sd { namespace slidesorter { namespace view {
 
-class ButtonBar;
 class LayeredDevice;
 class Layouter;
 class PageObjectPainter;
@@ -213,25 +212,14 @@ public:
     /** The page under the mouse is not highlighted in some contexts.  Call
         this method on context changes.
     */
-    void UpdatePageUnderMouse (bool bAnimate);
-    void UpdatePageUnderMouse (
-        const Point& rMousePosition,
-        const bool bIsMouseButtonDown,
-        const bool bAnimate = true);
-    void UpdatePageUnderMouse (
-        const model::SharedPageDescriptor& rpDescriptor,
-        const Point& rMousePosition,
-        const bool bIsMouseButtonDown,
-        const bool bAnimate = true);
-    void SetPageUnderMouse (
-        const model::SharedPageDescriptor& rpDescriptor,
-        const bool bAnimate = true);
+    void UpdatePageUnderMouse ();
+    void UpdatePageUnderMouse (const Point& rMousePosition);
+    void SetPageUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
 
     bool SetState (
         const model::SharedPageDescriptor& rpDescriptor,
         const model::PageDescriptor::State eState,
-        const bool bStateValue,
-        const bool bAnimate = true);
+        const bool bStateValue);
 
     void UpdateOrientation (void);
 
@@ -252,7 +240,6 @@ public:
         SharedSdWindow mpWindow;
     };
 
-    ButtonBar& GetButtonBar (void) const;
     ToolTip& GetToolTip (void) const;
 
 protected:
@@ -278,7 +265,6 @@ private:
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
     Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
-    ::boost::scoped_ptr<ButtonBar> mpButtonBar;
     ::boost::scoped_ptr<ToolTip> mpToolTip;
     bool mbIsRearrangePending;
     ::std::vector<Link> maVisibilityChangeListeners;

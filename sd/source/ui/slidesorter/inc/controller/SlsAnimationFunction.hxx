@@ -59,15 +59,6 @@ public:
     /** Blend two points together according to the given weight.
     */
     static double Blend (const double nStartValue, const double nEndValue, const double nWeight);
-
-    /** Apply a gradual change the alpha value from the old value to a
-        new value (set prior to this call.)
-    */
-    static void ApplyButtonAlphaChange(
-        const model::SharedPageDescriptor& rpDescriptor,
-        view::SlideSorterView& rView,
-        const double nButtonAlpha,
-        const double nButtonBarAlpha);
 };
 
 

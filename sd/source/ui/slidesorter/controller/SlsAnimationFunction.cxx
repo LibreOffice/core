@@ -57,23 +57,6 @@ double AnimationFunction::Blend (
 
 
 
-void AnimationFunction::ApplyButtonAlphaChange(
-    const model::SharedPageDescriptor& rpDescriptor,
-    view::SlideSorterView& rView,
-    const double nButtonAlpha,
-    const double nButtonBarAlpha)
-{
-    if (rpDescriptor)
-    {
-        rpDescriptor->GetVisualState().SetButtonAlpha(nButtonAlpha);
-        rpDescriptor->GetVisualState().SetButtonBarAlpha(nButtonBarAlpha);
-        rView.RequestRepaint(rpDescriptor);
-    }
-}
-
-
-
-
 //===== AnimationBezierFunction ===============================================
 
 AnimationBezierFunction::AnimationBezierFunction (
