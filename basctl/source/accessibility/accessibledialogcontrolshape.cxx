@@ -59,7 +59,7 @@ AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialo
         m_xControlModel = Reference< XPropertySet >( m_pDlgEdObj->GetUnoControlModel(), UNO_QUERY );
 
     if ( m_xControlModel.is() )
-        m_xControlModel->addPropertyChangeListener( ::rtl::OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
+        m_xControlModel->addPropertyChangeListener( OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
 
     m_bFocused = IsFocused();
     m_bSelected = IsSelected();
@@ -71,7 +71,7 @@ AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialo
 AccessibleDialogControlShape::~AccessibleDialogControlShape()
 {
     if ( m_xControlModel.is() )
-        m_xControlModel->removePropertyChangeListener( ::rtl::OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
+        m_xControlModel->removePropertyChangeListener( OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
 
     delete m_pExternalLock;
     m_pExternalLock = NULL;
@@ -191,15 +191,15 @@ Window* AccessibleDialogControlShape::GetWindow() const
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::GetModelStringProperty( const sal_Char* pPropertyName )
+OUString AccessibleDialogControlShape::GetModelStringProperty( const sal_Char* pPropertyName )
 {
-    ::rtl::OUString sReturn;
+    OUString sReturn;
 
     try
     {
         if ( m_xControlModel.is() )
         {
-            ::rtl::OUString sPropertyName( ::rtl::OUString::createFromAscii( pPropertyName ) );
+            OUString sPropertyName( OUString::createFromAscii( pPropertyName ) );
             Reference< XPropertySetInfo > xInfo = m_xControlModel->getPropertySetInfo();
             if ( xInfo.is() && xInfo->hasPropertyByName( sPropertyName ) )
                 m_xControlModel->getPropertyValue( sPropertyName ) >>= sReturn;
@@ -269,7 +269,7 @@ void AccessibleDialogControlShape::disposing()
     m_pDlgEdObj = NULL;
 
     if ( m_xControlModel.is() )
-        m_xControlModel->removePropertyChangeListener( ::rtl::OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
+        m_xControlModel->removePropertyChangeListener( OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
     m_xControlModel.clear();
 }
 
@@ -280,7 +280,7 @@ void AccessibleDialogControlShape::disposing()
 void AccessibleDialogControlShape::disposing( const lang::EventObject& ) throw (RuntimeException)
 {
     if ( m_xControlModel.is() )
-        m_xControlModel->removePropertyChangeListener( ::rtl::OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
+        m_xControlModel->removePropertyChangeListener( OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
     m_xControlModel.clear();
 }
 
@@ -313,18 +313,18 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::getImplementationName() throw (RuntimeException)
+OUString AccessibleDialogControlShape::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basctl.AccessibleShape" ));
+    return OUString( "com.sun.star.comp.basctl.AccessibleShape" );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AccessibleDialogControlShape::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    Sequence< OUString > aNames( getSupportedServiceNames() );
+    const OUString* pNames = aNames.getConstArray();
+    const OUString* pEnd = pNames + aNames.getLength();
     for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
         ;
 
@@ -333,10 +333,10 @@ sal_Bool AccessibleDialogControlShape::supportsService( const ::rtl::OUString& r
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > AccessibleDialogControlShape::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AccessibleShape" ));
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.drawing.AccessibleShape" ;
     return aNames;
 }
 
@@ -430,7 +430,7 @@ sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::getAccessibleDescription(  ) throw (RuntimeException)
+OUString AccessibleDialogControlShape::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -439,7 +439,7 @@ sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::getAccessibleName(  ) throw (RuntimeException)
+OUString AccessibleDialogControlShape::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -581,20 +581,20 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  ) throw (Runtime
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::getTitledBorderText(  ) throw (RuntimeException)
+OUString AccessibleDialogControlShape::getTitledBorderText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::getToolTipText(  ) throw (RuntimeException)
+OUString AccessibleDialogControlShape::getToolTipText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sText;
+    OUString sText;
     Window* pWindow = GetWindow();
     if ( pWindow )
         sText = pWindow->GetQuickHelpText();
