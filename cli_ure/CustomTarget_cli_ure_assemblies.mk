@@ -10,7 +10,7 @@
 cli_ure_source_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 
 # FIXME move this to configure.in ?
-cli_ure_CCNUMVER = $(shell $(CXX) | $(gb_AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk)
+cli_ure_CCNUMVER = $(shell PATH='$(PATH)' $(CXX) | $(gb_AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk)
 cli_ure_CCNUMVER_GOOD = $(shell expr $(cli_ure_CCNUMVER) '>=' 001399999999)
 
 include $(SRCDIR)/cli_ure/version/version.txt
