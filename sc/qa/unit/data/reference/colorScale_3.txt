@@ -1,0 +1,23 @@
+Color Scale with 3 entries
+Color Scale Entry
+Type: Value
+Color: 248,105,107
+Value: -1
+Color Scale Entry
+Type: Percentile
+Color: 255,235,132
+Value: 50
+Color Scale Entry
+Type: Value
+Color: 99,190,123
+Value: 8
+7,1,0,250,145,114
+7,2,0,251,165,118
+7,3,0,252,185,122
+7,4,0,253,205,126
+7,5,0,254,225,130
+8,1,0,224,226,131
+8,2,0,162,208,127
+8,3,0,99,190,123
+8,4,0,99,190,123
+8,5,0,99,190,123
