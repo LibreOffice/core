@@ -367,8 +367,6 @@ SwDoc::SwDoc()
     // COMPATIBILITY FLAGS END
     //
 
-    pMacroTable = new SvxMacroTableDtor;
-
     mpGrammarContact = ::createGrammarContact();
 
     /*
@@ -574,7 +572,6 @@ SwDoc::~SwDoc()
     // The BookMarks contain indices to the Content. These must be deleted
     // before deleting the Nodes.
     pMarkManager->clearAllMarks();
-    DELETEZ( pMacroTable );
 
     if( pExtInputRing )
     {
