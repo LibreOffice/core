@@ -907,9 +907,8 @@ void ScDataBarFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
             for( SCROW nRow = pRange->aStart.Row(), nEndRow = pRange->aEnd.Row(); nRow <= nEndRow; ++nRow)
             {
                 boost::scoped_ptr<ScDataBarInfo> pInfo( GetDataBarInfo(ScAddress(nCol, nRow, nTab)) );
-                std::cout << nCol << "," << nRow << "," << nTab << "," << pInfo->mnZero << ",";
-                std::cout << pInfo->mnLength << "," << pInfo->mbGradient << "," << pInfo->mbShowValue << std::endl;
-                std::cout << std::endl;
+                rBuf.append((sal_Int32) nCol).append(",").append(nRow).append(",").append((sal_Int32) nTab).append(",").append(pInfo->mnZero).append(",");
+                rBuf.append(pInfo->mnLength).append(",").append(pInfo->mbGradient).append(",").append(pInfo->mbShowValue).append("\n");
             }
         }
     }
