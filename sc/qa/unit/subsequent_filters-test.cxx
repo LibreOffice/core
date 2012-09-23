@@ -1489,62 +1489,46 @@ void ScFiltersTest::testPivotTableBasicODS()
 
 namespace {
 
+void testColorScaleFormat_Impl(ScDocument* pDoc, const rtl::OUString& rFilePath, const ScConditionalFormat* pFormat)
+{
+    rtl::OUStringBuffer aBuf;
+    CPPUNIT_ASSERT(pFormat);
+    pFormat->dumpInfo(aBuf);
+    rtl::OUString aString = aBuf.makeStringAndClear();
+    std::string aStdString;
+    loadFile(rFilePath, aStdString);
+    rtl::OUString aRefString = rtl::OUString::createFromAscii(aStdString.c_str());
+    CPPUNIT_ASSERT_EQUAL(aRefString, aString);
+}
+
 void testColorScale_Impl(ScDocument* pDoc, const rtl::OUString& aBaseString)
 {
     // first color scale
     {
-        rtl::OUStringBuffer aBuf;
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(1,1,0);
-        CPPUNIT_ASSERT(pFormat);
-        pFormat->dumpInfo(aBuf);
-        rtl::OUString aString = aBuf.makeStringAndClear();
         rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_1.txt");
-        std::string aStdString;
-        loadFile(aFilePath, aStdString);
-        rtl::OUString aRefString = rtl::OUString::createFromAscii(aStdString.c_str());
-        CPPUNIT_ASSERT_EQUAL(aRefString, aString);
+        testColorScaleFormat_Impl(pDoc, aFilePath, pFormat);
     }
 
     // second cond format
     {
-        rtl::OUStringBuffer aBuf;
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(4,1,0);
-        CPPUNIT_ASSERT(pFormat);
-        pFormat->dumpInfo(aBuf);
-        rtl::OUString aString = aBuf.makeStringAndClear();
         rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_2.txt");
-        std::string aStdString;
-        loadFile(aFilePath, aStdString);
-        rtl::OUString aRefString = rtl::OUString::createFromAscii(aStdString.c_str());
-        CPPUNIT_ASSERT_EQUAL(aRefString, aString);
+        testColorScaleFormat_Impl(pDoc, aFilePath, pFormat);
     }
 
     // third cond format
     {
-        rtl::OUStringBuffer aBuf;
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(7,1,0);
-        CPPUNIT_ASSERT(pFormat);
-        pFormat->dumpInfo(aBuf);
-        rtl::OUString aString = aBuf.makeStringAndClear();
         rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_3.txt");
-        std::string aStdString;
-        loadFile(aFilePath, aStdString);
-        rtl::OUString aRefString = rtl::OUString::createFromAscii(aStdString.c_str());
-        CPPUNIT_ASSERT_EQUAL(aRefString, aString);
+        testColorScaleFormat_Impl(pDoc, aFilePath, pFormat);
     }
 
     // forth cond format
     {
-        rtl::OUStringBuffer aBuf;
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(10,1,0);
-        CPPUNIT_ASSERT(pFormat);
-        pFormat->dumpInfo(aBuf);
-        rtl::OUString aString = aBuf.makeStringAndClear();
         rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_4.txt");
-        std::string aStdString;
-        loadFile(aFilePath, aStdString);
-        rtl::OUString aRefString = rtl::OUString::createFromAscii(aStdString.c_str());
-        CPPUNIT_ASSERT_EQUAL(aRefString, aString);
+        testColorScaleFormat_Impl(pDoc, aFilePath, pFormat);
     }
 }
 
