@@ -918,6 +918,8 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
 {
     aDoubleStringTable.clear();
+    aChangesTable.clear();
+
     delete pCompareClass;
     delete pCharClass;
 }
@@ -942,125 +944,30 @@ int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
 sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    for (DoubleStringTable::reverse_iterator it = aDoubleStringTable.rbegin(); it != aDoubleStringTable.rend(); ++it)
+
+    for (StringChangeTable::reverse_iterator it = aChangesTable.rbegin(); it != aChangesTable.rend(); it++)
     {
-        LanguageType eCurLang = it->first;
-        DoubleStringArray& rDoubleStringArray = it->second;
-        if( eCurLang != eLang ) // the current language is treated later
+        LanguageType eCurrentLang = it->first;
+        StringChangeList& rStringChangeList = it->second;
+        std::vector<SvxAutocorrWord> aDeleteWords;
+        std::vector<SvxAutocorrWord> aNewWords;
+
+        for (sal_uInt32 i = 0; i < rStringChangeList.aDeletedEntries.size(); i++)
         {
-            SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eCurLang);
-            sal_uInt32 nDoubleStringArrayCount = rDoubleStringArray.size();
-            sal_uInt32 nPos = nDoubleStringArrayCount;
-            sal_uInt32 nLastPos = nPos;
-
-            // 1st run: delete or change entries:
-            for( SvxAutocorrWordList::reverse_iterator it2 = pWordList->rbegin(); it2 != pWordList->rend(); ++it2 )
-            {
-                SvxAutocorrWord* pWordPtr = *it2;
-                String sEntry(pWordPtr->GetShort());
-                // formatted text is only in Writer
-                sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
-                while(!bFound && nPos)
-                {
-                    DoubleString& rDouble = rDoubleStringArray[ nPos - 1];
-
-                    if( pCompareClass->compareString( sEntry, rDouble.sShort ) == 0)
-                    {
-                        nLastPos = nPos - 1;
-                        bFound = sal_True;
-                        if( !(pWordPtr->IsTextOnly() == (0 == rDouble.pUserData)
-                            && 0 == pCompareClass->compareString(
-                                pWordPtr->GetLong(), rDouble.sLong ) ) )
-                        {
-                            pAutoCorrect->PutText(sEntry, rDouble.sLong, eCurLang);
-                        }
-                        rDoubleStringArray.erase(rDoubleStringArray.begin() + nPos - 1);
-                        break;
-                    }
-                    nPos--;
-                }
-                nPos = nLastPos;
-                if(!bFound)
-                {
-                    pAutoCorrect->DeleteText(sEntry, eCurLang);
-                }
-            }
-            nDoubleStringArrayCount = rDoubleStringArray.size();
-            for(sal_uInt32 nDoubleStringArrayPos = 0; nDoubleStringArrayPos < nDoubleStringArrayCount; nDoubleStringArrayPos++ )
-            {
-                // now there should only be new entries left
-                DoubleString& rDouble = rDoubleStringArray[ nDoubleStringArrayPos ];
-                if(rDouble.pUserData == &bHasSelectionText)
-                {
-                    pAutoCorrect->PutText( rDouble.sShort, *SfxObjectShell::Current(), eCurLang );
-                }
-                else
-                {
-                    pAutoCorrect->PutText( rDouble.sShort, rDouble.sLong, eCurLang);
-                }
-            }
+            DoubleString& deleteEntry = rStringChangeList.aDeletedEntries[i];
+            SvxAutocorrWord aDeleteWord( deleteEntry.sShort, deleteEntry.sLong );
+            aDeleteWords.push_back( aDeleteWord );
         }
+
+        for (sal_uInt32 i = 0; i < rStringChangeList.aNewEntries.size(); i++)
+        {
+            DoubleString& newEntry = rStringChangeList.aNewEntries[i];
+            SvxAutocorrWord aNewWord( newEntry.sShort, newEntry.sLong );
+            aNewWords.push_back( aNewWord );
+        }
+        pAutoCorrect->MakeCombinedChanges( aNewWords, aDeleteWords, eCurrentLang );
     }
-    aDoubleStringTable.clear();
-    // and now the current selection
-    SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
-    sal_uInt32 nListBoxCount = (sal_uInt32) aReplaceTLB.GetEntryCount();
-
-    aReplaceTLB.SetUpdateMode(sal_False);
-    sal_uInt32 nListBoxPos = nListBoxCount;
-    sal_uInt32 nLastListBoxPos = nListBoxPos;
-    // 1st run: delete or change entries:
-
-    for( SvxAutocorrWordList::reverse_iterator it = pWordList->rbegin(); it != pWordList->rend(); ++it )
-    {
-        SvxAutocorrWord* pWordPtr = *it;
-        String sEntry(pWordPtr->GetShort());
-        // formatted text is only in Writer
-        sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
-        while(!bFound && nListBoxPos)
-        {
-            SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( nListBoxPos - 1);
-            if( pCompareClass->compareString( sEntry, aReplaceTLB.GetEntryText(pEntry, 0)) == 0)
-            {
-                nLastListBoxPos = nListBoxPos - 1;
-                bFound = sal_True;
-                String sLong = aReplaceTLB.GetEntryText(pEntry, 1);
-                if( !(pWordPtr->IsTextOnly() == (0 == pEntry->GetUserData())
-                    && 0 == pCompareClass->compareString(
-                        pWordPtr->GetLong(), sLong )))
-                {
-                    pAutoCorrect->PutText(sEntry, sLong, eLang);
-                }
-                aReplaceTLB.GetModel()->Remove(pEntry);
-                break;
-
-            }
-            nListBoxPos --;
-        }
-        nListBoxPos = nLastListBoxPos;
-        if(!bFound)
-        {
-            pAutoCorrect->DeleteText(sEntry, eLang);
-        }
-
-    }
-    nListBoxCount = (sal_uInt32) aReplaceTLB.GetEntryCount();
-    for( sal_uInt32 i = 0; i < nListBoxCount; i++ )
-    {
-        // now there should only be new entries left
-        SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( i );
-        String sShort = aReplaceTLB.GetEntryText(pEntry, 0);
-        if(pEntry->GetUserData() == &bHasSelectionText)
-        {
-            pAutoCorrect->PutText(sShort, *SfxObjectShell::Current(), eLang);
-        }
-        else
-        {
-            String sLong = aReplaceTLB.GetEntryText(pEntry, 1);
-            pAutoCorrect->PutText(sShort, sLong, eLang);
-        }
-    }
-
+    aChangesTable.clear();
     return sal_False;
 }
 
@@ -1072,6 +979,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     if(bFromReset)
     {
         aDoubleStringTable.clear();
+        aChangesTable.clear();
     }
     else
     {
@@ -1229,6 +1137,62 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     return 0;
 };
 
+void OfaAutocorrReplacePage::NewEntry(String sShort, String sLong)
+{
+    DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
+    for (sal_uInt32 i = 0; i < rNewArray.size(); i++)
+    {
+        if (rNewArray[i].sShort == sShort)
+        {
+            rNewArray.erase(rNewArray.begin() + i);
+            break;
+        }
+    }
+
+    DoubleStringArray& rDeletedArray = aChangesTable[eLang].aDeletedEntries;
+    for (sal_uInt32 i = 0; i < rDeletedArray.size(); i++)
+    {
+        if (rDeletedArray[i].sShort == sShort)
+        {
+            rDeletedArray.erase(rDeletedArray.begin() + i);
+            break;
+        }
+    }
+
+    DoubleString aNewString = DoubleString();
+    aNewString.sShort = sShort;
+    aNewString.sLong = sLong;
+    rNewArray.push_back(aNewString);
+}
+
+void OfaAutocorrReplacePage::DeleteEntry(String sShort, String sLong)
+{
+    DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
+    for (sal_uInt32 i = 0; i < rNewArray.size(); i++)
+    {
+        if (rNewArray[i].sShort == sShort)
+        {
+            rNewArray.erase(rNewArray.begin() + i);
+            break;
+        }
+    }
+
+    DoubleStringArray& rDeletedArray = aChangesTable[eLang].aDeletedEntries;
+    for (sal_uInt32 i = 0; i < rDeletedArray.size(); i++)
+    {
+        if (rDeletedArray[i].sShort == sShort)
+        {
+            rDeletedArray.erase(rDeletedArray.begin() + i);
+            break;
+        }
+    }
+
+    DoubleString aDeletedString = DoubleString();
+    aDeletedString.sShort = sShort;
+    aDeletedString.sLong = sLong;
+    rDeletedArray.push_back(aDeletedString);
+}
+
 IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 {
     SvLBoxEntry* pEntry = aReplaceTLB.FirstSelected();
@@ -1237,6 +1201,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
         DBG_ASSERT( pEntry, "no entry selected" );
         if( pEntry )
         {
+            DeleteEntry(aReplaceTLB.GetEntryText(pEntry, 0), aReplaceTLB.GetEntryText(pEntry, 1));
             aReplaceTLB.GetModel()->Remove(pEntry);
             ModifyHdl(&aShortED);
             return 0;
@@ -1249,6 +1214,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
         if(sEntry.Len() && ( aReplaceED.GetText().Len() ||
                 ( bHasSelectionText && bSWriter ) ))
         {
+            NewEntry(aShortED.GetText(), aReplaceED.GetText());
             aReplaceTLB.SetUpdateMode(sal_False);
             sal_uInt32 nPos = UINT_MAX;
             sEntry += '\t';
