@@ -45,6 +45,10 @@ $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 	$(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_add_asmobjects,gcc3_uno,\
+	bridges/source/cpp_uno/gcc3_linux_arm/armhelper \
+))
+
 $(eval $(call gb_Library_add_exception_objects,gcc3_uno,\
 	bridges/source/cpp_uno/shared/bridge \
 	bridges/source/cpp_uno/shared/component \
