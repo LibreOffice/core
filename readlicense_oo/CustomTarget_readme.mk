@@ -44,7 +44,7 @@ $(readlicense_oo_DIR)/readme.xrm : \
 			-p readlicense_oo \
 			-i $< \
 			-o $@ \
-			-m $(gb_SDFLOCATION)/readlicense_oo/docs/readme/localize.sdf \
+			-m $(gb_SDFLOCATION)/readlicense_oo/docs/localize.sdf \
 			-l all)
 
 endif
