@@ -81,6 +81,11 @@ $(call gb_CliLibraryTarget_get_target,$(1)) : $(call gb_CliLibrary_get_target,$(
 
 endef
 
+define gb_CliLibraryTarget_use_package
+$(call gb_CliLibraryTarget_get_target,$(1)) :| $(call gb_Package_get_target,$(strip $(2)))
+
+endef
+
 define gb_CliLibraryTarget_use_assemblies
 $(foreach assembly,$(2),$(call gb_CliLibraryTarget_use_assembly,$(1),$(assembly)))
 
@@ -143,6 +148,11 @@ endef
 
 define gb_CliLibrary_set_configfile
 $(call gb_CliAssembly_set_configfile,$(1),$(2))
+
+endef
+
+define gb_CliLibrary_use_package
+$(call gb_CliLibraryTarget_use_package,$(1),$(2))
 
 endef
 
