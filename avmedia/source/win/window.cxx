@@ -677,15 +677,15 @@ void Window::fireSetFocusEvent( const ::com::sun::star::awt::FocusEvent& rEvt )
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL Window::getImplementationName(  )
+OUString SAL_CALL Window::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME ) );
+    return OUString( AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME );
 }
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Window::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_WIN_WINDOW_SERVICENAME;
@@ -693,11 +693,11 @@ sal_Bool SAL_CALL Window::supportsService( const ::rtl::OUString& ServiceName )
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Window::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_WIN_WINDOW_SERVICENAME ) );
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = AVMEDIA_WIN_WINDOW_SERVICENAME ;
 
     return aRet;
 }
