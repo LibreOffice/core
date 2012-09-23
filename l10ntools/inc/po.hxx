@@ -15,9 +15,7 @@
 
 class GenPoEntry
 {
-
 private:
-
     OString    m_sWhiteSpace;
     OString    m_sExtractCom;
     OString    m_sReference;
@@ -57,40 +55,30 @@ public:
 
 class PoEntry
 {
+private:
+    GenPoEntry m_aGenPo;
+
 public:
     enum SDFPARTS { PROJECT, SOURCEFILE, DUMMY, RESOURCETYPE, GROUPID,
                     LOCALID, HELPID, PLATFORM, WIDTH, LANGUAGEID,
                     TEXT, HELPTEXT, QUICKHELPTEXT, TITLE, TIMESTAMP };
     enum TYPE { TTEXT=TEXT, TQUICKHELPTEXT=QUICKHELPTEXT, TTITLE=TITLE };
-private:
-
-    GenPoEntry  m_aGenPo;
-    OString     m_sSourceFile;
-    OString     m_sGroupId;
-    OString     m_sLocalId;
-    OString     m_sResourceType;
-    TYPE        m_eType;
-    OString     m_sHelpText;
-
-    void            SetMembers();
-public:
 
                     PoEntry();
-                    PoEntry(const OString& i_rSDFLine,
+                    PoEntry(const OString& rSDFLine,
                             const TYPE eType = TTEXT);
-    virtual         ~PoEntry();
+                    ~PoEntry();
 
-    OString         getSourceFile() const       { return m_sSourceFile; }
-    OString         getGroupId() const          { return m_sGroupId; }
-    OString         getLocalId() const          { return m_sLocalId; }
-    OString         getResourceType() const     { return m_sResourceType; }
-    TYPE            getType() const             { return m_eType; }
-    OString         getHelpText() const         { return m_sHelpText; }
+    OString         getSourceFile() const;
+    OString         getGroupId() const;
+    OString         getLocalId() const;
+    OString         getResourceType() const;
+    TYPE            getType() const;
     OString         getUnTransStr() const;
     OString         getTransStr() const;
-    bool            getFuzzy() const            { return m_aGenPo.getFuzzy(); }
-    bool            isNull() const              { return m_aGenPo.isNull(); }
-    OString         getKeyId() const            { return m_aGenPo.getKeyId(); }
+    bool            getFuzzy() const;
+    bool            isNull() const;
+    OString         getKeyId() const;
     void            setUnTransStr(const OString& rUnTransStr);
     void            setTransStr(const OString& rTransStr);
     void            setFuzzy(const bool bFuzzy);
@@ -104,31 +92,15 @@ public:
 
 class PoHeader
 {
-
 private:
     GenPoEntry m_aGenPo;
-    OString    m_sExtractionSource;
-    OString    m_sProjectIdVersion;
-    OString    m_sReportMsgidBugsTo;
-    OString    m_sPotCreationDate;
-    OString    m_sPoRevisionDate;
-    OString    m_sLastTranslator;
-    OString    m_sLanguageTeam;
-    OString    m_sLanguage;
-    OString    m_sMimeVersion;
-    OString    m_sContentType;
-    OString    m_sEncoding;
-    OString    m_sPluralForms;
-    OString    m_sXGenerator;
-    OString    m_sXAcceleratorMarker;
 
-    void            SetMembers();
 public:
                     PoHeader();
                     PoHeader( const OString& rExtSrc );
                     ~PoHeader();
 
-    OString         getLanguage() const { return m_sLanguage; }
+    OString         getLanguage() const;
     void            writeToFile(std::ofstream& rOFStream);
     void            readFromFile(std::ifstream& rIFStream);
 };
