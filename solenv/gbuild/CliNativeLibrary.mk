@@ -31,11 +31,15 @@ $(dir $(call gb_CliNativeLibraryTarget_get_target,%))%/.dir :
 $(call gb_CliNativeLibraryTarget_get_target,%) :
 	$(call gb_CliNativeLibraryTarget__command,$@,$*,$<)
 
+$(call gb_CliNativeLibraryTarget_get_external_target,%) :
+	touch $@
+
 .PHONY : $(call gb_CliNativeLibraryTarget_get_clean_target,%)
 $(call gb_CliNativeLibraryTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),SN ,4)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(call gb_CliNativeLibraryTarget_get_target,$*) \
+			 $(call gb_CliNativeLibraryTarget_get_external_target,$*) \
 	)
 
 define gb_CliNativeLibraryTarget_CliNativeLibraryTarget
@@ -43,17 +47,15 @@ $(call gb_CliNativeLibraryTarget_get_target,$(1)) : CLI_NATIVE_ASSEMBLIES := $(g
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : CLI_NATIVE_KEYFILE :=
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : CLI_NATIVE_LIBRARY :=
 
+$(call gb_CliNativeLibraryTarget_get_external_target,$(1)) :| $(dir $(call gb_CliNativeLibraryTarget_get_target,$(1))).dir
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) :| $(dir $(call gb_CliNativeLibraryTarget_get_target,$(1))).dir
 
 endef
 
-# TODO gb_Library_get_target might be sufficient here. I do not know if
-# #using <assembly.dll> actually does anything at compile time, or if it is
-# only needed at link time.
 define gb_CliNativeLibraryTarget_wrap_library
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : CLI_NATIVE_LIBRARY := $(call gb_CliNativeLibraryTarget__get_library,$(2))
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : $(call gb_Library_get_target,$(2))
-$(call gb_Library_get_external_headers_target,$(2)) : $$(CLI_NATIVE_ASSEMBLIES)
+$(call gb_Library_get_external_headers_target,$(2)) : $(call gb_CliNativeLibraryTarget_get_external_target,$(1))
 
 endef
 
@@ -65,6 +67,7 @@ endef
 
 define gb_CliNativeLibraryTarget_use_assembly
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : CLI_NATIVE_ASSEMBLIES += $(call gb_CliLibrary_get_target,$(2))
+$(call gb_CliNativeLibraryTarget_get_external_target,$(1)) : $(call gb_CliLibrary_get_target,$(2))
 
 endef
 

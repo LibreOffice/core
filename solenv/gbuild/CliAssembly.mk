@@ -39,7 +39,7 @@ $(call gb_CliConfigTarget_get_target,$(1)) : CLI_CONFIG_VERSIONFILE := $(gb_CliC
 
 $(call gb_CliConfigTarget_get_target,$(1)) : $(2)
 $(call gb_CliConfigTarget_get_target,$(1)) : $(gb_CliConfigTarget_TARGET)
-$(call gb_CliConfigTarget_get_target,$(1)) : $$(CLI_CONFIG_VERSIONFILE)
+$(call gb_CliConfigTarget_get_target,$(1)) : $(gb_CliConfigTarget_VERSIONFILE_DEFAULT)
 $(call gb_CliConfigTarget_get_target,$(1)) :| $(dir $(call gb_CliConfigTarget_get_target,$(1))).dir
 
 endef

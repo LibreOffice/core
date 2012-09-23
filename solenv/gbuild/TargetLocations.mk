@@ -86,6 +86,7 @@ gb_CliAssembly_get_target = $(WORKDIR)/CliAssembly/$(1).done
 gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
 gb_CliLibraryTarget_get_target = $(WORKDIR)/CliLibraryTarget/$(1)$(gb_CliLibraryTarget_EXT)
+gb_CliNativeLibraryTarget_get_external_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).external
 gb_CliNativeLibraryTarget_get_target = $(WORKDIR)/CliNativeLibraryTarget/$(1)$(gb_CliNativeLibraryTarget_EXT)
 gb_CliUnoApiTarget_get_target = $(WORKDIR)/CliUnoApiTarget/$(1)$(gb_CliUnoApiTarget_EXT)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
