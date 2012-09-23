@@ -32,4 +32,8 @@ $(eval $(call gb_CliLibrary_add_generated_csfiles,cli_basetypes,\
 	CustomTarget/cli_ure/source/basetypes/assembly \
 ))
 
+$(eval $(call gb_CliLibrary_use_package,cli_basetypes,\
+	cli_ure_cliuno \
+))
+
 # vim: set noet sw=4 ts=4:
