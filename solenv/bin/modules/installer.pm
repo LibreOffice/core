@@ -1683,9 +1683,6 @@ sub run {
 
                     installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile, $allvariableshashref);
 
-                    # if there are Merge Modules, they have to be integrated now
-                    $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $msifilename, $languagestringref, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
-
                     # copy msi database into installation directory
 
                     my $msidestfilename = $installdir . $installer::globals::separator . $msidatabasename;
@@ -1704,6 +1701,14 @@ sub run {
                 {
                     installer::windows::msiglobal::create_transforms($languagesarrayref, $defaultlanguage, $installdir, $allvariableshashref);
                 }
+                # if there are Merge Modules, they have to be integrated now
+                my $mergedbname = installer::windows::msiglobal::get_msidatabasename($allvariableshashref, $defaultlanguage);
+                my $mergeidtdir = $idtdirbase . $installer::globals::separator . "mergemodules";
+                if ( -d $mergeidtdir ) { installer::systemactions::remove_complete_directory($mergeidtdir, 1); }
+                installer::systemactions::create_directory($mergeidtdir);
+                installer::systemactions::copy_one_file($installdir . $installer::globals::separator . $mergedbname, $mergeidtdir . $installer::globals::separator . $mergedbname);
+                $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $mergeidtdir . $installer::globals::separator . $mergedbname, $languagestringref, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
+                installer::systemactions::copy_one_file($mergeidtdir . $installer::globals::separator . $mergedbname, $installdir . $installer::globals::separator . $mergedbname);
 
                 installer::windows::msiglobal::rename_msi_database_in_installset($defaultlanguage, $installdir, $allvariableshashref);
             }
