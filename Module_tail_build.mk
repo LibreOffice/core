@@ -167,6 +167,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     toolkit \
 	tools \
 	touch \
+	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
+		translations \
+	) \
     tubes \
     twain \
     ucb \
