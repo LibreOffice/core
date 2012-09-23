@@ -92,4 +92,8 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	) \
 ))
 
+ifeq ($(strip $(bridges_SELECTED_BRIDGE)),)
+$(call gb_Output_error,no bridge selected for build: bailing out)
+endif
+
 # vim: set noet sw=4 ts=4:
