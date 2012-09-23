@@ -66,7 +66,7 @@ he    1255  1037
 hi       0  1081
 hr    1250  1050   # Croatian
 ht    1252  1626   # Haitian
-hu    1250  1038
+hu       0  1038
 hy       0  1067   # Armenian
 id    1252  1057   # Indonesian
 is    1252  1039   # Icelandic
