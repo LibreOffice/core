@@ -286,10 +286,12 @@ define gb_ExtensionTarget__localize_helpfile_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : HELPFILES += $(3)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
+ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+endif
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_HELPEXTARGET)) | \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/.dir
@@ -319,10 +321,12 @@ endef
 define gb_ExtensionTarget__localize_helptreefile_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3)
+ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(WITH_LANG)),$(gb_ExtensionTarget_UPDATETREETARGET)) | \
         $(2)/$(4)
@@ -331,7 +335,9 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
 	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),TRE,3)
 	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(dir $$@) && \
-        $(gb_ExtensionTarget_UPDATETREECOMMAND) $$< $(5) $$(SDF) $$@ $(6) )
+		$(if $(filter-out en-US,$(5)), \
+			$(gb_ExtensionTarget_UPDATETREECOMMAND) $$< $(5) $$(SDF) $$@ $(6),\
+			cp $$< $$@))
 
 endef
 
