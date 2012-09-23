@@ -5779,26 +5779,36 @@ if test \( "$_os" = "WINNT" \) ; then
         MFC_INCLUDE=`echo $MFC_INCLUDE | $SED 's/\/$//'`
         MFC_LIB=`echo $MFC_LIB | $SED 's/\/$//'`
 
-        if test -f "$ATL_INCLUDE/atlase.h"; then
+        AC_MSG_NOTICE([looking for atlbase.h in "$ATL_INCLUDE"])
+        if test -f "$ATL_INCLUDE/atlbase.h"; then
             HAVE_ATL_H="yes"
         else
-            HAVA_ATL_H="no"
+            HAVE_ATL_H="no"
         fi
+        AC_MSG_NOTICE([found atlbase.h in "$ATL_INCLUDE"? "$HAVE_ATL_H"])
+
+        AC_MSG_NOTICE([looking for afx.h in "$MFC_INCLUDE"])
         if test -f "$MFC_INCLUDE/afx.h"; then
             HAVE_MFC_H="yes"
         else
-            HAVA_MFC_H="no"
+            HAVE_MFC_H="no"
         fi
+        AC_MSG_NOTICE([found afx.h in "$MFC_INCLUDE"? "$HAVE_MFC_H"])
+
+        AC_MSG_NOTICE([looking for atls.lib in "$ATL_LIB"])
         if test -f "$ATL_LIB/atls.lib"; then
             HAVE_ATL_LIB="yes"
+            AC_MSG_NOTICE([looking for atlthunk.lib in "$ATL_LIB"])
             if test -f "$ATL_LIB/atlthunk.lib"; then
                 HAVE_ATLTHUNK="YES"
             else
                 HAVE_ATLTHUNK="NO"
             fi
+            AC_MSG_NOTICE([found atlthunk.lib in "$ATL_LIB"? "$HAVE_ATLTHUNK"])
         else
             HAVE_ATL_LIB="no"
         fi
+        AC_MSG_NOTICE([found atls.lib in "$ATL_LIB"? "$HAVE_ATL_LIB"])
 
         dnl TODO check also MFC libraries, they seem to have diferent names
         dnl mfc42.lib mfc90.lib
