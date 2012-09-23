@@ -132,7 +132,7 @@ $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(2)/localize.sdf
-$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $$(SDF)
+$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(gb_SDFLOCATION)/$(2)/localize.sdf
 endif
 
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
@@ -219,7 +219,7 @@ $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_ExtensionTarget_TRANS_LANGS)),$(subst en_US,$(lang),$(2)))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
-$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $$(SDF)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
@@ -288,7 +288,8 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
-$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : $$(SDF)
+$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
+        $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_HELPEXTARGET)) | \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/.dir
@@ -320,7 +321,8 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
-$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : $$(SDF)
+$(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
+        $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(WITH_LANG)),$(gb_ExtensionTarget_UPDATETREETARGET)) | \
         $(2)/$(4)
