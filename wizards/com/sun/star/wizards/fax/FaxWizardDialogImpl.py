@@ -173,8 +173,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.myFaxDoc.keepTypeFrame = \
                 (self.chkUseCommunicationType.State is not 0)
             self.myFaxDoc.killEmptyFrames()
-            self.bSaveSuccess = OfficeDocument.store(self.xMSF, TextDocument.xTextDocument,
-                self.sPath, "writer8_template")
+            self.bSaveSuccess = OfficeDocument.store(self.xMSF,
+				TextDocument.xTextDocument, self.sPath, "writer8_template")
             if self.bSaveSuccess:
                 self.saveConfiguration()
                 xIH = self.xMSF.createInstance( \
