@@ -29,14 +29,14 @@ readlicense_XRMEXCOMMAND := $(gb_Helper_set_ld_path) $(readlicense_XRMEXTARGET)
 $(call gb_CustomTarget_get_target,readlicense_oo/readme) : $(readlicense_oo_READMEs)
 
 ifeq ($(strip $(gb_WITH_LANG)),)
-readlicense_oo_README_XRM := $(SRCDIR)/readlicense_oo/docs/readme/readme.xrm
+readlicense_oo_README_XRM := $(SRCDIR)/readlicense_oo/docs/readme.xrm
 else
 readlicense_oo_README_XRM := $(readlicense_oo_DIR)/readme.xrm
 
 $(readlicense_oo_DIR)/readme.xrm : \
-		$(SRCDIR)/readlicense_oo/docs/readme/readme.xrm \
+		$(SRCDIR)/readlicense_oo/docs/readme.xrm \
 		$(readlicense_XRMEXTARGET) \
-		$(gb_SDFLOCATION)/readlicense_oo/docs/readme/localize.sdf \
+		$(gb_SDFLOCATION)/readlicense_oo/docs/localize.sdf \
 		| $(readlicense_oo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XRM,1)
 	$(call gb_Helper_abbreviate_dirs, \
@@ -44,7 +44,7 @@ $(readlicense_oo_DIR)/readme.xrm : \
 			-p readlicense_oo \
 			-i $< \
 			-o $@ \
-			-m $(gb_SDFLOCATION)/readlicense_oo/docs/readme/localize.sdf \
+			-m $(gb_SDFLOCATION)/readlicense_oo/docs/localize.sdf \
 			-l all)
 
 endif
