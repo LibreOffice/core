@@ -41,7 +41,7 @@ static const char* strListBasicKeyWords[] = {
     "and",
     "any",
     "append",
-    "attrubute",
+    "attribute",
     "as",
     "base",
     "binary",
