@@ -39,13 +39,13 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	$(if $(filter GCCLINUXH,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_linux_hppa \
 	) \
-	$(if $(filter GCCLINUXA,$(COM)$(OS)$(CPU)$(CPUNAME)),\
+	$(if $(filter GCCLINUXA,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_linux_ia64 \
 	) \
 	$(if $(and $(filter GCCI,$(COM)$(CPU)),$(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS))),\
 		Library_gcc3_linux_intel \
 	) \
-	$(if $(filter GCCLINUX6,$(COM)$(OS)$(CPU)$(CPUNAME)),\
+	$(if $(filter GCCLINUX6,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_linux_m68k \
 	) \
 	$(if $(and $(filter GCCM,$(COM)$(CPU)),$(filter ANDROID LINUX,$(OS))),\
@@ -75,7 +75,7 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	$(if $(filter GCCMACOSXP,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_macosx_powerpc \
 	) \
-	$(if $(filter GCCSOLARISI,$(COM)$(OS)$(CPU)$(CPUNAME)),\
+	$(if $(filter GCCSOLARISI,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_solaris_intel \
 	) \
 	$(if $(filter GCCSOLARISS,$(COM)$(OS)$(CPU)),\
