@@ -548,7 +548,7 @@ void ScColorScaleFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
             for( SCROW nRow = pRange->aStart.Row(), nEndRow = pRange->aEnd.Row(); nRow <= nEndRow; ++nRow)
             {
                 boost::scoped_ptr<Color> pColor( GetColor(ScAddress(nCol, nRow, nTab)) );
-                rBuf.append(nCol).append(",").append(nRow).append(",").append(nTab).append(",");
+                rBuf.append((sal_Int32)nCol).append(",").append(nRow).append(",").append((sal_Int32)nTab).append(",");
                 rBuf.append(((sal_Int32)pColor->GetRed())).append(",").append(((sal_Int32)pColor->GetGreen())).append(",").append(((sal_Int32)pColor->GetBlue())).append("\n");
             }
         }
