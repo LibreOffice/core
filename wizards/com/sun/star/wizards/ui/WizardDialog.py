@@ -15,11 +15,16 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+import uno
+import traceback
 from abc import ABCMeta, abstractmethod
-from .UnoDialog2 import *
+from .UnoDialog2 import UnoDialog2, Desktop, PropertyNames, UIConsts, \
+	ItemListenerProcAdapter
 from .XPathSelectionListener import XPathSelectionListener
+from .event.CommonListener import TerminateListenerProcAdapter
+from ..common.Helper import Helper
 from ..common.Resource import Resource
-from ..common.HelpIds import *
+from ..common.HelpIds import HelpIds
 from ..document.OfficeDocument import OfficeDocument
 from ..text.TextDocument import TextDocument
 

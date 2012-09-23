@@ -15,18 +15,24 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from .FaxWizardDialog import *
-from .CGFaxWizard import *
-from .FaxDocument import *
+import traceback
+from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno
+from .CGFaxWizard import CGFaxWizard
+from .FaxDocument import FaxDocument
 from .FaxWizardDialogConst import HID
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextFieldHandler import TextFieldHandler
+from ..text.TextDocument import TextDocument
+from ..text.ViewHandler import ViewHandler
+from ..common.Configuration import Configuration
 from ..common.SystemDialog import SystemDialog
 from ..common.NoValidPathException import NoValidPathException
 from ..common.HelpIds import HelpIds
 from ..common.FileAccess import FileAccess
+from ..common.Desktop import Desktop
+from ..document.OfficeDocument import OfficeDocument
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.uno import RuntimeException
