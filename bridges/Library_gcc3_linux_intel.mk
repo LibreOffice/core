@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 		dl \
 	) \
 	sal \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_asmobjects,gcc3_uno,\
