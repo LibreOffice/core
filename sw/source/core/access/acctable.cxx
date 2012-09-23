@@ -29,6 +29,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <algorithm>
 #include <list>
 #include <set>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -409,19 +410,7 @@ sal_Bool SwAccessibleTableData_Impl::CompareExtents(
     if( maExtents.size() != rCmp.maExtents.size() )
         return sal_False;
 
-    Int32PairList_Impl::const_iterator aIter( maExtents.begin() );
-    Int32PairList_Impl::const_iterator aEndIter( maExtents.end() );
-    Int32PairList_Impl::const_iterator aCmpIter( rCmp.maExtents.begin() );
-    while( aIter != aEndIter )
-    {
-        if( *aIter != *aCmpIter )
-            return sal_False;
-
-        ++aIter;
-        ++aCmpIter;
-    }
-
-    return sal_True;
+    return ::std::equal(maExtents.begin(), maExtents.end(), rCmp.maExtents.begin()) ? sal_True : sal_False;
 }
 
 SwAccessibleTableData_Impl::SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap,
