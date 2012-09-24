@@ -1,0 +1,106 @@
+--- build/win32/libwpd.vcproj
++++ build/win32/libwpd.vcproj
+@@ -42,7 +42,7 @@
+ 				Optimization="0"
+ 				PreprocessorDefinitions="_DEBUG;DEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS"
+ 				BasicRuntimeChecks="3"
+-				RuntimeLibrary="1"
++				RuntimeLibrary="3"
+ 				RuntimeTypeInfo="true"
+ 				PrecompiledHeaderFile=".\Debug/libwpd.pch"
+ 				AssemblerListingLocation=".\Debug/"
+@@ -115,7 +115,7 @@
+ 				InlineFunctionExpansion="1"
+ 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS"
+ 				StringPooling="true"
+-				RuntimeLibrary="0"
++				RuntimeLibrary="2"
+ 				EnableFunctionLevelLinking="true"
+ 				RuntimeTypeInfo="true"
+ 				PrecompiledHeaderFile=".\Release/libwpd.pch"
+--- build/win32/libwpdstream.vcproj
++++ build/win32/libwpdstream.vcproj
+@@ -43,7 +43,7 @@
+ 				InlineFunctionExpansion="1"
+ 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE"
+ 				StringPooling="true"
+-				RuntimeLibrary="0"
++				RuntimeLibrary="2"
+ 				EnableFunctionLevelLinking="true"
+ 				PrecompiledHeaderFile=".\Release/libwpdstream.pch"
+ 				AssemblerListingLocation=".\Release/"
+@@ -114,7 +114,7 @@
+ 				Optimization="0"
+ 				PreprocessorDefinitions="_DEBUG;DEBUG;WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE"
+ 				BasicRuntimeChecks="3"
+-				RuntimeLibrary="1"
++				RuntimeLibrary="3"
+ 				PrecompiledHeaderFile=".\Debug/libwpdstream.pch"
+ 				AssemblerListingLocation=".\Debug/"
+ 				ObjectFile=".\Debug/"
+diff --git a/build/win32/wpd2html.vcproj b/build/win32/wpd2html.vcproj
+index a41eef2..bdc44cc 100644
+--- build/win32/wpd2html.vcproj
++++ build/win32/wpd2html.vcproj
+@@ -46,7 +46,7 @@
+ 				Optimization="4"
+ 				AdditionalIncludeDirectories="..\..\src\lib"
+ 				PreprocessorDefinitions="NDEBUG;WIN32;_CONSOLE"
+-				RuntimeLibrary="0"
++				RuntimeLibrary="2"
+ 				PrecompiledHeaderFile=".\Release/wpd2html.pch"
+ 				AssemblerListingLocation=".\Release/"
+ 				ObjectFile=".\Release/"
+@@ -134,7 +134,7 @@
+ 				AdditionalIncludeDirectories="..\..\src\lib"
+ 				PreprocessorDefinitions="_DEBUG;DEBUG;WIN32;_CONSOLE"
+ 				BasicRuntimeChecks="3"
+-				RuntimeLibrary="1"
++				RuntimeLibrary="3"
+ 				PrecompiledHeaderFile=".\Debug/wpd2html.pch"
+ 				AssemblerListingLocation=".\Debug/"
+ 				ObjectFile=".\Debug/"
+diff --git a/build/win32/wpd2raw.vcproj b/build/win32/wpd2raw.vcproj
+index a41318a..9a057e5 100644
+--- build/win32/wpd2raw.vcproj
++++ build/win32/wpd2raw.vcproj
+@@ -47,7 +47,7 @@
+ 				Optimization="4"
+ 				AdditionalIncludeDirectories="..\..\src\lib"
+ 				PreprocessorDefinitions="NDEBUG;WIN32;_CONSOLE"
+-				RuntimeLibrary="0"
++				RuntimeLibrary="2"
+ 				PrecompiledHeaderFile=".\Release/wpd2raw.pch"
+ 				AssemblerListingLocation=".\Release/"
+ 				ObjectFile=".\Release/"
+@@ -136,7 +136,7 @@
+ 				AdditionalIncludeDirectories="..\..\src\lib"
+ 				PreprocessorDefinitions="_DEBUG;DEBUG;WIN32;_CONSOLE"
+ 				BasicRuntimeChecks="3"
+-				RuntimeLibrary="1"
++				RuntimeLibrary="3"
+ 				PrecompiledHeaderFile=".\Debug/wpd2raw.pch"
+ 				AssemblerListingLocation=".\Debug/"
+ 				ObjectFile=".\Debug/"
+diff --git a/build/win32/wpd2text.vcproj b/build/win32/wpd2text.vcproj
+index 8c02ed1..f4ae836 100644
+--- build/win32/wpd2text.vcproj
++++ build/win32/wpd2text.vcproj
+@@ -47,7 +47,7 @@
+ 				AdditionalIncludeDirectories="..\..\src\lib"
+ 				PreprocessorDefinitions="_DEBUG;DEBUG;WIN32;_CONSOLE"
+ 				BasicRuntimeChecks="3"
+-				RuntimeLibrary="1"
++				RuntimeLibrary="3"
+ 				PrecompiledHeaderFile=".\Debug/wpd2text.pch"
+ 				AssemblerListingLocation=".\Debug/"
+ 				ObjectFile=".\Debug/"
+@@ -136,7 +136,7 @@
+ 				Optimization="4"
+ 				AdditionalIncludeDirectories="..\..\src\lib"
+ 				PreprocessorDefinitions="NDEBUG;WIN32;_CONSOLE"
+-				RuntimeLibrary="0"
++				RuntimeLibrary="2"
+ 				PrecompiledHeaderFile=".\Release/wpd2text.pch"
+ 				AssemblerListingLocation=".\Release/"
+ 				ObjectFile=".\Release/"
