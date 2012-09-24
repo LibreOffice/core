@@ -95,18 +95,6 @@ define gb_Helper_get_outdir_clean_target
 $$(subst $(OUTDIR)/,$(WORKDIR)/Clean/OutDir/,$(1))
 endef
 
-# RepositoryExternal.mk is optional
-define gb_Helper_add_repository
-include $(1)/Repository.mk
--include $(1)/RepositoryExternal.mk
-
-endef
-
-define gb_Helper_add_repositories
-$(foreach repo,$(1),$(call gb_Helper_add_repository,$(repo)))
-
-endef
-
 define gb_Helper_init_registries
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
 gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS EXTENSIONLIBS
