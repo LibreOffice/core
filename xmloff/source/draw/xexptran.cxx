@@ -1581,7 +1581,9 @@ void SdXMLImExSvgDElement::AddPolygon(
         // Test for Last point same -> closed, ignore last point. Take
         // some more circumstances in account when looking at curve segments.
         drawing::PolygonFlags* pFlagArray = (pFlags) ? pFlags->getArray() : 0L;
-        if((pPointArray->X == (pPointArray + (nCnt - 1))->X) && (pPointArray->Y == (pPointArray + (nCnt - 1))->Y))
+
+        // #121090# only reduce double start/end points if polygon *is* closed
+        if(bClosed && (pPointArray->X == (pPointArray + (nCnt - 1))->X) && (pPointArray->Y == (pPointArray + (nCnt - 1))->Y))
         {
             if(pFlags)
             {
