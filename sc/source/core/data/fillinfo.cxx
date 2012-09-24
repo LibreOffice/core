@@ -363,6 +363,9 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     }
 
     ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
+    if(pCondFormList)
+        pCondFormList->startRendering();
+
     for (nArrX=0; nArrX<=nX2+2; nArrX++)                    // links & rechts + 1
     {
         nX = (nArrX>0) ? nArrX-1 : MAXCOL+1;                    // negativ -> ungueltig
@@ -647,6 +650,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         // STD_COL_WIDTH ganz links und rechts wird fuer DrawExtraShadow gebraucht
     }
 
+    if(pCondFormList)
+        pCondFormList->endRendering();
     //-------------------------------------------------------------------------
     //  bedingte Formatierung auswerten
 

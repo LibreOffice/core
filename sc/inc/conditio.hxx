@@ -35,8 +35,11 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 
+#include <rtl/math.hxx>
+
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScBaseCell;
 class ScFormulaCell;
@@ -116,9 +119,24 @@ public:
 #if DUMP_FORMAT_INFO
     virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const = 0;
 #endif
+
+    virtual void startRendering();
+    virtual void endRendering();
 protected:
     ScDocument* mpDoc;
 
+};
+
+class approx_less : public std::binary_function<double, double, bool>
+{
+public:
+    bool operator() (double nVal1, double nVal2)
+    {
+        if(nVal1 < nVal2 && !rtl::math::approxEqual(nVal1, nVal2))
+            return true;
+
+        return false;
+    }
 };
 
 class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
@@ -216,10 +234,27 @@ public:
     virtual void dumpInfo(rtl::OUStringBuffer& ) const {}
 #endif
 
+    virtual void endRendering();
+    virtual void startRendering();
+
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
     ScDocument*     GetDocument() const     { return mpDoc; }
     ScConditionalFormat*    pCondFormat;
+
+private:
+
+    bool IsDuplicate(double nArg, const rtl::OUString& rStr, const ScAddress& rAddr, const ScRangeList& rRanges) const;
+
+    struct ScConditionEntryCache
+    {
+        typedef std::map<rtl::OUString, sal_Int32> StringCacheType;
+        StringCacheType maStrings;
+        typedef std::map<double, sal_Int32, approx_less> ValueCacheType;
+        ValueCacheType maValues;
+    };
+
+    mutable boost::scoped_ptr<ScConditionEntryCache> mpCache;
 };
 
 //
@@ -326,6 +361,9 @@ public:
     //  operator== only for sorting
     bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
     bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
+
+    void startRendering();
+    void endRendering();
 };
 
 //
@@ -371,6 +409,9 @@ public:
     size_t size() const;
 
     void erase(sal_uLong nIndex);
+
+    void startRendering();
+    void endRendering();
 };
 
 // see http://www.boost.org/doc/libs/1_49_0/libs/ptr_container/doc/tutorial.html#cloneability

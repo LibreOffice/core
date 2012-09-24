@@ -72,6 +72,14 @@ bool ScFormatEntry::operator==( const ScFormatEntry& r ) const
     }
 }
 
+void ScFormatEntry::startRendering()
+{
+}
+
+void ScFormatEntry::endRendering()
+{
+}
+
 bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
 {
     if (pFormula)
@@ -716,7 +724,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     bFirstRun = false;
 }
 
-static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, String& rArgStr )
+static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, rtl::OUString& rArgStr )
 {
     bool bVal = true;
 
@@ -760,53 +768,84 @@ static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, S
     return bVal;
 }
 
-static bool lcl_IsDuplicate( ScDocument *pDoc, double nArg, const String& rStr, const ScAddress& rAddr, const ScRangeList& rRanges )
+bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, const ScAddress& rAddr, const ScRangeList& rRanges ) const
 {
-    size_t nListCount = rRanges.size();
-    for( size_t i = 0; i < nListCount; i++ )
+    if(!mpCache)
     {
-        const ScRange *aRange = rRanges[i];
-        SCROW nRow = aRange->aEnd.Row();
-        SCCOL nCol = aRange->aEnd.Col();
-        SCCOL nColStart = aRange->aStart.Col();
-        SCROW nRowStart = aRange->aEnd.Row();
-        SCTAB nTab = aRange->aStart.Tab();
-
-        // temporary fix to workaorund slow duplicate entry
-        // conditions, prevent to use a whole row
-        if(nRow == MAXROW)
+        mpCache.reset(new ScConditionEntryCache);
+        size_t nListCount = rRanges.size();
+        for( size_t i = 0; i < nListCount; i++ )
         {
-            bool bShrunk = false;
-            pDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,
-                                            nCol, nRow, false);
-        }
+            const ScRange *aRange = rRanges[i];
+            SCROW nRow = aRange->aEnd.Row();
+            SCCOL nCol = aRange->aEnd.Col();
+            SCCOL nColStart = aRange->aStart.Col();
+            SCROW nRowStart = aRange->aStart.Row();
+            SCTAB nTab = aRange->aStart.Tab();
 
-        for( SCROW r = nRowStart; r <= nRow; r++ )
-            for( SCCOL c = nColStart; c <= nCol; c++ )
+            // temporary fix to workaorund slow duplicate entry
+            // conditions, prevent to use a whole row
+            if(nRow == MAXROW)
             {
-                double nVal = 0.0;
-                ScBaseCell *pCell = NULL;
-                String aStr;
-
-                if( c == rAddr.Col() && r == rAddr.Row() )
-                    continue;
-                pDoc->GetCell( c, r, rAddr.Tab(), pCell );
-                if( !pCell )
-                    continue;
-
-                if( !lcl_GetCellContent( pCell, false, nVal, aStr ) )
-                {
-                    if( rStr.Len() &&
-                        ( ScGlobal::GetCollator()->compareString( rStr, aStr ) == COMPARE_EQUAL ) )
-                        return true;
-                }
-                else
-                {
-                    if( !rStr.Len() && ::rtl::math::approxEqual( nArg, nVal ) )
-                        return true;
-                }
+                bool bShrunk = false;
+                mpDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,
+                        nCol, nRow, false);
             }
+
+            for( SCROW r = nRowStart; r <= nRow; r++ )
+                for( SCCOL c = nColStart; c <= nCol; c++ )
+                {
+                    double nVal = 0.0;
+                    ScBaseCell *pCell = NULL;
+
+                    mpDoc->GetCell( c, r, rAddr.Tab(), pCell );
+                    if( !pCell )
+                        continue;
+
+                    rtl::OUString aStr;
+                    if( !lcl_GetCellContent( pCell, false, nVal, aStr ) )
+                    {
+                        std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult = mpCache->maStrings.insert(std::pair<rtl::OUString, sal_Int32>(aStr, static_cast<sal_Int32>(1)));
+                        if(!aResult.second)
+                            aResult.first->second++;
+                    }
+                    else
+                    {
+                        std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult = mpCache->maValues.insert(std::pair<double, sal_Int32>(nVal, (sal_Int32)1));
+                        if(!aResult.second)
+                            aResult.first->second++;
+                    }
+                }
+        }
     }
+
+    if(rStr.isEmpty())
+    {
+        ScConditionEntryCache::ValueCacheType::iterator itr = mpCache->maValues.find(nArg);
+        if(itr == mpCache->maValues.end())
+            return false;
+        else
+        {
+            if(itr->second > 1)
+                return true;
+            else
+                return false;
+        }
+    }
+    else
+    {
+        ScConditionEntryCache::StringCacheType::iterator itr = mpCache->maStrings.find(rStr);
+        if(itr == mpCache->maStrings.end())
+            return false;
+        else
+        {
+            if(itr->second > 1)
+                return true;
+            else
+                return false;
+        }
+    }
+
     return false;
 }
 
@@ -873,7 +912,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
             if( pCondFormat )
             {
                 const ScRangeList& aRanges = pCondFormat->GetRange();
-                bValid = lcl_IsDuplicate( mpDoc, nArg, String(), rAddr, aRanges );
+                bValid = IsDuplicate( nArg, rtl::OUString(), rAddr, aRanges );
                 if( eOp == SC_COND_NOTDUPLICATE )
                     bValid = !bValid;
             }
@@ -901,7 +940,7 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) 
         if( pCondFormat && rArg.Len() )
         {
             const ScRangeList& aRanges = pCondFormat->GetRange();
-            bValid = lcl_IsDuplicate( mpDoc, 0.0, rArg, rAddr, aRanges );
+            bValid = IsDuplicate( 0.0, rArg, rAddr, aRanges );
             if( eOp == SC_COND_NOTDUPLICATE )
                 bValid = !bValid;
             return bValid;
@@ -980,7 +1019,7 @@ bool ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
     ((ScConditionEntry*)this)->Interpret(rPos);         // Formeln auswerten
 
     double nArg = 0.0;
-    String aArgStr;
+    rtl::OUString aArgStr;
     bool bVal = lcl_GetCellContent( pCell, bIsStr1, nArg, aArgStr );
     if (bVal)
         return IsValid( nArg, rPos );
@@ -1278,6 +1317,17 @@ ScConditionMode ScConditionEntry::GetModeFromApi(sal_Int32 nOperation)
     }
     return eMode;
 }
+
+void ScConditionEntry::startRendering()
+{
+    mpCache.reset();
+}
+
+void ScConditionEntry::endRendering()
+{
+    mpCache.reset();
+}
+
 //------------------------------------------------------------------------
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
@@ -1578,6 +1628,22 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
     return bAllMarked;
 }
 
+void ScConditionalFormat::startRendering()
+{
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+        itr->startRendering();
+    }
+}
+
+void ScConditionalFormat::endRendering()
+{
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+        itr->endRendering();
+    }
+}
+
 //------------------------------------------------------------------------
 
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
@@ -1718,6 +1784,22 @@ void ScConditionalFormatList::erase( sal_uLong nIndex )
             maConditionalFormats.erase(itr);
             break;
         }
+    }
+}
+
+void ScConditionalFormatList::startRendering()
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->startRendering();
+    }
+}
+
+void ScConditionalFormatList::endRendering()
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->endRendering();
     }
 }
 
