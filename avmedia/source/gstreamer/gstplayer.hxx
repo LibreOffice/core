@@ -24,6 +24,8 @@
 #include "gstcommon.hxx"
 
 #include "com/sun/star/media/XPlayer.hpp"
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 typedef struct _GstVideoOverlay GstVideoOverlay;
 
@@ -33,18 +35,21 @@ namespace avmedia { namespace gstreamer {
 // - Player -
 // ----------
 
-class Player : public ::cppu::WeakImplHelper2< ::com::sun::star::media::XPlayer,
-                                               ::com::sun::star::lang::XServiceInfo >
+typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
+                                          ::com::sun::star::lang::XServiceInfo > GstPlayer_BASE;
+
+class Player : public ::cppu::BaseMutex,
+               public GstPlayer_BASE
 {
 public:
 
     Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
     ~Player();
 
-    void preparePlaybin( const OUString& rURL, bool bFakeVideo );
+    void preparePlaybin( const OUString& rURL, GstElement *pSink );
     bool create( const OUString& rURL );
-    void processMessage( GstMessage *message );
-    GstBusSyncReply processSyncMessage( GstMessage *message );
+    virtual void processMessage( GstMessage *message );
+    virtual GstBusSyncReply processSyncMessage( GstMessage *message );
 
     // XPlayer
     virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -69,8 +74,10 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-private:
+    // ::cppu::OComponentHelper
+    virtual void SAL_CALL disposing(void);
 
+protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
     OUString                maURL;

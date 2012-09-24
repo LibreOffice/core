@@ -20,9 +20,9 @@
 #ifndef _FRAMEGRABBER_HXX
 #define _FRAMEGRABBER_HXX
 
-#include "gstcommon.hxx"
-
-#include "com/sun/star/media/XFrameGrabber.hpp"
+#include "gstplayer.hxx"
+#include "com/sun/star/media/XFrameGrabber.hdl"
+#include <cppuhelper/implbase2.hxx>
 
 namespace avmedia { namespace gstreamer {
 
@@ -30,31 +30,34 @@ namespace avmedia { namespace gstreamer {
 // - FrameGrabber -
 // ----------------
 
-class FrameGrabber : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XFrameGrabber,
-                                                      ::com::sun::star::lang::XServiceInfo >
+typedef ::cppu::WeakImplHelper2< ::com::sun::star::media::XFrameGrabber,
+                                 ::com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;
+
+class FrameGrabber : public FrameGrabber_BASE
 {
+    GstElement *mpPipeline;
+    void disposePipeline();
 public:
+    // static create method instead of public Ctor
+    static FrameGrabber* create( const rtl::OUString &rURL );
 
-            FrameGrabber( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
-            ~FrameGrabber();
-
-    bool    create( const OUString& rURL );
+    virtual ~FrameGrabber();
 
     // XFrameGrabber
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMgr;
-    OUString                                                                            maURL;
+    FrameGrabber( const rtl::OUString &aURL );
+    FrameGrabber( const FrameGrabber& );
+    FrameGrabber& operator=( const FrameGrabber& );
 };
 
-} // namespace gstreamer
+} // namespace gst
 } // namespace avmedia
 
 #endif // _FRAMEGRABBER_HXX

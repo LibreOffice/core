@@ -21,3 +21,4 @@
 #include "gstplayer.cxx"
 #include "gstuno.cxx"
 #include "gstwindow.cxx"
+#include "gstframegrabber.cxx"
