@@ -26,6 +26,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sfx2_metadatable, \
 $(eval $(call gb_CppunitTest_use_sdk_api,sfx2_metadatable))
 
 $(eval $(call gb_CppunitTest_use_libraries,sfx2_metadatable, \
+	cppu \
+	cppuhelper \
     sal \
     sfx \
 	$(gb_UWINAPI) \
