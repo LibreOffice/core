@@ -1489,7 +1489,7 @@ void ScFiltersTest::testPivotTableBasicODS()
 
 namespace {
 
-void testColorScaleFormat_Impl(ScDocument* pDoc, const rtl::OUString& rFilePath, const ScConditionalFormat* pFormat)
+void testColorScaleFormat_Impl(const rtl::OUString& rFilePath, const ScConditionalFormat* pFormat)
 {
     rtl::OUStringBuffer aBuf;
     CPPUNIT_ASSERT(pFormat);
@@ -1507,28 +1507,28 @@ void testColorScale_Impl(ScDocument* pDoc, const rtl::OUString& aBaseString)
     {
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(1,1,0);
         rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_1.txt");
-        testColorScaleFormat_Impl(pDoc, aFilePath, pFormat);
+        testColorScaleFormat_Impl(aFilePath, pFormat);
     }
 
     // second cond format
     {
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(4,1,0);
         rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_2.txt");
-        testColorScaleFormat_Impl(pDoc, aFilePath, pFormat);
+        testColorScaleFormat_Impl(aFilePath, pFormat);
     }
 
     // third cond format
     {
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(7,1,0);
         rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_3.txt");
-        testColorScaleFormat_Impl(pDoc, aFilePath, pFormat);
+        testColorScaleFormat_Impl(aFilePath, pFormat);
     }
 
     // forth cond format
     {
         const ScConditionalFormat* pFormat = pDoc->GetCondFormat(10,1,0);
         rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_4.txt");
-        testColorScaleFormat_Impl(pDoc, aFilePath, pFormat);
+        testColorScaleFormat_Impl(aFilePath, pFormat);
     }
 }
 
