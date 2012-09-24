@@ -1230,7 +1230,7 @@ public:
                                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
                                         const ScStyleSheet& rStyle);
 
-    void            ApplySelectionStyle( const ScStyleSheet& rStyle, const ScMarkData& rMark );
+    SC_DLLPUBLIC void            ApplySelectionStyle( const ScStyleSheet& rStyle, const ScMarkData& rMark );
     void            ApplySelectionLineStyle( const ScMarkData& rMark,
                                             const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
 
