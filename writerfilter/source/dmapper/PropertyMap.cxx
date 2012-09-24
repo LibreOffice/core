@@ -303,6 +303,8 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     Insert( PROP_TOP_MARGIN, false, uno::makeAny( (sal_Int32)2540 ) );
     //page bottom margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
     Insert( PROP_BOTTOM_MARGIN, false, uno::makeAny( (sal_Int32) 2540 ) );
+    //page style layout
+    Insert(PROP_PAGE_STYLE_LAYOUT, false, uno::makeAny(style::PageStyleLayout::PageStyleLayout_ALL));
     uno::Any aFalse( ::uno::makeAny( false ) );
     Insert( PROP_GRID_DISPLAY, false, aFalse);
     Insert( PROP_GRID_PRINT, false, aFalse);
