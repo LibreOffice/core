@@ -158,7 +158,6 @@ include $(GBUILDDIR)/TargetLocations.mk
 
 $(eval $(call gb_Helper_init_registries))
 $(eval $(call gb_Helper_add_repositories,$(SRCDIR)))
-$(eval $(call gb_Helper_collect_libtargets))
 
 gb_Library_DLLPOSTFIX := lo
 

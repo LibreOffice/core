@@ -33,7 +33,6 @@
 #  gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 # defined by platform
 #  gb_StaticLibrary_FILENAMES
-#  gb_StaticLibrary_TARGETS
 
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
