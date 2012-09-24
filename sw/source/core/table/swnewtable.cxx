@@ -700,7 +700,7 @@ sal_Bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     {
         SwTableLine* pLine = aLines[ i ];
         sal_uInt16 nInsPos = aInsPos[i];
-        OSL_ENSURE( nInsPos != USHRT_MAX, "Didn't found insert position" );
+        assert(nInsPos != USHRT_MAX); // didn't find insert position
         SwTableBox* pBox = pLine->GetTabBoxes()[ nInsPos ];
         if( bBehind )
             ++nInsPos;
@@ -2114,22 +2114,24 @@ void SwTable::CheckConsistency() const
     {
         SwTwips nWidth = 0;
         SwTableLine* pLine = GetTabLines()[nCurrLine];
-        SAL_WARN_IF( !pLine, "sw", "Missing Table Line" );
+        SAL_WARN_IF( !pLine, "sw.core", "Missing Table Line" );
         sal_uInt16 nColCount = pLine->GetTabBoxes().size();
-        SAL_WARN_IF( !nColCount, "sw", "Empty Table Line" );
+        SAL_WARN_IF( !nColCount, "sw.core", "Empty Table Line" );
         for( sal_uInt16 nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-            SAL_WARN_IF( !pBox, "sw", "Missing Table Box" );
+            SAL_WARN_IF( !pBox, "sw.core", "Missing Table Box" );
             SwTwips nNewWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth() + nWidth;
             long nRowSp = pBox->getRowSpan();
             if( nRowSp < 0 )
             {
-                SAL_WARN_IF( aIter == aRowSpanCells.end(), "sw", "Missing master box" );
+                SAL_WARN_IF( aIter == aRowSpanCells.end(),
+                        "sw.core", "Missing master box");
                 SAL_WARN_IF( aIter->nLeft != nWidth || aIter->nRight != nNewWidth,
-                    "sw", "Wrong position/size of overlapped table box" );
+                    "sw.core", "Wrong position/size of overlapped table box");
                 --(aIter->nRowSpan);
-                SAL_WARN_IF( aIter->nRowSpan != -nRowSp, "sw", "Wrong row span value" );
+                SAL_WARN_IF( aIter->nRowSpan != -nRowSp, "sw.core",
+                        "Wrong row span value" );
                 if( nRowSp == -1 )
                 {
                     std::list< RowSpanCheck >::iterator aEraseIter = aIter;
@@ -2141,7 +2143,7 @@ void SwTable::CheckConsistency() const
             }
             else if( nRowSp != 1 )
             {
-                SAL_WARN_IF( !nRowSp, "sw", "Zero row span?!" );
+                SAL_WARN_IF( !nRowSp, "sw.core", "Zero row span?!" );
                 RowSpanCheck aEntry;
                 aEntry.nLeft = nWidth;
                 aEntry.nRight = nNewWidth;
@@ -2152,14 +2154,20 @@ void SwTable::CheckConsistency() const
         }
         if( !nCurrLine )
             nLineWidth = nWidth;
-        SAL_WARN_IF( nWidth != nLineWidth, "sw", "Different Line Widths" );
-        SAL_WARN_IF( nWidth != nTabSize, "sw", "Line's Boxes are too small or too large" );
-        SAL_WARN_IF( nWidth < 0 || nWidth > USHRT_MAX, "sw", "Width out of range" );
-        SAL_WARN_IF( aIter != aRowSpanCells.end(), "sw", "Missing overlapped box" );
+        SAL_WARN_IF( nWidth != nLineWidth, "sw.core",
+                "Different Line Widths: first: " << nLineWidth
+                << " current [" << nCurrLine << "]: " <<  nWidth);
+        SAL_WARN_IF( abs(nWidth - nTabSize) > 1 /* how tolerant? */, "sw.core",
+                "Line width differs from table width: " << nTabSize
+                << " current [" << nCurrLine << "]: " << nWidth);
+        SAL_WARN_IF( nWidth < 0 || nWidth > USHRT_MAX, "sw.core",
+                "Width out of range [" << nCurrLine << "]: " << nWidth);
+        SAL_WARN_IF( aIter != aRowSpanCells.end(), "sw.core",
+                "Missing overlapped box" );
         aIter = aRowSpanCells.begin();
     }
     bool bEmpty = aRowSpanCells.empty();
-    SAL_WARN_IF( !bEmpty, "sw", "Open row span detected" );
+    SAL_WARN_IF( !bEmpty, "sw.core", "Open row span detected" );
 }
 
 #endif
