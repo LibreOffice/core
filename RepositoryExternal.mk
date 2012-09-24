@@ -804,7 +804,7 @@ endef
 
 else # !SYSTEM_ICU
 
-ifeq ($(OS),ANDROID)
+ifeq ($(OS)$(DISABLE_DYNLOADING),ANDROID)
 gb_ICU_suffix:=lo
 else
 gb_ICU_suffix:=
