@@ -9681,7 +9681,7 @@ AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_MEDIAWIKI=YES
-  BUILD_TYPE="$BUILD_TYPE SWEXT"
+  XSLTML_TARBALL=a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
   if test  "x$with_java" = "xno"; then
     AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
   fi
@@ -9691,6 +9691,7 @@ else
   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
+AC_SUBST(XSLTML_TARBALL)
 
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
     AC_MSG_CHECKING([which Servlet API Jar to use])

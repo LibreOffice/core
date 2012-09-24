@@ -36,7 +36,7 @@ f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz
 fa9aa839145cdf860bf596532bb8af97-cppunit-1.13.1.tar.gz
 @MOZ_TARBALL@
 a4d9b30810a434a3ed39fc0003bbd637-LICENSE_stax-api-1.0-2-sources.html
-a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
+@XSLTML_TARBALL@
 ada24d37d8d638b3d8a9985e80bc2978-source-9.0.0.7-bj.zip
 af3c3acf618de6108d65fcdc92b492e1-commons-codec-1.3-src.tar.gz
 bc702168a2af16869201dbe91e46ae48-LICENSE_Python-2.6.1

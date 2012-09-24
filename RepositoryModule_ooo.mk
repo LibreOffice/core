@@ -183,6 +183,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     xmlreader \
     xmlscript \
     xmlsecurity \
+	xsltml \
 ))
 
 # vim: set noet ts=4 sw=4:

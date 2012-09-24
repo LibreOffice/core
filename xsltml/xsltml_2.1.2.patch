@@ -95,13 +95,6 @@
  </xsl:template>
  
  <!-- 4.4.10.4 determinant  -->
-@@ -1103,4 +1110,4 @@
- 	<xsl:if test="$this-p &lt; $p"><xsl:text>)</xsl:text></xsl:if>
- </xsl:template>
- 
--</xsl:stylesheet>
-+</xsl:stylesheet>
-\ No newline at end of file
 --- misc/xsltml_2.1.2/entities.xsl	2009-03-27 08:11:02.000000000 +0100
 +++ misc/build/xsltml_2.1.2/entities.xsl	2008-03-07 21:36:34.000000000 +0100
 @@ -4,17 +4,56 @@
@@ -1161,13 +1154,6 @@
  		<xsl:text>}</xsl:text>
  	</xsl:if>
  	<xsl:if test="@background">
-@@ -219,4 +229,4 @@
- 	<xsl:apply-templates/>
- </xsl:template>
- 
--</xsl:stylesheet>
-+</xsl:stylesheet>
-\ No newline at end of file
 --- misc/xsltml_2.1.2/mmltex.xsl	2009-03-27 08:11:02.000000000 +0100
 +++ misc/build/xsltml_2.1.2/mmltex.xsl	2008-03-07 21:36:34.000000000 +0100
 @@ -6,9 +6,9 @@
@@ -1182,13 +1168,6 @@
       copyright and other information                                        -->
  <!-- ====================================================================== -->
  
-@@ -33,4 +33,4 @@
- 	<xsl:text>&#xA;\]</xsl:text>
- </xsl:template>
- 
--</xsl:stylesheet>
-+</xsl:stylesheet>
-\ No newline at end of file
 --- misc/xsltml_2.1.2/scripts.xsl	2009-03-27 08:11:02.000000000 +0100
 +++ misc/build/xsltml_2.1.2/scripts.xsl	2008-03-07 21:36:34.000000000 +0100
 @@ -1,12 +1,13 @@
@@ -1294,13 +1273,6 @@
  			<xsl:text>\underbrace{</xsl:text>
  			<xsl:apply-templates select="./*[1]"/>
  			<xsl:text>}</xsl:text>
-@@ -372,4 +409,4 @@
- 	</xsl:choose>
- </xsl:template>
- 
--</xsl:stylesheet>
-+</xsl:stylesheet>
-\ No newline at end of file
 --- misc/xsltml_2.1.2/tables.xsl	2009-03-27 08:11:02.000000000 +0100
 +++ misc/build/xsltml_2.1.2/tables.xsl	2008-03-07 21:36:34.000000000 +0100
 @@ -1,130 +1,218 @@
@@ -1434,6 +1406,7 @@
 -</xsl:template>
 -
 -</xsl:stylesheet>
+\ No newline at end of file
 +<?xml version='1.0' encoding="UTF-8"?>
 +<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 +		xmlns:m="http://www.w3.org/1998/Math/MathML"
@@ -1738,10 +1711,3 @@
  		</xsl:call-template>
  		<xsl:text>}{</xsl:text>
  	</xsl:if>
-@@ -325,4 +343,4 @@
- 	</xsl:call-template>
- </xsl:template>
- 
--</xsl:stylesheet>
-+</xsl:stylesheet>
-\ No newline at end of file

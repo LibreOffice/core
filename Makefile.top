@@ -189,6 +189,7 @@ xmloff\
 xmlreader\
 xmlscript\
 xmlsecurity\
+xsltml\
 
 dmake_modules:=\
 apache-commons\
@@ -250,7 +251,6 @@ stlport\
 sysui\
 tomcat\
 xpdf\
-xsltml\
 zlib\
 
 export gb_TAILBUILDTARGET=all slowcheck
