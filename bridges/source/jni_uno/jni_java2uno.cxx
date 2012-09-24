@@ -388,7 +388,7 @@ extern "C"
 {
 
 //------------------------------------------------------------------------------
-JNIEXPORT jobject
+SAL_DLLPUBLIC_EXPORT jobject
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle, jstring jo_method,
     jobjectArray jo_args /* may be 0 */ )
@@ -654,7 +654,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
 }
 
 //------------------------------------------------------------------------------
-JNIEXPORT void
+SAL_DLLPUBLIC_EXPORT void
 JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle )
     SAL_THROW_EXTERN_C()
