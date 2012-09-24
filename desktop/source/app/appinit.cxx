@@ -111,20 +111,21 @@ static void configureUcb()
 #endif // GNOME_VFS_ENABLED
 }
 
-Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
+void Desktop::InitApplicationServiceManager()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
-
+    Reference<XMultiServiceFactory> sm;
 #ifdef ANDROID
     rtl::OUString aUnoRc( OUString( "file:///assets/program/unorc"  ) );
-    return Reference<XMultiServiceFactory>(
+    sm.set(
         cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
         UNO_QUERY_THROW);
 #else
-    return Reference<XMultiServiceFactory>(
+    sm.set(
         cppu::defaultBootstrap_InitialComponentContext()->getServiceManager(),
         UNO_QUERY_THROW);
 #endif
+    comphelper::setProcessServiceFactory(sm);
 }
 
 void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )

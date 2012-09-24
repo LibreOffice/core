@@ -600,7 +600,7 @@ void Desktop::Init()
     // something to enforce this gotcha
     try
     {
-        comphelper::setProcessServiceFactory(CreateApplicationServiceManager());
+        InitApplicationServiceManager();
     }
     catch (css::uno::Exception & e)
     {
