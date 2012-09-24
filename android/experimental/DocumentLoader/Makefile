@@ -19,14 +19,153 @@ APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 SODEST=libs/$(ANDROID_APP_ABI)
 OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
 
-define COPYSO
-cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
-cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
-endef
-
 define COPYJAR
 cp $(1) libs
 endef
+
+LIBS = \
+  -Wl,--start-group \
+  $(addprefix -l,$(strip \
+	ascii_expat_xmlparse \
+	avmedialo \
+	basebmp \
+	basegfxlo \
+	bootstrap.uno \
+	canvastoolslo \
+	collator_data \
+	comphelpgcc3 \
+	configmgr.uno \
+	cppcanvaslo \
+	crypto \
+	dbaxmllo \
+	dbtoolslo \
+	deploymentmisclo \
+	dict_ja \
+	dict_zh \
+	drawinglayerlo \
+	editenglo \
+	expat_xmlparse \
+	expat_xmltok \
+	expwrap.uno \
+	fastsax.uno \
+	filterconfiglo \
+	fontconfig \
+	forlo \
+	foruilo \
+	freetype \
+	frmlo \
+	fsstorage.uno \
+	fwelo \
+	fwilo \
+	fwklo \
+	gcc3_uno \
+	hwplo \
+	i18nisolang1gcc3 \
+	i18npool.uno \
+	i18nregexplo \
+	i18nsearch.uno \
+	i18nutilgcc3 \
+	icudata \
+	icui18n \
+	icule \
+	icutu \
+	icuuc \
+	index_data \
+	introspection.uno \
+	java_uno \
+	jpeg \
+	jvmaccessgcc3 \
+	jvmfwk \
+	lcms2 \
+	libotouchlo \
+	lnglo \
+	lo-bootstrap \
+	localedata_en \
+	localedata_es \
+	localedata_euro \
+	localedata_others \
+	loglo \
+	log_uno_uno \
+	lpsolve55 \
+	lwpftlo \
+	msfilterlo \
+	mswordlo \
+	ooxlo \
+	orcus \
+	package2 \
+	reflection.uno \
+	reg \
+	saxlo \
+	sax_shared \
+	sblo \
+	sclo \
+	scdlo \
+	scfiltlo \
+	sddlo \
+	sdfiltlo \
+	sdlo \
+	sfxlo \
+	smdlo \
+	smlo \
+	sotlo \
+	spllo \
+	stocservices.uno \
+	store \
+	svgfilterlo \
+	svllo \
+	svtlo \
+	svxcorelo \
+	svxlo \
+	swdlo \
+	swlo \
+	t602filterlo \
+	textconv_dict \
+	textconversiondlgslo \
+	textfdlo \
+	textinstream.uno \
+	textoutstream.uno \
+	tklo \
+	tllo \
+	ucb1 \
+	ucbhelper4gcc3 \
+	ucpfile1 \
+	ucppkg1 \
+	uno_cppu \
+	uno_cppuhelpergcc3 \
+	uno_sal \
+	uno_salhelpergcc3 \
+	uno_cppuhelpergcc3 \
+	unordflo \
+	unoxmllo \
+	utllo \
+	uuilo \
+	vbahelperlo \
+	vbaswobj.uno \
+	vcllo \
+	wpftdrawlo \
+	wpftwriterlo \
+	xml2 \
+	xmlfalo \
+	xmlfdlo \
+	xmlreader \
+	xmlscriptlo \
+	xmlsecurity \
+	xoflo \
+	xolo \
+	xsec_fw \
+	xslt \
+	xsltdlglo \
+	xsltfilterlo \
+	xstor \
+  )) \
+  -Wl,--end-group
+
+WHOLELIBS = \
+  -Wl,--whole-archive \
+  $(addprefix -l,$(strip \
+	juh \
+  )) \
+  -Wl,--no-whole-archive
 
 # The default target just builds.
 
@@ -39,87 +178,16 @@ properties:
 	echo "APP_ABI := $(ANDROID_APP_ABI)" >>jni/Application.mk
 	echo "APP_PLATFORM := android-14" >>jni/Application.mk
 
+link-so:
+# Build the single .so for this app
+	mkdir -p $(OBJLOCAL)
+	$(CXX) -Wl,-Map,liblo-native-code.map -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
+	mkdir -p $(SODEST)
+	cp $(OBJLOCAL)/liblo-native-code.so $(SODEST)
+	$(STRIP) --strip-debug $(SODEST)/liblo-native-code.so
+
 copy-stuff:
-# First always clean
-	rm -rf libs $(OBJLOCAL)
-	mkdir -p $(SODEST) $(OBJLOCAL)
-#
-# Copy shared libraries (including UNO components) we need to
-# libs/$(ANDROID_APP_ABI) so that ant will include them in the .apk.
-#
-# Copy them to obj/local/$(ANDROID_APP_ABI), too, where gdb will look for
-# them.
-#
-	for F in $(strip \
-		   basegfxlo \
-		   bootstrap.uno \
-		   comphelpgcc3 \
-		   dbaxmllo \
-		   dbtoolslo \
-		   expwrap.uno \
-		   frmlo \
-		   gcc3_uno \
-		   i18nisolang1gcc3 \
-		   icudatalo \
-		   icui18nlo \
-		   iculelo \
-		   icuuclo \
-		   introspection.uno \
-		   java_uno \
-		   juh \
-		   juhx \
-		   jvmaccessgcc3 \
-		   jvmfwk \
-		   libotouchlo \
-		   lo-bootstrap \
-		   localedata_en \
-		   localedata_others \
-		   lwpftlo \
-		   mergedlo \
-		   msfilterlo \
-		   mswordlo \
-		   ooxlo \
-		   reflection.uno \
-		   reg \
-		   sclo \
-		   scdlo \
-		   scfiltlo \
-		   sddlo \
-		   smdlo \
-		   stocservices.uno \
-		   store \
-		   svgfilterlo \
-		   swdlo \
-		   swlo \
-		   t602filterlo \
-		   textinstream.uno \
-		   tllo \
-		   ucbhelper4gcc3 \
-		   ucppkg1 \
-		   uno_cppu \
-		   uno_cppuhelpergcc3 \
-		   uno_sal \
-		   uno_salhelpergcc3 \
-		   uno_cppuhelpergcc3 \
-		   unordflo \
-		   unoxmllo \
-		   vbahelperlo \
-		   vbaswobj.uno \
-		   wpftdrawlo \
-		   wpftwriterlo \
-		   xml2 \
-		   xmlfdlo \
-		   xmlreader \
-		   xmlsecurity \
-		   xslt \
-		  ); do \
-	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
-	done
-#
-# Then the shared GNU C++ library
-	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ANDROID_APP_ABI)/libgnustl_shared.so)
-#
-# Then other "assets". Let the directory structure under assets mimic
+# Then "assets". Let the directory structure under assets mimic
 # that under solver for now.
 #
 # Please note that I have no idea what all of this is really necessary and for
@@ -216,10 +284,11 @@ copy-stuff:
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
+	mkdir -p $(SODEST)
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
 	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
-build-ant: copy-stuff properties
+build-ant: copy-stuff link-so properties
 #
 # Copy jar files we need
 #

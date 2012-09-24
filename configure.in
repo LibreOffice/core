@@ -2422,8 +2422,8 @@ else
 fi
 AC_SUBST(DISABLE_SCRIPTING)
 
-if test $_os = iOS; then
-    # Disable dynamic_loading always for iOS
+if test $_os = iOS -o $_os = Android; then
+    # Disable dynamic_loading always for iOS and Android
     enable_dynamic_loading=no
 elif test -z "$enable_dynamic_loading"; then
     # Otherwise enable it unless speficically disabled

@@ -27,47 +27,36 @@
  * instead of those above.
  */
 
-#ifndef ANDROID_BOOSTRAP_H
-#define ANDROID_BOOSTRAP_H
+#ifndef COMPONENT_MAPPING_H
+#define COMPONENT_MAPPING_H
 
-#if defined(ANDROID)
-
-#include <jni.h>
-#include <dirent.h>
+#ifdef DISABLE_DYNLOADING
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <osl/detail/component-mapping.h>
+/* On iOS and perhaps Android static linking of the LO code into one
+ * executable (on Android, into one shared library) is used. In order to get
+ * the needed UNO coponent linked in, the "main" code for an app needs to
+ * implement the lo_get_libmap() function to map UNO component library names
+ * as produced in a build for iOS (like configmgr.uno.a or libsclo.a) to the
+ * corresponding component_getFactory functions.
+ */
 
-typedef struct lo_apk_dir lo_apk_dir;
+typedef struct {
+    const char *lib;
+    void * (*component_getFactory_function)(const char *, void *, void *);
+} lib_to_component_mapping;
 
-void *lo_apkentry(const char *filename,
-                  size_t *size);
-
-lo_apk_dir *lo_apk_opendir(const char *dirname);
-
-struct dirent *lo_apk_readdir(lo_apk_dir *dirp);
-
-int lo_apk_closedir(lo_apk_dir *dirp);
-
-int lo_apk_lstat(const char *path, struct stat *statp);
-
-int lo_dlcall_argc_argv(void *function,
-                        int argc,
-                        const char **argv);
-
-JavaVM *lo_get_javavm(void);
-
-struct android_app *lo_get_app(void);
+const lib_to_component_mapping *lo_get_libmap(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // ANDROID
+#endif /* DISABLE_DYNLOADING */
 
-#endif // ANDROID_BOOTSTRAP_H
+#endif /* COMPONENT_MAPPING_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
