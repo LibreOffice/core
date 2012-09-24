@@ -693,9 +693,11 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
         // Do *not* compare nMethod / nHow, older versions with
         // encrypted streams write mismatching DEFLATE/STORE pairs
         // there.
+        // Do *not* compare timestamps, since MSO 2010 can produce documents
+        // with timestamp difference in the central directory entry and local
+        // file header.
         bBroken = rEntry.nVersion != nVersion
                         || (rEntry.nFlag & ~6L) != (nFlag & ~6L)
-                        || rEntry.nTime != nTime
                         || rEntry.nPathLen != nPathLen
                         || !rEntry.sPath.equals( sLOCPath );
     }
