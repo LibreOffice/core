@@ -889,6 +889,112 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     return pNdTbl;
 }
 
+static void lcl_RemoveBreaks(SwCntntNode & rNode, SwTableFmt *const pTableFmt)
+{
+    // delete old layout frames, new ones need to be created...
+    rNode.DelFrms();
+
+    if (!rNode.IsTxtNode())
+    {
+        return;
+    }
+
+    SwTxtNode & rTxtNode = static_cast<SwTxtNode&>(rNode);
+    // remove PageBreaks/PageDesc/ColBreak
+    SfxItemSet const* pSet = rTxtNode.GetpSwAttrSet();
+    if (pSet)
+    {
+        const SfxPoolItem* pItem;
+        if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false, &pItem))
+        {
+            if (pTableFmt)
+            {
+                pTableFmt->SetFmtAttr(*pItem);
+            }
+            rTxtNode.ResetAttr(RES_BREAK);
+            pSet = rTxtNode.GetpSwAttrSet();
+        }
+
+        if (pSet
+            && (SFX_ITEM_SET == pSet->GetItemState(RES_PAGEDESC, false, &pItem))
+            && static_cast<SwFmtPageDesc const*>(pItem)->GetPageDesc())
+        {
+            if (pTableFmt)
+            {
+                pTableFmt->SetFmtAttr(*pItem);
+            }
+            rTxtNode.ResetAttr(RES_PAGEDESC);
+        }
+    }
+}
+
+static void
+lcl_BalanceTable(SwTable & rTable, size_t const nMaxBoxes,
+    SwTableNode & rTblNd, SwTableBoxFmt & rBoxFmt, SwTxtFmtColl & rTxtColl,
+    SwUndoTxtToTbl *const pUndo, std::vector<sal_uInt16> *const pPositions)
+{
+    // balance lines in table, insert empty boxes so all lines have the size
+    for (size_t n = 0; n < rTable.GetTabLines().size(); ++n)
+    {
+        SwTableLine *const pCurrLine = rTable.GetTabLines()[ n ];
+        size_t const nBoxes = pCurrLine->GetTabBoxes().size();
+        if (nMaxBoxes != nBoxes)
+        {
+            rTblNd.GetNodes().InsBoxen(&rTblNd, pCurrLine, &rBoxFmt, &rTxtColl,
+                    0, nBoxes, nMaxBoxes - nBoxes);
+
+            if (pUndo)
+            {
+                for (size_t i = nBoxes; i < nMaxBoxes; ++i)
+                {
+                    pUndo->AddFillBox( *pCurrLine->GetTabBoxes()[i] );
+                }
+            }
+
+            // if the first line is missing boxes, the width array is useless!
+            if (!n && pPositions)
+            {
+                pPositions->clear();
+            }
+        }
+    }
+}
+
+static void
+lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
+        SwTableBoxFmt & rBoxFmt, SwDoc & rDoc,
+        std::vector<sal_uInt16> *const pPositions)
+{
+    if (pPositions && !pPositions->empty())
+    {
+        SwTableLines& rLns = rTable.GetTabLines();
+        sal_uInt16 nLastPos = 0;
+        for (size_t n = 0; n < pPositions->size(); ++n)
+        {
+            SwTableBoxFmt *pNewFmt = rDoc.MakeTableBoxFmt();
+            pNewFmt->SetFmtAttr(
+                    SwFmtFrmSize(ATT_VAR_SIZE, (*pPositions)[n] - nLastPos));
+            for (size_t nTmpLine = 0; nTmpLine < rLns.size(); ++nTmpLine)
+            {
+                //JP 24.06.98: have to do an Add here, because the BoxFormat is
+                //             still needed by the caller
+                pNewFmt->Add( rLns[ nTmpLine ]->GetTabBoxes()[ n ] );
+            }
+
+            nLastPos = (*pPositions)[ n ];
+        }
+
+        // propagate size upwards from format, so the table gets the right size
+        SAL_WARN_IF(rBoxFmt.GetDepends(), "sw.core",
+                "who is still registered in the format?");
+        rBoxFmt.SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
+    }
+    else
+    {
+        rBoxFmt.SetFmtAttr(SwFmtFrmSize(ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes));
+    }
+}
+
 SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                     SwTableFmt* pTblFmt,
                                     SwTableLineFmt* pLineFmt,
@@ -945,31 +1051,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             }
         }
 
-        // die alten Frames loeschen, es werden neue erzeugt
-        pTxtNd->DelFrms();
-
-        // PageBreaks/PageDesc/ColBreak rausschmeissen.
-        const SfxItemSet* pSet = pTxtNd->GetpSwAttrSet();
-        if( pSet )
-        {
-            const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False, &pItem ) )
-            {
-                if( !nLines )
-                    pTblFmt->SetFmtAttr( *pItem );
-                pTxtNd->ResetAttr( RES_BREAK );
-                pSet = pTxtNd->GetpSwAttrSet();
-            }
-
-            if( pSet && SFX_ITEM_SET == pSet->GetItemState(
-                RES_PAGEDESC, sal_False, &pItem ) &&
-                ((SwFmtPageDesc*)pItem)->GetPageDesc() )
-            {
-                if( !nLines )
-                    pTblFmt->SetFmtAttr( *pItem );
-                pTxtNd->ResetAttr( RES_PAGEDESC );
-            }
-        }
+        lcl_RemoveBreaks(*pTxtNd, (0 == nLines) ? pTblFmt : 0);
 
         // setze den bei allen TextNode in der Tabelle den TableNode
         // als StartNode
@@ -1032,54 +1114,10 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             nMaxBoxes = nBoxes;
     }
 
-    // die Tabelle ausgleichen, leere Sections einfuegen
-    sal_uInt16 n;
+    lcl_BalanceTable(*pTable, nMaxBoxes, *pTblNd, *pBoxFmt, *pTxtColl,
+            pUndo, &aPosArr);
+    lcl_SetTableBoxWidths(*pTable, nMaxBoxes, *pBoxFmt, *pDoc, &aPosArr);
 
-    for( n = 0; n < pTable->GetTabLines().size(); ++n )
-    {
-        SwTableLine* pCurrLine = pTable->GetTabLines()[ n ];
-        if( nMaxBoxes != ( nBoxes = pCurrLine->GetTabBoxes().size() ))
-        {
-            InsBoxen( pTblNd, pCurrLine, pBoxFmt, pTxtColl, 0,
-                        nBoxes, nMaxBoxes - nBoxes );
-
-            if( pUndo )
-                for( sal_uInt16 i = nBoxes; i < nMaxBoxes; ++i )
-                    pUndo->AddFillBox( *pCurrLine->GetTabBoxes()[ i ] );
-
-            // fehlen der 1. Line Boxen, dann kann man das Breiten Array
-            // vergessen!
-            if( !n )
-                aPosArr.clear();
-        }
-    }
-
-    if( !aPosArr.empty() )
-    {
-        SwTableLines& rLns = pTable->GetTabLines();
-        sal_uInt16 nLastPos = 0;
-        for( n = 0; n < aPosArr.size(); ++n )
-        {
-            SwTableBoxFmt *pNewFmt = pDoc->MakeTableBoxFmt();
-            pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
-                                                aPosArr[ n ] - nLastPos ));
-            for( sal_uInt16 nTmpLine = 0; nTmpLine < rLns.size(); ++nTmpLine )
-                //JP 24.06.98: hier muss ein Add erfolgen, da das BoxFormat
-                //              von der rufenden Methode noch gebraucht wird!
-                pNewFmt->Add( rLns[ nTmpLine ]->GetTabBoxes()[ n ] );
-
-            nLastPos = aPosArr[ n ];
-        }
-
-        // damit die Tabelle die richtige Groesse bekommt, im BoxFormat die
-        // Groesse nach "oben" transportieren.
-        OSL_ENSURE( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
-        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
-    }
-    else
-        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes ));
-
-    // das wars doch wohl ??
     return pTblNd;
 }
 
@@ -1295,7 +1333,6 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 #endif
 
     SwDoc* pDoc = GetDoc();
-    std::vector<sal_uInt16> aPosArr;
     SwTable * pTable = &pTblNd->GetTable();
     SwTableLine* pLine;
     SwTableBox* pBox;
@@ -1308,36 +1345,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
         SwNode& rNode = aNodeIndex.GetNode();
         if( rNode.IsCntntNode() )
         {
-            static_cast<SwCntntNode&>(rNode).DelFrms();
-            if(rNode.IsTxtNode())
-            {
-                SwTxtNode& rTxtNode = static_cast<SwTxtNode&>(rNode);
-                // setze den bei allen TextNode in der Tabelle den TableNode
-                // als StartNode
-
-                // remove PageBreaks/PageDesc/ColBreak
-                const SwAttrSet* pSet = rTxtNode.GetpSwAttrSet();
-                if( pSet )
-                {
-                    const SfxPoolItem* pItem;
-                    if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False, &pItem ) )
-                    {
-                        if( !nLines )
-                            pTblFmt->SetFmtAttr( *pItem );
-                        rTxtNode.ResetAttr( RES_BREAK );
-                        pSet = rTxtNode.GetpSwAttrSet();
-                    }
-
-                    if( pSet && SFX_ITEM_SET == pSet->GetItemState(
-                        RES_PAGEDESC, sal_False, &pItem ) &&
-                        ((SwFmtPageDesc*)pItem)->GetPageDesc() )
-                    {
-                        if( !nLines )
-                            pTblFmt->SetFmtAttr( *pItem );
-                        rTxtNode.ResetAttr( RES_PAGEDESC );
-                    }
-                }
-            }
+            lcl_RemoveBreaks(static_cast<SwCntntNode&>(rNode),
+                    (0 == nLines) ? pTblFmt : 0);
         }
     }
 
@@ -1383,49 +1392,11 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
             nMaxBoxes = nBoxes;
     }
 
-    // die Tabelle ausgleichen, leere Sections einfuegen
-    sal_uInt16 n;
+    SwTxtFmtColl *const pTxtColl(const_cast<SwTxtFmtColl*>(
+            GetDoc()->GetDfltTxtFmtColl()));
+    lcl_BalanceTable(*pTable, nMaxBoxes, *pTblNd, *pBoxFmt, *pTxtColl, 0, 0);
+    lcl_SetTableBoxWidths(*pTable, nMaxBoxes, *pBoxFmt, *pDoc, 0);
 
-    for (n = 0; n < pTable->GetTabLines().size(); ++n )
-    {
-        // rhbz#820283: balance the cells in table rows
-        SwTableLine *const pCurrLine = pTable->GetTabLines()[ n ];
-        nBoxes = pCurrLine->GetTabBoxes().size();
-        SwTxtFmtColl *const pTxtColl(const_cast<SwTxtFmtColl*>(
-                GetDoc()->GetDfltTxtFmtColl()));
-        if (nMaxBoxes != nBoxes)
-        {
-            InsBoxen( pTblNd, pCurrLine, pBoxFmt, pTxtColl, 0,
-                        nBoxes, nMaxBoxes - nBoxes );
-        }
-    }
-
-    if( !aPosArr.empty() )
-    {
-        SwTableLines& rLns = pTable->GetTabLines();
-        sal_uInt16 nLastPos = 0;
-        for( n = 0; n < aPosArr.size(); ++n )
-        {
-            SwTableBoxFmt *pNewFmt = pDoc->MakeTableBoxFmt();
-            pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
-                                                aPosArr[ n ] - nLastPos ));
-            for( sal_uInt16 nLines2 = 0; nLines2 < rLns.size(); ++nLines2 )
-                //JP 24.06.98: hier muss ein Add erfolgen, da das BoxFormat
-                //              von der rufenden Methode noch gebraucht wird!
-                pNewFmt->Add( rLns[ nLines2 ]->GetTabBoxes()[ n ] );
-
-            nLastPos = aPosArr[ n ];
-        }
-
-        // damit die Tabelle die richtige Groesse bekommt, im BoxFormat die
-        // Groesse nach "oben" transportieren.
-        OSL_ENSURE( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
-        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
-    }
-    else
-        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes ));
-
-    // das wars doch wohl ??
     return pTblNd;
 }
 
