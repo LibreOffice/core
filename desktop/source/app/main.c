@@ -25,4 +25,18 @@ SAL_IMPLEMENT_MAIN() {
     return soffice_main();
 }
 
+#ifdef DBG_UTIL
+#ifdef __gnu_linux__
+#include <stdio.h>
+#include <stdlib.h>
+
+/* HACK: detect calls to xmlCleanupParser, which causes hard to debug crashes */
+__attribute__ ((visibility("default"))) void xmlCleanupParser(void)
+{
+    fprintf(stderr, "\n*** ERROR: DO NOT call xmlCleanupParser()\n\n");
+    abort();
+}
+#endif
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
