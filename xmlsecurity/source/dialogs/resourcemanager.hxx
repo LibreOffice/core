@@ -38,16 +38,16 @@ namespace XmlSec
 
     const LocaleDataWrapper&    GetLocaleData( void );
     DateTime        GetDateTime( const ::com::sun::star::util::DateTime& _rDT );
-    String          GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
-    String          GetDateString( const ::com::sun::star::util::DateTime& _rDT );
+    OUString        GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
+    OUString        GetDateString( const ::com::sun::star::util::DateTime& _rDT );
 
     std::vector< std::pair< ::rtl::OUString, ::rtl::OUString> >
         parseDN(const ::rtl::OUString& rRawString);
     std::pair< ::rtl::OUString, ::rtl::OUString> GetDNForCertDetailsView(
         const ::rtl::OUString & rRawString);
-    String          GetContentPart( const String& _rRawString );
+    OUString        GetContentPart( const OUString& _rRawString );
 
-    String          GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", sal_uInt16 _nLineBreak = 0xFFFF );
+    OUString        GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", sal_uInt16 _nLineBreak = 0xFFFF );
 
     long            ShrinkToFitWidth( Control& _rCtrl, long _nOffs = 0 );       // return = new width
     void            AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset = 0 );

@@ -29,7 +29,6 @@
 #include <rtl/ustrbuf.h>
 #include <vector>
 
-using ::rtl::OUString;
 using namespace std;
 
 namespace XmlSec
@@ -58,18 +57,18 @@ namespace XmlSec
             Time( _rDT.Hours, _rDT.Minutes, _rDT.Seconds, _rDT.HundredthSeconds ) );
     }
 
-    String GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
+    OUString GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
     {
         // String with date and time information (#i20172#)
         DateTime aDT( GetDateTime( _rDT ) );
         const LocaleDataWrapper& rLoDa = GetLocaleData();
-        String sRet( rLoDa.getDate( aDT ) );
-        sRet += ' ';
-        sRet += rLoDa.getTime( aDT );
-        return sRet;
+        OUStringBuffer sRet( rLoDa.getDate( aDT ) );
+        sRet.append( ' ' );
+        sRet.append( rLoDa.getTime( aDT ) );
+        return sRet.makeStringAndClear();
     }
 
-    String GetDateString( const ::com::sun::star::util::DateTime& _rDT )
+    OUString GetDateString( const ::com::sun::star::util::DateTime& _rDT )
     {
         return GetLocaleData().getDate( GetDateTime( _rDT ) );
     }
@@ -295,7 +294,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
 #endif
 
-    String GetContentPart( const String& _rRawString )
+    OUString GetContentPart( const OUString& _rRawString )
     {
         char const * aIDs[] = { "CN", "OU", "O", "E", NULL };
         OUString retVal;
@@ -319,11 +318,11 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         return retVal;
     }
 
-    String GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
+    OUString GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
     {
         const sal_Int8*         pSerNumSeq = _rSeq.getConstArray();
         int                     nCnt = _rSeq.getLength();
-        String                  aStr;
+        OUStringBuffer          aStr;
         const char              pHexDigs[ 17 ] = "0123456789ABCDEF";
         char                    pBuffer[ 3 ] = "  ";
         sal_uInt8                   nNum;
@@ -337,19 +336,19 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
             pBuffer[ 1 ] = pHexDigs[ nNum & 0x0F ];
             nNum >>= 4;
             pBuffer[ 0 ] = pHexDigs[ nNum ];
-            aStr.AppendAscii( pBuffer );
+            aStr.appendAscii( pBuffer );
 
             --nBreak;
             if( nBreak )
-                aStr.AppendAscii( _pSep );
+                aStr.appendAscii( _pSep );
             else
             {
                 nBreak = nBreakStart;
-                aStr.AppendAscii( "\n" );
+                aStr.append( '\n' );
             }
         }
 
-        return aStr;
+        return aStr.makeStringAndClear();
     }
 
     long ShrinkToFitWidth( Control& _rCtrl, long _nOffs )
