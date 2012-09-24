@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .ConfigNode import *
+from .ConfigNode import ConfigNode
 from .Configuration import Configuration
 
 class ConfigSet(ConfigNode):

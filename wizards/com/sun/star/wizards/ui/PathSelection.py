@@ -16,8 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from ..common.PropertyNames import *
-from ..common.FileAccess import *
+from ..common.PropertyNames import PropertyNames
+from ..common.FileAccess import FileAccess
 from ..common.SystemDialog import SystemDialog
 
 class PathSelection(object):

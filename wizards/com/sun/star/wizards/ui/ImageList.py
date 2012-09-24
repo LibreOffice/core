@@ -17,7 +17,7 @@
 #
 from threading import RLock
 from .PeerConfig import PeerConfig
-from ..common.PropertyNames import *
+from ..common.PropertyNames import PropertyNames
 from ..common.HelpIds import HelpIds
 from ..common.Helper import Helper
 

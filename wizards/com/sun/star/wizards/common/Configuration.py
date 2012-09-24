@@ -15,9 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+import uno
 import traceback
 from .PropertyNames import PropertyNames
-from .Helper import *
+from .Helper import Helper
 
 '''
 This class gives access to the OO configuration api.
