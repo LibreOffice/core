@@ -321,6 +321,9 @@ void testRangeNameImpl(ScDocument* pDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("=SUM(global3) should be 10", 10.0, aValue);
     pDoc->GetValue(1,0,1,aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", 5.0, aValue);
+    // Test if Global5 ( which depends on Global6 ) is evaluated
+    pDoc->GetValue(0,5,1, aValue);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
 }
@@ -351,8 +354,6 @@ void ScFiltersTest::testRangeNameXLSX()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     testRangeNameImpl(pDoc);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testHardRecalcODS()
