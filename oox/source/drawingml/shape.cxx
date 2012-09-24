@@ -475,6 +475,18 @@ Reference< XShape > Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredX( sal_True );
             if ( mbFlipV )
                 mpCustomShapePropertiesPtr->setMirroredY( sal_True );
+
+            // #119920 Handle missing text rotation
+            if(getTextBody())
+            {
+                const sal_Int32 nTextRotation(getTextBody()->getTextProperties().moRotation.get(0));
+
+                if(nTextRotation)
+                {
+                    mpCustomShapePropertiesPtr->setTextRotation((nTextRotation * -1) / 60000);
+                }
+            }
+
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
         }
 

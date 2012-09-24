@@ -45,6 +45,7 @@ namespace oox { namespace drawingml {
 CustomShapeProperties::CustomShapeProperties()
 : mbMirroredX   ( sal_False )
 , mbMirroredY   ( sal_False )
+, mnTextRotation(0) // #119920# Add missing extra text rotation
 {
 }
 CustomShapeProperties::~CustomShapeProperties()
@@ -93,6 +94,22 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
         if( xDefaulter.is() )
             xDefaulter->createCustomShapeDefaults( maShapePresetType );
+
+        PropertyMap aPropertyMap;
+
+        aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
+        aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
+
+        if(mnTextRotation)
+        {
+            // #119920# Handle missing text rotation
+            aPropertyMap[ PROP_TextRotateAngle ] <<= Any(mnTextRotation);
+        }
+
+        // converting the vector to a sequence
+        Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
+        PropertySet aPropSet( xPropSet );
+        aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
         if ( maAdjustmentGuideList.size() )
         {
@@ -146,6 +163,12 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "non-primitive" );
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
+
+        if(mnTextRotation)
+        {
+            aPropertyMap[ PROP_TextRotation ] <<= Any(mnTextRotation);
+        }
+
         awt::Size aSize( xShape->getSize() );
         awt::Rectangle aViewBox( 0, 0, aSize.Width * 360, aSize.Height * 360 );
         if ( maPath2DList.size() )

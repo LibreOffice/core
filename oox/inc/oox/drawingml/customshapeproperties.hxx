@@ -130,6 +130,9 @@ public:
     void                                setMirroredX( sal_Bool bMirroredX ) { mbMirroredX = bMirroredX; };
     void                                setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
 
+    // #119920# Add missing extra text rotation
+    void setTextRotation(sal_Int32 nTextRotation) { mnTextRotation = nTextRotation; }
+
     double getValue( const std::vector< CustomShapeGuide >&, sal_uInt32 nIndex ) const;
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
     static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName );
@@ -148,6 +151,9 @@ private:
                                     maSegments;
     sal_Bool                        mbMirroredX;
     sal_Bool                        mbMirroredY;
+
+    // #119920# Add missing extra text rotation
+    sal_Int32                       mnTextRotation;
 };
 
 } }
