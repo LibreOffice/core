@@ -2586,17 +2586,13 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         rSet.Put( SvxCrossedOutItem( nFontAttributes & 0x01 ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
     if ( IsProperty( DFF_Prop_fillColor ) )
         rSet.Put( XFillColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor ) ) );
-    if ( IsProperty( DFF_Prop_shadowType ) )
-    {
-        MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType ) );
-        if( eShadowType != mso_shadowOffset )
-        {
-            rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm shadow distance
-            rSet.Put( SdrShadowYDistItem( 35 ) );
-        }
-    }
     if ( IsProperty( DFF_Prop_shadowColor ) )
         rSet.Put( SdrShadowColorItem( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor ), DFF_Prop_shadowColor ) ) );
+    else
+    {
+        //The default value for this property is 0x00808080
+        rSet.Put( SdrShadowColorItem( rManager.MSO_CLR_ToColor( 0x00808080, DFF_Prop_shadowColor ) ) );
+    }
     if ( IsProperty( DFF_Prop_shadowOpacity ) )
         rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity ) ) / 655 ) ) );
     if ( IsProperty( DFF_Prop_shadowOffsetX ) )
@@ -2620,6 +2616,17 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
                 rSet.Put( SdrShadowXDistItem( 35 ) );
             if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
                 rSet.Put( SdrShadowYDistItem( 35 ) );
+        }
+    }
+    if ( IsProperty( DFF_Prop_shadowType ) )
+    {
+        MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType ) );
+        if( eShadowType != mso_shadowOffset )
+        {
+            //0.12" == 173 twip == 302 100mm
+            sal_uInt32 nDist = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP ? 173: 302;
+            rSet.Put( SdrShadowXDistItem( nDist ) );
+            rSet.Put( SdrShadowYDistItem( nDist ) );
         }
     }
     if ( bHasShadow )
