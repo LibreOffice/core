@@ -257,9 +257,9 @@ ____
 For main/MathMLDTD/math.dtd:
 - W3C license
 
-W3C® SOFTWARE NOTICE AND LICENSE
+W3CÂ® SOFTWARE NOTICE AND LICENSE
 
-Copyright © 1994-2001 World Wide Web Consortium, (Massachusetts Institute of
+Copyright Â© 1994-2001 World Wide Web Consortium, (Massachusetts Institute of
 Technology, Institut National de Recherche en Informatique et en Automatique,
 Keio University). All Rights Reserved. http://www.w3.org/Consortium/Legal/
 
@@ -279,7 +279,7 @@ modifications, that you make:
     Any pre-existing intellectual property disclaimers, notices, or terms and
     conditions. If none exist, a short notice of the following form (hypertext
     is preferred, text is permitted) should be used within the body of any
-    redistributed or derivative code: "Copyright © [$date-of-software] World 
+    redistributed or derivative code: "Copyright Â© [$date-of-software] World 
     Wide Web Consortium, (Massachusetts Institute of Technology, Institut 
     National de Recherche en Informatique et en Automatique, Keio University).
     All Rights Reserved. http://www.w3.org/Consortium/Legal/"
@@ -651,14 +651,14 @@ Copyright (C) 1997 TWAIN Working Group: Bell+Howell, Canon, DocuMagix,
 Fujitsu, Genoa Technology, Hewlett-Packard, Kofax Imaging Products, and
 Ricoh Corporation.  All rights reserved.
 
-Copyright © 1998 TWAIN Working Group: Adobe Systems Incorporated, 
+Copyright Â© 1998 TWAIN Working Group: Adobe Systems Incorporated, 
 Canon Information Systems, Eastman Kodak Company, 
 Fujitsu Computer Products of America, Genoa Technology, 
 Hewlett-Packard Company, Intel Corporation, Kofax Image Products, 
 JFL Peripheral Solutions Inc., Ricoh Corporation, and Xerox Corporation.  
 All rights reserved.
 
-Copyright © 2000 TWAIN Working Group: Adobe Systems Incorporated, 
+Copyright Â© 2000 TWAIN Working Group: Adobe Systems Incorporated, 
 Canon Information Systems, Digimarc Corporation, Eastman Kodak Company, 
 Fujitsu Computer Products of America, Hewlett-Packard Company, 
 JFL Peripheral Solutions Inc., Ricoh Corporation, and Xerox Corporation.  
@@ -812,7 +812,7 @@ For main/ucb/source/ucp/odma/odma.h:
             ODMA 2.0 SPECIFICATIONS AND SOFTWARE
             -----------------------------------
 
-          Copyright © 1994-1998 AIIM International
+          Copyright Â© 1994-1998 AIIM International
 
 LICENSE:
 
@@ -862,7 +862,7 @@ For main/x11_extensions/inc/Xrender.h,
     main/x11_extensions/inc/renderproto.h:
 - license equal to MIT license
 
-Copyright © 2000 SuSE, Inc.
+Copyright Â© 2000 SuSE, Inc.
 
 Permission to use, copy, modify, distribute, and sell this software and its
 documentation for any purpose is hereby granted without fee, provided that
@@ -890,8 +890,8 @@ For main/x11_extensions/inc/Xrandr.h,
     main/x11_extensions/inc/randrproto.h
 - license equal to MIT license
 
-Copyright © 2000 Compaq Computer Corporation, Inc.
-Copyright © 2002 Hewlett-Packard Company, Inc.
+Copyright Â© 2000 Compaq Computer Corporation, Inc.
+Copyright Â© 2002 Hewlett-Packard Company, Inc.
 
 Permission to use, copy, modify, distribute, and sell this software and its
 documentation for any purpose is hereby granted without fee, provided that
