@@ -34,7 +34,7 @@ f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz
 3fa4d5236f2a36ca5c3af6715e837691-curl-7.26.0.tar.gz
 8294d6c42e3553229af9934c5c0ed997-stax-api-1.0-2-sources.jar
 fa9aa839145cdf860bf596532bb8af97-cppunit-1.13.1.tar.gz
-a169ab152209200a7bad29a275cb0333-seamonkey-1.1.14.source.tar.gz
+@MOZ_TARBALL@
 a4d9b30810a434a3ed39fc0003bbd637-LICENSE_stax-api-1.0-2-sources.html
 a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
 ada24d37d8d638b3d8a9985e80bc2978-source-9.0.0.7-bj.zip

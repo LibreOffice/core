@@ -8013,6 +8013,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_MOZILLA=NO
     BUILD_TYPE="$BUILD_TYPE MOZ"
+    MOZ_TARBALL=a169ab152209200a7bad29a275cb0333-seamonkey-1.1.14.source.tar.gz
     if test -z "$with_mozilla_version"; then
         MOZILLA_VERSION=
     else
@@ -8185,6 +8186,7 @@ AC_SUBST(MOZ_FLAVOUR)
 AC_SUBST(MOZ_INC)
 AC_SUBST(MOZ_LIB)
 AC_SUBST(MOZ_LIB_XPCOM)
+AC_SUBST(MOZ_TARBALL)
 
 dnl ===================================================================
 dnl Check for system NSS
