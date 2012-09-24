@@ -43,12 +43,7 @@ endif
 
 $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_ucalc \
-    CppunitTest_sc_filters_test \
     CppunitTest_sc_rangelst_test \
-))
-
-$(eval $(call gb_Module_add_slowcheck_targets,sc,\
-    CppunitTest_sc_subsequent_filters_test \
 ))
 
 # Disabled to allow the check tinderbox execute the sd tests

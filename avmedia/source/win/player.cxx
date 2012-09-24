@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -50,6 +41,30 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace win {
 
+LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
+{
+    Player* pPlayer = (Player*) ::GetWindowLong( hWnd, 0 );
+    bool    bProcessed = true;
+
+    if( pPlayer )
+    {
+        switch( nMsg )
+        {
+            case( WM_GRAPHNOTIFY ):
+                pPlayer->processEvent();
+            break;
+            default:
+                bProcessed = false;
+            break;
+        }
+    }
+    else
+        bProcessed = false;
+
+    return( bProcessed ? 0 : DefWindowProc( hWnd, nMsg, nPar1, nPar2 ) );
+}
+
+
 bool isWindowsVistaOrHigher()
 {
     // POST: return true if we are at least on Windows Vista
@@ -57,10 +72,7 @@ bool isWindowsVistaOrHigher()
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionEx(&osvi);
-    if ( osvi.dwMajorVersion >= 6 )
-        return true;
-
-    return false;
+    return  osvi.dwMajorVersion >= 6;
 }
 
 // ----------------
@@ -68,6 +80,7 @@ bool isWindowsVistaOrHigher()
 // ----------------
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+    Player_BASE(m_aMutex),
     mxMgr( rxMgr ),
     mpGB( NULL ),
     mpOMF( NULL ),
@@ -80,8 +93,10 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mpVW( NULL ),
     mpEV( NULL ),
     mnUnmutedVolume( 0 ),
+    mnFrameWnd( 0 ),
     mbMuted( false ),
-    mbLooping( false )
+    mbLooping( false ),
+    mbAddWindow( sal_True )
 {
     ::CoInitialize( NULL );
 }
@@ -90,6 +105,18 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 
 Player::~Player()
 {
+    if( mnFrameWnd )
+        ::DestroyWindow( (HWND) mnFrameWnd );
+
+    ::CoUninitialize();
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Player::disposing()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    stop();
     if( mpBA )
         mpBA->Release();
 
@@ -106,7 +133,10 @@ Player::~Player()
         mpMS->Release();
 
     if( mpME )
+    {
+        mpME->SetNotifyWindow( 0, WM_GRAPHNOTIFY, 0);
         mpME->Release();
+    }
 
     if( mpMC )
         mpMC->Release();
@@ -119,12 +149,8 @@ Player::~Player()
 
     if( mpGB )
         mpGB->Release();
-
-    ::CoUninitialize();
 }
-
 // ------------------------------------------------------------------------------
-
 bool Player::create( const OUString& rURL )
 {
     HRESULT hR;
@@ -135,15 +161,12 @@ bool Player::create( const OUString& rURL )
         // Don't use the overlay mixer on Windows Vista
         // It disables the desktop composition as soon as RenderFile is called
         // also causes some other problems: video rendering is not reliable
-        if( !isWindowsVistaOrHigher() )
+        if( !isWindowsVistaOrHigher() && SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**) &mpOMF ) ) )
         {
-            if( SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**) &mpOMF ) ) )
-            {
-                mpGB->AddFilter( mpOMF, L"com_sun_star_media_OverlayMixerFilter" );
+            mpGB->AddFilter( mpOMF, L"com_sun_star_media_OverlayMixerFilter" );
 
-                if( !SUCCEEDED( mpOMF->QueryInterface( IID_IDDrawExclModeVideo, (void**) &mpEV ) ) )
-                    mpEV = NULL;
-            }
+            if( !SUCCEEDED( mpOMF->QueryInterface( IID_IDDrawExclModeVideo, (void**) &mpEV ) ) )
+                mpEV = NULL;
         }
 
         if( SUCCEEDED( hR = mpGB->RenderFile( reinterpret_cast<LPCWSTR>(rURL.getStr()), NULL ) ) &&
@@ -185,6 +208,7 @@ const IVideoWindow* Player::getVideoWindow() const
 
 void Player::setNotifyWnd( int nNotifyWnd )
 {
+    mbAddWindow = sal_False;
     if( mpME )
         mpME->SetNotifyWindow( (OAHWND) nNotifyWnd, WM_GRAPHNOTIFY, reinterpret_cast< LONG_PTR>( this ) );
 }
@@ -207,7 +231,7 @@ long Player::processEvent()
     long nCode;
     LONG_PTR nParam1, nParam2;
 
-    if( mpME && SUCCEEDED( mpME->GetEvent( &nCode, &nParam1, &nParam2, 0 ) ) )
+    while( mpME && SUCCEEDED( mpME->GetEvent( &nCode, &nParam1, &nParam2, 0 ) ) )
     {
         if( EC_COMPLETE == nCode )
         {
@@ -234,8 +258,44 @@ long Player::processEvent()
 void SAL_CALL Player::start(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     if( mpMC )
+    {
+        if ( mbAddWindow )
+        {
+            static WNDCLASS* mpWndClass = NULL;
+            if ( !mpWndClass )
+            {
+                mpWndClass = new WNDCLASS;
+
+                memset( mpWndClass, 0, sizeof( *mpWndClass ) );
+                mpWndClass->hInstance = GetModuleHandle( NULL );
+                mpWndClass->cbWndExtra = sizeof( DWORD );
+                mpWndClass->lpfnWndProc = MediaPlayerWndProc_2;
+                mpWndClass->lpszClassName = "com_sun_star_media_Sound_Player";
+                mpWndClass->hbrBackground = (HBRUSH) ::GetStockObject( BLACK_BRUSH );
+                mpWndClass->hCursor = ::LoadCursor( NULL, IDC_ARROW );
+
+                ::RegisterClass( mpWndClass );
+            }
+            if ( !mnFrameWnd )
+            {
+                mnFrameWnd = (int) ::CreateWindow( mpWndClass->lpszClassName, NULL,
+                                           0,
+                                           0, 0, 0, 0,
+                                           (HWND) NULL, NULL, mpWndClass->hInstance, 0 );
+                if ( mnFrameWnd )
+                {
+                    ::ShowWindow((HWND) mnFrameWnd, SW_HIDE);
+                    ::SetWindowLong( (HWND) mnFrameWnd, 0, (DWORD) this );
+                    // mpVW->put_Owner( (OAHWND) mnFrameWnd );
+                    setNotifyWnd( mnFrameWnd );
+                }
+            }
+        }
+
         mpMC->Run();
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -243,6 +303,7 @@ void SAL_CALL Player::start(  )
 void SAL_CALL Player::stop(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     if( mpMC )
         mpMC->Stop();
 }
@@ -252,6 +313,8 @@ void SAL_CALL Player::stop(  )
 sal_Bool SAL_CALL Player::isPlaying()
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     OAFilterState   eFilterState;
     bool            bRet = false;
 
@@ -266,6 +329,8 @@ sal_Bool SAL_CALL Player::isPlaying()
 double SAL_CALL Player::getDuration(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     REFTIME aRefTime( 0.0 );
 
     if( mpMP  )
@@ -279,6 +344,8 @@ double SAL_CALL Player::getDuration(  )
 void SAL_CALL Player::setMediaTime( double fTime )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     if( mpMP  )
     {
         const bool bPlaying = isPlaying();
@@ -295,6 +362,8 @@ void SAL_CALL Player::setMediaTime( double fTime )
 double SAL_CALL Player::getMediaTime(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     REFTIME aRefTime( 0.0 );
 
     if( mpMP  )
@@ -308,6 +377,8 @@ double SAL_CALL Player::getMediaTime(  )
 double SAL_CALL Player::getRate(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     double fRet( 0.0 );
 
     if( mpMP  )
@@ -321,6 +392,8 @@ double SAL_CALL Player::getRate(  )
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     mbLooping = bSet;
 }
 
@@ -329,6 +402,8 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
 sal_Bool SAL_CALL Player::isPlaybackLoop(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     return mbLooping;
 }
 
@@ -337,6 +412,8 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 void SAL_CALL Player::setMute( sal_Bool bSet )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     if( mpBA && ( mbMuted != bSet ) )
     {
         mbMuted = bSet;
@@ -349,6 +426,8 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 sal_Bool SAL_CALL Player::isMute(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     return mbMuted;
 }
 
@@ -357,6 +436,8 @@ sal_Bool SAL_CALL Player::isMute(  )
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     mnUnmutedVolume = static_cast< long >( nVolumeDB ) * 100;
 
     if( !mbMuted && mpBA )
@@ -368,6 +449,8 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 sal_Int16 SAL_CALL Player::getVolumeDB(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     return( static_cast< sal_Int16 >( mnUnmutedVolume / 100 ) );
 }
 
@@ -376,6 +459,8 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
 awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     awt::Size aSize( 0, 0 );
 
     if( mpBV )
@@ -395,6 +480,8 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
 uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+
     uno::Reference< ::media::XPlayerWindow >    xRet;
     awt::Size                                   aSize( getPreferredPlayerWindowSize() );
 

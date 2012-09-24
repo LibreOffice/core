@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "mediawindowbase_impl.hxx"
 #include <avmedia/mediaitem.hxx>
@@ -60,52 +51,45 @@ MediaWindowBaseImpl::~MediaWindowBaseImpl()
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL )
 {
-    uno::Reference< lang::XMultiServiceFactory >    xFactory( ::comphelper::getProcessServiceFactory() );
-    uno::Reference< media::XPlayer >                xPlayer;
+    uno::Reference< media::XPlayer > xPlayer;
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
     if( xFactory.is() )
     {
-        try
+        static const char * aServiceManagers[] = {
+            AVMEDIA_MANAGER_SERVICE_NAME,
+// a fallback path just for gstreamer which has
+// two significant versions deployed at once ...
+#ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
+            AVMEDIA_MANAGER_SERVICE_NAME_OLD
+#endif
+        };
+
+        for( sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i )
         {
+            const rtl::OUString aServiceName( aServiceManagers[ i ],
+                                              strlen( aServiceManagers[ i ] ),
+                                              RTL_TEXTENCODING_ASCII_US );
+
             uno::Reference< ::com::sun::star::media::XManager > xManager;
 
             try {
                 xManager = uno::Reference< ::com::sun::star::media::XManager >(
-                        xFactory->createInstance( AVMEDIA_MANAGER_SERVICE_NAME ),
-                        uno::UNO_QUERY );
-            } catch ( const uno::Exception & ) {
-            }
-
-// a fallback path just for gstreamer which has
-// two significant versions deployed at once ...
-#ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
-            if( !xManager.is() )
-            {
-                xManager = uno::Reference< ::com::sun::star::media::XManager >(
-                        xFactory->createInstance( AVMEDIA_MANAGER_SERVICE_NAME_OLD ),
-                        uno::UNO_QUERY );
-            }
-#endif
-
-            if( xManager.is() )
-            {
-                xPlayer = uno::Reference< ::com::sun::star::media::XPlayer >(
-                    xManager->createPlayer( rURL ), uno::UNO_QUERY );
-            }
-            else
+                        xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
+                if( xManager.is() )
+                    xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ),
+                                                                uno::UNO_QUERY );
+                else
+                    SAL_WARN( "avmedia",
+                              "failed to create media player service " << aServiceName );
+            } catch ( const uno::Exception &e ) {
                 SAL_WARN(
-                    "avmedia",
-                    ("failed to create media player service "
-                     AVMEDIA_MANAGER_SERVICE_NAME));
-        }
-        catch( const uno::Exception &e )
-        {
-            SAL_WARN(
-                "avmedia",
-                "couldn't create media player " AVMEDIA_MANAGER_SERVICE_NAME
-                    ", exception '" << e.Message << '\'');
+                         "avmedia",
+                         "couldn't create media player " AVMEDIA_MANAGER_SERVICE_NAME
+                         ", exception '" << e.Message << '\'');
+            }
         }
     }
 
@@ -212,17 +196,11 @@ void MediaWindowBaseImpl::setPlayerWindow( const uno::Reference< media::XPlayerW
 
 void MediaWindowBaseImpl::cleanUp()
 {
-    if( mxPlayer.is() )
-    {
-        mxPlayer->stop();
+    uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
+    if( xComponent.is() ) // this stops the player
+        xComponent->dispose();
 
-        uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
-
-        if( xComponent.is() )
-            xComponent->dispose();
-
-        mxPlayer.clear();
-    }
+    mxPlayer.clear();
 
     mpMediaWindow = NULL;
 }
