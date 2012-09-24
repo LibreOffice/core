@@ -1529,7 +1529,6 @@ if test "$_os" = "WINNT"; then
       DISABLE_ACTIVEX="TRUE"
       AC_MSG_RESULT([no])
    fi
-   AC_SUBST(DISABLE_ACTIVEX)
 
    AC_MSG_CHECKING([whether to use ATL])
    if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE" -o "$enable_atl" = ""; then
@@ -1537,9 +1536,13 @@ if test "$_os" = "WINNT"; then
       AC_MSG_RESULT([yes])
    else
       DISABLE_ATL="TRUE"
+      dnl ActiveX depends on ATL, it should be disabled
+      DISABLE_ACTIVEX="TRUE"
       AC_MSG_RESULT([no])
    fi
+
    AC_SUBST(DISABLE_ATL)
+   AC_SUBST(DISABLE_ACTIVEX)
 
 fi
 
@@ -5749,8 +5752,8 @@ dnl Check for ATL and MFC
 dnl ============================================
 if test \( "$_os" = "WINNT" \) ; then
     AC_MSG_CHECKING([for ATL and MFC])
-    if test "$DISABLE_ATL" = "TRUE" -o "$DISABLE_ACTIVEX" = "TRUE" ; then
-        AC_MSG_RESULT([ATL/MFC disabled])
+    if test "$DISABLE_ATL" = "TRUE"; then
+        AC_MSG_RESULT([ATL is disabled, nothing to check])
     else
         AC_MSG_NOTICE([testing ATL/MFC libs and includes])
         if test -z "$with_atl_include_dir"; then
