@@ -69,11 +69,13 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     const desktop::CommandLineArgs& rCmdLineArgs = aDesktop.GetCommandLineArgs();
     if ( rCmdLineArgs.IsHelp() )
     {
+        desktop::Desktop::ensureProcessServiceFactory();
         desktop::displayCmdlineHelp();
         return EXIT_SUCCESS;
     }
     else if ( rCmdLineArgs.IsVersion() )
     {
+        desktop::Desktop::ensureProcessServiceFactory();
         desktop::displayVersion();
         return EXIT_SUCCESS;
     }
