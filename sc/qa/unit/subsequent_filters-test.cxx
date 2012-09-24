@@ -50,6 +50,7 @@
 #include "userdat.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+#include "stlsheet.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -634,6 +635,25 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
         rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
         pFiltersTest->createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
         testCondFile(aCSVFileName, pDoc, 2);
+        // test parent cell style import ( fdo#55198 )
+        if ( nFormat == XLSX )
+        {
+            pPattern = pDoc->GetPattern(1,1,3);
+            ScStyleSheet* pStyleSheet = (ScStyleSheet*)pPattern->GetStyleSheet();
+            // check parent style name
+            rtl::OUString sExpected("Excel Built-in Date");
+            rtl::OUString sResult = pStyleSheet->GetName();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("parent style for Sheet4.B2 is 'Excel Built-in Date'", sExpected, sResult);
+            // check  align
+            SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+            eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(rItemSet.Get( ATTR_HOR_JUSTIFY ) ).GetValue() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+            // check date format ( should be just month e.g. 29 )
+            sResult =pDoc->GetString( 1,1,3 );
+            sExpected = rtl::OUString("29");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should just display month", sExpected, sResult );
+
+        }
     }
 
     ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0,0,2);
