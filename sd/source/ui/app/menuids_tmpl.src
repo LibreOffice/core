@@ -128,6 +128,14 @@
         Text [ en-US ] = "~New Slide" ; \
     };
 
+#define MN_DUPLICATE_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_DUPLICATE_PAGE ; \
+        HelpId = CMD_SID_DUPLICATE_PAGE ; \
+        Text [ en-US ] = "~Duplicate Slide" ; \
+    };
+
 #define MN_INSERT_MASTER \
     MenuItem\
     {\
@@ -205,6 +213,7 @@
                 MN_DISPLAY_MASTER_OBJECTS\
                 SEPARATOR\
                 MN_INSERT_SLIDE\
+                MN_DUPLICATE_SLIDE\
                 MN_DELETE_SLIDE\
             };\
         };\

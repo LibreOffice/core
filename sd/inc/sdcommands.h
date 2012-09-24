@@ -76,6 +76,7 @@
 #define CMD_SID_SHOW_SLIDE                          ".uno:ShowSlide"
 #define CMD_SID_INSERTLAYER                         ".uno:InsertLayer"
 #define CMD_SID_INSERTPAGE                          ".uno:InsertPage"
+#define CMD_SID_DUPLICATE_PAGE                      ".uno:DuplicatePage"
 #define CMD_SID_MEASURE_DLG                         ".uno:MeasureAttributes"
 #define CMD_SID_HORIZONTAL                          ".uno:MirrorHorz"
 #define CMD_SID_VERTICAL                            ".uno:MirrorVert"
