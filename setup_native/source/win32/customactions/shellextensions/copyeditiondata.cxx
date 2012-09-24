@@ -38,8 +38,6 @@
 #pragma warning(pop)
 #endif
 
-#include "boost/scoped_array.hpp"
-
 #define LCL_LENGTH0(s) (sizeof (s) / sizeof *(s))
 #define LCL_STRING0(s) (s), LCL_LENGTH0(s)
 
@@ -80,10 +78,36 @@ wchar_t * getProperty(
 
 }
 
+namespace {
+    class scoped_wchar_t_array
+    {
+    private:
+        wchar_t* mpArray;
+
+    public:
+        scoped_wchar_t_array( wchar_t* pArray )
+            : mpArray( pArray )
+        {}
+
+        ~scoped_wchar_t_array()
+        {
+            if ( mpArray != 0 )
+            {
+                delete[] mpArray;
+            }
+        }
+
+        wchar_t* get()
+        {
+            return mpArray;
+        }
+    };
+}
+
 extern "C" UINT __stdcall copyEditionData(MSIHANDLE install) {
-    boost::scoped_array<wchar_t> from(
+    scoped_wchar_t_array from(
         getProperty(install, L"SourceDir", LCL_STRING0(L"edition\0")));
-    if (!from) {
+    if (!from.get()) {
         return ERROR_INSTALL_FAILURE;
     }
     Status stat = fileExists(from.get());
@@ -94,11 +118,11 @@ extern "C" UINT __stdcall copyEditionData(MSIHANDLE install) {
         return ERROR_SUCCESS;
     }
     wchar_t * end;
-    boost::scoped_array<wchar_t> to(
+    scoped_wchar_t_array to(
         getProperty(
             install, L"INSTALLLOCATION",
             LCL_STRING0(L"program\\edition\0"), &end));
-    if (!to) {
+    if (!to.get()) {
         return ERROR_INSTALL_FAILURE;
     }
     stat = fileExists(to.get());
