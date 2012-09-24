@@ -111,6 +111,7 @@ public:
     void testFdo52052();
     void testInk();
     void testFdo52389();
+    void testFdo49655();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST(testFdo52052);
     CPPUNIT_TEST(testInk);
     CPPUNIT_TEST(testFdo52389);
+    CPPUNIT_TEST(testFdo49655);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -968,6 +970,19 @@ void Test::testFdo52389()
     // The last '!' character at the end of the document was lost
     load("fdo52389.rtf");
     CPPUNIT_ASSERT_EQUAL(6, getLength());
+}
+
+void Test::testFdo49655()
+{
+    /*
+     * The problem was that the table was not imported due to the '  ' string in the middle of the table definition.
+     *
+     * xray ThisComponent.TextTables.Count 'was 0
+     */
+    load("fdo49655.rtf");
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

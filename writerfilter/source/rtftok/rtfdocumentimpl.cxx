@@ -1006,6 +1006,14 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
+    // Are we in the middle of the table definition? (No cell defs yet, but we already have some cell props.)
+    if (m_aStates.top().aTableCellSprms.find(NS_ooxml::LN_CT_TcPrBase_vAlign).get() &&
+        m_aStates.top().nCells == 0)
+    {
+        m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, RTFValue::Pointer_t(new RTFValue(rString))));
+        return;
+    }
+
     checkFirstRun();
     checkNeedPap();
 
