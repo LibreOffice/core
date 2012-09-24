@@ -69,6 +69,7 @@ public:
     virtual const GtkSalFrame*  GetFrame() const;
     virtual void                CheckItem( unsigned nPos, sal_Bool bCheck );
     virtual void                EnableItem( unsigned nPos, sal_Bool bEnable );
+    virtual void                ShowItem( unsigned nPos, sal_Bool bShow );
     virtual void                SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText );
     virtual void                SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
     virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
@@ -85,6 +86,7 @@ public:
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     virtual void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
+    virtual sal_Bool            IsItemVisible( unsigned nPos );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText );
     void                        NativeSetItemCommand( unsigned nSection,
@@ -114,9 +116,10 @@ public:
 
     sal_uInt16          mnId;               // Item ID
     MenuItemType        mnType;             // Item type
-    Menu*               mpVCLMenu;          // VCL Menu into which this MenuItem is inserted
-    GtkSalMenu*         mpParentMenu;       // The menu in which this menu item is inserted
-    GtkSalMenu*         mpSubMenu;          // Sub menu of this item (if defined)
+    sal_Bool            mbVisible;          // Item visibility.
+    Menu*               mpVCLMenu;          // VCL Menu into which this menu item is inserted
+    GtkSalMenu*         mpParentMenu;       // The menu into which this menu item is inserted
+    GtkSalMenu*         mpSubMenu;          // Submenu of this item (if defined)
 };
 
 #endif // GTKSALMENU_HXX

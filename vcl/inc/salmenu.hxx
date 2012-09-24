@@ -66,7 +66,7 @@ public:
     virtual ~SalMenu();
 
     virtual sal_Bool VisibleMenuBar() = 0;  // must return sal_True to actually DISPLAY native menu bars
-                            // otherwise only menu messages are processed (eg, OLE on Windows)
+                                            // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) = 0;
     virtual void RemoveItem( unsigned nPos ) = 0;
@@ -82,7 +82,9 @@ public:
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
 
-    virtual void SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr ) {}
+    // FIXME: Make the other VCL native backends to work with these new methods.
+    virtual void SetItemCommand( unsigned, SalMenuItem*, const rtl::OUString& ) {}
+    virtual void ShowItem( unsigned nPos, sal_Bool bShow ) { EnableItem( nPos, bShow ); }
     virtual void Freeze() {}
 
     // return an empty rectangle if not implemented

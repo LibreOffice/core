@@ -31,6 +31,8 @@
 #  include <gdk/gdkkeysyms-compat.h>
 #endif
 
+#include <svtools/menuoptions.hxx>
+
 #include <framework/menuconfiguration.hxx>
 
 #include <sal/log.hxx>
@@ -136,23 +138,24 @@ bool GtkSalMenu::PrepUpdate()
     const GtkSalFrame* pFrame = GetFrame();
     if (!pFrame)
     {
-    const GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pFrame->getWindow()) ));
-    if(!pWindow)
-    {
-        SAL_INFO("vcl.unity", "not updating menu model, I have no frame " << mpMenuModel);
-        return false;
-    }
+        const GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pFrame->getWindow()) ));
+        if(!pWindow)
+        {
+            SAL_INFO("vcl.unity", "not updating menu model, I have no frame " << mpMenuModel);
+            return false;
+        }
     
-    // the root menu does not have its own model and has to use the one owned by the frame
-    if(mbMenuBar)
-    {
-        mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( pWindow ), "g-lo-menubar" ) );
-        mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( pWindow ), "g-lo-action-group" ) );
+        // the root menu does not have its own model and has to use the one owned by the frame
+        if(mbMenuBar)
+        {
+            mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( pWindow ), "g-lo-menubar" ) );
+            mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( pWindow ), "g-lo-action-group" ) );
+        }
+        if(!mpMenuModel || !mpActionGroup)
+            return false;
+        SAL_INFO("vcl.unity", "updating menu model" << mpMenuModel);
+        return true;
     }
-    if(!mpMenuModel || !mpActionGroup)
-        return false;
-    SAL_INFO("vcl.unity", "updating menu model" << mpMenuModel);
-    return true;
 }
 
 void GtkSalMenu::UpdateNativeMenu( )
@@ -173,16 +176,21 @@ void GtkSalMenu::UpdateNativeMenu( )
     sal_uInt16 validItems = 0;
     sal_uInt16 nItem;
 
-    for ( nItem = 0; nItem < GetItemCount(); nItem++ ) {
-        GtkSalMenuItem *pSalMenuItem = GetItemAtPos( nItem );
+    for ( nItem = 0; nItem < pMenu->GetItemCount(); nItem++ ) {
+        if ( pMenu->IsItemVisible( nItem ) == sal_False )
+            continue;
+
+        GtkSalMenuItem *pSalMenuItem = pMenu->GetItemAtPos( nItem );
         sal_uInt16 nId = pSalMenuItem->mnId;
 
         if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
         {
             while ( nItemPos < g_lo_menu_get_n_items_from_section( pLOMenu, nSection ) )
                 g_lo_menu_remove_from_section( pLOMenu, nSection, nItemPos );
+            
             nSection++;
             nItemPos = 0;
+            validItems = 0;
 
             if ( nLOMenuSize <= nSection )
             {
@@ -601,6 +609,16 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
     }
 }
 
+sal_Bool GtkSalMenu::IsItemVisible( unsigned nPos )
+{
+    sal_Bool bVisible = sal_False;
+
+    if ( nPos < maItems.size() )
+        bVisible = ( ( GtkSalMenuItem* ) maItems[ nPos ])->mbVisible;
+
+    return bVisible;
+}
+
 void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
 }
@@ -608,6 +626,13 @@ void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 {
 }
+
+void GtkSalMenu::ShowItem( unsigned nPos, sal_Bool bShow )
+{
+    if ( nPos < maItems.size() )
+        ( ( GtkSalMenuItem* ) maItems[ nPos ])->mbVisible = bShow;
+}
+
 
 void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )
 {
@@ -642,6 +667,7 @@ void GtkSalMenu::Freeze()
 GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
     mnType( pItemData->eType ),
+    mbVisible( sal_True ),
     mpVCLMenu( pItemData->pMenu ),
     mpParentMenu( NULL ),
     mpSubMenu( NULL )
