@@ -171,12 +171,12 @@ void GtkSalMenu::UpdateNativeMenu( )
     if ( nLOMenuSize == 0 )
         g_lo_menu_new_section( pLOMenu, 0, NULL );
 
-    sal_uInt16 nSection = 0;
-    sal_uInt16 nItemPos = 0;
-    sal_uInt16 validItems = 0;
-    sal_uInt16 nItem;
+    sal_Int32 nSection = 0;
+    sal_Int32 nItemPos = 0;
+    sal_Int32 validItems = 0;
+    sal_Int32 nItem;
 
-    for ( nItem = 0; nItem < pMenu->GetItemCount(); nItem++ ) {
+    for ( nItem = 0; nItem < ( sal_Int32 ) pMenu->GetItemCount(); nItem++ ) {
         if ( pMenu->IsItemVisible( nItem ) == sal_False )
             continue;
 
@@ -185,9 +185,13 @@ void GtkSalMenu::UpdateNativeMenu( )
 
         if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
         {
-            while ( nItemPos < g_lo_menu_get_n_items_from_section( pLOMenu, nSection ) )
-                g_lo_menu_remove_from_section( pLOMenu, nSection, nItemPos );
-            
+            // Delete extra items from current section.
+            sal_uInt16 nSectionItems = g_lo_menu_get_n_items_from_section( pLOMenu, nSection );
+
+            while ( nSectionItems > validItems )
+                // FIXME Remove associated command if needed.
+                g_lo_menu_remove_from_section( pLOMenu, nSection, --nSectionItems );
+
             nSection++;
             nItemPos = 0;
             validItems = 0;
@@ -279,6 +283,17 @@ void GtkSalMenu::UpdateNativeMenu( )
         SAL_INFO("vcl.unity", "nSection " << nSection << " model sections " << g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) ));
         g_lo_menu_remove(pLOMenu, nSection );
     }
+
+    // Delete extra items in last section.
+    sal_Int32 nSectionItems = (sal_Int32) g_lo_menu_get_n_items_from_section( pLOMenu, nSection );
+
+    while ( nSectionItems > validItems )
+        g_lo_menu_remove_from_section( pLOMenu, nSection, --nSectionItems );
+
+    // Delete extra sections.
+    for ( sal_Int32 n = nLOMenuSize - 1; n > nSection; )
+        // FIXME Remove associated command if needed.
+        g_lo_menu_remove( pLOMenu, n-- );
 }
 
 void GtkSalMenu::DisconnectFrame()
@@ -630,7 +645,7 @@ void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 void GtkSalMenu::ShowItem( unsigned nPos, sal_Bool bShow )
 {
     if ( nPos < maItems.size() )
-        ( ( GtkSalMenuItem* ) maItems[ nPos ])->mbVisible = bShow;
+        ( ( GtkSalMenuItem* ) maItems[ nPos ] )->mbVisible = bShow;
 }
 
 
