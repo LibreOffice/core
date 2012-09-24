@@ -125,6 +125,7 @@ $(eval $(foreach method,\
 	use_package \
 	use_packages \
 	use_unpacked \
+	use_static_libraries \
 	add_sdi_headers \
 	set_warnings_not_errors \
 	set_generated_cxx_suffix \
