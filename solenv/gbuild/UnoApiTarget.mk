@@ -313,7 +313,7 @@ endef
 
 $(call gb_UnoApiHeadersTarget_get_bootstrap_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(if $(filter IOSudkapi,$(OS)$*), \
+	$(if $(filter TRUEudkapi,$(DISABLE_DYNLOADING)$*), \
 		$(call gb_Output_announce,$*,$(true),HPB,3) \
 		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*),-C), \
 	\
@@ -328,7 +328,7 @@ $(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) : \
 
 $(call gb_UnoApiHeadersTarget_get_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(if $(filter IOSudkapi,$(OS)$*), \
+	$(if $(filter TRUEudkapi,$(DISABLE_DYNLOADING)$*), \
 		$(call gb_Output_announce,$*,$(true),HPP,3) \
 		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-C), \
 	\
