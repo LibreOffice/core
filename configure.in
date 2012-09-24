@@ -10901,24 +10901,46 @@ if test "$with_fonts" != "no"; then
     AC_MSG_RESULT([yes])
     WITH_FONTS=YES
     BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
+    FONT_DEJAVU_TARBALL="f872f4ac066433d8ff92f5e316b36ff9-dejavu-fonts-ttf-2.33.zip"
+    FONT_GENTIUM_TARBALL="35efabc239af896dfb79be7ebdd6e6b9-gentiumbasic-fonts-1.10.zip"
+    FONT_LIBERATION_NARROW_TARBALL="0be45d54cc5e1c2e3102e32b8c190346-liberation-fonts-ttf-1.07.1.tar.gz"
+    FONT_LIBERATION_TARBALL="cfbf1ac6f61bf6cf45342a0cc9381be5-liberation-fonts-ttf-2.00.0.tar.gz"
+    FONT_LINLIBERTINEG_TARBALL="e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip"
 else
     AC_MSG_RESULT([no])
     WITH_FONTS=NO
     SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
+    FONT_DEJAVU_TARBALL=
+    FONT_GENTIUM_TARBALL=
+    FONT_LIBERATION_NARROW_TARBALL=
+    FONT_LIBERATION_TARBALL=
+    FONT_LINLIBERTINEG_TARBALL=
 fi
+AC_SUBST(FONT_DEJAVU_TARBALL)
+AC_SUBST(FONT_GENTIUM_TARBALL)
+AC_SUBST(FONT_LIBERATION_TARBALL)
+AC_SUBST(FONT_LINLIBERTINEG_TARBALL)
+AC_SUBST(FONT_LIBERATION_NARROW_TARBALL)
 AC_SUBST(WITH_FONTS)
 
-AC_MSG_CHECKING([whether to include Agfa Monotype fonts])
-if test "$with_agfa_monotype_fonts" = "yes"; then
-    AC_MSG_RESULT([yes])
-    WITH_AGFA_MONOTYPE_FONTS=YES
-    SCPDEFS="$SCPDEFS -DWITH_AGFA_MONOTYPE_FONTS"
-    BUILD_TYPE="$BUILD_TYPE AGFA_MONOTYPE_FONTS"
-else
-    AC_MSG_RESULT([no])
-    WITH_AGFA_MONOTYPE_FONTS=NO
-fi
-AC_SUBST(WITH_AGFA_MONOTYPE_FONTS)
+
+# The agfa monotype fonts options seems broken
+# there is no assocaited entry in ooo.lst
+# so we do not fetch the dependencies
+# there is no tie-up with MORE_FONTS, but in dmake mode
+# without more_fonts that option is meaningless
+# so I suspect it is not really used anymore, commenting out for now
+#AC_MSG_CHECKING([whether to include Agfa Monotype fonts])
+#if test "$with_agfa_monotype_fonts" = "yes"; then
+#    AC_MSG_RESULT([yes])
+#    WITH_AGFA_MONOTYPE_FONTS=YES
+#    SCPDEFS="$SCPDEFS -DWITH_AGFA_MONOTYPE_FONTS"
+#    BUILD_TYPE="$BUILD_TYPE AGFA_MONOTYPE_FONTS"
+#else
+#    AC_MSG_RESULT([no])
+#    WITH_AGFA_MONOTYPE_FONTS=NO
+#fi
+#AC_SUBST(WITH_AGFA_MONOTYPE_FONTS)
 
 dnl ===================================================================
 dnl Test whether to include ppds

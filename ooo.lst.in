@@ -14,10 +14,12 @@ c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz
 2ae988b339daec234019a7066f96733e-commons-lang-2.3-src.tar.gz
 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
-0be45d54cc5e1c2e3102e32b8c190346-liberation-fonts-ttf-1.07.1.tar.gz
-cfbf1ac6f61bf6cf45342a0cc9381be5-liberation-fonts-ttf-2.00.0.tar.gz
+@FONT_LINLIBERTINEG_TARBALL@
+@FONT_LIBERATION_NARROW_TARBALL@
+@FONT_LIBERATION_TARBALL@
+@FONT_GENTIUM_TARBALL@
+@FONT_DEJAVU_TARBALL@
 35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
-35efabc239af896dfb79be7ebdd6e6b9-gentiumbasic-fonts-1.10.zip
 39bb3fcea1514f1369fcfc87542390fd-sacjava-1.3.zip
 3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz
 3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
@@ -50,7 +52,6 @@ ea570af93c284aa9e5621cd563f54f4d-bsh-2.0b1-src.tar.gz
 dd7dab7a5fea97d2a6a43f511449b7cd-expat-2.1.0.tar.gz
 fb7ba5c2182be4e73748859967455455-README_stax-api-1.0-2-sources.txt
 fca8706f2c4619e2fa3f8f42f8fc1e9d-rasqal-0.9.16.tar.gz
-f872f4ac066433d8ff92f5e316b36ff9-dejavu-fonts-ttf-2.33.zip
 0981bda6548a8c8233ffce2b6e4b2a23-mysql-connector-c++-1.1.0.tar.gz
 061a9f17323117c9358ed60f33ecff78-postgresql-9.1.1.tar.bz2
 46e92b68e31e858512b680b3b61dc4c1-mythes-1.2.3.tar.gz
@@ -89,7 +90,6 @@ a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz
 3121aaf3e13e5d88dfff13fb4a5f1ab8-hunspell-1.3.2.tar.gz
 3bf481ca95109b14435125c0dd1f2217-graphite2-1.0.3.tgz
 @VISIO_TARBALL@
-e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip
 @CMIS_TARBALL@
 @CDR_TARBALL@
 327348d67c979c88c2dec59a23a17d85-lcms2-2.3.tar.gz

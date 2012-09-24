@@ -112,6 +112,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     MathMLDTD \
 	mdds \
     Mesa \
+	$(if $(filter MORE_FONTS,$(BUILD_TYPE)),\
+		more_fonts \
+	) \
 	$(if $(filter NEON,$(BUILD_TYPE)),\
 		neon \
 	) \

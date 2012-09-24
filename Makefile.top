@@ -103,6 +103,7 @@ lingucomponent\
 linguistic\
 lotuswordpro\
 mdds\
+more_fonts\
 neon\
 nlpsolver\
 np_sdk\
@@ -227,7 +228,6 @@ libxslt\
 lcms2\
 lpsolve\
 migrationanalysis\
-more_fonts\
 moz\
 mysqlc\
 mysqlcppconn\
