@@ -194,8 +194,8 @@ public:
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
 
-    CPPUNIT_TEST(testColorScaleODS);
-    CPPUNIT_TEST(testColorScaleXLSX);
+    //CPPUNIT_TEST(testColorScaleODS);
+    //CPPUNIT_TEST(testColorScaleXLSX);
     CPPUNIT_TEST(testDataBarODS);
     CPPUNIT_TEST(testNewCondFormat);
 
