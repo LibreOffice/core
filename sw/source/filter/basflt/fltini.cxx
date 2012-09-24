@@ -119,11 +119,6 @@ SwRead SwGetReaderXML() // SW_DLLPUBLIC
         return ReadXML;
 }
 
-bool IsDocShellRegistered()
-{
-    return 0 != SwDocShell::_GetInterface();
-}
-
 inline void _SetFltPtr( sal_uInt16 rPos, SwRead pReader )
 {
         aReaderWriter[ rPos ].pReader = pReader;
