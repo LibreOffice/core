@@ -381,6 +381,15 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 
 void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 {
+    if ( rTypeModel.maPositionHorizontal == "center" )
+        rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
+
+    if ( rTypeModel.maPositionHorizontalRelative == "page" )
+        rPropSet.setAnyProperty(PROP_HoriOrientRelation, makeAny(text::RelOrientation::PAGE_FRAME));
+
+    if ( rTypeModel.maPositionVertical == "center" )
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::CENTER));
+
     if ( rTypeModel.maPosition == "absolute" )
     {
         if (rTypeModel.moWrapAnchorX.get() == "page" && rTypeModel.moWrapAnchorY.get() == "page")
@@ -395,8 +404,16 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
             // Map to as-character by default, that fixes vertical position of some textframes.
             rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_CHARACTER);
         }
-        // Vertical placement relative to margin, because parent style must not modify vertical position
-        rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
+
+        if ( rTypeModel.maPositionVerticalRelative == "page" )
+        {
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
+        }
+        else
+        {
+            // Vertical placement relative to margin, because parent style must not modify vertical position
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
+        }
     }
     else if( rTypeModel.maPosition == "relative" )
     {   // I'm not very sure this is correct either.
@@ -432,8 +449,6 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
-        if (maTypeModel.maPositionHorizontal == "center")
-            PropertySet(xShape).setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
     }
 
     // Import Legacy Fragments (if any)
@@ -479,11 +494,6 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
         }
 
         lcl_SetAnchorType(aPropSet, maTypeModel);
-
-        if ( maTypeModel.maPositionVerticalRelative == "page" )
-        {
-            aPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
-        }
     }
     return xShape;
 }

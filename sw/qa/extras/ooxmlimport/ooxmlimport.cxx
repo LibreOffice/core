@@ -35,8 +35,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFormField.hpp>
@@ -890,7 +892,25 @@ void Test::testN779627()
     uno::Any aValue = xTableProperties->getPropertyValue("LeftMargin");
     sal_Int32 nLeftMargin;
     aValue >>= nLeftMargin;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Left margin shouldn't take tableCellMar into account in nested tables",
+            sal_Int32(0), nLeftMargin);
+
+    /*
+     * Another problem tested with this document is that the roundrect is
+     * centered vertically and horizontally.
+     */
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProperties( xDraws->getByIndex(2), uno::UNO_QUERY );
+    sal_Int16 nValue;
+    xShapeProperties->getPropertyValue("HoriOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally", text::HoriOrientation::CENTER, nValue);
+    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally relatively to page", text::RelOrientation::PAGE_FRAME, nValue);
+    xShapeProperties->getPropertyValue("VertOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically", text::VertOrientation::CENTER, nValue);
+    xShapeProperties->getPropertyValue("VertOrientRelation") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically relatively to page", text::RelOrientation::PAGE_FRAME, nValue);
 }
 
 void Test::testFdo55187()

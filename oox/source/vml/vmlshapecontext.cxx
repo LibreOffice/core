@@ -361,7 +361,9 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName == "margin-left" )    mrTypeModel.maMarginLeft = aValue;
             else if( aName == "margin-top" )     mrTypeModel.maMarginTop = aValue;
             else if( aName == "mso-position-vertical-relative" )  mrTypeModel.maPositionVerticalRelative = aValue;
+            else if( aName == "mso-position-horizontal-relative" )  mrTypeModel.maPositionHorizontalRelative = aValue;
             else if( aName == "mso-position-horizontal" ) mrTypeModel.maPositionHorizontal = aValue;
+            else if( aName == "mso-position-vertical" ) mrTypeModel.maPositionVertical = aValue;
             else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = sal_True;
             else if( aName == "rotation" )       mrTypeModel.maRotation = aValue;
             else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
