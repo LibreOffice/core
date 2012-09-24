@@ -476,7 +476,7 @@ Reference< XShape > Shape::createAndInsert(
             if ( mbFlipV )
                 mpCustomShapePropertiesPtr->setMirroredY( sal_True );
 
-            // #119920 Handle missing text rotation
+            // #119920# Handle missing text rotation
             if(getTextBody())
             {
                 const sal_Int32 nTextRotation(getTextBody()->getTextProperties().moRotation.get(0));
