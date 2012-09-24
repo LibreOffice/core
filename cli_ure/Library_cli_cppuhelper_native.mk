@@ -14,7 +14,7 @@ $(eval $(call gb_Library_Library,cli_cppuhelper_native))
 $(eval $(call gb_Library_add_cxxflags,cli_cppuhelper_native,\
 	-AI $(gb_Helper_OUTDIRLIBDIR) \
 	-clr:oldSyntax \
-	-wd4449 \
+	-wd4339 \
 ))
 
 # TODO do not encode filenames here
