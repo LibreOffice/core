@@ -248,13 +248,10 @@ endef
 
 # StaticLibrary class
 
-gb_StaticLibrary_DEFS :=
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
-gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
 
 gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
 	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
 gb_StaticLibrary_StaticLibrary_platform =
