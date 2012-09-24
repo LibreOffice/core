@@ -40,11 +40,11 @@ endef
 define gb_UnpackedTarget__command_unzip
 unzip \
 	-qq \
-	-d $(UNPACKED_DIR) $(UNPACKED_TARBALL) && \
+	-d $(UNPACKED_DIR) $(UNPACKED_TARBALL) \
 $(if $(filter-out 0,$(UNPACKED_STRIP_COMPONENTS)),\
-	UNZIP_DIR=`ls $(UNPACKED_DIR)` && \
-	mv $(UNPACKED_DIR)/$$UNZIP_DIR/* $(UNPACKED_DIR) && \
-	rmdir $(UNPACKED_DIR)/$$UNZIP_DIR \
+	&& UNZIP_DIR=`ls $(UNPACKED_DIR)` \
+	&& mv $(UNPACKED_DIR)/$$UNZIP_DIR/* $(UNPACKED_DIR) \
+	&& rmdir $(UNPACKED_DIR)/$$UNZIP_DIR \
 )
 endef
 
