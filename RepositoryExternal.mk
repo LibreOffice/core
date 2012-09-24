@@ -1020,21 +1020,6 @@ endef
 
 else # !SYSTEM_LIBWPD
 
-ifeq ($(OS)$(COM),WNTMSC)
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	libwpd-0.9 \
-))
-
-define gb_LinkTarget__use_wpd
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	libwpd-0.9 \
-)
-
-endef
-
-else # !WNTMSC
-
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	wpd-0.9 \
 ))
@@ -1045,8 +1030,6 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 endef
-
-endif # WNTMSC
 
 endif # SYSTEM_LIBWPD
 
