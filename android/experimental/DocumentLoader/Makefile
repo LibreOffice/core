@@ -142,8 +142,14 @@ LIBS = \
 	vbahelperlo \
 	vbaswobj.uno \
 	vcllo \
+	visiolib \
+	wpdlib \
 	wpftdrawlo \
 	wpftwriterlo \
+	wpglib \
+	wpslib \
+	writerfilterlo \
+	writerperfect \
 	xml2 \
 	xmlfalo \
 	xmlfdlo \
