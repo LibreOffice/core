@@ -26,7 +26,7 @@
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */
 #define IGNOREDTOKENS       400         /* #include | #pragma | //... | ... */
-#define COMMEND             401         /*...                               */
+#define COMMENT             401         /*...                               */
 #define DEFINEDRES          402         /* Text = {                         */
 #define ANYTOKEN            404         /* XYZ                              */
 #define UNKNOWNTOKEN        405         /* XYZ[ \t]$                        */

@@ -82,8 +82,8 @@ void YYWarning();
 	pChar[1] = 0x00;
 	pChar[0] = c2;
 
-	WorkOnTokenSet( COMMEND, yytext );
-	WorkOnTokenSet( COMMEND, pChar );
+	WorkOnTokenSet( COMMENT, yytext );
+	WorkOnTokenSet( COMMENT, pChar );
 	for(;;) {
 		if ( c2 == EOF )
 			break;
@@ -92,7 +92,7 @@ void YYWarning();
 		c1 = c2;
 		c2 = yyinput();
 		pChar[0] = c2;
-		WorkOnTokenSet( COMMEND, pChar );
+		WorkOnTokenSet( COMMENT, pChar );
 	}
 }
 
