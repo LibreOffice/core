@@ -1386,6 +1386,20 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     // die Tabelle ausgleichen, leere Sections einfuegen
     sal_uInt16 n;
 
+    for (n = 0; n < pTable->GetTabLines().size(); ++n )
+    {
+        // rhbz#820283: balance the cells in table rows
+        SwTableLine *const pCurrLine = pTable->GetTabLines()[ n ];
+        nBoxes = pCurrLine->GetTabBoxes().size();
+        SwTxtFmtColl *const pTxtColl(const_cast<SwTxtFmtColl*>(
+                GetDoc()->GetDfltTxtFmtColl()));
+        if (nMaxBoxes != nBoxes)
+        {
+            InsBoxen( pTblNd, pCurrLine, pBoxFmt, pTxtColl, 0,
+                        nBoxes, nMaxBoxes - nBoxes );
+        }
+    }
+
     if( !aPosArr.empty() )
     {
         SwTableLines& rLns = pTable->GetTabLines();
