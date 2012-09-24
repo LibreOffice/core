@@ -35,7 +35,13 @@ $(dir $(call gb_CliUnoApiTarget_get_target,%)).dir :
 $(dir $(call gb_CliUnoApiTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_CliUnoApiTarget_get_target,%) : $(gb_CliUnoApiTarget_TARGET)
+# TODO depending on the whole URE might be overkill, but I do not have a
+# Windows machine to debug it...
+$(call gb_CliUnoApiTarget_get_target,%) : \
+		$(gb_CliUnoApiTarget_TARGET) \
+		$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+		$(call gb_Package_get_target,cppuhelper_unorc) \
+		$(call gb_Rdb_get_outdir_target,ure/services)
 	$(call gb_CliUnoApiTarget__command,$@,$*,$<)
 
 .PHONY : $(call gb_CliUnoApiTarget_get_clean_target,%)
