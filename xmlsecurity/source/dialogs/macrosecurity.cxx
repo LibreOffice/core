@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
         ::rtl::OUString aSystemFileURL = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID ) ?
             aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
-        String aNewPathStr(aSystemFileURL);
+        OUString aNewPathStr(aSystemFileURL);
 
         if ( osl::FileBase::getSystemPathFromFileURL( aSystemFileURL, aSystemFileURL ) == osl::FileBase::E_None )
             aNewPathStr = aSystemFileURL;
@@ -340,7 +340,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
 {
     static long nTabs[] = { 3, 0, 35*CS_LB_WIDTH/100, 70*CS_LB_WIDTH/100 };
     maTrustCertLB.SetTabs( &nTabs[ 0 ] );
-    maTrustCertLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
+    maTrustCertLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
 
     FreeResource();
 
@@ -425,7 +425,7 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
                                      OutputToScreenPixel( aLogicPix.BottomRight() ) );
 
-        String aStr(ReadOnlyImage::GetHelpTip());
+        OUString aStr(ReadOnlyImage::GetHelpTip());
         if ( Help::IsBalloonHelpEnabled() )
             Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect,
             aStr );
@@ -436,9 +436,9 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-const String& ReadOnlyImage::GetHelpTip()
+const OUString& ReadOnlyImage::GetHelpTip()
 {
-     static String  aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));
+     static OUString aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));
      return aStr;
 }
 

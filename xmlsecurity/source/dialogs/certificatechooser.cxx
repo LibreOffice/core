@@ -67,7 +67,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::X
 {
     static long nTabs[] = { 3, 0, 30*CS_LB_WIDTH/100, 60*CS_LB_WIDTH/100 };
     maCertLB.SetTabs( &nTabs[0] );
-    maCertLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
+    maCertLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
     maCertLB.SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     maCertLB.SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     maViewBtn.SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
@@ -172,12 +172,12 @@ void CertificateChooser::ImplInitialize()
         // fill list of certificates; the first entry will be selected
         for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
         {
-            String sEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() ) );
-            sEntry += '\t';
-            sEntry += XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() );
-            sEntry += '\t';
-            sEntry += XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() );
-            SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry );
+            OUStringBuffer sEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() ) );
+            sEntry.append( '\t' );
+            sEntry.append( XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() ) );
+            sEntry.append( '\t' );
+            sEntry.append( XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
+            SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry.makeStringAndClear() );
             pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); // missuse user data as index
         }
 
