@@ -1,5 +1,6 @@
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 PopupMenu::SetSelectedEntry(unsigned short)
+RelatedMultipart::getIds()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
@@ -19,11 +20,9 @@ ThumbnailView::GetItemCount() const
 ThumbnailView::ImplScroll(Point const&)
 ThumbnailView::InsertItem(unsigned short, BitmapEx const&, rtl::OUString const&, unsigned long)
 ThumbnailViewItemAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
-ThumbnailViewItemAcc::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
 VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction const&, Point const&, boost::shared_array<unsigned char> const&)
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
-basctl::DbgName_DocShell()
 binfilter::ImpSvtData::~ImpSvtData()
 binfilter::PCodeBuffConvertor<unsigned int, unsigned short>::GetBuffer()
 binfilter::PCodeBuffConvertor<unsigned int, unsigned short>::GetSize()
@@ -71,6 +70,13 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<co
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::file::OStatement_Base::reset()
+connectivity::mork::MQueryHelper::next()
+connectivity::mork::MQueryHelperResultEntry::insert(rtl::OString const&, rtl::OUString&)
+connectivity::mork::OColumnAlias::isColumnSearchable(rtl::OUString) const
+connectivity::mork::ProfileAccess::getProfileCount(com::sun::star::mozilla::MozillaProductType)
+connectivity::mork::ProfileAccess::getProfileExists(com::sun::star::mozilla::MozillaProductType, rtl::OUString const&)
+connectivity::mork::ProfileAccess::getProfileList(com::sun::star::mozilla::MozillaProductType, com::sun::star::uno::Sequence<rtl::OUString>&)
+connectivity::mork::ProfileAccess::isProfileLocked(com::sun::star::mozilla::MozillaProductType, rtl::OUString const&)
 connectivity::mozab::MQueryHelper::next()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
@@ -80,7 +86,14 @@ framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
 ooo::vba::excel::GetDocShellFromRanges(com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRangeContainer> const&)
 ooo::vba::excel::GetDocumentFromRange(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
-oox::drawingml::TextParagraphProperties::dump() const
+oox::drawingml::TextListStyle::dump() const
+oox::ole::AxFormPageModel::AxFormPageModel()
+oox::ole::AxMultiPageModel::AxMultiPageModel()
+oox::ole::AxMultiPageModel::setTabStripModel(boost::shared_ptr<oox::ole::AxTabStripModel> const&)
+oox::ole::AxTabStripModel::AxTabStripModel()
+oox::ole::AxTabStripModel::getCaption(int) const
+oox::ole::VbaFormControl::getControlId() const
+oox::ole::VbaModule::extractOleOverrideFromAttr(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const&) const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 sd::ClientBox::GetMinOutputSizePixel() const
 sd::ClientBox::RemoveUnlocked()
@@ -96,5 +109,9 @@ sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::RegisterFactory(unsigned short)
+sd::framework::ReadOnlyModeObserver::AddStatusListener(com::sun::star::uno::Reference<com::sun::star::frame::XStatusListener> const&)
+sd::framework::ReadOnlyModeObserver::ReadOnlyModeObserver(com::sun::star::uno::Reference<com::sun::star::frame::XController> const&)
+sd::framework::ResourceManager::Disable()
+sd::framework::ResourceManager::Enable()
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
 std::__cxx1998::vector<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::~vector()

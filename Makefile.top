@@ -526,6 +526,7 @@ findunusedcode:
               | grep -v ^WPG \
               | grep -v ^WPS \
               | grep -v WPX \
+              | grep -v ^WSObject \
               > unusedcode.easy
 
 check: dev-install subsequentcheck

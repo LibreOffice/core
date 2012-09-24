@@ -36,7 +36,6 @@ namespace basctl
 {
 
 TYPEINIT1(DocShell, SfxObjectShell);
-DBG_NAME(DocShell);
 
 SFX_IMPL_OBJECTFACTORY( DocShell, SvGlobalName(), SFXOBJECTSHELL_STD_NORMAL, "sbasic" )
 
