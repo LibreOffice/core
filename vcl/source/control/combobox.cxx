@@ -61,6 +61,7 @@ ComboBox::ComboBox( WindowType nType ) :
     Edit( nType )
 {
     ImplInitComboBoxData();
+    SetMaxWidthInChars(0);
 }
 
 // -----------------------------------------------------------------------
@@ -70,6 +71,7 @@ ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
 {
     ImplInitComboBoxData();
     ImplInit( pParent, nStyle );
+    SetMaxWidthInChars(0);
 }
 
 // -----------------------------------------------------------------------
@@ -83,6 +85,7 @@ ComboBox::ComboBox( Window* pParent, const ResId& rResId ) :
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
+    SetMaxWidthInChars(0);
     if ( !(nStyle & WB_HIDE ) )
         Show();
 }
@@ -1115,6 +1118,9 @@ Size ComboBox::CalcMinimumSize() const
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
         aSz.Width() += getMaxWidthScrollBarAndDownButton();
     }
+
+    aSz.Width() += ImplGetExtraOffset() * 2;
+    aSz.Width() += mpSubEdit->GetPosPixel().X();
 
     aSz = CalcWindowSize( aSz );
     return aSz;

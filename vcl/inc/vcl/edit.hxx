@@ -118,7 +118,6 @@ private:
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
     SAL_DLLPRIVATE void        ImplCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
     SAL_DLLPRIVATE void        ImplPaste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
-    SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
     SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
@@ -132,6 +131,7 @@ protected:
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, sal_Bool bPaint = sal_True );
     SAL_DLLPRIVATE int         ImplGetNativeControlType();
+    SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( Window* pWin );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;

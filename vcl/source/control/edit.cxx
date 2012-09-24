@@ -2891,6 +2891,7 @@ void Edit::SetSubEdit( Edit* pEdit )
 Size Edit::CalcMinimumSizeForText(const rtl::OUString &rString) const
 {
     Size aSize ( GetTextWidth( rString ), GetTextHeight() );
+    aSize.Width() += ImplGetExtraOffset() * 2;
     // do not create edit fields in which one cannot enter anything
     // a default minimum width should exist for at least 3 characters
     Size aMinSize ( CalcSize( mnMinWidthInChars ) );
@@ -2948,6 +2949,7 @@ Size Edit::CalcSize( xub_StrLen nChars ) const
     // works only correct for fixed fonts, average otherwise
     Size aSz( GetTextWidth( rtl::OUString('x') ), GetTextHeight() );
     aSz.Width() *= nChars;
+    aSz.Width() += ImplGetExtraOffset() * 2;
     aSz = CalcWindowSize( aSz );
     return aSz;
 }

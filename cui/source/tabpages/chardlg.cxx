@@ -281,9 +281,9 @@ namespace
 {
     void equalize_width_requests(Window *pA, Window *pB, Window *pC)
     {
-        long nWidthWest = pA->GetOptimalSize(WINDOWSIZE_PREFERRED).Width();
-        long nWidthEast = pB->GetOptimalSize(WINDOWSIZE_PREFERRED).Width();
-        long nWidthCTL = pC->GetOptimalSize(WINDOWSIZE_PREFERRED).Width();
+        long nWidthWest = pA->get_preferred_size().Width();
+        long nWidthEast = pB->get_preferred_size().Width();
+        long nWidthCTL = pC->get_preferred_size().Width();
         long nLargest = std::max(nWidthWest, std::max(nWidthEast, nWidthCTL));
         pA->set_width_request(nLargest);
         pB->set_width_request(nLargest);
