@@ -30,7 +30,6 @@
 
 #include <xmloff/attrlist.hxx>
 #include <rtl/math.hxx>
-#include <tools/string.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -112,42 +111,40 @@ sal_Bool XSecController::convertNumber( sal_Int32& rValue,
 void XSecController::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                                 const com::sun::star::util::DateTime& rDateTime )
 {
-    String aString( String::CreateFromInt32( rDateTime.Year ) );
-    aString += '-';
+    rBuffer.append((sal_Int32) rDateTime.Year);
+    rBuffer.append('-');
     if( rDateTime.Month < 10 )
-        aString += '0';
-    aString += String::CreateFromInt32( rDateTime.Month );
-    aString += '-';
+        rBuffer.append('0');
+    rBuffer.append((sal_Int32) rDateTime.Month);
+    rBuffer.append('-');
     if( rDateTime.Day < 10 )
-        aString += '0';
-    aString += String::CreateFromInt32( rDateTime.Day );
+        rBuffer.append('0');
+    rBuffer.append((sal_Int32) rDateTime.Day);
 
     if( rDateTime.Seconds != 0 ||
         rDateTime.Minutes != 0 ||
         rDateTime.Hours   != 0 )
     {
-        aString += 'T';
+        rBuffer.append('T');
         if( rDateTime.Hours < 10 )
-            aString += '0';
-        aString += String::CreateFromInt32( rDateTime.Hours );
-        aString += ':';
+            rBuffer.append('0');
+        rBuffer.append((sal_Int32) rDateTime.Hours);
+        rBuffer.append(':');
         if( rDateTime.Minutes < 10 )
-            aString += '0';
-        aString += String::CreateFromInt32( rDateTime.Minutes );
-        aString += ':';
+            rBuffer.append('0');
+        rBuffer.append((sal_Int32) rDateTime.Minutes);
+        rBuffer.append(':');
         if( rDateTime.Seconds < 10 )
-            aString += '0';
-        aString += String::CreateFromInt32( rDateTime.Seconds );
+            rBuffer.append('0');
+        rBuffer.append((sal_Int32) rDateTime.Seconds);
         if ( rDateTime.HundredthSeconds > 0)
         {
-            aString += ',';
+            rBuffer.append(',');
             if (rDateTime.HundredthSeconds < 10)
-                aString += '0';
-            aString += String::CreateFromInt32( rDateTime.HundredthSeconds );
+                rBuffer.append('0');
+            rBuffer.append((sal_Int32) rDateTime.HundredthSeconds);
         }
     }
-
-    rBuffer.append( aString );
 }
 
 /** convert ISO Date String to util::DateTime */
