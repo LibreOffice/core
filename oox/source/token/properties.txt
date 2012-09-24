@@ -222,6 +222,7 @@ HoriJustify
 HoriJustifyMethod
 HoriOrient
 HoriOrientPosition
+HoriOrientRelation
 HorizontalSplitMode
 HorizontalSplitPositionTwips
 IgnoreBlankCells
@@ -506,6 +507,7 @@ VertJustifyMethod
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+VertOrient
 VertOrientPosition
 VertOrientRelation
 ViewBox

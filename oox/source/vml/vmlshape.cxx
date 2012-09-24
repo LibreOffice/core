@@ -383,6 +383,18 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 
 void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 {
+    if (rTypeModel.maPositionHorizontal == "center" )
+        rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
+
+    if (rTypeModel.maPositionHorizontalRelative == "page" )
+        rPropSet.setAnyProperty(PROP_HoriOrientRelation, makeAny(text::RelOrientation::PAGE_FRAME));
+
+    if (rTypeModel.maPositionVertical == "center" )
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::CENTER));
+
+    if ( rTypeModel.maPositionVerticalRelative == "page" )
+        rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
+
     if ( rTypeModel.maPosition == "absolute" )
     {
         if (rTypeModel.moWrapAnchorX.get() == "page" && rTypeModel.moWrapAnchorY.get() == "page")
@@ -430,8 +442,6 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
-        if (maTypeModel.maPositionHorizontal == "center")
-            PropertySet(xShape).setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
     }
 
     // Import Legacy Fragments (if any)
