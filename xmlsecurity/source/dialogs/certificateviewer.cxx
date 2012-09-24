@@ -110,7 +110,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     {
         maCertImg.SetImage(
             Image( XMLSEC_RES( IMG_STATE_NOT_VALIDATED ) ) );
-        maHintNotTrustedFI.SetText( String( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) ) );
+        maHintNotTrustedFI.SetText( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) );
     }
 
     FreeResource();
@@ -170,11 +170,11 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     DateTime aDateTimeEnd( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
-    String sText = maValidDateFI.GetText();
-    sText.SearchAndReplace( rtl::OUString( "%SDATE%" ),
-                            GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
-    sText.SearchAndReplace( rtl::OUString( "%EDATE%" ),
-                            GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
+    OUString sText = maValidDateFI.GetText();
+    sText.replaceFirst( "%SDATE%",
+        GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
+    sText.replaceFirst( "%EDATE%",
+        GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
     maValidDateFI.SetText( sText );
 
     // adjust position of fixed text depending on image sizes
@@ -206,13 +206,13 @@ void CertificateViewerGeneralTP::ActivatePage()
 
 struct Details_UserDatat
 {
-    String          maTxt;
+    OUString        maTxt;
     bool            mbFixedWidthFont;
 
-    inline          Details_UserDatat( const String& _rTxt, bool _bFixedWidthFont );
+    inline          Details_UserDatat( const OUString& _rTxt, bool _bFixedWidthFont );
 };
 
-inline Details_UserDatat::Details_UserDatat( const String& _rTxt, bool _bFixedWidthFont )
+inline Details_UserDatat::Details_UserDatat( const OUString& _rTxt, bool _bFixedWidthFont )
     :maTxt              ( _rTxt )
     ,mbFixedWidthFont   ( _bFixedWidthFont )
 {
@@ -221,7 +221,7 @@ inline Details_UserDatat::Details_UserDatat( const String& _rTxt, bool _bFixedWi
 
 void CertificateViewerDetailsTP::Clear( void )
 {
-    maElementML.SetText( String() );
+    maElementML.SetText( OUString() );
     sal_uLong           i = 0;
     SvLBoxEntry*    pEntry = maElementsLB.GetEntry( i );
     while( pEntry )
@@ -234,8 +234,8 @@ void CertificateViewerDetailsTP::Clear( void )
     maElementsLB.Clear();
 }
 
-void CertificateViewerDetailsTP::InsertElement( const String& _rField, const String& _rValue,
-                                                const String& _rDetails, bool _bFixedWidthFont )
+void CertificateViewerDetailsTP::InsertElement( const OUString& _rField, const OUString& _rValue,
+                                                const OUString& _rDetails, bool _bFixedWidthFont )
 {
     SvLBoxEntry*    pEntry = maElementsLB.InsertEntry( _rField );
     maElementsLB.SetEntryText( _rValue, pEntry, 1 );
@@ -258,66 +258,66 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
 
     static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
     maElementsLB.SetTabs( &nTabs[ 0 ] );
-    maElementsLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
+    maElementsLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
 
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
     sal_uInt16                  nLineBreak = 16;
     const char*             pHexSep = " ";
-    String                  aLBEntry;
-    String                  aDetails;
+    OUString                aLBEntry;
+    OUString                aDetails;
     // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
     aLBEntry = rtl::OUString( "V" );
-    aLBEntry += String::CreateFromInt32( xCert->getVersion() + 1 );
-    InsertElement( String( XMLSEC_RES( STR_VERSION ) ), aLBEntry, aLBEntry );
+    aLBEntry += OUString::valueOf( sal_Int32( xCert->getVersion() + 1 ) );
+    InsertElement( XMLSEC_RES( STR_VERSION ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_SERIALNUM ) ), aLBEntry, aDetails, true );
+    InsertElement( XMLSEC_RES( STR_SERIALNUM ), aLBEntry, aDetails, true );
 
     std::pair< ::rtl::OUString, ::rtl::OUString> pairIssuer =
         XmlSec::GetDNForCertDetailsView(xCert->getIssuerName());
     aLBEntry = pairIssuer.first;
     aDetails = pairIssuer.second;
-    InsertElement( String( XMLSEC_RES( STR_ISSUER ) ), aLBEntry, aDetails );
+    InsertElement( XMLSEC_RES( STR_ISSUER ), aLBEntry, aDetails );
 
     DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += rtl::OUString( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
-    InsertElement( String( XMLSEC_RES( STR_VALIDFROM ) ), aLBEntry, aLBEntry  );
+    InsertElement( XMLSEC_RES( STR_VALIDFROM ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += rtl::OUString( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
-    InsertElement( String( XMLSEC_RES( STR_VALIDTO ) ), aLBEntry, aLBEntry );
+    InsertElement( XMLSEC_RES( STR_VALIDTO ), aLBEntry, aLBEntry );
 
     std::pair< ::rtl::OUString, ::rtl::OUString > pairSubject =
         XmlSec::GetDNForCertDetailsView(xCert->getSubjectName());
     aLBEntry = pairSubject.first;
     aDetails = pairSubject.second;
-    InsertElement( String( XMLSEC_RES( STR_SUBJECT ) ), aLBEntry, aDetails );
+    InsertElement( XMLSEC_RES( STR_SUBJECT ), aLBEntry, aDetails );
 
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
-    InsertElement( String( XMLSEC_RES( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
+    InsertElement( XMLSEC_RES( STR_SUBJECT_PUBKEY_ALGO ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_SUBJECT_PUBKEY_VAL ) ), aLBEntry, aDetails, true );
+    InsertElement( XMLSEC_RES( STR_SUBJECT_PUBKEY_VAL ), aLBEntry, aDetails, true );
 
     aLBEntry = aDetails = xCert->getSignatureAlgorithm();
-    InsertElement( String( XMLSEC_RES( STR_SIGNATURE_ALGO ) ), aLBEntry, aDetails );
+    InsertElement( XMLSEC_RES( STR_SIGNATURE_ALGO ), aLBEntry, aDetails );
 
     aSeq = xCert->getSHA1Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_THUMBPRINT_SHA1 ) ), aLBEntry, aDetails, true );
+    InsertElement( XMLSEC_RES( STR_THUMBPRINT_SHA1 ), aLBEntry, aDetails, true );
 
     aSeq = xCert->getMD5Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_THUMBPRINT_MD5 ) ), aLBEntry, aDetails, true );
+    InsertElement( XMLSEC_RES( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
 
     FreeResource();
 
@@ -336,7 +336,7 @@ void CertificateViewerDetailsTP::ActivatePage()
 IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
 {
     SvLBoxEntry*    pEntry = maElementsLB.FirstSelected();
-    String          aElementText;
+    OUString        aElementText;
     bool            bFixedWidthFont;
     if( pEntry )
     {
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
 struct CertPath_UserData
 {
     cssu::Reference< dcss::security::XCertificate > mxCert;
-    String                                          maStatus;
+    OUString                                        maStatus;
     bool mbValid;
 
     CertPath_UserData( cssu::Reference< dcss::security::XCertificate > xCert, bool bValid):
@@ -392,9 +392,9 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
 
     // check if buttontext is to wide
     const long nOffset = 10;
-    String sText = maViewCertPB.GetText();
+    OUString sText = maViewCertPB.GetText();
     long nTxtW = maViewCertPB.GetTextWidth( sText );
-    if ( sText.Search( '~' ) == STRING_NOTFOUND )
+    if ( sText.indexOf( '~' ) == -1 )
         nTxtW += nOffset;
     long nBtnW = maViewCertPB.GetSizePixel().Width();
     if ( nTxtW > nBtnW )
@@ -425,13 +425,12 @@ void CertificateViewerCertPathTP::ActivatePage()
             mpParent->mxSecurityEnvironment->buildCertificatePath( mpParent->mxCert );
         const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
 
-        String aState;
         sal_Int32 i, nCnt = aCertPath.getLength();
         SvLBoxEntry* pParent = NULL;
         for( i = nCnt; i; )
         {
             const Reference< security::XCertificate > rCert = pCertPath[ --i ];
-            String sName = XmlSec::GetContentPart( rCert->getSubjectName() );
+            OUString sName = XmlSec::GetContentPart( rCert->getSubjectName() );
             //Verify the certificate
             sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
                  Sequence<Reference<css::security::XCertificate> >());
@@ -466,7 +465,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
 
 IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
 {
-    String sStatus;
+    OUString sStatus;
     SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
     {
@@ -482,7 +481,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
 
 void CertificateViewerCertPathTP::Clear( void )
 {
-    maCertStatusML.SetText( String() );
+    maCertStatusML.SetText( OUString() );
     sal_uLong           i = 0;
     SvLBoxEntry*    pEntry = maCertPathLB.GetEntry( i );
     while( pEntry )
@@ -496,7 +495,7 @@ void CertificateViewerCertPathTP::Clear( void )
 }
 
 SvLBoxEntry* CertificateViewerCertPathTP::InsertCert(
-    SvLBoxEntry* _pParent, const String& _rName, cssu::Reference< dcss::security::XCertificate > rxCert,
+    SvLBoxEntry* _pParent, const OUString& _rName, cssu::Reference< dcss::security::XCertificate > rxCert,
     bool bValid)
 {
     Image aImage = bValid ? maCertImage : maCertNotValidatedImage;
