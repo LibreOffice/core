@@ -14,10 +14,6 @@ bridges_SELECTED_BRIDGE := gcc3_linux_arm
 
 $(eval $(call gb_Library_Library,gcc3_uno))
 
-$(eval $(call gb_Library_use_custom_headers,gcc3_uno,\
-	bridges/source/cpp_uno/gcc3_linux_arm \
-))
-
 $(eval $(call gb_Library_use_internal_comprehensive_api,gcc3_uno,\
 	udkapi \
 ))
@@ -67,6 +63,8 @@ $(eval $(call gb_Library_add_cxxobjects,gcc3_uno,\
 ))
 
 # HACK
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,gcc3_uno)) : \
+	$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,gcc3_uno)) : \
 	EXTRAOBJECTLISTS += $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
 
