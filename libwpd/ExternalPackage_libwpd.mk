@@ -31,7 +31,7 @@ $(eval $(call gb_Package_Package,libwpd,$(call gb_UnpackedTarball_get_dir,wpd)))
 $(eval $(call gb_Package_use_external_project,libwpd,libwpd))
 
 ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,libwpd,lib/libwpd-0.9.lib,build/win32/Release/libwpd-0.9.lib))
+$(eval $(call gb_ExternalPackage_add_file,libwpd,lib/libwpd-0.9.lib,build/win32/Release/lib/libwpd-0.9.lib))
 else
 $(eval $(call gb_ExternalPackage_add_file,libwpd,lib/libwpd-0.9.a,src/lib/.libs/libwpd-0.9.a))
 endif
