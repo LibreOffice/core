@@ -104,3 +104,68 @@ index 8c02ed1..f4ae836 100644
  				PrecompiledHeaderFile=".\Release/wpd2text.pch"
  				AssemblerListingLocation=".\Release/"
  				ObjectFile=".\Release/"
+--- src/lib/WP6BoxGroup.cpp
++++ src/lib/WP6BoxGroup.cpp
+@@ -304,8 +304,8 @@ void WP6BoxGroup::parse(WP6Listener *listener)
+ 	if (!m_nativeHeight && gbsPacket)
+ 		m_nativeHeight = gbsPacket->getNativeHeight();
+ 
+-	std::vector<uint16_t> graphicsDataIds;
+-	std::vector<uint16_t>::iterator gdiIter;
++	std::vector<unsigned> graphicsDataIds;
++	std::vector<unsigned>::iterator gdiIter;
+ 	WP6SubDocument *subDocument = 0;
+ 
+ 	// Get the box content
+@@ -389,7 +389,7 @@ void WP6BoxGroup::parse(WP6Listener *listener)
+ 	if (tmpContentType == 0x03)
+ 	{
+ 		for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
+-			listener->insertGraphicsData((*gdiIter));
++			listener->insertGraphicsData(((uint16_t)*gdiIter));
+ 	}
+ 	if ((tmpContentType == 0x01) && (subDocument))
+ 	{
+--- src/lib/WP6BoxGroup.h
++++ src/lib/WP6BoxGroup.h
+@@ -28,7 +28,6 @@
+ #define WP6BOXGROUP_H
+ 
+ #include "WP6VariableLengthGroup.h"
+-#include <vector>
+ #include "libwpd_internal.h"
+ 
+ class WPXInputStream;
+--- src/lib/WP6GraphicsFilenamePacket.cpp
++++ src/lib/WP6GraphicsFilenamePacket.cpp
+@@ -50,4 +50,9 @@ void WP6GraphicsFilenamePacket::_readContents(WPXInputStream *input, WPXEncrypti
+ 		m_childIds.push_back(readU16(input, encryption));
+ }
+ 
++const std::vector<unsigned> WP6GraphicsFilenamePacket::getChildIds() const
++{
++	return m_childIds;
++}
++
+ /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
+--- src/lib/WP6GraphicsFilenamePacket.h
++++ src/lib/WP6GraphicsFilenamePacket.h
+@@ -39,16 +39,12 @@ public:
+ 	~WP6GraphicsFilenamePacket();
+ 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+ 	void parse(WP6Listener * /*listener */) const {}
+-	const std::vector<uint16_t> &getChildIds() const
+-	{
+-		return m_childIds;
+-	}
+-
++	const std::vector<unsigned> getChildIds() const;
+ 
+ private:
+ 	WP6GraphicsFilenamePacket(const WP6GraphicsFilenamePacket &);
+ 	WP6GraphicsFilenamePacket &operator=(const WP6GraphicsFilenamePacket &);
+-	std::vector<uint16_t> m_childIds;
++	std::vector<unsigned> m_childIds;
+ 	const uint8_t m_flags;
+ 
+ };
