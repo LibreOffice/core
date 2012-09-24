@@ -6780,7 +6780,7 @@ elif test $_os = iOS; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPD=NO
-    WPD_TARBALL=c01351d7db2b205de755d58769288224-libwpd-0.9.4.tar.bz2
+    WPD_TARBALL=9a48f87fe205a5418aaa1a564c51e992-libwpd-0.9.5.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(WPD_CFLAGS)
