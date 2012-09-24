@@ -33,7 +33,6 @@
 #include "pagecollector.hxx"
 #include "informationdialog.hxx"
 
-#include <unotools/localfilehelper.hxx>
 #include <vector>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
@@ -49,7 +48,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -71,7 +69,6 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <comphelper/componentcontext.hxx>
 
 using namespace ::std;
 using namespace ::rtl;
