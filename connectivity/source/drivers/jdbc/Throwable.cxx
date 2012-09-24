@@ -54,7 +54,13 @@ jclass java_lang_Throwable::st_getMyClass()
     static jmethodID mID(NULL);
     return callStringMethod("getLocalizedMessage",mID);
 }
-// -----------------------------------------------------------------------------
 
+#if OSL_DEBUG_LEVEL > 0
+void java_lang_Throwable::printStackTrace() const
+{
+    static jmethodID mID(NULL);
+    return callVoidMethod("printStackTrace",mID);
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

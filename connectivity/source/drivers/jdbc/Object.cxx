@@ -180,6 +180,9 @@ namespace
         else if ( _pEnvironment->IsInstanceOf( jThrow, java_lang_Throwable::st_getMyClass() ) )
         {
             ::std::auto_ptr< java_lang_Throwable > pThrow( new java_lang_Throwable( _pEnvironment, jThrow ) );
+#if OSL_DEBUG_LEVEL > 0
+            pThrow->printStackTrace();
+#endif
             ::rtl::OUString sMessage = pThrow->getMessage();
             if ( sMessage.isEmpty() )
                 sMessage = pThrow->getLocalizedMessage();
