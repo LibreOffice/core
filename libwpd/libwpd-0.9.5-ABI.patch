@@ -1,0 +1,22 @@
+--- src/lib/WPXPropertyList.cpp	2012-09-24 11:55:06.000000000 +0200
++++ src/lib/WPXPropertyList.cpp	2012-09-24 14:25:10.401619900 +0200
+@@ -171,7 +171,7 @@
+ 	m_mapImpl->remove(name);
+ }
+ 
+-WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
++const WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
+ {
+ 	WPXPropertyList tmp(propList);
+ 	std::swap(m_mapImpl, tmp.m_mapImpl);
+--- src/lib/WPXPropertyList.h	2012-09-24 13:48:08.667113100 +0200
++++ src/lib/WPXPropertyList.h	2012-09-24 14:25:10.401619900 +0200
+@@ -50,7 +50,7 @@
+ 
+ 	void remove(const char *name);
+ 	const WPXProperty *operator[](const char *name) const;
+-	WPXPropertyList &operator=(const WPXPropertyList &propList);
++	const WPXPropertyList &operator=(const WPXPropertyList &propList);
+ 	void clear();
+ 
+ 	class Iter
