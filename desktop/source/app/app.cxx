@@ -634,7 +634,8 @@ void Desktop::Init()
             // 2nd office startup should terminate after sending cmdlineargs through pipe
             SetBootstrapStatus(BS_TERMINATE);
         }
-        else if ( rCmdLineArgs.IsHelp() )
+        else if ( !rCmdLineArgs.GetUnknown().isEmpty()
+                  || rCmdLineArgs.IsHelp() || rCmdLineArgs.IsVersion() )
         {
             // disable IPC thread in an instance that is just showing a help message
             OfficeIPCThread::DisableOfficeIPCThread();
@@ -1388,6 +1389,22 @@ int Desktop::Main()
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
+    OUString aUnknown( rCmdLineArgs.GetUnknown() );
+    if ( !aUnknown.isEmpty() )
+    {
+        displayCmdlineHelp( aUnknown );
+        return EXIT_FAILURE;
+    }
+    if ( rCmdLineArgs.IsHelp() )
+    {
+        displayCmdlineHelp( OUString() );
+        return EXIT_SUCCESS;
+    }
+    if ( rCmdLineArgs.IsVersion() )
+    {
+        displayVersion();
+        return EXIT_SUCCESS;
+    }
 
     // setup configuration error handling
     ConfigurationErrorHandler aConfigErrHandler;
@@ -1430,14 +1447,6 @@ int Desktop::Main()
         RegisterServices();
 
         SetSplashScreenProgress(25);
-
-#ifndef UNX
-        if ( rCmdLineArgs.IsHelp() )
-        {
-            displayCmdlineHelp();
-            return EXIT_SUCCESS;
-        }
-#endif
 
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
@@ -2696,10 +2705,10 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
         break;
     case ApplicationEvent::TYPE_HELP:
-#ifndef UNX
-        // in non unix version allow showing of cmdline help window
-        displayCmdlineHelp();
-#endif
+        displayCmdlineHelp(rAppEvent.GetData());
+        break;
+    case ApplicationEvent::TYPE_VERSION:
+        displayVersion();
         break;
     case ApplicationEvent::TYPE_OPEN:
         {

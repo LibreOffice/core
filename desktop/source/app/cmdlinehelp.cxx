@@ -136,7 +136,7 @@ namespace desktop
 
     rtl::OUString ReplaceStringHookProc(const rtl::OUString& rStr);
 
-    void displayCmdlineHelp()
+    void displayCmdlineHelp(OUString const & unknown)
     {
         // if you put variables in other chunks don't forget to call the replace routines
         // for those chunks...
@@ -147,6 +147,11 @@ namespace desktop
         String aHelpMessage_bottom(aCmdLineHelp_bottom, RTL_TEXTENCODING_ASCII_US);
         aHelpMessage_version = ReplaceStringHookProc(aHelpMessage_version);
         aHelpMessage_head.SearchAndReplaceAscii( "%CMDNAME", String( "soffice", RTL_TEXTENCODING_ASCII_US) );
+        if (!unknown.isEmpty())
+        {
+            aHelpMessage_head = "Unknown option: " + unknown + "\n\n"
+                + aHelpMessage_head;
+        }
 #ifdef UNX
         // on unix use console for output
         fprintf(stdout, "%s%s",
