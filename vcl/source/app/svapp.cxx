@@ -1763,9 +1763,9 @@ void Application::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
     pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType);
 }
 
-sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
+bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
 {
-    sal_Bool bRet = true;
+    bool bRet = true;
 
 // Disable Java bridge on UNIX
 #if defined UNX

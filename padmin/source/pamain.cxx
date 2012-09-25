@@ -117,7 +117,7 @@ int MyApp::Main()
 
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
     {
-        sal_Bool bQuitApp;
+        bool bQuitApp;
         if( !InitAccessBridge( true, bQuitApp ) )
             if( bQuitApp )
                 return EXIT_FAILURE;

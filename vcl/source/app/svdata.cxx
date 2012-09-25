@@ -327,9 +327,9 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
 }
 
 
-bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
+bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
 {
-    rCancelled = sal_False;
+    rCancelled = false;
 
     bool bErrorMessage = true;
 
@@ -411,7 +411,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = true;
         }
 
         return false;
@@ -434,7 +434,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = true;
         }
 
         return false;
@@ -457,7 +457,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = true;
         }
 
         return false;
@@ -480,7 +480,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = true;
         }
 
         return false;
