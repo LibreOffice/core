@@ -1072,13 +1072,18 @@ Size getLegacyBestSizeForChildren(const Window &rWindow)
     return aRet;
 }
 
-Window* getLegacyNonLayoutParent(Window *pParent)
+Window* getNonLayoutParent(Window *pWindow)
 {
-    while (pParent && pParent->GetType() == WINDOW_CONTAINER)
-    {
-        pParent = pParent->GetParent();
-    }
-    return pParent;
+    while (pWindow && pWindow->GetType() == WINDOW_CONTAINER)
+        pWindow = pWindow->GetParent();
+    return pWindow;
+}
+
+Window* getNonLayoutRealParent(Window *pWindow)
+{
+    while (pWindow && pWindow->GetType() == WINDOW_CONTAINER)
+        pWindow = pWindow->ImplGetParent();
+    return pWindow;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1814,7 +1814,7 @@ void OKButton::Click()
     // close parent if no link set
     if ( !GetClickHdl() )
     {
-        Window* pParent = getLegacyNonLayoutParent(GetParent());
+        Window* pParent = getNonLayoutParent(this);
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )
@@ -1891,7 +1891,7 @@ void CancelButton::Click()
     // close parent if link not set
     if ( !GetClickHdl() )
     {
-        Window* pParent = getLegacyNonLayoutParent(GetParent());
+        Window* pParent = getNonLayoutParent(this);
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )

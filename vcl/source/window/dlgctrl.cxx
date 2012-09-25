@@ -52,8 +52,9 @@ static sal_Bool ImplHasIndirectTabParent( Window* pWindow )
     // The window has inderect tab parent if it is included in tab hierarchy
     // of the indirect parent window
 
-    return ( pWindow && pWindow->GetParent()
-          && ( pWindow->GetParent()->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) );
+    Window* pNonLayoutParent = getNonLayoutParent(pWindow);
+    return ( pNonLayoutParent
+          && ( pNonLayoutParent->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) );
 }
 
 // -----------------------------------------------------------------------
@@ -68,8 +69,12 @@ static Window* ImplGetTopParentOfTabHierarchy( Window* pParent )
 
     if ( pResult )
     {
-        while ( pResult->GetParent() && ( pResult->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) )
-            pResult = pResult->GetParent();
+        Window* pNonLayoutParent = getNonLayoutParent(pResult);
+        while ( pNonLayoutParent && ( pResult->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) )
+        {
+            pResult = pNonLayoutParent;
+            pNonLayoutParent = getNonLayoutParent(pResult);
+        }
     }
 
     return pResult;

@@ -478,7 +478,10 @@ private:
 Size getLegacyBestSizeForChildren(const Window &rWindow);
 
 //Get first parent which is not a layout widget
-Window* getLegacyNonLayoutParent(Window *pParent);
+Window* getNonLayoutParent(Window *pParent);
+
+//Get first real parent which is not a layout widget
+Window* getNonLayoutRealParent(Window *pParent);
 
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist

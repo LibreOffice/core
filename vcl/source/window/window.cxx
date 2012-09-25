@@ -35,6 +35,7 @@
 #include "unotools/fontcfg.hxx"
 #include "unotools/confignode.hxx"
 
+#include "vcl/layout.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/salgtype.hxx"
 #include "vcl/event.hxx"
@@ -5218,7 +5219,7 @@ long Window::Notify( NotifyEvent& rNEvt )
         if ( (rNEvt.GetType() == EVENT_KEYINPUT) || (rNEvt.GetType() == EVENT_KEYUP) )
         {
             if ( ImplIsOverlapWindow() ||
-                 ((ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
+                 ((getNonLayoutRealParent(this)->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
             {
                 nRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == EVENT_KEYINPUT );
             }
