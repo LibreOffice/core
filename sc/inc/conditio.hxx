@@ -37,6 +37,8 @@
 
 #include <rtl/math.hxx>
 
+#include <map>
+
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
