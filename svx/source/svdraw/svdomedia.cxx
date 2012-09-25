@@ -192,7 +192,12 @@ SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
 uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot()
 {
     if( !m_pImpl->m_xCachedSnapshot.is() )
-        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame(getURL(), true);
+    {
+        rtl::OUString aRealURL = m_pImpl->m_MediaProperties.getTempURL();
+        if( aRealURL.isEmpty() )
+            aRealURL = m_pImpl->m_MediaProperties.getURL();
+        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, true );
+    }
     return m_pImpl->m_xCachedSnapshot;
 }
 
@@ -357,6 +362,7 @@ static char const s_PkgScheme[] = "vnd.sun.star.Package:";
 
 void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProperties )
 {
+    bool bBroadcastChanged = false;
     const sal_uInt32 nMaskSet = rNewProperties.getMaskSet();
 
     // use only a subset of MediaItem properties for own own properties
@@ -398,6 +404,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
             m_pImpl->m_pTempFile.reset();
             m_pImpl->m_MediaProperties.setURL(url, 0);
         }
+        bBroadcastChanged = true;
     }
 
     if( AVMEDIA_SETMASK_LOOP & nMaskSet )
@@ -411,6 +418,12 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
 
     if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
         m_pImpl->m_MediaProperties.setZoom( rNewProperties.getZoom() );
+
+    if( bBroadcastChanged )
+    {
+        SetChanged();
+        BroadcastObjectChange();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
