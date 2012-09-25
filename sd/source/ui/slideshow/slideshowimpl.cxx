@@ -3322,12 +3322,14 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
                         {
                             if ( maPresSettings.mbShowPauseLogo )
                             {
+                                Graphic aGraphic;
                                 Image aImage;
                                 bool bLoad = vcl::ImageRepository::loadBrandingImage(
                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "logo" ) ),
                                     aImage );
                                 OSL_ENSURE( bLoad, "Can't load logo image");
-                                Graphic aGraphic(aImage.GetBitmapEx());
+                                if ( bLoad )
+                                    aGraphic = Graphic(aImage.GetBitmapEx());
                                 mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, &aGraphic );
                             }
                             else
