@@ -84,7 +84,7 @@ public:
         ::com::sun::star::chart2::data::XDataSequence > getOriginalCategories();
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getSimpleCategories();
-    ::std::vector< ComplexCategory > getCategoriesByLevel( sal_Int32 nLevel );
+    const std::vector<ComplexCategory>* getCategoriesByLevel( sal_Int32 nLevel );
 
     static ::rtl::OUString getCategoryByIndex(
           const ::com::sun::star::uno::Reference<

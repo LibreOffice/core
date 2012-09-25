@@ -556,14 +556,13 @@ Sequence< ::rtl::OUString > ExplicitCategoriesProvider::getSimpleCategories()
     return m_aExplicitCategories;
 }
 
-std::vector< ComplexCategory >  ExplicitCategoriesProvider::getCategoriesByLevel( sal_Int32 nLevel )
+const std::vector<ComplexCategory>* ExplicitCategoriesProvider::getCategoriesByLevel( sal_Int32 nLevel )
 {
-    std::vector< ComplexCategory > aRet;
     init();
     sal_Int32 nMaxIndex = m_aComplexCats.size()-1;
-    if( nLevel >= 0 && nLevel <= nMaxIndex  )
-        aRet = m_aComplexCats[nMaxIndex-nLevel];
-    return aRet;
+    if (nLevel >= 0 && nLevel <= nMaxIndex)
+        return &m_aComplexCats[nMaxIndex-nLevel];
+    return NULL;
 }
 
 OUString ExplicitCategoriesProvider::getCategoryByIndex(

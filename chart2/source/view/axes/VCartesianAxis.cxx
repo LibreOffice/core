@@ -463,10 +463,16 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
         for( ; nLevel<nLevelCount; nLevel++ )
         {
             ::std::vector< TickInfo > aTickInfoVector;
-            std::vector< ComplexCategory > aComplexCategories( m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoriesByLevel( nLevel ) );
+            const std::vector<ComplexCategory>* pComplexCategories =
+                m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoriesByLevel(nLevel);
+
+            if (!pComplexCategories)
+                continue;
+
             sal_Int32 nCatIndex = 0;
-            std::vector< ComplexCategory >::const_iterator aIt(aComplexCategories.begin());
-            std::vector< ComplexCategory >::const_iterator aEnd(aComplexCategories.end());
+            std::vector<ComplexCategory>::const_iterator aIt = pComplexCategories->begin();
+            std::vector<ComplexCategory>::const_iterator aEnd = pComplexCategories->end();
+
             for(;aIt!=aEnd;++aIt)
             {
                 TickInfo aTickInfo(0);
@@ -497,20 +503,25 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
         for( ; nLevel<nLevelCount; nLevel++ )
         {
             ::std::vector< TickInfo > aTickInfoVector;
-            std::vector< ComplexCategory > aComplexCategories( m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoriesByLevel( nLevel ) );
+            const std::vector<ComplexCategory>* pComplexCategories =
+                m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoriesByLevel(nLevel);
             sal_Int32 nCatIndex = 0;
-            std::vector< ComplexCategory >::const_iterator aIt(aComplexCategories.begin());
-            std::vector< ComplexCategory >::const_iterator aEnd(aComplexCategories.end());
-            for(;aIt!=aEnd;++aIt)
+            if (pComplexCategories)
             {
-                TickInfo aTickInfo(0);
-                ComplexCategory aCat(*aIt);
-                aTickInfo.fScaledTickValue = nCatIndex + 1.0;
-                aTickInfoVector.push_back(aTickInfo);
-                nCatIndex += aCat.Count;
-                if( nCatIndex + 1.0 > m_aScale.Maximum )
-                    break;
+                std::vector<ComplexCategory>::const_iterator aIt = pComplexCategories->begin();
+                std::vector<ComplexCategory>::const_iterator aEnd = pComplexCategories->end();
+                for(;aIt!=aEnd;++aIt)
+                {
+                    TickInfo aTickInfo(0);
+                    ComplexCategory aCat(*aIt);
+                    aTickInfo.fScaledTickValue = nCatIndex + 1.0;
+                    aTickInfoVector.push_back(aTickInfo);
+                    nCatIndex += aCat.Count;
+                    if( nCatIndex + 1.0 > m_aScale.Maximum )
+                        break;
+                }
             }
+
             //fill up with single ticks until maximum scale
             while( nCatIndex + 1.0 < m_aScale.Maximum )
             {
