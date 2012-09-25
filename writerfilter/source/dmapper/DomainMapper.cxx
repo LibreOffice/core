@@ -1419,6 +1419,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
         }
         break;
+        case NS_ooxml::LN_CT_SdtBlock_sdtContent:
+            m_pImpl->SetSdt(true);
+        break;
+        case NS_ooxml::LN_CT_SdtBlock_sdtEndContent:
+            m_pImpl->SetSdt(false);
+        break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -2878,6 +2884,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     }
     break;
     case NS_ooxml::LN_CT_PPrBase_framePr:
+    // Avoid frames if we're inside a structured document tag, would just cause outher tables fail to create.
+    if (!m_pImpl->GetSdt())
     {
         PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
         if( pContext.get() )

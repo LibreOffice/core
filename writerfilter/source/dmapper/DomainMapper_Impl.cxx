@@ -201,7 +201,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstParaInSection( true ),
         m_bIsLastParaInSection( false ),
         m_bParaSectpr( false ),
-        m_bUsingEnhancedFields( false )
+        m_bUsingEnhancedFields( false ),
+        m_bSdt(false)
 {
     appendTableManager( );
     GetBodyText();
@@ -323,6 +324,16 @@ void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 bool DomainMapper_Impl::GetParaSectpr()
 {
     return m_bParaSectpr;
+}
+
+void DomainMapper_Impl::SetSdt(bool bSdt)
+{
+    m_bSdt = bSdt;
+}
+
+bool DomainMapper_Impl::GetSdt()
+{
+    return m_bSdt;
 }
 
 bool DomainMapper_Impl::GetParaChanged()

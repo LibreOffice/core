@@ -184,6 +184,8 @@ public:
     void endParagraphGroup();
     void startCharacterGroup();
     void endCharacterGroup();
+    void startSdt();
+    void endSdt();
 
     void startField();
     void fieldSeparator();

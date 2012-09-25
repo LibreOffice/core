@@ -4392,6 +4392,7 @@ sd
 sdt
 sdtContent
 sdtContentLocked
+sdtEndContent
 sdtEndPr
 sdtLocked
 sdtPr

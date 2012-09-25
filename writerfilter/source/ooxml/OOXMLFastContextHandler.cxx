@@ -617,6 +617,32 @@ void OOXMLFastContextHandler::endParagraphGroup()
     }
 }
 
+void OOXMLFastContextHandler::startSdt()
+{
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->element("contexthandler.startSdt");
+#endif
+
+    OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+    OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(1));
+    OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+    pProps->add(pProp);
+    mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+}
+
+void OOXMLFastContextHandler::endSdt()
+{
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->element("contexthandler.endSdt");
+#endif
+
+    OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+    OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(1));
+    OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+    pProps->add(pProp);
+    mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+}
+
 void OOXMLFastContextHandler::startSectionGroup()
 {
 #ifdef DEBUG_CONTEXT_HANDLER
