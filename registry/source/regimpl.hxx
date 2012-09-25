@@ -103,10 +103,10 @@ public:
 
     ~ORegistry();
 
-    sal_Bool            isReadOnly() const
+    bool            isReadOnly() const
         { return m_readOnly; }
 
-    sal_Bool            isOpen() const
+    bool            isOpen() const
         { return m_isOpen; }
 
     ORegKey*    getRootKey();
@@ -160,8 +160,8 @@ private:
 
     sal_uInt32      m_refCount;
     osl::Mutex          m_mutex;
-    sal_Bool        m_readOnly;
-    sal_Bool        m_isOpen;
+    bool            m_readOnly;
+    bool            m_isOpen;
     rtl::OUString       m_name;
     store::OStoreFile   m_file;
     KeyMap          m_openKeyTable;
