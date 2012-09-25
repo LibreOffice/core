@@ -1074,15 +1074,23 @@ Size getLegacyBestSizeForChildren(const Window &rWindow)
 
 Window* getNonLayoutParent(Window *pWindow)
 {
-    while (pWindow && pWindow->GetType() == WINDOW_CONTAINER)
+    while (pWindow)
+    {
         pWindow = pWindow->GetParent();
+        if (!pWindow || pWindow->GetType() != WINDOW_CONTAINER)
+            break;
+    }
     return pWindow;
 }
 
 Window* getNonLayoutRealParent(Window *pWindow)
 {
-    while (pWindow && pWindow->GetType() == WINDOW_CONTAINER)
+    while (pWindow)
+    {
         pWindow = pWindow->ImplGetParent();
+        if (!pWindow || pWindow->GetType() != WINDOW_CONTAINER)
+            break;
+    }
     return pWindow;
 }
 
