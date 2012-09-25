@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <vcl/edit.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
@@ -36,6 +37,7 @@
 #include <svtools/scriptedtext.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/framelinkarray.hxx>
+#include "app.hrc"
 #include "swmodule.hxx"
 #include "swtypes.hxx"
 #include "view.hxx"
@@ -54,11 +56,14 @@ using namespace com::sun::star;
 class AutoFmtPreview : public Window
 {
 public:
-            AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* pWrtShell );
-            ~AutoFmtPreview();
+    AutoFmtPreview(Window* pParent);
+    ~AutoFmtPreview();
 
     void NotifyChange( const SwTableAutoFmt& rNewData );
 
+    void DetectRTL(SwWrtShell* pWrtShell);
+
+    virtual void Resize();
 protected:
     virtual void Paint( const Rectangle& rRect );
 
@@ -161,45 +166,40 @@ SwStringInputDlg::~SwStringInputDlg()
 
 SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
                     sal_Bool bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
-    : SfxModalDialog( pParent, SW_RES( DLG_AUTOFMT_TABLE ) ),
-    //
-    aFlFormat       ( this, SW_RES( FL_FORMAT ) ),
-    aLbFormat       ( this, SW_RES( LB_FORMAT ) ),
-    aFlFormats       ( this, SW_RES( FL_FORMATS ) ),
-
-    aBtnNumFormat   ( this, SW_RES( BTN_NUMFORMAT ) ),
-    aBtnBorder      ( this, SW_RES( BTN_BORDER ) ),
-    aBtnFont        ( this, SW_RES( BTN_FONT ) ),
-    aBtnPattern     ( this, SW_RES( BTN_PATTERN ) ),
-    aBtnAlignment   ( this, SW_RES( BTN_ALIGNMENT ) ),
-    aBtnOk          ( this, SW_RES( BTN_OK ) ),
-    aBtnCancel      ( this, SW_RES( BTN_CANCEL ) ),
-    aBtnHelp        ( this, SW_RES( BTN_HELP ) ),
-    aBtnAdd         ( this, SW_RES( BTN_ADD ) ),
-    aBtnRemove      ( this, SW_RES( BTN_REMOVE ) ),
-    aBtnRename      ( this, SW_RES( BTN_RENAME ) ),
-    aBtnMore        ( this, SW_RES( BTN_MORE ) ),
-    aStrTitle       ( SW_RES( STR_ADD_TITLE ) ),
-    aStrLabel       ( SW_RES( STR_ADD_LABEL ) ),
-    aStrClose       ( SW_RES( STR_BTN_CLOSE ) ),
-    aStrDelTitle    ( SW_RES( STR_DEL_TITLE ) ),
-    aStrDelMsg      ( SW_RES( STR_DEL_MSG ) ),
-    aStrRenameTitle ( SW_RES( STR_RENAME_TITLE ) ),
-    aStrInvalidFmt  ( SW_RES( STR_INVALID_AFNAME )),
-    pWndPreview     ( new AutoFmtPreview( this, SW_RES( WND_PREVIEW ), pWrtShell )),
-    //
-    pShell          ( pWrtShell ),
-    nIndex          ( 0 ),
-    nDfltStylePos   ( 0 ),
-    bCoreDataChanged( sal_False ),
-    bSetAutoFmt     ( bSetAutoFormat )
+    : SfxModalDialog(pParent, "AutoFormatTableDialog", "modules/swriter/ui/autoformattable.ui")
+    , aStrTitle(SW_RES(STR_ADD_AUTOFORMAT_TITLE))
+    , aStrLabel(SW_RES(STR_ADD_AUTOFORMAT_LABEL))
+    , aStrClose(SW_RES(STR_BTN_AUTOFORMAT_CLOSE))
+    , aStrDelTitle(SW_RES(STR_DEL_AUTOFORMAT_TITLE))
+    , aStrDelMsg(SW_RES(STR_DEL_AUTOFORMAT_MSG))
+    , aStrRenameTitle(SW_RES(STR_RENAME_AUTOFORMAT_TITLE))
+    , aStrInvalidFmt(SW_RES(STR_INVALID_AUTOFORMAT_NAME))
+    , pShell(pWrtShell)
+    , nIndex(0)
+    , nDfltStylePos(0)
+    , bCoreDataChanged(sal_False)
+    , bSetAutoFmt(bSetAutoFormat)
 {
+    get(m_pLbFormat, "formatlb");
+    get(m_pFormatting, "formatting");
+    get(m_pBtnNumFormat, "numformatcb");
+    get(m_pBtnBorder, "bordercb");
+    get(m_pBtnFont, "fontcb");
+    get(m_pBtnPattern, "patterncb");
+    get(m_pBtnAlignment, "alignmentcb");
+    get(m_pBtnOk, "ok");
+    get(m_pBtnCancel, "cancel");
+    get(m_pBtnAdd, "add");
+    get(m_pBtnRemove, "remove");
+    get(m_pBtnRename, "rename");
+    get(m_pWndPreview, "preview");
+
+    m_pWndPreview->DetectRTL(pWrtShell);
+
     pTableTbl = new SwTableAutoFmtTbl;
     pTableTbl->Load();
 
-    Init( pSelFmt );
-    //------------- >
-    FreeResource();
+    Init(pSelFmt);
 }
 
 //------------------------------------------------------------------------
@@ -207,9 +207,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
 
 SwAutoFormatDlg::~SwAutoFormatDlg()
 {
-    delete pWndPreview;
-
-    if( bCoreDataChanged )
+    if (bCoreDataChanged)
         pTableTbl->Save();
     delete pTableTbl;
 }
@@ -220,33 +218,25 @@ SwAutoFormatDlg::~SwAutoFormatDlg()
 void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
 {
     Link aLk( LINK( this, SwAutoFormatDlg, CheckHdl ) );
-    aBtnBorder.SetClickHdl( aLk );
-    aBtnFont.SetClickHdl( aLk );
-    aBtnPattern.SetClickHdl( aLk );
-    aBtnAlignment.SetClickHdl( aLk );
-    aBtnNumFormat.SetClickHdl( aLk );
+    m_pBtnBorder->SetClickHdl( aLk );
+    m_pBtnFont->SetClickHdl( aLk );
+    m_pBtnPattern->SetClickHdl( aLk );
+    m_pBtnAlignment->SetClickHdl( aLk );
+    m_pBtnNumFormat->SetClickHdl( aLk );
 
-    aBtnAdd.SetClickHdl ( LINK( this, SwAutoFormatDlg, AddHdl ) );
-    aBtnRemove.SetClickHdl ( LINK( this, SwAutoFormatDlg, RemoveHdl ) );
-    aBtnRename.SetClickHdl ( LINK( this, SwAutoFormatDlg, RenameHdl ) );
-    aBtnOk.SetClickHdl ( LINK( this, SwAutoFormatDlg, OkHdl ) );
-    aLbFormat.SetSelectHdl( LINK( this, SwAutoFormatDlg, SelFmtHdl ) );
+    m_pBtnAdd->SetClickHdl ( LINK( this, SwAutoFormatDlg, AddHdl ) );
+    m_pBtnRemove->SetClickHdl ( LINK( this, SwAutoFormatDlg, RemoveHdl ) );
+    m_pBtnRename->SetClickHdl ( LINK( this, SwAutoFormatDlg, RenameHdl ) );
+    m_pBtnOk->SetClickHdl ( LINK( this, SwAutoFormatDlg, OkHdl ) );
+    m_pLbFormat->SetSelectHdl( LINK( this, SwAutoFormatDlg, SelFmtHdl ) );
 
-    aBtnMore.AddWindow( &aBtnNumFormat );
-    aBtnMore.AddWindow( &aBtnBorder );
-    aBtnMore.AddWindow( &aBtnFont );
-    aBtnMore.AddWindow( &aBtnPattern );
-    aBtnMore.AddWindow( &aBtnAlignment );
-    aBtnMore.AddWindow( &aFlFormats );
-    aBtnMore.AddWindow( &aBtnRename );
-
-    aBtnAdd.Enable( bSetAutoFmt );
+    m_pBtnAdd->Enable( bSetAutoFmt );
 
     nIndex = 0;
     if( !bSetAutoFmt )
     {
         // dann muss die Liste um den Eintrag <Keins> erweitert werden.
-        aLbFormat.InsertEntry( ViewShell::GetShellRes()->aStrNone );
+        m_pLbFormat->InsertEntry( ViewShell::GetShellRes()->aStrNone );
         nDfltStylePos = 1;
         nIndex = 255;
     }
@@ -255,12 +245,12 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
             i < nCount; i++)
     {
         SwTableAutoFmt const& rFmt = (*pTableTbl)[ i ];
-        aLbFormat.InsertEntry(rFmt.GetName());
+        m_pLbFormat->InsertEntry(rFmt.GetName());
         if (pSelFmt && rFmt.GetName() == pSelFmt->GetName())
             nIndex = i;
     }
 
-    aLbFormat.SelectEntryPos( 255 != nIndex ? (nDfltStylePos + nIndex) : 0 );
+    m_pLbFormat->SelectEntryPos( 255 != nIndex ? (nDfltStylePos + nIndex) : 0 );
     SelFmtHdl( 0 );
 }
 
@@ -269,20 +259,20 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
 
 void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFmt& rFmt, sal_Bool bEnable )
 {
-    aBtnNumFormat.Enable( bEnable );
-    aBtnNumFormat.Check( rFmt.IsValueFormat() );
+    m_pBtnNumFormat->Enable( bEnable );
+    m_pBtnNumFormat->Check( rFmt.IsValueFormat() );
 
-    aBtnBorder.Enable( bEnable );
-    aBtnBorder.Check( rFmt.IsFrame() );
+    m_pBtnBorder->Enable( bEnable );
+    m_pBtnBorder->Check( rFmt.IsFrame() );
 
-    aBtnFont.Enable( bEnable );
-    aBtnFont.Check( rFmt.IsFont() );
+    m_pBtnFont->Enable( bEnable );
+    m_pBtnFont->Check( rFmt.IsFont() );
 
-    aBtnPattern.Enable( bEnable );
-    aBtnPattern.Check( rFmt.IsBackground() );
+    m_pBtnPattern->Enable( bEnable );
+    m_pBtnPattern->Check( rFmt.IsBackground() );
 
-    aBtnAlignment.Enable( bEnable );
-    aBtnAlignment.Check( rFmt.IsJustify() );
+    m_pBtnAlignment->Enable( bEnable );
+    m_pBtnAlignment->Check( rFmt.IsJustify() );
 }
 
 void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
@@ -309,15 +299,15 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
     SwTableAutoFmt* pData  = &(*pTableTbl)[nIndex];
     sal_Bool bCheck = ((CheckBox*)pBtn)->IsChecked(), bDataChgd = sal_True;
 
-    if( pBtn == &aBtnNumFormat )
+    if( pBtn == m_pBtnNumFormat )
         pData->SetValueFormat( bCheck );
-    else if ( pBtn == &aBtnBorder )
+    else if ( pBtn == m_pBtnBorder )
         pData->SetFrame( bCheck );
-    else if ( pBtn == &aBtnFont )
+    else if ( pBtn == m_pBtnFont )
         pData->SetFont( bCheck );
-    else if ( pBtn == &aBtnPattern )
+    else if ( pBtn == m_pBtnPattern )
         pData->SetBackground( bCheck );
-    else if ( pBtn == &aBtnAlignment )
+    else if ( pBtn == m_pBtnAlignment )
         pData->SetJustify( bCheck );
     else
         bDataChgd = sal_False;
@@ -326,11 +316,11 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
     {
         if( !bCoreDataChanged )
         {
-            aBtnCancel.SetText( aStrClose );
+            m_pBtnCancel->SetText( aStrClose );
             bCoreDataChanged = sal_True;
         }
 
-        pWndPreview->NotifyChange( *pData );
+        m_pWndPreview->NotifyChange( *pData );
     }
     return 0;
 }
@@ -373,13 +363,13 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
                             break;
 
                     pTableTbl->InsertAutoFmt(n, pNewData);
-                    aLbFormat.InsertEntry( aFormatName, nDfltStylePos + n );
-                    aLbFormat.SelectEntryPos( nDfltStylePos + n );
+                    m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
+                    m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
                     bFmtInserted = sal_True;
-                    aBtnAdd.Enable( sal_False );
+                    m_pBtnAdd->Enable( sal_False );
                     if ( !bCoreDataChanged )
                     {
-                        aBtnCancel.SetText( aStrClose );
+                        m_pBtnCancel->SetText( aStrClose );
                         bCoreDataChanged = sal_True;
                     }
 
@@ -409,7 +399,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
 {
     String aMessage = aStrDelMsg ;
     aMessage.AppendAscii("\n\n");
-    aMessage += aLbFormat.GetSelectEntry() ;
+    aMessage += m_pLbFormat->GetSelectEntry() ;
     aMessage += '\n';
 
     MessBox* pBox = new MessBox( this, WinBits( WB_OK_CANCEL ),
@@ -417,21 +407,21 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
 
     if ( pBox->Execute() == RET_OK )
     {
-        aLbFormat.RemoveEntry( nDfltStylePos + nIndex );
-        aLbFormat.SelectEntryPos( nDfltStylePos + nIndex-1 );
+        m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
+        m_pLbFormat->SelectEntryPos( nDfltStylePos + nIndex-1 );
 
         pTableTbl->EraseAutoFmt(nIndex);
         nIndex--;
 
         if( !nIndex )
         {
-            aBtnRemove.Enable(sal_False);
-            aBtnRename.Enable(sal_False);
+            m_pBtnRemove->Enable(sal_False);
+            m_pBtnRename->Enable(sal_False);
         }
 
         if( !bCoreDataChanged )
         {
-            aBtnCancel.SetText( aStrClose );
+            m_pBtnCancel->SetText( aStrClose );
             bCoreDataChanged = sal_True;
         }
     }
@@ -448,7 +438,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
     while( !bOk )
     {
         SwStringInputDlg* pDlg = new SwStringInputDlg( this,
-                        aStrRenameTitle, aLbFormat.GetSelectEntry(),
+                        aStrRenameTitle, m_pLbFormat->GetSelectEntry(),
                                                         aEmptyStr );
         if( pDlg->Execute() == RET_OK )
         {
@@ -466,7 +456,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                 if( n >= pTableTbl->size() )
                 {
                     // no format with this name exists, so rename it
-                    aLbFormat.RemoveEntry( nDfltStylePos + nIndex );
+                    m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
                     SwTableAutoFmt* p = &(*pTableTbl)[ nIndex ];
 
                     p->SetName( aFormatName );
@@ -480,12 +470,12 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                         }
 
                     pTableTbl->MoveAutoFmt(n, nIndex);
-                    aLbFormat.InsertEntry( aFormatName, nDfltStylePos + n );
-                    aLbFormat.SelectEntryPos( nDfltStylePos + n );
+                    m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
+                    m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
 
                     if ( !bCoreDataChanged )
                     {
-                        aBtnCancel.SetText( aStrClose );
+                        m_pBtnCancel->SetText( aStrClose );
                         bCoreDataChanged = sal_True;
                     }
 
@@ -515,11 +505,11 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
 IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
 {
     sal_Bool bBtnEnable = sal_False;
-    sal_uInt8 nSelPos = (sal_uInt8) aLbFormat.GetSelectEntryPos(), nOldIdx = nIndex;
+    sal_uInt8 nSelPos = (sal_uInt8) m_pLbFormat->GetSelectEntryPos(), nOldIdx = nIndex;
     if( nSelPos >= nDfltStylePos )
     {
         nIndex = nSelPos - nDfltStylePos;
-        pWndPreview->NotifyChange( (*pTableTbl)[nIndex] );
+        m_pWndPreview->NotifyChange( (*pTableTbl)[nIndex] );
         bBtnEnable = 0 != nIndex;
         UpdateChecks( (*pTableTbl)[nIndex], sal_True );
     }
@@ -536,12 +526,12 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
         aTmp.SetWidthHeight( sal_False );
 
         if( nOldIdx != nIndex )
-            pWndPreview->NotifyChange( aTmp );
+            m_pWndPreview->NotifyChange( aTmp );
         UpdateChecks( aTmp, sal_False );
     }
 
-    aBtnRemove.Enable( bBtnEnable );
-    aBtnRename.Enable( bBtnEnable );
+    m_pBtnRemove->Enable( bBtnEnable );
+    m_pBtnRename->Enable( bBtnEnable );
 
     return 0;
 }
@@ -561,19 +551,13 @@ IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
 //------------------------------------------------------------------------
 
-AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* pWrtShell ) :
-        Window          ( pParent, rRes ),
-
+AutoFmtPreview::AutoFmtPreview(Window* pParent) :
+        Window          ( pParent ),
         aCurData        ( aEmptyStr ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
         bFitWidth       ( sal_False ),
         mbRTL           ( false ),
-        aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
-        nLabelColWidth  ( (aPrvSize.Width() - 4) / 4 - 12 ),
-        nDataColWidth1  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3 ),
-        nDataColWidth2  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4 ),
-        nRowHeight      ( (aPrvSize.Height() - 4) / 5 ),
         aStrJan         ( SW_RES( STR_JAN ) ),
         aStrFeb         ( SW_RES( STR_FEB ) ),
         aStrMar         ( SW_RES( STR_MAR ) ),
@@ -583,11 +567,6 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
         aStrSum         ( SW_RES( STR_SUM ) ),
         m_xMSF          ( comphelper::getProcessServiceFactory() )
 {
-    if (!pWrtShell->IsCrsrInTbl()) // We haven't created the table yet
-        mbRTL = Application::GetSettings().GetLayoutRTL();
-    else
-        mbRTL = pWrtShell->IsTableRightToLeft();
-
     OSL_ENSURE( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
     if ( m_xMSF.is() )
     {
@@ -599,6 +578,29 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
     pNumFmt = new SvNumberFormatter( m_xMSF, LANGUAGE_SYSTEM );
 
     Init();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAutoFmtPreview(Window *pParent, VclBuilder::stringmap &)
+{
+    return new AutoFmtPreview(pParent);
+}
+
+void AutoFmtPreview::Resize()
+{
+    aPrvSize = Size(GetSizePixel().Width() - 6, GetSizePixel().Height() - 30);
+    nLabelColWidth = (aPrvSize.Width() - 4) / 4 - 12;
+    nDataColWidth1 = (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3;
+    nDataColWidth2 = (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4;
+    nRowHeight = (aPrvSize.Height() - 4) / 5;
+    NotifyChange(aCurData);
+}
+
+void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
+{
+    if (!pWrtShell->IsCrsrInTbl()) // We haven't created the table yet
+        mbRTL = Application::GetSettings().GetLayoutRTL();
+    else
+        mbRTL = pWrtShell->IsTableRightToLeft();
 }
 
 //------------------------------------------------------------------------

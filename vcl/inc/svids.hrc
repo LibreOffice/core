@@ -148,6 +148,8 @@
 #define SV_BUTTONTEXT_ABORT                 10109
 #define SV_BUTTONTEXT_LESS                  10110
 #define SV_BUTTONTEXT_RESET                 10111
+#define SV_BUTTONTEXT_ADD                   10112
+#define SV_BUTTONTEXT_DELETE                10113
 
 #define SV_STDTEXT_FIRST                    SV_STDTEXT_SERVICENOTAVAILABLE
 #define SV_STDTEXT_SERVICENOTAVAILABLE      10200

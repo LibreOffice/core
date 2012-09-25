@@ -41,20 +41,6 @@
 #define BTN_FONT        23
 #define BTN_PATTERN     24
 #define BTN_ALIGNMENT   25
-#define STR_ADD_TITLE   100
-#define STR_ADD_LABEL   101
-#define STR_DEL_TITLE   102
-#define STR_DEL_MSG     103
-#define STR_INVALID_AFNAME 104
-#define STR_RENAME_TITLE    105
-    // Autoformat-Preview:
-#define STR_JAN         121
-#define STR_FEB         122
-#define STR_MAR         123
-#define STR_NORTH       124
-#define STR_MID         125
-#define STR_SOUTH       126
-#define STR_SUM         127
 
 // Gruppierung setzen/aufheben:
 #define BTN_GROUP_COLS  1

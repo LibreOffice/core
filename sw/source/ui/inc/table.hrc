@@ -25,7 +25,7 @@
 
 #define MSG_ERR_TABLE_MERGE     (RC_TABLE_BEGIN + 7)
 
-#define DLG_AUTOFMT_TABLE       (RC_TABLE_BEGIN + 9)
+
 #define DLG_SWDLG_STRINPUT      (RC_TABLE_BEGIN + 10)
 #define TP_TABLE_COLUMN         (RC_TABLE_BEGIN + 11)
 #define DLG_INSERT_CHART        (RC_TABLE_BEGIN + 12)

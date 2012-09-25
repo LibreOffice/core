@@ -570,6 +570,76 @@ String STR_SYMBOL
     Text [ en-US ] = "Symbol" ;
 };
 
+String STR_ADD_AUTOFORMAT_TITLE
+{
+    Text [ en-US ] = "Add AutoFormat" ;
+};
+
+String STR_ADD_AUTOFORMAT_LABEL
+{
+    Text [ en-US ] = "Name" ;
+};
+
+String STR_DEL_AUTOFORMAT_TITLE
+{
+    Text [ en-US ] = "Delete AutoFormat" ;
+};
+
+String STR_DEL_AUTOFORMAT_MSG
+{
+    Text [ en-US ] = "The following AutoFormat entry will be deleted:" ;
+};
+
+String STR_RENAME_AUTOFORMAT_TITLE
+{
+    Text [ en-US ] = "Rename AutoFormat" ;
+};
+
+String STR_BTN_AUTOFORMAT_CLOSE
+{
+    Text [ en-US ] = "~Close" ;
+};
+
+String STR_JAN
+{
+    Text [ en-US ] = "Jan" ;
+};
+
+String STR_FEB
+{
+    Text [ en-US ] = "Feb" ;
+};
+
+String STR_MAR
+{
+    Text [ en-US ] = "Mar" ;
+};
+
+String STR_NORTH
+{
+    Text [ en-US ] = "North" ;
+};
+
+String STR_MID
+{
+    Text [ en-US ] = "Mid" ;
+};
+
+String STR_SOUTH
+{
+    Text [ en-US ] = "South" ;
+};
+
+String STR_SUM
+{
+    Text [ en-US ] = "Sum" ;
+};
+
+String STR_INVALID_AUTOFORMAT_NAME
+{
+    Text [ en-US ] = "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name." ;
+};
+
 ToolBox RID_MODULE_TOOLBOX
 {
     HelpID = HID_MODULE_TOOLBOX ;

@@ -479,7 +479,6 @@ public:
     virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ); //add for  SwSplitTblDlg
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
-                                                            int nResId,
                                                             sal_Bool bSetAutoFmt = sal_True,
                                                             const SwTableAutoFmt* pSelFmt = 0 );
     virtual SfxAbstractDialog * CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType,int nResId );//add for SwBorderDlg

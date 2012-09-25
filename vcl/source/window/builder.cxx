@@ -27,6 +27,7 @@
  */
 
 #include <osl/module.hxx>
+#include <sal/log.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -280,8 +281,22 @@ namespace
                 pBtn->SetText(VclResId(SV_BUTTONTEXT_RESET).toString());
                 pWindow = pBtn;
             }
+            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-add")))
+            {
+                PushButton *pBtn = new PushButton(pParent, nBits);
+                pBtn->SetText(VclResId(SV_BUTTONTEXT_ADD).toString());
+                pWindow = pBtn;
+            }
+            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-delete")))
+            {
+                PushButton *pBtn = new PushButton(pParent, nBits);
+                pBtn->SetText(VclResId(SV_BUTTONTEXT_DELETE).toString());
+                pWindow = pBtn;
+            }
             else
-                fprintf(stderr, "unknown stock type %s\n", sType.getStr());
+            {
+                SAL_WARN("vcl.layout", "unknown stock type: " << sType.getStr());
+            }
         }
 
         if (!pWindow)
@@ -481,12 +496,12 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
 
         if (sPattern.isEmpty())
         {
-            fprintf(stderr, "making numeric field for %s %s\n", name.getStr(), sUnit.getStr());
+            SAL_INFO("vcl.layout", "making numeric field for " << name.getStr() << " " << sUnit.getStr());
             pWindow = new NumericField(pParent, nBits);
         }
         else
         {
-            fprintf(stderr, "making metric field for %s %s\n", name.getStr(), sUnit.getStr());
+            SAL_INFO("vcl.layout", "making metric field for " << name.getStr() << " " << sUnit.getStr());
             MetricField *pField = new MetricField(pParent, nBits);
             pField->SetUnit(eUnit);
             pWindow = pField;
@@ -552,12 +567,16 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
                 pWindow = (*pFunction)(pParent, rMap);
         }
     }
-    if (!pWindow)
-        fprintf(stderr, "TO-DO, implement %s or add a make%s function\n", name.getStr(), name.getStr());
+    SAL_WARN_IF(!pWindow, "vcl.layout", "implement " << name.getStr() << "or add a make" << name.getStr() << " function");
     if (pWindow)
     {
         pWindow->SetHelpId(m_sHelpRoot + id);
-        fprintf(stderr, "for %s, created %p child of %p (%p/%p/%p) with helpid %s\n", name.getStr(), pWindow, pParent, pWindow->mpWindowImpl->mpParent, pWindow->mpWindowImpl->mpRealParent, pWindow->mpWindowImpl->mpBorderWindow, pWindow->GetHelpId().getStr());
+        SAL_INFO("vcl.layout", "for " << name.getStr() <<
+            ", created << " << pWindow << " child of " <<
+            pParent << "(" << pWindow->mpWindowImpl->mpParent << "/" <<
+            pWindow->mpWindowImpl->mpRealParent << "/" <<
+            pWindow->mpWindowImpl->mpBorderWindow << ") with helpid " <<
+            pWindow->GetHelpId().getStr());
         m_aChildren.push_back(WinAndId(id, pWindow));
     }
     return pWindow;
@@ -1114,7 +1133,9 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
                 set_window_packing_position(pCurrent, sValue.toInt32());
             }
             else
-                fprintf(stderr, "unknown packing %s\n", sKey.getStr());
+            {
+                SAL_WARN("vcl.layout", "unknown packing: " << sKey.getStr());
+            }
         }
     }
 }
@@ -1258,7 +1279,6 @@ void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
     reorderWithinParent(rReplacement, nPosition);
 
     assert(nPosition == getPositionWithinParent(rReplacement));
-    fprintf(stderr, "swapped %p for %p %p/%p/%p\n", &rReplacement, &rOrig, rReplacement.mpWindowImpl->mpParent, rReplacement.mpWindowImpl->mpRealParent, rReplacement.mpWindowImpl->mpBorderWindow);
 }
 
 bool VclBuilder::replace(rtl::OString sID, Window &rReplacement)
@@ -1277,7 +1297,7 @@ bool VclBuilder::replace(rtl::OString sID, Window &rReplacement)
             return true;
         }
     }
-    fprintf(stderr, "no sign of %s\n", sID.getStr());
+    SAL_WARN("vcl.layout", "no sign of :" << sID.getStr());
     return false;
 }
 
@@ -1330,7 +1350,9 @@ void VclBuilder::mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustm
             rTarget.SetSpinSize(nSpinSize);
         }
         else
-            fprintf(stderr, "unhandled property %s\n", rKey.getStr());
+        {
+            SAL_WARN("vcl.layout", "unhandled property :" << rKey.getStr());
+        }
     }
 }
 

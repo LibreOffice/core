@@ -97,7 +97,22 @@
 #define STR_STATUSBAR_WORDCOUNT_NO_SELECTION (RC_APP_BEGIN + 110)
 #define STR_STATUSBAR_WORDCOUNT              (RC_APP_BEGIN + 111)
 
-#define APP_ACT_END                     STR_STATUSBAR_WORDCOUNT
+#define STR_ADD_AUTOFORMAT_TITLE        (RC_APP_BEGIN + 112)
+#define STR_ADD_AUTOFORMAT_LABEL        (RC_APP_BEGIN + 113)
+#define STR_DEL_AUTOFORMAT_TITLE        (RC_APP_BEGIN + 114)
+#define STR_DEL_AUTOFORMAT_MSG          (RC_APP_BEGIN + 115)
+#define STR_RENAME_AUTOFORMAT_TITLE     (RC_APP_BEGIN + 116)
+#define STR_BTN_AUTOFORMAT_CLOSE        (RC_APP_BEGIN + 117)
+#define STR_INVALID_AUTOFORMAT_NAME     (RC_APP_BEGIN + 118)
+#define STR_JAN                         (RC_APP_BEGIN + 119)
+#define STR_FEB                         (RC_APP_BEGIN + 120)
+#define STR_MAR                         (RC_APP_BEGIN + 121)
+#define STR_NORTH                       (RC_APP_BEGIN + 122)
+#define STR_MID                         (RC_APP_BEGIN + 123)
+#define STR_SOUTH                       (RC_APP_BEGIN + 124)
+#define STR_SUM                         (RC_APP_BEGIN + 125)
+
+#define APP_ACT_END                     STR_SUM
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line

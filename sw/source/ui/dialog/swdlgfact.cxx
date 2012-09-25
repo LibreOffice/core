@@ -973,25 +973,11 @@ AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg 
     return 0;
 }
 
-AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
-                                                                                    int nResId,
-                                                                                    sal_Bool bSetAutoFmt,
-                                                                                    const SwTableAutoFmt* pSelFmt )
+AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(Window* pParent,
+    SwWrtShell* pShell, sal_Bool bSetAutoFmt, const SwTableAutoFmt* pSelFmt)
 {
-    SwAutoFormatDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_AUTOFMT_TABLE :
-            pDlg = new SwAutoFormatDlg( pParent, pShell,bSetAutoFmt,pSelFmt);
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwAutoFormatDlg_Impl( pDlg );
-    return 0;
+    SwAutoFormatDlg* pDlg = new SwAutoFormatDlg(pParent, pShell, bSetAutoFmt, pSelFmt);
+    return new AbstractSwAutoFormatDlg_Impl(pDlg);
 }
 
 SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType,int nResId )
