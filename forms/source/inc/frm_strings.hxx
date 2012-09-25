@@ -267,6 +267,8 @@ namespace frm
     #define PROPERTY_CONTROL_BORDER_COLOR_MOUSE  "ControlBorderColorOnHover"
     #define PROPERTY_CONTROL_BORDER_COLOR_INVALID "ControlBorderColorOnInvalid"
     #define PROPERTY_GENERATEVBAEVENTS  "GenerateVbaEvents"
+    #define PROPERTY_CONTROL_TYPE_IN_MSO          "ControlTypeinMSO"
+    #define PROPERTY_OBJ_ID_IN_MSO                "ObjIDinMSO"
 
     //--------------------------------------------------------------------------
     //- URLs

@@ -688,6 +688,9 @@ SvxShapeControlPropertyMapping[] =
     { MAP_CHAR_LEN("ControlTextEmphasis"),  MAP_CHAR_LEN("FontEmphasisMark") },
     { MAP_CHAR_LEN("ImageScaleMode"),  MAP_CHAR_LEN("ScaleMode") },
     { MAP_CHAR_LEN("ControlWritingMode"), MAP_CHAR_LEN("WritingMode") },
+    //added for exporting OCX control
+    { MAP_CHAR_LEN("ControlTypeinMSO"), MAP_CHAR_LEN("ControlTypeinMSO") },
+    { MAP_CHAR_LEN("ObjIDinMSO"), MAP_CHAR_LEN("ObjIDinMSO") },
     { NULL,0, NULL, 0 }
 };
 

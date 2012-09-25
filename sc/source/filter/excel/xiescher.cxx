@@ -39,6 +39,7 @@
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <rtl/logfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -110,6 +111,8 @@
 
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -455,6 +458,77 @@ SdrObject* XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, con
         xSdrObj.reset( DoCreateSdrObj( rDffConv, rAnchorRect ) );
         if( xSdrObj.is() )
             xSdrObj->SetModel( rDffConv.GetModel() );
+        //added for exporting OCX control
+        /*  mnObjType value set should be as below table:
+                    0x0000      Group               0x0001      Line
+                    0x0002      Rectangle           0x0003      Oval
+                    0x0004      Arc                 0x0005      Chart
+                    0x0006      Text                    0x0009      Polygon
+                +-----------------------------------------------------+
+        OCX ==>|    0x0008      Picture                                     |
+                +-----------------------------------------------------+
+                |   0x0007      Button                                      |
+                |   0x000B      Checkbox            0x000C      Radio button    |
+                |   0x000D      Edit box                0x000E      Label       |
+        TBX ==> |   0x000F      Dialog box          0x0010      Spin control    |
+                |   0x0011      Scrollbar               0x0012      List            |
+                |   0x0013      Group box           0x0014      Dropdown list   |
+                +-----------------------------------------------------+
+                    0x0019      Note                0x001E      OfficeArt object
+        */
+        if( xSdrObj.is() && xSdrObj->IsUnoObj() &&
+            ( (mnObjType < 25 && mnObjType > 10) || mnObjType == 7 || mnObjType == 8 ) )
+        {
+            SdrUnoObj* pSdrUnoObj = dynamic_cast< SdrUnoObj* >( xSdrObj.get() );
+            if( pSdrUnoObj != NULL )
+            {
+                Reference< XControlModel > xCtrlModel = pSdrUnoObj->GetUnoControlModel();
+                Reference< XPropertySet > xPropSet(xCtrlModel,UNO_QUERY);
+                const static rtl::OUString sPropertyName = rtl::OUString::createFromAscii("ControlTypeinMSO");
+
+                enum ControlType { eCreateFromOffice = 0, eCreateFromMSTBXControl, eCreateFromMSOCXControl };
+
+                if( mnObjType == 7 || (mnObjType < 25 && mnObjType > 10) )//TBX
+                {
+                    //Need summary type for export. Detail type(checkbox, button ...) has been contained by mnObjType
+                    const sal_Int16 nTBXControlType = eCreateFromMSTBXControl ;
+                    Any aAny;
+                    aAny <<= nTBXControlType;
+                    try
+                    {
+                        xPropSet->setPropertyValue(sPropertyName, aAny);
+                    }
+                    catch(const Exception&)
+                    {
+                        OSL_TRACE("XclImpDrawObjBase::CreateSdrObject, this control can't be set the property ControlTypeinMSO!");
+                    }
+                }
+                if( mnObjType == 8 )//OCX
+                {
+                    //Need summary type for export
+                    const static rtl::OUString sObjIdPropertyName = rtl::OUString::createFromAscii("ObjIDinMSO");
+                    const XclImpPictureObj* const pObj = dynamic_cast< const XclImpPictureObj* const >(this);
+                    if( pObj != NULL && pObj->IsOcxControl() )
+                    {
+                        const sal_Int16 nOCXControlType =  eCreateFromMSOCXControl;
+                        Any aAny;
+                        try
+                        {
+                            aAny <<= nOCXControlType;
+                            xPropSet->setPropertyValue(sPropertyName, aAny);
+                            //Detail type(checkbox, button ...)
+                            aAny<<= mnObjId;
+                            xPropSet->setPropertyValue(sObjIdPropertyName, aAny);
+                        }
+                        catch(const Exception&)
+                        {
+                            OSL_TRACE("XclImpDrawObjBase::CreateSdrObject, this control can't be set the property ObjIDinMSO!");
+                        }
+                    }
+                }
+
+            }
+        }
     }
     return xSdrObj.release();
 }
