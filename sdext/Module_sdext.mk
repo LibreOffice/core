@@ -56,7 +56,6 @@ endif
 ifeq ($(ENABLE_PRESENTER_SCREEN),YES)
 $(eval $(call gb_Module_add_targets,sdext,\
     Configuration_presenter \
-    CustomTarget_presenter \
     Extension_presenter \
     Library_presenter \
     Rdb_presenter \
