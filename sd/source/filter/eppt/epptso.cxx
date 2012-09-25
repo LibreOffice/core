@@ -5738,18 +5738,6 @@ void PPTWriter::WriteCString( SvStream& rSt, const String& rString, sal_uInt32 n
 void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt )
 {
-    mpPptEscherEx->OpenContainer( ESCHER_SpgrContainer );
-    mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-    mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
-    *mpStrm     << (sal_Int32)maRect.Left() // Bounding box fuer die Gruppierten shapes an die sie attached werden
-                << (sal_Int32)maRect.Top()
-                << (sal_Int32)maRect.Right()
-                << (sal_Int32)maRect.Bottom();
-
-    sal_uInt32 nShapeId = mpPptEscherEx->GenerateShapeId();
-    mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );     // Flags: Group | Patriarch
-    aSolverContainer.AddShape( rXShape, nShapeId );
-    EscherPropertyContainer aPropOpt2;
     try
     {
         static const rtl::OUString  sModel( RTL_CONSTASCII_USTRINGPARAM ( "Model" ) );
@@ -5778,6 +5766,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 awt::Size aM( ImplMapSize( aS ) );
                 aColumns.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Width ) );
                 nPosition += aM.Width;
+                if ( x == nColumnCount - 1  && nPosition != maRect.Right() )
+                    maRect.Right() = nPosition;
             }
 
             nPosition = aPosition.Y;
@@ -5789,7 +5779,21 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 awt::Size aM( ImplMapSize( aS ) );
                 aRows.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Height ) );
                 nPosition += aM.Height;
+                if ( y == nRowCount - 1 && nPosition != maRect.Bottom())
+                    maRect.Bottom() = nPosition;
             }
+            mpPptEscherEx->OpenContainer( ESCHER_SpgrContainer );
+            mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+            mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
+            *mpStrm     << (sal_Int32)maRect.Left() // Bounding box fuer die Gruppierten shapes an die sie attached werden
+                        << (sal_Int32)maRect.Top()
+                        << (sal_Int32)maRect.Right()
+                        << (sal_Int32)maRect.Bottom();
+
+            sal_uInt32 nShapeId = mpPptEscherEx->GenerateShapeId();
+            mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );     // Flags: Group | Patriarch
+            aSolverContainer.AddShape( rXShape, nShapeId );
+            EscherPropertyContainer aPropOpt2;
 
             if ( nRowCount )
             {
