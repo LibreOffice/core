@@ -249,7 +249,7 @@ SwFmt::~SwFmt()
 
 void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
-    sal_Bool bContinue = sal_True; // sal_True = pass on to dependent ones
+    bool bContinue = true; // true = pass on to dependent ones
 
     sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
                     pNewValue ? pNewValue->Which() : 0 ;
@@ -293,7 +293,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 
             if( aNew.Count() )
                 NotifyClients( &aOld, &aNew );
-            bContinue = sal_False;
+            bContinue = false;
         }
         break;
     case RES_FMT_CHG:
@@ -318,7 +318,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 
             // pass Hint only to dependent formats (no Frames)
             ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFmt) );
-            bContinue = sal_False;
+            bContinue = false;
         }
         break;
     default:
@@ -328,7 +328,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
             {
                 // DropCaps might come into this block
                 OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify was sent without sender" );
-                bContinue = sal_False;
+                bContinue = false;
             }
         }
     }
@@ -529,7 +529,7 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
 
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
               aNew( *aSet.GetPool(), aSet.GetRanges() );
-    sal_Bool bRet = 0 != aSet.ClearItem_BC( 0, &aOld, &aNew );
+    bool bRet = 0 != aSet.ClearItem_BC( 0, &aOld, &aNew );
     if( bRet )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
@@ -566,7 +566,7 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
 
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
               aNew( *aSet.GetPool(), aSet.GetRanges() );
-    sal_Bool bRet = 0 != aSet.Intersect_BC( rSet, &aOld, &aNew );
+    bool bRet = 0 != aSet.Intersect_BC( rSet, &aOld, &aNew );
     if( bRet )
     {
         SwAttrSetChg aChgOld( aSet, aOld );

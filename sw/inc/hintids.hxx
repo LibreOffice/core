@@ -469,7 +469,7 @@ extern sal_uInt16 aCharAutoFmtSetRange[];
 extern sal_uInt16 aPgFrmFmtSetRange[];
 
 // check if ID is InRange of AttrSet-Ids
-sal_Bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId );
+bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId );
 
 #endif
 

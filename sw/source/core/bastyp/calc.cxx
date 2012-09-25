@@ -671,13 +671,13 @@ SwCalcOper SwCalc::GetToken()
                                                       coStartFlags, aEmptyStr,
                                                       coContFlags, aEmptyStr );
 
-        sal_Bool bSetError = sal_True;
+        bool bSetError = true;
         xub_StrLen nRealStt = nCommandPos + (xub_StrLen)aRes.LeadingWhiteSpace;
         if( aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER) )
         {
             nNumberValue.PutDouble( aRes.Value );
             eCurrOper = CALC_NUMBER;
-            bSetError = sal_False;
+            bSetError = false;
         }
         else if( aRes.TokenType & KParseType::IDENTNAME )
         {
@@ -721,13 +721,13 @@ SwCalcOper SwCalc::GetToken()
             }
             aVarName = aName;
             eCurrOper = CALC_NAME;
-            bSetError = sal_False;
+            bSetError = false;
         }
         else if ( aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
         {
             nNumberValue.PutString( String( aRes.DequotedNameOrString ));
             eCurrOper = CALC_NUMBER;
-            bSetError = sal_False;
+            bSetError = false;
         }
         else if( aRes.TokenType & KParseType::ONE_SINGLE_CHAR )
         {
@@ -735,7 +735,7 @@ SwCalcOper SwCalc::GetToken()
                               static_cast<xub_StrLen>(aRes.EndPos) - nRealStt ));
             if( 1 == aName.Len() )
             {
-                bSetError = sal_False;
+                bSetError = false;
                 sal_Unicode ch = aName.GetChar( 0 );
                 switch( ch )
                 {
@@ -815,16 +815,16 @@ SwCalcOper SwCalc::GetToken()
                             eCurrOper = CALC_NAME;
                         }
                         else
-                            bSetError = sal_True;
+                            bSetError = true;
                     }
                     else
                     {
-                        bSetError = sal_True;
+                        bSetError = true;
                     }
                     break;
 
                 default:
-                    bSetError = sal_True;
+                    bSetError = true;
                     break;
                 }
             }
@@ -837,10 +837,10 @@ SwCalcOper SwCalc::GetToken()
             {
                 sal_Unicode ch = aName.GetChar(0);
 
-                bSetError = sal_True;
+                bSetError = true;
                 if ('<' == ch || '>' == ch)
                 {
-                    bSetError = sal_False;
+                    bSetError = false;
 
                     SwCalcOper eTmp2 = ('<' == ch) ? CALC_LEQ : CALC_GEQ;
                     eCurrOper = ('<' == ch) ? CALC_LES : CALC_GRE;
@@ -848,14 +848,14 @@ SwCalcOper SwCalc::GetToken()
                     if( 2 == aName.Len() && '=' == aName.GetChar(1) )
                         eCurrOper = eTmp2;
                     else if( 1 != aName.Len() )
-                        bSetError = sal_True;
+                        bSetError = true;
                 }
             }
         }
         else if( nRealStt == sCommand.Len() )
         {
             eCurrOper = CALC_ENDCALC;
-            bSetError = sal_False;
+            bSetError = false;
         }
 
         if( bSetError )
@@ -983,15 +983,15 @@ SwCalcOper SwCalc::GetToken()
         case '[':
             {
                 String aStr;
-                sal_Bool bIgnore = sal_False;
+                bool bIgnore = false;
                 do {
                     while( 0 != ( ch = NextCh( sCommand, nCommandPos  )) &&
                            ch != ']' )
                     {
                         if( !bIgnore && '\\' == ch )
-                            bIgnore = sal_True;
+                            bIgnore = true;
                         else if( bIgnore )
-                            bIgnore = sal_False;
+                            bIgnore = false;
                         aStr += ch;
                     }
 
@@ -1192,15 +1192,15 @@ SwSbxValue SwCalc::Term()
                 }
 
                 fVal *= fFac;
-                sal_Bool bSign;
+                bool bSign;
                 if (fVal < 0.0)
                 {
                     fVal *= -1.0;
-                    bSign = sal_True;
+                    bSign = true;
                 }
                 else
                 {
-                    bSign = sal_False;
+                    bSign = false;
                 }
 
                 // rounding
@@ -1268,7 +1268,7 @@ SwSbxValue SwCalc::Prim()
 
     pfCalc pFnc = 0;
 
-    sal_Bool bChkTrig = sal_False, bChkPow = sal_False;
+    bool bChkTrig = false, bChkPow = false;
 
     switch( eCurrOper )
     {
@@ -1276,8 +1276,8 @@ SwSbxValue SwCalc::Prim()
     case CALC_COS:  pFnc = &cos;  break;
     case CALC_TAN:  pFnc = &tan;  break;
     case CALC_ATAN: pFnc = &atan; break;
-    case CALC_ASIN: pFnc = &asin; bChkTrig = sal_True; break;
-    case CALC_ACOS: pFnc = &acos; bChkTrig = sal_True; break;
+    case CALC_ASIN: pFnc = &asin; bChkTrig = true; break;
+    case CALC_ACOS: pFnc = &acos; bChkTrig = true; break;
 
     case CALC_NOT:
         {
@@ -1321,7 +1321,7 @@ SwSbxValue SwCalc::Prim()
         else
         {
             nErg = nNumberValue;
-            bChkPow = sal_True;
+            bChkPow = true;
         }
         break;
 
@@ -1335,7 +1335,7 @@ SwSbxValue SwCalc::Prim()
         else
         {
             nErg = VarLook( aVarName )->nValue;
-            bChkPow = sal_True;
+            bChkPow = true;
         }
         break;
 
@@ -1355,7 +1355,7 @@ SwSbxValue SwCalc::Prim()
             else
             {
                 GetToken();
-                bChkPow = sal_True; // in order for =(7)^2 to work
+                bChkPow = true; // in order for =(7)^2 to work
             }
         }
         break;
