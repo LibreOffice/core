@@ -74,7 +74,9 @@ endef
 
 # ScpPreprocessTarget class
 
-gb_ScpPreprocessTarget_TARGET := $(call gb_Executable_get_target_for_build,cpp.lcc)
+# TODO change to gb_Executable_get_target_for_build after soltools has
+# been gbuildified
+gb_ScpPreprocessTarget_TARGET := $(OUTDIR_FOR_BUILD)/bin/cpp.lcc
 gb_ScpPreprocessTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpPreprocessTarget_TARGET)
 
 gb_ScpPreprocessTarget_get_source = $(SRCDIR)/$(1).scp
