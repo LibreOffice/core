@@ -143,8 +143,8 @@ private:
 
     cssu::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
 
-    sal_Bool            mbAuthorsReadonly;
-    sal_Bool            mbURLsReadonly;
+    bool                mbAuthorsReadonly;
+    bool                mbURLsReadonly;
 
     DECL_LINK(          ViewCertPBHdl, void* );
     DECL_LINK(          RemoveCertPBHdl, void* );

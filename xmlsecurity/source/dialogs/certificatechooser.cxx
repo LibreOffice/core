@@ -76,7 +76,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::X
 
     mxCtx = _rxCtx;
     mxSecurityEnvironment = _rxSecurityEnvironment;
-    mbInitialized = sal_False;
+    mbInitialized = false;
 
     // disable buttons
     CertificateHighlightHdl( NULL );
@@ -183,7 +183,7 @@ void CertificateChooser::ImplInitialize()
 
         // enable/disable buttons
         CertificateHighlightHdl( NULL );
-        mbInitialized = sal_True;
+        mbInitialized = true;
     }
 }
 
