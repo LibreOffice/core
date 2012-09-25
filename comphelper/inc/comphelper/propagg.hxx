@@ -45,15 +45,15 @@ namespace internal
     {
         sal_Int32   nOriginalHandle;
         sal_Int32   nPos;
-        sal_Bool    bAggregate;
+        bool        bAggregate;
 
-        OPropertyAccessor(sal_Int32 _nOriginalHandle, sal_Int32 _nPos, sal_Bool _bAggregate)
+        OPropertyAccessor(sal_Int32 _nOriginalHandle, sal_Int32 _nPos, bool _bAggregate)
             :nOriginalHandle(_nOriginalHandle) ,nPos(_nPos) ,bAggregate(_bAggregate) { }
         OPropertyAccessor()
-            :nOriginalHandle(-1) ,nPos(-1) ,bAggregate(sal_False) { }
+            :nOriginalHandle(-1) ,nPos(-1) ,bAggregate(false) { }
 
-        sal_Bool operator==(const OPropertyAccessor& rOb) const { return nPos == rOb.nPos; }
-        sal_Bool operator <(const OPropertyAccessor& rOb) const { return nPos < rOb.nPos; }
+        bool operator==(const OPropertyAccessor& rOb) const { return nPos == rOb.nPos; }
+        bool operator <(const OPropertyAccessor& rOb) const { return nPos < rOb.nPos; }
     };
 
     typedef std::map< sal_Int32, OPropertyAccessor, ::std::less< sal_Int32 > >  PropertyAccessorMap;
@@ -149,7 +149,7 @@ public:
 
         @return sal_True, if _nHandle marks an aggregate property, otherwise sal_False
     */
-    virtual sal_Bool SAL_CALL fillAggregatePropertyInfoByHandle(::rtl::OUString* _pPropName, sal_Int32* _pOriginalHandle,
+    virtual bool SAL_CALL fillAggregatePropertyInfoByHandle(::rtl::OUString* _pPropName, sal_Int32* _pOriginalHandle,
                                                    sal_Int32 _nHandle) const;
 
     /** returns information about a property given by handle
