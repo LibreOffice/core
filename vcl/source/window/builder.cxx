@@ -1353,7 +1353,7 @@ void VclBuilder::mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustm
         }
         else
         {
-            SAL_WARN("vcl.layout", "unhandled property :" << rKey.getStr());
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
         }
     }
 }

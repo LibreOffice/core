@@ -30,6 +30,7 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 
 #define _SVX_ZOOM_CXX
@@ -42,7 +43,6 @@
 #include <svx/viewlayoutitem.hxx>
 #include <dialmgr.hxx>
 #include <svx/zoom_def.hxx>
-#include <svx/dialogs.hrc>  // RID_SVXDLG_ZOOM
 
 // static ----------------------------------------------------------------
 
@@ -52,10 +52,10 @@
 
 sal_uInt16 SvxZoomDialog::GetFactor() const
 {
-    if ( a100Btn.IsChecked() )
+    if ( m_p100Btn->IsChecked() )
         return 100;
-    if ( aUserBtn.IsChecked() )
-        return (sal_uInt16)aUserEdit.GetValue();
+    if ( m_pUserBtn->IsChecked() )
+        return (sal_uInt16)m_pUserEdit->GetValue();
     else
         return SPECIAL_FACTOR;
 }
@@ -64,41 +64,41 @@ sal_uInt16 SvxZoomDialog::GetFactor() const
 
 void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
 {
-    aUserEdit.Disable();
+    m_pUserEdit->Disable();
 
     if ( !nBtnId )
     {
         if ( nNewFactor == 100 )
         {
-            a100Btn.Check();
-            a100Btn.GrabFocus();
+            m_p100Btn->Check();
+            m_p100Btn->GrabFocus();
         }
         else
         {
-            aUserBtn.Check();
-            aUserEdit.Enable();
-            aUserEdit.SetValue( (long)nNewFactor );
-            aUserEdit.GrabFocus();
+            m_pUserBtn->Check();
+            m_pUserEdit->Enable();
+            m_pUserEdit->SetValue( (long)nNewFactor );
+            m_pUserEdit->GrabFocus();
         }
     }
     else
     {
-        aUserEdit.SetValue( (long)nNewFactor );
+        m_pUserEdit->SetValue( (long)nNewFactor );
 
         if ( ZOOMBTN_OPTIMAL == nBtnId )
         {
-            aOptimalBtn.Check();
-            aOptimalBtn.GrabFocus();
+            m_pOptimalBtn->Check();
+            m_pOptimalBtn->GrabFocus();
         }
         else if ( ZOOMBTN_PAGEWIDTH == nBtnId )
         {
-            aPageWidthBtn.Check();
-            aPageWidthBtn.GrabFocus();
+            m_pPageWidthBtn->Check();
+            m_pPageWidthBtn->GrabFocus();
         }
         else if ( ZOOMBTN_WHOLEPAGE == nBtnId )
         {
-            aWholePageBtn.Check();
-            aWholePageBtn.GrabFocus();
+            m_pWholePageBtn->Check();
+            m_pWholePageBtn->GrabFocus();
         }
     }
 }
@@ -110,15 +110,15 @@ void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
     switch ( nBtnId )
     {
         case ZOOMBTN_OPTIMAL:
-            aOptimalBtn.Hide();
+            m_pOptimalBtn->Hide();
             break;
 
         case ZOOMBTN_PAGEWIDTH:
-            aPageWidthBtn.Hide();
+            m_pPageWidthBtn->Hide();
             break;
 
         case ZOOMBTN_WHOLEPAGE:
-            aWholePageBtn.Hide();
+            m_pWholePageBtn->Hide();
             break;
 
         default:
@@ -131,63 +131,54 @@ void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
 void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
 {
     DBG_ASSERT( nMin < nMax, "invalid limits" );
-    aUserEdit.SetMin( nMin );
-    aUserEdit.SetFirst( nMin );
-    aUserEdit.SetMax( nMax );
-    aUserEdit.SetLast( nMax );
+    m_pUserEdit->SetMin( nMin );
+    m_pUserEdit->SetFirst( nMin );
+    m_pUserEdit->SetMax( nMax );
+    m_pUserEdit->SetLast( nMax );
 }
 
 // -----------------------------------------------------------------------
 
-SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
-
-    SfxModalDialog( pParent, CUI_RES( RID_SVXDLG_ZOOM ) ),
-
-    aZoomFl         ( this, CUI_RES( FL_ZOOM ) ),
-    aOptimalBtn     ( this, CUI_RES( BTN_OPTIMAL ) ),
-    aWholePageBtn   ( this, CUI_RES( BTN_WHOLE_PAGE ) ),
-    aPageWidthBtn   ( this, CUI_RES( BTN_PAGE_WIDTH ) ),
-    a100Btn         ( this, CUI_RES( BTN_100 ) ),
-    aUserBtn        ( this, CUI_RES( BTN_USER ) ),
-    aUserEdit       ( this, CUI_RES( ED_USER ) ),
-
-    aViewLayoutFl   ( this, CUI_RES( FL_VIEWLAYOUT ) ),
-    aAutomaticBtn   ( this, CUI_RES( BTN_AUTOMATIC ) ),
-    aSingleBtn      ( this, CUI_RES( BTN_SINGLE ) ),
-    aColumnsBtn     ( this, CUI_RES( BTN_COLUMNS ) ),
-    aColumnsEdit    ( this, CUI_RES( ED_COLUMNS ) ),
-    aBookModeChk    ( this, CUI_RES( CHK_BOOK ) ),
-
-    aBottomFl       ( this, CUI_RES( FL_BOTTOM ) ),
-    aOKBtn          ( this, CUI_RES( BTN_ZOOM_OK ) ),
-    aCancelBtn      ( this, CUI_RES( BTN_ZOOM_CANCEL ) ),
-    aHelpBtn        ( this, CUI_RES( BTN_ZOOM_HELP ) ),
-
-    rSet        ( rCoreSet ),
-    pOutSet     ( NULL ),
-    bModified   ( sal_False )
+SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
+    : SfxModalDialog(pParent, "ZoomDialog", "cui/ui/zoomdialog.ui")
+    , rSet(rCoreSet)
+    , pOutSet(NULL)
+    , bModified(false)
 
 {
+    get(m_pOptimalBtn, "optimal");
+    get(m_pWholePageBtn, "fitwandh");
+    get(m_pPageWidthBtn, "fitw");
+    get(m_p100Btn, "100pc");
+    get(m_pUserBtn, "variable");
+    get(m_pUserEdit, "zoomsb");
+    get(m_pViewFrame, "viewframe");
+    get(m_pAutomaticBtn, "automatic");
+    get(m_pSingleBtn, "singlepage");
+    get(m_pColumnsBtn, "columns");
+    get(m_pColumnsEdit, "columnssb");
+    get(m_pBookModeChk, "bookmode");
+    get(m_pOKBtn, "ok");
     Link aLink = LINK( this, SvxZoomDialog, UserHdl );
-    a100Btn.SetClickHdl( aLink );
-    aOptimalBtn.SetClickHdl( aLink );
-    aPageWidthBtn.SetClickHdl( aLink );
-    aWholePageBtn.SetClickHdl( aLink );
-    aUserBtn.SetClickHdl( aLink );
+    m_p100Btn->SetClickHdl( aLink );
+    m_pOptimalBtn->SetClickHdl( aLink );
+    m_pPageWidthBtn->SetClickHdl( aLink );
+    m_pWholePageBtn->SetClickHdl( aLink );
+    m_pUserBtn->SetClickHdl( aLink );
 
     Link aViewLayoutLink = LINK( this, SvxZoomDialog, ViewLayoutUserHdl );
-    aAutomaticBtn.SetClickHdl( aViewLayoutLink );
-    aSingleBtn.SetClickHdl( aViewLayoutLink );
-    aColumnsBtn.SetClickHdl( aViewLayoutLink );
+    m_pAutomaticBtn->SetClickHdl( aViewLayoutLink );
+    m_pSingleBtn->SetClickHdl( aViewLayoutLink );
+    m_pColumnsBtn->SetClickHdl( aViewLayoutLink );
 
     Link aViewLayoutSpinLink = LINK( this, SvxZoomDialog, ViewLayoutSpinHdl );
-    aColumnsEdit.SetModifyHdl( aViewLayoutSpinLink );
+    m_pColumnsEdit->SetModifyHdl( aViewLayoutSpinLink );
 
     Link aViewLayoutCheckLink = LINK( this, SvxZoomDialog, ViewLayoutCheckHdl );
-    aBookModeChk.SetClickHdl( aViewLayoutCheckLink );
+    m_pBookModeChk->SetClickHdl( aViewLayoutCheckLink );
 
-    aOKBtn.SetClickHdl( LINK( this, SvxZoomDialog, OKHdl ) );
-    aUserEdit.SetModifyHdl( LINK( this, SvxZoomDialog, SpinHdl ) );
+    m_pOKBtn->SetClickHdl( LINK( this, SvxZoomDialog, OKHdl ) );
+    m_pUserEdit->SetModifyHdl( LINK( this, SvxZoomDialog, SpinHdl ) );
 
     // default values
     sal_uInt16 nValue = 100;
@@ -209,19 +200,19 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
         nMin = nValue;
     if ( nMax < nValue )
         nMax = nValue;
-    aUserEdit.SetMin( nMin );
-    aUserEdit.SetFirst( nMin );
-    aUserEdit.SetMax( nMax );
-    aUserEdit.SetLast( nMax );
-    aUserEdit.SetValue( nValue );
+    m_pUserEdit->SetMin( nMin );
+    m_pUserEdit->SetFirst( nMin );
+    m_pUserEdit->SetMax( nMax );
+    m_pUserEdit->SetLast( nMax );
+    m_pUserEdit->SetValue( nValue );
 
-    aUserEdit.SetAccessibleRelationLabeledBy( &aUserBtn );
-    aUserEdit.SetAccessibleName(aUserBtn.GetText());
-    aColumnsEdit.SetAccessibleRelationLabeledBy(&aColumnsBtn);
-    aColumnsEdit.SetAccessibleName(aColumnsBtn.GetText());
-    aColumnsEdit.SetAccessibleRelationMemberOf(&aColumnsBtn);
-    aBookModeChk.SetAccessibleRelationLabeledBy(&aColumnsBtn);
-    aBookModeChk.SetAccessibleRelationMemberOf(&aColumnsBtn);
+    m_pUserEdit->SetAccessibleRelationLabeledBy(m_pUserBtn);
+    m_pUserEdit->SetAccessibleName(m_pUserBtn->GetText());
+    m_pColumnsEdit->SetAccessibleRelationLabeledBy(m_pColumnsBtn);
+    m_pColumnsEdit->SetAccessibleName(m_pColumnsBtn->GetText());
+    m_pColumnsEdit->SetAccessibleRelationMemberOf(m_pColumnsBtn);
+    m_pBookModeChk->SetAccessibleRelationLabeledBy(m_pColumnsBtn);
+    m_pBookModeChk->SetAccessibleRelationMemberOf(m_pColumnsBtn);
 
     const SfxPoolItem& rItem = rSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_ZOOM ) );
 
@@ -251,13 +242,13 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
         }
 
         if ( !(SVX_ZOOM_ENABLE_100 & nValSet) )
-            a100Btn.Disable();
+            m_p100Btn->Disable();
         if ( !(SVX_ZOOM_ENABLE_OPTIMAL & nValSet) )
-            aOptimalBtn.Disable();
+            m_pOptimalBtn->Disable();
         if ( !(SVX_ZOOM_ENABLE_PAGEWIDTH & nValSet) )
-            aPageWidthBtn.Disable();
+            m_pPageWidthBtn->Disable();
         if ( !(SVX_ZOOM_ENABLE_WHOLEPAGE & nValSet) )
-            aWholePageBtn.Disable();
+            m_pWholePageBtn->Disable();
         SetFactor( nZoom, nBtnId );
     }
     else
@@ -274,46 +265,39 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
 
         if ( 0 == nColumns )
         {
-            aAutomaticBtn.Check();
-            aColumnsEdit.SetValue( 2 );
-            aColumnsEdit.Disable();
-            aBookModeChk.Disable();
+            m_pAutomaticBtn->Check();
+            m_pColumnsEdit->SetValue( 2 );
+            m_pColumnsEdit->Disable();
+            m_pBookModeChk->Disable();
         }
         else if ( 1 == nColumns)
         {
-            aSingleBtn.Check();
-            aColumnsEdit.SetValue( 2 );
-            aColumnsEdit.Disable();
-            aBookModeChk.Disable();
+            m_pSingleBtn->Check();
+            m_pColumnsEdit->SetValue( 2 );
+            m_pColumnsEdit->Disable();
+            m_pBookModeChk->Disable();
         }
         else
         {
-            aColumnsBtn.Check();
+            m_pColumnsBtn->Check();
             if ( !bBookMode )
             {
-                aColumnsEdit.SetValue( nColumns );
+                m_pColumnsEdit->SetValue( nColumns );
                 if ( 0 != nColumns % 2 )
-                    aBookModeChk.Disable();
+                    m_pBookModeChk->Disable();
             }
             else
             {
-                aColumnsEdit.SetValue( nColumns );
-                aBookModeChk.Check();
+                m_pColumnsEdit->SetValue( nColumns );
+                m_pBookModeChk->Check();
             }
         }
     }
     else
     {
         // hide view layout related controls:
-        aViewLayoutFl.Disable();
-        aAutomaticBtn.Disable();
-        aSingleBtn.Disable();
-        aColumnsBtn.Disable();
-        aColumnsEdit.Disable();
-        aBookModeChk.Disable();
+        m_pViewFrame->Disable();
     }
-
-    FreeResource();
 }
 
 // -----------------------------------------------------------------------
@@ -330,13 +314,13 @@ IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 {
     bModified |= sal_True;
 
-    if ( pBtn == &aUserBtn )
+    if (pBtn == m_pUserBtn)
     {
-        aUserEdit.Enable();
-        aUserEdit.GrabFocus();
+        m_pUserEdit->Enable();
+        m_pUserEdit->GrabFocus();
     }
     else
-        aUserEdit.Disable();
+        m_pUserEdit->Disable();
     return 0;
 }
 
@@ -344,7 +328,7 @@ IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 
 IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
 {
-    if ( !aUserBtn.IsChecked() )
+    if ( !m_pUserBtn->IsChecked() )
         return 0;
     bModified |= sal_True;
     return 0;
@@ -356,22 +340,22 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 {
     bModified |= sal_True;
 
-    if ( pBtn == &aAutomaticBtn )
+    if (pBtn == m_pAutomaticBtn)
     {
-        aColumnsEdit.Disable();
-        aBookModeChk.Disable();
+        m_pColumnsEdit->Disable();
+        m_pBookModeChk->Disable();
     }
-    else if ( pBtn == &aSingleBtn )
+    else if (pBtn == m_pSingleBtn)
     {
-        aColumnsEdit.Disable();
-        aBookModeChk.Disable();
+        m_pColumnsEdit->Disable();
+        m_pBookModeChk->Disable();
     }
-    else if ( pBtn == &aColumnsBtn )
+    else if (pBtn == m_pColumnsBtn)
     {
-        aColumnsEdit.Enable();
-        aColumnsEdit.GrabFocus();
-        if ( 0 == aColumnsEdit.GetValue() % 2 )
-            aBookModeChk.Enable();
+        m_pColumnsEdit->Enable();
+        m_pColumnsEdit->GrabFocus();
+        if ( 0 == m_pColumnsEdit->GetValue() % 2 )
+            m_pBookModeChk->Enable();
     }
     else
     {
@@ -386,15 +370,15 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, MetricField *, pEdt )
 {
-    if ( pEdt == &aColumnsEdit && !aColumnsBtn.IsChecked() )
+    if ( pEdt == m_pColumnsEdit && !m_pColumnsBtn->IsChecked() )
         return 0;
 
-    if ( 0 == aColumnsEdit.GetValue() % 2 )
-        aBookModeChk.Enable();
+    if ( 0 == m_pColumnsEdit->GetValue() % 2 )
+        m_pBookModeChk->Enable();
     else
     {
-        aBookModeChk.Check( sal_False );
-        aBookModeChk.Disable();
+        m_pBookModeChk->Check( sal_False );
+        m_pBookModeChk->Disable();
     }
 
     bModified |= sal_True;
@@ -406,7 +390,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, MetricField *, pEdt )
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
 {
-    if ( pChk == &aBookModeChk && !aColumnsBtn.IsChecked() )
+    if (pChk == m_pBookModeChk && !m_pColumnsBtn->IsChecked())
         return 0;
 
     bModified |= sal_True;
@@ -418,41 +402,41 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
 
 IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 {
-    if ( bModified || &aOKBtn != pBtn )
+    if ( bModified || m_pOKBtn != pBtn )
     {
         SvxZoomItem aZoomItem( SVX_ZOOM_PERCENT, 0, rSet.GetPool()->GetWhich( SID_ATTR_ZOOM ) );
         SvxViewLayoutItem aViewLayoutItem( 0, false, rSet.GetPool()->GetWhich( SID_ATTR_VIEWLAYOUT ) );
 
-        if ( &aOKBtn == pBtn )
+        if ( m_pOKBtn == pBtn )
         {
             sal_uInt16 nFactor = GetFactor();
 
             if ( SPECIAL_FACTOR == nFactor )
             {
-                if ( aOptimalBtn.IsChecked() )
+                if ( m_pOptimalBtn->IsChecked() )
                     aZoomItem.SetType( SVX_ZOOM_OPTIMAL );
-                else if ( aPageWidthBtn.IsChecked() )
+                else if ( m_pPageWidthBtn->IsChecked() )
                     aZoomItem.SetType( SVX_ZOOM_PAGEWIDTH );
-                else if ( aWholePageBtn.IsChecked() )
+                else if ( m_pWholePageBtn->IsChecked() )
                     aZoomItem.SetType( SVX_ZOOM_WHOLEPAGE );
             }
             else
                 aZoomItem.SetValue( nFactor );
 
-            if ( aAutomaticBtn.IsChecked() )
+            if ( m_pAutomaticBtn->IsChecked() )
             {
                 aViewLayoutItem.SetValue( 0 );
                 aViewLayoutItem.SetBookMode( false );
             }
-            if ( aSingleBtn.IsChecked() )
+            if ( m_pSingleBtn->IsChecked() )
             {
                 aViewLayoutItem.SetValue( 1 );
                 aViewLayoutItem.SetBookMode( false );
             }
-            else if ( aColumnsBtn.IsChecked() )
+            else if ( m_pColumnsBtn->IsChecked() )
             {
-                aViewLayoutItem.SetValue( static_cast<sal_uInt16>(aColumnsEdit.GetValue()) );
-                aViewLayoutItem.SetBookMode( aBookModeChk.IsChecked() );
+                aViewLayoutItem.SetValue( static_cast<sal_uInt16>(m_pColumnsEdit->GetValue()) );
+                aViewLayoutItem.SetBookMode( m_pBookModeChk->IsChecked() );
             }
         }
         else
@@ -464,15 +448,15 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
         pOutSet->Put( aZoomItem );
 
         // don't set attribute in case the whole viewlayout stuff is disabled:
-        if ( aViewLayoutFl.IsEnabled() )
-            pOutSet->Put( aViewLayoutItem );
+        if (m_pViewFrame->IsEnabled())
+            pOutSet->Put(aViewLayoutItem);
 
         // memorize value from the UserEdit beyond the dialog
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         if ( pSh )
             pSh->PutItem( SfxUInt16Item( SID_ATTR_ZOOM_USER,
-                                         (sal_uInt16)aUserEdit.GetValue() ) );
+                                         (sal_uInt16)m_pUserEdit->GetValue() ) );
         EndDialog( RET_OK );
     }
     else

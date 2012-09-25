@@ -2032,7 +2032,7 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         set_margin_bottom(rValue.toInt32());
     else
     {
-        SAL_WARN("vcl.layout", "unhandled property: " << rKey.getStr());
+        SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
         return false;
     }
     return true;

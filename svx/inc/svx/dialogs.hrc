@@ -121,9 +121,6 @@
 #define RID_SVXDLG_CHARMAP                  ( RID_SVX_START +  10 )
 #define RID_SVXDLG_POSTIT                   ( RID_SVX_START +   8 )
 
-// only needed for layout:
-#define RID_SVXDLG_ZOOM                     ( RID_SVX_START +  0 )
-
 // IDs of options pages of applications
 #define RID_SW_TP_MAILCONFIG            (RID_OFA_START + 102)
 #define RID_SW_TP_STD_FONT_CJK          (RID_OFA_START + 247)

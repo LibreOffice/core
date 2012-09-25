@@ -36,29 +36,25 @@
 class SvxZoomDialog : public SfxModalDialog
 {
 private:
-    FixedLine           aZoomFl;
-    RadioButton         aOptimalBtn;
-    RadioButton         aWholePageBtn;
-    RadioButton         aPageWidthBtn;
-    RadioButton         a100Btn;
-    RadioButton         aUserBtn;
-    MetricField         aUserEdit;
+    RadioButton*        m_pOptimalBtn;
+    RadioButton*        m_pWholePageBtn;
+    RadioButton*        m_pPageWidthBtn;
+    RadioButton*        m_p100Btn;
+    RadioButton*        m_pUserBtn;
+    MetricField*        m_pUserEdit;
 
-    FixedLine           aViewLayoutFl;
-    RadioButton         aAutomaticBtn;
-    RadioButton         aSingleBtn;
-    RadioButton         aColumnsBtn;
-    MetricField         aColumnsEdit;
-    CheckBox            aBookModeChk;
+    VclContainer*       m_pViewFrame;
+    RadioButton*        m_pAutomaticBtn;
+    RadioButton*        m_pSingleBtn;
+    RadioButton*        m_pColumnsBtn;
+    MetricField*        m_pColumnsEdit;
+    CheckBox*           m_pBookModeChk;
 
-    FixedLine           aBottomFl;
-    OKButton            aOKBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
+    OKButton*           m_pOKBtn;
 
     const SfxItemSet&   rSet;
     SfxItemSet*         pOutSet;
-    sal_Bool                bModified;
+    sal_Bool            bModified;
 
 #ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
