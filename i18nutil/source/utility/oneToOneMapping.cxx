@@ -61,7 +61,7 @@ oneToOneMappingWithFlag::oneToOneMappingWithFlag( UnicodePairWithFlag *rpTableWF
     : oneToOneMapping( NULL, rnSize, sizeof(UnicodePairWithFlag) ),
       mpTableWF ( rpTableWF ),
       mnFlag    ( rnFlag ),
-      mbHasIndex( sal_False )
+      mbHasIndex( false )
 {
 }
 
@@ -98,7 +98,7 @@ void oneToOneMappingWithFlag::makeIndex()
             mpIndex[high][low] = &mpTableWF[k];
         }
 
-        mbHasIndex = sal_True;
+        mbHasIndex = true;
     }
 }
 

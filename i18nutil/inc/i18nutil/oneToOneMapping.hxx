@@ -75,7 +75,7 @@ protected:
     UnicodePairWithFlag  *mpTableWF;
     UnicodePairFlag       mnFlag;
     UnicodePairWithFlag **mpIndex[256];
-    sal_Bool              mbHasIndex;
+    bool                  mbHasIndex;
 };
 
 } } } }
