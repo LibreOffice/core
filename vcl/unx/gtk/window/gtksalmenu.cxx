@@ -158,13 +158,94 @@ bool GtkSalMenu::PrepUpdate()
     }
 }
 
-void GtkSalMenu::UpdateNativeMenu( )
+/*
+ * Menu updating methods
+ */
+
+void RemoveSpareItemsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, unsigned nSection, unsigned nValidItems )
+{
+    sal_Int32 nSectionItems = g_lo_menu_get_n_items_from_section( pMenu, nSection );
+
+    while ( nSectionItems > (sal_Int32) nValidItems )
+    {
+        gchar* aCommand = g_lo_menu_get_command_from_item_in_section( pMenu, nSection, --nSectionItems );
+
+        if ( aCommand != NULL && pOldCommandList != NULL )
+            *pOldCommandList = g_list_append( *pOldCommandList, g_strdup( aCommand ) );
+
+        g_free( aCommand );
+
+        g_lo_menu_remove_from_section( pMenu, nSection, nSectionItems );
+    }
+}
+
+void RemoveSpareSectionsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, unsigned nLastSection )
+{
+    if ( pMenu == NULL || pOldCommandList == NULL )
+        return;
+
+    sal_Int32 n = g_menu_model_get_n_items( G_MENU_MODEL( pMenu ) ) - 1;
+
+    for ( ; n > (sal_Int32) nLastSection; n-- )
+    {
+        RemoveSpareItemsFromNativeMenu( pMenu, pOldCommandList, n, 0 );
+        g_lo_menu_remove( pMenu, n );
+    }
+}
+
+gint CompareStr( gpointer str1, gpointer str2 )
+{
+    return g_strcmp0( (const gchar*) str1, (const gchar*) str2 );
+}
+
+void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList, GList* pNewCommandList )
+{
+    if ( pActionGroup == NULL || pOldCommandList == NULL )
+        return;
+
+    while ( pNewCommandList != NULL )
+    {
+        GList* pNewCommand = g_list_first( pNewCommandList );
+        pNewCommandList = g_list_remove_link( pNewCommandList, pNewCommand );
+
+        gpointer aCommand = g_list_nth_data( pNewCommand, 0 );
+
+        GList* pOldCommand = g_list_find_custom( pOldCommandList, aCommand, (GCompareFunc) CompareStr );
+
+        if ( pOldCommand != NULL )
+        {
+            pOldCommandList = g_list_remove_link( pOldCommandList, pOldCommand );
+            g_list_free_full( pOldCommand, g_free );
+        }
+
+        g_list_free_full( pNewCommand, g_free );
+    }
+
+    while ( pOldCommandList != NULL )
+    {
+        GList* pCommand = g_list_first( pOldCommandList );
+        pOldCommandList = g_list_remove_link( pOldCommandList, pCommand );
+
+        gchar* aCommand = (gchar*) g_list_nth_data( pCommand, 0 );
+
+        g_lo_action_group_remove( pActionGroup, aCommand );
+
+        g_list_free_full( pCommand, g_free );
+    }
+}
+
+static void UpdateNativeSubMenu( GtkSalMenu *pMenu )
 {
     if(!PrepUpdate())
         return;
-    Menu* pVCLMenu = GetMenu();
-    GLOMenu* pLOMenu = G_LO_MENU( GetMenuModel() );
-    GActionGroup* pActionGroup = GetActionGroup();
+
+//    SolarMutexGuard aGuard;
+
+    Menu* pVCLMenu = pMenu->GetMenu();
+    GLOMenu* pLOMenu = G_LO_MENU( pMenu->GetMenuModel() );
+    GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( pMenu->GetActionGroup() );
+    GList *pOldCommandList = NULL;
+    GList *pNewCommandList = NULL;
 
     sal_uInt16 nLOMenuSize = g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) );
 
@@ -186,11 +267,7 @@ void GtkSalMenu::UpdateNativeMenu( )
         if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
         {
             // Delete extra items from current section.
-            sal_uInt16 nSectionItems = g_lo_menu_get_n_items_from_section( pLOMenu, nSection );
-
-            while ( nSectionItems > validItems )
-                // FIXME Remove associated command if needed.
-                g_lo_menu_remove_from_section( pLOMenu, nSection, --nSectionItems );
+            RemoveSpareItemsFromNativeMenu( pLOMenu, &pOldCommandList, nSection, validItems );
 
             nSection++;
             nItemPos = 0;
@@ -221,6 +298,12 @@ void GtkSalMenu::UpdateNativeMenu( )
         gboolean bEnabled = ( itemEnabled == sal_True ) ? TRUE : FALSE;
         gchar* aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
 
+        // Store current item command in command list.
+        gchar *aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pLOMenu, nSection, nItemPos );
+
+        if ( aCurrentCommand != NULL )
+            pOldCommandList = g_list_append( pOldCommandList, aCurrentCommand );
+
         // Force updating of native menu labels.
         NativeSetItemText( nSection, nItemPos, aText );
         NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
@@ -242,6 +325,8 @@ void GtkSalMenu::UpdateNativeMenu( )
             NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, FALSE );
             NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
             NativeSetEnableItem( aNativeCommand, bEnabled );
+
+            pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
         }
 
         GtkSalMenu* pSubmenu = pSalMenuItem->mpSubMenu;
@@ -250,6 +335,10 @@ void GtkSalMenu::UpdateNativeMenu( )
         if ( pSubmenu && pSubmenu->GetMenu() )
         {
             NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+            pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
+
+            GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
+
             if ( pSubMenuModel == NULL )
             {
                 pSubMenuModel = g_lo_menu_new();
@@ -285,15 +374,13 @@ void GtkSalMenu::UpdateNativeMenu( )
     }
 
     // Delete extra items in last section.
-    sal_Int32 nSectionItems = (sal_Int32) g_lo_menu_get_n_items_from_section( pLOMenu, nSection );
-
-    while ( nSectionItems > validItems )
-        g_lo_menu_remove_from_section( pLOMenu, nSection, --nSectionItems );
+    RemoveSpareItemsFromNativeMenu( pLOMenu, &pOldCommandList, nSection, validItems );
 
     // Delete extra sections.
-    for ( sal_Int32 n = nLOMenuSize - 1; n > nSection; )
-        // FIXME Remove associated command if needed.
-        g_lo_menu_remove( pLOMenu, n-- );
+    RemoveSpareSectionsFromNativeMenu( pLOMenu, &pOldCommandList, nSection );
+
+    // Delete unused commands.
+    RemoveUnusedCommands( pActionGroup, pOldCommandList, pNewCommandList );
 }
 
 void GtkSalMenu::DisconnectFrame()
@@ -607,7 +694,8 @@ void GtkSalMenu::Activate( const gchar* aMenuCommand )
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aMenuCommand, TRUE );
 
     if ( pSalSubMenu != NULL ) {
-        pSalSubMenu->mpVCLMenu->Activate();
+        MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
+        pMenuBar->HandleMenuActivateEvent( pSalSubMenu->mpVCLMenu );
         pSalSubMenu->UpdateNativeMenu();
     }
 }
@@ -620,7 +708,8 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aMenuCommand, TRUE );
 
     if ( pSalSubMenu != NULL ) {
-        pSalSubMenu->mpVCLMenu->Deactivate();
+        MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
+        pMenuBar->HandleMenuDeActivateEvent( pSalSubMenu->mpVCLMenu );
     }
 }
 

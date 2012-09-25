@@ -24,15 +24,14 @@
 #ifndef GTKSALMENU_HXX
 #define GTKSALMENU_HXX
 
-#include <vcl/sv.h>
-#include <vcl/bitmap.hxx>
-#include <unx/gtk/gtkframe.hxx>
-#include <unx/salmenu.h>
-
+#include <vector>
 #include <gio/gio.h>
 
-#include "glomenu.h"
-#include "gloactiongroup.h"
+#include <unx/salmenu.h>
+#include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/glomenu.h>
+#include <unx/gtk/gloactiongroup.h>
+#include <vcl/sv.h>
 
 
 class MenuItemList;
