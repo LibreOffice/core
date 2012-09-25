@@ -70,9 +70,9 @@ struct MediaTempFile
 
 struct SdrMediaObj::Impl
 {
-    ::avmedia::MediaItem               m_MediaProperties;
-    ::boost::scoped_ptr<Graphic>       m_pGraphic;
-    ::boost::shared_ptr<MediaTempFile> m_pTempFile;
+    ::avmedia::MediaItem                  m_MediaProperties;
+    ::boost::shared_ptr< MediaTempFile >  m_pTempFile;
+    uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
 };
 
 TYPEINIT1( SdrMediaObj, SdrRectObj );
@@ -185,8 +185,15 @@ SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
 
     m_pImpl->m_pTempFile = rObj.m_pImpl->m_pTempFile; // before props
     setMediaProperties( rObj.getMediaProperties() );
-    setGraphic( rObj.m_pImpl->m_pGraphic.get() );
+    m_pImpl->m_xCachedSnapshot = rObj.m_pImpl->m_xCachedSnapshot;
     return *this;
+}
+
+uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot()
+{
+    if( !m_pImpl->m_xCachedSnapshot.is() )
+        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame(getURL(), true);
+    return m_pImpl->m_xCachedSnapshot;
 }
 
 // ------------------------------------------------------------------------------
@@ -276,12 +283,6 @@ Size SdrMediaObj::getPreferredSize() const
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::setGraphic( const Graphic* pGraphic )
-{
-    m_pImpl->m_pGraphic.reset( pGraphic ? new Graphic( *pGraphic ) : NULL );
-}
-
-// ------------------------------------------------------------------------------
 uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
 {
     if (!m_pImpl->m_pTempFile)
@@ -362,7 +363,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     if( ( AVMEDIA_SETMASK_URL & nMaskSet ) &&
         ( rNewProperties.getURL() != getURL() ))
     {
-        setGraphic();
+        m_pImpl->m_xCachedSnapshot = uno::Reference< graphic::XGraphic >();
         ::rtl::OUString const url(rNewProperties.getURL());
         if ((0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
                 url.getStr(), url.getLength(),

@@ -120,7 +120,7 @@ namespace sdr
             if(!pRetval)
             {
                 // create a new one. It's inserted to the local list from the
-                // VieObjectContact constructor via AddViewObjectContact()
+                // ViewObjectContact constructor via AddViewObjectContact()
                 pRetval = &CreateObjectSpecificViewObjectContact(rObjectContact);
             }
 
