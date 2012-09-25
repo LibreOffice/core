@@ -980,10 +980,10 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
 XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
     XclXFBase( true ),      // default is cell XF
     XclImpRoot( rRoot ),
+    mpPooledPattern( 0 ),
     mpStyleSheet( 0 ),
     mnXclNumFmt( 0 ),
-    mnXclFont( 0 ),
-    mpPooledPattern( 0 )
+    mnXclFont( 0 )
 {
 }
 
