@@ -356,6 +356,8 @@ private:
     /// If the current paragraph contains section property definitions.
     bool                            m_bParaSectpr;
     bool                            m_bUsingEnhancedFields;
+    /// If the current paragraph is inside a structured document element.
+    bool                            m_bSdt;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
@@ -415,6 +417,10 @@ public:
     bool GetIsFirstParagraphInSection();
     void SetParaSectpr(bool bParaSectpr);
     bool GetParaSectpr();
+    /// Setter method for m_bSdt.
+    void SetSdt(bool bSdt);
+    /// Getter method for m_bSdt.
+    bool GetSdt();
     bool GetParaChanged();
 
     void deferBreak( BreakType deferredBreakType );
