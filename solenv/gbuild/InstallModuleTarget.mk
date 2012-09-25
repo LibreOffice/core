@@ -74,24 +74,27 @@ endef
 
 # ScpPreprocessTarget class
 
+gb_ScpPreprocessTarget_TARGET := $(call gb_Executable_get_target_for_build,cpp.lcc)
+gb_ScpPreprocessTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpPreprocessTarget_TARGET)
+
 gb_ScpPreprocessTarget_get_source = $(SRCDIR)/$(1).scp
 
 define gb_ScpPreprocessTarget__command
 $(call gb_Output_announce,$(2),$(true),SPP,2)
 $(call gb_Helper_abbreviate_dirs,\
-	$(call gb_Helper_execute,cpp.lcc) \
+	$(gb_ScpPreprocessTarget_COMMAND) \
 		-+ -P \
 		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
 		$(SCP_INCLUDE) $(SCP_TEMPLATE_INCLUDE) \
-		$(3) > $(1) \
+		$(SCP_SOURCE) > $(1) \
 )
 endef
 
 $(dir $(call gb_ScpPreprocessTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpPreprocessTarget_get_target,%) :
-	$(call gb_ScpPreprocessTarget__command,$@,$*,$<)
+$(call gb_ScpPreprocessTarget_get_target,%) : $(gb_ScpPreprocessTarget_TARGET)
+	$(call gb_ScpPreprocessTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpPreprocessTarget_get_clean_target,%)
 $(call gb_ScpPreprocessTarget_get_clean_target,%) :
@@ -100,6 +103,7 @@ $(call gb_ScpPreprocessTarget_get_clean_target,%) :
 
 # gb_ScpPreprocessTarget_ScpPreprocessTarget(<target>)
 define gb_ScpPreprocessTarget_ScpPreprocessTarget
+$(call gb_ScpPreprocessTarget_get_target,$(1)) : private SCP_SOURCE := $(call gb_ScpPreprocessTarget_get_source,$(1))
 $(call gb_ScpPreprocessTarget_get_target,$(1)) : $(call gb_ScpPreprocessTarget_get_source,$(1))
 $(call gb_ScpPreprocessTarget_get_target,$(1)) :| $(dir $(call gb_ScpPreprocessTarget_get_target,$(1))).dir
 
