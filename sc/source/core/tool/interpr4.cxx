@@ -3299,9 +3299,9 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pTokenMatrixMap( NULL ),
     pMyFormulaCell( pCell ),
     pFormatter( pDoc->GetFormatTable() ),
-    mnStringNoValueError( errNoValue),
     pLastStackRefToken( NULL ),
     bRefFunc( false ),
+    mnStringNoValueError( errNoValue ),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
