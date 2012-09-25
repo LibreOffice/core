@@ -134,7 +134,7 @@ protected:
 class approx_less : public std::binary_function<double, double, bool>
 {
 public:
-    bool operator() (double nVal1, double nVal2)
+    bool operator() (double nVal1, double nVal2) const
     {
         if(nVal1 < nVal2 && !rtl::math::approxEqual(nVal1, nVal2))
             return true;
