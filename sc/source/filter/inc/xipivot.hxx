@@ -199,13 +199,14 @@ typedef ScfRef< XclImpPivotCache > XclImpPivotCacheRef;
 // ============================================================================
 
 class XclImpPivotTable;
+class XclImpPTField;
 
 // ============================================================================
 
 class XclImpPTItem
 {
 public:
-    explicit            XclImpPTItem( const XclImpPCField* pCacheField );
+    explicit            XclImpPTItem( const XclImpPTField & );
 
     /** Returns the internal name of the item or 0, if no name could be found. */
     const String*       GetItemName() const;
@@ -220,7 +221,8 @@ public:
 
 private:
     XclPTItemInfo       maItemInfo;         /// General data for this item.
-    const XclImpPCField* mpCacheField;      /// Corresponding pivot cache field.
+    //const XclImpPCField* mpCacheField;      /// Corresponding pivot cache field.
+    const XclImpPTField & mrPTField;
 };
 
 typedef ScfRef< XclImpPTItem > XclImpPTItemRef;

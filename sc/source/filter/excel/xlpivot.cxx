@@ -158,6 +158,37 @@ const bool* XclPCItem::GetBool() const
     return (meType == EXC_PCITEM_BOOL) ? &mbValue : 0;
 }
 
+const String* XclPCItem::GetItemName() const
+{
+    //! TODO: use XclImpPCItem::ConvertToText(), if all conversions are available
+    if( EXC_PCITEM_BOOL == this->GetType() )
+    {
+        static String szBool[] = { String::CreateFromAscii("FALSE"), String::CreateFromAscii("TRUE") };
+
+        if( const bool* pBool = this->GetBool() )
+        {
+            return &(!!*pBool)[szBool];
+        }
+        else
+        {
+            return &0[szBool];
+        }
+    }
+    else
+    {
+        if( this->IsEmpty())
+        {
+            static String aEmptyString( String::EmptyString() );
+            return &aEmptyString;
+        }
+        else
+            return this->GetText();
+    }
+
+    return NULL;
+}
+
+
 // Field settings =============================================================
 
 XclPCFieldInfo::XclPCFieldInfo() :

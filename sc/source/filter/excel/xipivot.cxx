@@ -853,17 +853,20 @@ bool XclImpPivotCache::IsRefreshOnLoad() const
 // Pivot table
 // ============================================================================
 
-XclImpPTItem::XclImpPTItem( const XclImpPCField* pCacheField ) :
-    mpCacheField( pCacheField )
+XclImpPTItem::XclImpPTItem( const XclImpPTField& rPTField ) :
+    mrPTField( rPTField )
 {
 }
 
 const String* XclImpPTItem::GetItemName() const
 {
-    if( mpCacheField )
+    if( const XclImpPCField * mpCacheField = mrPTField.GetCacheField() )
+    {
         if( const XclImpPCItem* pCacheItem = mpCacheField->GetItem( maItemInfo.mnCacheIdx ) )
-            //! TODO: use XclImpPCItem::ConvertToText(), if all conversions are available
-            return pCacheItem->IsEmpty() ? &String::EmptyString() : pCacheItem->GetText();
+        {
+            return pCacheItem->GetItemName();
+        }
+    }
     return 0;
 }
 
@@ -948,7 +951,7 @@ void XclImpPTField::ReadSxvdex( XclImpStream& rStrm )
 
 void XclImpPTField::ReadSxvi( XclImpStream& rStrm )
 {
-    XclImpPTItemRef xItem( new XclImpPTItem( GetCacheField() ) );
+    XclImpPTItemRef xItem( new XclImpPTItem( *this ) );
     maItems.push_back( xItem );
     xItem->ReadSxvi( rStrm );
 }
