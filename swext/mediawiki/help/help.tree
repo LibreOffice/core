@@ -12,11 +12,11 @@
 <tree_view>
 <help_section application="swriter" id="02" title="MediaWiki">
     <node id="0224" title="MediaWiki">
-        <topic id="help/help/wiki.xhp">MediaWiki</topic>
-        <topic id="help/help/wikiaccount.xhp">Wiki Publisher</topic>
-        <topic id="help/help/wikiformats.xhp">MediaWiki Formats</topic>
-        <topic id="help/help/wikisend.xhp">Send to MediaWiki</topic>
-        <topic id="help/help/wikisettings.xhp">MediaWiki Options</topic>
+        <topic id="help/com.sun.wiki-publisher/wiki.xhp">MediaWiki</topic>
+        <topic id="help/com.sun.wiki-publisher/wikiaccount.xhp">Wiki Publisher</topic>
+        <topic id="help/com.sun.wiki-publisher/wikiformats.xhp">MediaWiki Formats</topic>
+        <topic id="help/com.sun.wiki-publisher/wikisend.xhp">Send to MediaWiki</topic>
+        <topic id="help/com.sun.wiki-publisher/wikisettings.xhp">MediaWiki Options</topic>
     </node>
 </help_section>
 </tree_view>
