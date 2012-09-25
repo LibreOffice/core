@@ -180,18 +180,18 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
 {
     Size aOutputSize( 400, 400 );
     SetOutputSizePixel( aOutputSize );
-    SetText( String( RTL_CONSTASCII_USTRINGPARAM( "XML Signature Test" ) ) );
+    SetText( OUString("XML Signature Test") );
 
     long nY = 15;
 
     maTokenLine.SetPosSizePixel( TEXTFIELDSTARTX, nY, aOutputSize.Width()-2*TEXTFIELDSTARTX, FIXEDLINEHEIGHT );
-    maTokenLine.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Crypto Settings" ) ) );
+    maTokenLine.SetText( OUString("Crypto Settings") );
     maTokenLine.Show();
 
     nY += EDITHEIGHT*3/2;
 
     maCryptoCheckBox.SetPosSizePixel( TEXTFIELDSTARTX, nY, aOutputSize.Width()-2*TEXTFIELDSTARTX, FIXEDLINEHEIGHT );
-    maCryptoCheckBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Use Default Token (NSS option only)" ) ) );
+    maCryptoCheckBox.SetText( OUString("Use Default Token (NSS option only)") );
     maCryptoCheckBox.Check( sal_True );
     maEditTokenName.Disable();
     maFixedTextTokenName.Disable();
@@ -201,7 +201,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     nY += EDITHEIGHT;
 
     maFixedTextTokenName.SetPosSizePixel( TEXTFIELDSTARTX, nY, TEXTFIELDWIDTH, EDITHEIGHT );
-    maFixedTextTokenName.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Crypto Token:" ) ) );
+    maFixedTextTokenName.SetText( OUString("Crypto Token:") );
     maFixedTextTokenName.Show();
 
     maEditTokenName.SetPosSizePixel( TEXTFIELDSTARTX+TEXTFIELDWIDTH, nY, EDITWIDTH, EDITHEIGHT );
@@ -210,14 +210,14 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     nY += EDITHEIGHT*3;
 
     maTest2Line.SetPosSizePixel( TEXTFIELDSTARTX, nY, aOutputSize.Width()-2*TEXTFIELDSTARTX, FIXEDLINEHEIGHT );
-    maTest2Line.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Test Office Document" ) ) );
+    maTest2Line.SetText( OUString("Test Office Document") );
     maTest2Line.Show();
 
     nY += EDITHEIGHT*3/2;
 
 
     maFixedTextDOCFileName.SetPosSizePixel( TEXTFIELDSTARTX, nY, TEXTFIELDWIDTH, EDITHEIGHT );
-    maFixedTextDOCFileName.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Office File:" ) ) );
+    maFixedTextDOCFileName.SetText( OUString("Office File:") );
     maFixedTextDOCFileName.Show();
 
     maEditDOCFileName.SetPosSizePixel( TEXTFIELDSTARTX+TEXTFIELDWIDTH, nY, EDITWIDTH, EDITHEIGHT );
@@ -226,12 +226,12 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     nY += EDITHEIGHT*2;
 
     maDigitalSignaturesButton.SetPosSizePixel( TEXTFIELDSTARTX, nY, BUTTONWIDTH*2, BUTTONHEIGHT );
-    maDigitalSignaturesButton.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Digital Signatures..." ) ) );
+    maDigitalSignaturesButton.SetText( OUString("Digital Signatures...") );
     maDigitalSignaturesButton.SetClickHdl( LINK( this, MyWin, DigitalSignaturesWithServiceHdl ) );
     maDigitalSignaturesButton.Show();
 
     maVerifyDigitalSignaturesButton.SetPosSizePixel( TEXTFIELDSTARTX+BUTTONWIDTH*2+BUTTONSPACE, nY, BUTTONWIDTH*2, BUTTONHEIGHT );
-    maVerifyDigitalSignaturesButton.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Verify Signatures" ) ) );
+    maVerifyDigitalSignaturesButton.SetText( OUString("Verify Signatures") );
     maVerifyDigitalSignaturesButton.SetClickHdl( LINK( this, MyWin, VerifyDigitalSignaturesHdl ) );
     maVerifyDigitalSignaturesButton.Show();
 
@@ -243,24 +243,23 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     nY += EDITHEIGHT*2;
 
     maHintText.SetPosSizePixel( TEXTFIELDSTARTX, nY, aOutputSize.Width()-2*TEXTFIELDSTARTX, aOutputSize.Height()-nY );
-    maHintText.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Hint: Copy crypto files from xmlsecurity/tools/cryptoken/nss and sample files from xmlsecurity/tools/examples to <temp>/nss.\nThis location will be used from the demo as the default location." ) ) );
+    maHintText.SetText( OUString("Hint: Copy crypto files from xmlsecurity/tools/cryptoken/nss and sample files from xmlsecurity/tools/examples to <temp>/nss.\nThis location will be used from the demo as the default location.") );
     maHintText.Show();
 
     // Help the user with some default values
     ::rtl::OUString aTempDirURL;
     ::osl::File::getTempDirURL( aTempDirURL );
     INetURLObject aURLObj( aTempDirURL );
-    aURLObj.insertName( String( RTL_CONSTASCII_USTRINGPARAM( "nss" ) ), true );
+    aURLObj.insertName( "nss", true );
     ::rtl::OUString aNSSFolder = aURLObj.getFSysPath( INetURLObject::FSYS_DETECT );
-    String aDefaultXMLFileName( aNSSFolder );
-    maEditXMLFileName.SetText( aNSSFolder + String( RTL_CONSTASCII_USTRINGPARAM( "demo-sample.xml" ) ) );
-    maEditBINFileName.SetText( aNSSFolder + String( RTL_CONSTASCII_USTRINGPARAM( "demo-sample.gif" ) ) );
-    maEditDOCFileName.SetText( aNSSFolder + String( RTL_CONSTASCII_USTRINGPARAM( "demo-sample.sxw" ) ) );
-    maEditSIGFileName.SetText( aNSSFolder + String( RTL_CONSTASCII_USTRINGPARAM( "demo-result.xml" ) ) );
+    maEditXMLFileName.SetText( aNSSFolder + "demo-sample.xml" );
+    maEditBINFileName.SetText( aNSSFolder + "demo-sample.gif" );
+    maEditDOCFileName.SetText( aNSSFolder + "demo-sample.sxw" );
+    maEditSIGFileName.SetText( aNSSFolder + "demo-result.xml" );
     maEditTokenName.SetText( aNSSFolder );
 
 #ifdef WNT
-    maEditTokenName.SetText( String() );
+    maEditTokenName.SetText( OUString() );
     maEditTokenName.Disable();
     maCryptoCheckBox.Disable();
 #endif
@@ -309,13 +308,13 @@ IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
     for ( int n = 0; n < nInfos; n++ )
     {
         security::DocumentSignatureInformation& rInf = aInfos[n];
-        String aText( RTL_CONSTASCII_USTRINGPARAM( "The document is signed by\n\n  " ) );
-        aText += String( rInf.Signer->getSubjectName() );
-        aText += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n The signature is " ) );
+        OUStringBuffer aText( "The document is signed by\n\n  " );
+        aText.append( rInf.Signer->getSubjectName() );
+        aText.append( "\n\n The signature is " );
         if ( !rInf.SignatureIsValid )
-            aText += String( RTL_CONSTASCII_USTRINGPARAM( "NOT " ) );
-        aText += String( RTL_CONSTASCII_USTRINGPARAM( "valid" ) );
-        InfoBox( this, aText ).Execute();
+            aText.append( "NOT " );
+        aText.append( "valid" );
+        InfoBox( this, aText.makeStringAndClear() ).Execute();
     }
 
     return 0;
