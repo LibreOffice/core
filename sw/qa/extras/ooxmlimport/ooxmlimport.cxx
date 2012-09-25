@@ -93,6 +93,7 @@ public:
     void testN779627();
     void testFdo55187();
     void testN780563();
+    void testN780853();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testN779627);
     CPPUNIT_TEST(testFdo55187);
     CPPUNIT_TEST(testN780563);
+    CPPUNIT_TEST(testN780853);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -905,6 +907,19 @@ void Test::testN780563()
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount( ));
+}
+
+void Test::testN780853()
+{
+    /*
+     * The problem was that the table was not imported.
+     *
+     * xray ThisComponent.TextTables.Count 'was 0
+     */
+    load("n780853.docx");
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
