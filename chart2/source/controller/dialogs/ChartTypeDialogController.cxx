@@ -62,7 +62,7 @@ ChartTypeParameter::ChartTypeParameter()
                     , nSplineOrder(3)
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
-                    , bSortByXValues(sal_False)
+                    , bSortByXValues(false)
 {
 }
 
@@ -81,7 +81,7 @@ ChartTypeParameter::ChartTypeParameter( sal_Int32 SubTypeIndex, bool HasXAxisWit
                     , nSplineOrder(3)
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
-                    , bSortByXValues(sal_False)
+                    , bSortByXValues(false)
 {
 }
 ChartTypeParameter::~ChartTypeParameter()
@@ -218,7 +218,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
                 sal_Int32        nSplineOrder = rParameter.nSplineOrder;
                 CurveStyle       eCurveStyle = rParameter.eCurveStyle;
                 sal_Int32        nGeometry3D = rParameter.nGeometry3D;
-                sal_Bool         bSortByXValues = rParameter.bSortByXValues;
+                bool             bSortByXValues = rParameter.bSortByXValues;
 
                 rParameter = (*aIter).second;
 

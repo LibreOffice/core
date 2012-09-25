@@ -82,8 +82,8 @@ public:
 
     sal_Int32       nGeometry3D;
 
-    ThreeDLookScheme                    eThreeDLookScheme;
-    sal_Bool                            bSortByXValues;
+    ThreeDLookScheme    eThreeDLookScheme;
+    bool                bSortByXValues;
 };
 
 typedef ::comphelper::MakeMap< ::rtl::OUString, ChartTypeParameter > tTemplateServiceChartTypeParameterMap;
