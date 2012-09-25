@@ -322,7 +322,9 @@ bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rV
         else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("center")))
             eStyle = VCL_BUTTONBOX_CENTER;
         else
-            fprintf(stderr, "unknown layout style %s\n", rValue.getStr());
+        {
+            SAL_WARN("vcl.layout", "unknown layout style " << rValue.getStr());
+        }
         set_layout(eStyle);
     }
     else
@@ -359,7 +361,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
         case VCL_BUTTONBOX_START:
             break;
         default:
-            fprintf(stderr, "todo unimplemented layout style\n");
+            SAL_WARN("vcl.layout", "todo unimplemented layout style");
         case VCL_BUTTONBOX_DEFAULT_STYLE:
         case VCL_BUTTONBOX_END:
             setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension

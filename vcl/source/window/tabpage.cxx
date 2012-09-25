@@ -227,7 +227,6 @@ bool TabPage::isLayoutEnabled() const
 
 Size TabPage::GetOptimalSize(WindowSizeType eType) const
 {
-    fprintf(stderr, "asked for optimalsize of tabpage %p (%d) vis is %d\n", this, isLayoutEnabled(), IsVisible());
     if (eType == WINDOWSIZE_MAXIMUM)
         return Window::GetOptimalSize(eType);
     Size aSize;

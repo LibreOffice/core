@@ -552,8 +552,6 @@ VclBuilder* VclBuilderContainer::overrideResourceWithUIXML(Window *pWindow, cons
         appendAscii(".ui").
         makeStringAndClear();
 
-    fprintf(stderr, "path %s id %d\n", rtl::OUStringToOString(sRoot+sPath, RTL_TEXTENCODING_UTF8).getStr(), nUIid);
-
     osl::File aUIFile(sRoot + sPath);
     osl::File::RC error = aUIFile.open(osl_File_OpenFlag_Read);
     //good, use the preferred GtkBuilder xml
@@ -1212,7 +1210,7 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
     if (!isLayoutEnabled())
     {
-        fprintf(stderr, "Dialog has become non-layout because extra children have been added directly to it!\n");
+        SAL_WARN("vcl.layout", "Dialog has become non-layout because extra children have been added directly to it.");
         return 0;
     }
 
@@ -1279,7 +1277,7 @@ bool VclBuilderContainer::replace_buildable(Window *pParent, const ResId& rResId
     }
     else
     {
-        fprintf(stderr, "%d %p not found, hiding\n", nID, &rReplacement);
+        SAL_WARN("vcl.layout", "widget " << nID << " " << &rReplacement << " not found, hiding");
         //move "missing" elements into the action area (just to have
         //a known container as an owner) and hide it
         Window* pArbitraryParent;

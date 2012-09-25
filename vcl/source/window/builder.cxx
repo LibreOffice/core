@@ -605,7 +605,9 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
         if (pCurrentChild->GetHelpId().isEmpty())
         {
             pCurrentChild->SetHelpId(m_sHelpRoot + m_sID);
-            fprintf(stderr, "for toplevel dialog %p %s, set helpid %s\n", this, rID.getStr(), pCurrentChild->GetHelpId().getStr());
+            SAL_INFO("vcl.layout", "for toplevel dialog " << this << " " <<
+                rID.getStr() << ", set helpid " <<
+                pCurrentChild->GetHelpId().getStr());
         }
     }
     else

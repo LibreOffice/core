@@ -808,16 +808,12 @@ void PrintDialog::setupOptionalUI()
     const Sequence< PropertyValue >& rOptions( maPController->getUIOptions() );
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
-        fprintf(stderr, "property name is %s\n", rtl::OUStringToOString(rOptions[i].Name, RTL_TEXTENCODING_UTF8).getStr());
-
         if (rOptions[i].Name == "OptionsUIFile")
         {
             rtl::OUString sOptionsUIFile;
             rOptions[i].Value >>= sOptionsUIFile;
 
             Window *pCustom = get<Window>("customcontents");
-
-            fprintf(stderr, "pcustom is %p\n", pCustom);
 
             delete mpCustomOptionsUIBuilder;
             mpCustomOptionsUIBuilder = new VclBuilder(pCustom, getUIRootDir(), sOptionsUIFile);
@@ -943,7 +939,6 @@ void PrintDialog::setupOptionalUI()
                 pPage = mpCustomOptionsUIBuilder->get<TabPage>(aID);
             sal_uInt16 nPageId = mpTabCtrl->GetPageId(*pPage);
 
-            fprintf(stderr, "pCustomPage %p for %s\n", pPage, rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
             mpTabCtrl->SetPageText(nPageId, aText);
 
             // set help id

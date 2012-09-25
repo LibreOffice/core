@@ -6518,7 +6518,7 @@ Size Window::GetSizePixel() const
 {
     if (!mpWindowImpl)
     {
-        fprintf(stderr, "WTF\n");
+        SAL_WARN("vcl.layout", "WTF no windowimpl");
         return Size(0,0);
     }
 

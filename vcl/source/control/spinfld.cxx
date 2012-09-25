@@ -367,7 +367,6 @@ SpinField::SpinField( Window* pParent, const ResId& rResId ) :
 
 void SpinField::take_properties(Window &rOther)
 {
-    fprintf(stderr, "SpinField::take_properties\n");
     if (!GetParent())
     {
         ImplInitSpinFieldData();
@@ -391,7 +390,6 @@ void SpinField::take_properties(Window &rOther)
     mbUpperIn = rOtherField.mbUpperIn;
     mbLowerIn = rOtherField.mbLowerIn;
     mbInDropDown = rOtherField.mbInDropDown;
-    fprintf(stderr, "SpinField::take_properties %p %d\n", this, IsVisible());
 }
 
 
@@ -1004,7 +1002,6 @@ Size SpinField::CalcMinimumSizeForText(const rtl::OUString &rString) const
 
 Size SpinField::CalcMinimumSize() const
 {
-    fprintf(stderr, "SpinField::CalcMinimumSize\n");
     return CalcMinimumSizeForText(GetText());
 }
 
