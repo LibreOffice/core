@@ -32,6 +32,7 @@ ModalDialog RID_DEFAULTABOUT
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 150 ) ;
     Text [ en-US ] = "About %PRODUCTNAME" ;
     OKButton RID_CUI_ABOUT_BTN_OK
     {

@@ -394,19 +394,19 @@ void AboutDialog::LayoutControls( Size& aDlgSize )
     Size aMainLogoSz = maMainLogo.GetSizePixel();
     Size aAppLogoSiz = maAppLogo.GetSizePixel();
 
-    long nLeftOffset = aMainLogoSz.Width();
-
     aDlgSize = GetOutputSizePixel();
+    long nCol1 = aMainLogoSz.Width();
+    long nCol2 = aAppLogoSiz.Width() ? aAppLogoSiz.Width() : aDlgSize.Width();
 
     Size a6Size      = maVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     long nDlgMargin  = a6Size.Width() * 2;
     long nCtrlMargin = a6Size.Height() * 2;
-    long nTextWidth  = aAppLogoSiz.Width() - nDlgMargin;
+    long nTextWidth  = nCol2 - nDlgMargin;
     long nY          = aAppLogoSiz.Height() + a6Size.Height();
 
-    aDlgSize.Width() = nLeftOffset + a6Size.Width() + aAppLogoSiz.Width();
+    aDlgSize.Width() = nCol1 + a6Size.Width() + nCol2;
 
-    Point aPos( nLeftOffset + a6Size.Width(), nY );
+    Point aPos( nCol1 + a6Size.Width(), nY );
     Size aSize;
     // layout fixed text control
     lcl_layoutFixedText( maVersionText, aPos, aSize, nTextWidth );
@@ -432,7 +432,7 @@ void AboutDialog::LayoutControls( Size& aDlgSize )
 
     // logos position
     maMainLogoPos = Point( 0, nY / 2 - aMainLogoSz.Height() / 2 );
-    maAppLogoPos = Point( nLeftOffset + a6Size.Width(), 0 );
+    maAppLogoPos = Point( nCol1 + a6Size.Width(), 0 );
 
     // OK-Button-Position (at the bottom and centered)
     Size aOKSiz = maOKButton.GetSizePixel();
