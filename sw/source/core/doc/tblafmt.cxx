@@ -630,6 +630,9 @@ SwTableAutoFmt::SwTableAutoFmt( const SwTableAutoFmt& rNew )
 
 SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
 {
+    if (&rNew == this)
+        return *this;
+
     for( sal_uInt8 n = 0; n < 16; ++n )
     {
         if( aBoxAutoFmt[ n ] )
