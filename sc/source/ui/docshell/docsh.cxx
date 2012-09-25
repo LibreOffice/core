@@ -1412,6 +1412,7 @@ sal_Bool __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
     }
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
 
+    GetUndoManager()->Clear();
     // #73762# invalidate eventually temporary table areas
     if ( bRet )
         aDocument.InvalidateTableArea();
