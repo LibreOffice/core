@@ -133,8 +133,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     ModifyHdl();
     LineOnOffHdl();
 
-    PushButton *pOkPB = get<PushButton>("ok");
-    pOkPB->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
+    get<PushButton>("ok")->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
 SwLineNumberingDlg::~SwLineNumberingDlg()

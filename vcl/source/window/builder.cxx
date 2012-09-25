@@ -427,7 +427,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         }
     }
 
-    if (bIsPlaceHolder)
+    if (bIsPlaceHolder || name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkTreeSelection")))
         return NULL;
 
     Window *pWindow = NULL;
@@ -567,7 +567,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
                 pWindow = (*pFunction)(pParent, rMap);
         }
     }
-    SAL_WARN_IF(!pWindow, "vcl.layout", "implement " << name.getStr() << "or add a make" << name.getStr() << " function");
+    SAL_WARN_IF(!pWindow, "vcl.layout", "problably need to implement " << name.getStr() << "or add a make" << name.getStr() << " function");
     if (pWindow)
     {
         pWindow->SetHelpId(m_sHelpRoot + id);
