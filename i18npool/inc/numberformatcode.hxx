@@ -58,7 +58,7 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > aFormatSeq;
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XLocaleData4 > mxLocaleData;
-    sal_Bool bFormatsValid;
+    bool bFormatsValid;
 
     void setupLocale( const ::com::sun::star::lang::Locale& rLocale );
     void getFormats( const ::com::sun::star::lang::Locale& rLocale );

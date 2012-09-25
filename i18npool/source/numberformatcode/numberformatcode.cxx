@@ -31,7 +31,7 @@ NumberFormatCodeMapper::NumberFormatCodeMapper(
                 ::com::sun::star::uno::XComponentContext >& rxContext )
         :
         mxContext( rxContext ),
-        bFormatsValid( sal_False )
+        bFormatsValid( false )
 {
 }
 
@@ -154,7 +154,7 @@ void NumberFormatCodeMapper::setupLocale( const ::com::sun::star::lang::Locale& 
       || aLocale.Language   != rLocale.Language
       || aLocale.Variant    != rLocale.Variant )
     {
-        bFormatsValid = sal_False;
+        bFormatsValid = false;
         aLocale = rLocale;
     }
 }
@@ -170,7 +170,7 @@ void NumberFormatCodeMapper::getFormats( const ::com::sun::star::lang::Locale& r
             aFormatSeq = ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > (0);
         else
             aFormatSeq = mxLocaleData->getAllFormats( aLocale );
-        bFormatsValid = sal_True;
+        bFormatsValid = true;
     }
 }
 
