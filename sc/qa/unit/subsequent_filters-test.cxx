@@ -644,7 +644,7 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
             rtl::OUString sExpected("Excel Built-in Date");
             rtl::OUString sResult = pStyleSheet->GetName();
             CPPUNIT_ASSERT_EQUAL_MESSAGE("parent style for Sheet4.B2 is 'Excel Built-in Date'", sExpected, sResult);
-            // check  align
+            // check  align of style
             SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
             eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(rItemSet.Get( ATTR_HOR_JUSTIFY ) ).GetValue() );
             CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
@@ -653,6 +653,12 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
             sExpected = rtl::OUString("29");
             CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should just display month", sExpected, sResult );
 
+            // check actual align applied to cell, should be the same as
+            // the style
+            eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(pPattern->GetItem( ATTR_HOR_JUSTIFY ) ).GetValue() );
+#if ENABLE_WHEN_FIXED
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("cell with 'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+#endif
         }
     }
 
