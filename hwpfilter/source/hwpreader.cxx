@@ -371,20 +371,14 @@ void HwpReader::makeMeta()
 static struct
 {
     const char *name;
-    sal_Bool bMade;
+    bool bMade;
 }
-
-
 ArrowShape[] =
 {
-    { "", sal_False },
-    {
-        "Arrow", sal_False
-    },
-    { "Line Arrow", sal_False },
-    {
-        "Square", sal_False
-    }
+    { "", false },
+    { "Arrow", false },
+    { "Line Arrow", false },
+    { "Square", false }
 };
 
 static struct
@@ -449,7 +443,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         {
             if( prop->line_tstyle && !ArrowShape[prop->line_tstyle].bMade  )
             {
-                ArrowShape[prop->line_tstyle].bMade = sal_True;
+                ArrowShape[prop->line_tstyle].bMade = true;
                 padd(ascii("draw:name"), sXML_CDATA,
                     ascii(ArrowShape[prop->line_tstyle].name));
                 if( prop->line_tstyle == 1 )
@@ -473,7 +467,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
             }
             if( prop->line_hstyle && !ArrowShape[prop->line_hstyle].bMade)
             {
-                ArrowShape[prop->line_hstyle].bMade = sal_True;
+                ArrowShape[prop->line_hstyle].bMade = true;
                 padd(ascii("draw:name"), sXML_CDATA,
                     ascii(ArrowShape[prop->line_hstyle].name));
                 if( prop->line_hstyle == 1 )
@@ -927,7 +921,7 @@ struct PageSetting
         footer_odd = 0L;
         footer_even = 0L;
         pagenumber=0L;
-        bIsSet = sal_False;
+        bIsSet = false;
     }
     HeaderFooter *header ;
     HeaderFooter *header_odd ;
@@ -936,7 +930,7 @@ struct PageSetting
     HeaderFooter *footer_odd ;
     HeaderFooter *footer_even ;
     ShowPageNum *pagenumber;
-    sal_Bool bIsSet;
+    bool bIsSet;
 };
 
 void HwpReader::makeMasterStyles()
@@ -951,12 +945,12 @@ void HwpReader::makeMasterStyles()
     {
         ShowPageNum *pn = hwpfile.getPageNumber(i);
         pSet[pn->m_nPageNumber].pagenumber = pn;
-        pSet[pn->m_nPageNumber].bIsSet = sal_True;
+        pSet[pn->m_nPageNumber].bIsSet = true;
     }
     for( i = 0 ; i < hwpfile.getHeaderFooterCount() ; i++ )
     {
         HeaderFooter* hf = hwpfile.getHeaderFooter(i);
-        pSet[hf->m_nPageNumber].bIsSet = sal_True;
+        pSet[hf->m_nPageNumber].bIsSet = true;
         if( hf->type == 0 )                       // header
         {
             switch( hf->where )
