@@ -1,5 +1,5 @@
---- misc/build/cppunit-1.13.0/include/cppunit/plugin/TestPlugIn.h
-+++ misc/build/cppunit-1.13.0/include/cppunit/plugin/TestPlugIn.h
+--- misc/build/cppunit-1.13.1/include/cppunit/plugin/TestPlugIn.h
++++ misc/build/cppunit-1.13.1/include/cppunit/plugin/TestPlugIn.h
 @@ -106,7 +106,9 @@
   * CppUnitTestPlugIn *CPPUNIT_PLUGIN_EXPORTED_NAME(void);
   * \endcode

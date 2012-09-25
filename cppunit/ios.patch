@@ -1,5 +1,5 @@
---- misc/build/cppunit-1.13.0/configure
-+++ misc/build/cppunit-1.13.0/configure
+--- misc/build/cppunit-1.13.1/configure
++++ misc/build/cppunit-1.13.1/configure
 @@ -23273,7 +23273,7 @@
    { $as_echo "$as_me:${as_lineno-$LINENO}: result: creating $ac_prefix_conf_OUT - prefix $ac_prefix_conf_UPP for $ac_prefix_conf_INP defines" >&5
  $as_echo "creating $ac_prefix_conf_OUT - prefix $ac_prefix_conf_UPP for $ac_prefix_conf_INP defines" >&6; }

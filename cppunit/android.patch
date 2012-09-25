@@ -1,5 +1,5 @@
---- misc/cppunit-1.13.0/config/config.sub
-+++ misc/build/cppunit-1.13.0/config/config.sub
+--- misc/cppunit-1.13.1/config/config.sub
++++ misc/build/cppunit-1.13.1/config/config.sub
 @@ -120,7 +120,7 @@
  # Here we must recognize all the valid KERNEL-OS combinations.
  maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
@@ -18,8 +18,8 @@
  	      | -uxpv* | -beos* | -mpeix* | -udk* \
  	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
  	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
---- misc/cppunit-1.13.0/config/ltmain.sh
-+++ misc/build/cppunit-1.13.0/config/ltmain.sh
+--- misc/cppunit-1.13.1/config/ltmain.sh
++++ misc/build/cppunit-1.13.1/config/ltmain.sh
 @@ -3228,6 +3228,12 @@
  	fi
        else
@@ -33,8 +33,8 @@
  	# Parse the version information argument.
  	save_ifs="$IFS"; IFS=':'
  	set dummy $vinfo 0 0 0
---- misc/cppunit-1.13.0/src/cppunit/UnixDynamicLibraryManager.cpp
-+++ misc/build/cppunit-1.13.0/src/cppunit/UnixDynamicLibraryManager.cpp
+--- misc/cppunit-1.13.1/src/cppunit/UnixDynamicLibraryManager.cpp
++++ misc/build/cppunit-1.13.1/src/cppunit/UnixDynamicLibraryManager.cpp
 @@ -13,7 +13,15 @@
  DynamicLibraryManager::LibraryHandle 
  DynamicLibraryManager::doLoadLibrary( const std::string &libraryName )

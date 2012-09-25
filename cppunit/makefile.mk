@@ -29,8 +29,8 @@ TARGET = cppunit
 
 .INCLUDE: settings.mk
 
-TARFILE_NAME=cppunit-1.13.0
-TARFILE_MD5=0c65c839854edd43d9294d1431a2b292
+TARFILE_NAME=cppunit-1.13.1
+TARFILE_MD5=fa9aa839145cdf860bf596532bb8af97
 
 PATCH_FILES = windows.patch unix.patch
 
