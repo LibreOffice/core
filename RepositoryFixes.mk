@@ -80,6 +80,7 @@ gb_Library_FILENAMES := $(patsubst npsoplugin:inpsoplugin%,npsoplugin:npsoplugin
 
 gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
 gb_StaticLibrary_FILENAMES := $(patsubst png:png%,png:libpng%,$(gb_StaticLibrary_FILENAMES))
+gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
 ifeq ($(COM),GCC)
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:crypto%,$(gb_Library_FILENAMES))
