@@ -27,7 +27,7 @@ class RdbOptions : public Options
 public:
     RdbOptions()
         : Options()
-        , m_generateTypeList(sal_False)
+        , m_generateTypeList(false)
         {}
 
     ~RdbOptions() {}
@@ -39,11 +39,11 @@ public:
 
     ::rtl::OString  prepareVersion();
 
-    sal_Bool generateTypeList()
+    bool generateTypeList()
         { return m_generateTypeList; }
 
 protected:
-    sal_Bool m_generateTypeList;
+    bool m_generateTypeList;
 };
 
 #endif // _RDBMAKER_RDBOPTIONS_HXX_

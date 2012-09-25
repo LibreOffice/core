@@ -33,7 +33,7 @@ struct TypeReader_Impl
 {
     TypeReader_Impl(const sal_uInt8* buffer,
                        sal_uInt32 bufferLen,
-                       sal_Bool copyData)
+                       bool copyData)
         : m_refCount(0)
         , m_copyData(copyData)
         , m_blopSize(bufferLen)
@@ -62,7 +62,7 @@ struct TypeReader_Impl
         }
 
     sal_Int32           m_refCount;
-    sal_Bool            m_copyData;
+    bool                m_copyData;
     sal_Int32           m_blopSize;
     const sal_uInt8*    m_pBlop;
     typereg::Reader*    m_pReader;
@@ -77,7 +77,7 @@ public:
 
     inline TypeReader(        const sal_uInt8* buffer,
                               sal_uInt32 bufferLen,
-                              sal_Bool copyData)
+                              bool copyData)
     {
         m_pImpl = new TypeReader_Impl(buffer, bufferLen, copyData);
         acquire();

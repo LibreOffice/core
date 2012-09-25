@@ -277,7 +277,7 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     }
 
                     m_options["-L"] = OString();
-                    m_generateTypeList = sal_True;
+                    m_generateTypeList = true;
                     break;
                 default:
                     throw IllegalArgument("the option is unknown" + OString(av[i]));

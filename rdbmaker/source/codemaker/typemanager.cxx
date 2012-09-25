@@ -168,7 +168,7 @@ TypeReader RegistryTypeManager::getTypeReader(const OString& name)
             sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
             if (!key.getValue(OUString(), pBuffer))
             {
-                reader = TypeReader(pBuffer, valueSize, sal_True);
+                reader = TypeReader(pBuffer, valueSize, true);
             }
             rtl_freeMemory(pBuffer);
         }
@@ -195,7 +195,7 @@ RTTypeClass RegistryTypeManager::getTypeClass(const OString& name)
                 sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
                 if (!key.getValue(OUString(), pBuffer))
                 {
-                    TypeReader reader(pBuffer, valueSize, sal_False);
+                    TypeReader reader(pBuffer, valueSize, false);
 
                     RTTypeClass ret = reader.getTypeClass();
 
