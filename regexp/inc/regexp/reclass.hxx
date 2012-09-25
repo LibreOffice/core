@@ -307,7 +307,7 @@ class REGEXP_DLLPUBLIC Regexpr
 
     struct re_pattern_buffer *bufp;
 
-    sal_Bool isIgnoreCase;
+    bool isIgnoreCase;
 
     /** Either a translate table to apply to all characters before comparing
         them, or zero for no translation. The translation is applied to a
