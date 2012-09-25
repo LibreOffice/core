@@ -1156,12 +1156,12 @@ void SmCursor::InsertCommand(sal_uInt16 nCommand) {
                 InsertLimit(CSUP, true);
             break;
         default:
-            InsertCommandText(SmResId(nCommand));
+            InsertCommandText(SM_RESSTR(nCommand));
             break;
     }
 }
 
-void SmCursor::InsertCommandText(XubString aCommandText) {
+void SmCursor::InsertCommandText(OUString aCommandText) {
     //Parse the the sub expression
     SmNode* pSubExpr = SmParser().ParseExpression(aCommandText);
 

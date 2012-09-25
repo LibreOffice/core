@@ -2452,7 +2452,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
     return result;
 }
 
-SmNode *SmParser::ParseExpression(const String &rBuffer)
+SmNode *SmParser::ParseExpression(const OUString &rBuffer)
 {
     m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;

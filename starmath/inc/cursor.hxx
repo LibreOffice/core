@@ -155,7 +155,7 @@ public:
      * This will work for stuff like "A intersection B". But stuff spaning multiple lines
      * or dependent on the context which position is placed in will not work!
      */
-    void InsertCommandText(String aCommandText);
+    void InsertCommandText(OUString aCommandText);
 
     /** Insert a special node created from aString
      *
