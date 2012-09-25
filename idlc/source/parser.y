@@ -273,7 +273,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 	::rtl::OString*		sval;		/* OString value */
     std::vector< rtl::OString > * svals;
 	sal_Char* 			strval;	/* sal_Char* value */
-	sal_Bool				bval;		/* sal_Boolean* value */
+	bool				bval;		/* sal_Boolean* value */
 	sal_Int64				ival;		/* sal_Int64 value */
     sal_uInt64 uval; /* sal_uInt64 value */
 	sal_uInt32			ulval;		/* sal_uInt32 value */

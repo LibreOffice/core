@@ -81,7 +81,7 @@ struct AstExprValue
         sal_uInt32      ulval;      // Contains unsigned long expr value
         sal_Int64       hval;       // Contains hyper expression value
         sal_uInt64      uhval;      // Contains unsigned hyper expr value
-        sal_Bool        bval;       // Contains boolean expression value
+        bool            bval;       // Contains boolean expression value
         float           fval;       // Contains 32-bit float expr value
         double          dval;       // Contains 64-bit float expr value
         sal_uInt32      eval;       // Contains enumeration value
