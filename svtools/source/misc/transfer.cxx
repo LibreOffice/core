@@ -181,7 +181,7 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
             pToAccept[nBInd] = sal_False;
 
         const char aQuotedParamChars[] =
-            "()<>@,;:\\\"/[]?=!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
+            "()<>@,;:\\\"/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
 
         for ( sal_Int32 nInd = 0; nInd < RTL_CONSTASCII_LENGTH(aQuotedParamChars); ++nInd )
         {
