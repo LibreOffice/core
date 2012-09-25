@@ -61,7 +61,7 @@ namespace basprov
 
         // properties
         ::rtl::OUString m_sURI;
-        sal_Bool m_bEditable;
+        bool m_bEditable;
 
     protected:
         // OPropertySetHelper
