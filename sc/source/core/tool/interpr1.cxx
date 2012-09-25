@@ -6578,10 +6578,20 @@ void ScInterpreter::ScSubTotal()
         const FormulaToken* p = pStack[ sp - nParamCount ];
         PushTempToken( *p );
         int nFunc = (int) ::rtl::math::approxFloor( GetDouble() );
+        bool bIncludeHidden = true;
+        if (nFunc > 100)
+        {
+            // For opcodes 101 through 111, we need to skip hidden cells.
+            // Other than that these opcodes are identical to 1 through 11.
+            bIncludeHidden = false;
+            nFunc -= 100;
+        }
+
         if( nFunc < 1 || nFunc > 11 )
             PushIllegalArgument();  // simulate return on stack, not SetError(...)
         else
         {
+            // TODO: Make use of bIncludeHidden flag. Then it's false, we do need to skip hidden cells.
             cPar = nParamCount - 1;
             glSubTotal = true;
             switch( nFunc )
