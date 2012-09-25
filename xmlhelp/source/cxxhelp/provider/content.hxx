@@ -51,11 +51,8 @@ namespace chelp
     {
         OUString aTitle;         // Title
         OUString aContentType;   // ContentType
-        sal_Bool        bIsDocument;    // IsDocument
-        sal_Bool        bIsFolder;      // IsFolder
 
-        ContentProperties()
-            : bIsDocument( sal_True ), bIsFolder( sal_False ) {}
+        ContentProperties() {}
     };
 
 //=========================================================================
