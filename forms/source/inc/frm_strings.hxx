@@ -321,6 +321,9 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_FOCUS,  "ControlBorderColorOnFocus"   );
     FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_MOUSE,  "ControlBorderColorOnHover"   );
     FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_INVALID,"ControlBorderColorOnInvalid" );
+    //added for exporting OCX control
+    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_TYPE_IN_MSO,          "ControlTypeinMSO" );
+    FORMS_CONSTASCII_STRING( PROPERTY_OBJ_ID_IN_MSO,                "ObjIDinMSO" );
 
     //--------------------------------------------------------------------------
     //- URLs

@@ -32,7 +32,7 @@
 #include "xeroot.hxx"
 
 // 0 = Export TBX form controls, 1 = Export OCX form controls.
-#define EXC_EXP_OCX_CTRL 0
+//#define EXC_EXP_OCX_CTRL 0
 
 namespace utl { class TempFile; }
 
@@ -61,11 +61,12 @@ class XclExpDffAnchorBase;
 class XclEscherHostAppData;
 class XclEscherClientData;
 class XclEscherClientTextbox;
-#if EXC_EXP_OCX_CTRL
+//delete for exporting OCX
+//#if EXC_EXP_OCX_CTRL
 class XclExpOcxControlObj;
-#else
+//#else
 class XclExpTbxControlObj;
-#endif
+//#endif
 
 class XclEscherEx : public EscherEx, protected XclExpRoot
 {
@@ -104,21 +105,22 @@ public:
 
                                 /// Flush and merge PicStream into EscherStream
             void                EndDocument();
-
-#if EXC_EXP_OCX_CTRL
+//delete for exporting OCX
+//#if EXC_EXP_OCX_CTRL
     /** Creates an OCX form control OBJ record from the passed form control.
         @descr  Writes the form control data to the 'Ctls' stream. */
-    XclExpOcxControlObj* CreateCtrlObj(
+    XclExpOcxControlObj* CreateOCXCtrlObj(
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
                             const Rectangle* pChildAnchor );
+    /** Creates a TBX form control OBJ record from the passed form control. */
+    XclExpTbxControlObj* CreateTBXCtrlObj(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            const Rectangle* pChildAnchor );
+
 
 private:
     SotStorageStreamRef  mxCtlsStrm;         /// The 'Ctls' stream.
-#else
-    /** Creates a TBX form control OBJ record from the passed form control. */
-    XclExpTbxControlObj* CreateCtrlObj(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
-                            const Rectangle* pChildAnchor );
+//#else
 
 private:
     /** Tries to get the name of a Basic macro from a control. */
@@ -126,7 +128,7 @@ private:
                             XclExpTbxControlObj& rTbxCtrlObj,
                             ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XControlModel > xCtrlModel );
-#endif
+//#endif
 
     void                DeleteCurrAppData();
 

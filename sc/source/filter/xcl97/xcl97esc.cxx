@@ -29,6 +29,8 @@
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/form/XForm.hpp>
 
 #include <svx/svdpage.hxx>
 #include <editeng/outlobj.hxx>
@@ -67,6 +69,10 @@ using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::embed::XClassifiedObject;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::form::XForm;
+using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::form::XFormsSupplier;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::script::XEventAttacherManager;
@@ -207,6 +213,8 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     aStack.Push( pCurrAppData );
     pCurrAppData = new XclEscherHostAppData;
     SdrObject* pObj = GetSdrObjectFromXShape( rxShape );
+    //added for exporting OCX control
+    sal_Int16 nMsCtlType = 0;
     if ( !pObj )
         pCurrXclObj = new XclObjAny( mrObjMgr );  // just what is it?!?
     else
@@ -240,13 +248,21 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         }
         else if( nObjType == OBJ_UNO )
         {
-#if EXC_EXP_OCX_CTRL
-            // no ActiveX controls in embedded drawings (chart shapes)
-            if( mbIsRootDff )
-                pCurrXclObj = CreateCtrlObj( rxShape, pChildAnchor );
-#else
-            pCurrXclObj = CreateCtrlObj( rxShape, pChildAnchor );
-#endif
+            //added for exporting OCX control
+            Reference< XPropertySet > xPropSet( rxShape, UNO_QUERY );
+            Any aAny;
+            try{
+                aAny = xPropSet->getPropertyValue(rtl::OUString::createFromAscii("ControlTypeinMSO"));
+            }catch(...)
+            {
+                OSL_TRACE("XclEscherEx::StartShape, this control can't get the property ControlTypeinMSO!");
+            }
+            aAny >>= nMsCtlType;
+
+            if( nMsCtlType == 2 )  //OCX Form Control
+                pCurrXclObj = CreateOCXCtrlObj( rxShape, pChildAnchor );
+            else  //TBX Form Control
+                pCurrXclObj = CreateTBXCtrlObj( rxShape, pChildAnchor );
             if( !pCurrXclObj )
                 pCurrXclObj = new XclObjAny( mrObjMgr );   // just a metafile
         }
@@ -302,6 +318,28 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                     pCurrAppData->SetClientTextbox( pAdditionalText );
                 }
             }
+        }
+    }
+    //add  for exporting OCX control
+    //for OCX control import from MS office file,we need keep the id value as MS office file.
+    //GetOldRoot().pObjRecs->Add( pCurrXclObj ) statement has generated the id value as aoo obj id rule;
+    //but we trick it here.
+    sal_uInt16 nObjType = pObj->GetObjIdentifier();
+    if( nObjType == OBJ_UNO && pCurrXclObj )
+    {
+        Reference< XPropertySet > xPropSet( rxShape, UNO_QUERY );
+        Any aAny;
+        try{
+            aAny = xPropSet->getPropertyValue(rtl::OUString::createFromAscii("ObjIDinMSO"));
+        }catch(...)
+        {
+            OSL_TRACE("XclEscherEx::StartShape, this control can't get the property ObjIDinMSO!");
+        }
+        sal_uInt16 nObjIDinMSO = 0xFFFF;
+        aAny >>= nObjIDinMSO;
+        if( nObjIDinMSO != 0xFFFF && nMsCtlType == 2)  //OCX
+        {
+            pCurrXclObj->SetId(nObjIDinMSO);
         }
     }
     if ( !pCurrXclObj )
@@ -367,9 +405,10 @@ void XclEscherEx::EndDocument()
     mpOutStrm->Seek( 0 );
 }
 
-#if EXC_EXP_OCX_CTRL
+//delete for exporting OCX
+//#if EXC_EXP_OCX_CTRL
 
-XclExpOcxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
+XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
     ::std::auto_ptr< XclExpOcxControlObj > xOcxCtrl;
 
@@ -397,9 +436,9 @@ XclExpOcxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape, con
     return xOcxCtrl.release();
 }
 
-#else
+//#else
 
-XclExpTbxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
+XclExpTbxControlObj* XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
     ::std::auto_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
     if( xTbxCtrl->GetObjType() == EXC_OBJTYPE_UNKNOWN )
@@ -467,7 +506,7 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
     }
 }
 
-#endif
+//#endif
 
 void XclEscherEx::DeleteCurrAppData()
 {

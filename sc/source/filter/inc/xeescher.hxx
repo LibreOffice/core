@@ -205,7 +205,8 @@ private:
 
 // ----------------------------------------------------------------------------
 
-#if EXC_EXP_OCX_CTRL
+//delete for exporting OCX
+//#if EXC_EXP_OCX_CTRL
 
 /** Represents an OBJ record for an OCX form control. */
 class XclExpOcxControlObj : public XclObj, public XclExpControlHelper
@@ -227,7 +228,7 @@ private:
     sal_uInt32          mnStrmSize;         /// Size in 'Ctls' stream.
 };
 
-#else
+//#else
 
 /** Represents an OBJ record for an TBX form control. */
 class XclExpTbxControlObj : public XclObj, public XclExpControlHelper
@@ -271,7 +272,7 @@ private:
     bool                mbScrollHor;    /// Scrollbar: true = horizontal.
 };
 
-#endif
+//#endif
 
 // ----------------------------------------------------------------------------
 

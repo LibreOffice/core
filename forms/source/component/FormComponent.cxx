@@ -595,6 +595,8 @@ OControlModel::OControlModel(
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
     ,m_bNativeLook( sal_False )
+    ,m_nControlTypeinMSO(0) // 0 : default value is create from AOO
+    ,m_nObjIDinMSO(INVALID_OBJ_ID_IN_MSO)
         // form controls are usually embedded into documents, not dialogs, and in documents
         // the native look is ugly ....
         // #i37342# / 2004-11-19 / frank.schoenheit@sun.com
@@ -649,6 +651,8 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     m_nTabIndex = _pOriginal->m_nTabIndex;
     m_nClassId = _pOriginal->m_nClassId;
     m_bNativeLook = _pOriginal->m_bNativeLook;
+    m_nControlTypeinMSO = _pOriginal->m_nControlTypeinMSO;
+    m_nObjIDinMSO = _pOriginal->m_nObjIDinMSO;
 
     if ( _bCloneAggregate )
     {
@@ -985,7 +989,13 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
         case PROPERTY_ID_NATIVE_LOOK:
             aReturn <<= (sal_Bool)sal_True;
             break;
-
+        //added for exporting OCX control
+        case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
+            aReturn <<= (sal_Int16)0;
+            break;
+        case PROPERTY_ID_OBJ_ID_IN_MSO:
+            aReturn <<= (sal_uInt16)INVALID_OBJ_ID_IN_MSO;
+            break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( _nHandle, aReturn );
@@ -1015,6 +1025,13 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
         case PROPERTY_ID_NATIVE_LOOK:
             _rValue <<= (sal_Bool)m_bNativeLook;
             break;
+        //added for exporting OCX control
+        case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
+            _rValue <<= (sal_Int16)m_nControlTypeinMSO;
+            break;
+        case PROPERTY_ID_OBJ_ID_IN_MSO:
+            _rValue <<= (sal_uInt16)m_nObjIDinMSO;
+            break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicFastPropertyValue( _nHandle, _rValue );
@@ -1043,6 +1060,13 @@ sal_Bool OControlModel::convertFastPropertyValue(
             break;
         case PROPERTY_ID_NATIVE_LOOK:
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_bNativeLook);
+            break;
+        //added for exporting OCX control
+        case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_nControlTypeinMSO);
+            break;
+        case PROPERTY_ID_OBJ_ID_IN_MSO:
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_nObjIDinMSO);
             break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
@@ -1078,6 +1102,13 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
         case PROPERTY_ID_NATIVE_LOOK:
             OSL_VERIFY( _rValue >>= m_bNativeLook );
             break;
+        //added for exporting OCX control
+        case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
+            OSL_VERIFY( _rValue >>= m_nControlTypeinMSO );
+            break;
+        case PROPERTY_ID_OBJ_ID_IN_MSO:
+            OSL_VERIFY( _rValue >>= m_nObjIDinMSO );
+            break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.setDynamicFastPropertyValue( _nHandle, _rValue );
@@ -1090,11 +1121,14 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
 //------------------------------------------------------------------------------
 void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_BASE_PROPERTIES( 4 )
+    //BEGIN_DESCRIBE_BASE_PROPERTIES( 4 )
+    BEGIN_DESCRIBE_BASE_PROPERTIES( 6 )
         DECL_PROP2      (CLASSID,     sal_Int16,        READONLY, TRANSIENT);
         DECL_PROP1      (NAME,        ::rtl::OUString,  BOUND);
         DECL_BOOL_PROP2 (NATIVE_LOOK,                   BOUND, TRANSIENT);
         DECL_PROP1      (TAG,         ::rtl::OUString,  BOUND);
+        DECL_PROP1      (CONTROL_TYPE_IN_MSO,sal_Int16,     BOUND);
+        DECL_PROP1      (OBJ_ID_IN_MSO,sal_uInt16,      BOUND);
     END_DESCRIBE_PROPERTIES()
 }
 

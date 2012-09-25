@@ -335,6 +335,8 @@ protected:
 //= OControlModel
 //= model of a form layer control
 //==================================================================
+//added for exporting OCX control
+#define INVALID_OBJ_ID_IN_MSO     0xFFFF
 
 typedef ::cppu::ImplHelper7 <   ::com::sun::star::form::XFormComponent
                             ,   ::com::sun::star::io::XPersistObject
@@ -371,6 +373,9 @@ protected:
     sal_Int16                       m_nTabIndex;                // index within the taborder
     sal_Int16                       m_nClassId;                 // type of the control
     sal_Bool                        m_bNativeLook;              // should the control use the native platform look?
+    //added for exporting OCX control
+    sal_Int16                       m_nControlTypeinMSO;        //keep the MS office control type for exporting to MS binarary file
+    sal_uInt16                      m_nObjIDinMSO;              //keep the OCX control obj id for exporting to MS binarary file
 // </properties>
 
 
