@@ -534,13 +534,13 @@ IMPL_LINK ( AboutDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
         {
             uno::Reference< uno::XComponentContext > xContext =
                 ::comphelper::getProcessComponentContext();
-            uno::Reference< system::XSystemShellExecute > xSystemShell(
+            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
                 xContext->getServiceManager()->createInstanceWithContext(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ),
                     xContext ),
                 uno::UNO_QUERY_THROW );
             if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, rtl::OUString(), system::SystemShellExecuteFlags::DEFAULTS );
+                xSystemShell->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
         }
         catch( const uno::Exception& e )
         {
