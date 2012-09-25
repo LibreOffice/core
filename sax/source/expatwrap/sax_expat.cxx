@@ -122,8 +122,8 @@ OUString XmlChar2OUString( const XML_Char *p )
                                      ) );\
         }\
         catch( const com::sun::star::uno::RuntimeException &e ) {\
-            pThis->bExceptionWasThrown = sal_True; \
-            pThis->bRTExceptionWasThrown = sal_True; \
+            pThis->bExceptionWasThrown = true; \
+            pThis->bRTExceptionWasThrown = true; \
             pImpl->rtexception = e; \
         }\
     }\
@@ -249,8 +249,8 @@ public: // module scope
     // therefor the exception must be saved somewhere.
     SAXParseException   exception;
     RuntimeException    rtexception;
-    sal_Bool            bExceptionWasThrown;
-    sal_Bool            bRTExceptionWasThrown;
+    bool                bExceptionWasThrown;
+    bool                bRTExceptionWasThrown;
 
     Locale              locale;
 
@@ -443,8 +443,8 @@ SaxExpatParser::SaxExpatParser(  )
     m_pImpl->pAttrList = new AttributeList;
     m_pImpl->rAttrList = Reference< XAttributeList > ( m_pImpl->pAttrList );
 
-    m_pImpl->bExceptionWasThrown = sal_False;
-    m_pImpl->bRTExceptionWasThrown = sal_False;
+    m_pImpl->bExceptionWasThrown = false;
+    m_pImpl->bRTExceptionWasThrown = false;
 }
 
 SaxExpatParser::~SaxExpatParser()
@@ -862,7 +862,7 @@ void SaxExpatParser_Impl::callbackEntityDecl(
             pImpl->rDocumentLocator->getSystemId(),
             pImpl->rDocumentLocator->getLineNumber(),
             pImpl->rDocumentLocator->getColumnNumber() );
-        pImpl->bExceptionWasThrown = sal_True;
+        pImpl->bExceptionWasThrown = true;
     } else {
         if( pImpl->rDTDHandler.is() ) {
             CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(
@@ -1008,12 +1008,12 @@ void SaxExpatParser_Impl::callErrorHandler( SaxExpatParser_Impl *pImpl ,
         }
         else {
             pImpl->exception = e;
-            pImpl->bExceptionWasThrown = sal_True;
+            pImpl->bExceptionWasThrown = true;
         }
     }
     catch( const SAXParseException & ex ) {
         pImpl->exception = ex;
-        pImpl->bExceptionWasThrown = sal_True;
+        pImpl->bExceptionWasThrown = true;
     }
     catch( const SAXException & ex ) {
         pImpl->exception = SAXParseException(
@@ -1025,7 +1025,7 @@ void SaxExpatParser_Impl::callErrorHandler( SaxExpatParser_Impl *pImpl ,
                                     pImpl->rDocumentLocator->getLineNumber(),
                                     pImpl->rDocumentLocator->getColumnNumber()
                              );
-        pImpl->bExceptionWasThrown = sal_True;
+        pImpl->bExceptionWasThrown = true;
     }
 }
 
