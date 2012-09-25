@@ -135,6 +135,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bSolarMutexLocked(false),
     bFormulaTextResult(false)
 {
+    rtl::math::setNan(&fValue); // NaN by default
+
     rXMLImport.SetRemoveLastChar(false);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -732,10 +734,17 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
     if(pFCell)
     {
         if( bFormulaTextResult && pOUTextValue )
+        {
             pFCell->SetHybridString( *pOUTextValue );
-        else
-            pFCell->SetHybridDouble( fValue );
-        pFCell->ResetDirty();
+            pFCell->ResetDirty();
+        }
+        else if (!rtl::math::isNan(fValue))
+        {
+            pFCell->SetHybridDouble(fValue);
+            pFCell->ResetDirty();
+        }
+
+        // Leave the cell dirty when the cached result is not given.
     }
 }
 
