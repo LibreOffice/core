@@ -434,6 +434,9 @@ bool ScRangeList::UpdateReference(
         }
     }
 
+    if(maRanges.empty())
+        return true;
+
     iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
     {
@@ -456,6 +459,17 @@ bool ScRangeList::UpdateReference(
             pR->aEnd.Set( theCol2, theRow2, theTab2 );
         }
     }
+
+    if(eUpdateRefMode == URM_INSDEL)
+    {
+        if( nDx < 0 || nDy < 0 )
+        {
+            size_t n = maRanges.size();
+            for(size_t i = n-1; i > 0; --i)
+                Join(*maRanges[i], true);
+        }
+    }
+
     return bChanged;
 }
 
