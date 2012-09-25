@@ -88,7 +88,7 @@ gb_DEBUG_CFLAGS := -g -fno-inline
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command
-$(call gb_Output_announce,$(2),$(true),OCX,3)
+$(call gb_Output_announce,$(2).mm,$(true),OCX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
@@ -106,7 +106,7 @@ endef
 # ObjCObject class
 
 define gb_ObjCObject__command
-$(call gb_Output_announce,$(2),$(true),OCC,3)
+$(call gb_Output_announce,$(2).m,$(true),OCC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	mkdir -p $(dir $(call gb_ObjCObject_get_dep_target,$(2))) && \
