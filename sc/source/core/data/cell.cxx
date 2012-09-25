@@ -642,8 +642,8 @@ ScFormulaCell::ScFormulaCell() :
     bInChangeTrack( sal_False ),
     bTableOpDirty( sal_False ),
     bNeedListening( sal_False ),
-    aPos(0,0,0),
-    pValidRefToken( NULL )
+    pValidRefToken( NULL ),
+    aPos(0,0,0)
 {
 }
 
@@ -672,8 +672,8 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bInChangeTrack( sal_False ),
     bTableOpDirty( sal_False ),
     bNeedListening( sal_False ),
-    aPos( rPos ),
-    pValidRefToken( NULL )
+    pValidRefToken( NULL ),
+    aPos( rPos )
 {
     Compile( rFormula, sal_True, eGrammar );    // bNoListening, Insert does that
 }
@@ -704,8 +704,8 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bInChangeTrack( sal_False ),
     bTableOpDirty( sal_False ),
     bNeedListening( sal_False ),
-    aPos( rPos ),
-    pValidRefToken( NULL )
+    pValidRefToken( NULL ),
+    aPos( rPos )
 {
     // UPN-Array erzeugen
     if( pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen() )
@@ -746,8 +746,8 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bInChangeTrack( sal_False ),
     bTableOpDirty( sal_False ),
     bNeedListening( sal_False ),
-    aPos( rPos ),
-    pValidRefToken( rCell.pValidRefToken )
+    pValidRefToken( rCell.pValidRefToken ),
+    aPos( rPos )
 {
     pCode = (rCell.pCode) ? rCell.pCode->Clone() : NULL;
 
