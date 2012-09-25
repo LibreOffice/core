@@ -138,8 +138,8 @@ protected:
 protected:
     sal_uInt32          m_inheritedMemberCount;
 
-    sal_Bool            m_cppuTypeLeak;
-    sal_Bool            m_cppuTypeDynamic;
+    bool                m_cppuTypeLeak;
+    bool                m_cppuTypeDynamic;
     sal_Int32           m_indentLength;
     ::rtl::OString      m_typeName;
     ::rtl::OString      m_name;
@@ -189,8 +189,8 @@ protected:
 
 protected:
     sal_uInt32  m_inheritedMemberCount;
-    sal_Bool    m_hasAttributes;
-    sal_Bool    m_hasMethods;
+    bool        m_hasAttributes;
+    bool        m_hasMethods;
 
 private:
     void dumpExceptionSpecification(
