@@ -81,7 +81,7 @@ SpellChecker::SpellChecker() :
     numdict(0),
     aEvtListeners(GetLinguMutex()),
     pPropHelper(NULL),
-    bDisposing(sal_False)
+    bDisposing(false)
 {
 }
 
@@ -587,7 +587,7 @@ void SAL_CALL SpellChecker::dispose()
 
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = true;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
         if (pPropHelper)

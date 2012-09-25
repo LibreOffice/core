@@ -66,7 +66,7 @@ MacSpellChecker::MacSpellChecker() :
     aDEncs = NULL;
     aDLocs = NULL;
     aDNames = NULL;
-    bDisposing = sal_False;
+    bDisposing = false;
     pPropHelper = NULL;
     numdict = 0;
     NSApplicationLoad();
@@ -523,7 +523,7 @@ void SAL_CALL
 
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = true;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }

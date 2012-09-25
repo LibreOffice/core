@@ -93,7 +93,7 @@ static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
 Thesaurus::Thesaurus() :
     aEvtListeners   ( GetLinguMutex() )
 {
-    bDisposing = sal_False;
+    bDisposing = false;
     pPropHelper = NULL;
     aThes = NULL;
     aCharSetInfo = NULL;
@@ -682,7 +682,7 @@ void SAL_CALL Thesaurus::dispose()
 
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = true;
         EventObject aEvtObj( (XThesaurus *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
         if (pPropHelper)

@@ -76,8 +76,8 @@ class SpellChecker :
     sal_Int32                          numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
-    linguistic::PropertyHelper_Spelling*      pPropHelper;
-    sal_Bool                                    bDisposing;
+    linguistic::PropertyHelper_Spelling*    pPropHelper;
+    bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     SpellChecker(const SpellChecker &);

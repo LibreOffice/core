@@ -84,7 +84,7 @@ using ::rtl::OUString;
 Hyphenator::Hyphenator() :
     aEvtListeners   ( GetLinguMutex() )
 {
-    bDisposing = sal_False;
+    bDisposing = false;
     pPropHelper = NULL;
     aDicts = NULL;
     numdict = 0;
@@ -860,7 +860,7 @@ void SAL_CALL Hyphenator::dispose()
 
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = true;
         EventObject aEvtObj( (XHyphenator *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
         if (pPropHelper)

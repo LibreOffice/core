@@ -88,7 +88,7 @@ class MacSpellChecker :
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Spell *      pPropHelper;
-    sal_Bool                                    bDisposing;
+    bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     MacSpellChecker(const MacSpellChecker &);

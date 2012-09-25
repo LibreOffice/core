@@ -85,7 +85,7 @@ class Thesaurus :
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     linguistic::PropertyHelper_Thesaurus*       pPropHelper;
-    sal_Bool                                    bDisposing;
+    bool                                    bDisposing;
     CharClass **                            aCharSetInfo;
     MyThes **                               aThes;
     rtl_TextEncoding *                      aTEncs;

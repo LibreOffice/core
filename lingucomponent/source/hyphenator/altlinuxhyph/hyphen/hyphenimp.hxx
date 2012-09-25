@@ -88,8 +88,8 @@ class Hyphenator :
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XMultiServiceFactory >       rSMgr;
-    linguistic::PropertyHelper_Hyphenation*     pPropHelper;
-    sal_Bool                                    bDisposing;
+    linguistic::PropertyHelper_Hyphenation* pPropHelper;
+    bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     Hyphenator(const Hyphenator &);
