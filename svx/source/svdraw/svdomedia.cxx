@@ -363,7 +363,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     if( ( AVMEDIA_SETMASK_URL & nMaskSet ) &&
         ( rNewProperties.getURL() != getURL() ))
     {
-        m_pImpl->m_xCachedSnapshot = uno::Reference< graphic::XGraphic >();
+        m_pImpl->m_xCachedSnapshot.clear();
         ::rtl::OUString const url(rNewProperties.getURL());
         if ((0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
                 url.getStr(), url.getLength(),
