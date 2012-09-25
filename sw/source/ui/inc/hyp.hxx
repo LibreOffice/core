@@ -41,7 +41,6 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >  xHyph;
     Link            aOldLnk;
-    LanguageType        nLangError;     // non existing language
     sal_uInt16          nPageCount;     // page count for progress view
     sal_uInt16          nPageStart;     // 1st checked page
     sal_Bool            bInSelection : 1; // seperating selected text
