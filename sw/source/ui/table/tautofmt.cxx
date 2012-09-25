@@ -45,7 +45,6 @@
 #include "tblafmt.hxx"
 #include "tautofmt.hxx"
 #include "shellres.hxx"
-#include "tautofmt.hrc"
 
 using namespace com::sun::star;
 
@@ -123,36 +122,26 @@ public:
     void GetInputString( String& rString ) const;
 
 private:
-    Edit            aEdInput;   // Edit erhaelt so den Focus
-    FixedText       aFtEditTitle;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
+    Edit*           m_pEdInput;   // Edit erhaelt so den Focus
 };
 
 
-SwStringInputDlg::SwStringInputDlg( Window*         pParent,
-                                    const String&   rTitle,
-                                    const String&   rEditTitle,
-                                    const String&   rDefault    ) :
-    ModalDialog     ( pParent, SW_RES( DLG_SWDLG_STRINPUT ) ),
-    //
-    aEdInput        ( this, SW_RES( ED_INPUT ) ),
-    aFtEditTitle    ( this, SW_RES( FT_LABEL ) ),
-    aBtnOk          ( this, SW_RES( BTN_OK ) ),
-    aBtnCancel      ( this, SW_RES( BTN_CANCEL ) )
+SwStringInputDlg::SwStringInputDlg(Window* pParent, const String& rTitle,
+    const String& rEditTitle, const String& rDefault)
+    : ModalDialog(pParent, "StringInputDialog", "modules/swriter/ui/stringinput.ui")
 {
-    SetText( rTitle );
-    aFtEditTitle.SetText( rEditTitle );
-    aEdInput.SetText( rDefault );
-    //-------------
-    FreeResource();
+    get<FixedText>("name")->SetText(rEditTitle);
+    get(m_pEdInput, "edit");
+
+    SetText(rTitle);
+    m_pEdInput->SetText(rDefault);
 }
 
 //------------------------------------------------------------------------
 
 void SwStringInputDlg::GetInputString( String& rString ) const
 {
-    rString = aEdInput.GetText();
+    rString = m_pEdInput->GetText();
 }
 
 

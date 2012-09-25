@@ -341,7 +341,6 @@
 #define HID_EDIT_FORMULA                                        "SW_HID_EDIT_FORMULA"
 #define HID_INSERT_FILE                                         "SW_HID_INSERT_FILE"
 #define HID_FORMAT_PAGE                                         "SW_HID_FORMAT_PAGE"
-#define HID_SWDLG_STRINPUT                                      "SW_HID_SWDLG_STRINPUT"
 #define HID_RENAME_GLOSSARY                                     "SW_HID_RENAME_GLOSSARY"
 #define HID_CONFIG_MENU                                         "SW_HID_CONFIG_MENU"
 #define HID_NAVIGATION_PI                                       "SW_HID_NAVIGATION_PI"
