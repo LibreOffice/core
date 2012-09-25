@@ -298,7 +298,7 @@ namespace chelp {
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiComponentFactory > m_xSMgr;
         com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess2 >      m_xSFA;
 
-        sal_Bool m_bShowBasic;
+        bool   m_bShowBasic;
         char*  m_pErrorDoc;
 
         int    m_nCustomCSSDocLength;
