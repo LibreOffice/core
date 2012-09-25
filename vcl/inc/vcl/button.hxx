@@ -201,6 +201,7 @@ public:
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
     virtual void take_properties(Window &rOther);
 };
 

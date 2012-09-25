@@ -1748,6 +1748,22 @@ Size PushButton::GetOptimalSize(WindowSizeType eType) const
     }
 }
 
+bool PushButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("has-default")))
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_DEFBUTTON);
+        if (toBool(rValue))
+            nBits |= WB_DEFBUTTON;
+        SetStyle(nBits);
+    }
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
+}
+
+
 // =======================================================================
 
 void OKButton::ImplInit( Window* pParent, WinBits nStyle )
