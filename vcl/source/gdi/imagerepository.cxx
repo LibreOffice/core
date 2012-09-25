@@ -64,9 +64,11 @@ namespace vcl
         {
             PNGReader aReader( aStrm );
             BitmapEx aBmp = aReader.Read();
-            rImage = Image( aBmp );
-
-            return true;
+            if (!aBmp.IsEmpty)
+            {
+                rImage = Image( aBmp );
+                return true;
+            }
         }
 
         return false;
