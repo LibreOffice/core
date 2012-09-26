@@ -54,13 +54,13 @@ public:
     SdStyleSheet( const rtl::OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, sal_uInt16 nMask );
     SdStyleSheet( const SdStyleSheet& );
 
-    virtual sal_Bool        SetParent (const String& rParentName);
+    virtual bool        SetParent (const String& rParentName);
     virtual SfxItemSet& GetItemSet();
-    virtual sal_Bool        IsUsed() const;
-    virtual sal_Bool        HasFollowSupport() const;
-    virtual sal_Bool        HasParentSupport() const;
-    virtual sal_Bool        HasClearParentSupport() const;
-    virtual sal_Bool        SetName( const UniString& );
+    virtual bool        IsUsed() const;
+    virtual bool        HasFollowSupport() const;
+    virtual bool        HasParentSupport() const;
+    virtual bool        HasClearParentSupport() const;
+    virtual bool        SetName( const UniString& );
     virtual void        SetHelpId( const String& r, sal_uLong nId );
 
     void        AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems = sal_True);

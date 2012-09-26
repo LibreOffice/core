@@ -197,9 +197,9 @@ void SdStyleSheet::Store(SvStream& rOut)
 |*
 \************************************************************************/
 
-sal_Bool SdStyleSheet::SetParent(const String& rParentName)
+bool SdStyleSheet::SetParent(const String& rParentName)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = sal_False;
 
     if (SfxStyleSheet::SetParent(rParentName))
     {
@@ -211,7 +211,7 @@ sal_Bool SdStyleSheet::SetParent(const String& rParentName)
                 SfxStyleSheetBase* pStyle = pPool->Find(rParentName, nFamily);
                 if (pStyle)
                 {
-                    bResult = sal_True;
+                    bResult = true;
                     SfxItemSet& rParentSet = pStyle->GetItemSet();
                     GetItemSet().SetParent(&rParentSet);
                     Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
@@ -219,14 +219,14 @@ sal_Bool SdStyleSheet::SetParent(const String& rParentName)
             }
             else
             {
-                bResult = sal_True;
+                bResult = true;
                 GetItemSet().SetParent(NULL);
                 Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
             }
         }
         else
         {
-            bResult = sal_True;
+            bResult = true;
         }
     }
     return bResult;
@@ -342,9 +342,9 @@ SfxItemSet& SdStyleSheet::GetItemSet()
 |*
 \************************************************************************/
 
-sal_Bool SdStyleSheet::IsUsed() const
+bool SdStyleSheet::IsUsed() const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     sal_uInt16 nListenerCount = GetListenerCount();
     if (nListenerCount > 0)
@@ -636,28 +636,28 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingIte
 
 // --------------------------------------------------------------------
 
-sal_Bool SdStyleSheet::HasFollowSupport() const
+bool SdStyleSheet::HasFollowSupport() const
 {
-    return sal_False;
+    return false;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SdStyleSheet::HasParentSupport() const
+bool SdStyleSheet::HasParentSupport() const
 {
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SdStyleSheet::HasClearParentSupport() const
+bool SdStyleSheet::HasClearParentSupport() const
 {
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SdStyleSheet::SetName( const UniString& rName )
+bool SdStyleSheet::SetName( const UniString& rName )
 {
     return SfxStyleSheet::SetName( rName );
 }

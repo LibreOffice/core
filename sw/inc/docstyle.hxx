@@ -130,13 +130,13 @@ public:
     void                    PresetParent(const String& rName){ aParent = rName; }
     void                    PresetFollow(const String& rName){ aFollow = rName; }
 
-    virtual sal_Bool            SetName( const String& rStr);
-    virtual sal_Bool            SetParent( const String& rStr);
-    virtual sal_Bool            SetFollow( const String& rStr);
+    virtual bool            SetName( const String& rStr);
+    virtual bool            SetParent( const String& rStr);
+    virtual bool            SetFollow( const String& rStr);
 
-    virtual sal_Bool            HasFollowSupport() const;
-    virtual sal_Bool            HasParentSupport() const;
-    virtual sal_Bool            HasClearParentSupport() const;
+    virtual bool            HasFollowSupport() const;
+    virtual bool            HasParentSupport() const;
+    virtual bool            HasClearParentSupport() const;
     virtual String          GetDescription();
     virtual String          GetDescription(SfxMapUnit eUnit);
 
@@ -147,7 +147,7 @@ public:
     const SwNumRule*        GetNumRule();
     void                    SetNumRule(const SwNumRule& rRule);
 
-    virtual sal_Bool            IsUsed() const;
+    virtual bool            IsUsed() const;
 };
 
 /*--------------------------------------------------------------------
@@ -204,7 +204,7 @@ public:
     virtual SfxStyleSheetBase* Find( const String&, SfxStyleFamily eFam,
                                     sal_uInt16 n=0xFFFF );
 
-    virtual sal_Bool SetParent( SfxStyleFamily eFam, const String &rStyle,
+    virtual bool SetParent( SfxStyleFamily eFam, const String &rStyle,
                             const String &rParent );
 
     virtual void Remove( SfxStyleSheetBase* pStyle);
