@@ -46,7 +46,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-
+#include <com/sun/star/table/ShadowFormat.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -93,6 +93,7 @@ public:
     void testN780563();
     void testN780853();
     void testN780843();
+    void testShadow();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -134,6 +135,7 @@ public:
     CPPUNIT_TEST(testN780563);
     CPPUNIT_TEST(testN780853);
     CPPUNIT_TEST(testN780843);
+    CPPUNIT_TEST(testShadow);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -941,6 +943,22 @@ void Test::testN780843()
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
     CPPUNIT_ASSERT_EQUAL(OUString("shown footer"), xFooter->getString());
+}
+
+void Test::testShadow()
+{
+    /*
+     * The problem was that drop shadows on inline images were not being
+     * imported and applied.
+     */
+    load("imgshadow.docx");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(1), uno::UNO_QUERY);
+
+    table::ShadowFormat aShadow;
+    xPropertySet->getPropertyValue("ShadowFormat") >>= aShadow;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(273), sal_Int32(aShadow.ShadowWidth));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
