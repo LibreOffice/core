@@ -95,8 +95,12 @@ sub main {
         run();
     };
     if ($@) {
-        warn "$@\n";
+        my $message = "ERROR: $@";
+
+        warn "$message\n";
         $exit_code = -1;
+
+        cleanup_on_error($message);
     }
 
     installer::logger::stoptime();
@@ -1818,6 +1822,37 @@ sub run {
         print $log_fh Dumper($filesinproductlanguageresolvedarrayref);
 
     }   # end of iteration for one language group
+}
+
+sub cleanup_on_error {
+    my $message = shift;
+
+    # If an installation set is currently created, the directory name
+    # is saved in $installer::globals::saveinstalldir.  If this
+    # directory name contains "_inprogress", it has to be renamed to
+    # "_witherror".
+    if ( $installer::globals::saveinstalldir =~ /_inprogress/ ) {
+        installer::systemactions::rename_string_in_directory($installer::globals::saveinstalldir, "_inprogress", "_witherror");
+    }
+
+    # Removing directories created in the output tree.
+    installer::worker::clean_output_tree();
+
+    $installer::globals::logfilename = $installer::globals::exitlog . $installer::globals::logfilename;
+
+    my @log = (@installer::globals::logfileinfo, @installer::globals::globallogfileinfo);
+
+    push(@log, "\n" . '*' x 65 . "\n");
+    push(@log, $message);
+    push(@log, '*' x 65 . "\n");
+
+    installer::files::save_file($installer::globals::logfilename, \@log);
+
+    print("ERROR, saved logfile $installer::globals::logfilename is:\n");
+    open(my $log, "<", $installer::globals::logfilename);
+    print ": $_" while (<$log>);
+    print "\n";
+    close($log);
 }
 
 1;
