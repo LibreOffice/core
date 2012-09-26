@@ -1387,43 +1387,6 @@ sub put_license_into_setup
 }
 
 #########################################################
-# Create a tar file from the binary package
-#########################################################
-
-sub tar_package
-{
-    my ( $installdir, $packagename, $tarfilename, $getuidlibrary) = @_;
-
-    my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
-
-    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename > $tarfilename";
-
-    my $returnvalue = system($systemcall);
-
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    chmod 0775, $tarfilename;
-
-    my $fulltarfile = $installdir . $installer::globals::separator . $tarfilename;
-    my $filesize = ( -s $fulltarfile );
-
-    return $filesize;
-}
-
-#########################################################
 # Collecting all pkgmap files from an installation set
 #########################################################
 
