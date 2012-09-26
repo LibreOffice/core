@@ -34,8 +34,9 @@ $(eval $(call gb_Library_use_libraries,desktopbe1,\
 	cppuhelper \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,desktopbe1))
 
 $(eval $(call gb_Library_set_componentfile,desktopbe1,shell/source/backends/desktopbe/desktopbe1))
 

@@ -31,8 +31,9 @@ $(eval $(call gb_Library_Library,localedata_es))
 $(eval $(call gb_Library_use_libraries,localedata_es,\
 	localedata_en \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,localedata_es))
 
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_es,\
 	CustomTarget/i18npool/localedata/localedata_es_AR \

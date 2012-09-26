@@ -45,8 +45,9 @@ $(eval $(call gb_Library_use_libraries,scriptframe,\
 	tl \
 	ucbhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,scriptframe))
 
 $(eval $(call gb_Library_add_exception_objects,scriptframe,\
 	scripting/source/provider/ActiveMSPList \

@@ -35,8 +35,9 @@ $(eval $(call gb_Executable_use_libraries,regcomp,\
     cppuhelper \
     sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,regcomp))
 
 $(eval $(call gb_Executable_add_exception_objects,regcomp,\
     cpputools/source/registercomponent/registercomponent \

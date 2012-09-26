@@ -107,9 +107,9 @@ gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
 gb_STDLIBS := \
-	mingwthrd \
-	mingw32 \
-	mingwex \
+	-lmingwthrd \
+	-lmingw32 \
+	-lmingwex \
 
 
 # LinkTarget class

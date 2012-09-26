@@ -19,8 +19,9 @@ $(eval $(call gb_Library_use_libraries,basebmp,\
     basegfx \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,basebmp))
 
 $(eval $(call gb_Library_set_include,basebmp,\
     -I$(SRCDIR)/basebmp/inc/ \

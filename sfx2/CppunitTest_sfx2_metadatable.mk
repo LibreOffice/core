@@ -29,8 +29,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_metadatable, \
     sal \
     sfx \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sfx2_metadatable))
 
 $(eval $(call gb_CppunitTest_set_include,sfx2_metadatable,\
     $$(INCLUDE) \

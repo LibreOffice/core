@@ -70,8 +70,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_annonationshapeobj, \
     vcl \
     xo \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sc_annonationshapeobj))
 
 $(eval $(call gb_CppunitTest_set_include,sc_annonationshapeobj,\
     -I$(SRCDIR)/sc/source/ui/inc \

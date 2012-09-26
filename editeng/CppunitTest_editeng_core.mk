@@ -58,8 +58,9 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     vcl \
     xo \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,editeng_core))
 
 $(eval $(call gb_CppunitTest_use_externals,editeng_core,\
     icuuc \

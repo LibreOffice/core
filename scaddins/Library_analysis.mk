@@ -42,8 +42,9 @@ $(eval $(call gb_Library_use_libraries,analysis,\
 	sal \
 	tl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,analysis))
 
 $(eval $(call gb_Library_add_exception_objects,analysis,\
 	scaddins/source/analysis/analysis \

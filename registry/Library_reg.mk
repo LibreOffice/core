@@ -41,8 +41,9 @@ $(eval $(call gb_Library_use_libraries,reg,\
 	sal \
 	store \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,reg))
 
 $(eval $(call gb_Library_add_exception_objects,reg,\
 	registry/source/keyimpl \

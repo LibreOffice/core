@@ -64,8 +64,9 @@ $(eval $(call gb_Library_use_libraries,dba,\
     vcl \
     xo \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,dba))
 
 $(eval $(call gb_Library_set_componentfile,dba,dbaccess/util/dba))
 

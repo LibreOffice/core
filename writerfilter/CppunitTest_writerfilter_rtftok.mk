@@ -44,8 +44,9 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
 	vcl \
 	writerfilter \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,writerfilter_rtftok))
 
 $(eval $(call gb_CppunitTest_use_api,writerfilter_rtftok,\
 	offapi \

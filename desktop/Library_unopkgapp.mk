@@ -51,8 +51,9 @@ $(eval $(call gb_Library_use_libraries,unopkgapp,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,unopkgapp))
 
 $(eval $(call gb_Library_add_exception_objects,unopkgapp,\
     desktop/source/pkgchk/unopkg/unopkg_app \

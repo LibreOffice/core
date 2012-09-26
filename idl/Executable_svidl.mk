@@ -39,8 +39,9 @@ $(eval $(call gb_Executable_use_libraries,svidl,\
 	tl \
 	sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,svidl))
 
 $(eval $(call gb_Executable_add_exception_objects,svidl,\
 	idl/source/cmptools/hash \

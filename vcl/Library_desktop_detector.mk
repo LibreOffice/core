@@ -59,8 +59,9 @@ $(eval $(call gb_Library_use_libraries,desktop_detector,\
     Xext \
     SM \
     ICE \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,desktop_detector))
 
 $(eval $(call gb_Library_use_externals,desktop_detector,\
 	icule \

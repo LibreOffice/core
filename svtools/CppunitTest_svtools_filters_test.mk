@@ -42,8 +42,9 @@ $(eval $(call gb_CppunitTest_use_libraries,svtools_filters_test, \
 	unotest \
 	vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,svtools_filters_test))
 
 $(eval $(call gb_CppunitTest_use_api,svtools_filters_test,\
     udkapi \

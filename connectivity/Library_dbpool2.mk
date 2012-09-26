@@ -45,8 +45,9 @@ $(eval $(call gb_Library_use_libraries,dbpool2,\
 	sal \
 	salhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,dbpool2))
 
 $(eval $(call gb_Library_add_exception_objects,dbpool2,\
 	connectivity/source/cpool/ZConnectionWrapper \

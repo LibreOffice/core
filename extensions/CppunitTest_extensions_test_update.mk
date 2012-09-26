@@ -40,8 +40,9 @@ $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
 	test \
 	unotest \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,extensions_test_update))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update,\

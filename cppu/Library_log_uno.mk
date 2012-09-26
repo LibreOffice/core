@@ -34,8 +34,9 @@ $(eval $(call gb_Library_use_libraries,log_uno,\
 	purpenvhelper \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,log_uno))
 
 $(eval $(call gb_Library_add_exception_objects,log_uno,\
 	cppu/source/LogBridge/LogBridge \

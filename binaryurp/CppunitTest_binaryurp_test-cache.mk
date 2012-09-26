@@ -31,8 +31,9 @@ $(eval $(call gb_CppunitTest_CppunitTest,binaryurp_test-cache))
 $(eval $(call gb_CppunitTest_use_libraries,binaryurp_test-cache,\
 	sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,binaryurp_test-cache))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,binaryurp_test-cache,\
 	binaryurp/qa/test-cache \

@@ -34,8 +34,9 @@ $(eval $(call gb_Executable_use_libraries,soffice,\
     shell32 \
     shlwapi \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,soffice))
 
 $(eval $(call gb_Executable_use_static_libraries,soffice,\
     ooopathutils \

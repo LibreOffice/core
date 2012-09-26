@@ -38,8 +38,9 @@ $(eval $(call gb_Library_use_libraries,binaryurp,\
 	sal \
 	salhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,binaryurp))
 
 $(eval $(call gb_Library_add_exception_objects,binaryurp,\
 	binaryurp/source/binaryany \

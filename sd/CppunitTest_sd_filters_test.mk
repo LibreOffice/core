@@ -71,8 +71,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
     vcl \
     xo \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sd_filters_test))
 
 $(eval $(call gb_CppunitTest_set_include,sd_filters_test,\
     -I$(SRCDIR)/sd/source/ui/inc \

@@ -56,8 +56,9 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,chartcontroller))
 
 $(eval $(call gb_Library_set_componentfile,chartcontroller,chart2/source/controller/chartcontroller))
 

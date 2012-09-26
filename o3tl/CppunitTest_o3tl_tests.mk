@@ -33,8 +33,9 @@ $(eval $(call gb_CppunitTest_use_package,o3tl_tests,o3tl_inc))
 $(eval $(call gb_CppunitTest_use_libraries,o3tl_tests,\
 	sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,o3tl_tests))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,o3tl_tests,\
 	o3tl/qa/cow_wrapper_clients \

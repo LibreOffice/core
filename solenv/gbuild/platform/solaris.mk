@@ -237,9 +237,9 @@ gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 
 gb_STDLIBS := \
-	m \
-	nsl \
-	socket \
+	-lm \
+	-lnsl \
+	-lsocket \
 
 gb_Library_PLAINLIBS_NONE += \
 	dl \

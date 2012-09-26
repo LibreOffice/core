@@ -54,8 +54,9 @@ $(eval $(call gb_Library_use_libraries,evoab,\
 	dbtools \
 	file \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,evoab))
 
 $(eval $(call gb_Library_add_exception_objects,evoab,\
 	connectivity/source/drivers/evoab2/NDriver \

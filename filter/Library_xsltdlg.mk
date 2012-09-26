@@ -40,8 +40,9 @@ $(eval $(call gb_Library_use_libraries,xsltdlg,\
 	cppu \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,xsltdlg))
 
 $(eval $(call gb_Library_add_exception_objects,xsltdlg,\
 	filter/source/xsltdialog/typedetectionexport \

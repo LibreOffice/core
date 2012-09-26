@@ -31,8 +31,9 @@ $(eval $(call gb_Library_use_libraries,epb,\
 	cppu \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,epb))
 
 $(eval $(call gb_Library_add_exception_objects,epb,\
 	filter/source/graphicfilter/epbm/epbm \

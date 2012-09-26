@@ -39,8 +39,9 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_breakiterator,\
 	sal \
 	unotest \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,i18npool_test_breakiterator))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_breakiterator,\
     i18npool/qa/cppunit/test_breakiterator \

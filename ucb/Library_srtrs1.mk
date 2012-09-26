@@ -36,8 +36,9 @@ $(eval $(call gb_Library_use_libraries,srtrs1,\
 	cppuhelper \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,srtrs1))
 
 $(eval $(call gb_Library_add_exception_objects,srtrs1,\
 	ucb/source/sorter/sortdynres \

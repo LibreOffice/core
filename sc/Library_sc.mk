@@ -84,8 +84,9 @@ $(eval $(call gb_Library_use_libraries,sc,\
 	vcl \
 	xo \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sc))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/attarray \

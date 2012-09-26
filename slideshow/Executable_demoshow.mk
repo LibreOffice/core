@@ -61,8 +61,9 @@ $(eval $(call gb_Executable_use_libraries,demoshow,\
     ucbhelper \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,demoshow))
 
 $(eval $(call gb_Executable_add_exception_objects,demoshow,\
     slideshow/test/demoshow \

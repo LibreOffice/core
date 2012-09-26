@@ -39,8 +39,9 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	salhelper \
 	ucbhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,ucpdav1))
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	libxml2 \

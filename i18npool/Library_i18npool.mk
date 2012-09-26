@@ -45,8 +45,9 @@ $(eval $(call gb_Library_use_libraries,i18npool,\
 	i18nutil \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,i18npool))
 
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Library_use_externals,i18npool,\

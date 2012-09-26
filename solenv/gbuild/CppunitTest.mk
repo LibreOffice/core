@@ -341,6 +341,7 @@ $(eval $(foreach method,\
 	add_ldflags \
 	set_ldflags \
 	add_libs \
+	add_standard_system_libs \
 	use_sdk_api \
 	use_udk_api \
 	use_internal_api \

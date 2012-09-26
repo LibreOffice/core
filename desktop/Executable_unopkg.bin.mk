@@ -46,8 +46,9 @@ $(eval $(call gb_Executable_use_libraries,$(desktop_UNOPKGBIN),\
     tl \
     unopkgapp \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,$(desktop_UNOPKGBIN)))
 
 $(eval $(call gb_Executable_add_cobjects,$(desktop_UNOPKGBIN),\
     desktop/source/pkgchk/unopkg/unopkg_main \

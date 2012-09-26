@@ -32,8 +32,9 @@ $(eval $(call gb_Library_use_libraries,placeware,\
 	sal \
 	sax \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,placeware))
 
 $(eval $(call gb_Library_add_exception_objects,placeware,\
 	filter/source/placeware/exporter \

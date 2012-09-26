@@ -34,8 +34,9 @@ $(eval $(call gb_Library_use_libraries,streams,\
     cppuhelper \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,streams))
 
 $(eval $(call gb_Library_set_componentfile,streams,io/source/stm/streams))
 

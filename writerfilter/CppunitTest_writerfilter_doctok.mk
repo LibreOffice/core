@@ -38,8 +38,9 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_doctok, \
 	sal \
 	writerfilter \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,writerfilter_doctok))
 
 $(eval $(call gb_CppunitTest_set_include,writerfilter_doctok,\
 	$$(INCLUDE) \

@@ -53,8 +53,9 @@ $(eval $(call gb_Library_use_libraries,ado,\
 	dbtools \
 	comphelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,ado))
 
 $(eval $(call gb_Library_add_exception_objects,ado,\
 	connectivity/source/drivers/ado/ADatabaseMetaDataImpl \

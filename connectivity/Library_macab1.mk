@@ -37,8 +37,9 @@ $(eval $(call gb_Library_use_libraries,macab1,\
 	dbtools \
 	sal \
 	salhelper \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,macab1))
 
 $(eval $(call gb_Library_set_include,macab1,\
         $$(INCLUDE) \

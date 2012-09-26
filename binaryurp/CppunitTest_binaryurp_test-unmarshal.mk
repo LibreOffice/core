@@ -34,8 +34,9 @@ $(eval $(call gb_CppunitTest_use_libraries,binaryurp_test-unmarshal,\
 	sal \
 	salhelper \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,binaryurp_test-unmarshal))
 
 $(eval $(call gb_CppunitTest_use_library_objects,binaryurp_test-unmarshal,\
 	binaryurp \

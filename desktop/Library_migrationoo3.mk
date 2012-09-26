@@ -40,8 +40,9 @@ $(eval $(call gb_Library_use_libraries,migrationoo3,\
     tl \
     utl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,migrationoo3))
 
 $(eval $(call gb_Library_use_externals,migrationoo3,\
     berkeleydb \

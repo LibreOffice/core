@@ -58,8 +58,9 @@ $(eval $(call gb_Library_use_libraries,frm,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,frm))
 
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Library_use_externals,frm,\

@@ -19,7 +19,6 @@ $(eval $(call gb_StaticLibrary_use_libraries,basebmp,\
     basegfx \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,basebmp,\

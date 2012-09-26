@@ -45,7 +45,8 @@ $(call gb_CxxObject_get_target,salhelper/qa/checkapi/strings) :| \
 $(eval $(call gb_CppunitTest_use_libraries,salhelper_checkapi,\
     salhelper \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,salhelper_checkapi))
 
 # vim: set noet sw=4 ts=4:

@@ -35,8 +35,9 @@ $(eval $(call gb_Library_use_libraries,unoxml,\
     cppu \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,unoxml))
 
 $(eval $(call gb_Library_use_external,unoxml,libxml2))
 

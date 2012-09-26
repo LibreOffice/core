@@ -49,8 +49,9 @@ $(eval $(call gb_Library_use_libraries,textconversiondlgs,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,textconversiondlgs))
 
 $(eval $(call gb_Library_add_exception_objects,textconversiondlgs,\
     svx/source/unodialogs/textconversiondlgs/services \

@@ -47,8 +47,9 @@ $(eval $(call gb_Library_use_libraries,ucpgvfs1,\
 	sal \
 	salhelper \
 	ucbhelper \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,ucpgvfs1))
 
 $(eval $(call gb_Library_add_exception_objects,ucpgvfs1,\
 	ucb/source/ucp/gvfs/gvfs_content \

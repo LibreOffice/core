@@ -45,8 +45,9 @@ $(eval $(call gb_Executable_use_libraries,rsc,\
 	sal \
 	tl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,rsc))
 
 $(eval $(call gb_Executable_add_grammars,rsc,\
 	rsc/source/parser/rscyacc \

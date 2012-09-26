@@ -47,8 +47,9 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
     vcl \
     xo \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,lwpft))
 
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Library_use_externals,lwpft,\

@@ -31,8 +31,9 @@ $(eval $(call gb_Library_use_libraries,eme,\
 	cppu \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,eme))
 
 $(eval $(call gb_Library_add_exception_objects,eme,\
 	filter/source/graphicfilter/eos2met/eos2met \

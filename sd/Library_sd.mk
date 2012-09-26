@@ -104,8 +104,9 @@ $(eval $(call gb_Library_use_libraries,sd,\
     vcl \
     xmlsecurity \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sd))
 
 $(eval $(call gb_Library_use_externals,sd,\
  libxml2 \

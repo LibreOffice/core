@@ -29,7 +29,7 @@
 
 gb_CPUDEFS := -DX86
 gb_COMPILERDEFAULTOPTFLAGS := -O2
-gb_STDLIBS := pthread
+gb_STDLIBS := $(PTHREAD_LIBS)
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 

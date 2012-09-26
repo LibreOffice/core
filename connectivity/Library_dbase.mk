@@ -50,8 +50,9 @@ $(eval $(call gb_Library_use_libraries,dbase,\
 	utl \
 	comphelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,dbase))
 
 $(eval $(call gb_Library_add_exception_objects,dbase,\
 	connectivity/source/drivers/dbase/DCode \

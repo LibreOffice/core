@@ -41,8 +41,9 @@ $(eval $(call gb_Library_use_libraries,unotest,\
 	cppuhelper \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,unotest))
 
 $(eval $(call gb_Library_use_externals,unotest,\
 	cppunit \

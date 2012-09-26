@@ -54,8 +54,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
     test \
     unotest \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sdext_pdfimport))
 
 $(eval $(call gb_CppunitTest_use_static_libraries,sdext_pdfimport,\
     pdfimport_s \

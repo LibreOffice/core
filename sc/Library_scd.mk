@@ -44,8 +44,9 @@ $(eval $(call gb_Library_use_libraries,scd,\
 	ucbhelper \
 	vcl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,scd))
 
 $(eval $(call gb_Library_add_exception_objects,scd,\
 	sc/source/ui/unoobj/detreg \

@@ -51,8 +51,9 @@ $(eval $(call gb_Library_use_libraries,emser,\
 	sal \
 	uuid \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,emser))
 
 ifeq ($(USE_DEBUG_RUNTIME),)
 $(eval $(call gb_Library_add_libs,emser,\

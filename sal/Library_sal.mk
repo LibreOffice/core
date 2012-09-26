@@ -82,8 +82,9 @@ $(eval $(call gb_Library_use_libraries,sal,\
 		lo-bootstrap \
 	) \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sal))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_externals,sal,\

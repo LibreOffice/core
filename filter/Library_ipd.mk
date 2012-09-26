@@ -29,8 +29,9 @@ $(eval $(call gb_Library_use_libraries,ipd,\
 	tl \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,ipd))
 
 $(eval $(call gb_Library_add_exception_objects,ipd,\
 	filter/source/graphicfilter/ipsd/ipsd \

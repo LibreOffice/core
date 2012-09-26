@@ -44,8 +44,9 @@ $(eval $(call gb_Library_use_libraries,spl,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,spl))
 
 $(eval $(call gb_Library_set_componentfile,spl,desktop/source/splash/spl))
 

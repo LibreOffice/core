@@ -35,8 +35,9 @@ $(eval $(call gb_Executable_use_libraries,regsingleton,\
     cppuhelper \
     sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,regsingleton))
 
 $(eval $(call gb_Executable_add_exception_objects,regsingleton,\
     cpputools/source/regsingleton/regsingleton \

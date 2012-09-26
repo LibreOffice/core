@@ -37,8 +37,9 @@ $(eval $(call gb_Library_use_libraries,flash,\
 	cppu \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,flash))
 
 $(eval $(call gb_Library_use_externals,flash,zlib))
 

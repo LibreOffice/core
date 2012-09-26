@@ -35,8 +35,9 @@ $(eval $(call gb_Library_use_libraries,introspection,\
     sal \
     salhelper \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,introspection))
 
 $(eval $(call gb_Library_set_componentfile,introspection,stoc/source/inspect/introspection))
 

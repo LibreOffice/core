@@ -38,8 +38,9 @@ $(eval $(call gb_Library_use_libraries,guesslang,\
 	tl \
 	utl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,guesslang))
 
 $(eval $(call gb_Library_use_externals,guesslang,\
 	libexttextcat \

@@ -35,8 +35,9 @@ $(eval $(call gb_Library_use_libraries,uwinapi,\
 		user32 \
 		version \
 	) \
-	$(filter-out uwinapi,$(gb_STDLIBS)) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,uwinapi))
 
 $(eval $(call gb_Library_add_defs,uwinapi,\
 	$(if $(filter $(COM),GCC), \

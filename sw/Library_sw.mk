@@ -77,8 +77,9 @@ $(eval $(call gb_Library_use_libraries,sw,\
     vcl \
     xo \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sw))
 
 $(eval $(call gb_Library_use_externals,sw,\
 	icuuc \

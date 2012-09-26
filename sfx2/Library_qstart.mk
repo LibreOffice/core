@@ -53,8 +53,9 @@ $(eval $(call gb_Library_use_libraries,qstart_gtk,\
     vcl \
     sfx \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,qstart_gtk))
 
 $(eval $(call gb_Library_use_externals,qstart_gtk,\
 	gio \

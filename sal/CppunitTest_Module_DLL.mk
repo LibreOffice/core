@@ -37,7 +37,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,Module_DLL,\
 $(eval $(call gb_CppunitTest_use_libraries,Module_DLL,\
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,Module_DLL))
 
 # vim: set noet sw=4 ts=4:

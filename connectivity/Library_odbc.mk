@@ -48,8 +48,9 @@ $(eval $(call gb_Library_use_libraries,odbc,\
 	sal \
 	salhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,odbc))
 
 $(eval $(call gb_Library_add_exception_objects,odbc,\
 	connectivity/source/drivers/odbc/oservices \

@@ -20,7 +20,9 @@
 # For minor contributions see the git repository.
 #
 # Alternatively, the contents of this file may be used under the terms of
-# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+#se_libraries,sal_osl_process,\
+    sal \
+	$(g either the GNU General Public License Version 3 or later (the "GPLv3+"), or
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
@@ -34,8 +36,9 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_process,\
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl_process,\
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sal_osl_process))
 
 # Depend on to be tested executable
 $(call gb_CppunitTest_get_target,sal_osl_process) : \

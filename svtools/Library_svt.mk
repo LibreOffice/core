@@ -63,8 +63,9 @@ $(eval $(call gb_Library_use_libraries,svt,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,svt))
 
 $(eval $(call gb_Library_use_externals,svt,\
     icuuc \

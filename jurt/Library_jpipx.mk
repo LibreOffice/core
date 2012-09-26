@@ -30,8 +30,9 @@ $(eval $(call gb_Library_Library,jpipx))
 $(eval $(call gb_Library_use_libraries,jpipx,\
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,jpipx))
 
 $(eval $(call gb_Library_add_cobjects,jpipx,\
     jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection \

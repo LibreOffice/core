@@ -44,8 +44,9 @@ $(eval $(call gb_Library_use_libraries,emboleobj,\
 	tl \
 	utl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,emboleobj))
 
 $(eval $(call gb_Library_add_exception_objects,emboleobj,\
 	embeddedobj/source/msole/closepreventer \

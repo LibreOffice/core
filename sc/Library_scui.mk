@@ -54,8 +54,9 @@ $(eval $(call gb_Library_use_libraries,scui,\
 	utl \
 	vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,scui))
 
 $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/attrdlg/attrdlg \

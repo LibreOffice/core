@@ -43,8 +43,9 @@ $(eval $(call gb_Library_use_libraries,smd,\
         ucbhelper \
         vcl \
 		$(gb_UWINAPI) \
-        $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,smd))
 
 $(eval $(call gb_Library_add_exception_objects,smd,\
 	starmath/source/detreg \

@@ -45,8 +45,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ww8export, \
     sw \
     tl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sw_subsequent_ww8export))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ww8export,\
     libxml2 \

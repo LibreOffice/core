@@ -56,8 +56,9 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 	comphelper \
 	i18nisolang1 \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,dbtools))
 
 ifeq ($(filter-out NETBSD MACOSX,$(OS)),)
 $(eval $(call gb_Library_use_libraries,dbtools,\

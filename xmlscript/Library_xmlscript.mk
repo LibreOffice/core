@@ -24,8 +24,9 @@ $(eval $(call gb_Library_use_libraries,xmlscript,\
     cppuhelper \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,xmlscript))
 
 $(eval $(call gb_Library_set_include,xmlscript,\
     -I$(SRCDIR)/xmlscript/source/inc \

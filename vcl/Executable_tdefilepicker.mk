@@ -42,8 +42,9 @@ $(eval $(call gb_Executable_set_include,tdefilepicker,\
 
 $(eval $(call gb_Executable_use_libraries,tdefilepicker,\
 	sal \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,tdefilepicker))
 
 $(eval $(call gb_Executable_add_libs,tdefilepicker,\
 	$(TDE_LIBS) \

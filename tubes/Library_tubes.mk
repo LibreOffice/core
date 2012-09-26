@@ -50,8 +50,9 @@ $(eval $(call gb_Library_use_libraries,tubes,\
 	utl \
 	vcl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,tubes))
 
 $(eval $(call gb_Library_use_externals,tubes,\
 	gtk \

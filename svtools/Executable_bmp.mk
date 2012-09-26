@@ -43,8 +43,9 @@ $(eval $(call gb_Executable_use_libraries,bmp,\
     tl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,bmp))
 
 $(eval $(call gb_Executable_add_exception_objects,bmp,\
     svtools/bmpmaker/bmp \
