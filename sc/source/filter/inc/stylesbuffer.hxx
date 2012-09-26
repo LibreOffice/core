@@ -909,6 +909,7 @@ public:
     FontRef             createFont( sal_Int32* opnFontId = 0 );
     /** Creates a number format. */
     NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const ::rtl::OUString& rFmtCode );
+    sal_Int32           nextFreeNumFmtId();
     /** Creates a new empty border object.
         @param opnBorderId  (out-param) The identifier of the new border object. */
     BorderRef           createBorder( sal_Int32* opnBorderId = 0 );

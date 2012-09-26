@@ -2445,7 +2445,19 @@ FillRef Dxf::createFill( bool bAlwaysNew )
 
 void Dxf::importNumFmt( const AttributeList& rAttribs )
 {
-    mxNumFmt = getStyles().importNumFmt( rAttribs );
+    // don't propagate number formats defined in Dxf entries
+    // they can have the same id ( but different format codes ) as those
+    // defined globally earlier. We discard the id defined in XML_numFmtId
+    // and generate one ourselves ( this assumes that the normal numberformat
+    // import has already taken place )
+    sal_Int32 nNumFmtId  = getStyles().nextFreeNumFmtId();
+    OUString aFmtCode = rAttribs.getXString( XML_formatCode, OUString() );
+    // we might need to do this generally for format codes,
+    // specifically for a fraction code '\ ?/?' is passed to us in xml, the '\' is not
+    // an escape character but merely should be telling the formatter to display the next
+    // char in the format ( afaics it does that anyhow )
+    aFmtCode = aFmtCode.replaceAll("\\", "");
+    mxNumFmt = getStyles().createNumFmt( nNumFmtId, aFmtCode );
 }
 
 void Dxf::importDxf( SequenceInputStream& rStrm )
@@ -2940,6 +2952,11 @@ FontRef StylesBuffer::createFont( sal_Int32* opnFontId )
 NumberFormatRef StylesBuffer::createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode )
 {
     return maNumFmts.createNumFmt( nNumFmtId, rFmtCode );
+}
+
+sal_Int32 StylesBuffer::nextFreeNumFmtId()
+{
+    return maNumFmts.nextFreeId();
 }
 
 BorderRef StylesBuffer::createBorder( sal_Int32* opnBorderId )

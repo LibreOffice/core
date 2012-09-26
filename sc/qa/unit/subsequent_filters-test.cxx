@@ -656,9 +656,7 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
             // check actual align applied to cell, should be the same as
             // the style
             eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(pPattern->GetItem( ATTR_HOR_JUSTIFY ) ).GetValue() );
-#if ENABLE_WHEN_FIXED
             CPPUNIT_ASSERT_EQUAL_MESSAGE("cell with 'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
-#endif
         }
     }
 
