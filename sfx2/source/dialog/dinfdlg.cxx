@@ -2311,8 +2311,6 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
 
     FreeResource();
 
-    XubString sTEST = m_aHeaderBar.GetItemText( HI_NAME );
-
     m_aPropertiesWin.InitControls( &m_aHeaderBar, &m_aVertScroll );
     m_aPropertiesWin.SetRemovedHdl( LINK( this, CustomPropertiesControl, RemovedHdl ) );
 
