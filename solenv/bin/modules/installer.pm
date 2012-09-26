@@ -297,10 +297,10 @@ sub run {
     if ($installer::globals::languages_defined_in_productlist) { installer::languages::get_info_about_languages($allsettingsarrayref); }
 
     #####################################
-    # Windows requires the encoding list
+    # Windows requires the LCID list
     #####################################
 
-    if ( $installer::globals::iswindowsbuild ) { installer::control::read_encodinglist($includepatharrayref); }
+    if ( $installer::globals::iswindowsbuild ) { installer::control::read_lcidlist($includepatharrayref); }
 
     #####################################################################
     # Including additional inc files for variable settings, if defined
@@ -1603,15 +1603,10 @@ sub run {
                     push(@installer::globals::logfileinfo, $infoline);
                 }
 
-                # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
-
-                installer::windows::idtglobal::setencoding($languageidtdir, $onelanguage);
-
                 # setting bidi attributes, if required
-
                 if ( $is_rtl ) { installer::windows::idtglobal::setbidiattributes($languageidtdir, $onelanguage); }
 
-                # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
+                # setting the condition, that at least one module is selected
                 installer::windows::idtglobal::set_multilanguageonly_condition($languageidtdir);
 
                 # include the license text into the table Control.idt
@@ -1678,8 +1673,6 @@ sub run {
                     installer::windows::msiglobal::create_msi_database($languageidtdir ,$msifilename);
 
                     # validating the database   # ToDo
-
-                    my $languagefile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . "SIS.mlf");
 
                     installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile, $allvariableshashref);
 

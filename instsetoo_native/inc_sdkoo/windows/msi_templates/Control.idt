@@ -1,6 +1,6 @@
 Dialog_	Control	Type	X	Y	Width	Height	Attributes	Property	Text	Control_Next	Help
 s72	s50	s20	i2	i2	i2	i2	I4	S50	L0	S50	L50
-WINDOWSENCODINGTEMPLATE	Control	Dialog_	Control
+65001	Control	Dialog_	Control
 AdminChangeFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 AdminChangeFolder	BannerLine	Line	0	44	374	0	1				
 AdminChangeFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_3	ComboText	

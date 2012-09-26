@@ -87,8 +87,7 @@ BEGIN
     $templatefoldername = "Templates";
     $programmenufolder = "ProgramMenuFolder";
     $systemfolder = "SystemFolder";
-    $encodinglistname = "msi-encodinglist.txt";
-    $msiencoding = "";  # hash reference for msi encodings
+    $lcidlistname = "msi-encodinglist.txt";
     $msilanguage = "";  # hash reference for msi languages LCID
     $sofficeiconadded = 0;
     $temppath = "";

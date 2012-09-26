@@ -1,6 +1,6 @@
 Action	Description	Template
 s72	L0	L0
-WINDOWSENCODINGTEMPLATE	ActionText	Action
+65001	ActionText	Action
 Advertise	OOO_ACTIONTEXT_1	
 AllocateRegistrySpace	OOO_ACTIONTEXT_2	OOO_ACTIONTEXT_3
 AppSearch	OOO_ACTIONTEXT_4	OOO_ACTIONTEXT_5

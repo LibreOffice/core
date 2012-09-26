@@ -440,7 +440,7 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
         $oneline = "s38\tS38\tL64\tL255\tI2\ti2\tS72\ti2\n";
         push(@{$idtref}, $oneline);
-        $oneline = "WINDOWSENCODINGTEMPLATE\tFeature\tFeature\n";
+        $oneline = "65001\tFeature\tFeature\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -480,7 +480,7 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
         $oneline = "s72\ts72\tl128\ts72\ts72\tS255\tL255\tI2\tS72\tI2\tI2\tS72\n";
         push(@{$idtref}, $oneline);
-        $oneline = "WINDOWSENCODINGTEMPLATE\tShortcut\tShortcut\n";
+        $oneline = "65001\tShortcut\tShortcut\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -1354,35 +1354,6 @@ sub include_subdir_into_componenttable
 
     if ( ! $changeddirectory ) { installer::exiter::exit_program("ERROR: Could not change directory for component: $onefile->{'Name'}!", "include_subdir_into_componenttable"); }
 
-}
-
-##################################################################
-# Setting the encoding in all idt files. Replacing the
-# variable WINDOWSENCODINGTEMPLATE
-##################################################################
-
-sub setencoding
-{
-    my ( $languageidtdir, $onelanguage ) = @_;
-
-    my $encoding = installer::windows::language::get_windows_encoding($onelanguage);
-
-    # collecting all idt files in the directory $languageidtdir and substituting the string
-
-    my $idtfiles = installer::systemactions::find_file_with_file_extension("idt", $languageidtdir);
-
-    for ( my $i = 0; $i <= $#{$idtfiles}; $i++ )
-    {
-        my $onefilename = $languageidtdir . $installer::globals::separator . ${$idtfiles}[$i];
-        my $onefile = installer::files::read_file($onefilename);
-
-        for ( my $j = 0; $j <= $#{$onefile}; $j++ )
-        {
-            ${$onefile}[$j] =~ s/WINDOWSENCODINGTEMPLATE/$encoding/g;
-        }
-
-        installer::files::save_file($onefilename, $onefile);
-    }
 }
 
 ##################################################################

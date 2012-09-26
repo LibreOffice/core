@@ -508,21 +508,6 @@ sub create_msi_database
     }
 }
 
-#####################################################################
-# Returning the value from sis.mlf for Summary Information Stream
-#####################################################################
-
-sub get_value_from_sis_lng
-{
-    my ($language, $languagefile, $searchstring) = @_;
-
-    my $language_block = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $languagefile);
-    my $newstring = installer::windows::idtglobal::get_language_string_from_language_block($language_block, $language, $searchstring);
-    $newstring = "\"" . $newstring . "\"";
-
-    return $newstring;
-}
-
 #################################################################
 # Returning the msi version for the Summary Information Stream
 #################################################################
@@ -541,24 +526,6 @@ sub get_wordcount_for_sis
 {
     my $wordcount = "0";
     return $wordcount;
-}
-
-#################################################################
-# Returning the codepage for the Summary Information Stream
-#################################################################
-
-sub get_codepage_for_sis
-{
-    my ( $language ) = @_;
-
-    my $codepage = installer::windows::language::get_windows_encoding($language);
-
-    # Codepage 65001 does not work in Summary Information Stream
-    if ( $codepage == 65001 ) { $codepage = 0; }
-
-    # my $codepage = "1252";    # determine dynamically in a function
-    # my $codepage = "65001";       # UTF-8
-    return $codepage;
 }
 
 #################################################################
@@ -603,19 +570,6 @@ sub get_packagecode_for_sis
 }
 
 #################################################################
-# Returning the title for the Summary Information Stream
-#################################################################
-
-sub get_title_for_sis
-{
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    my $title = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    return $title;
-}
-
-#################################################################
 # Returning the author for the Summary Information Stream
 #################################################################
 
@@ -641,45 +595,6 @@ sub get_subject_for_sis
     $subject = "\"" . $subject . "\"";
 
     return $subject;
-}
-
-#################################################################
-# Returning the comment for the Summary Information Stream
-#################################################################
-
-sub get_comment_for_sis
-{
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    my $comment = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    return $comment;
-}
-
-#################################################################
-# Returning the keywords for the Summary Information Stream
-#################################################################
-
-sub get_keywords_for_sis
-{
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    my $keywords = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    return $keywords;
-}
-
-######################################################################
-# Returning the application name for the Summary Information Stream
-######################################################################
-
-sub get_appname_for_sis
-{
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    my $appname = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    return $appname;
 }
 
 ######################################################################
@@ -713,19 +628,16 @@ sub write_summary_into_msi_database
         $msiinfo = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msiinfo.exe";
     }
 
-    my $sislanguage = "en-US";  # title, comment, keyword, and appname are always in English
-
     my $msiversion = get_msiversion_for_sis();
-    my $codepage = get_codepage_for_sis($language);
+    my $codepage = 0; # PID_CODEPAGE summary property in a signed short, therefore it is impossible to set 65001 here.
     my $template = get_template_for_sis($language, $allvariableshashref);
     my $guid = get_packagecode_for_sis();
-    my $title = get_title_for_sis($sislanguage,$languagefile, "OOO_SIS_TITLE");
+    my $title = "\"Installation database\"";
     my $author = get_author_for_sis();
     my $subject = get_subject_for_sis($allvariableshashref);
-    my $comment = get_comment_for_sis($sislanguage,$languagefile, "OOO_SIS_COMMENT");
-    $comment =~ s/\[ProductName\]/$allvariableshashref->{'PRODUCTNAME'}/;
-    my $keywords = get_keywords_for_sis($sislanguage,$languagefile, "OOO_SIS_KEYWORDS");
-    my $appname = get_appname_for_sis($sislanguage,$languagefile, "OOO_SIS_APPNAME");
+    my $comment = $allvariableshashref->{'PRODUCTNAME'};
+    my $keywords = "\"Install,MSI\"";
+    my $appname = "\"Windows Installer\"";
     my $security = get_security_for_sis();
     my $wordcount = get_wordcount_for_sis();
 

@@ -1,6 +1,6 @@
 Property	Order	Value	X	Y	Width	Height	Text	Help
 s72	i2	s64	i2	i2	i2	i2	L64	L50
-WINDOWSENCODINGTEMPLATE	RadioButton	Property	Order
+65001	RadioButton	Property	Order
 _IsMaintenance	1	Reinstall	0	0	290	14	OOO_RADIOBUTTON_2	
 _IsMaintenance	2	Remove	0	60	290	14	OOO_RADIOBUTTON_3	
 _IsSetupTypeMin	1	Typical	0	0	264	14	OOO_RADIOBUTTON_4	
