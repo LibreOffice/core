@@ -59,6 +59,35 @@ OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nT
     return OptValue< double >();
 }
 
+/** #119750# Special method for opacity; it *should* be a percentage value, but there are cases
+    where a value relative to 0xffff (65536) is used, ending with an 'f'
+ */
+OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
+{
+    OptValue< OUString > oValue = rAttribs.getString( nToken );
+    double fRetval(fDefValue);
+
+    if( oValue.has() )
+    {
+        const OUString aString(oValue.get());
+        const sal_Int32 nLength(aString.getLength());
+
+        if(nLength > 0)
+        {
+            if(aString.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("f")))
+            {
+                fRetval = std::max(0.0, std::min(1.0, aString.toDouble() / 65536.0));
+            }
+            else
+            {
+                fRetval = ConversionHelper::decodePercent( aString, fDefValue );
+            }
+        }
+    }
+
+    return OptValue< double >(fRetval);
+}
+
 /** Returns the integer value pair from the specified VML attribute (if present).
  */
 OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int32 nToken )
@@ -298,7 +327,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maStrokeModel.maEndArrow.moArrowWidth = rAttribs.getToken( XML_endarrowwidth );
             mrTypeModel.maStrokeModel.maEndArrow.moArrowLength = rAttribs.getToken( XML_endarrowlength );
             mrTypeModel.maStrokeModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
-            mrTypeModel.maStrokeModel.moOpacity = lclDecodePercent( rAttribs, XML_opacity, 1.0 );
+            mrTypeModel.maStrokeModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
             mrTypeModel.maStrokeModel.moWeight.assignIfUsed( rAttribs.getString( XML_weight ) );
             mrTypeModel.maStrokeModel.moDashStyle = rAttribs.getString( XML_dashstyle );
             mrTypeModel.maStrokeModel.moLineStyle = rAttribs.getToken( XML_linestyle );
@@ -308,9 +337,9 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         case VML_TOKEN( fill ):
             mrTypeModel.maFillModel.moFilled.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
             mrTypeModel.maFillModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
-            mrTypeModel.maFillModel.moOpacity = lclDecodePercent( rAttribs, XML_opacity, 1.0 );
+            mrTypeModel.maFillModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
             mrTypeModel.maFillModel.moColor2 = rAttribs.getString( XML_color2 );
-            mrTypeModel.maFillModel.moOpacity2 = lclDecodePercent( rAttribs, XML_opacity2, 1.0 );
+            mrTypeModel.maFillModel.moOpacity2 = lclDecodeOpacity( rAttribs, XML_opacity2, 1.0 );
             mrTypeModel.maFillModel.moType = rAttribs.getToken( XML_type );
             mrTypeModel.maFillModel.moAngle = rAttribs.getInteger( XML_angle );
             mrTypeModel.maFillModel.moFocus = lclDecodePercent( rAttribs, XML_focus, 0.0 );

@@ -34,6 +34,7 @@
 #include <svx/xfltrit.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -107,32 +108,32 @@ namespace sdr
                 // for SC, the caption object may have a specialized shadow. The usual object shadow is off
                 // and a specialized shadow gets created here (see old paint)
                 const SdrShadowColorItem& rShadColItem = (SdrShadowColorItem&)(rItemSet.Get(SDRATTR_SHADOWCOLOR));
-                const sal_uInt16 nTransp(((SdrShadowTransparenceItem&)(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
-                const Color aShadCol(rShadColItem.GetColorValue());
-                const XFillStyle eStyle = ((XFillStyleItem&)(rItemSet.Get(XATTR_FILLSTYLE))).GetValue();
+                const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
+                const Color aShadowColor(rShadColItem.GetColorValue());
+                const XFillStyle eShadowStyle = ((XFillStyleItem&)(rItemSet.Get(XATTR_FILLSTYLE))).GetValue();
 
                 // Create own ItemSet and modify as needed
                 // Always hide lines for special calc shadow
                 SfxItemSet aSet(rItemSet);
                 aSet.Put(XLineStyleItem(XLINE_NONE));
 
-                if(XFILL_HATCH == eStyle)
+                if(XFILL_HATCH == eShadowStyle)
                 {
                     // #41666# Hatch color is set hard to shadow color
                     XHatch aHatch = ((XFillHatchItem&)(rItemSet.Get(XATTR_FILLHATCH))).GetHatchValue();
-                    aHatch.SetColor(aShadCol);
+                    aHatch.SetColor(aShadowColor);
                     aSet.Put(XFillHatchItem(String(),aHatch));
                 }
                 else
                 {
-                    if(XFILL_NONE != eStyle && XFILL_SOLID != eStyle)
+                    if(XFILL_SOLID != eShadowStyle)
                     {
-                        // force fill to solid (for Gradient and Bitmap)
+                        // force fill to solid (for Gradient, Bitmap and *no* fill (#119750# not filled comments *have* shadow))
                         aSet.Put(XFillStyleItem(XFILL_SOLID));
                     }
 
-                    aSet.Put(XFillColorItem(String(),aShadCol));
-                    aSet.Put(XFillTransparenceItem(nTransp));
+                    aSet.Put(XFillColorItem(String(),aShadowColor));
+                    aSet.Put(XFillTransparenceItem(nShadowTransparence));
                 }
 
                 // crete FillAttribute from modified ItemSet
@@ -145,18 +146,43 @@ namespace sdr
                     // add shadow offset to object matrix
                     const sal_uInt32 nXDist(((SdrShadowXDistItem&)(rItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
                     const sal_uInt32 nYDist(((SdrShadowYDistItem&)(rItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
-                    aObjectMatrix.translate(nXDist, nYDist);
 
-                    // create unit outline polygon as geometry (see SdrCaptionPrimitive2D::create2DDecomposition)
-                    basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
-                        basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), fCornerRadiusX, fCornerRadiusY));
+                    if(nXDist || nYDist)
+                    {
+                        // #119750# create obect and shadow outline, clip shadow outline
+                        // on object outline. If there is a rest, create shadow. Do this to
+                        // emulate that shadow is *not* visible behind the object for
+                        // transparent object fill for comments in excel
+                        basegfx::B2DPolygon aObjectOutline(
+                            basegfx::tools::createPolygonFromRect(
+                                basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
+                                fCornerRadiusX,
+                                fCornerRadiusY));
+                        aObjectOutline.transform(aObjectMatrix);
 
-                    // create the specialized shadow primitive
-                    xSpecialShadow = drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        aObjectMatrix,
-                        aFill,
-                        drawinglayer::attribute::FillGradientAttribute());
+                        // create shadow outline
+                        basegfx::B2DPolygon aShadowOutline(aObjectOutline);
+                        aShadowOutline.transform(
+                            basegfx::tools::createTranslateB2DHomMatrix(nXDist, nYDist));
+
+                        // clip shadow outline against object outline
+                        const basegfx::B2DPolyPolygon aClippedShadow(
+                            basegfx::tools::clipPolygonOnPolyPolygon(
+                                aShadowOutline,
+                                basegfx::B2DPolyPolygon(aObjectOutline),
+                                false, // take the outside
+                                false));
+
+                        if(aClippedShadow.count())
+                        {
+                            // if there is shadow, create the specialized shadow primitive
+                            xSpecialShadow = drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
+                                aClippedShadow,
+                                basegfx::B2DHomMatrix(),
+                                aFill,
+                                drawinglayer::attribute::FillGradientAttribute());
+                        }
+                    }
                 }
 
                 if(xSpecialShadow.is())
