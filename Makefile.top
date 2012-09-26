@@ -145,6 +145,7 @@ shell\
 slideshow\
 smoketest\
 solenv\
+soltools\
 sot\
 starmath\
 stoc\
@@ -246,7 +247,6 @@ redland\
 rhino\
 saxon\
 setup_native\
-soltools\
 stax\
 stlport\
 sysui\

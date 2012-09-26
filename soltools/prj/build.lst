@@ -1,13 +1,3 @@
 so  soltools : solenv NULL
-so	soltools								usr1	-	all	so_usr1 NULL
-so	soltools\inc							get	-	all	so_inc NULL
-so	soltools\ldump							nmake	-	w	so_ldump so_mkdep NULL
-so	soltools\winunistd						nmake	-	n	so_wunistd NULL
-so	soltools\mkdepend						nmake	-	all	so_mkdep so_wunistd.n NULL
-so	soltools\checkdll						nmake	-	u	so_chkdl so_adjvis.u so_mkdep NULL
-so	soltools\cpp							nmake	-	all	so_cpp__ so_mkdep so_adjvis.u NULL
-so	soltools\javadep						nmake	-	all	so_jvdep so_mkdep so_adjvis.u NULL
-so	soltools\support						nmake	-	all	so_supp so_mkdep so_adjvis.u NULL
-so	soltools\giparser						nmake	-	all	so_gip so_supp so_adjvis.u NULL
-so	soltools\adjustvisibility				nmake	-	u	so_adjvis so_mkdep NULL
-so  soltools\testhxx                        nmake   -   all so_testhxx so_mkdep NULL
+so  soltools						usr1 - all so_usr1 NULL
+so  soltools\prj                                        nmake - all ro_prj NULL
