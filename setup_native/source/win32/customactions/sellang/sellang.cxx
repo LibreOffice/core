@@ -71,7 +71,7 @@ langid_to_string( LANGID langid )
 {
     /* Map from LANGID to string. The languages below are now in
      * alphabetical order of codes as in
-     * setup_native/source/win32/msi-encodinglist.txt. Only the
+     * l10ntools/source/ulfconv/msi-encodinglist.txt. Only the
      * language part is returned in the string.
      */
     switch (PRIMARYLANGID (langid)) {

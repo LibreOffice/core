@@ -406,7 +406,7 @@ sub main()
             # af    1252  1078   # Afrikaans
             grepFile(
                 '^\s*' . $langcoun . '',
-                "$SRC_ROOT", "setup_native", "source/win32/msi-encodinglist.txt", ());
+                "$SRC_ROOT", "l10ntools", "source/ulfconv/msi-encodinglist.txt", ());
         }
     }
     return 0;
