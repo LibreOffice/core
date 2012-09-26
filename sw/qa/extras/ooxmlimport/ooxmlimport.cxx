@@ -94,6 +94,7 @@ public:
     void testFdo55187();
     void testN780563();
     void testN780853();
+    void testN780843();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -134,6 +135,7 @@ public:
     CPPUNIT_TEST(testFdo55187);
     CPPUNIT_TEST(testN780563);
     CPPUNIT_TEST(testN780853);
+    CPPUNIT_TEST(testN780843);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -920,6 +922,27 @@ void Test::testN780853()
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
+void Test::testN780843()
+{
+    /*
+     * The problem was that wrong footer was picked.
+     *
+     * oParas = ThisComponent.Text.createEnumeration
+     * oPara = oParas.nextElement
+     * oPara = oParas.nextElement
+     * oPara = oParas.nextElement
+     * sStyle = oPara.PageStyleName
+     * oStyle = ThisComponent.StyleFamilies.PageStyles.getByName(sStyle)
+     * xray oStyle.FooterText.String ' was "hidden footer"
+     */
+    load("n780843.docx");
+    uno::Reference< text::XTextRange > xPara = getParagraph(3);
+    OUString aStyleName = getProperty<OUString>(xPara, "PageStyleName");
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
+    CPPUNIT_ASSERT_EQUAL(OUString("shown footer"), xFooter->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
