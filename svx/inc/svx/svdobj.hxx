@@ -47,6 +47,7 @@
 #include "svx/svxdllapi.h"
 #include "svx/shapeproperty.hxx"
 
+#include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 //************************************************************
@@ -451,8 +452,14 @@ protected:
     // global static ItemPool for not-yet-insetred items
 private:
     static SdrItemPool*         mpGlobalItemPool;
+    boost::optional<double>                                         mnRelativeWidth;
+    boost::optional<double>                                         mnRelativeHeight;
 public:
     static SdrItemPool& GetGlobalDrawObjectItemPool();
+    void SetRelativeWidth( double nValue ) { mnRelativeWidth.reset( nValue ); }
+    void SetRelativeHeight( double nValue ) { mnRelativeHeight.reset( nValue ); }
+    boost::optional<double> GetRelativeWidth( ) const { return mnRelativeWidth; }
+    boost::optional<double> GetRelativeHeight( ) const { return mnRelativeHeight; }
 protected:
     void ImpDeleteUserData();
     SdrObjUserData* ImpGetMacroUserData() const;
@@ -721,7 +728,7 @@ public:
     virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
     virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
     virtual void Shear (const Point& rRef, long nWink, double tn, bool bVShear);

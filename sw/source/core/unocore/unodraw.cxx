@@ -1265,6 +1265,22 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                         pFmt->SetFmtAttr(aSet);
                     }
                 }
+                else if( RES_FRM_SIZE == pEntry->nWID &&
+                        ( pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT || pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH ) )
+                {
+                    SvxShape* pSvxShape = GetSvxShape();
+                    SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
+                    if(pSvxShape)
+                    {
+                        SdrObject* pObj = pSvxShape->GetSdrObject();
+                        sal_Int16 nPercent;
+                        aValue >>= nPercent;
+                        if ( pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH )
+                            pObj->SetRelativeWidth( nPercent / 100.0 );
+                        else
+                            pObj->SetRelativeHeight( nPercent / 100.0 );
+                    }
+                }
                 else
                 {
                     m_pPropSet->setPropertyValue( *pEntry, aValue, aSet );

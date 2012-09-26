@@ -374,9 +374,11 @@ ReferenceSheet
 RefreshPeriod
 RegularExpressions
 RelId
+RelativeHeight
 RelativeHorizontalTabbarWidth
 RelativePosition
 RelativeSize
+RelativeWidth
 Repeat
 RepeatDelay
 Representation

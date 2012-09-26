@@ -584,7 +584,7 @@ void SdrObjGroup::Move(const Size& rSiz)
 }
 
 
-void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
     if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
         bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
@@ -611,11 +611,11 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
             sal_uIntPtr i;
             for (i=0; i<nObjAnz; i++) {
                 SdrObject* pObj=pOL->GetObj(i);
-                if (pObj->IsEdgeObj()) pObj->Resize(rRef,xFact,yFact);
+                if (pObj->IsEdgeObj()) pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
             }
             for (i=0; i<nObjAnz; i++) {
                 SdrObject* pObj=pOL->GetObj(i);
-                if (!pObj->IsEdgeObj()) pObj->Resize(rRef,xFact,yFact);
+                if (!pObj->IsEdgeObj()) pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
             }
         } else {
             ResizeRect(aOutRect,rRef,xFact,yFact);

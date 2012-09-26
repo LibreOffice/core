@@ -112,7 +112,7 @@ public:
                                        const Fraction& yFact);
     virtual       void       Move  (const Size& rSiz);
     virtual       void       Resize(const Point& rRef, const Fraction& xFact,
-                                    const Fraction& yFact);
+                                    const Fraction& yFact, bool bUnsetRelative = true);
 
     const SwFrmFmt *GetFmt() const;
           SwFrmFmt *GetFmt();

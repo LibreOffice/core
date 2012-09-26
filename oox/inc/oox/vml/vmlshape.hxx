@@ -74,6 +74,10 @@ struct ShapeTypeModel
     ::rtl::OUString     maPositionVerticalRelative; ///< The Y position is relative to this.
     ::rtl::OUString     maPositionHorizontal;   ///< The X position orientation (default: absolute).
     ::rtl::OUString     maPositionVertical;     ///< The Y position orientation.
+    ::rtl::OUString     maWidthPercent;         ///< The width in percents of the WidthRelative
+    ::rtl::OUString     maHeightPercent;        ///< The height in percents of the HeightRelative
+    ::rtl::OUString     maWidthRelative;        ///< To what the width is relative
+    ::rtl::OUString     maHeightRelative;       ///< To what the height is relative
     ::rtl::OUString     maRotation;             ///< Rotation of the shape, in degrees.
     ::rtl::OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
     sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)

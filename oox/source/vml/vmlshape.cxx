@@ -450,6 +450,32 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
     }
+    else
+    {
+        // FIXME Setting the relative width/heigh only for everything but text frames as
+        // TextFrames already have relative widht/heigh feature... but currently not working
+        // in the way we need.
+
+        // Set the relative width / height if any
+        if ( !maTypeModel.maWidthPercent.isEmpty( ) )
+        {
+            // Only page-relative width is supported ATM
+            if ( maTypeModel.maWidthRelative.isEmpty() || maTypeModel.maWidthRelative == "page" )
+            {
+                sal_Int16 nWidth = maTypeModel.maWidthPercent.toInt32() / 10;
+                PropertySet( xShape ).setAnyProperty(PROP_RelativeWidth, makeAny( nWidth ) );
+            }
+        }
+        if ( !maTypeModel.maHeightPercent.isEmpty( ) )
+        {
+            // Only page-relative height is supported ATM
+            if ( maTypeModel.maHeightRelative.isEmpty() || maTypeModel.maHeightRelative == "page" )
+            {
+                sal_Int16 nHeight = maTypeModel.maHeightPercent.toInt32() / 10;
+                PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
+            }
+        }
+    }
 
     // Import Legacy Fragments (if any)
     if( xShape.is() && !maShapeModel.maLegacyDiagramPath.isEmpty() )

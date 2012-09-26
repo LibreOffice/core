@@ -1556,9 +1556,14 @@ void SdrObject::Move(const Size& rSiz)
     }
 }
 
-void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
     if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
+        if (bUnsetRelative)
+        {
+            mnRelativeWidth.reset( );
+            mnRelativeHeight.reset( );
+        }
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         NbcResize(rRef,xFact,yFact);
         SetChanged();
