@@ -667,7 +667,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                     ev->et = ET_byte;
                     return ev;
                 case ET_boolean:
-                    ev->u.byval = (ev->u.bval == false) ? 1 : 0;
+                    ev->u.byval = ev->u.bval ? 1 : 0;
                     ev->et = ET_byte;
                     return ev;
                 case ET_float:
