@@ -31,6 +31,7 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "oox/drawingml/effectproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/table/tableproperties.hxx"
@@ -82,6 +83,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mpFillPropertiesPtr( new FillProperties )
 , mpGraphicPropertiesPtr( new GraphicProperties )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
+, mpEffectPropertiesPtr( new EffectProperties )
 , mpMasterTextListStyle( new TextListStyle )
 , mnSubType( 0 )
 , meFrameType( FRAMETYPE_GENERIC )
@@ -106,6 +108,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mpCustomShapePropertiesPtr( pSourceShape->mpCustomShapePropertiesPtr )
 , mpTablePropertiesPtr( pSourceShape->mpTablePropertiesPtr )
 , mp3DPropertiesPtr( pSourceShape->mp3DPropertiesPtr )
+, mpEffectPropertiesPtr (pSourceShape->mpEffectPropertiesPtr)
 , maShapeProperties( pSourceShape->maShapeProperties )
 , mpMasterTextListStyle( pSourceShape->mpMasterTextListStyle )
 , mxShape()
@@ -243,6 +246,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mpFillPropertiesPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
     mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
     mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : NULL );
+    mpEffectPropertiesPtr = EffectPropertiesPtr( new EffectProperties( *rReferencedShape.mpEffectPropertiesPtr.get() ) );
     mpMasterTextListStyle = TextListStylePtr( new TextListStyle( *rReferencedShape.mpMasterTextListStyle.get() ) );
     maShapeStyleRefs = rReferencedShape.maShapeStyleRefs;
     maSize = rReferencedShape.maSize;
@@ -495,6 +499,7 @@ Reference< XShape > Shape::createAndInsert(
         FillProperties aFillProperties;
         aFillProperties.moFillType = XML_noFill;
         sal_Int32 nFillPhClr = -1;
+        EffectProperties aEffectProperties;
 
         if( pTheme )
         {
@@ -520,6 +525,7 @@ Reference< XShape > Shape::createAndInsert(
 
         aLineProperties.assignUsed( getLineProperties() );
         aFillProperties.assignUsed( getFillProperties() );
+        aEffectProperties.assignUsed ( getEffectProperties() );
 
         ShapePropertyMap aShapeProps( rFilterBase.getModelObjectHelper() );
 
@@ -539,6 +545,7 @@ Reference< XShape > Shape::createAndInsert(
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
         aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr );
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
+        aEffectProperties.pushToPropMap( aShapeProps, rGraphicHelper );
 
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true
@@ -551,7 +558,9 @@ Reference< XShape > Shape::createAndInsert(
 
         // do not set properties at a group shape (this causes assertions from svx)
         if( aServiceName != "com.sun.star.drawing.GroupShape" )
+        {
             PropertySet( xSet ).setProperties( aShapeProps );
+        }
 
         if( bIsCustomShape )
         {
