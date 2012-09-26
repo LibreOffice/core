@@ -141,7 +141,7 @@ if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
 if (SYSTEM_JPEG != YES)
     MD5 = 52654eb3b2e60c35731ea8fc87f1bd29
     name = jpeg-8d.tar.gz
-    #URL1 = http://www.ijg.org/files/jpegsrc.v8d.tar.gz
+    URL1 = http://www.ijg.org/files/jpegsrc.v8d.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
