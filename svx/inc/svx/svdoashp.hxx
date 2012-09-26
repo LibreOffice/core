@@ -188,7 +188,7 @@ public:
     virtual const Rectangle& GetLogicRect() const;
 
     virtual void Move(const Size& rSiz);
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
     virtual void Shear(const Point& rRef, long nWink, double tn, bool bVShear);
     virtual void SetSnapRect(const Rectangle& rRect);
     virtual void SetLogicRect(const Rectangle& rRect);

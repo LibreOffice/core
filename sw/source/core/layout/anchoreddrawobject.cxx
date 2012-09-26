@@ -659,6 +659,29 @@ const SwRect SwAnchoredDrawObject::GetObjRect() const
 // --> #i70122#
 const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 {
+    // Resize objects with relative width or height
+#if 1
+    if ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) )
+    {
+        Rectangle aPageRect = GetPageFrm( )->GetBoundRect( ).SVRect();
+        Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();
+
+        long nTargetWidth = aCurrObjRect.GetWidth( );
+        if ( GetDrawObj( )->GetRelativeWidth( ) )
+            nTargetWidth = aPageRect.GetWidth( ) * GetDrawObj( )->GetRelativeWidth( ).get( );
+
+        long nTargetHeight = aCurrObjRect.GetHeight( );
+        if ( GetDrawObj( )->GetRelativeHeight( ) )
+            nTargetHeight = aPageRect.GetHeight( ) * GetDrawObj( )->GetRelativeHeight( ).get( );
+
+        if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
+        {
+            const_cast< SdrObject* >( GetDrawObj() )->Resize( aCurrObjRect.TopLeft(),
+                    Fraction( nTargetWidth, aCurrObjRect.GetWidth() ),
+                    Fraction( nTargetHeight, aCurrObjRect.GetHeight() ), false );
+        }
+    }
+#endif
     return GetDrawObj()->GetCurrentBoundRect();
 }
 

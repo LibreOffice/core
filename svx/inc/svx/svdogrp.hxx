@@ -97,7 +97,7 @@ public:
     virtual long GetShearAngle(bool bVertical = false) const;
 
     virtual void Move(const Size& rSiz);
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
     virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
     virtual void Shear(const Point& rRef, long nWink, double tn, bool bVShear);
