@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Zip_Zip,fontunxafm,$(call gb_UnpackedTarball_get_dir,afms)))
 
+$(eval $(call gb_Zip_add_dependencies,fontunxafm,\
+	$(call gb_UnpackedTarball_get_target,afms) \
+))
+
 $(eval $(call gb_Zip_add_files,fontunxafm,\
 	Courier-Bold.afm \
 	Courier-BoldOblique.afm \
