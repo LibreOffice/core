@@ -27,8 +27,6 @@ import org.openide.util.NbBundle;
 import org.openide.util.actions.SystemAction;
 
 /** A simple node with no children.
- *
- * @author tomaso
  */
 public class ScriptNode extends AbstractNode {
     private Element element;

@@ -20,7 +20,6 @@ package installer;
 
 import java.io.*;
 import java.util.*;
-//import javax.xml.parsers.*;
 import javax.swing.*;
 
 /**
@@ -28,8 +27,6 @@ import javax.swing.*;
  *  file out of a jar file and parses it, providing access to this
  *  information in a <code>Vector</code> of <code>ConverterInfo</code>
  *  objects.
- *
- *  @author  Aidan Butler
  */
 public class IdeUpdater extends Thread {
 
@@ -52,19 +49,12 @@ public class IdeUpdater extends Thread {
         if (installPath.endsWith(File.separator) == false)
             installPath += File.separator;
 
-    //File jeditLauncher = new File( installPath + "jedit.jar" );
     File netbeansLauncher = new File( installPath + "bin" );
 
     if( netbeansLauncher.isDirectory() ) {
         isNetbeansPath = true;
         installPath = installPath +"modules" + File.separator;
     }
-    /*
-    else if( jeditLauncher.isFile() ){
-        isNetbeansPath =  false;
-        installPath = installPath + "jars" + File.separator;
-    }
-    */
 
     System.out.println( "IdeUpdater installPath is " + installPath + " isNetbeansPath is " + isNetbeansPath );
         this.installPath = installPath;
@@ -124,10 +114,6 @@ public class IdeUpdater extends Thread {
 
     public void run() {
 
-        //InputStream istream;
-        //URL url;
-        //String fileName = null;
-
     internalThread = Thread.currentThread();
 
     progressBar.setString("Unzipping Required Files");
@@ -153,9 +139,6 @@ public class IdeUpdater extends Thread {
             return;
         }
     }
-
-        //System.out.println("About to call register");
-    //Register.register(installPath+File.separator, statusLabel, progressBar);
 
     statusLabel.setText("Installation Complete");
     progressBar.setString("Installation Complete");

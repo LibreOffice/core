@@ -25,12 +25,6 @@ import com.sun.star.document.XScriptInvocationContext;
 
 import com.sun.star.script.provider.XScriptContext;
 
-
-/**
- *  Description of the Class
- *
- * @author     Noel Power
- */
 public class EditorScriptContext implements XScriptContext
 {
     private XDesktop m_xDeskTop;
@@ -43,7 +37,6 @@ public class EditorScriptContext implements XScriptContext
         this.m_xDeskTop = xDesktop;
     }
 
-    //----------------------------------------------------------------------
     /**
         Obtain the document reference on which the script can operate
 

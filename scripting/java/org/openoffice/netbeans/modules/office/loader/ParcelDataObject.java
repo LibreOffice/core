@@ -28,8 +28,6 @@ import org.openide.util.HelpCtx;
 import org.openoffice.netbeans.modules.office.actions.*;
 
 /** Represents a Parcel object in the Repository.
- *
- * @author tomaso
  */
 public class ParcelDataObject extends MultiDataObject {
 

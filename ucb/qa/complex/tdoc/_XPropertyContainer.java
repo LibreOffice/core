@@ -20,10 +20,6 @@ package complex.tdoc;
 import com.sun.star.beans.XPropertyContainer;
 import share.LogWriter;
 
-/**
- *
- * @author  sg128468
- */
 public class _XPropertyContainer {
     public XPropertyContainer oObj = null;
     public LogWriter log = null;

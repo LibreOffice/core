@@ -42,18 +42,9 @@ import com.sun.star.script.framework.container.ScriptMetaData;
 
 import com.sun.star.script.framework.provider.*;
 import com.sun.star.script.framework.log.LogUtils;
-/**
- *  Description of the Class
- *
- * @author     Noel Power
- */
+
 public class ScriptProviderForJava
 {
-    /**
-     *  Description of the Class
-     *
-     * @author     Noel Power
-     */
     public static class _ScriptProviderForJava extends ScriptProvider
     {
         private Resolver m_resolutionPolicy = new StrictResolver();

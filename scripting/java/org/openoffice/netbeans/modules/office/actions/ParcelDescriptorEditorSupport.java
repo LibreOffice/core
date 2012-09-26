@@ -30,8 +30,6 @@ import org.openide.windows.CloneableOpenSupport;
 import org.openoffice.netbeans.modules.office.loader.ParcelDescriptorDataObject;
 
 /** Support for editing a data object as text.
- *
- * @author tomaso
  */
 // Replace OpenCookie with EditCookie or maybe ViewCookie as desired:
 public class ParcelDescriptorEditorSupport extends DataEditorSupport implements EditorCookie, OpenCookie, CloseCookie, PrintCookie {

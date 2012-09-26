@@ -26,8 +26,6 @@ import org.openoffice.netbeans.modules.office.nodes.*;
 import org.openoffice.netbeans.modules.office.actions.*;
 
 /** A node to represent this object.
- *
- * @author tomaso
  */
 public class ParcelDescriptorDataNode extends DataNode {
 

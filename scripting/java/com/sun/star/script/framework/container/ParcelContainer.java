@@ -41,9 +41,6 @@ import com.sun.star.uri.XVndSunStarScriptUrl;
 /**
  * The <code>ParcelContainer</code> object is used to store the
  * ScripingFramework specific Libraries.
- *
- * @author
- * @created
  */
 
 public class ParcelContainer implements XNameAccess

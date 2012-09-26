@@ -35,8 +35,6 @@ import org.openoffice.idesupport.SVersionRCFile;
 
 /** A single panel descriptor for a wizard.
  * You probably want to make a wizard iterator to hold it.
- *
- * @author tomaso
  */
 public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel */ {
 

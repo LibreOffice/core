@@ -30,8 +30,6 @@ import org.openide.util.actions.SystemAction;
 import org.openoffice.netbeans.modules.office.actions.MountDocumentAction;
 
 /** Recognizes single files in the Repository as being of a certain type.
- *
- * @author tomaso
  */
 public class OfficeDocumentDataLoader extends UniFileLoader {
 

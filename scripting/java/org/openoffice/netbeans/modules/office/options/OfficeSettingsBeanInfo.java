@@ -32,8 +32,6 @@ import org.openoffice.idesupport.OfficeInstallation;
 import org.openoffice.netbeans.modules.office.wizard.SelectPathPanel;
 
 /** Description of {@link OfficeSettings}.
- *
- * @author tomaso
  */
 public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
 

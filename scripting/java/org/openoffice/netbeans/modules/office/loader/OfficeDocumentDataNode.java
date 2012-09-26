@@ -31,13 +31,10 @@ import org.openoffice.netbeans.modules.office.actions.OfficeDocumentCookie;
 import org.openoffice.netbeans.modules.office.nodes.OfficeDocumentChildren;
 
 /** A node to represent this object.
- *
- * @author tomaso
  */
 public class OfficeDocumentDataNode extends DataNode {
 
     public OfficeDocumentDataNode(OfficeDocumentDataObject obj) {
-        // this(obj, Children.LEAF);
         this(obj, new OfficeDocumentChildren((OfficeDocumentCookie)
             obj.getCookie(OfficeDocumentCookie.class)));
     }

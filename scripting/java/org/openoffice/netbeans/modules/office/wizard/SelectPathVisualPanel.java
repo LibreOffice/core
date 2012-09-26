@@ -30,8 +30,6 @@ import org.openoffice.idesupport.OfficeInstallation;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 
 /** A single panel for a wizard - the GUI portion.
- *
- * @author tomaso
  */
 public class SelectPathVisualPanel extends javax.swing.JPanel {
 

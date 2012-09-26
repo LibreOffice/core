@@ -22,10 +22,6 @@ import com.sun.star.ucb.XContentEventListener;
 import com.sun.star.ucb.XContentIdentifier;
 import share.LogWriter;
 
-/**
- *
- * @author  sg128468
- */
 public class _XContent {
     public XContent oObj = null;
     public LogWriter log = null;

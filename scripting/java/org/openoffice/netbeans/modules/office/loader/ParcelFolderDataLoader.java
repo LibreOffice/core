@@ -31,8 +31,6 @@ import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.netbeans.modules.office.actions.*;
 
 /** Recognizes single files in the Repository as being of a certain type.
- *
- * @author tomaso
  */
 
 public class ParcelFolderDataLoader extends UniFileLoader {

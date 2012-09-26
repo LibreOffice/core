@@ -24,8 +24,6 @@ import org.openide.util.RequestProcessor;
 import org.openide.util.actions.CookieAction;
 
 /**
- *
- * @author  adams
  * @version 1.0
  */
 public class MountParcelAction extends CookieAction

@@ -23,11 +23,6 @@ import java.util.*;
 import java.net.URL;
 import javax.swing.*;
 
-/**
- *
- *
- *  @author  Aidan Butler
- */
 public class XmlUpdater extends Thread {
 
     private String classesPath = null;

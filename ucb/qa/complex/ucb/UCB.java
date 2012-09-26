@@ -18,26 +18,14 @@
 
 package complex.ucb;
 
-/**
- * @author ab106281
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
-
 import java.util.List;
 import java.util.ArrayList;
 
 import com.sun.star.beans.Property;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
-// import com.sun.star.uno.XComponentContext;
 import com.sun.star.ucb.*;
-// import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-// import com.sun.star.uno.XComponentContext;
-// import com.sun.star.lang.XMultiComponentFactory;
-// import com.sun.star.beans.XPropertySet;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -46,7 +34,6 @@ import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
 /**
- * @author rpiterman
  * This class is used to copy the content of a folder to
  * another folder.
  * There is an incosistency with argument order.
@@ -54,10 +41,6 @@ import static org.junit.Assert.*;
  */
 public class UCB  {
     private XUniversalContentBroker ucb;
-
-//  public String[] getTestMethodNames() {
-//      return new String[] {"checkWrongFtpConnection"};
-//  }
 
     public void init() throws Exception {
         ucb = UniversalContentBroker.create(connection.getComponentContext());
@@ -195,7 +178,6 @@ public class UCB  {
     }
 
     @Test public void checkWrongFtpConnection() {
-        //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
         try {
             String acountUrl = "ftp://noname:nopasswd@nohost";
             System.out.println(acountUrl);
@@ -221,7 +203,6 @@ public class UCB  {
             System.out.println("ExName: '"+exceptionName+"'");
             fail("Wrong exception thrown: " + exceptionName);
         }
-//      System.exit(0);
     }
 
     // setup and close connections

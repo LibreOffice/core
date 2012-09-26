@@ -31,8 +31,6 @@ import org.openoffice.idesupport.SVersionRCFile;
 import org.openoffice.idesupport.OfficeInstallation;
 
 /** Options for something or other.
- *
- * @author tomaso
  */
 public class OfficeSettings extends SystemOption {
 
