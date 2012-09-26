@@ -754,9 +754,9 @@ endif
 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2))
 
-$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_target,$$(lib)))
+$(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
-$$(foreach lib,$(2),$$(call gb_StaticLibrary_get_headers_target,$$(lib)))
+	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
 
 endef
 
