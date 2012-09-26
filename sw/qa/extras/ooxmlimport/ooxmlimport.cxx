@@ -92,6 +92,7 @@ public:
     void testInk();
     void testN779834();
     void testN779627();
+    void testN779941();
     void testFdo55187();
     void testN780563();
     void testN780853();
@@ -136,6 +137,7 @@ public:
     CPPUNIT_TEST(testInk);
     CPPUNIT_TEST(testN779834);
     CPPUNIT_TEST(testN779627);
+    CPPUNIT_TEST(testN779941);
     CPPUNIT_TEST(testFdo55187);
     CPPUNIT_TEST(testN780563);
     CPPUNIT_TEST(testN780853);
@@ -1004,6 +1006,29 @@ void Test::testN782345()
     load("n782345.docx");
 
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
+}
+
+void Test::testN779941()
+{
+    /*
+     * Make sure top/bottom margins of tables are set to 0 (problem was: bottom margin set to 0.35cm)
+     */
+    load("n779941.docx");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
+    {
+        uno::Any aValue = xTableProperties->getPropertyValue("TopMargin");
+        sal_Int32 nTopMargin;
+        aValue >>= nTopMargin;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
+    }
+    {
+        uno::Any aValue = xTableProperties->getPropertyValue("BottomMargin");
+        sal_Int32 nBottomMargin;
+        aValue >>= nBottomMargin;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
