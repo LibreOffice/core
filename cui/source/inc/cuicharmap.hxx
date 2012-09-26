@@ -51,10 +51,15 @@ public:
                     SvxShowText( Window* pParent,
                                  const ResId& rResId,
                                  sal_Bool bCenter = sal_False );
+                    SvxShowText( Window* pParent,
+                                 sal_Bool bCenter = sal_False );
                     ~SvxShowText();
 
     void            SetFont( const Font& rFont );
     void            SetText( const String& rText );
+    void            SetCentered(bool bCenter) { mbCenter = bCenter; }
+
+    virtual void    Resize();
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -73,19 +78,17 @@ private:
 
     void            init();
 
-    SvxShowCharSet  aShowSet;
-    SvxShowText     aShowText;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    PushButton      aDeleteBtn;
-    FixedText       aFontText;
-    ListBox         aFontLB;
-    FixedText       aSubsetText;
-    ListBox         aSubsetLB;
-    FixedText       aSymbolText;
-    SvxShowText     aShowChar;
-    FixedText       aCharCodeText;
+    SvxShowCharSet* m_pShowSet;
+    SvxShowText*    m_pShowText;
+    OKButton*       m_pOKBtn;
+    PushButton*     m_pDeleteBtn;
+    FixedText*      m_pFontText;
+    ListBox*        m_pFontLB;
+    FixedText*      m_pSubsetText;
+    ListBox*        m_pSubsetLB;
+    FixedText*      m_pSymbolText;
+    SvxShowText*    m_pShowChar;
+    FixedText*      m_pCharCodeText;
     Font            aFont;
     sal_Bool        bOne;
     const SubsetMap* pSubsetMap;

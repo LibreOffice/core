@@ -3338,26 +3338,20 @@ void SvxCharTwoLinesPage::Initialize()
 
 void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 {
-
     bool bStart = pBox == m_pStartBracketLB;
-    //SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    //if(pFact)
-    {
-        //AbstractSvxCharacterMap* aDlg = pFact->CreateSvxCharacterMap( this,  RID_SVXDLG_CHARMAP );
-        SvxCharacterMap* aDlg = new SvxCharacterMap( this );
-        aDlg->DisableFontSelection();
+    SvxCharacterMap* aDlg = new SvxCharacterMap( this );
+    aDlg->DisableFontSelection();
 
-        if ( aDlg->Execute() == RET_OK )
-        {
-            sal_Unicode cChar = (sal_Unicode) aDlg->GetChar();
-            SetBracket( cChar, bStart );
-        }
-        else
-        {
-            pBox->SelectEntryPos( bStart ? m_nStartBracketPosition : m_nEndBracketPosition );
-        }
-        delete aDlg;
+    if ( aDlg->Execute() == RET_OK )
+    {
+        sal_Unicode cChar = (sal_Unicode) aDlg->GetChar();
+        SetBracket( cChar, bStart );
     }
+    else
+    {
+        pBox->SelectEntryPos( bStart ? m_nStartBracketPosition : m_nEndBracketPosition );
+    }
+    delete aDlg;
 }
 
 // -----------------------------------------------------------------------

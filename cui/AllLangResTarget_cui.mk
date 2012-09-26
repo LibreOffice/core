@@ -55,7 +55,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/customize/macropg.src \
     cui/source/customize/selector.src \
     cui/source/dialogs/about.src \
-    cui/source/dialogs/charmap.src \
     cui/source/dialogs/colorpicker.src \
     cui/source/dialogs/commonlingui.src \
     cui/source/dialogs/cuiimapdlg.src \

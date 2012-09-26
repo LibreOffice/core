@@ -53,6 +53,7 @@ class SVX_DLLPUBLIC SvxShowCharSet : public Control
 {
 public:
                     SvxShowCharSet( Window* pParent, const ResId& rResId );
+                    SvxShowCharSet( Window* pParent );
                     ~SvxShowCharSet();
 
     void            SetFont( const Font& rFont );
@@ -86,6 +87,8 @@ public:
     void                        ReleaseAccessible();
     sal_Int32                   getMaxCharCount() const;
 #endif // _SVX_CHARMAP_CXX_
+
+    virtual void    Resize();
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -130,6 +133,8 @@ private:
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
     DECL_LINK(VscrollHdl, void *);
+
+    void            init();
 };
 
 #endif

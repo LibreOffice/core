@@ -13,6 +13,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/charnamepage \
 	cui/uiconfig/ui/effectspage \
 	cui/uiconfig/ui/positionpage \
+	cui/uiconfig/ui/specialcharacters \
 	cui/uiconfig/ui/twolinespage \
 	cui/uiconfig/ui/zoomdialog \
 ))
