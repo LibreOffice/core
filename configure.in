@@ -1276,12 +1276,6 @@ AC_ARG_WITH(system-nss,
         [Use NSS/nspr libraries already on system.]),,
     [with_system_nss="$with_system_libs"])
 
-AC_ARG_WITH(mozilla-version,
-    AS_HELP_STRING([--with-mozilla-version],
-        [Choose which version of Mozilla to use while building Mozilla.
-         (default=1.7.5) Note that not all versions are supported.]),
-,)
-
 AC_ARG_WITH(mozilla-toolkit,
     AS_HELP_STRING([--with-mozilla-toolkit],
         [Choose which GUI toolkit to use while building Mozilla components. (default=gtk2)]),
@@ -8014,15 +8008,7 @@ else
     SYSTEM_MOZILLA=NO
     BUILD_TYPE="$BUILD_TYPE MOZ"
     MOZ_TARBALL=a169ab152209200a7bad29a275cb0333-seamonkey-1.1.14.source.tar.gz
-    if test -z "$with_mozilla_version"; then
-        MOZILLA_VERSION=
-    else
-        AC_MSG_CHECKING([which Mozilla version to build])
-        MOZILLA_VERSION=$with_mozilla_version
-        enable_build_mozilla=1
-        AC_MSG_RESULT([$MOZILLA_VERSION])
-    fi
-
+    MOZILLA_VERSION=1.1.14
     AC_SUBST(MOZILLA_VERSION)
 
     AC_MSG_CHECKING([for toolkit Mozilla should use])
