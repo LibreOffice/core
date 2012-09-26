@@ -1967,9 +1967,9 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("resizable")))
     {
         WinBits nBits = GetStyle();
-        nBits &= ~(WB_SIZEMOVE);
+        nBits &= ~(WB_SIZEABLE);
         if (toBool(rValue))
-            nBits |= WB_SIZEMOVE;
+            nBits |= WB_SIZEABLE;
         SetStyle(nBits);
     }
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))

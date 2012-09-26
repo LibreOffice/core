@@ -80,6 +80,7 @@ protected:
 public:
     SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
     SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
+    SAL_DLLPRIVATE void doDeferredInit(bool bResizable);
 
 protected:
                     Dialog( WindowType nType );

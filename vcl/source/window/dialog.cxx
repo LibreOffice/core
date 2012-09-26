@@ -504,19 +504,31 @@ rtl::OUString VclBuilderContainer::getUIRootDir()
     return sShareLayer;
 }
 
+//we can't change sizeable after the fact, so need to defer until we know and then
+//do the init. Find the real parent stashed in mpDialogParent.
+void Dialog::doDeferredInit(bool bResizable)
+{
+    WinBits nBits = WB_3DLOOK|WB_CLOSEABLE|WB_MOVEABLE;
+    if (bResizable)
+        nBits |= WB_SIZEABLE;
+    Window *pParent = mpDialogParent;
+    mpDialogParent = NULL;
+    ImplInit(pParent, nBits);
+}
+
 Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
     : SystemWindow( WINDOW_DIALOG )
+    , mpDialogParent(pParent) //will be unset in doDeferredInit
 {
     ImplInitDialogData();
-    ImplInit(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
 Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType)
     : SystemWindow( nType )
+    , mpDialogParent(pParent) //will be unset in doDeferredInit
 {
     ImplInitDialogData();
-    ImplInit(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 

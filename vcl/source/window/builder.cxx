@@ -203,6 +203,18 @@ namespace
         return sPattern;
     }
 
+    bool extractResizable(VclBuilder::stringmap &rMap)
+    {
+        bool bResizable = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("resizable")));
+        if (aFind != rMap.end())
+        {
+            bResizable = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bResizable;
+    }
+
     bool extractOrientation(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
@@ -432,7 +444,12 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
 
     Window *pWindow = NULL;
     if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
-        pWindow = new Dialog(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
+    {
+        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
+        if (extractResizable(rMap))
+            nBits |= WB_SIZEABLE;
+        pWindow = new Dialog(pParent, nBits);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkBox")))
     {
         if (extractOrientation(rMap))
@@ -601,7 +618,10 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
         pCurrentChild = m_pParent;
         //toplevels default to resizable
         if (pCurrentChild->IsDialog())
-            pCurrentChild->SetStyle(pCurrentChild->GetStyle() | WB_SIZEMOVE | WB_3DLOOK);
+        {
+            Dialog *pDialog = (Dialog*)pCurrentChild;
+            pDialog->doDeferredInit(extractResizable(rMap));
+        }
         if (pCurrentChild->GetHelpId().isEmpty())
         {
             pCurrentChild->SetHelpId(m_sHelpRoot + m_sID);
