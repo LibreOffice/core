@@ -201,22 +201,22 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     return xRet;
 }
 
-::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
+OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME );
+    return OUString( AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
-sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_GST_FRAMEGRABBER_SERVICENAME;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
+    uno::Sequence< OUString > aRet(1);
     aRet[0] = AVMEDIA_GST_FRAMEGRABBER_SERVICENAME;
 
     return aRet;

@@ -108,9 +108,9 @@ private:
     IDDrawExclModeVideo*    mpEV;
     long                    mnUnmutedVolume;
     int                     mnFrameWnd;
-    sal_Bool                mbMuted;
+    bool                    mbMuted;
     bool                    mbLooping;
-    sal_Bool                mbAddWindow;
+    bool                    mbAddWindow;
 
     void                    ImplLayoutVideoWindow();
 };

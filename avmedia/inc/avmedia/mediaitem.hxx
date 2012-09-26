@@ -93,11 +93,11 @@ public:
     void                    setTime( double fTime );
     double                  getTime() const;
 
-    void                    setLoop( sal_Bool bLoop );
-    sal_Bool                isLoop() const;
+    void                    setLoop( bool bLoop );
+    bool                    isLoop() const;
 
-    void                    setMute( sal_Bool bMute );
-    sal_Bool                isMute() const;
+    void                    setMute( bool bMute );
+    bool                    isMute() const;
 
     void                    setVolumeDB( sal_Int16 nDB );
     sal_Int16               getVolumeDB() const;
