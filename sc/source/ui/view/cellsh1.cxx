@@ -2393,6 +2393,11 @@ void ScCellShell::ExecuteDataPilotDialog()
     }
 }
 
+void ScCellShell::ExecuteXMLSourceDialog()
+{
+    fprintf(stdout, "ScCellShell::ExecuteXMLSourceDialog:   launch xml dialog\n");
+}
+
 void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 {
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();

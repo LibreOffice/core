@@ -746,7 +746,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
 
         case SID_MANAGE_XML_SOURCE:
-            fprintf(stdout, "ScCellShell::ExecuteDB:   SID_MANAGE_XML_SOURCE\n");
+            ExecuteXMLSourceDialog();
         break;
         case FID_VALIDATION:
             {
