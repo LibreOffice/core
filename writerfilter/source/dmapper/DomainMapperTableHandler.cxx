@@ -391,6 +391,11 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, false, uno::makeAny( aDistances ) );
 
+        // Set table above/bottom spacing to 0.
+        // TODO: handle 'Around' text wrapping mode
+        m_aTableProperties->Insert( PropertyIds::PROP_TOP_MARGIN, true, uno::makeAny( 0 ) );
+        m_aTableProperties->Insert( PropertyIds::PROP_BOTTOM_MARGIN, true, uno::makeAny( 0 ) );
+
         //table border settings
         table::TableBorder aTableBorder;
         table::BorderLine2 aBorderLine;
