@@ -1036,7 +1036,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
 {
     if ( bEnable != mpData->mnEnableATT )
     {
-        sal_Bool bDummy;
+        bool bDummy;
         if( bEnable && !ImplInitAccessBridge(false, bDummy) )
             return;
 
