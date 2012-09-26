@@ -141,8 +141,8 @@ define gb_ScpMergeTarget_ScpMergeTarget
 $(call gb_ScpMergeTarget_get_target,$(1)) : private SCP_SOURCE := $(call gb_ScpMergeTarget_get_source,$(1))
 $(call gb_ScpMergeTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_source,$(1))
 $(call gb_ScpMergeTarget_get_target,$(1)) :| $(dir $(call gb_ScpMergeTarget_get_target,$(1))).dir
-$(call gb_ScpMergeTarget_get_target,$(1)) : SCP_SDF := $(gb_SDFLOCATION)/$(dir $(1))/localize.sdf
-$(call gb_ScpMergeTarget_get_target,$(1)) : $(gb_SDFLOCATION)/$(dir $(1))/localize.sdf
+$(call gb_ScpMergeTarget_get_target,$(1)) : SCP_SDF := $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
+$(call gb_ScpMergeTarget_get_target,$(1)) : $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
 
 endef
 
