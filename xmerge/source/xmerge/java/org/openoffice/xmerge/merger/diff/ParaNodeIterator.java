@@ -36,8 +36,6 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
  *  <code>Iterator</code> does not support any operation methods such as
  *  insert, remove or replace.  The main purpose of this
  *  <code>Iterator</code> is to be used with difference, not with merge.</p>
- *
- *  @author smak
  */
 public final class ParaNodeIterator extends NodeIterator {
 

@@ -37,7 +37,6 @@ import org.openoffice.xmerge.util.Debug;
  *  This class is used by <code> PxlDocument</code> to maintain pexcel
  *  workbooks.
  *
- *  @author  Martin Maher
  */
 public class Workbook implements org.openoffice.xmerge.Document,
 OfficeConstants {

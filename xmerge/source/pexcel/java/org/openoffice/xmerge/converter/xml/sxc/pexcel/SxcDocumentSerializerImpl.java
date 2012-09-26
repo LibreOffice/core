@@ -38,8 +38,6 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
  *  <p>This converts StarOffice XML format to a set of files in
  *  Pocket Excel PXL format.</p>
  *
- *  @author      Paul Rank
- *  @author      Mark Murnane
  */
 public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
 

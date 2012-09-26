@@ -136,8 +136,6 @@ class alignment extends conversionAlgorithm {
  *  </td></tr><tr><td>
  *  TEXT_ALIGN       </td><td>ALIGN_RIGHT, ALIGN_CENTER, ALIGN_JUST, ALIGN_LEFT
  *  </td></tr></table></p>
- *
- *   @author   David Proulx
  */
 public class ParaStyle extends Style implements Cloneable {
 

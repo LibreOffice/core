@@ -31,8 +31,6 @@ import org.openoffice.xmerge.util.Debug;
 
 /**
  *  Represents a text <code>Style</code> in an OpenOffice document.
- *
- *  @author Martin Maher
  */
 public class CellStyle extends Style implements Cloneable {
 

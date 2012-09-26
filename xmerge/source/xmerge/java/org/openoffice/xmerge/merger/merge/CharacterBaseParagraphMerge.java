@@ -31,8 +31,6 @@ import org.openoffice.xmerge.util.Debug;
  *  This is an implementation of the <code>NodeMergeAlgorithm</code>
  *  interface.  It is used to merge two paragraph <code>Node</code>
  *  objects based on character comparisons.
- *
- * @author smak
  */
 public final class CharacterBaseParagraphMerge
                    implements NodeMergeAlgorithm {

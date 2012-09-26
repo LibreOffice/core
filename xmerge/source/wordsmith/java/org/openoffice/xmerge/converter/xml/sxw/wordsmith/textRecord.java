@@ -28,7 +28,6 @@ import java.io.ByteArrayOutputStream;
  *  include: WordSmith header, font table, color table, paragraphs,
  *  and text runs.
  *
- *  @author   David Proulx
  */
 
 class textRecord {

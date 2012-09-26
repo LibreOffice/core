@@ -23,8 +23,6 @@ package org.openoffice.xmerge;
  *  jar file.  It has a main method that prints out the version
  *  info.  It also provides two static methods for runtime classes
  *  to query.
- *
- *  @author    Herbie Ong
  */
 public final class Version {
 

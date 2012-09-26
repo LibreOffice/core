@@ -44,7 +44,6 @@ import java.io.IOException;
  *
  * <p>This converts an OpenOffice Writer XML files to a Pocket Word file<.</p>
  *
- * @author      Mark Murnane
  * @version 1.1
  */
 public final class DocumentSerializerImpl

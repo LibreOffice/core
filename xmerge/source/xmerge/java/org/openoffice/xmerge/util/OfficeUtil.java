@@ -31,7 +31,6 @@ import java.util.ArrayList;
 /**
  * Class providing utility methods for OpenOffice plugins.
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 public class OfficeUtil implements OfficeConstants {

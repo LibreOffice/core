@@ -36,7 +36,6 @@ import java.util.ResourceBundle;
  *  declare it.  If it does throw <code>MissingResourceException</code>,
  *  it may be due to a packaging problem.</p>
  *
- *  @author      Herbie Ong
  */
 public final class Resources
 {

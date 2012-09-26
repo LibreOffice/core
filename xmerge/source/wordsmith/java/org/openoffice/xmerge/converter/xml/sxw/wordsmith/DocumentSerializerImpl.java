@@ -48,7 +48,6 @@ import org.openoffice.xmerge.converter.xml.*;
  *  <code>DocEncoder</code> object for the actual conversion of
  *  contents to the WordSmith format.</p>
  *
- *  @author      Herbie Ong, David Proulx
  */
 
 // DJP: take out "implements OfficeConstants"

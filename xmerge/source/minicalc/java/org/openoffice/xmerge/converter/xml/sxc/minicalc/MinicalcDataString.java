@@ -22,7 +22,6 @@ package org.openoffice.xmerge.converter.xml.sxc.minicalc;
  *  This class is used by <code>MinicalcDecoder</code> to manipulate a
  *  <code>String</code> containing MiniCalc cell data.
  *
- *  @author   Paul Rank
  */
 public class MinicalcDataString {
 

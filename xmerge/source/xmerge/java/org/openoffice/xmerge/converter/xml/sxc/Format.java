@@ -23,8 +23,6 @@ import java.awt.Color;
 /**
  *  This class specifies the format for a given spreadsheet cell.
  *
- *  @author  Mark Murnane
- *  @author  Martin Maher (Extended Style Support)
  */
 public class Format implements Cloneable {
 

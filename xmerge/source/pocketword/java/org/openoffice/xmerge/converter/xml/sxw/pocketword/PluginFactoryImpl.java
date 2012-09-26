@@ -40,7 +40,6 @@ import org.openoffice.xmerge.converter.xml.sxw.SxwPluginFactory;
 /**
  * Factory class used to create converters to/from the Pocket Word format.
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 public final class PluginFactoryImpl extends SxwPluginFactory

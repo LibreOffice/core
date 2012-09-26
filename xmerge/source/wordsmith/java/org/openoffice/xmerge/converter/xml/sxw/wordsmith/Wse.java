@@ -24,7 +24,6 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
  * This is the superclass for all elements in a WordSmith document.
  * Elements can be paragraphs, text runs, font tables, or color tables.
  *
- *  @author   David Proulx
  */
 abstract class Wse {
 

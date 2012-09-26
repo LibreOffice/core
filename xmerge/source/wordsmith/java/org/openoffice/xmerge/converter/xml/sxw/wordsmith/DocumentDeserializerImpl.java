@@ -55,7 +55,6 @@ import org.w3c.dom.Text;
  *  <code>String</code> object, then it calls <code>buildDocument</code>
  *  to create a <code>SxwDocument</code> object from it.
  *
- *  @author      Herbie Ong, David Proulx
  */
 public final class DocumentDeserializerImpl
 implements DOCConstants, OfficeConstants, DocumentDeserializer {

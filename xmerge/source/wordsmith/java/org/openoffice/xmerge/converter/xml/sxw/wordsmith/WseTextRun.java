@@ -45,7 +45,6 @@ import java.awt.Color;
  *    n bytes  Text - the actual text
  *  </li></ul></p>
  *
- *  @author   David Proulx
  */
 class WseTextRun extends Wse {
 

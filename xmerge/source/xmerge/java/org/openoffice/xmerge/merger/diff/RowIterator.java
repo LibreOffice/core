@@ -27,8 +27,6 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
 /**
  *  This is an implementation of the <code>Iterator</code> interface and extends
  *  <code>NodeIterator</code>.  It will traverse the tree and find row sequences.
- *
- * @author smak
  */
 public final class RowIterator extends NodeIterator {
 

@@ -38,7 +38,6 @@ import org.openoffice.xmerge.converter.xml.TextStyle;
  *    and to read existing data to allow for conversion to OpenOffice Writer
  *    format.</p>
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 public class PocketWordDocument implements Document, PocketWordConstants {

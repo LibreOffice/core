@@ -23,7 +23,6 @@ import java.awt.Color;
 /**
  *  This class represents a color table in a WordSmith document.
  *
- *  @author   David Proulx
  */
 class WseColorTable extends Wse {
 

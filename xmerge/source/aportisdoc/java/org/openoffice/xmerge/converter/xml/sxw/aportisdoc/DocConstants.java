@@ -23,7 +23,6 @@ import org.openoffice.xmerge.converter.palm.PdbUtil;
 /**
  *  Constants used for encoding and decoding the AportisDoc format.
  *
- *  @author   Herbie Ong
  */
 interface DocConstants {
 

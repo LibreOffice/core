@@ -33,7 +33,6 @@ import org.openoffice.xmerge.util.EndianConverter;
 /**
  * Represents a paragraph data structure within a Pocket Word document.
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 class Paragraph implements PocketWordConstants {

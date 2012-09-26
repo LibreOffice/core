@@ -37,7 +37,6 @@ import org.openoffice.xmerge.util.Debug;
  *
  *  <p>This converts a set of files in Pocket Excel PXL format to a StarOffice DOM.</p>
  *
- *  @author  Mark Murnane
  */
 public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
 

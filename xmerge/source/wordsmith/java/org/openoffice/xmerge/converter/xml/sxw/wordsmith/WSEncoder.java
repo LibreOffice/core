@@ -30,7 +30,6 @@ import org.openoffice.xmerge.converter.palm.Record;
  *  org.openoffice.xmerge.converter.xml.sxw.wordsmith.DocumentDeserializerImpl
  *  DocumentDeserializerImpl} to encode the WordSmith format.
  *
- *  @author   David Proulx
  */
 
 // DJP: replace 4096 w/ a defined constant

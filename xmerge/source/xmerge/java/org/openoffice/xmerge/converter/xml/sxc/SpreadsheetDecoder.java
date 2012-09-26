@@ -27,7 +27,6 @@ import org.openoffice.xmerge.ConvertData;
  *  This class is a abstract class for encoding a &quot;Device&quot;
  *  <code>Document</code> format into an alternative spreadsheet format.
  *
- *  @author  Mark Murnane
  */
 public abstract class SpreadsheetDecoder {
 

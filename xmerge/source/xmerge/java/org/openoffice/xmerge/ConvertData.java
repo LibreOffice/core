@@ -27,7 +27,6 @@ import java.util.Iterator;
  *  class.  The <code>ConvertData</code> contains a <code>String</code>
  *  name and a <code>Vector</code> of <code>Document</code> objects.</p>
  *
- *  @author  Martin Maher
  */
 public class ConvertData {
 

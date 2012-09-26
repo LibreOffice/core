@@ -37,7 +37,6 @@ import org.w3c.dom.NodeList;
  *  <code>Style</code>, and is an object which is a subclass of
  *  <code>Style</code>.
  *
- *  @author David Proulx
  *  @see <a href="Style.html">Style</a>
  */
 public class StyleCatalog {

@@ -21,7 +21,6 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 /**
  *  Constants used for encoding and decoding the WordSmith format.
  *
- *  @author   Herbie Ong, David Proulx
  */
 interface DOCConstants {
 

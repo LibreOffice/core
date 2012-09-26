@@ -63,8 +63,6 @@ import java.io.FileNotFoundException;
  *  <p>The <code>serialize</code> method transforms the DOM
  *  document from the given <code>Document</code> object by
  *  means of a supplied Xsl Stylesheet.</p>
- *
- *  @author      Aidan Butler
  */
 
 

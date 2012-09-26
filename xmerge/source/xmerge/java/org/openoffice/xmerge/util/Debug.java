@@ -39,7 +39,6 @@ import java.util.Properties;
  *  to set the writer to either <code>System.out</code>,
  *  <code>System.err</code>, or to a file.
  *
- *  @author      Herbie Ong
  */
 public final class Debug {
 

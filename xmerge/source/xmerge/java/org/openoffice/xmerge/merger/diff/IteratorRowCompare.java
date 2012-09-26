@@ -52,8 +52,6 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
  *  </li></ol></p>
  *
  *  <p>NOTE: The algorithm will have potential side effect to split rows.</p>
- *
- *  @author smak
  */
 
 public class IteratorRowCompare implements DiffAlgorithm {

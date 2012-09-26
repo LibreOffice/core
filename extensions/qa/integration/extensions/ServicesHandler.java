@@ -24,10 +24,6 @@ import com.sun.star.inspection.*;
 import com.sun.star.frame.*;
 import com.sun.star.lang.XServiceInfo;
 
-/**
- *
- * @author fs93730
- */
 public class ServicesHandler implements XPropertyHandler
 {
     private XComponentContext   m_context;

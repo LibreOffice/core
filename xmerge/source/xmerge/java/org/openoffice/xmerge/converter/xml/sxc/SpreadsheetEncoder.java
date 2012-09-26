@@ -27,7 +27,6 @@ import java.util.ArrayList;
  *
  *  <p>TODO - Add appropriate exceptions to each of the methods.</p>
  *
- *  @author  Mark Murnane
  */
 public abstract class SpreadsheetEncoder {
 

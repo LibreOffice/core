@@ -20,8 +20,6 @@ package org.openoffice.xmerge.converter.palm;
 
 /**
  *  Contains common static methods and constants for use within the package.
- *
- *  @author    Herbie Ong
  */
 public final class PdbUtil {
 

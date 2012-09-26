@@ -32,8 +32,6 @@ import org.openoffice.xmerge.util.Debug;
 /**
  *  This class is used by <code>PxlDocument</code> to maintain pexcel
  *  worksheets.
- *
- *  @author  Martin Maher
  */
 public class Worksheet {
 

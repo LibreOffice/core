@@ -31,7 +31,6 @@ import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
  *  @see  Convert
  *  @see  org.openoffice.xmerge.util.registry.ConverterInfoMgr
  *
- *  @author  Martin Maher
  */
 public class ConverterFactory {
 

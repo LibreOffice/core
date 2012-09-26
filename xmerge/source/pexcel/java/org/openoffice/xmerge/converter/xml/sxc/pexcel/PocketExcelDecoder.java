@@ -47,7 +47,6 @@ import org.openoffice.xmerge.util.Debug;
  *  This class is used by {@link SxcDocumentDeserializerImpl}
  *  SxcDocumentDeserializerImpl} to decode the Pocket Excel format.
  *
- *  @author   Paul Rank
  */
 final class PocketExcelDecoder extends SpreadsheetDecoder {
 

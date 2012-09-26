@@ -59,7 +59,6 @@ import java.io.UnsupportedEncodingException;
  *  PalmDocument.read} method for reading in its data from the <code>InputStream</code>
  *  object.</p>
  *
- *  @author  Akhil Arora, Herbie Ong
  *  @see     PalmDocument
  *  @see     Record
  */

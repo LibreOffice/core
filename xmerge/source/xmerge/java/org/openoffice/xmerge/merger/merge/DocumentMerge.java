@@ -35,8 +35,6 @@ import org.openoffice.xmerge.util.XmlUtil;
  * appropriate class which implements {@link
  * org.openoffice.xmerge.merger.NodeMergeAlgorithm
  * NodeMergeAlgorithm} to perform the merge.
- *
- * @author smak
  */
 public class DocumentMerge implements MergeAlgorithm {
 

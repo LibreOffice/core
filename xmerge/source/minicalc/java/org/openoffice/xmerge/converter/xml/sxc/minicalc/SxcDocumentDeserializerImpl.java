@@ -35,7 +35,6 @@ import java.util.Enumeration;
  *
  *  <p>This converts a set of files in MiniCalc PDB format to a StarOffice DOM.</p>
  *
- *  @author  Mark Murnane
  */
 public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
 

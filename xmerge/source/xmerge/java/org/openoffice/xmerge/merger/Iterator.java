@@ -24,8 +24,6 @@ package org.openoffice.xmerge.merger;
  *  DiffAlgorithm} and {@link
  *  org.openoffice.xmerge.merger.MergeAlgorithm
  *  MergeAlgorithm} to access a <code>Document</code>.
- *
- *  @author smak
  */
 public interface Iterator {
 

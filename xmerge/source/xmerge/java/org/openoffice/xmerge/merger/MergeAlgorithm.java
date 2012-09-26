@@ -26,8 +26,6 @@ import org.openoffice.xmerge.merger.Difference;
  *  This is the <code>MergeAlgorithm</code> interface. It is an
  *  interface so that different merge algorithms may be plugged-in
  *  to actually merge the diffs back to an original document.
- *
- *  @author smak
  */
 public interface MergeAlgorithm {
 

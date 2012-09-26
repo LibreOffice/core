@@ -25,7 +25,6 @@ import java.io.ByteArrayOutputStream;
 /**
  *  This class represents a WordSmith document header.
  *
- *  @author   David Proulx
  */
 class WseHeader extends Wse {
 

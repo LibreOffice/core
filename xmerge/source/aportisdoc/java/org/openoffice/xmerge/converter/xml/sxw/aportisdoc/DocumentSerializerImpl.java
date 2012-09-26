@@ -50,7 +50,6 @@ import org.openoffice.xmerge.util.XmlUtil;
  *  <code>DocEncoder</code> object for the actual conversion of
  *  contents to the AportisDoc format.</p>
  *
- *  @author      Herbie Ong
  */
 
 

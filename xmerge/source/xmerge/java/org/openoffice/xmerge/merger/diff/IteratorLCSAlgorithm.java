@@ -29,8 +29,6 @@ import org.openoffice.xmerge.util.Debug;
  *  Using Longest Common Subsequence (LCS). The algorithm here is based
  *  on the book "Introduction to Algorithms" by Thomas H.Cormen,
  *  Charles E.Leiserson and Ronald L.Riverst (MIT Press 1990) page 314.
- *
- *  @author smak
  */
 public class IteratorLCSAlgorithm implements DiffAlgorithm {
 

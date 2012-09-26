@@ -45,7 +45,6 @@ import org.w3c.dom.NodeList;
  *
  * <p>This converts a Pocket Word file to an OpenOffice Writer XML DOM.</p>
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 public final class DocumentDeserializerImpl

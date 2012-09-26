@@ -29,7 +29,6 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
  *   string table (null-terminated strings) representing font names
  *  </blockquote></p>
  *
- *  @author   David Proulx
  */
 class WseFontTable extends Wse {
 

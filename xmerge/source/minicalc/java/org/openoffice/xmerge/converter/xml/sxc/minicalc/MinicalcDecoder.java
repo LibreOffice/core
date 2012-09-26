@@ -47,7 +47,6 @@ import org.openoffice.xmerge.converter.xml.sxc.Format;
  *  org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializerImpl}
  *  SxcDocumentDeserializerImpl} to decode the MiniCalc format.
  *
- *  @author   Paul Rank
  */
 final class MinicalcDecoder extends SpreadsheetDecoder {
 

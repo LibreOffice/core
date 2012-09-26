@@ -26,7 +26,6 @@ import org.openoffice.xmerge.converter.xml.StyleCatalog;
  *  This class represents a paragraph in a WordSmith document.
  *  (A paragraph is "5" followed by 12 bytes of attributes.)
  *
- *  @author   David Proulx
  */
 class WsePara extends Wse {
 

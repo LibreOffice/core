@@ -48,8 +48,6 @@ import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializer;
  *  <p>This converts StarOffice XML format to a set of files in
  *  MiniCalc PDB format.</p>
  *
- *  @author      Paul Rank
- *  @author      Mark Murnane
  */
 public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
 

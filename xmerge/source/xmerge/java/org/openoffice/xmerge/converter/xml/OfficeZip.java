@@ -38,7 +38,6 @@ import org.openoffice.xmerge.util.Debug;
  *  OfficeDocument} to handle reading and writing
  *  from a ZIP file, as well as storing ZIP entries.
  *
- *  @author   Herbie Ong
  */
 class OfficeZip {
 

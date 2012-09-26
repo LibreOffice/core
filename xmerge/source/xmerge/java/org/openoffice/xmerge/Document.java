@@ -33,7 +33,6 @@ import java.io.IOException;
  *  org.openoffice.xmerge.PluginFactory#createDeviceDocument
  *  createDeviceDocument} method.</p>
  *
- *  @author  Herbie Ong
  *  @see     org.openoffice.xmerge.PluginFactory
  */
 public interface Document {

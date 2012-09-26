@@ -38,7 +38,6 @@ import org.openoffice.xmerge.util.EndianConverter;
  * paragraph in the document.  These paragraph descriptors appear at the end
  * of the Document Descriptor.
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 class DocumentDescriptor {

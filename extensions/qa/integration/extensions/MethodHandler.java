@@ -24,10 +24,6 @@ import com.sun.star.beans.*;
 import com.sun.star.reflection.*;
 import com.sun.star.inspection.*;
 
-/**
- *
- * @author fs93730
- */
 public class MethodHandler implements XPropertyHandler
 {
     private XComponentContext       m_context;

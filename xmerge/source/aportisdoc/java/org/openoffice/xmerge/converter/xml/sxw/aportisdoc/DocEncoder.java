@@ -31,7 +31,6 @@ import org.openoffice.xmerge.converter.palm.Record;
  *  It does not deal with any XML tags.  It only knows how to encode
  *  from <code>String</code>.
  *
- *  @author   Herbie Ong
  */
 final class DocEncoder implements DocConstants {
 

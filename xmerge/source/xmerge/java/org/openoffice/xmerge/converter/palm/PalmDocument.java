@@ -35,7 +35,6 @@ import org.openoffice.xmerge.Document;
  *  read via an <code>InputStream</code> and written via an
  *  <code>OutputStream</code>.</p>
  *
- *  @author  Martin Maher
  */
 
 public class PalmDocument

@@ -32,7 +32,6 @@ import org.openoffice.xmerge.util.Resources;
  *  DocumentDeserializerImpl} to decode a WordSmith format.  It currently
  *  decodes the text content into a single <code>String</code> object.
  *
- *  @author   Herbie Ong, David Proulx
  */
 final class WSDecoder implements DOCConstants {
 
