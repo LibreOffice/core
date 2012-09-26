@@ -6587,7 +6587,7 @@ void ScInterpreter::ScSubTotal()
             nFunc -= 100;
         }
 
-        if( nFunc < 1 || nFunc > 11 )
+        if (nFunc < 1 || nFunc > 11 || !bIncludeHidden)
             PushIllegalArgument();  // simulate return on stack, not SetError(...)
         else
         {
