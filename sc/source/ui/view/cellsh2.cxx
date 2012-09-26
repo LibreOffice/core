@@ -745,6 +745,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             }
             break;
 
+        case SID_MANAGE_XML_SOURCE:
+            fprintf(stdout, "ScCellShell::ExecuteDB:   SID_MANAGE_XML_SOURCE\n");
+        break;
         case FID_VALIDATION:
             {
                 const SfxPoolItem* pItem;

@@ -421,6 +421,8 @@
             <menu:menuitem menu:id=".uno:DefineDBName"/>
             <menu:menuitem menu:id=".uno:SelectDB"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ManageXMLSource"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DataSort"/>
             <menu:menu menu:id=".uno:FilterMenu">
                 <menu:menupopup>
