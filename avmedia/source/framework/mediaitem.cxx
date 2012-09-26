@@ -58,8 +58,8 @@ struct MediaItem::Impl
     double                  m_fTime;
     double                  m_fDuration;
     sal_Int16               m_nVolumeDB;
-    sal_Bool                m_bLoop;
-    sal_Bool                m_bMute;
+    bool                    m_bLoop;
+    bool                    m_bMute;
     ::com::sun::star::media::ZoomLevel m_eZoom;
 
     Impl(sal_uInt32 const nMaskSet)
@@ -302,7 +302,7 @@ double MediaItem::getTime() const
 
 //------------------------------------------------------------------------
 
-void MediaItem::setLoop( sal_Bool bLoop )
+void MediaItem::setLoop( bool bLoop )
 {
     m_pImpl->m_bLoop = bLoop;
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_LOOP;
@@ -310,14 +310,14 @@ void MediaItem::setLoop( sal_Bool bLoop )
 
 //------------------------------------------------------------------------
 
-sal_Bool MediaItem::isLoop() const
+bool MediaItem::isLoop() const
 {
     return m_pImpl->m_bLoop;
 }
 
 //------------------------------------------------------------------------
 
-void MediaItem::setMute( sal_Bool bMute )
+void MediaItem::setMute( bool bMute )
 {
     m_pImpl->m_bMute = bMute;
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_MUTE;
@@ -325,7 +325,7 @@ void MediaItem::setMute( sal_Bool bMute )
 
 //------------------------------------------------------------------------
 
-sal_Bool MediaItem::isMute() const
+bool MediaItem::isMute() const
 {
     return m_pImpl->m_bMute;
 }
