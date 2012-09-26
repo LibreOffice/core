@@ -640,6 +640,21 @@ String STR_INVALID_AUTOFORMAT_NAME
     Text [ en-US ] = "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name." ;
 };
 
+String STR_NUMERIC
+{
+    Text [ en-US ] = "Numeric";
+};
+
+String STR_ROW
+{
+    Text [ en-US ] = "Rows" ;
+};
+
+String STR_COL
+{
+    Text [ en-US ] = "Column" ;
+};
+
 ToolBox RID_MODULE_TOOLBOX
 {
     HelpID = HID_MODULE_TOOLBOX ;

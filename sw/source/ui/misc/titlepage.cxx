@@ -148,8 +148,7 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 }
 
 SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
-    SfxModalDialog( pParent, rtl::OString("DLG_TITLEPAGE"),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("modules/swriter/ui/titlepage.ui")) ),
+    SfxModalDialog( pParent, "DLG_TITLEPAGE", "modules/swriter/ui/titlepage.ui"),
     mpPageFmtDesc(0)
 {
     get(m_pUseExistingPagesRB, "RB_USE_EXISTING_PAGES");

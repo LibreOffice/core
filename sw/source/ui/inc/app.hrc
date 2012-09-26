@@ -111,8 +111,11 @@
 #define STR_MID                         (RC_APP_BEGIN + 123)
 #define STR_SOUTH                       (RC_APP_BEGIN + 124)
 #define STR_SUM                         (RC_APP_BEGIN + 125)
+#define STR_NUMERIC                     (RC_APP_BEGIN + 126)
+#define STR_COL                         (RC_APP_BEGIN + 127)
+#define STR_ROW                         (RC_APP_BEGIN + 128)
 
-#define APP_ACT_END                     STR_SUM
+#define APP_ACT_END                     STR_ROW
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line
