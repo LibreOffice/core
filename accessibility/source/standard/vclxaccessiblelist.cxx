@@ -319,7 +319,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
     if ( xChild.is() )
     {
         // Just add the SELECTED state.
-        sal_Bool bNowSelected = sal_False;
+        bool bNowSelected = false;
         if ( m_pListBoxHelper )
             bNowSelected = m_pListBoxHelper->IsEntryPosSelected ((sal_uInt16)i);
         VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(xChild.get());
@@ -330,7 +330,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         sal_uInt16 nTopEntry = 0;
         if ( m_pListBoxHelper )
             nTopEntry = m_pListBoxHelper->GetTopEntry();
-        sal_Bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
+        bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
         pItem->SetVisible( m_bVisible && bVisible );
     }
 
