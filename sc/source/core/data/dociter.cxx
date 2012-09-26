@@ -565,7 +565,11 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
 
         SCROW nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
         while ( (nColRow < nCellCount) && (nThisRow < nRow) )
-            nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, ++nColRow);
+        {
+            ++nColRow;
+            if(nColRow < nCellCount)
+                nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
+        }
 
         if ( nColRow < nCellCount && nThisRow <= mpParam->nRow2 )
         {
