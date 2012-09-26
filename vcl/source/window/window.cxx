@@ -7871,6 +7871,9 @@ void Window::SetCursor( Cursor* pCursor )
 
 void Window::SetText( const XubString& rStr )
 {
+    if (rStr == mpWindowImpl->maText)
+        return;
+
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     String oldTitle( mpWindowImpl->maText );
