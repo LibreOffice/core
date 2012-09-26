@@ -101,6 +101,12 @@ $(call gb_XcsTarget_get_clean_target,%) :
 		rm -f $(call gb_XcsTarget_get_target,$*) \
 			  $(call gb_XcsTarget_get_outdir_target,$(XCSFILE)))
 
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_XcsTarget_get_outdir_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(dir $(call gb_XcsTarget_get_outdir_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_XcsTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Deliver_deliver,$<,$@))
@@ -142,6 +148,12 @@ $(call gb_XcuDataTarget_get_clean_target,%) :
 		rm -f $(call gb_XcuDataTarget_get_target,$*) \
 			  $(call gb_XcuDataTarget_get_outdir_target,$(XCUFILE)))
 
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_XcuDataTarget_get_outdir_target,))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(dir $(call gb_XcuDataTarget_get_outdir_target,)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_XcuDataTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Deliver_deliver,$<,$@))
@@ -179,6 +191,10 @@ $(call gb_XcuModuleTarget_get_clean_target,%) :
 		rm -f $(call gb_XcuModuleTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$(XCUFILE)))
 
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_XcuModuleTarget_get_outdir_target,))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_XcuModuleTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Deliver_deliver,$<,$@))
@@ -213,6 +229,12 @@ $(call gb_XcuLangpackTarget_get_clean_target,%) :
 		rm -f $(foreach lang,$(gb_Configuration_LANGS),\
 			  $(call gb_XcuLangpackTarget__get_target_with_lang,$*,$(lang)) \
 			  $(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(XCUFILE),$(lang))))
+
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_XcuLangpackTarget_get_outdir_target,))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(dir $(call gb_XcuLangpackTarget_get_outdir_target,)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\

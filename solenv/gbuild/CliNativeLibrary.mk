@@ -22,6 +22,12 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
+$(dir $(call gb_CliNativeLibraryTarget_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_CliNativeLibraryTarget_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_CliNativeLibraryTarget_get_target,%) :
 	$(call gb_CliNativeLibraryTarget__command,$@,$*,$<)
 

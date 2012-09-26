@@ -19,6 +19,12 @@
 #
 # Uff, I hope this is at least partially understandable :-)
 
+$(dir $(call gb_ExternalPackage_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_ExternalPackage_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_ExternalPackage_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),EPK,2)
 	touch $@

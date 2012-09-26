@@ -14,6 +14,9 @@
 
 gb_AllLangZip_LANGS := $(if $(strip $(gb_WITH_LANG)),$(gb_WITH_LANG),en-US)
 
+$(dir $(call gb_AllLangZip_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_AllLangZip_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),ALZ,4)
 	touch $@

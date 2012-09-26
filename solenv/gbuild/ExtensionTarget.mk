@@ -71,6 +71,9 @@ $(if $(PLATFORM),\
 	cp -f $(1) $(2))
 endef
 
+$(call gb_ExtensionTarget_get_workdir,%)/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 # remove extension directory in workdir and oxt file in workdir
 $(call gb_ExtensionTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),OXT,3)

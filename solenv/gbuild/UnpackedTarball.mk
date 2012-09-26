@@ -58,6 +58,9 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
+$(dir $(call gb_UnpackedTarget_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_UnpackedTarget_get_target,%).tar.bz2 :
 	$(call gb_UnpackedTarget__command,untar,$@,$*,-j)
 
@@ -150,6 +153,9 @@ $(call gb_Helper_abbreviate_dirs,\
 	)
 )
 endef
+
+$(dir $(call gb_UnpackedTarball_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_UnpackedTarball_get_preparation_target,%) :
 	touch $@

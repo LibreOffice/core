@@ -61,6 +61,12 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
+$(dir $(call gb_InstallScriptTarget_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_InstallScriptTarget_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_InstallScriptTarget_get_target,%) : $(gb_InstallScriptTarget_TARGET)
 	$(call gb_InstallScriptTarget__command,$@,$*)
 

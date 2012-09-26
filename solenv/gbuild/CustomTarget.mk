@@ -26,6 +26,10 @@
 #
 #*************************************************************************
 
+# the .dir is for make 3.81, which ignores trailing /
+$(call gb_CustomTarget_get_workdir,%)/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_CustomTarget_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),CUS,3)
 	touch $@
