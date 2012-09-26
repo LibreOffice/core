@@ -52,8 +52,6 @@
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
-using rtl::OUStringBuffer;
-
 class Test : public SwModelTestBase
 {
 public:

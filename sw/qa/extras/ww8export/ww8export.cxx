@@ -35,8 +35,6 @@
 
 #include <unotools/tempfile.hxx>
 
-using rtl::OUString;
-
 class Test : public SwModelTestBase
 {
 public:

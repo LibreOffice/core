@@ -102,7 +102,7 @@ protected:
         uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         while (xParaEnum->hasMoreElements())
         {
             uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
@@ -117,7 +117,7 @@ protected:
     }
 
     /// Get a family of styles, see com.sun.star.style.StyleFamilies for possible values.
-    uno::Reference<container::XNameAccess> getStyles(rtl::OUString aFamily)
+    uno::Reference<container::XNameAccess> getStyles(OUString aFamily)
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
@@ -130,7 +130,7 @@ protected:
      *
      * If the attribute is omitted, the text of the node is returned.
      */
-    rtl::OUString parseDump(rtl::OString aXPath, rtl::OString aAttribute = OString())
+    OUString parseDump(rtl::OString aXPath, rtl::OString aAttribute = OString())
     {
         if (!mpXmlBuffer)
             dumpLayout();
@@ -142,11 +142,11 @@ protected:
         xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
         CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-        rtl::OUString aRet;
+        OUString aRet;
         if (aAttribute.getLength())
-            aRet = rtl::OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
+            aRet = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
         else
-            aRet = rtl::OUString::createFromAscii((const char*)XML_GET_CONTENT(pXmlNode));
+            aRet = OUString::createFromAscii((const char*)XML_GET_CONTENT(pXmlNode));
 
         xmlFreeDoc(pXmlDoc);
 
@@ -154,7 +154,7 @@ protected:
     }
 
     template< typename T >
-    T getProperty( uno::Any obj, const rtl::OUString& name ) const
+    T getProperty( uno::Any obj, const OUString& name ) const
     {
         uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
         T data = T();
@@ -163,7 +163,7 @@ protected:
     }
 
     template< typename T >
-    T getProperty( uno::Reference< uno::XInterface > obj, const rtl::OUString& name ) const
+    T getProperty( uno::Reference< uno::XInterface > obj, const OUString& name ) const
     {
         uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
         T data = T();

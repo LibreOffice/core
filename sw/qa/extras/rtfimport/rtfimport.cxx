@@ -57,10 +57,6 @@
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
-using rtl::OString;
-using rtl::OUString;
-using rtl::OUStringBuffer;
-
 class Test : public SwModelTestBase
 {
 public:
@@ -345,7 +341,7 @@ void Test::testFdo46662()
         }
         else if ( rProp.Name == "Suffix" )
         {
-            rtl::OUString sValue;
+            OUString sValue;
             rProp.Value >>= sValue;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
         }
@@ -740,7 +736,7 @@ void Test::testFdo49692()
 
         if (rProp.Name == "Suffix")
         {
-            rtl::OUString sValue;
+            OUString sValue;
             rProp.Value >>= sValue;
 
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
