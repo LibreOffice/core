@@ -378,35 +378,32 @@ TabPage RID_SVXPAGE_ANGLE
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text [ en-US ] = "~Angle" ;
     };
-    MetricField MTR_FLD_ANGLE
+    NumericField NF_ANGLE
     {
         HelpID = "cui:MetricField:RID_SVXPAGE_ANGLE:MTR_FLD_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 82 + 22  ) ;
-        Size = MAP_APPFONT ( 54 , 12 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Border = TRUE ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Minimum = -500000 ;
-        Maximum = 500000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ en-US ] = " degrees" ;
-        SpinSize = 500 ;
+        Minimum = 0 ;
+        Maximum = 359 ;
+        SpinSize = 5 ;
     };
     FixedText FT_ANGLEPRESETS
     {
         Pos = MAP_APPFONT ( 178 , 82 + 11  ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text [ en-US ] = "Default settings";
     };
     Control CTL_ANGLE
     {
         HelpId = HID_TPROTATION_CTRL2 ;
-        Border = TRUE ;
+        Border = FALSE ;
         Pos = MAP_APPFONT ( 178 , 82 + 22  ) ;
-        Size = MAP_APPFONT ( 70 , 48 ) ;
+        Size = MAP_APPFONT ( 48 , 48 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Rotation Angle";
     };

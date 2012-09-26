@@ -86,6 +86,12 @@ public:
     /** Links the passed numeric edit field to the control (bi-directional). */
     void                SetLinkedField( NumericField* pField );
 
+    /** Save value for later comparison */
+    void                SaveValue();
+
+    /** Compare value with the saved value */
+    bool                IsValueModified();
+
 private:
     void                Init( const Size& rWinSize, const Font& rWinFont );
     void                Init( const Size& rWinSize );

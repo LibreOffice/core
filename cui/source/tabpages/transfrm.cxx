@@ -228,10 +228,9 @@ SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
 
     aFlAngle                ( this, CUI_RES( FL_ANGLE ) ),
     aFtAngle                ( this, CUI_RES( FT_ANGLE ) ),
-    aMtrAngle               ( this, CUI_RES( MTR_FLD_ANGLE ) ),
+    maNfAngle               ( this, CUI_RES( NF_ANGLE ) ),
     aFtAnglePresets         ( this, CUI_RES(FT_ANGLEPRESETS) ),
-    aCtlAngle               ( this, CUI_RES( CTL_ANGLE ),
-                                RP_RB, 200, 80, CS_ANGLE ),
+    aCtlAngle               ( this, CUI_RES( CTL_ANGLE ) ),
     rOutAttrs               ( rInAttrs )
 {
     FreeResource();
@@ -241,12 +240,11 @@ SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
     DBG_ASSERT( pPool, "no pool (!)" );
     ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
-    aMtrAngle.SetModifyHdl(LINK( this, SvxAngleTabPage, ModifiedHdl));
-
     aCtlRect.SetAccessibleRelationLabeledBy(&aFtPosPresets);
     aCtlRect.SetAccessibleRelationMemberOf(&aFlPosition);
     aCtlAngle.SetAccessibleRelationLabeledBy(&aFtAnglePresets);
     aCtlAngle.SetAccessibleRelationMemberOf(&aFlAngle);
+    aCtlAngle.SetLinkedField( &maNfAngle );
 }
 
 // -----------------------------------------------------------------------
@@ -303,29 +301,27 @@ void SvxAngleTabPage::Construct()
         aCtlRect.Disable();
         aFlAngle.Disable();
         aFtAngle.Disable();
-        aMtrAngle.Disable();
+        maNfAngle.Disable();
         aFtAnglePresets.Disable();
         aCtlAngle.Disable();
     }
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
 {
     sal_Bool bModified = sal_False;
 
-    if(aMtrAngle.IsValueModified() || aMtrPosX.IsValueModified() || aMtrPosY.IsValueModified())
+    if(aCtlAngle.IsValueModified() || aMtrPosX.IsValueModified() || aMtrPosY.IsValueModified())
     {
         const double fUIScale(double(pView->GetModel()->GetUIScale()));
         const double fTmpX((GetCoreValue(aMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
         const double fTmpY((GetCoreValue(aMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
-        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), static_cast<sal_Int32>(aMtrAngle.GetValue())));
+        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), aCtlAngle.GetRotation()));
         rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
         rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
-        bModified |= sal_True;
+        bModified = sal_True;
     }
 
     return bModified;
@@ -362,15 +358,13 @@ void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
     pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ANGLE );
     if(pItem)
     {
-        aMtrAngle.SetValue(((const SfxInt32Item*)pItem)->GetValue());
+        aCtlAngle.SetRotation(((const SfxInt32Item*)pItem)->GetValue());
     }
     else
     {
-        aMtrAngle.SetText( String() );
+        aCtlAngle.SetRotation(0);
     }
-
-    aMtrAngle.SaveValue();
-    ModifiedHdl(this);
+    aCtlAngle.SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -469,41 +463,6 @@ void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
             }
         }
     }
-    else if(pWindow == &aCtlAngle)
-    {
-        switch( eRP )
-        {
-            case RP_LT: aMtrAngle.SetUserValue( 13500, FUNIT_NONE ); break;
-            case RP_MT: aMtrAngle.SetUserValue(  9000, FUNIT_NONE ); break;
-            case RP_RT: aMtrAngle.SetUserValue(  4500, FUNIT_NONE ); break;
-            case RP_LM: aMtrAngle.SetUserValue( 18000, FUNIT_NONE ); break;
-            case RP_RM: aMtrAngle.SetUserValue(     0, FUNIT_NONE ); break;
-            case RP_LB: aMtrAngle.SetUserValue( 22500, FUNIT_NONE ); break;
-            case RP_MB: aMtrAngle.SetUserValue( 27000, FUNIT_NONE ); break;
-            case RP_RB: aMtrAngle.SetUserValue( 31500, FUNIT_NONE ); break;
-            case RP_MM: break;
-        }
-    }
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK_NOARG(SvxAngleTabPage, ModifiedHdl)
-{
-    switch(aMtrAngle.GetValue())
-    {
-        case 13500: aCtlAngle.SetActualRP( RP_LT ); break;
-        case  9000: aCtlAngle.SetActualRP( RP_MT ); break;
-        case  4500: aCtlAngle.SetActualRP( RP_RT ); break;
-        case 18000: aCtlAngle.SetActualRP( RP_LM ); break;
-        case     0: aCtlAngle.SetActualRP( RP_RM ); break;
-        case 22500: aCtlAngle.SetActualRP( RP_LB ); break;
-        case 27000: aCtlAngle.SetActualRP( RP_MB ); break;
-        case 31500: aCtlAngle.SetActualRP( RP_RB ); break;
-        default:    aCtlAngle.SetActualRP( RP_MM ); break;
-    }
-
-    return( 0L );
 }
 
 /*************************************************************************

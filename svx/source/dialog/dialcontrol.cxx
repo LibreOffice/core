@@ -249,6 +249,7 @@ struct DialControl_Impl
     Size                maWinSize;
     Font                maWinFont;
     sal_Int32           mnAngle;
+    sal_Int32           mnInitialAngle;
     sal_Int32           mnOldAngle;
     long                mnCenterX;
     long                mnCenterY;
@@ -266,6 +267,7 @@ DialControl_Impl::DialControl_Impl( Window& rParent ) :
     maBmpBuffered( rParent ),
     mpLinkField( 0 ),
     mnAngle( 0 ),
+    mnInitialAngle( 0 ),
     mnCenterX( 0 ),
     mnCenterY( 0 ),
     mbNoRot( false )
@@ -415,6 +417,16 @@ void DialControl::SetLinkedField( NumericField* pField )
     mpImpl->mpLinkField = pField;
     // set modify handler at new linked field
     ImplSetFieldLink( LINK( this, DialControl, LinkedFieldModifyHdl ) );
+}
+
+void DialControl::SaveValue()
+{
+    mpImpl->mnInitialAngle = mpImpl->mnAngle;
+}
+
+bool DialControl::IsValueModified()
+{
+    return mpImpl->mnInitialAngle != mpImpl->mnAngle;
 }
 
 // private --------------------------------------------------------------------
