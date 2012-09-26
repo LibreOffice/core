@@ -8073,34 +8073,6 @@ else
             fi
         fi
 
-        if test -z "$MOZILLA_VERSION"; then
-            MOZILLA_VERSION=1.1.14
-        fi
-        MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
-        MOZILLA_FETCH_FILE=`grep $MOZILLA_SOURCE_VERSION ooo.lst.in`
-        AC_MSG_CHECKING([for Mozilla sources])
-        if test -z "$MOZILLA_FETCH_FILE"; then
-            AC_MSG_RESULT([not found])
-            HAVE_MOZILLA_TARBALL=n
-        else
-            AC_MSG_CHECKING([for $MOZILLA_FETCH_FILE])
-            if test ! -e "$TARFILE_LOCATION/$MOZILLA_FETCH_FILE"; then
-                if test -z "$DO_FETCH"; then
-                    AC_MSG_RESULT([will be fetched])
-                    HAVE_MOZILLA_TARBALL=y
-                else
-                    AC_MSG_RESULT([not found])
-                    HAVE_MOZILLA_TARBALL=n
-                fi
-            else
-                AC_MSG_RESULT([found])
-                HAVE_MOZILLA_TARBALL=y
-            fi
-        fi
-        if test "$HAVE_MOZILLA_TARBALL" != "y"; then
-            AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
-Use "./download" to download.])
-        fi
         if test "$_os" = "WINNT"; then
             AC_MSG_CHECKING([for moztools binaries])
             if test ! -e "$TARFILE_LOCATION/vc8-moztools.zip"; then
