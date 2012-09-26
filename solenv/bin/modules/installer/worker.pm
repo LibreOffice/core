@@ -1562,22 +1562,6 @@ sub tar_package
     return $filesize;
 }
 
-#########################################################
-# Shuffle an array (Fisher Yates shuffle)
-#########################################################
-
-sub shuffle_array
-{
-    my ( $arrayref ) = @_;
-
-    my $i = @$arrayref;
-    while (--$i)
-    {
-        my $j = int rand ($i+1);
-        @$arrayref[$i,$j] = @$arrayref[$j,$i];
-    }
-}
-
 ################################################
 # Defining the English license text to add
 # it into Solaris packages.

@@ -32,6 +32,7 @@ use base 'Exporter';
 use Cwd;
 use Data::Dumper;
 use File::Copy;
+use List::Util qw(shuffle);
 use installer::archivefiles;
 use installer::control;
 use installer::converter;
@@ -1057,7 +1058,7 @@ sub run {
             }
 
             # shuffle array to reduce parallel packaging process in pool
-            installer::worker::shuffle_array($packages)
+            @{$packages} = shuffle @{$packages}
                 unless $installer::globals::simple;
 
             # iterating over all packages
