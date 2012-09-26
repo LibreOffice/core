@@ -52,6 +52,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_borderline, \
     salhelper \
     i18nisolang1 \
     i18nutil \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

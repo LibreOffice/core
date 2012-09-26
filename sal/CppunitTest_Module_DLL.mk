@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,Module_DLL,\
 
 $(eval $(call gb_CppunitTest_use_libraries,Module_DLL,\
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

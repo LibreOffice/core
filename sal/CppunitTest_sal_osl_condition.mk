@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_condition,\
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl_condition,\
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

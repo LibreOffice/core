@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,qstart_gtk,\
     utl \
     vcl \
     sfx \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_mutex, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl_mutex, \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

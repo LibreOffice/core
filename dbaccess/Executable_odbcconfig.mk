@@ -37,6 +37,7 @@ $(eval $(call gb_Executable_set_include,odbcconfig,\
 $(eval $(call gb_Library_use_sdk_api,odbcconfig))
 
 $(eval $(call gb_Executable_use_libraries,odbcconfig,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

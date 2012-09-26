@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,writerfilter_uno,\
     cppuhelper \
     sal \
     writerfilter \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

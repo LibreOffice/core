@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,avmediawin,\
 	tl \
 	utl \
 	vcl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

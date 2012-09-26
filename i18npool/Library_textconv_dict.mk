@@ -36,6 +36,7 @@ $(eval $(call gb_Library_set_include,textconv_dict,\
 $(eval $(call gb_Library_use_sdk_api,textconv_dict))
 
 $(eval $(call gb_Library_use_libraries,textconv_dict,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

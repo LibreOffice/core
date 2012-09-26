@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,xof,\
     salhelper \
 	sax \
     xo \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

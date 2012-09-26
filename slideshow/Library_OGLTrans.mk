@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
     cppuhelper \
     sal \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

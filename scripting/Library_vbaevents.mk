@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,vbaevents,\
 	sfx \
 	sb \
 	tl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

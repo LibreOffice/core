@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,forui,\
     tl \
     utl \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

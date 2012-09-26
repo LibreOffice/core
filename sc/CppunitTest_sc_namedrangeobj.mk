@@ -69,6 +69,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_namedrangeobj, \
     vbahelper \
     vcl \
     xo \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

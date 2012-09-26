@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	svl \
 	tl \
 	xo \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,dbmm,\
     utl \
     vcl \
     xmlscript \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

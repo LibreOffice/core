@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,sdbc2,\
 	dbtools \
 	utl \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

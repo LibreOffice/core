@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,protocolhandler,\
 	sal \
 	sfx \
 	vcl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

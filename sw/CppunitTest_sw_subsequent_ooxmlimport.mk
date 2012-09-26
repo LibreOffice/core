@@ -42,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ooxmlimport, \
     unotest \
     sw \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,svgfilter,\
 	cppuhelper \
 	cppu \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

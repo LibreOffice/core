@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,tl,\
     i18nisolang1 \
     cppu \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

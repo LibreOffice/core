@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,fsstorage,\
     tl \
     ucbhelper \
     utl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

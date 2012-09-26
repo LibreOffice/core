@@ -109,7 +109,6 @@ endif
 gb_STDLIBS := \
 	mingwthrd \
 	mingw32 \
-	uwinapi \
 	mingwex \
 
 

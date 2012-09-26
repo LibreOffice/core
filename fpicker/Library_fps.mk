@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,fps,\
 	oleaut32 \
 	shell32 \
 	uuid \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

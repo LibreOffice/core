@@ -37,7 +37,6 @@ $(eval $(call gb_Library_set_include,hyphen,\
 $(eval $(call gb_Library_use_sdk_api,hyphen))
 
 $(eval $(call gb_Library_use_libraries,hyphen,\
-	$(gb_STDLIBS) \
 	cppu \
 	cppuhelper \
 	i18nisolang1 \
@@ -45,6 +44,8 @@ $(eval $(call gb_Library_use_libraries,hyphen,\
 	sal \
 	tl \
 	utl \
+	$(gb_UWINAPI) \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,hyphen,\

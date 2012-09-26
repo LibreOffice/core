@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_libraries,xo,\
     svl \
     tl \
     utl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

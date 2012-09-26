@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppu_qa_reference, \
 $(eval $(call gb_CppunitTest_use_libraries,cppu_qa_reference, \
 	cppu \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

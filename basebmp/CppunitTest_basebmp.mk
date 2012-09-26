@@ -27,6 +27,7 @@ endif
 $(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\
     basegfx \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

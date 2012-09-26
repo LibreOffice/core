@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_set_include,officeloader,\
 
 $(eval $(call gb_Executable_use_libraries,officeloader,\
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

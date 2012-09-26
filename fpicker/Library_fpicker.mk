@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,fpicker,\
 	svl \
 	svt \
 	vcl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

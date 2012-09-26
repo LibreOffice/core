@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,syssh,\
 	ole32 \
 	sal \
 	shell32 \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

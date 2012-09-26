@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,i18npool,\
 	i18nisolang1 \
 	i18nutil \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

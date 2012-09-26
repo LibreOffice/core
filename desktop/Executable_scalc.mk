@@ -34,6 +34,7 @@ $(eval $(call gb_Executable_add_defs,scalc,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,scalc,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

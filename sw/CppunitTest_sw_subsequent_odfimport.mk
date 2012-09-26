@@ -43,6 +43,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_odfimport, \
     unotest \
     vcl \
     tl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

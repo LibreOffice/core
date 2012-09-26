@@ -69,6 +69,7 @@ $(eval $(call gb_Library_use_libraries,dbp,\
 	cppuhelper \
 	cppu \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

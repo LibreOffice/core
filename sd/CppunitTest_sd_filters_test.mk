@@ -70,6 +70,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
     utl \
     vcl \
     xo \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

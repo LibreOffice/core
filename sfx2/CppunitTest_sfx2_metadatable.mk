@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sfx2_metadatable))
 $(eval $(call gb_CppunitTest_use_libraries,sfx2_metadatable, \
     sal \
     sfx \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

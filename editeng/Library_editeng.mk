@@ -151,6 +151,7 @@ $(eval $(call gb_Library_use_libraries,editeng,\
     salhelper \
     i18nisolang1 \
     i18nutil \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

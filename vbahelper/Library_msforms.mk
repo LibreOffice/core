@@ -62,6 +62,7 @@ $(eval $(call gb_Library_use_libraries,msforms,\
     tl \
     vbahelper \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

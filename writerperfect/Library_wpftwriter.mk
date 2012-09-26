@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,wpftwriter,\
 	ucbhelper \
 	utl \
 	xo \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

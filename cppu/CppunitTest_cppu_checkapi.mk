@@ -49,6 +49,7 @@ $(call gb_CxxObject_get_target,cppu/qa/checkapi/strings) :| \
 
 $(eval $(call gb_CppunitTest_use_libraries,cppu_checkapi,\
     cppu \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -39,6 +39,7 @@ $(eval $(call gb_Executable_use_libraries,quickstart,\
     ole32 \
     oleaut32 \
     shell32 \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

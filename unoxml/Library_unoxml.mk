@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_libraries,unoxml,\
     cppuhelper \
     cppu \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

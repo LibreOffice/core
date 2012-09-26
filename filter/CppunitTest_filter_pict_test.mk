@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_pict_test, \
 	tl \
 	unotest \
 	vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

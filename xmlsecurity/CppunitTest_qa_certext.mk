@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_qa_certext,\
 	svl \
 	test \
 	tl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

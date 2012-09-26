@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,test,\
 	utl \
 	unotest \
 	vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

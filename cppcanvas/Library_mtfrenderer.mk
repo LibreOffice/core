@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,mtfrenderer,\
 	comphelper \
 	cppcanvas \
 	basegfx \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

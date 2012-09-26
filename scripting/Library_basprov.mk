@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,basprov,\
 	tl \
 	ucbhelper \
 	vcl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

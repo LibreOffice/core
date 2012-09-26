@@ -44,6 +44,7 @@ $(call gb_CxxObject_get_target,salhelper/qa/checkapi/strings) :| \
 
 $(eval $(call gb_CppunitTest_use_libraries,salhelper_checkapi,\
     salhelper \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

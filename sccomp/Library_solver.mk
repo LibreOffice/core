@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,solver,\
 	cppuhelper \
 	sal \
 	tl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

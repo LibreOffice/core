@@ -188,7 +188,6 @@ gb_CXXFLAGS := \
 	-Zm500 \
 
 gb_STDLIBS := \
-	uwinapi \
 	advapi32 \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)

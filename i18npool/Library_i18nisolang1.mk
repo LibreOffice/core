@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_defs,i18nisolang1,\
 
 $(eval $(call gb_Library_use_libraries,i18nisolang1,\
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

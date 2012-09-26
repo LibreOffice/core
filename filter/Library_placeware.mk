@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,placeware,\
 	cppu \
 	sal \
 	sax \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

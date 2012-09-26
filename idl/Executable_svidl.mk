@@ -38,6 +38,7 @@ $(eval $(call gb_Executable_use_sdk_api,svidl))
 $(eval $(call gb_Executable_use_libraries,svidl,\
 	tl \
 	sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

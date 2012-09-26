@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_pipe, \
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl_pipe, \
     sal \
     unotest \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

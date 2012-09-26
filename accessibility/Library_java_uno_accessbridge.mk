@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,java_uno_accessbridge,\
     salhelper \
     tl \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

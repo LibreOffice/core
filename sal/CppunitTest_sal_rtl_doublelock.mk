@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_doublelock,\
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_rtl_doublelock,\
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

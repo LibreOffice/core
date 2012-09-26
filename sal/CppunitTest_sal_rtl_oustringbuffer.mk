@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_oustringbuffer,\
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_rtl_oustringbuffer,\
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -29,6 +29,7 @@
 $(eval $(call gb_Library_Library,dict_zh))
 
 $(eval $(call gb_Library_use_libraries,dict_zh,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

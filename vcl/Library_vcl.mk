@@ -84,6 +84,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     cppu \
     sal \
     xmlreader \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

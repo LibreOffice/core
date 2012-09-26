@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_cpputest, \
     sal \
     comphelper \
     cppu \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,mozabdrv,\
 	dbtools \
 	sal \
 	salhelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

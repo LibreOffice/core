@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_libraries,inprocserv,\
 	gdi32 \
 	ole32 \
 	uuid \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

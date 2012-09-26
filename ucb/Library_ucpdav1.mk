@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	sal \
 	salhelper \
 	ucbhelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

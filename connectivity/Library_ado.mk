@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,ado,\
 	uuid \
 	dbtools \
 	comphelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

@@ -52,6 +52,7 @@ $(eval $(call gb_Executable_use_libraries,svg2odf,\
 	cppuhelper \
 	cppu \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

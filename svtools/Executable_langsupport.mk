@@ -48,6 +48,7 @@ $(eval $(call gb_Executable_use_libraries,langsupport,\
     tl \
     ucbhelper \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

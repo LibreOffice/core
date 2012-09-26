@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,binaryurp_test-unmarshal,\
 	cppuhelper \
 	sal \
 	salhelper \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

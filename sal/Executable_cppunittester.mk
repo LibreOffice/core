@@ -34,6 +34,7 @@ $(eval $(call gb_Executable_set_include,cppunit/cppunittester,\
 
 $(eval $(call gb_Executable_use_libraries,cppunit/cppunittester,\
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

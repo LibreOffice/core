@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_libraries,gdipluscanvas,\
 	tl \
 	utl \
 	i18nisolang1 \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

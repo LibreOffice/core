@@ -18,6 +18,7 @@ $(eval $(call gb_Library_use_external,basebmp,vigra_headers))
 $(eval $(call gb_Library_use_libraries,basebmp,\
     basegfx \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

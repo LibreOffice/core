@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_scanner, \
     utl \
     vcl \
     xmlscript \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

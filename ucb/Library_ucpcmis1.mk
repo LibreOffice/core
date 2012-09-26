@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,ucpcmis1,\
 	salhelper \
 	ucbhelper \
 	tl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

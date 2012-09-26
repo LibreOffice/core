@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_libraries,i18nsearch,\
 	cppuhelper \
 	i18nregexp \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

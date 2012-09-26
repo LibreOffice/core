@@ -30,6 +30,7 @@ $(eval $(call gb_Executable_use_libraries,climaker,\
 		,msvcmrt \
 	) \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

@@ -29,6 +29,7 @@
 $(eval $(call gb_Library_Library,collator_data))
 
 $(eval $(call gb_Library_use_libraries,collator_data,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

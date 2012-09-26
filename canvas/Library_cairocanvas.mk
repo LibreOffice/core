@@ -68,6 +68,7 @@ $(eval $(call gb_Library_use_libraries,cairocanvas,\
 	tl \
 	i18nisolang1 \
 	canvastools \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

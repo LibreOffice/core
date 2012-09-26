@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,sysdtrans,\
 	shell32 \
 	uuid \
 	uwinapi \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

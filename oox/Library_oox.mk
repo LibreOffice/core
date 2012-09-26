@@ -75,6 +75,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     vcl \
     xo \
     xmlscript \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

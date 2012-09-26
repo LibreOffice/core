@@ -38,6 +38,7 @@ $(eval $(call gb_Executable_use_libraries,lngconvex,\
 	i18nisolang1 \
 	sal \
 	tl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 
