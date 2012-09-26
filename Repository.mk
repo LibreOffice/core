@@ -33,7 +33,9 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bmp \
     bmpsum \
     cfgex \
+    checkdll \
     checksingleton \
+    cpp \
     cppunit/cppunittester \
     g2g \
     gencoll_rule \
@@ -43,8 +45,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     gsicheck \
     helpex \
     idxdict \
+    javadepend \
     lngconvex \
     localize \
+    mkdepend \
     mkunroll \
     mork_helper \
     osl_process_child \
