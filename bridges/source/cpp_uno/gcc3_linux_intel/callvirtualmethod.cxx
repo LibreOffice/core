@@ -67,7 +67,9 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         // unexpected size of int
     assert(nStackLongs && pStackLongs); // no stack
 
+#ifdef __clang__
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
+#endif
 
     volatile long edx = 0, eax = 0; // for register returns
     void * stackptr;
