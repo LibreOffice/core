@@ -60,6 +60,9 @@ typedef ::boost::shared_ptr< TextCharacterProperties > TextCharacterPropertiesPt
 struct TextBodyProperties;
 typedef ::boost::shared_ptr< TextBodyProperties > TextBodyPropertiesPtr;
 
+struct EffectProperties;
+typedef ::boost::shared_ptr< EffectProperties > EffectPropertiesPtr;
+
 class TextBody;
 typedef ::boost::shared_ptr< TextBody > TextBodyPtr;
 
