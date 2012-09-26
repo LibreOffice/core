@@ -10962,12 +10962,15 @@ AC_MSG_CHECKING([whether to include AFMs])
 if test "$with_afms" != "no"; then
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE AFMS"
+    AFMS_TARBALL="1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz"
 else
     AC_MSG_RESULT([no])
     WITHOUT_AFMS=YES
     SCPDEFS="$SCPDEFS -DWITHOUT_AFMS"
+    AFMS_TARBALL=
 fi
 AC_SUBST(WITHOUT_AFMS)
+AC_SUBST(AFMS_TARBALL)
 
 dnl ===================================================================
 dnl Test whether to include extra galleries

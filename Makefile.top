@@ -32,6 +32,7 @@ MathMLDTD\
 Mesa\
 UnoControls\
 accessibility\
+afms\
 android\
 animations\
 apple_remote\
@@ -190,7 +191,6 @@ xmlscript\
 xmlsecurity\
 
 dmake_modules:=\
-afms\
 apache-commons\
 beanshell\
 berkeleydb\

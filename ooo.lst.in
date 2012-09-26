@@ -5,7 +5,7 @@ c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 0b49ede71c21c0599b0cc19b353a6cb3-README_apache-commons.txt
 6097739c841f671cb21332b9cc593ae7-libexttextcat-3.3.1.tar.bz2
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
-1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
+@AFMS_TARBALL@
 18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz
 1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
 24be19595acad0a2cae931af77a0148a-LICENSE_source-9.0.0.7-bj.html

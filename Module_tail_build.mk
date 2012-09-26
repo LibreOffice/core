@@ -26,6 +26,9 @@ $(eval $(call gb_Module_Module,tail_end))
 
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
     accessibility \
+	$(if $(filter AFMS,$(BUILD_TYPE)),\
+		afms \
+	) \
     animations \
     apple_remote \
 	autodoc \
