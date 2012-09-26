@@ -42,7 +42,6 @@
 
 class SwDoc;
 class SwDocShell;
-class ViewShell;
 class _SetGetExpFlds;
 class SwViewOption;
 class OutputDevice;
@@ -277,6 +276,7 @@ public:
     void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions);
     void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
     void ViewOptionAdjustStop();
+    void ViewOptionAdjustCrashPreventionKludge();
 
     bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }
     SwPrintData const*  GetSwPrtOptions() const { return m_pPrtOptions.get(); }

@@ -131,6 +131,11 @@ void SwRenderData::ViewOptionAdjustStop()
     m_pViewOptionAdjust.reset();
 }
 
+void SwRenderData::ViewOptionAdjustCrashPreventionKludge()
+{
+    m_pViewOptionAdjust->DontTouchThatViewShellItSmellsFunny();
+}
+
 
 void SwRenderData::MakeSwPrtOptions(
     SwDocShell const*const pDocShell,

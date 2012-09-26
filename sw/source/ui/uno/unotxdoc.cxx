@@ -400,6 +400,13 @@ SwXTextDocument::~SwXTextDocument()
         xNumFmtAgg = 0;
     }
     delete m_pPrintUIOptions;
+    if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
+    {   // rhbz#827695: this can happen if the last page is not printed
+        // the ViewShell has been deleted already by SwView::~SwView
+        // FIXME: replace this awful implementation of XRenderable with
+        // something less insane that has its own view
+        m_pRenderData->ViewOptionAdjustCrashPreventionKludge();
+    }
     delete m_pRenderData;
 }
 
@@ -3852,14 +3859,17 @@ void SwXDocumentPropertyHelper::onChange()
 
 SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(
             ViewShell& rSh, const SwViewOption &rViewOptions)
-    : m_rShell( rSh )
+    : m_pShell(&rSh)
     , m_aOldViewOptions( rViewOptions )
 {
 }
 
 SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 {
-    m_rShell.ApplyViewOptions( m_aOldViewOptions );
+    if (m_pShell)
+    {
+        m_pShell->ApplyViewOptions( m_aOldViewOptions );
+    }
 }
 
 void
@@ -3867,14 +3877,14 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
 {
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present
-    const bool bContainsHiddenChars         = m_rShell.GetDoc()->ContainsHiddenChars();
-    const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType( RES_HIDDENTXTFLD );
+    const bool bContainsHiddenChars         = m_pShell->GetDoc()->ContainsHiddenChars();
+    const SwFieldType* pFldType = m_pShell->GetDoc()->GetSysFldType( RES_HIDDENTXTFLD );
     const bool bContainsHiddenFields        = pFldType && pFldType->GetDepends();
-    pFldType = m_rShell.GetDoc()->GetSysFldType( RES_HIDDENPARAFLD );
+    pFldType = m_pShell->GetDoc()->GetSysFldType( RES_HIDDENPARAFLD );
     const bool bContainsHiddenParagraphs    = pFldType && pFldType->GetDepends();
-    pFldType = m_rShell.GetDoc()->GetSysFldType( RES_JUMPEDITFLD );
+    pFldType = m_pShell->GetDoc()->GetSysFldType( RES_JUMPEDITFLD );
     const bool bContainsPlaceHolders        = pFldType && pFldType->GetDepends();
-    const bool bContainsFields              = m_rShell.IsAnyFieldInDoc();
+    const bool bContainsFields              = m_pShell->IsAnyFieldInDoc();
 
     SwViewOption aRenderViewOptions( m_aOldViewOptions );
 
@@ -3914,7 +3924,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     if (m_aOldViewOptions != aRenderViewOptions)  // check if reformatting is necessary
     {
         aRenderViewOptions.SetPrinting( pPrtOptions != NULL );
-        m_rShell.ApplyViewOptions( aRenderViewOptions );
+        m_pShell->ApplyViewOptions( aRenderViewOptions );
     }
 }
 
