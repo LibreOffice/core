@@ -369,11 +369,15 @@ static BOOL isPopupMenuOpen = NO;
 -(id)windowAttribute {
     // go upstairs until reaching the broken connection
     AquaA11yWrapper * aWrapper = self;
+    int loops = 0;
     while ( [ aWrapper accessibleContext ] -> getAccessibleParent().is() ) {
         AquaA11yWrapper *aTentativeParentWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ aWrapper accessibleContext ] -> getAccessibleParent() -> getAccessibleContext() ];
         // Quick-and-dirty fix for infinite loop after fixing crash in
         // fdo#47275
         if ( aTentativeParentWrapper == aWrapper )
+            break;
+        // Even dirtier fix for infinite loop in fdo#55156
+        if ( loops++ == 100 )
             break;
         aWrapper = aTentativeParentWrapper;
         [ aWrapper autorelease ];
