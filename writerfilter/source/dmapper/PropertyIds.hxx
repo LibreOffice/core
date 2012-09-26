@@ -291,6 +291,7 @@ enum PropertyIds
         ,PROP_Z_ORDER
         ,PROP_EMBED_FONTS
         ,PROP_EMBED_SYSTEM_FONTS
+        ,PROP_SHADOW_FORMAT
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
