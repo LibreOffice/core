@@ -98,6 +98,7 @@ sub main {
     if ($@) {
         my $message = "ERROR: $@";
 
+        warn "ERROR: Failure in installer.pm\n";
         warn "$message\n";
         $exit_code = -1;
 
