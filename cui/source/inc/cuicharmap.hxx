@@ -37,7 +37,6 @@
 #include <svx/charmap.hxx>
 
 class SubsetMap;
-class SvxCharMapData;
 
 #define CHARMAP_MAXLEN  32
 
@@ -66,16 +65,13 @@ private:
 
 };
 
-class SvxCharMapData
+/** The main purpose of this dialog is to enable the use of characters
+    that are not easily accesible from the keyboard. */
+class SvxCharacterMap : public SfxModalDialog
 {
-public:
-                    SvxCharMapData( class SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr* pResContext );
-
-    void            SetCharFont( const Font& rFont );
-
 private:
-friend class SvxCharacterMap;
-    SfxModalDialog* mpDialog;
+
+    void            init();
 
     SvxShowCharSet  aShowSet;
     SvxShowText     aShowText;
@@ -91,7 +87,7 @@ friend class SvxCharacterMap;
     SvxShowText     aShowChar;
     FixedText       aCharCodeText;
     Font            aFont;
-    sal_Bool            bOne;
+    sal_Bool        bOne;
     const SubsetMap* pSubsetMap;
 
     DECL_LINK(OKHdl, void *);
@@ -102,14 +98,6 @@ friend class SvxCharacterMap;
     DECL_LINK(CharHighlightHdl, void *);
     DECL_LINK(CharPreSelectHdl, void *);
     DECL_LINK(DeleteHdl, void *);
-};
-
-/** The main purpose of this dialog is to enable the use of characters
-    that are not easily accesible from the keyboard. */
-class SvxCharacterMap : public SfxModalDialog
-{
-private:
-    SvxCharMapData* mpCharMapData;
 
 public:
                     SvxCharacterMap( Window* pParent, sal_Bool bOne=sal_True, const SfxItemSet* pSet=0 );
