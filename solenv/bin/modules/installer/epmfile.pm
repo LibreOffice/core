@@ -36,9 +36,9 @@ use installer::logger;
 use installer::packagelist;
 use installer::pathanalyzer;
 use installer::remover;
+use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::systemactions;
-use installer::worker;
 use POSIX;
 
 ############################################################################
@@ -413,7 +413,7 @@ sub create_epm_header
 
         if (( $installer::globals::issolarispkgbuild ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} ))
         {
-            if ( ! $installer::globals::englishlicenseset ) { installer::worker::set_english_license() }
+            if ( ! $installer::globals::englishlicenseset ) { _set_english_license() }
 
             # The location for the new file
             my $languagestring = "";
@@ -2797,7 +2797,7 @@ sub put_systemintegration_into_installset
         if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
 
         # Adding license content into Solaris packages
-        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
+        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { _add_license_into_systemintegrationpackages($destdir, $newcontent); }
     }
 }
 
@@ -3000,6 +3000,200 @@ sub finalize_linux_patch
 
     # Setting unix rights 755
     chmod 0755, $newscriptfilename;
+}
+
+################################################
+# Defining the English license text to add
+# it into Solaris packages.
+################################################
+
+sub _set_english_license
+{
+    my $additional_license_name = $installer::globals::englishsolarislicensename;   # always the English file
+    my $licensefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$additional_license_name, "" , 0);
+    if ( $$licensefileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $additional_license_name!", "set_english_license"); }
+    $installer::globals::englishlicenseset = 1;
+    $installer::globals::englishlicense = installer::files::read_file($$licensefileref);
+    installer::scpzipfiles::replace_all_ziplistvariables_in_file($installer::globals::englishlicense, $variableshashref);
+}
+
+################################################
+# Adding the content of the English license
+# file into the system integration packages.
+################################################
+
+sub _add_license_into_systemintegrationpackages
+{
+    my ($destdir, $packages) = @_;
+
+    for ( my $i = 0; $i <= $#{$packages}; $i++ )
+    {
+        my $copyrightfilename = ${$packages}[$i] . $installer::globals::separator . "install" . $installer::globals::separator . "copyright";
+        if ( ! -f $copyrightfilename ) { installer::exiter::exit_program("ERROR: Could not find license file in system integration package: $copyrightfilename!", "add_license_into_systemintegrationpackages"); }
+        my $copyrightfile = installer::files::read_file($copyrightfilename);
+
+        # Saving time stamp of old copyrightfile
+        my $savcopyrightfilename = $copyrightfilename . ".sav";
+        installer::systemactions::copy_one_file($copyrightfilename, $savcopyrightfilename);
+        _set_time_stamp_for_file($copyrightfilename, $savcopyrightfilename); # now $savcopyrightfile has the time stamp of $copyrightfile
+
+        # Adding license content to copyright file
+        push(@{$copyrightfile}, "\n");
+        for ( my $i = 0; $i <= $#{$installer::globals::englishlicense}; $i++ ) { push(@{$copyrightfile}, ${$installer::globals::englishlicense}[$i]); }
+        installer::files::save_file($copyrightfilename, $copyrightfile);
+
+        # Setting the old time stamp saved with $savcopyrightfilename
+        _set_time_stamp_for_file($savcopyrightfilename, $copyrightfilename); # now $copyrightfile has the time stamp of $savcopyrightfile
+        unlink($savcopyrightfilename);
+
+        # Changing content of copyright file in pkgmap
+        my $pkgmapfilename = ${$packages}[$i] . $installer::globals::separator . "pkgmap";
+        if ( ! -f $pkgmapfilename ) { installer::exiter::exit_program("ERROR: Could not find pkgmap in system integration package: $pkgmapfilename!", "add_license_into_systemintegrationpackages"); }
+        my $pkgmap = installer::files::read_file($pkgmapfilename);
+        _change_onefile_in_pkgmap($pkgmap, $copyrightfilename, "copyright");
+        installer::files::save_file($pkgmapfilename, $pkgmap);
+    }
+}
+
+##############################################
+# Setting time stamp of copied files to avoid
+# errors from pkgchk.
+##############################################
+
+sub _set_time_stamp_for_file
+{
+    my ($sourcefile, $destfile) = @_;
+
+    my $systemcall = "touch -r $sourcefile $destfile";
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: \"$systemcall\" failed!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: \"$systemcall\" !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+##############################################
+# Setting checksum and wordcount for changed
+# pkginfo file into pkgmap.
+##############################################
+
+sub _change_onefile_in_pkgmap
+{
+    my ($pkgmapfile, $fullfilename, $shortfilename) = @_;
+
+    # 1 i pkginfo 442 34577 1166716297
+    # ->
+    # 1 i pkginfo 443 34737 1166716297
+    #
+    # wc -c pkginfo | cut -f6 -d' '  -> 442  (variable)
+    # sum pkginfo | cut -f1 -d' '  -> 34577  (variable)
+    # grep 'pkginfo' pkgmap | cut -f6 -d' '  -> 1166716297  (fix)
+
+    my $checksum = _call_sum($fullfilename);
+    if ( $checksum =~ /^\s*(\d+)\s+.*$/ ) { $checksum = $1; }
+
+    my $wordcount = _call_wc($fullfilename);
+    if ( $wordcount =~ /^\s*(\d+)\s+.*$/ ) { $wordcount = $1; }
+
+    for ( my $i = 0; $i <= $#{$pkgmapfile}; $i++ )
+    {
+        if ( ${$pkgmapfile}[$i] =~ /(^.*\b\Q$shortfilename\E\b\s+)(\d+)(\s+)(\d+)(\s+)(\d+)(\s*$)/ )
+        {
+            my $newline = $1 . $wordcount . $3 . $checksum . $5 . $6 . $7;
+            ${$pkgmapfile}[$i] = $newline;
+            last;
+        }
+    }
+}
+
+#########################################################
+# Calling sum
+#########################################################
+
+sub _call_sum
+{
+    my ($filename) = @_;
+
+    $sumfile = "/usr/bin/sum";
+
+    if ( ! -f $sumfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/sum", "call_sum"); }
+
+    my $systemcall = "$sumfile $filename |";
+
+    my $sumoutput = "";
+
+    open (SUM, "$systemcall");
+    $sumoutput = <SUM>;
+    close (SUM);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $sumoutput;
+}
+
+#########################################################
+# Calling wc
+# wc -c pkginfo | cut -f6 -d' '
+#########################################################
+
+sub _call_wc
+{
+    my ($filename) = @_;
+
+    $wcfile = "/usr/bin/wc";
+
+    if ( ! -f $wcfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/wc", "call_wc"); }
+
+    my $systemcall = "$wcfile -c $filename |";
+
+    my $wcoutput = "";
+
+    open (WC, "$systemcall");
+    $wcoutput = <WC>;
+    close (WC);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $wcoutput;
 }
 
 1;
