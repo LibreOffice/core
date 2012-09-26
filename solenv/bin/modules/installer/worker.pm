@@ -1252,32 +1252,6 @@ sub resolving_hidden_flag
     push( @installer::globals::logfileinfo, $infoline);
 }
 
-################################################
-# Controlling that all keys in hash A are
-# also key in hash B.
-################################################
-
-sub key_in_a_is_also_key_in_b
-{
-    my ( $hashref_a, $hashref_b) = @_;
-
-    my $returnvalue = 1;
-
-    my $key;
-    foreach $key ( keys %{$hashref_a} )
-    {
-        if ( ! exists($hashref_b->{$key}) )
-        {
-            print "*****\n";
-            foreach $keyb ( keys %{$hashref_b} ) { print "$keyb : $hashref_b->{$keyb}\n"; }
-            print "*****\n";
-            $returnvalue = 0;
-        }
-    }
-
-    return $returnvalue;
-}
-
 ######################################################
 # Getting the first entry from a list of languages
 ######################################################
