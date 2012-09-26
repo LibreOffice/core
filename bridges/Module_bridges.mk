@@ -73,6 +73,9 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	$(if $(filter GCCMACOSXI,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_macosx_intel \
 	) \
+	$(if $(filter GCCMACOSXX,$(COM)$(OS)$(CPU)),\
+		Library_gcc3_macosx_x86-64 \
+	) \
 	$(if $(filter GCCMACOSXP,$(COM)$(OS)$(CPU)),\
 		Library_gcc3_macosx_powerpc \
 	) \
