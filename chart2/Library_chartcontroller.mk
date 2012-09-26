@@ -35,14 +35,6 @@ $(eval $(call gb_Library_set_include,chartcontroller,\
 
 $(eval $(call gb_Library_use_sdk_api,chartcontroller))
 
-# TODO: is this still necessary?
-# (from chart2/source/controller/dialogs/makefile.mk)
-# # i26518 the gcc-3.0.4 requires to enhance the template-depth
-# # this seems to be a compiler issue, so we recommend not to use 3.0.x anymore
-# .IF "$(COM)"=="GCC"
-#     CFLAGS+=-ftemplate-depth-128
-# .ENDIF
-
 $(eval $(call gb_Library_use_libraries,chartcontroller,\
     basegfx \
     chartcore \
