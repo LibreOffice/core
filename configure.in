@@ -11595,6 +11595,7 @@ if test "$with_system_libpng" = yes; then
     AC_MSG_RESULT([yes])
 else
     SYSTEM_LIBPNG=NO
+    BUILD_TYPE="$BUILD_TYPE LIBPNG"
     PNG_TARBALL=9e5d864bce8f06751bbd99962ecf4aad-libpng-1.5.10.tar.gz
     AC_MSG_RESULT([no])
 fi

@@ -1,3 +1,3 @@
-gp	gdk-pixbuf	: glib gettext jpeg libpng soltools NULL
+gp	gdk-pixbuf	: glib gettext jpeg LIBPNG:libpng soltools NULL
 gp	gdk-pixbuf			    usr1	-	all	gp_mkout NULL
 gp	gdk-pixbuf			    nmake	-	all	gp_gdk-pixbuf NULL
