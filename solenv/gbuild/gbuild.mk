@@ -150,9 +150,8 @@ include $(GBUILDDIR)/Helper.mk
 include $(GBUILDDIR)/TargetLocations.mk
 
 $(eval $(call gb_Helper_init_registries))
-# RepositoryExternal.mk is optional
 include $(SRCDIR)/Repository.mk
--include $(SRCDIR)/RepositoryExternal.mk
+include $(SRCDIR)/RepositoryExternal.mk
 
 gb_Library_DLLPOSTFIX := lo
 
