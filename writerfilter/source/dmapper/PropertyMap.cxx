@@ -1001,6 +1001,35 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 if ((m_bTitlePage && m_bIsFirstSection) || !m_bTitlePage)
                     xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
                             uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
+                else
+                {
+                    // In this miserable situation (second or later section on a title page), make sure that the header / footer is not lost.
+                    uno::Reference< container::XNameAccess > xPageStyles(rDM_Impl.GetPageStyles(), uno::UNO_QUERY);
+                    if (xPageStyles->hasByName(m_sFollowPageStyleName))
+                    {
+                        uno::Reference<beans::XPropertySet> xCurrent(xPageStyles->getByName(rPropNameSupplier.GetName(PROP_STANDARD)), uno::UNO_QUERY);
+                        uno::Reference<beans::XPropertySet> xFollow(xPageStyles->getByName(m_sFollowPageStyleName), uno::UNO_QUERY);
+
+                        if (xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_ON)).get<sal_Bool>())
+                        {
+                            xCurrent->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_ON), uno::makeAny(sal_True));
+                            uno::Reference<text::XTextRange> xCurrentRange(xCurrent->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_TEXT)), uno::UNO_QUERY_THROW);
+                            xCurrentRange->setString("");
+                            uno::Reference<text::XTextCopy> xCurrentTxt(xCurrentRange, uno::UNO_QUERY_THROW);
+                            uno::Reference<text::XTextCopy> xFollowTxt(xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_TEXT)), uno::UNO_QUERY_THROW);
+                            xCurrentTxt->copyText(xFollowTxt);
+                        }
+                        if (xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_ON)).get<sal_Bool>())
+                        {
+                            xCurrent->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_ON), uno::makeAny(sal_True));
+                            uno::Reference<text::XTextRange> xCurrentRange(xCurrent->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_TEXT)), uno::UNO_QUERY_THROW);
+                            xCurrentRange->setString("");
+                            uno::Reference<text::XTextCopy> xCurrentTxt(xCurrentRange, uno::UNO_QUERY_THROW);
+                            uno::Reference<text::XTextCopy> xFollowTxt(xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_TEXT)), uno::UNO_QUERY_THROW);
+                            xCurrentTxt->copyText(xFollowTxt);
+                        }
+                    }
+                }
                 // handle page breaks with odd/even page numbering
                 style::PageStyleLayout nPageStyleLayout(style::PageStyleLayout_ALL);
                 if (m_nBreakType == 3)
