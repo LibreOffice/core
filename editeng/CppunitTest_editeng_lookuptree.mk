@@ -53,8 +53,9 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_lookuptree, \
     i18nisolang1 \
     i18nutil \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,editeng_lookuptree))
 
 $(eval $(call gb_CppunitTest_use_externals,editeng_lookuptree,\
     icuuc \

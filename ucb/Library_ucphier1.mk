@@ -38,8 +38,9 @@ $(eval $(call gb_Library_use_libraries,ucphier1,\
 	salhelper \
 	ucbhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,ucphier1))
 
 $(eval $(call gb_Library_add_exception_objects,ucphier1,\
 	ucb/source/ucp/hierarchy/dynamicresultset \

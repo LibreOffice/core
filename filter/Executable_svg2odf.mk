@@ -53,8 +53,9 @@ $(eval $(call gb_Executable_use_libraries,svg2odf,\
 	cppu \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,svg2odf))
 
 $(eval $(call gb_Executable_add_exception_objects,svg2odf,\
     filter/source/svg/test/svg2odf \

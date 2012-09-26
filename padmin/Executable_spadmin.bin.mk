@@ -41,8 +41,9 @@ $(eval $(call gb_Executable_use_libraries,spadmin.bin,\
     cppu \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,spadmin.bin))
 
 $(eval $(call gb_Executable_add_exception_objects,spadmin.bin,\
     padmin/source/desktopcontext \

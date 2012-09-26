@@ -46,8 +46,9 @@ $(eval $(call gb_Library_use_libraries,fps_aqua,\
 	sal \
 	tl \
 	vcl \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,fps_aqua))
 
 $(eval $(call gb_Library_add_objcxxobjects,fps_aqua,\
 	fpicker/source/aqua/AquaFilePickerDelegate \

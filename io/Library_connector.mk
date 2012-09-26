@@ -34,8 +34,9 @@ $(eval $(call gb_Library_use_libraries,connector,\
     cppuhelper \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,connector))
 
 $(eval $(call gb_Library_set_componentfile,connector,io/source/connector/connector))
 

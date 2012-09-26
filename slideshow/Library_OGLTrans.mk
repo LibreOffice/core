@@ -53,8 +53,9 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
     sal \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,OGLTrans))
 
 $(eval $(call gb_Library_use_external,OGLTrans,mesa_headers))
 

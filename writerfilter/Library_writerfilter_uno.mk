@@ -45,8 +45,9 @@ $(eval $(call gb_Library_use_libraries,writerfilter_uno,\
     sal \
     writerfilter \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,writerfilter_uno))
 
 $(eval $(call gb_Library_use_external,writerfilter_uno,libxml2))
 

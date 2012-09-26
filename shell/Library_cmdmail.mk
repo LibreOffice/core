@@ -34,8 +34,9 @@ $(eval $(call gb_Library_use_libraries,cmdmail,\
 	cppuhelper \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,cmdmail))
 
 $(eval $(call gb_Library_set_componentfile,cmdmail,shell/source/cmdmail/cmdmail))
 

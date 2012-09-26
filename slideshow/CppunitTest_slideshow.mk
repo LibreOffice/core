@@ -67,8 +67,9 @@ $(eval $(call gb_CppunitTest_use_libraries,slideshow,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,slideshow))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,slideshow,\
     slideshow/test/slidetest \

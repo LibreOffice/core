@@ -35,8 +35,9 @@ $(eval $(call gb_Executable_add_defs,simpress,\
 
 $(eval $(call gb_Executable_use_libraries,simpress,\
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,simpress))
 
 $(eval $(call gb_Executable_add_libs,simpress,\
     $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \

@@ -62,8 +62,9 @@ $(eval $(call gb_Library_use_libraries,gdipluscanvas,\
 	utl \
 	i18nisolang1 \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,gdipluscanvas))
 
 $(eval $(call gb_Library_use_libraries,gdipluscanvas,\
 	gdi32 \

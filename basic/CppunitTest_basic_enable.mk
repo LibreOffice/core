@@ -29,8 +29,9 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_enable, \
     xmlscript \
     test \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,basic_enable))
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_CppunitTest_use_libraries,basic_enable, \

@@ -50,8 +50,9 @@ $(eval $(call gb_Library_use_libraries,sb,\
 	vcl \
 	xmlscript \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sb))
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)
 

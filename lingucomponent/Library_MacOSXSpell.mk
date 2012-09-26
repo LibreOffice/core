@@ -37,7 +37,6 @@ $(eval $(call gb_Library_set_include,MacOSXSpell,\
 $(eval $(call gb_Library_use_sdk_api,MacOSXSpell))
 
 $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
-	$(gb_STDLIBS) \
 	cppu \
 	cppuhelper \
 	lng \
@@ -47,6 +46,8 @@ $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
 	ucbhelper \
 	utl \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,MacOSXSpell))
 
 $(eval $(call gb_Library_use_externals,MacOSXSpell,\
 	cocoa \

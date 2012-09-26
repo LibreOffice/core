@@ -38,8 +38,9 @@ $(eval $(call gb_Library_use_libraries,ucpfile1,\
 	sal \
 	ucbhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,ucpfile1))
 
 $(eval $(call gb_Library_add_exception_objects,ucpfile1,\
 	ucb/source/ucp/file/bc \

@@ -51,8 +51,9 @@ $(eval $(call gb_Library_use_libraries,sunjavaplugin,\
     sal \
     salhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sunjavaplugin))
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_use_libraries,sunjavaplugin,\

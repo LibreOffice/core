@@ -53,8 +53,9 @@ $(eval $(call gb_Library_use_libraries,sysdtrans,\
 	uuid \
 	uwinapi \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sysdtrans))
 
 $(eval $(call gb_Library_use_static_libraries,sysdtrans,\
 	dtobj \

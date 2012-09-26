@@ -76,8 +76,9 @@ $(eval $(call gb_Library_use_libraries,oox,\
     xo \
     xmlscript \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,oox))
 
 $(eval $(call gb_Library_use_external,oox,openssl))
 

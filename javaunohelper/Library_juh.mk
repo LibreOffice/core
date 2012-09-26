@@ -34,8 +34,9 @@ $(eval $(call gb_Library_use_internal_comprehensive_api,juh,\
 $(eval $(call gb_Library_use_libraries,juh,\
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,juh))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Library_add_exception_objects,juh,\

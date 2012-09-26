@@ -53,8 +53,9 @@ $(eval $(call gb_Library_use_libraries,dbmm,\
     vcl \
     xmlscript \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,dbmm))
 
 $(eval $(call gb_Library_set_componentfile,dbmm,dbaccess/source/ext/macromigration/dbmm))
 

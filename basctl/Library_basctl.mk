@@ -61,8 +61,9 @@ $(eval $(call gb_Library_use_libraries,basctl,\
 	vcl \
 	xmlscript \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,basctl))
 
 $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/accessibility/accessibledialogcontrolshape \

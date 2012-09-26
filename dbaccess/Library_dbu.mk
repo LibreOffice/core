@@ -71,8 +71,9 @@ $(eval $(call gb_Library_use_libraries,dbu,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,dbu))
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_Library_use_libraries,dbu,\

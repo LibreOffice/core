@@ -54,8 +54,9 @@ $(eval $(call gb_Library_use_libraries,rptxml,\
     vcl \
     xo \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,rptxml))
 
 $(eval $(call gb_Library_set_componentfile,rptxml,reportdesign/util/rptxml))
 

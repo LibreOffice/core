@@ -35,8 +35,9 @@ $(eval $(call gb_CppunitTest_use_libraries,tubes_test, \
 	tubes \
 	utl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,tubes_test))
 
 $(eval $(call gb_CppunitTest_use_externals,tubes_test,\
 	telepathy \

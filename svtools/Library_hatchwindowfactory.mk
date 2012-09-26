@@ -45,8 +45,9 @@ $(eval $(call gb_Library_use_libraries,hatchwindowfactory,\
     tl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,hatchwindowfactory))
 
 $(eval $(call gb_Library_add_exception_objects,hatchwindowfactory,\
     svtools/source/hatchwindow/documentcloser \

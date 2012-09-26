@@ -54,8 +54,9 @@ $(eval $(call gb_Library_use_libraries,bootstrap,\
     salhelper \
     xmlreader \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,bootstrap))
 
 $(eval $(call gb_Library_set_componentfile,bootstrap,stoc/util/bootstrap))
 

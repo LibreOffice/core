@@ -49,8 +49,9 @@ $(eval $(call gb_Executable_use_libraries,langsupport,\
     ucbhelper \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,langsupport))
 
 $(eval $(call gb_Executable_add_exception_objects,langsupport,\
     svtools/langsupport/langsupport \

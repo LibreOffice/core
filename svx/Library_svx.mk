@@ -66,8 +66,9 @@ $(eval $(call gb_Library_use_libraries,svx,\
     xo \
     xmlscript \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,svx))
 
 $(eval $(call gb_Library_use_external,svx,icuuc))
 

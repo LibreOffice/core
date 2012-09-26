@@ -70,8 +70,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tableautoformatfield, \
     vcl \
     xo \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sc_tableautoformatfield))
 
 $(eval $(call gb_CppunitTest_set_include,sc_tableautoformatfield,\
     -I$(SRCDIR)/sc/source/ui/inc \

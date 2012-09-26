@@ -39,8 +39,9 @@ $(eval $(call gb_Library_use_libraries,java_uno_accessbridge,\
     tl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,java_uno_accessbridge))
 
 $(eval $(call gb_Library_add_exception_objects,java_uno_accessbridge,\
     accessibility/bridge/source/java/WindowsAccessBridgeAdapter \

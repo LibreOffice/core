@@ -56,8 +56,9 @@ $(eval $(call gb_Library_use_libraries,directx9canvas,\
 	utl \
 	i18nisolang1 \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,directx9canvas))
 
 $(eval $(call gb_Library_use_libraries,directx9canvas,\
 	d3d9 \

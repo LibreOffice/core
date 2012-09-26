@@ -38,8 +38,9 @@ $(eval $(call gb_Executable_use_libraries,soffice.bin,\
     sal \
     sofficeapp \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,soffice.bin))
 
 $(eval $(call gb_Executable_add_cobjects,soffice.bin,\
     desktop/source/app/main \

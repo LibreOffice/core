@@ -43,8 +43,9 @@ $(eval $(call gb_Library_use_libraries,xstor,\
 	cppuhelper \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,xstor))
 
 $(eval $(call gb_Library_add_exception_objects,xstor,\
 	package/source/xstor/disposelistener \

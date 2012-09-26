@@ -64,8 +64,9 @@ $(eval $(call gb_Library_use_libraries,vbaswobj,\
     vbahelper \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,vbaswobj))
 
 $(eval $(call gb_Library_use_externals,vbaswobj,\
 	libxml2 \

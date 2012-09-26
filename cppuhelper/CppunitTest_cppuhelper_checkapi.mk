@@ -50,7 +50,8 @@ $(call gb_CxxObject_get_target,cppuhelper/qa/checkapi/strings) :| \
 $(eval $(call gb_CppunitTest_use_libraries,cppuhelper_checkapi,\
     cppuhelper \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,cppuhelper_checkapi))
 
 # vim: set noet sw=4 ts=4:

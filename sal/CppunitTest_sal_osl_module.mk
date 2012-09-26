@@ -38,7 +38,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_module,\
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl_module,\
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sal_osl_module))
 
 # vim: set noet sw=4 ts=4:

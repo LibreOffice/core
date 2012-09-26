@@ -48,8 +48,9 @@ $(eval $(call gb_Library_use_libraries,hsqldb,\
 	tl \
 	utl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,hsqldb))
 
 $(eval $(call gb_Library_set_componentfile,hsqldb,connectivity/source/drivers/hsqldb/hsqldb))
 

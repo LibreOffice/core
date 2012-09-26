@@ -32,8 +32,9 @@ $(eval $(call gb_Library_use_libraries,java_uno,\
 	sal \
 	salhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,java_uno))
 
 $(eval $(call gb_Library_add_exception_objects,java_uno,\
 	bridges/source/jni_uno/jni_bridge \

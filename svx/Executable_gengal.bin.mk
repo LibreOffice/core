@@ -58,8 +58,9 @@ $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
     vcl \
     svxcore \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,$(svx_GENGALBIN)))
 
 $(eval $(call gb_Executable_add_exception_objects,$(svx_GENGALBIN),\
     svx/source/gengal/gengal \

@@ -39,8 +39,9 @@ $(eval $(call gb_Library_use_libraries,solver,\
 	sal \
 	tl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,solver))
 
 $(eval $(call gb_Library_use_external,solver,lpsolve55))
 

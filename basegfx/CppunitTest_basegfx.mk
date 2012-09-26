@@ -20,8 +20,9 @@ $(eval $(call gb_CppunitTest_use_libraries,basegfx_cpputest,\
     cppuhelper \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,basegfx_cpputest))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,basegfx_cpputest,\
     basegfx/test/basegfx1d \

@@ -31,8 +31,9 @@ $(eval $(call gb_Library_use_libraries,exp,\
 	cppu \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,exp))
 
 $(eval $(call gb_Library_add_exception_objects,exp,\
 	filter/source/graphicfilter/expm/expm \

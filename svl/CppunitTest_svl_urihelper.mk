@@ -49,7 +49,8 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
     tl \
     utl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,svl_urihelper))
 
 $(eval $(call gb_CppunitTest_use_ure,svl_urihelper))

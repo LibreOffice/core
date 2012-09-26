@@ -58,8 +58,9 @@ $(eval $(call gb_Library_use_libraries,swd,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,swd))
 
 $(eval $(call gb_Library_add_exception_objects,swd,\
     sw/source/filter/basflt/iodetect \

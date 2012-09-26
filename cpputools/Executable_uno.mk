@@ -36,8 +36,9 @@ $(eval $(call gb_Executable_use_libraries,uno,\
     sal \
     salhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,uno))
 
 $(eval $(call gb_Executable_use_externals,uno,\
     libxml2 \

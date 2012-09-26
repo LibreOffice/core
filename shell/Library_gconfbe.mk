@@ -43,8 +43,9 @@ $(eval $(call gb_Library_use_libraries,gconfbe1,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,gconfbe1))
 
 $(eval $(call gb_Library_set_componentfile,gconfbe1,shell/source/backends/gconfbe/gconfbe1))
 

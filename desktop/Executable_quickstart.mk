@@ -40,8 +40,9 @@ $(eval $(call gb_Executable_use_libraries,quickstart,\
     oleaut32 \
     shell32 \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Executable_add_standard_system_libs,quickstart))
 
 ifeq ($(COM),GCC)
 

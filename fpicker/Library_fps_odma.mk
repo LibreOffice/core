@@ -42,8 +42,9 @@ $(eval $(call gb_Library_use_libraries,fps_odma,\
 	utl \
 	vcl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,fps_odma))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_static_libraries,fps_odma,\

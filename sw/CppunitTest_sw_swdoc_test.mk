@@ -68,8 +68,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_swdoc_test, \
     vcl \
     xo \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,sw_swdoc_test))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_swdoc_test,\
 	icuuc \

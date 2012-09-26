@@ -30,8 +30,9 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_nested_struct, \
     xmlscript \
     test \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,basic_nested_struct))
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_CppunitTest_use_libraries,basic_nested_struct, \

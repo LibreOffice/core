@@ -9,7 +9,7 @@
 
 # Link almost everything with -lgnustl_shared
 gb_STDLIBS := \
-	gnustl_shared
+	-lgnustl_shared \
 
 gb_Library_PLAINLIBS_NONE := \
 	android \

@@ -65,8 +65,9 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sdui))
 
 $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/filter/html/htmlattr \

@@ -44,8 +44,9 @@ $(eval $(call gb_Library_use_libraries,lomenubar,\
 	cppuhelper \
     comphelper \
 	X11 \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,lomenubar))
 
 $(eval $(call gb_Library_add_exception_objects,lomenubar,\
 	framework/source/lomenubar/MenuItemInfo \

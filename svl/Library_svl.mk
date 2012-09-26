@@ -60,8 +60,9 @@ $(eval $(call gb_Library_use_libraries,svl,\
     ucbhelper \
     utl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,svl))
 
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/config/asiancfg \

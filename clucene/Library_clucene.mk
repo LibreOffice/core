@@ -50,10 +50,7 @@ $(eval $(call gb_Library_add_defs,clucene,\
     $(LFS_CFLAGS) \
 ))
 
-# clucene does not depend on sal nor needs uwinapi here
-$(eval $(call gb_Library_use_libraries,clucene,\
-    $(filter-out uwinapi,$(gb_STDLIBS)) \
-))
+$(eval $(call gb_Library_add_standard_system_libs,clucene))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_use_libraries,clucene,\

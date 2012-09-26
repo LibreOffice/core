@@ -58,8 +58,9 @@ $(eval $(call gb_Library_use_libraries,vclplug_svp,\
     jvmaccess \
     cppu \
     sal \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,vclplug_svp))
 
 $(eval $(call gb_Library_use_externals,vclplug_svp,\
 	icule \

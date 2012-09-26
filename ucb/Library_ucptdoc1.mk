@@ -39,8 +39,9 @@ $(eval $(call gb_Library_use_libraries,ucptdoc1,\
 	salhelper \
 	ucbhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,ucptdoc1))
 
 $(eval $(call gb_Library_add_exception_objects,ucptdoc1,\
 	ucb/source/ucp/tdoc/tdoc_contentcaps \

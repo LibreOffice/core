@@ -20,8 +20,9 @@ $(eval $(call gb_Library_use_internal_comprehensive_api,libotouch,\
 ))
 
 $(eval $(call gb_Library_use_libraries,libotouch,\
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,libotouch))
 
 $(eval $(call gb_Library_add_exception_objects,libotouch,\
 	touch/source/uno/Document \

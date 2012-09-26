@@ -53,8 +53,9 @@ $(eval $(call gb_Library_use_libraries,cppcanvas,\
 	tl \
 	vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,cppcanvas))
 
 $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/mtfrenderer/bitmapaction \

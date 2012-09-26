@@ -35,8 +35,9 @@ $(eval $(call gb_CppunitTest_use_libraries,cppu_qa_reference, \
 	cppu \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,cppu_qa_reference))
 
 $(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_qa_reference, \
 	cppu \

@@ -34,8 +34,9 @@ $(eval $(call gb_Library_use_libraries,invocation,\
     cppuhelper \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,invocation))
 
 $(eval $(call gb_Library_set_componentfile,invocation,stoc/source/invocation/invocation))
 

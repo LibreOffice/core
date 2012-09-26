@@ -42,8 +42,9 @@ $(eval $(call gb_Library_use_libraries,fileacc,\
     ucbhelper \
     utl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,fileacc))
 
 $(eval $(call gb_Library_set_componentfile,fileacc,fileaccess/source/fileacc))
 

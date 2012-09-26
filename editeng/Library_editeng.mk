@@ -152,8 +152,9 @@ $(eval $(call gb_Library_use_libraries,editeng,\
     i18nisolang1 \
     i18nutil \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,editeng))
 
 $(eval $(call gb_Library_use_external,editeng,icuuc))
 

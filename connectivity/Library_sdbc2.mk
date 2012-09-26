@@ -45,8 +45,9 @@ $(eval $(call gb_Library_use_libraries,sdbc2,\
 	utl \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sdbc2))
 
 $(eval $(call gb_Library_add_exception_objects,sdbc2,\
 	connectivity/source/manager/mdrivermanager \

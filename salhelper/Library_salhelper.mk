@@ -36,8 +36,9 @@ $(eval $(call gb_Library_add_defs,salhelper,\
 $(eval $(call gb_Library_use_libraries,salhelper,\
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,salhelper))
 
 $(eval $(call gb_Library_add_exception_objects,salhelper,\
     salhelper/source/condition \

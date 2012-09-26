@@ -51,8 +51,9 @@ $(eval $(call gb_Library_use_libraries,dbaxml,\
     vcl \
     xo \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,dbaxml))
 
 $(eval $(call gb_Library_set_componentfile,dbaxml,dbaccess/source/filter/xml/dbaxml))
 

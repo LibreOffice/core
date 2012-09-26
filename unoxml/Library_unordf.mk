@@ -33,8 +33,9 @@ $(eval $(call gb_Library_use_libraries,unordf,\
     cppu \
     sal \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,unordf))
 
 $(eval $(call gb_Library_use_externals,unordf,librdf))
 $(eval $(call gb_Library_use_externals,unordf,libxslt))

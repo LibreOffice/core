@@ -49,8 +49,9 @@ $(eval $(call gb_Library_use_libraries,avmediawin,\
 	utl \
 	vcl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,avmediawin))
 
 $(eval $(call gb_Library_add_libs,avmediawin,\
 	strmiids.lib \

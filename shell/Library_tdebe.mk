@@ -41,8 +41,9 @@ $(eval $(call gb_Library_use_libraries,tdebe1,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,tdebe1))
 
 $(eval $(call gb_Library_set_componentfile,tdebe1,shell/source/backends/kdebe/tdebe1))
 

@@ -41,8 +41,9 @@ $(eval $(call gb_Library_use_libraries,macabdrv1,\
 	dbtools \
 	sal \
 	salhelper \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,macabdrv1))
 
 $(eval $(call gb_Library_set_include,macabdrv1,\
         $$(INCLUDE) \

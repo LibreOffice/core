@@ -36,8 +36,9 @@ $(eval $(call gb_Library_use_libraries,syssh,\
 	sal \
 	shell32 \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,syssh))
 
 $(eval $(call gb_Library_set_componentfile,syssh,shell/source/win32/syssh))
 

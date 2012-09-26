@@ -44,8 +44,9 @@ $(eval $(call gb_Library_use_libraries,odfflatxml,\
 	cppu \
 	sal \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,odfflatxml))
 
 $(eval $(call gb_Library_add_exception_objects,odfflatxml,\
 	filter/source/odfflatxml/OdfFlatXml \

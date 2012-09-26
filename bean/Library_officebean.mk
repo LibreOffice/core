@@ -64,8 +64,6 @@ $(eval $(call gb_Library_add_ldflags,officebean,\
 
 endif
 
-$(eval $(call gb_Library_use_libraries,officebean,\
-    $(gb_STDLIBS) \
-))
+$(eval $(call gb_Library_add_standard_system_libs,officebean))
 
 # vim: set noet sw=4 ts=4:

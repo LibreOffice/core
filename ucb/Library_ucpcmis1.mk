@@ -40,8 +40,9 @@ $(eval $(call gb_Library_use_libraries,ucpcmis1,\
 	ucbhelper \
 	tl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,ucpcmis1))
 
 $(eval $(call gb_Library_use_externals,ucpcmis1,\
 	cmis \

@@ -68,8 +68,9 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sfx))
 
 $(eval $(call gb_Library_use_external,sfx,libxml2))
 

@@ -46,8 +46,9 @@ $(eval $(call gb_Library_use_libraries,jvmaccess,\
     sal \
     salhelper \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,jvmaccess))
 
 $(eval $(call gb_Library_add_exception_objects,jvmaccess,\
     jvmaccess/source/classpath \

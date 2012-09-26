@@ -29,8 +29,9 @@ $(eval $(call gb_Library_Library,jpipe))
 
 $(eval $(call gb_Library_use_libraries,jpipe,\
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,jpipe))
 
 ifeq ($(OS),WNT)
 

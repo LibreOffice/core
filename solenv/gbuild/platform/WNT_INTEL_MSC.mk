@@ -188,7 +188,7 @@ gb_CXXFLAGS := \
 	-Zm500 \
 
 gb_STDLIBS := \
-	advapi32 \
+	advapi32.lib \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -WX -DLIBO_WERROR

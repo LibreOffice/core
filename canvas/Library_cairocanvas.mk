@@ -69,8 +69,9 @@ $(eval $(call gb_Library_use_libraries,cairocanvas,\
 	i18nisolang1 \
 	canvastools \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,cairocanvas))
 
 $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_cachedbitmap \

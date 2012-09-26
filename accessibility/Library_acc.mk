@@ -48,8 +48,9 @@ $(eval $(call gb_Library_use_libraries,acc,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,acc))
 
 $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/extended/AccessibleBrowseBox \

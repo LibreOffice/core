@@ -40,8 +40,9 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_lngmisc, \
     salhelper \
     svl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,svl_lngmisc))
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_CppunitTest_use_libraries,svl_lngmisc, \

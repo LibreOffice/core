@@ -66,8 +66,9 @@ $(eval $(call gb_Library_use_libraries,sdfilt,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,sdfilt))
 
 $(eval $(call gb_Library_set_componentfile,sdfilt,sd/util/sdfilt))
 

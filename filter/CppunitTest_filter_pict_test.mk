@@ -20,8 +20,9 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_pict_test, \
 	unotest \
 	vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_CppunitTest_add_standard_system_libs,filter_pict_test))
 
 $(eval $(call gb_CppunitTest_use_api,filter_pict_test,\
     udkapi \

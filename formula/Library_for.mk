@@ -53,8 +53,9 @@ $(eval $(call gb_Library_use_libraries,for,\
     utl \
     vcl \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,for))
 
 $(eval $(call gb_Library_set_componentfile,for,formula/util/for))
 

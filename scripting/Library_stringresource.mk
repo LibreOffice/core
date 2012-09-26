@@ -43,8 +43,9 @@ $(eval $(call gb_Library_use_libraries,stringresource,\
 	sal \
 	tl \
 	$(gb_UWINAPI) \
-	$(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,stringresource))
 
 $(eval $(call gb_Library_add_exception_objects,stringresource,\
 	scripting/source/stringresource/stringresource \

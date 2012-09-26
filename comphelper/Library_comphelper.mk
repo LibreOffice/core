@@ -42,8 +42,9 @@ $(eval $(call gb_Library_use_libraries,comphelper,\
     salhelper \
     ucbhelper \
 	$(gb_UWINAPI) \
-    $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_add_standard_system_libs,comphelper))
 
 $(eval $(call gb_Library_use_sdk_api,comphelper))
 
