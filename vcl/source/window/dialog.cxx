@@ -1123,8 +1123,8 @@ void Dialog::GrabFocusToFirstControl()
     // Control in der TabSteuerung den Focus geben
     if ( !pFocusControl ||
          !(pFocusControl->GetStyle() & WB_TABSTOP) ||
-         !pFocusControl->IsVisible() ||
-         !pFocusControl->IsEnabled() || !pFocusControl->IsInputEnabled() )
+         !isVisibleInLayout(pFocusControl) ||
+         !isEnabledInLayout(pFocusControl) || !pFocusControl->IsInputEnabled() )
     {
         sal_uInt16 n = 0;
         pFocusControl = ImplGetDlgWindow( n, DLGWINDOW_FIRST );

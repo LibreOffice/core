@@ -94,7 +94,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
         pWindow = pWindow->ImplGetWindow();
 
         // Unsichtbare und disablte Fenster werden uebersprungen
-        if ( pTabPage || pWindow->IsVisible() )
+        if ( pTabPage || isVisibleInLayout(pWindow) )
         {
             // Wenn das letzte Control ein TabControl war, wird von
             // diesem die TabPage genommen
@@ -167,7 +167,7 @@ static Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nI
     if ( bTestEnable )
     {
         sal_uInt16 n2 = nIndex;
-        while ( pWindow && (!pWindow->IsEnabled() || !pWindow->IsInputEnabled()) )
+        while ( pWindow && (!isEnabledInLayout(pWindow) || !pWindow->IsInputEnabled()) )
         {
             n2 = nIndex+1;
             nIndex = 0;
@@ -184,7 +184,7 @@ static Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nI
                 nIndex = 0;
                 pWindow = ImplGetSubChildWindow( pParent, n, nIndex );
             }
-            while ( pWindow && n && (!pWindow->IsEnabled() || !pWindow->IsInputEnabled()) );
+            while ( pWindow && n && (!isEnabledInLayout(pWindow) || !pWindow->IsInputEnabled()) );
         }
     }
     return pWindow;
@@ -278,7 +278,7 @@ Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
                 while ( (i != nStartIndex) && (i != nStartIndex2) );
 
                 if ( (i == nStartIndex2) &&
-                     (!(pWindow->GetStyle() & WB_TABSTOP) || !pWindow->IsEnabled()) )
+                     (!(pWindow->GetStyle() & WB_TABSTOP) || !isEnabledInLayout(pWindow)) )
                     i = nStartIndex;
             }
         }
@@ -816,7 +816,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
 
                     nStyle = pWindow->GetStyle();
 
-                    if ( pWindow->IsVisible() && pWindow->IsEnabled() && pWindow->IsInputEnabled() )
+                    if ( isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() )
                     {
                         if ( pWindow != pSWindow )
                             pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
@@ -842,7 +842,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                 if ( nStyle & WB_GROUP )
                     break;
 
-                if ( pWindow->IsVisible() && pWindow->IsEnabled() && pWindow->IsInputEnabled() )
+                if ( isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() )
                 {
                     pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
                     return sal_True;
@@ -869,7 +869,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
         }
     }
 
-    if ( pButtonWindow && pButtonWindow->IsVisible() && pButtonWindow->IsEnabled() && pButtonWindow->IsInputEnabled() )
+    if ( pButtonWindow && isVisibleInLayout(pButtonWindow) && isEnabledInLayout(pButtonWindow) && pButtonWindow->IsInputEnabled() )
     {
         if ( bKeyInput )
         {
@@ -1102,7 +1102,7 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
                                                  nIndex,
                                                  nIndex,
                                                  sal_False );
-                if( pSWindow && pSWindow->IsVisible() && ! (pSWindow->GetStyle() & WB_NOLABEL) )
+                if( pSWindow && isVisibleInLayout(pSWindow) && ! (pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     WindowType nType = pSWindow->GetType();
                     if( nType != WINDOW_FIXEDTEXT   &&
@@ -1192,7 +1192,7 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
                                                  nSearchIndex,
                                                  nFoundIndex,
                                                  sal_False );
-                if( pSWindow && pSWindow->IsVisible() && !(pSWindow->GetStyle() & WB_NOLABEL) )
+                if( pSWindow && isVisibleInLayout(pSWindow) && !(pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     WindowType nType = pSWindow->GetType();
                     if ( ( nType == WINDOW_FIXEDTEXT    ||

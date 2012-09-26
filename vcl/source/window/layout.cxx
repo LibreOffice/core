@@ -1094,4 +1094,30 @@ Window* getNonLayoutRealParent(Window *pWindow)
     return pWindow;
 }
 
+bool isVisibleInLayout(const Window *pWindow)
+{
+    bool bVisible = true;
+    while (bVisible)
+    {
+        bVisible = pWindow->IsVisible();
+        pWindow = pWindow->GetParent();
+        if (!pWindow || pWindow->GetType() != WINDOW_CONTAINER)
+            break;
+    }
+    return bVisible;
+}
+
+bool isEnabledInLayout(const Window *pWindow)
+{
+    bool bEnabled = true;
+    while (bEnabled)
+    {
+        bEnabled = pWindow->IsEnabled();
+        pWindow = pWindow->GetParent();
+        if (!pWindow || pWindow->GetType() != WINDOW_CONTAINER)
+            break;
+    }
+    return bEnabled;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

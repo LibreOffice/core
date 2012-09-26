@@ -483,6 +483,12 @@ Window* getNonLayoutParent(Window *pParent);
 //Get first real parent which is not a layout widget
 Window* getNonLayoutRealParent(Window *pParent);
 
+//return true if this window and its stack of containers are all shown
+bool isVisibleInLayout(const Window *pWindow);
+
+//return true if this window and its stack of containers are all enabled
+bool isEnabledInLayout(const Window *pWindow);
+
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(WINDOW_NEXT);
