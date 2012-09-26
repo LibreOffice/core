@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,sdbt,\
     sal \
     tl \
     utl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

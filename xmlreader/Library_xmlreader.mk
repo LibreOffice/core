@@ -37,6 +37,7 @@ $(eval $(call gb_Library_add_defs,xmlreader,\
 $(eval $(call gb_Library_use_libraries,xmlreader,\
     cppu \
 	sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
     # cppu is only needed due to the cppumaker -C hack

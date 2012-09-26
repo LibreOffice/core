@@ -76,6 +76,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     vbahelper \
     vcl \
     xo \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

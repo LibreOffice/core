@@ -48,6 +48,7 @@ ifeq ($(GUI),WNT)
 
 $(eval $(call gb_Library_use_libraries,officebean,\
     jawt \
+	$(gb_UWINAPI) \
 ))
 
 else

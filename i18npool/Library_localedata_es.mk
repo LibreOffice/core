@@ -30,6 +30,7 @@ $(eval $(call gb_Library_Library,localedata_es))
 
 $(eval $(call gb_Library_use_libraries,localedata_es,\
 	localedata_en \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,localebe1,\
 	cppu \
 	cppuhelper \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

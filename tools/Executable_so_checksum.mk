@@ -28,6 +28,7 @@ $(eval $(call gb_Executable_set_include,so_checksum,\
 $(eval $(call gb_Executable_use_libraries,so_checksum,\
     sal \
     tl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 # used to link against basegfxlx comphelp4gcc3 i18nisolang1gcc3 ucbhelper4gcc3 uno_cppu uno_cppuhelpergcc3 uno_salhelpergcc3 vos3gcc3 - seems to be superficial

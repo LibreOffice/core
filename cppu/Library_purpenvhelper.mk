@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_sdk_api,purpenvhelper))
 $(eval $(call gb_Library_use_libraries,purpenvhelper,\
 	cppu \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

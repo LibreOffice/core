@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basegfx_cpputest,\
     cppu \
     cppuhelper \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

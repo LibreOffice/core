@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,avmediagst_0_10,\
 	sal \
 	tl \
 	vcl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

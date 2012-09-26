@@ -37,7 +37,6 @@ $(eval $(call gb_Library_set_include,lnth,\
 $(eval $(call gb_Library_use_sdk_api,lnth))
 
 $(eval $(call gb_Library_use_libraries,lnth,\
-	$(gb_STDLIBS) \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -46,6 +45,8 @@ $(eval $(call gb_Library_use_libraries,lnth,\
 	sal \
 	tl \
 	utl \
+	$(gb_UWINAPI) \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,lnth,\

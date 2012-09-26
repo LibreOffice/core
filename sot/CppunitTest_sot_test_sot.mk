@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sot_test_sot, \
     sot \
     tl \
     unotest \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

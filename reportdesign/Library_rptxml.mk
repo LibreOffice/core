@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_libraries,rptxml,\
     utl \
     vcl \
     xo \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

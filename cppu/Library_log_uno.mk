@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,log_uno,\
 	cppu \
 	purpenvhelper \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

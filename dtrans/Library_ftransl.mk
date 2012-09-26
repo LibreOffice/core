@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,ftransl,\
 	ole32 \
 	sal \
 	uwinapi \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

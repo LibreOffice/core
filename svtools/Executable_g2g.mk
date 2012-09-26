@@ -42,6 +42,7 @@ $(eval $(call gb_Executable_use_libraries,g2g,\
     svt \
     tl \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

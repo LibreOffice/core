@@ -57,6 +57,7 @@ $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
     cppuhelper \
     vcl \
     svxcore \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

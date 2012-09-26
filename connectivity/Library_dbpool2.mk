@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,dbpool2,\
 	dbtools \
 	sal \
 	salhelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

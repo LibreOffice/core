@@ -103,6 +103,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
     utl \
     vcl \
     xmlsecurity \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -30,6 +30,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,officecfg_cppheader_test))
 
 $(eval $(call gb_CppunitTest_use_libraries,officecfg_cppheader_test,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,binaryurp,\
 	cppuhelper \
 	sal \
 	salhelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

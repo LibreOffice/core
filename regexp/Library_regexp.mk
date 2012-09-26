@@ -39,6 +39,7 @@ $(eval $(call gb_Library_add_defs,i18nregexp,\
 $(eval $(call gb_Library_use_libraries,i18nregexp,\
 	sal \
 	i18nutil \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

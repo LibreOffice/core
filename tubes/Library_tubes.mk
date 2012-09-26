@@ -41,7 +41,6 @@ $(eval $(call gb_Library_add_defs,tubes,\
 ))
 
 $(eval $(call gb_Library_use_libraries,tubes,\
-	$(gb_STDLIBS) \
 	comphelper \
 	cppu \
 	sal \
@@ -50,6 +49,8 @@ $(eval $(call gb_Library_use_libraries,tubes,\
 	tl \
 	utl \
 	vcl \
+	$(gb_UWINAPI) \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_externals,tubes,\

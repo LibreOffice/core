@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,jdbc,\
 	utl \
 	jvmfwk \
 	comphelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

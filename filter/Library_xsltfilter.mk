@@ -35,8 +35,9 @@ $(eval $(call gb_Library_use_libraries,xsltfilter,\
 	ucbhelper \
 	cppuhelper \
 	cppu \
+	salhelper \
 	sal \
-        salhelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

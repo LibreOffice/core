@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	tl \
 	ucbhelper \
 	xmlreader \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

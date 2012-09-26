@@ -11,6 +11,7 @@ $(eval $(call gb_Executable_Executable,ulfconv))
 
 $(eval $(call gb_Executable_use_libraries,ulfconv,\
     sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

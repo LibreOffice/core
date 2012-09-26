@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,wpftdraw,\
 	tl \
 	utl \
 	xo \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

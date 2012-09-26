@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,ipt,\
 	tl \
 	basegfx \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,tubes_test, \
 	sal \
 	tubes \
 	utl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

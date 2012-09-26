@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_libraries,i18nutil,\
 	comphelper \
 	cppu \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

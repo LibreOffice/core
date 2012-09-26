@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,deploymentmisc,\
     ucbhelper \
     utl \
     xmlscript \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

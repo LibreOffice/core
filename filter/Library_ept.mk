@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,ept,\
 	basegfx \
 	cppu \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

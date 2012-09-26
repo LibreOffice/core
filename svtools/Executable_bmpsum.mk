@@ -41,6 +41,7 @@ $(eval $(call gb_Executable_use_libraries,bmpsum,\
     comphelper \
     tl \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

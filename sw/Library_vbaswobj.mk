@@ -63,6 +63,7 @@ $(eval $(call gb_Library_use_libraries,vbaswobj,\
     utl \
     vbahelper \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

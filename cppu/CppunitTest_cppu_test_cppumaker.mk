@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppu_test_cppumaker, \
 $(eval $(call gb_CppunitTest_use_libraries,cppu_test_cppumaker, \
 	cppu \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

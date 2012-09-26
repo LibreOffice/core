@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,offacc,\
     cppu \
     cppuhelper \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

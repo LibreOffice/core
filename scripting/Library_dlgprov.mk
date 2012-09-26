@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_libraries,dlgprov,\
 	vbahelper \
 	vcl \
 	xmlscript \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

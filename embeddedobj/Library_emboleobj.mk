@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_libraries,emboleobj,\
 	sal \
 	tl \
 	utl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

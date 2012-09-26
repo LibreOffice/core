@@ -34,6 +34,7 @@ $(eval $(call gb_Executable_add_defs,sbase,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,sbase,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,emser,\
 	oleaut32 \
 	sal \
 	uuid \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

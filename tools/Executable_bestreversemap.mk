@@ -28,6 +28,7 @@ $(eval $(call gb_Executable_set_include,bestreversemap,\
 
 $(eval $(call gb_Executable_use_libraries,bestreversemap,\
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

@@ -34,6 +34,7 @@ $(eval $(call gb_Executable_set_include,genindex_data,\
 
 $(eval $(call gb_Executable_use_libraries,genindex_data,\
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_sdk_api,affine_uno))
 $(eval $(call gb_Library_use_libraries,affine_uno,\
 	purpenvhelper \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

@@ -34,6 +34,7 @@ $(eval $(call gb_Executable_use_libraries,regcomp,\
     cppu \
     cppuhelper \
     sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

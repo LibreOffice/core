@@ -37,6 +37,7 @@ $(eval $(call gb_Executable_set_include,soffice.bin,\
 $(eval $(call gb_Executable_use_libraries,soffice.bin,\
     sal \
     sofficeapp \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

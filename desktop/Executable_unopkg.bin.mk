@@ -45,6 +45,7 @@ $(eval $(call gb_Executable_use_libraries,$(desktop_UNOPKGBIN),\
     sal \
     tl \
     unopkgapp \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

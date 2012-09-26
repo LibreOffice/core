@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
 	sal \
 	test \
 	unotest \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

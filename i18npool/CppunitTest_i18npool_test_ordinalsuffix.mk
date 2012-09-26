@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_ordinalsuffix,\
 	cppuhelper \
 	sal \
 	unotest \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

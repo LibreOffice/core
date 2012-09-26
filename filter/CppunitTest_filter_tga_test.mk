@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_tga_test, \
 	tl \
 	unotest \
 	vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

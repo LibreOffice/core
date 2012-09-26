@@ -57,6 +57,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     utl \
     vcl \
     xo \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

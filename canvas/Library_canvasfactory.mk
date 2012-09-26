@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,canvasfactory,\
 	cppu \
 	cppuhelper \
 	sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

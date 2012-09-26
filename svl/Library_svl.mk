@@ -59,6 +59,7 @@ $(eval $(call gb_Library_use_libraries,svl,\
     tl \
     ucbhelper \
     utl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_math, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_rtl_math, \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

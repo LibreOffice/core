@@ -28,6 +28,7 @@
 $(eval $(call gb_Library_Library,jpipe))
 
 $(eval $(call gb_Library_use_libraries,jpipe,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -34,6 +34,7 @@ $(eval $(call gb_Executable_set_include,genconv_dict,\
 
 $(eval $(call gb_Executable_use_libraries,genconv_dict,\
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

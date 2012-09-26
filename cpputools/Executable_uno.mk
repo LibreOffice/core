@@ -35,6 +35,7 @@ $(eval $(call gb_Executable_use_libraries,uno,\
     cppuhelper \
     sal \
     salhelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,fps_odma,\
 	ucbhelper \
 	utl \
 	vcl \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

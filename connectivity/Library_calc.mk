@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,calc,\
 	dbtools \
 	file \
 	comphelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

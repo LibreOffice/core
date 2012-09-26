@@ -30,6 +30,7 @@ $(eval $(call gb_Executable_Executable,javaldx))
 $(eval $(call gb_Executable_use_libraries,javaldx,\
     jvmfwk \
     sal \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

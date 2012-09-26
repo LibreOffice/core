@@ -60,6 +60,7 @@ $(eval $(call gb_Executable_use_libraries,demoshow,\
     tl \
     ucbhelper \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

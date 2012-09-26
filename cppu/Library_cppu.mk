@@ -40,6 +40,7 @@ $(eval $(call gb_Library_add_defs,cppu,\
 $(eval $(call gb_Library_use_libraries,cppu,\
 	sal \
 	salhelper \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

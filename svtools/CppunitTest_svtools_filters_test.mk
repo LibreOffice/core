@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svtools_filters_test, \
 	tl \
 	unotest \
 	vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

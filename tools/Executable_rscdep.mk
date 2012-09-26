@@ -29,6 +29,7 @@ $(eval $(call gb_Executable_use_libraries,rscdep,\
     comphelper \
     sal \
     tl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

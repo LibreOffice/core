@@ -60,6 +60,7 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     utl \
     vcl \
     xo \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

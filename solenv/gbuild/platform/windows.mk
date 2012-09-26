@@ -38,5 +38,6 @@ gb_OSDEFS := \
 	-DWNT \
 	-DNOMINMAX \
 
+gb_UWINAPI := uwinapi
 
 # vim:set noexpandtab:

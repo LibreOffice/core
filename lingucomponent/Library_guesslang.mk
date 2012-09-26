@@ -32,12 +32,13 @@ $(eval $(call gb_Library_set_componentfile,guesslang,lingucomponent/source/langu
 $(eval $(call gb_Library_use_sdk_api,guesslang))
 
 $(eval $(call gb_Library_use_libraries,guesslang,\
-	$(gb_STDLIBS) \
 	cppu \
 	cppuhelper \
 	sal \
 	tl \
 	utl \
+	$(gb_UWINAPI) \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_externals,guesslang,\

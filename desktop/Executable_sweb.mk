@@ -34,6 +34,7 @@ $(eval $(call gb_Executable_add_defs,sweb,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,sweb,\
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_use_libraries,soffice,\
     advapi32 \
     shell32 \
     shlwapi \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
     ucbhelper \
     vcl \
     xo \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

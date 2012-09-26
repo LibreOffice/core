@@ -42,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_libraries,lotuswordpro_test_lotuswordpro, \
     test \
     unotest \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

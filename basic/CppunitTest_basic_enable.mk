@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_enable, \
     vcl \
     xmlscript \
     test \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 

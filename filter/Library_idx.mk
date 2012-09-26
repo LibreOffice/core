@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,idx,\
 	vcl \
 	tl \
 	sal \
+	$(gb_UWINAPI) \
 	$(gb_STDLIBS) \
 ))
 

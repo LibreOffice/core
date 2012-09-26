@@ -80,6 +80,7 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
     tl \
     utl \
     vcl \
+	$(gb_UWINAPI) \
     $(gb_STDLIBS) \
 ))
 
