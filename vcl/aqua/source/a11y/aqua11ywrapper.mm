@@ -370,7 +370,12 @@ static BOOL isPopupMenuOpen = NO;
     // go upstairs until reaching the broken connection
     AquaA11yWrapper * aWrapper = self;
     while ( [ aWrapper accessibleContext ] -> getAccessibleParent().is() ) {
-        aWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ aWrapper accessibleContext ] -> getAccessibleParent() -> getAccessibleContext() ];
+        AquaA11yWrapper *aTentativeParentWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ aWrapper accessibleContext ] -> getAccessibleParent() -> getAccessibleContext() ];
+        // Quick-and-dirty fix for infinite loop after fixing crash in
+        // fdo#47275
+        if ( aTentativeParentWrapper == aWrapper )
+            break;
+        aWrapper = aTentativeParentWrapper;
         [ aWrapper autorelease ];
     }
     // get associated NSWindow

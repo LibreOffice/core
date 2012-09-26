@@ -72,7 +72,20 @@ long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracke
         pFocusTracker->tabpage_activated( getWindow(pEvent) );
         break;
     case VCLEVENT_MENU_HIGHLIGHT:
-        pFocusTracker->menu_highlighted( static_cast < const VclMenuEvent * > (pEvent) );
+        // Inspired by code in WindowEventHandler in
+        // vcl/unx/gtk/a11y/atkutil.cxx, find out what kind of event
+        // it is to avoid blindly using a static_cast and crash,
+        // fdo#47275.
+        if( const VclMenuEvent* pMenuEvent = dynamic_cast < const VclMenuEvent* > (pEvent) )
+        {
+            pFocusTracker->menu_highlighted( pMenuEvent );
+        }
+        else if( const VclAccessibleEvent* pAccEvent = dynamic_cast < const VclAccessibleEvent* > (pEvent) )
+        {
+            Reference< XAccessible > xAccessible = pAccEvent->GetAccessible();
+            if( xAccessible.is() )
+                pFocusTracker->setFocusedObject( xAccessible );
+        }
         break;
     default:
         break;
