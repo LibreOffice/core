@@ -108,6 +108,12 @@ $$(foreach group,$$(gb_Jar_VALIDGROUPS),$$(eval gb_Jar_$$(group) :=))
 
 endef
 
+define gb_Helper_collect_libtargets
+gb_Library_TARGETS := $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(gb_Library_$$(group)))
+gb_StaticLibrary_TARGETS := $$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(gb_StaticLibrary_$$(group)))
+
+endef
+
 define gb_Helper_collect_knownlibs
 gb_Library_KNOWNLIBS := $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(gb_Library_$$(group)))
 gb_StaticLibrary_KNOWNLIBS := $$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(gb_StaticLibrary_$$(group)))

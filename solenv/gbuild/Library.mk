@@ -37,6 +37,7 @@
 #  gb_Library_DLLFILENAMES
 #  gb_Library_FILENAMES
 #  gb_Library_Library_platform
+#  gb_Library_TARGETS
 
 # doesn't do anything, just used for hooking up component target
 .PHONY: $(call gb_Library__get_final_target,%)
