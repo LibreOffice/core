@@ -884,7 +884,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
         now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
         now.GetDay(), now.GetMonth(), now.GetYear() );
     aCreateValFt.SetText( ConvertDateTime_Impl( aName, uDT, aLocaleWrapper ) );
-    XubString aEmpty;
+    OUString aEmpty;
     aChangeValFt.SetText( aEmpty );
     aPrintValFt.SetText( aEmpty );
     const Time aTime( 0 );

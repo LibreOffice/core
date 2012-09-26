@@ -41,6 +41,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
@@ -154,8 +155,9 @@ OUString VCLXAccessibleEdit::implGetText()
             xub_Unicode cEchoChar = pEdit->GetEchoChar();
             if ( !cEchoChar )
                 cEchoChar = '*';
-            XubString sTmp;
-            aText = sTmp.Fill( (sal_uInt16)aText.getLength(), cEchoChar );
+            OUStringBuffer sTmp;
+            aText = comphelper::string::padToLength(sTmp, aText.getLength(),
+                cEchoChar).makeStringAndClear();
         }
     }
 
