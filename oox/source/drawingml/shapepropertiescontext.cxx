@@ -30,6 +30,7 @@
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/transform2dcontext.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
+#include "oox/drawingml/effectpropertiescontext.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -102,6 +103,7 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
     // todo not supported by core
     case A_TOKEN( effectLst ):  // CT_EffectList
     case A_TOKEN( effectDag ):  // CT_EffectContainer
+        xRet.set( new EffectPropertiesContext( *this, mrShape.getEffectProperties() ) );
         break;
 
     // todo

@@ -61,6 +61,7 @@ enum ShapePropertyId
     SHAPEPROP_FillBitmapOffsetX,
     SHAPEPROP_FillBitmapOffsetY,
     SHAPEPROP_FillBitmapRectanglePoint,
+    SHAPEPROP_ShadowXDistance,
     SHAPEPROP_END
 };
 

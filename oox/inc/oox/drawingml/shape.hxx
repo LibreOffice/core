@@ -97,6 +97,8 @@ public:
 
     table::TablePropertiesPtr       getTableProperties();
 
+    inline EffectProperties&        getEffectProperties() { return *mpEffectPropertiesPtr; }
+
     void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
     void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
     void                              moveAllToPosition( const com::sun::star::awt::Point &rPoint );
@@ -215,6 +217,7 @@ protected:
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
     table::TablePropertiesPtr   mpTablePropertiesPtr;
     Shape3DPropertiesPtr        mp3DPropertiesPtr;
+    EffectPropertiesPtr         mpEffectPropertiesPtr;
     PropertyMap                 maShapeProperties;
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;

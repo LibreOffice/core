@@ -406,6 +406,11 @@ ScrollWidth
 Segments
 SelectedItems
 SelectedPage
+Shadow
+ShadowColor
+ShadowTransparence
+ShadowXDistance
+ShadowYDistance
 Show
 ShowBorder
 ShowCharts
