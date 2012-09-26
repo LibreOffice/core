@@ -156,7 +156,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     if( pBuf && nWidth > 0 && nHeight > 0 &&
         // sanity check the size
 #ifdef AVMEDIA_GST_0_10
-        GST_BUFFER_SIZE( pBuf ) >= ( nWidth * nHeight * 3 )
+        GST_BUFFER_SIZE( pBuf ) >= static_cast<unsigned>( nWidth * nHeight * 3 )
 #else
         gst_buffer_get_size( pBuf ) >= ( nWidth * nHeight * 3 )
 #endif
