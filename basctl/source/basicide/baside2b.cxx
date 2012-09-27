@@ -91,22 +91,22 @@ char const cSuffixes[] = "%&!#@$";
  *
  * get/setText() only supports tools Strings limited to 64K).
  */
-rtl::OUString getTextEngineText (ExtTextEngine& rEngine)
+OUString getTextEngineText (ExtTextEngine& rEngine)
 {
     SvMemoryStream aMemStream;
     aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     aMemStream.SetLineDelimiter( LINEEND_LF );
     rEngine.Write( aMemStream );
     sal_uLong nSize = aMemStream.Tell();
-    ::rtl::OUString aText( (const sal_Char*)aMemStream.GetData(),
+    OUString aText( (const sal_Char*)aMemStream.GetData(),
         nSize, RTL_TEXTENCODING_UTF8 );
     return aText;
 }
 
-void setTextEngineText (ExtTextEngine& rEngine, rtl::OUString const& aStr)
+void setTextEngineText (ExtTextEngine& rEngine, OUString const& aStr)
 {
     rEngine.SetText(String());
-    ::rtl::OString aUTF8Str = ::rtl::OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
+    OString aUTF8Str = ::rtl::OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
     SvMemoryStream aMemStream( (void*)aUTF8Str.getStr(), aUTF8Str.getLength(),
         STREAM_READ | STREAM_SEEK_TO_BEGIN );
     aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
@@ -237,9 +237,9 @@ EditorWindow::EditorWindow (Window* pParent, ModulWindow* pModulWindow) :
         osl::MutexGuard g(mutex_);
         notifier_ = n;
     }
-    Sequence< rtl::OUString > s(2);
-    s[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontHeight"));
-    s[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontName"));
+    Sequence< OUString > s(2);
+    s[0] = OUString( "FontHeight" );
+    s[1] = OUString( "FontName" );
     n->addPropertiesChangeListener(s, listener_.get());
 }
 
@@ -556,7 +556,7 @@ bool EditorWindow::SetSourceInBasic()
 
 // Returns the position of the last character of any of the following
 // EOL char combinations: CR, CR/LF, LF, return -1 if no EOL is found
-sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex )
+sal_Int32 searchEOL( const OUString& rStr, sal_Int32 fromIndex )
 {
     sal_Int32 iRetPos = -1;
 
@@ -592,7 +592,7 @@ void EditorWindow::CreateEditEngine()
 
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
     bDoSyntaxHighlight = false; // too slow for large texts...
-    rtl::OUString aOUSource(rModulWindow.GetModule());
+    OUString aOUSource(rModulWindow.GetModule());
     sal_Int32 nLines = 0;
     sal_Int32 nIndex = -1;
     do
@@ -646,7 +646,7 @@ void EditorWindow::CreateEditEngine()
 
     // set readonly mode for readonly libraries
     ScriptDocument aDocument(rModulWindow.GetDocument());
-    rtl::OUString aOULibName(rModulWindow.GetLibName());
+    OUString aOULibName(rModulWindow.GetLibName());
     Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) )
     {
@@ -776,7 +776,7 @@ void EditorWindow::InitScrollBars()
     {
         rModulWindow.GetHScrollBar()->SetVisibleSize( aOutSz.Width() );
         rModulWindow.GetHScrollBar()->SetPageSize( aOutSz.Width() * 8 / 10 );
-        rModulWindow.GetHScrollBar()->SetLineSize( GetTextWidth( rtl::OUString('x') ) );
+        rModulWindow.GetHScrollBar()->SetLineSize( GetTextWidth( OUString('x') ) );
         rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
         rModulWindow.GetHScrollBar()->Show();
     }
@@ -820,9 +820,9 @@ void EditorWindow::UpdateSyntaxHighlighting ()
 
 void EditorWindow::ImplSetFont()
 {
-    rtl::OUString sFontName(
+    OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get().
-        get_value_or( rtl::OUString() ) );
+        get_value_or( OUString() ) );
     if ( sFontName.isEmpty() )
     {
         Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
@@ -1361,8 +1361,8 @@ void WatchWindow::AddWatch( const String& rVName )
     lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
     WatchItem* pWatchItem = new WatchItem(aVar);
 
-    String aWatchStr_( aVar );
-    aWatchStr_ += String( RTL_CONSTASCII_USTRINGPARAM( "\t\t" ) );
+    OUString aWatchStr_( aVar );
+    aWatchStr_ += OUString( "\t\t" );
     SvLBoxEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, true, LIST_APPEND );
     pNewEntry->SetUserData( pWatchItem );
 
@@ -1555,7 +1555,7 @@ void StackWindow::UpdateCalls()
             String aEntry( String::CreateFromInt32(nScope ));
             if ( aEntry.Len() < 2 )
                 aEntry.Insert( ' ', 0 );
-            aEntry += String( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+            aEntry += OUString( ": " );
             aEntry += pMethod->GetName();
             SbxArray* pParams = pMethod->GetParameters();
             SbxInfo* pInfo = pMethod->GetInfo();
@@ -1578,11 +1578,11 @@ void StackWindow::UpdateCalls()
                     aEntry += '=';
                     SbxDataType eType = pVar->GetType();
                     if( eType & SbxARRAY )
-                        aEntry += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+                        aEntry += OUString( "..." );
                     else if( eType != SbxOBJECT )
                         aEntry += pVar->GetString();
                     if ( nParam < ( pParams->Count() - 1 ) )
-                        aEntry += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+                        aEntry += OUString( ", " );
                 }
                 aEntry += ')';
             }
@@ -1803,7 +1803,7 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
 
             // Copy data and create name
 
-            String aIndexStr = String( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
+            String aIndexStr = OUString( "(" );
             pChildItem->mpArrayParentItem = pItem;
             pChildItem->nDimLevel = nThisLevel;
             pChildItem->nDimCount = pItem->nDimCount;
@@ -1813,11 +1813,11 @@ void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
             {
                 short n = pChildItem->vIndices[j] = pItem->vIndices[j];
                 aIndexStr += String::CreateFromInt32( n );
-                aIndexStr += String( RTL_CONSTASCII_USTRINGPARAM( "," ) );
+                aIndexStr += OUString( "," );
             }
             pChildItem->vIndices[nParentLevel] = sal::static_int_cast<short>( i );
             aIndexStr += String::CreateFromInt32( i );
-            aIndexStr += String( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+            aIndexStr += OUString( ")" );
 
             String aDisplayName;
             WatchItem* pArrayRootItem = pChildItem->GetRootItem();
@@ -1904,7 +1904,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bEdit;
 }
 
-sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
     String aVName( pItem->maName );
@@ -1987,10 +1987,10 @@ String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
                 short nMin, nMax;
                 pArray->GetDim( sal::static_int_cast<short>( i+1 ), nMin, nMax );
                 aRetStr += String::CreateFromInt32( nMin );
-                aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( " to " ) );
+                aRetStr += OUString( " to " );
                 aRetStr += String::CreateFromInt32( nMax );
                 if( i < nDims - 1 )
-                    aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+                    aRetStr += OUString( ", " );
             }
             aRetStr += ')';
         }
@@ -2111,7 +2111,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
                     }
                     else
-                        aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "<?>" ) );
+                        aWatchStr += OUString( "<?>" );
                 }
                 else if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
                 {
@@ -2143,7 +2143,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     }
                     else
                     {
-                        aWatchStr = String( RTL_CONSTASCII_USTRINGPARAM( "Null" ) );
+                        aWatchStr = OUString( "Null" );
                         if( pItem->mpObject != NULL )
                         {
                             bCollapse = true;
@@ -2164,7 +2164,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     }
 
                     bool bString = ((sal_uInt8)eType == (sal_uInt8)SbxSTRING);
-                    String aStrStr( RTL_CONSTASCII_USTRINGPARAM( "\"" ) );
+                    OUString aStrStr( "\"" );
                     if( bString )
                         aWatchStr += aStrStr;
                     aWatchStr += pVar->GetString();
@@ -2174,12 +2174,12 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 if( !aTypeStr.Len() )
                 {
                     if( !pVar->IsFixed() )
-                        aTypeStr = String( RTL_CONSTASCII_USTRINGPARAM( "Variant/" ) );
+                        aTypeStr = OUString( "Variant/" );
                     aTypeStr += getBasicTypeName( pVar->GetType() );
                 }
             }
             else if( !bArrayElement )
-                aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "<Out of Scope>" ) );
+                aWatchStr += OUString( "<Out of Scope>" );
 
             if( bCollapse )
                 implCollapseModifiedObjectEntry( pEntry, this );
