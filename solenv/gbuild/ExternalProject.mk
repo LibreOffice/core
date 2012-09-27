@@ -103,4 +103,10 @@ $(foreach target,$(2),$(call gb_ExternalProject_register_target,$(1),$(target)))
 
 endef
 
+# Make an external Project depend on another external project
+define gb_ExternalProject_use_external
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_ExternalProject_get_target,$(2))
+
+endef
+
 # vim: set noet sw=4 ts=4:
