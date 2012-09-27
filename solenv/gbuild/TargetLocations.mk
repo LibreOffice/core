@@ -171,6 +171,7 @@ gb_UnoApiHeadersTarget_get_comprehensive_target = $(WORKDIR)/UnoApiHeadersTarget
 gb_UnoApiHeadersTarget_get_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/normal.done
 gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
 gb_UnpackedTarball_get_dir = $(WORKDIR)/UnpackedTarball/$(1)
+gb_UnpackedTarball_get_pristine_dir = $(WORKDIR)/UnpackedTarball/$(1).org
 gb_UnpackedTarball_get_final_target = $(WORKDIR)/UnpackedTarball/$(1).update
 gb_UnpackedTarball_get_target = $(WORKDIR)/UnpackedTarball/$(1).done
 gb_UnpackedTarball_get_preparation_target = $(WORKDIR)/UnpackedTarball/$(1).prepare
