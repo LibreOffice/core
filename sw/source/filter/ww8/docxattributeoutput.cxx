@@ -1460,7 +1460,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     pSerializer->singleElementNS( XML_w, elementToken, xAttrs );
 }
 
-static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, bool bUseStartEnd = false )
+static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, bool bWriteTag = true, const SvxBoxItem* pDefaultBorders = 0)
 {
     static const sal_uInt16 aBorders[] =
     {
@@ -1474,12 +1474,91 @@ static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, b
         XML_bottom,
         bUseStartEnd ? XML_end : XML_right
     };
+    bool tagWritten = false;
     const sal_uInt16* pBrd = aBorders;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
         if ( pLn )
+        {
+            if ( pDefaultBorders )
+            {
+                const SvxBorderLine* pRefLn = pDefaultBorders->GetLine( *pBrd );
+
+                // If border is equal to default border: do not output
+                if ( pRefLn && *pLn == *pRefLn) {
+                    continue;
+                }
+            }
+
+            if (!tagWritten && bWriteTag) {
+                pSerializer->startElementNS( XML_w, tag, FSEND );
+                tagWritten = true;
+            }
+
             impl_borderLine( pSerializer, aXmlElements[i], pLn, 0 );
+
+            // When exporting default borders, we need to export these 2 attr
+            if ( pDefaultBorders == 0 ) {
+                if ( i == 2 )
+                    impl_borderLine( pSerializer, XML_insideH, pLn, 0 );
+                else if ( i == 3 )
+                    impl_borderLine( pSerializer, XML_insideV, pLn, 0 );
+            }
+        }
+    }
+    if (tagWritten && bWriteTag) {
+        pSerializer->endElementNS( XML_w, tag );
+    }
+}
+
+static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, const SvxBoxItem* pDefaultMargins = 0)
+{
+    static const sal_uInt16 aBorders[] =
+    {
+        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+    };
+
+    const sal_Int32 aXmlElements[] =
+    {
+        XML_top,
+        bUseStartEnd ? XML_start : XML_left,
+        XML_bottom,
+        bUseStartEnd ? XML_end : XML_right
+    };
+    bool tagWritten = false;
+    const sal_uInt16* pBrd = aBorders;
+    for( int i = 0; i < 4; ++i, ++pBrd )
+    {
+        sal_Int32 nDist = sal_Int32( rBox.GetDistance( *pBrd ) );
+
+        if ( aBorders[i] == BOX_LINE_LEFT ) {
+            // Office's cell margin is measured from the right of the border.
+            // While LO's cell spacing is measured from the center of the border.
+            // So we add half left-border width to tblIndent value
+            const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
+            if (pLn)
+                nDist -= pLn->GetWidth() * 0.5;
+        }
+
+        if (pDefaultMargins)
+        {
+            // Skip output if cell margin == table default margin
+            if (sal_Int32( pDefaultMargins->GetDistance( *pBrd ) ) == nDist)
+                continue;
+        }
+
+        if (!tagWritten) {
+            pSerializer->startElementNS( XML_w, tag, FSEND );
+            tagWritten = true;
+        }
+        pSerializer->singleElementNS( XML_w, aXmlElements[i],
+               FSNS( XML_w, XML_w ), OString::valueOf( nDist ).getStr( ),
+               FSNS( XML_w, XML_type ), "dxa",
+               FSEND );
+    }
+    if (tagWritten) {
+        pSerializer->endElementNS( XML_w, tag );
     }
 }
 
@@ -1526,40 +1605,19 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
                 FSEND );
     }
 
-    // The cell borders
-    m_pSerializer->startElementNS( XML_w, XML_tcBorders, FSEND );
-    SwFrmFmt *pFmt = pTblBox->GetFrmFmt( );
-    impl_pageBorders( m_pSerializer, pFmt->GetBox( ), !bEcma );
-    m_pSerializer->endElementNS( XML_w, XML_tcBorders );
+    const SvxBoxItem& rBox = pTblBox->GetFrmFmt( )->GetBox( );
+    const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrmFmt( )->GetBox( );
+    {
+        // The cell borders
+        impl_pageBorders( m_pSerializer, rBox, XML_tcBorders, !bEcma, true, &rDefaultBox );
+    }
 
     TableBackgrounds( pTableTextNodeInfoInner );
 
-    // Cell margins
-    m_pSerializer->startElementNS( XML_w, XML_tcMar, FSEND );
-    const SvxBoxItem& rBox = pFmt->GetBox( );
-    static const sal_uInt16 aBorders[] =
     {
-        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
-    };
-
-    const sal_Int32 aXmlElements[] =
-    {
-        XML_top,
-        bEcma ? XML_left : XML_start,
-        XML_bottom,
-        bEcma ? XML_right : XML_end
-    };
-    const sal_uInt16* pBrd = aBorders;
-    for( int i = 0; i < 4; ++i, ++pBrd )
-    {
-        sal_Int32 nDist = sal_Int32( rBox.GetDistance( *pBrd ) );
-        m_pSerializer->singleElementNS( XML_w, aXmlElements[i],
-               FSNS( XML_w, XML_w ), OString::valueOf( nDist ).getStr( ),
-               FSNS( XML_w, XML_type ), "dxa",
-               FSEND );
+        // Cell margins
+        impl_cellMargins( m_pSerializer, rBox, XML_tcMar, !bEcma, &rDefaultBox );
     }
-
-    m_pSerializer->endElementNS( XML_w, XML_tcMar );
 
     TableVerticalCell( pTableTextNodeInfoInner );
 
@@ -1590,6 +1648,8 @@ void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTab
 {
     m_pSerializer->startElementNS( XML_w, XML_tbl, FSEND );
 
+    tableFirstCells.push_back(pTableTextNodeInfoInner);
+
     InitTableHelper( pTableTextNodeInfoInner );
     TableDefinition( pTableTextNodeInfoInner );
 }
@@ -1600,6 +1660,8 @@ void DocxAttributeOutput::EndTable()
 
     if ( m_nTableDepth > 0 )
         --m_nTableDepth;
+
+    tableFirstCells.pop_back();
 
     // We closed the table; if it is a nested table, the cell that contains it
     // still continues
@@ -1745,6 +1807,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     // Output the table borders
     TableDefaultBorders( pTableTextNodeInfoInner );
+
+    // Output the default cell margins
+    TableDefaultCellMargins( pTableTextNodeInfoInner, nIndent );
+
     TableBidi( pTableTextNodeInfoInner );
 
     // Table indent
@@ -1783,9 +1849,20 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     // the defaults of the table are taken from the top-left cell
-    m_pSerializer->startElementNS( XML_w, XML_tblBorders, FSEND );
-    impl_pageBorders( m_pSerializer, pFrmFmt->GetBox( ), !bEcma );
-    m_pSerializer->endElementNS( XML_w, XML_tblBorders );
+    impl_pageBorders( m_pSerializer, pFrmFmt->GetBox( ), XML_tblBorders, !bEcma, true );
+}
+
+void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_Int32& tblIndent )
+{
+    const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
+    const SwFrmFmt * pFrmFmt = pTabBox->GetFrmFmt();
+    const SvxBoxItem& rBox = pFrmFmt->GetBox( );
+    const bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+
+    impl_cellMargins(m_pSerializer, rBox, XML_tblCellMar, !bEcma);
+
+    // add table cell left margin to tblIndent
+    tblIndent += sal_Int32( rBox.GetDistance( BOX_LINE_LEFT ) );
 }
 
 void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -4350,7 +4427,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
     }
 
-    impl_pageBorders( m_pSerializer, rBox );
+    impl_pageBorders( m_pSerializer, rBox, false, false );
 
     if ( m_bOpenedSectPr )
     {

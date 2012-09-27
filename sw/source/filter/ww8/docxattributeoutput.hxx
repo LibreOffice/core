@@ -148,6 +148,7 @@ public:
     virtual void TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     virtual void TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     virtual void TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
+    virtual void TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner, sal_Int32& tblIndent );
     virtual void TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     virtual void TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
@@ -612,6 +613,9 @@ private:
     unsigned int m_postitFieldsMaxId;
     int m_anchorId;
     int m_nextFontId;
+
+    // Remember first cell (used for for default borders/margins) of each table
+    std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> tableFirstCells;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
