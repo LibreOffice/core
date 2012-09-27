@@ -603,43 +603,6 @@ inline SvListEntry* SvTreeList::GetParent( SvListEntry* pEntry ) const
     return pParent;
 }
 
-#define DECLARE_SVTREELIST( ClassName, Type )                                   \
-class ClassName : public SvTreeList                                             \
-{                                                                               \
-public:                                                                         \
-    Type        First() const                                                   \
-                    { return (Type)SvTreeList::First(); }                       \
-    Type        Next( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const         \
-                    { return (Type)SvTreeList::Next(pEntry,pDepth); }           \
-    Type        Prev( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const         \
-                    { return (Type)SvTreeList::Prev(pEntry,pDepth); }           \
-    Type        Last() const                                                    \
-                    { return (Type)SvTreeList::Last(); }                        \
-                                                                                \
-    Type        Clone( SvListEntry* pEntry, sal_uLong& nCloneCount ) const      \
-                    { return (Type)SvTreeList::Clone(pEntry,nCloneCount); }     \
-    Type        GetEntry( SvListEntry* pParent, sal_uLong nPos ) const          \
-                    { return (Type)SvTreeList::GetEntry(pParent,nPos); }        \
-    Type        GetEntry( sal_uLong nRootPos ) const                            \
-                    { return (Type)SvTreeList::GetEntry(nRootPos); }            \
-    Type        GetParent( SvListEntry* pEntry ) const                          \
-                    { return (Type)SvTreeList::GetParent(pEntry); }             \
-    using SvTreeList::FirstChild;                                               \
-    Type        FirstChild( Type pParent ) const                                \
-                    { return (Type)SvTreeList::FirstChild(pParent); }           \
-    using SvTreeList::NextSibling;                                              \
-    Type        NextSibling( Type pEntry ) const                                \
-                    { return (Type)SvTreeList::NextSibling(pEntry); }           \
-    using SvTreeList::PrevSibling;                                              \
-    Type        PrevSibling( Type pEntry ) const                                \
-                    { return (Type)SvTreeList::PrevSibling(pEntry); }           \
-    using SvTreeList::LastSibling;                                              \
-    Type        LastSibling( Type pEntry ) const                                \
-                    { return (Type)SvTreeList::LastSibling(pEntry); }           \
-    Type        GetEntryAtAbsPos( sal_uLong nAbsPos ) const                     \
-                    { return (Type)SvTreeList::GetEntryAtAbsPos( nAbsPos); }    \
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

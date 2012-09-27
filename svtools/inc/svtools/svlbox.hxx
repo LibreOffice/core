@@ -215,6 +215,24 @@ public:
     void        SetFlags( sal_uInt16 nFlags ) { nEntryFlags = nFlags; }
 };
 
+class SVT_DLLPUBLIC SvLBoxTreeList : public SvTreeList
+{
+public:
+    SvLBoxEntry* First() const;
+    SvLBoxEntry* Next( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvLBoxEntry* Prev( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvLBoxEntry* Last() const;
+    SvLBoxEntry* Clone( SvListEntry* pEntry, sal_uLong& nCloneCount ) const;
+    SvLBoxEntry* GetEntry( SvListEntry* pParent, sal_uLong nPos ) const;
+    SvLBoxEntry* GetEntry( sal_uLong nRootPos ) const;
+    SvLBoxEntry* GetParent( SvListEntry* pEntry ) const;
+    SvLBoxEntry* FirstChild( SvLBoxEntry* pParent ) const;
+    SvLBoxEntry* NextSibling( SvLBoxEntry* pEntry ) const;
+    SvLBoxEntry* PrevSibling( SvLBoxEntry* pEntry ) const;
+    SvLBoxEntry* LastSibling( SvLBoxEntry* pEntry ) const;
+    SvLBoxEntry* GetEntryAtAbsPos( sal_uLong nAbsPos ) const;
+};
+
 // *********************************************************************
 // ****************************** SvLBox *******************************
 // *********************************************************************
@@ -231,8 +249,6 @@ public:
 // Entries duerfen ueber den obersten Eintrag gedroppt werden.
 // Das Drop-Target ist in diesem Fall 0
 #define SV_DRAGDROP_ENABLE_TOP      (DragDropMode)0x0020
-
-DECLARE_SVTREELIST(SvLBoxTreeList, SvLBoxEntry*)
 
 #define SVLISTBOX_ID_LBOX 0   // fuer SvLBox::IsA()
 

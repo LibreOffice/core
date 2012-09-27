@@ -480,6 +480,71 @@ SvLBoxItem* SvLBoxEntry::GetFirstItem( sal_uInt16 nId )
     return 0;
 }
 
+SvLBoxEntry* SvLBoxTreeList::First() const
+{
+    return (SvLBoxEntry*)SvTreeList::First();
+}
+
+SvLBoxEntry* SvLBoxTreeList::Next( SvListEntry* pEntry, sal_uInt16* pDepth ) const
+{
+    return (SvLBoxEntry*)SvTreeList::Next(pEntry,pDepth);
+}
+
+SvLBoxEntry* SvLBoxTreeList::Prev( SvListEntry* pEntry, sal_uInt16* pDepth ) const
+{
+    return (SvLBoxEntry*)SvTreeList::Prev(pEntry,pDepth);
+}
+
+SvLBoxEntry* SvLBoxTreeList::Last() const
+{
+    return (SvLBoxEntry*)SvTreeList::Last();
+}
+
+SvLBoxEntry* SvLBoxTreeList::Clone( SvListEntry* pEntry, sal_uLong& nCloneCount ) const
+{
+    return (SvLBoxEntry*)SvTreeList::Clone(pEntry,nCloneCount);
+}
+
+SvLBoxEntry* SvLBoxTreeList::GetEntry( SvListEntry* pParent, sal_uLong nPos ) const
+{
+    return (SvLBoxEntry*)SvTreeList::GetEntry(pParent,nPos);
+}
+
+SvLBoxEntry* SvLBoxTreeList::GetEntry( sal_uLong nRootPos ) const
+{
+    return (SvLBoxEntry*)SvTreeList::GetEntry(nRootPos);
+}
+
+SvLBoxEntry* SvLBoxTreeList::GetParent( SvListEntry* pEntry ) const
+{
+    return (SvLBoxEntry*)SvTreeList::GetParent(pEntry);
+}
+
+SvLBoxEntry* SvLBoxTreeList::FirstChild( SvLBoxEntry* pParent ) const
+{
+    return (SvLBoxEntry*)SvTreeList::FirstChild(pParent);
+}
+
+SvLBoxEntry* SvLBoxTreeList::NextSibling( SvLBoxEntry* pEntry ) const
+{
+    return (SvLBoxEntry*)SvTreeList::NextSibling(pEntry);
+}
+
+SvLBoxEntry* SvLBoxTreeList::PrevSibling( SvLBoxEntry* pEntry ) const
+{
+    return (SvLBoxEntry*)SvTreeList::PrevSibling(pEntry);
+}
+
+SvLBoxEntry* SvLBoxTreeList::LastSibling( SvLBoxEntry* pEntry ) const
+{
+    return (SvLBoxEntry*)SvTreeList::LastSibling(pEntry);
+}
+
+SvLBoxEntry* SvLBoxTreeList::GetEntryAtAbsPos( sal_uLong nAbsPos ) const
+{
+    return (SvLBoxEntry*)SvTreeList::GetEntryAtAbsPos( nAbsPos);
+}
+
 // ***************************************************************
 // class SvLBoxViewData
 // ***************************************************************
