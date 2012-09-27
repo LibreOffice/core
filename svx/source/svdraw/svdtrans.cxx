@@ -1097,7 +1097,7 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
         case MAP_PIXEL      : pText = "pixel"; break;
         case MAP_SYSFONT    : pText = "sysfont"; break;
         case MAP_APPFONT    : pText = "appfont"; break;
-        case MAP_RELATIVE   : pText = "\%"; break;
+        case MAP_RELATIVE   : pText = "%"; break;
 
         default             : pText = ""; break;
     }
@@ -1127,7 +1127,7 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         case FUNIT_MILE     : pText = "mile(s)"; break;
 
         // other units
-        case FUNIT_PERCENT: pText = "\%"; break;
+        case FUNIT_PERCENT: pText = "%"; break;
 
 //      case FUNIT_NONE     :
 //      case FUNIT_CUSTOM   :
