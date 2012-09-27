@@ -107,9 +107,18 @@ static gboolean timed_out( void * )
 
 void TestTeleTubes::testInitialize()
 {
-    utl::LocalFileHelper::ConvertPhysicalNameToURL(
-            OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini",
-            maTestConfigIniURL );
+    g_timeout_add_seconds (10, timed_out, NULL);
+    try
+    {
+        utl::LocalFileHelper::ConvertPhysicalNameToURL(
+                OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini",
+                maTestConfigIniURL );
+    }
+    catch (const com::sun::star::uno::Exception& e)
+    {
+        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Exception while getting config.ini url: "
+                    + e.Message, RTL_TEXTENCODING_UTF8).getStr(), false);
+    }
     rtl::Bootstrap aTestConfig( maTestConfigIniURL );
 
     TeleManager::addSuffixToNames( "TeleTest");
@@ -124,7 +133,6 @@ void TestTeleTubes::testInitialize()
         aTestConfig.getFrom("accepter", aAccepterIdentifier));
     maAccepterIdentifier = OUStringToOString( aAccepterIdentifier, RTL_TEXTENCODING_UTF8);
 
-    g_timeout_add_seconds (10, timed_out, NULL);
     mpCollaboration1 = new TestCollaboration();
     mpCollaboration2 = new TestCollaboration();
 }
