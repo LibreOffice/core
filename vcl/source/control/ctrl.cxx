@@ -93,7 +93,7 @@ void Control::take_properties(Window &rOther)
 
     Control &rOtherControl = static_cast<Control&>(rOther);
     std::swap(mpControlData, rOtherControl.mpControlData);
-    mbHasFocus = rOtherControl.mbHasFocus;
+    mbHasControlFocus = rOtherControl.mbHasControlFocus;
 }
 
 // -----------------------------------------------------------------------
