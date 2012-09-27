@@ -228,7 +228,6 @@ gb_Library_PLAINLIBS_NONE += \
 	ddraw \
 	gdi32 \
 	gdiplus \
-	gnu_getopt \
 	imm32 \
 	kernel32 \
 	jawt \
