@@ -328,8 +328,11 @@ my_components += \
 .END
 
 .IF "$(GUIBASE)" == "aqua"
+.IF "$(BITNESS_OVERRIDE)" != "64"
 my_components += \
-    component/avmedia/source/quicktime/avmediaQuickTime \
+    component/avmedia/source/quicktime/avmediaQuickTime
+.ENDIF
+my_components += \
     component/lingucomponent/source/spellcheck/macosxspell/MacOSXSpell
 .END
 
