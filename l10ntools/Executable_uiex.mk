@@ -27,7 +27,7 @@ $(eval $(call gb_Executable_add_exception_objects,uiex,\
 ))
 
 $(eval $(call gb_Executable_use_externals,uiex,\
-    libxslt \
+    libexslt \
     libxml2 \
 ))
 

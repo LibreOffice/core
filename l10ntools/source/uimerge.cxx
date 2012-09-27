@@ -11,6 +11,7 @@
 
 #include <rtl/strbuf.hxx>
 
+#include <libexslt/exslt.h>
 #include <libxslt/transform.h>
 #include <libxslt/xslt.h>
 #include <libxslt/xsltutils.h>
@@ -128,6 +129,8 @@ int extractTranslations()
         fprintf(stderr, "cannot open %s\n", sOutputFile.getStr());
         return 1;
     }
+
+    exsltRegisterAll();
 
     rtl::OString sActFileName = common::pathnameToken(sInputFileName.getStr(), sPrjRoot.getStr());
 
