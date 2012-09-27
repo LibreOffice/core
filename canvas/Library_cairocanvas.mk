@@ -91,7 +91,9 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_textlayout \
 ))
 
-$(eval $(call gb_Library_use_external,cairocanvas,cairo))
+$(eval $(call gb_Library_use_externals,cairocanvas,\
+	cairo \
+))
 
 ifeq ($(OS),WNT)
 
@@ -116,6 +118,8 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 # freetype? fontconfig? -> test on Solaris
 $(eval $(call gb_Library_use_libraries,cairocanvas,\
 	X11 \
+))
+$(eval $(call gb_Library_use_externals,cairocanvas,\
 	Xrender \
 ))
 endif
