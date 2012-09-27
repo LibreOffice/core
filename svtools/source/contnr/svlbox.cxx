@@ -827,9 +827,10 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    pSourceEntry = (SvLBoxEntry*)aList.First();
-    while ( pSourceEntry )
+    SvTreeEntryList::iterator it = aList.begin(), itEnd = aList.end();
+    for (; it != itEnd; ++it)
     {
+        pSourceEntry = static_cast<SvLBoxEntry*>(*it);
         SvLBoxEntry* pNewParent = 0;
         sal_uLong nInsertionPos = ULONG_MAX;
         sal_Bool bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
@@ -855,8 +856,6 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
 
         if( bOk == (sal_Bool)2 )  // HACK: make visible moved entry?
             MakeVisible( pSourceEntry );
-
-        pSourceEntry = (SvLBoxEntry*)aList.Next();
     }
     pModel->SetCloneLink( aCloneLink );
     return bSuccess;
@@ -888,9 +887,11 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    pSourceEntry = (SvLBoxEntry*)aList.First();
-    while ( pSourceEntry )
+    SvTreeEntryList::iterator it = aList.begin(), itEnd = aList.end();
+    for (; it != itEnd; ++it)
     {
+        pSourceEntry = static_cast<SvLBoxEntry*>(*it);
+
         SvLBoxEntry* pNewParent = 0;
         sal_uLong nInsertionPos = ULONG_MAX;
         sal_Bool bOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
@@ -926,8 +927,6 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
 
         if( bOk == (sal_Bool)2 )  // HACK: make moved entry visible?
             MakeVisible( pSourceEntry );
-
-        pSourceEntry = (SvLBoxEntry*)aList.Next();
     }
     pModel->SetCloneLink( aCloneLink );
     return bSuccess;
@@ -948,11 +947,12 @@ void SvLBox::RemoveSelection()
             SelectChildren( pEntry, sal_False );
         pEntry = NextSelected( pEntry );
     }
-    pEntry = (SvLBoxEntry*)aList.First();
-    while ( pEntry )
+
+    SvTreeEntryList::iterator it = aList.begin(), itEnd = aList.end();
+    for (; it != itEnd; ++it)
     {
-        pModel->Remove( pEntry );
-        pEntry = (SvLBoxEntry*)aList.Next();
+        pEntry = static_cast<SvLBoxEntry*>(*it);
+        pModel->Remove(pEntry);
     }
 }
 

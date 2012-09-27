@@ -31,7 +31,7 @@
 DBG_NAME(SvListEntry);
 
 
-SvTreeEntryList::SvTreeEntryList() : mnCurrent(0) {}
+SvTreeEntryList::SvTreeEntryList() {}
 
 void SvTreeEntryList::push_back( SvListEntry* pItem )
 {
@@ -114,36 +114,46 @@ const SvListEntry* SvTreeEntryList::operator[](size_t i) const
     return i < maEntryList.size() ? maEntryList[i] : NULL;
 }
 
-SvListEntry* SvTreeEntryList::First()
+SvTreeEntryList::const_iterator SvTreeEntryList::begin() const
 {
-    mnCurrent = 0;
-    return ( mnCurrent < maEntryList.size() ) ? maEntryList[ 0 ] : NULL;
+    return maEntryList.begin();
 }
 
-SvListEntry* SvTreeEntryList::Next()
+SvTreeEntryList::const_iterator SvTreeEntryList::end() const
 {
-    return ( mnCurrent+1 < maEntryList.size() ) ? maEntryList[ ++mnCurrent ] : NULL;
+    return maEntryList.end();
 }
 
-SvListEntry* SvTreeEntryList::last()
+SvTreeEntryList::iterator SvTreeEntryList::begin()
 {
-    return maEntryList.empty() ? NULL : maEntryList.back();
+    return maEntryList.begin();
+}
+
+SvTreeEntryList::iterator SvTreeEntryList::end()
+{
+    return maEntryList.end();
+}
+
+SvListEntry* SvTreeEntryList::front()
+{
+    return maEntryList.front();
+}
+
+SvListEntry* SvTreeEntryList::back()
+{
+    return maEntryList.back();
 }
 
 void SvTreeEntryList::DestroyAll()
 {
-    SvListEntry* pPtr = (SvListEntry*)First();
-    while( pPtr )
-    {
-        delete pPtr;
-        pPtr = (SvListEntry*)Next();
-    }
+    ListType::const_iterator it = maEntryList.begin(), itEnd = maEntryList.end();
+    for (; it != itEnd; ++it)
+        delete *it;
 }
 
 SvTreeEntryList::SvTreeEntryList(const SvTreeEntryList& rList)
 {
     maEntryList.clear();
-    mnCurrent = 0;
     for ( size_t i = 0, n = rList.size(); i < n; ++i )
         maEntryList.push_back(const_cast<SvListEntry*>(rList[i]));
 }
@@ -193,14 +203,14 @@ void SvListEntry::SetListPositions()
 {
     if( pChildren )
     {
-        SvListEntry *pEntry = (SvListEntry*)pChildren->First();
-        sal_uLong       nCur = 0;
-        while ( pEntry )
+        SvTreeEntryList::iterator it = pChildren->begin(), itEnd = pChildren->end();
+        sal_uLong nCur = 0;
+        for (; it != itEnd; ++it)
         {
+            SvListEntry* pEntry = *it;
             pEntry->nListPos &= 0x80000000;
             pEntry->nListPos |= nCur;
-            nCur++;
-            pEntry = (SvListEntry*)pChildren->Next();
+            ++nCur;
         }
     }
     nListPos &= (~0x80000000);
@@ -349,12 +359,7 @@ void SvTreeList::Clear()
     SvTreeEntryList* pRootList = pRootItem->pChildren;
     if ( pRootList )
     {
-        SvListEntry* pEntry = (SvListEntry*)(pRootList->First());
-        while( pEntry )
-        {
-            delete pEntry;
-            pEntry = (SvListEntry*)(pRootList->Next());
-        }
+        pRootList->DestroyAll();
         delete pRootItem->pChildren;
         pRootItem->pChildren = 0;
     }
@@ -369,25 +374,27 @@ void SvTreeList::Clear()
 |*
 *************************************************************************/
 
-sal_Bool SvTreeList::IsChild( SvListEntry* pParent, SvListEntry* pChild ) const
+bool SvTreeList::IsChild(const SvListEntry* pParent, const SvListEntry* pChild) const
 {
     if ( !pParent )
         pParent = pRootItem;
 
-    sal_Bool bIsChild = sal_False;
+    bool bIsChild = false;
     SvTreeEntryList* pList = pParent->pChildren;
     if ( !pList )
-        return sal_False;
-    SvListEntry* pActualChild = (SvListEntry*)(pList->First());
-    while( !bIsChild && pActualChild )
+        return false;
+
+    SvTreeEntryList::const_iterator it = pList->begin(), itEnd = pList->end();
+    while (!bIsChild && it != itEnd)
     {
+        const SvListEntry* pActualChild = *it;
         if ( pActualChild == pChild )
-            bIsChild = sal_True;
+            bIsChild = true;
         else
         {
             if ( pActualChild->pChildren )
                 bIsChild = IsChild( pActualChild, pChild );
-            pActualChild = (SvListEntry*)(pList->Next());
+            ++it;
         }
     }
     return bIsChild;
@@ -578,9 +585,10 @@ SvTreeEntryList* SvTreeList::CloneChildren( SvTreeEntryList* pChildren,
 {
     DBG_ASSERT(!pChildren->empty(),"Children?");
     SvTreeEntryList* pClonedChildren = new SvTreeEntryList;
-    SvListEntry* pChild = (SvListEntry*)pChildren->First();
-    while ( pChild )
+    SvTreeEntryList::iterator it = pChildren->begin(), itEnd = pChildren->end();
+    while (it != itEnd)
     {
+        SvListEntry* pChild = *it;
         SvListEntry* pNewChild = CloneEntry( pChild );
         nCloneCount++;
         pNewChild->pParent = pNewParent;
@@ -592,7 +600,7 @@ SvTreeEntryList* SvTreeList::CloneChildren( SvTreeEntryList* pChildren,
         }
 
         pClonedChildren->push_back( pNewChild );
-        pChild = (SvListEntry*)pChildren->Next();
+        ++it;
     }
     return pClonedChildren;
 }
@@ -765,12 +773,12 @@ SvListEntry* SvTreeList::Prev( SvListEntry* pActEntry, sal_uInt16* pDepth ) cons
 
     if ( nActualPos > 0 )
     {
-        pActEntry = (SvListEntry*)(*pActualList)[ nActualPos - 1 ];
+        pActEntry = (*pActualList)[nActualPos-1];
         while( pActEntry->pChildren )
         {
             pActualList = pActEntry->pChildren;
             nDepth++;
-            pActEntry = (SvListEntry*)(pActualList->last());
+            pActEntry = pActualList->back();
         }
         if ( bWithDepth )
             *pDepth = nDepth;
@@ -805,7 +813,7 @@ SvListEntry* SvTreeList::Last() const
     SvListEntry* pEntry = 0;
     while( pActList )
     {
-        pEntry = (SvListEntry*)(pActList->last());
+        pEntry = pActList->back();
         pActList = pEntry->pChildren;
 //      if ( pActList->Count() == 0 )
 //          pActList = 0;
@@ -965,7 +973,7 @@ SvListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvListEntry* pActE
         {
             pActualList = pActEntry->pChildren;
             nDepth++;
-            pActEntry = (SvListEntry*)(pActualList->last());
+            pActEntry = pActualList->back();
         }
         if ( bWithDepth )
             *pActDepth = nDepth;
@@ -1124,7 +1132,7 @@ SvListEntry* SvTreeList::LastSibling( SvListEntry* pEntry ) const
     SvListEntry* pSib = 0;
     SvTreeEntryList* pSibs = pEntry->pParent->pChildren;
     if ( pSibs )
-        pSib = (SvListEntry*)(pSibs->last());
+        pSib = pSibs->back();
     return pSib;
 }
 
@@ -1715,16 +1723,16 @@ void SvListView::ActionInsertedTree( SvListEntry* pEntry )
 void SvListView::RemoveViewData( SvListEntry* pParent )
 {
     SvTreeEntryList* pChildren = pParent->pChildren;
-    if( pChildren )
+    if (!pChildren)
+        return;
+
+    SvTreeEntryList::iterator it = pChildren->begin(), itEnd = pChildren->end();
+    for (; it != itEnd; ++it)
     {
-        SvListEntry* pCur = (SvListEntry*)pChildren->First();
-        while( pCur )
-        {
-            maDataTable.erase(pCur);
-            if( pCur->HasChildren())
-                RemoveViewData( pCur );
-            pCur = (SvListEntry*)pChildren->Next();
-        }
+        SvListEntry* pCur = *it;
+        maDataTable.erase(pCur);
+        if (pCur->HasChildren())
+            RemoveViewData(pCur);
     }
 }
 

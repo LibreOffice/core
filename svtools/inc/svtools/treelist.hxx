@@ -66,10 +66,13 @@ class SvListEntry;
 class SVT_DLLPUBLIC SvTreeEntryList
 {
 private:
-    std::vector<SvListEntry*> maEntryList;
-    size_t mnCurrent;
+    typedef std::vector<SvListEntry*> ListType;
+    ListType maEntryList;
 
 public:
+    typedef ListType::const_iterator const_iterator;
+    typedef ListType::iterator iterator;
+
     SvTreeEntryList();
     SvTreeEntryList(const SvTreeEntryList& rList);
 
@@ -88,9 +91,14 @@ public:
 
     SvListEntry* operator[](size_t i);
     const SvListEntry* operator[](size_t i) const;
-    SvListEntry* First();
-    SvListEntry* Next();
-    SvListEntry* last();
+
+    const_iterator begin() const;
+    const_iterator end() const;
+
+    iterator begin();
+    iterator end();
+    SvListEntry* front();
+    SvListEntry* back();
 };
 
 //=============================================================================
@@ -321,7 +329,7 @@ public:
     sal_Bool            HasParent( SvListEntry* pEntry ) const
     { return (sal_Bool)(pEntry->pParent!=pRootItem); }
 
-    sal_Bool            IsChild( SvListEntry* pParent, SvListEntry* pChild ) const;
+    bool                IsChild(const SvListEntry* pParent, const SvListEntry* pChild) const;
     SvListEntry*        GetEntry( SvListEntry* pParent, sal_uLong nPos ) const;
     SvListEntry*        GetEntry( sal_uLong nRootPos ) const;
     SvListEntry*        GetEntryAtAbsPos( sal_uLong nAbsPos ) const;
