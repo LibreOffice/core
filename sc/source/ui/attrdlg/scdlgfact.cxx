@@ -82,6 +82,7 @@
 #include "colorformat.hxx"
 #include "condformatdlg.hxx"
 #include "condformatmgr.hxx"
+#include "xmlsourcedlg.hxx"
 
 // ause
 #include "editutil.hxx"
@@ -122,6 +123,8 @@ IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractScXMLSourceDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 
 // ScAbstractTabDialog_Impl begin
 void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
@@ -1546,6 +1549,14 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*   
         return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 }
+
+AbstractScXMLSourceDlg* ScAbstractDialogFactory_Impl::CreateScXMLSourceDlg(Window* pParent, int nId)
+{
+    ScXMLSourceDlg* pDlg = (nId == RID_SCDLG_XML_SOURCE) ? new ScXMLSourceDlg(pParent) : NULL;
+
+    return pDlg ? new AbstractScXMLSourceDlg_Impl(pDlg) : NULL;
+}
+
 #undef SfxTabDialog
 #undef ScAbstractTabDialog_Impl
 

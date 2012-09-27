@@ -64,6 +64,7 @@ class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScTextImportOptionsDlg;
 class ScCondFormatManagerDlg;
+class ScXMLSourceDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -377,6 +378,11 @@ class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDl
     virtual bool IsDateConversionSet() const;
 };
 
+class AbstractScXMLSourceDlg_Impl : public AbstractScXMLSourceDlg
+{
+    DECL_ABSTDLG_BASE(AbstractScXMLSourceDlg_Impl, ScXMLSourceDlg)
+};
+
 //add for ScAttrDlg , ScHFEditDlg, ScStyleDlg, ScSubTotalDlg, ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
@@ -389,6 +395,7 @@ class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void        SetText( const XubString& rStr );
     virtual String      GetText() const;
 };
+
 //------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
@@ -585,6 +592,9 @@ public:
 
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
                                                     const SfxItemSet* pArgSet,int nId );
+
+    virtual AbstractScXMLSourceDlg* CreateScXMLSourceDlg(Window* pParent, int nId);
+
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId );
 

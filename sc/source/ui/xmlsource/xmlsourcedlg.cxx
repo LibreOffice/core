@@ -10,4 +10,13 @@
 #include "xmlsourcedlg.hxx"
 #include "xmlsourcedlg.hrc"
 
+ScXMLSourceDlg::ScXMLSourceDlg(Window* pParent) :
+    ModalDialog(pParent, RID_SCDLG_XML_SOURCE)
+{
+}
+
+ScXMLSourceDlg::~ScXMLSourceDlg()
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

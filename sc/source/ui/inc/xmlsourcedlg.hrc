@@ -9,6 +9,7 @@
 
 #include "sc.hrc"
 
-
+#define BTN_OK 0
+#define BTN_CANCEL 1
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

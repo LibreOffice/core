@@ -10,8 +10,13 @@
 #ifndef __SC_XMLSOURCEDLG_HXX__
 #define __SC_XMLSOURCEDLG_HXX__
 
-class XMLSourceDlg
+#include "vcl/dialog.hxx"
+
+class ScXMLSourceDlg : public ModalDialog
 {
+public:
+    ScXMLSourceDlg(Window* pParent);
+    virtual ~ScXMLSourceDlg();
 };
 
 #endif
