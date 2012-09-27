@@ -90,10 +90,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_libraries,sofficeapp,tubes))
-
-$(eval $(call gb_Library_add_defs,sofficeapp,\
-    -DENABLE_TELEPATHY \
-))
 endif
 
 #
