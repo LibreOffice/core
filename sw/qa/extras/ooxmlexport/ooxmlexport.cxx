@@ -30,6 +30,13 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 #include <unotools/tempfile.hxx>
 
@@ -55,6 +62,7 @@ public:
     void testMathRad();
     void testMathSubscripts();
     void testMathVerticalStacks();
+    void testTablePosition();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -77,6 +85,7 @@ public:
     CPPUNIT_TEST(testMathRad);
     CPPUNIT_TEST(testMathSubscripts);
     CPPUNIT_TEST(testMathVerticalStacks);
+    CPPUNIT_TEST(testTablePosition);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -346,6 +355,46 @@ void Test::testMathVerticalStacks()
 // TODO check these
 //    CHECK_FORMULA( "binom {a} {b}", getFormula( getRun( getParagraph( 3 ), 1 )));
 //    CHECK_FORMULA( "binom {a} {binom {b} {c}}", getFormula( getRun( getParagraph( 4 ), 1 )));
+}
+
+void Test::testTablePosition()
+{
+    // This is the reverse test of n779957 from ooxmlimport
+    // We want to verify that a full round-trip does not break formatting
+    // Of course if import code is wrong, this tests will fail regardless of export code.
+    roundtrip( "../../ooxmlimport/data/n779957.docx" );
+
+    sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
+    sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+
+    for (int i=0; i<4; i++) {
+        uno::Reference<text::XTextTable> xTable1 (xTables->getByIndex(i), uno::UNO_QUERY);
+        // Verify X coord
+        uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
+        xCtrl->select(uno::makeAny(xTable1));
+        uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY);
+        uno::Reference<text::XTextViewCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+        awt::Point pos = xCursor->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect X coord computed from docx",
+            xCoordsFromOffice[i], pos.X, 1);
+
+        // Verify left margin of 1st cell :
+        //  * Office left margins are measured relative to the right of the border
+        //  * LO left spacing is measured from the center of the border
+        uno::Reference<table::XCell> xCell = xTable1->getCellByName("A1");
+        uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
+        sal_Int32 aLeftMargin = -1;
+        xPropSet->getPropertyValue("LeftBorderDistance") >>= aLeftMargin;
+        uno::Any aLeftBorder = xPropSet->getPropertyValue("LeftBorder");
+        table::BorderLine2 aLeftBorderLine;
+        aLeftBorder >>= aLeftBorderLine;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect left spacing computed from docx cell margin",
+            cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
