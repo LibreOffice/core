@@ -2395,7 +2395,22 @@ void ScCellShell::ExecuteDataPilotDialog()
 
 void ScCellShell::ExecuteXMLSourceDialog()
 {
-    fprintf(stdout, "ScCellShell::ExecuteXMLSourceDialog:   launch xml dialog\n");
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    if (!pFact)
+        return;
+
+    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
+    if (!pTabViewShell)
+        return;
+
+    boost::scoped_ptr<AbstractScXMLSourceDlg> pDlg(
+        pFact->CreateScXMLSourceDlg(
+            pTabViewShell->GetDialogParent(), RID_SCDLG_XML_SOURCE));
+
+    if (!pDlg)
+        return;
+
+    pDlg->Execute();
 }
 
 void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
