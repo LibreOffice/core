@@ -75,7 +75,7 @@ private:
 
 public:
     SvTreeEntryList();
-    SvTreeEntryList(SvTreeEntryList& rList);
+    SvTreeEntryList(const SvTreeEntryList& rList);
 
     void DestroyAll();
     void push_back(SvListEntry* pItem);
@@ -85,12 +85,13 @@ public:
     void replace(SvListEntry* pNew, SvListEntry* pOld);
     void clear();
 
-    bool empty();
+    bool empty() const;
 
-    size_t size();
-    size_t GetPos(SvListEntry* pItem);
+    size_t size() const;
+    size_t GetPos(const SvListEntry* pItem) const;
 
     SvListEntry* operator[](size_t i);
+    const SvListEntry* operator[](size_t i) const;
     SvListEntry* First();
     SvListEntry* Next();
     SvListEntry* last();

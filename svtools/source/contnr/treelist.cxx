@@ -84,17 +84,17 @@ void SvTreeEntryList::clear()
     maEntryList.clear();
 }
 
-bool SvTreeEntryList::empty()
+bool SvTreeEntryList::empty() const
 {
     return maEntryList.empty();
 }
 
-size_t SvTreeEntryList::size()
+size_t SvTreeEntryList::size() const
 {
     return maEntryList.size();
 }
 
-size_t SvTreeEntryList::GetPos( SvListEntry* pItem )
+size_t SvTreeEntryList::GetPos(const SvListEntry* pItem) const
 {
     for ( size_t i = 0, n = maEntryList.size(); i < n; ++i ) {
         if ( maEntryList[ i ] == pItem ) {
@@ -104,9 +104,14 @@ size_t SvTreeEntryList::GetPos( SvListEntry* pItem )
     return (size_t)~0;
 }
 
-SvListEntry* SvTreeEntryList::operator[]( size_t i )
+SvListEntry* SvTreeEntryList::operator[](size_t i)
 {
-    return i < maEntryList.size() ? maEntryList[ i ] : NULL;
+    return i < maEntryList.size() ? maEntryList[i] : NULL;
+}
+
+const SvListEntry* SvTreeEntryList::operator[](size_t i) const
+{
+    return i < maEntryList.size() ? maEntryList[i] : NULL;
 }
 
 SvListEntry* SvTreeEntryList::First()
@@ -135,13 +140,12 @@ void SvTreeEntryList::DestroyAll()
     }
 }
 
-SvTreeEntryList::SvTreeEntryList(SvTreeEntryList& rList)
+SvTreeEntryList::SvTreeEntryList(const SvTreeEntryList& rList)
 {
     maEntryList.clear();
     maCurrent = 0;
-    for ( size_t i = 0, n = rList.size(); i < n; ++i ) {
-        maEntryList.push_back( rList[ i ] );
-    }
+    for ( size_t i = 0, n = rList.size(); i < n; ++i )
+        maEntryList.push_back(const_cast<SvListEntry*>(rList[i]));
 }
 
 SvListEntry::SvListEntry()
