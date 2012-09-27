@@ -10,11 +10,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
-#include <ucbhelper/configurationkeys.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/help.hxx>
@@ -52,11 +51,10 @@ int UIPreviewApp::Main()
         uno::Reference<lang::XMultiServiceFactory> (xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
 
-    // Create UCB.
-    uno::Sequence< uno::Any > aArgs(2);
-    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
-    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
-    ::ucbhelper::ContentBroker::initialize(xSFactory, aArgs);
+    // Create UCB (for backwards compatibility, in case some code still uses
+    // plain createInstance w/o args directly to obtain an instance):
+    ::ucb::UniversalContentBroker::create(
+        comphelper::getProcessComponentContext() );
 
     // turn on tooltips
     Help::EnableQuickHelp();
@@ -87,9 +85,6 @@ int UIPreviewApp::Main()
         fprintf(stderr, "fatal error: %s\n", rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
     }
     return false;
-
-
-    ::ucbhelper::ContentBroker::deinitialize();
 
     return EXIT_SUCCESS;
 }
