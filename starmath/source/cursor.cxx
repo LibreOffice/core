@@ -1462,7 +1462,7 @@ void SmCursor::EndEdit(){
     RequestRepaint();
 
     //Update the edit engine and text of the document
-    String formula;
+    OUString formula;
     SmNodeToTextVisitor(pTree, formula);
     //pTree->CreateTextFromNode(formula);
     pDocShell->aText = formula;

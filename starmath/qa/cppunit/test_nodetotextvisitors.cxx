@@ -494,11 +494,11 @@ void Test::SimpleSpecialChars()
  */
 void Test::parseandparseagain(const char *formula, const char *test_name)
 {
-    String input, output1, output2;
+    OUString output1, output2;
     SmNode *pNode1, *pNode2;
 
     // parse 1
-    input.AppendAscii(formula);
+    OUString input = OUString::createFromAscii(formula);
     pNode1 = SmParser().ParseExpression(input);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode1, output1);
@@ -519,17 +519,17 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
 
 void Test::ParseAndCheck(const char *formula, const char * expected, const char *test_name)
 {
-    String sInput, sOutput, sExpected;
+    OUString sOutput;
     SmNode *pNode;
 
     // parse
-    sInput.AppendAscii(formula);
+    OUString sInput = OUString::createFromAscii(formula);
     pNode = SmParser().ParseExpression(sInput);
     pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode, sOutput);
 
     // compare
-    sExpected.AppendAscii(expected);
+    OUString sExpected = OUString::createFromAscii(expected);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
         sExpected,
         sOutput);
