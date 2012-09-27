@@ -1273,7 +1273,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
-                        sal_Int16 nPercent;
+                        sal_Int16 nPercent(100);
                         aValue >>= nPercent;
                         if ( pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH )
                             pObj->SetRelativeWidth( nPercent / 100.0 );
