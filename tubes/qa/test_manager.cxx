@@ -49,25 +49,17 @@ class TestTeleTubes: public CppUnit::TestFixture
 {
 public:
 
-    TestTeleTubes() {}
-    ~TestTeleTubes() {}
+    TestTeleTubes();
+    ~TestTeleTubes();
     // This could happen in costructor wasn't there TestTeleTubes instance for each test:
-    void testInitialize();
-    void testInitTeleManager();
     void testContactList();
-    void testStartBuddySession();
-    void testSendPacket();
-    void testDestroyTeleTubes();
+    void testSession();
     void testFailAlways();
 
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
-    CPPUNIT_TEST( testInitialize );
-    CPPUNIT_TEST( testInitTeleManager );
     CPPUNIT_TEST( testContactList );
-    CPPUNIT_TEST( testStartBuddySession );
-    CPPUNIT_TEST( testSendPacket );
-    CPPUNIT_TEST( testDestroyTeleTubes );
+    CPPUNIT_TEST( testSession );
 #if 0
     CPPUNIT_TEST( testFailAlways );     // test failure displays SAL_LOG, uncomment for debugging
 #endif
@@ -105,7 +97,7 @@ static gboolean timed_out( void * )
     return FALSE;
 }
 
-void TestTeleTubes::testInitialize()
+TestTeleTubes::TestTeleTubes()
 {
     g_timeout_add_seconds (10, timed_out, NULL);
     try
@@ -135,10 +127,7 @@ void TestTeleTubes::testInitialize()
 
     mpCollaboration1 = new TestCollaboration();
     mpCollaboration2 = new TestCollaboration();
-}
 
-void TestTeleTubes::testInitTeleManager()
-{
     CPPUNIT_ASSERT( TeleManager::init( true));
 }
 
@@ -189,7 +178,7 @@ static void lcl_FileSent( bool success, void * )
 }
 */
 
-void TestTeleTubes::testStartBuddySession()
+void TestTeleTubes::testSession()
 {
     TeleConference* pConference = NULL;
     CPPUNIT_ASSERT( mpOffererAccount != 0);
@@ -209,17 +198,14 @@ void TestTeleTubes::testStartBuddySession()
     pConference = TeleManager::getConference();
     CPPUNIT_ASSERT( pConference != NULL);
     mpCollaboration2->SetConference( pConference );
-}
 
-void TestTeleTubes::testSendPacket()
-{
     mpCollaboration1->SendPacket( "from 1 to 2");
 
     while (!mbPacketReceived)
         g_main_context_iteration( NULL, TRUE);
 }
 
-void TestTeleTubes::testDestroyTeleTubes()
+TestTeleTubes::~TestTeleTubes()
 {
     if (mpOffererAccount) {
         g_object_unref(mpOffererAccount);
