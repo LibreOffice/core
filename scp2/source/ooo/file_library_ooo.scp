@@ -528,12 +528,14 @@ File gid_File_Lib_MacOSXSpell
 	Dir = SCP2_OOO_BIN_DIR;
 End
 
+#if !defined(BITNESS_OVERRIDE) || BITNESS_OVERRIDE==32
 File gid_File_Lib_avmediaQuickTime
 	LIB_FILE_BODY;
 	Styles = (PACKED);
 	Name = LIBNAME(avmediaQuickTime);
 	Dir = SCP2_OOO_BIN_DIR;
 End
+#endif
 #endif
 
 #ifdef WNT
