@@ -40,7 +40,6 @@ use installer::copyproject;
 use installer::download;
 use installer::environment;
 use installer::epmfile;
-use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::helppack;
@@ -273,7 +272,7 @@ sub run {
     my $includepathref = installer::ziplist::getinfofromziplist($allsettingsarrayref, "include");
     if ( $$includepathref eq "" )
     {
-        installer::exiter::exit_program("ERROR: Definition for \"include\" not found in $installer::globals::ziplistname", "Main");
+        die 'Definition for "include" not found in ' . $installer::globals::ziplistname;
     }
 
     my $includepatharrayref = installer::converter::convert_stringlist_into_array($includepathref, ",");

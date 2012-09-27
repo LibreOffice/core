@@ -28,7 +28,6 @@
 package installer::archivefiles;
 
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
-use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
@@ -277,7 +276,7 @@ sub resolving_archive_flag
             {
                 if ( $installer::globals::dounzip )         # really unpacking the files
                 {
-                    if ( $zip->extractTree("", $unzipdir) != AZ_OK ) { installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag"); }
+                    if ( $zip->extractTree("", $unzipdir) != AZ_OK ) { die "Could not unzip: $!"; }
 
                     if (( $^O =~ /cygwin/i ) && ( $contains_dll ))
                     {
@@ -533,7 +532,7 @@ sub resolving_archive_flag
 
                     if ( $maxcounter == 5 ) # exiting the program
                     {
-                        installer::exiter::exit_program("ERROR: Failed to unzip $sourcepath !", "resolving_archive_flag");
+                        die "Failed to unzip $sourcepath !";
                     }
                 }
                 else

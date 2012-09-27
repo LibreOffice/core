@@ -28,7 +28,6 @@
 package installer::profiles;
 
 use installer::converter;
-use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
@@ -98,7 +97,7 @@ sub add_profile_into_filelist
     if ( $allvariables->{'GLOBALFILEGID'} ) { $vclgid = $allvariables->{'GLOBALFILEGID'}; }
     my ($vclfile) = grep {$_->{gid} eq $vclgid} @{$filesarrayref};
     if (! defined $vclfile) {
-        installer::exiter::exit_program("ERROR: Could not find file $vclgid in list of files!", "add_profile_into_filelist");
+        die "Could not find file $vclgid in list of files!";
     }
 
     # copying all base data
