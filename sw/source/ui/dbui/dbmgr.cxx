@@ -2502,7 +2502,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     rtl::OUString sDataSource, sDataTableOrQuery;
     Sequence<Any> aSelection;
 
-    sal_Int16 nCmdType = CommandType::TABLE;
+    sal_Int32 nCmdType = CommandType::TABLE;
     uno::Reference< XConnection> xConnection;
 
     ODataAccessDescriptor aDescriptor(rProperties);
