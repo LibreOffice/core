@@ -355,6 +355,25 @@ namespace connectivity
                     ,Sequence< ::rtl::OUString >())
                     );
         }
+        else if ( eType == D_NATIVE )
+        {
+            aDriverInfo.push_back(DriverPropertyInfo(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalSocket"))
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "The file path of a socket to connect to a local MySQL server."))
+                    ,sal_False
+                    ,::rtl::OUString()
+                    ,Sequence< ::rtl::OUString >())
+                    );
+            aDriverInfo.push_back(DriverPropertyInfo(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedPipe"))
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "The name of a pipe to connect to a local MySQL server."))
+                    ,sal_False
+                    ,::rtl::OUString()
+                    ,Sequence< ::rtl::OUString >())
+                    );
+        }
 
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
