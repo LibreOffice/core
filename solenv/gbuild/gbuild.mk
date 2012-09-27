@@ -48,7 +48,16 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 
 .DELETE_ON_ERROR:
 
+# by default gbuild use /bin/sh
+# if you want to use a particular shell
+# you can export gb_SHELL=<path_to_shell>
+#
+ifdef gb_SHELL
+SHELL := $(gb_SHELL)
+else
 SHELL := /bin/sh
+endif
+
 true := T
 false :=
 define NEWLINE
