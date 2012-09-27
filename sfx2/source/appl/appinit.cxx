@@ -113,7 +113,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     pApp->Get_Impl()->pAppDispatch->release();
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xGlobalBroadcaster = css::frame::GlobalEventBroadcaster::create(xContext);
+    css::uno::Reference< css::document::XEventListener > xGlobalBroadcaster(css::frame::GlobalEventBroadcaster::create(xContext), css::uno::UNO_QUERY_THROW);
 
     css::document::EventObject aEvent2;
     aEvent2.EventName = "OnCloseApp";

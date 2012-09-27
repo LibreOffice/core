@@ -47,7 +47,6 @@
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -188,7 +187,7 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
         if( xCfgMgr.is() )
             sDTDPath = xCfgMgr->substituteVariables( sDTDPath );
 
-        mxGlobalBroadcaster = Reference < XEventBroadcaster >( GlobalEventBroadcaster::create(comphelper::ComponentContext(mxMSF).getUNOContext()), UNO_QUERY_THROW );
+        mxGlobalBroadcaster = Reference < XEventBroadcaster >( GlobalEventBroadcaster::create(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
         mxGlobalEventListener = new GlobalEventListenerImpl( this );
         mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
     }

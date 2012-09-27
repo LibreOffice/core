@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
@@ -38,7 +37,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
@@ -172,11 +170,12 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
 };
 
 //=============================================================================
+//TODO: remove support of obsolete document::XEventBroadcaster/Listener
 class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
                            , public ::cppu::WeakImplHelper4< ::com::sun::star::lang::XServiceInfo
                                                            , ::com::sun::star::frame::XGlobalEventBroadcaster
-                                                           , ::com::sun::star::document::XDocumentEventBroadcaster
-                                                           , ::com::sun::star::document::XDocumentEventListener
+                                                           , ::com::sun::star::document::XEventBroadcaster
+                                                           , ::com::sun::star::document::XEventListener
                                                             >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;

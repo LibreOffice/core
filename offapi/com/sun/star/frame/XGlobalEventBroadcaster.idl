@@ -19,15 +19,17 @@
 #ifndef __com_sun_star_frame_XGlobalEventBroadcaster_idl__
 #define __com_sun_star_frame_XGlobalEventBroadcaster_idl__
 
-#include <com/sun/star/document/XEventBroadcaster.idl>
-#include <com/sun/star/document/XEventsSupplier.idl>
 #include <com/sun/star/container/XSet.idl>
+#include <com/sun/star/document/XDocumentEventBroadcaster.idl>
+#include <com/sun/star/document/XDocumentEventListener.idl>
+#include <com/sun/star/document/XEventsSupplier.idl>
 
-
- module com {  module sun {  module star {  module frame {
+module com {  module sun {  module star {  module frame {
 
 /**
    Provides a unified interface for the GlobalEventBroadcaster service to implement.
+
+   @since LibreOffice 3.7
  */
 
 interface XGlobalEventBroadcaster
@@ -39,11 +41,11 @@ interface XGlobalEventBroadcaster
 
         /** access to bound event handlers
          */
-        interface ::com::sun::star::document::XEventBroadcaster;
+        interface ::com::sun::star::document::XDocumentEventBroadcaster;
 
         interface ::com::sun::star::container::XSet;
 
-        interface ::com::sun::star::document::XEventListener;
+        interface ::com::sun::star::document::XDocumentEventListener;
 };
 
 

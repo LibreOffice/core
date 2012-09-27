@@ -1532,7 +1532,7 @@ int Desktop::Main()
 
         // create service for loadin SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
-            ( css::frame::GlobalEventBroadcaster::create(comphelper::ComponentContext(xSMgr).getUNOContext()), UNO_QUERY );
+            ( css::frame::GlobalEventBroadcaster::create(comphelper::getComponentContext(xSMgr)), UNO_QUERY_THROW );
 
         /* ensure existance of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
@@ -1567,12 +1567,9 @@ int Desktop::Main()
         // keep a language options instance...
         pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
 
-        if (pExecGlobals->xGlobalBroadcaster.is())
-        {
-            css::document::EventObject aEvent;
-            aEvent.EventName = ::rtl::OUString("OnStartApp");
-            pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
-        }
+        css::document::EventObject aEvent;
+        aEvent.EventName = ::rtl::OUString("OnStartApp");
+        pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
 
         SetSplashScreenProgress(50);
 

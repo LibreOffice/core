@@ -89,11 +89,10 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     aSaveInListBox.SetSelectHdl( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
 
-    uno::Reference< document::XEventsSupplier > xSupplier;
+    uno::Reference< frame::XGlobalEventBroadcaster > xSupplier;
 
-    xSupplier = uno::Reference< document::XEventsSupplier > (
-        frame::GlobalEventBroadcaster::create(::comphelper::getProcessComponentContext()),
-        uno::UNO_QUERY_THROW );
+    xSupplier =
+        frame::GlobalEventBroadcaster::create(::comphelper::getProcessComponentContext());
 
     sal_uInt16 nPos(0);
     m_xAppEvents = xSupplier->getEvents();

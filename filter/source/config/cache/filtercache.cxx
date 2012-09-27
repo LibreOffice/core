@@ -48,7 +48,6 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/locale.hxx>
 #include <comphelper/processfactory.hxx>
@@ -250,7 +249,7 @@ void FilterCache::load(EFillState eRequired,
         // and starts a thread, which calls loadAll() at this filter cache.
         // Note: Its not a leak to create this listener with new here.
         // It kills itself after working!
-        /* LateInitListener* pLateInit = */ new LateInitListener(comphelper::ComponentContext(m_xSMGR).getUNOContext());
+        /* LateInitListener* pLateInit = */ new LateInitListener(comphelper::getComponentContext(m_xSMGR));
     }
 
     // ------------------------------------------

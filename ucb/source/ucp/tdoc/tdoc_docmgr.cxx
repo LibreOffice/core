@@ -42,7 +42,7 @@
 
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/container/XEnumerationAccess.hpp"
+#include "com/sun/star/document/XEventBroadcaster.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
 #include "com/sun/star/frame/GlobalEventBroadcaster.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
@@ -115,16 +115,14 @@ OfficeDocumentsManager::OfficeDocumentsManager(
             const uno::Reference< uno::XComponentContext > & rxContext,
             OfficeDocumentsEventListener * pDocEventListener )
 : m_xContext( rxContext ),
-  m_xDocEvtNotifier( createDocumentEventNotifier( rxContext ) ),
+  m_xDocEvtNotifier( frame::GlobalEventBroadcaster::create( rxContext ) ),
   m_pDocEventListener( pDocEventListener ),
   m_xDocCloseListener( new OfficeDocumentsCloseListener( this ) )
 {
-    if ( m_xDocEvtNotifier.is() )
-    {
-        // Order is important (multithreaded environment)
-        m_xDocEvtNotifier->addEventListener( this );
-        buildDocumentsList();
-    }
+    // Order is important (multithreaded environment)
+    uno::Reference< document::XEventBroadcaster >(
+        m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->addEventListener( this );
+    buildDocumentsList();
 }
 
 //=========================================================================
@@ -141,8 +139,8 @@ OfficeDocumentsManager::~OfficeDocumentsManager()
 //=========================================================================
 void OfficeDocumentsManager::destroy()
 {
-    if ( m_xDocEvtNotifier.is() )
-        m_xDocEvtNotifier->removeEventListener( this );
+    uno::Reference< document::XEventBroadcaster >(
+        m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->removeEventListener( this );
 }
 
 //=========================================================================
@@ -457,53 +455,10 @@ void SAL_CALL OfficeDocumentsManager::disposing(
 //
 //=========================================================================
 
-// static
-uno::Reference< document::XEventBroadcaster >
-OfficeDocumentsManager::createDocumentEventNotifier(
-        const uno::Reference< uno::XComponentContext >& rxContext )
-{
-    uno::Reference< uno::XInterface > xIfc;
-    try
-    {
-        xIfc = frame::GlobalEventBroadcaster::create(rxContext);
-    }
-    catch ( uno::Exception const & )
-    {
-        // handled below.
-    }
-
-    OSL_ENSURE(
-        xIfc.is(),
-        "Could not instanciate com.sun.star.frame.GlobalEventBroadcaster" );
-
-    if ( xIfc.is() )
-    {
-        uno::Reference< document::XEventBroadcaster > xBC(
-            xIfc, uno::UNO_QUERY );
-
-        OSL_ENSURE(
-            xBC.is(),
-            "com.sun.star.frame.GlobalEventBroadcaster does not implement "
-            "interface com.sun.star.document.XEventBroadcaster!" );
-
-        return xBC;
-    }
-    else
-        return uno::Reference< document::XEventBroadcaster >();
-}
-
-//=========================================================================
 void OfficeDocumentsManager::buildDocumentsList()
 {
-    OSL_ENSURE( m_xDocEvtNotifier.is(),
-                "OfficeDocumentsManager::buildDocumentsList - "
-                "No document event notifier!" );
-
-    uno::Reference< container::XEnumerationAccess > xEnumAccess(
-        m_xDocEvtNotifier, uno::UNO_QUERY_THROW );
-
     uno::Reference< container::XEnumeration > xEnum
-        = xEnumAccess->createEnumeration();
+        = m_xDocEvtNotifier->createEnumeration();
 
     osl::MutexGuard aGuard( m_aMtx );
 

@@ -35,11 +35,11 @@
 
 #include "cppuhelper/implbase1.hxx"
 
-#include "com/sun/star/document/XEventBroadcaster.hpp"
 #include "com/sun/star/document/XEventListener.hpp"
 #include "com/sun/star/embed/XStorage.hpp"
 #include "com/sun/star/frame/XModel.hpp"
 #include "com/sun/star/frame/XModuleManager2.hpp"
+#include "com/sun/star/frame/XGlobalEventBroadcaster.hpp"
 #include "com/sun/star/util/XCloseListener.hpp"
 
 namespace tdoc_ucp {
@@ -158,12 +158,6 @@ namespace tdoc_ucp {
         queryStorageTitle( const rtl::OUString & rDocId );
 
     private:
-        static com::sun::star::uno::Reference<
-            com::sun::star::document::XEventBroadcaster >
-        createDocumentEventNotifier(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext );
-
         void buildDocumentsList();
 
         bool
@@ -195,7 +189,7 @@ namespace tdoc_ucp {
         com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext >        m_xContext;
         com::sun::star::uno::Reference<
-            com::sun::star::document::XEventBroadcaster >   m_xDocEvtNotifier;
+            com::sun::star::frame::XGlobalEventBroadcaster > m_xDocEvtNotifier;
         com::sun::star::uno::Reference<
             com::sun::star::frame::XModuleManager2 >        m_xModuleMgr;
         DocumentList                                        m_aDocs;
