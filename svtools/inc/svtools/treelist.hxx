@@ -63,15 +63,11 @@
 
 class SvListEntry;
 
-//=============================================================================
-
-typedef ::std::vector< SvListEntry* > SvTreeEntryList_impl;
-
 class SVT_DLLPUBLIC SvTreeEntryList
 {
 private:
-    SvTreeEntryList_impl    maEntryList;
-    size_t                  maCurrent;
+    std::vector<SvListEntry*> maEntryList;
+    size_t maCurrent;
 
 public:
     SvTreeEntryList();

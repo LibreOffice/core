@@ -52,7 +52,7 @@ void SvTreeEntryList::insert( SvListEntry* pItem, size_t i )
 
 void SvTreeEntryList::remove( SvListEntry* pItem )
 {
-    for (SvTreeEntryList_impl::iterator it = maEntryList.begin(); it != maEntryList.end(); ++it)
+    for (std::vector<SvListEntry*>::iterator it = maEntryList.begin(); it != maEntryList.end(); ++it)
     {
         if ( *it == pItem )
         {
