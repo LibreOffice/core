@@ -2176,6 +2176,38 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     m_pSerializer->singleElementNS( XML_a, XML_tailEnd,
             FSEND );
     m_pSerializer->endElementNS( XML_a, XML_ln );
+
+    // Output effects
+    SvxShadowItem aShadowItem = rGrfNode.GetFlyFmt()->GetShadow();
+    if ( aShadowItem.GetLocation() != SVX_SHADOW_NONE )
+    {
+        // Distance is measured diagonally from corner
+        double nShadowDist = sqrt((aShadowItem.GetWidth()*aShadowItem.GetWidth())*2);
+        OString aShadowDist( OString::valueOf( TwipsToEMU( nShadowDist ) ) );
+        OString aShadowColor = impl_ConvertColor( aShadowItem.GetColor() );
+        sal_uInt32 nShadowDir = 0;
+        switch ( aShadowItem.GetLocation() )
+        {
+            case SVX_SHADOW_TOPLEFT: nShadowDir = 13500000; break;
+            case SVX_SHADOW_TOPRIGHT: nShadowDir = 18900000; break;
+            case SVX_SHADOW_BOTTOMLEFT: nShadowDir = 8100000; break;
+            case SVX_SHADOW_BOTTOMRIGHT: nShadowDir = 2700000; break;
+            case SVX_SHADOW_NONE:
+            case SVX_SHADOW_END:
+                break;
+        }
+        OString aShadowDir( OString::valueOf( long(nShadowDir) ) );
+
+        m_pSerializer->startElementNS( XML_a, XML_effectLst, FSEND );
+        m_pSerializer->startElementNS( XML_a, XML_outerShdw,
+                                       XML_dist, aShadowDist.getStr(),
+                                       XML_dir, aShadowDir.getStr(), FSEND );
+        m_pSerializer->singleElementNS( XML_a, XML_srgbClr,
+                                        XML_val, aShadowColor.getStr(), FSEND );
+        m_pSerializer->endElementNS( XML_a, XML_outerShdw );
+        m_pSerializer->endElementNS( XML_a, XML_effectLst );
+    }
+
     m_pSerializer->endElementNS( XML_pic, XML_spPr );
 
     m_pSerializer->endElementNS( XML_pic, XML_pic );
