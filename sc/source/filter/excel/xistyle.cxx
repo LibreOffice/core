@@ -1513,7 +1513,8 @@ void XclImpXFBuffer::ApplyPattern(
     if( XclImpXF* pXF = GetXF( rXFIndex.GetXFIndex() ) )
     {
         // #108770# set 'Standard' number format for all Boolean cells
-        sal_uLong nForceScNumFmt = rXFIndex.IsBoolCell() ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
+        //sal_uLong nForceScNumFmt = rXFIndex.IsBoolCell() ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
+        sal_uLong nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
         pXF->ApplyPattern( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, nForceScNumFmt );
     }
 }

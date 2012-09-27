@@ -796,6 +796,9 @@ public:
     /// Skip a NumberFormatter in stream, Chart needs this
     static void SkipNumberFormatterInStream( SvStream& );
 
+    const String& GetTrueString();
+    const String& GetFalseString();
+
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;

@@ -3043,6 +3043,8 @@ sal_uInt16 SvNumberFormatter::GetYear2000Default()
     return (sal_uInt16) ::utl::MiscCfg().GetYear2000();
 }
 
+const String& SvNumberFormatter::GetTrueString(){return pFormatScanner->GetTrueString();}
+const String& SvNumberFormatter::GetFalseString(){return pFormatScanner->GetFalseString();}
 
 // static
 const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()

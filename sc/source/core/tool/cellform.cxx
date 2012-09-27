@@ -129,11 +129,25 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
                             rString.Erase();
                         else if ( pFCell->IsValue() )
                         {
-                            double fValue = pFCell->GetValue();
-                            if ( !bNullVals && fValue == 0.0 )
-                                rString.Erase();
+                            if(pFCell->GetFormatType() == NUMBERFORMAT_LOGICAL)
+                            {
+                                String aCellString;
+                                double fValue = pFCell->GetValue();
+                                if(fValue)
+                                    aCellString = rFormatter.GetTrueString();
+                                else
+                                    aCellString = rFormatter.GetFalseString();
+                                rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor );
+
+                            }
                             else
-                                rFormatter.GetOutputString( fValue, nFormat, rString, ppColor );
+                            {
+                                double fValue = pFCell->GetValue();
+                                if ( !bNullVals && fValue == 0.0 )
+                                    rString.Erase();
+                                else
+                                    rFormatter.GetOutputString( fValue, nFormat, rString, ppColor );
+                            }
                         }
                         else
                         {
