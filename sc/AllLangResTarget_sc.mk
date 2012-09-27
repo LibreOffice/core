@@ -83,6 +83,7 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/colorformat.src \
     sc/source/ui/src/condformatdlg.src \
     sc/source/ui/src/condformatmgr.src \
+    sc/source/ui/src/xmlsourcedlg.src \
     sc/source/ui/cctrl/checklistmenu.src \
     sc/source/ui/navipi/navipi.src \
     sc/source/ui/docshell/tpstat.src \

@@ -10,9 +10,12 @@
 #include "xmlsourcedlg.hxx"
 #include "xmlsourcedlg.hrc"
 
+#include "scresid.hxx"
+
 ScXMLSourceDlg::ScXMLSourceDlg(Window* pParent) :
-    ModalDialog(pParent, RID_SCDLG_XML_SOURCE)
+    ModalDialog(pParent, ScResId(RID_SCDLG_XML_SOURCE))
 {
+    FreeResource();
 }
 
 ScXMLSourceDlg::~ScXMLSourceDlg()
