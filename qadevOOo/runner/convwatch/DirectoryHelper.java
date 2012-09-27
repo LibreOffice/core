@@ -24,8 +24,6 @@ import java.util.ArrayList;
 
 /**
  * Helper for directory access
- *
- * @author Lars.Langhans@sun.com
  */
 public class DirectoryHelper
 {
@@ -118,7 +116,6 @@ public class DirectoryHelper
                     try
                     {
                         // Composing the URL by replacing all backslashs
-                        // String stringUrl = "file:///" + aFileEntries[ i ].getAbsolutePath().replace( '\\', '/' );
                         String aStr = aDirEntries[ i ].getAbsolutePath();
                         m_aFileList.add(aStr);
                     }
@@ -130,18 +127,5 @@ public class DirectoryHelper
                 }
             }
         }
-
-    // tests
-    // public static void main(String[] args)
-    //     {
-    //         String sDirectory = "/misc/convwatch/gfxcmp/data/doc-pool/demo";
-    //         Object[] aDirectoryList = DirectoryHelper.traverse( sDirectory, false );
-    //
-    //         for (int i=0;i<aDirectoryList.length;i++)
-    //         {
-    //             String sEntry = (String)aDirectoryList[i];
-    //             System.out.println(sEntry);
-    //         }
-    //     }
 }
 

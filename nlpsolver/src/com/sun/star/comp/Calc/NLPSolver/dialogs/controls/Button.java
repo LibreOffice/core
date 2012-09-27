@@ -35,10 +35,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.sun.star.comp.Calc.NLPSolver.dialogs.BaseDialog;
 
-/**
- *
- * @author Andreas Schneider
- */
 public class Button extends LabeledControl {
     
     private String name;

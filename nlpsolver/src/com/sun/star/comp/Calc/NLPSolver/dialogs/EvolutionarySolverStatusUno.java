@@ -40,10 +40,6 @@ import com.sun.star.comp.Calc.NLPSolver.dialogs.controls.Button;
 import com.sun.star.comp.Calc.NLPSolver.dialogs.controls.Label;
 import com.sun.star.comp.Calc.NLPSolver.dialogs.controls.ProgressBar;
 
-/**
- *
- * @author Andreas Schneider <Andreas.Schneider@Sun.COM>
- */
 public class EvolutionarySolverStatusUno extends BaseDialog
     implements IEvolutionarySolverStatusDialog,
                XActionListener {

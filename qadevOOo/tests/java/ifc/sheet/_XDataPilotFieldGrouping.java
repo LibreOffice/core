@@ -26,10 +26,6 @@ import com.sun.star.sheet.XDataPilotFieldGrouping;
 import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 
-/**
- *
- * @author sw93809
- */
 public class _XDataPilotFieldGrouping extends MultiMethodTest
 {
     public XDataPilotFieldGrouping oObj = null;

@@ -20,7 +20,6 @@ package helper;
 
 /**
  * Helper object, to identify the current Operation System.
- * @author ll93751
  */
 public class OSHelper
 {
@@ -33,8 +32,6 @@ public class OSHelper
             }
             return false;
         }
-    // not need
-    // public static boolean isUnix()
     public static boolean isSolarisIntel()
         {
             if ( ( System.getProperty("os.name").toLowerCase().startsWith("solaris") ||

@@ -16,23 +16,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package graphical;
 
-// import graphical.EnhancedComplexTestCase;
-
-/**
- *
- * @author ll93751
- */
 public class GraphicalComparator extends EnhancedComplexTestCase
 {
 
-    // @Override
     public String[] getTestMethodNames() {
         return new String[]{"check"};
     }
@@ -46,4 +34,3 @@ public class GraphicalComparator extends EnhancedComplexTestCase
     }
 
 }
-

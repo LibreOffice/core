@@ -22,9 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- *
- * @author ll93751
- *
  * I have removed the assure(...) functions from ComplexTestCase due to the fact now I can
  * use the functions every where and don't need to be a ComplexTestCase any longer.
  */
@@ -397,16 +394,6 @@ public class Assurance
     protected void failed(String msg, boolean cont) {
         assure(msg, false, cont);
     }
-
-//    /**
-//     * @deprecated
-//     */
-//    protected void addResult(String message, boolean state) {
-//        String msg = message + " - " + state;
-//        this.state &= state;
-//        this.message += msg + "\r\n";
-//        log.println(msg);
-//    }
 
     public class AssureException extends RuntimeException {
 

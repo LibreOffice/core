@@ -18,10 +18,6 @@
 
 package graphical;
 
-/**
- *
- * @author ll93751
- */
 public class WrongEnvironmentException extends OfficeException
 {
     public WrongEnvironmentException(String _aMessage)

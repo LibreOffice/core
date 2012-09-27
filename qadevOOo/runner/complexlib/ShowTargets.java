@@ -20,10 +20,6 @@ package complexlib;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author fs93730
- */
 public class ShowTargets
 {
     /** Creates a new instance of ShowTargets */

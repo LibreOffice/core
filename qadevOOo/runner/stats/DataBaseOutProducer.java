@@ -22,10 +22,6 @@ import share.DescEntry;
 
 import java.util.HashMap;
 
-/**
- *
- * @author  sg128468
- */
 public abstract class DataBaseOutProducer implements LogWriter {
     protected HashMap<String,Object> mSqlInput = null;
     protected HashMap<String, String[]> mSqlOutput = null;
@@ -78,14 +74,9 @@ public abstract class DataBaseOutProducer implements LogWriter {
         return true;
     }
 
-    /**
-     *
-     *
-     */
     public boolean summary(DescEntry entry) {
         mSqlExec.openConnection();
         findTypeInEntryTree(entry, entry.Logger);
-//        checkDataBase(entry.Logger);
         mSqlExec.closeConnection();
         return true;
     }
@@ -189,10 +180,4 @@ public abstract class DataBaseOutProducer implements LogWriter {
      * Abstract method, so derived classes have to overwrite it.
      */
     protected abstract boolean insertEntry(LogWriter log);
-
-    /**
-     *
-    protected abstract boolean checkDataBase(LogWriter log);
-     */
-
 }

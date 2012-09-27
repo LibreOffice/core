@@ -28,8 +28,6 @@ import com.sun.star.uno.XNamingService;
 import lib.StatusException;
 
 /** wraps a com.sun.star.sdb.DataSource
- *
- * @author fs93730
  */
 public class DataSource
 {

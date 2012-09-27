@@ -19,8 +19,6 @@
 package graphical;
 
 /**
- *
- * @author ll93751
  * Exception which occur if something goes wrong at load document.
  */
 
@@ -30,5 +28,4 @@ public class OfficeException extends Exception
         {
             super(_aMessage);
         }
-
 }

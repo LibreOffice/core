@@ -23,13 +23,8 @@ import helper.ProcessHandler;
 import helper.StringHelper;
 import java.io.File;
 
-/**
- *
- * @author ll93751
- */
 public class JPEGCreator extends EnhancedComplexTestCase
 {
-    // @Override
     public String[] getTestMethodNames()
     {
         return new String[]{"PostscriptOrPDFToJPEG"};
@@ -52,11 +47,6 @@ public class JPEGCreator extends EnhancedComplexTestCase
     {
          GlobalLogWriter.println("  Document: " + _sDocumentName);
          GlobalLogWriter.println("   results: " + _sResult);
-//         IOffice aOffice = new Office(_aParams, _sResult);
-//         aOffice.start();
-//         aOffice.load(_sDocumentName);
-//         aOffice.storeAsPostscript();
-//         aOffice.close();
          String sJPEGNameSchema = createJPEG(_sDocumentName, "", _aParams);
 
          // store information only if jpeg files exists
@@ -140,10 +130,6 @@ public static void convertToNearSameFileWithWidth340(String _sJPEGFilename)
         return;
     }
     String sJPEGFilename = _sJPEGFilename.replaceAll("\\\\", "/");
-//    if (OSHelper.isWindows())
-//    {
-//        sJPEGFilename = sJPEGFilename.replaceAll("/", "\\\\");
-//    }
     String sNewJPEGFilename;
     sNewJPEGFilename = util.utils.replaceAll13(sJPEGFilename, ".jpg", "_w340.jpg");
     convertToWidth340(sJPEGFilename, sNewJPEGFilename);
@@ -164,8 +150,6 @@ Catrom am besten
  */
 private static void convertToWidth340(String _sFrom, String _To)
 {
-            // int nResult = 0;
-
             String sConvertEXE = "convert";
             if (OSHelper.isLinuxIntel())
             {
@@ -201,23 +185,6 @@ private static void convertToWidth340(String _sFrom, String _To)
             {
                 GlobalLogWriter.println("'" + sBack + "'");
             }
-            // try to interpret the result, which we get as a String
-//            try
-//            {
-//                int nIdx = sBack.indexOf("\n");
-//                if (nIdx > 0)
-//                {
-//                    sBack = sBack.substring(0, nIdx);
-//                }
-//
-//                nResult = Integer.valueOf(sBack).intValue();
-//            }
-//            catch(java.lang.NumberFormatException e)
-//            {
-//                GlobalLogWriter.get().println("Number format exception");
-//                nResult = 0;
-//            }
-            // return nResult;
 }
 
 /**
@@ -249,7 +216,6 @@ private static void convertToWidth340(String _sFrom, String _To)
             }
             String sFileDir = FileHelper.getPath(_sFile);
             String sBasename = FileHelper.getBasename(_sFile);
-//            String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
 
             String sTmpDir = util.utils.getUsersTempDir();
             if (_aParam.getOutputPath() != null)
@@ -282,7 +248,6 @@ private static void convertToWidth340(String _sFrom, String _To)
 
         private String getJPEGName(String _sOutputPath, String _sBasename, int _nResolutionInDPI, String _sGS_PageOutput)
         {
-            // String fs = System.getProperty("file.separator");
             String sName = _sBasename + "_" + String.valueOf(_nResolutionInDPI) + "DPI_" + _sGS_PageOutput + ".jpg";
             String sJPEGName = FileHelper.appendPath(_sOutputPath, sName);
             return sJPEGName;
@@ -303,9 +268,6 @@ private static void convertToWidth340(String _sFrom, String _To)
         {
             FileHelper.makeDirectories("", _sOutputPath);
 
-            // create a jpeg from original prn
-            // String fs = System.getProperty("file.separator");
-
             String sJPEGNameSchema = getJPEGName(_sOutputPath, _sSourceFile, _nResolutionInDPI, m_sGS_PageOutput);
             String sPostscriptOrPDFFile = FileHelper.appendPath(_sSourcePath, _sSourceFile);
             String sGhostscriptEXE = "gs";
@@ -324,7 +286,6 @@ private static void convertToWidth340(String _sFrom, String _To)
                 }
             }
 
-//            String sCommand = sGhostscriptEXE + " -dNOPROMPT -dBATCH -sDEVICE=jpeg -r" + String.valueOf(_nResolutionInDPI) + " -dNOPAUSE -sOutputFile=" + StringHelper.doubleQuoteIfNeed(sJPGFilename) + " " + StringHelper.doubleQuoteIfNeed(sOriginalFile);
             String[] sCommandArray =
                 {
                     sGhostscriptEXE,
@@ -339,23 +300,13 @@ private static void convertToWidth340(String _sFrom, String _To)
 
 
                 };
-            // System.out.println("Start Command array");
-            // try
-            // {
-            //     Runtime.getRuntime().exec(sCommandArray);
-            // } catch (Exception e) {
-            //     System.out.println("FAILED");
-            // }
-            // System.out.println("done");
 
 // TODO: gives ghostscript an error we can handle?
             ProcessHandler aHandler = new ProcessHandler(sCommandArray);
             boolean bBackValue = aHandler.executeSynchronously();
             assure("There seems to be a problem with ghostscript", bBackValue, true);
             int nExitCode = aHandler.getExitCode();
-            // ArrayList m_aFileList = new ArrayList();
 
-            // String sJPEGNameSchema = "";
             if (nExitCode == 0)
             {
                 // TODO: return a real filename, due to the fact we don't know how much files are created, maybe better to return a list
@@ -372,8 +323,7 @@ private static void convertToWidth340(String _sFrom, String _To)
                 assure("There seems to be a problem with ghostscript and '" + sPostscriptOrPDFFile + "' exit code: " + nExitCode, false, true);
                 GlobalLogWriter.println("Warning: There seems to be a problem with '" + sGhostscriptEXE + "'...");
             }
-            // String[] aList = new String[m_aFileList.size()];
-            // aList = (String[])m_aFileList.toArray(aList);
+
             return sJPEGNameSchema; // sNewJPEGFilename;
         }
 
@@ -405,7 +355,6 @@ private static void convertToWidth340(String _sFrom, String _To)
                 String sNewJPEGFilename = getFilenameForJPEGSchema(_sJPEGSchema, i);
                 if (FileHelper.exists(sNewJPEGFilename))
                 {
-                    // m_aFileList.add(sNewJPEGFilename); // as long as the files exist, fill the array
                     nPages ++;
                 }
                 else
@@ -416,47 +365,4 @@ private static void convertToWidth340(String _sFrom, String _To)
         }
         return nPages;
     }
-
-//    public static void main(String [] _args)
-//    {
-//// DONE: give an index.ini file ok
-////        String args[] = {
-////            "-TimeOut", "3600000",
-////            "-tb", "java_complex",
-////            "-o", "graphical.JPEGCreator",
-////            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
-////            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output",
-////            "-DOC_COMPARATOR_PRINT_MAX_PAGE", "9999",
-////            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION", "180",
-////            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
-//////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
-//////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
-//////            "-OFFICE_VIEWABLE", "false",
-////            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  --norestore --nocrashreport --accept=pipe,name=ll93751;urp;",
-////            "-NoOffice"
-////        };
-//
-//// Done: give a directory, where exist pdf/ps files ok.
-//// Done: inputpath (given file) doesn't exists, ok.
-//// Done: give a ps/pdf file. ok.
-//
-//        String args[] = {
-//            "-TimeOut", "3600000",
-//            "-tb", "java_complex",
-//            "-o", "graphical.JPEGCreator",
-//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\Names7.odt.pdf",
-//            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output",
-//            "-DOC_COMPARATOR_PRINT_MAX_PAGE", "9999",
-//            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION", "180",
-//            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
-////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
-////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
-////            "-OFFICE_VIEWABLE", "false",
-//            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  --norestore --nocrashreport --accept=pipe,name=ll93751;urp;",
-//            "-NoOffice"
-//        };
-//
-//        org.openoffice.Runner.main(args);
-//    }
-
 }

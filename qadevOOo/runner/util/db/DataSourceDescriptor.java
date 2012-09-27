@@ -22,8 +22,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 
 /** a descriptor for creating a com.sun.star.sdb.DataSource
- *
- * @author fs93730
  */
 public class DataSourceDescriptor
 {

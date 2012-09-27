@@ -29,10 +29,6 @@ package com.sun.star.comp.Calc.NLPSolver.dialogs.controls;
 
 import com.sun.star.uno.XComponentContext;
 
-/**
- *
- * @author Andreas Schneider
- */
 public abstract class LabeledControl extends BaseControl {
 
     public LabeledControl(XComponentContext context) {

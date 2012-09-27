@@ -18,10 +18,6 @@
 
 package graphical;
 
-/**
- *
- * @author ll93751
- */
 public interface IDocument
 {
     /**

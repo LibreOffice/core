@@ -62,10 +62,6 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Andreas Schneider <Andreas.Schneider@Sun.COM>
- */
 public abstract class BaseNLPSolver extends WeakBase
     implements com.sun.star.lang.XLocalizable,
                com.sun.star.sheet.XSolver,

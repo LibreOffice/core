@@ -20,10 +20,6 @@ package graphical;
 
 import java.util.Calendar;
 
-/**
- *
- * @author ll93751
- */
 public class TimeHelper
 {
     /*
@@ -72,5 +68,4 @@ public class TimeHelper
         {
             return String.valueOf(m_nRealMilliSeconds);
         }
-
 }

@@ -41,11 +41,6 @@ import helper.URLHelper;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- *
- * @author ll93751
- */
-
 class PropertySetHelper
 {
     XPropertySet m_xPropertySet;
@@ -139,32 +134,6 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
         }
         return m_xMultiServiceFactory;
     }
-//    private void startOffice()
-//        {
-//            // int tempTime = m_aParameterHelper.getTestParameters().getInt("SingleTimeOut");
-//            param.put("TimeOut", new Integer(300000));
-//            System.out.println("TimeOut: " + param.getInt("TimeOut"));
-//            System.out.println("ThreadTimeOut: " + param.getInt("ThreadTimeOut"));
-//
-//            // OfficeProvider aProvider = null;
-//            m_aProvider = new OfficeProvider();
-//            m_xXMultiServiceFactory = (XMultiServiceFactory) m_aProvider.getManager(param);
-//            param.put("ServiceFactory", m_xXMultiServiceFactory);
-//        }
-//
-//    private void stopOffice()
-//        {
-//            if (m_aProvider != null)
-//            {
-//                m_aProvider.closeExistingOffice(param, true);
-//                m_aProvider = null;
-//            }
-//            TimeHelper.waitInSeconds(2, "Give close Office some time.");
-//        }
-
-
-    // private String m_sUPDMinor;
-    // private String m_sCWS_WORK_STAMP;
 
     /**
      * This is the main test Function of current ReportDesignerTest
@@ -191,52 +160,20 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 
             ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
-            // FYI: it is not allowed to open the document read only
-//            PropertyValue aReadOnly = new PropertyValue(); // always overwrite already exist files
-//            aReadOnly.Name = "ReadOnly";
-//            aReadOnly.Value = Boolean.TRUE;
-//            aPropertyList.add(aReadOnly);
-
             XComponent xDocComponent = loadComponent(sFileURL, getXDesktop(), aPropertyList);
 
             GlobalLogWriter.println("Load done");
-//  context = createUnoService("com.sun.star.sdb.DatabaseContext")
-//     oDataBase = context.getByName("hh")
-//     oDBDoc = oDataBase.DatabaseDocument
-//
-//  dim args(1) as new com.sun.star.beans.PropertyValue
-//  args(0).Name = "ActiveConnection"
-//  args(0).Value = oDBDoc.getCurrentController().getPropertyValue("ActiveConnection")
-//  reportContainer = oDBDoc.getReportDocuments()
-//     report = reportContainer.loadComponentFromURL("Report40","",0,args)
 
             ArrayList<String> aList = null;
             try
             {
-//                XInterface x = (XInterface)getMultiServiceFactory().createInstance("com.sun.star.sdb.DatabaseContext");
-//                assure("can't create instance of com.sun.star.sdb.DatabaseContext", x != null);
-//                GlobalLogWriter.println("createInstance com.sun.star.sdb.DatabaseContext done");
-
-//                XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, x);
-//                showElements(xNameAccess);
-//                Object aObj = xNameAccess.getByName(sFileURL);
-//                    GlobalLogWriter.println("1");
-
-//                PropertySetHelper aHelper = new PropertySetHelper(aObj);
-//                XDocumentDataSource xDataSource = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
-//                Object aDatabaseDocument = aHelper.getPropertyValueAsObject("DatabaseDocument");
-//                XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
-
                 XOfficeDatabaseDocument xOfficeDBDoc = UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, xDocComponent);
 
-//                XOfficeDatabaseDocument xOfficeDBDoc = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, xDataSource);
                 assure("can't access DatabaseDocument", xOfficeDBDoc != null);
-//                GlobalLogWriter.println("2");
 
                 XModel xDBSource = UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
                 Object aController = xDBSource.getCurrentController();
                 assure("Controller of xOfficeDatabaseDocument is empty!", aController != null);
-//                GlobalLogWriter.println("3");
 
                 XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
                 aDBDocUI.connect();
@@ -250,19 +187,14 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                     GlobalLogWriter.println("Connection is false");
                 }
 
-                // aHelper = new PropertySetHelper(aController);
-
                 XReportDocumentsSupplier xSupplier = UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
                 XNameAccess xNameAccess = xSupplier.getReportDocuments();
                 assure("xOfficeDatabaseDocument returns no Report Document", xNameAccess != null);
-//                     GlobalLogWriter.println("5");
 
                 showElements(xNameAccess);
 
-                // Object aActiveConnectionObj = aHelper.getPropertyValueAsObject("ActiveConnection");
                 Object aActiveConnectionObj = aDBDocUI.getActiveConnection();
                 assure("ActiveConnection is empty", aActiveConnectionObj != null);
-//                     GlobalLogWriter.println("5");
 
                 ArrayList<PropertyValue> aPropertyList2 = new ArrayList<PropertyValue>();
 
@@ -271,58 +203,39 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                 aActiveConnection.Value = aActiveConnectionObj;
                 aPropertyList2.add(aActiveConnection);
 
-                aList = loadAndStoreReports(xNameAccess, aPropertyList2 /*, _nType*/ );
-                createDBEntry(/*_nType*/);
+                aList = loadAndStoreReports(xNameAccess, aPropertyList2);
+                createDBEntry();
             }
-            catch(Exception/*com.sun.star.uno.Exception*/ e)
+            catch(Exception e)
             {
                 GlobalLogWriter.println("ERROR: Exception caught");
                 GlobalLogWriter.println("Message: " + e.getMessage());
             }
 
-            // String mTestDocumentPath = (String) param.get("TestDocumentPath");
-            // System.out.println("mTestDocumentPath: '" + mTestDocumentPath + "'");
-            // // workaround for issue using deprecated "DOCPTH" prop
-            // System.setProperty("DOCPTH", mTestDocumentPath);
-
-            // Close the document
-            // util.utils.shortWait(2000);
-
             closeComponent(xDocComponent);
             return aList;
         }
 
-    private String getDocumentPoolName(/*int _nType*/)
+    private String getDocumentPoolName()
         {
             return "AutogenReportDesignTest";
-            // return getFileFormat(_nType);
         }
 
-// -----------------------------------------------------------------------------
-    private void createDBEntry(/*int _nType*/)
+    private void createDBEntry()
         {
             // try to connect the database
             String sDBConnection = (String)m_aParameterHelper.getTestParameters().get( convwatch.PropertyName.DB_CONNECTION_STRING );
             if (sDBConnection != null && sDBConnection.length() > 0)
             {
                 GlobalLogWriter.println("DBConnection: " + sDBConnection);
-// TODO: DB
-//                DB.init(sDBConnection);
 
-                getOutputPath(/*_nType*/);
-                getDocumentPoolName(/*_nType*/);
-                // TODO: DB
-//                DB.insertinto_documentcompare(sSourceVersion, sSourceName, sSourceCreatorType,
-//                                              m_sDestinationVersion, sDestinationName, sDestinationCreatorType,
-//                                              sDocumentPoolDir, sDocumentPoolName, m_sMailAddress,
-//                                              sSpecial, m_sParentDistinct);
+                getOutputPath();
+                getDocumentPoolName();
                 TimeHelper.waitInSeconds(1, "wait for DB.");
-                // DB.test();
-                // System.exit(1);
             }
         }
 
-    private ArrayList<String> loadAndStoreReports(XNameAccess _xNameAccess, ArrayList<PropertyValue> _aPropertyList /*, int _nType*/ )
+    private ArrayList<String> loadAndStoreReports(XNameAccess _xNameAccess, ArrayList<PropertyValue> _aPropertyList)
         {
             ArrayList<String> aList = new ArrayList<String>();
             if (_xNameAccess != null)
@@ -334,13 +247,9 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                     XComponent xDoc = loadComponent(sReportName, _xNameAccess, _aPropertyList);
                     if (xDoc != null)
                     {
-                        // util.utils.shortWait(1000);
-                        // print? or store?
-                        String sDocumentPathName = storeComponent(sReportName, xDoc /*, _nType*/);
+                        String sDocumentPathName = storeComponent(sReportName, xDoc);
                         aList.add(sDocumentPathName);
-    //                    util.utils.shortWait(1000);
                         closeComponent(xDoc);
-    //                    util.utils.shortWait(1000);
                     }
                     else
                     {
@@ -352,7 +261,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             return aList;
         }
 
-    private String getFormatExtension(Object _xComponent /* int _nType*/ )
+    private String getFormatExtension(Object _xComponent)
          {
              String sExtension;
              XServiceInfo xServiceInfo =  UnoRuntime.queryInterface( XServiceInfo.class, _xComponent );
@@ -373,51 +282,16 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
              return sExtension;
          }
 
-    //         switch(_nType)
-    //         {
-    //         case WRITER:
-    //             sExtension = ".odt";
-    //             break;
-    //         case CALC:
-    //             sExtension = ".ods";
-    //             break;
-    //         default:
-    //             sExtension = ".UNKNOWN";
-    //         }
-    //         return sExtension;
-    //     }
-    // private String getFileFormat(int _nType)
-    //     {
-    //         String sFileType;
-    //         switch(_nType)
-    //         {
-    //         case WRITER:
-    //             sFileType = "writer8";
-    //             break;
-    //         case CALC:
-    //             sFileType = "calc8";
-    //             break;
-    //         default:
-    //             sFileType = "UNKNOWN";
-    //         }
-    //         return sFileType;
-    //     }
-
     private String m_sOutputPath = null;
 
-    private String getOutputPath(/*int _nType*/)
+    private String getOutputPath()
         {
             if (m_sOutputPath == null)
             {
                 String sOutputPath = (String)m_aParameterHelper.getTestParameters().get( convwatch.PropertyName.DOC_COMPARATOR_OUTPUT_PATH );
                 sOutputPath = helper.StringHelper.removeQuoteIfExists(sOutputPath);
 
-                // sOutputPath += "tmp_123";
                 sOutputPath = FileHelper.appendPath(sOutputPath, DateHelper.getDateTimeForFilename());
-                // sOutputPath += System.getProperty("file.separator");
-
-                // sOutputPath += getFileFormat(_nType);
-                // sOutputPath += System.getProperty("file.separator");
 
                 File aOutputFile = new File(sOutputPath); // create the directory of the given output path
                 aOutputFile.mkdirs();
@@ -429,19 +303,11 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
     /*
       store given _xComponent under the given Name in DOC_COMPARATOR_INPUTPATH
      */
-    private String storeComponent(String _sName, Object _xComponent /*, int _nType*/ )
+    private String storeComponent(String _sName, Object _xComponent)
         {
-            String sOutputPath = getOutputPath(/*_nType*/);
+            String sOutputPath = getOutputPath();
 
-//            // add DocumentPoolName
-//            sOutputPath = FileHelper.appendPath(sOutputPath, getDocumentPoolName(/*_nType*/));
-//            // sOutputPath += System.getProperty("file.separator");
-//
-//            File aOutputFile = new File(sOutputPath); // create the directory of the given output path
-//            aOutputFile.mkdirs();
-
-
-            String sName = _sName + getFormatExtension(_xComponent /*_nType*/);
+            String sName = _sName + getFormatExtension(_xComponent);
             sOutputPath = FileHelper.appendPath(sOutputPath, sName);
 
             // we need the name and path
@@ -450,11 +316,6 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             String sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputPath);
 
             ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>(); // set some properties for storeAsURL
-
-            // PropertyValue aFileFormat = new PropertyValue();
-            // aFileFormat.Name = "FilterName";
-            // aFileFormat.Value = getFileFormat(_nType);
-            // aPropertyList.add(aFileFormat);
 
             PropertyValue aOverwrite = new PropertyValue(); // always overwrite already exist files
             aOverwrite.Name = "Overwrite";

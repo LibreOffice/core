@@ -27,10 +27,6 @@
 
 package com.sun.star.comp.Calc.NLPSolver.dialogs.controls;
 
-/**
- *
- * @author Andreas Schneider
- */
 public enum TextAlign {
     Left(0),
     Center(1),

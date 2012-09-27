@@ -53,7 +53,6 @@ import java.util.logging.Logger;
 /**
  * The BaseDialog represents the base for all dialogs used within the addon.
  * It automatically loads the necessary interfaces to access OpenOffice.org dialogs.
- * @author Andreas Schneider
  */
 public abstract class BaseDialog extends BaseControl {
     
