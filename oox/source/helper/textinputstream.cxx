@@ -194,7 +194,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
         const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, rtl_TextEncoding eTextEnc )
 {
     Reference< XTextInputStream > xTextStrm;
-    const char* pcCharset = rtl_getMimeCharsetFromTextEncoding( eTextEnc );
+    const char* pcCharset = rtl_getBestMimeCharsetFromTextEncoding( eTextEnc);
     OSL_ENSURE( pcCharset, "TextInputStream::createXTextInputStream - unsupported text encoding" );
     if( rxContext.is() && rxInStrm.is() && pcCharset ) try
     {
