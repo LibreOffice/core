@@ -812,9 +812,6 @@ public:
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
-    /** Returns the caption with the specified zero-based index. */
-    ::rtl::OUString     getCaption( sal_Int32 nIndex ) const;
-
 private:
     AxStringArray       maCaptions;         ///< Captions of all tabs.
     sal_uInt32          mnBackColor;        ///< Fill color.
@@ -905,10 +902,6 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-
-    /** Sets the tabstrip control model related to this multipage control.
-        Contains all formatting attributes of the page tabs. */
-    void                setTabStripModel( const AxTabStripModelRef& rxTabStrip );
 
 private:
     AxTabStripModelRef  mxTabStrip;

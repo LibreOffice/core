@@ -363,11 +363,6 @@ OUString VbaFormControl::getControlName() const
     return mxSiteModel.get() ? mxSiteModel->getName() : OUString();
 }
 
-sal_Int32 VbaFormControl::getControlId() const
-{
-    return mxSiteModel.get() ? mxSiteModel->getId() : -1;
-}
-
 void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,
         const Reference< XNameContainer >& rxParentNC, const ControlConverter& rConv ) const
 {

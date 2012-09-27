@@ -123,8 +123,6 @@ public:
 
     /** Returns the programmatical name of the control. */
     ::rtl::OUString     getControlName() const;
-    /** Returns the unique identifier of this control. */
-    sal_Int32           getControlId() const;
 
     /** Creates the UNO control model, inserts it into the passed container,
         and converts all control properties. */

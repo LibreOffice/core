@@ -74,8 +74,6 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
 
 private:
-    void extractOleOverrideFromAttr( const rtl::OUString& rAttribute,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxOleNameOverrides ) const;
     /** Reads and returns the VBA source code from the passed storage. */
     ::rtl::OUString     readSourceCode( StorageBase& rVbaStrg ) const;
 

@@ -87,11 +87,7 @@ jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextListStyle::dump() const
 oox::ole::AxFormPageModel::AxFormPageModel()
 oox::ole::AxMultiPageModel::AxMultiPageModel()
-oox::ole::AxMultiPageModel::setTabStripModel(boost::shared_ptr<oox::ole::AxTabStripModel> const&)
 oox::ole::AxTabStripModel::AxTabStripModel()
-oox::ole::AxTabStripModel::getCaption(int) const
-oox::ole::VbaFormControl::getControlId() const
-oox::ole::VbaModule::extractOleOverrideFromAttr(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const&) const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 sd::ClientBox::GetMinOutputSizePixel() const
 sd::ClientBox::RemoveUnlocked()

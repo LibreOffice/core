@@ -327,32 +327,6 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
     return aSourceCode.makeStringAndClear();
 }
 
-void VbaModule::extractOleOverrideFromAttr( const OUString& rAttribute,
-                                            const Reference< container::XNameContainer >& rxOleNameOverrides ) const
-{
-    // format of the attribute we are interested in is
-    // Attribute VB_Control = "ControlName", intString, MSForms, ControlTypeAsString
-    // e.g.
-    // Attribute VB_Control = "CommandButton1, 201, 19, MSForms, CommandButton"
-    OUString sControlAttribute = CREATE_OUSTRING( "Attribute VB_Control = \"" );
-    if ( rxOleNameOverrides.is() && rAttribute.indexOf( sControlAttribute ) !=  -1 )
-    {
-        OUString sRest = rAttribute.copy( sControlAttribute.getLength() );
-        sal_Int32 nPos = sRest.indexOf( ',' );
-        OUString sCntrlName = sRest.copy( 0, nPos );
-
-        sal_Int32 nCntrlId = sRest.copy( nPos + 1 ).copy( 0, sRest.indexOf( ',', nPos + 1) ).toInt32();
-        OSL_TRACE("In module %s, assiging %d controlname %s",
-            rtl::OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr(), nCntrlId,
-            rtl::OUStringToOString( sCntrlName, RTL_TEXTENCODING_UTF8 ).getStr() );
-        if ( !rxOleNameOverrides->hasByName( maName ) )
-            rxOleNameOverrides->insertByName( maName, Any( Reference< container::XIndexContainer> ( new OleIdToNameContainer ) ) );
-        Reference< container::XIndexContainer > xIdToOleName;
-        if ( rxOleNameOverrides->getByName( maName ) >>= xIdToOleName )
-            xIdToOleName->insertByIndex( nCntrlId, makeAny( sCntrlName ) );
-    }
-}
-
 void VbaModule::createModule( const OUString& rVBASourceCode,
                               const Reference< container::XNameContainer >& rxBasicLib,
                               const Reference< container::XNameAccess >& rxDocObjectNA ) const

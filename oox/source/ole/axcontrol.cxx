@@ -2319,11 +2319,6 @@ void AxTabStripModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     AxFontDataModel::convertProperties( rPropMap, rConv );
 }
 
-OUString AxTabStripModel::getCaption( sal_Int32 nIndex ) const
-{
-    return ContainerHelper::getVectorElement( maCaptions, nIndex, OUString() );
-}
-
 // ============================================================================
 
 AxContainerModelBase::AxContainerModelBase( bool bFontSupport ) :
@@ -2487,11 +2482,6 @@ void AxMultiPageModel::convertProperties( PropertyMap& rPropMap, const ControlCo
     if( mxTabStrip.get() )
         mxTabStrip->convertProperties( rPropMap, rConv );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
-}
-
-void AxMultiPageModel::setTabStripModel( const AxTabStripModelRef& rxTabStrip )
-{
-    mxTabStrip = rxTabStrip;
 }
 
 // ============================================================================
