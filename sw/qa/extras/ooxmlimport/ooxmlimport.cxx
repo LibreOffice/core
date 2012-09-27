@@ -841,7 +841,7 @@ void Test::testN778140()
     load("n778140.docx");
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
 }
 
 void Test::testN778828()
