@@ -11,10 +11,6 @@
 gb_STDLIBS := \
 	-lgnustl_shared \
 
-gb_Library_PLAINLIBS_NONE := \
-	android \
-	gnustl_shared \
-
 # No unit testing can be run
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 
