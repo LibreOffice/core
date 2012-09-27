@@ -1181,11 +1181,6 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
     ::com::sun::star::drawing::ColorMode eColorMode( ::com::sun::star::drawing::ColorMode_STANDARD );
     sal_Int16 nLuminance = 0;
     sal_Int32 nContrast = 0;
-    sal_Int16 nRed = 0;
-    sal_Int16 nGreen = 0;
-    sal_Int16 nBlue = 0;
-    double fGamma = 1.0;
-    sal_Int16 nTransparency = 0;
 
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicColorMode" ) ) ) )
         aAny >>= eColorMode;
@@ -1197,16 +1192,6 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
         aAny >>= nC;
         nContrast = nC;
     }
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustRed" ) ) ) )
-        aAny >>= nRed;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustGreen" ) ) ) )
-        aAny >>= nGreen;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustBlue" ) ) ) )
-        aAny >>= nBlue;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Gamma" ) ) ) )
-        aAny >>= fGamma;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Transparency" ) ) ) )
-        aAny >>= nTransparency;
 
     if ( eColorMode == ::com::sun::star::drawing::ColorMode_WATERMARK )
     {
@@ -1483,6 +1468,12 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     String          aGraphicUrl;
     ByteString      aUniqueId;
     bool            bIsGraphicMtf(false);
+    // #121074#
+    sal_Int16 nTransparency(0);
+    sal_Int16 nRed(0);
+    sal_Int16 nGreen(0);
+    sal_Int16 nBlue(0);
+    double fGamma(1.0);
 
     ::com::sun::star::drawing::BitmapMode   eBitmapMode( ::com::sun::star::drawing::BitmapMode_NO_REPEAT );
     ::com::sun::star::uno::Any aAny;
@@ -1563,6 +1554,33 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
             aAny >>= bMirrored;
 
+        // #121074# transparency of graphic is not supported in MS formats, get and apply it
+        // in the GetTransformedGraphic call in GetBlibID
+        if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, String(RTL_CONSTASCII_USTRINGPARAM("Transparency"))))
+        {
+            aAny >>= nTransparency;
+        }
+
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustRed" ) ) ) )
+        {
+            aAny >>= nRed;
+        }
+
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustGreen" ) ) ) )
+        {
+            aAny >>= nGreen;
+        }
+
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "AdjustBlue" ) ) ) )
+        {
+            aAny >>= nBlue;
+        }
+
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Gamma" ) ) ) )
+        {
+            aAny >>= fGamma;
+        }
+
         if ( bCreateFillBitmap && bFillBitmapModeAllowed )
         {
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapMode" ) ), sal_True ) )
@@ -1600,7 +1618,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 const sal_uInt16 nFormat = aDescriptor.GetFileFormat();
 
                 // can MSO handle it?
-                if ( bMirrored || nAngle ||
+                if ( bMirrored || nAngle || nTransparency || nRed || nGreen || nBlue || (1.0 != fGamma) ||
                      (nFormat != GFF_BMP &&
                       nFormat != GFF_GIF &&
                       nFormat != GFF_JPG &&
@@ -1647,13 +1665,45 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
         if ( aGraphicUrl.Len() || aUniqueId.Len() )
         {
-            if ( bMirrored || nAngle )
+            if(bMirrored || nTransparency || nRed || nGreen || nBlue || (1.0 != fGamma))
             {
                 pGraphicAttr = new GraphicAttr;
-                if ( bMirrored )
-                    pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
-                if ( bIsGraphicMtf )
-                    AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
+
+                if(bMirrored)
+                {
+                    pGraphicAttr->SetMirrorFlags(BMP_MIRROR_HORZ);
+                }
+
+                // #121074#
+                if(nTransparency)
+                {
+                    pGraphicAttr->SetTransparency((nTransparency * 255) / 100);
+                }
+
+                if(nRed)
+                {
+                    pGraphicAttr->SetChannelR(nRed);
+                }
+
+                if(nGreen)
+                {
+                    pGraphicAttr->SetChannelG(nGreen);
+                }
+
+                if(nBlue)
+                {
+                    pGraphicAttr->SetChannelB(nBlue);
+                }
+
+                if(1.0 != fGamma)
+                {
+                    pGraphicAttr->SetGamma(fGamma);
+                }
+            }
+
+            if(nAngle && bIsGraphicMtf)
+            {
+                AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
             }
 
             if ( eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT )
@@ -1703,18 +1753,20 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
                 {
                     Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
+                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, aRect, NULL, pGraphicAttr));
 
-                    sal_uInt32 nBlibId = 0;
-                    nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, NULL, pGraphicAttr );
-                    if ( nBlibId )
+                    if(nBlibId)
                     {
-                        if ( bCreateFillBitmap )
-                            AddOpt( ESCHER_Prop_fillBlip, nBlibId, sal_True );
+                        if(bCreateFillBitmap)
+                        {
+                            AddOpt(ESCHER_Prop_fillBlip, nBlibId, sal_True);
+                        }
                         else
                         {
                             AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
                             ImplCreateGraphicAttributes( rXPropSet, nBlibId, bCreateCroppingAttributes );
                         }
+
                         bRetValue = sal_True;
                     }
                 }
