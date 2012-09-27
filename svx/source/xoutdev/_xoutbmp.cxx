@@ -141,40 +141,71 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
             aURL.setBase( aName );
         }
 
-        if( ( nFlags & XOUTBMP_USE_NATIVE_IF_POSSIBLE ) &&
-            !( nFlags & XOUTBMP_MIRROR_HORZ ) &&
-            !( nFlags & XOUTBMP_MIRROR_VERT ) &&
-            ( rGraphic.GetType() != GRAPHIC_GDIMETAFILE ) && rGraphic.IsLink() )
+        // #i121128# use shortcut to write SVG data in original form (if possible)
+        const SvgDataPtr aSvgDataPtr(rGraphic.getSvgData());
+
+        if(aSvgDataPtr.get()
+            && aSvgDataPtr->getSvgDataArrayLength()
+            && rFilterName.EqualsIgnoreCaseAscii("svg"))
         {
-            // try to write native link
-            const GfxLink aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
-
-            switch( aGfxLink.GetType() )
+            if(!(nFlags & XOUTBMP_DONT_ADD_EXTENSION))
             {
-                case( GFX_LINK_TYPE_NATIVE_GIF ): aExt = FORMAT_GIF; break;
-                case( GFX_LINK_TYPE_NATIVE_JPG ): aExt = FORMAT_JPG; break;
-                case( GFX_LINK_TYPE_NATIVE_PNG ): aExt = FORMAT_PNG; break;
-
-                default:
-                break;
+                aURL.setExtension(rFilterName);
             }
 
-            if( aExt.Len() )
+            rFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE|STREAM_SHARE_DENYNONE|STREAM_TRUNC);
+            SvStream* pOStm = aMedium.GetOutStream();
+
+            if(pOStm)
             {
-                if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
-                    aURL.setExtension( aExt );
-                rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                pOStm->Write(aSvgDataPtr->getSvgDataArray().get(), aSvgDataPtr->getSvgDataArrayLength());
+                aMedium.Commit();
 
-                SfxMedium   aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC );
-                SvStream*   pOStm = aMedium.GetOutStream();
-
-                if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
+                if(!aMedium.GetError())
                 {
-                    pOStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
-                    aMedium.Commit();
+                    nErr = GRFILTER_OK;
+                }
+            }
+        }
 
-                    if( !aMedium.GetError() )
-                        nErr = GRFILTER_OK;
+        if( GRFILTER_OK != nErr )
+        {
+            if( ( nFlags & XOUTBMP_USE_NATIVE_IF_POSSIBLE ) &&
+                !( nFlags & XOUTBMP_MIRROR_HORZ ) &&
+                !( nFlags & XOUTBMP_MIRROR_VERT ) &&
+                ( rGraphic.GetType() != GRAPHIC_GDIMETAFILE ) && rGraphic.IsLink() )
+            {
+                // try to write native link
+                const GfxLink aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
+
+                switch( aGfxLink.GetType() )
+                {
+                    case( GFX_LINK_TYPE_NATIVE_GIF ): aExt = FORMAT_GIF; break;
+                    case( GFX_LINK_TYPE_NATIVE_JPG ): aExt = FORMAT_JPG; break;
+                    case( GFX_LINK_TYPE_NATIVE_PNG ): aExt = FORMAT_PNG; break;
+
+                    default:
+                    break;
+                }
+
+                if( aExt.Len() )
+                {
+                    if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
+                        aURL.setExtension( aExt );
+                    rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
+                    SfxMedium   aMedium(aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC);
+                    SvStream*   pOStm = aMedium.GetOutStream();
+
+                    if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
+                    {
+                        pOStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
+                        aMedium.Commit();
+
+                        if( !aMedium.GetError() )
+                            nErr = GRFILTER_OK;
+                    }
                 }
             }
         }
