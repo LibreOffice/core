@@ -241,39 +241,62 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
 
-    if( nOptimizeFlags )
+    if(nOptimizeFlags && Count())
     {
-        double      fArea;
-        const sal_Bool  bEdges = ( nOptimizeFlags & POLY_OPTIMIZE_EDGES ) == POLY_OPTIMIZE_EDGES;
-        sal_uInt16      nPercent = 0;
+        // #115630# ImplDrawHatch does not work with beziers included in the polypolygon, take care of that
+        bool bIsCurve(false);
 
-        if( bEdges )
+        for(sal_uInt16 a(0); !bIsCurve && a < Count(); a++)
         {
-            const Rectangle aBound( GetBoundRect() );
-
-            fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
-            nPercent = pData ? pData->GetPercentValue() : 50;
-            nOptimizeFlags &= ~POLY_OPTIMIZE_EDGES;
+            if((*this)[a].HasFlags())
+            {
+                bIsCurve = true;
+            }
         }
 
-        // watch for ref counter
-        if( mpImplPolyPolygon->mnRefCount > 1 )
+        if(bIsCurve)
         {
-            mpImplPolyPolygon->mnRefCount--;
-            mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-        }
+            OSL_ENSURE(false, "Optimize does *not* support curves, falling back to AdaptiveSubdivide()...");
+            PolyPolygon aPolyPoly;
 
-        // Optimize polygons
-        for( sal_uInt16 i = 0, nPolyCount = mpImplPolyPolygon->mnCount; i < nPolyCount; i++ )
+            AdaptiveSubdivide(aPolyPoly);
+            aPolyPoly.Optimize(nOptimizeFlags, pData);
+            *this = aPolyPoly;
+        }
+        else
         {
+            double      fArea;
+            const sal_Bool  bEdges = ( nOptimizeFlags & POLY_OPTIMIZE_EDGES ) == POLY_OPTIMIZE_EDGES;
+            sal_uInt16      nPercent = 0;
+
             if( bEdges )
             {
-                mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( POLY_OPTIMIZE_NO_SAME );
-                Polygon::ImplReduceEdges( *( mpImplPolyPolygon->mpPolyAry[ i ] ), fArea, nPercent );
+                const Rectangle aBound( GetBoundRect() );
+
+                fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
+                nPercent = pData ? pData->GetPercentValue() : 50;
+                nOptimizeFlags &= ~POLY_OPTIMIZE_EDGES;
             }
 
-            if( nOptimizeFlags )
-                mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( nOptimizeFlags, pData );
+            // watch for ref counter
+            if( mpImplPolyPolygon->mnRefCount > 1 )
+            {
+                mpImplPolyPolygon->mnRefCount--;
+                mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
+            }
+
+            // Optimize polygons
+            for( sal_uInt16 i = 0, nPolyCount = mpImplPolyPolygon->mnCount; i < nPolyCount; i++ )
+            {
+                if( bEdges )
+                {
+                    mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( POLY_OPTIMIZE_NO_SAME );
+                    Polygon::ImplReduceEdges( *( mpImplPolyPolygon->mpPolyAry[ i ] ), fArea, nPercent );
+                }
+
+                if( nOptimizeFlags )
+                    mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( nOptimizeFlags, pData );
+            }
         }
     }
 }
