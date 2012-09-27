@@ -269,7 +269,7 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
 
-        int aCount;
+        NSInteger aCount;
         NSRange range = [macSpell checkSpellingOfString:aNSStr startingAt:0 language:aLang wrap:sal_False inSpellDocumentWithTag:macTag wordCount:&aCount];
         int rVal = 0;
         if(range.length>0)
