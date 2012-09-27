@@ -2182,7 +2182,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     if ( aShadowItem.GetLocation() != SVX_SHADOW_NONE )
     {
         // Distance is measured diagonally from corner
-        double nShadowDist = sqrt((aShadowItem.GetWidth()*aShadowItem.GetWidth())*2);
+        double nShadowDist = sqrt((aShadowItem.GetWidth()*aShadowItem.GetWidth())*2.0);
         OString aShadowDist( OString::valueOf( TwipsToEMU( nShadowDist ) ) );
         OString aShadowColor = impl_ConvertColor( aShadowItem.GetColor() );
         sal_uInt32 nShadowDir = 0;
