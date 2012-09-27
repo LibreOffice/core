@@ -1358,4 +1358,29 @@ sub remove_empty_dirs_in_folder
 
 }
 
+######################################################
+# Making systemcall
+######################################################
+
+sub make_systemcall
+{
+    my ($systemcall) = @_;
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
 1;

@@ -2227,7 +2227,7 @@ sub create_packages_without_epm
                 my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
                 my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
                 $systemcall = "cp -p $pkginfoorig $pkginfotmp";
-                 make_systemcall($systemcall);
+                installer::systemactions::make_systemcall($systemcall);
 
                 $faspac = $$compressorref;
                 $infoline = "Found compressor: $faspac\n";
@@ -2236,13 +2236,14 @@ sub create_packages_without_epm
                 installer::logger::print_message( "... $faspac ...\n" );
                 installer::logger::include_timestamp_into_logfile("Starting $faspac");
 
-                 $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
-                 make_systemcall($systemcall);
+                $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
+                installer::systemactions::make_systemcall($systemcall);
 
-                 # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
-                 # updated the size and checksum, but not the time stamp.
-                 $systemcall = "touch -r $pkginfotmp $pkginfoorig";
-                 make_systemcall($systemcall);
+                # Setting time stamp for pkginfo, because faspac-so.sh
+                # changed the pkginfo file, updated the size and
+                # checksum, but not the time stamp.
+                $systemcall = "touch -r $pkginfotmp $pkginfoorig";
+                installer::systemactions::make_systemcall($systemcall);
                 if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
 
                 installer::logger::include_timestamp_into_logfile("End of $faspac");
@@ -2530,31 +2531,6 @@ sub remove_temporary_epm_files
     }
 }
 
-######################################################
-# Making the systemcall
-######################################################
-
-sub make_systemcall
-{
-    my ($systemcall) = @_;
-
-    my $returnvalue = system($systemcall);
-
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-}
-
 ###########################################################
 # Creating a better directory structure in the solver.
 ###########################################################
@@ -2683,11 +2659,11 @@ sub unpack_tar_gz_file
 
         # unpacking gunzip
         my $systemcall = "cd $destdir; cat $packagename | gunzip | tar -xf -";
-        make_systemcall($systemcall);
+        installer::systemactions::make_systemcall($systemcall);
 
         # deleting the tar.gz files
         $systemcall = "cd $destdir; rm -f $packagename";
-        make_systemcall($systemcall);
+        installer::systemactions::make_systemcall($systemcall);
 
         # Finding new content -> that is the package name
         my ($newcontent, $allcontent ) = installer::systemactions::find_new_content_in_directory($destdir, $oldcontent);
@@ -2709,7 +2685,7 @@ sub copy_and_unpack_tar_gz_files
     my ($sourcefile, $destdir) = @_;
 
     my $systemcall = "cd $destdir; cat $sourcefile | gunzip | tar -xf -";
-    make_systemcall($systemcall);
+    installer::systemactions::make_systemcall($systemcall);
 }
 
 ######################################################

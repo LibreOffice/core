@@ -871,31 +871,6 @@ sub replace_variables_in_string
     return $string;
 }
 
-######################################################
-# Making systemcall
-######################################################
-
-sub make_systemcall
-{
-    my ($systemcall) = @_;
-
-    my $returnvalue = system($systemcall);
-
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-}
-
 #################################################################
 # Copying the files defined as ScpActions into the
 # installation set.
@@ -1419,7 +1394,7 @@ sub collectpackagemaps
     my $tarfilename = $subdirname . ".tar";
     my $targzname = $tarfilename . ".gz";
     $systemcall = "cd $pkgmapdir; tar -cf - $subdirname | gzip > $targzname";
-    make_systemcall($systemcall);
+    installer::systemactions::make_systemcall($systemcall);
     installer::systemactions::remove_complete_directory($pkgmapsubdir, 1);
 }
 
