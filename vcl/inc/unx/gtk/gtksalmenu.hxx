@@ -104,6 +104,7 @@ public:
     void                        Deactivate( const gchar* aMenuCommand );
     void DisconnectFrame();
     void UpdateNativeMenu();
+//    void UpdateNativeSubMenu();
     bool PrepUpdate();
 };
 

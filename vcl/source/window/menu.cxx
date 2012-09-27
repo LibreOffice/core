@@ -3233,7 +3233,8 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
     }
 }
 
-void Menu::Freeze() {
+void Menu::Freeze(void)
+{
     SalMenu *pSalMenu = ImplGetSalMenu();
 
     if ( pSalMenu ) {

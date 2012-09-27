@@ -219,8 +219,15 @@ g_lo_action_group_change_state (GActionGroup *group,
                 g_lo_action_group_perform_submenu_action (lo_group, action_name, value);
             else
             {
+                gboolean is_new = FALSE;
+
+                /* If action already exists but has no state, it should be removed and added again. */
                 if (action->state_type == NULL)
+                {
+                    g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
                     action->state_type = g_variant_type_copy (g_variant_get_type(value));
+                    is_new = TRUE;
+                }
 
                 if (g_variant_is_of_type (value, action->state_type) == TRUE)
                 {
@@ -229,7 +236,10 @@ g_lo_action_group_change_state (GActionGroup *group,
 
                     action->state = g_variant_ref (value);
 
-                    g_action_group_action_state_changed (group, action_name, value);
+                    if (is_new)
+                        g_action_group_action_added (G_ACTION_GROUP (group), action_name);
+                    else
+                        g_action_group_action_state_changed (group, action_name, value);
                 }
             }
         }
@@ -247,6 +257,9 @@ g_lo_action_group_activate (GActionGroup *group,
 
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
     GtkSalFrame *pFrame = lo_group->priv->frame;
+
+    if ( parameter != NULL )
+        g_action_group_change_action_state( group, action_name, parameter );
 
     if ( pFrame != NULL )
     {
