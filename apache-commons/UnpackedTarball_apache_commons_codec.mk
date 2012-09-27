@@ -11,6 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,apache_commons_codec))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_codec,$(APACHE_COMMONS_CODEC_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_fix_end_of_line,apache_commons_codec,\
+        build.xml \
+))
+
 $(eval $(call gb_UnpackedTarball_add_patches,apache_commons_codec,\
 	apache-commons/patches/codec.patch \
 ))
