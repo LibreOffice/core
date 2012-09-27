@@ -67,7 +67,7 @@ class SVT_DLLPUBLIC SvTreeEntryList
 {
 private:
     std::vector<SvListEntry*> maEntryList;
-    size_t maCurrent;
+    size_t mnCurrent;
 
 public:
     SvTreeEntryList();

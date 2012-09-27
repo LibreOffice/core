@@ -31,7 +31,7 @@
 DBG_NAME(SvListEntry);
 
 
-SvTreeEntryList::SvTreeEntryList() { maCurrent = 0; };
+SvTreeEntryList::SvTreeEntryList() : mnCurrent(0) {}
 
 void SvTreeEntryList::push_back( SvListEntry* pItem )
 {
@@ -116,13 +116,13 @@ const SvListEntry* SvTreeEntryList::operator[](size_t i) const
 
 SvListEntry* SvTreeEntryList::First()
 {
-    maCurrent = 0;
-    return ( maCurrent < maEntryList.size() ) ? maEntryList[ 0 ] : NULL;
+    mnCurrent = 0;
+    return ( mnCurrent < maEntryList.size() ) ? maEntryList[ 0 ] : NULL;
 }
 
 SvListEntry* SvTreeEntryList::Next()
 {
-    return ( maCurrent+1 < maEntryList.size() ) ? maEntryList[ ++maCurrent ] : NULL;
+    return ( mnCurrent+1 < maEntryList.size() ) ? maEntryList[ ++mnCurrent ] : NULL;
 }
 
 SvListEntry* SvTreeEntryList::last()
@@ -143,7 +143,7 @@ void SvTreeEntryList::DestroyAll()
 SvTreeEntryList::SvTreeEntryList(const SvTreeEntryList& rList)
 {
     maEntryList.clear();
-    maCurrent = 0;
+    mnCurrent = 0;
     for ( size_t i = 0, n = rList.size(); i < n; ++i )
         maEntryList.push_back(const_cast<SvListEntry*>(rList[i]));
 }
