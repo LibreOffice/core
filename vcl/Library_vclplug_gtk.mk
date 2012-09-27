@@ -111,10 +111,11 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,vclplug_gtk,\
-    dl \
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,vclplug_gtk,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

@@ -78,10 +78,11 @@ $(eval $(call gb_Library_use_static_libraries,vclplug_svp,\
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,vclplug_svp,\
-    dl \
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,vclplug_svp,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

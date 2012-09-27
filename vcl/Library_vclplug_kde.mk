@@ -83,10 +83,11 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde,\
 $(eval $(call gb_Library_set_warnings_not_errors,vclplug_kde))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,vclplug_kde,\
-    dl \
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,vclplug_kde,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

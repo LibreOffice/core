@@ -84,8 +84,8 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 $(eval $(call gb_Library_add_standard_system_libs,vcl))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_use_libraries,vcl,\
-    objc \
+$(eval $(call gb_Library_add_libs,vcl,\
+    -lobjc \
 ))
 endif
 
@@ -666,10 +666,10 @@ endif
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,vcl,\
-    dl \
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,vcl,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
 

@@ -92,10 +92,11 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_tde,\
 $(eval $(call gb_Library_set_warnings_not_errors,vclplug_tde))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,vclplug_tde,\
-    dl \
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,vclplug_tde,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

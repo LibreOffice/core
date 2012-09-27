@@ -1464,8 +1464,8 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 ifeq ($(OS),MACOSX)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	objc \
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lobjc \
 )
 else ifeq ($(OS),WNT)
 $(call gb_LinkTarget_use_libraries,$(1),\
