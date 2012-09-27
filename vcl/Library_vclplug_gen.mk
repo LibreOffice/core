@@ -129,8 +129,8 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
 
 ## handle Xinerama
 ifneq ($(USE_XINERAMA),NO)
-ifneq ($(OS),SOLARIS)
-# not Solaris
+ifneq ($(OS)$(USE_XINERAMA_VERSION),SOLARISXsun)
+# not Solaris/Xsun
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_XINERAMA_XORG \
 ))
@@ -143,25 +143,12 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
     -Wl,-Bstatic -lXinerama -Wl,-Bdynamic \
 ))
 endif
-else
-# Solaris
+else # Solaris/Xsun
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_XINERAMA_XSUN \
 ))
-ifeq ($(USE_XINERAMA_VERSION),Xorg)
-# Solaris, Xorg
-ifeq ($(XINERAMA_LINK),dynamic)
-$(eval $(call gb_Library_add_libs,vclplug_gen,\
-    -lXinerama \
-))
-else
-$(eval $(call gb_Library_add_libs,vclplug_gen,\
-    -Wl,-Bstatic -lXinerama -Wl,-Bdynamic \
-))
 endif
-endif
-endif
-endif
+endif # USE_XINERAMA
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_use_libraries,vclplug_gen,\
