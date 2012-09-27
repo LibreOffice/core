@@ -54,7 +54,7 @@ class TabBar;
 class BaseWindow;
 class LocalizationMgr;
 
-bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
+bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 
 class Shell :
     public SfxViewShell,
@@ -67,13 +67,13 @@ public:
 private:
     friend class JavaDebuggingListenerImpl;
     friend class LocalizationMgr;
-    friend bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName ); // defined in baside3.cxx
+    friend bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName ); // defined in baside3.cxx
 
     WindowTable         aWindowTable;
     sal_uInt16          nCurKey;
     BaseWindow*         pCurWin;
     ScriptDocument      m_aCurDocument;
-    rtl::OUString       m_aCurLibName;
+    OUString            m_aCurLibName;
     boost::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
     ScrollBar           aHScrollBar;
@@ -100,14 +100,14 @@ private:
     void                InitTabBar();
     void                InitScrollBars();
     void                CheckWindows();
-    void                RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, bool bDestroy );
+    void                RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy );
     void                UpdateWindows();
     void                InvalidateBasicIDESlots();
     void                StoreAllWindowData( bool bPersistent = true );
     void                SetMDITitle();
     void                EnableScrollbars( bool bEnable );
-    void                SetCurLib( const ScriptDocument& rDocument, ::rtl::OUString aLibName, bool bUpdateWindows = true , bool bCheck = true );
-    void                SetCurLibForLocalization( const ScriptDocument& rDocument, ::rtl::OUString aLibName );
+    void                SetCurLib( const ScriptDocument& rDocument, OUString aLibName, bool bUpdateWindows = true , bool bCheck = true );
+    void                SetCurLibForLocalization( const ScriptDocument& rDocument, OUString aLibName );
 
     void                ImplStartListening( StarBASIC* pBasic );
 
@@ -128,8 +128,8 @@ private:
     void                ManageToolbars();
     void                ArrangeTabBar();
 
-    ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName );
-    DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
+    ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
+    DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
@@ -163,7 +163,7 @@ public:
 
     BaseWindow*      GetCurWindow() const    { return pCurWin; }
     ScriptDocument const& GetCurDocument() const { return m_aCurDocument; }
-    rtl::OUString const&  GetCurLibName() const { return m_aCurLibName; }
+    OUString const&  GetCurLibName() const { return m_aCurLibName; }
     boost::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
     ScrollBar&          GetHScrollBar()         { return aHScrollBar; }
@@ -196,9 +196,9 @@ public:
     long                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );
 
-    BaseWindow*         FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName = ::rtl::OUString(), const ::rtl::OUString& rName = ::rtl::OUString(), ItemType nType = TYPE_UNKNOWN, bool bFindSuspended = false );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
-    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
+    BaseWindow*         FindWindow( const ScriptDocument& rDocument, const OUString& rLibName = OUString(), const OUString& rName = OUString(), ItemType nType = TYPE_UNKNOWN, bool bFindSuspended = false );
+    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
+    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
     BaseWindow*         FindApplicationWindow();
     bool                NextPage( bool bPrev = false );
 
@@ -209,8 +209,8 @@ public:
     // (defined in moduldlg.cxx)
     static void CopyDialogResources(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& io_xISP,
-        const ScriptDocument& rSourceDoc, const ::rtl::OUString& rSourceLibName, const ScriptDocument& rDestDoc,
-        const ::rtl::OUString& rDestLibName, const ::rtl::OUString& rDlgName );
+        const ScriptDocument& rSourceDoc, const OUString& rSourceLibName, const ScriptDocument& rDestDoc,
+        const OUString& rDestLibName, const OUString& rDlgName );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         GetCurrentDocument() const;
