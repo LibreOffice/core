@@ -51,8 +51,8 @@ $(eval $(call gb_Executable_add_exception_objects,spadmin.bin,\
 ))
 
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Executable_use_libraries,spadmin.bin,\
-    pthread \
+$(eval $(call gb_Executable_add_libs,spadmin.bin,\
+    -lpthread \
 ))
 endif
 

@@ -73,10 +73,11 @@ $(eval $(call gb_Library_add_exception_objects,desktop_detector,\
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,desktop_detector,\
-    dl \
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,desktop_detector,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

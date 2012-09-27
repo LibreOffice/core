@@ -53,10 +53,10 @@ $(eval $(call gb_Library_add_defs,clucene,\
 $(eval $(call gb_Library_add_standard_system_libs,clucene))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,clucene,\
-    dl \
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,clucene,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
 

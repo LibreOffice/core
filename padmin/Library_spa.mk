@@ -53,9 +53,9 @@ $(eval $(call gb_Library_add_exception_objects,spa,\
 ))
 
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Library_use_libraries,spa,\
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,spa,\
+	-lm \
+	-lpthread \
 ))
 endif
 

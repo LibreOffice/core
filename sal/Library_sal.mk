@@ -57,11 +57,6 @@ $(eval $(call gb_Library_add_defs,sal,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sal,\
-	$(if $(filter $(GUI),UNX), \
-		$(if $(filter $(OS),ANDROID),, \
-			pthread \
-		) \
-	) \
 	$(if $(filter $(OS),LINUX), \
 		dl \
 	) \
@@ -82,6 +77,14 @@ $(eval $(call gb_Library_use_libraries,sal,\
 		lo-bootstrap \
 	) \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_add_libs,sal,\
+	$(if $(filter $(GUI),UNX), \
+		$(if $(filter $(OS),ANDROID),, \
+			-lpthread \
+		) \
+	) \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,sal))

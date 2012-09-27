@@ -99,10 +99,10 @@ $(eval $(call gb_Library_use_externals,merged,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,merged,\
-	dl \
-	m \
-	pthread \
+$(eval $(call gb_Library_add_libs,merged,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
 
@@ -129,7 +129,9 @@ endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_libraries,merged,\
 	AppleRemote \
-	objc \
+))
+$(eval $(call gb_Library_add_libs,merged,\
+	-lobjc \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
 	Carbon \

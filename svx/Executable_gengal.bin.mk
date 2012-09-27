@@ -81,9 +81,9 @@ $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
-    dl \
-    pthread \
+$(eval $(call gb_Executable_add_libs,$(svx_GENGALBIN),\
+	-ldl \
+	-lpthread \
 ))
 endif
 

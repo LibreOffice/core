@@ -151,10 +151,10 @@ endif
 endif # USE_XINERAMA
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,vclplug_gen,\
-    dl \
-    m \
-    pthread \
+$(eval $(call gb_Library_add_libs,vclplug_gen,\
+	-lm \
+	-ldl \
+	-lpthread \
 ))
 endif
 
