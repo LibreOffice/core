@@ -7,9 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# for RSCREVISION
-include $(SOLARENV)/inc/minor.mk
-
 $(eval $(call gb_ExternalProject_ExternalProject,hsqldb))
 
 $(eval $(call gb_ExternalProject_use_unpacked,hsqldb,hsqldb))
@@ -23,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,hsqldb,build) :
 	"$(ANT)" \
 		-q \
 		-f build/build.xml \
-		-Dbuild.label="build-$(RSCREVISION)" \
+		-Dbuild.label="build-libreoffice" \
 		$(if $(filter yes,$(JAVACISGCJ))\
 			,-Dbuild.compiler=gcj \
 			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
