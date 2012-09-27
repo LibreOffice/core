@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,apache_commons_lang,\
 
 $(call gb_ExternalProject_get_state_target,apache_commons_lang,build) :
 	cd "$(call gb_UnpackedTarball_get_dir,apache_commons_lang)" && \
-	ANT_OPTS+="-Dfile.encoding=ISO-8859-1" \
+	ANT_OPTS="$$ANT_OPTS -Dfile.encoding=ISO-8859-1" \
 	"$(ANT)" \
 		-q \
 		-f build.xml \
