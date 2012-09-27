@@ -218,15 +218,27 @@ namespace sdr
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
 
-            // always append an invisible outline for the cases where no visible content exists
-            const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
-            const basegfx::B2DRange aObjectRange(
-                aObjectBound.Left(), aObjectBound.Top(),
-                aObjectBound.Right(), aObjectBound.Bottom());
+            // #119863# always append an invisible outline for the cases where no visible content exists
+            if(true)
+            {
+                const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+                const basegfx::B2DRange aObjectRange(
+                    aObjectBound.Left(), aObjectBound.Top(),
+                    aObjectBound.Right(), aObjectBound.Bottom());
 
-            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
-                drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                    false, aObjectRange));
+                // create object matrix
+                const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
+                const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
+                const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
+                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
+                    aObjectRange.getMinX(), aObjectRange.getMinY()));
+
+                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+                    drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                        false,
+                        aObjectMatrix));
+            }
 
             return xRetval;
         }
