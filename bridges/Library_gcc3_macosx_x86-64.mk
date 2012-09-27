@@ -46,12 +46,9 @@ $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 	sal \
 ))
 
-$(eval $(call gb_Library_add_asmobjects,gcc3_uno,\
-	bridges/source/cpp_uno/gcc3_macosx_x86-64/call \
-))
-
 $(eval $(call gb_Library_add_exception_objects,gcc3_uno,\
 	bridges/source/cpp_uno/gcc3_macosx_x86-64/abi \
+	bridges/source/cpp_uno/gcc3_macosx_x86-64/call \
 	bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod \
 	bridges/source/cpp_uno/gcc3_macosx_x86-64/cpp2uno \
 	bridges/source/cpp_uno/gcc3_macosx_x86-64/except \

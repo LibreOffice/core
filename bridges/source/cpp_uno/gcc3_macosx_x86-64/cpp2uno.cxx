@@ -396,7 +396,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 }
 
 //==================================================================================================
-extern "C" void privateSnippetExecutor( ... );
+extern "C" void privateSnippetExecutor();
 
 const int codeSnippetSize = 24;
 
