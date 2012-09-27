@@ -30,7 +30,6 @@ class CallWizard(unohelper.Base, XJobExecutor):
 		self.ctx = ctx
 
 	def trigger(self, args):
-		print "hello"
 		try:
 			fw = FaxWizardDialogImpl(self.ctx.ServiceManager)
 			fw.startWizard(self.ctx.ServiceManager)

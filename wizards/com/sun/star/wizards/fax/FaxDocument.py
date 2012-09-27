@@ -15,9 +15,9 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-
-from ..text.TextDocument import TextDocument, traceback, Helper,\
-	TextFieldHandler, Configuration
+from ..text.TextDocument import *
+    #TextDocument, traceback, Helper,\
+    #TextFieldHandler, Configuration
 from ..text.TextSectionHandler import TextSectionHandler
 from ..common.PropertyNames import PropertyNames
 
@@ -51,8 +51,8 @@ class FaxDocument(TextDocument):
 
     def switchFooter(self, sPageStyle, bState, bPageNumber, sText):
         if TextDocument.xTextDocument is not None:
-            TextDocument.xTextDocument.lockControllers()
             try:
+                TextDocument.xTextDocument.lockControllers()
                 xPageStyleCollection = \
                     TextDocument.xTextDocument.StyleFamilies.getByName("PageStyles")
                 xPageStyle = xPageStyleCollection.getByName(sPageStyle)
@@ -84,6 +84,7 @@ class FaxDocument(TextDocument):
 
                 TextDocument.xTextDocument.unlockControllers()
             except Exception:
+                TextDocument.xTextDocument.lockControllers()
                 traceback.print_exc()
 
     def hasElement(self, sElement):
