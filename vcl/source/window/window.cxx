@@ -640,8 +640,8 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mePackType          = VCL_PACK_START;
     mpWindowImpl->mnPadding           = 0;
     mpWindowImpl->mnGridHeight        = 1;
-    mpWindowImpl->mnGridLeftAttach    = 0;
-    mpWindowImpl->mnGridTopAttach     = 0;
+    mpWindowImpl->mnGridLeftAttach    = -1;
+    mpWindowImpl->mnGridTopAttach     = -1;
     mpWindowImpl->mnGridWidth         = 1;
     mpWindowImpl->mnBorderWidth       = 0;
     mpWindowImpl->mnMarginLeft        = 0;

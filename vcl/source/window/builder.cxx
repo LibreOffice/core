@@ -1,29 +1,10 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ * This file is part of the LibreOffice project.
  *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Initial Developer of the Original Code is
- *        Caolán McNamara <caolanm@redhat.com> (Red Hat, Inc.)
- * Portions created by the Initial Developer are Copyright (C) 2012 the
- * Initial Developer. All Rights Reserved.
- *
- * Contributor(s): Caolán McNamara <caolanm@redhat.com>
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
- * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
- * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
- * instead of those above.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
 #include <osl/module.hxx>
@@ -767,6 +748,22 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
         pTabControl->RemovePage(pTabControl->GetCurPageId());
 }
 
+namespace
+{
+    bool sortByGridPositions(Window *pA, Window *pB)
+    {
+        sal_Int32 nTopA = pA->get_grid_top_attach();
+        sal_Int32 nTopB = pB->get_grid_top_attach();
+        if (nTopA < nTopB)
+            return true;
+        if (nTopA > nTopB)
+            return false;
+        sal_Int32 nLeftA = pA->get_grid_left_attach();
+        sal_Int32 nLeftB = pB->get_grid_left_attach();
+        return nLeftA < nLeftB;
+    }
+}
+
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 {
     Window *pCurrentChild = NULL;
@@ -818,8 +815,6 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                     {
                         //To-Do make reorder a virtual in Window, move this foo
                         //there and see above
-
-                        rtl::OString sPosition(RTL_CONSTASCII_STRINGPARAM("position"));
                         std::vector<Window*> aChilds;
                         for (Window* pChild = pCurrentChild->GetWindow(WINDOW_FIRSTCHILD); pChild;
                             pChild = pChild->GetWindow(WINDOW_NEXT))
@@ -827,6 +822,13 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                             aChilds.push_back(pChild);
                         }
 
+                        //sort child order within parent list by grid position
+                        //so that tabbing between controls goes in a visually sensible sequence
+                        std::stable_sort(aChilds.begin(), aChilds.end(), sortByGridPositions);
+                        for (size_t i = 0; i < aChilds.size(); ++i)
+                            reorderWithinParent(*aChilds[i], i);
+
+                        //honour box positions if there is any
                         for (size_t i = 0; i < aChilds.size(); ++i)
                         {
                             sal_Int32 nPosition = get_window_packing_position(aChilds[i]);
@@ -834,19 +836,6 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                                 continue;
                             reorderWithinParent(*aChilds[i], nPosition);
                         }
-
-#if TODO
-//sort by ltr ttb
-                        rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
-                        rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
-                        for (size_t i = 0; i < aChilds.size(); ++i)
-                        {
-                            sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
-                            if (nPosition == 0xFFFF)
-                                continue;
-                            reorderWithinParent(*aChilds[i], nPosition);
-                        }
-#endif
                     }
                 }
             }
