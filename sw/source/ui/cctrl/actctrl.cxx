@@ -67,7 +67,7 @@ NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
 
 NoSpaceEdit::NoSpaceEdit(Window* pParent)
     : Edit(pParent),
-    sForbiddenChars(String::CreateFromAscii(" "))
+    sForbiddenChars(rtl::OUString(" "))
 {
 }
 

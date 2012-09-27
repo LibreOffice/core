@@ -128,10 +128,6 @@ Size VclBox::calculateRequisition() const
 
 void VclBox::setAllocation(const Size &rAllocation)
 {
-    //SetBackground( Color(0x00, 0xFF, 0x00) );
-
-    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
-
     sal_uInt16 nVisibleChildren = 0, nExpandChildren = 0;
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
@@ -159,10 +155,6 @@ void VclBox::setAllocation(const Size &rAllocation)
         Size aRequisition = calculateRequisition();
         nExtraSpace = (getPrimaryDimension(rAllocation) - getPrimaryDimension(aRequisition)) / nExpandChildren;
     }
-
-    rtl::OString sPadding(RTL_CONSTASCII_STRINGPARAM("padding"));
-    rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
-    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
 
     for (sal_Int32 ePackType = VCL_PACK_START; ePackType <= VCL_PACK_END; ++ePackType)
     {

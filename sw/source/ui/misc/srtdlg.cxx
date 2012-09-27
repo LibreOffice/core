@@ -233,7 +233,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
     if(!m_pDelimTabRB->IsChecked())
     {
         m_pDelimEdt->SetText(rtl::OUString(cDeli));
-        m_pDelimEdt->Check(sal_True);
+        m_pDelimFreeRB->Check(sal_True);
         DelimHdl(m_pDelimFreeRB);
     }
     else
