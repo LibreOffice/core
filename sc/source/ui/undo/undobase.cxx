@@ -555,12 +555,11 @@ rtl::OUString ScUndoWrapper::GetComment() const
     return rtl::OUString();
 }
 
-String ScUndoWrapper::GetRepeatComment(SfxRepeatTarget& rTarget) const
+OUString ScUndoWrapper::GetRepeatComment(SfxRepeatTarget& rTarget) const
 {
     if (pWrappedUndo)
         return pWrappedUndo->GetRepeatComment(rTarget);
-    else
-        return String();
+    return OUString();
 }
 
 sal_uInt16 ScUndoWrapper::GetId() const

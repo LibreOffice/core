@@ -55,8 +55,8 @@ public:
     virtual void            Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool        CanRepeat(SfxRepeatTarget& rTarget) const;
     virtual sal_Bool        Merge( SfxUndoAction *pNextAction );
-    virtual rtl::OUString   GetComment() const;
-    virtual String          GetRepeatComment(SfxRepeatTarget&) const;
+    virtual OUString        GetComment() const;
+    virtual OUString        GetRepeatComment(SfxRepeatTarget&) const;
     virtual sal_uInt16      GetId() const;
 };
 

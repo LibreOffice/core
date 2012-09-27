@@ -77,8 +77,8 @@ public:
     virtual sal_Bool CanRepeat(SfxRepeatTarget& rView) const;
     virtual void Repeat(SfxRepeatTarget& rView);
 
-    virtual String GetRepeatComment(SfxRepeatTarget& rView) const;
-    virtual String GetSdrRepeatComment(SdrView& rView) const;
+    virtual OUString GetRepeatComment(SfxRepeatTarget& rView) const;
+    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
 
     virtual bool CanSdrRepeat(SdrView& rView) const;
     virtual void SdrRepeat(SdrView& rView);
@@ -100,8 +100,8 @@ protected:
     std::vector<SdrUndoAction*> aBuf;
 
     // Beschreibung der Action, nicht expandiert (beinhaltet %O)
-    String                      aComment;
-    String                      aObjDescription;
+    OUString                    aComment;
+    OUString                    aObjDescription;
 
     SdrRepeatFunc               eFunction;
 
@@ -114,10 +114,10 @@ public:
     SdrUndoAction* GetAction(sal_uIntPtr nNum) const { return aBuf[nNum]; }
     void AddAction(SdrUndoAction* pAct);
 
-    void SetComment(const String& rStr) { aComment=rStr; }
-    void SetObjDescription(const String& rStr) { aObjDescription=rStr; }
-    virtual rtl::OUString GetComment() const;
-    virtual String GetSdrRepeatComment(SdrView& rView) const;
+    void SetComment(const OUString& rStr) { aComment=rStr; }
+    void SetObjDescription(const OUString& rStr) { aObjDescription=rStr; }
+    virtual OUString GetComment() const;
+    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void Undo();
     virtual void Redo();
@@ -189,8 +189,8 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
-    virtual String GetSdrRepeatComment(SdrView& rView) const;
+    virtual OUString GetComment() const;
+    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
     virtual bool CanSdrRepeat(SdrView& rView) const;
@@ -220,8 +220,8 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
-    virtual String GetSdrRepeatComment(SdrView& rView) const;
+    virtual OUString GetComment() const;
+    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
     virtual bool CanSdrRepeat(SdrView& rView) const;
@@ -250,7 +250,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 //************************************************************
@@ -336,8 +336,8 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
-    virtual String GetSdrRepeatComment(SdrView& rView) const;
+    virtual OUString GetComment() const;
+    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
     virtual bool CanSdrRepeat(SdrView& rView) const;
@@ -360,9 +360,9 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
-    static  rtl::OUString GetComment( const SdrObject& _rForObject );
+    static  OUString GetComment(const SdrObject& _rForObject);
 };
 
 //************************************************************
@@ -411,7 +411,7 @@ public:
     SdrUndoCopyObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoNewObj(rNewObj,bOrdNumDirect) {}
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 //************************************************************
@@ -430,7 +430,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -472,8 +472,8 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
-    virtual String GetSdrRepeatComment(SdrView& rView) const;
+    virtual OUString GetComment() const;
+    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
     virtual bool CanSdrRepeat(SdrView& rView) const;
@@ -504,7 +504,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -555,7 +555,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 //************************************************************
@@ -574,7 +574,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 //************************************************************
@@ -595,7 +595,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -676,8 +676,8 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
-    virtual String GetSdrRepeatComment(SdrView& rView) const;
+    virtual OUString GetComment() const;
+    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
     virtual bool CanSdrRepeat(SdrView& rView) const;
@@ -699,7 +699,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 //************************************************************
@@ -715,8 +715,8 @@ class SdrUndoCopyPage : public SdrUndoNewPage
 public:
     SdrUndoCopyPage(SdrPage& rNewPg): SdrUndoNewPage(rNewPg) {}
 
-    virtual rtl::OUString GetComment() const;
-    virtual String GetSdrRepeatComment(SdrView& rView) const;
+    virtual OUString GetComment() const;
+    virtual OUString GetSdrRepeatComment(SdrView& rView) const;
 
     virtual void SdrRepeat(SdrView& rView);
     virtual bool CanSdrRepeat(SdrView& rView) const;
@@ -743,7 +743,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -796,7 +796,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 //************************************************************
@@ -820,7 +820,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 ///////////////////////////////////////////////////////////////////////

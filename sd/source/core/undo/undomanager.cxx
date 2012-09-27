@@ -27,7 +27,7 @@ UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
 {
 }
 
-void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId /* =0 */)
+void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId /* =0 */)
 {
     if( !IsDoing() )
     {

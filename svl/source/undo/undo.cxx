@@ -94,10 +94,10 @@ sal_Bool SfxUndoAction::Merge( SfxUndoAction * )
 
 //------------------------------------------------------------------------
 
-rtl::OUString SfxUndoAction::GetComment() const
+OUString SfxUndoAction::GetComment() const
 {
     DBG_CHKTHIS(SfxUndoAction, 0);
-    return rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
@@ -111,7 +111,7 @@ sal_uInt16 SfxUndoAction::GetId() const
 
 //------------------------------------------------------------------------
 
-XubString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
+OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 {
     DBG_CHKTHIS(SfxUndoAction, 0);
     return GetComment();
@@ -681,11 +681,11 @@ size_t SfxUndoManager::GetUndoActionCount( bool const i_currentLevel ) const
 
 //------------------------------------------------------------------------
 
-rtl::OUString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentLevel ) const
+OUString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentLevel ) const
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    rtl::OUString sComment;
+    OUString sComment;
     const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
     DBG_ASSERT( nNo < pUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionComment: illegal index!" );
     if( nNo < pUndoArray->nCurUndoAction )
@@ -840,7 +840,7 @@ size_t SfxUndoManager::ImplGetRedoActionCount_Lock( bool const i_currentLevel ) 
 
 //------------------------------------------------------------------------
 
-rtl::OUString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentLevel ) const
+OUString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentLevel ) const
 {
     UndoManagerGuard aGuard( *m_pData );
     const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
@@ -933,7 +933,7 @@ size_t SfxUndoManager::GetRepeatActionCount() const
 
 //------------------------------------------------------------------------
 
-XubString SfxUndoManager::GetRepeatActionComment( SfxRepeatTarget &rTarget) const
+OUString SfxUndoManager::GetRepeatActionComment(SfxRepeatTarget &rTarget) const
 {
     UndoManagerGuard aGuard( *m_pData );
     return m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.size() - 1 ].pAction
@@ -999,7 +999,7 @@ void SfxUndoManager::RemoveUndoListener( SfxUndoListener& i_listener )
 //------------------------------------------------------------------------
 
 void SfxUndoManager::EnterListAction(
-    const XubString& rComment, const XubString &rRepeatComment, sal_uInt16 nId )
+    const OUString& rComment, const OUString &rRepeatComment, sal_uInt16 nId )
 
 /*  [Beschreibung]
 
@@ -1282,21 +1282,21 @@ sal_uInt16 SfxListUndoAction::GetId() const
 
 //------------------------------------------------------------------------
 
-rtl::OUString SfxListUndoAction::GetComment() const
+OUString SfxListUndoAction::GetComment() const
 {
     return aComment;
 }
 
 //------------------------------------------------------------------------
 
-void SfxListUndoAction::SetComment( const UniString& rComment )
+void SfxListUndoAction::SetComment(const OUString& rComment)
 {
     aComment = rComment;
 }
 
 //------------------------------------------------------------------------
 
-XubString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const
+OUString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const
 {
     return aRepeatComment;
 }
@@ -1306,8 +1306,8 @@ XubString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const
 
 SfxListUndoAction::SfxListUndoAction
 (
-    const XubString &rComment,
-    const XubString rRepeatComment,
+    const OUString &rComment,
+    const OUString rRepeatComment,
     sal_uInt16 Id,
     SfxUndoArray *pFather
 )
@@ -1442,22 +1442,21 @@ void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
 
 //------------------------------------------------------------------------
 
-rtl::OUString SfxLinkUndoAction::GetComment() const
+OUString SfxLinkUndoAction::GetComment() const
 {
     if ( pAction )
         return pAction->GetComment();
-    return rtl::OUString();
+    return OUString();
 }
 
 
 //------------------------------------------------------------------------
 
-XubString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const
+OUString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const
 {
     if ( pAction )
         return pAction->GetRepeatComment(r);
-    else
-        return XubString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------

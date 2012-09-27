@@ -57,12 +57,11 @@ rtl::OUString ScUndoDraw::GetComment() const
     return rtl::OUString();
 }
 
-String ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
+OUString ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
 {
     if (pDrawUndo)
         return pDrawUndo->GetRepeatComment(rTarget);
-    else
-        return String();
+    return OUString();
 }
 
 sal_uInt16 ScUndoDraw::GetId() const
