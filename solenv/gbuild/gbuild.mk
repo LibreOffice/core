@@ -405,10 +405,8 @@ gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
 endif
 
 ifneq (,$(SYSTEM_UCPP))
-gb_UCPP := $(SYSTEM_UCPP)
 gb_UCPPTARGET :=
 else
-gb_UCPP := ucpp
 gb_UCPPTARGET := $(call gb_Executable_get_target_for_build,ucpp)
 endif
 
