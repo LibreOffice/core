@@ -131,12 +131,12 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	AppleRemote \
 	objc \
 ))
-$(eval $(call gb_Library_use_externals,merged,\
-	carbon \
-	cocoa \
-	corefoundation \
-	coreservices \
-	quicktime \
+$(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
+	Carbon \
+	Cocoa \
+	CoreFoundation \
+	CoreServices \
+	QuickTime \
 ))
 endif
 
@@ -162,9 +162,9 @@ $(eval $(call gb_Library_use_externals,merged,\
 endif
 
 ifeq ($(OS),IOS)
-$(eval $(call gb_Library_use_externals,merged,\
-	corefoundation \
-	uikit \
+$(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
+	CoreFoundation \
+	UIKit \
 ))
 endif
 

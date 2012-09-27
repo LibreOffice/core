@@ -74,7 +74,7 @@ $(eval $(call gb_Library_add_objcxxobjects,OGLTrans,\
     , $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 
-$(eval $(call gb_Library_use_libraries,OGLTrans,\
+$(eval $(call gb_Library_use_system_darwin_frameworks,OGLTrans,\
     Cocoa \
     GLUT \
     OpenGL \

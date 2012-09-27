@@ -35,9 +35,9 @@ $(eval $(call gb_Library_use_packages,fps_aqua,\
 
 $(eval $(call gb_Library_use_sdk_api,fps_aqua))
 
-$(eval $(call gb_Library_add_libs,fps_aqua,\
-    -framework Cocoa \
-    -framework CoreFoundation \
+$(eval $(call gb_Library_use_system_darwin_frameworks,fps_aqua,\
+    Cocoa \
+    CoreFoundation \
 ))
 
 $(eval $(call gb_Library_use_libraries,fps_aqua,\

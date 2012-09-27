@@ -84,10 +84,10 @@ $(eval $(call gb_Library_add_objcxxobjects,pl,\
 	extensions/source/plugin/aqua/sysplug \
 ))
 
-$(eval $(call gb_Library_use_externals,pl,\
-    cocoa \
-    carbon \
-    corefoundation \
+$(eval $(call gb_Library_use_system_darwin_frameworks,pl,\
+    Cocoa \
+    Carbon \
+    CoreFoundation \
 ))
 
 else # GUIBASE!=aqua

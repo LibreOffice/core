@@ -29,9 +29,9 @@ $(eval $(call gb_Library_Library,macabdrv1))
 
 $(eval $(call gb_Library_use_sdk_api,macabdrv1))
 
-$(eval $(call gb_Library_add_libs,macabdrv1,\
-	-framework Carbon \
-	-framework AddressBook \
+$(eval $(call gb_Library_use_system_darwin_frameworks,macabdrv1,\
+	Carbon \
+	AddressBook \
 ))
 
 $(eval $(call gb_Library_use_libraries,macabdrv1,\

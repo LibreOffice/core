@@ -136,11 +136,9 @@ gb_LinkTarget_OBJCXXFLAGS += -g
 gb_LinkTarget_OBJCFLAGS += -g
 endif
 
-# FIXME framework handling very hackish
 define gb_LinkTarget__get_liblinkflags
-$(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS) $(gb_Library_UNOLIBS_OOO),$(1)),$(call gb_Library_get_filename,$(lib)))) \
-$(foreach lib,$(filter $(gb_Library_UNOLIBS_OOO),$(1)),$(SOLARVER)/$(INPATH)/lib/$(lib)$(gb_Library_UNOEXT)) \
-$(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(1)))
+$(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library_UNOLIBS_OOO),$(1)),$(call gb_Library_get_filename,$(lib)))) \
+$(foreach lib,$(filter $(gb_Library_UNOLIBS_OOO),$(1)),$(SOLARVER)/$(INPATH)/lib/$(lib)$(gb_Library_UNOEXT))
 endef
 
 define gb_LinkTarget__get_layer
@@ -190,6 +188,10 @@ $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_LinkTarget__command_staticlink,$(1))
 endef
 
+define gb_LinkTarget_use_system_darwin_frameworks
+$(call gb_LinkTarget_add_libs,$(1),$(foreach fw,$(2),-framework $(fw)))
+endef
+
 
 # Library class
 
@@ -202,12 +204,6 @@ gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-
-gb_Library__FRAMEWORKS := \
-    Foundation \
-    CoreFoundation \
-    CoreGraphics \
-	CoreText \
 
 gb_Library_PLAINLIBS_NONE += \
     objc \
