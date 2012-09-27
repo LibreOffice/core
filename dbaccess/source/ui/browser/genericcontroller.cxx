@@ -256,7 +256,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     OSL_ENSURE(getORB().is(), "OGenericUnoController::Construct need a service factory!");
     try
     {
-        m_xDatabaseContext = Reference< XNameAccess >( DatabaseContext::create(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW );
+        m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(getORB()));
     }
     catch(Exception&)
     {

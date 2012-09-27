@@ -22,6 +22,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -40,7 +41,7 @@ namespace dbp
     struct OControlWizardContext
     {
         // the global data source context
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
                     xDatasourceContext;
 
         // the control mode

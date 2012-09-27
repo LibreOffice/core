@@ -30,6 +30,8 @@ module com {  module sun {  module star {  module sdb {
 
 /**
     Provides an interface for the new-style DatabaseContext service to implement.
+
+    @since LibreOffice 3.7
  */
 published interface XDatabaseContext
 {
@@ -67,7 +69,7 @@ published interface XDatabaseContext
 
         @since OOo 3.3
     */
-    [optional] interface XDatabaseRegistrations;
+    interface XDatabaseRegistrations;
 };
 
 

@@ -277,7 +277,7 @@ void ODatabaseImportExport::initialize()
     if ( !m_xConnection.is() )
     {   // we need a connection
         OSL_ENSURE(!m_sDataSourceName.isEmpty(),"There must be a datsource name!");
-        Reference<XNameAccess> xDatabaseContext( DatabaseContext::create(comphelper::ComponentContext(m_xFactory).getUNOContext()), UNO_QUERY_THROW);
+        Reference<XNameAccess> xDatabaseContext( DatabaseContext::create(comphelper::getComponentContext(m_xFactory)), UNO_QUERY_THROW);
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
 
         Reference< XConnection > xConnection;

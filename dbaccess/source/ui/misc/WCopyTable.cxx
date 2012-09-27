@@ -46,8 +46,8 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>
@@ -1338,7 +1338,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         {
             xSuppDestinationColumns.set( xTable, UNO_QUERY_THROW );
             // insert new table name into table filter
-            ::dbaui::appendToFilter( m_xDestConnection, m_sName, comphelper::ComponentContext(GetFactory()).getUNOContext(), this );
+            ::dbaui::appendToFilter( m_xDestConnection, m_sName, comphelper::getComponentContext(GetFactory()), this );
 
             // copy ui settings
             m_rSourceObject.copyUISettingsTo( xTable );

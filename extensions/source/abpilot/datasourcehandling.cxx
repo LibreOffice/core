@@ -49,7 +49,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 
 #include <comphelper/interaction.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
@@ -127,7 +127,7 @@ namespace abp
         {
             // create the new data source
             Reference< XPropertySet > xNewDataSource;
-            lcl_implCreateAndInsert( comphelper::ComponentContext(_rxORB).getUNOContext(), _rName, xNewDataSource );
+            lcl_implCreateAndInsert( comphelper::getComponentContext(_rxORB), _rName, xNewDataSource );
 
             //.............................................................
             // set the URL property
@@ -157,11 +157,9 @@ namespace abp
         OSL_ENSURE( !_sURL.isEmpty(), "lcl_registerDataSource: invalid URL!" );
         try
         {
-
-            ::comphelper::ComponentContext aContext( _rxORB );
-            Reference< XDatabaseRegistrations > xRegistrations(
-                aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
-
+            Reference< XDatabaseContext > xRegistrations(
+                DatabaseContext::create(
+                    comphelper::getComponentContext(_rxORB)));
             if ( xRegistrations->hasRegisteredDatabase( _sName ) )
                 xRegistrations->changeDatabaseLocation( _sName, _sURL );
             else
@@ -201,7 +199,7 @@ namespace abp
         {
             // create the UNO context
             m_pImpl->xContext = Reference<XNameAccess>(
-                      lcl_getDataSourceContext( comphelper::ComponentContext(_rxORB).getUNOContext() ),
+                      lcl_getDataSourceContext( comphelper::getComponentContext(_rxORB) ),
                       UNO_QUERY_THROW);
 
             if (m_pImpl->xContext.is())

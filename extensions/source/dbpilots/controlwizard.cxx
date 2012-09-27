@@ -42,7 +42,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <vcl/msgbox.hxx>
@@ -446,9 +446,8 @@ namespace dbp
         {
             DBG_ASSERT(xORB.is(), "OControlWizard::implGetDSContext: invalid service factory!");
 
-            m_aContext.xDatasourceContext = Reference<XNameAccess>(
-                DatabaseContext::create(comphelper::ComponentContext(xORB).getUNOContext()),
-                UNO_QUERY_THROW);
+            m_aContext.xDatasourceContext =
+                DatabaseContext::create(comphelper::getComponentContext(xORB));
         }
         catch(const Exception&)
         {

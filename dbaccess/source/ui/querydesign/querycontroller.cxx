@@ -66,6 +66,7 @@
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/streamsection.hxx>
@@ -1534,7 +1535,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                     m_xAlterView.set( xElements->getByName( m_sName ), UNO_QUERY );
 
                 // now check if our datasource has set a tablefilter and if so, append the new table name to it
-                ::dbaui::appendToFilter( getConnection(), m_sName, comphelper::ComponentContext(getORB()).getUNOContext(), getView() );
+                ::dbaui::appendToFilter( getConnection(), m_sName, comphelper::getComponentContext(getORB()), getView() );
             }
             Reference< XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )

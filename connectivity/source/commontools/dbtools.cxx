@@ -63,9 +63,9 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/conncleanup.hxx>
 #include <connectivity/dbconversion.hxx>
@@ -281,7 +281,7 @@ Reference< XConnection > getConnection_allowException(
             const ::rtl::OUString& _rsPwd,
             const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    Reference< XDataSource> xDataSource( getDataSource_allowException(_rsTitleOrPath, comphelper::ComponentContext(_rxFactory).getUNOContext()) );
+    Reference< XDataSource> xDataSource( getDataSource_allowException(_rsTitleOrPath, comphelper::getComponentContext(_rxFactory)) );
     Reference<XConnection> xConnection;
     if (xDataSource.is())
     {

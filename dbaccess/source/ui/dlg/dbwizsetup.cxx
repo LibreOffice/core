@@ -50,7 +50,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -859,7 +858,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const ::rtl::OUString& _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-        Reference< XNamingService > xDatabaseContext( DatabaseContext::create(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW );
+        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(comphelper::getComponentContext(getORB())) );
         Reference< XNameAccess > xNameAccessDatabaseContext(xDatabaseContext, UNO_QUERY_THROW );
         INetURLObject aURL( _sPath );
         ::rtl::OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );

@@ -34,7 +34,6 @@
 #include <svtools/helpid.hrc>
 #include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
@@ -801,7 +800,7 @@ void AssignmentPersistentData::Commit()
 
             try
             {
-                m_xDatabaseContext = DatabaseContext::create(comphelper::ComponentContext(m_xORB).getUNOContext());
+                m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(m_xORB));
             }
             catch(Exception&) { }
             if (!m_xDatabaseContext.is())

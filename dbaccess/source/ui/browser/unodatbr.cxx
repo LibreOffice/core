@@ -3126,7 +3126,7 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
 // -------------------------------------------------------------------------
 namespace
 {
-    Reference< XInterface > lcl_getDataSource( const Reference< XNameAccess >& _rxDatabaseContext,
+    Reference< XInterface > lcl_getDataSource( const Reference< XDatabaseContext >& _rxDatabaseContext,
         const ::rtl::OUString& _rDataSourceName, const Reference< XConnection >& _rxConnection )
     {
         Reference< XDataSource > xDataSource;

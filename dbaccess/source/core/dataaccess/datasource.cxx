@@ -601,7 +601,7 @@ Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames(  ) throw 
 Reference< XInterface > ODatabaseSource::Create( const Reference< XComponentContext >& _rxContext )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::Create" );
-    Reference< XSingleServiceFactory > xDBContext( DatabaseContext::create(_rxContext), UNO_QUERY_THROW );
+    Reference< XDatabaseContext > xDBContext( DatabaseContext::create(_rxContext) );
     return xDBContext->createInstance();
 }
 

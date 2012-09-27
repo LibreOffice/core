@@ -2155,7 +2155,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
         Reference< XConnection > xNewConn;
         if ( !m_aDataSourceName.isEmpty() )
         {
-            Reference< XNameAccess > xDatabaseContext( DatabaseContext::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
+            Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext.getUNOContext()) );
             try
             {
                 Reference< XDataSource > xDataSource( xDatabaseContext->getByName( m_aDataSourceName ), UNO_QUERY_THROW );

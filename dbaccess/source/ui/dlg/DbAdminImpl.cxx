@@ -50,9 +50,9 @@
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
@@ -208,8 +208,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
 
     try
     {
-        m_xDatabaseContext = Reference< XNameAccess >( DatabaseContext::create(comphelper::ComponentContext(m_xORB).getUNOContext()), UNO_QUERY_THROW );
-        m_xDynamicContext.set(m_xDatabaseContext,UNO_QUERY);
+        m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(m_xORB));
     }
     catch(Exception&)
     {
@@ -219,8 +218,6 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     {
         ShowServiceNotAvailableError(_pParent->GetParent(), String(SERVICE_SDB_DATABASECONTEXT), sal_True);
     }
-
-    OSL_ENSURE(m_xDynamicContext.is(), "ODbAdminDialog::ODbAdminDialog : no XNamingService interface !");
 }
     //-------------------------------------------------------------------------
 sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyValue >& _rDriverParam)
