@@ -99,7 +99,7 @@ sub create_nopatchlist
 # Saving the patchlist file
 #########################################
 
-sub save_patchlist_file
+sub _save_patchlist_file
 {
     my ($installlogdir, $patchlistfilename) = @_;
 
@@ -221,7 +221,7 @@ sub analyze_and_save_logfile
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
 
     # Saving the list of patchfiles in a patchlist directory in the install directory
-    if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
+    if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { _save_patchlist_file($installlogdir, $numberedlogfilename); }
 
     if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
 
