@@ -30,9 +30,6 @@
 
 gb_UnoApiPartTarget_IDLCTARGET := $(call gb_Executable_get_target_for_build,idlc)
 gb_UnoApiPartTarget_IDLCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiPartTarget_IDLCTARGET)
-ifeq (,$(SYSTEM_UCPP))
-gb_UnoApiPartTarget_UCPPTARGET := $(call gb_Executable_get_target_for_build,ucpp)
-endif
 
 # The .urd files are actually created by the gb_UnoApiPartTarget__command,
 # invoked for the per-directory .done files.
