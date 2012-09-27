@@ -8535,6 +8535,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to use Xrender])
 if test "$WANT_X11" = "yes" -a  "$test_xrender" = "yes"; then
     AC_MSG_RESULT([yes])
+    PKG_CHECK_MODULES(XRENDER, xrender)
     AC_CHECK_LIB([Xrender], [XRenderQueryVersion], [:],
       [AC_MSG_ERROR(libXrender not found or functional)], [])
     AC_MSG_CHECKING([which Xrender headers to use])
@@ -8548,6 +8549,8 @@ if test "$WANT_X11" = "yes" -a  "$test_xrender" = "yes"; then
 else
     AC_MSG_RESULT([no])
 fi
+AC_SUBST(XRENDER_CFLAGS)
+AC_SUBST(XRENDER_LIBS)
 
 dnl ===================================================================
 dnl Check for XRandr

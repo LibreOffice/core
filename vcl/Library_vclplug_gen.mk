@@ -61,6 +61,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	cairo \
 	icule \
 	icuuc \
+	Xrender \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
@@ -111,22 +112,12 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
 
 ## handle RandR 
 ifneq ($(ENABLE_RANDR),)
+$(eval $(call gb_Library_use_externals,vclplug_gen,\
+	Xrandr \
+))
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_RANDR \
 ))
-ifeq ($(XRANDR_DLOPEN),FALSE)
-$(eval $(call gb_Library_set_include,vclplug_gen,\
-	$$(INCLUDE) \
-    $$(XRANDR_CFLAGS) \
-))
-$(eval $(call gb_Library_add_libs,vclplug_gen,\
-    $(XRANDR_LIBS) \
-))
-else
-$(eval $(call gb_Library_add_defs,vclplug_gen,\
-    -DXRANDR_DLOPEN \
-))
-endif
 endif
 
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
@@ -172,11 +163,6 @@ endif
 endif
 endif
 
-## handle Render linking
-$(eval $(call gb_Library_add_libs,vclplug_gen,\
-    $(shell pkg-config --libs xrender) \
-))
-
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_use_libraries,vclplug_gen,\
     dl \
@@ -184,4 +170,5 @@ $(eval $(call gb_Library_use_libraries,vclplug_gen,\
     pthread \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:
