@@ -366,7 +366,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define BINTEST_VERIFY( c ) \
     if (! (c)) { fprintf( stderr, "### binary compatibility test failed: %s [line %d]!!!\n", #c, __LINE__ ); abort(); }
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
-    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
+    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %d!!!\n", OFFSET_OF(s, m), static_cast<int>(n) ); abort(); }
 
 #if OSL_DEBUG_LEVEL > 1
 #if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) && (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
@@ -375,8 +375,8 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #else // ! GNUC
 #define BINTEST_VERIFYSIZE( s, n ) \
-    fprintf( stderr, "> sizeof(" #s ") = %d\n", sizeof(s) ); \
-    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+    fprintf( stderr, "> sizeof(" #s ") = %" SAL_PRI_SIZET "d\n", sizeof(s) ); \
+    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %" SAL_PRI_SIZET "d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #endif
 #else // ! OSL_DEBUG_LEVEL
 #define BINTEST_VERIFYSIZE( s, n ) \
