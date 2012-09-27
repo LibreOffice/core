@@ -62,7 +62,9 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     svidl \
     transex3 \
     typesconfig \
-    ucpp \
+    $(if $(filter UCPP,$(BUILD_TYPE)),\
+            ucpp \
+    ) \
     ulfconv \
     ulfex \
     xml2cmp \

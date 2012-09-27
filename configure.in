@@ -1383,6 +1383,11 @@ AC_ARG_WITH(system-icu,
         [Use icu already on system.]),,
     [with_system_icu="$with_system_libs"])
 
+AC_ARG_WITH(system-ucpp,
+    AS_HELP_STRING([--with-system-ucpp],
+        [Use ucpp already on system.]),,
+    [])
+
 AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
         [Use the OpenLDAP LDAP SDK already on system.]),,
@@ -6312,6 +6317,16 @@ else
     fi
 fi
 AC_SUBST(BUILD_DMAKE)
+
+AC_MSG_CHECKING([which ucpp tp use])
+if test -n "$with_system_ucpp" -a "$with_system_ucpp" != "no"; then
+    AC_MSG_RESULT([external])
+    AC_PATH_PROG(SYSTEM_UCPP, ucpp)
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE UCPP"
+fi
+AC_SUBST(SYSTEM_UCPP)
 
 dnl ===================================================================
 dnl Check for epm (not needed for Windows)

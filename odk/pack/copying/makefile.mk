@@ -50,12 +50,16 @@ IDL_CHAPTER_REFS=idl_chapter_refs.txt
 EXELIST = \
     $(DESTDIRBIN)/cppumaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)/regcompare$(EXEPOSTFIX) 	\
-	$(DESTDIRBIN)/ucpp$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)/idlc$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)/javamaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)/autodoc$(EXEPOSTFIX) \
     $(DESTDIRBIN)/unoapploader$(EXEPOSTFIX) \
     $(DESTDIRBIN)/uno-skeletonmaker$(EXEPOSTFIX)
+
+.IF "$(SYSTEM_UCPP)" == ""
+EXELIST += \
+	$(DESTDIRBIN)/ucpp$(EXEPOSTFIX)
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 EXELIST += \

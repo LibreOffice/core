@@ -84,7 +84,9 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 		translations \
 	) \
 	ucbhelper \
-	ucpp \
+	$(if $(filter UCPP,$(BUILD_TYPE)),\
+		ucpp \
+	) \
 	udkapi \
 	udm \
 	unoil \

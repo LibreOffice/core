@@ -187,7 +187,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     twain \
     ucb \
 	ucbhelper \
-	ucpp \
+	$(if $(filter UCPP,$(BUILD_TYPE)),\
+		ucpp \
+	) \
 	udkapi \
 	udm \
     unixODBC \
