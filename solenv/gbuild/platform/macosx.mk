@@ -168,12 +168,6 @@ gb_LinkTarget_OBJCFLAGS += -g
 gb_LinkTarget_OBJCXXFLAGS += -g
 endif
 
-# FIXME framework handling very hackish
-define gb_LinkTarget__get_liblinkflags
-$(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(1)),$(call gb_Library_get_filename,$(lib)))) \
-$(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(1)))
-endef
-
 define gb_LinkTarget__get_layer
 $(if $(filter Executable,$(1)),\
 	$$(call gb_Executable_get_layer,$(2)),\
@@ -201,7 +195,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
-		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
+		$(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
@@ -246,6 +240,10 @@ $(if $(filter Library Bundle CppunitTest Executable,$(TARGETTYPE)),$(call gb_Lin
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
+define gb_LinkTarget_use_system_darwin_frameworks
+$(call gb_LinkTarget_add_libs,$(1),$(foreach fw,$(2),-framework $(fw)))
+endef
+
 
 # Library class
 
@@ -261,16 +259,8 @@ gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 
-gb_Library__FRAMEWORKS := \
-	Cocoa \
-	GLUT \
-	OpenGL \
-
 gb_Library_PLAINLIBS_NONE += \
-	GLUT \
-	Cocoa \
 	objc \
-	OpenGL \
 	m \
 	pthread \
 

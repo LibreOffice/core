@@ -1,4 +1,3 @@
-
 # -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
@@ -33,16 +32,10 @@ $(eval $(call gb_Library_use_package,AppleRemote,\
     apple_remote_inc \
 ))
 
-$(eval $(call gb_Library_use_externals,AppleRemote,\
-    cocoa \
-    carbon \
-    iokit \
-))
-
-$(eval $(call gb_Library_add_libs,AppleRemote,\
-    -framework Cocoa \
-    -framework Carbon \
-    -framework IOKit \
+$(eval $(call gb_Library_use_system_darwin_frameworks,AppleRemote,\
+    Cocoa \
+    Carbon \
+    IOKit \
 ))
 
 $(eval $(call gb_Library_add_objcobjects,AppleRemote,\
@@ -55,3 +48,5 @@ $(eval $(call gb_Library_add_objcobjects,AppleRemote,\
     apple_remote/source/MultiClickRemoteBehavior \
     apple_remote/source/RemoteMainController \
 ))
+
+# vim: set noet sw=4 ts=4:

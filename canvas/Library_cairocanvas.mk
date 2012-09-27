@@ -43,8 +43,8 @@ $(eval $(call gb_Library_add_cxxflags,cairocanvas,\
     $(gb_OBJCXXFLAGS) \
 ))
 
-$(eval $(call gb_Library_add_libs,cairocanvas,\
-    -framework Cocoa \
+$(eval $(call gb_Library_use_system_darwin_frameworks,cairocanvas,\
+    Cocoa \
 ))
 
 endif

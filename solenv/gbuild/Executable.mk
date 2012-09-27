@@ -106,6 +106,7 @@ $(eval $(foreach method,\
 	set_ldflags \
 	add_libs \
 	add_standard_system_libs \
+	use_system_darwin_frameworks \
 	set_library_path_flags \
 	add_api \
 	use_api \

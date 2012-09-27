@@ -49,8 +49,11 @@ $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
 
 $(eval $(call gb_Library_add_standard_system_libs,MacOSXSpell))
 
+$(eval $(call gb_Library_use_system_darwin_frameworks,MacOSXSpell,\
+	Cocoa \
+))
+
 $(eval $(call gb_Library_use_externals,MacOSXSpell,\
-	cocoa \
 	hunspell \
 ))
 

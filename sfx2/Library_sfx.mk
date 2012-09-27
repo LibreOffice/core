@@ -280,8 +280,10 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_objcxxobjects,sfx,\
     sfx2/source/appl/shutdowniconaqua \
 ))
-$(eval $(call gb_Library_use_libraries,sfx,\
-    objc \
+$(eval $(call gb_Library_add_libs,sfx,\
+    -lobjc \
+))
+$(eval $(call gb_Library_use_system_darwin_frameworks,sfx,\
     Cocoa \
 ))
 endif

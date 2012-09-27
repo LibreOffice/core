@@ -29,9 +29,9 @@ $(eval $(call gb_Library_Library,macbe1))
 
 $(eval $(call gb_Library_use_sdk_api,macbe1))
 
-$(eval $(call gb_Library_use_externals,macbe1,\
-	cocoa \
-	systemconfiguration \
+$(eval $(call gb_Library_use_system_darwin_frameworks,macbe1,\
+	Cocoa \
+	SystemConfiguration \
 ))
 
 $(eval $(call gb_Library_use_libraries,macbe1,\

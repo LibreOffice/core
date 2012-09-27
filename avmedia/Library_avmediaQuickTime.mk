@@ -49,10 +49,10 @@ $(eval $(call gb_Library_use_libraries,avmediaQuickTime,\
 
 $(eval $(call gb_Library_add_standard_system_libs,avmediaQuickTime))
 
-$(eval $(call gb_Library_use_externals,avmediaQuickTime,\
-	cocoa \
-	qtkit \
-	quicktime \
+$(eval $(call gb_Library_use_system_darwin_frameworks,avmediaQuickTime,\
+	Cocoa \
+	QTKit \
+	QuickTime \
 ))
 
 $(eval $(call gb_Library_add_objcxxobjects,avmediaQuickTime,\

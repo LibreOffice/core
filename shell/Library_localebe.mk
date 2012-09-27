@@ -30,9 +30,9 @@ $(eval $(call gb_Library_Library,localebe1))
 $(eval $(call gb_Library_use_sdk_api,localebe1))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_use_externals,localebe1,\
-	corefoundation \
-	coreservices \
+$(eval $(call gb_Library_use_system_darwin_frameworks,localebe1,\
+	CoreFoundation \
+	CoreServices \
 ))
 endif
 

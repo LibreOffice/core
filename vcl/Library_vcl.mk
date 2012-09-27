@@ -362,8 +362,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/gdi/coretext/salgdi \
 ))
 
-$(eval $(call gb_Library_use_externals,vcl,\
-	coretext \
+$(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
+	CoreText \
 ))
 
 else # ATSUI
@@ -443,11 +443,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 $(eval $(call gb_Library_use_libraries,vcl,\
     AppleRemote \
 ))
-$(eval $(call gb_Library_use_externals,vcl,\
-    $(if $(filter 64,$(BITNESS_OVERRIDE)),,quicktime) \
-    cocoa \
-    carbon \
-    corefoundation \
+$(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
+    $(if $(filter 64,$(BITNESS_OVERRIDE)),,QuickTime) \
+    Cocoa \
+    Carbon \
+    CoreFoundation \
 ))
 
 $(eval $(call gb_Library_use_libraries,vcl,\
@@ -610,9 +610,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/window/salmenu \
     vcl/ios/source/window/salobj \
 ))
-$(eval $(call gb_Library_use_externals,vcl,\
-	uikit \
-	corefoundation \
+$(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
+	UIKit \
+	CoreFoundation \
 ))
 endif
 

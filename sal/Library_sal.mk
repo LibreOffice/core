@@ -87,9 +87,9 @@ $(eval $(call gb_Library_use_libraries,sal,\
 $(eval $(call gb_Library_add_standard_system_libs,sal))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_use_externals,sal,\
-	carbon \
-	corefoundation \
+$(eval $(call gb_Library_use_system_darwin_frameworks,sal,\
+	Carbon \
+	CoreFoundation \
 ))
 endif
 

@@ -38,10 +38,10 @@ $(eval $(call gb_Library_add_objcobjects,OOoSpotlightImporter,\
 	extensions/source/macosx/spotlight/main \
 ))
 
-$(eval $(call gb_Library_add_ldflags,OOoSpotlightImporter,\
-	-framework CoreFoundation \
-	-framework Foundation \
-	-framework CoreServices \
+$(eval $(call gb_Library_use_system_darwin_frameworks,OOoSpotlightImporter,\
+	CoreFoundation \
+	Foundation \
+	CoreServices \
 ))
 
 $(eval $(call gb_Library_use_external,OOoSpotlightImporter,zlib))
