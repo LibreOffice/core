@@ -128,9 +128,9 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     m_pPool(rInAttrs.GetPool())
 {
     //fill label placement list
-    std::map< sal_Int32, XubString > aPlacementToStringMap;
+    std::map< sal_Int32, OUString > aPlacementToStringMap;
     for( sal_Int32 nEnum=0; nEnum<m_aLB_LabelPlacement.GetEntryCount(); ++nEnum )
-        aPlacementToStringMap[nEnum]=m_aLB_LabelPlacement.GetEntry(static_cast<sal_uInt16>(nEnum));
+        aPlacementToStringMap[nEnum] = m_aLB_LabelPlacement.GetEntry(static_cast<sal_uInt16>(nEnum));
 
     ::com::sun::star::uno::Sequence < sal_Int32 > aAvailabelPlacementList;
     const SfxPoolItem *pPoolItem = NULL;
