@@ -57,7 +57,7 @@ private:
     boost::scoped_ptr<DlgEditor> pEditor; // never nullptr
     boost::scoped_ptr<SfxUndoManager> pUndoMgr; // never nullptr
     Link                aOldNotifyUndoActionHdl;
-    ::rtl::OUString     aCurPath;
+    OUString            aCurPath;
 
 protected:
     virtual void        Paint( const Rectangle& );
@@ -78,7 +78,7 @@ protected:
 
 public:
                         TYPEINFO();
-    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, rtl::OUString aLibName, rtl::OUString aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
+    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, OUString aLibName, OUString aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
                         DialogWindow( DialogWindow* pCurView ); // never implemented
                         ~DialogWindow();
 
@@ -89,13 +89,13 @@ public:
     DlgEdModel&         GetModel() const;
     DlgEdPage&          GetPage() const;
     DlgEdView&          GetView() const;
-    bool                RenameDialog( const ::rtl::OUString& rNewName );
+    bool                RenameDialog( const OUString& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();
     bool                SaveDialog();
     bool                ImportDialog();
 
-    virtual ::rtl::OUString      GetTitle();
+    virtual OUString             GetTitle();
     virtual EntryDescriptor      CreateEntryDescriptor();
     virtual void        SetReadOnly (bool bReadOnly);
     virtual bool        IsReadOnly();

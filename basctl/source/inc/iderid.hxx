@@ -31,7 +31,7 @@ public:
     IDEResId( sal_uInt16 nId );
 };
 
-inline rtl::OUString IDE_RESSTR (sal_uInt16 nId)
+inline OUString IDE_RESSTR (sal_uInt16 nId)
 {
     return IDEResId(nId).toString();
 }
