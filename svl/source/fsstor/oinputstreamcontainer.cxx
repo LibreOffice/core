@@ -27,8 +27,8 @@ using namespace ::com::sun::star;
 OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInputStream >& xStream )
 : m_xInputStream( xStream )
 , m_xSeekable( xStream, uno::UNO_QUERY )
-, m_bSeekable( sal_False )
-, m_bDisposed( sal_False )
+, m_bSeekable( false )
+, m_bDisposed( false )
 , m_pListenersContainer( NULL )
 {
     m_bSeekable = m_xSeekable.is();
@@ -302,7 +302,7 @@ void SAL_CALL OFSInputStreamContainer::dispose(  )
         m_pListenersContainer->disposeAndClear( aSource );
     }
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 //-----------------------------------------------
