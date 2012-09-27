@@ -27,7 +27,7 @@ struct SfxImageItem_Impl
 {
     String  aURL;
     long    nAngle;
-    sal_Bool    bMirrored;
+    bool    bMirrored;
     int     operator == ( const SfxImageItem_Impl& rOther ) const
             { return nAngle == rOther.nAngle && bMirrored == rOther.bMirrored; }
 };
@@ -39,7 +39,7 @@ SfxImageItem::SfxImageItem( sal_uInt16 which, sal_uInt16 nImage )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
-    pImp->bMirrored = sal_False;
+    pImp->bMirrored = false;
 }
 
 SfxImageItem::SfxImageItem( const SfxImageItem& rItem )
@@ -109,12 +109,12 @@ long SfxImageItem::GetRotation() const
     return pImp->nAngle;
 }
 
-void SfxImageItem::SetMirrored( sal_Bool bSet )
+void SfxImageItem::SetMirrored( bool bSet )
 {
     pImp->bMirrored = bSet;
 }
 
-sal_Bool SfxImageItem::IsMirrored() const
+bool SfxImageItem::IsMirrored() const
 {
     return pImp->bMirrored;
 }
