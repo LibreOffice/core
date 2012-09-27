@@ -438,7 +438,7 @@ unsigned char * codeSnippet(
     OSL_ASSERT(p - code <= codeSnippetSize);
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr,
-            "==> codeSnippet to %s, functionIndex=%d%s, vtableOffset=%d\n",
+            "==> codeSnippet to %s, functionIndex=%lu%s, vtableOffset=%"SAL_PRIdINT32"\n",
             (exec == privateSnippetExecutorGeneral ? "General" :
              (exec == privateSnippetExecutorVoid ? "Void" :
               (exec == privateSnippetExecutorHyper ? "Hyper" :
