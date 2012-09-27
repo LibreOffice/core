@@ -136,6 +136,12 @@ gb_FULLDEPS := $(true)
 endif
 endif
 
+ifneq ($(strip $(patches)$(PATCHES)),)
+gb_KEEP_PRISTINE := $(true)
+else
+gb_KEEP_PRISTINE := $(false)
+endif
+
 # save user-supplied flags for latter use
 # TODO remove after the old build system is abolished
 ifneq ($(strip $(ENVCFLAGS)),)

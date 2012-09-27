@@ -145,6 +145,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(UNPACKED_POST_ACTION),\
 			$(UNPACKED_POST_ACTION) && \
 		) \
+	    $(if $(gb_KEEP_PRISTINE), \
+			rm -fr $(call gb_UnpackedTarball_get_pristine_dir,$(2)) && \
+			cp -r $(call gb_UnpackedTarball_get_dir,$(2)) $(call gb_UnpackedTarball_get_pristine_dir,$(2)) && \
+		) \
 		touch $(1) \
 	) || \
 	( \
@@ -174,6 +178,7 @@ $(call gb_UnpackedTarball_get_clean_target,%) :
 			$(call gb_UnpackedTarball_get_target,$*) \
 			$(call gb_UnpackedTarball_get_preparation_target,$*) \
 			$(call gb_UnpackedTarball_get_dir,$*) \
+			$(call gb_UnpackedTarball_get_pristine_dir,$*) \
 			$(foreach subdir,$(UNPACKED_SUBDIRS),$(gb_EXTERNAL_HEADERS_DIR)/$(subdir)) \
 	)
 
@@ -364,5 +369,27 @@ define gb_UnpackedTarball_mark_output_files
 $(foreach file,$(2),$(call gb_UnpackedTarball_mark_output_file,$(1),$(file)))
 
 endef
+
+# force the rebuild of an external target
+# this only works when running as partial build.
+#
+%.rebuild :
+	if [ -f $(call gb_UnpackedTarball_get_target,$*) ] ; then \
+		touch $(call gb_UnpackedTarball_get_target,$*) ; \
+		make ;\
+	fi
+
+%.genpatch :
+	if [ -d $(call gb_UnpackedTarball_get_dir,$*) -a -d  $(call gb_UnpackedTarball_get_pristine_dir,$*) ] ; then \
+		( \
+		    patch_file=$$(pwd)/$*.new.patch; \
+			cd $(call gb_UnpackedTarball_get_dir,) ; \
+			diff -ur $*.org $* > $$patch_file; \
+		    echo "Patch $$patch_file generated" ; \
+		); \
+	else \
+		echo "Error: No pristine tarball avaialable for $*" 1>&2 ; \
+	fi
+
 
 # vim: set noet sw=4 ts=4:
