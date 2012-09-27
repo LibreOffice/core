@@ -35,6 +35,7 @@ accessibility\
 afms\
 android\
 animations\
+apache-commons\
 apple_remote\
 autodoc\
 avmedia\
@@ -192,7 +193,6 @@ xmlsecurity\
 xsltml\
 
 dmake_modules:=\
-apache-commons\
 beanshell\
 berkeleydb\
 binfilter \
