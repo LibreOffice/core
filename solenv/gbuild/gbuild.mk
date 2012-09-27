@@ -71,6 +71,8 @@ endef
 
 COMMA :=,
 
+CLOSE_PAREN :=)
+
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/pre_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/pre_*.mk)
@@ -143,6 +145,12 @@ gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
 endif
+endif
+
+ifneq ($(strip $(patches)$(PATCHES)),)
+gb_KEEP_PRISTINE := $(true)
+else
+gb_KEEP_PRISTINE := $(false)
 endif
 
 # save user-supplied flags for latter use
