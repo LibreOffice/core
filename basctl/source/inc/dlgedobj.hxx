@@ -31,7 +31,7 @@
 namespace basctl
 {
 
-typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > IndexToNameMap;
+typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexToNameMap;
 
 
 class DlgEdForm;
@@ -59,7 +59,7 @@ private:
 
 protected:
     DlgEdObj();
-    DlgEdObj(const ::rtl::OUString& rModelName,
+    DlgEdObj(const OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
     virtual void NbcMove( const Size& rSize );
@@ -104,8 +104,8 @@ public:
     virtual SdrObject* getFullDragClone() const;
 
     virtual sal_Bool        supportsService( const sal_Char* _pServiceName ) const;
-    virtual ::rtl::OUString GetDefaultName() const;
-    virtual ::rtl::OUString GetUniqueName() const;
+    virtual OUString GetDefaultName() const;
+    virtual OUString GetUniqueName() const;
 
     virtual sal_Int32   GetStep() const;
     virtual void        UpdateStep();
