@@ -74,74 +74,26 @@ private:
     size_t                  maCurrent;
 
 public:
-                    SvTreeEntryList() { maCurrent = 0; };
-                    SvTreeEntryList( SvTreeEntryList& rList );
+    SvTreeEntryList();
+    SvTreeEntryList(SvTreeEntryList& rList);
 
-    void            DestroyAll();
-    void            push_back( SvListEntry* pItem )
-                    { maEntryList.push_back( pItem ); }
-    void            insert( SvListEntry* pItem, size_t i )
-                    {
-                        if ( i < maEntryList.size() ) {
-                            maEntryList.insert( maEntryList.begin() + i, pItem );
-                        } else {
-                            maEntryList.push_back( pItem );
-                        }
-                    }
-    void            remove( SvListEntry* pItem )
-                    {
-                        for ( SvTreeEntryList_impl::iterator it = maEntryList.begin();
-                              it != maEntryList.end();
-                              ++it
-                        ) {
-                            if ( *it == pItem ) {
-                                maEntryList.erase( it );
-                                break;
-                            }
-                        }
-                    }
-    void            remove( size_t i )
-                    {
-                        if ( i < maEntryList.size() ) {
-                            maEntryList.erase( maEntryList.begin() + i );
-                        }
-                    }
-    void            replace( SvListEntry* pNew, SvListEntry* pOld )
-                    {
-                        for ( size_t i = 0, n = maEntryList.size(); i < n; ++i ) {
-                            if ( maEntryList[ i ] == pOld ) {
-                                maEntryList[ i ] = pNew;
-                                break;
-                            }
-                        }
-                    }
-    void            clear() { maEntryList.clear(); }
+    void DestroyAll();
+    void push_back(SvListEntry* pItem);
+    void insert(SvListEntry* pItem, size_t i);
+    void remove(SvListEntry* pItem);
+    void remove(size_t i);
+    void replace(SvListEntry* pNew, SvListEntry* pOld);
+    void clear();
 
-    bool            empty() { return maEntryList.empty(); }
+    bool empty();
 
-    size_t          size() { return maEntryList.size(); }
-    size_t          GetPos( SvListEntry* pItem )
-                    {
-                        for ( size_t i = 0, n = maEntryList.size(); i < n; ++i ) {
-                            if ( maEntryList[ i ] == pItem ) {
-                                return i;
-                            }
-                        }
-                        return (size_t)~0;
-                    }
+    size_t size();
+    size_t GetPos(SvListEntry* pItem);
 
-    SvListEntry*    operator[]( size_t i )
-                    { return i < maEntryList.size() ? maEntryList[ i ] : NULL; }
-    SvListEntry*    First()
-                    {
-                        maCurrent = 0;
-                        return ( maCurrent < maEntryList.size() ) ? maEntryList[ 0 ] : NULL;
-                    }
-    SvListEntry*    Next()
-                    {
-                        return ( maCurrent+1 < maEntryList.size() ) ? maEntryList[ ++maCurrent ] : NULL;
-                    }
-    SvListEntry*    last() { return maEntryList.empty() ? NULL : maEntryList.back(); }
+    SvListEntry* operator[](size_t i);
+    SvListEntry* First();
+    SvListEntry* Next();
+    SvListEntry* last();
 };
 
 //=============================================================================

@@ -30,6 +30,120 @@
 
 DBG_NAME(SvListEntry);
 
+
+SvTreeEntryList::SvTreeEntryList() { maCurrent = 0; };
+
+void SvTreeEntryList::push_back( SvListEntry* pItem )
+{
+    maEntryList.push_back( pItem );
+}
+
+void SvTreeEntryList::insert( SvListEntry* pItem, size_t i )
+{
+    if ( i < maEntryList.size() )
+    {
+        maEntryList.insert( maEntryList.begin() + i, pItem );
+    }
+    else
+    {
+        maEntryList.push_back( pItem );
+    }
+}
+
+void SvTreeEntryList::remove( SvListEntry* pItem )
+{
+    for (SvTreeEntryList_impl::iterator it = maEntryList.begin(); it != maEntryList.end(); ++it)
+    {
+        if ( *it == pItem )
+        {
+            maEntryList.erase( it );
+            break;
+        }
+    }
+}
+
+void SvTreeEntryList::remove( size_t i )
+{
+    if ( i < maEntryList.size() ) {
+        maEntryList.erase( maEntryList.begin() + i );
+    }
+}
+
+void SvTreeEntryList::replace( SvListEntry* pNew, SvListEntry* pOld )
+{
+    for ( size_t i = 0, n = maEntryList.size(); i < n; ++i ) {
+        if ( maEntryList[ i ] == pOld ) {
+            maEntryList[ i ] = pNew;
+            break;
+        }
+    }
+}
+
+void SvTreeEntryList::clear()
+{
+    maEntryList.clear();
+}
+
+bool SvTreeEntryList::empty()
+{
+    return maEntryList.empty();
+}
+
+size_t SvTreeEntryList::size()
+{
+    return maEntryList.size();
+}
+
+size_t SvTreeEntryList::GetPos( SvListEntry* pItem )
+{
+    for ( size_t i = 0, n = maEntryList.size(); i < n; ++i ) {
+        if ( maEntryList[ i ] == pItem ) {
+            return i;
+        }
+    }
+    return (size_t)~0;
+}
+
+SvListEntry* SvTreeEntryList::operator[]( size_t i )
+{
+    return i < maEntryList.size() ? maEntryList[ i ] : NULL;
+}
+
+SvListEntry* SvTreeEntryList::First()
+{
+    maCurrent = 0;
+    return ( maCurrent < maEntryList.size() ) ? maEntryList[ 0 ] : NULL;
+}
+
+SvListEntry* SvTreeEntryList::Next()
+{
+    return ( maCurrent+1 < maEntryList.size() ) ? maEntryList[ ++maCurrent ] : NULL;
+}
+
+SvListEntry* SvTreeEntryList::last()
+{
+    return maEntryList.empty() ? NULL : maEntryList.back();
+}
+
+void SvTreeEntryList::DestroyAll()
+{
+    SvListEntry* pPtr = (SvListEntry*)First();
+    while( pPtr )
+    {
+        delete pPtr;
+        pPtr = (SvListEntry*)Next();
+    }
+}
+
+SvTreeEntryList::SvTreeEntryList(SvTreeEntryList& rList)
+{
+    maEntryList.clear();
+    maCurrent = 0;
+    for ( size_t i = 0, n = rList.size(); i < n; ++i ) {
+        maEntryList.push_back( rList[ i ] );
+    }
+}
+
 SvListEntry::SvListEntry()
 {
     DBG_CTOR(SvListEntry,0);
@@ -113,29 +227,6 @@ SvViewData::~SvViewData()
     nVisPos = 0x12345678;
     nFlags = 0x1234;
 #endif
-}
-
-//=============================================================================
-// SvTreeEntryList
-//=============================================================================
-
-void SvTreeEntryList::DestroyAll()
-{
-    SvListEntry* pPtr = (SvListEntry*)First();
-    while( pPtr )
-    {
-        delete pPtr;
-        pPtr = (SvListEntry*)Next();
-    }
-}
-
-SvTreeEntryList::SvTreeEntryList(SvTreeEntryList& rList)
-{
-    maEntryList.clear();
-    maCurrent = 0;
-    for ( size_t i = 0, n = rList.size(); i < n; ++i ) {
-        maEntryList.push_back( rList[ i ] );
-    }
 }
 
 /*************************************************************************
