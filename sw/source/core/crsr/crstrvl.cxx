@@ -1538,7 +1538,7 @@ const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
 }
 
 /// is the node in a protected section?
-sal_Bool SwContentAtPos::IsInProtectSect() const
+bool SwContentAtPos::IsInProtectSect() const
 {
     const SwTxtNode* pNd = 0;
     if( pFndTxtAttr )

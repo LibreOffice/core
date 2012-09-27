@@ -179,8 +179,8 @@ public:
     sal_Bool    IsInWrd()           { return IsInWord(); }
     sal_Bool    IsSttWrd()          { return IsStartWord(); }
     sal_Bool    IsEndWrd();
-    sal_Bool    IsSttOfPara() const { return IsSttPara(); }
-    sal_Bool    IsEndOfPara() const { return IsEndPara(); }
+    bool    IsSttOfPara() const { return IsSttPara(); }
+    bool    IsEndOfPara() const { return IsEndPara(); }
 
     // select word / sentense
     sal_Bool    SelNearestWrd();

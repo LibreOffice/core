@@ -150,23 +150,23 @@ SwPaM * SwCrsrShell::CreateCrsr()
 /**
  * Delete current Cursor, making the following one the current.
  * Note, this function does not delete anything if there is no other cursor.
- * @return - returns sal_True if there was another cursor and we deleted one.
+ * @return - returns true if there was another cursor and we deleted one.
  */
-sal_Bool SwCrsrShell::DestroyCrsr()
+bool SwCrsrShell::DestroyCrsr()
 {
     // don't delete Crsr within table selection
     OSL_ENSURE( !IsTableMode(), "in table Selection" );
 
     // Is there a next one? Don't do anything if not.
     if(pCurCrsr->GetNext() == pCurCrsr)
-        return sal_False;
+        return false;
 
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCursor* pNextCrsr = (SwCursor*)pCurCrsr->GetNext();
     delete pCurCrsr;
     pCurCrsr = dynamic_cast<SwShellCrsr*>(pNextCrsr);
     UpdateCrsr();
-    return sal_True;
+    return true;
 }
 
 
@@ -365,7 +365,7 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
     SwShellCrsr* pShellCrsr = getShellCrsr( true );
     if ( !bLeft && pShellCrsr->IsInFrontOfLabel() )
     {
-        SetInFrontOfLabel( sal_False );
+        SetInFrontOfLabel( false );
         bRet = sal_True;
     }
     // 2. CASE: Cursor is at beginning of numbered paragraph. A move
@@ -375,7 +375,7 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
              0 != ( pTxtNd = pShellCrsr->GetNode()->GetTxtNode() ) &&
              pTxtNd->HasVisibleNumberingOrBullet() )
     {
-        SetInFrontOfLabel( sal_True );
+        SetInFrontOfLabel( true );
         bRet = sal_True;
     }
     // 3. CASE: Regular cursor move. Reset the bInFrontOfLabel flag:
@@ -385,13 +385,13 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
         // #i107447#
         // To avoid loop the reset of <bInFrontOfLabel> flag is no longer
         // reflected in the return value <bRet>.
-        const bool bResetOfInFrontOfLabel = SetInFrontOfLabel( sal_False );
+        const bool bResetOfInFrontOfLabel = SetInFrontOfLabel( false );
         bRet = pShellCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed,
                                       bSkipHidden, !IsOverwriteCrsr() );
         if ( !bRet && bLeft && bResetOfInFrontOfLabel )
         {
             // undo reset of <bInFrontOfLabel> flag
-            SetInFrontOfLabel( sal_True );
+            SetInFrontOfLabel( true );
         }
     }
 
@@ -429,7 +429,7 @@ void SwCrsrShell::UpdateMarkedListLevel()
     {
         if ( !pTxtNd->IsNumbered() )
         {
-            pCurCrsr->_SetInFrontOfLabel( sal_False );
+            pCurCrsr->_SetInFrontOfLabel( false );
             MarkListLevel( String(), 0 );
         }
         else if ( pCurCrsr->IsInFrontOfLabel() )
@@ -459,7 +459,7 @@ sal_Bool SwCrsrShell::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
 
     sal_Bool bRet = pTmpCrsr->UpDown( bUp, nCnt );
     // #i40019# UpDown should always reset the bInFrontOfLabel flag:
-    bRet = SetInFrontOfLabel(sal_False) || bRet;
+    bRet = SetInFrontOfLabel(false) || bRet;
 
     if( pBlockCrsr )
         pBlockCrsr->clearPoints();
@@ -500,11 +500,11 @@ sal_Bool SwCrsrShell::LRMargin( sal_Bool bLeft, sal_Bool bAPI)
     {
         const SwTxtNode * pTxtNd = _GetCrsr()->GetNode()->GetTxtNode();
         if ( pTxtNd && pTxtNd->HasVisibleNumberingOrBullet() )
-            SetInFrontOfLabel( sal_True );
+            SetInFrontOfLabel( true );
     }
     else if ( !bLeft )
     {
-        bRet = SetInFrontOfLabel( sal_False ) || bRet;
+        bRet = SetInFrontOfLabel( false ) || bRet;
     }
 
     if( bRet )
@@ -1005,20 +1005,20 @@ int SwCrsrShell::CompareCursor( CrsrCompareType eType ) const
 }
 
 
-sal_Bool SwCrsrShell::IsSttPara() const
-{   return( pCurCrsr->GetPoint()->nContent == 0 ? sal_True : sal_False ); }
+bool SwCrsrShell::IsSttPara() const
+{   return pCurCrsr->GetPoint()->nContent == 0; }
 
 
-sal_Bool SwCrsrShell::IsEndPara() const
-{   return( pCurCrsr->GetPoint()->nContent == pCurCrsr->GetCntntNode()->Len() ? sal_True : sal_False ); }
+bool SwCrsrShell::IsEndPara() const
+{   return pCurCrsr->GetPoint()->nContent == pCurCrsr->GetCntntNode()->Len(); }
 
 
-sal_Bool SwCrsrShell::IsInFrontOfLabel() const
+bool SwCrsrShell::IsInFrontOfLabel() const
 {
     return pCurCrsr->IsInFrontOfLabel();
 }
 
-bool SwCrsrShell::SetInFrontOfLabel( sal_Bool bNew )
+bool SwCrsrShell::SetInFrontOfLabel( bool bNew )
 {
     if ( bNew != IsInFrontOfLabel() )
     {
@@ -2277,7 +2277,7 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
 
     sal_Bool bRet = GetLayout()->GetCrsrOfst( &aPos, aPt /*, &aTmpState*/ );
 
-    SetInFrontOfLabel( sal_False ); // #i27615#
+    SetInFrontOfLabel( false ); // #i27615#
 
     // show only in TextNodes
     SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
@@ -2645,13 +2645,13 @@ SwShellCrsr* SwCrsrShell::getShellCrsr( bool bBlock )
 
     Wait for TableMode, multiple selections and more than x selected paragraphs.
 */
-sal_Bool SwCrsrShell::ShouldWait() const
+bool SwCrsrShell::ShouldWait() const
 {
     if ( IsTableMode() || GetCrsrCnt() > 1 )
-        return sal_True;
+        return true;
 
     if( HasDrawView() && GetDrawView()->GetMarkedObjectList().GetMarkCount() )
-        return sal_True;
+        return true;
 
     SwPaM* pPam = GetCrsr();
     return pPam->Start()->nNode.GetIndex() + 10 <

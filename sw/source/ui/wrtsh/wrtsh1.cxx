@@ -1392,7 +1392,7 @@ void SwWrtShell::NumOrBulletOff()
 
         // #126346# - Cursor can not be anymore in front of
         // a label, because numbering/bullet is switched off.
-        SetInFrontOfLabel( sal_False );
+        SetInFrontOfLabel( false );
     }
 }
 // <- #i29560#

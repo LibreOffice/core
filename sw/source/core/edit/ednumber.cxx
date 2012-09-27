@@ -232,7 +232,7 @@ void SwEditShell::DelNumRules()
 
     // cursor can not be anymore in front of a label,
     // because numbering/bullet is deleted.
-    SetInFrontOfLabel( sal_False );
+    SetInFrontOfLabel( false );
 
     GetDoc()->SetModified();
     EndAllAction();

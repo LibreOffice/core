@@ -448,7 +448,7 @@ sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
     return bRet;
 }
 
-sal_Bool SwNode::IsInProtectSect() const
+bool SwNode::IsInProtectSect() const
 {
     const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
     const SwSectionNode* pSectNd = pNd->FindSectionNode();

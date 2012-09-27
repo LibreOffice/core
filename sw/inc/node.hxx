@@ -268,7 +268,7 @@ public:
     /// Is node in the visible area of the Shell?
     sal_Bool IsInVisibleArea( ViewShell* pSh = 0 ) const;
     /// Is node in an protected area?
-    sal_Bool IsInProtectSect() const;
+    bool IsInProtectSect() const;
     /**  Is node in something that is protected (range, frame,
         table cells ... including anchor in case of frames or footnotes)? */
     sal_Bool IsProtect() const;
