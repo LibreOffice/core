@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\
     tk \
     tl \
     vcl \
+    stl \
     $(gb_STDLIBS) \
 ))
 
