@@ -2078,6 +2078,16 @@ AC_ARG_WITH(mingw-cross-compiler,
     ],
 ,)
 
+AC_ARG_WITH(idlc-cpp,
+    AS_HELP_STRING([--with-idlc-cpp],
+        [Specify the C Preprocessor to use for idlc.])
+    [
+                          Usage:     --with-idlc-cpp=cpp
+
+                          Default is ucpp.
+    ]
+,)
+
 AC_ARG_WITH(build-version,
     AS_HELP_STRING([--with-build-version],
         [Allows the builder to add a custom version tag that will appear in the
@@ -6318,13 +6328,20 @@ else
 fi
 AC_SUBST(BUILD_DMAKE)
 
-AC_MSG_CHECKING([which ucpp tp use])
-if test -n "$with_system_ucpp" -a "$with_system_ucpp" != "no"; then
-    AC_MSG_RESULT([external])
-    AC_PATH_PROG(SYSTEM_UCPP, ucpp)
+AC_MSG_CHECKING([which C preprocessor to use in idlc])
+if test -n "$with_idlc_cpp"; then
+    AC_MSG_RESULT([$with_idlc_cpp])
+    AC_PATH_PROG(SYSTEM_UCPP, $with_idlc_cpp)
 else
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE UCPP"
+    AC_MSG_RESULT([ucpp])
+    AC_MSG_CHECKING([which ucpp tp use])
+    if test -n "$with_system_ucpp" -a "$with_system_ucpp" != "no"; then
+        AC_MSG_RESULT([external])
+        AC_PATH_PROG(SYSTEM_UCPP, ucpp)
+    else
+        AC_MSG_RESULT([internal])
+        BUILD_TYPE="$BUILD_TYPE UCPP"
+    fi
 fi
 AC_SUBST(SYSTEM_UCPP)
 
