@@ -241,8 +241,6 @@ gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 
 gb_Library_PLAINLIBS_NONE += \
 	dl \
-	fontconfig \
-	freetype \
 	GL \
 	GLU \
 	ICE \

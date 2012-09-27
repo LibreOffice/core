@@ -243,8 +243,6 @@ gb_STDLIBS := \
 
 gb_Library_PLAINLIBS_NONE += \
 	dl \
-	fontconfig \
-	freetype \
 	GL \
 	GLU \
 	ICE \
