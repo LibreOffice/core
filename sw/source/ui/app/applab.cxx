@@ -91,21 +91,19 @@ const char MASTER_LABEL[] = "MasterLabel";
 
 const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrmFmt &rFmt,
-                        sal_uInt16 nCol, sal_uInt16 nRow, sal_Bool bPage)
+                        sal_uInt16 nCol, sal_uInt16 nRow )
 {
     SfxItemSet aSet(rSh.GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
                         RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT, 0 );
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
-    aSet.Put(SwFmtAnchor(bPage ? FLY_AS_CHAR : FLY_AT_PAGE, nPhyPageNum));
-    if (!bPage)
-    {
-        aSet.Put(SwFmtHoriOrient(rItem.lLeft + nCol * rItem.lHDist,
-                                                    text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-        aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
-                                                    text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-    }
+    //anchor frame to page
+    aSet.Put( SwFmtAnchor( FLY_AT_PAGE, nPhyPageNum ) );
+    aSet.Put( SwFmtHoriOrient( rItem.lLeft + nCol * rItem.lHDist,
+                               text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
+    aSet.Put( SwFmtVertOrient( rItem.lUpper + nRow * rItem.lVDist,
+                               text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Insert Fly
     OSL_ENSURE( pFmt, "Fly not inserted" );
 
@@ -130,21 +128,19 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
 
 const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrmFmt &rFmt, SwFldMgr& rFldMgr,
-                        sal_uInt16 nCol, sal_uInt16 nRow, sal_Bool bLast, sal_Bool bPage)
+                        sal_uInt16 nCol, sal_uInt16 nRow, sal_Bool bLast )
 {
     SfxItemSet aSet(rSh.GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
                         RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT, 0 );
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
-    aSet.Put(SwFmtAnchor(bPage ? FLY_AS_CHAR : FLY_AT_PAGE, nPhyPageNum));
-    if (!bPage)
-    {
-        aSet.Put(SwFmtHoriOrient(rItem.lLeft + nCol * rItem.lHDist,
-                                                    text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-        aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
-                                                    text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-    }
+    //anchor frame to page
+    aSet.Put( SwFmtAnchor( FLY_AT_PAGE, nPhyPageNum ) );
+    aSet.Put( SwFmtHoriOrient( rItem.lLeft + nCol * rItem.lHDist,
+                               text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
+    aSet.Put( SwFmtVertOrient( rItem.lUpper + nRow * rItem.lVDist,
+                               text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Insert Fly
     OSL_ENSURE( pFmt, "Fly not inserted" );
 
@@ -300,26 +296,11 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             SwFmtFrmSize aFrmSize(  ATT_FIX_SIZE, iWidth, iHeight );
             pFmt->SetFmtAttr( aFrmSize );
 
-            SwFrmFmt* pFmtEORow = new SwFrmFmt (*pFmt);
-            SwFrmFmt* pFmtEOCol = new SwFrmFmt (*pFmt);
-            SwFrmFmt* pFmtEOColEORow = new SwFrmFmt (*pFmt);
-
-            SvxULSpaceItem aFrmULSpace( 0, (sal_uInt16)(rItem.lVDist - rItem.lHeight),
-                                        RES_UL_SPACE );
+            //frame represents label itself, no border space
             SvxULSpaceItem aFrmNoULSpace( 0, 0, RES_UL_SPACE );
-
-            SvxLRSpaceItem aFrmLRSpace( 0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
-                                        0, 0, RES_LR_SPACE );
             SvxLRSpaceItem aFrmNoLRSpace( 0, 0, 0, 0, RES_LR_SPACE );
-
-            pFmt->SetFmtAttr(aFrmULSpace);
-            pFmt->SetFmtAttr(aFrmLRSpace);
-            pFmtEORow->SetFmtAttr(aFrmULSpace);
-            pFmtEORow->SetFmtAttr(aFrmNoLRSpace);
-            pFmtEOCol->SetFmtAttr(aFrmNoULSpace);
-            pFmtEOCol->SetFmtAttr(aFrmLRSpace);
-            pFmtEOColEORow->SetFmtAttr(aFrmNoULSpace);
-            pFmtEOColEORow->SetFmtAttr(aFrmNoLRSpace);
+            pFmt->SetFmtAttr( aFrmNoULSpace );
+            pFmt->SetFmtAttr( aFrmNoLRSpace );
 
             const SwFrmFmt *pFirstFlyFmt = 0;
             if ( rItem.bPage )
@@ -327,26 +308,16 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                 SwFmtVertOrient aFrmVertOrient( pFmt->GetVertOrient() );
                 aFrmVertOrient.SetVertOrient( text::VertOrientation::TOP );
                 pFmt->SetFmtAttr(aFrmVertOrient);
-                pFmtEORow->SetFmtAttr(aFrmVertOrient);
-                pFmtEOCol->SetFmtAttr(aFrmVertOrient);
-                pFmtEOColEORow->SetFmtAttr(aFrmVertOrient);
 
                 for ( sal_uInt16 i = 0; i < rItem.nRows; ++i )
                 {
                     for ( sal_uInt16 j = 0; j < rItem.nCols; ++j )
                     {
                         pSh->Push();
-                        SwFrmFmt* pFrmFmt;
-                        if ( j == rItem.nCols - 1 )
-                            pFrmFmt = ( i == rItem.nRows - 1 ? pFmtEOColEORow : pFmtEORow );
-                        else
-                            pFrmFmt = ( i == rItem.nRows - 1 ? pFmtEOCol : pFmt );
-
-                        const SwFrmFmt *pTmp =
-                                bLabel ?
-                                lcl_InsertLabText( *pSh, rItem, *pFrmFmt, *pFldMgr, j, i,
-                                    i == rItem.nRows - 1 && j == rItem.nCols - 1, sal_True ) :
-                                lcl_InsertBCText(*pSh, rItem, *pFrmFmt, j, i, sal_True);
+                        const SwFrmFmt *pTmp = ( bLabel ?
+                                                 lcl_InsertLabText( *pSh, rItem, *pFmt, *pFldMgr, j, i,
+                                                   i == rItem.nRows - 1 && j == rItem.nCols - 1 ) :
+                                                 lcl_InsertBCText( *pSh, rItem, *pFmt, j, i ) );
                         if (!(i|j))
                         {
                             pFirstFlyFmt = pTmp;
@@ -388,8 +359,6 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                         }
                         pSh->Pop( sal_False );
                     }
-                    if ( i + 1 != rItem.nRows )
-                        pSh->SplitNode(); // Small optimisation
                 }
             }
             else
@@ -397,10 +366,10 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                 pFirstFlyFmt = bLabel ?
                     lcl_InsertLabText( *pSh, rItem, *pFmt, *pFldMgr,
                             static_cast< sal_uInt16 >(rItem.nCol - 1),
-                            static_cast< sal_uInt16 >(rItem.nRow - 1), sal_True, sal_False ) :
+                            static_cast< sal_uInt16 >(rItem.nRow - 1), sal_True ) :
                     lcl_InsertBCText(*pSh, rItem, *pFmt,
                             static_cast< sal_uInt16 >(rItem.nCol - 1),
-                            static_cast< sal_uInt16 >(rItem.nRow - 1), sal_False);
+                            static_cast< sal_uInt16 >(rItem.nRow - 1));
             }
 
             //fill the user fields
