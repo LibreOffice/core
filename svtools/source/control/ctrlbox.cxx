@@ -1143,7 +1143,7 @@ void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode
 
 void FontNameBox::InitFontMRUEntriesFile()
 {
-    rtl::OUString sUserConfigDir(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
+    rtl::OUString sUserConfigDir("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
     rtl::Bootstrap::expandMacros(sUserConfigDir);
 
     maFontMRUEntriesFile = sUserConfigDir;
