@@ -298,10 +298,12 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : HELPFILES += $(3)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3)
 ifneq ($(strip $(gb_WITH_LANG)),)
+ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
-        SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+	POFILE := $(gb_POLOCATION)/$(5)/$(subst $(SRCDIR),,$(2))/$(subst /$(lastword $(subst /, ,$(3))),.po,$(3))
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
-        $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+        $(gb_POLOCATION)/$(5)/$(subst $(SRCDIR),,$(2))/$(subst /$(lastword $(subst /, ,$(3))),.po,$(3))
+endif
 endif
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_HELPEXTARGET)) | \
@@ -313,7 +315,7 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
         mkdir -p $$(dir $$@) && \
         $(if $(filter-out en-US,$(5)), \
             $(gb_ExtensionTarget_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) \
-                -m $$(SDF), \
+                -m $$(POFILE), \
             cp $$< $$@))
 
 endef
@@ -333,10 +335,12 @@ define gb_ExtensionTarget__localize_helptreefile_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3)
 ifneq ($(strip $(gb_WITH_LANG)),)
+ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+	POFILE := $(gb_POLOCATION)/$(5)/$(subst $(SRCDIR),,$(2))/$(subst /$(lastword $(subst /, ,$(4))),.po,$(4))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(subst $(WORKDIR)/CustomTarget,,$(2)/$(dir $(or $(4),$(3)))))localize.sdf
+        $(gb_POLOCATION)/$(5)/$(subst $(SRCDIR),,$(2))/$(subst /$(lastword $(subst /, ,$(4))),.po,$(4))
+endif
 endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_UPDATETREETARGET)) | \
@@ -347,7 +351,7 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
 	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(dir $$@) && \
 		$(if $(filter-out en-US,$(5)), \
-			$(gb_ExtensionTarget_UPDATETREECOMMAND) $$< $(5) $$(SDF) $$@ $(6),\
+			cp $$< $$@,\
 			cp $$< $$@))
 
 endef
