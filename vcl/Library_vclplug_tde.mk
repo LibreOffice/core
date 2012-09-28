@@ -45,7 +45,11 @@ $(eval $(call gb_Library_add_defs,vclplug_tde,\
 $(eval $(call gb_Library_use_sdk_api,vclplug_tde))
 
 $(eval $(call gb_Library_add_libs,vclplug_tde,\
-    $$(TDE_LIBS) \
+	$(TDE_LIBS) \
+	-lX11 \
+	-lXext \
+	-lSM \
+	-lICE \
 ))
 
 $(eval $(call gb_Library_use_libraries,vclplug_tde,\
@@ -68,13 +72,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_tde,\
 $(eval $(call gb_Library_use_externals,vclplug_tde,\
 	icule \
 	icuuc \
-))
-
-$(eval $(call gb_Library_add_libs,vclplug_tde,\
-	-lX11 \
-	-lXext \
-	-lSM \
-	-lICE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_tde,\
