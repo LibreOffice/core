@@ -2226,7 +2226,7 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
         GetPrivateProfileString(
         TEXT("Bootstrap"),
         TEXT("ProductKey"),
-        TEXT("OpenOffice.org"),
+        TEXT("LibreOffice"),
         szBuffer,
         SAL_N_ELEMENTS(szBuffer),
         szModuleName )
