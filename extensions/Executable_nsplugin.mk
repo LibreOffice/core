@@ -42,17 +42,20 @@ $(eval $(call gb_Executable_use_static_libraries,nsplugin,\
 	npsoenv \
 ))
 
+$(eval $(call gb_Executable_add_libs,nsplugin,\
+	$(if $(filter $(OS),LINUX), \
+		-ldl \
+	) \
+	$(if $(filter $(OS),SOLARIS), \
+		-lnsl \
+		-lsocket \
+	) \
+))
+
 $(eval $(call gb_Executable_use_libraries,nsplugin,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(if $(filter $(OS),LINUX), \
-		dl \
-	) \
-	$(if $(filter $(OS),SOLARIS), \
-		nsl \
-		socket \
-	) \
 ))
 
 ifeq ($(GUI),WNT)

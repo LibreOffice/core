@@ -914,9 +914,9 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	ssl \
 )
 ifeq ($(OS),SOLARIS)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	nsl \
-	socket \
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lnsl \
+	-lsocket \
 )
 endif
 endif

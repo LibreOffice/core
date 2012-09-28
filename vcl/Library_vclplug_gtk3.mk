@@ -69,16 +69,19 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
     jvmaccess \
     cppu \
     sal \
-    X11 \
-    Xext \
-    SM \
-    ICE \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,vclplug_gtk3))
 
 $(eval $(call gb_Library_use_externals,vclplug_gtk3,\
 	dbus \
+))
+
+$(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
+	-lX11 \
+	-lXext \
+	-lSM \
+	-lICE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\

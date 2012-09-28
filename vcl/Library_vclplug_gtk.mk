@@ -57,10 +57,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk,\
     jvmaccess \
     cppu \
     sal \
-    X11 \
-    Xext \
-    SM \
-    ICE \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,vclplug_gtk))
@@ -71,6 +67,13 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk,\
 	gthread \
 	icule \
 	icuuc \
+))
+
+$(eval $(call gb_Library_add_libs,vclplug_gtk,\
+	-lX11 \
+	-lXext \
+	-lSM \
+	-lICE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\

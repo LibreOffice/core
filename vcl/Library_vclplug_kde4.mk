@@ -56,10 +56,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_kde4,\
     jvmaccess \
     cppu \
     sal \
-    X11 \
-    Xext \
-    SM \
-    ICE \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,vclplug_kde4))
@@ -68,6 +64,13 @@ $(eval $(call gb_Library_use_externals,vclplug_kde4,\
 	icule \
 	icuuc \
 	kde4 \
+))
+
+$(eval $(call gb_Library_add_libs,vclplug_kde4,\
+	-lX11 \
+	-lXext \
+	-lSM \
+	-lICE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\

@@ -63,10 +63,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_tde,\
     jvmaccess \
     cppu \
     sal \
-    X11 \
-    Xext \
-    SM \
-    ICE \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,vclplug_tde))
@@ -74,6 +70,13 @@ $(eval $(call gb_Library_add_standard_system_libs,vclplug_tde))
 $(eval $(call gb_Library_use_externals,vclplug_tde,\
 	icule \
 	icuuc \
+))
+
+$(eval $(call gb_Library_add_libs,vclplug_tde,\
+	-lX11 \
+	-lXext \
+	-lSM \
+	-lICE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_tde,\

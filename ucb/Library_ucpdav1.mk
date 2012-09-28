@@ -80,10 +80,10 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 endif
 
 ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Library_use_libraries,ucpdav1,\
-	dl \
-	nsl \
-	socket \
+$(eval $(call gb_Library_add_libs,ucpdav1,\
+	-ldl \
+	-lnsl \
+	-lsocket \
 ))
 endif
 

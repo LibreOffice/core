@@ -39,11 +39,14 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 	) \
 ))
 
+ifneq ($(OS),ANDROID)
+$(eval $(call gb_Library_add_libs,gcc3_uno,\
+	-ldl \
+))
+endif
+
 $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 	cppu \
-	$(if $(filter-out ANDROID,$(OS)),\
-		dl \
-	) \
 	sal \
 ))
 

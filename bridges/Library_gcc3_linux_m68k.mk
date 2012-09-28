@@ -36,9 +36,12 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 	-fno-strict-aliasing \
 ))
 
+$(eval $(call gb_Library_add_libs,gcc3_uno,\
+	-ldl \
+))
+
 $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 	cppu \
-	dl \
 	sal \
 ))
 

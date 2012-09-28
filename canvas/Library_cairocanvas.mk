@@ -116,8 +116,8 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 ))
 
 # freetype? fontconfig? -> test on Solaris
-$(eval $(call gb_Library_use_libraries,cairocanvas,\
-	X11 \
+$(eval $(call gb_Library_add_libs,cairocanvas,\
+	-lX11 \
 ))
 $(eval $(call gb_Library_use_externals,cairocanvas,\
 	Xrender \

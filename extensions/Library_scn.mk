@@ -69,8 +69,8 @@ $(eval $(call gb_Library_add_exception_objects,scn,\
 	extensions/source/scanner/scanunx \
 ))
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,scn,\
-	dl \
+$(eval $(call gb_Library_add_libs,scn,\
+	-ldl \
 ))
 endif
 endif
