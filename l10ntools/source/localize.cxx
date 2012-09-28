@@ -170,7 +170,7 @@ bool passesPositiveList(rtl::OUString const & url) {
 void handleCommand(
     rtl::OUString const & project, rtl::OUString const & projectRoot,
     rtl::OUString const & url, rtl::OUString const & actualDir,
-    std::ofstream & outPut, rtl::OUString const & executable, bool positive)
+    PoOfstream & rPoOutPut, rtl::OUString const & executable, bool positive)
 {
     if (positive ? passesPositiveList(url) : passesNegativeList(url)) {
         rtl::OUString inPath;
@@ -241,7 +241,7 @@ void handleCommand(
 
         std::string s;
         std::getline(in, s);
-        if (!in.eof() && !outPut.is_open())
+        if (!in.eof() && !rPoOutPut.isOpen())
         {
             rtl::OUString outDirUrl;
             if (osl::FileBase::getFileURLFromSystemPath(actualDir.
@@ -263,8 +263,14 @@ void handleCommand(
                 std::cerr << "Error: Cannot convert pathname from UTF-16\n";
                 throw false; //TODO
             }
-            outPut.open(outFilePath.getStr(),
-                        std::ios_base::out | std::ios_base::trunc);
+            rPoOutPut.open(outFilePath.getStr());
+            if (!rPoOutPut.isOpen())
+            {
+                std::cerr
+                    << "Error: Cannot open po file "
+                    << outFilePath.getStr() << "\n";
+                throw false; //TODO
+            }
             rtl::OString relativPath;
             if (!inPath.copy(inPath.indexOf(project),
                 inPath.lastIndexOf('/')-inPath.indexOf(project)).
@@ -275,18 +281,28 @@ void handleCommand(
                 std::cerr << "Error: Cannot convert pathname from UTF-16\n";
                 throw false; //TODO
             }
-            PoHeader(relativPath).writeToFile(outPut);
+            rPoOutPut.writeHeader(PoHeader(relativPath));
         }
         while (!in.eof())
         {
             OString sLine = OString(s.data(),s.length());
-
-            if (!sLine.getToken(PoEntry::TEXT,'\t').isEmpty())
-                PoEntry(sLine).writeToFile(outPut);
-            if (!sLine.getToken(PoEntry::QUICKHELPTEXT,'\t').isEmpty())
-                PoEntry(sLine,PoEntry::TQUICKHELPTEXT).writeToFile(outPut);
-            if (!sLine.getToken(PoEntry::TITLE,'\t').isEmpty())
-                PoEntry(sLine,PoEntry::TTITLE).writeToFile(outPut);
+            try
+            {
+                if (!sLine.getToken(PoEntry::TEXT,'\t').isEmpty())
+                    rPoOutPut.writeEntry(PoEntry(sLine));
+                if (!sLine.getToken(PoEntry::QUICKHELPTEXT,'\t').isEmpty())
+                    rPoOutPut.writeEntry(PoEntry(sLine,PoEntry::TQUICKHELPTEXT));
+                if (!sLine.getToken(PoEntry::TITLE,'\t').isEmpty())
+                    rPoOutPut.writeEntry(PoEntry(sLine,PoEntry::TTITLE));
+            }
+            catch(PoEntry::Exception& aException)
+            {
+                if(aException == PoEntry::INVALIDSDFLINE)
+                {
+                    std::cerr << executable << "'s input is invalid\n";
+                    throw false; //TODO
+                }
+            }
             std::getline(in, s);
         };
         in.close();
@@ -296,7 +312,7 @@ void handleCommand(
 void handleFile(
     rtl::OUString const & project, rtl::OUString const & projectRoot,
     rtl::OUString const & url, rtl::OUString const & actualDir,
-    std::ofstream &  outPut)
+    PoOfstream & rPoOutPut)
 {
     struct Command {
         char const * extension;
@@ -319,7 +335,7 @@ void handleFile(
                 commands[i].extension, commands[i].extensionLength))
         {
             handleCommand(
-                project, projectRoot, url, actualDir, outPut,
+                project, projectRoot, url, actualDir, rPoOutPut,
                 rtl::OUString::createFromAscii(commands[i].executable),
                 commands[i].positive);
             break;
@@ -430,7 +446,7 @@ void handleDirectory(
     rtl::OUString const & url, int level, rtl::OUString const & project,
     rtl::OUString const & projectRoot, rtl::OUString const & actualDir)
 {
-    std::ofstream output;
+    PoOfstream aPoOutPut;
     osl::Directory dir(url);
     if (dir.open() != osl::FileBase::E_None) {
         std::cerr
@@ -494,13 +510,13 @@ void handleDirectory(
                 }
             } else {
                 handleFile(project, projectRoot,
-                           stat.getFileURL(), actualDir, output);
+                           stat.getFileURL(), actualDir, aPoOutPut);
             }
             break;
         }
     }
-    if (output.is_open())
-        output.close();
+    if (aPoOutPut.isOpen())
+        aPoOutPut.close();
     if (dir.close() != osl::FileBase::E_None) {
         std::cerr << "Error: Cannot close directory\n";
         throw false; //TODO

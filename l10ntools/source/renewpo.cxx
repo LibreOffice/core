@@ -12,7 +12,10 @@
 #include <dirent.h>
 #include <string>
 #include <vector>
+
+#include <osl/file.hxx>
 #include <rtl/string.hxx>
+
 #include "po.hxx"
 
 using namespace std;
@@ -58,10 +61,27 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
                     const OString& rpo2loPath, const OString& rSDFPath)
 {
     const OString LangEntryName = pLangEntry->d_name;
-    const OString SDFFileName = LangEntryName + ".sdf";
 
     //Generate and open sdf
     cout << "Process start with language: " <<  LangEntryName.getStr() << endl;
+    OUString aTempUrl;
+    if (osl::FileBase::createTempFile(0, 0, &aTempUrl)
+        != osl::FileBase::E_None)
+    {
+        cerr << "osl::FileBase::createTempFile() failed\n";
+        return;
+    }
+    OUString aTempPath;
+    if (osl::FileBase::getSystemPathFromFileURL(aTempUrl, aTempPath)
+        != osl::FileBase::E_None)
+    {
+        cerr
+            << "osl::FileBase::getSystemPathFromFileURL(" << aTempUrl
+            << ") failed\n";
+        return;
+    }
+    const OString SDFFileName =
+        OUStringToOString(aTempPath, RTL_TEXTENCODING_UTF8);
     system( (rpo2loPath +
             " -i " + rPath + "/" + LangEntryName +
             " -o " + SDFFileName +
@@ -69,7 +89,7 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
             " -t " + rSDFPath).getStr());
     cout << "Language sdf is ready!" << endl;
 
-    ofstream aOutPut;
+    PoOfstream aNewPo;
     ifstream aSDFInput(SDFFileName.getStr());
     string s;
     getline(aSDFInput,s);
@@ -77,40 +97,41 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
     while(!aSDFInput.eof())
     {
         OString sActUnTrans = sLine;
-        OString sPath = rPath + "/"+ LangEntryName;
-        OString sActSourcePath = GetPath(sPath,sActUnTrans);
-        //Make new po file, copy header with some changes
-        if (!aOutPut.is_open())
+        const OString sPath = rPath + "/"+ LangEntryName;
+        const OString sActSourcePath = GetPath(sPath,sActUnTrans);
+        //Make new po file and add header
+        if (!aNewPo.isOpen())
         {
-            aOutPut.open((sActSourcePath + ".po_tmp").getStr(),
-                         std::ios_base::out | std::ios_base::trunc);
-            ifstream aPOInput((sActSourcePath + ".po").getStr());
-            getline(aPOInput,s);
-            while(s!="")
+            const OString sNewPoFileName = sActSourcePath + ".po_tmp";
+            aNewPo.open(sNewPoFileName);
+            if (!aNewPo.isOpen())
             {
-                if (s.find("#. extracted from")!=string::npos)
-                    s = string(s,0,s.length()-3);
-                if (s.find("Report-Msgid-Bugs-To")!=string::npos)
-                    s = string("\"Report-Msgid-Bugs-To: ") +
-                        "https://bugs.freedesktop.org/enter_bug.cgi?product=" +
-                        "LibreOffice&bug_status=UNCONFIRMED&component=UI\\n\"";
-                if (s.find("X-Generator")!=string::npos)
-                    s = "\"X-Generator: LibreOffice\\n\"";
-                aOutPut << s << endl;
-                getline(aPOInput,s);
-            };
-            aPOInput.close();
+                cerr
+                    << "Cannot open temp file for new po: "
+                    << sNewPoFileName.getStr() << endl;
+                return;
+            }
+            const OString sOldPoFileName = sActSourcePath + ".po";
+            ifstream aOldPo(sOldPoFileName.getStr());
+            if (!aOldPo.is_open())
+            {
+                cerr
+                    << "Cannot open old po file: "
+                    << sOldPoFileName.getStr() << endl;
+                return;
+            }
+            aNewPo.writeHeader(PoHeader(aOldPo));
+            aOldPo.close();
         }
 
         //Set PoEntry and write out
         getline(aSDFInput,s);
-        sLine = OString(s.data(),s.length());
         OString sActTrans;
-        if (!aSDFInput.eof() && IsSameEntry(sActUnTrans,sLine))
+        if (!aSDFInput.eof() &&
+            IsSameEntry(sActUnTrans,sLine = OString(s.data(),s.length())))
         {
             sActTrans = sLine;
             getline(aSDFInput,s);
-            sLine = OString(s.data(),s.length());
         }
         else
         {
@@ -121,7 +142,7 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
         const vector<PoEntry::TYPE> vTypes( vInitializer,
             vInitializer + sizeof(vInitializer) / sizeof(vInitializer[0]) );
         unsigned short nDummyBit = 0;
-        for( unsigned nIndex=0; nIndex<vTypes.size(); ++nIndex)
+        for( unsigned short nIndex=0; nIndex<vTypes.size(); ++nIndex )
         {
             if (!sActUnTrans.getToken(vTypes[nIndex],'\t').isEmpty())
             {
@@ -141,15 +162,15 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
                 aPE.setFuzzy( sActStr.isEmpty() ? false :
                     static_cast<bool>(sActTrans.getToken(PoEntry::DUMMY,'\t').
                         copy(nDummyBit++,1).toBoolean()));
-                aPE.writeToFile(aOutPut);
+                aNewPo.writeEntry(aPE);
             }
         }
         //Check wheather next entry is in the same po file
-        OString sNextSourcePath =
-            !aSDFInput.eof() ? GetPath(sPath,sLine) : "";
+        OString sNextSourcePath = aSDFInput.eof() ? "" :
+            GetPath(sPath,sLine = OString(s.data(),s.length()));
         if (sNextSourcePath!=sActSourcePath)
         {
-            aOutPut.close();
+            aNewPo.close();
             system(("rm " + sActSourcePath +".po").getStr());
             system(("mv "+ sActSourcePath +".po_tmp " +
                     sActSourcePath +".po").getStr());
@@ -158,7 +179,10 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
 
     //Close and remove sdf file
     aSDFInput.close();
-    system(("rm " + SDFFileName).getStr());
+    if (osl::File::remove(aTempUrl) != osl::FileBase::E_None)
+    {
+        cerr << "Warning: failure removing temporary " << aTempUrl << '\n';
+    }
 }
 
 
