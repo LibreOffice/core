@@ -81,6 +81,7 @@ public:
     bool            Intersects( const ScRange& ) const;
     bool            In( const ScRange& ) const;
     size_t          GetCellCount() const;
+    ScAddress       GetTopLeftCorner() const;
 
     ScRange*        Remove(size_t nPos);
     void            RemoveAll();

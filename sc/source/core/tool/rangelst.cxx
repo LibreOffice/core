@@ -1145,6 +1145,21 @@ void ScRangeList::push_back(ScRange* p)
     maRanges.push_back(p);
 }
 
+ScAddress ScRangeList::GetTopLeftCorner() const
+{
+    if(empty())
+        return ScAddress();
+
+    ScAddress aAddr = maRanges[0]->aStart;
+    for(size_t i = 1, n = size(); i < n; ++i)
+    {
+        if(maRanges[i]->aStart < aAddr)
+            aAddr = maRanges[i]->aStart;
+    }
+
+    return aAddr;
+}
+
 // === ScRangePairList ========================================================
 
 ScRangePairList::~ScRangePairList()
