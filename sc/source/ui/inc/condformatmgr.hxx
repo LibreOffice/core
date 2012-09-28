@@ -71,6 +71,7 @@ public:
     ScConditionalFormat* GetSelection();
     void DeleteSelection();
     void Update();
+    ScCondFormatManagerWindow &GetListControl() { return maWdManager; }
 
 private:
     ScCondFormatManagerWindow maWdManager;
