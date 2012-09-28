@@ -53,7 +53,7 @@ $(eval $(call gb_Library_use_externals,shlxthdl,\
 	zlib \
 ))
 
-$(eval $(call gb_Library_use_libraries,shlxthdl,\
+$(eval $(call gb_Library_use_system_win32_libs,shlxthdl,\
 	advapi32 \
 	comctl32 \
 	gdi32 \

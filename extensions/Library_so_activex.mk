@@ -54,14 +54,14 @@ $(eval $(call gb_Library_add_ldflags,so_activex,\
 	/DEF:$(SRCDIR)/extensions/source/activex/so_activex.def \
 ))
 
-$(eval $(call gb_Library_use_libraries,so_activex,\
-	uuid \
+$(eval $(call gb_Library_use_system_win32_libs,so_activex,\
 	advapi32 \
+	gdi32 \
 	ole32 \
 	oleaut32 \
-	gdi32 \
-	urlmon \
 	shlwapi \
+	urlmon \
+	uuid \
 ))
 
 ifneq ($(USE_DEBUG_RUNTIME),)

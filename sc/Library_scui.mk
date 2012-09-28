@@ -121,10 +121,10 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,scui,\
+$(eval $(call gb_Library_use_system_win32_libs,scui,\
 	advapi32 \
-	$(gb_Library_win32_OLDNAMES) \
-	uwinapi \
+	oldnames \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

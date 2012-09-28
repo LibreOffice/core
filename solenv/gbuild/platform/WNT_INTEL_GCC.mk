@@ -186,6 +186,10 @@ $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(call gb_LinkTarget__command_d
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlinklibrary,$(1)))
 endef
 
+define gb_LinkTarget_use_system_win32_libs
+$(call gb_LinkTarget_add_libs,$(1),$(foreach lib,$(2),-l$(patsubst oldnames,moldname,$(lib))))
+endef
+
 
 # Library class
 
@@ -212,46 +216,6 @@ gb_Library_RTVERDLLEXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_RTDLLEXT)
 gb_Library_OOODLLEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
 gb_Library_UNODLLEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVERDLLEXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_DLLEXT)
-
-gb_Library_win32_OLDNAMES := moldname
-
-gb_Library_PLAINLIBS_NONE += \
-	mingwthrd \
-	mingw32 \
-	mingwex \
-	advapi32 \
-	comctl32 \
-	comdlg32 \
-	crypt32 \
-	d3d9 \
-	d3dx \
-	ddraw \
-	gdi32 \
-	gdiplus \
-	imm32 \
-	kernel32 \
-	jawt \
-	msi \
-	msimg32 \
-	msvcrt \
-	msvcprt \
-	mpr \
-	$(gb_Library_win32_OLDNAMES) \
-	ole32 \
-	oleaut32 \
-	propsys \
-	shell32 \
-	shlwapi \
-	urlmon \
-	user32 \
-	usp10 \
-	uuid \
-	winmm \
-	version \
-	wininet \
-	winspool \
-	wldap32 \
-	ws2_32 \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \

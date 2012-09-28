@@ -114,7 +114,7 @@ $(eval $(call gb_Library_use_externals,sd,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,sd,\
+$(eval $(call gb_Library_use_system_win32_libs,sd,\
 	ws2_32 \
 ))
 endif

@@ -63,6 +63,9 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_use_libraries,emboleobj,\
 	embobj \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,emboleobj,\
 	gdi32 \
 	ole32 \
 	oleaut32 \

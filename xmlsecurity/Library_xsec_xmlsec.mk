@@ -101,7 +101,7 @@ $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	xmlsec1-mscrypto \
 ))
 
-$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
+$(eval $(call gb_Library_use_system_win32_libs,xsec_xmlsec,\
 	crypt32 \
 	advapi32 \
 ))

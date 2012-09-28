@@ -33,12 +33,15 @@ $(eval $(call gb_Executable_set_include,quickstart,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_use_libraries,quickstart,\
+$(eval $(call gb_Executable_use_system_win32_libs,quickstart,\
     comdlg32 \
     gdi32 \
     ole32 \
     oleaut32 \
     shell32 \
+))
+
+$(eval $(call gb_Executable_use_libraries,quickstart,\
 	$(gb_UWINAPI) \
 ))
 
@@ -46,14 +49,14 @@ $(eval $(call gb_Executable_add_standard_system_libs,quickstart))
 
 ifeq ($(COM),GCC)
 
-$(eval $(call gb_Executable_use_libraries,quickstart,\
+$(eval $(call gb_Executable_use_system_win32_libs,quickstart,\
     uuid \
 ))
 
 else
 
-$(eval $(call gb_Executable_add_libs,quickstart,\
-    comsupp.lib \
+$(eval $(call gb_Executable_use_system_win32_libs,quickstart,\
+    comsupp \
 ))
 
 endif

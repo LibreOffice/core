@@ -62,9 +62,8 @@ $(eval $(call gb_Library_use_libraries,sunjavaplugin,\
 endif
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_use_libraries,sunjavaplugin,\
-    advapi32 \
-    uwinapi \
+$(eval $(call gb_Library_use_system_win32_libs,sunjavaplugin,\
+	advapi32 \
 ))
 endif
 

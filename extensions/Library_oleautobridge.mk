@@ -43,6 +43,9 @@ $(eval $(call gb_Library_use_libraries,oleautobridge,\
 	cppuhelper \
 	cppu \
 	sal \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,oleautobridge,\
 	advapi32 \
 	ole32 \
 	oleaut32 \

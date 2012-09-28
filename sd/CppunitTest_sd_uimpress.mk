@@ -77,7 +77,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
 $(eval $(call gb_CppunitTest_add_standard_system_libs,sd_uimpress))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
+$(eval $(call gb_CppunitTest_use_system_win32_libs,sd_uimpress,\
 	ws2_32 \
 ))
 endif

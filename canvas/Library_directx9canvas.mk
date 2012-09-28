@@ -60,7 +60,7 @@ $(eval $(call gb_Library_use_libraries,directx9canvas,\
 
 $(eval $(call gb_Library_add_standard_system_libs,directx9canvas))
 
-$(eval $(call gb_Library_use_libraries,directx9canvas,\
+$(eval $(call gb_Library_use_system_win32_libs,directx9canvas,\
 	d3d9 \
 	gdi32 \
 	gdiplus \

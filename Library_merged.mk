@@ -107,14 +107,14 @@ $(eval $(call gb_Library_add_libs,merged,\
 endif
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,merged,\
+$(eval $(call gb_Library_use_system_win32_libs,merged,\
 	advapi32 \
 	gdi32 \
 	gdiplus \
 	imm32 \
 	mpr \
 	msimg32 \
-	$(gb_Library_win32_OLDNAMES) \
+	oldnames \
 	ole32 \
 	oleaut32 \
 	shell32 \

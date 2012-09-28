@@ -117,11 +117,11 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/win/source/dll/toolsdll \
 ))
 
-$(eval $(call gb_Library_use_libraries,tl,\
-    mpr \
-    ole32 \
-    shell32 \
-    uuid \
+$(eval $(call gb_Library_use_system_win32_libs,tl,\
+	mpr \
+	ole32 \
+	shell32 \
+	uuid \
 ))
 
 endif

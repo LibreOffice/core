@@ -295,12 +295,12 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/syspathw32 \
 ))
 
-$(eval $(call gb_Library_use_libraries,sfx,\
-    gdi32 \
-    advapi32 \
-    ole32 \
-    shell32 \
-    uuid \
+$(eval $(call gb_Library_use_system_win32_libs,sfx,\
+	advapi32 \
+	gdi32 \
+	ole32 \
+	shell32 \
+	uuid \
 ))
 
 endif

@@ -69,18 +69,18 @@ $(eval $(call gb_Library_use_static_libraries,npsoplugin,\
 	ooopathutils \
 ))
 
-$(eval $(call gb_Library_use_libraries,npsoplugin,\
-	ws2_32 \
-	shell32 \
-	ole32 \
-	kernel32 \
-	user32 \
-	gdi32 \
-	winspool \
-	comdlg32 \
+$(eval $(call gb_Library_use_system_win32_libs,npsoplugin,\
 	advapi32 \
+	comdlg32 \
+	gdi32 \
+	kernel32 \
+	ole32 \
 	oleaut32 \
+	shell32 \
+	user32 \
 	uuid \
+	winspool \
+	ws2_32 \
 ))
 
 $(eval $(call gb_Library_add_defs,npsoplugin,\

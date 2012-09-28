@@ -19,12 +19,15 @@ $(eval $(call gb_Library_use_udk_api,cli_uno))
 
 $(eval $(call gb_Library_use_libraries,cli_uno,\
 	cppu \
+	sal \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,cli_uno,\
 	mscoree \
 	$(if $(USE_DEBUG_RUNTIME)\
 		,msvcmrtd \
 		,msvcmrt \
 	) \
-	sal \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cli_uno,\

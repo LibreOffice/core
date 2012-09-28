@@ -1468,7 +1468,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	-lobjc \
 )
 else ifeq ($(OS),WNT)
-$(call gb_LinkTarget_use_libraries,$(1),\
+$(call gb_LinkTarget_use_system_win32_libs,$(1),\
 	advapi32 \
 	gdi32 \
 )
@@ -1614,7 +1614,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 ifeq ($(GUI)$(COM),WNTMSC)
 $(call gb_LinkTarget_use_external,$(1),openssl)
 
-$(call gb_LinkTarget_use_libraries,$(1),\
+$(call gb_LinkTarget_use_system_win32_libs,$(1),\
 	secur32 \
 	ws2_32 \
 )

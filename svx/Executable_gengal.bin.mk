@@ -71,12 +71,11 @@ $(eval $(call gb_Executable_use_static_libraries,$(svx_GENGALBIN),\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
-    kernel32 \
-    msvcrt \
-    $(gb_Library_win32_OLDNAMES) \
-    user32 \
-    uwinapi \
+$(eval $(call gb_Executable_use_system_win32_libs,$(svx_GENGALBIN),\
+	kernel32 \
+	msvcrt \
+	oldnames \
+	user32 \
 ))
 endif
 

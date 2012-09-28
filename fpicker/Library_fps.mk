@@ -52,6 +52,10 @@ $(eval $(call gb_Library_use_libraries,fps,\
 	tl \
 	utl \
 	vcl \
+	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,fps,\
 	advapi32 \
 	comdlg32 \
 	gdi32 \
@@ -60,7 +64,6 @@ $(eval $(call gb_Library_use_libraries,fps,\
 	oleaut32 \
 	shell32 \
 	uuid \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,fps))

@@ -42,17 +42,19 @@ $(eval $(call gb_Library_add_defs,sysdtrans,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sysdtrans,\
-	advapi32 \
 	cppu \
 	cppuhelper \
+	sal \
+	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,sysdtrans,\
+	advapi32 \
 	gdi32 \
 	ole32 \
 	oleaut32 \
-	sal \
 	shell32 \
 	uuid \
-	uwinapi \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,sysdtrans))

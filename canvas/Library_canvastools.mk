@@ -87,7 +87,7 @@ endif
 endif
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,canvastools,\
+$(eval $(call gb_Library_use_system_win32_libs,canvastools,\
 	winmm \
 ))
 endif

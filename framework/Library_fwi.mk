@@ -76,7 +76,7 @@ $(eval $(call gb_Library_add_exception_objects,fwi,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,fwi,\
+$(eval $(call gb_Library_use_system_win32_libs,fwi,\
     advapi32 \
 ))
 endif

@@ -46,7 +46,7 @@ $(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
 $(eval $(call gb_Library_add_standard_system_libs,postgresql-sdbc-impl))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
+$(eval $(call gb_Library_use_system_win32_libs,postgresql-sdbc-impl,\
 	shell32 \
 	wldap32 \
 ))

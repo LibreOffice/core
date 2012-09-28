@@ -53,19 +53,19 @@ $(eval $(call gb_Library_use_externals,ooofilt,\
 	zlib \
 ))
 
-$(eval $(call gb_Library_use_libraries,ooofilt,\
+$(eval $(call gb_Library_use_system_win32_libs,ooofilt,\
 	advapi32 \
 	comctl32 \
 	kernel32 \
 	msvcprt \
+	oldnames \
 	ole32 \
 	shell32 \
 	uuid \
-	$(gb_Library_win32_OLDNAMES) \
 ))
 
 ifneq ($(PRODUCT),full)
-$(eval $(call gb_Library_use_libraries,ooofilt,\
+$(eval $(call gb_Library_use_system_win32_libs,ooofilt,\
 	msvcrt \
 ))
 endif

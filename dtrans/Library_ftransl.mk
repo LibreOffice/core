@@ -37,14 +37,16 @@ $(eval $(call gb_Library_set_include,ftransl,\
 $(eval $(call gb_Library_use_sdk_api,ftransl))
 
 $(eval $(call gb_Library_use_libraries,ftransl,\
-	advapi32 \
 	cppu \
 	cppuhelper \
+	sal \
+	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,ftransl,\
+	advapi32 \
 	gdi32 \
 	ole32 \
-	sal \
-	uwinapi \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,ftransl))

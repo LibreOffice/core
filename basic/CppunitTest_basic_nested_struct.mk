@@ -35,7 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_nested_struct, \
 $(eval $(call gb_CppunitTest_add_standard_system_libs,basic_nested_struct))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_CppunitTest_use_libraries,basic_nested_struct, \
+$(eval $(call gb_CppunitTest_use_system_win32_libs,basic_nested_struct, \
 	oleaut32 \
 ))
 endif

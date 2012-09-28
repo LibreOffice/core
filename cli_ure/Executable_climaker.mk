@@ -24,13 +24,16 @@ $(eval $(call gb_Executable_use_internal_bootstrap_api,climaker,\
 $(eval $(call gb_Executable_use_libraries,climaker,\
 	cppu \
 	cppuhelper \
+	sal \
+	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Executable_use_system_win32_libs,climaker,\
 	mscoree \
 	$(if $(USE_DEBUG_RUNTIME) \
 		,msvcmrtd \
 		,msvcmrt \
 	) \
-	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_standard_system_libs,climaker))

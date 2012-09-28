@@ -45,7 +45,7 @@ $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
 $(eval $(call gb_CppunitTest_add_standard_system_libs,extensions_test_update))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_use_libraries,extensions_test_update,\
+$(eval $(call gb_CppunitTest_use_system_win32_libs,extensions_test_update,\
 	shell32 \
 	ole32 \
 ))

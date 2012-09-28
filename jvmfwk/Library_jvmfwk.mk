@@ -50,8 +50,8 @@ $(eval $(call gb_Library_use_libraries,jvmfwk,\
 $(eval $(call gb_Library_add_standard_system_libs,jvmfwk))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,jvmfwk,\
-    advapi32 \
+$(eval $(call gb_Library_use_system_win32_libs,jvmfwk,\
+	advapi32 \
 ))
 endif
 

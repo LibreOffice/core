@@ -45,7 +45,7 @@ $(eval $(call gb_Library_use_libraries,updchk,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,updchk,\
+$(eval $(call gb_Library_use_system_win32_libs,updchk,\
 	ole32 \
 	shell32 \
 	wininet \

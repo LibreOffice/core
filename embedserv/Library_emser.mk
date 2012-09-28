@@ -45,12 +45,15 @@ $(eval $(call gb_Library_use_libraries,emser,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	sal \
+	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,emser,\
 	gdi32 \
 	ole32 \
 	oleaut32 \
-	sal \
 	uuid \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,emser))

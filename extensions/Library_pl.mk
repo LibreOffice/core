@@ -63,10 +63,10 @@ $(eval $(call gb_Library_add_libs,pl,\
 endif # OS=SOLARIS
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_use_libraries,pl,\
-	version \
-	ole32 \
+$(eval $(call gb_Library_use_system_win32_libs,pl,\
 	advapi32 \
+	ole32 \
+	version \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,pl,\

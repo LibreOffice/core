@@ -27,8 +27,11 @@
 
 $(eval $(call gb_Executable_Executable,senddoc))
 
-$(eval $(call gb_Executable_use_libraries,senddoc,\
+$(eval $(call gb_Executable_use_system_win32_libs,senddoc,\
 	kernel32 \
+))
+
+$(eval $(call gb_Executable_use_libraries,senddoc,\
 	sal \
 ))
 

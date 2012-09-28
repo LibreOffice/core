@@ -41,9 +41,6 @@ $(eval $(call gb_Library_use_libraries,avmediawin,\
 	comphelper \
 	cppu \
 	cppuhelper \
-	gdi32 \
-	ole32 \
-	oleaut32 \
 	sal \
 	tl \
 	utl \
@@ -53,8 +50,11 @@ $(eval $(call gb_Library_use_libraries,avmediawin,\
 
 $(eval $(call gb_Library_add_standard_system_libs,avmediawin))
 
-$(eval $(call gb_Library_add_libs,avmediawin,\
-	strmiids.lib \
+$(eval $(call gb_Library_use_system_win32_libs,avmediawin,\
+	gdi32 \
+	ole32 \
+	oleaut32 \
+	strmiids \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediawin,\
