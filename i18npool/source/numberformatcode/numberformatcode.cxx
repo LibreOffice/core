@@ -21,15 +21,17 @@
 #include <numberformatcode.hxx>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
+#include <comphelper/componentcontext.hxx>
 
 
 
 NumberFormatCodeMapper::NumberFormatCodeMapper(
             const ::com::sun::star::uno::Reference <
-                ::com::sun::star::lang::XMultiServiceFactory >& rxMSF )
+                ::com::sun::star::uno::XComponentContext >& rxContext )
         :
-        xMSF( rxMSF ),
-        bFormatsValid( sal_False )
+        mxContext( rxContext ),
+        bFormatsValid( false )
 {
 }
 
@@ -152,7 +154,7 @@ void NumberFormatCodeMapper::setupLocale( const ::com::sun::star::lang::Locale& 
       || aLocale.Language   != rLocale.Language
       || aLocale.Variant    != rLocale.Variant )
     {
-        bFormatsValid = sal_False;
+        bFormatsValid = false;
         aLocale = rLocale;
     }
 }
@@ -164,11 +166,11 @@ void NumberFormatCodeMapper::getFormats( const ::com::sun::star::lang::Locale& r
     if ( !bFormatsValid )
     {
         createLocaleDataObject();
-        if( !xlocaleData.is() )
+        if( !mxLocaleData.is() )
             aFormatSeq = ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > (0);
         else
-            aFormatSeq = xlocaleData->getAllFormats( aLocale );
-        bFormatsValid = sal_True;
+            aFormatSeq = mxLocaleData->getAllFormats( aLocale );
+        bFormatsValid = true;
     }
 }
 
@@ -255,17 +257,10 @@ NumberFormatCodeMapper::mapElementUsageStringToShort(const ::rtl::OUString& form
 void
 NumberFormatCodeMapper::createLocaleDataObject() {
 
-    if(xlocaleData.is())
+    if(mxLocaleData.is())
         return;
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >
-        xI = xMSF->createInstance(
-        ::rtl::OUString(  "com.sun.star.i18n.LocaleData"  ));
-
-    if ( xI.is() ) {
-        ::com::sun::star::uno::Any x = xI->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData >*)0) );
-            x >>= xlocaleData;
-    }
+    mxLocaleData.set( com::sun::star::i18n::LocaleData::create(mxContext) );
 }
 
 ::rtl::OUString SAL_CALL

@@ -17,14 +17,11 @@
  */
 
 package com.sun.star.lib.uno.helper;
-import com.sun.star.lib.uno.environments.java.java_environment;
 import java.util.List;
 import com.sun.star.uno.XWeak;
 import com.sun.star.lang.XTypeProvider;
 import java.util.ArrayList;
 import com.sun.star.uno.Type;
-import com.sun.star.lib.uno.typedesc.TypeDescription;
-import com.sun.star.uno.UnoRuntime;
 //import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XSingleComponentFactory;

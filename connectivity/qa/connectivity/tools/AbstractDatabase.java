@@ -167,7 +167,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
         final XDocumentDataSource dataSource = UnoRuntime.queryInterface( XDocumentDataSource.class, dbContext.getByName( _docURL ) );
 
         m_databaseDocument = dataSource.getDatabaseDocument();
-        m_dataSource = new DataSource(m_orb, m_databaseDocument.getDataSource());
+        m_dataSource = new DataSource(m_databaseDocument.getDataSource());
     }
 
     /** returns the URL of the ODB document represented by this instance

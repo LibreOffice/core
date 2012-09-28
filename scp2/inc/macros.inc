@@ -212,8 +212,7 @@
 #define PACKED_SHELLNEW_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (PACKED,WORKSTATION, OVERWRITE); \
-        Dir    = PREDEFINED_OSSHELLNEWDIR; \
-        NetDir = gid_Dir_Shellnew
+        Dir    = gid_Dir_Shellnew
 
 #define STD_SHELLNEW_FILE(id,name) \
     File id \

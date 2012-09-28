@@ -405,8 +405,7 @@ class MergeDataFile;
 
 class MergeData
 {
-friend class MergeDataFile;
-private:
+public:
     rtl::OString sTyp;
     rtl::OString sGID;
     rtl::OString sLID;
@@ -451,7 +450,8 @@ class MergeDataFile
         ~MergeDataFile();
 
 
-        std::vector<rtl::OString> GetLanguages();
+        std::vector<rtl::OString> GetLanguages() const;
+        const MergeDataHashMap& getMap() const { return aMap; }
 
         PFormEntrys *GetPFormEntrys( ResData *pResData );
         PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );

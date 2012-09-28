@@ -119,7 +119,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
     (void)anImage;
     (void)aPoint;
     DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
-                             new DragSourceContext(mDragSource),
+                             new DragSourceContext,
                              mDragSource,
                              DNDConstants::ACTION_COPY,
                              DNDConstants::ACTION_COPY);
@@ -139,7 +139,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
         bDropSuccess = DragSource::g_DropSuccess;
 
     DragSourceDropEvent dsde(static_cast<OWeakObject*>(mDragSource),
-                             new DragSourceContext(mDragSource),
+                             new DragSourceContext,
                              static_cast< XDragSource* >(mDragSource),
                              SystemToOfficeDragActions(operation),
                              bDropSuccess );
@@ -154,7 +154,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
     (void)draggedImage;
     (void)screenPoint;
     DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
-                             new DragSourceContext(mDragSource),
+                             new DragSourceContext,
                              mDragSource,
                              DNDConstants::ACTION_COPY,
                              DNDConstants::ACTION_COPY);
@@ -263,7 +263,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   trigger.Event >>= mMouseEvent;
   m_MouseButton= mMouseEvent.Buttons;
   mXDragSrcListener = listener;
-  mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext(this));
+  mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext);
   auto_ptr<AquaClipboard> clipb(new AquaClipboard(NULL, false));
   g_XTransferable = transferable;
   clipb->setContents(g_XTransferable, uno::Reference<XClipboardOwner>());

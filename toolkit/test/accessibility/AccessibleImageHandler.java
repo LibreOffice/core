@@ -26,8 +26,8 @@ class AccessibleImageHandler extends NodeHandler
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleImage xImage =
-            (XAccessibleImage) UnoRuntime.queryInterface (
-                XAccessibleImage.class, xContext);
+            UnoRuntime.queryInterface (
+            XAccessibleImage.class, xContext);
         if (xImage != null)
             return new AccessibleImageHandler (xImage);
         else
@@ -46,7 +46,7 @@ class AccessibleImageHandler extends NodeHandler
 
     protected static XAccessibleImage getImage (AccTreeNode aNode)
     {
-        return (XAccessibleImage) UnoRuntime.queryInterface (
+        return UnoRuntime.queryInterface (
             XAccessibleImage.class, aNode.getContext());
     }
 

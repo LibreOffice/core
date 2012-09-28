@@ -26,7 +26,6 @@ import com.sun.star.embed.XStorage;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import ifc.ui._XUIConfiguration;
 import java.io.PrintWriter;
 import com.sun.star.lang.EventObject;

@@ -20,9 +20,6 @@ package org.openoffice.java.accessibility;
 import com.sun.star.accessibility.*;
 import com.sun.star.uno.*;
 
-import javax.accessibility.AccessibleState;
-import javax.accessibility.AccessibleStateSet;
-
 
 /**
  */

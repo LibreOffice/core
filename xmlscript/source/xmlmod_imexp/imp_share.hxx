@@ -33,9 +33,6 @@
 
 #include <vector>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
-
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::com::sun::star;

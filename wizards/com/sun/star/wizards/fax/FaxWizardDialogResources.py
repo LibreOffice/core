@@ -15,7 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.common.Resource import Resource
+from ..common.Resource import Resource
 
 class FaxWizardDialogResources(Resource):
     MODULE_NAME = "dbw"
@@ -25,6 +25,15 @@ class FaxWizardDialogResources(Resource):
     RID_FAXWIZARDSALUTATION_START = 3290
     RID_FAXWIZARDROADMAP_START = 3300
     RID_RID_COMMON_START = 500
+    
+    resToPlaceHolder = "#to#"
+    resFromPlaceHolder = "#from#"
+    resFaxconstPlaceHolder = "#faxconst#"
+    resTelconstPlaceHolder = "#telconst#"
+    resEmailconstPlaceHolder = "#emailconst#"
+    resConsist1PlaceHolder = "#consist1#"
+    resConsist2PlaceHolder = "#consist2#"
+    resConsist3PlaceHolder = "#consist3#"
 
 
     def __init__(self, xmsf):
@@ -40,8 +49,6 @@ class FaxWizardDialogResources(Resource):
 
         self.resFaxWizardDialog_title = self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 1)
-        self.resLabel9_value = self.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 2)
         self.resoptBusinessFax_value = self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 3)
         self.resoptPrivateFax_value = self.getResText(
@@ -118,6 +125,26 @@ class FaxWizardDialogResources(Resource):
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 39)
         self.resLabel2_value = self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 40)
+            
+        #Create a Dictionary for the constants values.
+        self.dictConstants = {
+        FaxWizardDialogResources.resToPlaceHolder : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 41),
+        FaxWizardDialogResources.resFromPlaceHolder : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 42),
+        FaxWizardDialogResources.resFaxconstPlaceHolder : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 43),
+        FaxWizardDialogResources.resTelconstPlaceHolder : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 44),
+        FaxWizardDialogResources.resEmailconstPlaceHolder : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 45),
+        FaxWizardDialogResources.resConsist1PlaceHolder : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 46),
+        FaxWizardDialogResources.resConsist2PlaceHolder : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 47),
+        FaxWizardDialogResources.resConsist3PlaceHolder : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 48)}
+        
         self.loadRoadmapResources()
         self.loadSalutationResources()
         self.loadGreetingResources()

@@ -42,12 +42,12 @@ $(eval $(call gb_Library_add_defs,sc,\
 
 $(eval $(call gb_Library_use_sdk_api,sc))
 
+$(eval $(call gb_Library_use_externals,sc,\
+	mdds_headers \
+))
+
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_libraries,sc,tubes))
-
-$(eval $(call gb_Library_add_defs,sc,\
-	-DENABLE_TELEPATHY \
-))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/collab/sccollaboration \

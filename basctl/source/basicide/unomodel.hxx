@@ -16,12 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef UNOMODEL_HXX
-#define UNOMODEL_HXX
+#ifndef BASCTL_UNOMODEL_HXX
+#define BASCTL_UNOMODEL_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sfx2/sfxbasemodel.hxx>
+
+namespace basctl
+{
 
 //-----------------------------------------------------------------------------
 class SIDEModel : public SfxBaseModel,
@@ -40,21 +43,23 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
             throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
             throw( ::com::sun::star::uno::RuntimeException );
 
-    static ::com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames_Static();
-    static ::rtl::OUString getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
+    static OUString getImplementationName_Static();
 };
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SIDEModel_createInstance(
                 const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr )
                     throw( com::sun::star::uno::Exception );
 
-#endif
+} // namespace basctl
+
+#endif // BASCTL_UNOMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

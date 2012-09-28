@@ -1326,7 +1326,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     {
     }
 
-    m_aLineStyleLb.SetPosSizePixel( 2, 2, 110, 140 );
+    m_aLineStyleLb.setPosSizePixel( 2, 2, 110, 140 );
     SetOutputSizePixel( Size( 114, 144 ) );
 
     m_aLineStyleLb.SetSourceUnit( FUNIT_TWIP );

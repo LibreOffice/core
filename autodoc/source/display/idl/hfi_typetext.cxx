@@ -55,19 +55,16 @@ HF_IdlTypeText::referingCe() const
 
 HF_IdlTypeText::HF_IdlTypeText( Environment &       io_rEnv,
                                 Xml::Element &      o_rOut,
-                                bool                i_bWithLink,
                                 const client *      i_pScopeGivingCe )
     :   HtmlFactory_Idl(io_rEnv, &o_rOut),
-        pReferingCe( i_pScopeGivingCe ),
-        bWithLink(i_bWithLink)
+        pReferingCe( i_pScopeGivingCe )
 {
 }
 
 HF_IdlTypeText::HF_IdlTypeText( Environment &       io_rEnv,
                                 E_Index             )
     :   HtmlFactory_Idl(io_rEnv, 0),
-        pReferingCe( 0 ),
-        bWithLink(true)
+        pReferingCe( 0 )
 {
 }
 
@@ -726,7 +723,7 @@ HF_IdlTypeText::write_TemplateParameterList(
         return;
 
     HF_IdlTypeText
-        aTemplateParamWriter(Env(), CurOut(), true, pReferingCe);
+        aTemplateParamWriter(Env(), CurOut(), pReferingCe);
     CurOut() << "< ";
     std::vector<ary::idl::Type_id>::const_iterator
         it = i_templateParameters.begin();

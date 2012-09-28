@@ -53,7 +53,7 @@ class ScDocument;
 typedef sal_Int32 SCROW;
 typedef sal_Int16 SCCOL;
 typedef sal_Int16 SCTAB;
-typedef sal_Int32 SCCOLROW;     // a type capable of holding either SCCOL or SCROW
+typedef sal_Int32 SCCOLROW;     ///< a type capable of holding either SCCOL or SCROW
 
 // temporarily signed typedefs
 typedef sal_Int32 SCsROW;
@@ -61,8 +61,8 @@ typedef sal_Int16 SCsCOL;
 typedef sal_Int16 SCsTAB;
 typedef sal_Int32 SCsCOLROW;
 
-// size_t typedef to be able to find places where code was changed from USHORT
-// to size_t and is used to read/write from/to streams.
+/** size_t typedef to be able to find places where code was changed from USHORT
+    to size_t and is used to read/write from/to streams. */
 typedef size_t SCSIZE;
 
 // Maximum possible value of data type, NOT maximum row value.
@@ -84,7 +84,7 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 // Count values
 const SCROW       MAXROWCOUNT    = MAXROWCOUNT_DEFINE;
 const SCCOL       MAXCOLCOUNT    = MAXCOLCOUNT_DEFINE;
-// limiting to 10000 for now, problem with 32 bit builds for now
+/// limiting to 10000 for now, problem with 32 bit builds for now
 const SCTAB       MAXTABCOUNT    = 10000;
 const SCCOLROW    MAXCOLROWCOUNT = MAXROWCOUNT;
 // Maximum values
@@ -375,10 +375,10 @@ inline bool ScAddress::operator!=( const ScAddress& r ) const
     return !operator==( r );
 }
 
+/** Same behavior as the old sal_uInt32 nAddress < r.nAddress with encoded
+    tab|col|row bit fields. */
 inline bool ScAddress::operator<( const ScAddress& r ) const
 {
-    // Same behavior as the old sal_uInt32 nAddress < r.nAddress with encoded
-    // tab|col|row bit fields.
     if (nTab == r.nTab)
     {
         if (nCol == r.nCol)
@@ -462,8 +462,8 @@ public:
     { aStart = aEnd = rPos; return *this; }
     inline void SetInvalid() { aStart.SetInvalid(); aEnd.SetInvalid(); }
     inline bool IsValid() const { return aStart.IsValid() && aEnd.IsValid(); }
-    inline bool In( const ScAddress& ) const;   // is Address& in Range?
-    inline bool In( const ScRange& ) const;     // is Range& in Range?
+    inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
+    inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
     sal_uInt16 Parse( const String&, ScDocument* = NULL,
                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
@@ -547,7 +547,7 @@ inline bool ScRange::operator!=( const ScRange& r ) const
     return !operator==( r );
 }
 
-// Sort on upper left corner, if equal then use lower right too.
+/// Sort on upper left corner, if equal then use lower right too.
 inline bool ScRange::operator<( const ScRange& r ) const
 {
     return aStart < r.aStart || (aStart == r.aStart && aEnd < r.aEnd) ;

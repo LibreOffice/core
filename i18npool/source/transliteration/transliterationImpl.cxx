@@ -21,9 +21,11 @@
 #include "transliterationImpl.hxx"
 #include "servicename.hxx"
 
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/string.h>
@@ -136,25 +138,17 @@ static struct TMlist {
 };
 
 // Constructor/Destructor
-TransliterationImpl::TransliterationImpl(const Reference <XMultiServiceFactory>& xMSF) : xSMgr(xMSF)
+TransliterationImpl::TransliterationImpl(const Reference <XComponentContext>& xContext) : mxContext(xContext)
 {
     numCascade = 0;
     caseignoreOnly = sal_True;
 
-    if ( xMSF.is() )
-    {
-        Reference < XInterface > xI=
-                xMSF->createInstance(OUString("com.sun.star.i18n.LocaleData"));
-        if ( xI.is() ) {
-            Any x = xI->queryInterface( ::getCppuType( (const uno::Reference< i18n::XLocaleData >*)0) );
-            x >>= localedata;
-        }
-    }
+    mxLocaledata.set(LocaleData::create(xContext));
 }
 
 TransliterationImpl::~TransliterationImpl()
 {
-    localedata.clear();
+    mxLocaledata.clear();
     clear();
 }
 
@@ -261,7 +255,7 @@ TransliterationImpl::loadModulesByImplNames(const Sequence< OUString >& implName
 Sequence<OUString> SAL_CALL
 TransliterationImpl::getAvailableModules( const Locale& rLocale, sal_Int16 sType ) throw(RuntimeException)
 {
-    const Sequence<OUString> &translist = localedata->getTransliterations(rLocale);
+    const Sequence<OUString> &translist = mxLocaledata->getTransliterations(rLocale);
     Sequence<OUString> r(translist.getLength());
     Reference<XExtendedTransliteration> body;
     sal_Int32 n = 0;
@@ -597,7 +591,7 @@ void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTrans
     if (implName != lastTransBody.Name)
     {
         lastTransBody.Body.set(
-            xSMgr->createInstance(implName), UNO_QUERY_THROW);
+            mxContext->getServiceManager()->createInstanceWithContext(implName, mxContext), UNO_QUERY_THROW);
         lastTransBody.Name = implName;
     }
     body = lastTransBody.Body;

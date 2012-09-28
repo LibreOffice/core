@@ -20,7 +20,6 @@ import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.Document;
-import java.net.URL;
 
 class TextLogger
     extends JEditorPane

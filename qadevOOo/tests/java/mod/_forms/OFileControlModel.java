@@ -32,7 +32,6 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -64,7 +63,7 @@ import com.sun.star.util.XCloseable;
  * threads concurently.
  * @see com.sun.star.io.XPersistObject
  * @see com.sun.star.container.XChild
- * @see com.sun.star.form.FormControlModel
+ * @see com.sun.star.form
  * @see com.sun.star.awt.UnoControlFileControlModel
  * @see com.sun.star.form.FormComponent
  * @see com.sun.star.beans.XPropertyAccess

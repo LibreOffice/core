@@ -30,11 +30,11 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XSet.hpp>
 
+#include <boost/noncopyable.hpp>
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertybag.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <map>
@@ -76,11 +76,9 @@ namespace comphelper
                         ,public OPropertyBag_PBase
                         ,public OPropertyBag_Base
                         ,public ::cppu::IEventNotificationHook
+                        ,private boost::noncopyable
     {
     private:
-        ::comphelper::ComponentContext
-                        m_aContext;
-
         /// our IPropertyArrayHelper implementation
         ::std::auto_ptr< ::cppu::OPropertyArrayHelper >
                         m_pArrayHelper;
@@ -97,8 +95,6 @@ namespace comphelper
         bool            m_isModified;
 
     public:
-        OPropertyBag( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
-
         // XServiceInfo - static versions
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -106,6 +102,7 @@ namespace comphelper
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     protected:
+        OPropertyBag();
         virtual ~OPropertyBag();
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
@@ -215,10 +212,6 @@ namespace comphelper
         */
         void impl_setPropertyValues_throw( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rProps );
 
-    private:
-        OPropertyBag();                                 // never implemented
-        OPropertyBag( const OPropertyBag& );            // never implemented
-        OPropertyBag& operator=( const OPropertyBag& ); // never implemented
     protected:
         using ::cppu::OPropertySetHelper::getPropertyValues;
         using ::cppu::OPropertySetHelper::setPropertyValues;

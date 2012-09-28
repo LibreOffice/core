@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
-/**************************************************************************
-                                TODO
- **************************************************************************
+#include <cassert>
 
- *************************************************************************/
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -48,6 +46,8 @@
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -57,7 +57,6 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <ucbhelper/activedatastreamer.hxx>
 #include <ucbhelper/interactionrequest.hxx>
@@ -167,7 +166,7 @@ class Content_Impl : public salhelper::SimpleReferenceObject
 friend class ContentEventListener_Impl;
 
     mutable rtl::OUString               m_aURL;
-    Reference< XMultiServiceFactory >   m_xSMgr;
+    Reference< XComponentContext >      m_xCtx;
     Reference< XContent >               m_xContent;
     Reference< XCommandProcessor >          m_xCommandProcessor;
     Reference< XCommandEnvironment >    m_xEnv;
@@ -181,7 +180,7 @@ private:
 
 public:
     Content_Impl() : m_nCommandId( 0 ) {};
-    Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
+    Content_Impl( const Reference< XComponentContext >& rCtx,
                   const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv );
 
@@ -191,7 +190,8 @@ public:
     Reference< XContent >          getContent();
     Reference< XCommandProcessor > getCommandProcessor();
     sal_Int32 getCommandId();
-    Reference< XMultiServiceFactory > getServiceManager() { return m_xSMgr; }
+    Reference< XComponentContext > getComponentContext()
+    { assert(m_xCtx.is()); return m_xCtx; }
 
     Any  executeCommand( const Command& rCommand );
 
@@ -206,109 +206,42 @@ public:
 // Helpers.
 //=========================================================================
 
-static void ensureContentProviderForURL( const ContentBroker & rBroker,
+static void ensureContentProviderForURL( const Reference< XUniversalContentBroker >& rBroker,
                                          const rtl::OUString & rURL )
     throw ( ContentCreationException, RuntimeException )
 {
-    Reference< XContentProviderManager > xMgr
-        = rBroker.getContentProviderManagerInterface();
-    if ( !xMgr.is() )
+    Reference< XContentProvider > xProv
+        = rBroker->queryContentProvider( rURL );
+    if ( !xProv.is() )
     {
-        throw RuntimeException(
-            rtl::OUString(
-                "UCB does not implement mandatory interface "
-                "XContentProviderManager!" ),
-            Reference< XInterface >() );
+        throw ContentCreationException(
+            "No Content Provider available for URL: " + rURL,
+            Reference< XInterface >(),
+            ContentCreationError_NO_CONTENT_PROVIDER );
     }
-    else
-    {
-        Reference< XContentProvider > xProv
-            = xMgr->queryContentProvider( rURL );
-        if ( !xProv.is() )
-        {
-            throw ContentCreationException(
-                rtl::OUString(
-                    "No Content Provider available for URL: ") + rURL,
-                Reference< XInterface >(),
-                ContentCreationError_NO_CONTENT_PROVIDER );
-        }
-    }
-}
-
-//=========================================================================
-static ContentBroker* getContentBroker( bool bThrow )
-    throw ( ContentCreationException, RuntimeException )
-{
-    ContentBroker* pBroker = ContentBroker::get();
-
-    if ( !pBroker )
-    {
-        if ( bThrow )
-            throw RuntimeException(
-                    rtl::OUString("No Content Broker!"),
-                    Reference< XInterface >() );
-    }
-    else
-    {
-#if OSL_DEBUG_LEVEL > 1
-        Reference< XContentProviderManager > xMgr
-            = pBroker->getContentProviderManagerInterface();
-        if ( !xMgr.is() )
-        {
-            if ( bThrow )
-                throw RuntimeException(
-                        rtl::OUString(
-                            "UCB does not implement mandatory interface "
-                            "XContentProviderManager!" ),
-                        Reference< XInterface >() );
-        }
-        else
-        {
-            OSL_ENSURE( xMgr->queryContentProviders().getLength(),
-                        "Content Broker not configured (no providers)!" );
-        }
-#endif
-    }
-
-    return pBroker;
 }
 
 //=========================================================================
 static Reference< XContentIdentifier > getContentIdentifier(
-                                    const ContentBroker & rBroker,
+                                    const Reference< XUniversalContentBroker > & rBroker,
                                     const rtl::OUString & rURL,
                                     bool bThrow )
     throw ( ContentCreationException, RuntimeException )
 {
-    Reference< XContentIdentifierFactory > xIdFac
-                        = rBroker.getContentIdentifierFactoryInterface();
-    if ( xIdFac.is() )
+    Reference< XContentIdentifier > xId
+        = rBroker->createContentIdentifier( rURL );
+
+    if ( xId.is() )
+        return xId;
+
+    if ( bThrow )
     {
-        Reference< XContentIdentifier > xId
-            = xIdFac->createContentIdentifier( rURL );
+        ensureContentProviderForURL( rBroker, rURL );
 
-        if ( xId.is() )
-            return xId;
-
-        if ( bThrow )
-        {
-            ensureContentProviderForURL( rBroker, rURL );
-
-            throw ContentCreationException(
-                rtl::OUString(
-                    "Unable to create Content Identifier!" ),
-                Reference< XInterface >(),
-                ContentCreationError_IDENTIFIER_CREATION_FAILED );
-        }
-    }
-    else
-    {
-        if ( bThrow )
-            throw RuntimeException(
-                    rtl::OUString(
-                        "UCB does not implement mandatory interface "
-                        "XContentIdentifierFactory!" ),
-                    Reference< XInterface >() );
+        throw ContentCreationException(
+            "Unable to create Content Identifier!",
+            Reference< XInterface >(),
+            ContentCreationError_IDENTIFIER_CREATION_FAILED );
     }
 
     return Reference< XContentIdentifier >();
@@ -316,49 +249,34 @@ static Reference< XContentIdentifier > getContentIdentifier(
 
 //=========================================================================
 static Reference< XContent > getContent(
-                                    const ContentBroker & rBroker,
+                                    const Reference< XUniversalContentBroker > & rBroker,
                                     const Reference< XContentIdentifier > & xId,
                                     bool bThrow )
     throw ( ContentCreationException, RuntimeException )
 {
-    Reference< XContentProvider > xProvider
-        = rBroker.getContentProviderInterface();
-    if ( xProvider.is() )
+    Reference< XContent > xContent;
+    rtl::OUString msg;
+    try
     {
-        Reference< XContent > xContent;
-        rtl::OUString msg;
-        try
-        {
-            xContent = xProvider->queryContent( xId );
-        }
-        catch ( IllegalIdentifierException const & e )
-        {
-            msg = e.Message;
-            // handled below.
-        }
-
-        if ( xContent.is() )
-            return xContent;
-
-        if ( bThrow )
-        {
-            ensureContentProviderForURL( rBroker, xId->getContentIdentifier() );
-
-            throw ContentCreationException(
-                    rtl::OUString(
-                        "Unable to create Content! " ) + msg,
-                    Reference< XInterface >(),
-                    ContentCreationError_CONTENT_CREATION_FAILED );
-        }
+        xContent = rBroker->queryContent( xId );
     }
-    else
+    catch ( IllegalIdentifierException const & e )
     {
-        if ( bThrow )
-            throw RuntimeException(
-                    rtl::OUString(
-                        "UCB does not implement mandatory interface "
-                        "XContentProvider!" ),
-                    Reference< XInterface >() );
+        msg = e.Message;
+        // handled below.
+    }
+
+    if ( xContent.is() )
+        return xContent;
+
+    if ( bThrow )
+    {
+        ensureContentProviderForURL( rBroker, xId->getContentIdentifier() );
+
+        throw ContentCreationException(
+            "Unable to create Content! " + msg,
+            Reference< XInterface >(),
+            ContentCreationError_CONTENT_CREATION_FAILED );
     }
 
     return Reference< XContent >();
@@ -379,27 +297,28 @@ Content::Content()
 
 //=========================================================================
 Content::Content( const rtl::OUString& rURL,
-                  const Reference< XCommandEnvironment >& rEnv )
+                  const Reference< XCommandEnvironment >& rEnv,
+                  const Reference< XComponentContext >& rCtx )
     throw ( ContentCreationException, RuntimeException )
 {
-    ContentBroker* pBroker = getContentBroker( true );
+    Reference< XUniversalContentBroker > pBroker(
+        UniversalContentBroker::create( rCtx ) );
 
     Reference< XContentIdentifier > xId
-        = getContentIdentifier( *pBroker, rURL, true );
+        = getContentIdentifier( pBroker, rURL, true );
 
-    Reference< XContent > xContent = getContent( *pBroker, xId, true );
+    Reference< XContent > xContent = getContent( pBroker, xId, true );
 
-    m_xImpl = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
+    m_xImpl = new Content_Impl( rCtx, xContent, rEnv );
 }
 
 //=========================================================================
 Content::Content( const Reference< XContent >& rContent,
-                  const Reference< XCommandEnvironment >& rEnv )
+                  const Reference< XCommandEnvironment >& rEnv,
+                  const Reference< XComponentContext >& rCtx )
     throw ( ContentCreationException, RuntimeException )
 {
-    ContentBroker* pBroker = getContentBroker( true );
-
-    m_xImpl = new Content_Impl( pBroker->getServiceManager(), rContent, rEnv );
+    m_xImpl = new Content_Impl( rCtx, rContent, rEnv );
 }
 
 //=========================================================================
@@ -412,23 +331,23 @@ Content::Content( const Content& rOther )
 // static
 sal_Bool Content::create( const rtl::OUString& rURL,
                           const Reference< XCommandEnvironment >& rEnv,
+                          const Reference< XComponentContext >& rCtx,
                           Content& rContent )
 {
-    ContentBroker* pBroker = getContentBroker( false );
-    if ( !pBroker )
-        return sal_False;
+    Reference< XUniversalContentBroker > pBroker(
+        UniversalContentBroker::create( rCtx ) );
 
     Reference< XContentIdentifier > xId
-        = getContentIdentifier( *pBroker, rURL, false );
+        = getContentIdentifier( pBroker, rURL, false );
     if ( !xId.is() )
         return sal_False;
 
-    Reference< XContent > xContent = getContent( *pBroker, xId, false );
+    Reference< XContent > xContent = getContent( pBroker, xId, false );
     if ( !xContent.is() )
         return sal_False;
 
     rContent.m_xImpl
-        = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
+        = new Content_Impl( rCtx, xContent, rEnv );
 
     return sal_True;
 }
@@ -738,12 +657,12 @@ Reference< XResultSet > Content::createSortedCursor(
     if( aDynSet.is() )
     {
         Reference< XDynamicResultSet > aDynResult;
-        Reference< XMultiServiceFactory > aServiceManager = m_xImpl->getServiceManager();
+        Reference< XMultiComponentFactory > aServiceManager = m_xImpl->getComponentContext()->getServiceManager();
 
         if( aServiceManager.is() )
         {
-            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString("com.sun.star.ucb.SortedDynamicResultSetFactory")),
+            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstanceWithContext(
+                                "com.sun.star.ucb.SortedDynamicResultSetFactory", m_xImpl->getComponentContext()),
                                 UNO_QUERY );
 
             aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
@@ -1024,7 +943,8 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
             return sal_False;
     }
 
-    Content aNewContent( xNew, m_xImpl->getEnvironment() );
+    Content aNewContent(
+        xNew, m_xImpl->getEnvironment(), m_xImpl->getComponentContext() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
     aNewContent.executeCommand( rtl::OUString("insert"),
                                 makeAny(
@@ -1044,20 +964,8 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                    const sal_Int32 nNameClashAction )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    ContentBroker* pBroker = ContentBroker::get();
-    if ( !pBroker )
-    {
-        OSL_FAIL( "Content::transferContent - No Content Broker!" );
-        return sal_False;
-    }
-
-    Reference< XCommandProcessor > xCmdProc(
-                                    pBroker->getCommandProcessorInterface() );
-    if ( !xCmdProc.is() )
-    {
-        OSL_FAIL( "Content::transferContent - No XCommandProcessor!" );
-        return sal_False;
-    }
+    Reference< XUniversalContentBroker > pBroker(
+        UniversalContentBroker::create( m_xImpl->getComponentContext() ) );
 
     // Execute command "globalTransfer" at UCB.
 
@@ -1098,7 +1006,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aTransferArg;
 
-    xCmdProc->execute( aCommand, 0, m_xImpl->getEnvironment() );
+    pBroker->execute( aCommand, 0, m_xImpl->getEnvironment() );
     return sal_True;
 }
 
@@ -1152,14 +1060,15 @@ sal_Bool Content::isDocument()
 //=========================================================================
 //=========================================================================
 
-Content_Impl::Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
+Content_Impl::Content_Impl( const Reference< XComponentContext >& rCtx,
                             const Reference< XContent >& rContent,
                             const Reference< XCommandEnvironment >& rEnv )
-: m_xSMgr( rSMgr ),
+: m_xCtx( rCtx ),
   m_xContent( rContent ),
   m_xEnv( rEnv ),
   m_nCommandId( 0 )
 {
+    assert(rCtx.is());
     if ( m_xContent.is() )
     {
         m_xContentEventListener = new ContentEventListener_Impl( *this );
@@ -1288,51 +1197,30 @@ Reference< XContent > Content_Impl::getContent()
 
         if ( !m_xContent.is() && !m_aURL.isEmpty() )
         {
-            ContentBroker* pBroker = ContentBroker::get();
+            Reference< XUniversalContentBroker > pBroker(
+                UniversalContentBroker::create( getComponentContext() ) );
 
-            OSL_ENSURE( pBroker, "No Content Broker!" );
+            OSL_ENSURE( pBroker->queryContentProviders().getLength(),
+                        "Content Broker not configured (no providers)!" );
 
-            if ( pBroker )
+            Reference< XContentIdentifier > xId
+                = pBroker->createContentIdentifier( m_aURL );
+
+            OSL_ENSURE( xId.is(), "No Content Identifier!" );
+
+            if ( xId.is() )
             {
-                OSL_ENSURE( pBroker->getContentProviderManagerInterface()
-                                        ->queryContentProviders().getLength(),
-                            "Content Broker not configured (no providers)!" );
-
-                Reference< XContentIdentifierFactory > xIdFac
-                            = pBroker->getContentIdentifierFactoryInterface();
-
-                OSL_ENSURE( xIdFac.is(), "No Content Identifier factory!" );
-
-                if ( xIdFac.is() )
+                try
                 {
-                    Reference< XContentIdentifier > xId
-                                = xIdFac->createContentIdentifier( m_aURL );
-
-                    OSL_ENSURE( xId.is(), "No Content Identifier!" );
-
-                    if ( xId.is() )
-                    {
-                        Reference< XContentProvider > xProvider
-                            = pBroker->getContentProviderInterface();
-
-                        OSL_ENSURE( xProvider.is(), "No Content Provider!" );
-
-                        if ( xProvider.is() )
-                        {
-                            try
-                            {
-                                m_xContent = xProvider->queryContent( xId );
-                            }
-                            catch ( IllegalIdentifierException const & )
-                            {
-                            }
-
-                            if ( m_xContent.is() )
-                                m_xContent->addContentEventListener(
-                                                m_xContentEventListener );
-                        }
-                    }
+                    m_xContent = pBroker->queryContent( xId );
                 }
+                catch ( IllegalIdentifierException const & )
+                {
+                }
+
+                if ( m_xContent.is() )
+                    m_xContent->addContentEventListener(
+                        m_xContentEventListener );
             }
         }
     }

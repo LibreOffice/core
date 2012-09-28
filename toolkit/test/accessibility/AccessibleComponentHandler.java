@@ -28,8 +28,8 @@ class AccessibleComponentHandler
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleComponent xComponent =
-            (XAccessibleComponent) UnoRuntime.queryInterface (
-                XAccessibleComponent.class, xContext);
+            UnoRuntime.queryInterface (
+            XAccessibleComponent.class, xContext);
         if (xComponent != null)
             return new AccessibleComponentHandler (xComponent);
         else

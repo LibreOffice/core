@@ -31,7 +31,7 @@
 #include "dbregistersettings.hxx"
 #include "svx/svxids.hrc"
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
@@ -61,9 +61,9 @@ namespace svx
 
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            Reference< XDatabaseRegistrations > xRegistrations(
-                aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
+            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            Reference< XDatabaseContext > xRegistrations(
+                DatabaseContext::create(xContext) );
 
             Sequence< ::rtl::OUString > aRegistrationNames( xRegistrations->getRegistrationNames() );
             const ::rtl::OUString* pRegistrationName = aRegistrationNames.getConstArray();
@@ -93,9 +93,9 @@ namespace svx
 
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            Reference< XDatabaseRegistrations > xRegistrations(
-                aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
+            Reference< XDatabaseContext > xRegistrations(
+                DatabaseContext::create(
+                    comphelper::getProcessComponentContext()));
 
             const DatabaseRegistrations& rNewRegistrations = pRegistrations->getRegistrations();
             for (   DatabaseRegistrations::const_iterator reg = rNewRegistrations.begin();

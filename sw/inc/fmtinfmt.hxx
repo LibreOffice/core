@@ -43,24 +43,24 @@ class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
-    String aURL;                    // URL.
-    String aTargetFrame;            // Target frame for URL.
+    String aURL;                    ///< URL.
+    String aTargetFrame;            ///< Target frame for URL.
     String aINetFmt;
     String aVisitedFmt;
-    String aName;                   // Name of the link.
+    String aName;                   ///< Name of the link.
     SvxMacroTableDtor* pMacroTbl;
-    SwTxtINetFmt* pTxtAttr;         // My TextAttribute.
+    SwTxtINetFmt* pTxtAttr;         ///< My TextAttribute.
     sal_uInt16 nINetId;
     sal_uInt16 nVisitedId;
 public:
     SwFmtINetFmt( const String& rURL, const String& rTarget );
     SwFmtINetFmt( const SwFmtINetFmt& rAttr );
-    SwFmtINetFmt();                     // For TypeInfo.
+    SwFmtINetFmt();                     ///< For TypeInfo.
     virtual ~SwFmtINetFmt();
 
     TYPEINFO();
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -97,11 +97,11 @@ public:
     sal_uInt16 GetVisitedFmtId() const          { return nVisitedId; }
     void SetVisitedFmtId( sal_uInt16 nNew )     { nVisitedId = nNew; }
 
-    // Set a new MacroTable or clear the current one.
+    /// Set a new MacroTable or clear the current one.
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
-    // Macro getter and setter.
+    /// Macro getter and setter.
     void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
     const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };

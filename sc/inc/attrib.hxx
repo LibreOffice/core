@@ -112,10 +112,10 @@ public:
 //------------------------------------------------------------------------
 class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
 {
-    bool        bProtection;    // protect cell
-    bool        bHideFormula;   // hide formula
-    bool        bHideCell;      // hide cell
-    bool        bHidePrint;     // don't print cell
+    bool        bProtection;    ///< protect cell
+    bool        bHideFormula;   ///< hide formula
+    bool        bHideCell;      ///< hide cell
+    bool        bHidePrint;     ///< don't print cell
 public:
                             TYPEINFO();
                             ScProtectionAttr();

@@ -32,4 +32,4 @@ use lib ("$ENV{SOLARENV}/bin/modules");
 
 use installer qw(main);
 
-main();
+exit main();

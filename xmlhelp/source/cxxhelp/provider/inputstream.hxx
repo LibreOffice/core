@@ -40,7 +40,7 @@ namespace chelp {
     {
     public:
 
-        XInputStream_impl( const rtl::OUString& aUncPath );
+        XInputStream_impl( const OUString& aUncPath );
 
         virtual ~XInputStream_impl();
 

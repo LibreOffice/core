@@ -65,10 +65,25 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 
 #define SBWIDTH 16
 
-SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId )
-    ,m_pAccessible(NULL)
-    ,aVscrollSB( this, WB_VERT)
+SvxShowCharSet::SvxShowCharSet(Window* pParent, const ResId& rResId)
+    : Control(pParent, rResId)
+    , m_pAccessible(NULL)
+    , aVscrollSB(this, WB_VERT)
+{
+    init();
+    InitSettings( sal_True, sal_True );
+}
+
+SvxShowCharSet::SvxShowCharSet(Window* pParent)
+    : Control(pParent)
+    , m_pAccessible(NULL)
+    , aVscrollSB( this, WB_VERT)
+{
+    init();
+    InitSettings( sal_True, sal_True );
+}
+
+void SvxShowCharSet::init()
 {
     nSelectedIndex = -1;    // TODO: move into init list when it is no longer static
 
@@ -81,7 +96,21 @@ SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
     // other settings like aVscroll depend on selected font => see SetFont
 
     bDrag = sal_False;
-    InitSettings( sal_True, sal_True );
+}
+
+void SvxShowCharSet::Resize()
+{
+    aOrigSize = GetOutputSizePixel();
+    aOrigPos = GetPosPixel();
+
+    Control::Resize();
+
+    SetFont(GetFont()); //force recalculation of correct fontsize
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowCharSet(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxShowCharSet(pParent);
 }
 
 // -----------------------------------------------------------------------
@@ -494,7 +523,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
 
     if( bNeedVscroll)
     {
-        aVscrollSB.SetPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT );
+        aVscrollSB.setPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT );
         aVscrollSB.SetRangeMin( 0 );
         int nLastRow = (maFontCharMap.GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
         aVscrollSB.SetRangeMax( nLastRow );

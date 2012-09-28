@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/accessories))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/accessories,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/accessories,\
     scp2/source/accessories/module_accessories \
 ))

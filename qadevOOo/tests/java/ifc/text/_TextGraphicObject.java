@@ -136,7 +136,6 @@ public class _TextGraphicObject extends MultiPropertyTest {
             res[0][i] = new Point();
             res[0][i].X = rd() * rd() * rd();
             res[0][i].Y = rd() * rd() * rd();
-            ;
         }
 
         return res;

@@ -912,6 +912,11 @@ void GenPspGraphics::GetDevFontList( ImplDevFontList *pList )
     SalGenericInstance::RegisterFontSubstitutors( pList );
 }
 
+void GenPspGraphics::ClearDevFontCache()
+{
+    GlyphCache::GetInstance().ClearFontCache();
+}
+
 void GenPspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
 {
     const psp::PrinterInfo& rInfo = psp::PrinterInfoManager::get().getPrinterInfo( m_pJobData->m_aPrinterName );

@@ -61,5 +61,5 @@
 #define TSB_SIZEPROTECT             46
 #define FL_PROTECT                  47
 #define FL_DIVIDER                  48
-
+#define NF_ANGLE                    49
 //

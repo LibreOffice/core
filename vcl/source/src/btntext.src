@@ -76,3 +76,18 @@ String SV_BUTTONTEXT_ABORT
 {
     Text [ en-US ] = "~Abort";
 };
+
+String SV_BUTTONTEXT_RESET
+{
+    Text [ en-US ] = "R~eset";
+};
+
+String SV_BUTTONTEXT_ADD
+{
+    Text [ en-US ] = "~Add";
+};
+
+String SV_BUTTONTEXT_DELETE
+{
+    Text [ en-US ] = "~Delete";
+};

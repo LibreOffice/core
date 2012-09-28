@@ -35,7 +35,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <tools/debug.hxx>
@@ -82,7 +81,7 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
     StringList_Impl* pList = NULL;
     try
     {
-        ::ucbhelper::Content aCnt( rURL, uno::Reference< ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content aCnt( rURL, uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         uno::Reference< sdbc::XResultSet > xResultSet;
         uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
         uno::Sequence< OUString > aProps(3);
@@ -173,7 +172,7 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
         uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
                     xFactory->createInstance( "com.sun.star.task.InteractionHandler" ), uno::UNO_QUERY );
 
-        ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ) );
+        ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         uno::Reference< sdbc::XResultSet > xResultSet;
         uno::Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
@@ -256,7 +255,7 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
         uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
                     xFactory->createInstance( "com.sun.star.task.InteractionHandler" ), uno::UNO_QUERY );
-        ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ) );
+        ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         // open the "active help" stream
         uno::Reference< io::XInputStream > xStream = aCnt.openStream();
         // and convert it to a String
@@ -288,7 +287,8 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
     try
     {
         ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::NO_DECODE ),
-                      uno::Reference< ucb::XCommandEnvironment > () );
+                      uno::Reference< ucb::XCommandEnvironment >(),
+                      comphelper::getProcessComponentContext() );
         if ( !( aCnt.getPropertyValue( "IsErrorDocument" ) >>= bRet ) )
         {
             SAL_WARN( "sfx2.bastyp", "Property 'IsErrorDocument' is missing" );
@@ -311,7 +311,7 @@ sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         aCnt.getPropertyValue( "Size" ) >>= nTemp;
     }
     catch( const ucb::CommandAbortedException& )

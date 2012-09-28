@@ -21,7 +21,6 @@ package graphical;
 import helper.OSHelper;
 import helper.ProcessHandler;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Helper class to interpret a jpg filename
@@ -157,13 +156,8 @@ class CountNotBlackPixelsFromImage extends CountNotXXXPixelsFromImage
     }
 }
 
-/**
- *
- * @author ll93751
- */
 public class JPEGComparator extends EnhancedComplexTestCase
 {
-    // @Override
 
     public String[] getTestMethodNames()
     {
@@ -185,8 +179,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
 
     public void checkOneFile(String _sDocumentName, String _sResult, ParameterHelper _aParams) throws OfficeException
     {
-        // private void callEveryPictureInIniFile(IniFile _aIniFile, String _sSectionName, ParameterHelper _aParam)
-        // {
         String sPath = FileHelper.getPath(_sDocumentName);
         String sSectionName = FileHelper.getBasename(_sDocumentName);
 
@@ -210,14 +202,11 @@ public class JPEGComparator extends EnhancedComplexTestCase
             for (int i = 1; i <= nPages; i++)
             {
                 String sJPEGFilename = JPEGCreator.getFilenameForJPEGSchema(sJPEGSchema, i);
-                // String sPath = FileHelper.getPath(_aParam.getInputPath());
                 String sJPEGPath = FileHelper.getPath(sJPEGFilename);
                 if (!sPath.equals(sJPEGPath))
                 {
                     GlobalLogWriter.println("Path where to find the index and where to file the JPEG pictures are not the same.");
-
                 }
-                // String sEntry = FileHelper.appendPath(sPath, sSection);
                 File aFile = new File(sJPEGFilename);
                 assure("File '" + sJPEGFilename + "' doesn't exists.", aFile.exists(), true);
                 if (aFile.exists())
@@ -394,7 +383,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
      * @param _sDocumentName
      * @param _sResult
      * @param _aParams
-     * @return 0=no difference !=0 both files differ
      */
     private void compareJPEG(String _sDocumentName, String _sResult, ParameterHelper _aParams)
     {
@@ -410,7 +398,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
             // we want to have all in one Directory, Original, Reference and the Difference result.
             // copy the original file to the reference path
             String sNewSourceBasename = "Original_" + sSourceBasename;
-            // String sSource = FileHelper.appendPath(sSourcePath, sSourceBasename);
             String sSource = _sDocumentName;
             String sDestination = FileHelper.appendPath(sDestinationPath, sNewSourceBasename);
             FileHelper.copy(sSource, sDestination);
@@ -419,7 +406,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
             JPEGCreator.convertToNearSameFileWithWidth340(sDestination);
         }
         String sDifferenceBasename = "Difference_between_" + FileHelper.getNameNoSuffix(sSourceBasename) + "_and_" + FileHelper.getNameNoSuffix(sDestinationBasename) + ".jpg";
-        // String sDifferencePath = sDestinationPath;
 
         String sSource = FileHelper.appendPath(sDestinationPath, sSourceBasename);
         String sDestination = FileHelper.appendPath(sDestinationPath, sDestinationBasename);
@@ -483,8 +469,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
             int nMaxPage = Math.max(nPage, aResultIni.getIntValue("global", "pages", 0));
             aResultIni.insertValue("global", "pages", nMaxPage);
 
-            // INIoutput.writeValue("buildid", _sBuildID);
-            // INIoutput.writeValue("refbuildid", _sRefBuildID);
             String sRefBuildId = (String) _aParams.getTestParameters().get("RefBuildId");
             if (sRefBuildId == null)
             {
@@ -510,75 +494,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
         }
     }
 
-//    // This creates a status for exact on document
-//    static boolean createINIStatus(StatusHelper[] aList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID, String _sRefBuildID)
-//        {
-//            // Status
-//            String fs = System.getProperty("file.separator");
-//            String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
-//            String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
-////            String sHTMLFile = _sFilenamePrefix + sNameNoSuffix + ".html";
-////            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, "", "");
-////            HTMLoutput.header(sNameNoSuffix);
-////  TODO: version info was fine
-////            HTMLoutput.checkSection(sBasename);
-//            // Status end
-//
-//            String sINIFile = _sFilenamePrefix + sNameNoSuffix + ".ini";
-//            INIOutputter INIoutput = INIOutputter.create(_sOutputPath, sINIFile, "", "");
-//            INIoutput.createHeader();
-////  TODO: version info was fine
-//
-//            INIoutput.writeSection("global");
-//            INIoutput.writeValue("pages", String.valueOf(aList.length));
-//            INIoutput.writeValue("buildid", _sBuildID);
-//            INIoutput.writeValue("refbuildid", _sRefBuildID);
-//            INIoutput.writeValue("diffdiff", "no");
-//            INIoutput.writeValue("basename", sBasename);
-//
-//            boolean bResultIsOk = true;          // result over all pages
-//            for (int i=0;i<aList.length; i++)
-//            {
-//                INIoutput.writeSection("page" + String.valueOf(i + 1));   // list start at point 0, but this is page 1 and so on... current_page = (i + 1)
-//                aList[i].printStatus();
-//
-//                boolean bCurrentResult = true;   // result over exact one page
-//
-//                int nCurrentDiffStatus = aList[i].nDiffStatus;
-//
-//                // check if the status is in a defined range
-//                if (nCurrentDiffStatus == StatusHelper.DIFF_NO_DIFFERENCES)
-//                {
-//                    // ok.
-//                }
-//                else if (nCurrentDiffStatus == StatusHelper.DIFF_DIFFERENCES_FOUND && aList[i].nPercent < 5)
-//                {
-//                    // ok.
-//                }
-//                else if (nCurrentDiffStatus == StatusHelper.DIFF_AFTER_MOVE_DONE_NO_PROBLEMS)
-//                {
-//                    // ok.
-//                }
-//                else if (nCurrentDiffStatus == StatusHelper.DIFF_AFTER_MOVE_DONE_DIFFERENCES_FOUND && aList[i].nPercent2 < 5)
-//                {
-//                    // ok.
-//                }
-//                else
-//                {
-//                    // failed.
-//                    bCurrentResult = false; // logic: nDiff==0 = true if there is no difference
-//                }
-//
-//                // Status
-////                HTMLoutput.checkLine(aList[i], bCurrentResult);
-//                INIoutput.checkLine(aList[i], bCurrentResult);
-//                bResultIsOk &= bCurrentResult;
-//            }
-//            // Status
-////            HTMLoutput.close();
-//            INIoutput.close();
-//            return bResultIsOk;
-//        }
     /**
      * count how much pixel differ and between Old or New and the Difference graphics
      *
@@ -614,41 +529,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
         final int nNotWhiteCount_NewGraphic = PixelCounter.countNotWhitePixelsFromImage(_sNewGfx);
         final int nNotBlackCount_DiffGraphic = PixelCounter.countNotBlackPixelsFromImage(_sDiffGfx);
 
-        // Count Pixels in different threads
-//        CountNotWhitePixelsFromImage t1 = new CountNotWhitePixelsFromImage(_sOldGfx);
-//        CountNotWhitePixelsFromImage t2 = new CountNotWhitePixelsFromImage(_sNewGfx);
-//        CountNotBlackPixelsFromImage t3 = new CountNotBlackPixelsFromImage(_sDiffGfx);
-//        t1.start();
-//        t2.start();
-//        t3.start();
-//        try
-//        {
-//            t1.join();
-//        }
-//        catch (InterruptedException ex)
-//        {
-//            GlobalLogWriter.get().println("Thread 1 failed: " + ex.getMessage());
-//        }
-//        try
-//        {
-//            t2.join();
-//        }
-//        catch (InterruptedException ex)
-//        {
-//            GlobalLogWriter.get().println("Thread 2 failed: " + ex.getMessage());
-//        }
-//        try
-//        {
-//            t3.join();
-//        }
-//        catch (InterruptedException ex)
-//        {
-//            GlobalLogWriter.get().println("Thread 3 failed: " + ex.getMessage());
-//        }
-//        final int nNotWhiteCount_OldGraphic = t1.getValue();
-//        final int nNotWhiteCount_NewGraphic = t2.getValue();
-//        final int nNotBlackCount_DiffGraphic = t3.getValue();
-
         a.stop();
         GlobalLogWriter.println("Thread Time is: " + a.getTime());
 
@@ -681,11 +561,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
                 sComposite = FileHelper.appendPath(sIMPath, sComposite);
             }
         }
-
-        // String sCommand = sComposite + " -compose difference " +
-        //     StringHelper.doubleQuoteIfNeed(_sOldGfx) + " " +
-        //     StringHelper.doubleQuoteIfNeed(_sNewGfx) + " " +
-        //     StringHelper.doubleQuoteIfNeed(_sDiffGfx);
 
         String[] sCommandArray =
         {
@@ -728,10 +603,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
         int nResult = 0;
         // would like to know what the meaning of %k is for ImageMagick's 'identify'
         String sIM_Format = "%k";
-        // if (OSHelper.isWindows())
-        // {
-        //     sIM_Format = "%%k";
-        // }
 
         String sIdentify = "identify";
         if (OSHelper.isWindows())
@@ -743,8 +614,6 @@ public class JPEGComparator extends EnhancedComplexTestCase
                 sIdentify = FileHelper.appendPath(sIMPath, sIdentify);
             }
         }
-
-        // String sCommand = sIdentify + " " + sIM_Format + " " + StringHelper.doubleQuoteIfNeed(_sDiffGfx);
 
         String[] sCommandArray =
         {
@@ -778,29 +647,4 @@ public class JPEGComparator extends EnhancedComplexTestCase
         }
         return nResult;
     }
-//    public static void main(String [] _args)
-//    {
-//// give an index.ini file, ok
-//// give a directory, where exist jpeg files ok
-//// inputpath (given file) doesn't exists
-//// give a jpeg file.
-//
-//        String args[] = {
-//            "-TimeOut", "3600000",
-//            "-tb", "java_complex",
-//            "-o", "graphical.JPEGComparator",
-//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
-//            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2",
-////            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\GroupReport.odt.pdf_180DPI_0001.jpg",
-////            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2\\Report1.odt.pdf_180DPI_0001.jpg",
-//            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
-////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
-////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
-////            "-OFFICE_VIEWABLE", "false",
-////            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  --norestore --nocrashreport --accept=pipe,name=ll93751;urp;",
-//            "-NoOffice"
-//        };
-//
-//        org.openoffice.Runner.main(args);
-//    }
 }

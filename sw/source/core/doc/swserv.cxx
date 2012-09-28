@@ -303,16 +303,16 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
 
 
 
-SwDataChanged::SwDataChanged( const SwPaM& rPam, sal_uInt16 nTyp )
-    : pPam( &rPam ), pPos( 0 ), pDoc( rPam.GetDoc() ), nType( nTyp )
+SwDataChanged::SwDataChanged( const SwPaM& rPam )
+    : pPam( &rPam ), pPos( 0 ), pDoc( rPam.GetDoc() )
 {
     nNode = rPam.GetPoint()->nNode.GetIndex();
     nCntnt = rPam.GetPoint()->nContent.GetIndex();
 }
 
 
-SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos, sal_uInt16 nTyp )
-    : pPam( 0 ), pPos( &rPos ), pDoc( pDc ), nType( nTyp )
+SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
+    : pPam( 0 ), pPos( &rPos ), pDoc( pDc )
 {
     nNode = rPos.nNode.GetIndex();
     nCntnt = rPos.nContent.GetIndex();

@@ -42,7 +42,7 @@
 #include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 //_______________________________________________
@@ -158,7 +158,7 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 
     try
     {
-        css::uno::Reference< css::uno::XComponentContext >    xContext( comphelper::ComponentContext(xSMGR).getUNOContext() );
+        css::uno::Reference< css::uno::XComponentContext >    xContext( comphelper::getComponentContext(xSMGR) );
         css::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(xContext) );
         const ::sal_Bool                                      bSubstRequired   = sal_True;
         const ::rtl::OUString                                 sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);

@@ -1,0 +1,63 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef CONNECTIVITY_RESOURCE_MORK_HRC
+#define CONNECTIVITY_RESOURCE_MORK_HRC
+
+#include "resource/conn_shared_res.hrc"
+
+// ============================================================================
+// = the mozab driver's resource strings
+// ============================================================================
+
+#define STR_MOZILLA_ADDRESSBOOKS            ( STR_MORK_BASE +    0 )
+#define STR_THUNDERBIRD_ADDRESSBOOKS        ( STR_MORK_BASE +    1 )
+#define STR_OE_ADDRESSBOOK                  ( STR_MORK_BASE +    2 )
+#define STR_OUTLOOK_MAPI_ADDRESSBOOK        ( STR_MORK_BASE +    3 )
+    // FREE
+#define STR_NO_TABLE_CREATION_SUPPORT       ( STR_MORK_BASE +    5 )
+#define STR_MOZILLA_IS_RUNNING              ( STR_MORK_BASE +    6 )
+#define STR_COULD_NOT_RETRIEVE_AB_ENTRY     ( STR_MORK_BASE +    7 )
+#define STR_COULD_NOT_GET_DIRECTORY_NAME    ( STR_MORK_BASE +    8 )
+#define STR_TIMEOUT_WAITING                 ( STR_MORK_BASE +    9 )
+#define STR_ERR_EXECUTING_QUERY             ( STR_MORK_BASE +   10 )
+#define STR_MOZILLA_IS_RUNNIG_NO_CHANGES    ( STR_MORK_BASE +   11 )
+#define STR_FOREIGN_PROCESS_CHANGED_AB      ( STR_MORK_BASE +   12 )
+#define STR_CANT_FIND_ROW                   ( STR_MORK_BASE +   13 )
+#define STR_CANT_FIND_CARD_FOR_ROW          ( STR_MORK_BASE +   14 )
+#define STR_QUERY_INVALID_IS_NULL_COLUMN    ( STR_MORK_BASE +   15 )
+#define STR_NO_HOSTNAME                     ( STR_MORK_BASE +   16 )
+#define STR_NO_BASEDN                       ( STR_MORK_BASE +   17 )
+#define STR_COULD_NOT_CONNECT_LDAP          ( STR_MORK_BASE +   18 )
+#define STR_ERROR_REFRESH_ROW               ( STR_MORK_BASE +   19 )
+#define STR_ILLEGAL_MOVEMENT                ( STR_MORK_BASE +   20 )
+#define STR_ERROR_GET_ROW                   ( STR_MORK_BASE +   21 )
+#define STR_COMMIT_ROW                      ( STR_MORK_BASE +   22 )
+#define STR_INVALID_ROW_UPDATE              ( STR_MORK_BASE +   23 )
+#define STR_ROW_CAN_NOT_SAVE                ( STR_MORK_BASE +   24 )
+#define STR_CAN_NOT_CANCEL_ROW_UPDATE       ( STR_MORK_BASE +   25 )
+#define STR_CAN_NOT_CREATE_ROW              ( STR_MORK_BASE +   26 )
+#define STR_QUERY_AT_LEAST_ONE_TABLES       ( STR_MORK_BASE +   27 )
+#define STR_NO_COUNT_SUPPORT                ( STR_MORK_BASE +   28 )
+#define STR_STMT_TYPE_NOT_SUPPORTED         ( STR_MORK_BASE +   29 )
+#define STR_COULD_NOT_LOAD_LIB              ( STR_MORK_BASE +   30 )
+#define STR_UNSPECIFIED_ERROR               ( STR_MORK_BASE +   31 )
+#define STR_COULD_NOT_CREATE_ADDRESSBOOK    ( STR_MORK_BASE +   32 )
+
+#endif // CONNECTIVITY_RESOURCE_MOZAB_HRC
+

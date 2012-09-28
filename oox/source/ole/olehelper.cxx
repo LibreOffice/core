@@ -40,7 +40,6 @@
 #include <tools/globname.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 
 namespace oox {
 namespace ole {
@@ -354,15 +353,6 @@ lcl_getFrame( const  Reference< ::com::sun::star::frame::XModel >& rxModel )
     return xFrame;
 }
 
-Reference< XComponentContext >
-lcl_getUnoCtx()
-{
-    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
-    return aCtx.getUNOContext();
-}
-
-
-
 class OleFormCtrlExportHelper
 {
     ::oox::ole::EmbeddedControl maControl;
@@ -476,7 +466,7 @@ void OleFormCtrlExportHelper::exportControl( const Reference< XOutputStream >& r
     }
 }
 
-MSConvertOCXControls::MSConvertOCXControls( const Reference< ::com::sun::star::frame::XModel >& rxModel ) : SvxMSConvertOCXControls( rxModel ), mxCtx( lcl_getUnoCtx() ), maGrfHelper( mxCtx, lcl_getFrame( rxModel ), StorageRef() )
+MSConvertOCXControls::MSConvertOCXControls( const Reference< ::com::sun::star::frame::XModel >& rxModel ) : SvxMSConvertOCXControls( rxModel ), mxCtx( comphelper::getProcessComponentContext() ), maGrfHelper( mxCtx, lcl_getFrame( rxModel ), StorageRef() )
 {
 }
 
@@ -589,7 +579,7 @@ sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxMode
 {
     SvGlobalName aName;
 
-    OleFormCtrlExportHelper exportHelper( lcl_getUnoCtx(), rxModel, rxControlModel );
+    OleFormCtrlExportHelper exportHelper( comphelper::getProcessComponentContext(), rxModel, rxControlModel );
 
     if ( !exportHelper.isValid() )
         return sal_False;

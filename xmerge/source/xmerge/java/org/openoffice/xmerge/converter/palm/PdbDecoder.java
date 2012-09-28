@@ -49,7 +49,6 @@ import java.io.DataInputStream;
  *
  *  <p>Other decoders assume these as well.</p>
  *
- *  @author  Herbie Ong
  *  @see     PalmDB
  *  @see     Record
  */

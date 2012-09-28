@@ -34,18 +34,7 @@
 
 // __________ Imports __________
 
-// structs, const, ...
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.bridge.XUnoUrlResolver;
-
-// exceptions
-import com.sun.star.container.NoSuchElementException;
-
-// interfaces
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.Exception;
-
 import com.sun.star.uno.UnoRuntime;
 
 // others

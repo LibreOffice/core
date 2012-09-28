@@ -35,7 +35,6 @@ import com.sun.star.wizards.common.PropertyNames;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import com.sun.star.wizards.common.HelpIds;
-import com.sun.star.wizards.common.PropertyNames;
 
 /**
  *

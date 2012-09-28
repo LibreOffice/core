@@ -32,6 +32,7 @@
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
+#include <algorithm>
 #include <map>
 #include <list>
 #include <accmap.hxx>
@@ -70,6 +71,7 @@
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
 #include <switerator.hxx>
+#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -78,7 +80,7 @@ using namespace ::sw::access;
 
 struct SwFrmFunc
 {
-    sal_Bool operator()( const SwFrm * p1,
+    bool operator()( const SwFrm * p1,
                          const SwFrm * p2) const
     {
         return p1 < p2;
@@ -92,12 +94,12 @@ class SwAccessibleContextMap_Impl: public _SwAccessibleContextMap_Impl
 public:
 
 #if OSL_DEBUG_LEVEL > 0
-    sal_Bool mbLocked;
+    bool mbLocked;
 #endif
 
     SwAccessibleContextMap_Impl()
 #if OSL_DEBUG_LEVEL > 0
-        : mbLocked( sal_False )
+        : mbLocked( false )
 #endif
     {}
 
@@ -198,7 +200,7 @@ void SwDrawModellListener_Impl::Dispose()
 //------------------------------------------------------------------------------
 struct SwShapeFunc
 {
-    sal_Bool operator()( const SdrObject * p1,
+    bool operator()( const SdrObject * p1,
                          const SdrObject * p2) const
     {
         return p1 < p2;
@@ -215,11 +217,11 @@ class SwAccessibleShapeMap_Impl: public _SwAccessibleShapeMap_Impl
 public:
 
 #if OSL_DEBUG_LEVEL > 0
-    sal_Bool mbLocked;
+    bool mbLocked;
 #endif
     SwAccessibleShapeMap_Impl( SwAccessibleMap *pMap )
 #if OSL_DEBUG_LEVEL > 0
-        : mbLocked( sal_False )
+        : mbLocked( false )
 #endif
     {
         maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
@@ -421,24 +423,24 @@ public:
         mnStates |= _nStates;
     }
 
-    inline sal_Bool IsUpdateCursorPos() const
+    inline bool IsUpdateCursorPos() const
     {
         return (mnStates & ACC_STATE_CARET) != 0;
     }
-    inline sal_Bool IsInvalidateStates() const
+    inline bool IsInvalidateStates() const
     {
         return (mnStates & ACC_STATE_MASK) != 0;
     }
-    inline sal_Bool IsInvalidateRelation() const
+    inline bool IsInvalidateRelation() const
     {
         return (mnStates & ACC_STATE_RELATION_MASK) != 0;
     }
-    inline sal_Bool IsInvalidateTextSelection() const
+    inline bool IsInvalidateTextSelection() const
     {
         return ( mnStates & ACC_STATE_TEXT_SELECTION_CHANGED ) != 0;
     }
 
-    inline sal_Bool IsInvalidateTextAttrs() const
+    inline bool IsInvalidateTextAttrs() const
     {
         return ( mnStates & ACC_STATE_TEXT_ATTRIBUTE_CHANGED ) != 0;
     }
@@ -460,19 +462,19 @@ typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
 
 class SwAccessibleEventList_Impl: public _SwAccessibleEventList_Impl
 {
-    sal_Bool mbFiring;
+    bool mbFiring;
 
 public:
 
     SwAccessibleEventList_Impl()
-        : mbFiring( sal_False )
+        : mbFiring( false )
     {}
 
     inline void SetFiring()
     {
-        mbFiring = sal_True;
+        mbFiring = true;
     }
-    inline sal_Bool IsFiring() const
+    inline bool IsFiring() const
     {
         return mbFiring;
     }
@@ -503,7 +505,7 @@ public:
 //------------------------------------------------------------------------------
 struct SwAccessibleChildFunc
 {
-    sal_Bool operator()( const SwAccessibleChild& r1,
+    bool operator()( const SwAccessibleChild& r1,
                          const SwAccessibleChild& r2 ) const
     {
         const void *p1 = r1.GetSwFrm()
@@ -542,7 +544,7 @@ struct SwAccessibleParaSelection
 
 struct SwXAccWeakRefComp
 {
-    sal_Bool operator()( const uno::WeakReference<XAccessible>& _rXAccWeakRef1,
+    bool operator()( const uno::WeakReference<XAccessible>& _rXAccWeakRef1,
                          const uno::WeakReference<XAccessible>& _rXAccWeakRef2 ) const
     {
         return _rXAccWeakRef1.get() < _rXAccWeakRef2.get();
@@ -754,10 +756,10 @@ void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
 }
 
 //------------------------------------------------------------------------------
-static sal_Bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
+static bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
                                   const SwFrm *pFrm )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( pFrm && pFrm->IsCellFrm() && rAcc.is() )
     {
@@ -877,7 +879,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
             SwAccessibleEvent_Impl aEvent( *(*aIter).second );
             OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                     "dispose events should not be stored" );
-            sal_Bool bAppendEvent = sal_True;
+            bool bAppendEvent = true;
             switch( rEvent.GetType() )
             {
             case SwAccessibleEvent_Impl::CARET_OR_STATES:
@@ -927,7 +929,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // but executed immediatly to avoid broadcasting of
                 // defunctional objects. So what needs to be done here is to
                 // remove all events for the frame in question.
-                bAppendEvent = sal_False;
+                bAppendEvent = false;
                 break;
             case SwAccessibleEvent_Impl::INVALID_ATTR:
                 OSL_ENSURE( aEvent.GetType() == SwAccessibleEvent_Impl::INVALID_ATTR,
@@ -1017,7 +1019,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
     {
         ::std::list< const SwFrm * > aParents;
         Window *pWin = GetShell()->GetWin();
-        sal_Bool bFocused = pWin && pWin->HasFocus();
+        bool bFocused = pWin && pWin->HasFocus();
         SwAccessibleObjShape_Impl *pShape = pShapes;
         while( nShapes )
         {
@@ -1111,7 +1113,7 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
     if( pShapes )
     {
         Window *pWin = GetShell()->GetWin();
-        sal_Bool bFocused = pWin && pWin->HasFocus();
+        bool bFocused = pWin && pWin->HasFocus();
         SwAccessibleObjShape_Impl  *pShape = pShapes;
         while( nShapes )
         {
@@ -1144,7 +1146,7 @@ SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mnPara( 1 ),
     mnFootnote( 1 ),
     mnEndnote( 1 ),
-    mbShapeSelected( sal_False )
+    mbShapeSelected( false )
 {
     pSh->GetLayout()->AddAccessibleShell();
 }
@@ -1250,10 +1252,10 @@ SwAccessibleMap::~SwAccessibleMap()
 }
 
 uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
-    sal_Bool bPagePreview )
+    bool bPagePreview )
 {
     uno::Reference < XAccessible > xAcc;
-    sal_Bool bSetVisArea = sal_False;
+    bool bSetVisArea = false;
 
     {
         osl::MutexGuard aGuard( maMutex );
@@ -1262,13 +1264,13 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
         {
             mpFrmMap = new SwAccessibleContextMap_Impl;
 #if OSL_DEBUG_LEVEL > 0
-            mpFrmMap->mbLocked = sal_False;
+            mpFrmMap->mbLocked = false;
 #endif
         }
 
 #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( !mpFrmMap->mbLocked, "Map is locked" );
-        mpFrmMap->mbLocked = sal_True;
+        mpFrmMap->mbLocked = true;
 #endif
 
         const SwRootFrm *pRootFrm = GetShell()->GetLayout();
@@ -1277,8 +1279,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
             xAcc = (*aIter).second;
         if( xAcc.is() )
         {
-            bSetVisArea = sal_True; // Set VisArea when map mutex is not
-                                    // locked
+            bSetVisArea = true; // Set VisArea when map mutex is not locked
         }
         else
         {
@@ -1299,7 +1300,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
         }
 
 #if OSL_DEBUG_LEVEL > 0
-        mpFrmMap->mbLocked = sal_False;
+        mpFrmMap->mbLocked = false;
 #endif
     }
 
@@ -1315,7 +1316,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
 
 uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
 {
-    return _GetDocumentView( sal_False );
+    return _GetDocumentView( false );
 }
 
 uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
@@ -1329,7 +1330,7 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
         mpPreview = new SwAccPreviewData();
     mpPreview->Update( *this, _rPrevwPages, _rScale, _pSelectedPageFrm, _rPrevwWinSize );
 
-    uno::Reference<XAccessible> xAcc = _GetDocumentView( sal_True );
+    uno::Reference<XAccessible> xAcc = _GetDocumentView( true );
     return xAcc;
 }
 
@@ -1338,7 +1339,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
 {
     uno::Reference < XAccessible > xAcc;
     uno::Reference < XAccessible > xOldCursorAcc;
-    sal_Bool bOldShapeSelected = sal_False;
+    bool bOldShapeSelected = false;
 
     {
         osl::MutexGuard aGuard( maMutex );
@@ -1448,7 +1449,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         mxCursorContext = xAcc;
 
                         bOldShapeSelected = mbShapeSelected;
-                        mbShapeSelected = sal_False;
+                        mbShapeSelected = false;
                     }
                 }
             }
@@ -1910,7 +1911,7 @@ void SwAccessibleMap::InvalidateAttr( const SwTxtFrm& rTxtFrm )
 void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 {
     SwAccessibleChild aFrmOrObj( pFrm );
-    sal_Bool bShapeSelected = sal_False;
+    bool bShapeSelected = false;
     const ViewShell *pVSh = GetShell();
     if( pVSh->ISA( SwCrsrShell ) )
     {
@@ -1932,7 +1933,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
             }
             else if( pFESh->IsObjSelected() > 0 )
             {
-                bShapeSelected = sal_True;
+                bShapeSelected = true;
                 aFrmOrObj = static_cast<const SwFrm *>( 0 );
             }
         }
@@ -1943,7 +1944,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 
     uno::Reference < XAccessible > xOldAcc;
     uno::Reference < XAccessible > xAcc;
-    sal_Bool bOldShapeSelected = sal_False;
+    bool bOldShapeSelected = false;
 
     {
         osl::MutexGuard aGuard( maMutex );
@@ -2001,7 +2002,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 void SwAccessibleMap::InvalidateFocus()
 {
     uno::Reference < XAccessible > xAcc;
-    sal_Bool bShapeSelected;
+    bool bShapeSelected;
     {
         osl::MutexGuard aGuard( maMutex );
 
@@ -2059,7 +2060,7 @@ void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
 }
 
 void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
-                                              sal_Bool bFrom )
+                                              bool bFrom )
 {
     // first, see if this frame is accessible, and if so, get the respective
     SwAccessibleChild aFrmOrObj( pFrm );
@@ -2108,8 +2109,8 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
 void SwAccessibleMap::InvalidateRelationSet( const SwFrm* pMaster,
                                              const SwFrm* pFollow )
 {
-    _InvalidateRelationSet( pMaster, sal_False );
-    _InvalidateRelationSet( pFollow, sal_True );
+    _InvalidateRelationSet( pMaster, false );
+    _InvalidateRelationSet( pFollow, true );
 }
 
 // invalidation of CONTENT_FLOW_FROM/_TO relation of a paragraph
@@ -2271,7 +2272,7 @@ void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
 }
 
 
-sal_Bool SwAccessibleMap::IsPageSelected( const SwPageFrm *pPageFrm ) const
+bool SwAccessibleMap::IsPageSelected( const SwPageFrm *pPageFrm ) const
 {
     return mpPreview && mpPreview->GetSelPage() == pPageFrm;
 }
@@ -2284,12 +2285,8 @@ void SwAccessibleMap::FireEvents()
         if( mpEvents )
         {
             mpEvents->SetFiring();
-            SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
-            while( aIter != mpEvents->end() )
-            {
-                FireEvent( *aIter );
-                ++aIter;
-            }
+            ::std::for_each(mpEvents->begin(), mpEvents->end(),
+                            boost::bind(&SwAccessibleMap::FireEvent, this, _1));
 
             delete mpEventMap;
             mpEventMap = 0;

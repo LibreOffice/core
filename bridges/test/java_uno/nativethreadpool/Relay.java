@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package test.javauno.nativethreadpool;
+package test.java_uno.nativethreadpool;
 
 import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridgeFactory;
@@ -27,7 +27,6 @@ import com.sun.star.connection.AlreadyAcceptingException;
 import com.sun.star.connection.ConnectionSetupException;
 import com.sun.star.connection.Acceptor;
 import com.sun.star.connection.XAcceptor;
-import com.sun.star.connection.XConnection;
 import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;

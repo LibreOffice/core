@@ -346,8 +346,8 @@ void SwTableFormula::_MakeFormula( const SwTable& rTbl, String& rNewStr,
 
         rNewStr += '(';
         bool bDelim = false;
-        for( sal_uInt16 n = 0; n < aBoxes.size() &&
-                           !pCalcPara->rCalc.IsCalcError(); ++n )
+        for (size_t n = 0; n < aBoxes.size() &&
+                           !pCalcPara->rCalc.IsCalcError(); ++n)
         {
             const SwTableBox* pTblBox = aBoxes[n];
             if ( pTblBox->getRowSpan() >= 1 )
@@ -869,14 +869,13 @@ String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
     return sTmp;
 }
 
-sal_uInt16 SwTableFormula::GetBoxesOfFormula( const SwTable& rTbl,
+void SwTableFormula::GetBoxesOfFormula( const SwTable& rTbl,
                                         SwSelBoxes& rBoxes )
 {
     rBoxes.clear();
 
     BoxNmToPtr( &rTbl );
     ScanString( &SwTableFormula::_GetFmlBoxes, rTbl, &rBoxes );
-    return rBoxes.size();
 }
 
 void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& ,
@@ -956,7 +955,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                 break;
 
             // dann mal die Tabellenkoepfe raus:
-            for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
+            for (size_t n = 0; n < rBoxes.size(); ++n)
             {
                 pLine = rBoxes[n]->GetUpper();
                 while( pLine->GetUpper() )

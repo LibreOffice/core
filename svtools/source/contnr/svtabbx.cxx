@@ -978,7 +978,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
         sal_Bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
         if ( bIsCheckBox )
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
-                m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, eState, sal_True, sal_False );
+                m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, eState, sal_False );
         else
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
                 m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, OFFSET_NONE );

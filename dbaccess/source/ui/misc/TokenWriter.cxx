@@ -25,9 +25,11 @@
 #include "HtmlReader.hxx"
 #include "dbustrings.hrc"
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -39,7 +41,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <tools/color.hxx>
@@ -107,7 +109,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 
     m_eDestEnc = osl_getThreadTextEncoding();
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     impl_initFromDescriptor( _aDataDescriptor, false );
 
     xub_StrLen nCount = comphelper::string::getTokenCount(rExchange, char(11));
@@ -117,7 +119,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
         for(xub_StrLen i=SBA_FORMAT_SELECTION_COUNT;i<nCount;++i)
             m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.GetToken(i,char(11)).ToInt32();
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 // import data
@@ -275,7 +277,7 @@ void ODatabaseImportExport::initialize()
     if ( !m_xConnection.is() )
     {   // we need a connection
         OSL_ENSURE(!m_sDataSourceName.isEmpty(),"There must be a datsource name!");
-        Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(m_xFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        Reference<XNameAccess> xDatabaseContext( DatabaseContext::create(comphelper::getComponentContext(m_xFactory)), UNO_QUERY_THROW);
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
 
         Reference< XConnection > xConnection;
@@ -730,9 +732,7 @@ void OHTMLImportExport::WriteHeader()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteHeader" );
     uno::Reference<document::XDocumentProperties> xDocProps(
-        m_xFactory->createInstance(::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties"))),
-        uno::UNO_QUERY);
+        document::DocumentProperties::create( comphelper::getComponentContext(m_xFactory) ) );
     if (xDocProps.is()) {
         xDocProps->setTitle(m_sName);
     }

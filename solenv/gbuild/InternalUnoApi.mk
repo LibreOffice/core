@@ -52,6 +52,8 @@ $(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(
 $(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1)_out)
 $(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 
+$(call gb_UnoApiTarget_get_headers_target,$(1)) : $(gb_Helper_MISCDUMMY)
+
 $(call gb_Deliver_add_deliverable,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)_out),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_InternalUnoApi_get_clean_target,$(1))))
@@ -71,6 +73,7 @@ endef
 define gb_InternalUnoApi__use_api
 $(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
 $(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
+$(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarget_get_headers_target,$(2))
 
 endef
 
@@ -113,12 +116,6 @@ endef
 
 define gb_InternalUnoApi_set_xmlfile
 $(call gb_UnoApiTarget_set_xmlfile,$(1)_out,$(2))
-$(call gb_Package_Package_internal,$(1)_xml,$(SRCDIR))
-$(call gb_Package_add_file,$(1)_xml,xml/$(notdir $(2)),$(2))
-$(call gb_InternalUnoApi_get_target,$(1)) :| \
-	$(call gb_Package_get_target,$(1)_xml)
-$(call gb_InternalUnoApi_get_clean_target,$(1)) : \
-	$(call gb_Package_get_clean_target,$(1)_xml)
 
 endef
 

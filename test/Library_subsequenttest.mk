@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_libraries,subsequenttest,\
     test \
 	tl \
 	utl \
-	ucbhelper \
 	unotest \
 	vcl \
     $(gb_STDLIBS) \
@@ -70,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/sheet/xcellrangedata \
     test/source/sheet/xcellrangereferrer \
     test/source/sheet/xcellrangesquery \
+    test/source/sheet/xgoalseek \
     test/source/sheet/xdatabaserange \
     test/source/sheet/xdatapilotdescriptor \
     test/source/sheet/xdatapilotfieldgrouping \

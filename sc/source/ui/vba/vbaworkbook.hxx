@@ -41,7 +41,6 @@ class ScVbaWorkbook : public ScVbaWorkbook_BASE
     void initColorData( const css::uno::Sequence< sal_Int32 >& sColors );
     void init();
 
-    ::rtl::OUString convertFileFormat(sal_Int32 aFileFormat);
 protected:
 
     ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
@@ -50,8 +49,6 @@ public:
             css::uno::Reference< css::frame::XModel > xModel );
     ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~ScVbaWorkbook() {}
-
-    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     // Attributes
     virtual ::sal_Bool SAL_CALL getProtectStructure() throw (css::uno::RuntimeException);
@@ -72,7 +69,6 @@ public:
     virtual css::uno::Any SAL_CALL Colors( const css::uno::Any& Index ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getFileFormat(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL SaveCopyAs( const rtl::OUString& Filename ) throw ( css::uno::RuntimeException);
-    virtual void SAL_CALL SaveAs( const rtl::OUString& FileName, const css::uno::Any& FileFormat, const css::uno::Any& CreateBackup ) throw (css::uno::RuntimeException);
 
     // code name
     virtual ::rtl::OUString SAL_CALL getCodeName() throw ( css::uno::RuntimeException);
@@ -81,7 +77,6 @@ public:
     virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
-    virtual css::uno::Reference< css::frame::XModel >  getDocModel() { return mxModel; }
     // XUnoTunnel
     virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);
 };

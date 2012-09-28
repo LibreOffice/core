@@ -49,6 +49,8 @@ ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
 
+gb_CPPU_ENV := msci
+
 gb_COMPILERDEFS := \
 	-DMSC \
 	-D_CRT_NON_CONFORMING_SWPRINTFS \
@@ -57,7 +59,7 @@ gb_COMPILERDEFS := \
 	-D_MT \
 	-D_DLL \
 	-DBOOST_MEM_FN_ENABLE_CDECL \
-	-DCPPU_ENV=msci \
+	-DCPPU_ENV=$(gb_CPPU_ENV) \
 	-DM1500 \
 
 gb_CPUDEFS := -D_X86_=1
@@ -152,6 +154,7 @@ gb_CXXFLAGS := \
 	-wd4290 \
 	-wd4294 \
 	-wd4350 \
+	-wd4351 \
 	-wd4355 \
 	-wd4365 \
 	-wd4503 \
@@ -164,6 +167,7 @@ gb_CXXFLAGS := \
 	-wd4619 \
 	-wd4625 \
 	-wd4626 \
+	-wd4628 \
 	-wd4640 \
 	-wd4668 \
 	-wd4675 \
@@ -236,6 +240,8 @@ define gb_create_deps
 endef
 endif
 
+gb_COMPILER_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
+
 # Helper class
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
@@ -274,6 +280,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	unset INCLUDE && \
 	$(gb_CC) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_COMPILER_LTOFLAGS)) \
 		$(T_CFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
@@ -295,6 +302,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	unset INCLUDE && \
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_COMPILER_LTOFLAGS)) \
 		$(T_CXXFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
@@ -385,6 +393,10 @@ gb_Library_TARGETTYPEFLAGS := \
 	-DLL \
 	$(gb_Windows_PE_TARGETTYPEFLAGS)
 
+ifeq ($(ENABLE_LTO),TRUE)
+gb_Library_TARGETTYPEFLAGS += -LTCG
+endif
+
 gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
@@ -400,6 +412,7 @@ gb_Library_PLAINLIBS_NONE += \
 	d3d9 \
 	d3dx \
 	ddraw \
+	delayimp \
 	gdi32 \
 	gdiplus \
 	gnu_getopt \
@@ -410,8 +423,11 @@ gb_Library_PLAINLIBS_NONE += \
 	libcmt \
 	libcmtd \
 	mpr \
+	mscoree \
 	msi \
 	msimg32 \
+	msvcmrt \
+	msvcmrtd \
 	msvcrt \
 	msvcprt \
 	$(gb_Library_win32_OLDNAMES) \
@@ -529,17 +545,12 @@ endef
 
 # StaticLibrary class
 
-gb_StaticLibrary_DEFS :=
 gb_StaticLibrary_TARGETTYPEFLAGS := -LIB
 gb_StaticLibrary_SYSPRE :=
 gb_StaticLibrary_PLAINEXT := .lib
-gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
 
 gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
 	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
-
-gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
 define gb_StaticLibrary_StaticLibrary_platform
 $(call gb_LinkTarget_get_target,$(2)) \
@@ -641,7 +652,7 @@ endif # OOO_TEST_SOFFICE
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/program/soffice.exe}" \
-	-Dorg.openoffice.test.arg.env=PATH \
+	-Dorg.openoffice.test.arg.env=PATH="$$$$PATH" \
 	-Dorg.openoffice.test.arg.user=file:///$(call gb_JunitTest_get_userdir,$(1))
 
 endef
@@ -718,11 +729,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
-$(call gb_InstallModuleTarget_set_include,$(1),\
-	$(SOLARINC) \
-	$(SCP_INCLUDE) \
-)
-
 endef
 
 # ScpConvertTarget class
@@ -736,6 +742,11 @@ endef
 # InstallScript class
 
 gb_InstallScript_EXT := .inf
+
+# CliAssemblyTarget class
+
+gb_CliAssemblyTarget_POLICYEXT := $(gb_Library_DLLEXT)
+gb_CliAssemblyTarget_get_dll = $(OUTDIR)/bin/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 
 # ExtensionTarget class
 

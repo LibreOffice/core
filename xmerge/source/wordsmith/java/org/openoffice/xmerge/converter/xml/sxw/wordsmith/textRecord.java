@@ -18,7 +18,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 
-import org.openoffice.xmerge.util.Debug;
 import java.io.IOException;
 import java.io.DataOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,7 +28,6 @@ import java.io.ByteArrayOutputStream;
  *  include: WordSmith header, font table, color table, paragraphs,
  *  and text runs.
  *
- *  @author   David Proulx
  */
 
 class textRecord {

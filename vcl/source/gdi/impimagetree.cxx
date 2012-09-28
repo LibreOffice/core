@@ -39,6 +39,7 @@
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/lang/Locale.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -409,7 +410,7 @@ bool ImplImageTree::find(
             args[0] <<= i->first + ".zip";
             try {
                 i->second.set(
-                    comphelper::createProcessComponentWithArguments(
+                    comphelper::getProcessServiceFactory()->createInstanceWithArguments(
                         rtl::OUString( "com.sun.star.packages.zip.ZipFileAccess"),
                         args),
                     css::uno::UNO_QUERY_THROW);

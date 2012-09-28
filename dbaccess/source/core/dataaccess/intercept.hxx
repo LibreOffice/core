@@ -44,7 +44,7 @@ protected:
     virtual ~OInterceptor();
 public:
 
-    OInterceptor( ODocumentDefinition* _pContentHolder,sal_Bool _bAllowEditDoc );
+    OInterceptor( ODocumentDefinition* _pContentHolder );
 
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
@@ -150,7 +150,6 @@ private:
 
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
     PropertyChangeListenerContainer*    m_pStatCL;
-    sal_Bool                            m_bAllowEditDoc;
 };
 
 }   // namespace dbaccess

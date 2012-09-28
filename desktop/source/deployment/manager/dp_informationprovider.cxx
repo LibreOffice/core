@@ -163,7 +163,7 @@ PackageInformationProvider::getPackageLocation( const rtl::OUString& _sExtension
     }
     if ( !aLocationURL.isEmpty() )
     {
-        ::ucbhelper::Content aContent( aLocationURL, NULL );
+        ::ucbhelper::Content aContent( aLocationURL, NULL, mxContext );
         aLocationURL = aContent.getURL();
     }
     return aLocationURL;

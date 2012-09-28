@@ -77,18 +77,16 @@ FltError ExportBiff5::Write()
     SotStorageRef xRootStrg = GetRootStorage();
     OSL_ENSURE( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
 
-    bool bWriteBasicCode = false;
     bool bWriteBasicStrg = false;
     if( GetBiff() == EXC_BIFF8 )
     {
         const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
-        bWriteBasicCode = rFilterOpt.IsLoadExcelBasicCode();
         bWriteBasicStrg = rFilterOpt.IsLoadExcelBasicStorage();
     }
 
     if( pDocShell && xRootStrg.Is() && bWriteBasicStrg )
     {
-        SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg, bWriteBasicCode, bWriteBasicStrg );
+        SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg );
         sal_uLong nErr = aBasicImport.SaveOrDelMSVBAStorage( sal_True, EXC_STORAGE_VBA_PROJECT );
         if( nErr != ERRCODE_NONE )
             pDocShell->SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );

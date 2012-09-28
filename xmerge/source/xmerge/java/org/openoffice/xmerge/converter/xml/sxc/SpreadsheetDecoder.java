@@ -27,15 +27,8 @@ import org.openoffice.xmerge.ConvertData;
  *  This class is a abstract class for encoding a &quot;Device&quot;
  *  <code>Document</code> format into an alternative spreadsheet format.
  *
- *  @author  Mark Murnane
  */
 public abstract class SpreadsheetDecoder {
-
-    /**
-     *  Constructor for creating new <code>SpreadsheetDecoder</code>.
-     */
-    public SpreadsheetDecoder(String name, String password) throws IOException {
-    }
 
     /**
      *  Returns the total number of sheets in the WorkBook.

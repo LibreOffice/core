@@ -23,8 +23,6 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/configurationkeys.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>

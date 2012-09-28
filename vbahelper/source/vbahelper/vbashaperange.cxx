@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include<com/sun/star/view/XSelectionSupplier.hpp>
@@ -47,7 +48,7 @@ public:
 
 };
 
-ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xShapes, const uno::Reference< drawing::XDrawPage >& xDrawPage, const uno::Reference< frame::XModel >& xModel  ) : ScVbaShapeRange_BASE( xParent, xContext, xShapes ), m_xDrawPage( xDrawPage ), m_nShapeGroupCount(0), m_xModel( xModel )
+ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xShapes, const uno::Reference< drawing::XDrawPage >& xDrawPage, const uno::Reference< frame::XModel >& xModel  ) : ScVbaShapeRange_BASE( xParent, xContext, xShapes ), m_xDrawPage( xDrawPage ), m_xModel( xModel )
 {
 }
 
@@ -73,8 +74,7 @@ ScVbaShapeRange::getShapes() throw (uno::RuntimeException)
 {
     if ( !m_xShapes.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        m_xShapes.set( xMSF->createInstance( rtl::OUString("com.sun.star.drawing.ShapeCollection") ), uno::UNO_QUERY_THROW );
+        m_xShapes.set( drawing::ShapeCollection::create(mxContext) );
         sal_Int32 nLen = m_xIndexAccess->getCount();
         for ( sal_Int32 index = 0; index < nLen; ++index )
             m_xShapes->add( uno::Reference< drawing::XShape >( m_xIndexAccess->getByIndex( index ), uno::UNO_QUERY_THROW ) );
@@ -117,7 +117,7 @@ ScVbaShapeRange::IncrementTop( double Increment ) throw (uno::RuntimeException)
     }
 }
 
-rtl::OUString SAL_CALL ScVbaShapeRange::getName() throw (uno::RuntimeException)
+OUString SAL_CALL ScVbaShapeRange::getName() throw (uno::RuntimeException)
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; /* ++index unreachable */ )
@@ -128,7 +128,7 @@ rtl::OUString SAL_CALL ScVbaShapeRange::getName() throw (uno::RuntimeException)
     throw uno::RuntimeException();
 }
 
-void SAL_CALL ScVbaShapeRange::setName( const rtl::OUString& _name ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaShapeRange::setName( const OUString& _name ) throw (uno::RuntimeException)
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; ++index )
@@ -382,20 +382,20 @@ ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
         return uno::makeAny( xVbShape );
 }
 
-rtl::OUString
+OUString
 ScVbaShapeRange::getServiceImplName()
 {
-    return rtl::OUString("ScVbaShapeRange");
+    return OUString("ScVbaShapeRange");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaShapeRange::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.msform.ShapeRange"  );
+        aServiceNames[ 0 ] = "ooo.vba.msform.ShapeRange";
     }
     return aServiceNames;
 }

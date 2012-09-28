@@ -99,6 +99,17 @@ public class LetterWizardDialogResources extends Resource
     String resSubjectconstPlaceHolder = "#subjectconst#";
     String resSubjectconstPlaceHolder_value;
 
+    String resBusinessElegantTitle;
+    String resBusinessModernTitle;
+    String resBusinessOfficeTitle;
+    String resOfficialElegantTitle;
+    String resOfficialModernTitle;
+    String resOfficialOfficeTitle;
+    String resPrivateBottleTitle;
+    String resPrivateMailTitle;
+    String resPrivateMarineTitle;
+    String resPrivateRedLineTitle;
+
     public LetterWizardDialogResources(XMultiServiceFactory xmsf)
     {
         super(xmsf, UNIT_NAME, MODULE_NAME);
@@ -163,6 +174,17 @@ public class LetterWizardDialogResources extends Resource
         reslblTitle6_value = getResText(RID_LETTERWIZARDDIALOG_START + 58);
 
         resSubjectconstPlaceHolder_value = getResText(RID_LETTERWIZARDDIALOG_START + 59);
+
+        resBusinessElegantTitle = getResText(RID_LETTERWIZARDDIALOG_START + 60);
+        resBusinessModernTitle = getResText(RID_LETTERWIZARDDIALOG_START + 61);
+        resBusinessOfficeTitle = getResText(RID_LETTERWIZARDDIALOG_START + 62);
+        resOfficialElegantTitle = getResText(RID_LETTERWIZARDDIALOG_START + 60);
+        resOfficialModernTitle = getResText(RID_LETTERWIZARDDIALOG_START + 61);
+        resOfficialOfficeTitle = getResText(RID_LETTERWIZARDDIALOG_START + 62);
+        resPrivateBottleTitle = getResText(RID_LETTERWIZARDDIALOG_START + 63);
+        resPrivateMailTitle = getResText(RID_LETTERWIZARDDIALOG_START + 64);
+        resPrivateMarineTitle = getResText(RID_LETTERWIZARDDIALOG_START + 65);
+        resPrivateRedLineTitle = getResText(RID_LETTERWIZARDDIALOG_START + 66);
 
         loadRoadmapResources();
         loadSalutationResources();

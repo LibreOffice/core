@@ -92,7 +92,6 @@ private:
 
     XclImpCrnList       maCrnList;      /// List of CRN records (cached cell values).
     String              maTabName;      /// Name of the external sheet.
-    SCTAB               mnScTab;        /// New sheet index in Calc document.
 };
 
 // External document (SUPBOOK) ================================================
@@ -222,7 +221,6 @@ private:
 
     XclImpXtiVector     maXtiList;          /// List of all XTI structures.
     XclImpSupbookList   maSupbookList;      /// List of external documents.
-    bool                mbCreated;          /// true = Calc sheets already created.
 };
 
 // ============================================================================
@@ -564,8 +562,7 @@ const XclAddress& XclImpCrn::GetAddress() const
 // Sheet in an external document ==============================================
 
 XclImpSupbookTab::XclImpSupbookTab( const String& rTabName ) :
-    maTabName( rTabName ),
-    mnScTab( SCTAB_INVALID )
+    maTabName( rTabName )
 {
 }
 
@@ -749,8 +746,7 @@ void XclImpSupbook::LoadCachedValues()
 // Import link manager ========================================================
 
 XclImpLinkManagerImpl::XclImpLinkManagerImpl( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot ),
-    mbCreated( false )
+    XclImpRoot( rRoot )
 {
 }
 

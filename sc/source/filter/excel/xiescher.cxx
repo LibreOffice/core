@@ -113,8 +113,6 @@
 
 #include "namebuff.hxx"
 #include <boost/shared_ptr.hpp>
-#include <comphelper/componentcontext.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -3158,14 +3156,6 @@ bool XclImpSimpleDffConverter::GetColorFromPalette( sal_uInt16 nIndex, Color& rC
 
     rColor.SetColor( nColor );
     return 1;
-}
-
-// ----------------------------------------------------------------------------
-Reference< XComponentContext >
-lcl_getUnoCtx()
-{
-    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
-    return aCtx.getUNOContext();
 }
 
 XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(

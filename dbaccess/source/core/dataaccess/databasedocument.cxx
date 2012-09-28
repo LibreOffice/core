@@ -38,6 +38,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -52,6 +53,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
@@ -100,6 +102,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml::sax;
@@ -173,7 +176,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     DBG_CTOR(ODatabaseDocument,NULL);
     OSL_TRACE( "DD: ctor: %p: %p", this, m_pImpl.get() );
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         impl_reparent_nothrow( m_xForms );
         impl_reparent_nothrow( m_xReports );
@@ -182,7 +185,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
 
         m_pEventExecutor = new DocumentEventExecutor( m_pImpl->m_aContext, this );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 
     // if there previously was a document instance for the same Impl which was already initialized,
     // then consider ourself initialized, too.
@@ -1867,7 +1870,7 @@ Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames(  ) thro
 Reference< XInterface > ODatabaseDocument::Create( const Reference< XComponentContext >& _rxContext )
 {
     ::comphelper::ComponentContext aContext( _rxContext );
-    Reference< XUnoTunnel > xDBContextTunnel( aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ), UNO_QUERY_THROW );
+    Reference< XUnoTunnel > xDBContextTunnel( DatabaseContext::create(_rxContext), UNO_QUERY_THROW );
     ODatabaseContext* pContext = reinterpret_cast< ODatabaseContext* >( xDBContextTunnel->getSomething( ODatabaseContext::getUnoTunnelImplementationId() ) );
 
     ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( aContext.getLegacyServiceFactory(), *pContext ) );
@@ -2078,7 +2081,7 @@ Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
 uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHelper_throw(const uno::Reference< uno::XInterface >& _xComponent)
 {
     if ( !m_xModuleManager.is() )
-        m_xModuleManager.set( m_pImpl->m_aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+        m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext.getUNOContext()) );
 
     ::rtl::OUString sModuleId;
     try

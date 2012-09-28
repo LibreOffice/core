@@ -31,8 +31,6 @@ import org.openoffice.xmerge.PluginFactory;
 
 /**
  *  Class for storing the information about a converter plugin.
- *
- *  @author  Brian Cameron
  */
 public class ConverterInfo {
 

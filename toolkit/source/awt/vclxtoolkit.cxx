@@ -129,9 +129,10 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
-
+#include "toolkit/awt/scrollabledialog.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
+#include <toolkit/awt/scrollabledialog.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -242,7 +243,7 @@ TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_NO )
             nWinBits |= WB_DEF_NO;
     }
-    if ( nCompType == WINDOW_MULTILINEEDIT )
+    if ( nCompType == WINDOW_MULTILINEEDIT || nCompType == WINDOW_DIALOG || WINDOW_GROUPBOX )
     {
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::AUTOHSCROLL )
             nWinBits |= WB_AUTOHSCROLL;
@@ -723,7 +724,14 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_GROUPBOX:
                         {
-                pNewWindow = new GroupBox( pParent, nWinBits );
+#if SCROLLABLEFRAME
+                if ( bFrameControl )
+                {
+                    pNewWindow = new toolkit::ScrollableWrapper< GroupBox >( pParent, nWinBits | WB_VSCROLL );
+                }
+                else
+#endif
+                    pNewWindow = new GroupBox( pParent, nWinBits );
                                 if ( bFrameControl )
                                 {
                                     GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
@@ -786,7 +794,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // Modal/Modeless nur durch Show/Execute
                 if ( (pParent == NULL ) && ( rDescriptor.ParentIndex == -1 ) )
                     pParent = DIALOG_NO_PARENT;
-                pNewWindow = new Dialog( pParent, nWinBits );
+                pNewWindow = new toolkit::ScrollableWrapper<Dialog>( pParent, nWinBits );
                 // #i70217# Don't always create a new component object. It's possible that VCL has called
                 // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
                 // which creates a component object.
@@ -1061,7 +1069,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         if ( pParentComponent )
             pParent = pParentComponent->GetWindow();
     }
-
     WinBits nWinBits = ImplGetWinBits( rDescriptor.WindowAttributes,
         ImplGetComponentType( rDescriptor.WindowServiceName ) );
     nWinBits |= nForceWinBits;

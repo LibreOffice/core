@@ -47,7 +47,7 @@
 #include "com/sun/star/xml/sax/XParser.hpp"
 #include "com/sun/star/xml/dom/XDocument.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
-#include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
+#include "com/sun/star/xml/dom/DocumentBuilder.hpp"
 #include "com/sun/star/xml/dom/XSAXDocumentBuilder.hpp"
 #include "com/sun/star/xml/dom/NodeType.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
@@ -1116,18 +1116,9 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
 css::uno::Reference<css::xml::dom::XDocument> SAL_CALL
 SfxDocumentMetaData::createDOM() const // throw (css::uno::RuntimeException)
 {
-    css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
-        m_xContext->getServiceManager());
-    css::uno::Reference<css::xml::dom::XDocumentBuilder> xBuilder(
-        xMsf->createInstanceWithContext(::rtl::OUString(
-                "com.sun.star.xml.dom.DocumentBuilder"), m_xContext),
-        css::uno::UNO_QUERY_THROW );
-    if (!xBuilder.is()) throw css::uno::RuntimeException(
-        ::rtl::OUString("SfxDocumentMetaData::createDOM: "
-                "cannot create DocumentBuilder service"),
-                *const_cast<SfxDocumentMetaData*>(this));
-    css::uno::Reference<css::xml::dom::XDocument> xDoc =
-                xBuilder->newDocument();
+    css::uno::Reference<css::lang::XMultiComponentFactory> xMsf ( m_xContext->getServiceManager());
+    css::uno::Reference<css::xml::dom::XDocumentBuilder> xBuilder( css::xml::dom::DocumentBuilder::create(m_xContext) );
+    css::uno::Reference<css::xml::dom::XDocument> xDoc = xBuilder->newDocument();
     if (!xDoc.is()) throw css::uno::RuntimeException(
         ::rtl::OUString("SfxDocumentMetaData::createDOM: "
                 "cannot create new document"),

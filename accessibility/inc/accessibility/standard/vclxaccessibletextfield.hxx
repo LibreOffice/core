@@ -68,10 +68,10 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName (void)
+    virtual OUString SAL_CALL getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
     // Return text field specific services.
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -81,7 +81,7 @@ protected:
     /** With this method the text of the currently selected item is made
         available to the <type>VCLXAccessibleTextComponent</type> base class.
     */
-    ::rtl::OUString implGetText (void);
+    OUString implGetText (void);
 
 private:
     /** We need to save the accessible parent to return it in <type>getAccessibleParent()</type>,

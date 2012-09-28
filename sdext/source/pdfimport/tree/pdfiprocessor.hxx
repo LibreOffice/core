@@ -238,7 +238,6 @@ namespace pdfi
 
         sal_Int32                          m_nPages;
         sal_Int32                          m_nNextZOrder;
-        double                             m_fWordSpace;
         bool                               m_bIsWhiteSpaceInLine;
         com::sun::star::uno::Reference<
             com::sun::star::task::XStatusIndicator >

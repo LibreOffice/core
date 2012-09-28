@@ -284,12 +284,12 @@ void Base::acquire(void)
 {
     m_env_acquire(m_pEnv);
 
-    osl_incrementInterlockedCount(&m_nRef);
+    osl_atomic_increment(&m_nRef);
 }
 
 void Base::release(void)
 {
-    if (osl_decrementInterlockedCount(&m_nRef) == 0)
+    if (osl_atomic_decrement(&m_nRef) == 0)
         delete this;
 
     else
@@ -299,7 +299,7 @@ void Base::release(void)
 void Base::harden(uno_Environment ** ppHardEnv)
 {
     m_env_harden(ppHardEnv, m_pEnv);
-    osl_incrementInterlockedCount(&m_nRef);
+    osl_atomic_increment(&m_nRef);
 }
 
 void Base::acquireWeak(void)

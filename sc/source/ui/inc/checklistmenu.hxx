@@ -203,7 +203,6 @@ private:
     ScDocument* mpDoc;
 
     ScMenuFloatingWindow* mpParentMenu;
-    ScMenuFloatingWindow* mpActiveSubMenu;
 };
 
 /**

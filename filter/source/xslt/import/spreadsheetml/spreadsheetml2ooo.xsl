@@ -25,7 +25,7 @@
   for a copy of the LGPLv3 License.
 
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:SL="http://schemas.microsoft.com/schemaLibrary/2003/core" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="aml dt html o ss SL v w10 w wx x">
+<xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:SL="http://schemas.microsoft.com/schemaLibrary/2003/core" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:exsl="http://exslt.org/common" xmlns:set="http://exslt.org/sets" extension-element-prefixes="set exsl" exclude-result-prefixes="aml dt html o ss SL v w10 w wx x set exsl">
 	<!--+++++ INCLUDED XSL MODULES +++++-->
 	<!-- helper collection, to convert measures (e.g. inch to pixel using DPI (dots per inch) parameter)-->
 	<xsl:import href="../../common/measure_conversion.xsl"/>
@@ -426,21 +426,27 @@
 			-->
 		</office:settings>
 	</xsl:template>
-	<!-- Key all attributes with the same name and same value -->
-	<xsl:key name="same-named-font" match="/ss:Workbook/ss:Styles/ss:Style/ss:Font" use="concat(@ss:FontName, @x:Family)"/>
-	<xsl:key name="same-named-face" match="/ss:Workbook/ss:Worksheet/ss:Table/ss:Row/ss:Cell//html:Font[@html:Face]" use="concat(@html:Face, @x:Family)"/>
+
+	<xsl:variable name="allFontDefs"><xsl:for-each select="/ss:Workbook/ss:Styles/ss:Style/ss:Font[@ss:FontName or @x:Family]|/ss:Workbook/ss:Worksheet/ss:Table/ss:Row/ss:Cell/descendant::html:Font[@html:Face or @x:Family]"><f><xsl:copy-of select="@ss:FontName |@html:Face | @x:Family"/><xsl:value-of select="concat(@ss:FontName, @html:Face, '&#9;', @x:Family)"/></f></xsl:for-each></xsl:variable>
+	
 	<xsl:template name="font-declaration">
+		<xsl:variable name="distinctFontDefs">
+			<xsl:choose>
+				<!-- saxon dropped support for exslt:sets#distinct() in version 8.2, but is capable of executing XPath 2.0 functions -->
+				<xsl:when test="function-available('set:distinct')"><xsl:copy-of select="set:distinct(exsl:node-set($allFontDefs)/*)"/></xsl:when>
+				<xsl:otherwise><xsl:call-template name="set:distinct"><xsl:with-param name="nodes" select="$allFontDefs"></xsl:with-param></xsl:call-template></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<office:font-face-decls>
-			<xsl:if test="/ss:Workbook/ss:Styles/ss:Style/ss:Font">
-				<xsl:for-each select="/ss:Workbook/ss:Styles/ss:Style/ss:Font[ generate-id(.) = generate-id(key('same-named-font', concat(@ss:FontName, @x:Family))[1])]">
-					<xsl:sort select="name()"/>
-					<xsl:element name="style:font-face">
-						<xsl:if test="@ss:FontName">
+			<xsl:if test="count(exsl:node-set($distinctFontDefs))">
+				<xsl:for-each select="exsl:node-set($distinctFontDefs)/*">
+					<style:font-face>
+						<xsl:if test="@ss:FontName or @html:Face">
 							<xsl:attribute name="style:name">
-								<xsl:value-of select="@ss:FontName"/>
+								<xsl:value-of select="@ss:FontName | @html:Face"/>
 							</xsl:attribute>
 							<xsl:attribute name="svg:font-family">
-								<xsl:value-of select="@ss:FontName"/>
+								<xsl:value-of select="@ss:FontName | @html:Face "/>
 							</xsl:attribute>
 						</xsl:if>
 						<xsl:if test="@x:Family">
@@ -450,25 +456,9 @@
 								</xsl:call-template>
 							</xsl:attribute>
 						</xsl:if>
-					</xsl:element>
+					</style:font-face>
 				</xsl:for-each>
 			</xsl:if>
-			<xsl:for-each select="/ss:Workbook/ss:Worksheet/ss:Table/ss:Row/ss:Cell/descendant::html:Font[@html:Face][ generate-id(.) = generate-id(key('same-named-face', concat(@html:Face, @x:Family))[1])]">
-				<xsl:sort select="name()"/>
-				<xsl:element name="style:font-face">
-					<xsl:attribute name="style:name">
-						<xsl:value-of select="@html:Face"/>
-					</xsl:attribute>
-					<xsl:attribute name="svg:font-family">
-						<xsl:value-of select="@html:Face"/>
-					</xsl:attribute>
-					<xsl:attribute name="style:font-family-generic">
-						<xsl:call-template name="translate-font-family-generic">
-							<xsl:with-param name="family" select="@x:Family"/>
-						</xsl:call-template>
-					</xsl:attribute>
-				</xsl:element>
-			</xsl:for-each>
 		</office:font-face-decls>
 	</xsl:template>
 	<xsl:template name="translate-font-family-generic">
@@ -764,117 +754,122 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<xsl:key match="/ss:Workbook/ss:Worksheet/ss:Table" name="tableWithConditional" use="following-sibling::x:ConditionalFormatting"/>
-	<xsl:key match="ss:Table/ss:Row/ss:Cell/@ss:StyleID" name="tableStyleIDs" use="ancestor::ss:Table"/>
+	
+	<xsl:key name="definedStyleIds" match="/ss:Workbook/ss:Styles/ss:Style/@ss:ID" use="string(.)"/>
+	<xsl:variable name="defaultStyle" select="/ss:Workbook/ss:Styles/ss:Style[@ss:ID='Default']/@ss:ID"></xsl:variable>
 	<xsl:key name="styleId" match="@ss:StyleID" use="."/>
 	<xsl:template name="CondFormat_automatic_style">
 		<!-- For each conditionalFormatting We inject a new style, which is a child of the current found style -->
-		<xsl:for-each select="/ss:Workbook/ss:Worksheet/x:ConditionalFormatting">
-			<xsl:variable name="table-pos" select="count(../preceding-sibling::ss:Worksheet)+1"/>
-			<xsl:variable name="conditions" select="count(preceding-sibling::x:ConditionalFormatting)+1"/>
-			<xsl:variable name="conditionalFormatting" select="."/>
-			<!-- for all 'ssStyle/@ss:ID's, which are in tables connected within this conditional formatting  -->
-			<xsl:for-each select="key('tableStyleIDs', key('tableWithConditional', .)) [generate-id(.) = generate-id(key('styleId', .)[1])] ">
-				<!-- sort the style ID by their naming -->
-				<xsl:sort select="."/>
-				<xsl:element name="style:style">
-					<xsl:attribute name="style:name">
-						<xsl:call-template name="encode-as-nc-name">
-							<xsl:with-param name="string" select="concat(.,'-ce',$table-pos,'-',$conditions)"/>
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:attribute name="style:family">table-cell</xsl:attribute>
-					<xsl:variable name="style" select="key('Style', .)" />
-					<xsl:choose>
-						<xsl:when test="$style/@ss:Name">
-							<xsl:attribute name="style:parent-style-name">
-								<xsl:call-template name="encode-as-nc-name">
-									<xsl:with-param name="string" select="."/>
-								</xsl:call-template>
-							</xsl:attribute>
-						</xsl:when>
-						<!-- as we create an automatic style, the parent is not allowed to be an automatic style as well
-							 if the parent would be a automatic (unnamed) style, the style information have to be embedded to this style -->
-						<xsl:otherwise>
-							<xsl:attribute name="style:parent-style-name">
-								<xsl:call-template name="encode-as-nc-name">
-									<xsl:with-param name="string" select="$style/@ss:Parent"/>
-								</xsl:call-template>
-							</xsl:attribute>
-							<xsl:if test="$style/ss:NumberFormat/@ss:Format">
-								<xsl:attribute name="style:data-style-name">
-									<xsl:value-of select="concat($style/@ss:ID, 'F')"/>
+		<xsl:for-each select="/ss:Workbook/ss:Worksheet[x:ConditionalFormatting]">
+			<xsl:variable name="table-pos" select="count(preceding-sibling::ss:Worksheet)+1"/>
+			<xsl:variable name="styleIdsUsedByTable" select="$defaultStyle | key('definedStyleIds', ss:Table/ss:Row/ss:Cell/@ss:StyleID)"/>
+			<xsl:for-each select="x:ConditionalFormatting">
+				<xsl:variable name="conditions" select="position()"/>
+				<xsl:variable name="conditionalFormatting" select="."/>
+				<!-- we want to loop over the distinct styleId attribute values of all cells within the table related to the current conditional formatting. -->
+				<!-- We'd need to add the anonymous style id "Default" to the mix. -->
+				<!-- for all 'ssStyle/@ss:ID's, which are in tables connected within this conditional formatting  -->
+				<!-- <xsl:for-each select="key('tableStyleIDs', generate-id(preceding-sibling::ss:Table)) [generate-id(.) = generate-id(key('styleId', .)[1])] "> -->
+				<xsl:for-each select="$styleIdsUsedByTable">
+					<xsl:element name="style:style">
+						<xsl:attribute name="style:name">
+							<xsl:call-template name="encode-as-nc-name">
+								<xsl:with-param name="string" select="concat(.,'-ce',$table-pos,'-',$conditions)"/>
+							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:attribute name="style:family">table-cell</xsl:attribute>
+						<xsl:variable name="style" select="key('Style', .)" />
+						<xsl:choose>
+							<xsl:when test="$style/@ss:Name">
+								<xsl:attribute name="style:parent-style-name">
+									<xsl:call-template name="encode-as-nc-name">
+										<xsl:with-param name="string" select="."/>
+									</xsl:call-template>
 								</xsl:attribute>
-							</xsl:if>
-							<xsl:apply-templates select="$style" mode="style-style-content"/>
-						</xsl:otherwise>
-					</xsl:choose>
-					<xsl:for-each select="$conditionalFormatting/x:Condition">
-						<xsl:variable name="condition-number" select="count(preceding-sibling::x:Condition)+1"/>
-						<xsl:variable name="base-address">
-							<xsl:choose>
-								<xsl:when test="contains(../x:Range,',')">
-									<xsl:choose>
-										<xsl:when test="contains(substring-before(../x:Range,','),':')">
-											<xsl:value-of select="substring-before(substring-after(../x:Range,':'),',')"/>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="substring-before(../x:Range,',')"/>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="../x:Range"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<xsl:variable name="columnNumber">
-							<xsl:choose>
-								<xsl:when test="contains($base-address, ':')">
-									<xsl:value-of select="substring-after(substring-after($base-address, ':'),'C')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="substring-after($base-address,'C')"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<xsl:variable name="rowNumber">
-							<xsl:choose>
-								<xsl:when test="contains($base-address, ':')">
-									<xsl:value-of select="substring-before(substring-after(substring-after($base-address, ':'),'R'),'C')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="substring-before(substring-after($base-address,'R'),'C')"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<xsl:variable name="base-cell-address">
-							<xsl:call-template name="translate-unit">
-								<xsl:with-param name="column-number" select="$columnNumber"/>
-								<xsl:with-param name="row-number" select="$rowNumber"/>
-								<xsl:with-param name="column-pos-style" select="'relative'"/>
-								<xsl:with-param name="row-pos-style" select="'relative'"/>
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:variable name="condition-value">
-							<xsl:call-template name="translate-condition">
-								<xsl:with-param name="cell-column-pos" select="$columnNumber"/>
-								<xsl:with-param name="cell-row-pos" select="$rowNumber"/>
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:element name="style:map">
-							<xsl:attribute name="style:condition">
-								<xsl:value-of select="$condition-value"/>
-							</xsl:attribute>
-							<xsl:attribute name="style:apply-style-name">
-								<xsl:value-of select="concat('Excel_CondFormat_',$table-pos,'_',$conditions,'_',$condition-number)"/>
-							</xsl:attribute>
-							<xsl:attribute name="style:base-cell-address">
-								<xsl:value-of select="concat(../../@ss:Name,'.',$base-cell-address)"/>
-							</xsl:attribute>
-						</xsl:element>
-					</xsl:for-each>
-				</xsl:element>
+							</xsl:when>
+							<!-- as we create an automatic style, the parent is not allowed to be an automatic style as well
+								if the parent would be a automatic (unnamed) style, the style information have to be embedded to this style -->
+							<xsl:otherwise>
+								<xsl:attribute name="style:parent-style-name">
+									<xsl:call-template name="encode-as-nc-name">
+										<xsl:with-param name="string" select="$style/@ss:Parent"/>
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:if test="$style/ss:NumberFormat/@ss:Format">
+									<xsl:attribute name="style:data-style-name">
+										<xsl:value-of select="concat($style/@ss:ID, 'F')"/>
+									</xsl:attribute>
+								</xsl:if>
+								<xsl:apply-templates select="$style" mode="style-style-content"/>
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:for-each select="$conditionalFormatting/x:Condition">
+							<xsl:variable name="condition-number" select="count(preceding-sibling::x:Condition)+1"/>
+							<xsl:variable name="base-address">
+								<xsl:choose>
+									<xsl:when test="contains(../x:Range,',')">
+										<xsl:choose>
+											<xsl:when test="contains(substring-before(../x:Range,','),':')">
+												<xsl:value-of select="substring-before(substring-after(../x:Range,':'),',')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="substring-before(../x:Range,',')"/>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="../x:Range"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<xsl:variable name="columnNumber">
+								<xsl:choose>
+									<xsl:when test="contains($base-address, ':')">
+										<xsl:value-of select="substring-after(substring-after($base-address, ':'),'C')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="substring-after($base-address,'C')"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<xsl:variable name="rowNumber">
+								<xsl:choose>
+									<xsl:when test="contains($base-address, ':')">
+										<xsl:value-of select="substring-before(substring-after(substring-after($base-address, ':'),'R'),'C')"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="substring-before(substring-after($base-address,'R'),'C')"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<xsl:variable name="base-cell-address">
+								<xsl:call-template name="translate-unit">
+									<xsl:with-param name="column-number" select="$columnNumber"/>
+									<xsl:with-param name="row-number" select="$rowNumber"/>
+									<xsl:with-param name="column-pos-style" select="'relative'"/>
+									<xsl:with-param name="row-pos-style" select="'relative'"/>
+								</xsl:call-template>
+							</xsl:variable>
+							<xsl:variable name="condition-value">
+								<xsl:call-template name="translate-condition">
+									<xsl:with-param name="cell-column-pos" select="$columnNumber"/>
+									<xsl:with-param name="cell-row-pos" select="$rowNumber"/>
+								</xsl:call-template>
+							</xsl:variable>
+							<xsl:element name="style:map">
+								<xsl:attribute name="style:condition">
+									<xsl:value-of select="$condition-value"/>
+								</xsl:attribute>
+								<xsl:attribute name="style:apply-style-name">
+									<xsl:value-of select="concat('Excel_CondFormat_',$table-pos,'_',$conditions,'_',$condition-number)"/>
+								</xsl:attribute>
+								<xsl:attribute name="style:base-cell-address">
+									<xsl:value-of select="concat(../../@ss:Name,'.',$base-cell-address)"/>
+								</xsl:attribute>
+							</xsl:element>
+						</xsl:for-each>
+					</xsl:element>
+				</xsl:for-each>				
 			</xsl:for-each>
 		</xsl:for-each>
 	</xsl:template>
@@ -895,31 +890,6 @@
 				<xsl:variable name="qualifier" select="x:Qualifier"/>
 				<xsl:variable name="first-value" select="x:Value1"/>
 				<xsl:choose>
-					<xsl:when test="$qualifier = 'Equal'">
-						<xsl:choose>
-							<xsl:when test="starts-with($first-value,'&quot;')">
-								<xsl:value-of select="concat('cell-content()=',$address-value)"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="concat('cell-content()=[',$address-value,']')"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'Less'">
-						<xsl:value-of select="concat('cell-content()&lt;[',$address-value,']')"/>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'Greater'">
-						<xsl:value-of select="concat('cell-content()&gt;[',$address-value,']')"/>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'LessOrEqual'">
-						<xsl:value-of select="concat('cell-content()&lt;=[',$address-value,']')"/>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'GreaterOrEqual'">
-						<xsl:value-of select="concat('cell-content()&gt;=[',$address-value,']')"/>
-					</xsl:when>
-					<xsl:when test="$qualifier = 'NotEqual'">
-						<xsl:value-of select="concat('cell-content()!=[',$address-value,']')"/>
-					</xsl:when>
 					<xsl:when test="$qualifier = 'Between'">
 						<xsl:variable name="second-value">
 							<xsl:call-template name="translate-expression">
@@ -929,7 +899,7 @@
 								<xsl:with-param name="return-value" select="''"/>
 							</xsl:call-template>
 						</xsl:variable>
-						<xsl:value-of select="concat('cell-content-is-between([',$address-value,'],[',$second-value,'])')"/>
+						<xsl:value-of select="concat('cell-content-is-between(',$address-value,',',$second-value,')')"/>
 					</xsl:when>
 					<xsl:when test="$qualifier = 'NotBetween'">
 						<xsl:variable name="second-value">
@@ -940,8 +910,22 @@
 								<xsl:with-param name="return-value" select="''"/>
 							</xsl:call-template>
 						</xsl:variable>
-						<xsl:value-of select="concat('cell-content-is-not-between([',$address-value,'],[',$second-value,'])')"/>
+						<xsl:value-of select="concat('cell-content-is-not-between(',$address-value,',',$second-value,')')"/>
 					</xsl:when>
+					<xsl:otherwise>
+						<xsl:variable name="translatedQualifier">
+							<xsl:choose>
+								<xsl:when test="$qualifier = 'Equal'">=</xsl:when>
+								<xsl:when test="$qualifier = 'Less'">&lt;</xsl:when>
+								<xsl:when test="$qualifier = 'Greater'">&gt;</xsl:when>
+								<xsl:when test="$qualifier = 'LessOrEqual'">&lt;=</xsl:when>
+								<xsl:when test="$qualifier = 'GreaterOrEqual'">&gt;=</xsl:when>
+								<xsl:when test="$qualifier = 'NotEqual'">!=</xsl:when>
+							</xsl:choose>
+						</xsl:variable>
+						<xsl:value-of select="concat('cell-content()', $translatedQualifier, $address-value)"/>
+					</xsl:otherwise>
+					
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
@@ -5054,17 +5038,15 @@
 		<style:style style:family="table-column" style:name="{concat('co', $table-pos)}">
 			<style:table-column-properties fo:break-before="auto" style:column-width="{$default-column-width}"/>
 		</style:style>
-		<xsl:choose>
-			<xsl:when test="ss:Column">
-				<xsl:call-template name="get-column-style-name">
-					<xsl:with-param name="finishedColumns" select="0"/>
-					<xsl:with-param name="columnCount" select="count(./ss:Column)"/>
-					<xsl:with-param name="currentCount" select="1"/>
-					<xsl:with-param name="table-pos" select="$table-pos"/>
-					<xsl:with-param name="default-column-width" select="$default-column-width"/>
-				</xsl:call-template>
-			</xsl:when>
-		</xsl:choose>
+		<xsl:variable name="columnCount" select="count(ss:Column)"/>
+		<xsl:for-each select="ss:Column">
+			<xsl:apply-templates select="." mode="create-column-style">
+				<xsl:with-param name="columnCount" select="$columnCount"/>
+				<xsl:with-param name="currentCount" select="position()"/>
+				<xsl:with-param name="table-pos" select="$table-pos"/>
+				<xsl:with-param name="default-column-width" select="$default-column-width"/>
+			</xsl:apply-templates>
+		</xsl:for-each>
 		<xsl:if test="../x:PageBreaks/x:ColBreaks">
 			<style:style style:name="{concat('cob',$table-pos)}" style:family="table-column">
 				<xsl:element name="style:table-column-properties">
@@ -5091,15 +5073,15 @@
 		<style:style style:family="table-row" style:name="{concat('ro', $table-pos)}">
 			<style:table-row-properties style:row-height="{$default-row-height}" style:use-optimal-row-height="false"/>
 		</style:style>
-		<xsl:if test="ss:Row">
-			<xsl:call-template name="get-row-style-name">
-				<xsl:with-param name="earlierRowNo" select="0"/>
-				<xsl:with-param name="rowNodeCount" select="count(./ss:Row)"/>
-				<xsl:with-param name="rowNodeIndex" select="1"/>
+		<xsl:variable name="rowCount" select="count(ss:Row)"/>
+		<xsl:for-each select="ss:Row">
+			<xsl:apply-templates select="." mode="create-row-style">
+				<xsl:with-param name="rowNodeCount" select="$rowCount"/>
+				<xsl:with-param name="rowNodeIndex" select="position()"/>
 				<xsl:with-param name="table-pos" select="$table-pos"/>
 				<xsl:with-param name="default-row-height" select="$default-row-height"/>
-			</xsl:call-template>
-		</xsl:if>
+			</xsl:apply-templates>
+		</xsl:for-each>
 		<xsl:if test="../x:PageBreaks/x:RowBreaks">
 			<style:style style:name="{concat('rob',$table-pos)}" style:family="table-row">
 				<xsl:element name="style:table-row-properties">
@@ -5135,98 +5117,82 @@
 			</xsl:element>
 		</xsl:element>
 	</xsl:template>
-	<xsl:template name="get-column-style-name">
+	<xsl:template match="ss:Column" mode="create-column-style">
 		<!-- generate stylename of colbreak after matching the column number and the colbreak number -->
-		<xsl:param name="finishedColumns"/>
 		<xsl:param name="columnCount"/>
 		<xsl:param name="currentCount"/>
 		<xsl:param name="table-pos"/>
 		<xsl:param name="default-column-width"/>
-		<xsl:if test="$currentCount &lt; ($columnCount + 1)">
-			<xsl:variable name="span-value">
-				<xsl:choose>
-					<xsl:when test="./ss:Column[position() = $currentCount]/@ss:Span">
-						<xsl:value-of select="./ss:Column[position() = $currentCount]/@ss:Span + 1"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="0"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:variable name="current-index">
-				<xsl:choose>
-					<xsl:when test="./ss:Column[position() = $currentCount]/@ss:Index">
-						<xsl:value-of select="./ss:Column[position() = $currentCount]/@ss:Index - 1"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$finishedColumns"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:variable name="column-break">
-				<xsl:choose>
-					<xsl:when test="$span-value = 0">
-						<xsl:if test="../x:PageBreaks/x:ColBreaks/x:ColBreak/x:Column = $current-index">
-							<xsl:value-of select="1"/>
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:if test="../x:PageBreaks/x:ColBreaks[(x:ColBreak/x:Column &gt; $finishedColumns) and (x:ColBreak/x:Column &lt; ($finishedColumns + $span-value))]">
-							<xsl:value-of select="1"/>
-						</xsl:if>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:if test="$column-break = 1">
-				<xsl:element name="style:style">
-					<xsl:attribute name="style:name">
-						<xsl:call-template name="encode-as-nc-name">
-							<xsl:with-param name="string" select="concat('cob', $table-pos, '-',$currentCount)"/>
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:attribute name="style:family">table-column</xsl:attribute>
-					<xsl:element name="style:table-column-properties">
-						<xsl:choose>
-							<xsl:when test="./ss:Column[position() = $currentCount]/@ss:Width">
-								<xsl:attribute name="style:column-width">
-									<xsl:call-template name="convert2cm">
-										<xsl:with-param name="value" select="concat(./ss:Column[position() = $currentCount]/@ss:Width,'pt')"/>
-									</xsl:call-template>
-									<xsl:text>cm</xsl:text>
-								</xsl:attribute>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:attribute name="style:column-width">
-									<xsl:value-of select="$default-column-width"/>
-								</xsl:attribute>
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-							<xsl:when test="./ss:Column[position() = $currentCount]/@ss:AutoFitWidth = '0'">
-								<xsl:attribute name="style:use-optimal-column-width">false</xsl:attribute>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:choose>
-									<xsl:when test="./ss:Column[position() = $currentCount]/@ss:Width &gt; 0">
-										<xsl:attribute name="style:use-optimal-column-width">false</xsl:attribute>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:attribute name="style:use-optimal-column-width">true</xsl:attribute>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:attribute name="fo:break-before">page</xsl:attribute>
-					</xsl:element>
-				</xsl:element>
-			</xsl:if>
-			<style:style style:name="{concat('co', $table-pos, '-',$currentCount)}" style:family="table-column">
+		<xsl:variable name="span-value" select="@ss:Span + count(@ss:Span)"/>
+		<xsl:variable name="finishedColumns">
+			<xsl:choose>
+				<xsl:when test="@ss:Index">
+					<xsl:value-of select="@ss:Index -1 + $span-value"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:variable name="recent-index"
+						select="preceding-sibling::*[@ss:Index][last()]"/>
+					<xsl:choose>
+						<xsl:when test="$recent-index">
+							<xsl:variable name="nodes-up-to-current"
+								select="set:intersection(preceding-sibling::*, $recent-index/following-sibling::*)"/>
+							<xsl:variable name="allSpans" select="$nodes-up-to-current/@ss:Span"/>
+							<xsl:value-of
+								select="$recent-index/@ss:Index + count($nodes-up-to-current) + sum($allSpans) + count($allSpans)"
+							/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:variable name="allSpans" select="preceding-sibling::*/@ss:Span"/>
+
+							<xsl:value-of select="$currentCount + sum($allSpans) + count($allSpans)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="current-index">
+			<xsl:choose>
+				<xsl:when test="@ss:Index">
+					<xsl:value-of select="@ss:Index - 1"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$finishedColumns"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
+		<xsl:variable name="column-break">
+			<xsl:choose>
+				<xsl:when test="$span-value = 0">
+					<xsl:if test="../x:PageBreaks/x:ColBreaks/x:ColBreak/x:Column = $current-index">
+						<xsl:value-of select="1"/>
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if
+						test="../x:PageBreaks/x:ColBreaks[(x:ColBreak/x:Column &gt; $finishedColumns) and (x:ColBreak/x:Column &lt; ($finishedColumns + $span-value))]">
+						<xsl:value-of select="1"/>
+					</xsl:if>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:if test="$column-break = 1">
+			<xsl:element name="style:style">
+				<xsl:attribute name="style:name">
+					<xsl:call-template name="encode-as-nc-name">
+						<xsl:with-param name="string"
+							select="concat('cob', $table-pos, '-',$currentCount)"/>
+					</xsl:call-template>
+				</xsl:attribute>
+				<xsl:attribute name="style:family">table-column</xsl:attribute>
 				<xsl:element name="style:table-column-properties">
 					<xsl:choose>
-						<xsl:when test="./ss:Column[position() = $currentCount]/@ss:Width">
+						<xsl:when test="@ss:Width">
 							<xsl:attribute name="style:column-width">
 								<xsl:call-template name="convert2cm">
-									<xsl:with-param name="value" select="concat(./ss:Column[position() = $currentCount]/@ss:Width,'pt')"/>
+									<xsl:with-param name="value"
+										select="concat(@ss:Width,'pt')"
+									/>
 								</xsl:call-template>
 								<xsl:text>cm</xsl:text>
 							</xsl:attribute>
@@ -5237,172 +5203,150 @@
 							</xsl:attribute>
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:attribute name="fo:break-before">auto</xsl:attribute>
-				</xsl:element>
-			</style:style>
-			<xsl:if test="$currentCount &lt; $columnCount">
-				<xsl:call-template name="get-column-style-name">
-					<xsl:with-param name="finishedColumns">
-						<xsl:choose>
-							<xsl:when test="./ss:Column[position() = $currentCount]/@ss:Index">
-								<xsl:choose>
-									<xsl:when test="./ss:Column[position() = $currentCount]/@ss:Span">
-										<xsl:value-of select="./ss:Column[position() = $currentCount]/@ss:Index + ./ss:Column[position() = $currentCount]/@ss:Span"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="./ss:Column[position() = $currentCount]/@ss:Index"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:choose>
-									<xsl:when test="./ss:Column[position() = $currentCount]/@ss:Span">
-										<xsl:value-of select="$finishedColumns + ./ss:Column[position() = $currentCount]/@ss:Span + 1"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="$finishedColumns + 1"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:with-param>
-					<xsl:with-param name="columnCount" select="$columnCount"/>
-					<xsl:with-param name="currentCount" select="$currentCount + 1"/>
-					<xsl:with-param name="table-pos" select="$table-pos"/>
-					<xsl:with-param name="default-column-width" select="$default-column-width"/>
-				</xsl:call-template>
-			</xsl:if>
-		</xsl:if>
-	</xsl:template>
-	<xsl:template name="get-row-style-name">
-		<!-- generate stylename of rowbreak after matching the row number and the rowbreak number -->
-		<xsl:param name="earlierRowNo"/>
-		<xsl:param name="rowNodeCount"/>
-		<xsl:param name="rowNodeIndex"/>
-		<xsl:param name="table-pos"/>
-		<xsl:param name="default-row-height"/>
-		<xsl:if test="$rowNodeIndex &lt; ($rowNodeCount + 1)">
-			<xsl:variable name="span-value">
-				<xsl:choose>
-					<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Index">
-						<xsl:choose>
-							<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Span">
-								<xsl:value-of select="./ss:Row[position() = $rowNodeIndex]/@ss:Index - $earlierRowNo+ ./ss:Row[position() = $rowNodeIndex]/@ss:Span"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="0"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:choose>
-							<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Span">
-								<xsl:value-of select="./ss:Row[position() = $rowNodeIndex]/@ss:Span + 1"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="0"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:variable name="current-index">
-				<xsl:choose>
-					<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Index">
-						<xsl:value-of select="./ss:Row[position() = $rowNodeIndex]/@ss:Index - 1"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$earlierRowNo"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:variable name="row-break">
-				<xsl:choose>
-					<xsl:when test="$span-value = 0">
-						<xsl:if test="../x:PageBreaks/x:RowBreaks/x:RowBreak/x:Row = $current-index">
-							<xsl:value-of select="1"/>
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:if test="../x:PageBreaks/x:RowBreaks[(x:RowBreak/x:Row &gt; $earlierRowNo) and (x:RowBreak/x:Row &lt; ($earlierRowNo + $span-value))]">
-							<xsl:value-of select="1"/>
-						</xsl:if>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:if test="$row-break = 1">
-				<xsl:element name="style:style">
 					<xsl:choose>
-						<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:StyleID">
-							<xsl:attribute name="style:name"><xsl:value-of select="concat('ro', $table-pos, '-',$rowNodeIndex,'-',ss:Row[position() = $rowNodeIndex]/@ss:StyleID)"/></xsl:attribute>
+						<xsl:when
+							test="@ss:AutoFitWidth = '0'">
+							<xsl:attribute name="style:use-optimal-column-width"
+								>false</xsl:attribute>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:attribute name="style:name"><xsl:value-of select="concat('ro', $table-pos, '-',$rowNodeIndex)"/></xsl:attribute>
+							<xsl:choose>
+								<xsl:when
+									test="@ss:Width &gt; 0">
+									<xsl:attribute name="style:use-optimal-column-width"
+										>false</xsl:attribute>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:attribute name="style:use-optimal-column-width"
+										>true</xsl:attribute>
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:attribute name="style:family">table-row</xsl:attribute>
-
-
-					<xsl:element name="style:table-row-properties">
-						<xsl:choose>
-							<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Height">
-								<xsl:attribute name="style:row-height">
-									<xsl:call-template name="convert2cm">
-										<xsl:with-param name="value" select="concat(./ss:Row[position() = $rowNodeIndex]/@ss:Height,'pt')"/>
-									</xsl:call-template>
-									<xsl:text>cm</xsl:text>
-								</xsl:attribute>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:attribute name="style:row-height">
-									<xsl:value-of select="$default-row-height"/>
-								</xsl:attribute>
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:choose>
-							<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:AutoFitHeight = '0'">
-								<xsl:attribute name="style:use-optimal-row-height">false</xsl:attribute>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:choose>
-									<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Height &gt; 0">
-										<xsl:attribute name="style:use-optimal-row-height">false</xsl:attribute>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:attribute name="style:use-optimal-row-height">true</xsl:attribute>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:attribute name="fo:break-before">page</xsl:attribute>
-						<xsl:apply-templates select="key('Style', ss:Row[position() = $rowNodeIndex]/@ss:StyleID)/ss:Interior" mode="style-style-content"/>
-					</xsl:element>
-					<!--
-						<xsl:apply-templates select="key('Style', ss:Row[position() = $rowNodeIndex]/@ss:StyleID)" mode="style-style-content" />
-					-->
+					<xsl:attribute name="fo:break-before">page</xsl:attribute>
 				</xsl:element>
-			</xsl:if>
-			<!--
-			<style:style style:name="{concat('ro', $table-pos, '-',$rowNodeIndex)}" style:family="table-row">
-			-->
+			</xsl:element>
+		</xsl:if>
+		<style:style style:name="{concat('co', $table-pos, '-',$currentCount)}"
+			style:family="table-column">
+			<xsl:element name="style:table-column-properties">
+				<xsl:choose>
+					<xsl:when test="@ss:Width">
+						<xsl:attribute name="style:column-width">
+							<xsl:call-template name="convert2cm">
+								<xsl:with-param name="value"
+									select="concat(@ss:Width,'pt')"
+								/>
+							</xsl:call-template>
+							<xsl:text>cm</xsl:text>
+						</xsl:attribute>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:attribute name="style:column-width">
+							<xsl:value-of select="$default-column-width"/>
+						</xsl:attribute>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:attribute name="fo:break-before">auto</xsl:attribute>
+			</xsl:element>
+		</style:style>
+	</xsl:template>
+	
+	<xsl:template match="ss:Row" mode="create-row-style">
+		<!-- generate stylename of rowbreak after matching the row number and the rowbreak number -->
+		<xsl:param name="rowNodeCount"/>
+		<xsl:param name="rowNodeIndex" select="position()"/>
+		<xsl:param name="table-pos"/>
+		<xsl:param name="default-row-height"/>
+		<xsl:variable name="simple-span-value" select="@ss:Span + count(@ss:Span)"/>
+		
+		<xsl:variable name="earlierRowNo">
+			<xsl:choose>
+				<xsl:when test="@ss:Index"><xsl:value-of select="@ss:Index -1 + $simple-span-value"/></xsl:when>
+				<xsl:otherwise>
+					<xsl:variable name="recent-index" select="preceding-sibling::*[@ss:Index][last()]"></xsl:variable>
+					<xsl:choose>
+						<xsl:when test="$recent-index">
+							<xsl:variable name="nodes-up-to-current" select="set:intersection(preceding-sibling::*, $recent-index/following-sibling::*)"></xsl:variable>
+							<xsl:variable name="allSpans" select="$nodes-up-to-current/@ss:Span"/>
+							<xsl:value-of select="$recent-index/@ss:Index + count($nodes-up-to-current) + sum($allSpans) + count($allSpans)"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:variable name="allSpans" select="preceding-sibling::*/@ss:Span"/>
+							<xsl:value-of select="position() + sum($allSpans) + count($allSpans)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="span-value">
+			<xsl:choose>
+				<xsl:when test="@ss:Index">
+					<xsl:choose>
+						<xsl:when test="@ss:Span">
+							<xsl:value-of select="@ss:Index - $earlierRowNo + @ss:Span"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="0"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:choose>
+						<xsl:when test="@ss:Span">
+							<xsl:value-of select="@ss:Span + 1"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="0"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+			
+		<xsl:variable name="current-index">
+			<xsl:choose>
+				<xsl:when test="@ss:Index">
+					<xsl:value-of select="@ss:Index - 1"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$earlierRowNo"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="row-break">
+			<xsl:choose>
+				<xsl:when test="$span-value = 0">
+					<xsl:if test="../x:PageBreaks/x:RowBreaks/x:RowBreak/x:Row = $current-index">
+						<xsl:value-of select="1"/>
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="../x:PageBreaks/x:RowBreaks[(x:RowBreak/x:Row &gt; $earlierRowNo) and (x:RowBreak/x:Row &lt; ($earlierRowNo + $span-value))]">
+						<xsl:value-of select="1"/>
+					</xsl:if>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:if test="$row-break = 1">
 			<xsl:element name="style:style">
 				<xsl:choose>
-					<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:StyleID">
-						<xsl:attribute name="style:name"><xsl:value-of select="concat('ro', $table-pos, '-',$rowNodeIndex,'-',ss:Row[position() = $rowNodeIndex]/@ss:StyleID)"/></xsl:attribute>
+					<xsl:when test="@ss:StyleID">
+						<xsl:attribute name="style:name"><xsl:value-of select="concat('ro', $table-pos, '-',$rowNodeIndex,'-',@ss:StyleID)"/></xsl:attribute>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:attribute name="style:name"><xsl:value-of select="concat('ro', $table-pos, '-',$rowNodeIndex)"/></xsl:attribute>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:attribute name="style:family">table-row</xsl:attribute>
-
-
+				
+				
 				<xsl:element name="style:table-row-properties">
 					<xsl:choose>
-						<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Height">
+						<xsl:when test="@ss:Height">
 							<xsl:attribute name="style:row-height">
 								<xsl:call-template name="convert2cm">
-									<xsl:with-param name="value" select="concat(./ss:Row[position() = $rowNodeIndex]/@ss:Height,'pt')"/>
+									<xsl:with-param name="value" select="concat(@ss:Height,'pt')"/>
 								</xsl:call-template>
 								<xsl:text>cm</xsl:text>
 							</xsl:attribute>
@@ -5414,19 +5358,12 @@
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:choose>
-						<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:AutoFitHeight">
-							<xsl:choose>
-								<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:AutoFitHeight = '0'">
-									<xsl:attribute name="style:use-optimal-row-height">false</xsl:attribute>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:attribute name="style:use-optimal-row-height">true</xsl:attribute>
-								</xsl:otherwise>
-							</xsl:choose>
+						<xsl:when test="@ss:AutoFitHeight = '0'">
+							<xsl:attribute name="style:use-optimal-row-height">false</xsl:attribute>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:choose>
-								<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Height &gt; 0">
+								<xsl:when test="@ss:Height &gt; 0">
 									<xsl:attribute name="style:use-optimal-row-height">false</xsl:attribute>
 								</xsl:when>
 								<xsl:otherwise>
@@ -5435,48 +5372,79 @@
 							</xsl:choose>
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:attribute name="fo:break-before">auto</xsl:attribute>
-					<!-- apply to background  -->
-					<xsl:apply-templates select="key('Style', ss:Row[position() = $rowNodeIndex]/@ss:StyleID)/ss:Interior" mode="style-style-content"/>
+					<xsl:attribute name="fo:break-before">page</xsl:attribute>
+					<xsl:apply-templates select="key('Style', @ss:StyleID)/ss:Interior" mode="style-style-content"/>
 				</xsl:element>
 				<!--
-				<xsl:apply-templates select="key('Style', ss:Row[position() = $rowNodeIndex]/@ss:StyleID)" mode="style-style-content" />
+					<xsl:apply-templates select="key('Style', @ss:StyleID)" mode="style-style-content" />
 				-->
 			</xsl:element>
-			<xsl:if test="$rowNodeIndex &lt; $rowNodeCount">
-				<xsl:call-template name="get-row-style-name">
-					<xsl:with-param name="earlierRowNo">
+		</xsl:if>
+		<!--
+			<style:style style:name="{concat('ro', $table-pos, '-',$rowNodeIndex)}" style:family="table-row">
+		-->
+		<xsl:element name="style:style">
+			<xsl:choose>
+				<xsl:when test="@ss:StyleID">
+					<xsl:attribute name="style:name"><xsl:value-of select="concat('ro', $table-pos, '-',$rowNodeIndex,'-',@ss:StyleID)"/></xsl:attribute>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:attribute name="style:name"><xsl:value-of select="concat('ro', $table-pos, '-',$rowNodeIndex)"/></xsl:attribute>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:attribute name="style:family">table-row</xsl:attribute>
+			
+			
+			<xsl:element name="style:table-row-properties">
+				<xsl:choose>
+					<xsl:when test="@ss:Height">
+						<xsl:attribute name="style:row-height">
+							<xsl:call-template name="convert2cm">
+								<xsl:with-param name="value" select="concat(@ss:Height,'pt')"/>
+							</xsl:call-template>
+							<xsl:text>cm</xsl:text>
+						</xsl:attribute>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:attribute name="style:row-height">
+							<xsl:value-of select="$default-row-height"/>
+						</xsl:attribute>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:choose>
+					<xsl:when test="@ss:AutoFitHeight">
 						<xsl:choose>
-							<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Index">
-								<xsl:choose>
-									<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Span">
-										<xsl:value-of select="./ss:Row[position() = $rowNodeIndex]/@ss:Index + ./ss:Row[position() = $rowNodeIndex]/@ss:Span"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="./ss:Row[position() = $rowNodeIndex]/@ss:Index"/>
-									</xsl:otherwise>
-								</xsl:choose>
+							<xsl:when test="@ss:AutoFitHeight = '0'">
+								<xsl:attribute name="style:use-optimal-row-height">false</xsl:attribute>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:choose>
-									<xsl:when test="./ss:Row[position() = $rowNodeIndex]/@ss:Span">
-										<xsl:value-of select="$earlierRowNo + ./ss:Row[position() = $rowNodeIndex]/@ss:Span + 1"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="$earlierRowNo + 1"/>
-									</xsl:otherwise>
-								</xsl:choose>
+								<xsl:attribute name="style:use-optimal-row-height">true</xsl:attribute>
 							</xsl:otherwise>
 						</xsl:choose>
-					</xsl:with-param>
-					<xsl:with-param name="rowNodeCount" select="$rowNodeCount"/>
-					<xsl:with-param name="rowNodeIndex" select="$rowNodeIndex + 1"/>
-					<xsl:with-param name="table-pos" select="$table-pos"/>
-					<xsl:with-param name="default-row-height" select="$default-row-height"/>
-				</xsl:call-template>
-			</xsl:if>
-		</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:choose>
+							<xsl:when test="@ss:Height &gt; 0">
+								<xsl:attribute name="style:use-optimal-row-height">false</xsl:attribute>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:attribute name="style:use-optimal-row-height">true</xsl:attribute>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:attribute name="fo:break-before">auto</xsl:attribute>
+				<!-- apply to background  -->
+				<xsl:apply-templates select="key('Style', @ss:StyleID)/ss:Interior" mode="style-style-content"/>
+			</xsl:element>
+			<!--
+				<xsl:apply-templates select="key('Style', ss:Row[position() = $rowNodeIndex]/@ss:StyleID)" mode="style-style-content" />
+			-->
+		</xsl:element>
+
+		
 	</xsl:template>
+
 	<xsl:template name="count-spanned-columns">
 		<xsl:param name="expandedColumnCount" select="0"/>
 		<xsl:param name="columns"/>
@@ -5588,9 +5556,25 @@
 				<xsl:variable name="condition-pos-str" select="concat($condition-pos-str1, $condition-pos-str2)"/>
 				<xsl:choose>
 					<xsl:when test="./ss:Table/ss:Row">
-						<xsl:call-template name="create-rows">
-							<xsl:with-param name="condition-pos-str" select="$condition-pos-str"/>
-						</xsl:call-template>
+						<xsl:variable name="worksheetNo" select="count(preceding-sibling::ss:Worksheet)+1"/>
+						<xsl:variable name="rowNodeCount" select="count(ss:Table/ss:Row)"/>
+						<xsl:variable name="expandedRowCount">
+							<xsl:call-template name="get-expanded-row-count"/>
+						</xsl:variable>
+						<xsl:variable name="expandedColumnCount">
+							<xsl:call-template name="get-expanded-column-count"/>
+						</xsl:variable>
+						<xsl:for-each select="ss:Table/ss:Row">
+							<xsl:apply-templates select="." mode="create-rows">
+								<xsl:with-param name="condition-pos-str" select="$condition-pos-str"/>
+								<xsl:with-param name="worksheetNo" select="$worksheetNo"/>
+								<xsl:with-param name="rowNodeCount" select="$rowNodeCount"/>
+								<xsl:with-param name="rowNodeIndex" select="position()"/>
+								<xsl:with-param name="expandedRowCount" select="$expandedRowCount"/>
+								<xsl:with-param name="expandedRowCountIndex" select="1"/>
+								<xsl:with-param name="expandedColumnCount" select="$expandedColumnCount"/>
+							</xsl:apply-templates>
+						</xsl:for-each>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:choose>
@@ -5976,11 +5960,30 @@
 	<xsl:template match="ss:Row" mode="create-rows">
 		<xsl:param name="worksheetNo"/>
 		<xsl:param name="rowNodeCount"/>
-		<xsl:param name="rowNodeIndex" select="1"/>
+		<xsl:param name="rowNodeIndex"/>
 		<xsl:param name="expandedRowCount"/>
-		<xsl:param name="expandedRowCountIndex" select="1"/>
 		<xsl:param name="expandedColumnCount"/>
 		<xsl:param name="condition-pos-str"/>
+		<xsl:variable name="simple-span-value" select="@ss:Span + count(@ss:Span)"/>
+		<xsl:variable name="expandedRowCountIndex">
+				<xsl:choose>
+					<xsl:when test="@ss:Index"><xsl:value-of select="@ss:Index -1 + $simple-span-value"/></xsl:when>
+					<xsl:otherwise>
+						<xsl:variable name="recent-index" select="preceding-sibling::*[@ss:Index][last()]"></xsl:variable>
+						<xsl:choose>
+							<xsl:when test="$recent-index">
+								<xsl:variable name="nodes-up-to-current" select="set:intersection(preceding-sibling::*, $recent-index/following-sibling::*)"></xsl:variable>
+								<xsl:variable name="allSpans" select="$nodes-up-to-current/@ss:Span"/>
+								<xsl:value-of select="$recent-index/@ss:Index + count($nodes-up-to-current) + sum($allSpans) + count($allSpans)"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:variable name="allSpans" select="preceding-sibling::*/@ss:Span"/>
+								<xsl:value-of select="$rowNodeIndex + sum($allSpans) + count($allSpans)"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
+		</xsl:variable>
 		<xsl:variable name="currentRowNo">
 			<xsl:choose>
 				<xsl:when test="@ss:Index">
@@ -6032,16 +6035,16 @@
 				<!-- Excel row without content -->
 				<xsl:when test="not(*)">
 					<!-- OASIS OpenDocument Format does not allow rows without a cell -->
-				<xsl:choose>
-					<xsl:when test="$expandedColumnCount != 0">
-						<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<!-- OASIS XML row can not be empty -->
-						<table:table-cell table:number-columns-repeated="256"/>
-					</xsl:otherwise>
-				</xsl:choose>
-
+					<xsl:choose>
+						<xsl:when test="$expandedColumnCount != 0">
+							<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- OASIS XML row can not be empty -->
+							<table:table-cell table:number-columns-repeated="256"/>
+						</xsl:otherwise>
+					</xsl:choose>
+					
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:call-template name="create-cells">
@@ -6052,53 +6055,9 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:element>
-		<!-- columns are painting over the expanded RowCount -->
-		<xsl:choose>
-			<xsl:when test="count(following-sibling::ss:Row) != 0">
-				<xsl:apply-templates select="following-sibling::ss:Row[1]" mode="create-rows">
-					<xsl:with-param name="worksheetNo" select="$worksheetNo"/>
-					<xsl:with-param name="rowNodeCount" select="$rowNodeCount"/>
-					<xsl:with-param name="rowNodeIndex" select="$rowNodeIndex + 1"/>
-					<xsl:with-param name="expandedRowCount" select="$expandedRowCount"/>
-					<xsl:with-param name="expandedRowCountIndex">
-						<xsl:choose>
-							<xsl:when test="@ss:Index and @ss:Span">
-								<xsl:value-of select="@ss:Index + @ss:Span + 1"/>
-							</xsl:when>
-							<xsl:when test="@ss:Index">
-								<xsl:value-of select="@ss:Index + 1"/>
-							</xsl:when>
-							<xsl:when test="@ss:Span">
-								<xsl:value-of select="$expandedRowCountIndex + @ss:Span + 1"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="$expandedRowCountIndex + 1"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:with-param>
-					<xsl:with-param name="expandedColumnCount" select="$expandedColumnCount"/>
-					<xsl:with-param name="condition-pos-str" select="$condition-pos-str"/>
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:when test="$currentRowNo &lt; 65536">
-				<xsl:element name="table:table-row">
-					<!-- fill the preceding gap with rows without a cell -->
-					<xsl:attribute name="table:number-rows-repeated">
-						<xsl:value-of select="65536 - $currentRowNo"/>
-					</xsl:attribute>
-					<xsl:choose>
-						<xsl:when test="$expandedColumnCount != 0">
-							<table:table-cell table:number-columns-repeated="{$expandedColumnCount}"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<!-- OASIS XML row can not be empty -->
-							<table:table-cell table:number-columns-repeated="256"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:element>
-			</xsl:when>
-		</xsl:choose>
+		
 	</xsl:template>
+
 	<xsl:template name="get-expanded-column-count">
 		<xsl:choose>
 			<xsl:when test="ss:Table/@ss:ExpandedColumnCount">
@@ -7012,23 +6971,29 @@
 				<xsl:with-param name="param-str" select="substring-before($condition-pos-str,$current-pos-str)"/>
 			</xsl:call-template>
 		</xsl:variable>
+		<xsl:variable name="base-style-name">
+			<xsl:choose>
+				<xsl:when test="@ss:StyleID">
+					<xsl:value-of select="@ss:StyleID"/>
+				</xsl:when>
+				<xsl:when test="../@ss:StyleID">
+					<xsl:value-of select="../@ss:StyleID"/>
+				</xsl:when>
+				<xsl:when test="../../@ss:StyleID">
+					<xsl:value-of select="../../@ss:StyleID"/>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:variable name="style-name">
 			<xsl:choose>
 				<xsl:when test="contains($condition-pos-str, $current-pos-str) and starts-with($temp-str, 'c')">
-					<xsl:value-of select="concat(@ss:StyleID, '-ce', substring-after($temp-str, 'c'))"/>
+					<xsl:choose>
+						<xsl:when test="string-length($base-style-name) &gt; 0"><xsl:value-of select="concat($base-style-name, '-ce', substring-after($temp-str, 'c'))"/></xsl:when>
+						<xsl:otherwise><xsl:value-of select="concat('Default-ce', substring-after($temp-str, 'c'))"/></xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:choose>
-						<xsl:when test="@ss:StyleID">
-							<xsl:value-of select="@ss:StyleID"/>
-						</xsl:when>
-						<xsl:when test="../@ss:StyleID">
-							<xsl:value-of select="../@ss:StyleID"/>
-						</xsl:when>
-						<xsl:when test="../../@ss:StyleID">
-							<xsl:value-of select="../../@ss:StyleID"/>
-						</xsl:when>
-					</xsl:choose>
+					<xsl:value-of select="$base-style-name"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -7594,6 +7559,9 @@
 					<xsl:with-param name="style-data" select="$style-data"/>
 					<xsl:with-param name="current-pos" select="string-length($temp)+$current-pos+3"/>
 				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="starts-with($current-style-data, '&amp;')">
+				<xsl:value-of select="$current-pos + 1"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$current-pos"/>
@@ -9170,4 +9138,25 @@
 		<xsl:param name="string"/>
 		<xsl:value-of select="translate($string, '.%()/\+[]', '')"/>
 	</xsl:template>
+	
+	<xsl:template name="set:distinct">
+		<xsl:param name="nodes" select="/.."/>
+		<xsl:param name="distinct" select="/.."/>
+		<xsl:choose>
+			<xsl:when test="$nodes">
+				<xsl:call-template name="set:distinct">
+					<xsl:with-param name="distinct" select="$distinct | $nodes[1][not(. = $distinct)]"/>
+					<xsl:with-param name="nodes" select="$nodes[position() > 1]"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="$distinct" mode="set:distinct"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="node()|@*" mode="set:distinct">
+		<xsl:copy-of select="." />
+	</xsl:template>
+	
 </xsl:stylesheet>

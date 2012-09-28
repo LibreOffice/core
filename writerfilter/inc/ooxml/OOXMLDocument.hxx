@@ -248,6 +248,7 @@ public:
     static OOXMLStream::Pointer_t
     createStream(uno::Reference<uno::XComponentContext> rContext,
                  uno::Reference<io::XInputStream> rStream,
+                 bool bRepairStorage,
                  OOXMLStream::StreamType_t nStreamType = OOXMLStream::DOCUMENT);
 
     static OOXMLStream::Pointer_t

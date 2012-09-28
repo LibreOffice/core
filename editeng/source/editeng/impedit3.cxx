@@ -254,7 +254,7 @@ Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCo
     return aTranslatedPos;
 }
 
-sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Kashidas from sw/source/core/text/porlay.txt
+static sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Kashidas from sw/source/core/text/porlay.txt
 {
             // Lam + Alef
     return ( 0x644 == cCh && 0x627 == cNextCh ) ||
@@ -262,7 +262,7 @@ sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Kashidas 
            ( 0x628 == cCh && 0x631 == cNextCh );
 }
 
-sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )  // For Kashidas from sw/source/core/text/porlay.txt
+static sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )  // For Kashidas from sw/source/core/text/porlay.txt
 {
     // Alef, Dal, Thal, Reh, Zain, and Waw do not connect to the left
     sal_Bool bRet = 0x627 != cPrevCh && 0x62F != cPrevCh && 0x630 != cPrevCh &&
@@ -1414,11 +1414,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
             {
                 long n = ( nMaxLineWidth - aTextSize.Width() ) / 2;
                 n += nStartX;  // Indentation is kept.
-                if ( n > 0 )
-                    pLine->SetStartPosX( (sal_uInt16)n );
-                else
-                    pLine->SetStartPosX( 0 );
-
+                pLine->SetStartPosX( n );
             }
             break;
             case SVX_ADJUST_RIGHT:
@@ -1427,24 +1423,21 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                 // the blank must not be displayed!
                 long n = nMaxLineWidth - aTextSize.Width();
                 n += nStartX;  // Indentation is kept.
-                if ( n > 0 )
-                    pLine->SetStartPosX( (sal_uInt16)n );
-                else
-                    pLine->SetStartPosX( 0 );
+                pLine->SetStartPosX( n );
             }
             break;
             case SVX_ADJUST_BLOCK:
             {
                 bool bDistLastLine = (GetJustifyMethod(nPara) == SVX_JUSTIFY_METHOD_DISTRIBUTE);
                 long nRemainingSpace = nMaxLineWidth - aTextSize.Width();
-                pLine->SetStartPosX( (sal_uInt16)nStartX );
+                pLine->SetStartPosX( nStartX );
                 if ( nRemainingSpace > 0 && (!bEOC || bDistLastLine) )
                     ImpAdjustBlocks( pParaPortion, pLine, nRemainingSpace );
             }
             break;
             default:
             {
-                pLine->SetStartPosX( (sal_uInt16)nStartX ); // FI, LI
+                pLine->SetStartPosX( nStartX ); // FI, LI
             }
             break;
         }
@@ -1467,7 +1460,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
         if ( GetTextRanger() )
         {
             if ( nTextXOffset )
-                pLine->SetStartPosX( (sal_uInt16) ( pLine->GetStartPosX() + nTextXOffset ) );
+                pLine->SetStartPosX( pLine->GetStartPosX() + nTextXOffset );
             if ( nTextExtraYOffset )
             {
                 pLine->SetHeight( (sal_uInt16) ( pLine->GetHeight() + nTextExtraYOffset ), 0, pLine->GetHeight() );

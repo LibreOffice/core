@@ -506,7 +506,7 @@ inline uno_Sequence * icopyConstructSequence(
         (eTypeClass <= typelib_TypeClass_ENUM &&
          eTypeClass != typelib_TypeClass_ANY))
     {
-        ::osl_incrementInterlockedCount( &pSource->nRefCount );
+        osl_atomic_increment( &pSource->nRefCount );
         return pSource;
     }
     else // create new sequence
@@ -828,7 +828,7 @@ inline void _copyConstructData(
         }
         else
         {
-            ::osl_incrementInterlockedCount( &(*(uno_Sequence **)pSource)->nRefCount );
+            osl_atomic_increment( &(*(uno_Sequence **)pSource)->nRefCount );
             *(uno_Sequence **)pDest = *(uno_Sequence **)pSource;
         }
         break;

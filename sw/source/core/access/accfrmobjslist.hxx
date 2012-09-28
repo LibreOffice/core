@@ -54,12 +54,12 @@ public:
         , nNextObj( rIter.nNextObj )
     {}
 
-    inline sal_Bool operator==( const SwAccessibleChildSList_const_iterator& r ) const
+    inline bool operator==( const SwAccessibleChildSList_const_iterator& r ) const
     {
         return aCurr == r.aCurr;
     }
 
-    inline sal_Bool operator!=(
+    inline bool operator!=(
             const SwAccessibleChildSList_const_iterator& r ) const
     {
         return !(*this == r);
@@ -78,7 +78,7 @@ class SwAccessibleChildSList
 {
     const SwRect maVisArea;
     const SwFrm& mrFrm;
-    const sal_Bool mbVisibleChildrenOnly;
+    const bool mbVisibleChildrenOnly;
     SwAccessibleMap& mrAccMap;
 
 public:
@@ -89,7 +89,7 @@ public:
                                    SwAccessibleMap& rAccMap )
         : maVisArea()
         , mrFrm( rFrm )
-        , mbVisibleChildrenOnly( sal_False )
+        , mbVisibleChildrenOnly( false )
         , mrAccMap( rAccMap )
     {}
 
@@ -118,7 +118,7 @@ public:
         return mrFrm;
     }
 
-    inline sal_Bool IsVisibleChildrenOnly() const
+    inline bool IsVisibleChildrenOnly() const
     {
         return mbVisibleChildrenOnly;
     }

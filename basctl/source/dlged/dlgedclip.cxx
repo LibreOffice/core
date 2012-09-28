@@ -24,6 +24,8 @@
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 
+namespace basctl
+{
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -128,5 +130,8 @@ void SAL_CALL DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard 
     m_SeqFlavors = Sequence< DataFlavor >();
     m_SeqData = Sequence< Any >();
 }
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,6 @@ package com.sun.star.wizards.document;
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
-import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.beans.XPropertySet;

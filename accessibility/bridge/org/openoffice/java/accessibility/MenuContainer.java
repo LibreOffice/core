@@ -18,8 +18,6 @@
 
 package org.openoffice.java.accessibility;
 
-import javax.accessibility.AccessibleContext;
-
 import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
 

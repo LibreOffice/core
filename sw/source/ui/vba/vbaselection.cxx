@@ -60,6 +60,7 @@
 #include "vbaheaderfooter.hxx"
 #include "vbaheaderfooterhelper.hxx"
 #include <vbahelper/vbashaperange.hxx>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include "vbarows.hxx"
@@ -352,7 +353,6 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         default:
         {
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            break;
         }
     }
 }
@@ -868,8 +868,7 @@ SwVbaSelection::ShapeRange( ) throw (uno::RuntimeException)
     if ( !xShapes.is() )
     {
         uno::Reference< drawing::XShape > xShape( mxModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
-        uno::Reference< lang::XMultiServiceFactory > xMSF( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        xShapes.set( xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection")) ), uno::UNO_QUERY_THROW );
+        xShapes.set( drawing::ShapeCollection::create(mxContext) );
         xShapes->add( xShape );
     }
 

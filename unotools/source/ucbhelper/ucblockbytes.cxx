@@ -31,6 +31,7 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/ucb/DocumentHeaderField.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
@@ -53,8 +54,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <comphelper/storagehelper.hxx>
-
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -627,8 +626,8 @@ Moderator::Moderator(
           xContent,
           new UcbTaskEnvironment(
               xInteract.is() ? new ModeratorsInteractionHandler(*this) : 0,
-              xProgress.is() ? new ModeratorsProgressHandler(*this) : 0
-          ))
+              xProgress.is() ? new ModeratorsProgressHandler(*this) : 0),
+          comphelper::getProcessComponentContext())
 {
     // now exchange the whole data sink stuff
     // with a thread safe version
@@ -1148,7 +1147,9 @@ static sal_Bool _UCBOpenContentSync(
     Reference < XProgressHandler > xProgress,
     UcbLockBytesHandlerRef xHandler )
 {
-    ::ucbhelper::Content aContent( xContent, new UcbTaskEnvironment( xInteract, xProgress ) );
+    ::ucbhelper::Content aContent(
+        xContent, new UcbTaskEnvironment( xInteract, xProgress ),
+        comphelper::getProcessComponentContext() );
     Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
     ::rtl::OUString aScheme = xIdent->getContentProviderScheme();
 
@@ -1322,17 +1323,12 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
             m_xSeekable = Reference < XSeekable > ( rxInputStream, UNO_QUERY );
             if( !m_xSeekable.is() && rxInputStream.is() )
             {
-                Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-                Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
-                                    xFactory->createInstance ( ::rtl::OUString("com.sun.star.io.TempFile") ),
-                                    UNO_QUERY );
+                Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                Reference< XOutputStream > rxTempOut = Reference < XOutputStream > ( TempFile::create(xContext), UNO_QUERY_THROW );
 
-                if( rxTempOut.is() )
-                {
-                    ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
-                    m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );
-                    m_xSeekable = Reference < XSeekable > ( rxTempOut, UNO_QUERY );
-                }
+                ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
+                m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );
+                m_xSeekable = Reference < XSeekable > ( rxTempOut, UNO_QUERY );
             }
         }
 
@@ -1419,7 +1415,10 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
     Sequence<sal_Int8> aData;
     sal_Int32          nSize;
 
-    nCount = SAL_MIN(nCount, 0x7FFFFFFF);
+    if(nCount > 0x7FFFFFFF)
+    {
+        nCount = 0x7FFFFFFF;
+    }
     try
     {
         if ( !m_bTerminated && !IsSynchronMode() )

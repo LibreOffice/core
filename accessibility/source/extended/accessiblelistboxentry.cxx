@@ -42,6 +42,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -91,7 +92,7 @@ namespace accessibility
         if ( IsAlive_Impl() )
         {
             // increment ref count to prevent double call of Dtor
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             dispose();
         }
     }
@@ -178,9 +179,9 @@ namespace accessibility
             throw lang::DisposedException();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString AccessibleListBoxEntry::implGetText()
+    OUString AccessibleListBoxEntry::implGetText()
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         SvLBoxEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
             sRet = getListBox()->SearchEntryText( pEntry );
@@ -256,41 +257,35 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     // XServiceInfo
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL AccessibleListBoxEntry::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
     // -----------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        const ::rtl::OUString* pSupported = aSupported.getConstArray();
-        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
-        for ( ; pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported )
-            ;
-
-        return pSupported != pEnd;
+        return cppu::supportsService(this, _rServiceName);
     }
     // -----------------------------------------------------------------------------
     // XServiceInfo - static methods
     // -----------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > AccessibleListBoxEntry::getSupportedServiceNames_Static(void) throw( RuntimeException )
+    Sequence< OUString > AccessibleListBoxEntry::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
-        Sequence< ::rtl::OUString > aSupported(3);
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleContext") );
-        aSupported[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleComponent") );
-        aSupported[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleTreeListBoxEntry") );
+        Sequence< OUString > aSupported(3);
+        aSupported[0] = "com.sun.star.accessibility.AccessibleContext";
+        aSupported[1] = "com.sun.star.accessibility.AccessibleComponent";
+        aSupported[2] = "com.sun.star.awt.AccessibleTreeListBoxEntry";
         return aSupported;
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString AccessibleListBoxEntry::getImplementationName_Static(void) throw( RuntimeException )
+    OUString AccessibleListBoxEntry::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svtools.AccessibleTreeListBoxEntry") );
+        return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBoxEntry" );
     }
     // -----------------------------------------------------------------------------
     // XAccessible
@@ -389,13 +384,13 @@ namespace accessibility
         return AccessibleRole::LABEL;
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  ) throw (RuntimeException)
     {
         // no description for every item
-        return ::rtl::OUString();
+        return OUString();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -671,7 +666,7 @@ namespace accessibility
         return bRet;
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -679,7 +674,7 @@ namespace accessibility
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
-        static const ::rtl::OUString sActionDesc( RTL_CONSTASCII_USTRINGPARAM( "toggleExpand" ) );
+        static const OUString sActionDesc( "toggleExpand" );
         return sActionDesc;
     }
     // -----------------------------------------------------------------------------
@@ -735,9 +730,8 @@ namespace accessibility
         SvLBoxEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException();
-        sal_Int32 i, nCount = 0;
-        nCount = getListBox()->GetLevelChildCount( pParent );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( pParent );
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( getListBox()->IsSelected( pEntry ) )
@@ -755,9 +749,8 @@ namespace accessibility
         SvLBoxEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
             throw RuntimeException();
-        sal_Int32 i, nCount = 0;
-        nCount = getListBox()->GetLevelChildCount( pParent );
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( pParent );
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( !getListBox()->IsSelected( pEntry ) )
@@ -857,13 +850,13 @@ namespace accessibility
         EnsureIsAlive();
         return OCommonAccessibleText::getCharacter( nIndex );
     }
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
 
         if ( !implIsValidIndex( nIndex, sText.getLength() ) )
             throw IndexOutOfBoundsException();
@@ -878,7 +871,7 @@ namespace accessibility
         return OCommonAccessibleText::getCharacterCount(  );
     }
 
-    ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL AccessibleListBoxEntry::getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -910,14 +903,14 @@ namespace accessibility
 
         return sal_False;
     }
-    ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getText(  ) throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL AccessibleListBoxEntry::getText(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
         return OCommonAccessibleText::getText(  );
     }
-    ::rtl::OUString SAL_CALL AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );

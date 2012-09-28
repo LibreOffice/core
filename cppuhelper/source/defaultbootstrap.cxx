@@ -62,6 +62,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/shlib.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "osl/file.hxx"
 #include "registry/registry.hxx"
 #include "rtl/bootstrap.hxx"
@@ -920,13 +921,7 @@ rtl::OUString ServiceManager::getImplementationName()
 sal_Bool ServiceManager::supportsService(rtl::OUString const & ServiceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< rtl::OUString > names(getSupportedServiceNames());
-    for (sal_Int32 i = 0; i != names.getLength(); ++i) {
-        if (ServiceName == names[i]) {
-            return true;
-        }
-    }
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< rtl::OUString > ServiceManager::getSupportedServiceNames()
@@ -1936,13 +1931,7 @@ rtl::OUString FactoryWrapper::getImplementationName()
 sal_Bool FactoryWrapper::supportsService(rtl::OUString const & ServiceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< rtl::OUString > names(getSupportedServiceNames());
-    for (sal_Int32 i = 0; i != names.getLength(); ++i) {
-        if (ServiceName == names[i]) {
-            return true;
-        }
-    }
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< rtl::OUString > FactoryWrapper::getSupportedServiceNames()

@@ -33,7 +33,6 @@ ifeq ($(ENABLE_MEDIAWIKI),YES)
 $(eval $(call gb_Module_add_targets,swext,\
 	Jar_mediawiki \
 	Configuration_mediawiki \
-	Zip_mediawiki_develop \
 	Extension_wiki-publisher \
 ))
 endif

@@ -211,7 +211,6 @@ public class AccessibleListBox extends TestCase {
         }
 
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**

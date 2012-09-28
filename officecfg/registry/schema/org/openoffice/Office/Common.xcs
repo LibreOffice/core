@@ -6726,6 +6726,11 @@
               <desc>Human - the Gnome default theme for Ubuntu</desc>
             </info>
           </enumeration>
+          <enumeration oor:value="tango_testing">
+            <info>
+              <desc>Tango Testing - used for testing by the design team</desc>
+            </info>
+          </enumeration>
         </constraints>
         <value>auto</value>
       </prop>

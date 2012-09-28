@@ -490,11 +490,9 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
                 try {
                     XAccessibleContext xAccessibleContext = unoAccessible.getAccessibleContext();
                     if (xAccessibleContext != null) {
-                                            javax.accessibility.AccessibleContext ac = new AccessibleTreeItem(xAccessibleContext);
-                                            if (ac != null) {
-                                                ac.setAccessibleParent(Tree.this);
-                                                accessibleContext = ac;
-                                            }
+                        javax.accessibility.AccessibleContext ac = new AccessibleTreeItem(xAccessibleContext);
+                        ac.setAccessibleParent(Tree.this);
+                        accessibleContext = ac;
                     }
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }

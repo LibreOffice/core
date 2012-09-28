@@ -38,10 +38,7 @@ VisualState::VisualState (const sal_Int32 nPageId)
       meOldVisualState(VS_None),
       mnStateAnimationId(controller::Animator::NotAnAnimationId),
       maLocationOffset(0,0),
-      mnLocationAnimationId(controller::Animator::NotAnAnimationId),
-      mnButtonAlpha(1.0),
-      mnButtonBarAlpha(1.0),
-      mnButtonAlphaAnimationId(controller::Animator::NotAnAnimationId)
+      mnLocationAnimationId(controller::Animator::NotAnAnimationId)
 {
 }
 
@@ -101,42 +98,6 @@ bool VisualState::SetLocationOffset (const Point& rOffset)
     }
     else
         return false;
-}
-
-
-double VisualState::GetButtonAlpha (void) const
-{
-    return mnButtonAlpha;
-}
-
-
-void VisualState::SetButtonAlpha (const double nAlpha)
-{
-    mnButtonAlpha = nAlpha;
-}
-
-
-double VisualState::GetButtonBarAlpha (void) const
-{
-    return mnButtonBarAlpha;
-}
-
-
-void VisualState::SetButtonBarAlpha (const double nAlpha)
-{
-    mnButtonBarAlpha = nAlpha;
-}
-
-
-sal_Int32 VisualState::GetButtonAlphaAnimationId (void) const
-{
-    return mnButtonAlphaAnimationId;
-}
-
-
-void VisualState::SetButtonAlphaAnimationId (const sal_Int32 nAnimationId)
-{
-    mnButtonAlphaAnimationId = nAnimationId;
 }
 
 

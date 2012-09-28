@@ -167,7 +167,6 @@ IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl)
 
 SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
 : SfxTabDialog( pParent, SdResId( TAB_PARAGRAPH ), pAttr )
-, rOutAttrs( *pAttr )
 {
     FreeResource();
 

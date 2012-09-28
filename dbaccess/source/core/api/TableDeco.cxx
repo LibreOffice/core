@@ -608,7 +608,7 @@ void ODBTableDecorator::refreshColumns()
                                     m_xMetaData.is() && m_xMetaData->supportsAlterTableWithDropColumn());
 
         pCol->setParent(*this);
-        OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
+        OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions, m_xConnection );
         m_xColumnMediator = pMediator;
         pCol->setMediator( pMediator );
         m_pColumns  = pCol;

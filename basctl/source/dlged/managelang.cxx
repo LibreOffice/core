@@ -39,6 +39,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::resource;
@@ -108,8 +111,8 @@ ManageLanguageDialog::~ManageLanguageDialog()
 void ManageLanguageDialog::Init()
 {
     // get current IDE
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    ::rtl::OUString sLibName = pIDEShell->GetCurLibName();
+    Shell* pShell = GetShell();
+    ::rtl::OUString sLibName = pShell->GetCurLibName();
     // set dialog title with library name
     ::rtl::OUString sText = GetText();
     sText = sText.replaceAll("$1", sLibName);
@@ -206,8 +209,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
         ClearLanguageBox();
         FillLanguageBox();
 
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
+        if (SfxBindings* pBindings = GetBindingsPtr())
             pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
     }
     return 1;
@@ -399,5 +401,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     }
     return aLocaleSeq;
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

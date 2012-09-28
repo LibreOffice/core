@@ -66,7 +66,7 @@ $(eval $(call gb_Library_add_defs,sd,\
 ))
 
 ifneq ($(strip $(dbg_anim_log)$(DBG_ANIM_LOG)),)
-$(eval $(call gb_Library_set_defs,sd,\
+$(eval $(call gb_Library_add_defs,sd,\
     $$(DEFS) \
     -DDBG_ANIM_LOG \
 ))
@@ -107,8 +107,8 @@ $(eval $(call gb_Library_use_libraries,sd,\
 ))
 
 $(eval $(call gb_Library_use_externals,sd,\
- gtk \
  libxml2 \
+ dbus \
 ))
 
 ifeq ($(OS),WNT)
@@ -329,15 +329,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/presenter/PresenterPreviewCache \
     sd/source/ui/presenter/PresenterTextView \
     sd/source/ui/presenter/SlideRenderer \
-    sd/source/ui/remotecontrol/BluetoothServer \
-    sd/source/ui/remotecontrol/BufferedStreamSocket \
-    sd/source/ui/remotecontrol/Communicator \
-    sd/source/ui/remotecontrol/DiscoveryService \
-    sd/source/ui/remotecontrol/ImagePreparer \
-    sd/source/ui/remotecontrol/Server \
-    sd/source/ui/remotecontrol/Receiver \
-    sd/source/ui/remotecontrol/Listener \
-    sd/source/ui/remotecontrol/Transmitter \
     sd/source/ui/slideshow/PaneHider \
     sd/source/ui/slideshow/SlideShowRestarter \
     sd/source/ui/slideshow/showwin \
@@ -382,7 +373,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/slidesorter/shell/SlideSorterService \
     sd/source/ui/slidesorter/shell/SlideSorterViewShell \
     sd/source/ui/slidesorter/view/SlideSorterView \
-    sd/source/ui/slidesorter/view/SlsButtonBar \
     sd/source/ui/slidesorter/view/SlsFontProvider \
     sd/source/ui/slidesorter/view/SlsFramePainter \
     sd/source/ui/slidesorter/view/SlsInsertAnimator \
@@ -521,6 +511,25 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/view/viewshel \
     sd/source/ui/view/zoomlist \
 ))
+
+ifeq ($(ENABLE_SDREMOTE),YES)
+$(eval $(call gb_Library_add_exception_objects,sd,\
+    sd/source/ui/remotecontrol/BluetoothServer \
+    sd/source/ui/remotecontrol/BufferedStreamSocket \
+    sd/source/ui/remotecontrol/Communicator \
+    sd/source/ui/remotecontrol/DiscoveryService \
+    sd/source/ui/remotecontrol/ImagePreparer \
+    sd/source/ui/remotecontrol/Server \
+    sd/source/ui/remotecontrol/Receiver \
+    sd/source/ui/remotecontrol/Listener \
+    sd/source/ui/remotecontrol/Transmitter \
+))
+
+$(eval $(call gb_Library_add_defs,sd,\
+    -DENABLE_SDREMOTE \
+))
+
+endif
 
 ifeq ($(strip $(GUI)),WNT)
 $(eval $(call gb_Library_add_cxxobjects,sd,\

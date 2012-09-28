@@ -139,7 +139,7 @@ HF_IdlProperty::write_Declaration( const client & i_ce ) const
     }   // end if
 
     HF_IdlTypeText
-        aType( Env(), CurOut(), true );
+        aType( Env(), CurOut() );
     aType.Produce_byData( PropertyAttr::Type(i_ce) );
 
     CurOut() << " " >> *new Html::Bold << i_ce.LocalName();
@@ -169,7 +169,7 @@ HF_IdlAttribute::write_Declaration( const client & i_ce ) const
     }
 
     HF_IdlTypeText
-        aType( Env(), CurOut(), true );
+        aType( Env(), CurOut() );
     aType.Produce_byData( AttributeAttr::Type(i_ce) );
 
     CurOut()
@@ -194,7 +194,7 @@ HF_IdlAttribute::write_Declaration( const client & i_ce ) const
             Xml::Element &
                 rGet = aSub.Produce_Definition();
             HF_IdlTypeText
-                aExc(Env(), rGet, true);
+                aExc(Env(), rGet);
             type_list & itExc = *pGetExceptions;
 
             rGet << "get raises (";
@@ -215,7 +215,7 @@ HF_IdlAttribute::write_Declaration( const client & i_ce ) const
             Xml::Element &
                 rSet = aSub.Produce_Definition();
             HF_IdlTypeText
-                aExc(Env(), rSet, true);
+                aExc(Env(), rSet);
             type_list & itExc = *pSetExceptions;
 
             rSet << "set raises (";
@@ -274,7 +274,7 @@ HF_IdlConstant::write_Declaration( const client & i_ce ) const
 {
     CurOut() << "const ";
     HF_IdlTypeText
-        aType( Env(), CurOut(), true );
+        aType( Env(), CurOut() );
     aType.Produce_byData(ConstantAttr::Type(i_ce));
     CurOut()
         << " "
@@ -298,7 +298,7 @@ void
 HF_IdlStructElement::write_Declaration( const client & i_ce ) const
 {
     HF_IdlTypeText
-        aType( Env(), CurOut(), true );
+        aType( Env(), CurOut() );
     aType.Produce_byData(StructElementAttr::Type(i_ce));
     CurOut()
         << " "
@@ -425,7 +425,7 @@ HF_IdlCommentedRelationElement::write_Title( const client & /*i_ce*/ ) const
                         << new Html::ClassAttr(C_sMemberTitle);
 
     HF_IdlTypeText
-        aText(Env(), rAnchor, true);
+        aText(Env(), rAnchor);
     aText.Produce_byData(m_relation.Type());
 }
 

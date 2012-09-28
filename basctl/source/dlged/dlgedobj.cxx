@@ -41,6 +41,9 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -51,7 +54,7 @@ using ::rtl::OUString;
 TYPEINIT1(DlgEdObj, SdrUnoObj);
 DBG_NAME(DlgEdObj);
 
-DlgEditor* DlgEdObj::GetDialogEditor ()
+DlgEditor& DlgEdObj::GetDialogEditor ()
 {
     if (DlgEdForm* pFormThis = dynamic_cast<DlgEdForm*>(this))
         return pFormThis->GetDlgEditor();
@@ -122,16 +125,12 @@ namespace
 
 uno::Reference< awt::XControl > DlgEdObj::GetControl() const
 {
-    const DlgEdForm* pForm = GetDlgEdForm();
-    const DlgEditor* pEditor = pForm ? pForm->GetDlgEditor() : NULL;
-    SdrView* pView = pEditor ? pEditor->GetView() : NULL;
-    Window* pWindow = pEditor ? pEditor->GetWindow() : NULL;
-    OSL_ENSURE( ( pView && pWindow ) || !pForm, "DlgEdObj::GetControl: no view or no window!" );
-
     uno::Reference< awt::XControl > xControl;
-    if ( pView && pWindow )
-        xControl = GetUnoControl( *pView, *pWindow );
-
+    if (DlgEdForm const* pForm = GetDlgEdForm())
+    {
+        DlgEditor const& rEditor = pForm->GetDlgEditor();
+        xControl = GetUnoControl(rEditor.GetView(), rEditor.GetWindow());
+    }
     return xControl;
 }
 
@@ -416,19 +415,12 @@ void DlgEdObj::SetPropsFromRect()
 
 void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 {
-    DlgEdPage* pPage_ = 0;
-    if ( pDlgEdForm )
-    {
-        DlgEditor* pEditor = pDlgEdForm->GetDlgEditor();
-        if ( pEditor )
-            pPage_ = pEditor->GetPage();
-    }
-    DBG_ASSERT( pPage_, "DlgEdObj::PositionAndSizeChange: no page!" );
-    if ( pPage_ )
+    DBG_ASSERT( pDlgEdForm, "DlgEdObj::PositionAndSizeChange: no form!" );
+    DlgEdPage& rPage = pDlgEdForm->GetDlgEditor().GetPage();
     {
         sal_Int32 nPageXIn = 0;
         sal_Int32 nPageYIn = 0;
-        Size aPageSize = pPage_->GetSize();
+        Size aPageSize = rPage.GetSize();
         sal_Int32 nPageWidthIn = aPageSize.Width();
         sal_Int32 nPageHeightIn = aPageSize.Height();
         sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
@@ -521,7 +513,7 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
                     xCont->insertByName( aNewName , aAny );
 
                     LocalizationMgr::renameControlResourceIDsForEditorObject(
-                        GetDialogEditor(), aAny, aNewName
+                        &GetDialogEditor(), aAny, aNewName
                     );
                 }
             }
@@ -1004,7 +996,7 @@ void DlgEdObj::NbcMove( const Size& rSize )
     StartListening();
 
     // dialog model changed
-    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
+    GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged(true);
 }
 
 //----------------------------------------------------------------------------
@@ -1023,7 +1015,7 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     StartListening();
 
     // dialog model changed
-    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
+    GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged(true);
 }
 
 //----------------------------------------------------------------------------
@@ -1074,7 +1066,7 @@ void DlgEdObj::SetDefaults()
             // set number formats supplier for formatted field
             if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
             {
-                Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor()->GetNumberFormatsSupplier();
+                Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor().GetNumberFormatsSupplier();
                 if ( xSupplier.is() )
                 {
                     Any aSupplier;
@@ -1110,7 +1102,7 @@ void DlgEdObj::SetDefaults()
                 xCont->insertByName( aOUniqueName , aAny );
 
                 LocalizationMgr::setControlResourceIDsForNewEditorObject(
-                    GetDialogEditor(), aAny, aOUniqueName
+                    &GetDialogEditor(), aAny, aOUniqueName
                 );
 
                 // #110559#
@@ -1119,7 +1111,7 @@ void DlgEdObj::SetDefaults()
         }
 
         // dialog model changed
-        pDlgEdForm->GetDlgEditor()->SetDialogModelChanged(true);
+        pDlgEdForm->GetDlgEditor().SetDialogModelChanged(true);
     }
 }
 
@@ -1138,7 +1130,7 @@ void DlgEdObj::StartListening()
         if (!m_xPropertyChangeListener.is() && xControlModel.is())
         {
             // create listener
-            m_xPropertyChangeListener = static_cast< ::com::sun::star::beans::XPropertyChangeListener*>( new DlgEdPropListenerImpl( (DlgEdObj*)this ) );
+            m_xPropertyChangeListener = new DlgEdPropListenerImpl(*this);
 
             // register listener to properties
             xControlModel->addPropertyChangeListener( ::rtl::OUString() , m_xPropertyChangeListener );
@@ -1149,7 +1141,7 @@ void DlgEdObj::StartListening()
         if( !m_xContainerListener.is() && xEventsSupplier.is() )
         {
             // create listener
-            m_xContainerListener = static_cast< ::com::sun::star::container::XContainerListener*>( new DlgEdEvtContListenerImpl( (DlgEdObj*)this ) );
+            m_xContainerListener = new DlgEdEvtContListenerImpl(*this);
 
             // register listener to script event container
             Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
@@ -1204,17 +1196,17 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
 {
     if (isListening())
     {
-        DlgEdForm* pRealDlgEdForm = dynamic_cast< DlgEdForm* >(this);
-        if( pRealDlgEdForm == 0 )
+        DlgEdForm* pRealDlgEdForm = dynamic_cast<DlgEdForm*>(this);
+        if (!pRealDlgEdForm)
             pRealDlgEdForm = GetDlgEdForm();
-
-        DlgEditor* pDlgEditor = pRealDlgEdForm ? pRealDlgEdForm->GetDlgEditor() : 0;
-
-        if( !pDlgEditor || pDlgEditor->isInPaint() )
+        if (!pRealDlgEdForm)
+            return;
+        DlgEditor& rDlgEditor = pRealDlgEdForm->GetDlgEditor();
+        if (rDlgEditor.isInPaint())
             return;
 
         // dialog model changed
-        pDlgEditor->SetDialogModelChanged(true);
+        rDlgEditor.SetDialogModelChanged(true);
 
         // update position and size
         if ( evt.PropertyName == DLGED_PROP_POSITIONX || evt.PropertyName == DLGED_PROP_POSITIONY ||
@@ -1224,7 +1216,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
             PositionAndSizeChange( evt );
 
             if ( evt.PropertyName == DLGED_PROP_DECORATION )
-                GetDialogEditor()->ResetDialog();
+                GetDialogEditor().ResetDialog();
         }
         // change name of control in dialog model
         else if ( evt.PropertyName == DLGED_PROP_NAME )
@@ -1253,7 +1245,7 @@ void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::Cont
     if (isListening())
     {
         // dialog model changed
-        GetDialogEditor()->SetDialogModelChanged(true);
+        GetDialogEditor().SetDialogModelChanged(true);
     }
 }
 
@@ -1264,7 +1256,7 @@ void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::Cont
     if (isListening())
     {
         // dialog model changed
-        GetDialogEditor()->SetDialogModelChanged(true);
+        GetDialogEditor().SetDialogModelChanged(true);
     }
 }
 
@@ -1275,7 +1267,7 @@ void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::Conta
     if (isListening())
     {
         // dialog model changed
-        GetDialogEditor()->SetDialogModelChanged(true);
+        GetDialogEditor().SetDialogModelChanged(true);
     }
 }
 
@@ -1289,8 +1281,8 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
     {
         SdrUnoObj::SetLayer( nLayer );
 
-        DlgEdHint aHint( DLGED_HINT_LAYERCHANGED, this );
-        GetDlgEdForm()->GetDlgEditor()->Broadcast( aHint );
+        DlgEdHint aHint( DlgEdHint::LAYERCHANGED, this );
+        GetDlgEdForm()->GetDlgEditor().Broadcast( aHint );
     }
 }
 
@@ -1301,8 +1293,8 @@ DBG_NAME(DlgEdForm);
 
 //----------------------------------------------------------------------------
 
-DlgEdForm::DlgEdForm()
-          :DlgEdObj()
+DlgEdForm::DlgEdForm (DlgEditor& rDlgEditor_) :
+    rDlgEditor(rDlgEditor_)
 {
     DBG_CTOR(DlgEdForm, NULL);
 }
@@ -1312,21 +1304,6 @@ DlgEdForm::DlgEdForm()
 DlgEdForm::~DlgEdForm()
 {
     DBG_DTOR(DlgEdForm, NULL);
-}
-
-//----------------------------------------------------------------------------
-
-void DlgEdForm::SetDlgEditor( DlgEditor* pEditor )
-{
-    pDlgEditor = pEditor;
-    ImplInvalidateDeviceInfo();
-}
-
-//----------------------------------------------------------------------------
-
-void DlgEdForm::ImplInvalidateDeviceInfo()
-{
-    mpDeviceInfo.reset();
 }
 
 //----------------------------------------------------------------------------
@@ -1405,127 +1382,118 @@ void DlgEdForm::RemoveChild( DlgEdObj* pDlgEdObj )
 
 void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 {
-    DlgEditor* pEditor = GetDlgEditor();
-    DBG_ASSERT( pEditor, "DlgEdForm::PositionAndSizeChange: no dialog editor!" );
-    if ( pEditor )
+    DlgEditor& rEditor = GetDlgEditor();
+    DlgEdPage& rPage = rEditor.GetPage();
+
+    sal_Int32 nPageXIn = 0;
+    sal_Int32 nPageYIn = 0;
+    Size aPageSize = rPage.GetSize();
+    sal_Int32 nPageWidthIn = aPageSize.Width();
+    sal_Int32 nPageHeightIn = aPageSize.Height();
+    sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
+    if ( TransformSdrToFormCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
     {
-        DlgEdPage* pPage_ = pEditor->GetPage();
-        DBG_ASSERT( pPage_, "DlgEdForm::PositionAndSizeChange: no page!" );
-        if ( pPage_ )
+        Reference< beans::XPropertySet > xPSetForm( GetUnoControlModel(), UNO_QUERY );
+        if ( xPSetForm.is() )
         {
-            sal_Int32 nPageXIn = 0;
-            sal_Int32 nPageYIn = 0;
-            Size aPageSize = pPage_->GetSize();
-            sal_Int32 nPageWidthIn = aPageSize.Width();
-            sal_Int32 nPageHeightIn = aPageSize.Height();
-            sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
-            if ( TransformSdrToFormCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
+            sal_Int32 nValue = 0;
+            evt.NewValue >>= nValue;
+            sal_Int32 nNewValue = nValue;
+
+            if ( evt.PropertyName == DLGED_PROP_POSITIONX )
             {
-                Reference< beans::XPropertySet > xPSetForm( GetUnoControlModel(), UNO_QUERY );
-                if ( xPSetForm.is() )
+                if ( nNewValue < nPageX )
+                    nNewValue = nPageX;
+            }
+            else if ( evt.PropertyName == DLGED_PROP_POSITIONY )
+            {
+                if ( nNewValue < nPageY )
+                    nNewValue = nPageY;
+            }
+            else if ( evt.PropertyName == DLGED_PROP_WIDTH )
+            {
+                if ( nNewValue < 1 )
+                    nNewValue = 1;
+            }
+            else if ( evt.PropertyName == DLGED_PROP_HEIGHT )
+            {
+                if ( nNewValue < 1 )
+                    nNewValue = 1;
+            }
+
+            if ( nNewValue != nValue )
+            {
+                Any aNewValue;
+                aNewValue <<= nNewValue;
+                EndListening( false );
+                xPSetForm->setPropertyValue( evt.PropertyName, aNewValue );
+                StartListening();
+            }
+        }
+    }
+
+    bool bAdjustedPageSize = rEditor.AdjustPageSize();
+    SetRectFromProps();
+    std::vector<DlgEdObj*> const& aChildList = ((DlgEdForm*)this)->GetChildren();
+    std::vector<DlgEdObj*>::const_iterator aIter;
+
+    if ( bAdjustedPageSize )
+    {
+        rEditor.InitScrollBars();
+        aPageSize = rPage.GetSize();
+        nPageWidthIn = aPageSize.Width();
+        nPageHeightIn = aPageSize.Height();
+        if ( TransformSdrToControlCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
+        {
+            for ( aIter = aChildList.begin(); aIter != aChildList.end(); ++aIter )
+            {
+                Reference< beans::XPropertySet > xPSet( (*aIter)->GetUnoControlModel(), UNO_QUERY );
+                if ( xPSet.is() )
                 {
-                    sal_Int32 nValue = 0;
-                    evt.NewValue >>= nValue;
-                    sal_Int32 nNewValue = nValue;
+                    sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+                    xPSet->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nX;
+                    xPSet->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nY;
+                    xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidth;
+                    xPSet->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nHeight;
 
-                    if ( evt.PropertyName == DLGED_PROP_POSITIONX )
+                    sal_Int32 nNewX = nX;
+                    if ( nX + nWidth > nPageX + nPageWidth )
                     {
-                        if ( nNewValue < nPageX )
-                            nNewValue = nPageX;
+                        nNewX = nPageX + nPageWidth - nWidth;
+                        if ( nNewX < nPageX )
+                            nNewX = nPageX;
                     }
-                    else if ( evt.PropertyName == DLGED_PROP_POSITIONY )
+                    if ( nNewX != nX )
                     {
-                        if ( nNewValue < nPageY )
-                            nNewValue = nPageY;
-                    }
-                    else if ( evt.PropertyName == DLGED_PROP_WIDTH )
-                    {
-                        if ( nNewValue < 1 )
-                            nNewValue = 1;
-                    }
-                    else if ( evt.PropertyName == DLGED_PROP_HEIGHT )
-                    {
-                        if ( nNewValue < 1 )
-                            nNewValue = 1;
-                    }
-
-                    if ( nNewValue != nValue )
-                    {
-                        Any aNewValue;
-                        aNewValue <<= nNewValue;
+                        Any aValue;
+                        aValue <<= nNewX;
                         EndListening( false );
-                        xPSetForm->setPropertyValue( evt.PropertyName, aNewValue );
+                        xPSet->setPropertyValue( DLGED_PROP_POSITIONX, aValue );
+                        StartListening();
+                    }
+
+                    sal_Int32 nNewY = nY;
+                    if ( nY + nHeight > nPageY + nPageHeight )
+                    {
+                        nNewY = nPageY + nPageHeight - nHeight;
+                        if ( nNewY < nPageY )
+                            nNewY = nPageY;
+                    }
+                    if ( nNewY != nY )
+                    {
+                        Any aValue;
+                        aValue <<= nNewY;
+                        EndListening( false );
+                        xPSet->setPropertyValue( DLGED_PROP_POSITIONY, aValue );
                         StartListening();
                     }
                 }
             }
-
-            bool bAdjustedPageSize = pEditor->AdjustPageSize();
-            SetRectFromProps();
-            ::std::vector< DlgEdObj* >::iterator aIter;
-            ::std::vector< DlgEdObj* > aChildList = ((DlgEdForm*)this)->GetChildren();
-
-            if ( bAdjustedPageSize )
-            {
-                pEditor->InitScrollBars();
-                aPageSize = pPage_->GetSize();
-                nPageWidthIn = aPageSize.Width();
-                nPageHeightIn = aPageSize.Height();
-                if ( TransformSdrToControlCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
-                {
-                    for ( aIter = aChildList.begin(); aIter != aChildList.end(); ++aIter )
-                    {
-                        Reference< beans::XPropertySet > xPSet( (*aIter)->GetUnoControlModel(), UNO_QUERY );
-                        if ( xPSet.is() )
-                        {
-                            sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
-                            xPSet->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nX;
-                            xPSet->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nY;
-                            xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidth;
-                            xPSet->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nHeight;
-
-                            sal_Int32 nNewX = nX;
-                            if ( nX + nWidth > nPageX + nPageWidth )
-                            {
-                                nNewX = nPageX + nPageWidth - nWidth;
-                                if ( nNewX < nPageX )
-                                    nNewX = nPageX;
-                            }
-                            if ( nNewX != nX )
-                            {
-                                Any aValue;
-                                aValue <<= nNewX;
-                                EndListening( false );
-                                xPSet->setPropertyValue( DLGED_PROP_POSITIONX, aValue );
-                                StartListening();
-                            }
-
-                            sal_Int32 nNewY = nY;
-                            if ( nY + nHeight > nPageY + nPageHeight )
-                            {
-                                nNewY = nPageY + nPageHeight - nHeight;
-                                if ( nNewY < nPageY )
-                                    nNewY = nPageY;
-                            }
-                            if ( nNewY != nY )
-                            {
-                                Any aValue;
-                                aValue <<= nNewY;
-                                EndListening( false );
-                                xPSet->setPropertyValue( DLGED_PROP_POSITIONY, aValue );
-                                StartListening();
-                            }
-                        }
-                    }
-                }
-            }
-
-            for ( aIter = aChildList.begin(); aIter != aChildList.end(); ++aIter )
-            {
-                (*aIter)->SetRectFromProps();
-            }
         }
     }
+
+    for ( aIter = aChildList.begin(); aIter != aChildList.end(); ++aIter )
+        (*aIter)->SetRectFromProps();
 }
 
 //----------------------------------------------------------------------------
@@ -1729,7 +1697,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
     }
 
     // dialog model changed
-    GetDlgEditor()->SetDialogModelChanged(true);
+    GetDlgEditor().SetDialogModelChanged(true);
 }
 
 //----------------------------------------------------------------------------
@@ -1753,7 +1721,7 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     }
 
     // dialog model changed
-    GetDlgEditor()->SetDialogModelChanged(true);
+    GetDlgEditor().SetDialogModelChanged(true);
 }
 
 //----------------------------------------------------------------------------
@@ -1769,7 +1737,7 @@ bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     SetPropsFromRect();
 
     // dialog model changed
-    GetDlgEditor()->SetDialogModelChanged(true);
+    GetDlgEditor().SetDialogModelChanged(true);
 
     // start listening
     StartListening();
@@ -1783,15 +1751,8 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
 {
     awt::DeviceInfo aDeviceInfo;
 
-    DlgEditor* pEditor = GetDlgEditor();
-    DBG_ASSERT( pEditor, "DlgEdForm::getDeviceInfo: no editor associated with the form object!" );
-    if ( !pEditor )
-        return aDeviceInfo;
-
-    Window* pWindow = pEditor->GetWindow();
-    DBG_ASSERT( pWindow, "DlgEdForm::getDeviceInfo: no window associated with the editor!" );
-    if ( !pWindow )
-        return aDeviceInfo;
+    DlgEditor& rEditor = GetDlgEditor();
+    Window& rWindow = rEditor.GetWindow();
 
     // obtain an XControl
     ::utl::SharedUNOComponent< awt::XControl > xDialogControl; // ensures auto-disposal, if needed
@@ -1804,10 +1765,11 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
         if ( !!mpDeviceInfo )
             return *mpDeviceInfo;
 
-        Reference< awt::XControlContainer > xEditorControlContainer( pEditor->GetWindowControlContainer() );
+        Reference< awt::XControlContainer > xEditorControlContainer( rEditor.GetWindowControlContainer() );
         xDialogControl.reset(
-            GetTemporaryControlForWindow( *pWindow, xEditorControlContainer ),
-            ::utl::SharedUNOComponent< awt::XControl >::TakeOwnership );
+            GetTemporaryControlForWindow(rWindow, xEditorControlContainer),
+            utl::SharedUNOComponent< awt::XControl >::TakeOwnership
+        );
     }
 
     Reference< awt::XDevice > xDialogDevice;
@@ -1850,5 +1812,6 @@ bool DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
 }
 //----------------------------------------------------------------------------
 
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

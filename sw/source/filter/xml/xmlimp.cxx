@@ -27,11 +27,14 @@
  ************************************************************************/
 
 
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -40,8 +43,6 @@
 #include <xmloff/XMLTextShapeImportHelper.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <doc.hxx>
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
@@ -278,8 +279,7 @@ public:
                 sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList,
-                const Reference< document::XDocumentProperties >& xDocProps,
-                const Reference< xml::sax::XDocumentHandler >& xDocBuilder);
+                const Reference< document::XDocumentProperties >& xDocProps);
     virtual ~SwXMLOfficeDocContext_Impl();
 
     TYPEINFO();
@@ -295,11 +295,10 @@ SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
                 sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList,
-                const Reference< document::XDocumentProperties >& xDocProps,
-                const Reference< xml::sax::XDocumentHandler >& xDocBuilder) :
+                const Reference< document::XDocumentProperties >& xDocProps) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList ),
-    SvXMLMetaDocumentContext( rImport, nPrfx, rLName, xDocProps, xDocBuilder)
+    SvXMLMetaDocumentContext( rImport, nPrfx, rLName, xDocProps)
 {
 }
 
@@ -413,15 +412,11 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT ) )
     {
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
-                uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
             GetDocumentProperties());
         // flat OpenDocument file format
         pContext = new SwXMLOfficeDocContext_Impl( *this, nPrefix, rLocalName,
-                        xAttrList, xDocProps, xDocBuilder);
+                        xAttrList, xDocProps);
     }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
@@ -1154,6 +1149,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aSet.insert(String("SmallCapsPercentage66", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("TabOverflow", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("UnbreakableNumberings", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("ClippedPictures", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("BackgroundParaOverDrawings", RTL_TEXTENCODING_ASCII_US));
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1185,6 +1182,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bSmallCapsPercentage66 = false;
     bool bTabOverflow = false;
     bool bUnbreakableNumberings = false;
+    bool bClippedPictures = false;
+    bool bBackgroundParaOverDrawings = false;
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1273,6 +1272,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bTabOverflow = true;
                 else if ( pValues->Name == "UnbreakableNumberings" )
                     bUnbreakableNumberings = true;
+                else if ( pValues->Name == "ClippedPictures" )
+                    bClippedPictures = true;
+                else if ( pValues->Name == "BackgroundParaOverDrawings" )
+                    bBackgroundParaOverDrawings = true;
             }
             catch( Exception& )
             {
@@ -1450,6 +1453,15 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("UnbreakableNumberings") ), makeAny( false ) );
     }
+
+    if ( !bClippedPictures )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("ClippedPictures") ), makeAny( false ) );
+    }
+
+    if ( !bBackgroundParaOverDrawings )
+        xProps->setPropertyValue("BackgroundParaOverDrawings", makeAny( false ) );
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();

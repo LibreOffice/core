@@ -1,0 +1,41 @@
+Mork Format Parsing Library
+=============================
+
+Description
+-----------
+
+Cross Platform Mozilla Mork format reader.
+
+
+Compillation
+------------
+
+g++ -o MorkParser main.cpp MorkParser.cpp
+
+
+License
+-------
+
+This program is licensed under permissive BSD license.
+See the license.txt file for more information.
+
+
+Date: October 16th, 2007
+
+Project Maintainers:
+  Yuriy Soroka
+  ysoroka@scalingweb.com
+
+  http://www.scalingweb.com/
+
+Thanks
+-------------
+Thanks to Petr Stejskal <stejsky@volny.cz> who helped with porting this code from Qt to STL.
+
+
+How you can help
+----------------
+
+  Comments, patches, bug reports are welcome.
+
+

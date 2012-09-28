@@ -196,24 +196,31 @@ SystemFontList::SystemFontList()
     {
         CFArrayRef font_descriptors = CTFontCollectionCreateMatchingFontDescriptors(font_collection);
 
-        for(int i = 0; i < CFArrayGetCount(font_descriptors); i++)
+        if(font_descriptors)
         {
-            CTFontDescriptorRef font_descriptor = (CTFontDescriptorRef)CFArrayGetValueAtIndex(font_descriptors, i);
-            CTFontRef font = CTFontCreateWithFontDescriptor(font_descriptor, 0, NULL);
-            ImplDevFontAttributes devfont_attr;
-            if(GetDevFontAttributes( font_descriptor, devfont_attr ) )
+            for(int i = 0; i < CFArrayGetCount(font_descriptors); i++)
             {
-                ImplCoreTextFontData* font_data = new ImplCoreTextFontData(devfont_attr, font);
-                if(font_data && font_data->GetCTFont())
+                CTFontDescriptorRef font_descriptor = (CTFontDescriptorRef)CFArrayGetValueAtIndex(font_descriptors, i);
+                CTFontRef font = CTFontCreateWithFontDescriptor(font_descriptor, 0, NULL);
+                if(font)
                 {
-                    m_aFontContainer [ font_data->GetCTFont() ] = font_data;
+                    ImplDevFontAttributes devfont_attr;
+                    if(GetDevFontAttributes( font_descriptor, devfont_attr ) )
+                    {
+                        CoreTextPhysicalFontFace* font_face = new CoreTextPhysicalFontFace(devfont_attr, font);
+                        if(font_face && font_face->GetCTFont())
+                        {
+                            m_aFontContainer [ font_face->GetCTFont() ] = font_face;
+                        }
+                    }
+                    CFRelease(font);
                 }
             }
-            CFRelease(font);
+            CFRelease(font_descriptors);
         }
-        CFRelease(font_descriptors);
+        CFRelease(font_collection);
     }
-    CFRelease(font_collection);
+
 }
 
 SystemFontList::~SystemFontList()
@@ -224,7 +231,7 @@ SystemFontList::~SystemFontList()
     m_aFontContainer.clear();
 }
 
-ImplCoreTextFontData* SystemFontList::GetFontDataFromRef( CTFontRef font ) const
+CoreTextPhysicalFontFace* SystemFontList::GetFontDataFromRef( CTFontRef font ) const
 {
     CoreTextFontContainer::const_iterator it = m_aFontContainer.find( font );
     return it == m_aFontContainer.end() ? NULL : (*it).second;
@@ -240,7 +247,7 @@ void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
     }
 }
 
-ImplCoreTextFontData::ImplCoreTextFontData( const ImplDevFontAttributes& rDFA, CTFontRef font )
+CoreTextPhysicalFontFace::CoreTextPhysicalFontFace( const ImplDevFontAttributes& rDFA, CTFontRef font )
 :   PhysicalFontFace( rDFA, 0 )
 ,   m_CTFontRef((CTFontRef)CFRetain(font))
 ,   m_pCharMap( NULL )
@@ -250,23 +257,22 @@ ImplCoreTextFontData::ImplCoreTextFontData( const ImplDevFontAttributes& rDFA, C
 ,   m_bHasCJKSupport( false )
 ,   m_bFontCapabilitiesRead( false )
 {
+    msgs_debug(font,"retain %p as %p",font, m_CTFontRef);
 }
 
-ImplCoreTextFontData::~ImplCoreTextFontData()
+CoreTextPhysicalFontFace::~CoreTextPhysicalFontFace()
 {
     if( m_pCharMap )
     {
         m_pCharMap->DeReference();
     }
-    if( m_CTFontRef )
-    {
-        CFRelease(m_CTFontRef);
-    }
+    msgs_debug(font,"release font %p", m_CTFontRef);
+    SafeCFRelease(m_CTFontRef);
 }
 
-PhysicalFontFace* ImplCoreTextFontData::Clone() const
+PhysicalFontFace* CoreTextPhysicalFontFace::Clone() const
 {
-    ImplCoreTextFontData* pClone = new ImplCoreTextFontData(*this);
+    CoreTextPhysicalFontFace* pClone = new CoreTextPhysicalFontFace(*this);
     if( m_pCharMap )
     {
         m_pCharMap->AddReference();
@@ -274,16 +280,17 @@ PhysicalFontFace* ImplCoreTextFontData::Clone() const
     if( m_CTFontRef )
     {
         pClone->m_CTFontRef = (CTFontRef)CFRetain(m_CTFontRef);
+        msgs_debug(font,"clone ref %p into %p", m_CTFontRef, pClone->m_CTFontRef);
     }
     return pClone;
 }
 
-ImplFontEntry* ImplCoreTextFontData::CreateFontInstance(FontSelectPattern& rFSD) const
+ImplFontEntry* CoreTextPhysicalFontFace::CreateFontInstance(FontSelectPattern& rFSD) const
 {
     return new ImplFontEntry(rFSD);
 }
 
-const ImplFontCharMap* ImplCoreTextFontData::GetImplFontCharMap()
+const ImplFontCharMap* CoreTextPhysicalFontFace::GetImplFontCharMap()
 {
     // return the cached charmap
     if( m_pCharMap )
@@ -316,7 +323,7 @@ const ImplFontCharMap* ImplCoreTextFontData::GetImplFontCharMap()
     return m_pCharMap;
 }
 
-bool ImplCoreTextFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
+bool CoreTextPhysicalFontFace::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
 {
     // read this only once per font
     if( m_bFontCapabilitiesRead )
@@ -380,7 +387,7 @@ void addTable(struct font_table* table, CTFontTableTag tag, CFDataRef data)
     }
 }
 
-bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, bool* pJustCFF ) const
+bool CoreTextPhysicalFontFace::GetRawFontData( std::vector<unsigned char>& rBuffer, bool* pJustCFF ) const
 {
     bool rc;
     int table_count = 0;
@@ -391,9 +398,6 @@ bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, 
         if(CFF_table)
         {
             *pJustCFF = CFDataGetLength(CFF_table) ? true : false;
-        }
-        if(CFF_table)
-        {
             CFRelease(CFF_table);
             return true;
         }
@@ -528,7 +532,7 @@ bool ImplCoreTextFontData::GetRawFontData( std::vector<unsigned char>& rBuffer, 
     return rc;
 }
 
-void ImplCoreTextFontData::DetermineCJKSupport_OS2(CFDataRef rOS2Table)
+void CoreTextPhysicalFontFace::DetermineCJKSupport_OS2(CFDataRef rOS2Table)
 {
     if(CFDataGetLength(rOS2Table) >= 48)
     {
@@ -545,7 +549,7 @@ void ImplCoreTextFontData::DetermineCJKSupport_OS2(CFDataRef rOS2Table)
     }
 }
 
-void ImplCoreTextFontData::DetermineCJKSupport_cmap(CFDataRef rCmapTable)
+void CoreTextPhysicalFontFace::DetermineCJKSupport_cmap(CFDataRef rCmapTable)
 {
     int table_len = CFDataGetLength(rCmapTable) / 2;
     if(table_len >= 12)
@@ -574,7 +578,7 @@ void ImplCoreTextFontData::DetermineCJKSupport_cmap(CFDataRef rCmapTable)
     }
 }
 
-bool ImplCoreTextFontData::HasCJKSupport( void )
+bool CoreTextPhysicalFontFace::HasCJKSupport( void )
 {
     // read this only once per font
     if(!m_bOs2TableRead )

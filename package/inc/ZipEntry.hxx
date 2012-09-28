@@ -28,9 +28,9 @@ struct ZipEntry
     sal_Int16 nMethod;
     sal_Int32 nTime;
     sal_Int32 nCrc;
-    sal_Int32 nCompressedSize;
-    sal_Int32 nSize;
-    sal_Int32 nOffset;
+    sal_Int64 nCompressedSize;
+    sal_Int64 nSize;
+    sal_Int64 nOffset;
     sal_Int16 nPathLen;
     sal_Int16 nExtraLen;
     ::rtl::OUString sPath;

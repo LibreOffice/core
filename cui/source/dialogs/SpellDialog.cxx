@@ -49,7 +49,7 @@
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <sfx2/app.hxx>
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
@@ -256,8 +256,7 @@ SpellDialog::SpellDialog(
     aDialogUndoLink( LINK (this, SpellDialog, DialogUndoHdl)),
     bModified( false ),
     bFocusLocked( true ),
-    rParent         ( *pChildWindow ),
-    nOldLang        ( LANGUAGE_NONE )
+    rParent         ( *pChildWindow )
 {
     FreeResource();
     xSpell = LinguMgr::GetSpellChecker();
@@ -2176,9 +2175,8 @@ IMPL_LINK( SpellDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
     try
     {
         uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+            com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+        xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch ( uno::Exception& )
     {

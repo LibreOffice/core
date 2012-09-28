@@ -44,7 +44,6 @@
 //----------------------------------------------------------------------------
 
 ScFilterOptionsMgr::ScFilterOptionsMgr(
-                                Dialog*             ptrDlg,
                                 ScViewData*         ptrViewData,
                                 const ScQueryParam& refQueryData,
                                 MoreButton&         refBtnMore,
@@ -62,8 +61,7 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 FixedLine&          refFlOptions,
                                 const String&       refStrUndefined )
 
-    :   pDlg            ( ptrDlg ),
-        pViewData       ( ptrViewData ),
+    :   pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData ? ptrViewData->GetDocument() : NULL ),
         rBtnMore        ( refBtnMore ),
         rBtnCase        ( refBtnCase ),

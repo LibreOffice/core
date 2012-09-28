@@ -51,13 +51,13 @@ const sal_Char *linker_dummy = "";
 
 static const sal_Char sAutoTblFmtName[] = "autotbl.fmt";
 
-// bis SO5PF
+// till SO5PF
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;
 const sal_uInt16 AUTOFORMAT_ID_358      = 9601;
 const sal_uInt16 AUTOFORMAT_DATA_ID_X   = 9502;
 
-// ab SO5
-//! in nachfolgenden Versionen muss der Betrag dieser IDs groesser sein
+// from SO5 on
+// in following versions the value of the IDs must be higher
 const sal_uInt16 AUTOFORMAT_ID_504      = 9801;
 const sal_uInt16 AUTOFORMAT_DATA_ID_504 = 9802;
 
@@ -923,8 +923,8 @@ ScAutoFormat::ScAutoFormat(const ScAutoFormat& r) :
 
 ScAutoFormat::~ScAutoFormat()
 {
-    //  Bei Aenderungen per StarOne wird nicht sofort gespeichert, sondern zuerst nur
-    //  das SaveLater Flag gesetzt. Wenn das Flag noch gesetzt ist, jetzt speichern.
+    //  When modified via StarOne then only the SaveLater flag is set and no saving is done.
+    //  If the flag is set then save now.
 
     if (mbSaveLater)
         Save();
@@ -1039,7 +1039,7 @@ bool ScAutoFormat::Load()
     if (bRet)
     {
         SvStream& rStream = *pStream;
-        // Achtung hier muss ein allgemeiner Header gelesen werden
+        // Attention: A common header has to be read
         sal_uInt16 nVal = 0;
         rStream >> nVal;
         bRet = 0 == rStream.GetError();
@@ -1105,10 +1105,10 @@ bool ScAutoFormat::Save()
         SvStream& rStream = *pStream;
         rStream.SetVersion( fileVersion );
 
-        // Achtung hier muss ein allgemeiner Header gespeichert werden
+        // Attention: A common header has to be saved
         sal_uInt16 nVal = AUTOFORMAT_ID;
         rStream << nVal
-                << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
+                << (sal_uInt8)2         // Number of chars of the header including this
                 << (sal_uInt8)::GetSOStoreTextEncoding(
                     osl_getThreadTextEncoding() );
         m_aVersions.Write(rStream, fileVersion);

@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
-import java.util.Vector;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.NamedValueCollection;
 import com.sun.star.wizards.common.PropertyNames;

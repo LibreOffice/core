@@ -515,7 +515,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
     */
     public void _setInteractionHandler() {
         XInteractionHandler handler = null;
-        Object oHandler = tEnv.getObjRelation("InteractionHandler");;
+        Object oHandler = tEnv.getObjRelation("InteractionHandler");
 
         if (oHandler == null)
             throw new StatusException

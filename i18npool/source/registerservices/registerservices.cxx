@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -101,6 +102,17 @@
                                     new ImplName( rxMSF ) );                \
 }
 
+#define IMPL_CREATEINSTANCE_CTX( ImplName ) \
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   \
+        SAL_CALL ImplName##_CreateInstance(                                 \
+            const ::com::sun::star::uno::Reference<                         \
+                    ::com::sun::star::lang::XMultiServiceFactory >& rxMSF ) \
+{                                                                           \
+    return ::com::sun::star::uno::Reference <                               \
+            ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* )   \
+                                    new ImplName( comphelper::getComponentContext(rxMSF) ) );                \
+}
+
 typedef ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface > (SAL_CALL *FN_CreateInstance)(
             const ::com::sun::star::uno::Reference<
@@ -115,7 +127,7 @@ typedef ::com::sun::star::uno::Reference<
 
 using namespace ::com::sun::star::i18n;
 
-IMPL_CREATEINSTANCE_MSF( NumberFormatCodeMapper )
+IMPL_CREATEINSTANCE_CTX( NumberFormatCodeMapper )
 IMPL_CREATEINSTANCE( NativeNumberSupplier )
 IMPL_CREATEINSTANCE( LocaleData )
 IMPL_CREATEINSTANCE_MSF( DefaultNumberingProvider )
@@ -147,7 +159,7 @@ IMPL_CREATEINSTANCE( Collator_Unicode )
 
 IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_MSF( cclass_Unicode )
-IMPL_CREATEINSTANCE_MSF( TransliterationImpl )
+IMPL_CREATEINSTANCE_CTX( TransliterationImpl )
 IMPL_CREATEINSTANCE( UnoScriptTypeDetector )
 
 IMPL_CREATEINSTANCE_MSF( InputSequenceCheckerImpl )

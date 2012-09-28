@@ -36,7 +36,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
@@ -136,7 +136,7 @@ void VCLXAccessibleTabPage::SetSelected( bool bSelected )
 
 // -----------------------------------------------------------------------------
 
-void VCLXAccessibleTabPage::SetPageText( const ::rtl::OUString& sPageText )
+void VCLXAccessibleTabPage::SetPageText( const OUString& sPageText )
 {
     Any aOldValue, aNewValue;
     if ( OCommonAccessibleText::implInitTextChangedEvent( m_sPageText, sPageText, aOldValue, aNewValue ) )
@@ -152,9 +152,9 @@ void VCLXAccessibleTabPage::SetPageText( const ::rtl::OUString& sPageText )
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabPage::GetPageText()
+OUString VCLXAccessibleTabPage::GetPageText()
 {
-    ::rtl::OUString sText;
+    OUString sText;
     if ( m_pTabControl )
         sText = OutputDevice::GetNonMnemonicString( m_pTabControl->GetPageText( m_nPageId ) );
 
@@ -224,7 +224,7 @@ awt::Rectangle VCLXAccessibleTabPage::implGetBounds() throw (RuntimeException)
 // OCommonAccessibleText
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabPage::implGetText()
+OUString VCLXAccessibleTabPage::implGetText()
 {
     return GetPageText();
 }
@@ -265,37 +265,31 @@ void VCLXAccessibleTabPage::disposing()
     AccessibleTextHelper_BASE::disposing();
 
     m_pTabControl = NULL;
-    m_sPageText = ::rtl::OUString();
+    m_sPageText = OUString();
 }
 
 // -----------------------------------------------------------------------------
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabPage::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleTabPage::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleTabPage" ));
+    return OUString( "com.sun.star.comp.toolkit.AccessibleTabPage" );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool VCLXAccessibleTabPage::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleTabPage::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleTabPage::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabPage" ));
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleTabPage";
     return aNames;
 }
 
@@ -386,11 +380,11 @@ sal_Int16 VCLXAccessibleTabPage::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabPage::getAccessibleDescription(    ) throw (RuntimeException)
+OUString VCLXAccessibleTabPage::getAccessibleDescription(    ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sDescription;
+    OUString sDescription;
     if ( m_pTabControl )
         sDescription = m_pTabControl->GetHelpText( m_nPageId );
 
@@ -399,7 +393,7 @@ sal_Int16 VCLXAccessibleTabPage::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabPage::getAccessibleName(  ) throw (RuntimeException)
+OUString VCLXAccessibleTabPage::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -549,20 +543,20 @@ Reference< awt::XFont > VCLXAccessibleTabPage::getFont(  ) throw (RuntimeExcepti
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabPage::getTitledBorderText(  ) throw (RuntimeException)
+OUString VCLXAccessibleTabPage::getTitledBorderText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabPage::getToolTipText(  ) throw (RuntimeException)
+OUString VCLXAccessibleTabPage::getToolTipText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
@@ -590,12 +584,12 @@ sal_Bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex ) throw (Inde
 
 // -----------------------------------------------------------------------------
 
-Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int32 nIndex, const Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
+Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     Sequence< PropertyValue > aValues;
-    ::rtl::OUString sText( implGetText() );
+    OUString sText( implGetText() );
 
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -679,7 +673,7 @@ sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
         Reference< datatransfer::clipboard::XClipboard > xClipboard = m_pTabControl->GetClipboard();
         if ( xClipboard.is() )
         {
-            ::rtl::OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
 
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();

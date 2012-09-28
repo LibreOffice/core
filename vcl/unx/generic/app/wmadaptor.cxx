@@ -1124,7 +1124,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
                          8,
                          PropModeReplace,
                          (unsigned char*)aTitle.getStr(),
-                         aTitle.getLength()+1 );
+                         aTitle.getLength() );
     if( m_aWMAtoms[ NET_WM_ICON_NAME ] )
         XChangeProperty( m_pDisplay,
                          (XLIB_Window)pEnv->aShellWindow,
@@ -1133,11 +1133,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
                          8,
                          PropModeReplace,
                          (unsigned char*)aTitle.getStr(),
-                         aTitle.getLength()+1 );
-    // The +1 copies the terminating null byte. Although
-    // the spec says, this should not be necessary
-    // at least the kwin implementation seems to depend
-    // on the null byte
+                         aTitle.getLength() );
 }
 
 /*

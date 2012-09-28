@@ -25,13 +25,10 @@
 #include <tokens/tkpcont2.hxx>
 
 
-StmBoundsStatu2::StmBoundsStatu2( StateMachineContext &
-                                                    o_rOwner,
-                                  TkpContext &      i_rFollowUpContext,
+StmBoundsStatu2::StmBoundsStatu2( TkpContext &      i_rFollowUpContext,
                                   uintt             i_nStatusFunctionNr,
                                   bool              i_bIsDefault )
-    :   pOwner(&o_rOwner),
-        pFollowUpContext(&i_rFollowUpContext),
+    :   pFollowUpContext(&i_rFollowUpContext),
         nStatusFunctionNr(i_nStatusFunctionNr),
         bIsDefault(i_bIsDefault)
 {

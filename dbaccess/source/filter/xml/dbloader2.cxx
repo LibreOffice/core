@@ -38,8 +38,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -67,7 +67,6 @@
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
@@ -446,9 +445,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     sal_Int32 nInitialSelection = -1;
     if ( !xModel.is() )
     {
-        Reference< XSingleServiceFactory > xDatabaseContext;
-        if ( !m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT, xDatabaseContext ) )
-            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "css.sdb.DatabaseContext not available" ) ), NULL );
+        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext.getUNOContext()) );
 
         ::rtl::OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
         bCreateNew = sFactoryName.match(_rURL);

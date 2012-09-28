@@ -60,23 +60,17 @@ public:
 
 class SwCharURLPage : public SfxTabPage
 {
-    FixedLine           aURLFL;
+    Edit*               m_pURLED;
+    FixedText*          m_pTextFT;
+    Edit*               m_pTextED;
+    Edit*               m_pNameED;
+    ComboBox*           m_pTargetFrmLB;
+    PushButton*         m_pURLPB;
+    PushButton*         m_pEventPB;
+    ListBox*            m_pVisitedLB;
+    ListBox*            m_pNotVisitedLB;
 
-    FixedText           aURLFT;
-    Edit                aURLED;
-    FixedText           aTextFT;
-    Edit                aTextED;
-    FixedText           aNameFT;
-    Edit                aNameED;
-    FixedText           aTargetFrmFT;
-    ComboBox            aTargetFrmLB;
-    PushButton          aURLPB;
-    PushButton          aEventPB;
-    FixedLine           aStyleFL;
-    FixedText           aVisitedFT;
-    ListBox             aVisitedLB;
-    FixedText           aNotVisitedFT;
-    ListBox             aNotVisitedLB;
+    VclContainer*       m_pCharStyleContainer;
 
     SvxMacroItem*       pINetItem;
     sal_Bool                bModified;

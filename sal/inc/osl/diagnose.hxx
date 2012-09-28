@@ -33,6 +33,9 @@
 #include <functional>
 #include <typeinfo>
 
+#ifndef HAVE_CXX0X
+#define BOOST_NO_0X_HDR_TYPEINDEX
+#endif
 #include "boost/unordered_set.hpp"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
@@ -40,6 +43,7 @@
 #include "rtl/allocator.hxx"
 #include "rtl/instance.hxx"
 #include "sal/log.hxx"
+#include "sal/saldllapi.h"
 #include "sal/types.h"
 
 /// @cond INTERNAL

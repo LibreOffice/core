@@ -33,7 +33,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
@@ -63,7 +63,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/useroptions.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -303,13 +302,11 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     bool        bSendAsPDF = (rType.equalsAsciiL( PDF_DOCUMENT_TYPE, PDF_DOCUMENT_TYPE_LEN ));
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = ::comphelper::getProcessServiceFactory();
-    if (!xSMGR.is())
+    css::uno::Reference< css::uno::XComponentContext > xContext  = ::comphelper::getProcessComponentContext();
+    if (!xContext.is())
         return eRet;
 
-    const rtl::OUString aModuleManager( "com.sun.star.frame.ModuleManager" );
-    css::uno::Reference< css::frame::XModuleManager > xModuleManager( xSMGR->createInstance( aModuleManager ), css::uno::UNO_QUERY_THROW );
-    if ( !xModuleManager.is() )
-        return eRet;
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( css::frame::ModuleManager::create(xContext) );
 
     rtl::OUString aModule;
     try
@@ -430,18 +427,17 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 if ( !bHasLocation ||  aFilterName.isEmpty())
                 {
                     // Retrieve the user defined default filter
-                    css::uno::Reference< css::container::XNameAccess > xNameAccess( xModuleManager, css::uno::UNO_QUERY );
                     try
                     {
-                        ::comphelper::SequenceAsHashMap aFilterPropsHM( xNameAccess->getByName( aModule ) );
+                        ::comphelper::SequenceAsHashMap aFilterPropsHM( xModuleManager->getByName( aModule ) );
                         aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
                                                     ::rtl::OUString("ooSetupFactoryDefaultFilter"),
                                                     ::rtl::OUString() );
-                        css::uno::Reference< css::container::XNameAccess > xNameAccess2(
+                        css::uno::Reference< css::container::XNameAccess > xNameAccess(
                             xContainerQuery, css::uno::UNO_QUERY );
-                        if ( xNameAccess2.is() )
+                        if ( xNameAccess.is() )
                         {
-                            ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess2->getByName( aFilterName ) );
+                            ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess->getByName( aFilterName ) );
                             aTypeName = aFilterPropsHM2.getUnpackedValueOrDefault(
                                                         ::rtl::OUString("Type"),
                                                         ::rtl::OUString() );
@@ -551,7 +547,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             css::util::URL aPrepareURL;
             css::uno::Reference< css::frame::XDispatch > xPrepareDispatch;
             css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
-            css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( ::comphelper::ComponentContext(xSMGR).getUNOContext() ) );
+            css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( ::comphelper::getComponentContext(xSMGR) ) );
             if( !bSendAsPDF )
             {
                 try

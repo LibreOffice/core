@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
+
 #include <tools/debug.hxx>
 
 #include <tools/rc.h>
@@ -36,6 +40,8 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/builder.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/wrkwin.hxx>
@@ -45,6 +51,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
+#include <iostream>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -115,6 +122,60 @@ void ImplHideSplash()
             pSVData->mpIntroWindow->Hide();
 }
 
+//Get next window after pChild of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
+{
+    Window *pLastChild = pChild;
+
+    if (pChild->GetType() == WINDOW_CONTAINER)
+        pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
+    else
+        pChild = pChild->GetWindow(WINDOW_NEXT);
+
+    while (!pChild)
+    {
+        Window *pParent = pLastChild->GetParent();
+        if (!pParent)
+            return NULL;
+        if (pParent == pTopLevel)
+            return NULL;
+        pLastChild = pParent;
+        pChild = pParent->GetWindow(WINDOW_NEXT);
+    }
+
+    if (pChild && pChild->GetType() == WINDOW_CONTAINER)
+        pChild = nextLogicalChildOfParent(pTopLevel, pChild);
+
+    return pChild;
+}
+
+Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
+{
+    Window *pLastChild = pChild;
+
+    if (pChild->GetType() == WINDOW_CONTAINER)
+        pChild = pChild->GetWindow(WINDOW_LASTCHILD);
+    else
+        pChild = pChild->GetWindow(WINDOW_PREV);
+
+    while (!pChild)
+    {
+        Window *pParent = pLastChild->GetParent();
+        if (!pParent)
+            return NULL;
+        if (pParent == pTopLevel)
+            return NULL;
+        pLastChild = pParent;
+        pChild = pParent->GetWindow(WINDOW_PREV);
+    }
+
+    if (pChild && pChild->GetType() == WINDOW_CONTAINER)
+        pChild = prevLogicalChildOfParent(pTopLevel, pChild);
+
+    return pChild;
+}
+
 // -----------------------------------------------------------------------
 
 void ImplWindowAutoMnemonic( Window* pWindow )
@@ -129,7 +190,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
     {
         pChild = pGetChild->ImplGetWindow();
         aMnemonicGenerator.RegisterMnemonic( pChild->GetText() );
-        pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
+        pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
     }
 
     // Bei TabPages auch noch die Controls vom Dialog beruecksichtigen
@@ -146,7 +207,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
             {
                 pChild = pGetChild->ImplGetWindow();
                 aMnemonicGenerator.RegisterMnemonic( pChild->GetText() );
-                pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
+                pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
             }
         }
     }
@@ -163,15 +224,41 @@ void ImplWindowAutoMnemonic( Window* pWindow )
                 pChild->SetText( aText );
         }
 
-        pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
+        pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
     }
+}
+
+static VclButtonBox* getActionArea(Dialog *pDialog)
+{
+    VclButtonBox *pButtonBox = NULL;
+    if (pDialog->isLayoutEnabled())
+    {
+        Window *pBox = pDialog->GetWindow(WINDOW_FIRSTCHILD);
+        Window *pChild = pBox->GetWindow(WINDOW_LASTCHILD);
+        while (pChild)
+        {
+            pButtonBox = dynamic_cast<VclButtonBox*>(pChild);
+            if (pButtonBox)
+                break;
+            pChild = pChild->GetWindow(WINDOW_PREV);
+        }
+    }
+    return pButtonBox;
+}
+
+static Window* getActionAreaButtonList(Dialog *pDialog)
+{
+    VclButtonBox* pButtonBox = getActionArea(pDialog);
+    if (pButtonBox)
+        return pButtonBox->GetWindow(WINDOW_FIRSTCHILD);
+    return pDialog->GetWindow(WINDOW_FIRSTCHILD);
 }
 
 // =======================================================================
 
 static PushButton* ImplGetDefaultButton( Dialog* pDialog )
 {
-    Window* pChild = pDialog->GetWindow( WINDOW_FIRSTCHILD );
+    Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
     {
         if ( pChild->ImplIsPushButton() )
@@ -191,7 +278,7 @@ static PushButton* ImplGetDefaultButton( Dialog* pDialog )
 
 static PushButton* ImplGetOKButton( Dialog* pDialog )
 {
-    Window* pChild = pDialog->GetWindow( WINDOW_FIRSTCHILD );
+    Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
     {
         if ( pChild->GetType() == WINDOW_OKBUTTON )
@@ -207,7 +294,8 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
 
 static PushButton* ImplGetCancelButton( Dialog* pDialog )
 {
-    Window* pChild = pDialog->GetWindow( WINDOW_FIRSTCHILD );
+    Window* pChild = getActionAreaButtonList(pDialog);
+
     while ( pChild )
     {
         if ( pChild->GetType() == WINDOW_CANCELBUTTON )
@@ -267,6 +355,10 @@ void Dialog::ImplInitDialogData()
     mbModalMode             = sal_False;
     mnMousePositioned       = 0;
     mpDialogImpl            = new DialogImpl;
+
+    //To-Do, reuse maResizeTimer
+    maLayoutTimer.SetTimeout(50);
+    maLayoutTimer.SetTimeoutHdl( LINK( this, Dialog, ImplHandleLayoutTimerHdl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -370,7 +462,6 @@ void Dialog::ImplInitSettings()
     // fallback to settings color
     else
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
-
 }
 
 // -----------------------------------------------------------------------
@@ -380,6 +471,67 @@ Dialog::Dialog( WindowType nType ) :
 {
     ImplInitDialogData();
 }
+
+#define BASEPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIConfig"))
+#define RELPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice.cfg"))
+#define SERVICENAME_PATHSETTINGS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings"))
+
+rtl::OUString VclBuilderContainer::getUIRootDir()
+{
+    namespace css = ::com::sun::star;
+
+    /*to-do, check if user config has an override before using shared one, etc*/
+    css::uno::Reference< css::beans::XPropertySet > xPathSettings(
+        ::comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_PATHSETTINGS),
+                css::uno::UNO_QUERY_THROW);
+
+    ::rtl::OUString sShareLayer;
+    xPathSettings->getPropertyValue(BASEPATH_SHARE_LAYER) >>= sShareLayer;
+
+    // "UIConfig" is a "multi path" ... use first part only here!
+    sal_Int32 nPos = sShareLayer.indexOf(';');
+    if (nPos > 0)
+        sShareLayer = sShareLayer.copy(0, nPos);
+
+    // Note: May be an user uses URLs without a final slash! Check it ...
+    nPos = sShareLayer.lastIndexOf('/');
+    if (nPos != sShareLayer.getLength()-1)
+        sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+
+    sShareLayer += RELPATH_SHARE_LAYER; // folder
+    sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    /*to-do, can we merge all this foo with existing soffice.cfg finding code, etc*/
+    return sShareLayer;
+}
+
+//we can't change sizeable after the fact, so need to defer until we know and then
+//do the init. Find the real parent stashed in mpDialogParent.
+void Dialog::doDeferredInit(bool bResizable)
+{
+    WinBits nBits = WB_3DLOOK|WB_CLOSEABLE|WB_MOVEABLE;
+    if (bResizable)
+        nBits |= WB_SIZEABLE;
+    Window *pParent = mpDialogParent;
+    mpDialogParent = NULL;
+    ImplInit(pParent, nBits);
+}
+
+Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
+    : SystemWindow( WINDOW_DIALOG )
+    , mpDialogParent(pParent) //will be unset in doDeferredInit
+{
+    ImplInitDialogData();
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+}
+
+Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType)
+    : SystemWindow( nType )
+    , mpDialogParent(pParent) //will be unset in doDeferredInit
+{
+    ImplInitDialogData();
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+}
+
 
 // -----------------------------------------------------------------------
 
@@ -392,8 +544,58 @@ Dialog::Dialog( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
+Dialog::Dialog( Window* pParent, const ResId& rResId ) :
+    SystemWindow( WINDOW_DIALOG )
+{
+    ImplInitDialogData();
+    rResId.SetRT( RSC_DIALOG );
+    init(pParent, rResId);
+}
+
+VclBuilder* VclBuilderContainer::overrideResourceWithUIXML(Window *pWindow, const ResId& rResId)
+{
+    sal_Int32 nUIid = static_cast<sal_Int32>(rResId.GetId());
+
+    rtl::OUString sRoot = getUIRootDir();
+    rtl::OUString sPath = rtl::OUStringBuffer(
+        rResId.GetResMgr()->getPrefixName()).
+        append("/ui/").
+        append(nUIid).
+        appendAscii(".ui").
+        makeStringAndClear();
+
+    osl::File aUIFile(sRoot + sPath);
+    osl::File::RC error = aUIFile.open(osl_File_OpenFlag_Read);
+    //good, use the preferred GtkBuilder xml
+    if (error == osl::File::E_None)
+        return new VclBuilder(pWindow, sRoot, sPath, rtl::OString::valueOf(nUIid));
+    return NULL;
+}
+
+WinBits Dialog::init(Window *pParent, const ResId& rResId)
+{
+    WinBits nStyle = ImplInitRes( rResId );
+
+    ImplInit( pParent, nStyle );
+
+    m_pUIBuilder = overrideResourceWithUIXML(this, rResId);
+
+    if (m_pUIBuilder)
+        loadAndSetJustHelpID(rResId);
+    else
+    {
+        //fallback to using the binary resource file
+        ImplLoadRes( rResId );
+    }
+
+    return nStyle;
+}
+
+// -----------------------------------------------------------------------
+
 Dialog::~Dialog()
 {
+    maLayoutTimer.Stop();
     delete mpDialogImpl;
     mpDialogImpl = NULL;
 }
@@ -456,6 +658,36 @@ long Dialog::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
+void Dialog::setInitialLayoutSize()
+{
+    maLayoutTimer.Stop();
+
+    //resize dialog to fit requisition on initial show
+    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+
+    const DialogStyle& rDialogStyle =
+        GetSettings().GetStyleSettings().GetDialogStyle();
+    pBox->set_border_width(rDialogStyle.content_area_border);
+    pBox->set_spacing(rDialogStyle.content_area_spacing);
+
+    VclButtonBox *pActionArea = getActionArea(this);
+    if (pActionArea)
+    {
+        pActionArea->set_border_width(rDialogStyle.action_area_border);
+        pActionArea->set_spacing(rDialogStyle.button_spacing);
+    }
+
+    Size aSize = get_preferred_size();
+
+    Size aMax = GetOptimalSize(WINDOWSIZE_MAXIMUM);
+    aSize.Width() = std::min(aMax.Width(), aSize.Width());
+    aSize.Height() = std::min(aMax.Height(), aSize.Height());
+
+    SetMinOutputSizePixel(aSize);
+    SetSizePixel(aSize);
+    setPosSizeOnContainee(aSize, *pBox);
+}
+
 // -----------------------------------------------------------------------
 
 void Dialog::StateChanged( StateChangedType nType )
@@ -464,6 +696,9 @@ void Dialog::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW )
     {
+        if (isLayoutEnabled())
+            setInitialLayoutSize();
+
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
 
@@ -507,18 +742,7 @@ sal_Bool Dialog::Close()
 {
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
-    //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
-    mnCancelClose = 0;
     ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
-        // basic boolean ( and what the user might use in the event handler) can
-    // be ambiguous ( e.g. basic true = -1 )
-    // test agains 0 ( false ) and assume anything else is true
-    // ( Note: ) this used to work ( something changes somewhere )
-    if (mnCancelClose != 0)
-    {
-        return sal_False;
-    }
-    //liuchen 2009-7-22
     if ( aDelData.IsDead() )
         return sal_False;
     ImplRemoveDel( &aDelData );
@@ -899,8 +1123,8 @@ void Dialog::GrabFocusToFirstControl()
     // Control in der TabSteuerung den Focus geben
     if ( !pFocusControl ||
          !(pFocusControl->GetStyle() & WB_TABSTOP) ||
-         !pFocusControl->IsVisible() ||
-         !pFocusControl->IsEnabled() || !pFocusControl->IsInputEnabled() )
+         !isVisibleInLayout(pFocusControl) ||
+         !isEnabledInLayout(pFocusControl) || !pFocusControl->IsInputEnabled() )
     {
         sal_uInt16 n = 0;
         pFocusControl = ImplGetDlgWindow( n, DLGWINDOW_FIRST );
@@ -945,7 +1169,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
     {
         ImplBorderWindow aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
         aImplWin.SetText( GetText() );
-        aImplWin.SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
+        aImplWin.setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
         aImplWin.SetDisplayActive( sal_True );
         aImplWin.InitView();
 
@@ -955,18 +1179,150 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
     pDev->Pop();
 }
 
+bool Dialog::isLayoutEnabled() const
+{
+    //pre dtor called, and single child is a container => we're layout enabled
+    const Window *pChild = mpDialogImpl ? GetWindow(WINDOW_FIRSTCHILD) : NULL;
+    return pChild && pChild->GetType() == WINDOW_CONTAINER && !pChild->GetWindow(WINDOW_NEXT);
+}
+
+Size Dialog::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM || !isLayoutEnabled())
+        return SystemWindow::GetOptimalSize(eType);
+
+    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+
+    sal_Int32 nBorderWidth = get_border_width();
+
+    aSize.Height() += mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2*nBorderWidth;
+    aSize.Width() += mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2*nBorderWidth;
+
+    return Window::CalcWindowSize(aSize);
+}
+
+void Dialog::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
+{
+    sal_Int32 nBorderWidth = get_border_width();
+
+    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2 * nBorderWidth;
+    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2 * nBorderWidth;
+
+    Point aPos(mpWindowImpl->mnLeftBorder + nBorderWidth,
+        mpWindowImpl->mnTopBorder + nBorderWidth);
+
+    VclContainer::setLayoutAllocation(rBox, aPos, aSize);
+}
+
+IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
+{
+    if (!isLayoutEnabled())
+    {
+        SAL_WARN("vcl.layout", "Dialog has become non-layout because extra children have been added directly to it.");
+        return 0;
+    }
+
+    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+    assert(pBox);
+    setPosSizeOnContainee(GetSizePixel(), *pBox);
+    return 0;
+}
+
+void Dialog::queue_layout()
+{
+    if (hasPendingLayout())
+        return;
+    if (IsInClose())
+        return;
+    if (!isLayoutEnabled())
+        return;
+    maLayoutTimer.Start();
+}
+
+void Dialog::Resize()
+{
+    queue_layout();
+}
+
+bool Dialog::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("border-width")))
+        set_border_width(rValue.toInt32());
+    else
+        return SystemWindow::set_property(rKey, rValue);
+    return true;
+}
+
+VclBuilderContainer::VclBuilderContainer()
+    : m_pUIBuilder(NULL)
+{
+}
+
+VclBuilderContainer::~VclBuilderContainer()
+{
+    delete m_pUIBuilder;
+}
+
+bool VclBuilderContainer::replace_buildable(Window *pParent, const ResId& rResId, Window &rReplacement)
+{
+    if (!pParent)
+        return false;
+
+    VclBuilderContainer *pBuilderContainer = dynamic_cast<VclBuilderContainer*>(pParent);
+    if (!pBuilderContainer)
+        return false;
+
+    VclBuilder *pUIBuilder = pBuilderContainer->m_pUIBuilder;
+    if (!pUIBuilder)
+        return false;
+
+    sal_Int32 nID = rResId.GetId();
+
+    bool bFound = pUIBuilder->replace(rtl::OString::valueOf(nID), rReplacement);
+    if (bFound)
+    {
+        rReplacement.loadAndSetJustHelpID(rResId);
+    }
+    else
+    {
+        SAL_WARN("vcl.layout", "widget " << nID << " " << &rReplacement << " not found, hiding");
+        //move "missing" elements into the action area (just to have
+        //a known container as an owner) and hide it
+        Window* pArbitraryParent;
+        if (pParent->IsDialog())
+        {
+            Dialog *pDialog = static_cast<Dialog*>(pParent);
+            pArbitraryParent = getActionArea(pDialog);
+        }
+        else
+            pArbitraryParent = pParent->GetWindow(WINDOW_FIRSTCHILD);
+        rReplacement.ImplInit(pArbitraryParent, 0, NULL);
+        rReplacement.Hide();
+    }
+
+    return true;
+}
+
 // -----------------------------------------------------------------------
 
 ModelessDialog::ModelessDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_MODELESSDIALOG )
 {
     rResId.SetRT( RSC_MODELESSDIALOG );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
+
+    WinBits nStyle = init( pParent, rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+ModelessDialog::ModelessDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription ) :
+    Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
+{
 }
 
 // =======================================================================
@@ -983,8 +1339,12 @@ ModalDialog::ModalDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_MODALDIALOG )
 {
     rResId.SetRT( RSC_MODALDIALOG );
-    ImplInit( pParent, ImplInitRes( rResId ) );
-    ImplLoadRes( rResId );
+    init( pParent, rResId );
+}
+
+ModalDialog::ModalDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription ) :
+    Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODALDIALOG)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -112,7 +112,9 @@ public:
     virtual sal_Bool HasRowHeader() const= 0;
     virtual sal_Bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )= 0;
     virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True ) = 0;
+    virtual Rectangle calcHeaderCellRect( sal_Bool _bColHeader, sal_Int32 _nPos ) = 0;
     virtual Rectangle calcTableRect( sal_Bool _bOnScreen = sal_True ) = 0;
+    virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) = 0;
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)= 0;
     virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const= 0;
@@ -168,6 +170,33 @@ public:
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         getTable() = 0;
+
+    /** commits the event at all listeners of the cell
+         @param nEventId
+             the event id
+         @param rNewValue
+             the new value
+          @param rOldValue
+             the old value
+      */
+     virtual void commitCellEvent(
+         sal_Int16 nEventId,
+         const ::com::sun::star::uno::Any& rNewValue,
+         const ::com::sun::star::uno::Any& rOldValue
+     ) = 0;
+    /** commits the event at all listeners of the table
+         @param nEventId
+             the event id
+         @param rNewValue
+             the new value
+          @param rOldValue
+             the old value
+      */
+     virtual void commitTableEvent(
+         sal_Int16 nEventId,
+         const ::com::sun::star::uno::Any& rNewValue,
+         const ::com::sun::star::uno::Any& rOldValue
+     ) = 0;
 
     ///** Commits an event to all listeners. */
     virtual void commitEvent(

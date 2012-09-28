@@ -138,7 +138,7 @@ namespace cmis
 
     void RepoContent::getRepositories( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
-        if ( m_aRepositories.size( ) == 0 )
+        if ( m_aRepositories.empty() )
         {
             // Get the auth credentials
             AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
@@ -147,13 +147,10 @@ namespace cmis
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
-                map< int, string > params = m_aURL.getSessionParams( );
-                params[USERNAME] = rUsername;
-                params[PASSWORD] = rPassword;
-
                 try
                 {
-                    m_aRepositories = libcmis::SessionFactory::getRepositories( params );
+                    m_aRepositories = libcmis::SessionFactory::getRepositories(
+                           OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ), rUsername, rPassword );
                 }
                 catch (const libcmis::Exception&)
                 {

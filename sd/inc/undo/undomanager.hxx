@@ -31,7 +31,7 @@ class UndoManager : public SfxUndoManager
 public:
     UndoManager( sal_uInt16 nMaxUndoActionCount = 20 );
 
-    virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId=0);
+    virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId=0);
 
     virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
 

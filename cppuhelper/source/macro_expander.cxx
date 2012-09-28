@@ -34,6 +34,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -169,14 +170,7 @@ OUString Bootstrap_MacroExpander::getImplementationName()
 sal_Bool Bootstrap_MacroExpander::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    Sequence< OUString > const & service_names = s_get_service_names();
-    OUString const * p = service_names.getConstArray();
-    for ( sal_Int32 nPos = service_names.getLength(); nPos--; )
-    {
-        if (p[ nPos ].equals( serviceName ))
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 //__________________________________________________________________________________________________
 Sequence< OUString > Bootstrap_MacroExpander::getSupportedServiceNames()

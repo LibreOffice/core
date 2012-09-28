@@ -220,7 +220,7 @@ void ScPreview::TestLastPage()
 
 void ScPreview::CalcPages()
 {
-    WaitObject( this );
+    WaitObject aWait( this );
 
     ScDocument* pDoc = pDocShell->GetDocument();
     nTabCount = pDoc->GetTableCount();

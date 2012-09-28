@@ -90,7 +90,7 @@ namespace pcr
         ,FormController_PropertyBase1( m_aBHelper )
         ,m_aServiceDescriptor( _aServiceDescriptor )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             Reference< XObjectInspectorModel > xModel(
                 *(new DefaultFormComponentInspectorModel( _rxContext, _bUseFormFormComponentHandlers )),
@@ -98,7 +98,7 @@ namespace pcr
             );
             setInspectorModel( xModel );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //------------------------------------------------------------------------

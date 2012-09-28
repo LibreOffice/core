@@ -29,7 +29,7 @@ PRJ := ..$/..$/..
 PRJNAME := bridges
 
 TARGET := test_javauno_acquire
-PACKAGE := test$/javauno$/acquire
+PACKAGE := test$/java_uno$/acquire
 
 ENABLE_EXCEPTIONS := TRUE
 

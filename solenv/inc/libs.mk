@@ -198,15 +198,6 @@ JPEG3RDLIB=-ljpeg
 .ELSE
 JPEG3RDLIB=-ljpeglib
 .ENDIF
-.IF "$(SYSTEM_NEON)" == "YES"
-NEON3RDLIB=-lneon
-.ELIF "$(GUI)$(COM)"=="WNTGCC"
-NEON3RDLIB=-lneon
-.ELIF "$(OS)" == "MACOSX"
-NEON3RDLIB=$(SOLARLIBDIR)/libneon.dylib
-.ELSE
-NEON3RDLIB=-lneon
-.ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-l$(DB_LIB)
 .ELIF "$(GUI)$(COM)"=="WNTGCC"
@@ -455,7 +446,6 @@ EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
 EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
 JPEG3RDLIB=jpeglib.lib
-NEON3RDLIB=ineon.lib
 BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib
@@ -491,7 +481,7 @@ PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = icppunit_dll.lib
-XSLTLIB = libxslt.lib $(LIBXML2LIB)
+XSLTLIB = libexslt.lib libxslt.lib $(LIBXML2LIB)
 REDLANDLIB = librdf.lib
 
 JVMFWKLIB = ijvmfwk.lib
@@ -531,7 +521,6 @@ SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
 UNOTESTLIB=iunotest.lib
-BOOSTTHREADLIB=boostthread.lib
 XMLREADERLIB=ixmlreader.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC")

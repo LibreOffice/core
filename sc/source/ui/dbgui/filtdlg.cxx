@@ -266,7 +266,6 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     // Option initialization:
 
     pOptionsMgr  = new ScFilterOptionsMgr(
-                            this,
                             pViewData,
                             theQueryData,
                             aBtnMore,

@@ -349,7 +349,6 @@ OUString LwpBookMark::GetName()
 
 LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpStoryMarker(objHdr,pStrm)
-    , m_nExtra(0)
     , m_nFlag(0)
     , m_nFieldType(0)
     , m_bHasStyle(sal_False)

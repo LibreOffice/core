@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -1486,13 +1486,10 @@ void
 UpdateCheck::showReleaseNote(const rtl::OUString& rURL) const
 {
     const uno::Reference< c3s::XSystemShellExecute > xShellExecute(
-        createService( UNISTRING( "com.sun.star.system.SystemShellExecute" ), m_xContext ),
-        uno::UNO_QUERY );
+        c3s::SystemShellExecute::create( m_xContext ) );
 
     try {
-
-        if( xShellExecute.is() )
-            xShellExecute->execute(rURL, rtl::OUString(), c3s::SystemShellExecuteFlags::URIS_ONLY);
+        xShellExecute->execute(rURL, rtl::OUString(), c3s::SystemShellExecuteFlags::URIS_ONLY);
     } catch(const c3s::SystemShellExecuteException&) {
     }
 }

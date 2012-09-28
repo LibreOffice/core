@@ -42,6 +42,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/TextAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -448,21 +449,14 @@ void CGMImpressOutAct::EndGroup()
             uno::Any aAny( maXDrawPage->queryInterface( ::getCppuType(((const uno::Reference< drawing::XShapeGrouper >*)0) )));
             if( aAny >>= aXShapeGrouper )
             {
-                uno::Reference< drawing::XShapes >  aXShapes;
-                uno::Reference< drawing::XShape >  aXShapeCollection( maXServiceManagerSC->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ShapeCollection" )) ), uno::UNO_QUERY );
-                if ( aXShapeCollection.is() )
+                uno::Reference< drawing::XShapes >  aXShapes(
+                         drawing::ShapeCollection::create(comphelper::getComponentContext(maXServiceManagerSC)) );
+                for ( sal_uInt32 i = mnFirstIndex; i < mnCurrentCount; i++ )
                 {
-                    aXShapes = uno::Reference< drawing::XShapes >( aXShapeCollection, uno::UNO_QUERY );
-                    if( aXShapes.is() )
+                    uno::Reference< drawing::XShape >  aXShape = *(uno::Reference< drawing::XShape > *)maXShapes->getByIndex( i ).getValue();
+                    if (aXShape.is() )
                     {
-                        for ( sal_uInt32 i = mnFirstIndex; i < mnCurrentCount; i++ )
-                        {
-                            uno::Reference< drawing::XShape >  aXShape = *(uno::Reference< drawing::XShape > *)maXShapes->getByIndex( i ).getValue();
-                            if (aXShape.is() )
-                            {
-                                aXShapes->add( aXShape );
-                            }
-                        }
+                        aXShapes->add( aXShape );
                     }
                 }
                 uno::Reference< drawing::XShapeGroup >  aXShapeGroup = aXShapeGrouper->group( aXShapes );

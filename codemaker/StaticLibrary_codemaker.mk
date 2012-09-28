@@ -27,9 +27,9 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,codemaker))
 
-$(eval $(call gb_StaticLibrary_set_include,codemaker,\
-    -I$(SRCDIR)/codemaker/inc \
-    $$(INCLUDE) \
+$(eval $(call gb_StaticLibrary_use_packages,codemaker,\
+	codemaker_inc \
+	sal_generated \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,codemaker,\

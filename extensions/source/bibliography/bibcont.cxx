@@ -123,12 +123,10 @@ sal_Bool BibWindowContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
 }
 
 
-BibBookContainer::BibBookContainer(Window* pParent,BibDataManager* pDtMn, WinBits nStyle):
+BibBookContainer::BibBookContainer(Window* pParent, WinBits nStyle):
     BibSplitWindow(pParent,nStyle),
-    pDatMan(pDtMn),
     pTopWin(NULL),
-    pBottomWin(NULL),
-    bFirstTime(sal_True)
+    pBottomWin(NULL)
 {
     pBibMod = OpenBibModul();
     aTimer.SetTimeoutHdl(LINK( this, BibBookContainer, SplitHdl));

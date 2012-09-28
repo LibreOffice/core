@@ -38,8 +38,8 @@ BasicDLL::BasicDLL()
     BASIC_DLL() = this;
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
     pBasResMgr = ResMgr::CreateResMgr("sb", aLocale );
-    bDebugMode = sal_False;
-    bBreakEnabled = sal_True;
+    bDebugMode = false;
+    bBreakEnabled = true;
 }
 
 BasicDLL::~BasicDLL()
@@ -47,7 +47,7 @@ BasicDLL::~BasicDLL()
     delete pBasResMgr;
 }
 
-void BasicDLL::EnableBreak( sal_Bool bEnable )
+void BasicDLL::EnableBreak( bool bEnable )
 {
     BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -55,7 +55,7 @@ void BasicDLL::EnableBreak( sal_Bool bEnable )
         pThis->bBreakEnabled = bEnable;
 }
 
-void BasicDLL::SetDebugMode( sal_Bool bDebugMode )
+void BasicDLL::SetDebugMode( bool bDebugMode )
 {
     BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -68,7 +68,7 @@ void BasicDLL::BasicBreak()
 {
     // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
     // but the Basic doesn't stop early enough, the box might appear more often...
-    static bool bJustStopping = sal_False;
+    static bool bJustStopping = false;
 
     BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );

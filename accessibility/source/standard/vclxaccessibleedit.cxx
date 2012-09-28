@@ -41,6 +41,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
@@ -140,9 +141,9 @@ void VCLXAccessibleEdit::FillAccessibleStateSet( utl::AccessibleStateSetHelper& 
 // OCommonAccessibleText
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleEdit::implGetText()
+OUString VCLXAccessibleEdit::implGetText()
 {
-    ::rtl::OUString aText;
+    OUString aText;
 
     Edit* pEdit = static_cast< Edit* >( GetWindow() );
     if ( pEdit )
@@ -154,8 +155,9 @@ void VCLXAccessibleEdit::FillAccessibleStateSet( utl::AccessibleStateSetHelper& 
             xub_Unicode cEchoChar = pEdit->GetEchoChar();
             if ( !cEchoChar )
                 cEchoChar = '*';
-            XubString sTmp;
-            aText = sTmp.Fill( (sal_uInt16)aText.getLength(), cEchoChar );
+            OUStringBuffer sTmp;
+            aText = comphelper::string::padToLength(sTmp, aText.getLength(),
+                cEchoChar).makeStringAndClear();
         }
     }
 
@@ -191,17 +193,17 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleEdit, VCLXAccessibleTextComponen
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleEdit::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleEdit::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleEdit") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleEdit" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleEdit::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleEdit::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleEdit") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleEdit";
     return aNames;
 }
 
@@ -278,14 +280,14 @@ sal_Bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex ) throw (Inde
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleEdit::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleEdit::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    static const ::rtl::OUString sAction( RTL_CONSTASCII_USTRINGPARAM( "activate" ) );
+    static const OUString sAction( "activate" );
     return sAction;
 }
 
@@ -328,7 +330,7 @@ sal_Unicode VCLXAccessibleEdit::getCharacter( sal_Int32 nIndex ) throw (IndexOut
 
 // -----------------------------------------------------------------------------
 
-Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 nIndex, const Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
+Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -398,7 +400,7 @@ sal_Int32 VCLXAccessibleEdit::getIndexAtPoint( const awt::Point& aPoint ) throw 
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleEdit::getSelectedText(  ) throw (RuntimeException)
+OUString VCLXAccessibleEdit::getSelectedText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -430,7 +432,7 @@ sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEnd
     OExternalLockGuard aGuard( this );
 
     sal_Bool bReturn = sal_False;
-    ::rtl::OUString sText( implGetText() );
+    OUString sText( implGetText() );
 
     if ( !implIsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -448,7 +450,7 @@ sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEnd
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleEdit::getText(  ) throw (RuntimeException)
+OUString VCLXAccessibleEdit::getText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -457,7 +459,7 @@ sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEnd
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -534,7 +536,7 @@ sal_Bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex ) throw (IndexOutOfBoun
                 if ( xDataObj->isDataFlavorSupported( aFlavor ) )
                 {
                     Any aData = xDataObj->getTransferData( aFlavor );
-                    ::rtl::OUString sText;
+                    OUString sText;
                     aData >>= sText;
                     bReturn = replaceText( nIndex, nIndex, sText );
                 }
@@ -551,12 +553,12 @@ sal_Bool VCLXAccessibleEdit::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIn
 {
     OExternalLockGuard aGuard( this );
 
-    return replaceText( nStartIndex, nEndIndex, ::rtl::OUString() );
+    return replaceText( nStartIndex, nEndIndex, OUString() );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool VCLXAccessibleEdit::insertText( const ::rtl::OUString& sText, sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+sal_Bool VCLXAccessibleEdit::insertText( const OUString& sText, sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -565,12 +567,12 @@ sal_Bool VCLXAccessibleEdit::insertText( const ::rtl::OUString& sText, sal_Int32
 
 // -----------------------------------------------------------------------------
 
-sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const ::rtl::OUString& sReplacement ) throw (IndexOutOfBoundsException, RuntimeException)
+sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     sal_Bool bReturn = sal_False;
-    ::rtl::OUString sText( implGetText() );
+    OUString sText( implGetText() );
 
     if ( !implIsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -604,7 +606,7 @@ sal_Bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEn
 
 // -----------------------------------------------------------------------------
 
-sal_Bool VCLXAccessibleEdit::setText( const ::rtl::OUString& sText ) throw (RuntimeException)
+sal_Bool VCLXAccessibleEdit::setText( const OUString& sText ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 

@@ -29,6 +29,7 @@
 #include <svtools/svmedit.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -88,23 +89,17 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     aSaveInListBox.SetSelectHdl( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
 
-    uno::Reference< document::XEventsSupplier > xSupplier;
+    uno::Reference< frame::XGlobalEventBroadcaster > xSupplier;
 
-    xSupplier = uno::Reference< document::XEventsSupplier > (
-        ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.frame.GlobalEventBroadcaster" )) ),
-        uno::UNO_QUERY );
+    xSupplier =
+        frame::GlobalEventBroadcaster::create(::comphelper::getProcessComponentContext());
 
     sal_uInt16 nPos(0);
-    if ( xSupplier.is() )
-    {
-        m_xAppEvents = xSupplier->getEvents();
-        nPos = aSaveInListBox.InsertEntry(
-            utl::ConfigManager::getProductName() );
-        aSaveInListBox.SetEntryData( nPos, new bool(true) );
-        aSaveInListBox.SelectEntryPos( nPos, sal_True );
-    }
+    m_xAppEvents = xSupplier->getEvents();
+    nPos = aSaveInListBox.InsertEntry(
+        utl::ConfigManager::getProductName() );
+    aSaveInListBox.SetEntryData( nPos, new bool(true) );
+    aSaveInListBox.SelectEntryPos( nPos, sal_True );
 }
 
 // -----------------------------------------------------------------------

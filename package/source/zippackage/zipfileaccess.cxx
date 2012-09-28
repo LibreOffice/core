@@ -23,7 +23,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <zipfileaccess.hxx>
 #include <ZipEnumeration.hxx>
 #include <ZipPackageSink.hxx>
@@ -185,7 +185,10 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 
     if ( ( aArguments[0] >>= aParamURL ) )
     {
-        ::ucbhelper::Content aContent ( aParamURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content aContent(
+            aParamURL,
+            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+            comphelper::getComponentContext( m_xFactory ) );
         uno::Reference < io::XActiveDataSink > xSink = new ZipPackageSink;
         if ( aContent.openStream ( xSink ) )
         {

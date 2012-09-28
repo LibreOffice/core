@@ -167,13 +167,13 @@ sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffe
     OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
     return doDeflateBytes(rBuffer, nNewOffset, nNewLength);
 }
-sal_Int32 SAL_CALL Deflater::getTotalIn(  )
+sal_Int64 SAL_CALL Deflater::getTotalIn(  )
 {
-    return pStream->total_in;
+    return pStream->total_in; // FIXME64: zlib doesn't look 64bit clean here
 }
-sal_Int32 SAL_CALL Deflater::getTotalOut(  )
+sal_Int64 SAL_CALL Deflater::getTotalOut(  )
 {
-    return pStream->total_out;
+    return pStream->total_out; // FIXME64: zlib doesn't look 64bit clean here
 }
 void SAL_CALL Deflater::reset(  )
 {

@@ -61,6 +61,7 @@ public:
     void testNorthernThai();
 #endif
     void testKhmer();
+    void testJapanese();
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
@@ -75,6 +76,7 @@ public:
     CPPUNIT_TEST(testWordBoundaries);
     CPPUNIT_TEST(testKhmer);
 #endif
+    CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
@@ -212,7 +214,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=14904
     {
-        const sal_Unicode TEST1[] =
+        const sal_Unicode TEST[] =
         {
             'W', 'o', 'r', 'k', 'i', 'n', 'g', ' ', 0x201C, 'W', 'o', 'r', 'd', 's',
             ' ', 's', 't', 'a', 'r', 't', 'i', 'n', 'g', ' ', 'w', 'i', 't',
@@ -223,7 +225,7 @@ void TestBreakIterator::testWordBoundaries()
             't', ' ', 'e', 'v', 'e', 'n', ' ' , 0x00BF, 'r', 'e', 'a', 'l', '?', ' ',
             'S', 'p', 'a', 'n', 'i', 's', 'h'
         };
-        rtl::OUString aTest(TEST1, SAL_N_ELEMENTS(TEST1));
+        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
 
         aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
@@ -487,10 +489,91 @@ void TestBreakIterator::testWordBoundaries()
         while (nPos++ < aTest.getLength());
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=58513
+    {
+        aLocale.Language = "fi";
+        aLocale.Country = "FI";
+
+        rtl::OUString aTest("Kuorma-auto kaakkois- ja Keski-Suomi");
+
+        {
+            sal_Int32 nPos = 0;
+            sal_Int32 aExpected[] = {12, 22, 25, 36};
+            size_t i = 0;
+            do
+            {
+                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+                nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                    i18n::WordType::WORD_COUNT, true).endPos;
+                CPPUNIT_ASSERT(aExpected[i++] == nPos);
+            }
+            while (nPos++ < aTest.getLength());
+            CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
+        }
+
+        {
+            sal_Int32 nPos = 0;
+            sal_Int32 aExpected[] = {0, 11, 12, 21, 22, 24, 25, 36};
+            size_t i = 0;
+            do
+            {
+                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+                aBounds = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                    i18n::WordType::DICTIONARY_WORD, true);
+                CPPUNIT_ASSERT(aExpected[i++] == aBounds.startPos);
+                CPPUNIT_ASSERT(aExpected[i++] == aBounds.endPos);
+                nPos = aBounds.endPos;
+            }
+            while (nPos++ < aTest.getLength());
+            CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
+        }
+    }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=107843
+    {
+        aLocale.Language = rtl::OUString("en");
+        aLocale.Country = rtl::OUString("US");
+
+        const sal_Unicode TEST[] =
+        {
+            'r', 'u', 0xFB00, 'l', 'e', ' ', 0xFB01, 's', 'h'
+        };
+        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 5);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 7, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 6 && aBounds.endPos == 9);
+    }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=113785
+    {
+        aLocale.Language = rtl::OUString("en");
+        aLocale.Country = rtl::OUString("US");
+
+        const sal_Unicode TEST[] =
+        {
+            'a', 0x2013, 'b', 0x2014, 'c'
+        };
+        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 1);
+
+        aBounds = m_xBreak->nextWord(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD);
+        CPPUNIT_ASSERT(aBounds.startPos == 2 && aBounds.endPos == 3);
+
+        aBounds = m_xBreak->nextWord(aTest, aBounds.endPos, aLocale, i18n::WordType::DICTIONARY_WORD);
+        CPPUNIT_ASSERT(aBounds.startPos == 4 && aBounds.endPos == 5);
+    }
 }
 
-//See http://qa.openoffice.org/issues/show_bug.cgi?id=111152
 //See https://bugs.freedesktop.org/show_bug.cgi?id=40292
+//See https://issues.apache.org/ooo/show_bug.cgi?id=80412
+//See https://issues.apache.org/ooo/show_bug.cgi?id=111152
+//See https://issues.apache.org/ooo/show_bug.cgi?id=50172
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
@@ -558,6 +641,21 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
+        const sal_Unicode KA_VOWELSIGNU[] = { 0x0B95, 0x0BC1 };
+        rtl::OUString aTest(KA_VOWELSIGNU, SAL_N_ELEMENTS(KA_VOWELSIGNU));
+
+        sal_Int32 nDone=0;
+        sal_Int32 nPos = 0;
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(KA_VOWELSIGNU));
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(KA_VOWELSIGNU), aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
+    }
+
+    {
         const sal_Unicode CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI[] =
             { 0x0B9A, 0x0BBF, 0x0BA4, 0x0BCD, 0x0BA4, 0x0BBF, 0x0BB0, 0x0BC8 };
         rtl::OUString aTest(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI,
@@ -599,6 +697,24 @@ void TestBreakIterator::testGraphemeIteration()
         }
 
         CPPUNIT_ASSERT_MESSAGE("Should be considered 1 grapheme", nGraphemeCount == 1);
+    }
+
+    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hi"));
+    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IN"));
+
+    {
+        const sal_Unicode SHA_VOWELSIGNII[] = { 0x936, 0x940 };
+        rtl::OUString aTest(SHA_VOWELSIGNII, SAL_N_ELEMENTS(SHA_VOWELSIGNII));
+
+        sal_Int32 nDone=0;
+        sal_Int32 nPos = 0;
+
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == SAL_N_ELEMENTS(SHA_VOWELSIGNII));
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(SHA_VOWELSIGNII), aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
 }
 
@@ -762,9 +878,9 @@ void TestBreakIterator::testKhmer()
     aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("km"));
     aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KH"));
 
-    const sal_Unicode KHMER1[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
+    const sal_Unicode KHMER[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
 
-    rtl::OUString aTest(KHMER1, SAL_N_ELEMENTS(KHMER1));
+    rtl::OUString aTest(KHMER, SAL_N_ELEMENTS(KHMER));
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 
@@ -777,6 +893,39 @@ void TestBreakIterator::testKhmer()
 }
 #endif
 
+void TestBreakIterator::testJapanese()
+{
+    lang::Locale aLocale;
+    aLocale.Language = OUString("ja");
+    aLocale.Country = OUString("JP");
+    i18n::Boundary aBounds;
+
+    {
+        const sal_Unicode JAPANESE[] = { 0x30B7, 0x30E3, 0x30C3, 0x30C8, 0x30C0, 0x30A6, 0x30F3 };
+
+        rtl::OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
+        aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
+            i18n::WordType::DICTIONARY_WORD, true);
+
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
+    }
+
+    {
+        const sal_Unicode JAPANESE[] = { 0x9EBB, 0x306E, 0x8449, 0x9EBB, 0x306E, 0x8449 };
+
+        rtl::OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
+        aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale,
+            i18n::WordType::DICTIONARY_WORD, true);
+
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 3);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
+            i18n::WordType::DICTIONARY_WORD, true);
+
+        CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 6);
+    }
+}
+
 void TestBreakIterator::setUp()
 {
     BootstrapFixtureBase::setUp();
@@ -786,8 +935,8 @@ void TestBreakIterator::setUp()
 
 void TestBreakIterator::tearDown()
 {
-    BootstrapFixtureBase::tearDown();
     m_xBreak.clear();
+    BootstrapFixtureBase::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestBreakIterator);

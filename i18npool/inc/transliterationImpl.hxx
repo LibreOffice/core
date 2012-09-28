@@ -19,10 +19,10 @@
 #ifndef _I18N_TRANSLITERATIONIMPL_HXX_
 #define _I18N_TRANSLITERATIONIMPL_HXX_
 
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/types.h>
 
@@ -44,7 +44,7 @@ class TransliterationImpl : public cppu::WeakImplHelper2
 {
 public:
     // Constructors
-    TransliterationImpl(const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xMSF);
+    TransliterationImpl(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& xContext);
     // Destructor
     ~TransliterationImpl();
 
@@ -104,8 +104,8 @@ private:
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedTransliteration > bodyCascade[maxCascade];
     sal_Int16 numCascade;
     sal_Bool caseignoreOnly;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    com::sun::star::uno::Reference< XLocaleData > localedata;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+    com::sun::star::uno::Reference< XLocaleData4 > mxLocaledata;
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedTransliteration > caseignore;
 
     virtual sal_Bool SAL_CALL loadModuleByName( const rtl::OUString& implName,

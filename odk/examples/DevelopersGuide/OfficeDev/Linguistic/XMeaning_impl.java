@@ -32,7 +32,7 @@
  *
  *************************************************************************/
 
-import com.sun.star.lang.Locale;
+
 
 public class XMeaning_impl implements
     com.sun.star.linguistic2.XMeaning

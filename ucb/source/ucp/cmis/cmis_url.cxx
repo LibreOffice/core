@@ -63,17 +63,6 @@ namespace cmis
             m_sPath = rtl::OUString( );
     }
 
-    map< int, string > URL::getSessionParams( )
-    {
-        map< int, string > params;
-        params[ATOMPUB_URL] = OUSTR_TO_STDSTR( m_sBindingUrl );
-        params[REPOSITORY_ID] = OUSTR_TO_STDSTR( m_sRepositoryId );
-        params[USERNAME] = OUSTR_TO_STDSTR( m_sUser );
-        params[PASSWORD] = OUSTR_TO_STDSTR( m_sPass );
-
-        return params;
-    }
-
     rtl::OUString& URL::getObjectPath( )
     {
         return m_sPath;

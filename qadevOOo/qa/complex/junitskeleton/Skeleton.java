@@ -17,8 +17,6 @@
  */
 package complex.junitskeleton;
 
-import com.sun.star.io.IOException;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;

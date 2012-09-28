@@ -57,6 +57,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 
 // header for class SvNumberFormatter
 #include <svl/zforlist.hxx>
@@ -107,7 +108,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
 {
     OSL_TRACE( "ChartModel: CTOR called" );
 
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_xOldModelAgg.set(
             m_xContext->getServiceManager()->createInstanceWithContext(
@@ -121,7 +122,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
         m_xChartTypeManager.set( xContext->getServiceManager()->createInstanceWithContext(
                 C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 ChartModel::ChartModel( const ChartModel & rOther )
@@ -147,7 +148,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_xOldModelAgg.set(
             m_xContext->getServiceManager()->createInstanceWithContext(
@@ -177,7 +178,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
         ModifyListenerHelper::addListener( xNewPageBackground, xListener );
         xListener.clear();
     }
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 ChartModel::~ChartModel()
@@ -695,10 +696,7 @@ uno::Reference< document::XDocumentProperties > SAL_CALL
     ::osl::MutexGuard aGuard( m_aModelMutex );
     if ( !m_xDocumentProperties.is() )
     {
-        uno::Reference< document::XDocumentProperties > xDocProps(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                C2U("com.sun.star.document.DocumentProperties") ), uno::UNO_QUERY );
-        m_xDocumentProperties.set(xDocProps);
+        m_xDocumentProperties.set( document::DocumentProperties::create( ::comphelper::getProcessComponentContext() ) );
     }
     return m_xDocumentProperties;
 }

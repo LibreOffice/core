@@ -38,7 +38,6 @@ extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 }
 
-
 class ScDocument;
 class ScAddInDocs : public std::set<ScDocument*> {};
 
@@ -49,26 +48,26 @@ class ScAddInAsync : public SvtBroadcaster
 private:
     union
     {
-        double      nVal;               // aktueller Wert
+        double      nVal;               // current value
         String*     pStr;
     };
-    ScAddInDocs*    pDocs;              // Liste der benutzenden Dokumente
-    FuncData*       mpFuncData;          // Zeiger auf die Daten in der Collection
-    sal_uLong           nHandle;            // wird von double auf sal_uLong gecasted
-    ParamType       meType;              // PTR_DOUBLE oder PTR_STRING Ergebnis
-    sal_Bool            bValid;             // ob Wert gueltig
+    ScAddInDocs*    pDocs;              // List of using documents
+    FuncData*       mpFuncData;         // Pointer to files in collection
+    sal_uLong       nHandle;            // is casted from double to sal_uLong
+    ParamType       meType;             // result of type PTR_DOUBLE or PTR_STRING
+    bool            bValid;             // is value valid?
 
 public:
-    // cTor nur wenn ScAddInAsync::Get fehlschlaegt!
-    // nIndex: Index aus der FunctionCollection
+    // cTor only if ScAddInAsync::Get fails.
+    // nIndex: Index from FunctionCollection
     ScAddInAsync(sal_uLong nHandle, FuncData* pFuncData, ScDocument* pDoc);
-                    // default-cTor nur fuer das eine globale aSeekObj !!!
+                    // default-cTor only for that single, global aSeekObj!
                     ScAddInAsync();
     virtual         ~ScAddInAsync();
     static ScAddInAsync*    Get( sal_uLong nHandle );
     static void     CallBack( sal_uLong nHandle, void* pData );
     static void     RemoveDocument( ScDocument* pDocument );
-    sal_Bool            IsValid() const         { return bValid; }
+    bool            IsValid() const         { return bValid; }
     ParamType       GetType() const         { return meType; }
     double          GetValue() const        { return nVal; }
     const String&   GetString() const       { return *pStr; }
@@ -76,7 +75,7 @@ public:
                         { return pDocs->find( pDoc ) != pDocs->end(); }
     void            AddDocument( ScDocument* pDoc ) { pDocs->insert( pDoc ); }
 
-    // Vergleichsoperatoren fuer PtrArrSort
+    // Comparators for PtrArrSort
     bool operator< ( const ScAddInAsync& r ) const { return nHandle <  r.nHandle; }
     bool operator==( const ScAddInAsync& r ) const { return nHandle == r.nHandle; }
 };
@@ -88,8 +87,6 @@ struct CompareScAddInAsync
 class ScAddInAsyncs : public std::set<ScAddInAsync*, CompareScAddInAsync> {};
 
 extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
-
-
 
 #endif
 

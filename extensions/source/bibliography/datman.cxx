@@ -41,6 +41,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -50,11 +51,6 @@
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/io/XDataInputStream.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XContentAccess.hpp>
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/container.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/svtabbx.hxx>
@@ -91,9 +87,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::lang;
-using namespace ::ucb;
 
 #define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
 
@@ -103,9 +97,9 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
     Reference< XDataSource >    xDataSource;
     // is it a favorite title ?
     Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-    Reference<XInterface> xNamingContextIfc = xMgr->createInstance(C2U("com.sun.star.sdb.DatabaseContext"));
-    Reference< XNameAccess >  xNamingContext(xNamingContextIfc, UNO_QUERY);
-    if (xNamingContext.is() && xNamingContext->hasByName(_rURL))
+    Reference<XComponentContext>  xContext = comphelper::getProcessComponentContext();
+    Reference< XDatabaseContext >  xNamingContext = DatabaseContext::create(xContext);
+    if (xNamingContext->hasByName(_rURL))
     {
         DBG_ASSERT(Reference< XNamingService > (xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the sdb::DatabaseAccessContext !");
         try

@@ -99,7 +99,7 @@ sal_Bool SwWrtShell::TryRemoveIndent()
 
 long SwWrtShell::DelLine()
 {
-    ACT_KONTEXT(this);
+    SwActContext aActContext(this);
     ResetCursorStack();
         // alten Cursor merken
     Push();
@@ -170,10 +170,10 @@ long SwWrtShell::DelLeft()
     {
         if( !IsBlockMode() || HasSelection() )
         {
-             //OS: wieder einmal Basic: ACT_KONTEXT muss vor
+            //OS: wieder einmal Basic: SwActContext muss vor
             //EnterStdMode verlassen werden!
             {
-                ACT_KONTEXT(this);
+                SwActContext aActContext(this);
                 ResetCursorStack();
                 Delete();
                 UpdateAttr();
@@ -265,10 +265,10 @@ long SwWrtShell::DelRight()
         {
             if( !IsBlockMode() || HasSelection() )
             {
-                //OS: wieder einmal Basic: ACT_KONTEXT muss vor
+                //OS: wieder einmal Basic: SwActContext muss vor
                 //EnterStdMode verlassen werden!
                 {
-                    ACT_KONTEXT(this);
+                    SwActContext aActContext(this);
                     ResetCursorStack();
                     Delete();
                     UpdateAttr();
@@ -418,7 +418,7 @@ long SwWrtShell::DelRight()
 
 long SwWrtShell::DelToEndOfPara()
 {
-    ACT_KONTEXT(this);
+    SwActContext aActContext(this);
     ResetCursorStack();
     Push();
     SetMark();
@@ -438,7 +438,7 @@ long SwWrtShell::DelToEndOfPara()
 
 long SwWrtShell::DelToStartOfPara()
 {
-    ACT_KONTEXT(this);
+    SwActContext aActContext(this);
     ResetCursorStack();
     Push();
     SetMark();
@@ -489,7 +489,7 @@ long SwWrtShell::DelNxtWord()
 {
     if(IsEndOfDoc())
         return 0;
-    ACT_KONTEXT(this);
+    SwActContext aActContext(this);
     ResetCursorStack();
     EnterStdMode();
     SetMark();
@@ -515,7 +515,7 @@ long SwWrtShell::DelPrvWord()
 {
     if(IsStartOfDoc())
         return 0;
-    ACT_KONTEXT(this);
+    SwActContext aActContext(this);
     ResetCursorStack();
     EnterStdMode();
     SetMark();

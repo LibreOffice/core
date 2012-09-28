@@ -33,6 +33,7 @@
 
  *************************************************************************/
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustring.h>
@@ -43,6 +44,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -966,29 +968,23 @@ uno::Reference< io::XInputStream > getInputStream(
 
         try
         {
-            uno::Reference< io::XOutputStream > xOutputStream(
-                rContext.xSMgr->createInstance(
-                    rtl::OUString("com.sun.star.io.Pipe") ),
-                uno::UNO_QUERY );
+            uno::Reference< io::XOutputStream > xOutputStream( io::Pipe::create(comphelper::getComponentContext(rContext.xSMgr)), uno::UNO_QUERY_THROW );
 
-            if ( xOutputStream.is() )
-            {
-                ucb::OpenCommandArgument2 aArg;
-                aArg.Mode       = ucb::OpenMode::DOCUMENT;
-                aArg.Priority   = 0; // unused
-                aArg.Sink       = xOutputStream;
-                aArg.Properties = uno::Sequence< beans::Property >( 0 );
+            ucb::OpenCommandArgument2 aArg;
+            aArg.Mode       = ucb::OpenMode::DOCUMENT;
+            aArg.Priority   = 0; // unused
+            aArg.Sink       = xOutputStream;
+            aArg.Properties = uno::Sequence< beans::Property >( 0 );
 
-                ucb::Command aOpenCommand(
-                                    rtl::OUString("open"),
-                                    -1,
-                                    uno::makeAny( aArg ) );
+            ucb::Command aOpenCommand(
+                                rtl::OUString("open"),
+                                -1,
+                                uno::makeAny( aArg ) );
 
-                xCommandProcessorS->execute( aOpenCommand, 0, rContext.xEnv );
+            xCommandProcessorS->execute( aOpenCommand, 0, rContext.xEnv );
 
-                xInputStream = uno::Reference< io::XInputStream >(
-                                        xOutputStream, uno::UNO_QUERY );
-            }
+            xInputStream = uno::Reference< io::XInputStream >(
+                                    xOutputStream, uno::UNO_QUERY );
         }
         catch ( uno::RuntimeException const & )
         {

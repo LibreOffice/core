@@ -21,23 +21,18 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
-
 import java.io.IOException;
 
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentSerializer;
-import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
 import org.openoffice.xmerge.converter.palm.PalmDB;
-import org.openoffice.xmerge.converter.palm.PdbEncoder;
 import org.openoffice.xmerge.converter.palm.Record;
 import org.openoffice.xmerge.converter.palm.PdbUtil;
 import org.openoffice.xmerge.converter.palm.PalmDocument;
-import org.openoffice.xmerge.converter.xml.OfficeDocument;
 import org.openoffice.xmerge.util.*;
 import org.openoffice.xmerge.converter.xml.*;
 
@@ -53,7 +48,6 @@ import org.openoffice.xmerge.converter.xml.*;
  *  <code>DocEncoder</code> object for the actual conversion of
  *  contents to the WordSmith format.</p>
  *
- *  @author      Herbie Ong, David Proulx
  */
 
 // DJP: take out "implements OfficeConstants"

@@ -40,24 +40,24 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
 {
-    String    sTargetFrameName; // Target frame for URL.
-    String    sURL;             // Simple URL.
-    String    sName;            // Name of the anchor.
-    ImageMap *pMap;             // ClientSide images.
+    String    sTargetFrameName; ///< Target frame for URL.
+    String    sURL;             ///< Simple URL.
+    String    sName;            ///< Name of the anchor.
+    ImageMap *pMap;             ///< ClientSide images.
 
-    sal_Bool      bIsServerMap;     // A ServerSideImageMap with the URL.
+    sal_Bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
 
     SwFmtURL& operator=( const SwFmtURL& );
 
 public:
     SwFmtURL();
 
-    // @@@ copy construction allowed, but assigment is not? @@@
+    /// @@@ copy construction allowed, but assigment is not? @@@
     SwFmtURL( const SwFmtURL& );
 
     virtual ~SwFmtURL();
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -70,7 +70,7 @@ public:
 
     void SetTargetFrameName( const String& rStr ) { sTargetFrameName = rStr; }
     void SetURL( const String &rURL, sal_Bool bServerMap );
-    void SetMap( const ImageMap *pM );  // Pointer will be copied.
+    void SetMap( const ImageMap *pM );  ///< Pointer will be copied.
 
     const String   &GetTargetFrameName()const { return sTargetFrameName; }
     const String   &GetURL()            const { return sURL; }

@@ -18,14 +18,10 @@
 
 import javax.swing.*;
 import javax.swing.tree.*;
-import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
-import java.beans.*;
-
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.Any;
@@ -33,18 +29,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.lang.XComponent;
-import com.sun.star.frame.XModel;
-import com.sun.star.frame.FrameSearchFlag;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XDispatchHelper;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.util.XURLTransformer;
 import com.sun.star.beans.*;
-import com.sun.star.script.XInvocation;
-
-import com.sun.star.lib.uno.helper.PropertySet;
-
 import com.sun.star.script.browse.XBrowseNode;
 import com.sun.star.script.browse.BrowseNodeTypes;
 import com.sun.star.script.browse.XBrowseNodeFactory;

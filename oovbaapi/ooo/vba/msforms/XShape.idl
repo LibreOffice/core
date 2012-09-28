@@ -64,7 +64,6 @@ interface XShape : ooo::vba::XHelperInterface
     void ScaleHeight( [in] double Factor, [in] boolean RelativeToOriginalSize, [in] long Scale );
     void ScaleWidth( [in] double Factor, [in] boolean RelativeToOriginalSize, [in] long Scale );
     any ShapeRange( [in] any index );  // only here for convience
-    void Copy();
 };
 }; }; };
 

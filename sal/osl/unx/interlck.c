@@ -49,10 +49,9 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
 {
     // Fast case for old, slow, single CPU Intel machines for whom
     // interlocking is a performance nightmare.
-    register oslInterlockedCount nCount asm("%eax");
-    nCount = 1;
-
     if ( osl_isSingleCPU ) {
+        register oslInterlockedCount nCount asm("%eax");
+        nCount = 1;
         __asm__ __volatile__ (
             "xaddl %0, %1\n\t"
         :   "+r" (nCount), "+m" (*pCount)
@@ -60,28 +59,29 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
         :   "memory");
         return ++nCount;
     }
-#if ( __GNUC__ > 4 ) || (( __GNUC__ == 4)  && ( __GNUC_MINOR__ >= 4 ))
+#if defined( HAVE_GCC_BUILTIN_ATOMIC )
     else
         return __sync_add_and_fetch (pCount, 1);
 #else
     else {
+        register oslInterlockedCount nCount asm("%eax");
+        nCount = 1;
         __asm__ __volatile__ (
             "lock\n\t"
             "xaddl %0, %1\n\t"
         :   "+r" (nCount), "+m" (*pCount)
         :   /* nothing */
         :   "memory");
+        return ++nCount;
     }
-    return ++nCount;
 #endif
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    register oslInterlockedCount nCount asm("%eax");
-    nCount = -1;
-
     if ( osl_isSingleCPU ) {
+        register oslInterlockedCount nCount asm("%eax");
+        nCount = -1;
         __asm__ __volatile__ (
             "xaddl %0, %1\n\t"
         :   "+r" (nCount), "+m" (*pCount)
@@ -89,22 +89,24 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
         :   "memory");
         return --nCount;
     }
-#if ( __GNUC__ > 4 ) || (( __GNUC__ == 4)  && ( __GNUC_MINOR__ >= 4 ))
+#if defined( HAVE_GCC_BUILTIN_ATOMIC )
     else
         return __sync_sub_and_fetch (pCount, 1);
 #else
     else {
+        register oslInterlockedCount nCount asm("%eax");
+        nCount = -1;
         __asm__ __volatile__ (
             "lock\n\t"
             "xaddl %0, %1\n\t"
         :   "+r" (nCount), "+m" (*pCount)
         :   /* nothing */
         :   "memory");
+        return --nCount;
     }
-    return --nCount;
 #endif
 }
-#elif ( __GNUC__ > 4 ) || (( __GNUC__ == 4) && ( __GNUC_MINOR__ >= 4 ))
+#elif defined( HAVE_GCC_BUILTIN_ATOMIC )
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     return __sync_add_and_fetch(pCount, 1);

@@ -216,7 +216,10 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
         case VML_TOKEN( group ):
             return new GroupShapeContext( rParent, rShapes.createShape< GroupShape >(), rAttribs );
         case VML_TOKEN( shape ):
-            return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
+            if (rAttribs.hasAttribute(XML_path))
+                return new ShapeContext( rParent, rShapes.createShape< BezierShape >(), rAttribs );
+            else
+                return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
         case VML_TOKEN( rect ):
             return new RectangleShapeContext( rParent, rAttribs, rShapes.createShape< RectangleShape >() );
         case VML_TOKEN( roundrect ):
@@ -227,10 +230,11 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
             return new ShapeContext( rParent, rShapes.createShape< PolyLineShape >(), rAttribs );
         case VML_TOKEN( line ):
             return new ShapeContext( rParent, rShapes.createShape< LineShape >(), rAttribs );
+        case VML_TOKEN( curve ):
+            return new ShapeContext( rParent, rShapes.createShape< BezierShape >(), rAttribs );
 
         // TODO:
         case VML_TOKEN( arc ):
-        case VML_TOKEN( curve ):
         case VML_TOKEN( diagram ):
         case VML_TOKEN( image ):
             return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
@@ -276,6 +280,9 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
     // fill settings (may be overridden by v:fill element later)
     mrTypeModel.maFillModel.moFilled = lclDecodeBool( rAttribs, XML_filled );
     mrTypeModel.maFillModel.moColor = rAttribs.getString( XML_fillcolor );
+
+    // For roundrect we may have a arcsize attribute to read
+    mrTypeModel.maArcsize = rAttribs.getString( XML_arcsize,rtl::OUString( ) );
 }
 
 ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -354,7 +361,13 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName == "margin-left" )    mrTypeModel.maMarginLeft = aValue;
             else if( aName == "margin-top" )     mrTypeModel.maMarginTop = aValue;
             else if( aName == "mso-position-vertical-relative" )  mrTypeModel.maPositionVerticalRelative = aValue;
+            else if( aName == "mso-position-horizontal-relative" )  mrTypeModel.maPositionHorizontalRelative = aValue;
             else if( aName == "mso-position-horizontal" ) mrTypeModel.maPositionHorizontal = aValue;
+            else if( aName == "mso-position-vertical" ) mrTypeModel.maPositionVertical = aValue;
+            else if( aName == "mso-width-percent" ) mrTypeModel.maWidthPercent = aValue;
+            else if( aName == "mso-width-relative" ) mrTypeModel.maWidthRelative = aValue;
+            else if( aName == "mso-height-percent" ) mrTypeModel.maHeightPercent = aValue;
+            else if( aName == "mso-height-relative" ) mrTypeModel.maHeightRelative = aValue;
             else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = sal_True;
             else if( aName == "rotation" )       mrTypeModel.maRotation = aValue;
             else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
@@ -379,6 +392,9 @@ ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, c
     // line start and end positions
     setFrom(rAttribs.getString(XML_from, OUString()));
     setTo(rAttribs.getString(XML_to, OUString()));
+    setControl1(rAttribs.getString(XML_control1, OUString()));
+    setControl2(rAttribs.getString(XML_control2, OUString()));
+    setVmlPath(rAttribs.getString(XML_path, OUString()));
 }
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -409,6 +425,7 @@ void ShapeContext::setPoints( const OUString& rPoints )
 {
     mrShapeModel.maPoints.clear();
     sal_Int32 nIndex = 0;
+
     while( nIndex >= 0 )
     {
         sal_Int32 nX = rPoints.getToken( 0, ',', nIndex ).toInt32();
@@ -428,6 +445,24 @@ void ShapeContext::setTo( const OUString& rPoints )
     if (!rPoints.isEmpty())
         mrShapeModel.maTo = rPoints;
 }
+
+void ShapeContext::setControl1( const OUString& rPoints )
+{
+    if (!rPoints.isEmpty())
+        mrShapeModel.maControl1 = rPoints;
+}
+
+void ShapeContext::setControl2( const OUString& rPoints )
+{
+    if (!rPoints.isEmpty())
+        mrShapeModel.maControl2 = rPoints;
+}
+void ShapeContext::setVmlPath( const OUString& rPath )
+{
+    if (!rPath.isEmpty())
+        mrShapeModel.maVmlPath = rPath;
+}
+
 
 // ============================================================================
 

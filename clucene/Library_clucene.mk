@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,clucene))
 
 $(eval $(call gb_Library_use_external,clucene,zlib))
 
-$(eval $(call gb_Library_use_package,clucene,clucene_source))
+$(eval $(call gb_Library_use_package,clucene,clucene_inc))
 
 $(eval $(call gb_Library_use_unpacked,clucene,clucene))
 
@@ -62,6 +62,8 @@ $(eval $(call gb_Library_use_libraries,clucene,\
     pthread \
 ))
 endif
+
+$(eval $(call gb_Library_set_generated_cxx_suffix,clucene,cpp))
 
 $(eval $(call gb_Library_add_generated_exception_objects,clucene,\
     UnpackedTarball/clucene/src/shared/CLucene/SharedHeader \

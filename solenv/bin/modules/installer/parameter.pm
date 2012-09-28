@@ -43,7 +43,6 @@ sub usage
 {
     print <<Ende;
 --------------------------------------------------------------------------------
-$installer::globals::prog
 The following parameter are needed:
 -f: Path to the product list (required)
 -s: Path to the setup script (optional, if defined in product list)
@@ -377,7 +376,7 @@ sub setglobalvariables
         elsif ( $ENV{'TEMP'} )  { $installer::globals::temppath = $ENV{'TEMP'}; }
         elsif ( $ENV{'TMPDIR'} )  { $installer::globals::temppath = $ENV{'TMPDIR'}; }
         $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
-        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::globaltempdirname;
+        $installer::globals::temppath .= $installer::globals::separator . 'ooopackaging';
         installer::systemactions::create_directory_with_privileges($installer::globals::temppath, "777");
         my $dirsave = $installer::globals::temppath;
 
@@ -534,7 +533,6 @@ sub outputparameter
     my @output = ();
 
     push(@output, "\n########################################################\n");
-    push(@output, "$installer::globals::prog, version 1.0\n");
     push(@output, "Product list file: $installer::globals::ziplistname\n");
     if (!($installer::globals::setupscript_defined_in_productlist))
     {

@@ -164,7 +164,7 @@ ScAccessibleDataPilotControl::~ScAccessibleDataPilotControl(void)
     if (!IsDefunc() && !rBHelper.bInDispose)
     {
         // increment refcount to prevent double call off dtor
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         // call dispose to inform object wich have a weak reference to this object
         dispose();
     }
@@ -542,7 +542,7 @@ ScAccessibleDataPilotButton::~ScAccessibleDataPilotButton(void)
     if (!IsDefunc() && !rBHelper.bInDispose)
     {
         // increment refcount to prevent double call off dtor
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         // call dispose to inform object wich have a weak reference to this object
         dispose();
     }

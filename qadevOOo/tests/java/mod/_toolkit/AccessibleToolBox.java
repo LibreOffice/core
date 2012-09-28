@@ -83,7 +83,6 @@ public class AccessibleToolBox extends TestCase {
 
         if (xTextDoc != null) {
             util.DesktopTools.closeDoc(xTextDoc);
-            ;
         }
     }
 

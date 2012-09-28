@@ -54,6 +54,32 @@ ScFormatEntry::ScFormatEntry(ScDocument* pDoc):
 {
 }
 
+bool ScFormatEntry::operator==( const ScFormatEntry& r ) const
+{
+    if(GetType() != r.GetType())
+        return false;
+
+    switch(GetType())
+    {
+        case condformat::CONDITION:
+            return static_cast<const ScCondFormatEntry&>(*this) == static_cast<const ScCondFormatEntry&>(r);
+        default:
+            // TODO: implement also this case
+            // actually return false for these cases is not that bad
+            // as soon as databar and color scale are tested we need
+            // to think about the range
+            return false;
+    }
+}
+
+void ScFormatEntry::startRendering()
+{
+}
+
+void ScFormatEntry::endRendering()
+{
+}
+
 bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
 {
     if (pFormula)
@@ -698,7 +724,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     bFirstRun = false;
 }
 
-static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, String& rArgStr )
+static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, rtl::OUString& rArgStr )
 {
     bool bVal = true;
 
@@ -742,40 +768,84 @@ static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, S
     return bVal;
 }
 
-static bool lcl_IsDuplicate( ScDocument *pDoc, double nArg, const String& rStr, const ScAddress& rAddr, const ScRangeList& rRanges )
+bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, const ScAddress& rAddr, const ScRangeList& rRanges ) const
 {
-    size_t nListCount = rRanges.size();
-    for( size_t i = 0; i < nListCount; i++ )
+    if(!mpCache)
     {
-        const ScRange *aRange = rRanges[i];
-        SCROW nRow = aRange->aEnd.Row();
-        SCCOL nCol = aRange->aEnd.Col();
-        for( SCROW r = aRange->aStart.Row(); r <= nRow; r++ )
-            for( SCCOL c = aRange->aStart.Col(); c <= nCol; c++ )
+        mpCache.reset(new ScConditionEntryCache);
+        size_t nListCount = rRanges.size();
+        for( size_t i = 0; i < nListCount; i++ )
+        {
+            const ScRange *aRange = rRanges[i];
+            SCROW nRow = aRange->aEnd.Row();
+            SCCOL nCol = aRange->aEnd.Col();
+            SCCOL nColStart = aRange->aStart.Col();
+            SCROW nRowStart = aRange->aStart.Row();
+            SCTAB nTab = aRange->aStart.Tab();
+
+            // temporary fix to workaorund slow duplicate entry
+            // conditions, prevent to use a whole row
+            if(nRow == MAXROW)
             {
-                double nVal = 0.0;
-                ScBaseCell *pCell = NULL;
-                String aStr;
-
-                if( c == rAddr.Col() && r == rAddr.Row() )
-                    continue;
-                pDoc->GetCell( c, r, rAddr.Tab(), pCell );
-                if( !pCell )
-                    continue;
-
-                if( !lcl_GetCellContent( pCell, false, nVal, aStr ) )
-                {
-                    if( rStr.Len() &&
-                        ( ScGlobal::GetCollator()->compareString( rStr, aStr ) == COMPARE_EQUAL ) )
-                        return true;
-                }
-                else
-                {
-                    if( !rStr.Len() && ::rtl::math::approxEqual( nArg, nVal ) )
-                        return true;
-                }
+                bool bShrunk = false;
+                mpDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,
+                        nCol, nRow, false);
             }
+
+            for( SCROW r = nRowStart; r <= nRow; r++ )
+                for( SCCOL c = nColStart; c <= nCol; c++ )
+                {
+                    double nVal = 0.0;
+                    ScBaseCell *pCell = NULL;
+
+                    mpDoc->GetCell( c, r, rAddr.Tab(), pCell );
+                    if( !pCell )
+                        continue;
+
+                    rtl::OUString aStr;
+                    if( !lcl_GetCellContent( pCell, false, nVal, aStr ) )
+                    {
+                        std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult = mpCache->maStrings.insert(std::pair<rtl::OUString, sal_Int32>(aStr, static_cast<sal_Int32>(1)));
+                        if(!aResult.second)
+                            aResult.first->second++;
+                    }
+                    else
+                    {
+                        std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult = mpCache->maValues.insert(std::pair<double, sal_Int32>(nVal, (sal_Int32)1));
+                        if(!aResult.second)
+                            aResult.first->second++;
+                    }
+                }
+        }
     }
+
+    if(rStr.isEmpty())
+    {
+        ScConditionEntryCache::ValueCacheType::iterator itr = mpCache->maValues.find(nArg);
+        if(itr == mpCache->maValues.end())
+            return false;
+        else
+        {
+            if(itr->second > 1)
+                return true;
+            else
+                return false;
+        }
+    }
+    else
+    {
+        ScConditionEntryCache::StringCacheType::iterator itr = mpCache->maStrings.find(rStr);
+        if(itr == mpCache->maStrings.end())
+            return false;
+        else
+        {
+            if(itr->second > 1)
+                return true;
+            else
+                return false;
+        }
+    }
+
     return false;
 }
 
@@ -842,7 +912,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
             if( pCondFormat )
             {
                 const ScRangeList& aRanges = pCondFormat->GetRange();
-                bValid = lcl_IsDuplicate( mpDoc, nArg, String(), rAddr, aRanges );
+                bValid = IsDuplicate( nArg, rtl::OUString(), rAddr, aRanges );
                 if( eOp == SC_COND_NOTDUPLICATE )
                     bValid = !bValid;
             }
@@ -870,7 +940,7 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) 
         if( pCondFormat && rArg.Len() )
         {
             const ScRangeList& aRanges = pCondFormat->GetRange();
-            bValid = lcl_IsDuplicate( mpDoc, 0.0, rArg, rAddr, aRanges );
+            bValid = IsDuplicate( 0.0, rArg, rAddr, aRanges );
             if( eOp == SC_COND_NOTDUPLICATE )
                 bValid = !bValid;
             return bValid;
@@ -949,7 +1019,7 @@ bool ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
     ((ScConditionEntry*)this)->Interpret(rPos);         // Formeln auswerten
 
     double nArg = 0.0;
-    String aArgStr;
+    rtl::OUString aArgStr;
     bool bVal = lcl_GetCellContent( pCell, bIsStr1, nArg, aArgStr );
     if (bVal)
         return IsValid( nArg, rPos );
@@ -1123,7 +1193,7 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                         ScRange aPaint( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 );
 
                         //  kein Paint, wenn es nur die Zelle selber ist
-                        if ( aPaint.aStart != rChanged || aPaint.aEnd != rChanged )
+                        if ( aPaint.IsValid() && (aPaint.aStart != rChanged || aPaint.aEnd != rChanged ))
                             DataChanged( &aPaint );
                     }
                 }
@@ -1247,6 +1317,17 @@ ScConditionMode ScConditionEntry::GetModeFromApi(sal_Int32 nOperation)
     }
     return eMode;
 }
+
+void ScConditionEntry::startRendering()
+{
+    mpCache.reset();
+}
+
+void ScConditionEntry::endRendering()
+{
+    mpCache.reset();
+}
+
 //------------------------------------------------------------------------
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
@@ -1286,8 +1367,6 @@ int ScCondFormatEntry::operator== ( const ScCondFormatEntry& r ) const
 {
     return ScConditionEntry::operator==( r ) &&
             aStyleName == r.aStyleName;
-
-    //  Range wird nicht verglichen
 }
 
 ScCondFormatEntry::~ScCondFormatEntry()
@@ -1353,13 +1432,14 @@ bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
 
     //! auf gleiche Eintraege in anderer Reihenfolge testen ???
 
-    /*
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
-        if ( ! (*ppEntries[i] == *r.ppEntries[i]) )
+    for (sal_uInt16 i=0; i<size(); i++)
+        if ( ! (maEntries == r.maEntries ) )
             return false;
-    */
 
-    return maRanges == r.maRanges;
+    // right now don't check for same range
+    // we only use this method to merge same conditional formats from
+    // old ODF data structure
+    return true;
 }
 
 void ScConditionalFormat::AddRange( const ScRangeList& rRanges )
@@ -1427,11 +1507,11 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
 
 
 #if DUMP_FORMAT_INFO
-void ScConditionalFormat::dumpInfo() const
+void ScConditionalFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
 {
     for(CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->dumpInfo();
+        itr->dumpInfo(rBuf);
     }
 }
 #endif
@@ -1469,6 +1549,12 @@ void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
     maRanges.UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
         itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
+}
+
+void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    SCTAB nTab = maRanges[0]->aStart.Tab();
+    maRanges.DeleteArea( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 }
 
 void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew)
@@ -1540,6 +1626,22 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
         }
 
     return bAllMarked;
+}
+
+void ScConditionalFormat::startRendering()
+{
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+        itr->startRendering();
+    }
+}
+
+void ScConditionalFormat::endRendering()
+{
+    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+        itr->endRendering();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -1626,6 +1728,22 @@ void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
         itr->UpdateMoveTab( nOldPos, nNewPos );
 }
 
+void ScConditionalFormatList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    for( iterator itr = begin(); itr != end(); ++itr)
+        itr->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
+
+    // need to check which must be deleted
+    iterator itr = begin();
+    while(itr != end())
+    {
+        if(itr->GetRange().empty())
+            maConditionalFormats.erase(itr++);
+        else
+            ++itr;
+    }
+}
+
 void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )
 {
     for( iterator itr = begin(); itr != end(); ++itr)
@@ -1666,6 +1784,22 @@ void ScConditionalFormatList::erase( sal_uLong nIndex )
             maConditionalFormats.erase(itr);
             break;
         }
+    }
+}
+
+void ScConditionalFormatList::startRendering()
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->startRendering();
+    }
+}
+
+void ScConditionalFormatList::endRendering()
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->endRendering();
     }
 }
 

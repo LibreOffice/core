@@ -219,8 +219,9 @@ public:
     sal_Bool PutText( const String& rShort, SfxObjectShell& );
     //  - Deleting an entry
     sal_Bool DeleteText( const String& rShort );
+    //  - Make combined changes in one pass
+    sal_Bool MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries, std::vector<SvxAutocorrWord>& aDeleteEntries );
 };
-
 
 class EDITENG_DLLPUBLIC SvxAutoCorrect
 {
@@ -343,6 +344,10 @@ public:
 
     //  - Delete a entry
     sal_Bool DeleteText( const String& rShort, LanguageType eLang = LANGUAGE_SYSTEM);
+
+    sal_Bool MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
+                                  std::vector<SvxAutocorrWord>& aDeleteEntries,
+                                  LanguageType eLang = LANGUAGE_SYSTEM );
 
     // Load, Set, Get - the exception list for capital letters at the
     // beginning of a sentence

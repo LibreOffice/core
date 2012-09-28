@@ -28,6 +28,10 @@
 #undef SHARED
 #endif
 
+#if defined( EXPLICIT )
+#undef EXPLICIT
+#endif
+
 // The tokenizer is stand-alone, i. e. he can be used from everywhere.
 // A BASIC-instance is necessary for error messages. Without BASIC the
 // errors are only counted. The BASIC is also necessary when an advanced

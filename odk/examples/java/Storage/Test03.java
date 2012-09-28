@@ -16,21 +16,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package storagetesting;
-
-import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-
 import com.sun.star.embed.*;
 import com.sun.star.container.XNameAccess;
-
-import storagetesting.TestHelper;
-import storagetesting.StorageTest;
 
 public class Test03 implements StorageTest {
 
@@ -62,7 +53,7 @@ public class Test03 implements StorageTest {
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_WRITE );
+                                                                        ElementModes.WRITE );
             if ( xTempSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -85,7 +76,7 @@ public class Test03 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "MediaType3",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
@@ -176,7 +167,7 @@ public class Test03 implements StorageTest {
             if ( xResultSubStorage == null )
                 return false;
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType3", false, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType3", false, ElementModes.READ ) )
                 return false;
 
             XNameAccess xChildAccess = (XNameAccess) UnoRuntime.queryInterface( XNameAccess.class, xResultSubStorage );

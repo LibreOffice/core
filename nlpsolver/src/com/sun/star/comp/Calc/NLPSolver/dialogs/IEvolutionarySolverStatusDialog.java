@@ -27,10 +27,6 @@
 
 package com.sun.star.comp.Calc.NLPSolver.dialogs;
 
-/**
- *
- * @author Andreas Schneider <Andreas.Schneider@Sun.COM>
- */
 public interface IEvolutionarySolverStatusDialog {
     public final static int WAITING = 0;
     public final static int OK = 1;

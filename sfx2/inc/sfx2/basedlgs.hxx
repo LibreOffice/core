@@ -22,9 +22,10 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
+#include <vcl/builder.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/dialog.hxx>
 
 class TabPage;
 class SfxTabPage;
@@ -70,6 +71,7 @@ private:
 
 protected:
     SfxModalDialog(Window *pParent, const ResId& );
+    SfxModalDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription);
     SfxModalDialog(Window* pParent, sal_uInt32 nUniqueId, WinBits nWinStyle = WB_STDMODAL );
 
     String&             GetExtraData()      { return aExtraData; }
@@ -97,9 +99,13 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
     SAL_DLLPRIVATE SfxModelessDialog(SfxModelessDialog &); // not defined
     SAL_DLLPRIVATE void operator =(SfxModelessDialog &); // not defined
 
+    void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
+
 protected:
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, const ResId& );
+                            SfxModelessDialog( SfxBindings*, SfxChildWindow*,
+                                Window*, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
                             ~SfxModelessDialog();
     virtual sal_Bool            Close();
     virtual void            Resize();

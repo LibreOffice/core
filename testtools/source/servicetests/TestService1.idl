@@ -21,7 +21,7 @@
 
 #include <XTestService1.idl>
 
-module testtools { module servicetests {
+module servicetests {
 
 interface TestService1 {
     interface XTestService1;
@@ -41,6 +41,6 @@ interface TestService1 {
     [attribute/*, optional*/] long Prop8Long;
 };
 
-}; };
+};
 
 #endif

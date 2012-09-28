@@ -39,6 +39,7 @@
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 
@@ -53,7 +54,6 @@ using namespace com::sun::star;
 
 //-------------------------------------------------------------------------
 
-#define DP_SERVICE_DBCONTEXT        "com.sun.star.sdb.DatabaseContext"
 #define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 //  entries in the "type" ListBox
@@ -86,20 +86,15 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     {
         //  get database names
 
-        uno::Reference<container::XNameAccess> xContext(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( DP_SERVICE_DBCONTEXT )) ),
-                uno::UNO_QUERY);
-        if (xContext.is())
+        uno::Reference<sdb::XDatabaseContext> xContext = sdb::DatabaseContext::create(
+                comphelper::getProcessComponentContext() );
+        uno::Sequence<rtl::OUString> aNames = xContext->getElementNames();
+        long nCount = aNames.getLength();
+        const rtl::OUString* pArray = aNames.getConstArray();
+        for (long nPos = 0; nPos < nCount; nPos++)
         {
-            uno::Sequence<rtl::OUString> aNames = xContext->getElementNames();
-            long nCount = aNames.getLength();
-            const rtl::OUString* pArray = aNames.getConstArray();
-            for (long nPos = 0; nPos < nCount; nPos++)
-            {
-                String aName = pArray[nPos];
-                aLbDatabase.InsertEntry( aName );
-            }
+            String aName = pArray[nPos];
+            aLbDatabase.InsertEntry( aName );
         }
     }
     catch(uno::Exception&)
@@ -161,11 +156,8 @@ void ScDataPilotDatabaseDlg::FillObjects()
     {
         //  open connection (for tables or queries)
 
-        uno::Reference<container::XNameAccess> xContext(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( DP_SERVICE_DBCONTEXT )) ),
-                uno::UNO_QUERY);
-        if ( !xContext.is() ) return;
+        uno::Reference<sdb::XDatabaseContext> xContext = sdb::DatabaseContext::create(
+                comphelper::getProcessComponentContext() );
 
         uno::Any aSourceAny = xContext->getByName( aDatabaseName );
         uno::Reference<sdb::XCompletedConnection> xSource(

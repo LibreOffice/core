@@ -125,9 +125,6 @@ sub generate_idls($) {
     foreach $module ( keys %result ) {
         foreach $type ( keys %{$result{$module}} ) {
             my $fname = $path . "/" . $type . ".idl";
-            if ( uc($module) eq "ADODB" || uc($module) eq "DAO" ) {
-                $fname = $path . "/" . uc($module) . "_" . $type . ".idl";
-            }
             open( IDL, ">$fname" ) || die "Cannot write $fname.";
 
             if( $module eq "vba" ) {

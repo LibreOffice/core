@@ -29,10 +29,6 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.DatabaseAccess;
 
-/**
- *
- * @author oj93728
- */
 public class DatabaseApplication
 {
 

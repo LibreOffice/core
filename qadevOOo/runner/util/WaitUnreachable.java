@@ -107,7 +107,7 @@ public final class WaitUnreachable {
             }
 
             private final WaitUnreachable unreachable;
-        };
+        }
         new WaitThread(obj).start();
     }
 

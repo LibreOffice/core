@@ -26,8 +26,8 @@ class AccessibleHypertextHandler extends AccessibleTreeHandler
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleHypertext xText =
-            (XAccessibleHypertext) UnoRuntime.queryInterface (
-                XAccessibleHypertext.class, xContext);
+            UnoRuntime.queryInterface (
+            XAccessibleHypertext.class, xContext);
         if (xText != null)
             return new AccessibleHypertextHandler (xText);
         else
@@ -47,8 +47,8 @@ class AccessibleHypertextHandler extends AccessibleTreeHandler
     protected static XAccessibleHypertext getHypertext (AccTreeNode aNode)
     {
         XAccessibleHypertext xHypertext =
-            (XAccessibleHypertext) UnoRuntime.queryInterface (
-                 XAccessibleHypertext.class, aNode.getContext());
+            UnoRuntime.queryInterface (
+             XAccessibleHypertext.class, aNode.getContext());
         return xHypertext;
     }
 

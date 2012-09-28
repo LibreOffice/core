@@ -59,6 +59,7 @@
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/types.hxx>
@@ -69,6 +70,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -1699,7 +1701,7 @@ void OReportController::impl_initialize( )
 
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );
-            m_xFormatter.set(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
+            m_xFormatter.set(util::NumberFormatter::create(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW);
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
             ::comphelper::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );

@@ -27,20 +27,20 @@ ScVbaImage::ScVbaImage( const uno::Reference< XHelperInterface >& xParent, const
 {
 }
 
-rtl::OUString
+OUString
 ScVbaImage::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaImage"));
+    return OUString("ScVbaImage");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaImage::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.Image" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.Image";
     }
     return aServiceNames;
 }

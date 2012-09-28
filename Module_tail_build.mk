@@ -26,6 +26,9 @@ $(eval $(call gb_Module_Module,tail_end))
 
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
     accessibility \
+	$(if $(filter AFMS,$(BUILD_TYPE)),\
+		afms \
+	) \
     animations \
     apple_remote \
 	autodoc \
@@ -36,13 +39,26 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     basic \
     bean \
 	binaryurp \
-	bluez_bluetooth \
+	$(if $(filter BLUEZ,$(BUILD_TYPE)),\
+		bluez_bluetooth \
+	) \
+	bridges \
     canvas \
     chart2 \
+	cli_ure \
+	$(if $(filter CLUCENE,$(BUILD_TYPE)),\
+		clucene \
+	) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		codemaker \
+	) \
+    comphelper \
     configmgr \
     connectivity \
 	cosv \
     cppcanvas \
+	cppu \
+	cppuhelper \
 	cpputools \
     cui \
     dbaccess \
@@ -64,6 +80,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     formula \
     fpicker \
     framework \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
+	    helpcompiler \
+	) \
 	$(if $(filter HSQLDB,$(BUILD_TYPE)),\
 		hsqldb \
 	) \
@@ -71,18 +90,44 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	i18npool \
 	i18nutil \
     idl \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		idlc \
+	) \
 	io \
 	javaunohelper \
+	jurt \
+	jvmaccess \
+	jvmfwk \
+	libcdr \
+	libcmis \
+	libmspub \
+	liborcus \
+	libvisio \
+	libwpd \
+	libwpg \
+	libwps \
     lingucomponent \
     linguistic \
     lotuswordpro \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		l10ntools \
+	) \
     MathMLDTD \
+	mdds \
     Mesa \
+	$(if $(filter MORE_FONTS,$(BUILD_TYPE)),\
+		more_fonts \
+	) \
+	$(if $(filter NEON,$(BUILD_TYPE)),\
+		neon \
+	) \
 	$(if $(filter NLPSOLVER,$(BUILD_TYPE)),\
 		nlpsolver \
 	) \
     np_sdk \
 	o3tl \
+	offapi \
+	officecfg \
     oovbaapi \
     oox \
     package \
@@ -94,11 +139,18 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
 		qadevOOo \
 	) \
-	regexp \
-	remotebridges \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		rdbmaker \
+	) \
+    readlicense_oo \
+    regexp \
+    registry \
+    remotebridges \
     reportbuilder \
     reportdesign \
+	ridljar \
     rsc \
+	salhelper \
     sane \
 	sax \
     sc \
@@ -116,6 +168,8 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     smoketest \
     sot \
     starmath \
+	stoc \
+	store \
     svl \
     svtools \
     svx \
@@ -126,9 +180,17 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     toolkit \
 	tools \
 	touch \
+	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
+		translations \
+	) \
     tubes \
     twain \
     ucb \
+	ucbhelper \
+	$(if $(filter UCPP,$(BUILD_TYPE)),\
+		ucpp \
+	) \
+	udkapi \
 	udm \
     unixODBC \
     UnoControls \
@@ -150,10 +212,13 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	) \
     xmerge \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
-	    xmlhelp) \
+	    xmlhelp \
+	) \
     xmloff \
+	xmlreader \
     xmlscript \
     xmlsecurity \
+	xsltml \
 ))
 
 ifeq ($(MERGELIBS),TRUE)

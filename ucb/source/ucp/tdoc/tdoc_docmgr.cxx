@@ -37,14 +37,16 @@
 #include "rtl/ref.hxx"
 #include "cppuhelper/weak.hxx"
 
-#include "comphelper/namedvaluecollection.hxx"
 #include "comphelper/documentinfo.hxx"
+#include "comphelper/namedvaluecollection.hxx"
 
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/container/XEnumerationAccess.hpp"
+#include "com/sun/star/document/XEventBroadcaster.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
+#include "com/sun/star/frame/GlobalEventBroadcaster.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
+#include "com/sun/star/frame/ModuleManager.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/util/XCloseBroadcaster.hpp"
 
@@ -110,19 +112,17 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
 //=========================================================================
 
 OfficeDocumentsManager::OfficeDocumentsManager(
-            const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
+            const uno::Reference< uno::XComponentContext > & rxContext,
             OfficeDocumentsEventListener * pDocEventListener )
-: m_xSMgr( xSMgr ),
-  m_xDocEvtNotifier( createDocumentEventNotifier( xSMgr ) ),
+: m_xContext( rxContext ),
+  m_xDocEvtNotifier( frame::GlobalEventBroadcaster::create( rxContext ) ),
   m_pDocEventListener( pDocEventListener ),
   m_xDocCloseListener( new OfficeDocumentsCloseListener( this ) )
 {
-    if ( m_xDocEvtNotifier.is() )
-    {
-        // Order is important (multithreaded environment)
-        m_xDocEvtNotifier->addEventListener( this );
-        buildDocumentsList();
-    }
+    // Order is important (multithreaded environment)
+    uno::Reference< document::XEventBroadcaster >(
+        m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->addEventListener( this );
+    buildDocumentsList();
 }
 
 //=========================================================================
@@ -139,8 +139,8 @@ OfficeDocumentsManager::~OfficeDocumentsManager()
 //=========================================================================
 void OfficeDocumentsManager::destroy()
 {
-    if ( m_xDocEvtNotifier.is() )
-        m_xDocEvtNotifier->removeEventListener( this );
+    uno::Reference< document::XEventBroadcaster >(
+        m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->removeEventListener( this );
 }
 
 //=========================================================================
@@ -455,56 +455,10 @@ void SAL_CALL OfficeDocumentsManager::disposing(
 //
 //=========================================================================
 
-// static
-uno::Reference< document::XEventBroadcaster >
-OfficeDocumentsManager::createDocumentEventNotifier(
-        const uno::Reference< lang::XMultiServiceFactory >& rXSMgr )
-{
-    uno::Reference< uno::XInterface > xIfc;
-    try
-    {
-        xIfc = rXSMgr->createInstance(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.GlobalEventBroadcaster" ) ) );
-    }
-    catch ( uno::Exception const & )
-    {
-        // handled below.
-    }
-
-    OSL_ENSURE(
-        xIfc.is(),
-        "Could not instanciate com.sun.star.frame.GlobalEventBroadcaster" );
-
-    if ( xIfc.is() )
-    {
-        uno::Reference< document::XEventBroadcaster > xBC(
-            xIfc, uno::UNO_QUERY );
-
-        OSL_ENSURE(
-            xBC.is(),
-            "com.sun.star.frame.GlobalEventBroadcaster does not implement "
-            "interface com.sun.star.document.XEventBroadcaster!" );
-
-        return xBC;
-    }
-    else
-        return uno::Reference< document::XEventBroadcaster >();
-}
-
-//=========================================================================
 void OfficeDocumentsManager::buildDocumentsList()
 {
-    OSL_ENSURE( m_xDocEvtNotifier.is(),
-                "OfficeDocumentsManager::buildDocumentsList - "
-                "No document event notifier!" );
-
-    uno::Reference< container::XEnumerationAccess > xEnumAccess(
-        m_xDocEvtNotifier, uno::UNO_QUERY_THROW );
-
     uno::Reference< container::XEnumeration > xEnum
-        = xEnumAccess->createEnumeration();
+        = m_xDocEvtNotifier->createEnumeration();
 
     osl::MutexGuard aGuard( m_aMtx );
 
@@ -700,14 +654,7 @@ bool OfficeDocumentsManager::isBasicIDE(
         {
             try
             {
-                m_xModuleMgr
-                    = uno::Reference<
-                        frame::XModuleManager >(
-                            m_xSMgr->createInstance(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.frame.ModuleManager" ) ) ),
-                            uno::UNO_QUERY );
+                m_xModuleMgr = frame::ModuleManager::create( m_xContext );
             }
             catch ( uno::Exception const & )
             {

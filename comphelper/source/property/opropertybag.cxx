@@ -58,10 +58,9 @@ namespace comphelper
     //= OPropertyBag
     //====================================================================
     //--------------------------------------------------------------------
-    OPropertyBag::OPropertyBag( const Reference< XComponentContext >& _rxContext )
+    OPropertyBag::OPropertyBag()
         :OPropertyBag_PBase( GetBroadcastHelper(), this )
         ,::cppu::IEventNotificationHook()
-        ,m_aContext( _rxContext )
         ,m_bAutoAddProperties( false )
         ,m_NotifyListeners(m_aMutex)
         ,m_isModified(false)
@@ -116,9 +115,9 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OPropertyBag::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > SAL_CALL OPropertyBag::Create( SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
     {
-        return *new OPropertyBag( _rxContext );
+        return *new OPropertyBag;
     }
 
     //--------------------------------------------------------------------

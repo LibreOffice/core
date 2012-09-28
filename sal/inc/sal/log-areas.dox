@@ -42,6 +42,7 @@ certain functionality.
 
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
 @li @c vcl.gtk - Gtk+ 2/3 plugin
+@li @c vcl.layout - Widget layout
 
 
 @section Writer

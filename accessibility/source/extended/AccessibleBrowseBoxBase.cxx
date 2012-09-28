@@ -29,14 +29,13 @@
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
 #include <svtools/accessibletableprovider.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
 // ============================================================================
-
-using ::rtl::OUString;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -80,8 +79,8 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         IAccessibleTableProvider&                      rBrowseBox,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
         AccessibleBrowseBoxObjType      eObjType,
-        const ::rtl::OUString&          rName,
-        const ::rtl::OUString&          rDescription ) :
+        const OUString&          rName,
+        const OUString&          rDescription ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
     mxParent( rxParent ),
     mpBrowseBox( &rBrowseBox ),
@@ -100,7 +99,7 @@ AccessibleBrowseBoxBase::~AccessibleBrowseBoxBase()
     if( isAlive() )
     {
         // increment ref count to prevent double call of Dtor
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }
@@ -353,23 +352,13 @@ sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
         const OUString& rServiceName )
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
-
-    Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
-    const OUString* pArrBegin = aSupportedServices.getConstArray();
-    const OUString* pArrEnd = pArrBegin + aSupportedServices.getLength();
-    const OUString* pString = pArrBegin;
-
-    for( ; ( pString != pArrEnd ) && ( rServiceName != *pString ); ++pString )
-        ;
-
-    return pString != pArrEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
+    const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
     return Sequence< OUString >( &aServiceName, 1 );
 }
 
@@ -620,7 +609,7 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccess
 // ----------------------------------------------------------------------------
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccessible >& rxParent, IAccessibleTableProvider& rBrowseBox,
         const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType,
-        const ::rtl::OUString& rName, const ::rtl::OUString& rDescription )
+        const OUString& rName, const OUString& rDescription )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType, rName, rDescription )
 {
 }

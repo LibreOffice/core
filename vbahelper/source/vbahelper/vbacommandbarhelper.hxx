@@ -57,10 +57,10 @@ private:
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xDocCfgMgr; // current document
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
     css::uno::Reference< css::container::XNameAccess > m_xWindowState;
-    rtl::OUString maModuleId;
+    OUString maModuleId;
 
     void Init() throw (css::uno::RuntimeException);
-    sal_Bool hasToolbar( const rtl::OUString& sResourceUrl, const rtl::OUString& sName )  throw (css::uno::RuntimeException);
+    sal_Bool hasToolbar( const OUString& sResourceUrl, const OUString& sName )  throw (css::uno::RuntimeException);
 public:
     VbaCommandBarHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException );
 
@@ -79,16 +79,16 @@ public:
         return m_xWindowState;
     }
     sal_Bool persistChanges() throw (css::uno::RuntimeException);
-    css::uno::Reference< css::container::XIndexAccess > getSettings( const rtl::OUString& sResourceUrl ) throw (css::uno::RuntimeException);
-    void removeSettings( const rtl::OUString& sResourceUrl ) throw (css::uno::RuntimeException);
-    void ApplyChange( const rtl::OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, sal_Bool bTemporary = sal_True ) throw (css::uno::RuntimeException);
+    css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
+    void removeSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
+    void ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, sal_Bool bTemporary = sal_True ) throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() throw (css::uno::RuntimeException);
 
-    const rtl::OUString getModuleId() const { return maModuleId; }
-    rtl::OUString findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const rtl::OUString& sName ) throw (css::uno::RuntimeException);
-    static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const rtl::OUString& sName, bool bMenu = false ) throw (css::uno::RuntimeException);
-    static rtl::OUString generateCustomURL();
+    const OUString getModuleId() const { return maModuleId; }
+    OUString findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName ) throw (css::uno::RuntimeException);
+    static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const OUString& sName, bool bMenu = false ) throw (css::uno::RuntimeException);
+    static OUString generateCustomURL();
 };
 
 #endif //VBA_COMMANDBARHELPER_HXX

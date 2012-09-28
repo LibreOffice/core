@@ -18,8 +18,6 @@
 
 package complex.tdoc;
 
-import lib.MultiMethodTest;
-
 import com.sun.star.lang.XServiceInfo;
 import share.LogWriter;
 

@@ -1184,14 +1184,14 @@ void SAL_CALL OControlModel::setPropertyValues( const Sequence< PropertyValue >&
 void OControlModel::lockInstance( LockAccess )
 {
     m_aMutex.acquire();
-    osl_incrementInterlockedCount( &m_lockCount );
+    osl_atomic_increment( &m_lockCount );
 }
 
 //--------------------------------------------------------------------
 oslInterlockedCount OControlModel::unlockInstance( LockAccess )
 {
     OSL_ENSURE( m_lockCount > 0, "OControlModel::unlockInstance: not locked!" );
-    oslInterlockedCount lockCount = osl_decrementInterlockedCount( &m_lockCount );
+    oslInterlockedCount lockCount = osl_atomic_decrement( &m_lockCount );
     m_aMutex.release();
     return lockCount;
 }

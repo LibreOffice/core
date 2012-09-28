@@ -17,13 +17,11 @@
  */
 package mod._toolkit;
 
-import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XWindow;
 import com.sun.star.awt.tree.XMutableTreeDataModel;
 import com.sun.star.awt.tree.XMutableTreeNode;
 import com.sun.star.awt.tree.XTreeControl;
@@ -31,7 +29,6 @@ import com.sun.star.awt.tree.XTreeNode;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.AnyConverter;
@@ -46,9 +43,7 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.PropertyName;
 import util.SOfficeFactory;
-import util.UITools;
 import util.utils;
 
 

@@ -64,7 +64,7 @@ HF_IdlTypedef::Produce_byData( const client & i_ce ) const
     aTopList.Produce_Term("Defining Type");
 
     HF_IdlTypeText
-        aDefinition( Env(), aTopList.Produce_Definition(), true );
+        aDefinition( Env(), aTopList.Produce_Definition() );
     aDefinition.Produce_byData( TypedefAttr::DefiningType(i_ce) );
 
     CurOut() << new Html::HorizontalLine;

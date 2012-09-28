@@ -43,7 +43,6 @@ $(eval $(call gb_Library_use_libraries,writerfilter_uno,\
     cppu \
     cppuhelper \
     sal \
-    ucbhelper \
     writerfilter \
     $(gb_STDLIBS) \
 ))

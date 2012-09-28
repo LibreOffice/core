@@ -43,26 +43,17 @@ import com.sun.star.lang.XSingleServiceFactory;
 // supported Interfaces
 import com.sun.star.linguistic2.XThesaurus;
 import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XServiceDisplayName;
 
 // Exceptions
 import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
-import com.sun.star.lang.IllegalArgumentException;
-
 //used Interfaces
 import com.sun.star.linguistic2.XMeaning;
 import com.sun.star.lang.Locale;
-import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.EventObject;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
-
 import java.util.ArrayList;
 
 public class SampleThesaurus extends ComponentBase implements
@@ -72,7 +63,7 @@ public class SampleThesaurus extends ComponentBase implements
         XServiceInfo
 {
     PropChgHelper               aPropChgHelper;
-    ArrayList                   aEvtListeners;
+    ArrayList<?>                   aEvtListeners;
     boolean                     bDisposing;
 
     public SampleThesaurus()
@@ -91,7 +82,7 @@ public class SampleThesaurus extends ComponentBase implements
         // 'GetValueToUse' function
         aPropChgHelper  = new PropChgHelper( (XThesaurus) this, aProps );
 
-        aEvtListeners   = new ArrayList();
+        aEvtListeners   = new ArrayList<Object>();
         bDisposing      = false;
     }
 

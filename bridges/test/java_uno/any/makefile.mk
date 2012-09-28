@@ -20,7 +20,7 @@ PRJ = ..$/..$/..
 PRJNAME = bridges
 TARGET = test_javauno_any
 
-PACKAGE = test$/java_uno$/anytest
+PACKAGE = test$/java_uno$/any
 
 ENABLE_EXCEPTIONS = TRUE
 

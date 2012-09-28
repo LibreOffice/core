@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,cui))
 $(eval $(call gb_Module_add_targets,cui,\
 	AllLangResTarget_cui \
 	Library_cui \
+	UI_cui \
 ))
 
 # vim: set noet sw=4 ts=4:

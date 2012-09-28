@@ -64,7 +64,7 @@ import util.DBTools;
 * @see com.sun.star.form.DataAwareControlModel
 * @see com.sun.star.form.component.DatabaseComboBox
 * @see com.sun.star.beans.XPropertyState
-* @see com.sun.star.form.FormControlModel
+* @see com.sun.star.form
 * @see com.sun.star.container.XNamed
 * @see com.sun.star.form.XBoundComponent
 * @see com.sun.star.form.component.ComboBox

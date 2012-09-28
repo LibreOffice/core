@@ -299,6 +299,7 @@ sal_Int32 compileFile(const OString * pathname)
 
     OUString cpp;
     OUString startDir;
+#ifndef SYSTEM_UCPP
     if (osl_getExecutableFile(&cpp.pData) != osl_Process_E_None) {
         OSL_ASSERT(false);
     }
@@ -311,7 +312,9 @@ sal_Int32 compileFile(const OString * pathname)
 #else
     cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("ucpp"));
 #endif
-
+#else // SYSTEM_UCPP
+    cpp = OUString( RTL_CONSTASCII_USTRINGPARAM(UCPP));
+#endif
     oslProcess      hProcess = NULL;
     oslProcessError procError = osl_Process_E_None;
 

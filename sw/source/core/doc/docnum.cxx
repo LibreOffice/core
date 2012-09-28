@@ -1874,7 +1874,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         // which objects are still in the Area.
         // After the move they could come before/after the
         // Position.
-        SwDataChanged aTmp( rPam, 0 );
+        SwDataChanged aTmp( rPam );
     }
 
     SwNodeIndex aIdx( nOffset > 0 ? pEnd->nNode : pStt->nNode, nOffs );

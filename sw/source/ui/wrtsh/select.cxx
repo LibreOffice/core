@@ -71,7 +71,7 @@ void SwWrtShell::Invalidate()
 
 sal_Bool SwWrtShell::SelNearestWrd()
 {
-    MV_KONTEXT(this);
+    SwMvContext aMvContext(this);
     if( !IsInWrd() && !IsEndWrd() && !IsSttWrd() )
         PrvWrd();
     if( IsEndWrd() )
@@ -85,7 +85,7 @@ sal_Bool SwWrtShell::SelWrd(const Point *pPt, sal_Bool )
 {
     sal_Bool bRet;
     {
-        MV_KONTEXT(this);
+        SwMvContext aMvContext(this);
         SttSelect();
         bRet = SwCrsrShell::SelectWord( pPt );
     }
@@ -102,7 +102,7 @@ sal_Bool SwWrtShell::SelWrd(const Point *pPt, sal_Bool )
 void SwWrtShell::SelSentence(const Point *pPt, sal_Bool )
 {
     {
-        MV_KONTEXT(this);
+        SwMvContext aMvContext(this);
         ClearMark();
         SwCrsrShell::GoStartSentence();
         SttSelect();
@@ -118,7 +118,7 @@ void SwWrtShell::SelSentence(const Point *pPt, sal_Bool )
 void SwWrtShell::SelPara(const Point *pPt, sal_Bool )
 {
     {
-        MV_KONTEXT(this);
+        SwMvContext aMvContext(this);
         ClearMark();
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
         SttSelect();
@@ -139,7 +139,7 @@ long SwWrtShell::SelAll()
     {
         if(bBlockMode)
             LeaveBlockMode();
-        MV_KONTEXT(this);
+        SwMvContext aMvContext(this);
         sal_Bool bMoveTable = sal_False;
         SwPosition *pStartPos = 0;
         SwPosition *pEndPos = 0;
@@ -320,7 +320,7 @@ long SwWrtShell::SetCrsr(const Point *pPt, sal_Bool bTextOnly)
 
 long SwWrtShell::SetCrsrKillSel(const Point *pPt, sal_Bool bTextOnly )
 {
-    ACT_KONTEXT(this);
+    SwActContext aActContext(this);
     ResetSelect(pPt,sal_False);
     return SwCrsrShell::SetCrsr(*pPt, bTextOnly);
 }
@@ -350,14 +350,14 @@ long SwWrtShell::ResetSelect(const Point *,sal_Bool)
     }
     else
     {
-        /*  ACT_KONTEXT() macht eine Action auf -
+        /*  SwActContext macht eine Action auf -
             um im Basicablauf keine Probleme mit der
             Shellumschaltung zu bekommen, darf
             GetChgLnk().Call() erst nach
             EndAction() gerufen werden.
         */
         {
-            ACT_KONTEXT(this);
+            SwActContext aActContext(this);
             bSelWrd = bSelLn = sal_False;
             KillPams();
             ClearMark();
@@ -447,7 +447,7 @@ inline sal_Bool operator<(const Point &rP1,const Point &rP2)
 
 long SwWrtShell::ExtSelWrd(const Point *pPt, sal_Bool )
 {
-    MV_KONTEXT(this);
+    SwMvContext aMvContext(this);
     if( IsTableMode() )
         return 1;
 
@@ -509,7 +509,7 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, sal_Bool )
 
 long SwWrtShell::ExtSelLn(const Point *pPt, sal_Bool )
 {
-    MV_KONTEXT(this);
+    SwMvContext aMvContext(this);
     SwCrsrShell::SetCrsr(*pPt);
     if( IsTableMode() )
         return 1;
@@ -569,12 +569,12 @@ void SwWrtShell::EnterStdMode()
     }
     else
     {
-        /*  ACT_KONTEXT() opens and action which has to be
+        /*  SwActContext opens and action which has to be
             closed prior to the call of
             GetChgLnk().Call()
         */
         {
-            ACT_KONTEXT(this);
+            SwActContext aActContext(this);
             bSelWrd = bSelLn = sal_False;
             if( !IsRetainSelection() )
                 KillPams();
@@ -888,7 +888,7 @@ long SwWrtShell::EndDrag(const Point * /*pPt*/, sal_Bool )
 // #i32329# Enhanced table selection
 sal_Bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag )
 {
-    MV_KONTEXT(this);
+    SwMvContext aMvContext(this);
     SttSelect();
     if(SelTblRowCol( rPt, pEnd, bRowDrag ))
     {

@@ -29,8 +29,11 @@
 #ifndef _OSL_MODULE_H_
 #define _OSL_MODULE_H_
 
-#   include <rtl/ustring.h>
-#   include <rtl/tencinfo.h>
+#include "sal/config.h"
+
+#include "rtl/tencinfo.h"
+#include "rtl/ustring.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

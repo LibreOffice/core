@@ -143,6 +143,7 @@ void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
             SetName( aNewLinkName );
         }
 
+        sfx2::SvBaseLinkRef const xThis(this); // keep yourself alive
         Refresh( aFile, aFilter, aArea, GetRefreshDelay() );
     }
 

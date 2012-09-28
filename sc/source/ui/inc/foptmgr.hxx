@@ -42,7 +42,6 @@ namespace formula
     class RefButton;
 }
 class MoreButton;
-class Dialog;
 struct ScQueryParam;
 class ScDocument;
 class ScViewData;
@@ -52,8 +51,7 @@ class ScViewData;
 class ScFilterOptionsMgr
 {
 public:
-            ScFilterOptionsMgr( Dialog*             ptrDlg,
-                                ScViewData*         ptrViewData,
+            ScFilterOptionsMgr( ScViewData*         ptrViewData,
                                 const ScQueryParam& refQueryData,
                                 MoreButton&         refBtnMore,
                                 CheckBox&           refBtnCase,
@@ -74,7 +72,6 @@ public:
     sal_Bool    VerifyPosStr ( const String& rPosStr ) const;
 
 private:
-    Dialog*         pDlg;
     ScViewData*     pViewData;
     ScDocument*     pDoc;
 

@@ -19,136 +19,75 @@
 
 
 #include "ToolPanelModule.hxx"
-#include "ReadOnlyModeObserver.hxx"
+
 #include "framework/FrameworkHelper.hxx"
+#include <com/sun/star/drawing/framework/XTabBar.hpp>
+#include <com/sun/star/drawing/framework/TabBarButton.hpp>
 
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
-
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/compbase1.hxx>
-#include <boost/enable_shared_from_this.hpp>
+#include "strings.hrc"
+#include "sdresid.hxx"
+#include "svtools/toolpanelopt.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+
 using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 
 namespace sd { namespace framework {
 
-namespace {
 
-typedef ::cppu::WeakComponentImplHelper1 <
-      ::com::sun::star::frame::XStatusListener
-    > LocalReadOnlyModeObserverInterfaceBase;
+//===== ToolPanelModule ==================================================
 
-/** This local class enables or disables the ResourceManager of a
-    ToolPanelModule.  It connects to a ReadOnlyModeObserver and is called
-    when the state of the .uno:EditDoc command changes.  When either the
-    ResourceManager or the ReadOnlyModeObserver are disposed then the
-    LocalReadOnlyModeObserver disposes itself.  The link
-    between the ResourceManager and the ReadOnlyModeObserver is removed and
-    the ReadOnlyModeObserver typically looses its last reference and is
-    destroyed.
-*/
-class LocalReadOnlyModeObserver
-    : private MutexOwner,
-      public LocalReadOnlyModeObserverInterfaceBase
+ToolPanelModule::ToolPanelModule (
+    const Reference<frame::XController>& rxController,
+    const OUString& rsRightPaneURL)
+    : ResourceManager(rxController,
+        FrameworkHelper::CreateResourceId(FrameworkHelper::msTaskPaneURL, rsRightPaneURL)),
+      mxControllerManager(rxController,UNO_QUERY)
 {
-public:
-    LocalReadOnlyModeObserver (
-        const Reference<frame::XController>& rxController,
-        const ::rtl::Reference<ResourceManager>& rpResourceManager)
-        : MutexOwner(),
-          LocalReadOnlyModeObserverInterfaceBase(maMutex),
-          mpResourceManager(rpResourceManager),
-          mpObserver(new ReadOnlyModeObserver(rxController))
+    if (mxConfigurationController.is())
     {
-        mpObserver->AddStatusListener(this);
+        if (SvtToolPanelOptions().GetVisibleImpressView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msImpressViewURL);
+        if (SvtToolPanelOptions().GetVisibleOutlineView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msOutlineViewURL);
+        if (SvtToolPanelOptions().GetVisibleNotesView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msNotesViewURL);
+        if (SvtToolPanelOptions().GetVisibleHandoutView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msHandoutViewURL);
+        if (SvtToolPanelOptions().GetVisibleSlideSorterView()==sal_True)
+            AddActiveMainView(FrameworkHelper::msSlideSorterURL);
 
-        Reference<lang::XComponent> xComponent (
-            static_cast<XWeak*>(mpResourceManager.get()), UNO_QUERY);
-        if (xComponent.is())
-            xComponent->addEventListener(this);
+        mxConfigurationController->addConfigurationChangeListener(
+            this,
+            FrameworkHelper::msResourceActivationEvent,
+            Any());
     }
-
-    ~LocalReadOnlyModeObserver (void)
-    {
-    }
-
-    virtual void SAL_CALL disposing (void)
-    {
-        Reference<lang::XComponent> xComponent (static_cast<XWeak*>(mpObserver.get()), UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
-
-        xComponent = Reference<lang::XComponent>(
-            static_cast<XWeak*>(mpResourceManager.get()), UNO_QUERY);
-        if (xComponent.is())
-            xComponent->removeEventListener(this);
-
-    }
-
-    virtual void SAL_CALL disposing (const com::sun::star::lang::EventObject& rEvent)
-        throw(RuntimeException)
-    {
-        if (rEvent.Source == Reference<XInterface>(static_cast<XWeak*>(mpObserver.get())))
-        {
-            mpObserver = NULL;
-        }
-        else if (rEvent.Source == Reference<XInterface>(
-            static_cast<XWeak*>(mpResourceManager.get())))
-        {
-            mpResourceManager = NULL;
-        }
-        dispose();
-    }
-
-    virtual void SAL_CALL statusChanged (const com::sun::star::frame::FeatureStateEvent& rEvent)
-        throw(RuntimeException)
-    {
-        bool bReadWrite (true);
-        if (rEvent.IsEnabled)
-            rEvent.State >>= bReadWrite;
-
-        if (bReadWrite)
-            mpResourceManager->Enable();
-        else
-            mpResourceManager->Disable();
-    }
-
-private:
-    ::rtl::Reference<ResourceManager> mpResourceManager;
-    ::rtl::Reference<ReadOnlyModeObserver> mpObserver;
-
-};
 }
 
-
-
-
-//===== ToolPanelModule ====================================================
-
-void ToolPanelModule::Initialize (const Reference<frame::XController>& rxController)
+ToolPanelModule::~ToolPanelModule (void)
 {
-    ::rtl::Reference<ResourceManager> pResourceManager (
-        new ResourceManager(
-            rxController,
-            FrameworkHelper::CreateResourceId(
-                FrameworkHelper::msTaskPaneURL,
-                FrameworkHelper::msRightPaneURL)));
-    pResourceManager->AddActiveMainView(FrameworkHelper::msImpressViewURL);
-    pResourceManager->AddActiveMainView(FrameworkHelper::msNotesViewURL);
-    pResourceManager->AddActiveMainView(FrameworkHelper::msHandoutViewURL);
-    pResourceManager->AddActiveMainView(FrameworkHelper::msSlideSorterURL);
-
-    new LocalReadOnlyModeObserver(rxController, pResourceManager);
 }
 
+void ToolPanelModule::SaveResourceState (void)
+{
+    SvtToolPanelOptions().SetVisibleImpressView(IsResourceActive(FrameworkHelper::msImpressViewURL));
+    SvtToolPanelOptions().SetVisibleOutlineView(IsResourceActive(FrameworkHelper::msOutlineViewURL));
+    SvtToolPanelOptions().SetVisibleNotesView(IsResourceActive(FrameworkHelper::msNotesViewURL));
+    SvtToolPanelOptions().SetVisibleHandoutView(IsResourceActive(FrameworkHelper::msHandoutViewURL));
+    SvtToolPanelOptions().SetVisibleSlideSorterView(IsResourceActive(FrameworkHelper::msSlideSorterURL));
+}
 
-
+void SAL_CALL ToolPanelModule::notifyConfigurationChange (
+    const ConfigurationChangeEvent& rEvent)
+    throw (RuntimeException)
+{
+    if (!rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent))
+        ResourceManager::notifyConfigurationChange(rEvent);
+}
 
 } } // end of namespace sd::framework
 

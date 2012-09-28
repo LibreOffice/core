@@ -17,13 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BREAKPOINT_HXX
-#define _BREAKPOINT_HXX
+#ifndef BASCTL_BREAKPOINT_HXX
+#define BASCTL_BREAKPOINT_HXX
 
 #include <cstddef>
 #include <vector>
 
 class SbModule;
+
+namespace basctl
+{
 
 struct BreakPoint
 {
@@ -66,6 +69,8 @@ public:
     BreakPoint* remove(BreakPoint* ptr);
 };
 
-#endif  // _BREAKPOINT_HXX
+} // namespace basctl
+
+#endif // BASCTL_BREAKPOINT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

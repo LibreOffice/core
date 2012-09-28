@@ -369,8 +369,17 @@ static BOOL isPopupMenuOpen = NO;
 -(id)windowAttribute {
     // go upstairs until reaching the broken connection
     AquaA11yWrapper * aWrapper = self;
+    int loops = 0;
     while ( [ aWrapper accessibleContext ] -> getAccessibleParent().is() ) {
-        aWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ aWrapper accessibleContext ] -> getAccessibleParent() -> getAccessibleContext() ];
+        AquaA11yWrapper *aTentativeParentWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ aWrapper accessibleContext ] -> getAccessibleParent() -> getAccessibleContext() ];
+        // Quick-and-dirty fix for infinite loop after fixing crash in
+        // fdo#47275
+        if ( aTentativeParentWrapper == aWrapper )
+            break;
+        // Even dirtier fix for infinite loop in fdo#55156
+        if ( loops++ == 100 )
+            break;
+        aWrapper = aTentativeParentWrapper;
         [ aWrapper autorelease ];
     }
     // get associated NSWindow
@@ -970,15 +979,9 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
             com::sun::star::awt::Point location = rxAccessibleComponent -> getLocationOnScreen();
             com::sun::star::awt::Point hitPoint ( point.X - location.X , point.Y - location.Y); 
             Reference < XAccessible > rxAccessible = rxAccessibleComponent -> getAccessibleAtPoint ( hitPoint );
-            if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {
-                if ( rxAccessible -> getAccessibleContext() -> getAccessibleChildCount() > 0 ) {
-                    hitChild = hitTestRunner ( point, rxAccessible -> getAccessibleContext() );
-                    if ( ! hitChild.is() ) {
-                        hitChild = rxAccessible -> getAccessibleContext();
-                    }
-                } else {
-                    hitChild = rxAccessible -> getAccessibleContext();
-                }
+            if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() &&
+                 rxAccessible -> getAccessibleContext() -> getAccessibleChildCount() == 0 ) {
+                hitChild = rxAccessible -> getAccessibleContext();
             }
         } 
         if ( !hitChild.is() && rxAccessibleContext -> getAccessibleChildCount() > 0 ) { // special treatment for e.g. comboboxes

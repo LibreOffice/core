@@ -104,6 +104,13 @@ void IosSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
+void IosSalGraphics::ClearDevFontCache()
+{
+    SalData* pSalData = GetSalData();
+    delete pSalData->mpFontList;
+    pSalData->mpFontList = NULL;
+}
+
 void IosSalGraphics::GetDevFontSubstList( OutputDevice* )
 {
     // nothing to do since there are no device-specific fonts on Ios

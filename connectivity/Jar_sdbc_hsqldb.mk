@@ -41,7 +41,7 @@ $(eval $(call gb_Jar_set_packageroot,sdbc_hsqldb,com))
 $(eval $(call gb_Jar_add_packagedir,sdbc_hsqldb,org))
 
 $(eval $(call gb_Jar_add_sourcefiles,sdbc_hsqldb,\
-	connectivity/com/sun/star/sdbcx/comp/hsqldb/FileSystemRuntimeException \
+	connectivity/org/hsqldb/lib/FileSystemRuntimeException \
 	connectivity/com/sun/star/sdbcx/comp/hsqldb/NativeInputStreamHelper \
 	connectivity/com/sun/star/sdbcx/comp/hsqldb/NativeLibraries \
 	connectivity/com/sun/star/sdbcx/comp/hsqldb/NativeOutputStreamHelper \

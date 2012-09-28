@@ -167,8 +167,10 @@ storeError OStoreLockBytes::readAt (
                 nOffset, m_xNode->capacity());
 
             sal_uInt32 nLength = sal_uInt32(aDescr.m_nLength);
-            nLength = SAL_MIN(nLength, nBytes);
-
+            if(nLength > nBytes)
+            {
+                nLength = nBytes;
+            }
             memcpy (
                 &pData[rnDone],
                 &m_xNode->m_pData[aDescr.m_nOffset],
@@ -186,7 +188,10 @@ storeError OStoreLockBytes::readAt (
                 nOffset - m_xNode->capacity(), OStoreDataPageData::capacity(m_xNode->m_aDescr)); // @@@
 
             sal_uInt32 nLength = sal_uInt32(aDescr.m_nLength);
-            nLength = SAL_MIN(nLength, nBytes);
+            if(nLength > nBytes)
+            {
+                nLength = nBytes;
+            }
 
             storeError eErrCode = aPage.read (aDescr.m_nPage, aData, *m_xManager);
             if (eErrCode != store_E_None)
@@ -259,7 +264,10 @@ storeError OStoreLockBytes::writeAt (
                 nOffset, m_xNode->capacity());
 
             sal_uInt32 nLength = sal_uInt32(aDescr.m_nLength);
-            nLength = SAL_MIN(nLength, nBytes);
+            if(nLength > nBytes)
+            {
+                nLength = nBytes;
+            }
 
             memcpy (
                 &m_xNode->m_pData[aDescr.m_nOffset],
@@ -312,7 +320,10 @@ storeError OStoreLockBytes::writeAt (
             }
 
             // Modify data page.
-            nLength = SAL_MIN(nLength, nBytes);
+            if(nLength > nBytes)
+            {
+                nLength = nBytes;
+            }
             memcpy (
                 &xData->m_pData[aDescr.m_nOffset],
                 &pData[rnDone], nLength);

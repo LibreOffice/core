@@ -11,7 +11,15 @@
 #include <vector>
 
 #include "officecfg/Office/Common.hxx"
+#include "officecfg/Office/Impress.hxx"
+
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include <comphelper/processfactory.hxx>
+#include <comphelper/configuration.hxx>
+#include <sal/log.hxx>
 
 #include "sddll.hxx"
 
@@ -25,21 +33,33 @@
 using namespace std;
 using namespace sd;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 using rtl::OString;
 using namespace ::osl;
+using namespace ::comphelper;
 
-// struct ClientInfoInternal:
-//     ClientInfo
-// {
-//     osl::StreamSocket mStreamSocket;
-//     rtl::OUString mPin;
-//     ClientInfoInternal( const rtl::OUString rName,
-//                         const rtl::OUString rAddress,
-//                         osl::StreamSocket &rSocket, rtl::OUString rPin ):
-//             ClientInfo( rName, rAddress ),
-//             mStreamSocket( rSocket ),
-//             mPin( rPin ) {}
-// };
+namespace sd {
+    /**
+     * Used to keep track of clients that have attempted to connect, but haven't
+     * yet been approved.
+     */
+    struct ClientInfoInternal:
+        ClientInfo
+    {
+        BufferedStreamSocket *mpStreamSocket;
+        rtl::OUString mPin;
+
+        ClientInfoInternal( const rtl::OUString rName,
+                            const rtl::OUString rAddress,
+                            BufferedStreamSocket *pSocket, rtl::OUString rPin ):
+                ClientInfo( rName, rAddress ),
+                mpStreamSocket( pSocket ),
+                mPin( rPin ) {}
+    };
+}
 
 RemoteServer::RemoteServer() :
     Thread( "RemoteServerThread" ),
@@ -56,21 +76,26 @@ RemoteServer::~RemoteServer()
 
 void RemoteServer::execute()
 {
+    SAL_INFO( "sdremote", "RemoteServer::execute called" );
     osl::SocketAddr aAddr( "0", PORT );
     if ( !mSocket.bind( aAddr ) )
     {
-        // Error binding
+        SAL_WARN( "sdremote", "bind failed" << mSocket.getErrorAsString() );
+        return;
     }
 
     if ( !mSocket.listen(3) )
     {
-        // Error listening
+        SAL_WARN( "sdremote", "listen failed" << mSocket.getErrorAsString() );
+        return;
     }
     while ( true )
     {
         StreamSocket aSocket;
+        SAL_INFO( "sdremote", "waiting on accept" );
         if ( mSocket.acceptConnection( aSocket ) == osl_Socket_Error )
         {
+            SAL_WARN( "sdremote", "accept failed" << mSocket.getErrorAsString() );
             return; // Closed, or other issue.
         }
         BufferedStreamSocket *pSocket = new BufferedStreamSocket( aSocket);
@@ -89,22 +114,55 @@ void RemoteServer::execute()
             OUString aAddress = aClientAddr.getHostname();
 
             MutexGuard aGuard( mDataMutex );
-            mAvailableClients.push_back( new ClientInfoInternal(
+            ClientInfoInternal* pClient = new ClientInfoInternal(
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
                     aAddress, pSocket, OStringToOUString( aPin,
-                    RTL_TEXTENCODING_UTF8 ) ) );
+                    RTL_TEXTENCODING_UTF8 ) );
+            mAvailableClients.push_back( pClient );
 
             // Read off any additional non-empty lines
+            // We know that we at least have the empty termination line to read.
             do
             {
                 pSocket->readLine( aLine );
             }
             while ( aLine.getLength() > 0 );
+
+            // Check if we already have this server.
+            Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
+            Sequence< OUString > aNames = xConfig->getElementNames();
+            bool aFound = false;
+            for ( int i = 0; i < aNames.getLength(); i++ )
+            {
+                if ( aNames[i].equals( pClient->mName ) )
+                {
+                    Reference<XNameAccess> xSetItem( xConfig->getByName(aNames[i]), UNO_QUERY );
+                    Any axPin(xSetItem->getByName("PIN"));
+                    OUString sPin;
+                    axPin >>= sPin;
+
+                    if ( sPin.equals( pClient->mPin ) ) {
+                        SAL_INFO( "sdremote", "client found on validated list -- connecting" );
+                        connectClient( pClient, sPin );
+                        aFound = true;
+                        break;
+                    }
+                }
+
+            }
+            // Pin not found so inform the client.
+            if ( !aFound )
+            {
+                SAL_INFO( "sdremote", "client not found on validated list" );
+                pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
+                            strlen( "LO_SERVER_VALIDATING_PIN\n\n" ) );
+            }
         } else {
+            SAL_INFO( "sdremote", "client failed to send LO_SERVER_CLIENT_PAIR, ignoring" );
             delete pSocket;
         }
     }
-
+    spServer = NULL; // Object is destroyed when Thread::execute() ends.
 }
 
 RemoteServer *sd::RemoteServer::spServer = NULL;
@@ -163,10 +221,11 @@ void RemoteServer::removeCommunicator( Communicator* mCommunicator )
 
 std::vector<ClientInfo*> RemoteServer::getClients()
 {
-    if ( !spServer )
-        std::vector<ClientInfo*>();
-    MutexGuard aGuard( spServer->mDataMutex );
     std::vector<ClientInfo*> aClients;
+    if ( !spServer )
+        return aClients;
+
+    MutexGuard aGuard( spServer->mDataMutex );
     aClients.assign( spServer->mAvailableClients.begin(),
                      spServer->mAvailableClients.end() );
     return aClients;
@@ -174,12 +233,42 @@ std::vector<ClientInfo*> RemoteServer::getClients()
 
 sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
 {
+    SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )
         return false;
 
     ClientInfoInternal *apClient = (ClientInfoInternal*) pClient;
     if ( apClient->mPin.equals( aPin ) )
     {
+        // Save in settings first
+        boost::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
+        Reference< XNameContainer > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get( aChanges );
+
+        Reference<XSingleServiceFactory> xChildFactory (
+            xConfig, UNO_QUERY);
+        Reference<XNameReplace> xChild( xChildFactory->createInstance(), UNO_QUERY);
+                Any aValue;
+        if (xChild.is())
+        {
+            // Check whether the client is already saved
+            bool aSaved = false;
+            Sequence< OUString > aNames = xConfig->getElementNames();
+            for ( int i = 0; i < aNames.getLength(); i++ )
+            {
+                if ( aNames[i].equals( apClient->mName ) )
+                {
+                    xConfig->replaceByName( apClient->mName, makeAny( xChild ) );
+                    aSaved = true;
+                    break;
+                }
+            }
+            if ( !aSaved )
+                xConfig->insertByName( apClient->mName, makeAny( xChild ) );
+            aValue <<= OUString( apClient->mPin );
+            xChild->replaceByName("PIN", aValue);
+            aChanges->commit();
+        }
+
         Communicator* pCommunicator = new Communicator( apClient->mpStreamSocket );
         MutexGuard aGuard( spServer->mDataMutex );
 
@@ -206,6 +295,7 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
 void SdDLL::RegisterRemotes()
 {
     // Disable unless in experimental mode for now
+    SAL_INFO( "sdremote", "SdDLL::RegisterRemotes called" );
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
         return;
@@ -213,5 +303,15 @@ void SdDLL::RegisterRemotes()
     sd::RemoteServer::setup();
     sd::DiscoveryService::setup();
 
+}
+
+bool RemoteServer::isBluetoothDiscoverable()
+{
+    return BluetoothServer::isDiscoverable();
+}
+
+void RemoteServer::setBluetoothDiscoverable( bool aDiscoverable )
+{
+    BluetoothServer::setDiscoverable( aDiscoverable );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

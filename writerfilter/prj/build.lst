@@ -1,3 +1,3 @@
-wf	writerfilter	: soltools sal BOOST:boost configmgr cppu cppuhelper ucbhelper tools svx LIBXSLT:libxslt oox test NULL
+wf	writerfilter	: soltools sal BOOST:boost configmgr cppu cppuhelper tools svx LIBXSLT:libxslt oox test NULL
 wf	writerfilter	usr1	-	all	wf_mkout NULL
 wf	writerfilter\prj	nmake	-	all	wf_prj NULL

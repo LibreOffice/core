@@ -187,6 +187,12 @@
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
       <FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
     </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="72">
+      <FormatCode>[CURRENCY]* #,##0;-[CURRENCY]* #,##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="73">
+      <FormatCode>[CURRENCY]* #,##0.00;-[CURRENCY]* #,##0.00</FormatCode>
+    </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
       <FormatCode>0%</FormatCode>
     </FormatElement>

@@ -39,34 +39,17 @@ namespace comphelper
 COMPHELPER_DLLPUBLIC void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr);
 
 /**
- * This function get the process service factory. If no service factory is set the function returns
- * a null interface.
+ * This function gets the process service factory.
+ *
+ * If no service factory is set the function throws a RuntimeException.
  *
  * @author Juergen Schmidt
  */
 COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getProcessServiceFactory();
 
-/** creates a component, using the process factory if set
-    @see getProcessServiceFactory
-    @see setProcessServiceFactory
-*/
-COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    createProcessComponent(
-        const ::rtl::OUString& _rServiceSpecifier
-    ) SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
+/** Obtains a component context from a service factory.
 
-/** creates a component with arguments, using the process factory if set
-
-    @see getProcessServiceFactory
-    @see setProcessServiceFactory
-*/
-COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    createProcessComponentWithArguments(
-        const ::rtl::OUString& _rServiceSpecifier,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArgs
-    ) SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
-
-/** Tries to obtain a component context from a service factory.
+    Throws a RuntimeException if no component context can be obtained.
 
     @param factory may be null
     @return may be null
@@ -79,7 +62,8 @@ getComponentContext(
 
 /**
  * This function gets the process service factory's default component context.
- * If no service factory is set the function returns a null interface.
+ *
+ * Throws a RuntimeException if no component context can be obtained.
  */
 COMPHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >

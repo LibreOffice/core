@@ -23,6 +23,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
@@ -30,7 +31,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configurationhelper.hxx>
 
@@ -252,7 +252,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
             aUserTemplateURL += aExt;
 
             uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
-                ucb::SimpleFileAccess::create( ::comphelper::ComponentContext(xFactory).getUNOContext() ) );
+                ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
 
             ::rtl::OUString aBackupURL;
             ::osl::Security().getConfigDir(aBackupURL);
@@ -383,11 +383,10 @@ String SfxObjectFactory::GetModuleName() const
 {
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-        css::uno::Reference< css::container::XNameAccess > xModuleManager(
-            xSMGR->createInstance("com.sun.star.frame.ModuleManager"),
-            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
+            css::frame::ModuleManager::create(xContext));
 
         ::rtl::OUString sDocService(GetDocumentServiceName());
         ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(sDocService) );

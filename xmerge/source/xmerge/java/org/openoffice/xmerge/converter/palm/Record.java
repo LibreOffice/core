@@ -30,7 +30,6 @@ import java.io.IOException;
  *  <p>Note that it is not associated with a <code>Record</code> number
  *  or ID.</p>
  *
- *  @author  Akhil Arora, Herbie Ong
  *  @see     PalmDocument
  *  @see     PalmDB
  */

@@ -23,7 +23,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.wizards.common.Resource;
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * New Interface which gives us the possibility to switch on the fly between the old

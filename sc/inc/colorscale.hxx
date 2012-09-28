@@ -86,6 +86,10 @@ public:
 
     ScColorScaleEntryType GetType() const;
     void SetType( ScColorScaleEntryType eType );
+
+#if DUMP_FORMAT_INFO
+    void dumpInfo(rtl::OUStringBuffer& rBuf) const;
+#endif
 };
 
 namespace databar
@@ -228,7 +232,7 @@ public:
     size_t size() const;
 
 #if DUMP_FORMAT_INFO
-    virtual void dumpInfo() const;
+    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
 #endif
 };
 
@@ -252,7 +256,7 @@ public:
     virtual condformat::ScFormatEntryType GetType() const;
 
 #if DUMP_FORMAT_INFO
-    virtual void dumpInfo() const;
+    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
 #endif
 private:
     double getMin(double nMin, double nMax) const;

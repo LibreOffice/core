@@ -89,8 +89,6 @@ private: //member
         ::com::sun::star::uno::Sequence< double > >*  m_pSimpleTicks;
     ::std::vector< ::std::vector< TickInfo > >*       m_pInfoTicks;
     const ExplicitIncrementData& m_rIncrement;
-    //iteration from m_nMinDepth to m_nMaxDepth
-    sal_Int32   m_nMinDepth;
     sal_Int32   m_nMaxDepth;
     sal_Int32   m_nTickCount;
     sal_Int32*  m_pnPositions; //current positions in the different sequences

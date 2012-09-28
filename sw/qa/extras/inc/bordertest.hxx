@@ -30,13 +30,11 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
-using rtl::OUString;
-
 #ifndef bordertest_hxx
 #define bordertest_hxx
 
-typedef std::map<rtl::OUString, com::sun::star::table::BorderLine> BorderLineMap;
-typedef std::pair<rtl::OUString, com::sun::star::table::BorderLine> StringBorderPair;
+typedef std::map<OUString, com::sun::star::table::BorderLine> BorderLineMap;
+typedef std::pair<OUString, com::sun::star::table::BorderLine> StringBorderPair;
 
 using namespace com::sun::star;
 
@@ -135,7 +133,7 @@ public:
             if (xServiceInfo->supportsService("com.sun.star.text.TextTable"))
             {
                 uno::Reference<text::XTextTable> const xTextTable(xServiceInfo, uno::UNO_QUERY_THROW);
-                uno::Sequence<rtl::OUString> const cells = xTextTable->getCellNames();
+                uno::Sequence<OUString> const cells = xTextTable->getCellNames();
                 uno::Sequence< uno::Sequence< sal_Int32 > > borderWidthSequence;
                 sal_Int32 nLength = cells.getLength();
 

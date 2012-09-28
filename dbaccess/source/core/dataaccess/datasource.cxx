@@ -40,6 +40,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -141,12 +142,12 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
     DBG_CTOR( FlushNotificationAdapter, NULL );
     OSL_ENSURE( _rxBroadcaster.is(), "FlushNotificationAdapter::FlushNotificationAdapter: invalid flushable!" );
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         if ( _rxBroadcaster.is() )
             _rxBroadcaster->addFlushListener( this );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
     OSL_ENSURE( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
 }
 
@@ -341,7 +342,7 @@ void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang:
     TSharedConnectionMap::iterator aFind = m_aSharedConnection.find(xConnection);
     if ( m_aSharedConnection.end() != aFind )
     {
-        osl_decrementInterlockedCount(&aFind->second->second.nALiveCount);
+        osl_atomic_decrement(&aFind->second->second.nALiveCount);
         if ( !aFind->second->second.nALiveCount )
         {
             ::comphelper::disposeComponent(aFind->second->second.xMasterConnection);
@@ -404,7 +405,7 @@ void OSharedConnectionManager::addEventListener(const Reference<XConnection>& _r
     Reference<XComponent> xComp(_rxConnection,UNO_QUERY);
     xComp->addEventListener(this);
     OSL_ENSURE( m_aConnections.end() != _rIter , "Iterator is end!");
-    osl_incrementInterlockedCount(&_rIter->second.nALiveCount);
+    osl_atomic_increment(&_rIter->second.nALiveCount);
 }
 
 namespace
@@ -600,8 +601,7 @@ Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames(  ) throw 
 Reference< XInterface > ODatabaseSource::Create( const Reference< XComponentContext >& _rxContext )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::Create" );
-    ::comphelper::ComponentContext aContext( _rxContext );
-    Reference< XSingleServiceFactory > xDBContext( aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ), UNO_QUERY_THROW );
+    Reference< XDatabaseContext > xDBContext( DatabaseContext::create(_rxContext) );
     return xDBContext->createInstance();
 }
 

@@ -110,7 +110,6 @@ public:
     void AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
 
 private:
-    const CondFormat& mrCondFormat;
     std::vector< ColorScaleRuleModelEntry > maColorScaleRuleEntries;
 
     sal_uInt32 mnCfvo;
@@ -130,7 +129,6 @@ public:
     ScDataBarFormatData* getDataBarFormatData() { return mpFormat; }
 
 private:
-    const CondFormat& mrCondFormat;
     ScDataBarFormatData* mpFormat;
 
     boost::scoped_ptr<ColorScaleRuleModelEntry> mpUpperLimit;

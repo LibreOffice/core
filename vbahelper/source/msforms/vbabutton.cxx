@@ -24,22 +24,22 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-const static rtl::OUString LABEL( RTL_CONSTASCII_USTRINGPARAM("Label") );
+const static OUString LABEL( "Label" );
 ScVbaButton::ScVbaButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
 }
 
 // Attributes
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaButton::getCaption() throw (css::uno::RuntimeException)
 {
-    rtl::OUString Label;
+    OUString Label;
     m_xProps->getPropertyValue( LABEL ) >>= Label;
     return Label;
 }
 
 void SAL_CALL
-ScVbaButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
+ScVbaButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
@@ -110,20 +110,20 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaButton::getFont() throw (uno::
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString
+OUString
 ScVbaButton::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaButton"));
+    return OUString("ScVbaButton");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaButton::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.Button" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.Button";
     }
     return aServiceNames;
 }

@@ -87,6 +87,7 @@ public:
 
     ServerFont*                 CacheFont( const FontSelectPattern& );
     void                        UncacheFont( ServerFont& );
+    void                        ClearFontCache();
     void                        InvalidateAllGlyphs();
 
 protected:
@@ -207,7 +208,6 @@ public:
     const unsigned char* GetTable( const char* pName, sal_uLong* pLength );
     int                 GetEmUnits() const;
     const FT_Size_Metrics& GetMetricsFT() const { return maSizeFT->metrics; }
-    int                 GetGlyphKernValue( int, int ) const;
     const ImplFontCharMap* GetImplFontCharMap() const;
     bool                GetFontCapabilities(vcl::FontCapabilities &) const;
 
@@ -339,7 +339,7 @@ class ServerFontLayoutEngine
 {
 public:
     virtual         ~ServerFontLayoutEngine() {}
-    virtual bool    operator()( ServerFontLayout&, ImplLayoutArgs& );
+    virtual bool    layout(ServerFontLayout&, ImplLayoutArgs&) = 0;
 };
 
 // =======================================================================
@@ -401,7 +401,6 @@ public:
     virtual ~ExtraKernInfo() {}
 
     int     GetUnscaledKernPairs( ImplKernPairData** ) const;
-    int     GetUnscaledKernValue( sal_Unicode cLeft, sal_Unicode cRight ) const;
 
 protected:
     mutable bool mbInitialized;

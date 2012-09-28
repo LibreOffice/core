@@ -42,6 +42,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <sot/storage.hxx>
+#include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -60,6 +61,11 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
+#include <cassert>
+
+namespace basctl
+{
+
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -69,6 +75,9 @@ using namespace ::com::sun::star::ui::dialogs;
 
 
 typedef ::cppu::WeakImplHelper1< task::XInteractionHandler > HandlerImpl_BASE;
+
+namespace
+{
 
 class DummyInteractionHandler  : public HandlerImpl_BASE
 {
@@ -88,30 +97,28 @@ public:
 };
 
 //----------------------------------------------------------------------------
-//  BasicLibUserData
+//  LibUserData
 //----------------------------------------------------------------------------
-class BasicLibUserData
+class LibUserData
 {
 private:
-    ScriptDocument      m_aDocument;
+    ScriptDocument m_aDocument;
 
 public:
-                    BasicLibUserData( const ScriptDocument& rDocument ) : m_aDocument( rDocument ) { }
-                    virtual         ~BasicLibUserData() {};
+    LibUserData (ScriptDocument const& rDocument) : m_aDocument(rDocument) { }
+    virtual ~LibUserData() {};
 
-    const ScriptDocument&
-                    GetDocument() const { return m_aDocument; }
+    const ScriptDocument& GetDocument() const { return m_aDocument; }
 };
 
-
 //----------------------------------------------------------------------------
-//  BasicLibLBoxString
+//  LibLBoxString
 //----------------------------------------------------------------------------
 
-class BasicLibLBoxString : public SvLBoxString
+class LibLBoxString : public SvLBoxString
 {
 public:
-    BasicLibLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
+    LibLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
     virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
@@ -119,14 +126,14 @@ public:
 
 //----------------------------------------------------------------------------
 
-void BasicLibLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
+void LibLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
 {
     // Change text color if library is read only:
     bool bReadOnly = false;
     if (pEntry && pEntry->GetUserData())
     {
         ScriptDocument aDocument(
-            static_cast< BasicLibUserData * >(pEntry->GetUserData())->
+            static_cast<LibUserData*>(pEntry->GetUserData())->
             GetDocument() );
 
         rtl::OUString aLibName(
@@ -147,16 +154,18 @@ void BasicLibLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvL
         rDev.DrawText(rPos, GetText());
 }
 
+} // namespace
+
 
 //----------------------------------------------------------------------------
-//  BasicCheckBox
+//  basctl::CheckBox
 //----------------------------------------------------------------------------
 
-BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId )
+CheckBox::CheckBox( Window* pParent, const ResId& rResId )
     :SvTabListBox( pParent, rResId )
+    ,eMode(ObjectMode::Module)
     ,m_aDocument( ScriptDocument::getApplicationScriptDocument() )
 {
-    nMode = NEWOBJECTMODE_MOD;
     long aTabs_[] = { 1, 12 };  // TabPos needs at least one...
                                 // 12 because of the CheckBox
     SetTabs( aTabs_ );
@@ -165,7 +174,7 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId )
 
 //----------------------------------------------------------------------------
 
-BasicCheckBox::~BasicCheckBox()
+CheckBox::~CheckBox()
 {
     delete pCheckButton;
 
@@ -173,18 +182,18 @@ BasicCheckBox::~BasicCheckBox()
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
     {
-        delete static_cast<BasicLibUserData*>(pEntry->GetUserData());
+        delete static_cast<LibUserData*>(pEntry->GetUserData());
         pEntry = Next( pEntry );
     }
 }
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::Init()
+void CheckBox::Init()
 {
     pCheckButton = new SvLBoxButtonData(this);
 
-    if ( nMode == LIBMODE_CHOOSER )
+    if (eMode == ObjectMode::Library)
         EnableCheckButton( pCheckButton );
     else
         EnableCheckButton( 0 );
@@ -194,11 +203,11 @@ void BasicCheckBox::Init()
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::SetMode( NewObjectMode n )
+void CheckBox::SetMode (ObjectMode::Mode e)
 {
-    nMode = n;
+    eMode = e;
 
-    if ( nMode == LIBMODE_CHOOSER )
+    if (eMode == ObjectMode::Library)
         EnableCheckButton( pCheckButton );
     else
         EnableCheckButton( 0 );
@@ -206,14 +215,14 @@ void BasicCheckBox::SetMode( NewObjectMode n )
 
 //----------------------------------------------------------------------------
 
-SvLBoxEntry* BasicCheckBox::DoInsertEntry( const String& rStr, sal_uLong nPos )
+SvLBoxEntry* CheckBox::DoInsertEntry( const String& rStr, sal_uLong nPos )
 {
     return SvTabListBox::InsertEntryToColumn( rStr, nPos, 0 );
 }
 
 //----------------------------------------------------------------------------
 
-SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
+SvLBoxEntry* CheckBox::FindEntry( const String& rName )
 {
     sal_uLong nCount = GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; i++ )
@@ -228,7 +237,7 @@ SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::CheckEntryPos( sal_uLong nPos )
+void CheckBox::CheckEntryPos( sal_uLong nPos )
 {
     if ( nPos < GetEntryCount() )
     {
@@ -241,7 +250,7 @@ void BasicCheckBox::CheckEntryPos( sal_uLong nPos )
 
 //----------------------------------------------------------------------------
 
-bool BasicCheckBox::IsChecked( sal_uLong nPos ) const
+bool CheckBox::IsChecked( sal_uLong nPos ) const
 {
     if ( nPos < GetEntryCount() )
         return GetCheckButtonState(GetEntry(nPos)) == SV_BUTTON_CHECKED;
@@ -250,18 +259,18 @@ bool BasicCheckBox::IsChecked( sal_uLong nPos ) const
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
+void CheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
 {
     SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2, eButtonKind );
 
-    if ( nMode == NEWOBJECTMODE_MOD )
+    if (eMode == ObjectMode::Module)
     {
         // initialize all columns with own string class (column 0 == bitmap)
         sal_uInt16 nCount = pEntry->ItemCount();
         for ( sal_uInt16 nCol = 1; nCol < nCount; ++nCol )
         {
             SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
-            BasicLibLBoxString* pStr = new BasicLibLBoxString( pEntry, 0, pCol->GetText() );
+            LibLBoxString* pStr = new LibLBoxString( pEntry, 0, pCol->GetText() );
             pEntry->ReplaceItem( pStr, nCol );
         }
     }
@@ -269,9 +278,9 @@ void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const
 
 //----------------------------------------------------------------------------
 
-sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool CheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
-    if ( nMode != NEWOBJECTMODE_MOD )
+    if (eMode != ObjectMode::Module)
         return false;
 
     DBG_ASSERT( pEntry, "Kein Eintrag?" );
@@ -317,9 +326,9 @@ sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 
 //----------------------------------------------------------------------------
 
-sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewName )
+sal_Bool CheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewName )
 {
-    bool bValid = ( rNewName.getLength() <= 30 ) && BasicIDE::IsValidSbxName( rNewName );
+    bool bValid = rNewName.getLength() <= 30 && IsValidSbxName(rNewName);
     rtl::OUString aOldName( GetEntryText( pEntry, 0 ) );
     if ( bValid && ( aOldName != rNewName ) )
     {
@@ -333,9 +342,8 @@ sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& r
             if ( xDlgLibContainer.is() )
                 xDlgLibContainer->renameLibrary( aOldName, rNewName );
 
-            BasicIDE::MarkDocumentModified( m_aDocument );
-            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-            if ( pBindings )
+            MarkDocumentModified( m_aDocument );
+            if (SfxBindings* pBindings = GetBindingsPtr())
             {
                 pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
                 pBindings->Update( SID_BASICIDE_LIBSELECTOR );
@@ -370,7 +378,7 @@ sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& r
 
 IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
 {
-    if (BasicIDE::IsValidSbxName(aEdit.GetText()))
+    if (IsValidSbxName(aEdit.GetText()))
         EndDialog(1);
     else
     {
@@ -381,7 +389,7 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
     return 0;
 }
 
-NewObjectDialog::NewObjectDialog(Window * pParent, NewObjectMode nMode,
+NewObjectDialog::NewObjectDialog(Window * pParent, ObjectMode::Mode eMode,
                                  bool bCheckName)
     : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
         aText( this, IDEResId( RID_FT_NEWLIB ) ),
@@ -392,20 +400,22 @@ NewObjectDialog::NewObjectDialog(Window * pParent, NewObjectMode nMode,
     FreeResource();
     aEdit.GrabFocus();
 
-    switch (nMode)
+    switch (eMode)
     {
-    case NEWOBJECTMODE_LIB:
-        SetText( IDE_RESSTR(RID_STR_NEWLIB) );
-        break;
-    case NEWOBJECTMODE_MOD:
-        SetText( IDE_RESSTR(RID_STR_NEWMOD) );
-        break;
-    case NEWOBJECTMODE_METH:
-        SetText( IDE_RESSTR(RID_STR_NEWMETH) );
-        break;
-    default:
-        SetText( IDE_RESSTR(RID_STR_NEWDLG) );
-        break;
+        case ObjectMode::Library:
+            SetText( IDE_RESSTR(RID_STR_NEWLIB) );
+            break;
+        case ObjectMode::Module:
+            SetText( IDE_RESSTR(RID_STR_NEWMOD) );
+            break;
+        case ObjectMode::Method:
+            SetText( IDE_RESSTR(RID_STR_NEWMETH) );
+            break;
+        case ObjectMode::Dialog:
+            SetText( IDE_RESSTR(RID_STR_NEWDLG) );
+            break;
+        default:
+            assert(false);
     }
 
     if (bCheckName)
@@ -516,7 +526,7 @@ LibPage::LibPage( Window * pParent )
 
     aBasicsBox.SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
 
-    aLibBox.SetMode( NEWOBJECTMODE_MOD );
+    aLibBox.SetMode(ObjectMode::Module);
     aLibBox.EnableInplaceEditing(true);
     aLibBox.SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
     aCloseButton.GrabFocus();
@@ -538,7 +548,7 @@ LibPage::~LibPage()
     sal_uInt16 nCount = aBasicsBox.GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        BasicDocumentEntry* pEntry = (BasicDocumentEntry*)aBasicsBox.GetEntryData( i );
+        DocumentEntry* pEntry = (DocumentEntry*)aBasicsBox.GetEntryData( i );
         delete pEntry;
     }
 }
@@ -649,14 +659,9 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         DBG_ASSERT( pCurEntry, "Entry?!" );
         String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if ( pDispatcher )
-        {
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
                                     SFX_CALLMODE_ASYNCHRON, &aDocItem, &aLibNameItem, 0L );
-        }
         EndTabDialog( 1 );
         return 0;
     }
@@ -682,24 +687,24 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         Reference< script::XLibraryContainer > xModLibContainer = m_aCurDocument.getLibraryContainer( E_SCRIPTS );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
         {
-            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-            if ( pIDEShell )
-                pIDEShell->GetViewFrame()->GetWindow().EnterWait();
+            Shell* pShell = GetShell();
+            if (pShell)
+                pShell->GetViewFrame()->GetWindow().EnterWait();
             xModLibContainer->loadLibrary( aLibName );
-            if ( pIDEShell )
-                pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
+            if (pShell)
+                pShell->GetViewFrame()->GetWindow().LeaveWait();
         }
 
         // load dialog library (if not loaded)
         Reference< script::XLibraryContainer > xDlgLibContainer = m_aCurDocument.getLibraryContainer( E_DIALOGS );
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && !xDlgLibContainer->isLibraryLoaded( aLibName ) )
         {
-            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-            if ( pIDEShell )
-                pIDEShell->GetViewFrame()->GetWindow().EnterWait();
+            Shell* pShell = GetShell();
+            if (pShell)
+                pShell->GetViewFrame()->GetWindow().EnterWait();
             xDlgLibContainer->loadLibrary( aLibName );
-            if ( pIDEShell )
-                pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
+            if (pShell)
+                pShell->GetViewFrame()->GetWindow().LeaveWait();
         }
 
         // check, if library is password protected
@@ -726,7 +731,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
                         aLibBox.SetCurEntry( aLibBox.GetEntry( nPos ) );
                     }
 
-                    BasicIDE::MarkDocumentModified( m_aCurDocument );
+                    MarkDocumentModified( m_aCurDocument );
                 }
                 delete pDlg;
             }
@@ -806,7 +811,7 @@ void LibPage::InsertLib()
     xFltMgr->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
-    ::rtl::OUString aPath( BasicIDEGlobals::GetExtraData()->GetAddLibPath() );
+    ::rtl::OUString aPath(GetExtraData()->GetAddLibPath());
     if ( !aPath.isEmpty() )
         xFP->setDisplayDirectory( aPath );
     else
@@ -815,7 +820,7 @@ void LibPage::InsertLib()
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
     }
 
-    ::rtl::OUString aLastFilter( BasicIDEGlobals::GetExtraData()->GetAddLibFilter() );
+    rtl::OUString aLastFilter(GetExtraData()->GetAddLibFilter());
     if ( !aLastFilter.isEmpty() )
         xFltMgr->setCurrentFilter( aLastFilter );
     else
@@ -823,8 +828,8 @@ void LibPage::InsertLib()
 
     if ( xFP->execute() == RET_OK )
     {
-        BasicIDEGlobals::GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
-        BasicIDEGlobals::GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
+        GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
+        GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
 
         // library containers for import
         Reference< script::XLibraryContainer2 > xModLibContImport;
@@ -875,7 +880,7 @@ void LibPage::InsertLib()
 
             Reference< script::XLibraryContainer > xModLibContImp( xModLibContImport, UNO_QUERY );
             Reference< script::XLibraryContainer > xDlgLibContImp( xDlgLibContImport, UNO_QUERY );
-            Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetMergedLibraryNames( xModLibContImp, xDlgLibContImp );
+            Sequence< ::rtl::OUString > aLibNames = GetMergedLibraryNames( xModLibContImp, xDlgLibContImp );
             sal_Int32 nLibCount = aLibNames.getLength();
             const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
             for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
@@ -885,7 +890,7 @@ void LibPage::InsertLib()
                 {
                     pLibDlg = new LibDialog( this );
                     pLibDlg->SetStorageName( aURLObj.getName() );
-                    pLibDlg->GetLibBox().SetMode( NEWOBJECTMODE_LIB );
+                    pLibDlg->GetLibBox().SetMode(ObjectMode::Library);
                 }
 
                 // libbox entries
@@ -1142,7 +1147,7 @@ void LibPage::InsertLib()
 
                 delete pLibDlg;
                 if ( bChanges )
-                    BasicIDE::MarkDocumentModified( m_aCurDocument );
+                    MarkDocumentModified( m_aCurDocument );
             }
         }
     }
@@ -1176,14 +1181,12 @@ void LibPage::Export( void )
     }
 
 
-    Window* pWin = static_cast<Window*>( this );
-    std::auto_ptr< ExportDialog > xNewDlg( new ExportDialog( pWin ) );
-
-    if ( xNewDlg->Execute() == RET_OK )
+    ExportDialog aNewDlg(this);
+    if (aNewDlg.Execute() == RET_OK)
     {
         try
         {
-            if( xNewDlg->isExportAsPackage() )
+            if (aNewDlg.isExportAsPackage())
                 ExportAsPackage( aLibName );
             else
                 ExportAsBasic( aLibName );
@@ -1275,7 +1278,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
     xFltMgr->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
-    String aPath( BasicIDEGlobals::GetExtraData()->GetAddLibPath() );
+    String aPath = GetExtraData()->GetAddLibPath();
     if ( aPath.Len() )
     {
         xFP->setDisplayDirectory( aPath );
@@ -1289,7 +1292,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
 
     if ( xFP->execute() == RET_OK )
     {
-        BasicIDEGlobals::GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
+        GetExtraData()->SetAddLibPath(xFP->getDisplayDirectory());
 
         Sequence< ::rtl::OUString > aFiles = xFP->getFiles();
         INetURLObject aURL( aFiles[0] );
@@ -1310,7 +1313,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         Reference< XCommandEnvironment > xCmdEnv =
             static_cast<XCommandEnvironment*>( new OLibCommandEnvironment( xHandler ) );
 
-        ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv );
+        ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv, comphelper::getProcessComponentContext() );
 
         ::rtl::OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
@@ -1324,7 +1327,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         if( xSFA->exists( aPackageURL ) )
             xSFA->kill( aPackageURL );
 
-        ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv );
+        ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv, comphelper::getProcessComponentContext() );
         destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
             OUString(), NameClash::OVERWRITE );
@@ -1356,8 +1359,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         // write into pipe:
         Reference<packages::manifest::XManifestWriter> xManifestWriter( xMSF->createInstance
             ( DEFINE_CONST_UNICODE("com.sun.star.packages.manifest.ManifestWriter") ), UNO_QUERY );
-        Reference<io::XOutputStream> xPipe( xMSF->createInstance
-            ( DEFINE_CONST_UNICODE("com.sun.star.io.Pipe") ), UNO_QUERY );
+        Reference<io::XOutputStream> xPipe( io::Pipe::create(comphelper::getComponentContext(xMSF)), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, Sequence< Sequence<beans::PropertyValue> >(
                 &manifest[ 0 ], manifest.size() ) );
@@ -1366,10 +1368,10 @@ void LibPage::ExportAsPackage( const String& aLibName )
             true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
 
         // write buffered pipe data to content:
-        ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv );
+        ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv, comphelper::getProcessComponentContext() );
         manifestContent.writeStream( Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ), true );
 
-        ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv );
+        ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv, comphelper::getProcessComponentContext() );
         destFolderContent.transferContent(
             MetaInfContent, ::ucbhelper::InsertOperation_COPY,
             OUString(), NameClash::OVERWRITE );
@@ -1401,7 +1403,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
         xFolderPicker->setTitle( String( IDEResId( RID_STR_EXPORTBASIC ) ) );
 
         // set display directory and filter
-        String aPath( BasicIDEGlobals::GetExtraData()->GetAddLibPath() );
+        String aPath =GetExtraData()->GetAddLibPath();
         if( !aPath.Len() )
             aPath = SvtPathOptions().GetWorkPath();
 
@@ -1411,7 +1413,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
         if( nRet == RET_OK )
         {
             String aTargetURL = xFolderPicker->getDirectory();
-            BasicIDEGlobals::GetExtraData()->SetAddLibPath( aTargetURL );
+            GetExtraData()->SetAddLibPath(aTargetURL);
 
             Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
             implExportLib( aLibName, aTargetURL, xDummyHandler );
@@ -1442,14 +1444,9 @@ void LibPage::DeleteCurrent()
         // inform BasicIDE
         SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( m_aCurDocument.getDocumentOrNull() ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBREMOVED,
                                   SFX_CALLMODE_SYNCHRON, &aDocItem, &aLibNameItem, 0L );
-        }
 
         // remove library from module and dialog library containers
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
@@ -1457,8 +1454,8 @@ void LibPage::DeleteCurrent()
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             xDlgLibContainer->removeLibrary( aOULibName );
 
-        ((SvLBox&)aLibBox).GetModel()->Remove( pCurEntry );
-        BasicIDE::MarkDocumentModified( m_aCurDocument );
+        static_cast<SvLBox&>(aLibBox).GetModel()->Remove( pCurEntry );
+        MarkDocumentModified( m_aCurDocument );
     }
 }
 
@@ -1494,7 +1491,7 @@ void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocati
 {
     String aEntryText( rDocument.getTitle( eLocation ) );
     sal_uInt16 nPos = aBasicsBox.InsertEntry( aEntryText, LISTBOX_APPEND );
-    aBasicsBox.SetEntryData( nPos, new BasicDocumentEntry( rDocument, eLocation ) );
+    aBasicsBox.SetEntryData( nPos, new DocumentEntry(rDocument, eLocation) );
 }
 
 //----------------------------------------------------------------------------
@@ -1502,7 +1499,7 @@ void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocati
 void LibPage::SetCurLib()
 {
     sal_uInt16 nSelPos = aBasicsBox.GetSelectEntryPos();
-    BasicDocumentEntry* pEntry = (BasicDocumentEntry*)aBasicsBox.GetEntryData( nSelPos );
+    DocumentEntry* pEntry = (DocumentEntry*)aBasicsBox.GetEntryData( nSelPos );
     if ( pEntry )
     {
         ScriptDocument aDocument( pEntry->GetDocument() );
@@ -1555,7 +1552,7 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos 
     }
 
     SvLBoxEntry* pNewEntry = aLibBox.DoInsertEntry( rLibName, nPos );
-    pNewEntry->SetUserData( new BasicLibUserData( m_aCurDocument ) );
+    pNewEntry->SetUserData( new LibUserData(m_aCurDocument) );
 
     if (bProtected)
     {
@@ -1578,7 +1575,7 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos 
 
 // Helper function
 void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
-                    BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox )
+                    CheckBox* pLibBox, TreeListBox* pBasicBox )
 {
     OSL_ENSURE( rDocument.isAlive(), "createLibImpl: invalid document!" );
     if ( !rDocument.isAlive() )
@@ -1599,19 +1596,19 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
         i++;
     }
 
-    std::auto_ptr< NewObjectDialog > xNewDlg( new NewObjectDialog( pWin, NEWOBJECTMODE_LIB ) );
-    xNewDlg->SetObjectName( aLibName );
+    NewObjectDialog aNewDlg(pWin, ObjectMode::Library);
+    aNewDlg.SetObjectName(aLibName);
 
-    if ( xNewDlg->Execute() )
+    if (aNewDlg.Execute())
     {
-        if ( xNewDlg->GetObjectName().Len() )
-            aLibName = xNewDlg->GetObjectName();
+        if (aNewDlg.GetObjectName().Len())
+            aLibName = aNewDlg.GetObjectName();
 
         if ( aLibName.Len() > 30 )
         {
             ErrorBox( pWin, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBNAMETOLONG ) ) ).Execute();
         }
-        else if ( !BasicIDE::IsValidSbxName( aLibName ) )
+        else if ( !IsValidSbxName( aLibName ) )
         {
             ErrorBox( pWin, WB_OK | WB_DEF_OK,
                         String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
@@ -1632,7 +1629,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                 if( pLibBox )
                 {
                     SvLBoxEntry* pEntry = pLibBox->DoInsertEntry( aLibName );
-                    pEntry->SetUserData( new BasicLibUserData( rDocument ) );
+                    pEntry->SetUserData( new LibUserData( rDocument ) );
                     pLibBox->SetCurEntry( pEntry );
                 }
 
@@ -1642,15 +1639,10 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                 if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
                     throw Exception();
 
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );
-                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-                if( pDispatcher )
-                {
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+                if (SfxDispatcher* pDispatcher = GetDispatcher())
                     pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
                                           SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-                }
 
                 if( pBasicBox )
                 {
@@ -1669,7 +1661,8 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                         aLibName,
                         Image( IDEResId( nId ) ),
                         pRootEntry, false,
-                        std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_LIBRARY ) ) );
+                        std::auto_ptr<Entry>(new Entry(OBJ_TYPE_LIBRARY))
+                    );
                     DBG_ASSERT( pNewLibEntry, "InsertEntry fehlgeschlagen!" );
 
                     if( pNewLibEntry )
@@ -1678,7 +1671,8 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
                             pNewLibEntry, false,
-                            std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
+                            std::auto_ptr<Entry>(new Entry(OBJ_TYPE_MODULE))
+                        );
                         DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );
                         pBasicBox->SetCurEntry( pEntry_ );
                         pBasicBox->Select( pBasicBox->GetCurEntry() );      // OV-Bug?!
@@ -1694,5 +1688,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 }
 
 //----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,35 +40,12 @@ public:
     TestLanguageTag() {}
     virtual ~TestLanguageTag() {}
 
-    void testInit();
     void testAllTags();
 
     CPPUNIT_TEST_SUITE(TestLanguageTag);
-    CPPUNIT_TEST(testInit);
     CPPUNIT_TEST(testAllTags);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void TestLanguageTag::testInit()
-{
-#if USE_LIBLANGTAG && !defined(SYSTEM_LIBLANGTAG)
-    // file:///$SRCDIR/solver/$INPATH/share/liblangtag
-    // file:///$OUTDIR/share/liblangtag
-    OUStringBuffer aBuf(128);
-    const char* pEnv = getenv("OUTDIR");
-    CPPUNIT_ASSERT_MESSAGE("No $OUTDIR", pEnv);
-    aBuf.append( "file:///").append( OStringToOUString( pEnv, RTL_TEXTENCODING_UTF8)).append( "/share/liblangtag");
-    OUString aURL( aBuf.makeStringAndClear());
-    OUString aData( aURL);
-    aData += "/language-subtag-registry.xml";
-    osl::DirectoryItem aDirItem;
-    CPPUNIT_ASSERT_MESSAGE("liblangtag data not found",
-            osl::DirectoryItem::get( aData, aDirItem) == osl::DirectoryItem::E_None);
-    OUString aPath;
-    CPPUNIT_ASSERT( osl::FileBase::getSystemPathFromFileURL( aURL, aPath) == osl::FileBase::E_None);
-    LanguageTag::overrideDataPath( aPath);
-#endif
-}
 
 void TestLanguageTag::testAllTags()
 {

@@ -28,7 +28,7 @@
 
 module com { module sun { module star { module sdb {
 
-interface XDatabaseRegistrationsListener;
+published interface XDatabaseRegistrationsListener;
 
 
 /** provides access to the application-wide registered databases.
@@ -40,7 +40,7 @@ interface XDatabaseRegistrationsListener;
 
     @since OOo 3.3
  */
-interface XDatabaseRegistrations
+published interface XDatabaseRegistrations
 {
     /** determines whether a database is registered under the given name.
 

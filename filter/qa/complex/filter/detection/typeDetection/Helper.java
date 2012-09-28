@@ -26,7 +26,6 @@ import helper.StreamSimulator;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.StringTokenizer;

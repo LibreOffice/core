@@ -28,6 +28,9 @@
 #include <iderdll.hxx>
 #include <basdoc.hxx>
 
+namespace basctl
+{
+
 using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::std;
@@ -84,14 +87,14 @@ OUString SIDEModel::getImplementationName(void) throw( uno::RuntimeException )
     return getImplementationName_Static();
 }
 
-::rtl::OUString SIDEModel::getImplementationName_Static()
+OUString SIDEModel::getImplementationName_Static()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basic.BasicIDE" ));
+    return OUString( "com.sun.star.comp.basic.BasicIDE" );
 }
 
 sal_Bool SIDEModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.BasicIDE" ));
+    return rServiceName == OUString( "com.sun.star.script.BasicIDE" );
 }
 uno::Sequence< OUString > SIDEModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
@@ -102,7 +105,7 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static(void)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.BasicIDE" ));
+    pArray[0] = "com.sun.star.script.BasicIDE" ;
     return aRet;
 }
 
@@ -110,9 +113,11 @@ uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
     SolarMutexGuard aGuard;
-    BasicIDEGlobals::ensure();
-    SfxObjectShell* pShell = new BasicDocShell();
+    EnsureIde();
+    SfxObjectShell* pShell = new DocShell();
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

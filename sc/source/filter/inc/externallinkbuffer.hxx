@@ -128,7 +128,6 @@ private:
     ExternalNameModel   maExtNameModel;     /// Additional name data.
     ResultMatrix        maResults;          /// DDE/OLE link results.
     ResultMatrix::iterator maCurrIt;        /// Current position in result matrix.
-    sal_uInt32          mnStorageId;        /// OLE storage identifier (BIFF).
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDDELink >
                         mxDdeLink;          /// Interface of a DDE link.
     bool                mbDdeLinkCreated;   /// True = already tried to create the DDE link.

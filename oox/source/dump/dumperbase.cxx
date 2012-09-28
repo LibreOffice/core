@@ -1303,11 +1303,10 @@ NameListRef NameListWrapper::getNameList( const Config& rCfg ) const
 
 SharedConfigData::SharedConfigData( const OUString& rFileName,
         const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg,
-        const OUString& rSysFileName, MediaDescriptor& rMediaDesc ) :
+        const OUString& rSysFileName ) :
     mxContext( rxContext ),
     mxRootStrg( rxRootStrg ),
     maSysFileName( rSysFileName ),
-    mrMediaDesc( rMediaDesc ),
     mbLoaded( false ),
     mbPwCancelled( false )
 {
@@ -1454,9 +1453,9 @@ Config::Config( const sal_Char* pcEnvVar, const FilterBase& rFilter )
     construct( pcEnvVar, rFilter );
 }
 
-Config::Config( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
+Config::Config( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
 {
-    construct( pcEnvVar, rxContext, rxRootStrg, rSysFileName, rMediaDesc );
+    construct( pcEnvVar, rxContext, rxRootStrg, rSysFileName );
 }
 
 Config::~Config()
@@ -1471,14 +1470,14 @@ void Config::construct( const Config& rParent )
 void Config::construct( const sal_Char* pcEnvVar, const FilterBase& rFilter )
 {
     if( !rFilter.getFileUrl().isEmpty() )
-        construct( pcEnvVar, rFilter.getComponentContext(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
+        construct( pcEnvVar, rFilter.getComponentContext(), rFilter.getStorage(), rFilter.getFileUrl() );
 }
 
-void Config::construct( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
+void Config::construct( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
 {
     if( pcEnvVar && rxRootStrg.get() && !rSysFileName.isEmpty() )
         if( const sal_Char* pcFileName = ::getenv( pcEnvVar ) )
-            mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxContext, rxRootStrg, rSysFileName, rMediaDesc ) );
+            mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxContext, rxRootStrg, rSysFileName ) );
 }
 
 const OUString& Config::getStringOption( const String& rKey, const OUString& rDefault ) const

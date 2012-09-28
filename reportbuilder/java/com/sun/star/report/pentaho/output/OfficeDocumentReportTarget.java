@@ -1674,9 +1674,9 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     {
         final String classId = (String) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, "class-id");
         final String chartUrl = (String) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, "href");
-        final ArrayList masterColumns = (ArrayList) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, SDBCReportDataFactory.MASTER_COLUMNS);
-        final ArrayList masterValues = (ArrayList) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, SDBCReportDataFactory.MASTER_VALUES);
-        final ArrayList detailColumns = (ArrayList) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, SDBCReportDataFactory.DETAIL_COLUMNS);
+        final ArrayList<?> masterColumns = (ArrayList<?>) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, SDBCReportDataFactory.MASTER_COLUMNS);
+        final ArrayList<?> masterValues = (ArrayList<?>) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, SDBCReportDataFactory.MASTER_VALUES);
+        final ArrayList<?> detailColumns = (ArrayList<?>) attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, SDBCReportDataFactory.DETAIL_COLUMNS);
         final String href = oleProducer.produceOle(chartUrl, masterColumns, masterValues, detailColumns);
 
         final AttributeList oleList = new AttributeList();

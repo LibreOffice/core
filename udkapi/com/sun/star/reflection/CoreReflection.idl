@@ -30,6 +30,8 @@
 /** This service is the implementation of the reflection API.
     You can obtain information about types, modify values of reflected types
     and call on objects.
+
+    @deprecated Rather use the 'theCoreReflection' singleton.
 */
 published service CoreReflection
 {
@@ -41,14 +43,6 @@ published service CoreReflection
      */
     [optional] interface com::sun::star::lang::XComponent;
 };
-
-/** Accessable singleton to CoreReflection instance.
-singleton theCoreReflection
-{
-    service CoreReflection;
-};
-*/
-
 
 }; }; }; };
 

@@ -19,8 +19,6 @@
 package complex.olesimplestorage;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTempFile;
 import com.sun.star.embed.XOLESimpleStorage;
 import com.sun.star.uno.UnoRuntime;

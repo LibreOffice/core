@@ -29,8 +29,6 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
 /**
  * This is a class representing the different attributes for a worksheet
  * contained in settings.xml.
- *
- * @author Martin Maher
  */
 public class SheetSettings implements OfficeConstants {
 

@@ -206,7 +206,7 @@ namespace svx
         DBG_CTOR( FmFocusListenerAdapter, NULL );
 
         DBG_ASSERT( m_xWindow.is(), "FmFocusListenerAdapter::FmFocusListenerAdapter: invalid control!" );
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             try
             {
@@ -218,7 +218,7 @@ namespace svx
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------
@@ -303,7 +303,7 @@ namespace svx
         DBG_CTOR( FmMouseListenerAdapter, NULL );
 
         DBG_ASSERT( m_xWindow.is(), "FmMouseListenerAdapter::FmMouseListenerAdapter: invalid control!" );
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             try
             {
@@ -315,7 +315,7 @@ namespace svx
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

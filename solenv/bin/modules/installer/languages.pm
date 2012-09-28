@@ -138,9 +138,74 @@ sub get_all_languages_for_one_product
         my $furthercheck = 1;
 
         # For some languages (that are not supported by Windows, english needs to be added to the installation set
-        # Languages saved in "@installer::globals::noMSLocaleLangs"
 
-        if ( all_elements_of_array1_in_array2(\@languagearray, \@installer::globals::noMSLocaleLangs) )
+        # FIXME The script i18npool/source/isolang/langid.pl greps this very
+        # source file to read this array.  Be careful!
+        my @noMSLocaleLangs = (
+            "br",
+            "bs",
+            "dz",
+            "gu",
+            "km",
+            "nr",
+            "ns",
+            "nso",
+            "rw",
+            "ss",
+            "st",
+            "tg",
+            "ts",
+            "tn",
+            "ve",
+            "xh",
+            "zu",
+            "ne",
+            "bn",
+            "bn-BD",
+            "bn-IN",
+            "lo",
+            "cy",
+            "ku",
+            "as-IN",
+            "te-IN",
+            "ml-IN",
+            "mr-IN",
+            "ur-IN",
+            "ta-IN",
+            "or-IN",
+            "ti-ER",
+            "eo",
+            "ka",
+            "ga",
+            "uk",
+            "gd",
+            "my",
+            "mai",
+            "brx",
+            "dgo",
+            "kok",
+            "mni",
+            "ca-XV",
+            "sat",
+            "ug",
+            "om",
+            "si",
+            "or",
+            "oc",
+            "ml",
+            "as",
+            "ast",
+            "ht",
+            "jbo",
+            "fur",
+            "ny",
+            "so",
+            "kab",
+            "tk",
+            "ky-CN",
+        );
+
+        if ( all_elements_of_array1_in_array2(\@languagearray, \@noMSLocaleLangs) )
         {
             my $officestartlanguage = $languagearray[0];
             unshift(@languagearray, "en-US");   # am Anfang einfügen!

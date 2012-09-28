@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <comphelper/processfactory.hxx>
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -40,8 +43,7 @@
 #include <cuires.hrc>
 
 // #97807# -------------
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <ucbhelper/contentbroker.hxx>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
@@ -66,7 +68,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         // #97807# URL content comparison of entries -----------
         INetURLObject aFile( aDlg.GetPath() );
         String sInsFile = aFile.getFSysPath( INetURLObject::FSYS_DETECT );
-        ::ucbhelper::Content aContent( aFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+        ::ucbhelper::Content aContent( aFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         Reference< XContent > xContent = aContent.get();
         OSL_ENSURE( xContent.is(), "AddHdl_Impl: invalid content interface!" );
         Reference< XContentIdentifier > xID = xContent->getIdentifier();
@@ -90,7 +92,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
                     if( aCur == aFileContentMap.end() ) // look for File Content in aFileContentMap, but not find it.
                     {
                         INetURLObject aVFile( sVFile, INetURLObject::FSYS_DETECT );
-                        aFileContentMap[sVFile] = ::ucbhelper::Content( aVFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+                        aFileContentMap[sVFile] = ::ucbhelper::Content( aVFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                         VContent = aFileContentMap.find( sVFile )->second;
                     }
                     else
@@ -99,21 +101,13 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
                     OSL_ENSURE( xVContent.is(), "AddHdl_Impl: invalid content interface!" );
                     xVID = xVContent->getIdentifier();
                     OSL_ENSURE( xVID.is(), "AddHdl_Impl: invalid ID interface!" );
-                    if ( xID.is() && xVID.is() )
+                    if ( xID.is() && xVID.is()
+                         && ( UniversalContentBroker::create(
+                                  comphelper::getProcessComponentContext() )->
+                              compareContentIds( xID, xVID ) == 0 ) )
                     {
-                        // get a generic content provider
-                        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-                        Reference< XContentProvider > xProvider;
-                        if ( pBroker )
-                            xProvider = pBroker->getContentProviderInterface();
-                        if ( xProvider.is() )
-                        {
-                            if ( 0 == xProvider->compareContentIds( xID, xVID ) )
-                            {
-                                bDuplicated = sal_True;
-                                break;
-                            }
-                        }
+                        bDuplicated = sal_True;
+                        break;
                     }
                 }
             } // end of if the entries are more than zero.

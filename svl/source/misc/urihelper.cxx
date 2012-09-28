@@ -19,29 +19,23 @@
 
 #include <svl/urihelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/ucb/Command.hpp"
-#include <com/sun/star/ucb/FileSystemNotation.hpp>
 #include "com/sun/star/ucb/IllegalIdentifierException.hpp"
+#include "com/sun/star/ucb/UniversalContentBroker.hpp"
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/ucb/XCommandProcessor.hpp"
 #include "com/sun/star/ucb/XContent.hpp"
-#include "com/sun/star/ucb/XContentIdentifierFactory.hpp"
-#include "com/sun/star/ucb/XContentProvider.hpp"
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#include "com/sun/star/ucb/XUniversalContentBroker.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/uri/UriReferenceFactory.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "com/sun/star/uri/XUriReferenceFactory.hpp"
-#include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/processfactory.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustrbuf.hxx"
@@ -49,7 +43,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include <tools/inetmime.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <unotools/charclass.hxx>
 #include "rtl/instance.hxx"
 
@@ -158,16 +151,13 @@ bool isAbsoluteHierarchicalUriReference(
 enum Result { Success, GeneralFailure, SpecificFailure };
 
 Result normalizePrefix(
-    css::uno::Reference< css::ucb::XContentProvider > const & broker,
+    css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
     rtl::OUString const & uri, rtl::OUString * normalized)
 {
     OSL_ASSERT(broker.is() && normalized != 0);
     css::uno::Reference< css::ucb::XContent > content;
     try {
-        content = broker->queryContent(
-            css::uno::Reference< css::ucb::XContentIdentifierFactory >(
-                broker, css::uno::UNO_QUERY_THROW)->createContentIdentifier(
-                    uri));
+        content = broker->queryContent(broker->createContentIdentifier(uri));
     } catch (css::ucb::IllegalIdentifierException &) {}
     if (!content.is()) {
         return GeneralFailure;
@@ -195,7 +185,7 @@ Result normalizePrefix(
 }
 
 rtl::OUString normalize(
-    css::uno::Reference< css::ucb::XContentProvider > const & broker,
+    css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
     css::uno::Reference< css::uri::XUriReferenceFactory > const & uriFactory,
     rtl::OUString const & uriReference)
 {
@@ -286,31 +276,8 @@ URIHelper::normalizedMakeRelative(
     rtl::OUString const & baseUriReference, rtl::OUString const & uriReference)
 {
     OSL_ASSERT(context.is());
-    css::uno::Reference< css::lang::XMultiComponentFactory > componentFactory(
-        context->getServiceManager());
-    if (!componentFactory.is()) {
-        throw css::uno::RuntimeException("component context has no service manager",
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    css::uno::Sequence< css::uno::Any > args(2);
-    args[0] <<= rtl::OUString("Local");
-    args[1] <<= rtl::OUString("Office");
-    css::uno::Reference< css::ucb::XContentProvider > broker;
-    try {
-        broker = css::uno::Reference< css::ucb::XContentProvider >(
-            componentFactory->createInstanceWithArgumentsAndContext(
-                "com.sun.star.ucb.UniversalContentBroker",
-                args, context),
-            css::uno::UNO_QUERY_THROW);
-    } catch (css::uno::RuntimeException &) {
-        throw;
-    } catch (css::uno::Exception &) {
-        css::uno::Any exception(cppu::getCaughtException());
-        throw css::lang::WrappedTargetRuntimeException(
-            "creating com.sun.star.ucb.UniversalContentBroker failed",
-            css::uno::Reference< css::uno::XInterface >(),
-            exception);
-    }
+    css::uno::Reference< css::ucb::XUniversalContentBroker > broker(
+        css::ucb::UniversalContentBroker::create(context));
     css::uno::Reference< css::uri::XUriReferenceFactory > uriFactory(
         css::uri::UriReferenceFactory::create(context));
     return uriFactory->makeRelative(

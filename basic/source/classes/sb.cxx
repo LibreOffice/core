@@ -876,13 +876,13 @@ SbModule* SbClassFactory::FindClass( const String& rClassName )
     return pMod;
 }
 
-StarBASIC::StarBASIC( StarBASIC* p, sal_Bool bIsDocBasic  )
+StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
     : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) ), bDocBasic( bIsDocBasic )
 {
     SetParent( p );
     pLibInfo = NULL;
-    bNoRtl = bBreak = sal_False;
-    bVBAEnabled = sal_False;
+    bNoRtl = bBreak = false;
+    bVBAEnabled = false;
     pModules = new SbxArray;
 
     if( !GetSbData()->nInst++ )
@@ -904,7 +904,7 @@ StarBASIC::StarBASIC( StarBASIC* p, sal_Bool bIsDocBasic  )
     // Search via StarBasic is always global
     SetFlag( SBX_GBLSEARCH );
     pVBAGlobals = NULL;
-    bQuit = sal_False;
+    bQuit = false;
 
     if( bDocBasic )
         lclInsertDocBasicItem( *this );
@@ -1342,7 +1342,7 @@ SbxBase* StarBASIC::FindSBXInCurrentScope( const String& rName )
 void StarBASIC::QuitAndExitApplication()
 {
     Stop();
-    bQuit = sal_True;
+    bQuit = true;
 }
 
 void StarBASIC::Stop()
@@ -1355,9 +1355,9 @@ void StarBASIC::Stop()
     }
 }
 
-sal_Bool StarBASIC::IsRunning()
+bool StarBASIC::IsRunning()
 {
-    return sal_Bool( GetSbData()->pInst != NULL );
+    return GetSbData()->pInst != NULL;
 }
 
 /**************************************************************************
@@ -1385,7 +1385,7 @@ SbModule* StarBASIC::GetActiveModule()
 sal_uInt16 StarBASIC::BreakPoint( sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
 {
     SetErrorData( 0, l, c1, c2 );
-    bBreak = sal_True;
+    bBreak = true;
     if( GetSbData()->aBreakHdl.IsSet() )
         return (sal_uInt16) GetSbData()->aBreakHdl.Call( this );
     else
@@ -1395,7 +1395,7 @@ sal_uInt16 StarBASIC::BreakPoint( sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
 sal_uInt16 StarBASIC::StepPoint( sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
 {
     SetErrorData( 0, l, c1, c2 );
-    bBreak = sal_False;
+    bBreak = false;
     if( GetSbData()->aBreakHdl.IsSet() )
         return (sal_uInt16) GetSbData()->aBreakHdl.Call( this );
     else

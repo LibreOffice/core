@@ -22,8 +22,9 @@
 #include <ids.hrc>
 #include <unknownauthdlg.hrc>
 #include <unknownauthdlg.hxx>
+#include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 // -----------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
     xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
-                    getServiceFactory().get()->createInstance( rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" )), uno::UNO_QUERY );
+                    ::com::sun::star::security::DocumentDigitalSignatures::createDefault(comphelper::getComponentContext(getServiceFactory())) );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 
@@ -75,8 +76,7 @@ UnknownAuthDialog::UnknownAuthDialog
     m_aLabel1 ( this, ResId( FT_LABEL_1, *pResMgr ) ),
     m_aWarnImage ( this, ResId( IMG_WARN, *pResMgr ) ),
     m_xServiceFactory ( xServiceFactory ),
-    m_rXCert ( rXCert ),
-    pResourceMgr ( pResMgr )
+    m_rXCert ( rXCert )
 {
     FreeResource();
 

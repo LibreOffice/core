@@ -181,11 +181,11 @@ public:
     virtual void        drawRect( long nX, long nY, long nWidth, long nHeight );
     virtual void        drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry );
     virtual void        drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry );
-    virtual void        drawPolyPolygon( sal_uLong nPoly, const sal_uLong* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uLong* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
     virtual sal_Bool    drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
     virtual sal_Bool    drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
-    virtual sal_Bool    drawPolyPolygonBezier( sal_uLong nPoly, const sal_uLong* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
+    virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
     virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin );
 
     // CopyArea --> No RasterOp, but ClipRegion
@@ -234,7 +234,7 @@ public:
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     // get device resolution
-    virtual void            GetResolution( long& rDPIX, long& rDPIY );
+    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     // get the depth of the device
     virtual sal_uInt16          GetBitCount() const;
     // get the width of the device
@@ -272,6 +272,8 @@ public:
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
+    // graphics must drop any cached font info
+    virtual void ClearDevFontCache();
     // graphics should call ImplAddDevFontSubstitute on supplied
     // OutputDevice for all its device specific preferred font substitutions
     virtual void            GetDevFontSubstList( OutputDevice* );
@@ -290,7 +292,7 @@ public:
     // as "undefined character"
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const PhysicalFontFace* pFont,
-                                              long* pGlyphIDs,
+                                              sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
@@ -351,6 +353,7 @@ private:
     bool GetRawFontData( const PhysicalFontFace* pFontData,
                          std::vector<unsigned char>& rBuffer,
                          bool* pJustCFF );
+    void ResetFontStyle();
 };
 
 // --- some trivial inlines

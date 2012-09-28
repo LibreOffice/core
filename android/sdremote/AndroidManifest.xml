@@ -13,24 +13,39 @@
         android:targetSdkVersion="10" />
 
     <application
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.ImpressRemote" >
+        android:theme="@style/Theme.ImpressRemote"
+        android:title="@string/app_name" >
         <activity
             android:name=".SelectorActivity"
+            android:label="@string/selector_choose_a_computer"
+            android:logo="@drawable/actionbar_icon_computer"
+            android:title="@string/app_name"
             android:uiOptions="splitActionBarWhenNarrow" >
-            <intent-filter>
+            <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PairingActivity"
+            android:icon="@drawable/actionbar_icon_computer"
+            android:logo="@drawable/actionbar_icon_computer"
+            android:noHistory="true" >
+        </activity>
 
-        <service android:name=".communication.CommunicationService" >
+        <service
+            android:name=".communication.CommunicationService"
+            android:label="@string/startpresentation_title"
+            android:logo="@drawable/actionbar_icon_computer" >
         </service>
 
-        <activity android:name=".PairingActivity" >
-        </activity>
-        <activity android:name=".StartPresentationActivity" >
+        <activity
+            android:name=".StartPresentationActivity"
+            android:logo="@drawable/actionbar_icon_computer"
+            android:label="@string/startpresentation_title" >
         </activity>
         <activity
             android:name=".PresentationActivity"

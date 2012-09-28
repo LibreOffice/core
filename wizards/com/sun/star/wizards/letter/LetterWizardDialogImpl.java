@@ -19,9 +19,6 @@ package com.sun.star.wizards.letter;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
@@ -36,7 +33,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextFrame;
-import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.RuntimeException;
@@ -66,9 +62,10 @@ import com.sun.star.util.XSearchable;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.*;
-import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.TextElement;
 import com.sun.star.wizards.common.PlaceholderTextElement;
+
+import com.sun.star.beans.XPropertySet;
 
 public class LetterWizardDialogImpl extends LetterWizardDialog
 {
@@ -1166,12 +1163,17 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         try
         {
-            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
+            XInterface xPathInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
+            sTemplatePath = ((String[]) xPropertySet.getPropertyValue("Template_user"))[0];
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
-            sTemplatePath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common");
         }
         catch (NoValidPathException e)
+        {
+            e.printStackTrace();
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -1182,12 +1184,15 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
       try
       {
-        sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
         String sLetterPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common/wizard/letter");
 
         BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sLetterPath);
         OfficialFiles = FileAccess.getFolderTitles(xMSF, "off", sLetterPath);
         PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sLetterPath);
+
+        exchangeBusinessTitlesToLocalizedOnes();
+        exchangeOfficialTitlesToLocalizedOnes();
+        exchangePrivateTitlesToLocalizedOnes();
 
         setControlProperty("lstBusinessStyle", PropertyNames.STRING_ITEM_LIST, BusinessFiles[0]);
         setControlProperty("lstPrivOfficialStyle", PropertyNames.STRING_ITEM_LIST, OfficialFiles[0]);
@@ -1414,4 +1419,66 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             e.printStackTrace();
         }
     }
+
+    private void exchangeBusinessTitlesToLocalizedOnes()
+    {
+      for(int i = 0; i < BusinessFiles[0].length; ++i)
+      {
+        if( BusinessFiles[0][i].equals("Elegant") )
+        {
+          BusinessFiles[0][i] = resources.resBusinessElegantTitle;
+        }
+        else if( BusinessFiles[0][i].equals("Modern") )
+        {
+          BusinessFiles[0][i] = resources.resBusinessModernTitle;
+        }
+        else if( BusinessFiles[0][i].equals("Office") )
+        {
+          BusinessFiles[0][i] = resources.resBusinessOfficeTitle;
+        }
+      }
+    }
+
+    private void exchangeOfficialTitlesToLocalizedOnes()
+    {
+      for(int i = 0; i < OfficialFiles[0].length; ++i)
+      {
+        if( OfficialFiles[0][i].equals("Elegant") )
+        {
+          OfficialFiles[0][i] = resources.resOfficialElegantTitle;
+        }
+        else if( OfficialFiles[0][i].equals("Modern") )
+        {
+          OfficialFiles[0][i] = resources.resOfficialModernTitle;
+        }
+        else if( OfficialFiles[0][i].equals("Office") )
+        {
+          OfficialFiles[0][i] = resources.resOfficialOfficeTitle;
+        }
+      }
+    }
+ 
+    private void exchangePrivateTitlesToLocalizedOnes()
+    {
+      for(int i = 0; i < PrivateFiles[0].length; ++i)
+      {
+        if( PrivateFiles[0][i].equals("Bottle") )
+        {
+          PrivateFiles[0][i] = resources.resPrivateBottleTitle;
+        }
+        else if( PrivateFiles[0][i].equals("Mail") )
+        {
+          PrivateFiles[0][i] = resources.resPrivateMailTitle;
+        }
+        else if( PrivateFiles[0][i].equals("Marine") )
+        {
+          PrivateFiles[0][i] = resources.resPrivateMarineTitle;
+        }
+        else if( PrivateFiles[0][i].equals("Red Line") )
+        {
+          PrivateFiles[0][i] = resources.resPrivateRedLineTitle;
+        }
+      }
+    }
+
 }

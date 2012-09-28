@@ -26,7 +26,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <ucbhelper/contentbroker.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <osl/process.h>
@@ -41,9 +40,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/seqstream.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <resourcemodel/exceptions.hxx>
 #include <doctok/WW8Document.hxx>
@@ -67,37 +63,24 @@ xContext( xContext_ )
 
 sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< OUString >& aArguments ) throw (uno::RuntimeException)
 {
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= OUString("Local");
-    aUcbInitSequence[1] <<= OUString("Office");
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
-    {
-            OUString arg=aArguments[0];
+    OUString arg=aArguments[0];
 
-            uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
+    uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
-            rtl_uString *dir=NULL;
-            osl_getProcessWorkingDir(&dir);
-            OUString absFileUrl;
-            osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
-            rtl_uString_release(dir);
+    rtl_uString *dir=NULL;
+    osl_getProcessWorkingDir(&dir);
+    OUString absFileUrl;
+    osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
+    rtl_uString_release(dir);
 
-            uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
-            doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(xContext, xInputStream);
+    uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
+    doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(xContext, xInputStream);
 
-            doctok::WW8Document::Pointer_t pDocument(doctok::WW8DocumentFactory::createDocument(pDocStream));
+    doctok::WW8Document::Pointer_t pDocument(doctok::WW8DocumentFactory::createDocument(pDocStream));
 
-        Stream::Pointer_t pStream = createStreamHandler();
-        pDocument->resolve(*pStream);
+    Stream::Pointer_t pStream = createStreamHandler();
+    pDocument->resolve(*pStream);
 
-        ::ucbhelper::ContentBroker::deinitialize();
-    }
-    else
-    {
-        fprintf(stderr, "can't initialize UCB");
-    }
     return 0;
 }
 

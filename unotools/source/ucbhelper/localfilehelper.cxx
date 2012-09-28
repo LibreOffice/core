@@ -20,10 +20,10 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/fileidentifierconverter.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
@@ -41,25 +41,16 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
 {
     rReturn = ::rtl::OUString();
 
-    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-    if ( !pBroker )
+    Reference< XUniversalContentBroker > pBroker(
+        UniversalContentBroker::create(
+            comphelper::getProcessComponentContext() ) );
+    try
     {
-        rtl::OUString aRet;
-        if ( FileBase::getFileURLFromSystemPath( rName, aRet ) == FileBase::E_None )
-            rReturn = aRet;
+        rReturn = ::ucbhelper::getFileURLFromSystemPath( pBroker, rBaseURL, rName );
     }
-    else
+    catch ( ::com::sun::star::uno::RuntimeException& )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
-                pBroker->getContentProviderManagerInterface();
-        try
-        {
-            rReturn = ::ucbhelper::getFileURLFromSystemPath( xManager, rBaseURL, rName );
-        }
-        catch ( ::com::sun::star::uno::RuntimeException& )
-        {
-            return sal_False;
-        }
+        return sal_False;
     }
 
     return ( rReturn.Len() != 0 );
@@ -68,24 +59,15 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
 sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& rReturn )
 {
     rReturn = ::rtl::OUString();
-    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-    if ( !pBroker )
+    Reference< XUniversalContentBroker > pBroker(
+        UniversalContentBroker::create(
+            comphelper::getProcessComponentContext() ) );
+    try
     {
-        rtl::OUString aRet;
-        if( FileBase::getSystemPathFromFileURL( rName, aRet ) == FileBase::E_None )
-            rReturn = aRet;
+        rReturn = ::ucbhelper::getSystemPathFromFileURL( pBroker, rName );
     }
-    else
+    catch ( ::com::sun::star::uno::RuntimeException& )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
-                pBroker->getContentProviderManagerInterface();
-        try
-        {
-            rReturn = ::ucbhelper::getSystemPathFromFileURL( xManager, rName );
-        }
-        catch ( ::com::sun::star::uno::RuntimeException& )
-        {
-        }
     }
 
     return ( rReturn.Len() != 0 );
@@ -94,26 +76,16 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
 bool LocalFileHelper::ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::OUString& rReturn)
 {
     rReturn = ::rtl::OUString();
-    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-    if ( !pBroker )
+    Reference< XUniversalContentBroker > pBroker(
+        UniversalContentBroker::create(
+            comphelper::getProcessComponentContext() ) );
+    try
     {
-        rtl::OUString aRet;
-        if ( FileBase::getFileURLFromSystemPath( rName, aRet ) == FileBase::E_None )
-            rReturn = aRet;
+        rtl::OUString aBase( ::ucbhelper::getLocalFileURL() );
+        rReturn = ::ucbhelper::getFileURLFromSystemPath( pBroker, aBase, rName );
     }
-    else
+    catch (const ::com::sun::star::uno::RuntimeException&)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
-                pBroker->getContentProviderManagerInterface();
-
-        try
-        {
-            rtl::OUString aBase( ::ucbhelper::getLocalFileURL() );
-            rReturn = ::ucbhelper::getFileURLFromSystemPath( xManager, aBase, rName );
-        }
-        catch (const ::com::sun::star::uno::RuntimeException&)
-        {
-        }
     }
 
     return !rReturn.isEmpty();
@@ -122,27 +94,18 @@ bool LocalFileHelper::ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::
 bool LocalFileHelper::ConvertURLToPhysicalName(const rtl::OUString& rName, rtl::OUString& rReturn)
 {
     rReturn = ::rtl::OUString();
-    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-    if ( !pBroker )
+    Reference< XUniversalContentBroker > pBroker(
+        UniversalContentBroker::create(
+            comphelper::getProcessComponentContext() ) );
+    try
     {
-        ::rtl::OUString aRet;
-        if ( FileBase::getSystemPathFromFileURL( rName, aRet ) == FileBase::E_None )
-            rReturn = aRet;
+        INetURLObject aObj( rName );
+        INetURLObject aLocal( ::ucbhelper::getLocalFileURL() );
+        if ( aObj.GetProtocol() == aLocal.GetProtocol() )
+            rReturn = ::ucbhelper::getSystemPathFromFileURL( pBroker, rName );
     }
-    else
+    catch (const ::com::sun::star::uno::RuntimeException&)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
-                pBroker->getContentProviderManagerInterface();
-        try
-        {
-            INetURLObject aObj( rName );
-            INetURLObject aLocal( ::ucbhelper::getLocalFileURL() );
-            if ( aObj.GetProtocol() == aLocal.GetProtocol() )
-                rReturn = ::ucbhelper::getSystemPathFromFileURL( xManager, rName );
-        }
-        catch (const ::com::sun::star::uno::RuntimeException&)
-        {
-        }
     }
 
     return !rReturn.isEmpty();
@@ -167,7 +130,9 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
     StringList_Impl* pFiles = NULL;
     try
     {
-        ::ucbhelper::Content aCnt( rFolder, Reference< XCommandEnvironment > () );
+        ::ucbhelper::Content aCnt(
+            rFolder, Reference< XCommandEnvironment >(),
+            comphelper::getProcessComponentContext() );
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aProps(1);
         ::rtl::OUString* pProps = aProps.getArray();

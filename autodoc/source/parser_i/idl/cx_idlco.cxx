@@ -399,32 +399,32 @@ Context_UidlCode::SetupStateMachine()
             = new StmArrayStatu2( C_nStatusSize, A_nBezeichnerStatus, 0, true);
 
     DYN StmBoundsStatu2 *   dpBst_finErr
-            = new StmBoundsStatu2( *this, TkpContext_Null2_(), nF_fin_Error, true );
+            = new StmBoundsStatu2( TkpContext_Null2_(), nF_fin_Error, true );
     DYN StmBoundsStatu2 *   dpBst_finIgn
-            = new StmBoundsStatu2( *this, *this, nF_fin_Ignore, true );
+            = new StmBoundsStatu2( *this, nF_fin_Ignore, true );
     DYN StmBoundsStatu2 *   dpBst_finBez
-            = new StmBoundsStatu2( *this, *this, nF_fin_Identifier, true );
+            = new StmBoundsStatu2( *this, nF_fin_Identifier, true );
     DYN StmBoundsStatu2 *   dpBst_finKeyw
-            = new StmBoundsStatu2( *this, *this, nF_fin_Keyword, false );
+            = new StmBoundsStatu2( *this, nF_fin_Keyword, false );
     DYN StmBoundsStatu2 *   dpBst_finPunct
-            = new StmBoundsStatu2( *this, *this, nF_fin_Punctuation, false );
+            = new StmBoundsStatu2( *this, nF_fin_Punctuation, false );
     DYN StmBoundsStatu2 *   dpBst_finEOL
-            = new StmBoundsStatu2( *this, *this, nF_fin_EOL, false );
+            = new StmBoundsStatu2( *this, nF_fin_EOL, false );
     DYN StmBoundsStatu2 *   dpBst_finEOF
-            = new StmBoundsStatu2( *this, TkpContext_Null2_(), nF_fin_EOF, false );
+            = new StmBoundsStatu2( TkpContext_Null2_(), nF_fin_EOF, false );
 
     DYN StmBoundsStatu2 *   dpBst_gotoMld
-            = new StmBoundsStatu2( *this, *pDocuContext, nF_goto_MLDocu, false );
+            = new StmBoundsStatu2( *pDocuContext, nF_goto_MLDocu, false );
     DYN StmBoundsStatu2 *   dpBst_gotoSld
-            = new StmBoundsStatu2( *this, *pDocuContext, nF_goto_SLDocu, false );
+            = new StmBoundsStatu2( *pDocuContext, nF_goto_SLDocu, false );
     DYN StmBoundsStatu2 *   dpBst_gotoMlc
-            = new StmBoundsStatu2( *this, *dpContext_MLComment, nF_goto_MLComment, false );
+            = new StmBoundsStatu2( *dpContext_MLComment, nF_goto_MLComment, false );
     DYN StmBoundsStatu2 *   dpBst_gotoSlc
-            = new StmBoundsStatu2( *this, *dpContext_SLComment, nF_goto_SLComment, false );
+            = new StmBoundsStatu2( *dpContext_SLComment, nF_goto_SLComment, false );
     DYN StmBoundsStatu2 *   dpBst_gotoPrp
-            = new StmBoundsStatu2( *this, *dpContext_Preprocessor, nF_goto_Praeprocessor, false );
+            = new StmBoundsStatu2( *dpContext_Preprocessor, nF_goto_Praeprocessor, false );
     DYN StmBoundsStatu2 *   dpBst_gotoAsg
-            = new StmBoundsStatu2( *this, *dpContext_Assignment, nF_goto_Assignment, false );
+            = new StmBoundsStatu2( *dpContext_Assignment, nF_goto_Assignment, false );
 
     // construct dpMain:
     aStateMachine.AddStatus(dpStatusTop);

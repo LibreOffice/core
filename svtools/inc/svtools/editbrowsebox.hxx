@@ -661,7 +661,7 @@ namespace svt
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
 
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState,sal_Bool _bEnabled=sal_True);
+            ::com::sun::star::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
     protected:
         // creates the accessible which wraps the active cell
         void    implCreateActiveAccessible( );

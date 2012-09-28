@@ -196,7 +196,6 @@ private:
     SpellDialog_Impl* pImpl;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
-    LanguageType        nOldLang;
 
     DECL_LINK(ChangeHdl, void *);
     DECL_LINK(ChangeAllHdl, void *);

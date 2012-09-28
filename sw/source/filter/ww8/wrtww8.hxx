@@ -294,7 +294,7 @@ public:
     wwFont( const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet, bool bWrtWW8 );
     bool Write( SvStream *pTableStram ) const;
-    void WriteDocx( const DocxAttributeOutput* rAttrOutput ) const;
+    void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;
     void WriteRtf( const RtfAttributeOutput* rAttrOutput ) const;
     rtl::OUString GetFamilyName() const { return rtl::OUString( msFamilyNm ); }
     friend bool operator < (const wwFont &r1, const wwFont &r2);
@@ -318,7 +318,7 @@ public:
     sal_uInt16 GetId(const SvxFontItem& rFont);
     sal_uInt16 GetId(const wwFont& rFont);
     void WriteFontTable( SvStream *pTableStream, WW8Fib& pFib );
-    void WriteFontTable( const DocxAttributeOutput& rAttrOutput );
+    void WriteFontTable( DocxAttributeOutput& rAttrOutput );
     void WriteFontTable( const RtfAttributeOutput& rAttrOutput );
 
     /// If true, all fonts are loaded before processing the document.

@@ -25,8 +25,6 @@ import java.util.StringTokenizer;
 /**
  * The <code>ScriptDescriptor</code> object is used to store the search
  * criteria that should be used for finding a particular script
- *
- * @author     Tomas O'Connor
  */
 public class ScriptDescriptor
 {
@@ -35,7 +33,6 @@ public class ScriptDescriptor
     private String m_className;
     private List<String> m_classpath;
     private ArrayList<Class<?>> m_argumentTypes = new ArrayList<Class<?>>( 11 );
-
 
     /**
      * Constructs a ScriptDescriptor for the given name
@@ -57,7 +54,6 @@ public class ScriptDescriptor
         this.m_methodName = name.substring( idx + 1 );
         this.m_className = name.substring( 0, idx );
     }
-
 
     /**
      * Gets the fully qualified name of this <code>ScriptDescriptor</code>

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "comphelper/processfactory.hxx"
+
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
 #include "com/sun/star/task/DocumentPasswordRequest2.hpp"
 #include "com/sun/star/task/DocumentMSPasswordRequest.hpp"
@@ -204,7 +206,7 @@ handleAuthenticationRequest_(
 
     //////////////////////////
     // First, try to obtain credentials from password container service.
-    uui::PasswordContainerHelper aPwContainerHelper(xServiceFactory);
+    uui::PasswordContainerHelper aPwContainerHelper(comphelper::getComponentContext(xServiceFactory));
     if (aPwContainerHelper.handleAuthenticationRequest(rRequest,
                                                        xSupplyAuthentication,
                                                        rURL,

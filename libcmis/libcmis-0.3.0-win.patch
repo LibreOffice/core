@@ -1,0 +1,25 @@
+diff --git src/libcmis/ws-objectservice.cxx src/libcmis/ws-objectservice.cxx
+index df624de..5134d8e 100644
+--- src/libcmis/ws-objectservice.cxx
++++ src/libcmis/ws-objectservice.cxx
+@@ -119,7 +119,7 @@ libcmis::ObjectPtr ObjectService::updateProperties(
+ 
+ void ObjectService::deleteObject( string repoId, string id, bool allVersions ) throw ( libcmis::Exception )
+ {
+-    DeleteObject request( repoId, id, allVersions );
++    class DeleteObject request( repoId, id, allVersions );
+     m_session->soapRequest( m_url, request );
+ }
+         
+diff --git src/libcmis/ws-requests.hxx src/libcmis/ws-requests.hxx
+index 88fe5b9..6de94b8 100644
+--- src/libcmis/ws-requests.hxx
++++ src/libcmis/ws-requests.hxx
+@@ -202,6 +202,7 @@ class GetTypeChildrenResponse : public SoapResponse
+         std::vector< libcmis::ObjectTypePtr > getChildren( ) { return m_children; }
+ };
+ 
++#undef GetObject
+ class GetObject : public SoapRequest
+ {
+     private:

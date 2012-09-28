@@ -36,7 +36,7 @@ public class ExtensionFinder implements MethodFinder {
 
     public ScriptEntry[] findMethods(File basedir) {
         String parcelName;
-        ArrayList files = new ArrayList(10);
+        ArrayList<ScriptEntry> files = new ArrayList<ScriptEntry>(10);
         ScriptEntry[] empty = new ScriptEntry[0];
 
         if (basedir == null || basedir.exists() == false ||
@@ -54,7 +54,7 @@ public class ExtensionFinder implements MethodFinder {
         return empty;
     }
 
-    private void findFiles(ArrayList list, File basedir, String parcelName) {
+    private void findFiles(ArrayList<ScriptEntry> list, File basedir, String parcelName) {
         File[] children = basedir.listFiles();
         File f;
 

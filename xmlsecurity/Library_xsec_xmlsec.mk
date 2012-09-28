@@ -89,7 +89,7 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/xsec_nss \
 ))
 
-ifeq ($(GUI),WNT)
+ifeq ($(GUI)$(CROSS_COMPILING),WNT)
 
 $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_MSCRYPTO \
@@ -121,9 +121,15 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_NSS \
 ))
 
+ifeq ($(GUI)$(CROSS_COMPILING),WNTYES)
+$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
+	xmlsec1-nss \
+))
+else
 $(eval $(call gb_Library_use_static_libraries,xsec_xmlsec,\
 	xmlsec1-nss \
 ))
+endif
 
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	plc4 \
@@ -140,7 +146,7 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/xmlsignature_nssimpl \
 ))
 
-endif # ifeq ($(GUI),WNT)
+endif # ifeq ($(GUI)$(CROSS_COMPILING),WNT)
 
 ifeq ($(SYSTEM_NSS),YES)
 

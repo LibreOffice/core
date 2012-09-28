@@ -29,8 +29,6 @@ import org.openide.util.actions.SystemAction;
 import org.openoffice.idesupport.OfficeDocument;
 
 /** Recognizes single files in the Repository as being of a certain type.
- *
- * @author tomaso
  */
 public class ParcelDescriptorDataLoader extends UniFileLoader {
 

@@ -70,13 +70,20 @@ struct ShapeTypeModel
     ::rtl::OUString     maHeight;               ///< Height of the shape bounding box (number with unit).
     ::rtl::OUString     maMarginLeft;           ///< X position of the shape bounding box to shape anchor (number with unit).
     ::rtl::OUString     maMarginTop;            ///< Y position of the shape bounding box to shape anchor (number with unit).
+    ::rtl::OUString     maPositionHorizontalRelative; ///< The X position is relative to this.
     ::rtl::OUString     maPositionVerticalRelative; ///< The Y position is relative to this.
     ::rtl::OUString     maPositionHorizontal;   ///< The X position orientation (default: absolute).
+    ::rtl::OUString     maPositionVertical;     ///< The Y position orientation.
+    ::rtl::OUString     maWidthPercent;         ///< The width in percents of the WidthRelative
+    ::rtl::OUString     maHeightPercent;        ///< The height in percents of the HeightRelative
+    ::rtl::OUString     maWidthRelative;        ///< To what the width is relative
+    ::rtl::OUString     maHeightRelative;       ///< To what the height is relative
     ::rtl::OUString     maRotation;             ///< Rotation of the shape, in degrees.
     ::rtl::OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
     sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
     sal_Bool            mbVisible;              ///< Visible or Hidden
     ::rtl::OUString     maWrapStyle;            ///< Wrapping mode for text.
+    ::rtl::OUString     maArcsize;              ///< round rectangles arc size
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
@@ -185,6 +192,9 @@ struct ShapeModel
     ::rtl::OUString     maLegacyDiagramPath;///< Legacy Diagram Fragment Path
     ::rtl::OUString     maFrom;             ///< Start point for line shape.
     ::rtl::OUString     maTo;               ///< End point for line shape.
+    ::rtl::OUString     maControl1;         ///< Bezier control point 1
+    ::rtl::OUString     maControl2;         ///< Bezier control point 2
+    ::rtl::OUString     maVmlPath;          ///< VML path for this shape
 
     explicit            ShapeModel();
                         ~ShapeModel();
@@ -272,6 +282,10 @@ protected:
                         implConvertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+    /** Used by both RectangleShape and ComplexShape. */
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape>createPictureObject(
+            const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rxShapes,
+            const com::sun::star::awt::Rectangle& rShapeRect, OUString& rGraphicPath ) const;
 
 private:
     ::rtl::OUString     maService;          ///< Name of the UNO shape service.
@@ -284,6 +298,12 @@ class RectangleShape : public SimpleShape
 {
 public:
     explicit            RectangleShape( Drawing& rDrawing );
+protected:
+    /** Creates the corresponding XShape and inserts it into the passed container. */
+    virtual com::sun::star::uno::Reference<com::sun::star::drawing::XShape>
+                        implConvertAndInsert(
+                            const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& rxShapes,
+                            const com::sun::star::awt::Rectangle& rShapeRect) const;
 };
 
 // ============================================================================
@@ -324,6 +344,22 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 };
+
+/** Bezier shape object that supports to, from, control1 and control2
+    attribute or path attribute specification */
+class BezierShape : public SimpleShape
+{
+public:
+    explicit             BezierShape( Drawing& rDrawing );
+
+protected:
+    /** Creates the corresponding XShape and inserts it into the passed container. */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        implConvertAndInsert(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+};
+
 // ============================================================================
 
 /** A shape object with custom geometry. */

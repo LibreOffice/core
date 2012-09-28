@@ -269,8 +269,8 @@ public class UnoNode{
 
     private static String[] removeMandatoryServiceNames(String[] _sServiceNames){
     try{
-        List aList = java.util.Arrays.asList(_sServiceNames);
-        Vector aVector = new Vector(aList);
+        List<String> aList = java.util.Arrays.asList(_sServiceNames);
+        Vector<String> aVector = new Vector<String>(aList);
         for (int n = 0; n < _sServiceNames.length; n++){
             String[] sDelServiceNames = getMandatoryServiceNames(_sServiceNames[n]);
             for (int m = 0; m < sDelServiceNames.length; m++){

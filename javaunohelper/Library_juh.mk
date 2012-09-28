@@ -36,8 +36,19 @@ $(eval $(call gb_Library_use_libraries,juh,\
     $(gb_STDLIBS) \
 ))
 
+ifneq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Library_add_exception_objects,juh,\
     javaunohelper/source/preload \
 ))
+else
+# In the DISABLE_DYNLOADING case the juh library is a static archive that gets
+# linked into the single .so, so we can put directly into it the code that in
+# normal cases goes into the juhx library
+$(eval $(call gb_Library_add_exception_objects,juh,\
+    javaunohelper/source/bootstrap \
+    javaunohelper/source/javaunohelper \
+    javaunohelper/source/vm \
+))
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

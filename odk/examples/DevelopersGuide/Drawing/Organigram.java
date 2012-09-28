@@ -33,10 +33,6 @@
  *************************************************************************/
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
-
-import com.sun.star.bridge.XUnoUrlResolver;
-
 import com.sun.star.frame.XComponentLoader;
 
 import com.sun.star.lang.XComponent;

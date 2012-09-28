@@ -16,21 +16,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.storage;
-
-import ifc.script.framework.ScriptingUtils;
+package ifc.scripting;
 
 import drafts.com.sun.star.script.framework.storage.XScriptInfoAccess;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
-import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.Exception;
-import com.sun.star.beans.XPropertySet;
-
-import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Parameters;
@@ -194,7 +186,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         log.println(testdata.get("description"));
 
         Object obj = ScriptingUtils.getDefault().getScriptStorage(
-            tParam.getMSF(), location);
+            (XMultiServiceFactory) tParam.getMSF(), location);
 
         XScriptInfoAccess access = (XScriptInfoAccess)
             UnoRuntime.queryInterface(XScriptInfoAccess.class, obj);

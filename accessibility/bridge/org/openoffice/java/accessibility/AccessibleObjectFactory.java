@@ -19,10 +19,8 @@
 package org.openoffice.java.accessibility;
 
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.lang.ref.WeakReference;
-import javax.accessibility.Accessible;
-import javax.accessibility.AccessibleStateSet;
-
 import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
 import org.openoffice.java.accessibility.logging.XAccessibleEventLog;
@@ -73,7 +71,7 @@ public class AccessibleObjectFactory {
 
     public static void invokeAndWait() {
         try {
-            theEventQueue.invokeAndWait( new java.lang.Runnable () {
+            EventQueue.invokeAndWait( new java.lang.Runnable () {
                                                 public void run() {
                                                 }
                                              });

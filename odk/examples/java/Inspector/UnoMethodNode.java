@@ -37,8 +37,6 @@ import com.sun.star.reflection.ParamMode;
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.uno.TypeClass;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class UnoMethodNode extends UnoNode{
@@ -95,7 +93,7 @@ public class UnoMethodNode extends UnoNode{
             m_bisInvoked = true;
         }
         else{
-            Vector oUnoMethodObjects = m_xUnoMethodNode.getMethodObjects();
+            Vector<Object> oUnoMethodObjects = m_xUnoMethodNode.getMethodObjects();
             if (oUnoMethodObjects != null){
                 for (int i = 0; i < getXIdlMethod().getParameterInfos().length; i++){
                     this.m_oParamObjects[i] = oUnoMethodObjects.get(i);

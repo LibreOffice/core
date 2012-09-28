@@ -85,7 +85,6 @@ my_components = \
     component/sc/util/scfilt \
     component/scaddins/source/analysis/analysis \
     component/scaddins/source/datefunc/date \
-    component/sccomp/source/solver/solver \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
@@ -209,6 +208,7 @@ my_components += \
 .IF "$(OS)" != "IOS"
 
 my_components += \
+    component/sccomp/source/solver/solver \
     component/writerfilter/util/writerfilter \
     component/writerperfect/util/wpftwriter \
     component/writerperfect/util/wpftdraw \
@@ -328,8 +328,11 @@ my_components += \
 .END
 
 .IF "$(GUIBASE)" == "aqua"
+.IF "$(BITNESS_OVERRIDE)" != "64"
 my_components += \
-    component/avmedia/source/quicktime/avmediaQuickTime \
+    component/avmedia/source/quicktime/avmediaQuickTime
+.ENDIF
+my_components += \
     component/lingucomponent/source/spellcheck/macosxspell/MacOSXSpell
 .END
 
@@ -375,14 +378,15 @@ my_components += \
     component/canvas/source/directx/gdipluscanvas
 .END
 
-.IF "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
-.IF "$(OS)" != "MACOSX" && "$(SYSTEM_MOZILLA)" != "YES" && \
-    "$(WITH_MOZILLA)" != "NO"
+.IF "$(OS)" == "WNT"
+.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO"
 my_components += component/connectivity/source/drivers/mozab/mozab
 .ELSE
 my_components += component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
 .END
-.ENDIF
+.ELIF "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
+my_components += component/connectivity/source/drivers/mork/mork
+.END
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS" && "$(OS)" != "headless"
 my_components += component/shell/source/cmdmail/cmdmail

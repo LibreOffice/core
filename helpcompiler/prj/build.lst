@@ -1,0 +1,3 @@
+tr helpcompiler : BERKELEYDB:berkeleydb EXPAT:expat LIBXSLT:libxslt CLUCENE:clucene sal NULL
+tr	helpcompiler					usr1	-	all	tr_mkout NULL
+tr	helpcompiler\prj					nmake	-	all	tr_prj NULL

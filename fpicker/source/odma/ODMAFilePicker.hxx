@@ -58,6 +58,8 @@ class ODMAFilePicker :
       ::com::sun::star::lang::XServiceInfo >
 {
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        m_xContext;
     sal_Bool m_bUseDMS;
     sal_Bool m_bMultiSelectionMode;
     rtl::OUString m_aDefaultName;
@@ -72,7 +74,7 @@ protected:
 
 public:
 
-    ODMAFilePicker( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    ODMAFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     // XFilterManager functions
 

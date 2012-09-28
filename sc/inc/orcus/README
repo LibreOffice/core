@@ -1,7 +1,0 @@
-The headers in this directory are directly copied from the orcus project[1].
-Please send patches directly to the orcus project.
-
-Please don't modify these files here.  Any changes you may make here will get
-overwritten when copying updated files from orcus.
-
-[1] http://gitorious.org/orcus

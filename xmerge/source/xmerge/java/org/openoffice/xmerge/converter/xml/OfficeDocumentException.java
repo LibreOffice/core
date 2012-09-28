@@ -29,8 +29,6 @@ import org.openoffice.xmerge.util.Resources;
  *  Used by OfficeDocument to encapsulate exceptions.  It will add
  *  more details to the message string if it is of type
  *  <code>SAXParseException</code>.
- *
- *  @author      Herbie Ong
  */
 
 public final class OfficeDocumentException extends IOException {

@@ -35,7 +35,6 @@
 #include "svtools/extensionlistbox.hxx"
 #include "svtools/fixedhyper.hxx"
 #include "cppuhelper/implbase1.hxx"
-#include "unotools/collatorwrapper.hxx"
 
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XEventListener.hpp"
@@ -103,7 +102,6 @@ class ClientBox:
     bool            m_bHasScrollBar;
     bool            m_bHasActive;
     bool            m_bNeedsRecalc;
-    bool            m_bHasNew;
     bool            m_bInCheckMode;
     bool            m_bAdjustActive;
     bool            m_bInDelete;
@@ -135,8 +133,6 @@ class ClientBox:
     mutable ::osl::Mutex    m_entriesMutex;
     std::vector< TClientBoxEntry > m_vEntries;
     std::vector< TClientBoxEntry > m_vRemovedEntries;
-
-    CollatorWrapper *m_pCollator;
 
     void            CalcActiveHeight( const long nPos );
     long            GetTotalHeight() const;

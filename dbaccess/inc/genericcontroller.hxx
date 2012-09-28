@@ -25,7 +25,6 @@
 #include "dbaccessdllapi.h"
 #include "IController.hxx"
 
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -37,6 +36,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -242,7 +242,7 @@ namespace dbaui
         ControllerFrame                                                                     m_aCurrentFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xMasterDispatcher;    // dito
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xDatabaseContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >         m_xDatabaseContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                 m_xTitleHelper;
 
         sal_Bool                m_bPreview;

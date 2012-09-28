@@ -404,9 +404,7 @@ SwScrollNaviPopup::SwScrollNaviPopup( sal_uInt16 nId, const Reference< XFrame >&
     aToolBox(this, 0),
     aSeparator(this, SW_RES(FL_SEP)),
     aInfoField(this, SW_RES(FI_INFO)),
-    aIList(SW_RES(IL_VALUES)),
-    nFwdId(FN_START_OF_NEXT_PAGE),
-    nBackId(FN_START_OF_PREV_PAGE)
+    aIList(SW_RES(IL_VALUES))
 {
     sal_uInt16 i;
 

@@ -506,7 +506,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
         SfxMediumRef pMedium = new SfxMedium(
-                sFileName, ( STREAM_READ | STREAM_NOCREATE ), sal_False, 0 );
+                sFileName, ( STREAM_READ | STREAM_NOCREATE ) );
 
         if( pMedium )
         {
@@ -1083,12 +1083,8 @@ SvXMLImportContext* ORptFilter::CreateMetaContext(const ::rtl::OUString& rLocalN
 
     if ( (getImportFlags() & IMPORT_META) )
     {
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            getServiceFactory()->createInstance(::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.SAXDocumentBuilder"))),
-                uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
-        pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties(), xDocBuilder);
+        pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties());
     }
     return pContext;
 }

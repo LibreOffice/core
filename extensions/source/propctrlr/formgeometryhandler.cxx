@@ -784,7 +784,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void ShapeGeometryChangeNotifier::impl_init_nothrow()
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         try
         {
             Reference< XPropertySet > xShapeProperties( m_xShape, UNO_QUERY_THROW );
@@ -794,7 +794,7 @@ namespace pcr
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

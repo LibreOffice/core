@@ -343,7 +343,7 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
 {
     if( mpPrintInfo )
     {
-        long nDPIX = 72, nDPIY = 72;
+        sal_Int32 nDPIX = 72, nDPIY = 72;
         mpGraphics->GetResolution( nDPIX, nDPIY );
         const double fXScaling = static_cast<double>(nDPIX)/72.0,
                      fYScaling = static_cast<double>(nDPIY)/72.0;

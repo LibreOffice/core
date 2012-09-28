@@ -74,7 +74,8 @@ SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#
-    mbNoMoveOnCheckClip( false )
+    mbNoMoveOnCheckClip( false ),
+    maUnclippedFrm( )
 {
 }
 
@@ -112,7 +113,7 @@ TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
 |*  SwFlyFreeFrm::NotifyBackground()
 |*
 |*  Description      notifies the background (all CntntFrms that currently
-|*       are overlapping. Additionally, the window is also directly
+|*       are overlapping). Additionally, the window is also directly
 |*       invalidated (especially where there are no overlapping CntntFrms)
 |*       This also takes CntntFrms within other Flys into account.
 |*
@@ -150,7 +151,7 @@ void SwFlyFreeFrm::MakeAll()
     if( !GetPageFrm() )
         return;
 
-    Lock(); // The courtain drops
+    Lock(); // The curtain drops
 
     // takes care of the notification in the dtor
     const SwFlyNotify aNotify( this );
@@ -319,7 +320,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
         {
             SwFrm* pHeader = FindFooterOrHeader();
             // In a header, correction of the position is no good idea.
-            // If the fly moves, some paragraphs has to be formatted, this
+            // If the fly moves, some paragraphs have to be formatted, this
             // could cause a change of the height of the headerframe,
             // now the flyframe can change its position and so on ...
             if ( !pHeader || !pHeader->IsHeaderFrm() )
@@ -352,8 +353,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
         else
         {
             // If we reach this branch, the Frm protrudes into forbidden
-            // sections, and correcting the position is neither allowed
-            // nor possible nor required.
+            // areas, and correcting the position is not allowed or not
+            // possible or not required.
 
             // For Flys with OLE objects as lower, we make sure that
             // we always resize proportionally
@@ -444,9 +445,10 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             }
 
             // Now change the Frm; for columns, we put the new values into the attributes,
-            // otherwise we'll end up with unwanted side-effects
+            // otherwise we'll end up with unwanted side-effects/oscillations
             const long nPrtHeightDiff = Frm().Height() - Prt().Height();
             const long nPrtWidthDiff  = Frm().Width()  - Prt().Width();
+            maUnclippedFrm = SwRect( Frm() );
             Frm().Height( aFrmRect.Height() );
             Frm().Width ( Max( long(MINLAY), aFrmRect.Width() ) );
             if ( Lower() && Lower()->IsColumnFrm() )
@@ -1176,7 +1178,7 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
                 }
                 if ( pCell )
                 {
-                    // CellFrms might also sit in unallowed sections. In this case,
+                    // CellFrms might also sit in unallowed areas. In this case,
                     // the Fly is allowed to do so as well
                     SwRect aTmp( pCell->Prt() );
                     aTmp += pCell->Frm().Pos();

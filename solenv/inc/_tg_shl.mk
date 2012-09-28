@@ -449,7 +449,7 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB1FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL1OBJS)) $(shell cat /dev/null $(LIB1TARGET) $(SHL1LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -934,7 +934,7 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB2FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL2OBJS)) $(shell cat /dev/null $(LIB2TARGET) $(SHL2LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -1419,7 +1419,7 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB3FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL3OBJS)) $(shell cat /dev/null $(LIB3TARGET) $(SHL3LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -1904,7 +1904,7 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB4FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL4OBJS)) $(shell cat /dev/null $(LIB4TARGET) $(SHL4LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -2389,7 +2389,7 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB5FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL5OBJS)) $(shell cat /dev/null $(LIB5TARGET) $(SHL5LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -2874,7 +2874,7 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB6FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL6OBJS)) $(shell cat /dev/null $(LIB6TARGET) $(SHL6LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3359,7 +3359,7 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB7FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL7OBJS)) $(shell cat /dev/null $(LIB7TARGET) $(SHL7LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3844,7 +3844,7 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB8FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL8OBJS)) $(shell cat /dev/null $(LIB8TARGET) $(SHL8LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -4329,7 +4329,7 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB9FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL9OBJS)) $(shell cat /dev/null $(LIB9TARGET) $(SHL9LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
@@ -4814,7 +4814,7 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB10FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL10OBJS)) $(shell cat /dev/null $(LIB10TARGET) $(SHL10LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"

@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -37,7 +37,7 @@ class NumberFormatCodeMapper : public cppu::WeakImplHelper2
 {
 public:
     NumberFormatCodeMapper( const ::com::sun::star::uno::Reference <
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+                    ::com::sun::star::uno::XComponentContext >& rxContext );
     ~NumberFormatCodeMapper();
 
     virtual ::com::sun::star::i18n::NumberFormatCode SAL_CALL getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
@@ -55,10 +55,10 @@ public:
 
 private:
     ::com::sun::star::lang::Locale aLocale;
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xMSF;
+    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > aFormatSeq;
-    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XLocaleData > xlocaleData;
-    sal_Bool bFormatsValid;
+    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XLocaleData4 > mxLocaleData;
+    bool bFormatsValid;
 
     void setupLocale( const ::com::sun::star::lang::Locale& rLocale );
     void getFormats( const ::com::sun::star::lang::Locale& rLocale );

@@ -32,12 +32,7 @@
  *
  *************************************************************************/
 
-import com.sun.star.comp.servicemanager.ServiceManager;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XComponentLoader;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 
 import com.sun.star.uno.UnoRuntime;

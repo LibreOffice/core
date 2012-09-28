@@ -41,127 +41,133 @@
 #include <svl/srchitem.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
+namespace basctl
+{
+
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class BasicIDEDLL
+namespace
 {
-    BasicIDEShell* m_pShell;
-    BasicIDEData* m_pExtraData;
+
+class Dll
+{
+    Shell* m_pShell;
+    boost::scoped_ptr<ExtraData> m_pExtraData;
 
 public:
-    BasicIDEDLL();
-    ~BasicIDEDLL();
+    Dll ();
 
-    BasicIDEShell* GetShell() const { return m_pShell; }
-    void SetShell(BasicIDEShell* pShell) { m_pShell = pShell; }
-    BasicIDEData* GetExtraData();
+    Shell* GetShell() const { return m_pShell; }
+    void SetShell (Shell* pShell) { m_pShell = pShell; }
+    ExtraData* GetExtraData ();
 };
+
+// Holds a basctl::Dll and release it on exit, or dispose of the
+//default XComponent, whichever comes first
+class DllInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>
+{
+public:
+    DllInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), ::com::sun::star::uno::UNO_QUERY_THROW), new Dll)
+    { }
+};
+
+struct theDllInstance : public rtl::Static<DllInstance, theDllInstance> { };
+
+} // namespace
+
+void EnsureIde ()
+{
+    theDllInstance::get();
+}
+
+Shell* GetShell ()
+{
+    if (Dll* pDll = theDllInstance::get().get())
+        return pDll->GetShell();
+    return 0;
+}
+
+void ShellCreated (Shell* pShell)
+{
+    Dll* pDll = theDllInstance::get().get();
+    if (pDll && !pDll->GetShell())
+        pDll->SetShell(pShell);
+}
+
+void ShellDestroyed (Shell* pShell)
+{
+    Dll* pDll = theDllInstance::get().get();
+    if (pDll && pDll->GetShell() == pShell)
+        pDll->SetShell(0);
+}
+
+ExtraData* GetExtraData()
+{
+    if (Dll* pDll = theDllInstance::get().get())
+        return pDll->GetExtraData();
+    return 0;
+}
+
+
+IDEResId::IDEResId( sal_uInt16 nId ):
+    ResId(nId, *Module::Get()->GetResMgr())
+{ }
 
 namespace
 {
-    //Holds a BasicIDEDLL and release it on exit, or dispose of the
-    //default XComponent, whichever comes first
-    class BasicIDEDLLInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<BasicIDEDLL>
-    {
-    public:
-        BasicIDEDLLInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<BasicIDEDLL>(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), ::com::sun::star::uno::UNO_QUERY_THROW), new BasicIDEDLL)
-        {
-        }
-    };
 
-    struct theBasicIDEDLLInstance : public rtl::Static<BasicIDEDLLInstance, theBasicIDEDLLInstance> {};
-}
-
-namespace BasicIDEGlobals
+Dll::Dll () :
+    m_pShell(0)
 {
-    void ensure()
-    {
-        theBasicIDEDLLInstance::get();
-    }
-
-    BasicIDEShell* GetShell()
-    {
-        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
-        return pIDEGlobals ? pIDEGlobals->GetShell() : NULL;
-    }
-
-    void ShellCreated(BasicIDEShell* pShell)
-    {
-        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
-        if (pIDEGlobals && pIDEGlobals->GetShell() == NULL)
-            pIDEGlobals->SetShell(pShell);
-    }
-
-    void ShellDestroyed(BasicIDEShell* pShell)
-    {
-        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
-        if (pIDEGlobals && pIDEGlobals->GetShell() == pShell)
-            pIDEGlobals->SetShell(NULL);
-    }
-
-    BasicIDEData* GetExtraData()
-    {
-        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
-        return pIDEGlobals ? pIDEGlobals->GetExtraData() : NULL;
-    }
-}
-
-IDEResId::IDEResId( sal_uInt16 nId ):
-    ResId( nId, *(BASIC_MOD())->GetResMgr() )
-{
-}
-
-BasicIDEDLL::~BasicIDEDLL()
-{
-    delete m_pExtraData;
-}
-
-BasicIDEDLL::BasicIDEDLL()
-    : m_pShell(0)
-    , m_pExtraData(0)
-{
-    SfxObjectFactory* pFact = &BasicDocShell::Factory();
+    SfxObjectFactory* pFact = &DocShell::Factory();
     (void)pFact;
 
     ResMgr* pMgr = ResMgr::CreateResMgr(
-        "basctl", Application::GetSettings().GetUILocale() );
+        "basctl", Application::GetSettings().GetUILocale()
+    );
 
-    BASIC_MOD() = new BasicIDEModule( pMgr, &BasicDocShell::Factory() );
+    Module::Get() = new Module( pMgr, &DocShell::Factory() );
 
     GetExtraData(); // to cause GlobalErrorHdl to be set
 
-    SfxModule* pMod = BASIC_MOD();
+    SfxModule* pMod = Module::Get();
 
-    SfxObjectFactory& rFactory = BasicDocShell::Factory();
+    SfxObjectFactory& rFactory = DocShell::Factory();
     rFactory.SetDocumentServiceName( rtl::OUString("com.sun.star.script.BasicIDE") );
 
-    BasicDocShell::RegisterInterface( pMod );
-    BasicIDEShell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );
-    BasicIDEShell::RegisterInterface( pMod );
-
-    PropBrwMgr::RegisterChildWindow();
+    DocShell::RegisterInterface( pMod );
+    Shell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );
+    Shell::RegisterInterface( pMod );
 }
 
-BasicIDEData* BasicIDEDLL::GetExtraData()
+ExtraData* Dll::GetExtraData ()
 {
     if (!m_pExtraData)
-        m_pExtraData = new BasicIDEData;
-    return m_pExtraData;
+        m_pExtraData.reset(new ExtraData);
+    return m_pExtraData.get();
 }
 
-BasicIDEData::BasicIDEData()
+} // namespace
+
+//
+// basctl::ExtraData
+// ===================
+//
+
+ExtraData::ExtraData () :
+    pSearchItem(new SvxSearchItem(SID_SEARCH_ITEM)),
+    nBasicDialogCount(0),
+    bChoosingMacro(false),
+    bShellInCriticalSection(false)
 {
-    nBasicDialogCount = 0;
-    bChoosingMacro = false;
-    bShellInCriticalSection = false;
-    pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
-
-    StarBASIC::SetGlobalBreakHdl( LINK( this, BasicIDEData, GlobalBasicBreakHdl ) );
+    StarBASIC::SetGlobalBreakHdl(LINK(this, ExtraData, GlobalBasicBreakHdl));
 }
 
-BasicIDEData::~BasicIDEData()
+ExtraData::~ExtraData ()
 {
     // Resetting ErrorHdl is cleaner indeed but this instance is destroyed
     // pretty late, after the last Basic, anyway.
@@ -170,36 +176,26 @@ BasicIDEData::~BasicIDEData()
 //  StarBASIC::SetGlobalErrorHdl( Link() );
 //  StarBASIC::SetGlobalBreakHdl( Link() );
 //  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
-
-    delete pSearchItem;
 }
 
-SvxSearchItem& BasicIDEData::GetSearchItem() const
+void ExtraData::SetSearchItem (const SvxSearchItem& rItem)
 {
-    return *pSearchItem;
+    pSearchItem.reset((SvxSearchItem*)rItem.Clone());
 }
 
-void BasicIDEData::SetSearchItem( const SvxSearchItem& rItem )
-{
-    delete pSearchItem;
-    pSearchItem = (SvxSearchItem*)rItem.Clone();
-}
-
-IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
+IMPL_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
 {
     long nRet = 0;
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    if ( pIDEShell )
+    if (Shell* pShell = GetShell())
     {
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-        if ( pBasMgr )
+        if (BasicManager* pBasMgr = FindBasicManager(pBasic))
         {
             // I do get here twice if Step into protected Basic
             // => bad, if password query twice, also you don't see
             // the lib in the PasswordDlg...
             // => start no password query at this point
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-            OSL_ENSURE( aDocument.isValid(), "BasicIDEData::GlobalBasicBreakHdl: no document for the basic manager!" );
+            OSL_ENSURE( aDocument.isValid(), "basctl::ExtraData::GlobalBasicBreakHdl: no document for the basic manager!" );
             if ( aDocument.isValid() )
             {
                 ::rtl::OUString aOULibName( pBasic->GetName() );
@@ -214,7 +210,7 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
                     }
                     else
                     {
-                          nRet = pIDEShell->CallBasicBreakHdl( pBasic );
+                        nRet = pShell->CallBasicBreakHdl( pBasic );
                     }
                 }
             }
@@ -223,5 +219,8 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
 
     return nRet;
 }
+
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

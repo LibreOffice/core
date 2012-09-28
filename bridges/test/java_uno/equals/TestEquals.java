@@ -27,7 +27,6 @@ import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.lib.TestBed;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.loader.XImplementationLoader;
@@ -38,6 +37,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Hashtable;
+import test.lib.TestBed;
 
 // In this test scenario, the Java server (see implementation of method
 // notifyAccepting) has a remote bridge to the Java client and a local JNI

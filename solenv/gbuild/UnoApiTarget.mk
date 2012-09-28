@@ -56,18 +56,20 @@ define gb_UnoApiPartTarget__command
 	$(call gb_Output_announce,$(2),$(true),IDL,2)
 	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3)))) && \
+	$(gb_UnoApiPartTarget_IDLCCOMMAND) \
 		$(INCLUDE) \
 		-M $(basename $(call gb_UnoApiPartTarget_get_dep_target,$(dir $(2)))) \
 		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose \
-		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3)))) && \
-	$(gb_UnoApiPartTarget_IDLCCOMMAND) @$${RESPONSEFILE} > /dev/null && \
+		@$${RESPONSEFILE} > /dev/null && \
 	rm -f $${RESPONSEFILE} && \
 	touch $(1)
 
 endef
 
 $(call gb_UnoApiPartTarget_get_target,%.done) : \
-		$(gb_UnoApiPartTarget_IDLCTARGET)
+		$(gb_UnoApiPartTarget_IDLCTARGET) \
+		| $(gb_UCPPTARGET)
 	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$?))
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -134,10 +136,13 @@ $(if $(or $(and $(1),$(2),$(3)),$(and $(1),$(2)),$(and $(2),$(3)),$(and $(1),$(3
 $(if $(4),,$(error No root has been set for the rdb file))
 endef
 
-# FIXME cannot have a dependency on $(gb_UnoApiTarget_RDBMAKERTARGET) here
-# because that leads to dependency cycle because rdbmaker depends on offapi
-$(call gb_UnoApiTarget_get_target,%) : $(gb_UnoApiTarget_XML2CMPTARGET) \
-		$(gb_UnoApiTarget_REGCOMPARETARGET) $(gb_UnoApiTarget_REGMERGETARGET)
+$(call gb_UnoApiTarget_get_external_headers_target,%) :
+	mkdir -p $(dir $@) && touch $@
+
+$(call gb_UnoApiTarget_get_headers_target,%) : $(call gb_UnoApiTarget_get_external_headers_target,%)
+	mkdir -p $(dir $@) && touch $@
+
+$(call gb_UnoApiTarget_get_target,%) :
 	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_XML),$(UNOAPI_ROOT))
 	$(call gb_UnoApiTarget__command,$@,$*)
 
@@ -145,7 +150,9 @@ $(call gb_UnoApiTarget_get_target,%) : $(gb_UnoApiTarget_XML2CMPTARGET) \
 $(call gb_UnoApiTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UNO,4)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_UnoApiTarget_get_target,$*))
+		rm -f $(call gb_UnoApiTarget_get_target,$*) \
+			$(call gb_UnoApiTarget_get_external_headers_target,$*) \
+			$(call gb_UnoApiTarget_get_headers_target,$*))
 		-rm -rf $(call gb_UnoApiTarget_get_dep_target,$*) \
 			$(basename $(call gb_UnoApiPartTarget_get_dep_target,$*)) \
 			$(call gb_UnoApiPartTarget_get_target,$*)
@@ -210,12 +217,14 @@ $(call gb_UnoApiTarget_get_target,$(1)) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) :| $(call gb_UnoApiTarget_get_external_headers_target,$(1))
 
 endef
 
 define gb_UnoApiTarget_add_idlfiles
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
 $(call gb_UnoApiTarget__add_idlfiles,$(1),$(2),$(3))
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGETARGET)
 
 endef
 
@@ -230,6 +239,7 @@ endef
 
 define gb_UnoApiTarget_merge_api
 $(foreach rdb,$(2),$(call gb_UnoApiTarget__merge_api,$(1),$(rdb)))
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGETARGET)
 
 endef
 
@@ -248,6 +258,8 @@ define gb_UnoApiTarget_set_xmlfile
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_XML := $(SRCDIR)/$(2)
 $(call gb_UnoApiTarget_get_target,$(1)) : $(SRCDIR)/$(2)
 $(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_XMLRDB)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_XML2CMPTARGET)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_RDBMAKERTARGET)
 
 endef
 
@@ -257,6 +269,7 @@ endef
 
 define gb_UnoApiTarget_set_reference_rdbfile
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(SRCDIR)/$(strip $(2)).rdb
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGCOMPARETARGET)
 
 endef
 
@@ -276,19 +289,36 @@ gb_UnoApiHeadersTarget_CPPUMAKERTARGET := $(call gb_Executable_get_target_for_bu
 gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
 
 define gb_UnoApiHeadersTarget__command
-RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
-	-Gc $(4) -BUCR \
-	-O$(3) $(call gb_UnoApiTarget_get_target,$(2)) $(UNOAPI_DEPS)) && \
-$(gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND) @$${RESPONSEFILE} && \
-rm -f $${RESPONSEFILE} && \
-touch $(1)
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
+		$(UNOAPI_DEPS)) && \
+	$(gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND) \
+		-Gc $(4) -BUCR \
+		-O$(3) $(call gb_UnoApiTarget_get_target,$(2)) \
+		@$${RESPONSEFILE} && \
+	rm -f $${RESPONSEFILE} && \
+	touch $(1)
 
 endef
 
+# On iOS we use static linking because dynamic loading of own code
+# isn't allowed by the iOS App Store rules, and we want our code to be
+# eventually distributable there as part of apps.
+
+# To avoid problems that this causes together with the lovely
+# intentional breaking of the One Definition Rule, for iOS we always
+# generate comprehensive headers for udkapi. (The ODR breakage doesn't
+# harm, by accident or careful design, on platforms where shared
+# libraries are used.)
+
 $(call gb_UnoApiHeadersTarget_get_bootstrap_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(call gb_Output_announce,$*,$(true),HPB,3)
-	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*))
+	$(if $(filter TRUEudkapi,$(DISABLE_DYNLOADING)$*), \
+		$(call gb_Output_announce,$*,$(true),HPB,3) \
+		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*),-C), \
+	\
+		$(call gb_Output_announce,$*,$(true),HPB,3) \
+		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*)) \
+	)
 
 $(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
@@ -297,8 +327,13 @@ $(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) : \
 
 $(call gb_UnoApiHeadersTarget_get_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(call gb_Output_announce,$*,$(true),HPP,3)
-	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L)
+	$(if $(filter TRUEudkapi,$(DISABLE_DYNLOADING)$*), \
+		$(call gb_Output_announce,$*,$(true),HPP,3) \
+		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-C), \
+	\
+		$(call gb_Output_announce,$*,$(true),HPP,3) \
+		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L) \
+	)
 
 .PHONY : $(call gb_UnoApiHeadersTarget_get_clean_target,%)
 $(call gb_UnoApiHeadersTarget_get_clean_target,%) :

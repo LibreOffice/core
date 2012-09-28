@@ -32,8 +32,10 @@ MathMLDTD\
 Mesa\
 UnoControls\
 accessibility\
+afms\
 android\
 animations\
+apache-commons\
 apple_remote\
 autodoc\
 avmedia\
@@ -43,8 +45,12 @@ basegfx\
 basic\
 bean\
 binaryurp\
+bluez_bluetooth\
+boost\
+bridges\
 canvas\
 chart2\
+cli_ure\
 clucene\
 codemaker\
 comphelper\
@@ -73,6 +79,7 @@ forms\
 formula\
 fpicker\
 framework\
+helpcompiler\
 hsqldb\
 hwpfilter\
 i18npool\
@@ -85,9 +92,21 @@ jurt\
 jvmaccess\
 jvmfwk\
 l10ntools\
+libcdr\
+libcmis\
+libmspub\
+liborcus\
+libpng\
+libvisio\
+libwpd\
+libwpg\
+libwps\
 lingucomponent\
 linguistic\
 lotuswordpro\
+mdds\
+more_fonts\
+neon\
 nlpsolver\
 np_sdk\
 o3tl\
@@ -101,6 +120,7 @@ padmin\
 psprint_config\
 pyuno\
 qadevOOo\
+readlicense_oo\
 regexp\
 registry\
 remotebridges\
@@ -170,17 +190,13 @@ xmloff\
 xmlreader\
 xmlscript\
 xmlsecurity\
+xsltml\
 
 dmake_modules:=\
-afms\
-apache-commons\
 beanshell\
 berkeleydb\
 binfilter \
-boost\
-bridges\
 cairo\
-cli_ure\
 cppunit\
 crashrep\
 ct2n\
@@ -202,32 +218,21 @@ instsetoo_native\
 jfreereport\
 jpeg\
 languagetool\
-libcdr\
-libcmis\
 libcroco\
 libexttextcat\
 libgsf\
 liblangtag\
-libmspub\
-libpng\
 librsvg\
-libvisio\
-libwpd\
-libwpg\
-libwps\
 libxml2\
 libxmlsec\
 libxslt\
 lcms2\
 lpsolve\
-mdds\
 migrationanalysis\
-more_fonts\
 moz\
 mysqlc\
 mysqlcppconn\
 mythes\
-neon\
 nss\
 odk\
 openldap\
@@ -236,7 +241,6 @@ pango\
 postgresql\
 postprocess\
 python\
-readlicense_oo\
 redland\
 rhino\
 saxon\
@@ -247,7 +251,6 @@ stlport\
 sysui\
 tomcat\
 xpdf\
-xsltml\
 zlib\
 
 export gb_TAILBUILDTARGET=all slowcheck
@@ -271,7 +274,7 @@ $(1).clean:
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
 
 $(1).subsequentcheck:
-	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck gb_PARTIALBUILD=T
 
 $(1).deliver:
 	@true
@@ -523,6 +526,7 @@ findunusedcode:
               | grep -v ^WPG \
               | grep -v ^WPS \
               | grep -v WPX \
+              | grep -v ^WSObject \
               > unusedcode.easy
 
 check: dev-install subsequentcheck

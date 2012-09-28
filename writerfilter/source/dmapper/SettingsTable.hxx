@@ -63,6 +63,13 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
 
     bool GetEvenAndOddHeaders() const;
 
+    bool GetUsePrinterMetrics() const;
+
+    bool GetEmbedTrueTypeFonts() const;
+    bool GetEmbedSystemFonts() const;
+
+    bool GetDoNotUseHTMLParagraphAutoSpacing() const;
+
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 
  private:

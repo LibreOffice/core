@@ -34,6 +34,8 @@ $(eval $(call gb_Library_set_include,scfilt,\
 
 $(eval $(call gb_Library_use_sdk_api,scfilt))
 
+$(eval $(call gb_Library_use_external,scfilt,mdds_headers))
+
 $(eval $(call gb_Library_use_libraries,scfilt,\
 	basegfx \
 	comphelper \
@@ -59,6 +61,10 @@ $(eval $(call gb_Library_use_libraries,scfilt,\
 	utl \
 	vcl \
 	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_use_externals,scfilt,\
+	orcus \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scfilt,\
@@ -212,6 +218,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
         sc/source/filter/oox/worksheetfragment \
         sc/source/filter/oox/worksheethelper \
         sc/source/filter/oox/worksheetsettings \
+        sc/source/filter/orcus/orcusfiltersimpl \
 ))
 
 # vim: set noet sw=4 ts=4:

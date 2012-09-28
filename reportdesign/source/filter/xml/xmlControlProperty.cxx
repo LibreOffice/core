@@ -28,6 +28,7 @@
 
 #include "xmlControlProperty.hxx"
 
+#include <rtl/strbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>

@@ -88,11 +88,6 @@ String STR_BOOTSTRAP_ERR_LANGUAGE_MISSING
     Text [ en-US ] = "The user interface language cannot be determined.";
 };
 
-String STR_BOOTSTRAP_ERR_NO_SERVICE
-{
-    Text [ en-US ] = "The component manager is not available.";
-};
-
 String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
 {
     Text [ en-US ] = "The configuration service is not available.";

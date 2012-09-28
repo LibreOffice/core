@@ -29,8 +29,6 @@ import org.openoffice.xmerge.util.XmlUtil;
 /**
  * This is a class to define a Name Definition structure. This can then be
  * used by plugins to write or read their own definition types.
- *
- * @author Martin Maher
  */
 public class NameDefinition implements OfficeConstants {
 

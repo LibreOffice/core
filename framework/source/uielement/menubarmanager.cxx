@@ -49,6 +49,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
@@ -63,10 +64,11 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
+#include <svtools/javainteractionhandler.hxx>
+#include <uno/current_context.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/cmdoptions.hxx>
@@ -800,11 +802,45 @@ static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 // vcl handler
 //_________________________________________________________________________________________________________________
 
+namespace {
+
+class QuietInteractionContext:
+    public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >,
+    private boost::noncopyable
+{
+public:
+    QuietInteractionContext(
+        com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext >
+            const & context):
+        context_(context) {}
+
+private:
+    virtual ~QuietInteractionContext() {}
+
+    virtual com::sun::star::uno::Any SAL_CALL getValueByName(
+        rtl::OUString const & Name)
+        throw (com::sun::star::uno::RuntimeException)
+    {
+        return Name != JAVA_INTERACTION_HANDLER_NAME && context_.is()
+            ? context_->getValueByName(Name)
+            : com::sun::star::uno::Any();
+    }
+
+    com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext >
+        context_;
+};
+
+}
+
 IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Activate" );
     if ( pMenu == m_pVCLMenu )
     {
+        com::sun::star::uno::ContextLayer layer(
+            new QuietInteractionContext(
+                com::sun::star::uno::getCurrentContext()));
+
         // set/unset hiding disabled menu entries
         sal_Bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -2086,7 +2122,7 @@ void MenuBarManager::SetHdl()
     if ( !m_xURLTransformer.is() && mxServiceFactory.is() )
         m_xURLTransformer.set(
              URLTransformer::create(
-                 ::comphelper::ComponentContext(mxServiceFactory).getUNOContext()) );
+                 ::comphelper::getComponentContext(mxServiceFactory)) );
 }
 
 }

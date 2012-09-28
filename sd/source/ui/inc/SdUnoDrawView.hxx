@@ -21,7 +21,6 @@
 #define SD_UNO_DRAW_VIEW_HXX
 
 #include "DrawSubController.hxx"
-#include "DrawController.hxx"
 #include "DrawViewShell.hxx"
 #include <cppuhelper/basemutex.hxx>
 
@@ -35,7 +34,6 @@ class XLayer;
 
 namespace sd {
 
-class DrawController;
 class DrawViewShell;
 
 /** This class implements the DrawViewShell specific part of the controller.
@@ -46,7 +44,6 @@ class SdUnoDrawView
 {
 public:
     SdUnoDrawView (
-        DrawController& rController,
         DrawViewShell& rViewShell,
         View& rView) throw();
     virtual ~SdUnoDrawView (void) throw();
@@ -132,7 +129,6 @@ protected:
     ::com::sun::star::uno::Any getDrawViewMode() const;
 
 private:
-    DrawController& mrController;
     DrawViewShell& mrDrawViewShell;
     sd::View& mrView;
 

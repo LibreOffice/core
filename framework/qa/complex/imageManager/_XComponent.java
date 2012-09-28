@@ -18,7 +18,6 @@
 
 package complex.imageManager;
 
-import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;

@@ -73,10 +73,10 @@ enum SwDocStatSubType
 typedef sal_uInt16  SwDocInfoSubType;
 namespace nsSwDocInfoSubType
 {
-    // NB: these must denote consecutive integers!
-    // NB2: these are extended by 4 DI_INFO values for backward compatibility
-    //      in filter/html/htmlfld.cxx, so make sure that DI_SUBTYPE_END
-    //      really is the end, and is at least 4 less than DI_SUB_*!
+    /** NB: these must denote consecutive integers!
+     NB2: these are extended by 4 DI_INFO values for backward compatibility
+          in filter/html/htmlfld.cxx, so make sure that DI_SUBTYPE_END
+          really is the end, and is at least 4 less than DI_SUB_*! */
     const SwDocInfoSubType DI_SUBTYPE_BEGIN =  0;
     const SwDocInfoSubType DI_TITEL         =  DI_SUBTYPE_BEGIN;
     const SwDocInfoSubType DI_THEMA         =  1;
@@ -99,7 +99,7 @@ namespace nsSwDocInfoSubType
 }
 
 
-enum RegInfoFormat  // Only for loading of old documents!!!
+enum RegInfoFormat  ///< Only for loading of old documents!!!
 {
     RF_AUTHOR,
     RF_TIME,
@@ -297,7 +297,7 @@ public:
 class SwDocStatFieldType : public SwFieldType
 {
     SwDoc*          pDoc;
-    sal_Int16       nNumberingType;//com::sun::star::style::NumberingType
+    sal_Int16       nNumberingType; ///< com::sun::star::style::NumberingType
 
 public:
     SwDocStatFieldType(SwDoc*);
@@ -352,16 +352,16 @@ public:
 
 class SwHiddenTxtField : public SwField
 {
-    rtl::OUString aTRUETxt;     // Text if condition sal_True.
-    rtl::OUString aFALSETxt;    // If condition false.
-    rtl::OUString aContent;     // Evaluated DB-text.
+    rtl::OUString aTRUETxt;         ///< Text if condition sal_True.
+    rtl::OUString aFALSETxt;        ///< If condition false.
+    rtl::OUString aContent;         ///< Evaluated DB-text.
 
-    rtl::OUString aCond;              // Condition.
+    rtl::OUString aCond;            ///< Condition.
     sal_uInt16  nSubType;
 
-    sal_Bool    bCanToggle : 1;     // Can field be toggled alone?
-    sal_Bool    bIsHidden  : 1;     // Is it not visible?
-    sal_Bool    bValid     : 1;     // Is DB-field evaluated?
+    sal_Bool    bCanToggle : 1;     ///< Can field be toggled alone?
+    sal_Bool    bIsHidden  : 1;     ///< Is it not visible?
+    sal_Bool    bValid     : 1;     ///< Is DB-field evaluated?
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -388,11 +388,11 @@ public:
     String              GetColumnName(const String& rName);
     String              GetDBName(const String& rName, SwDoc *pDoc);
 
-    // Condition
+    /// Condition
     virtual void        SetPar1(const rtl::OUString& rStr);
     virtual const rtl::OUString& GetPar1() const;
 
-    // True/False - String
+    /// True/False - String
     virtual void        SetPar2(const rtl::OUString& rStr);
     virtual rtl::OUString GetPar2() const;
 
@@ -424,7 +424,7 @@ class SwHiddenParaField : public SwField
     rtl::OUString           aCond;
     sal_Bool                bIsHidden:1;
 public:
-    // Direct input, delete old value.
+    /// Direct input, delete old value.
     SwHiddenParaField(SwHiddenParaFieldType*, const String& rCond);
 
     virtual String      Expand() const;
@@ -433,7 +433,7 @@ public:
     void                SetHidden(sal_Bool bHidden)     { bIsHidden = bHidden; }
     sal_Bool                IsHidden() const            { return bIsHidden;    }
 
-    //Query, set condition.
+    /// Query, set condition.
     virtual const rtl::OUString& GetPar1() const;
     virtual void        SetPar1(const rtl::OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
@@ -468,7 +468,7 @@ class SW_DLLPUBLIC SwMacroField : public SwField
     virtual SwField* Copy() const;
 
 public:
-    // Direct input, delete old value.
+    /// Direct input, delete old value.
     SwMacroField( SwMacroFieldType*, const String& rLibAndName,
                   const String& rTxt);
 
@@ -479,11 +479,11 @@ public:
 
     virtual String   GetFieldName() const;
 
-    // Library and FileName
+    /// Library and FileName
     virtual const rtl::OUString& GetPar1() const;
     virtual void    SetPar1(const rtl::OUString& rStr);
 
-    // Macrotext
+    /// Macrotext
     virtual rtl::OUString  GetPar2() const;
     virtual void    SetPar2(const rtl::OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
@@ -521,7 +521,7 @@ class SW_DLLPUBLIC SwPostItField : public SwField
     rtl::OUString sTxt;
     rtl::OUString sAuthor;
     rtl::OUString sInitials; ///< Initials of the author.
-    rtl::OUString sName; ///< Name of the comment.
+    rtl::OUString sName;     ///< Name of the comment.
     DateTime    aDateTime;
     OutlinerParaObject* mpText;
     SwTextAPIObject* m_pTextObject;
@@ -538,11 +538,11 @@ public:
     inline const Date       GetDate() const                 { return aDateTime.GetDate(); }
     inline const Time       GetTime() const                 { return aDateTime.GetTime(); }
 
-    // Author
+    /// Author
     virtual const rtl::OUString& GetPar1() const;
     virtual void            SetPar1(const rtl::OUString& rStr);
 
-    // Text
+    /// Text
     virtual rtl::OUString   GetPar2() const;
     virtual void            SetPar2(const rtl::OUString& rStr);
     const rtl::OUString&    GetTxt() const { return sTxt; }
@@ -647,7 +647,7 @@ public:
     virtual SwFieldType*    Copy() const;
 
 protected:
-   // Overlay, because there is nothing to update!
+   /// Overlay, because there is nothing to update!
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 };
 
@@ -689,7 +689,7 @@ class SwRefPageGetFieldType : public SwFieldType
 
     void UpdateField( SwTxtFld* pTxtFld, _SetGetExpFlds& rSetList );
 protected:
-    // overwritten to update all RefPageGet fields
+    /// overwritten to update all RefPageGet fields
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
@@ -744,11 +744,11 @@ public:
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    // Placeholder-Text
+    /// Placeholder-Text
     virtual const rtl::OUString& GetPar1() const;
     virtual void    SetPar1(const rtl::OUString& rStr);
 
-    // Hint-Text
+    /// Hint-Text
     virtual rtl::OUString  GetPar2() const;
     virtual void    SetPar2(const rtl::OUString& rStr);
 
@@ -777,11 +777,11 @@ public:
 
 class SwScriptField : public SwField
 {
-    rtl::OUString sType; // Type of Code (Java/VBScript/...)
-    rtl::OUString sCode; // Code as text.
-                         // Code as JavaCode ?
+    rtl::OUString sType;  ///< Type of Code (Java/VBScript/...)
+    rtl::OUString sCode;  /**< Code as text.
+                          Code as JavaCode ? */
 
-    sal_Bool    bCodeURL;// Code contains URL of a script.
+    sal_Bool    bCodeURL; ///< Code contains URL of a script.
 
 public:
     SwScriptField( SwScriptFieldType*, const String& rType,
@@ -792,10 +792,10 @@ public:
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
 
-    // Type
+    /// Type
     virtual const rtl::OUString&   GetPar1() const;
     virtual void            SetPar1(const rtl::OUString& rStr);
-    // Text
+    /// Text
     virtual rtl::OUString   GetPar2() const;
     virtual void            SetPar2(const rtl::OUString& rStr);
 
@@ -825,7 +825,7 @@ public:
 
 class SW_DLLPUBLIC SwCombinedCharField : public SwField
 {
-    rtl::OUString sCharacters;    // combine these characters
+    rtl::OUString sCharacters;    ///< combine these characters
 
 public:
     SwCombinedCharField( SwCombinedCharFieldType*, const String& rChars );
@@ -833,7 +833,7 @@ public:
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
 
-    // Characters
+    /// Characters
     virtual const rtl::OUString&   GetPar1() const;
     virtual void        SetPar1(const rtl::OUString& rStr);
 

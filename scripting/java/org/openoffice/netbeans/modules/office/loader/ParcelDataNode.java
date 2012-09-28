@@ -33,8 +33,6 @@ import org.openide.windows.OutputWriter;
 import org.openoffice.netbeans.modules.office.actions.ParcelCookie;
 
 /** A node to represent this object.
- *
- * @author tomaso
  */
 public class ParcelDataNode extends DataNode {
 

@@ -20,7 +20,6 @@ package installer;
 
 import java.awt.event.*;
 import java.util.*;
-import java.net.*;
 import javax.swing.*;
 
 public class IdeFinal extends javax.swing.JPanel implements ActionListener, InstallListener {
@@ -74,7 +73,7 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
             nav.enableNext(false);
             nav.enableBack(false);
             nav.enableCancel(false);
-            ArrayList locations = wizard.getLocations();
+            ArrayList<?> locations = wizard.getLocations();
             //System.out.println("here "+locations.size());
             // Returned 1
             String progpath=null;

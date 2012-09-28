@@ -150,7 +150,7 @@ namespace svt
         {
             try
             {
-                m_pContent = new ::ucbhelper::Content( _rURL, m_xCmdEnv );
+                m_pContent = new ::ucbhelper::Content( _rURL, m_xCmdEnv, comphelper::getProcessComponentContext() );
                 m_eState = UNKNOWN;
                     // from now on, the state is unknown -> we cannot know for sure if the content
                     // is really valid (some UCP's only tell this when asking for properties, not upon

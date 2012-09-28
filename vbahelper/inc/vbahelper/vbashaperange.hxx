@@ -33,7 +33,6 @@ class VBAHELPER_DLLPUBLIC ScVbaShapeRange : public ScVbaShapeRange_BASE
 private:
     css::uno::Reference< css::drawing::XDrawPage > m_xDrawPage;
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
-    sal_Int32 m_nShapeGroupCount;
 protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
     virtual rtl::OUString getServiceImplName();

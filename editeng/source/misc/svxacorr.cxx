@@ -443,7 +443,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         // Check if the characters after that number correspond to the ordinal suffix
         rtl::OUString sServiceName("com.sun.star.i18n.OrdinalSuffix");
         uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix(
-                comphelper::createProcessComponent( sServiceName ),
+                comphelper::getProcessServiceFactory()->createInstance( sServiceName ),
                 uno::UNO_QUERY );
 
         if ( xOrdSuffix.is( ) )
@@ -1499,7 +1499,7 @@ sal_Bool SvxAutoCorrect::AddWrtSttException( const String& rNew,
         else if(CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
             pLists = pLangTable->find(LANGUAGE_DONTKNOW)->second;
     }
-    OSL_ENSURE(pLists, "keine Autokorrekturdatei");
+    OSL_ENSURE(pLists, "No auto correction file!");
     return pLists->AddToWrdSttExceptList(rNew);
 }
 
@@ -1552,8 +1552,9 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
 {
     OSL_ENSURE(pLangTable->find(eLang) == pLangTable->end(), "Language already exists ");
 
-    String sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False )),
-           sShareDirFile( sUserDirFile );
+    String sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ));
+    String sShareDirFile( sUserDirFile );
+
     SvxAutoCorrectLanguageListsPtr pLists = 0;
 
     Time nMinTime( 0, 2 ), nAktTime( Time::SYSTEM ), nLastCheckTime( Time::EMPTY );
@@ -1568,8 +1569,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         if( bNewFile )
         {
             sShareDirFile = sUserDirFile;
-            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
-                                                        sUserDirFile );
+            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
             pLangTable->insert(eLang, pLists);
             aLastFileTable.erase(nFndPos);
         }
@@ -1579,8 +1579,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
                               GetAutoCorrFileName( eLang, sal_False, sal_False ) ) ) ||
         ( sShareDirFile = sUserDirFile, bNewFile ))
     {
-        pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
-                                                    sUserDirFile );
+        pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
         pLangTable->insert(eLang, pLists);
         if (nFndPos != aLastFileTable.end())
             aLastFileTable.erase(nFndPos);
@@ -1611,6 +1610,23 @@ sal_Bool SvxAutoCorrect::DeleteText( const String& rShort, LanguageType eLang )
         return nTmpVal->second->DeleteText(rShort);
     return sal_False;
 }
+sal_Bool SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
+                                              std::vector<SvxAutocorrWord>& aDeleteEntries,
+                                              LanguageType eLang )
+{
+    boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>::iterator nTmpVal = pLangTable->find(eLang);
+    if(nTmpVal != pLangTable->end())
+    {
+        return nTmpVal->second->MakeCombinedChanges( aNewEntries, aDeleteEntries );
+    }
+    else if(CreateLanguageFile( eLang ))
+    {
+        return pLangTable->find( eLang )->second->MakeCombinedChanges( aNewEntries, aDeleteEntries );
+    }
+    return sal_False;
+
+}
+
 
     //  - return the replacement text (only for SWG-Format, all other
     //      can be taken from the word list!)
@@ -1683,7 +1699,7 @@ static const SvxAutocorrWord* lcl_SearchWordsInList(
 }
 
 
-// the search or the words in the substitution table
+// the search for the words in the substitution table
 const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
                 const String& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos,
                 SvxAutoCorrDoc& rDoc, LanguageType& rLang )
@@ -2351,7 +2367,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             sal_Unicode cSlash = '/';
             xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
             sMain.Erase(nSlashPos);
-            ::ucbhelper::Content aNewContent(   sMain, uno::Reference< XCommandEnvironment > ());
+            ::ucbhelper::Content aNewContent( sMain, uno::Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             Any aAny;
             TransferInfo aInfo;
             aInfo.NameClash = NameClash::OVERWRITE;
@@ -2405,7 +2421,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             xDstStg = 0;
             try
             {
-                ::ucbhelper::Content aContent ( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), uno::Reference < XCommandEnvironment > ());
+                ::ucbhelper::Content aContent ( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "delete" ) ), makeAny ( sal_Bool (sal_True ) ) );
             }
             catch (...)
@@ -2483,8 +2499,88 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
     return bRet;
 }
 
-sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort,
-                                           const String& rLong )
+sal_Bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries, std::vector<SvxAutocorrWord>& aDeleteEntries )
+{
+    // First get the current list!
+    GetAutocorrWordList();
+
+    MakeUserStorage_Impl();
+    SotStorageRef xStorage = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, sal_True );
+
+    sal_Bool bRet = xStorage.Is() && SVSTREAM_OK == xStorage->GetError();
+
+    if( bRet )
+    {
+        for ( sal_uInt32 i=0; i < aDeleteEntries.size(); i++ )
+        {
+            SvxAutocorrWord aWordToDelete = aDeleteEntries[i];
+            SvxAutocorrWordList::iterator iterator = pAutocorr_List->find( &aWordToDelete );
+            if( iterator != pAutocorr_List->end() )
+            {
+                SvxAutocorrWord* pFoundEntry = *iterator;
+                if( !pFoundEntry->IsTextOnly() )
+                {
+                    String aName( aWordToDelete.GetShort() );
+                    if (xStorage->IsOLEStorage())
+                        EncryptBlockName_Imp( aName );
+                    else
+                        GeneratePackageName ( aWordToDelete.GetShort(), aName );
+
+                    if( xStorage->IsContained( aName ) )
+                    {
+                        xStorage->Remove( aName );
+                        bRet = xStorage->Commit();
+                    }
+                }
+                // Update the word list
+                delete pFoundEntry;
+                pAutocorr_List->erase( iterator );
+            }
+        }
+
+        for ( sal_uInt32 i=0; i < aNewEntries.size(); i++ )
+        {
+            SvxAutocorrWord* aWordToAdd = new SvxAutocorrWord( aNewEntries[i].GetShort(), aNewEntries[i].GetLong(), sal_True );
+            SvxAutocorrWordList::iterator iterator = pAutocorr_List->find( aWordToAdd );
+            if( iterator != pAutocorr_List->end() )
+            {
+                if( !(*iterator)->IsTextOnly() )
+                {
+                    // Still have to remove the Storage
+                    String sStorageName( aWordToAdd->GetShort() );
+                    if (xStorage->IsOLEStorage())
+                    {
+                        EncryptBlockName_Imp( sStorageName );
+                    }
+                    else
+                    {
+                        GeneratePackageName ( aWordToAdd->GetShort(), sStorageName);
+                    }
+
+                    if( xStorage->IsContained( sStorageName ) )
+                        xStorage->Remove( sStorageName );
+                }
+                delete *iterator;
+                pAutocorr_List->erase( iterator );
+            }
+            bRet = pAutocorr_List->insert( aWordToAdd ).second;
+
+            if ( !bRet )
+            {
+                delete aWordToAdd;
+                break;
+            }
+        }
+
+        if ( bRet )
+        {
+            bRet = MakeBlocklist_Imp( *xStorage );
+        }
+    }
+    return bRet;
+}
+
+sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort, const String& rLong )
 {
     // First get the current list!
     GetAutocorrWordList();

@@ -37,18 +37,17 @@ class ScVbaCommandBar : public CommandBar_BASE
 private:
     VbaCommandBarHelperRef pCBarHelper;
     css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
-    rtl::OUString   m_sResourceUrl;
+    OUString   m_sResourceUrl;
     sal_Bool        m_bIsMenu;
-    sal_Bool        m_bTemporary;
 
 public:
-    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Bool bIsMenu, sal_Bool bTemporary = sal_True ) throw( css::uno::RuntimeException );
+    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Bool bIsMenu ) throw( css::uno::RuntimeException );
 
     sal_Bool IsMenu() const { return m_bIsMenu; }
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& _name ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( ::sal_Bool _visible ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
@@ -61,8 +60,8 @@ public:
     virtual css::uno::Any SAL_CALL FindControl( const css::uno::Any& aType, const css::uno::Any& aId, const css::uno::Any& aTag, const css::uno::Any& aVisible, const css::uno::Any& aRecursive ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 /** Dummy command bar implementation. Does nothing but provide its name. */
@@ -72,12 +71,12 @@ public:
     VbaDummyCommandBar(
             const css::uno::Reference< ov::XHelperInterface > xParent,
             const css::uno::Reference< css::uno::XComponentContext > xContext,
-            const ::rtl::OUString& rName,
+            const OUString& rName,
             sal_Int32 nType ) throw( css::uno::RuntimeException );
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& _name ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( ::sal_Bool _visible ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
@@ -90,11 +89,11 @@ public:
     virtual css::uno::Any SAL_CALL FindControl( const css::uno::Any& aType, const css::uno::Any& aId, const css::uno::Any& aTag, const css::uno::Any& aVisible, const css::uno::Any& aRecursive ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 
 private:
-    ::rtl::OUString maName;
+    OUString maName;
     sal_Int32 mnType;
 };
 

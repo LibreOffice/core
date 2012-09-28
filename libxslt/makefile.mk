@@ -103,8 +103,8 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
-.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
+LDFLAGS:=-Wl,-z,origin -Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
+.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
@@ -130,8 +130,10 @@ CPPFLAGS+:=$(ARCH_FLAGS) -xc99=none
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
+.IF "$(OS)" == "IOS"
 CONFIGURE_ACTION+=LIBS=-liconv
+.ENDIF
 CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
@@ -159,13 +161,14 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
 OUT2INC=libxslt$/*.h
+OUT2INC+=libexslt$/*.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib
 OUT2LIB+=libexslt$/.libs$/libexslt.*.dylib
 OUT2BIN_NONE+=xsltproc$/.libs$/xsltproc
 OUT2BIN+=xslt-config
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)" == "TRUE"
 OUT2LIB+=libxslt$/.libs$/libxslt.a
 OUT2LIB+=libexslt$/.libs$/libexslt.a
 OUT2BIN+=xslt-config

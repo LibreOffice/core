@@ -95,8 +95,8 @@ public class SdUnoOutlineView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing impress documents");
-        util.DesktopTools.closeDoc(xImpressDoc);;
-        util.DesktopTools.closeDoc(xSecondDrawDoc);;
+        util.DesktopTools.closeDoc(xImpressDoc);
+        util.DesktopTools.closeDoc(xSecondDrawDoc);
     }
 
     /**

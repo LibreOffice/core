@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_OPTGENRL_HRC
-#define _SVX_OPTGENRL_HRC
+#ifndef SVX_OPTGENRL_HRC
+#define SVX_OPTGENRL_HRC
 
 // defines ------------------------------------------------------------------
 
@@ -51,26 +51,10 @@
 #define ED_EMAIL        38
 #define GB_ADDRESS      39
 #define CB_USEDATA      40
-#define FT_NAME_EASTERN     41
+#define FT_NAME_EASTERN 41
+#define FT_CITY_US      42
 
-#define STR_US_STATE    10
-#define STR_QUERY_REG   11
-
-// positioning help for the dialog
-
-#define HSPACE      2
-#define VSPACE      3
-#define LINEH       12
-#define FLINEH      8
-#define LEFT        12
-#define MID         100
-#define RIGHT       248
-#define TOP         10
-#define LINE(y)     (14+y*15)
-#define FLINE(y)    (16+y*15)
-#define NAMELEN     74
-
-#endif // #ifndef _SVX_OPTGENRL_HRC
+#endif // #ifndef SVX_OPTGENRL_HRC
 
 // ******************************************************************* EOF
 

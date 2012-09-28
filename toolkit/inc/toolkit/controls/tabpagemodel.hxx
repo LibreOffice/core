@@ -34,17 +34,12 @@
 #include <com/sun/star/awt/tab/XTabPage.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include "toolkit/helper/servicenames.hxx"
 #include "toolkit/helper/macros.hxx"
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <list>
 #include <cppuhelper/implbase2.hxx>
-
-//  ----------------------------------------------------
-//  class UnoControlTabPageModel
-//  ----------------------------------------------------
 
 class UnoControlTabPageModel :  public ControlModelContainerBase
 {

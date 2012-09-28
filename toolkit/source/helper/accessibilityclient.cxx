@@ -163,13 +163,13 @@ namespace toolkit
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL AccessibleDummyFactory::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL AccessibleDummyFactory::release()
     {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        if ( 0 == osl_atomic_decrement( &m_refCount ) )
         {
             delete this;
             return 0;
@@ -197,7 +197,7 @@ namespace toolkit
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
-        if ( 1 == osl_incrementInterlockedCount( &s_nAccessibilityClients ) )
+        if ( 1 == osl_atomic_increment( &s_nAccessibilityClients ) )
         {   // the first client
 #endif // UNLOAD_ON_LAST_CLIENT_DYING
             // load the library implementing the factory
@@ -247,7 +247,7 @@ namespace toolkit
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
-            if( 0 == osl_decrementInterlockedCount( &s_nAccessibilityClients ) )
+            if( 0 == osl_atomic_decrement( &s_nAccessibilityClients ) )
             {
                 s_pFactory = NULL;
                 s_pAccessibleFactoryFunc = NULL;

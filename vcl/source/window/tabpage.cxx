@@ -29,8 +29,9 @@
 
 #include <tools/rc.h>
 
-#include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/bitmapex.hxx>
@@ -97,10 +98,26 @@ TabPage::TabPage( Window* pParent, const ResId& rResId ) :
     rResId.SetRT( RSC_TABPAGE );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
+
+    m_pUIBuilder = overrideResourceWithUIXML(this, rResId);
+
+    if (m_pUIBuilder)
+        loadAndSetJustHelpID(rResId);
+    else
+    {
+        //fallback to using the binary resource file
+        ImplLoadRes(rResId);
+    }
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+TabPage::TabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
+    : Window(WINDOW_TABPAGE)
+{
+    ImplInit(pParent, 0);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
 // -----------------------------------------------------------------------
@@ -199,6 +216,46 @@ void TabPage::ActivatePage()
 
 void TabPage::DeactivatePage()
 {
+}
+
+bool TabPage::isLayoutEnabled() const
+{
+    //Child is a container => we're layout enabled
+    const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    return pChild && pChild->GetType() == WINDOW_CONTAINER && !pChild->GetWindow(WINDOW_NEXT);
+}
+
+Size TabPage::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return Window::GetOptimalSize(eType);
+    Size aSize;
+    if (isLayoutEnabled())
+        aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
+    else
+        aSize = getLegacyBestSizeForChildren(*this);
+    return Window::CalcWindowSize(aSize);
+}
+
+void TabPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
+{
+    Window::SetPosSizePixel(rAllocPos, rAllocation);
+    if (isLayoutEnabled())
+        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
+}
+
+void TabPage::SetSizePixel(const Size& rAllocation)
+{
+    Window::SetSizePixel(rAllocation);
+    if (isLayoutEnabled())
+        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
+}
+
+void TabPage::SetPosPixel(const Point& rAllocPos)
+{
+    Window::SetPosPixel(rAllocPos);
+    if (isLayoutEnabled())
+        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), GetOutputSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

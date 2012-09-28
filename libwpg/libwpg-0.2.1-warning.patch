@@ -1,0 +1,161 @@
+--- misc/libwpg-0.2.1/src/lib/WPG2Parser.cpp
++++ misc/build/libwpg-0.2.1/src/lib/WPG2Parser.cpp
+@@ -25,6 +25,8 @@
+  * Corel Corporation or Corel Corporation Limited."
+  */
+ 
++#define DUMP_BINARY_DATA 0
++
+ #include "WPG2Parser.h"
+ #include "WPGPaintInterface.h"
+ #include "libwpg_utils.h"
+@@ -37,8 +39,6 @@
+ #define M_PI 3.14159265358979323846
+ #endif
+ 
+-#define DUMP_BINARY_DATA 0
+-
+ #if DUMP_BINARY_DATA
+ #include <sstream>
+ #endif
+@@ -237,7 +237,10 @@ WPG2Parser::WPG2Parser(WPXInputStream *i
+ 	m_dashArray(),
+ 	m_gradient(),
+ 	m_dashArrayStyles(),
+-	m_layerOpened(false), m_layerId(0),
++	m_layerOpened(false),
++#ifdef DEBUG
++	m_layerId(0),
++#endif
+ 	m_matrix(),
+ 	m_gradientAngle(0.0),
+ 	m_gradientRef(),
+@@ -252,9 +255,10 @@ WPG2Parser::WPG2Parser(WPXInputStream *i
+ 	m_hFlipped(false),
+ 	m_vFlipped(false),
+ 	m_textData(),
+-	m_drawTextData(false),
+-	m_binaryId(0),
+-	m_embedded(isEmbedded)
++	m_drawTextData(false)
++#if DUMP_BINARY_DATA
++	, m_binaryId(0)
++#endif
+ {
+ 	m_style.insert("draw:fill", "solid");
+ 	// default style
+@@ -784,7 +788,7 @@ void WPG2Parser::handleDPPenForeColor()
+ 	unsigned char red = (m_doublePrecision)   ? readU16()>>8 : readU8();
+ 	unsigned char green = (m_doublePrecision) ? readU16()>>8 : readU8();
+ 	unsigned char blue = (m_doublePrecision)  ? readU16()>>8 : readU8();
+-	unsigned char alpha = 0xff - (m_doublePrecision) ? readU16()>>8 : readU8();
++	unsigned char alpha = 0xff - ((m_doublePrecision) ? readU16()>>8 : readU8());
+ 
+ 	m_style.insert("svg:stroke-color", libwpg::WPGColor(red, green, blue, alpha).getColorString());
+ 	m_style.insert("svg:stroke-opacity", libwpg::WPGColor(red, green, blue, alpha).getOpacity(), WPX_PERCENT);
+@@ -824,7 +828,7 @@ void WPG2Parser::handleDPPenBackColor()
+ 	unsigned int red = (m_doublePrecision)   ? readU16()>>8 : readU8();
+ 	unsigned int green = (m_doublePrecision) ? readU16()>>8 : readU8();
+ 	unsigned int blue = (m_doublePrecision)  ? readU16()>>8 : readU8();
+-	unsigned int alpha = 0xff - (m_doublePrecision) ? readU16()>>8 : readU8();
++	unsigned int alpha = 0xff - ((m_doublePrecision) ? readU16()>>8 : readU8());
+ 
+ 	m_penBackColor = libwpg::WPGColor(red, green, blue, alpha);
+ 
+@@ -1120,7 +1124,7 @@ void WPG2Parser::handleDPBrushForeColor(
+ 		unsigned char red = (m_doublePrecision)   ? readU16()>>8 : readU8();
+ 		unsigned char green = (m_doublePrecision)   ? readU16()>>8 : readU8();
+ 		unsigned char blue = (m_doublePrecision)   ? readU16()>>8 : readU8();
+-		unsigned char alpha = 0xff - (m_doublePrecision)   ? readU16()>>8 : readU8();
++		unsigned char alpha = 0xff - ((m_doublePrecision)   ? readU16()>>8 : readU8());
+ 		WPG_DEBUG_MSG(("   Foreground color (RGBA): %d %d %d %d\n", red, green, blue, alpha));
+ 
+ 		m_brushForeColor = libwpg::WPGColor(red, green, blue, alpha);
+@@ -1145,7 +1149,7 @@ void WPG2Parser::handleDPBrushForeColor(
+ 				unsigned char red = (m_doublePrecision)   ? readU16()>>8 : readU8();
+ 				unsigned char green = (m_doublePrecision)   ? readU16()>>8 : readU8();
+ 				unsigned char blue = (m_doublePrecision)   ? readU16()>>8 : readU8();
+-				unsigned char alpha = 0xff - (m_doublePrecision)   ? readU16()>>8 : readU8();
++				unsigned char alpha = 0xff - ((m_doublePrecision)   ? readU16()>>8 : readU8());
+ 				libwpg::WPGColor color(red, green, blue, alpha);
+ 				colors.push_back(color);
+ 				WPG_DEBUG_MSG(("   Color #%d (RGBA): %d %d %d %d\n", i+1, red, green, blue, alpha));
+--- misc/libwpg-0.2.1/src/lib/WPG2Parser.h
++++ misc/build/libwpg-0.2.1/src/lib/WPG2Parser.h
+@@ -242,7 +242,9 @@ private:
+ 	::WPXPropertyListVector m_gradient;
+ 	std::map<unsigned int,libwpg::WPGDashArray> m_dashArrayStyles;
+ 	bool m_layerOpened;
++#ifdef DEBUG
+ 	unsigned int m_layerId;
++#endif
+ 	WPG2TransformMatrix m_matrix;
+ 	double m_gradientAngle;
+ 	::WPXPropertyList m_gradientRef;
+@@ -260,9 +262,9 @@ private:
+ 
+ 	class ObjectCharacterization;
+ 	void parseCharacterization(ObjectCharacterization*);
++#if DUMP_BINARY_DATA
+ 	unsigned m_binaryId;
+-	
+-	bool m_embedded;
++#endif
+ };
+ 
+ #endif // __WPG2PARSER_H__
+--- misc/libwpg-0.2.1/src/lib/WPGHeader.cpp
++++ misc/build/libwpg-0.2.1/src/lib/WPGHeader.cpp
+@@ -50,12 +50,7 @@ WPGHeader::WPGHeader() :
+     m_majorVersion(0x02),
+     m_minorVersion(0x00),
+     m_encryptionKey(0x00),
+-    m_startOfPacketData(0),
+-    m_entryCount(0),
+-    m_resourceComplete(0),
+-    m_encryptionBlockOffset(0),
+-    m_fileSize(0),
+-    m_encryptVersion(0)
++    m_startOfPacketData(0)
+ {
+     m_identifier[0] = 0xff;
+     m_identifier[1] = 'W';
+--- misc/libwpg-0.2.1/src/lib/WPGHeader.h
++++ misc/build/libwpg-0.2.1/src/lib/WPGHeader.h
+@@ -51,11 +51,6 @@ private:
+ 	unsigned char m_minorVersion;           // 0 for WPG 8.0 files
+ 	unsigned int  m_encryptionKey;          // 0 when not encrypted
+ 	unsigned int  m_startOfPacketData;      // unused, since according to the docs no packets are defined
+-	unsigned char m_entryCount;             // number of entries in extension
+-	unsigned char m_resourceComplete;       // resource completeness indicator
+-	unsigned int  m_encryptionBlockOffset;  // encryption block offset
+-	unsigned long m_fileSize;               // size of the entire wpg file
+-	unsigned int  m_encryptVersion;         // encryption version information
+ };
+ 
+ #endif // WPGHEADER
+--- misc/libwpg-0.2.1/src/lib/WPGXParser.h
++++ misc/build/libwpg-0.2.1/src/lib/WPGXParser.h
+@@ -62,12 +62,7 @@ class WPGTextDataHandler : public ::WPXD
+ public:
+ 	WPGTextDataHandler(libwpg::WPGPaintInterface* painter) :
+ 		m_painter(painter),
+-		m_x(0.0),
+-		m_y(0.0),
+-		m_width(0.0),
+-		m_height(0.0),
+ 		m_fontName("Times New Roman"),
+-		m_fontSize(12.0),
+ 		m_paragraphStyle(),
+ 		m_textStyle() {}
+ 		
+@@ -140,9 +135,7 @@ public:
+ 
+ private:
+ 	libwpg::WPGPaintInterface *m_painter;
+-	double m_x, m_y, m_width, m_height;
+ 	::WPXString m_fontName;
+-	double m_fontSize;
+ 	::WPXPropertyList m_paragraphStyle, m_textStyle;
+ };
+ 

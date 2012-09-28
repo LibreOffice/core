@@ -44,7 +44,6 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     // everything for the character(s)
     String          aFontName;
     CharSet         eCharSet;
-    char            cExtChar;
     sal_Bool        bExtCharAvailable;
     sal_Bool        bEdit;
     FixedLine       aNumberFL;

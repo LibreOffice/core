@@ -373,15 +373,15 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 }
 
 /// check if ID is in range of attribute set IDs
-sal_Bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId )
+bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId )
 {
     while( *pRange )
     {
         if( *pRange <= nId && nId <= *(pRange+1) )
-            return sal_True;
+            return true;
         pRange += 2;
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

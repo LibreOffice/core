@@ -18,21 +18,14 @@
 
 package ov;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import com.sun.star.accessibility.AccessibleEventId;
 import com.sun.star.accessibility.AccessibleEventObject;
-import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.uno.UnoRuntime;
 
 public class TextView
@@ -45,7 +38,7 @@ public class TextView
         ObjectViewContainer aContainer,
         XAccessibleContext xContext)
     {
-        XAccessibleText xText = (XAccessibleText)UnoRuntime.queryInterface(
+        XAccessibleText xText = UnoRuntime.queryInterface(
                 XAccessibleText.class, xContext);
         if (xText != null)
             return new TextView (aContainer);
@@ -93,7 +86,7 @@ public class TextView
     */
     public void SetObject (XAccessibleContext xObject)
     {
-        mxText = (XAccessibleText)UnoRuntime.queryInterface(
+        mxText = UnoRuntime.queryInterface(
             XAccessibleText.class, xObject);
         super.SetObject (xObject);
     }

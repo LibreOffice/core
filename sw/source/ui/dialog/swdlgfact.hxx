@@ -79,6 +79,7 @@ class AbstractSwWordCountFloatDlg_Impl : public AbstractSwWordCountFloatDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl,SwWordCountFloatDlg)
     virtual void                UpdateCounts();
+    virtual void                SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);
     virtual Window *            GetWindow(); //this method is added for return a Window type pointer
 };
 
@@ -438,11 +439,8 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         );
-    virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(int nResId,
-                                                    SfxBindings* pBindings,
-                                                       SfxChildWindow* pChild,
-                                                       Window *pParent,
-                                                    SfxChildWinInfo* pInfo);
+    virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(SfxBindings* pBindings,
+        SfxChildWindow* pChild, Window *pParent, SfxChildWinInfo* pInfo);
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg( Window* pParent,int nResId );
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream, int nResId ); //add for SwAsciiFilterDlg
@@ -451,7 +449,7 @@ public:
     virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, int nResId  ); //add for SwChangeDBDlg
     virtual SfxAbstractTabDialog *  CreateSwCharDlg( Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, int nResId, // add for SwCharDlg
                                                 const String* pFmtStr = 0, sal_Bool bIsDrwTxtDlg = sal_False);
-    virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg ( SwView& rView, int nResId, bool bToTable ); //add for SwConvertTableDlg
+    virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable); //add for SwConvertTableDlg
     virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId); //add for SwCaptionDialog
 
     virtual AbstractSwInsertDBColAutoPilot* CreateSwInsertDBColAutoPilot( SwView& rView, // add for SwInsertDBColAutoPilot
@@ -481,13 +479,12 @@ public:
     virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ); //add for  SwSplitTblDlg
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
-                                                            int nResId,
                                                             sal_Bool bSetAutoFmt = sal_True,
                                                             const SwTableAutoFmt* pSelFmt = 0 );
     virtual SfxAbstractDialog * CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType,int nResId );//add for SwBorderDlg
 
     virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode, int nResId ); //add for SwWrapDlg
-    virtual VclAbstractDialog * CreateSwTableWidthDlg ( Window *pParent, SwTableFUNC &rFnc , int nResId ); //add for SwTableWidthDlg
+    virtual VclAbstractDialog * CreateSwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc);
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,
                                                         const SfxItemSet* pItemSet, SwWrtShell* pSh,int nResId ); //add for SwTableTabDlg
     virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ); //add for SwFldDlg
@@ -528,8 +525,7 @@ public:
                                                 SwView& rView, sal_Bool bCol = sal_False ); //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
                                                 Window * pParent ); //add for SwInsertGrfRulerDlg
-    virtual AbstractInsTableDlg*        CreateInsTableDlg( int nResId,
-                                                SwView& rView ); //add for SwInsTableDlg
+    virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView); //add for SwInsTableDlg
     virtual AbstractJavaEditDialog*     CreateJavaEditDialog( int nResId,
                                                 Window* pParent, SwWrtShell* pWrtSh ); //add for SwJavaEditDialog
     virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,

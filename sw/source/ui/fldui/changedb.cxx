@@ -30,6 +30,7 @@
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDatabaseAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -51,9 +52,10 @@
 
 #include <unomid.h>
 
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::uno;
 
 
 /*--------------------------------------------------------------------
@@ -106,14 +108,8 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::FillDBPopup()
 {
-    Reference<XNameAccess> xDBContext;
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if( xMgr.is() )
-    {
-        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
-        xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-    }
-    OSL_ENSURE(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
 
     const SwDBData& rDBData = pSh->GetDBData();
     String sDBName(rDBData.sDataSource);

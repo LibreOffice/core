@@ -27,8 +27,6 @@ import helper.ProcessHandler;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.Vector;
-
 import lib.TestParameters;
 
 import org.junit.AfterClass;

@@ -133,7 +133,7 @@ void ManifestImport::doFileEntry(StringHashMap &rConvertedAttribs)
     OUString sSize = rConvertedAttribs[sSizeAttribute];
     if ( sSize.getLength() )
     {
-        sal_Int32 nSize = sSize.toInt32();
+        sal_Int64 nSize = sSize.toInt64();
         aSequence[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
         aSequence[PKG_MNFST_UCOMPSIZE].Value <<= nSize;
     }

@@ -19,34 +19,38 @@
 
 #include "sbxitem.hxx"
 
-SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, BasicIDEType nType)
-    :SfxPoolItem( nWhich_ )
-    ,m_aDocument(rDocument)
-    ,m_aLibName(aLibName)
-    ,m_aName(aName)
-    ,m_nType(nType)
+namespace basctl
 {
-}
 
-SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, BasicIDEType nType)
-    :SfxPoolItem( nWhich_ )
-    ,m_aDocument(rDocument)
-    ,m_aLibName(aLibName)
-    ,m_aName(aName)
-    ,m_aMethodName(aMethodName)
-    ,m_nType(nType)
-{
-}
+SbxItem::SbxItem (
+    sal_uInt16 nWhichItem,
+    ScriptDocument const& rDocument,
+    rtl::OUString const& aLibName,
+    rtl::OUString const& aName,
+    ItemType eType
+) :
+    SfxPoolItem(nWhichItem),
+    m_aDocument(rDocument),
+    m_aLibName(aLibName),
+    m_aName(aName),
+    m_eType(eType)
+{ }
 
-SbxItem::SbxItem(const SbxItem& rCopy)
-    :SfxPoolItem(rCopy)
-    ,m_aDocument(rCopy.m_aDocument)
-    ,m_aLibName(rCopy.m_aLibName)
-    ,m_aName(rCopy.m_aName)
-    ,m_aMethodName(rCopy.m_aMethodName)
-    ,m_nType(rCopy.m_nType)
-{
-}
+SbxItem::SbxItem (
+    sal_uInt16 nWhichItem,
+    ScriptDocument const& rDocument,
+    rtl::OUString const& aLibName,
+    rtl::OUString const& aName,
+    rtl::OUString const& aMethodName,
+    ItemType eType
+) :
+    SfxPoolItem(nWhichItem),
+    m_aDocument(rDocument),
+    m_aLibName(aLibName),
+    m_aName(aName),
+    m_aMethodName(aMethodName),
+    m_eType(eType)
+{ }
 
 SfxPoolItem *SbxItem::Clone(SfxItemPool*) const
 {
@@ -63,32 +67,9 @@ int SbxItem::operator==(const SfxPoolItem& rCmp) const
         m_aLibName == pSbxItem->m_aLibName &&
         m_aName == pSbxItem->m_aName &&
         m_aMethodName == pSbxItem->m_aMethodName &&
-        m_nType == pSbxItem->m_nType;
+        m_eType == pSbxItem->m_eType;
 }
 
-const ScriptDocument& SbxItem::GetDocument() const
-{
-    return m_aDocument;
-}
-
-const ::rtl::OUString& SbxItem::GetLibName() const
-{
-    return m_aLibName;
-}
-
-const ::rtl::OUString& SbxItem::GetName() const
-{
-    return m_aName;
-}
-
-const ::rtl::OUString& SbxItem::GetMethodName() const
-{
-    return m_aMethodName;
-}
-
-BasicIDEType SbxItem::GetType() const
-{
-    return m_nType;
-}
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

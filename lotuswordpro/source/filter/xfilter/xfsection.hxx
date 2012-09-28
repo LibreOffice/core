@@ -88,8 +88,6 @@ private:
     sal_Bool    m_bProtected;
     sal_Bool    m_bHiden;
     XFColor     m_aBackColor;
-    double      m_fMarginLeft;
-    double      m_fMarginRight;
     rtl::OUString   m_strSourceLink;
 };
 

@@ -19,10 +19,10 @@
 
 
 #include <comphelper/logging.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <com/sun/star/logging/LoggerPool.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
+#include <com/sun/star/resource/OfficeResourceLoader.hpp>
 #include <com/sun/star/resource/XResourceBundle.hpp>
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
 
@@ -53,7 +53,7 @@ namespace comphelper
     class EventLogger_Impl
     {
     private:
-        ::comphelper::ComponentContext  m_aContext;
+        Reference< XComponentContext >  m_aContext;
         ::rtl::OUString                 m_sLoggerName;
         Reference< XLogger >            m_xLogger;
 
@@ -68,7 +68,7 @@ namespace comphelper
         inline bool isValid() const { return m_xLogger.is(); }
         inline const ::rtl::OUString&  getName() const { return m_sLoggerName; }
         inline const Reference< XLogger >& getLogger() const { return m_xLogger; }
-        inline const ::comphelper::ComponentContext& getContext() const { return m_aContext; }
+        inline Reference< XComponentContext > getContext() const { return m_aContext; }
 
     private:
         void    impl_createLogger_nothrow();
@@ -82,7 +82,7 @@ namespace comphelper
     {
         try
         {
-            Reference< XLoggerPool > xPool( LoggerPool::get( m_aContext.getUNOContext() ), UNO_QUERY_THROW );
+            Reference< XLoggerPool > xPool( LoggerPool::get( m_aContext ) );
             if ( !m_sLoggerName.isEmpty() )
                 m_xLogger = xPool->getNamedLogger( m_sLoggerName );
             else
@@ -224,7 +224,7 @@ namespace comphelper
     };
 
     //--------------------------------------------------------------------
-    bool    lcl_loadBundle_nothrow( const ComponentContext& _rContext, ResourceBasedEventLogger_Data& _rLoggerData )
+    bool    lcl_loadBundle_nothrow( Reference< XComponentContext > const & _rContext, ResourceBasedEventLogger_Data& _rLoggerData )
     {
         if ( _rLoggerData.bBundleLoaded )
             return _rLoggerData.xBundle.is();
@@ -234,7 +234,9 @@ namespace comphelper
 
         try
         {
-            Reference< XResourceBundleLoader > xLoader( _rContext.getSingleton( "com.sun.star.resource.OfficeResourceLoader" ), UNO_QUERY_THROW );
+            Reference< XResourceBundleLoader > xLoader(
+                com::sun::star::resource::OfficeResourceLoader::get(
+                    _rContext ) );
             _rLoggerData.xBundle = Reference< XResourceBundle >( xLoader->loadBundle_Default( _rLoggerData.sBundleBaseName ), UNO_QUERY_THROW );
         }
         catch( const Exception& e )

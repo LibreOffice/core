@@ -81,14 +81,10 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/vbadialog \
 	sc/source/ui/vba/vbadialogs \
 	sc/source/ui/vba/vbaeventshelper \
-	sc/source/ui/vba/vbafiledialog \
-	sc/source/ui/vba/vbafiledialogselecteditems \
-	sc/source/ui/vba/vbafilesearch \
 	sc/source/ui/vba/vbafont \
 	sc/source/ui/vba/vbaformat \
 	sc/source/ui/vba/vbaformatcondition \
 	sc/source/ui/vba/vbaformatconditions \
-	sc/source/ui/vba/vbafoundfiles \
 	sc/source/ui/vba/vbaglobals \
 	sc/source/ui/vba/vbahyperlink \
 	sc/source/ui/vba/vbahyperlinks \
@@ -112,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/vbapivotcache \
 	sc/source/ui/vba/vbapivottable \
 	sc/source/ui/vba/vbapivottables \
-	sc/source/ui/vba/vbaquerytable \
 	sc/source/ui/vba/vbarange \
 	sc/source/ui/vba/vbasheetobject \
 	sc/source/ui/vba/vbastyle \

@@ -48,6 +48,7 @@
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <tools/gen.hxx>
 //  ----------------------------------------------------
 //  class ControlModelContainerBase
 //  ----------------------------------------------------
@@ -176,8 +177,8 @@ public:
     virtual void SAL_CALL setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getImageURL() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setImageURL( const ::rtl::OUString& _imageurl ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTooltip() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTooltip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getToolTip() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setToolTip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     void startControlListening( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxChildModel );
@@ -223,6 +224,7 @@ typedef ::cppu::AggImplInheritanceHelper2   < UnoControlContainer
 
 class ControlContainerBase : public ContainerControl_IBase
 {
+    ::Size ImplGetSizePixel( const ::Size& inSize );
 protected:
     bool                                                                        mbSizeModified;
     bool                                                                        mbPosModified;

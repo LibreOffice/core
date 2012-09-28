@@ -27,11 +27,13 @@
 #*************************************************************************
 
 $(eval $(call gb_Helper_register_executables,NONE, \
+    HelpIndexer \
+    HelpLinker \
     bestreversemap \
     bmp \
     bmpsum \
-    checksingleton \
     cfgex \
+    checksingleton \
     cppunit/cppunittester \
     g2g \
     gencoll_rule \
@@ -44,6 +46,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     lngconvex \
     localize \
     mkunroll \
+    mork_helper \
     osl_process_child \
     pdf2xml \
     pdfunzip \
@@ -60,12 +63,15 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     svidl \
     transex3 \
     typesconfig \
-	ucpp \
+    $(if $(filter UCPP,$(BUILD_TYPE)),\
+            ucpp \
+    ) \
+    uiex \
     ulfconv \
     ulfex \
     xml2cmp \
-    xrmex \
     xpdfimport \
+    xrmex \
 ))
 
 $(eval $(call gb_Helper_register_executables,SDK, \
@@ -76,8 +82,9 @@ ifneq ($(OS),IOS)
 
 $(eval $(call gb_Helper_register_executables,SDK, \
     autodoc \
-    javamaker \
+    climaker \
     cppumaker \
+    javamaker \
     regcompare \
     uno-skeletonmaker \
 ))
@@ -86,8 +93,6 @@ endif
 
 $(eval $(call gb_Helper_register_executables,OOO, \
     gnome-open-url.bin \
-    HelpLinker \
-    HelpIndexer \
     spadmin.bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \
 		tdefilepicker \
@@ -96,6 +101,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
 		kdefilepicker \
 	) \
+	ui-previewer \
 ))
 
 ifeq ($(OS),WNT)
@@ -301,6 +307,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lwpft \
 	MacOSXSpell \
     merged \
+    mork \
     mozab2 \
     mozabdrv \
     msfilter \
@@ -399,12 +406,17 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     affine_uno \
+	cli_cppuhelper_native \
+	cli_uno \
+	gcc3_uno \
+	java_uno \
     jpipe \
     juh \
     juhx \
     log_uno \
     sal_textenc \
     sunjavaplugin \
+	sunpro5_uno \
     unsafe_uno \
     xmlreader \
 ))
@@ -413,6 +425,8 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     jpipx \
+	msci_uno \
+	mscx_uno \
 ))
 
 endif
@@ -677,13 +691,16 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     xmlsec1 \
     xmlsec1-nss \
+))
+ifneq ($(CROSS_COMPILING),YES)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     xmlsec1-mscrypto \
 ))
+endif
 else
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     xmlsec1 \
     xmlsec1-nss \
-    xmlsec1-mscrypto \
 ))
 endif
 

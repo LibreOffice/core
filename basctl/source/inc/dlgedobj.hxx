@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGEDOBJ_HXX
-#define _BASCTL_DLGEDOBJ_HXX
+#ifndef BASCTL_DLGEDOBJ_HXX
+#define BASCTL_DLGEDOBJ_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -28,7 +28,10 @@
 
 #include <boost/optional.hpp>
 
-typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > IndexToNameMap;
+namespace basctl
+{
+
+typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexToNameMap;
 
 
 class DlgEdForm;
@@ -52,11 +55,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>  m_xContainerListener;
 
 private:
-    DlgEditor* GetDialogEditor ();
+    DlgEditor& GetDialogEditor ();
 
 protected:
     DlgEdObj();
-    DlgEdObj(const ::rtl::OUString& rModelName,
+    DlgEdObj(const OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
     virtual void NbcMove( const Size& rSize );
@@ -101,8 +104,8 @@ public:
     virtual SdrObject* getFullDragClone() const;
 
     virtual sal_Bool        supportsService( const sal_Char* _pServiceName ) const;
-    virtual ::rtl::OUString GetDefaultName() const;
-    virtual ::rtl::OUString GetUniqueName() const;
+    virtual OUString GetDefaultName() const;
+    virtual OUString GetUniqueName() const;
 
     virtual sal_Int32   GetStep() const;
     virtual void        UpdateStep();
@@ -140,15 +143,15 @@ class DlgEdForm: public DlgEdObj
     friend class DlgEdFactory;
 
 private:
-    DlgEditor* pDlgEditor;
+    DlgEditor& rDlgEditor;
     ::std::vector<DlgEdObj*> pChildren;
 
     mutable ::boost::optional< ::com::sun::star::awt::DeviceInfo >   mpDeviceInfo;
 
+private:
+    explicit DlgEdForm (DlgEditor&);
 
 protected:
-    DlgEdForm();
-
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
@@ -158,12 +161,11 @@ public:
 
     virtual ~DlgEdForm();
 
-    virtual void SetDlgEditor( DlgEditor* pEditor );
-    virtual DlgEditor* GetDlgEditor() const { return pDlgEditor; }
+    virtual DlgEditor& GetDlgEditor () const { return rDlgEditor; }
 
     virtual void AddChild( DlgEdObj* pDlgEdObj );
     virtual void RemoveChild( DlgEdObj* pDlgEdObj );
-    virtual ::std::vector<DlgEdObj*> GetChildren() const { return pChildren; }
+    virtual std::vector<DlgEdObj*> const& GetChildren() const { return pChildren; }
 
     virtual void UpdateStep();
 
@@ -183,6 +185,8 @@ private:
     void    ImplInvalidateDeviceInfo();
 };
 
-#endif // _BASCTL_DLGEDOBJ_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

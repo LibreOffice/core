@@ -206,11 +206,11 @@ sal_Int16 OAccessibleMenuComponent::getAccessibleRole(  ) throw (RuntimeExceptio
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuComponent::getAccessibleDescription( ) throw (RuntimeException)
+OUString OAccessibleMenuComponent::getAccessibleDescription( ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sDescription;
+    OUString sDescription;
     if ( m_pMenu )
     {
         Window* pWindow = m_pMenu->GetWindow();
@@ -223,11 +223,11 @@ sal_Int16 OAccessibleMenuComponent::getAccessibleRole(  ) throw (RuntimeExceptio
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuComponent::getAccessibleName(  ) throw (RuntimeException)
+OUString OAccessibleMenuComponent::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
@@ -348,20 +348,20 @@ Reference< awt::XFont > OAccessibleMenuComponent::getFont(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuComponent::getTitledBorderText(  ) throw (RuntimeException)
+OUString OAccessibleMenuComponent::getTitledBorderText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuComponent::getToolTipText(  ) throw (RuntimeException)
+OUString OAccessibleMenuComponent::getToolTipText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------

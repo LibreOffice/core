@@ -68,6 +68,12 @@ public:
                                      SCsTAB nDz
                                    );
 
+    /** For now this method assumes that nTab1 == nTab2
+     * The algorithm will be much more complicated if nTab1 != nTab2
+     */
+    void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1, SCCOL nCol2,
+                                    SCROW nRow2, SCTAB nTab2 );
+
     const ScRange*  Find( const ScAddress& ) const;
     ScRange*        Find( const ScAddress& );
     bool            operator==( const ScRangeList& ) const;
@@ -93,6 +99,8 @@ public:
 
 private:
     ::std::vector<ScRange*> maRanges;
+    typedef std::vector<ScRange*>::iterator iterator;
+    typedef std::vector<ScRange*>::const_iterator const_iterator;
 };
 SV_DECL_IMPL_REF( ScRangeList );
 

@@ -186,13 +186,13 @@ void SwDbtoolsClient::getFactory()
 
 Reference< XDataSource > SwDbtoolsClient::getDataSource(
         const ::rtl::OUString& rRegisteredName,
-        const Reference< XMultiServiceFactory>& xFactory
+        const Reference<XComponentContext>& rxContext
             )
 {
     Reference< XDataSource > xRet;
     ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    xAccess = getDataAccessTools();
     if(xAccess.is())
-        xRet = xAccess->getDataSource(rRegisteredName, xFactory);
+        xRet = xAccess->getDataSource(rRegisteredName, rxContext);
     return xRet;
 }
 

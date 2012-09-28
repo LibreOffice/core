@@ -47,12 +47,6 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.view.XSelectionSupplier;
 
-
-/**
- *
- * @author  sw93809
- * @version
- */
 public class SvxGraphCtrlAccessibleContext extends TestCase{
 
     static XComponent xDrawDoc = null;
@@ -67,7 +61,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
     * @param log writer to log information while testing
     *
     * @see TestEnvironment
-    * @see #getTestEnvironment()
+    * @see #getTestEnvironment
     */
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
@@ -136,7 +130,6 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
         }
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
-
 
         AccessibilityTools at = new AccessibilityTools();
 
@@ -212,7 +205,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
      * @param Param test parameters
      * @param log writer to log information while testing
      *
-     * @see #initializeTestCase()
+     * @see #initializeTestCase
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object

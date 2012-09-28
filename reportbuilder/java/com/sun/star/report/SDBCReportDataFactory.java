@@ -350,7 +350,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             IllegalArgumentException,
             WrappedTargetException
     {
-        final ArrayList masterValues = (ArrayList) parameters.get(MASTER_VALUES);
+        final ArrayList<?> masterValues = (ArrayList<?>) parameters.get(MASTER_VALUES);
         if (masterValues != null && !masterValues.isEmpty())
         {
             final XParameters para = (XParameters) UnoRuntime.queryInterface(XParameters.class, rowSet);
@@ -373,7 +373,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
     private final Object[] createRowSet(final RowSetProperties rowSetProps, final Map<String,Object> parameters)
             throws Exception
     {
-        final ArrayList detailColumns = (ArrayList) parameters.get(DETAIL_COLUMNS);
+        final ArrayList<?> detailColumns = (ArrayList<?>) parameters.get(DETAIL_COLUMNS);
         if (rowSetProperties.containsKey(rowSetProps) && detailColumns != null && !detailColumns.isEmpty())
         {
             return new Object[]
@@ -438,7 +438,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 composer.setFilter((String) rowSetProp.getPropertyValue("Filter"));
             }
             // get old parameter count
-            final ArrayList detailColumns = (ArrayList) parameters.get(DETAIL_COLUMNS);
+            final ArrayList<?> detailColumns = (ArrayList<?>) parameters.get(DETAIL_COLUMNS);
             final ArrayList<String> handledColumns = new ArrayList<String>();
             final XParametersSupplier paraSup = (XParametersSupplier) UnoRuntime.queryInterface(XParametersSupplier.class, composer);
             if (paraSup != null)
@@ -478,7 +478,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                     }
                 }
             }
-            final ArrayList masterValues = (ArrayList) parameters.get(MASTER_VALUES);
+            final ArrayList<?> masterValues = (ArrayList<?>) parameters.get(MASTER_VALUES);
             if (masterValues != null && !masterValues.isEmpty() && paramDef.parameterIndex.size() != detailColumns.size())
             {
                 // Vector masterColumns = (Vector) parameters.get("master-columns");
@@ -533,7 +533,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             WrappedTargetException,
             NoSuchElementException
     {
-        final StringBuffer order = new StringBuffer(getOrderStatement(commandType, command, (ArrayList) parameters.get(GROUP_EXPRESSIONS)));
+        final StringBuffer order = new StringBuffer(getOrderStatement(commandType, command, (ArrayList<?>) parameters.get(GROUP_EXPRESSIONS)));
         if (order.length() > 0 && commandType != CommandType.TABLE)
         {
             String statement = command;

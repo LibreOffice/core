@@ -21,20 +21,21 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,sm))
+$(eval $(call gb_Module_Module,starmath))
 
-$(eval $(call gb_Module_add_targets,sm,\
+$(eval $(call gb_Module_add_targets,starmath,\
     AllLangResTarget_sm \
     Library_sm \
     Library_smd \
     Package_uiconfig \
+    UI_smath \
 ))
 
-#$(eval $(call gb_Module_add_check_targets,sm,\
+#$(eval $(call gb_Module_add_check_targets,starmath,\
 #    CppunitTest_starmath_qa_cppunit \
 #))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,sm,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,starmath,\
     JunitTest_starmath_unoapi \
 ))
 

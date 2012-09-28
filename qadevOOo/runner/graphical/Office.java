@@ -20,10 +20,6 @@ package graphical;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author ll93751
- */
 public class Office implements IOffice
 {
     private ParameterHelper m_aParameterHelper;
@@ -101,7 +97,6 @@ public class Office implements IOffice
                         // foreach Report found in the .odb file, create an entry 'report'<number> in the original <name>.odb Section
                         // so it is possible to run through all reports by the given .odb name
                         IniFile aIniFile = new IniFile(sIniFile);
-                        // String sSection = FileHelper.getBasename(_sDocumentName); // name of the odb file
                         int nFileCount = aIniFile.getIntValue(sSection, "reportcount", 0);
                         String sValue = FileHelper.getBasename(sDocumentName);    // name of the corresponding report
                         aIniFile.insertValue(sSection, "report" + nFileCount, sValue);
@@ -133,8 +128,6 @@ public class Office implements IOffice
             {
                 m_aOffice.storeAsPostscript();
             }
-
-//          FileHelper.addBasenameToIndex(sOutputFilename);
         }
     }
 
@@ -153,8 +146,5 @@ public class Office implements IOffice
             m_aOffice.close();
         }
     }
-
-
-
 
 }

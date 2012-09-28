@@ -105,8 +105,9 @@ public:
     {}
     virtual ~UniRefBase();
 
-    void acquire() { osl_incrementInterlockedCount( &m_refCount ); }
+    void acquire() { osl_atomic_increment( &m_refCount ); }
     void release();
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -27,11 +27,13 @@
 #include "tools/multisel.hxx"
 #include "tools/resary.hxx"
 
+namespace basctl
+{
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace basicide;
 
-BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
+Renderable::Renderable (BaseWindow* pWin)
 : cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >( maMutex )
 , mpWindow( pWin )
 {
@@ -42,44 +44,40 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
 
     m_aUIProperties.realloc( 3 );
 
-    // create Subgroup for print range
+    // show Subgroup for print range
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
     aPrintRangeOpt.mbInternalOnly = true;
-    m_aUIProperties[0].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ),
-                                                      rtl::OUString(),
-                                                      aPrintRangeOpt
-                                                      );
+    m_aUIProperties[0].Value = setSubgroupControlOpt("printrange",
+        rtl::OUString(aStrings.GetString(0)), rtl::OUString(), aPrintRangeOpt);
 
     // create a choice for the range to print
     rtl::OUString aPrintContentName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
     Sequence< rtl::OUString > aChoices( 2 );
     Sequence< rtl::OUString > aHelpIds( 2 );
+    Sequence< rtl::OUString > aWidgetIds( 2 );
     aChoices[0] = aStrings.GetString( 1 );
     aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
     aChoices[1] = aStrings.GetString( 2 );
     aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
-    m_aUIProperties[1].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpIds,
-                                                    aPrintContentName,
-                                                    aChoices,
-                                                    0 );
+    aWidgetIds[0] = rtl::OUString("printallpages");
+    aWidgetIds[1] = rtl::OUString("printpages");
+    m_aUIProperties[1].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
+                                                   aHelpIds, aPrintContentName,
+                                                   aChoices, 0);
 
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
-    m_aUIProperties[2].Value = getEditControlOpt( rtl::OUString(),
-                                                  rtl::OUString(),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
-                                                  rtl::OUString(),
-                                                  aPageRangeOpt
-                                                  );
+    m_aUIProperties[2].Value = setEditControlOpt("pagerange", rtl::OUString(),
+                                                 rtl::OUString(), "PageRange",
+                                                 rtl::OUString(), aPageRangeOpt);
 }
 
-BasicRenderable::~BasicRenderable()
+Renderable::~Renderable()
 {
 }
 
-Printer* BasicRenderable::getPrinter()
+Printer* Renderable::getPrinter()
 {
     Printer* pPrinter = NULL;
     Any aValue( getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
@@ -94,7 +92,7 @@ Printer* BasicRenderable::getPrinter()
     return pPrinter;
 }
 
-sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
+sal_Int32 SAL_CALL Renderable::getRendererCount (
         const Any&, const Sequence<beans::PropertyValue >& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
 {
@@ -103,8 +101,7 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
     sal_Int32 nCount = 0;
     if( mpWindow )
     {
-        Printer* pPrinter = getPrinter();
-        if( pPrinter )
+        if (Printer* pPrinter = getPrinter())
         {
             nCount = mpWindow->countPages( pPrinter );
             sal_Int64 nContent = getIntValue( "PrintContent", -1 );
@@ -127,7 +124,7 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
     return nCount;
 }
 
-Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
+Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
         sal_Int32, const Any&, const Sequence<beans::PropertyValue>& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
 {
@@ -154,7 +151,7 @@ Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
     return aVals;
 }
 
-void SAL_CALL BasicRenderable::render (
+void SAL_CALL Renderable::render (
         sal_Int32 nRenderer, const Any&,
         const Sequence<beans::PropertyValue>& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
@@ -163,8 +160,7 @@ void SAL_CALL BasicRenderable::render (
 
     if( mpWindow )
     {
-        Printer* pPrinter = getPrinter();
-        if( pPrinter )
+        if (Printer* pPrinter = getPrinter())
         {
             sal_Int64 nContent = getIntValue( "PrintContent", -1 );
             if( nContent == 1 )
@@ -192,5 +188,6 @@ void SAL_CALL BasicRenderable::render (
     }
 }
 
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

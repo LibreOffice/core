@@ -22,6 +22,8 @@
 #include "dlgedmod.hxx"
 #include "dlgedobj.hxx"
 
+namespace basctl
+{
 
 TYPEINIT1( DlgEdPage, SdrPage );
 
@@ -30,14 +32,6 @@ TYPEINIT1( DlgEdPage, SdrPage );
 DlgEdPage::DlgEdPage( DlgEdModel& rModel, bool bMasterPage )
     :SdrPage( rModel, bMasterPage )
 {
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdPage::DlgEdPage( const DlgEdPage& rPage )
-    :SdrPage( rPage )
-{
-    pDlgEdForm = rPage.pDlgEdForm;
 }
 
 //----------------------------------------------------------------------------
@@ -60,17 +54,15 @@ SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum
 {
     SdrObject* pObj = SdrPage::SetObjectOrdNum( nOldObjNum, nNewObjNum );
 
-    DlgEdHint aHint( DLGED_HINT_OBJORDERCHANGED );
+    DlgEdHint aHint( DlgEdHint::OBJORDERCHANGED );
     if ( pDlgEdForm )
-    {
-        DlgEditor* pDlgEditor = pDlgEdForm->GetDlgEditor();
-        if ( pDlgEditor )
-            pDlgEditor->Broadcast( aHint );
-    }
+        pDlgEdForm->GetDlgEditor().Broadcast( aHint );
 
     return pObj;
 }
 
 //----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

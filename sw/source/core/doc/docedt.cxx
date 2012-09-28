@@ -725,7 +725,7 @@ void SwDoc::DeleteSection( SwNode *pNode )
 
 void SwDoc::SetModified(SwPaM &rPaM)
 {
-    SwDataChanged aTmp( rPaM, 0 );
+    SwDataChanged aTmp( rPaM );
     SetModified();
 }
 
@@ -753,7 +753,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 
     sal_uInt16 nOldAttrCnt = pNode->GetpSwpHints()
                                 ? pNode->GetpSwpHints()->Count() : 0;
-    SwDataChanged aTmp( rRg, 0 );
+    SwDataChanged aTmp( rRg );
     SwIndex& rIdx = rPt.nContent;
     xub_StrLen nStart = 0;
 
@@ -1662,7 +1662,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         // Send DataChanged before deletion, so that we still know
         // which objects are in the range.
         // Afterwards they could be before/after the Position.
-        SwDataChanged aTmp( rPam, 0 );
+        SwDataChanged aTmp( rPam );
     }
 
 
@@ -2295,7 +2295,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 nEnd = bOneNode ? pEnd->nContent.GetIndex()
                                 : pTxtNd->GetTxt().Len();
 
-        SwDataChanged aTmp( aDelPam, 0 );
+        SwDataChanged aTmp( aDelPam );
 
         if( IsRedlineOn() )
         {

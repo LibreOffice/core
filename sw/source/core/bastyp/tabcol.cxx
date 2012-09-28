@@ -80,7 +80,7 @@ SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
     return *this;
 }
 
-sal_Bool SwTabCols::operator==( const SwTabCols& rCmp ) const
+bool SwTabCols::operator==( const SwTabCols& rCmp ) const
 {
     sal_uInt16 i;
 
@@ -90,7 +90,7 @@ sal_Bool SwTabCols::operator==( const SwTabCols& rCmp ) const
            nRightMax== rCmp.GetRightMax()&&
            bLastRowAllowedToChange== rCmp.IsLastRowAllowedToChange() &&
            Count()== rCmp.Count()) )
-        return sal_False;
+        return false;
 
     for ( i = 0; i < Count(); ++i )
     {
@@ -100,7 +100,7 @@ sal_Bool SwTabCols::operator==( const SwTabCols& rCmp ) const
             return sal_False;
     }
 
-    return sal_True;
+    return true;
 }
 
 void SwTabCols::Insert( long nValue, long nMin, long nMax,

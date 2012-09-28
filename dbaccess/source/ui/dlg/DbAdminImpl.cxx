@@ -41,6 +41,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
@@ -51,6 +52,7 @@
 
 #include <comphelper/guarding.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
@@ -206,8 +208,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
 
     try
     {
-        m_xDatabaseContext = Reference< XNameAccess >(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-        m_xDynamicContext.set(m_xDatabaseContext,UNO_QUERY);
+        m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(m_xORB));
     }
     catch(Exception&)
     {
@@ -217,8 +218,6 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     {
         ShowServiceNotAvailableError(_pParent->GetParent(), String(SERVICE_SDB_DATABASECONTEXT), sal_True);
     }
-
-    OSL_ENSURE(m_xDynamicContext.is(), "ODbAdminDialog::ODbAdminDialog : no XNamingService interface !");
 }
     //-------------------------------------------------------------------------
 sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyValue >& _rDriverParam)

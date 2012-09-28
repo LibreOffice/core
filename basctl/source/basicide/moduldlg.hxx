@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MODULDLG_HXX
-#define _MODULDLG_HXX
+#ifndef BASCTL_MODULDLG_HXX
+#define BASCTL_MODULDLG_HXX
 
 #include <svheader.hxx>
 
@@ -35,13 +35,21 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/lstbox.hxx>
 
-enum NewObjectMode
+class SvxPasswordDialog;
+
+namespace basctl
 {
-    NEWOBJECTMODE_LIB  = 1,
-    NEWOBJECTMODE_MOD  = 2,
-    NEWOBJECTMODE_DLG  = 3,
-    NEWOBJECTMODE_METH = 4
-};
+
+namespace ObjectMode
+{
+    enum Mode
+    {
+        Library = 1,
+        Module  = 2,
+        Dialog  = 3,
+        Method  = 4,
+    };
+}
 
 class NewObjectDialog : public ModalDialog
 {
@@ -54,8 +62,8 @@ private:
     DECL_LINK(OkButtonHandler, void *);
 
 public:
-    NewObjectDialog(Window * pParent, NewObjectMode nMode, bool bCheckName = false);
-                ~NewObjectDialog();
+    NewObjectDialog (Window* pParent, ObjectMode::Mode, bool bCheckName = false);
+    virtual ~NewObjectDialog ();
 
     String      GetObjectName() const { return aEdit.GetText(); }
     void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
@@ -93,7 +101,7 @@ public:
 };
 
 
-class ExtBasicTreeListBox : public BasicTreeListBox
+class ExtTreeListBox : public TreeListBox
 {
 protected:
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
@@ -110,24 +118,21 @@ protected:
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
 
 public:
-    ExtBasicTreeListBox( Window* pParent, const ResId& rRes );
-    ~ExtBasicTreeListBox();
+    ExtTreeListBox( Window* pParent, const ResId& rRes );
+    ~ExtTreeListBox();
 };
 
-#define LIBMODE_CHOOSER     1
-#define LIBMODE_MANAGER     2
-
-class BasicCheckBox : public SvTabListBox
+class CheckBox : public SvTabListBox
 {
 private:
-    NewObjectMode       nMode;
+    ObjectMode::Mode    eMode;
     SvLBoxButtonData*   pCheckButton;
     ScriptDocument      m_aDocument;
     void                Init();
 
 public:
-                    BasicCheckBox( Window* pParent, const ResId& rResId );
-                    ~BasicCheckBox();
+    CheckBox( Window* pParent, const ResId& rResId );
+    ~CheckBox();
 
     SvLBoxEntry*    DoInsertEntry( const String& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvLBoxEntry*    FindEntry( const String& rName );
@@ -141,8 +146,8 @@ public:
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
-    void            SetMode( NewObjectMode n );
-    NewObjectMode   GetMode() const { return nMode; }
+    void            SetMode (ObjectMode::Mode);
+    ObjectMode::Mode GetMode () const { return eMode; }
 };
 
 class LibDialog: public ModalDialog
@@ -151,10 +156,10 @@ private:
     OKButton        aOKButton;
     CancelButton    aCancelButton;
     FixedText       aStorageName;
-    BasicCheckBox   aLibBox;
+    CheckBox        aLibBox;
     FixedLine       aFixedLine;
-    CheckBox        aReferenceBox;
-    CheckBox        aReplaceBox;
+    ::CheckBox      aReferenceBox;
+    ::CheckBox      aReplaceBox;
 
 public:
                     LibDialog( Window* pParent );
@@ -162,7 +167,7 @@ public:
 
     void            SetStorageName( const ::rtl::OUString& rName );
 
-    BasicCheckBox&  GetLibBox()                 { return aLibBox; }
+    CheckBox&       GetLibBox()                 { return aLibBox; }
     bool            IsReference() const         { return aReferenceBox.IsChecked(); }
     bool            IsReplace() const           { return aReplaceBox.IsChecked(); }
 
@@ -174,12 +179,12 @@ public:
 class OrganizeDialog : public TabDialog
 {
 private:
-    TabControl              aTabCtrl;
-    BasicEntryDescriptor    m_aCurEntry;
+    TabControl         aTabCtrl;
+    EntryDescriptor    m_aCurEntry;
 
 public:
-                    OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDescriptor& rDesc );
-                    ~OrganizeDialog();
+    OrganizeDialog( Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
+    ~OrganizeDialog();
 
     virtual short   Execute();
 
@@ -190,14 +195,14 @@ class ObjectPage: public TabPage
 {
 protected:
     FixedText           aLibText;
-    ExtBasicTreeListBox aBasicBox;
+    ExtTreeListBox      aBasicBox;
     PushButton          aEditButton;
     CancelButton        aCloseButton;
     PushButton          aNewModButton;
     PushButton          aNewDlgButton;
     PushButton          aDelButton;
 
-    DECL_LINK( BasicBoxHighlightHdl, BasicTreeListBox * );
+    DECL_LINK( BasicBoxHighlightHdl, TreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     void                CheckButtons();
     bool                GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibName );
@@ -214,12 +219,10 @@ protected:
 public:
                         ObjectPage( Window* pParent, const ResId& rResId, sal_uInt16 nMode );
 
-    void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
+    void                SetCurrentEntry( EntryDescriptor& rDesc );
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
 
-
-class SvxPasswordDialog;
 
 class LibPage: public TabPage
 {
@@ -227,7 +230,7 @@ protected:
     FixedText           aBasicsText;
     ListBox             aBasicsBox;
     FixedText           aLibText;
-    BasicCheckBox       aLibBox;
+    CheckBox            aLibBox;
     PushButton          aEditButton;
     CancelButton        aCloseButton;
     PushButton          aPasswordButton;
@@ -271,10 +274,12 @@ public:
 
 // Helper functions
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
-    BasicTreeListBox& rBasicBox, const ::rtl::OUString& rLibName, ::rtl::OUString aModName, bool bMain = false );
+    TreeListBox& rBasicBox, const ::rtl::OUString& rLibName, ::rtl::OUString aModName, bool bMain = false );
 void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
-                    BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox );
+                    CheckBox* pLibBox, TreeListBox* pBasicBox );
 
-#endif // _MODULDLG_HXX
+} // namespace basctl
+
+#endif // BASCTL_MODULDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

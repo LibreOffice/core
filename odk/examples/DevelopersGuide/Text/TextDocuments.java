@@ -34,20 +34,8 @@
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
-import com.sun.star.awt.FontWeight;
-
-import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertyState;
-
-import com.sun.star.bridge.XUnoUrlResolver;
-
-import com.sun.star.comp.servicemanager.ServiceManager;
-
-import com.sun.star.connection.XConnector;
-import com.sun.star.connection.XConnection;
-
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
@@ -57,7 +45,6 @@ import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
 
 import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapeGrouper;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.drawing.XDrawPageSupplier;
 
@@ -75,14 +62,11 @@ import com.sun.star.style.NumberingType;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 
-import com.sun.star.table.XCell;
-
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.ReferenceFieldSource;
 import com.sun.star.text.ReferenceFieldPart;
 import com.sun.star.text.TextColumn;
 import com.sun.star.text.TextContentAnchorType;
-import com.sun.star.text.XAutoTextContainer;
 import com.sun.star.text.XAutoTextGroup;
 import com.sun.star.text.XAutoTextEntry;
 import com.sun.star.text.XDependentTextField;
@@ -102,7 +86,6 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextField;
 import com.sun.star.text.XTextFrame;
 import com.sun.star.text.XTextRange;
-import com.sun.star.text.XTextSection;
 import com.sun.star.text.XTextTable;
 import com.sun.star.text.XTextTableCursor;
 import com.sun.star.text.XTextTablesSupplier;
@@ -114,12 +97,8 @@ import com.sun.star.text.XPageCursor;
 
 import com.sun.star.text.XWordCursor;
 
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
-
 import com.sun.star.util.XRefreshable;
 
 import com.sun.star.frame.XStorable;

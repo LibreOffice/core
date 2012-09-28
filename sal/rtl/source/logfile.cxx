@@ -36,7 +36,6 @@
 #include <osl/time.h>
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.h>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/alloc.h>

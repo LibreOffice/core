@@ -31,7 +31,7 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>
@@ -954,8 +954,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                     uno::UNO_QUERY_THROW);
                 aAny = xSet->getPropertyValue( rName );
 
-                uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
-                    ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))), uno::UNO_QUERY );
+                uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
                 uno::Any aNew;
                     aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
                 aNew >>= sVal;
@@ -1105,8 +1104,7 @@ String SwDocInfoField::Expand() const
                 {
                     // if the field is "fixed" we don't update it from the property
                     ::rtl::OUString sVal;
-                    uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
-                        ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))), uno::UNO_QUERY );
+                    uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
                     util::Date aDate;
                     util::DateTime aDateTime;
                     util::Duration aDuration;

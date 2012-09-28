@@ -152,7 +152,7 @@ namespace sdr
             const drawinglayer::primitive2d::Primitive2DReference xRetval(
                 new drawinglayer::primitive2d::MediaPrimitive2D(
                     aTransform, rURL, aBackgroundColor, nPixelBorder,
-                            avmedia::MediaWindow::grabFrame(rURL, true)));
+                    GetSdrMediaObj().getSnapshot()));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
         }

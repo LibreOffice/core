@@ -1,4 +1,4 @@
-officecfg_FILES = \
+officecfg_XCSFILES := \
     FirstStartWizard \
     Inet \
     Interaction \

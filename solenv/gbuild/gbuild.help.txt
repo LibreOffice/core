@@ -40,8 +40,7 @@ AVAILABLE TARGETS
                         against it
        <module>         build the named module
        <module>.clean   clean the named module
-       <module>.all     for dmake modules only, build the named module and
-                        the pre-requisite modules for this module
+       <module>.all     build the named module and the pre-requisite modules for it
        <module>.deliver for dmake modules only, deliver the named module
        cmd              execute the command contained in the variable cmd=""
                         in a shell with config_host.mk or config_build.mk
@@ -50,18 +49,20 @@ AVAILABLE TARGETS
 INTERACTIVE VARIABLES:
        DEBUG / debug   If not empty, build with DBGLEVEL=1 (see below).
        ENABLE_SYMBOLS / enable_symbols
-                       If not empty, build with debug symbols. Automatically
-                       enabled by DEBUG/debug.
+                       If not empty, build with debugging information.
+                       Automatically enabled by DEBUG/debug.
        DBGLEVEL / dbglevel
                        If not empty, force the debug level to the specified value. The
                        debug level is passed to the source code through OSL_DEBUG_LEVEL
                        macro.
                        0 = no debug
-                       1 = symbols + no optimizations
-                       2 = symbols + no optimizations + extra debug output. OSL_TRACE
-                           starts being active on this level.
-                       3... = symbols + no optimizations + extra debug output (usually
-                              extremely verbose). Levels > 2 are not used very much.
+                       1 = debugging information + no optimizations
+                       2 = degugging information + no optimizations + extra
+                           debug output. OSL_TRACE starts being active on this
+                           level.
+                       3... = degugging information + no optimizations + extra
+                              debug output (usually extremely verbose). Levels
+                              > 2 are not used very much.
 
        TIMELOG / timelog
                        If not empty enable the RTL_LOGFILE_* time logging facility.

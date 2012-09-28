@@ -189,7 +189,6 @@ private:
         BKMK_OLDNOTESFX = 0x0002
         };
     LwpObjectID m_objMarker;
-    sal_Bool m_bHint;
     sal_uInt16 m_nFlag;
 };
 
@@ -246,7 +245,6 @@ public:
 private:
     LwpObjectID m_objFormulaStory;
     LwpObjectID m_objResultContent;
-    sal_uInt8* m_nExtra;
     sal_uInt16 m_nFlag;
     sal_uInt16 m_nFieldType;
     LwpAtomHolder m_Formula;

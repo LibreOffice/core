@@ -103,7 +103,6 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
                                 GetSortData() ),
         nFieldCount     ( 0 ),
         nSortKeyCount   ( DEFSORT ),
-        nCurrentOffset  ( 0 ),
         bHasHeader      ( false ),
         bSortByRows     ( false ),
         maSortKeyCtrl   ( this, ScResId( CTRL_MANAGESORTKEY ), maSortKeyItems )

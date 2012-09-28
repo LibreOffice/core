@@ -141,14 +141,14 @@ throw( com::sun::star::uno::RuntimeException )
     WPXSvInputStream input( xInputStream );
 
     if (libmspub::MSPUBDocument::isSupported(&input))
-        sTypeName = OUString( "draw_Publisher_Document" );
+        sTypeName = "draw_Publisher_Document";
 
     if (sTypeName.getLength())
     {
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString( "TypeName" );
+            Descriptor[location].Name = "TypeName";
         }
 
         Descriptor[location].Value <<=sTypeName;

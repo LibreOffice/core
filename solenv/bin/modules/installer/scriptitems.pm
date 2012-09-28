@@ -2146,7 +2146,7 @@ sub get_string_of_modulegids_for_itemgid
     # Check: All modules or no module must have flag LANGUAGEMODULE
     if ( $haslanguagemodule )
     {
-        my $isreallylanguagemodule = installer::worker::key_in_a_is_also_key_in_b(\%foundmodules, \%installer::globals::alllangmodules);
+        my $isreallylanguagemodule = _key_in_a_is_also_key_in_b(\%foundmodules, \%installer::globals::alllangmodules);
         if ( ! $isreallylanguagemodule ) { installer::exiter::exit_program("ERROR: \"$itemgid\" is assigned to modules with flag \"LANGUAGEMODULE\" and also to modules without this flag! Modules: $allmodules", "get_string_of_modulegids_for_itemgid");  }
     }
 
@@ -2406,8 +2406,8 @@ sub resolve_assigned_modules
 
             # Currently no merging of Files, Dirs, ...
             # This has to be included here, if it is required
-            my $item;
-            foreach $item (@installer::globals::items_at_modules)
+            my @items_at_modules = ("Files", "Dirs", "Unixlinks");
+            for my $item (@items_at_modules)
             {
                 if ( exists($directaccess{$templategid}->{$item}) ) { $onefeature->{$item} = $directaccess{$templategid}->{$item}; }
             }
@@ -2496,6 +2496,32 @@ sub select_required_language_strings
             }
         }
     }
+}
+
+################################################
+# Controlling that all keys in hash A are
+# also key in hash B.
+################################################
+
+sub _key_in_a_is_also_key_in_b
+{
+    my ( $hashref_a, $hashref_b) = @_;
+
+    my $returnvalue = 1;
+
+    my $key;
+    foreach $key ( keys %{$hashref_a} )
+    {
+        if ( ! exists($hashref_b->{$key}) )
+        {
+            print "*****\n";
+            foreach $keyb ( keys %{$hashref_b} ) { print "$keyb : $hashref_b->{$keyb}\n"; }
+            print "*****\n";
+            $returnvalue = 0;
+        }
+    }
+
+    return $returnvalue;
 }
 
 1;

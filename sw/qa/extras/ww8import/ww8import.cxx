@@ -37,10 +37,6 @@
 
 #include <vcl/svapp.hxx>
 
-using rtl::OString;
-using rtl::OUString;
-using rtl::OUStringBuffer;
-
 class Test : public SwModelTestBase
 {
 public:

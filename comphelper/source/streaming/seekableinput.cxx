@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 
 using namespace ::com::sun::star;
@@ -91,22 +93,19 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
             throw uno::RuntimeException();
 
         uno::Reference< io::XOutputStream > xTempOut(
-                m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
-                uno::UNO_QUERY );
+                io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                uno::UNO_QUERY_THROW );
 
-        if ( xTempOut.is() )
+        copyInputToOutput_Impl( m_xOriginalStream, xTempOut );
+        xTempOut->closeOutput();
+
+        uno::Reference< io::XSeekable > xTempSeek( xTempOut, uno::UNO_QUERY );
+        if ( xTempSeek.is() )
         {
-            copyInputToOutput_Impl( m_xOriginalStream, xTempOut );
-            xTempOut->closeOutput();
-
-            uno::Reference< io::XSeekable > xTempSeek( xTempOut, uno::UNO_QUERY );
-            if ( xTempSeek.is() )
-            {
-                xTempSeek->seek( 0 );
-                m_xCopyInput = uno::Reference< io::XInputStream >( xTempOut, uno::UNO_QUERY );
-                if ( m_xCopyInput.is() )
-                    m_xCopySeek = xTempSeek;
-            }
+            xTempSeek->seek( 0 );
+            m_xCopyInput = uno::Reference< io::XInputStream >( xTempOut, uno::UNO_QUERY );
+            if ( m_xCopyInput.is() )
+                m_xCopySeek = xTempSeek;
         }
     }
 

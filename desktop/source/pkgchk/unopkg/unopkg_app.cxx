@@ -51,6 +51,7 @@
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/ui/dialogs/XDialogClosedListener.hpp"
+#include "com/sun/star/bridge/BridgeFactory.hpp"
 #include "com/sun/star/bridge/XBridgeFactory.hpp"
 #include <stdio.h>
 #include <vector>
@@ -197,25 +198,19 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
     if (!ctx.is())
         return;
 
-    Reference<css::bridge::XBridgeFactory> bridgeFac(
-        ctx->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.bridge.BridgeFactory"), ctx),
-        UNO_QUERY);
+    Reference<css::bridge::XBridgeFactory2> bridgeFac( css::bridge::BridgeFactory::create(ctx) );
 
-    if (bridgeFac.is())
+    const Sequence< Reference<css::bridge::XBridge> >seqBridges = bridgeFac->getExistingBridges();
+    for (sal_Int32 i = 0; i < seqBridges.getLength(); i++)
     {
-        const Sequence< Reference<css::bridge::XBridge> >seqBridges = bridgeFac->getExistingBridges();
-        for (sal_Int32 i = 0; i < seqBridges.getLength(); i++)
+        Reference<css::lang::XComponent> comp(seqBridges[i], UNO_QUERY);
+        if (comp.is())
         {
-            Reference<css::lang::XComponent> comp(seqBridges[i], UNO_QUERY);
-            if (comp.is())
+            try {
+                comp->dispose();
+            }
+            catch ( const css::lang::DisposedException& )
             {
-                try {
-                    comp->dispose();
-                }
-                catch ( const css::lang::DisposedException& )
-                {
-                }
             }
         }
     }

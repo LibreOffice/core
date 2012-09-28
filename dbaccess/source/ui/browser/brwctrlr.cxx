@@ -59,11 +59,13 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
@@ -83,6 +85,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
@@ -619,7 +622,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_nPendingLoadFinished(0)
     ,m_nFormActionNestingLevel(0)
     ,m_bLoadCanceled( sal_False )
-    ,m_bClosingKillOpen( sal_False )
     ,m_bCannotSelectUnfiltered( true )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::SbaXDataBrowserController" );
@@ -776,10 +778,9 @@ void SbaXDataBrowserController::initFormatter()
     if(xSupplier.is())
     {
         // create a new formatter
-        m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-            getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
-        if (m_xFormatter.is())
-            m_xFormatter->attachNumberFormatsSupplier(xSupplier);
+        m_xFormatter = Reference< util::XNumberFormatter > (
+            util::NumberFormatter::create(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW);
+        m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
     else // clear the formatter
         m_xFormatter = NULL;
@@ -2216,22 +2217,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
             sal_Bool bParserSuccess = sal_False;
 
-            sal_Int32 nOp = SQLFilterOperator::EQUAL;
-            if ( xField.is() )
-            {
-                sal_Int32 nType = 0;
-                xField->getPropertyValue(PROPERTY_TYPE) >>= nType;
-                switch(nType)
-                {
-                    case DataType::VARCHAR:
-                    case DataType::CHAR:
-                    case DataType::LONGVARCHAR:
-                        nOp = SQLFilterOperator::LIKE;
-                        break;
-                    default:
-                        nOp = SQLFilterOperator::EQUAL;
-                }
-            }
+            const sal_Int32 nOp = SQLFilterOperator::EQUAL;
 
             if ( bHaving )
             {

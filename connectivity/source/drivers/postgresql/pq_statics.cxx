@@ -93,15 +93,16 @@ struct DefColumnMetaData
 #define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 struct BaseTypeDef { const char * typeName; sal_Int32 value; };
 
-static Sequence< OUString > createStringSequence( const char * name[] )
+static Sequence< OUString > createStringSequence( const char * names[] )
 {
-    int length;
-    for( length = 0; name[length] ; length ++ );
+    int length = 0;
+    while (names[length])
+        ++length;
 
     Sequence< OUString > seq( length );
     for( int i = 0; i < length; i ++ )
     {
-        seq[i] = OUString( name[i] , strlen( name[i] ), RTL_TEXTENCODING_ASCII_US );
+        seq[i] = OUString( names[i] , strlen( names[i] ), RTL_TEXTENCODING_ASCII_US );
     }
     return seq;
 }

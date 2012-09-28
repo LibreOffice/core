@@ -46,9 +46,9 @@ public:
                         TabDialog( Window* pParent,
                                    WinBits nStyle = WB_STDTABDIALOG );
                         TabDialog( Window* pParent, const ResId& rResId );
+                        TabDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
                         ~TabDialog();
 
-    virtual void        Resize();
     virtual void        StateChanged( StateChangedType nStateChange );
 
     void                AdjustLayout();

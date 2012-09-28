@@ -19,14 +19,10 @@
 
 package org.openoffice.accessibility;
 
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.XKeyHandler;
 import org.openoffice.java.accessibility.AccessibleKeyBinding;
-import org.openoffice.java.accessibility.Build;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import javax.accessibility.*;
 
 public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEventDispatcher {
     EventQueue eventQueue;
@@ -126,4 +122,4 @@ public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEv
     public void disposing(com.sun.star.lang.EventObject event) {
         java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(this);
     }
-};
+}

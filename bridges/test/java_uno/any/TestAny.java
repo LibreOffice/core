@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package test.java_uno.anytest;
+package test.java_uno.any;
 
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
@@ -24,6 +24,8 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
 import java.lang.reflect.Array;
+// "any" is a reserved word in IDL, so we need to use a different packagename
+import test.java_uno.anytest.*;
 
 final class TestAny {
     public static boolean test(XTransport transport, boolean createTypes) {

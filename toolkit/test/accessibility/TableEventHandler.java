@@ -20,8 +20,6 @@ import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.accessibility.AccessibleEventId;
 import com.sun.star.accessibility.AccessibleTableModelChange;
-import com.sun.star.uno.UnoRuntime;
-
 import java.io.PrintStream;
 
 class TableEventHandler

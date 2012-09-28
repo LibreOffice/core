@@ -1,0 +1,13 @@
+--- misc/xmlsec1-1.2.14/configure.in	2012-08-29 22:44:51.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/configure.in	2012-08-29 22:46:23.000000000 +0200
+@@ -46,10 +46,6 @@
+ AC_PATH_PROG(HELP2MAN, help2man)
+ AC_PATH_PROG(MAN2HTML, man2html)
+ 
+-dnl Make sure we have an ANSI compiler
+-AM_C_PROTOTYPES
+-test "z$U" != "z" && AC_MSG_ERROR(Compiler not ANSI compliant)
+-
+ dnl Checks for header files.
+ AC_HEADER_DIRENT
+ AC_HEADER_STDC

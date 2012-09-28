@@ -10,91 +10,56 @@ package org.libreoffice.impressremote;
 
 import java.text.MessageFormat;
 
-import org.libreoffice.impressremote.communication.CommunicationService;
-import org.libreoffice.impressremote.communication.CommunicationService.State;
-
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
 public class PairingActivity extends SherlockActivity {
-    private CommunicationService mCommunicationService;
-    private TextView mPinText;
+    private ActivityChangeBroadcastProcessor mBroadcastProcessor;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bindService(new Intent(this, CommunicationService.class), mConnection,
-                        Context.BIND_IMPORTANT);
+        setContentView(R.layout.activity_pairing);
 
-        IntentFilter aFilter = new IntentFilter(
-                        CommunicationService.MSG_PAIRING_STARTED);
-        aFilter.addAction(CommunicationService.MSG_PAIRING_SUCCESSFUL);
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+
+        IntentFilter aFilter = new IntentFilter();
+
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+        mBroadcastProcessor.addToFilter(aFilter);
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
                         aFilter);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String aPin = getIntent().getStringExtra("PIN");
+        String aServerName = getIntent().getStringExtra("SERVERNAME");
+
+        ((TextView) findViewById(R.id.pairing_pin)).setText(aPin);
+        ((TextView) findViewById(R.id.pairing_instruction2_deviceName))
+                        .setText(MessageFormat
+                                        .format(getResources()
+                                                        .getString(R.string.pairing_instructions_2_deviceName),
+                                                        aServerName));
+
+        getSupportActionBar().setTitle(aServerName);
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unbindService(mConnection);
-    }
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName aClassName,
-                        IBinder aService) {
-            setContentView(R.layout.activity_pairing);
-            mPinText = (TextView) findViewById(R.id.pairing_pin);
-            mCommunicationService = ((CommunicationService.CBinder) aService)
-                            .getService();
-            ((TextView) findViewById(R.id.pairing_instruction2_deviceName))
-                            .setText(MessageFormat
-                                            .format(getResources()
-                                                            .getString(R.string.pairing_instructions_2_deviceName),
-                                                            CommunicationService
-                                                                            .getDeviceName()));
-
-            if (mCommunicationService.getState() == State.CONNECTING) {
-                mPinText.setText(mCommunicationService.getPairingPin());
-            }
-
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName aClassName) {
-            mCommunicationService = null;
-        }
-    };
 
     private BroadcastReceiver mListener = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
-            if (aIntent.getAction().equals(
-                            CommunicationService.MSG_PAIRING_STARTED)) {
-                String aPin = aIntent.getStringExtra("PIN");
-                mPinText.setText(aPin);
-                //                refreshLists();
-            } else if (aIntent.getAction().equals(
-                            CommunicationService.MSG_PAIRING_SUCCESSFUL)) {
-                Intent nIntent = new Intent(PairingActivity.this,
-                                StartPresentationActivity.class);
-                startActivity(nIntent);
-            }
-
+            mBroadcastProcessor.onReceive(aContext, aIntent);
         }
     };
 

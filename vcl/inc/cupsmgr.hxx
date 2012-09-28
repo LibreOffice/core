@@ -37,7 +37,6 @@
 namespace psp
 {
 
-class CUPSWrapper;
 class PPDParser;
 
 struct FPtrHash
@@ -48,8 +47,7 @@ struct FPtrHash
 
 class CUPSManager : public PrinterInfoManager
 {
-    CUPSWrapper*                                                m_pCUPSWrapper;
-    boost::unordered_map< FILE*, rtl::OString, FPtrHash >               m_aSpoolFiles;
+    boost::unordered_map< FILE*, rtl::OString, FPtrHash >       m_aSpoolFiles;
     int                                                         m_nDests;
     void*                                                       m_pDests;
     bool                                                        m_bNewDests;
@@ -66,13 +64,17 @@ class CUPSManager : public PrinterInfoManager
     osl::Mutex                                                  m_aCUPSMutex;
     oslThread                                                   m_aDestThread;
 
-    CUPSManager( CUPSWrapper* );
+    osl::Mutex                                                  m_aGetPPDMutex;
+    bool                                                        m_bPPDThreadRunning;
+
+    CUPSManager();
     virtual ~CUPSManager();
 
     virtual void initialize();
 
     void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const;
     void runDests();
+    OString threadedCupsGetPPD(const char* pPrinter);
 public:
     // public for stub
     static void runDestThread(void* pMgr);

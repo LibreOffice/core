@@ -22,12 +22,6 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.lang.IndexOutOfBoundsException;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.Vector;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 
 
 class AccessibleSelectionHandler
@@ -36,8 +30,8 @@ class AccessibleSelectionHandler
     public NodeHandler createHandler( XAccessibleContext xContext )
     {
         XAccessibleSelection xSelection =
-            (XAccessibleSelection) UnoRuntime.queryInterface(
-                XAccessibleSelection.class, xContext);
+            UnoRuntime.queryInterface(
+            XAccessibleSelection.class, xContext);
         return (xSelection == null) ? null :
             new AccessibleSelectionHandler(xSelection);
     }

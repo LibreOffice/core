@@ -36,6 +36,7 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -201,13 +202,13 @@ namespace pcr
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL EnumRepresentation::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL EnumRepresentation::release()
     {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        if ( 0 == osl_atomic_decrement( &m_refCount ) )
         {
            delete this;
            return 0;
@@ -248,11 +249,11 @@ namespace pcr
         if ( !_rxControl.is() )
             throw NullPointerException();
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         {
             _rxControl->addActionListener( this );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
         OSL_ENSURE( m_refCount > 0, "UrlClickHandler::UrlClickHandler: leaking!" );
 
         DBG_CTOR( UrlClickHandler, NULL );
@@ -316,10 +317,7 @@ namespace pcr
     {
         DBG_CTOR( GenericPropertyHandler, NULL );
 
-        m_xTypeConverter = Reference< XTypeConverter >(
-            m_aContext.createComponent( "com.sun.star.script.Converter" ),
-            UNO_QUERY_THROW
-        );
+        m_xTypeConverter = Converter::create(_rxContext);
     }
 
     //--------------------------------------------------------------------

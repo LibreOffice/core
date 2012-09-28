@@ -126,7 +126,7 @@ void OOXMLOLEHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_OLEObject_r_id:
-        mpFastContext->resolveOLE(val.getString());
+        mpFastContext->resolveData(val.getString());
         break;
     default:
         ;
@@ -134,6 +134,31 @@ void OOXMLOLEHandler::attribute(Id name, Value & val)
 }
 
 void OOXMLOLEHandler::sprm(Sprm & /*sprm*/)
+{
+}
+
+OOXMLEmbeddedFontHandler::OOXMLEmbeddedFontHandler(OOXMLFastContextHandler * pContext)
+: mpFastContext(pContext)
+{
+}
+
+OOXMLEmbeddedFontHandler::~OOXMLEmbeddedFontHandler()
+{
+}
+
+void OOXMLEmbeddedFontHandler::attribute(Id name, Value & val)
+{
+    switch (name)
+    {
+    case NS_ooxml::LN_CT_Rel_id:
+        mpFastContext->resolveData(val.getString());
+        break;
+    default:
+        break;
+    }
+}
+
+void OOXMLEmbeddedFontHandler::sprm(Sprm & /*sprm*/)
 {
 }
 
@@ -204,9 +229,8 @@ void OOXMLHeaderHandler::sprm(Sprm & /*sprm*/)
 /*
   class OOXMLBreakHandler
  */
-OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream,
-                                     OOXMLFastContextHandler * pContext)
-: mpFastContext(pContext), mnType(0), mnClear(0),
+OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream)
+: mnType(0), mnClear(0),
   mrStream(rStream)
 {
 }
@@ -337,6 +361,7 @@ void OOXMLHyperlinkHandler::attribute(Id name, Value & val)
 void OOXMLHyperlinkHandler::sprm(Sprm & /*rSprm*/)
 {
 }
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

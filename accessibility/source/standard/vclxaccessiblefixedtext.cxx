@@ -76,17 +76,17 @@ void VCLXAccessibleFixedText::implGetLineBoundary( i18n::Boundary& rBoundary, sa
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleFixedText::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleFixedText::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleFixedText") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleFixedText" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleFixedText") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleFixedText";
     return aNames;
 }
 

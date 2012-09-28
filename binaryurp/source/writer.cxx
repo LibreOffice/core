@@ -163,10 +163,7 @@ void Writer::execute() {
                     (item.oid != "UrpProtocolProperties" &&
                      !item.member.equals(
                          css::uno::TypeDescription(
-                             OUString(
-                                 RTL_CONSTASCII_USTRINGPARAM(
-                                     "com.sun.star.uno.XInterface::"
-                                     "release")))) &&
+                             "com.sun.star.uno.XInterface::release")) &&
                      bridge_->isCurrentContextMode()),
                     item.currentContext);
             } else {
@@ -241,8 +238,7 @@ void Writer::sendRequest(
     OSL_ASSERT(functionId >= 0);
     if (functionId > SAL_MAX_UINT16) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM("function ID too large for URP")),
+            "function ID too large for URP",
             css::uno::Reference< css::uno::XInterface >());
     }
     std::vector< unsigned char > buf;
@@ -409,8 +405,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     std::vector< unsigned char > header;
     if (buffer.size() > SAL_MAX_UINT32) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM("message too large for URP")),
+            "message too large for URP",
             css::uno::Reference< css::uno::XInterface >());
     }
     Marshal::write32(&header, static_cast< sal_uInt32 >(buffer.size()));
@@ -435,10 +430,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
         } catch (const css::io::IOException & e) {
             css::uno::Any exc(cppu::getCaughtException());
             throw css::lang::WrappedTargetRuntimeException(
-                (OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "Binary URP write raised IO exception: ")) +
-                 e.Message),
+                "Binary URP write raised IO exception: " + e.Message,
                 css::uno::Reference< css::uno::XInterface >(), exc);
         }
         n = static_cast< std::vector< unsigned char >::size_type >(n - k);

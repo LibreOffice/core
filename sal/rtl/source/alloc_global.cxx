@@ -170,7 +170,7 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
             p = rtl_allocateMemory (n);
             if (p != 0)
             {
-                memcpy (p, p_old, SAL_MIN(n, n_old));
+                memcpy (p, p_old, (n < n_old) ? n : n_old);
                 rtl_freeMemory (p_old);
             }
         }

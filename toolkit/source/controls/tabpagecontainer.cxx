@@ -27,18 +27,20 @@
  ************************************************************************/
 
 
-#include <toolkit/controls/tabpagecontainer.hxx>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <toolkit/helper/unopropertyarrayhelper.hxx>
-#include <toolkit/helper/property.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
+#include <toolkit/controls/tabpagecontainer.hxx>
+#include <toolkit/controls/tabpagemodel.hxx>
+#include <toolkit/helper/property.hxx>
+#include <toolkit/helper/unopropertyarrayhelper.hxx>
+
+#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
-#include <vcl/svapp.hxx>
-#include <com/sun/star/awt/XControlModel.hpp>
 #include <tools/diagnose_ex.h>
+#include <vcl/svapp.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -47,6 +49,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::view;
+using ::com::sun::star::awt::tab::XTabPageModel;
 
 #define WRONG_TYPE_EXCEPTION "Type must be ::com::sun::star::awt::tab::XTabPageModel!"
 //  ----------------------------------------------------
@@ -87,13 +90,13 @@ uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropI
 
 ::cppu::IPropertyArrayHelper& UnoControlTabPageContainerModel::getInfoHelper()
 {
-     static UnoPropertyArrayHelper* pHelper = NULL;
-     if ( !pHelper )
-     {
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
         com::sun::star::uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
-         pHelper = new UnoPropertyArrayHelper( aIDs );
+        pHelper = new UnoPropertyArrayHelper( aIDs );
     }
-     return *pHelper;
+    return *pHelper;
 }
 Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlTabPageContainerModel::getPropertySetInfo(  ) throw(RuntimeException)
 {
@@ -101,17 +104,67 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlTabPageContaine
     return xInfo;
 }
 
+namespace
+{
+    Reference< XTabPageModel > lcl_createTabPageModel( ::comphelper::ComponentContext const & i_context,
+        Sequence< Any > const & i_initArguments, Reference< XPropertySet > const & i_parentModel )
+    {
+        try
+        {
+            Reference< XPropertySet > const xParentDelegator( i_parentModel, UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > const xPSI( xParentDelegator->getPropertySetInfo() );
+            bool const isGeometryControlModel = xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) );
+
+            Reference< XInterface > xInstance;
+            if ( isGeometryControlModel )
+                xInstance = *( new OGeometryControlModel< UnoControlTabPageModel >( i_context.getLegacyServiceFactory() ) );
+            else
+                xInstance = *( new UnoControlTabPageModel( i_context.getLegacyServiceFactory() ) );
+
+            Reference< XTabPageModel > const xTabPageModel( xInstance, UNO_QUERY_THROW );
+            Reference< XInitialization > const xInit( xTabPageModel, UNO_QUERY_THROW );
+            xInit->initialize( i_initArguments );
+
+            return xTabPageModel;
+        }
+        catch( const RuntimeException& )
+        {
+            throw;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return NULL;
+    }
+}
+
+Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::createTabPage( ::sal_Int16 i_tabPageID ) throw (RuntimeException)
+{
+    Sequence< Any > aInitArgs(1);
+    aInitArgs[0] <<= i_tabPageID;
+    return lcl_createTabPageModel( maContext, aInitArgs, this );
+}
+
+Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::loadTabPage( ::sal_Int16 i_tabPageID, const ::rtl::OUString& i_resourceURL ) throw (RuntimeException)
+{
+    Sequence< Any > aInitArgs(2);
+    aInitArgs[0] <<= i_tabPageID;
+    aInitArgs[1] <<= i_resourceURL;
+    return lcl_createTabPageModel( maContext, aInitArgs, this );
+}
+
 void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex, const com::sun::star::uno::Any& aElement) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    uno::Reference < ::awt::tab::XTabPageModel > xTabPageModel;
+    uno::Reference < XTabPageModel > xTabPageModel;
     if(aElement >>= xTabPageModel)
     {
         if ( sal_Int32( m_aTabPageVector.size()) ==nIndex )
             m_aTabPageVector.push_back( xTabPageModel );
         else if ( sal_Int32( m_aTabPageVector.size()) > nIndex )
         {
-            std::vector< uno::Reference< ::awt::tab::XTabPageModel > >::iterator aIter = m_aTabPageVector.begin();
+            std::vector< uno::Reference< XTabPageModel > >::iterator aIter = m_aTabPageVector.begin();
             aIter += nIndex;
             m_aTabPageVector.insert( aIter, xTabPageModel );
         }
@@ -165,12 +218,12 @@ uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  ) throw (un
 // XContainer
 void UnoControlTabPageContainerModel::addContainerListener( const Reference< XContainerListener >& l ) throw(RuntimeException)
 {
-     maContainerListeners.addInterface( l );
+    maContainerListeners.addInterface( l );
 }
 
 void UnoControlTabPageContainerModel::removeContainerListener( const Reference< XContainerListener >& l ) throw(RuntimeException)
 {
-     maContainerListeners.removeInterface( l );
+    maContainerListeners.removeInterface( l );
 }
 
 //  ----------------------------------------------------
@@ -201,7 +254,7 @@ void UnoControlTabPageContainer::createPeer( const uno::Reference< awt::XToolkit
 
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     if ( m_aTabPageListeners.getLength() )
-        xTPContainer->addTabPageListener(&m_aTabPageListeners);
+        xTPContainer->addTabPageContainerListener(&m_aTabPageListeners);
 }
 
 // -------------------------------------------------------------------
@@ -219,7 +272,7 @@ void SAL_CALL UnoControlTabPageContainer::setActiveTabPageID( ::sal_Int16 _activ
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     xTPContainer->setActiveTabPageID(_activetabpageid);
 }
-::sal_Int32 SAL_CALL UnoControlTabPageContainer::getTabPageCount(  ) throw (RuntimeException)
+::sal_Int16 SAL_CALL UnoControlTabPageContainer::getTabPageCount(  ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
@@ -243,21 +296,21 @@ Reference< ::com::sun::star::awt::tab::XTabPage > SAL_CALL UnoControlTabPageCont
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPageByID(tabPageID);
 }
-void SAL_CALL UnoControlTabPageContainer::addTabPageListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
+void SAL_CALL UnoControlTabPageContainer::addTabPageContainerListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
 {
     m_aTabPageListeners.addInterface( listener );
     if( getPeer().is() && m_aTabPageListeners.getLength() == 1 )
     {
         uno::Reference < awt::tab::XTabPageContainer >  xTabPageContainer( getPeer(), uno::UNO_QUERY );
-        xTabPageContainer->addTabPageListener( &m_aTabPageListeners );
+        xTabPageContainer->addTabPageContainerListener( &m_aTabPageListeners );
     }
 }
-void SAL_CALL UnoControlTabPageContainer::removeTabPageListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
+void SAL_CALL UnoControlTabPageContainer::removeTabPageContainerListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
 {
     if( getPeer().is() && m_aTabPageListeners.getLength() == 1 )
     {
         uno::Reference < awt::tab::XTabPageContainer >  xTabPageContainer( getPeer(), uno::UNO_QUERY );
-        xTabPageContainer->addTabPageListener( &m_aTabPageListeners );
+        xTabPageContainer->addTabPageContainerListener( &m_aTabPageListeners );
     }
     m_aTabPageListeners.removeInterface( listener );
 }

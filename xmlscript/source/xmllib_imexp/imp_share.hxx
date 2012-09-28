@@ -32,8 +32,6 @@
 
 #include <vector>
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
 
 using namespace ::rtl;
 using namespace ::std;
@@ -75,11 +73,7 @@ inline bool getBoolAttr(
         }
         else
         {
-            throw xml::sax::SAXException(
-                rAttrName +
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              ": no boolean value (true|false)!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException(rAttrName + ": no boolean value (true|false)!", Reference< XInterface >(), Any() );
         }
     }
     return false;

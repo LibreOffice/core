@@ -2044,6 +2044,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
                 ScDocument* pDoc = pData->GetDocument();
 
+                if(pDoc->IsTabProtected(pData->GetTabNo()))
+                {
+                    pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
+                    break;
+                }
+
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
                 if(aRangeList.empty())
                 {
@@ -2079,20 +2085,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                ScRangeList aRangeList;
                 ScViewData* pData = GetViewData();
-                pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
                 ScDocument* pDoc = pData->GetDocument();
 
-                ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
-                if(aRangeList.empty())
+                if(pDoc->IsTabProtected(pData->GetTabNo()))
                 {
-                    ScRange* pRange = new ScRange(aPos);
-                    aRangeList.push_back(pRange);
+                    pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
+                    break;
                 }
 
+                ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
+
                 ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
-                AbstractScCondFormatManagerDlg* pDlg = pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aRangeList, aPos, RID_SCDLG_COND_FORMAT_MANAGER);
+                AbstractScCondFormatManagerDlg* pDlg = pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER);
                 if(pDlg->Execute() == RET_OK)
                 {
                     pDoc->SetCondFormList(pDlg->GetConditionalFormatList(), aPos.Tab());

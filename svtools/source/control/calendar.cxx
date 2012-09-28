@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -2382,7 +2381,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
             mpFixedLine->Show();
         }
         long nLineWidth = aOutSize.Width()-(CALFIELD_BORDERLINE_X*2);
-        mpFixedLine->SetPosSizePixel( (aOutSize.Width()-nLineWidth)/2, aOutSize.Height()+((CALFIELD_BORDER_YTOP-2)/2),
+        mpFixedLine->setPosSizePixel( (aOutSize.Width()-nLineWidth)/2, aOutSize.Height()+((CALFIELD_BORDER_YTOP-2)/2),
                                       nLineWidth, 2, WINDOW_POSSIZE_POSSIZE );
         aOutSize.Height() += nBtnHeight + (CALFIELD_BORDER_Y*2) + CALFIELD_BORDER_YTOP;
         SetOutputSizePixel( aOutSize );

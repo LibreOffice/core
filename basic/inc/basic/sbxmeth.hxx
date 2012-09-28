@@ -35,9 +35,6 @@ public:
     virtual SbxClassType GetClass() const;
 };
 
-SV_DECL_REF(SbxMethod)
-SV_IMPL_REF(SbxMethod)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

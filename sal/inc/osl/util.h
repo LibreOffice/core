@@ -30,6 +30,9 @@
 #ifndef _OSL_UTIL_H_
 #define _OSL_UTIL_H_
 
+#include "sal/config.h"
+
+#include "sal/saldllapi.h"
 #include "sal/types.h"
 
 #ifdef __cplusplus

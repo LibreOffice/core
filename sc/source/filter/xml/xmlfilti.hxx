@@ -59,10 +59,8 @@ class ScXMLFilterContext : public SvXMLImportContext
 
     com::sun::star::table::CellAddress aOutputPosition;
     com::sun::star::table::CellRangeAddress aConditionSourceRangeAddress;
-    sal_Int16   nUserListIndex;
     bool        bSkipDuplicates;
     bool        bCopyOutputData;
-    bool        bEnabledUserList;
     bool        bConditionSourceRange;
     std::vector<ConnStackItem> maConnStack;
 
@@ -215,12 +213,10 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     ScAddress       aOutputPosition;
     ScRange         aConditionSourceRangeAddress;
     sal_uInt8   nFilterFieldCount;
-    sal_Int16   nUserListIndex;
     bool        bSkipDuplicates:1;
     bool        bCopyOutputData:1;
     bool        bUseRegularExpressions:1;
     bool        bIsCaseSensitive:1;
-    bool        bEnabledUserList:1;
     bool        bConnectionOr:1;
     bool        bNextConnectionOr:1;
     bool        bConditionSourceRange:1;

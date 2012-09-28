@@ -22,7 +22,6 @@ package org.openoffice.xmerge.converter.xml.sxw.pocketword;
 /**
  * Interface defining constants for Pocket Word attributes.
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 public interface PocketWordConstants {

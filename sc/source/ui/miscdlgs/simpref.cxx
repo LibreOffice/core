@@ -70,9 +70,7 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
 
         //
-        pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
-        bRefInputMode   ( false ),
         bAutoReOpen     ( sal_True ),
         bCloseOnButtonUp( false ),
         bSingleCell     ( false ),

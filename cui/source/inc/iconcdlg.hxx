@@ -86,7 +86,6 @@ private :
     String              aUserString;
     sal_Bool                bHasExchangeSupport;
     IconChoiceDialog*   pDialog;
-    sal_Bool                bStandard;
 
     void                SetDialog( IconChoiceDialog* pNew ) { pDialog = pNew; }
     IconChoiceDialog*   GetDialog() const { return pDialog; }

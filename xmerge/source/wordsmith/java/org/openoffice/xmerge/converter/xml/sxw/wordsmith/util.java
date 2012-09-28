@@ -21,7 +21,6 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 /**
  *  WordSmith utility class.
  *
- *  @author   David Proulx
  */
 class util {
 

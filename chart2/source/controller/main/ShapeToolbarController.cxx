@@ -76,9 +76,9 @@ ShapeToolbarController::ShapeToolbarController( const Reference< lang::XMultiSer
     ,m_nToolBoxId( 1 )
     ,m_nSlotId( 0 )
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     m_xServiceManager = rxFact;
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 ShapeToolbarController::~ShapeToolbarController()

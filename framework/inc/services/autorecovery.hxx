@@ -1031,7 +1031,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             @param  sURL
                     the url of the file, which should be removed.
          */
-        static void st_impl_removeFile(const ::rtl::OUString& sURL);
+        void st_impl_removeFile(const ::rtl::OUString& sURL);
 
         //---------------------------------------
         /** try to remove ".lock" file from disc if office will be terminated
@@ -1040,7 +1040,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             This method has to be handled "optional". So every error inside
             has to be ignored ! This method CANT FAIL ... it can forget something only .-)
          */
-        static void st_impl_removeLockFile();
+        void st_impl_removeLockFile();
 };
 
 } // namespace framework

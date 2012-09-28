@@ -149,9 +149,9 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    Reference< XDataSource > ODataAccessStaticTools::getDataSource( const ::rtl::OUString& _rsRegisteredName, const Reference< XMultiServiceFactory>& _rxFactory ) const
+    Reference< XDataSource > ODataAccessStaticTools::getDataSource( const ::rtl::OUString& _rsRegisteredName, const Reference< XComponentContext>& _rxContext ) const
     {
-        return ::dbtools::getDataSource( _rsRegisteredName, _rxFactory );
+        return ::dbtools::getDataSource( _rsRegisteredName, _rxContext );
     }
 
     //----------------------------------------------------------------

@@ -30,79 +30,13 @@ package installer::exiter;
 use strict;
 use warnings;
 
-use installer::files;
-use installer::globals;
-use installer::logger;
-use installer::systemactions;
-use installer::worker;
-
-############################################
-# Exiting the program with an error
-# This function is used instead of "die"
-############################################
+use Carp;
 
 sub exit_program
 {
-    my ($message, $function) = @_;
+    my $message = shift;
 
-    # If an installation set is currently created, the directory name is saved in $installer::globals::saveinstalldir
-    # If this directory name matches with "_inprogress", it has to be renamed into "_witherror"
-
-    if ( $installer::globals::saveinstalldir =~ /_inprogress/ ) { installer::systemactions::rename_string_in_directory($installer::globals::saveinstalldir, "_inprogress", "_witherror");   }
-
-    installer::worker::clean_output_tree(); # removing directories created in the output tree
-
-    # If @installer::globals::logfileinfo is not empty, it can be used.
-    # Otherwise the content of @installer::globals::globallogfileinfo has to be used.
-
-    my $infoline;
-
-    $installer::globals::logfilename = $installer::globals::exitlog . $installer::globals::logfilename;
-
-    if ( ! $installer::globals::globalinfo_copied ) { installer::logger::copy_globalinfo_into_logfile(); }
-
-    if ( $#installer::globals::logfileinfo > -1 )
-    {
-        $infoline = "\n***************************************************************\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        $infoline = "$message\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        $infoline = "in function: $function\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        $infoline = "***************************************************************\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        installer::files::save_file($installer::globals::logfilename ,\@installer::globals::logfileinfo);
-    }
-    else
-    {
-        $infoline = "\n***************************************************************\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
-
-        $infoline = "$message\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
-
-        $infoline = "in function: $function\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
-
-        $infoline = "***************************************************************\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
-
-        installer::files::save_file($installer::globals::logfilename ,\@installer::globals::globallogfileinfo);
-    }
-    installer::logger::print_error("$message\nin function: $function");
-    print("ERROR, saved logfile $installer::globals::logfilename is:\n");
-    open(LOG, "<", $installer::globals::logfilename);
-    print ": $_" while (<LOG>);
-    print "\n";
-    close(LOG);
-
-    installer::logger::stoptime();
-
-    exit(-1);
+    croak $message;
 }
 
 1;

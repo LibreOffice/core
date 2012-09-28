@@ -122,7 +122,7 @@ public class CheckContentProvider {
             XContentProvider xContentProvider =
                             UnoRuntime.queryInterface(XContentProvider.class, o);
 
-            // create the ucb
+            // create unconfigured ucb
             XContentIdentifierFactory xContentIdentifierFactory =
                             UnoRuntime.queryInterface(XContentIdentifierFactory.class, xMSF.createInstance("com.sun.star.ucb.UniversalContentBroker"));
             // create a content identifier from the ucb for tdoc
@@ -185,7 +185,7 @@ public class CheckContentProvider {
             Object o = xMSF.createInstance("com.sun.star.comp.ucb.TransientDocumentsContentProvider");
             XContentProvider xContentProvider =
                             UnoRuntime.queryInterface(XContentProvider.class, o);
-            // create the ucb
+            // create unconfigured ucb
             XContentIdentifierFactory xContentIdentifierFactory =
                             UnoRuntime.queryInterface(XContentIdentifierFactory.class, xMSF.createInstance("com.sun.star.ucb.UniversalContentBroker"));
             // create a content identifier from the ucb for tdoc
@@ -220,7 +220,7 @@ public class CheckContentProvider {
             Object o = xMSF.createInstance("com.sun.star.comp.ucb.TransientDocumentsContentProvider");
             XContentProvider xContentProvider =
                             UnoRuntime.queryInterface(XContentProvider.class, o);
-            // create the ucb
+            // create unconfigured ucb
             XContentIdentifierFactory xContentIdentifierFactory =
                             UnoRuntime.queryInterface(XContentIdentifierFactory.class, xMSF.createInstance("com.sun.star.ucb.UniversalContentBroker"));
             // create a content identifier from the ucb for tdoc
@@ -255,7 +255,7 @@ public class CheckContentProvider {
             XContentProvider xContentProvider =
                             UnoRuntime.queryInterface(XContentProvider.class, o);
 
-            // create the ucb
+            // create unconfigured ucb
             XContentIdentifierFactory xContentIdentifierFactory =
                             UnoRuntime.queryInterface(XContentIdentifierFactory.class, xMSF.createInstance("com.sun.star.ucb.UniversalContentBroker"));
             // create a content identifier from the ucb for tdoc

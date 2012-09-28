@@ -19,9 +19,9 @@ public:
     virtual void AdjustLayout( ImplLayoutArgs& );
     virtual void DrawText( SalGraphics& ) const;
     virtual void DropGlyph( int nStart );
-    virtual long FillDXArray( long* pDXArray ) const;
+    virtual long FillDXArray( sal_Int32* pDXArray ) const;
     virtual bool GetBoundRect( SalGraphics&, Rectangle& ) const;
-    virtual void GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual void GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
     virtual bool GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
     virtual int GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
                                sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;

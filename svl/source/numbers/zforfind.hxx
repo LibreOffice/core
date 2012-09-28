@@ -74,6 +74,8 @@ public:
      */
     bool CanForceToIso8601( DateFormat eDateFormat );
 
+    void InvalidateDateAcceptancePatterns();
+
 private:
     SvNumberFormatter*  pFormatter;
     String* pUpperMonthText;                    // Array of month names, uppercase

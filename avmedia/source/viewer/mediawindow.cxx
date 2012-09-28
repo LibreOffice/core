@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <stdio.h>
 
@@ -70,15 +61,15 @@ MediaWindow::~MediaWindow()
 
 // -------------------------------------------------------------------------
 
-void MediaWindow::setURL( const ::rtl::OUString& rURL )
+void MediaWindow::setURL( const OUString& rURL )
 {
     if( mpImpl )
-        mpImpl->setURL( rURL, ::rtl::OUString() );
+        mpImpl->setURL( rURL, OUString() );
 }
 
 // -------------------------------------------------------------------------
 
-const ::rtl::OUString& MediaWindow::getURL() const
+const OUString& MediaWindow::getURL() const
 {
     return mpImpl->getURL();
 }
@@ -238,24 +229,24 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
     for( size_t i = 0; i < SAL_N_ELEMENTS(pFilters); i += 2 )
     {
-        rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
-                                        ::rtl::OUString::createFromAscii(pFilters[i]),
-                                        ::rtl::OUString::createFromAscii(pFilters[i+1]) ) );
+        rFilterNameVector.push_back( ::std::make_pair< OUString, OUString >(
+                                        OUString::createFromAscii(pFilters[i]),
+                                        OUString::createFromAscii(pFilters[i+1]) ) );
     }
 }
 
 // -------------------------------------------------------------------------
 
 bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
-        ::rtl::OUString& rURL, bool *const o_pbLink)
+        OUString& rURL, bool *const o_pbLink)
 {
     ::sfx2::FileDialogHelper        aDlg( (o_pbLink)
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
             : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    static const ::rtl::OUString    aWildcard( "*."  );
+    static const OUString           aWildcard( "*."  );
     FilterNameVector                aFilters;
-    const ::rtl::OUString           aSeparator( ";"  );
-    ::rtl::OUString                 aAllTypes;
+    const OUString                  aSeparator( ";"  );
+    OUString                        aAllTypes;
 
     aDlg.SetTitle( AVMEDIA_RESID( (o_pbLink)
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
@@ -279,7 +270,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
 
     for( i = 0; i < aFilters.size(); ++i )
     {
-        ::rtl::OUString aTypes;
+        OUString aTypes;
 
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
@@ -328,7 +319,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
         }
     }
     else if( !rURL.isEmpty() )
-        rURL = ::rtl::OUString();
+        rURL = OUString();
 
     return( !rURL.isEmpty() );
 }
@@ -344,7 +335,7 @@ void MediaWindow::executeFormatErrorBox( Window* pParent )
 
 // -------------------------------------------------------------------------
 
-bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPreferredSizePixel )
+bool MediaWindow::isMediaURL( const OUString& rURL, bool bDeep, Size* pPreferredSizePixel )
 {
     const INetURLObject aURL( rURL );
     bool                bRet = false;
@@ -378,7 +369,7 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
         else
         {
             FilterNameVector        aFilters;
-            const ::rtl::OUString   aExt( aURL.getExtension() );
+            const OUString          aExt( aURL.getExtension() );
 
             getMediaFilters( aFilters );
 
@@ -399,14 +390,14 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindow::createPlayer( const ::rtl::OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL )
 {
     return priv::MediaWindowImpl::createPlayer( rURL );
 }
 
 // -------------------------------------------------------------------------
 
-uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const ::rtl::OUString& rURL,
+uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
                                                             bool bAllowToCreateReplacementGraphic,
                                                             double fMediaTime )
 {

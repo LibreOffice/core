@@ -34,7 +34,6 @@ import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Exception;
 import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.lib.util.NativeLibraryLoader;
 

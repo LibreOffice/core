@@ -29,10 +29,9 @@
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <sal/macros.h>
+#include <com/sun/star/task/PasswordContainer.hpp>
 #include <com/sun/star/task/UrlRecord.hpp>
-#include <com/sun/star/task/XPasswordContainer.hpp>
-#include <com/sun/star/task/XMasterPasswordHandling.hpp>
-#include "com/sun/star/task/XUrlContainer.hpp"
+#include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include "webconninfo.hxx"
@@ -182,20 +181,17 @@ void WebConnectionInfoDialog::FillPasswordList()
 {
     try
     {
-        uno::Reference< task::XMasterPasswordHandling > xMasterPasswd(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
-            uno::UNO_QUERY );
+        uno::Reference< task::XPasswordContainer2 > xMasterPasswd(
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-        if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() )
+        if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
-            uno::Reference< task::XPasswordContainer > xPasswdContainer( xMasterPasswd, uno::UNO_QUERY_THROW );
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
                 comphelper::getProcessServiceFactory()->createInstance(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.InteractionHandler" ) ) ),
                 uno::UNO_QUERY_THROW );
 
-            uno::Sequence< task::UrlRecord > aURLEntries = xPasswdContainer->getAllPersistent( xInteractionHandler );
+            uno::Sequence< task::UrlRecord > aURLEntries = xMasterPasswd->getAllPersistent( xInteractionHandler );
             sal_Int32 nCount = 0;
             for ( sal_Int32 nURLInd = 0; nURLInd < aURLEntries.getLength(); nURLInd++ )
             {
@@ -212,11 +208,8 @@ void WebConnectionInfoDialog::FillPasswordList()
             // remember pos of first url container entry.
             m_nPos = nCount;
 
-            uno::Reference< task::XUrlContainer > xUrlContainer(
-                xPasswdContainer, uno::UNO_QUERY_THROW );
-
             uno::Sequence< rtl::OUString > aUrls
-                = xUrlContainer->getUrls( sal_True /* OnlyPersistent */ );
+                = xMasterPasswd->getUrls( sal_True /* OnlyPersistent */ );
 
             for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
             {
@@ -243,11 +236,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
             ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
             ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
 
-            uno::Reference< task::XPasswordContainer > xPasswdContainer(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.task.PasswordContainer" ) ) ),
-                uno::UNO_QUERY_THROW );
+            uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
+                task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
             sal_Int32 nPos = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
             if ( nPos < m_nPos )
@@ -256,9 +246,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
             }
             else
             {
-                uno::Reference< task::XUrlContainer > xUrlContainer(
-                    xPasswdContainer, uno::UNO_QUERY_THROW );
-                xUrlContainer->removeUrl( aURL );
+                xPasswdContainer->removeUrl( aURL );
             }
             m_aPasswordsLB.RemoveEntry( pEntry );
         }
@@ -274,21 +262,16 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
 {
     try
     {
-        uno::Reference< task::XPasswordContainer > xPasswdContainer(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.task.PasswordContainer" ) ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         // should the master password be requested before?
         xPasswdContainer->removeAllPersistent();
 
-        uno::Reference< task::XUrlContainer > xUrlContainer(
-            xPasswdContainer, uno::UNO_QUERY_THROW );
         uno::Sequence< rtl::OUString > aUrls
-            = xUrlContainer->getUrls( sal_True /* OnlyPersistent */ );
+            = xPasswdContainer->getUrls( sal_True /* OnlyPersistent */ );
         for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
-            xUrlContainer->removeUrl( aUrls[ nURLIdx ] );
+            xPasswdContainer->removeUrl( aUrls[ nURLIdx ] );
 
         m_aPasswordsLB.Clear();
     }
@@ -326,11 +309,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
                 uno::Sequence< ::rtl::OUString > aPasswd( 1 );
                 aPasswd[0] = aNewPass;
 
-                uno::Reference< task::XPasswordContainer > xPasswdContainer(
-                    comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.task.PasswordContainer" ) ) ),
-                    uno::UNO_QUERY_THROW );
+                uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
+                    task::PasswordContainer::create(comphelper::getProcessComponentContext()));
                 xPasswdContainer->addPersistent(
                     aURL, aUserName, aPasswd, xInteractionHandler );
             }

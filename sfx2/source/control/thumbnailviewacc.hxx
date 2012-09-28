@@ -201,8 +201,6 @@ public:
     void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     sal_Bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
-    static ThumbnailViewItemAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
-
 public:
 
     // XAccessible

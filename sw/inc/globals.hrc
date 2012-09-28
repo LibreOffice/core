@@ -170,7 +170,6 @@
 
 #define TP_REDLINE_OPT              (RC_GLOBALS_BEGIN +  74)
 
-#define TP_LINENUMBERING            (RC_GLOBALS_BEGIN +  75)
 #define TP_OUTLINE_NUM              (RC_GLOBALS_BEGIN +  76)
 
 #define TP_OPTCAPTION_PAGE          (RC_GLOBALS_BEGIN +  78)

@@ -65,9 +65,9 @@ VCLXAccessibleTextField::~VCLXAccessibleTextField (void)
 
 
 
-::rtl::OUString VCLXAccessibleTextField::implGetText (void)
+OUString VCLXAccessibleTextField::implGetText (void)
 {
-    ::rtl::OUString aText;
+    OUString aText;
     ListBox* pListBox = static_cast<ListBox*>(GetWindow());
     if (pListBox!=NULL && !pListBox->IsInDropDown())
         aText = pListBox->GetSelectEntry();
@@ -132,22 +132,22 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 
 //===== XServiceInfo ==========================================================
 
-::rtl::OUString VCLXAccessibleTextField::getImplementationName (void)
+OUString VCLXAccessibleTextField::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleTextField" ));
+    return OUString( "com.sun.star.comp.toolkit.AccessibleTextField" );
 }
 
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleTextField::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleTextField::getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames = VCLXAccessibleTextComponent::getSupportedServiceNames();
+    Sequence< OUString > aNames = VCLXAccessibleTextComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleTextField" ));
+    aNames[nLength] = "com.sun.star.accessibility.AccessibleTextField";
     return aNames;
 }
 

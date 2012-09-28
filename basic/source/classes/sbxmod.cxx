@@ -47,7 +47,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-#include <com/sun/star/document/XVbaMethodParameter.hpp>
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -174,7 +173,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
 
             if ( m_xAggProxy.is() )
             {
-                osl_incrementInterlockedCount( &m_refCount );
+                osl_atomic_increment( &m_refCount );
 
                 /* i35609 - Fix crash on Solaris. The setDelegator call needs
                     to be in its own block to ensure that all temporary Reference
@@ -184,7 +183,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
                     m_xAggProxy->setDelegator( static_cast< cppu::OWeakObject * >( this ) );
                 }
 
-                 osl_decrementInterlockedCount( &m_refCount );
+                 osl_atomic_decrement( &m_refCount );
             }
         }
     }
@@ -193,13 +192,13 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
 void SAL_CALL
 DocObjectWrapper::acquire() throw ()
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     OSL_TRACE("DocObjectWrapper::acquire(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
 }
 void SAL_CALL
 DocObjectWrapper::release() throw ()
 {
-    if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
+    if ( osl_atomic_decrement( &m_refCount ) == 0 )
     {
         OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
         delete this;
@@ -1085,7 +1084,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
     static sal_uInt16 nMaxCallLevel = 0;
 
     sal_uInt16 nRes = 0;
-    sal_Bool bDelInst = sal_Bool( GetSbData()->pInst == NULL );
+    bool bDelInst = ( GetSbData()->pInst == NULL );
         bool bQuit = false;
     StarBASICRef xBasic;
     uno::Reference< frame::XModel > xModel;
@@ -1229,7 +1228,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                 clearNativeObjectWrapperVector();
 
                 DBG_ASSERT(GetSbData()->pInst->nCallLvl==0,"BASIC-Call-Level > 0");
-                delete GetSbData()->pInst, GetSbData()->pInst = NULL, bDelInst = sal_False;
+                delete GetSbData()->pInst, GetSbData()->pInst = NULL, bDelInst = false;
 
                 // #i30690
                 SolarMutexGuard aSolarGuard;
@@ -1447,7 +1446,7 @@ void StarBASIC::ClearAllModuleVars( void )
 }
 
 // Execution of the init-code of all module
-void SbModule::GlobalRunInit( sal_Bool bBasicStart )
+void SbModule::GlobalRunInit( bool bBasicStart )
 {
     // If no Basic-Start, only initialise, if the module is not initialised
     if( !bBasicStart )
@@ -2330,8 +2329,9 @@ public:
     }
 
 
-    virtual void SAL_CALL windowClosing( const lang::EventObject& e ) throw (uno::RuntimeException)
+    virtual void SAL_CALL windowClosing( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
+#ifdef IN_THE_FUTURE
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
         if ( xDialog.is() )
         {
@@ -2351,15 +2351,6 @@ public:
 
                     mpUserForm->triggerMethod( rtl::OUString("Userform_QueryClose" ),
                                                 aParams);
-                    xVbaMethodParameter->setVbaMethodParameter( rtl::OUString( "Cancel"), aParams[0]);
-                    // If we don't cancel then we want to make sure the dialog
-                    // really is gone to make sure when we attempt to raise it again
-                    // it will actually generate an initialise event
-                    if  ( !nCancel )
-                    {
-                        removeListener(); // presumably we need to do this
-                        mpUserForm->ResetApiObj();
-                    }
                     return;
 
                 }
@@ -2367,6 +2358,7 @@ public:
         }
 
         mpUserForm->triggerMethod( rtl::OUString("Userform_QueryClose" ) );
+#endif
     }
 
 
@@ -2687,7 +2679,7 @@ void SbUserFormModule::InitObject()
             aArgs[ 0 ] = uno::Any();
             aArgs[ 1 ] <<= m_xDialog;
             aArgs[ 2 ] <<= m_xModel;
-            aArgs[ 3 ] <<= sProjectName;
+            aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( "ooo.vba.msforms.UserForm"), aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );

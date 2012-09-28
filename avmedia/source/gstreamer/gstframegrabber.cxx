@@ -1,231 +1,223 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2010 Novell, Inc.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
-#include <objbase.h>
-#include <strmif.h>
-#include <Amvideo.h>
-#include <Qedit.h>
-#include <uuids.h>
+#include "gstframegrabber.hxx"
+#include "gstplayer.hxx"
 
-#include "framegrabber.hxx"
-#include "player.hxx"
+#include <gst/gstbuffer.h>
+#include <gst/video/video.h>
+#include <gst/video/gstvideosink.h>
 
-#include <tools/stream.hxx>
 #include <vcl/graph.hxx>
-#include <unotools/localfilehelper.hxx>
+#include <vcl/bmpacc.hxx>
 
-#define AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer"
-#define AVMEDIA_GST_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer"
+#include <string>
+
+#ifdef AVMEDIA_GST_0_10
+#  define AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer_0_10"
+#  define AVMEDIA_GST_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer_0_10"
+#else
+#  define AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer"
+#  define AVMEDIA_GST_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer"
+#endif
 
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace gstreamer {
 
-// ----------------
-// - FrameGrabber -
-// ----------------
-
-FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
-    mxMgr( rxMgr )
+void FrameGrabber::disposePipeline()
 {
-    ::CoInitialize( NULL );
+    if( mpPipeline != NULL )
+    {
+        gst_element_set_state( mpPipeline, GST_STATE_NULL );
+        g_object_unref( G_OBJECT( mpPipeline ) );
+        mpPipeline = NULL;
+    }
 }
 
-// ------------------------------------------------------------------------------
+FrameGrabber::FrameGrabber( const OUString &rURL ) :
+    FrameGrabber_BASE()
+{
+    gchar *pPipelineStr;
+    pPipelineStr = g_strdup_printf(
+#ifdef AVMEDIA_GST_0_10
+        "uridecodebin uri=%s ! ffmpegcolorspace ! videoscale ! appsink "
+        "name=sink caps=\"video/x-raw-rgb,format=RGB,pixel-aspect-ratio=1/1,"
+        "bpp=(int)24,depth=(int)24,endianness=(int)4321,"
+        "red_mask=(int)0xff0000, green_mask=(int)0x00ff00, blue_mask=(int)0x0000ff\"",
+#else
+        "uridecodebin uri=%s ! videoconvert ! videoscale ! appsink "
+        "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"",
+#endif
+        rtl::OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    GError *pError = NULL;
+    mpPipeline = gst_parse_launch( pPipelineStr, &pError );
+    if( pError != NULL) {
+        g_warning( "Failed to construct frame-grabber pipeline '%s'\n", pError->message );
+        g_error_free( pError );
+        disposePipeline();
+    }
+
+    if( mpPipeline ) {
+        // pre-roll
+        switch( gst_element_set_state( mpPipeline, GST_STATE_PAUSED ) ) {
+        case GST_STATE_CHANGE_FAILURE:
+        case GST_STATE_CHANGE_NO_PREROLL:
+            g_warning( "failure pre-rolling media" );
+            disposePipeline();
+            break;
+        default:
+            break;
+        }
+    }
+    if( mpPipeline &&
+        gst_element_get_state( mpPipeline, NULL, NULL, 5 * GST_SECOND ) == GST_STATE_CHANGE_FAILURE )
+        disposePipeline();
+}
 
 FrameGrabber::~FrameGrabber()
 {
-    ::CoUninitialize();
+    disposePipeline();
 }
 
-// ------------------------------------------------------------------------------
-
-IMediaDet* FrameGrabber::implCreateMediaDet( const ::rtl::OUString& rURL ) const
+FrameGrabber* FrameGrabber::create( const OUString &rURL )
 {
-    IMediaDet* pDet = NULL;
-
-    if( SUCCEEDED( CoCreateInstance( CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void**) &pDet ) ) )
-    {
-        String aLocalStr;
-
-        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, aLocalStr ) && aLocalStr.Len() )
-        {
-            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( aLocalStr.GetBuffer() ) ) ) )
-            {
-                pDet->Release();
-                pDet = NULL;
-            }
-        }
-    }
-
-    return pDet;
+    return new FrameGrabber( rURL );
 }
-
-// ------------------------------------------------------------------------------
-
-bool FrameGrabber::create( const ::rtl::OUString& rURL )
-{
-    // just check if a MediaDet interface can be created with the given URL
-    IMediaDet*  pDet = implCreateMediaDet( rURL );
-
-    if( pDet )
-    {
-        maURL = rURL;
-        pDet->Release();
-        pDet = NULL;
-    }
-    else
-        maURL = ::rtl::OUString();
-
-    return( maURL.getLength() > 0 );
-}
-
-// ------------------------------------------------------------------------------
 
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
     throw (uno::RuntimeException)
 {
     uno::Reference< graphic::XGraphic > xRet;
-    IMediaDet*                          pDet = implCreateMediaDet( maURL );
 
-    if( pDet )
+    if( !mpPipeline )
+        return xRet;
+
+    gint64 gst_position = llround( fMediaTime * 1E9 );
+    gst_element_seek_simple(
+        mpPipeline, GST_FORMAT_TIME,
+        (GstSeekFlags)(GST_SEEK_FLAG_KEY_UNIT | GST_SEEK_FLAG_FLUSH),
+        gst_position );
+
+    GstElement *pSink = gst_bin_get_by_name( GST_BIN( mpPipeline ), "sink" );
+    if( !pSink )
+        return xRet;
+
+    GstBuffer *pBuf = NULL;
+    GstCaps *pCaps = NULL;
+
+    // synchronously fetch the frame
+#ifdef AVMEDIA_GST_0_10
+    g_signal_emit_by_name( pSink, "pull-preroll", &pBuf, NULL );
+    if( pBuf )
+        pCaps = GST_BUFFER_CAPS( pBuf );
+#else
+    GstSample *pSample = NULL;
+    g_signal_emit_by_name( pSink, "pull-preroll", &pSample, NULL );
+
+    if( pSample )
     {
-        double  fLength;
-        long    nStreamCount;
-        bool    bFound = false;
+        pBuf = gst_sample_get_buffer( pSample );
+        pCaps = gst_sample_get_caps( pSample );
+    }
+#endif
 
-        if( SUCCEEDED( pDet->get_OutputStreams( &nStreamCount ) ) )
+    // get geometry
+    int nWidth = 0, nHeight = 0;
+    if( !pCaps )
+        g_warning( "could not get snapshot format\n" );
+    else
+    {
+        GstStructure *pStruct = gst_caps_get_structure( pCaps, 0 );
+
+        /* we need to get the final caps on the buffer to get the size */
+        if( !gst_structure_get_int( pStruct, "width", &nWidth ) ||
+            !gst_structure_get_int( pStruct, "height", &nHeight ) )
+            nWidth = nHeight = 0;
+    }
+
+    if( pBuf && nWidth > 0 && nHeight > 0 &&
+        // sanity check the size
+#ifdef AVMEDIA_GST_0_10
+        GST_BUFFER_SIZE( pBuf ) >= static_cast<unsigned>( nWidth * nHeight * 3 )
+#else
+        gst_buffer_get_size( pBuf ) >= ( nWidth * nHeight * 3 )
+#endif
+        )
+    {
+        sal_uInt8 *pData = NULL;
+#ifdef AVMEDIA_GST_0_10
+        pData = GST_BUFFER_DATA( pBuf );
+#else
+        GstMapInfo aMapInfo;
+        gst_buffer_map( pBuf, &aMapInfo, GST_MAP_READ );
+        pData = aMapInfo.data;
+#endif
+
+        int nStride = GST_ROUND_UP_4( nWidth * 3 );
+        Bitmap aBmp( Size( nWidth, nHeight ), 24 );
+
+        BitmapWriteAccess *pWrite = aBmp.AcquireWriteAccess();
+        if( pWrite )
         {
-            for( long n = 0; ( n < nStreamCount ) && !bFound; ++n )
+            // yet another cheesy pixel copying loop
+            for( int y = 0; y < nHeight; ++y )
             {
-                GUID aMajorType;
-
-                if( SUCCEEDED( pDet->put_CurrentStream( n ) )  &&
-                    SUCCEEDED( pDet->get_StreamType( &aMajorType ) ) &&
-                    ( aMajorType == MEDIATYPE_Video ) )
+                sal_uInt8 *p = pData + y * nStride;
+                for( int x = 0; x < nWidth; ++x )
                 {
-                    bFound = true;
+                    BitmapColor col( p[0], p[1], p[2] );
+                    pWrite->SetPixel( y, x, col );
+                    p += 3;
                 }
             }
         }
+        aBmp.ReleaseAccess( pWrite );
 
-        if( bFound &&
-            ( S_OK == pDet->get_StreamLength( &fLength ) ) &&
-            ( fLength > 0.0 ) && ( fMediaTime >= 0.0 ) && ( fMediaTime <= fLength ) )
-        {
-            AM_MEDIA_TYPE   aMediaType;
-            long            nWidth = 0, nHeight = 0, nSize = 0;
+#ifndef AVMEDIA_GST_0_10
+        gst_buffer_unmap( pBuf, &aMapInfo );
+#endif
 
-            if( SUCCEEDED( pDet->get_StreamMediaType( &aMediaType ) ) )
-            {
-                if( ( aMediaType.formattype == FORMAT_VideoInfo ) &&
-                    ( aMediaType.cbFormat >= sizeof( VIDEOINFOHEADER ) ) )
-                {
-                    VIDEOINFOHEADER* pVih = reinterpret_cast< VIDEOINFOHEADER* >( aMediaType.pbFormat );
-
-                    nWidth = pVih->bmiHeader.biWidth;
-                    nHeight = pVih->bmiHeader.biHeight;
-
-                    if( nHeight < 0 )
-                        nHeight *= -1;
-                }
-
-                if( aMediaType.cbFormat != 0 )
-                {
-                    ::CoTaskMemFree( (PVOID) aMediaType.pbFormat );
-                    aMediaType.cbFormat = 0;
-                    aMediaType.pbFormat = NULL;
-                }
-
-                if( aMediaType.pUnk != NULL )
-                {
-                    aMediaType.pUnk->Release();
-                    aMediaType.pUnk = NULL;
-                }
-            }
-
-            if( ( nWidth > 0 ) && ( nHeight > 0 ) &&
-                SUCCEEDED( pDet->GetBitmapBits( 0, &nSize, NULL, nWidth, nHeight ) ) &&
-                ( nSize > 0  ) )
-            {
-                char* pBuffer = new char[ nSize ];
-
-                try
-                {
-                    if( SUCCEEDED( pDet->GetBitmapBits( fMediaTime, NULL, pBuffer, nWidth, nHeight ) ) )
-                    {
-                        SvMemoryStream  aMemStm( pBuffer, nSize, STREAM_READ | STREAM_WRITE );
-                        Bitmap          aBmp;
-
-                        if( aBmp.Read( aMemStm, false ) && !aBmp.IsEmpty() )
-                        {
-                            const Graphic aGraphic( aBmp );
-                            xRet = aGraphic.GetXGraphic();
-                        }
-                    }
-                }
-                catch( ... )
-                {
-                }
-
-                delete [] pBuffer;
-            }
-        }
-
-        pDet->Release();
+        xRet = Graphic( aBmp ).GetXGraphic();
     }
 
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
-
-::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
+OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME ) );
+    return OUString( AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
-// ------------------------------------------------------------------------------
-
-sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_GST_FRAMEGRABBER_SERVICENAME;
 }
 
-// ------------------------------------------------------------------------------
-
-uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_GST_FRAMEGRABBER_SERVICENAME ) );
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = AVMEDIA_GST_FRAMEGRABBER_SERVICENAME;
 
     return aRet;
 }

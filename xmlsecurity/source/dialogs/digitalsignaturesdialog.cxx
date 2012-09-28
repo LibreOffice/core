@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -68,7 +69,6 @@ using namespace ::com::sun::star::security;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 namespace css = ::com::sun::star;
-using ::rtl::OUString;
 
 namespace
 {
@@ -207,9 +207,9 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     const long nControlWidth = aControlSize.Width();
     static long nTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };
     maSignaturesLB.SetTabs( &nTabs[ 0 ] );
-    maSignaturesLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
+    maSignaturesLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
 
-    maSigsNotvalidatedFI.SetText( String( XMLSEC_RES( STR_NO_INFO_TO_VERIFY ) ) );
+    maSigsNotvalidatedFI.SetText( XMLSEC_RES( STR_NO_INFO_TO_VERIFY ) );
 
     FreeResource();
 
@@ -576,7 +576,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
     uno::Reference< ::com::sun::star::security::XCertificate > xCert;
 
-    String aNullStr;
     size_t nInfos = maCurrentSignatureInformations.size();
     size_t nValidSigs = 0, nValidCerts = 0;
     bool bAllNewSignatures = true;
@@ -612,9 +611,9 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
             DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
 
-            String  aSubject;
-            String  aIssuer;
-            String  aDateTimeStr;
+            OUString aSubject;
+            OUString aIssuer;
+            OUString aDateTimeStr;
 
             bool bSigValid = false;
             bool bCertValid = false;
@@ -680,7 +679,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 aImage = maSigsValidImg.GetImage();
             }
 
-            SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( aNullStr, aImage, aImage );
+            SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( OUString(), aImage, aImage );
             maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
             maSignaturesLB.SetEntryText( aIssuer, pEntry, 2 );
             maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 3 );
@@ -773,10 +772,7 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream(
         if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
         {
             //We write always into a new temporary stream.
-            mxTempSignatureStream = Reference < css::io::XStream >(
-                mxCtx->getServiceManager()->createInstanceWithContext(
-                OUSTR( "com.sun.star.io.TempFile" ), mxCtx) ,
-                UNO_QUERY_THROW);
+            mxTempSignatureStream = Reference < css::io::XStream >(css::io::TempFile::create(mxCtx), UNO_QUERY_THROW);
             aHelper.xSignatureStream = mxTempSignatureStream;
         }
         else

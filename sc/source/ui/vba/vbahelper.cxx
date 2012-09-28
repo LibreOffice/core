@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -90,7 +91,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
 uno::Reference< script::XTypeConverter >
 getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    static uno::Reference< script::XTypeConverter > xTypeConv( xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( "com.sun.star.script.Converter" ), xContext ), uno::UNO_QUERY_THROW );
+    static uno::Reference< script::XTypeConverter > xTypeConv( script::Converter::create(xContext) );
     return xTypeConv;
 }
 // helper method to determine if the view ( calc ) is in print-preview mode

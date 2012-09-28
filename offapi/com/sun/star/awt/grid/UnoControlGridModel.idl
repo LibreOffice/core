@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 #ifndef __com_sun_star_awt_grid_UnoControlGridModel_idl__
 #define __com_sun_star_awt_grid_UnoControlGridModel_idl__
 
@@ -44,7 +35,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @since OOo 3.3
  */
-service UnoControlGridModel
+published service UnoControlGridModel
 {
     /** specifies the standard model of an <type scope="com::sun::star::awt">UnoControl</type>. */
     service com::sun::star::awt::UnoControlModel;
@@ -131,14 +122,14 @@ service UnoControlGridModel
 
     /** controls whether or not to paint horizontal and vertical lines between the grid cells.
 
-        @see LineColor
+        @see GridLineColor
     */
     [property] boolean UseGridLines;
 
     /** specifies the color to be used when drawing lines between cells
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
 
         @see UseGridLines
     */
@@ -147,16 +138,46 @@ service UnoControlGridModel
     /** specifies the color to be used when drawing the background of row or column headers
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
     */
     [property, maybevoid] ::com::sun::star::util::Color             HeaderBackgroundColor;
 
     /** specifies the color to be used when drawing the text within row or column headers
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
     */
     [property, maybevoid] ::com::sun::star::util::Color             HeaderTextColor;
+
+    /** specifies the color to be used when drawing the background of selected cells, while the control has the focus.
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the control's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             ActiveSelectionBackgroundColor;
+
+    /** specifies the color to be used when drawing the background of selected cells, while the control does not have
+        the focus.
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the control's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             InactiveSelectionBackgroundColor;
+
+    /** specifies the color to be used when drawing the text of selected cells, while the control has the focus.
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the control's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             ActiveSelectionTextColor;
+
+    /** specifies the color to be used when drawing the text of selected cells, while the control does not have
+        the focus.
+
+        <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
+        depending on the control's style settings.</p>
+    */
+    [property, maybevoid] ::com::sun::star::util::Color             InactiveSelectionTextColor;
 
     /** specifies the colors to be used as background for data rows.
 
@@ -166,19 +187,13 @@ service UnoControlGridModel
 
         <p>If this sequence is empty, all rows will use the same background color as the control as whole.</p>
 
-        <p>If this property does not exist at a particular implementation, or is <VOID/>, rows will be painted
+        <p>If this property has a value of <VOID/>, rows will be painted
         in alternating background colors, every second row having a background color derived from the control's
         selection color.</p>
     */
     [property, maybevoid] sequence< ::com::sun::star::util::Color > RowBackgroundColors;
 
     /** specifies the vertical alignment of the content in the control.
-
-        <pre>
-            TOP
-            MIDDLE
-            BOTTOM
-        </pre>
      */
     [property] com::sun::star::style::VerticalAlignment VerticalAlign;
 
@@ -189,14 +204,14 @@ service UnoControlGridModel
     /** specifies the color to be used when drawing cell texts
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
     */
     [property, maybevoid] ::com::sun::star::util::Color             TextColor;
 
     /** specifies the color to be used when drawing text lines (underlining and strikethrough)
 
         <p>If this property has a value of <VOID/>, the grid control renderer will use some default color,
-        depending on the system's style settings.</p>
+        depending on the control's style settings.</p>
      */
     [property, maybevoid] com::sun::star::util::Color               TextLineColor;
 

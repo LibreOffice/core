@@ -27,7 +27,6 @@ class SfxObjectShell;
 class ScCharDlg : public SfxTabDialog
 {
 private:
-    const SfxItemSet&       rOutAttrs;
     const SfxObjectShell&   rDocShell;
 
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
@@ -41,8 +40,6 @@ public:
 class ScParagraphDlg : public SfxTabDialog
 {
 private:
-    const SfxItemSet&   rOutAttrs;
-
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:

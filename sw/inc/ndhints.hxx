@@ -48,7 +48,7 @@ typedef enum {
     NEW  = false,
 } CopyOrNew_t;
 
-// if COPY then pTxtNode must be given!
+/// if COPY then pTxtNode must be given!
 SW_DLLPRIVATE SwTxtAttr *
 MakeTxtAttr( SwDoc & rDoc, SfxPoolItem & rNew,
         xub_StrLen const nStt, xub_StrLen const nEnd,
@@ -57,19 +57,19 @@ SW_DLLPRIVATE SwTxtAttr *
 MakeTxtAttr( SwDoc & rDoc, const SfxItemSet & rSet,
         xub_StrLen nStt, xub_StrLen nEnd );
 
-// create redline dummy text hint that must not be inserted into hints array
+/// create redline dummy text hint that must not be inserted into hints array
 SW_DLLPRIVATE SwTxtAttr*
 MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr );
 
 
-// Class SwpHints is derived indirectly via SwpHts, because only the
-// class SwTxtNode should be allowed to insert and remove attributes.
-// Other classes like the Frames are given only reading access via
-// the index-operator.
-// Size when created is 1 because an array is created only if
-// also a hint is inserted.
+/** Class SwpHints is derived indirectly via SwpHts, because only the
+   class SwTxtNode should be allowed to insert and remove attributes.
+   Other classes like the Frames are given only reading access via
+   the index-operator.
+   Size when created is 1 because an array is created only if
+   also a hint is inserted. */
 
- // Class SwpHtStart/End
+ /// Class SwpHtStart/End
 
 struct CompareSwpHtStart
 {
@@ -85,7 +85,7 @@ struct CompareSwpHtEnd
 class SwpHtEnd : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtEnd,
     o3tl::find_partialorder_ptrequals> {};
 
-// Class SwpHintsArr
+/// Class SwpHintsArr
 
 
 /// the Hints array
@@ -133,32 +133,32 @@ public:
 // Class SwpHints
 
 
-// public interface
+/// public interface
 class SwpHints : public SwpHintsArray
 {
 private:
-    SwRegHistory* m_pHistory;   // for Undo
+    SwRegHistory* m_pHistory;          ///< for Undo
 
-    bool m_bFontChange          : 1;  // font change
-    // true: the Node is in Split and Frames are moved
+    bool m_bFontChange          : 1;   ///< font change
+    /// true: the Node is in Split and Frames are moved
     bool m_bInSplitNode         : 1;
-    // m_bHasHiddenParaField is invalid, call CalcHiddenParaField()
+    /// m_bHasHiddenParaField is invalid, call CalcHiddenParaField()
     bool m_bCalcHiddenParaField : 1;
-    bool m_bHasHiddenParaField  : 1;  // HiddenParaFld
-    bool m_bFootnote            : 1;  // footnotes
-    bool m_bDDEFields           : 1;  // the TextNode has DDE fields
+    bool m_bHasHiddenParaField  : 1;   ///< HiddenParaFld
+    bool m_bFootnote            : 1;   ///< footnotes
+    bool m_bDDEFields           : 1;   ///< the TextNode has DDE fields
 
-    // records a new attibute in m_pHistory.
+    /// records a new attibute in m_pHistory.
     void NoteInHistory( SwTxtAttr *pAttr, const bool bNew = false );
 
     void CalcFlags( );
 
-    // Delete methods may only be called by the TextNode!
-    // Because the TextNode also guarantees removal of the Character for
-    // attributes without an end.
+    /** Delete methods may only be called by the TextNode!
+       Because the TextNode also guarantees removal of the Character for
+       attributes without an end. */
     friend class SwTxtNode;
     void DeleteAtPos( const sal_uInt16 nPos );
-    // Delete the given Hint. The Hint must actually be in the array!
+    /// Delete the given Hint. The Hint must actually be in the array!
     void Delete( SwTxtAttr* pTxtHt );
 
     inline void SetInSplitNode(bool bInSplit) { m_bInSplitNode = bInSplit; }
@@ -185,9 +185,9 @@ public:
 
     inline bool CanBeDeleted() const    { return !Count(); }
 
-    // register a History, which receives all attribute changes (for Undo)
+    /// register a History, which receives all attribute changes (for Undo)
     void Register( SwRegHistory* pHist ) { m_pHistory = pHist; }
-    // deregister the currently registered History
+    /// deregister the currently registered History
     void DeRegister() { Register(0); }
     SwRegHistory* GetHistory() const    { return m_pHistory; }
 
@@ -199,17 +199,17 @@ public:
     inline bool HasFtn() const          { return m_bFootnote; }
     inline bool IsInSplitNode() const   { return m_bInSplitNode; }
 
-    // calc current value of m_bHasHiddenParaField, returns true iff changed
+    /// calc current value of m_bHasHiddenParaField, returns true iff changed
     bool CalcHiddenParaField();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
 
-// Output operator for text hints.
+/// Output operator for text hints.
 SvStream &operator<<(SvStream &aS, const SwpHints &rHints); //$ ostream
 
 
-// Inline Implementations
+/// Inline Implementations
 
 
 inline sal_uInt16 SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const

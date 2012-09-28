@@ -68,32 +68,22 @@ GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
 GlyphCache::~GlyphCache()
 {
     InvalidateAllGlyphs();
-    for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
-    {
-        ServerFont* pServerFont = it->second;
-        mrPeer.RemovingFont(*pServerFont);
-        delete pServerFont;
-    }
-    if( mpFtManager )
-        delete mpFtManager;
+    delete mpFtManager;
 }
 
 // -----------------------------------------------------------------------
 
 void GlyphCache::InvalidateAllGlyphs()
 {
-    // an application about to exit can omit garbage collecting the heap
-    // since it makes things slower and introduces risks if the heap was not perfect
-    // for debugging, for memory grinding or leak checking the env allows to force GC
-    const char* pEnv = getenv( "SAL_FORCE_GC_ON_EXIT" );
-    if( pEnv && (*pEnv != '0') )
+    for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
     {
-        // uncache of all glyph shapes and metrics
-        for( FontList::iterator it = maFontList.begin(); it != maFontList.end(); ++it )
-            delete const_cast<ServerFont*>( it->second );
-        maFontList.clear();
-        mpCurrentGCFont = NULL;
+        ServerFont* pServerFont = it->second;
+        mrPeer.RemovingFont(*pServerFont);
+        delete pServerFont;
     }
+
+    maFontList.clear();
+    mpCurrentGCFont = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -194,6 +184,13 @@ void GlyphCache::AnnounceFonts( ImplDevFontList* pList ) const
 {
     if( mpFtManager )
         mpFtManager->AnnounceFonts( pList );
+}
+
+void GlyphCache::ClearFontCache()
+{
+    InvalidateAllGlyphs();
+    if (mpFtManager)
+        mpFtManager->ClearFontList();
 }
 
 // -----------------------------------------------------------------------
@@ -457,25 +454,6 @@ int ExtraKernInfo::GetUnscaledKernPairs( ImplKernPairData** ppKernPairs ) const
         *(pKernData++) = *it;
 
     return nKernCount;
-}
-
-//--------------------------------------------------------------------------
-
-int ExtraKernInfo::GetUnscaledKernValue( sal_Unicode cLeft, sal_Unicode cRight ) const
-{
-    if( !mbInitialized )
-        Initialize();
-
-    if( maUnicodeKernPairs.empty() )
-        return 0;
-
-    ImplKernPairData aKernPair = { cLeft, cRight, 0 };
-    UnicodeKernPairs::const_iterator it = maUnicodeKernPairs.find( aKernPair );
-    if( it == maUnicodeKernPairs.end() )
-        return 0;
-
-    int nUnscaledValue = (*it).mnKern;
-    return nUnscaledValue;
 }
 
 // =======================================================================

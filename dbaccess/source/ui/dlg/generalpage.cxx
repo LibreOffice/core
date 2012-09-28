@@ -82,7 +82,6 @@ namespace dbaui
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN)
         ,m_eLastMessage                 (smNone)
         ,m_bDisplayingInvalid           (sal_False)
-        ,m_bUserGrabFocus               (sal_True)
         ,m_bInitTypeList                (true)
     {
         // fill the listbox with the UI descriptions for the possible types

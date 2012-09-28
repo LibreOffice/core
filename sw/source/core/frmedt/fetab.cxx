@@ -75,8 +75,7 @@ using namespace ::com::sun::star;
 // also see swtable.cxx
 #define COLFUZZY 20L
 
-inline sal_Bool IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
-inline sal_Bool IsNear( long nA, long nB, long nTolerance ) { return Abs( nA - nB ) <= nTolerance; }
+inline bool IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
 
 // table column cache
 SwTabCols *pLastCols   = 0;
@@ -95,14 +94,14 @@ class TblWait
 {
     SwWait *pWait;
 public:
-    TblWait( sal_uInt16 nCnt, SwFrm *pFrm, SwDocShell &rDocShell, sal_uInt16 nCnt2 = 0);
+    TblWait(size_t nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t nCnt2 = 0);
     ~TblWait() { delete pWait; }
 };
 
-TblWait::TblWait( sal_uInt16 nCnt, SwFrm *pFrm, SwDocShell &rDocShell, sal_uInt16 nCnt2):
+TblWait::TblWait(size_t const nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t const nCnt2):
     pWait( 0 )
 {
-    sal_Bool bWait = 20 < nCnt || 20 < nCnt2 || (pFrm &&
+    bool bWait = 20 < nCnt || 20 < nCnt2 || (pFrm &&
                  20 < pFrm->ImplFindTabFrm()->GetTable()->GetTabLines().size());
     if( bWait )
         pWait = new SwWait( rDocShell, sal_True );
@@ -478,7 +477,8 @@ sal_uInt16 SwFEShell::MergeTab()
             SET_CURR_SHELL( this );
             StartAllAction();
 
-            TblWait( pTableCrsr->GetBoxesCount(), 0, *GetDoc()->GetDocShell(),
+            TblWait(pTableCrsr->GetSelectedBoxesCount(), 0,
+                    *GetDoc()->GetDocShell(),
                      pTblNd->GetTable().GetTabLines().size() );
 
             nRet = GetDoc()->MergeTbl( *pTableCrsr );
@@ -544,10 +544,10 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
     const SwTabFrm *pTab = pBox->FindTabFrm();
     if ( pLastCols )
     {
-        sal_Bool bDel = sal_True;
+        bool bDel = true;
         if ( pColumnCacheLastTable == pTab->GetTable() )
         {
-            bDel = sal_False;
+            bDel = false;
             SWRECTFN( pTab )
 
             const SwPageFrm* pPage = pTab->FindPageFrm();
@@ -569,7 +569,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                     pColumnCacheLastTabFrm = pTab;
                 }
                 else
-                    bDel = sal_True;
+                    bDel = true;
             }
 
             if ( !bDel &&
@@ -587,7 +587,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                 rToFill = *pLastCols;
             }
             else
-                bDel = sal_True;
+                bDel = true;
         }
         if ( bDel )
             DELETEZ(pLastCols);
@@ -621,10 +621,10 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
     const SwTabFrm *pTab = pBox->FindTabFrm();
     if ( pLastRows )
     {
-        sal_Bool bDel = sal_True;
+        bool bDel = true;
         if ( pRowCacheLastTable == pTab->GetTable() )
         {
-            bDel = sal_False;
+            bDel = false;
             SWRECTFN( pTab )
             const SwPageFrm* pPage = pTab->FindPageFrm();
             const long nLeftMin  = ( bVert ?
@@ -636,7 +636,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
 
             if ( pRowCacheLastTabFrm != pTab ||
                  pRowCacheLastCellFrm != pBox )
-                bDel = sal_True;
+                bDel = true;
 
             if ( !bDel &&
                  pLastRows->GetLeftMin () == nLeftMin &&
@@ -647,7 +647,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
                 rToFill = *pLastRows;
             }
             else
-                bDel = sal_True;
+                bDel = true;
         }
         if ( bDel )
             DELETEZ(pLastRows);
@@ -949,10 +949,10 @@ sal_Bool SwFEShell::HasBoxSelection() const
         return sal_True;
     SwPaM* pPam = GetCrsr();
         // empty boxes are also selected as the absence of selection
-    sal_Bool bChg = sal_False;
+    bool bChg = false;
     if( pPam->GetPoint() == pPam->End())
     {
-        bChg = sal_True;
+        bChg = true;
         pPam->Exchange();
     }
     SwNode* pNd;
@@ -1207,7 +1207,8 @@ void SwFEShell::AdjustCellWidth( sal_Bool bBalance )
 
     // switch on wait-cursor, as we do not know how
     // much content is affected
-    TblWait aWait( USHRT_MAX, 0, *GetDoc()->GetDocShell() );
+    TblWait aWait(::std::numeric_limits<size_t>::max(), 0,
+                  *GetDoc()->GetDocShell());
 
     GetDoc()->AdjustCellWidth( *getShellCrsr( false ), bBalance );
     EndAllActionAndCall();
@@ -1236,7 +1237,7 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
         aBoxes.insert( pBox );
     }
 
-    for ( sal_uInt16 i = 0; i < aBoxes.size(); ++i )
+    for (size_t i = 0; i < aBoxes.size(); ++i)
     {
         SwTableBox *pBox = aBoxes[i];
         if ( pBox->GetSttNd() )
@@ -1276,7 +1277,7 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
     else
     {
         const SwTableSortBoxes& rTBoxes = pTblNd->GetTable().GetTabSortBoxes();
-        for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
+        for (size_t n = 0; n < rTBoxes.size(); ++n)
         {
             SwTableBox* pBox = rTBoxes[ n ];
             aBoxes.insert( pBox );
@@ -1315,7 +1316,7 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
     else
     {
         const SwTableSortBoxes& rTBoxes = pTblNd->GetTable().GetTabSortBoxes();
-        for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
+        for (size_t n = 0; n < rTBoxes.size(); ++n)
         {
             SwTableBox* pBox = rTBoxes[ n ];
             aBoxes.insert( pBox );
@@ -2337,8 +2338,8 @@ sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml
 {
     SwTblBoxFormula aTmp( rFml );
     SwSelBoxes aBoxes;
-
-    for( sal_uInt16 nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes ); nSelBoxes; )
+    aTmp.GetBoxesOfFormula(rTbl, aBoxes);
+    for (size_t nSelBoxes = aBoxes.size(); nSelBoxes; )
     {
         SwTableBox* pBox = aBoxes[ --nSelBoxes ];
         SwCellFrms::iterator iC;

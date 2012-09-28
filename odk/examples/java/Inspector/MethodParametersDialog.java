@@ -40,14 +40,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -82,7 +79,7 @@ public class MethodParametersDialog extends JDialog{
     }
 
 
-    public Vector getMethodObjects() {
+    public Vector<Object> getMethodObjects() {
         super.setModal(true);
         addBorderPanel(getContentPane(), BorderLayout.NORTH);
         addBorderPanel(getContentPane(), BorderLayout.WEST);
@@ -111,7 +108,7 @@ public class MethodParametersDialog extends JDialog{
         m_aParameterPanels[0].getInputComponent().requestFocusInWindow();
         setVisible(true);
         if (!bisdiposed){
-            Vector aMethodObjects = new Vector();
+            Vector<Object> aMethodObjects = new Vector<Object>();
             for (int i = 0; i < m_aParameterPanels.length; i++){
                 aMethodObjects.add(m_aParameterPanels[i].getValue());
             }

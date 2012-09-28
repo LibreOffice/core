@@ -66,6 +66,7 @@ private:
     sal_Bool                mbRestoreHelpId;
     sal_Bool                mbRestoreUnqId;
     sal_Bool                mbSmallInvalidate;
+    bool                    mbLayoutDirty;
     Link                maActivateHdl;
     Link                maDeactivateHdl;
 
@@ -90,7 +91,6 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE WinBits      ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
 
     virtual void                FillLayoutData() const;
@@ -142,6 +142,7 @@ public:
     sal_uInt16              GetPageId( sal_uInt16 nPos ) const;
     sal_uInt16              GetPagePos( sal_uInt16 nPageId ) const;
     sal_uInt16              GetPageId( const Point& rPos ) const;
+    sal_uInt16              GetPageId( const TabPage& rPage ) const;
 
     void                SetCurPageId( sal_uInt16 nPageId );
     sal_uInt16              GetCurPageId() const;
@@ -162,6 +163,7 @@ public:
     void                SetHelpText( sal_uInt16 nPageId, const XubString& rText );
     const XubString&    GetHelpText( sal_uInt16 nPageId ) const;
 
+    void                SetHelpId( sal_uInt16 nPageId, const rtl::OString& rId ) const;
     rtl::OString        GetHelpId( sal_uInt16 nPageId ) const;
 
     void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
@@ -193,6 +195,21 @@ public:
 
     // returns the rectangle of the tab for page nPageId
     Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
+
+    // rename nOldId to nNewId);
+    void ReassignPageId(sal_uInt16 nOldId, sal_uInt16 nNewId);
+
+    virtual void SetPosPixel(const Point& rPos);
+    virtual void SetSizePixel(const Size& rNewSize);
+    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+
+    Size calculateRequisition() const;
+    void setAllocation(const Size &rAllocation);
+
+    void markLayoutDirty()
+    {
+        mbLayoutDirty = true;
+    }
 };
 
 #endif  // _SV_TABCTRL_HXX

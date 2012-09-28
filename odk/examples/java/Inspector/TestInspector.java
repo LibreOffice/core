@@ -35,8 +35,6 @@
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 
-import java.io.DataInputStream;
-
 public class TestInspector {
 
     public static void main(String args[]) {

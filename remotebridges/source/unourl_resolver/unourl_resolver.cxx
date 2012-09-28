@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
+#include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 
@@ -158,14 +159,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     Reference< XConnection > xConnection( xConnector->connect( aConnectDescr ) );
 
     // As soon as singletons are ready, switch to singleton !
-    Reference< XBridgeFactory > xBridgeFactory(
-        _xSMgr->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory") ),
-            _xCtx ),
-        UNO_QUERY );
-
-    if (! xBridgeFactory.is())
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("no bridge factory!" ) ), Reference< XInterface >() );
+    Reference< XBridgeFactory2 > xBridgeFactory( BridgeFactory::create(_xCtx) );
 
     // bridge
     Reference< XBridge > xBridge( xBridgeFactory->createBridge(

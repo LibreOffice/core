@@ -31,7 +31,7 @@
 PRJ = ..$/..
 PRJNAME = cli_ure
 TARGET := qa_test_climaker
-PACKAGE = cliversion
+PACKAGE = cliversioning
 
 .INCLUDE: settings.mk
 

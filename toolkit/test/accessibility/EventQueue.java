@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.accessibility.*;
-import com.sun.star.lang.EventObject;
-
 import java.util.LinkedList;
 
 /** The event queue singleton dispatches events received from OpenOffice.org
@@ -70,8 +67,8 @@ class EventQueue
     private EventQueue ()
     {
         maMonitor = new Boolean (true);
-        maRegularQueue = new LinkedList();
-        maDisposingQueue = new LinkedList();
+        maRegularQueue = new LinkedList<Runnable>();
+        maDisposingQueue = new LinkedList<Runnable>();
         new Thread(this, "AWB.EventQueue").start();
     }
 
@@ -90,13 +87,13 @@ class EventQueue
                 {
                     if (maDisposingQueue.size() > 0)
                     {
-                        aEvent = (Runnable)maDisposingQueue.removeFirst();
+                        aEvent = maDisposingQueue.removeFirst();
                         if (mbVerbose)
                             System.out.println ("delivering disposing event " + aEvent);
                     }
                     else if (maRegularQueue.size() > 0)
                     {
-                        aEvent = (Runnable)maRegularQueue.removeFirst();
+                        aEvent = maRegularQueue.removeFirst();
                         if (mbVerbose)
                             System.out.println ("delivering regular event " + aEvent);
                     }
@@ -137,8 +134,8 @@ class EventQueue
 
     private static EventQueue maInstance = null;
     private Object maMonitor;
-    private LinkedList maRegularQueue;
-    private LinkedList maDisposingQueue;
+    private LinkedList<Runnable> maRegularQueue;
+    private LinkedList<Runnable> maDisposingQueue;
 }
 
 

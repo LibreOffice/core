@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// *** HideableMutableTreeNode ***
-import javax.swing.*;
 import javax.swing.tree.*;
 
 /**

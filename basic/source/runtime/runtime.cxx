@@ -50,7 +50,7 @@ bool SbiRuntime::isVBAEnabled()
     return result;
 }
 
-void StarBASIC::SetVBAEnabled( sal_Bool bEnabled )
+void StarBASIC::SetVBAEnabled( bool bEnabled )
 {
     if ( bDocBasic )
     {
@@ -58,15 +58,15 @@ void StarBASIC::SetVBAEnabled( sal_Bool bEnabled )
     }
 }
 
-sal_Bool StarBASIC::isVBAEnabled()
+bool StarBASIC::isVBAEnabled()
 {
     if ( bDocBasic )
     {
         if( SbiRuntime::isVBAEnabled() )
-            return sal_True;
+            return true;
         return bVBAEnabled;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -702,17 +702,17 @@ bool SbiRuntime::Step()
 
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
         sal_uInt32 nOp1, nOp2;
-        if (eOp < SbOP0_END)
+        if (eOp <= SbOP0_END)
         {
             (this->*( aStep0[ eOp ] ) )();
         }
-        else if (eOp >= SbOP1_START && eOp < SbOP1_END)
+        else if (eOp >= SbOP1_START && eOp <= SbOP1_END)
         {
             nOp1 = *pCode++; nOp1 |= *pCode++ << 8; nOp1 |= *pCode++ << 16; nOp1 |= *pCode++ << 24;
 
             (this->*( aStep1[ eOp - SbOP1_START ] ) )( nOp1 );
         }
-        else if (eOp >= SbOP2_START && eOp < SbOP2_END)
+        else if (eOp >= SbOP2_START && eOp <= SbOP2_END)
         {
             nOp1 = *pCode++; nOp1 |= *pCode++ << 8; nOp1 |= *pCode++ << 16; nOp1 |= *pCode++ << 24;
             nOp2 = *pCode++; nOp2 |= *pCode++ << 8; nOp2 |= *pCode++ << 16; nOp2 |= *pCode++ << 24;

@@ -32,7 +32,6 @@ import java.io.IOException;
  * The style may differ from the default style of the paragraph of which it
  * is part.
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 class ParagraphTextSegment implements PocketWordConstants {

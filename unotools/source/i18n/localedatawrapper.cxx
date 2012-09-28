@@ -32,10 +32,12 @@
 #include "instance.hxx"
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
+
+#include <comphelper/processfactory.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
@@ -69,13 +71,11 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         xSMgr( xSF ),
+        xLD( LocaleData::create(comphelper::getComponentContext(xSMgr)) ),
         bLocaleDataItemValid( sal_False ),
         bReservedWordValid( sal_False )
 {
     setLocale( rLocale );
-    xLD = Reference< XLocaleData4 > (
-        intl_createInstance( xSMgr, "com.sun.star.i18n.LocaleData",
-                             "LocaleDataWrapper" ), uno::UNO_QUERY );
 }
 
 
@@ -120,6 +120,8 @@ void LocaleDataWrapper::invalidateData()
     xDefaultCalendar.reset();
     if (aGrouping.getLength())
         aGrouping[0] = 0;
+    if (aDateAcceptancePatterns.getLength())
+        aDateAcceptancePatterns = Sequence<OUString>();
     // dummies
     cCurrZeroChar = '0';
 }
@@ -129,8 +131,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getLanguageCountryInfo( getLocale() );
+        return xLD->getLanguageCountryInfo( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -144,8 +145,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getLocaleItem( getLocale() );
+        return xLD->getLocaleItem( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -159,8 +159,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getAllCurrencies2( getLocale() );
+        return xLD->getAllCurrencies2( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -174,8 +173,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getAllFormats( getLocale() );
+        return xLD->getAllFormats( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -189,8 +187,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getForbiddenCharacters( getLocale() );
+        return xLD->getForbiddenCharacters( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -204,8 +201,7 @@ void LocaleDataWrapper::invalidateData()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getReservedWord( getLocale() );
+        return xLD->getReservedWord( getLocale() );
     }
     catch ( const Exception& e )
     {
@@ -224,8 +220,7 @@ void LocaleDataWrapper::invalidateData()
 
     try
     {
-        if ( xLD.is() )
-            rInstalledLocales = xLD->getAllInstalledLocaleNames();
+        rInstalledLocales = xLD->getAllInstalledLocaleNames();
     }
     catch ( const Exception& e )
     {
@@ -1830,8 +1825,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 {
     try
     {
-        if ( xLD.is() )
-            return xLD->getAllCalendars2( getLocale() );
+        return xLD->getAllCalendars2( getLocale() );
     }
     catch (const Exception& e)
     {
@@ -1845,16 +1839,67 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
 {
+    ::utl::ReadWriteGuard aGuard( aMutex );
+
+    if (aDateAcceptancePatterns.getLength())
+        return aDateAcceptancePatterns;
+
+    aGuard.changeReadToWrite();
+
     try
     {
-        if ( xLD.is() )
-            return xLD->getDateAcceptancePatterns( getLocale() );
+        const_cast<LocaleDataWrapper*>(this)->aDateAcceptancePatterns =
+            xLD->getDateAcceptancePatterns( getLocale() );
+        return aDateAcceptancePatterns;
     }
     catch (const Exception& e)
     {
         SAL_WARN( "unotools.i18n", "getDateAcceptancePatterns: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
+}
+
+// --- Override layer --------------------------------------------------------
+
+void LocaleDataWrapper::setDateAcceptancePatterns(
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPatterns )
+{
+    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nWrite );
+
+    if (!aDateAcceptancePatterns.getLength() || !rPatterns.getLength())
+    {
+        try
+        {
+            aDateAcceptancePatterns = xLD->getDateAcceptancePatterns( getLocale() );
+        }
+        catch (const Exception& e)
+        {
+            SAL_WARN( "unotools.i18n", "setDateAcceptancePatterns: Exception caught " << e.Message );
+        }
+        if (!rPatterns.getLength())
+            return;     // just a reset
+        if (!aDateAcceptancePatterns.getLength())
+        {
+            aDateAcceptancePatterns = rPatterns;
+            return;
+        }
+    }
+
+    // Never overwrite the locale's full date pattern! The first.
+    if (aDateAcceptancePatterns[0] == rPatterns[0])
+        aDateAcceptancePatterns = rPatterns;    // sane
+    else
+    {
+        // Copy existing full date pattern and append the sequence passed.
+        /* TODO: could check for duplicates and shrink target sequence */
+        Sequence< OUString > aTmp( rPatterns.getLength() + 1 );
+        OUString* pArray1 = aTmp.getArray();
+        const OUString* pArray2 = rPatterns.getConstArray();
+        pArray1[0] = aDateAcceptancePatterns[0];
+        for (sal_Int32 i=0; i < rPatterns.getLength(); ++i)
+            pArray1[i+1] = pArray2[i];
+        aDateAcceptancePatterns = aTmp;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

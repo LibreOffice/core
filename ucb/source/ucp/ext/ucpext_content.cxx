@@ -55,8 +55,9 @@
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/string.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <sal/macros.h>
@@ -286,7 +287,7 @@ namespace ucb { namespace ucp { namespace ext
             if ( aOpenCommand.Sink.is() )
             {
                 const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
-                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment );
+                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment, comphelper::getComponentContext(m_xSMgr) );
                 aRet = aRequestedContent.executeCommand( ::rtl::OUString(  "open"  ), makeAny( aOpenCommand ) );
             }
         }
@@ -502,7 +503,7 @@ namespace ucb { namespace ucp { namespace ext
         case E_EXTENSION_CONTENT:
         {
             const ::rtl::OUString sPhysicalContentURL( getPhysicalURL() );
-            ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnv );
+            ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnv, comphelper::getComponentContext(m_xSMgr) );
 
             // translate the property request
             Sequence< ::rtl::OUString > aPropertyNames( i_rProperties.getLength() );

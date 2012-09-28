@@ -21,7 +21,7 @@
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <i18nutil/paper.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -303,6 +303,8 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     Insert( PROP_TOP_MARGIN, false, uno::makeAny( (sal_Int32)2540 ) );
     //page bottom margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
     Insert( PROP_BOTTOM_MARGIN, false, uno::makeAny( (sal_Int32) 2540 ) );
+    //page style layout
+    Insert(PROP_PAGE_STYLE_LAYOUT, false, uno::makeAny(style::PageStyleLayout_ALL));
     uno::Any aFalse( ::uno::makeAny( false ) );
     Insert( PROP_GRID_DISPLAY, false, aFalse);
     Insert( PROP_GRID_PRINT, false, aFalse);
@@ -712,6 +714,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 {
     sal_Int32 nTopMargin = m_nTopMargin;
+    sal_Int32 nHeaderTop = m_nHeaderTop;
     if(HasHeader(bFirstPage))
     {
         m_nTopMargin = m_nHeaderTop;
@@ -745,6 +748,7 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     }
 
     sal_Int32 nBottomMargin = m_nBottomMargin;
+    sal_Int32 nHeaderBottom = m_nHeaderBottom;
     if( HasFooter( bFirstPage ) )
     {
         m_nBottomMargin = m_nHeaderBottom;
@@ -779,6 +783,8 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 
     // Restore original top margin, so we don't end up with a smaller margin in case we have to produce two page styles from one Word section.
     m_nTopMargin = nTopMargin;
+    m_nHeaderTop = nHeaderTop;
+    m_nHeaderBottom = nHeaderBottom;
 }
 
 uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection, DomainMapper_Impl& rDM_Impl, uno::Reference<text::XTextRange> xStartingRange)
@@ -900,14 +906,20 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( aElement != end())
             aElement->second >>= eWritingMode;
 
-
-
         sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode_LR_TB ?
             nHeight - m_nTopMargin - m_nBottomMargin :
             nWidth - m_nLeftMargin - m_nRightMargin;
 
+        sal_Int32 nGridLinePitch = m_nGridLinePitch;
+        //sep.dyaLinePitch
+        if (nGridLinePitch < 1 || nGridLinePitch > 31680)
+        {
+            SAL_WARN("writerfilter", "sep.dyaLinePitch outside legal range: " << nGridLinePitch);
+            nGridLinePitch = 1;
+        }
+
         operator[]( PropertyDefinition( PROP_GRID_LINES, false )) =
-                uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/m_nGridLinePitch));
+                uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/nGridLinePitch));
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
         //todo: is '0' the right index here?
@@ -937,7 +949,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             nCharWidth += ConversionHelper::convertTwipToMM100( nFraction );
         }
         operator[]( PropertyDefinition( PROP_GRID_BASE_HEIGHT, false )) = uno::makeAny( nCharWidth );
-        sal_Int32 nRubyHeight = m_nGridLinePitch - nCharWidth;
+        sal_Int32 nRubyHeight = nGridLinePitch - nCharWidth;
         if(nRubyHeight < 0 )
             nRubyHeight = 0;
         operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT, false )) = uno::makeAny( nRubyHeight );
@@ -986,8 +998,38 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
             /* break type
             0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
-                xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
-                    uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
+                if ((m_bTitlePage && m_bIsFirstSection) || !m_bTitlePage)
+                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
+                            uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
+                else
+                {
+                    // In this miserable situation (second or later section on a title page), make sure that the header / footer is not lost.
+                    uno::Reference< container::XNameAccess > xPageStyles(rDM_Impl.GetPageStyles(), uno::UNO_QUERY);
+                    if (xPageStyles->hasByName(m_sFollowPageStyleName))
+                    {
+                        uno::Reference<beans::XPropertySet> xCurrent(xPageStyles->getByName(rPropNameSupplier.GetName(PROP_STANDARD)), uno::UNO_QUERY);
+                        uno::Reference<beans::XPropertySet> xFollow(xPageStyles->getByName(m_sFollowPageStyleName), uno::UNO_QUERY);
+
+                        if (xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_ON)).get<sal_Bool>())
+                        {
+                            xCurrent->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_ON), uno::makeAny(sal_True));
+                            uno::Reference<text::XTextRange> xCurrentRange(xCurrent->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_TEXT)), uno::UNO_QUERY_THROW);
+                            xCurrentRange->setString("");
+                            uno::Reference<text::XTextCopy> xCurrentTxt(xCurrentRange, uno::UNO_QUERY_THROW);
+                            uno::Reference<text::XTextCopy> xFollowTxt(xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_TEXT)), uno::UNO_QUERY_THROW);
+                            xCurrentTxt->copyText(xFollowTxt);
+                        }
+                        if (xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_ON)).get<sal_Bool>())
+                        {
+                            xCurrent->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_ON), uno::makeAny(sal_True));
+                            uno::Reference<text::XTextRange> xCurrentRange(xCurrent->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_TEXT)), uno::UNO_QUERY_THROW);
+                            xCurrentRange->setString("");
+                            uno::Reference<text::XTextCopy> xCurrentTxt(xCurrentRange, uno::UNO_QUERY_THROW);
+                            uno::Reference<text::XTextCopy> xFollowTxt(xFollow->getPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_TEXT)), uno::UNO_QUERY_THROW);
+                            xCurrentTxt->copyText(xFollowTxt);
+                        }
+                    }
+                }
                 // handle page breaks with odd/even page numbering
                 style::PageStyleLayout nPageStyleLayout(style::PageStyleLayout_ALL);
                 if (m_nBreakType == 3)

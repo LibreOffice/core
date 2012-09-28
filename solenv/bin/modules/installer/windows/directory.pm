@@ -252,8 +252,7 @@ sub check_sourcedir_addon
 {
     my ( $onedir, $allvariableshashref ) = @_;
 
-    if (($installer::globals::addchildprojects) ||
-        ($installer::globals::patch) ||
+    if (($installer::globals::patch) ||
         ($installer::globals::languagepack) ||
         ($installer::globals::helppack) ||
         ($allvariableshashref->{'CHANGETARGETDIR'}))
@@ -450,9 +449,6 @@ sub add_root_directories
     push(@{$directorytableref}, $oneline);
 
     $oneline = "WindowsFolder\tTARGETDIR\tWindows\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "WindowsShellNewFolder\tWindowsFolder\tShellNew\n";
     push(@{$directorytableref}, $oneline);
 
     $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";

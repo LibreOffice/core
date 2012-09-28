@@ -119,7 +119,7 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
         "--protector",
         "dummy-libunobootstrapprotector",
         "unobootstrapprotector",
-        "placeholder-ure-internal-lib-dir",
+        "-env:URE_INTERNAL_LIB_DIR=file:///",
         "placeholder-uno-types",
         "placeholder-uno-services"
     };
@@ -128,18 +128,20 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
 
     NSString *app_root_escaped = [[[NSBundle mainBundle] bundlePath] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
 
-    argv[argc-3] = "-env:URE_INTERNAL_LIB_DIR=file:///";
-
     NSString *uno_types = @"-env:UNO_TYPES=";
 
     uno_types = [uno_types stringByAppendingString: @"file://"];
     uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"udkapi.rdb"]];
 
     uno_types = [uno_types stringByAppendingString: @" "];
-
     uno_types = [uno_types stringByAppendingString: @"file://"];
     uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"types.rdb"]];
 
+    uno_types = [uno_types stringByAppendingString: @" "];
+    uno_types = [uno_types stringByAppendingString: @"file://"];
+    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"ure/types.rdb"]];
+
+    assert(strcmp(argv[argc-2], "placeholder-uno-types") == 0);
     argv[argc-2] = [uno_types UTF8String];
 
     NSString *uno_services = @"-env:UNO_SERVICES=";
@@ -148,8 +150,7 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
         "services.rdb",
         "ComponentTarget/basic/util/sb.component",
         "ComponentTarget/chart2/source/controller/chartcontroller.component",
-        "ComponentTarget/chart2/source/tools/charttools.component",
-        "ComponentTarget/chart2/source/model/chartmodel.component",
+        "ComponentTarget/chart2/source/chartcore.component",
         "ComponentTarget/comphelper/util/comphelp.component",
         "ComponentTarget/eventattacher/source/evtatt.component",
         "ComponentTarget/fileaccess/source/fileacc.component",
@@ -185,6 +186,7 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
             uno_services = [uno_services stringByAppendingString: @" "];
     }
 
+    assert(strcmp(argv[argc-1], "placeholder-uno-services") == 0);
     argv[argc-1] = [uno_services UTF8String];
 
     lo_main(argc, argv);

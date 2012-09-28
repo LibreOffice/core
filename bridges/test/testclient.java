@@ -16,11 +16,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+package test;
+
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.IBridge;
 import com.sun.star.connection.XConnector;
 import com.sun.star.connection.XConnection;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.bridge.XInstanceProvider;
 
 import test.XCallMe;
@@ -97,7 +98,7 @@ public class testclient
 
                 com.sun.star.comp.servicemanager.ServiceManager smgr =
                     new com.sun.star.comp.servicemanager.ServiceManager();
-                smgr.addFactories( new String[] { "com.sun.star.comp.connections.Connector" });
+                smgr.insert( "com.sun.star.comp.connections.Connector" );
 
                 Object  x  = smgr.createInstance("com.sun.star.connection.Connector");
                 if( x == null )

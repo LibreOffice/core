@@ -40,7 +40,7 @@ class AccTreeNode
         public int mnChildCount;
     }
     /// NodeHandlers for this node
-    private Vector maHandlers;
+    private Vector<HandlerDescriptor> maHandlers;
 
     // The accessible context of this node.
     private XAccessible mxAccessible;
@@ -58,7 +58,7 @@ class AccTreeNode
     {
         super (aDisplay, aParent);
 
-        maHandlers = new Vector(5);
+        maHandlers = new Vector<HandlerDescriptor>(5);
         mxContext = xContext;
         mxAccessible = xAccessible;
     }
@@ -72,7 +72,7 @@ class AccTreeNode
         for (int i=0; i<maHandlers.size(); i++)
         {
             System.out.println ("replacing handler " + i);
-            HandlerDescriptor aDescriptor = (HandlerDescriptor)maHandlers.get(i);
+            HandlerDescriptor aDescriptor = maHandlers.get(i);
             aDescriptor.maHandler = aDescriptor.maHandler.createHandler (mxContext);
             aDescriptor.mnChildCount =
                     aDescriptor.maHandler.getChildCount (this);
@@ -87,7 +87,7 @@ class AccTreeNode
     public XAccessibleComponent getComponent ()
     {
         if (mxComponent == null && mxContext != null)
-            mxComponent = (XAccessibleComponent)UnoRuntime.queryInterface(
+            mxComponent = UnoRuntime.queryInterface(
                 XAccessibleComponent.class, mxContext);
         return mxComponent;
     }
@@ -97,7 +97,7 @@ class AccTreeNode
         if (mxComponent == null)
             getComponent();
         if (mxComponent != null)
-            return (XAccessibleExtendedComponent)UnoRuntime.queryInterface(
+            return UnoRuntime.queryInterface(
                 XAccessibleExtendedComponent.class, mxComponent);
         else
             return null;
@@ -106,21 +106,21 @@ class AccTreeNode
     public XAccessibleText getText ()
     {
         if (mxText == null && mxContext != null)
-            mxText = (XAccessibleText)UnoRuntime.queryInterface(
+            mxText = UnoRuntime.queryInterface(
                 XAccessibleText.class, mxContext);
         return mxText;
     }
 
     public XAccessibleEditableText getEditText ()
     {
-        return (XAccessibleEditableText)UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                 XAccessibleEditableText.class, mxContext);
     }
 
     public XAccessibleTable getTable ()
     {
         if (mxTable == null && mxContext != null)
-            mxTable = (XAccessibleTable)UnoRuntime.queryInterface(
+            mxTable = UnoRuntime.queryInterface(
                 XAccessibleTable.class, mxContext);
         return mxTable;
     }
@@ -129,14 +129,14 @@ class AccTreeNode
     public XAccessible getAccessible()
     {
         if ((mxAccessible == null) && (mxContext != null))
-            mxAccessible = (XAccessible)UnoRuntime.queryInterface(
+            mxAccessible = UnoRuntime.queryInterface(
                 XAccessible.class, mxContext);
         return mxAccessible;
     }
 
     public XAccessibleSelection getSelection ()
     {
-        return (XAccessibleSelection)UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                 XAccessibleSelection.class, mxContext);
     }
 
@@ -150,7 +150,7 @@ class AccTreeNode
     /** iterate over handlers and return child sum */
     protected HandlerDescriptor getHandlerDescriptor (int i)
     {
-        HandlerDescriptor aDescriptor = (HandlerDescriptor)maHandlers.get(i);
+        HandlerDescriptor aDescriptor = maHandlers.get(i);
         if (aDescriptor.mnChildCount < 0)
             aDescriptor.mnChildCount =
                     aDescriptor.maHandler.getChildCount (this);
@@ -276,7 +276,7 @@ class AccTreeNode
 
 
     /** iterate over handlers until the child is found */
-    public void getActions(Vector aActions)
+    public void getActions(Vector<String> aActions)
     {
         for(int i = 0; i < maHandlers.size(); i++)
         {
@@ -338,14 +338,14 @@ class AccTreeNode
             The returned array containes the indices of the updated children
             and can be used to create a TreeModelEvent.
     */
-    public Vector updateChildren (java.lang.Class class1)
+    public Vector<Integer> updateChildren (java.lang.Class class1)
     {
         return updateChildren (class1, null);
     }
 
-    public Vector updateChildren (java.lang.Class class1, java.lang.Class class2)
+    public Vector<Integer> updateChildren (java.lang.Class class1, java.lang.Class<AccessibleExtendedComponentHandler> class2)
     {
-        Vector aChildIndices = new Vector();
+        Vector<Integer> aChildIndices = new Vector<Integer>();
         int nOffset = 0;
         for(int i=0; i < maHandlers.size(); i++)
         {
@@ -359,7 +359,7 @@ class AccTreeNode
                 aDescriptor.mnChildCount = nChildCount;
                 // Fill in the indices of the updated children.
                 for (int j=0; j<nChildCount; j++)
-                    aChildIndices.add(new Integer(j+nOffset));
+                    aChildIndices.add(j+nOffset);
             }
             nOffset += aDescriptor.mnChildCount;
         }

@@ -42,7 +42,6 @@
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
@@ -235,7 +234,7 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             if ( !m_xURLTransformer.is() )
             {
-                m_xURLTransformer = util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() );
+                m_xURLTransformer = util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) );
             }
 
             xFrame          = m_xFrame;

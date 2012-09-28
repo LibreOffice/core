@@ -114,7 +114,7 @@ void SAL_CALL VCLXTabPageContainer::setActiveTabPageID( ::sal_Int16 _activetabpa
     if ( pTabCtrl )
         pTabCtrl->SelectTabPage(_activetabpageid);
 }
-::sal_Int32 SAL_CALL VCLXTabPageContainer::getTabPageCount(  ) throw (RuntimeException)
+::sal_Int16 SAL_CALL VCLXTabPageContainer::getTabPageCount(  ) throw (RuntimeException)
 {
     TabControl* pTabCtrl = (TabControl*)GetWindow();
     return pTabCtrl != NULL ? pTabCtrl->GetPageCount() : 0;
@@ -145,11 +145,11 @@ Reference< ::com::sun::star::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer:
     }
     return xTabPage;
 }
-void SAL_CALL VCLXTabPageContainer::addTabPageListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
+void SAL_CALL VCLXTabPageContainer::addTabPageContainerListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
 {
     m_aTabPageListeners.addInterface( listener );
 }
-void SAL_CALL VCLXTabPageContainer::removeTabPageListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
+void SAL_CALL VCLXTabPageContainer::removeTabPageContainerListener( const Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException)
 {
     m_aTabPageListeners.removeInterface( listener );
 }
@@ -196,7 +196,7 @@ void SAL_CALL VCLXTabPageContainer::elementInserted( const ::com::sun::star::con
 
         pPage->Hide();
         pTabCtrl->SetTabPage(nPageID,pPage);
-        pTabCtrl->SetHelpText(nPageID,xP->getTooltip());
+        pTabCtrl->SetHelpText(nPageID,xP->getToolTip());
         pTabCtrl->SetPageImage(nPageID,TkResMgr::getImageFromURL(xP->getImageURL()));
         pTabCtrl->SelectTabPage(nPageID);
         m_aTabPages.push_back(xTabPage);

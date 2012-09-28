@@ -15,19 +15,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-package ifc.script.framework;
+package ifc.scripting;
 
 import com.sun.star.awt.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
-import drafts.com.sun.star.accessibility.*;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.*;
+import com.sun.star.awt.XExtendedToolkit;
 
 // Jsuite classes
 import util.AccessibilityTools;
-import util.dbg;
 /**
 * Thread that pushes the buttons or checkbox
 * on the message box that is on top.

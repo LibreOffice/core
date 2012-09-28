@@ -45,7 +45,9 @@
 class SdDLL
 {
 protected:
+#ifdef ENABLE_SDREMOTE
     static void     RegisterRemotes();
+#endif
     static void     RegisterFactorys();
     static void     RegisterInterfaces();
     static void     RegisterControllers();

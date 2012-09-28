@@ -35,11 +35,11 @@
 
 #include "cppuhelper/implbase1.hxx"
 
-#include "com/sun/star/document/XEventBroadcaster.hpp"
 #include "com/sun/star/document/XEventListener.hpp"
 #include "com/sun/star/embed/XStorage.hpp"
 #include "com/sun/star/frame/XModel.hpp"
-#include "com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/frame/XModuleManager2.hpp"
+#include "com/sun/star/frame/XGlobalEventBroadcaster.hpp"
 #include "com/sun/star/util/XCloseListener.hpp"
 
 namespace tdoc_ucp {
@@ -123,7 +123,7 @@ namespace tdoc_ucp {
     public:
         OfficeDocumentsManager(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory > & xSMgr,
+                com::sun::star::uno::XComponentContext > & rxContext,
             OfficeDocumentsEventListener * pDocEventListener );
         virtual ~OfficeDocumentsManager();
 
@@ -158,12 +158,6 @@ namespace tdoc_ucp {
         queryStorageTitle( const rtl::OUString & rDocId );
 
     private:
-        static com::sun::star::uno::Reference<
-            com::sun::star::document::XEventBroadcaster >
-        createDocumentEventNotifier(
-            const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
-
         void buildDocumentsList();
 
         bool
@@ -193,11 +187,11 @@ namespace tdoc_ucp {
 
         osl::Mutex                                          m_aMtx;
         com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
+            com::sun::star::uno::XComponentContext >        m_xContext;
         com::sun::star::uno::Reference<
-            com::sun::star::document::XEventBroadcaster >   m_xDocEvtNotifier;
+            com::sun::star::frame::XGlobalEventBroadcaster > m_xDocEvtNotifier;
         com::sun::star::uno::Reference<
-            com::sun::star::frame::XModuleManager >         m_xModuleMgr;
+            com::sun::star::frame::XModuleManager2 >        m_xModuleMgr;
         DocumentList                                        m_aDocs;
         OfficeDocumentsEventListener *                      m_pDocEventListener;
         com::sun::star::uno::Reference<

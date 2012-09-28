@@ -90,7 +90,7 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
     if (i_nReturnType.IsValid())
     {   // Normal function, but not constructors:
         HF_IdlTypeText
-            aReturn(Env(), rReturnLine, true);
+            aReturn(Env(), rReturnLine);
         aReturn.Produce_byData(i_nReturnType);
     }
 
@@ -139,7 +139,7 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
         Xml::Element &
             rExcOut = aDecl.ExceptionCell();
         HF_IdlTypeText
-            aExc(Env(), rExcOut, true);
+            aExc(Env(), rExcOut);
         aExc.Produce_byData(*i_rExceptions);
 
         for (++i_rExceptions; i_rExceptions; ++i_rExceptions)
@@ -185,7 +185,7 @@ HF_IdlMethod::write_Param( HF_FunctionDeclaration &     o_decl,
     }   // end switch
 
     HF_IdlTypeText
-        aTypeWriter(Env(), rTypeCell, true);
+        aTypeWriter(Env(), rTypeCell);
     aTypeWriter.Produce_byData( i_param.Type() );
 
     rNameCell

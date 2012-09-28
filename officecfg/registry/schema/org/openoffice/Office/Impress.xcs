@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,6 +87,19 @@
       <prop oor:name="ServiceName" oor:type="xs:string">
         <info>
           <desc>The name of the startup service.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="AuthorisedRemote">
+      <info>
+        <author>ajrhunt</author>
+        <desc>
+          A Remote Control Device that has been authorised for connection.
+        </desc>
+      </info>
+      <prop oor:name="PIN" oor:type="xs:string">
+        <info>
+          <desc>The PIN used by the device for authentication.</desc>
         </info>
       </prop>
     </group>
@@ -655,6 +668,12 @@
           <value>5000</value>
         </prop>
       </group>
+      <set oor:name="AuthorisedRemotes" oor:node-type="AuthorisedRemote">
+       <info>
+        <author>ajrhunt</author>
+        <desc>Contains a list of remote control devices that can connect without user confirmation.</desc>
+       </info>
+      </set>
     </group>
     <group oor:name="Snap">
       <info>
@@ -1374,6 +1393,42 @@
           <desc>Options that control the tool panel.</desc>
           <label>Tool Panel Options</label>
         </info>
+        <group oor:name="Visible">
+          <info>
+            <desc>Options that control the visibility of the ToolPanel.</desc>
+            <label>ToolPanel Visibility</label>
+          </info>
+          <prop oor:name="ImpressView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the Impress view.</desc>
+              <label>ToolPanel Visibility ImpressView</label>
+            </info>
+          </prop>
+          <prop oor:name="OutlineView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the Outline view.</desc>
+              <label>ToolPanel Visibility OutlineView</label>
+            </info>
+          </prop>
+          <prop oor:name="NotesView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the Notes view.</desc>
+              <label>ToolPanel Visibility NotesView</label>
+            </info>
+          </prop>
+          <prop oor:name="HandoutView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the HandOut view.</desc>
+              <label>ToolPanel Visibility HandOutView</label>
+            </info>
+          </prop>
+          <prop oor:name="SlideSorterView" oor:type="xs:boolean">
+            <info>
+              <desc>Visibility of the ToolPanel in the SlideSorter view.</desc>
+              <label>ToolPanel Visibility SlideSorterView</label>
+            </info>
+          </prop>
+        </group>
         <set oor:name="RecentlyUsedMasterPages" oor:node-type="MasterPageDescriptor">
           <info>
             <desc>List of the URLs of the most recently used master pages.</desc>

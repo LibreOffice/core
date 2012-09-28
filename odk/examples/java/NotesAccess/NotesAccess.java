@@ -40,15 +40,12 @@ import lotus.domino.DocumentCollection;
 import lotus.domino.Document;
 import lotus.domino.NotesFactory;
 
-// OpenOffice.org API
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.sheet.XSpreadsheet;

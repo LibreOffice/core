@@ -39,7 +39,7 @@ public class AboutDialogBuilder extends AlertDialog.Builder {
             PackageInfo aInfo = aContext.getPackageManager().getPackageInfo(
                             aContext.getPackageName(), 0);
             String aVersionString = MessageFormat.format(
-                            getContext().getResources().getString(
+                            aContext.getResources().getString(
                                             R.string.about_versionstring),
                             aInfo.versionName, aInfo.versionCode);
             mVersionLabel.setText(aVersionString);

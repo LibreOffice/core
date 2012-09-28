@@ -41,8 +41,6 @@ class SbMethod;
 class BasicManager;
 class DocBasicItem;
 
-class StarBASICImpl;
-
 class BASIC_DLLPUBLIC StarBASIC : public SbxObject
 {
     friend class SbiScanner;
@@ -51,8 +49,6 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     friend class SbiRuntime;
     friend class DocBasicItem;
 
-    StarBASICImpl*  mpStarBASICImpl;
-
     SbxArrayRef     pModules;               // List of all modules
     SbxObjectRef    pRtl;               // Runtime Library
     SbxArrayRef     xUnoListeners;          // Listener handled by CreateUnoListener
@@ -60,12 +56,12 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
    // Handler-Support:
     Link            aErrorHdl;              // Error handler
     Link            aBreakHdl;              // Breakpoint handler
-    sal_Bool            bNoRtl;                 // if sal_True: do not search RTL
-    sal_Bool            bBreak;                 // if sal_True: Break, otherwise Step
-    sal_Bool            bDocBasic;
-    sal_Bool            bVBAEnabled;
+    bool            bNoRtl;                 // if true: do not search RTL
+    bool            bBreak;                 // if true: Break, otherwise Step
+    bool            bDocBasic;
+    bool            bVBAEnabled;
     BasicLibInfo*   pLibInfo;           // Info block for basic manager
-    sal_Bool            bQuit;
+    bool            bQuit;
 
     SbxObjectRef pVBAGlobals;
     BASIC_DLLPRIVATE SbxObject* getVBAGlobals( );
@@ -93,7 +89,7 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASIC,1);
     TYPEINFO();
 
-    StarBASIC( StarBASIC* pParent = NULL, sal_Bool bIsDocBasic = sal_False );
+    StarBASIC( StarBASIC* pParent = NULL, bool bIsDocBasic = false );
 
     // #51727 SetModified overridden so that the Modfied-State is
         // not delivered to Parent.
@@ -120,7 +116,7 @@ public:
     static void     Error( SbError, const String& rMsg );
     static void     FatalError( SbError );
     static void     FatalError( SbError, const String& rMsg );
-    static sal_Bool     IsRunning();
+    static bool     IsRunning();
     static SbError  GetErrBasic();
     // #66536 make additional message accessible by RTL function Error
     static String   GetErrorMsg();
@@ -151,7 +147,7 @@ public:
     static bool     IsCompilerError();
     static sal_uInt16   GetVBErrorCode( SbError nError );
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
-    sal_Bool            IsBreak() const             { return bBreak; }
+    bool            IsBreak() const             { return bBreak; }
 
     static Link     GetGlobalErrorHdl();
     static void     SetGlobalErrorHdl( const Link& rNewHdl );
@@ -167,26 +163,21 @@ public:
     static SbxBase* FindSBXInCurrentScope( const String& rName );
     static SbMethod* GetActiveMethod( sal_uInt16 nLevel = 0 );
     static SbModule* GetActiveModule();
-    void SetVBAEnabled( sal_Bool bEnabled );
-    sal_Bool isVBAEnabled();
+    void SetVBAEnabled( bool bEnabled );
+    bool isVBAEnabled();
 
     SbxObjectRef getRTL( void ) { return pRtl; }
-    sal_Bool IsDocBasic() { return bDocBasic; }
+    bool IsDocBasic() { return bDocBasic; }
     SbxVariable* VBAFind( const rtl::OUString& rName, SbxClassType t );
     bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
     void QuitAndExitApplication();
-    sal_Bool IsQuitApplication() { return bQuit; };
+    bool IsQuitApplication() { return bQuit; };
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         GetModelFromBasic( SbxObject* pBasic );
 };
 
-#ifndef __SB_SBSTARBASICREF_HXX
-#define __SB_SBSTARBASICREF_HXX
-
 SV_DECL_IMPL_REF(StarBASIC)
-
-#endif
 
 #endif
 

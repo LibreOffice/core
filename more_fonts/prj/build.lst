@@ -1,7 +1,2 @@
 bs	more_fonts	:	solenv NULL
-bs	more_fonts\fonts\ttf_dejavu		nmake	-	all	deja_fonts NULL
-bs	more_fonts\fonts\ttf_liberation	nmake	-	all	libe_fonts NULL
-bs	more_fonts\fonts\ttf_liberation_narrow	nmake	-	all	libe_fonts_narrow NULL
-bs	more_fonts\fonts\ttf_gentium	nmake	-	all	gent_fonts NULL
-bs	more_fonts\fonts\ttf_linlibertineg	nmake	-	all	linl_fonts NULL
-bs	more_fonts\fonts\ttf_amt	nmake	-	all	amt_fonts NULL
+bs	more_fonts\prj		nmake	-	all	more_fonts NULL

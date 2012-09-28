@@ -22,10 +22,6 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/**
- *
- * @author ll93751
- */
 public class FileURL
 {
     String m_sFileURL;

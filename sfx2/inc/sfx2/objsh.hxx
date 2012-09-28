@@ -294,6 +294,7 @@ public:
 
     sal_Bool                    DoInitNew( SfxMedium* pMedium=0 );
     sal_Bool                    DoLoad( SfxMedium* pMedium );
+    bool                        DoLoadExternal(SfxMedium* pMed, const rtl::OUString& rProvider);
     sal_Bool                    DoSave();
     sal_Bool                    DoSaveAs( SfxMedium &rNewStor );
     sal_Bool                    DoSaveObjectAs( SfxMedium &rNewStor, sal_Bool bCommit );
@@ -314,6 +315,7 @@ public:
     virtual sal_Bool            SwitchPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
+    virtual bool                LoadExternal(SfxMedium& rMedium, const rtl::OUString& rProvider);
     /**
      * Called when the Options dialog is dismissed with the OK button, to
      * handle potentially conflicting option settings.

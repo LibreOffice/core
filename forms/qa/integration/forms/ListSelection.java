@@ -26,7 +26,6 @@ import com.sun.star.container.XNamed;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.drawing.XDrawPageSupplier;
-import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XListBox;
 import com.sun.star.script.XLibraryContainer;

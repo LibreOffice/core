@@ -51,20 +51,14 @@ copy-stuff:
 # them.
 #
 	for F in $(strip \
-		   analysislo \
 		   basegfxlo \
 		   bootstrap.uno \
 		   comphelpgcc3 \
-		   ctllo \
-		   datelo \
 		   dbaxmllo \
 		   dbtoolslo \
-		   evtattlo \
 		   expwrap.uno \
-		   fastsax.uno \
 		   frmlo \
 		   gcc3_uno \
-		   hwplo \
 		   i18nisolang1gcc3 \
 		   icudatalo \
 		   icui18nlo \
@@ -227,7 +221,7 @@ copy-stuff:
 
 build-ant: copy-stuff properties
 #
-# Copy jar files we need, and even construct one.
+# Copy jar files we need
 #
 	for F in $(strip \
 		   java_uno \

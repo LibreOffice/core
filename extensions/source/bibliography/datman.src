@@ -361,7 +361,7 @@ ModalDialog RID_DLG_MAPPING
     FixedText FT_CUSTOM1
     {
         Pos = MAP_APPFONT ( 12 , 164 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
     };
     ListBox LB_CUSTOM1
     {
@@ -373,7 +373,7 @@ ModalDialog RID_DLG_MAPPING
     FixedText FT_CUSTOM2
     {
         Pos = MAP_APPFONT ( 118 , 164 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
     };
     ListBox LB_CUSTOM2
     {
@@ -385,7 +385,7 @@ ModalDialog RID_DLG_MAPPING
     FixedText FT_CUSTOM3
     {
         Pos = MAP_APPFONT ( 229, 164 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
     };
     ListBox LB_CUSTOM3
     {
@@ -397,7 +397,7 @@ ModalDialog RID_DLG_MAPPING
     FixedText FT_CUSTOM4
     {
         Pos = MAP_APPFONT ( 12 , 178 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
     };
     ListBox LB_CUSTOM4
     {
@@ -409,7 +409,7 @@ ModalDialog RID_DLG_MAPPING
     FixedText FT_CUSTOM5
     {
         Pos = MAP_APPFONT ( 118 , 178 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
     };
     ListBox LB_CUSTOM5
     {

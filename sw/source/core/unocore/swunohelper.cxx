@@ -28,8 +28,8 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -42,7 +42,6 @@
 #include <tools/datetime.hxx>
 #include <tools/string.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
 #include <swunohelper.hxx>
 
@@ -71,7 +70,8 @@ sal_Bool UCB_DeleteFile( const String& rURL )
     try
     {
         ucbhelper::Content aTempContent( rURL,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                comphelper::getProcessComponentContext() );
         aTempContent.executeCommand(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                         ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
@@ -96,7 +96,8 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
         String sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
 
         ucbhelper::Content aTempContent( sMainURL,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                comphelper::getProcessComponentContext() );
 
         ::com::sun::star::uno::Any aAny;
         ::com::sun::star::ucb::TransferInfo aInfo;
@@ -136,10 +137,10 @@ sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL )
                 ucbhelper::ContentIdentifier( xMSF,
                             aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xProv =
-                ucbhelper::ContentBroker::get()->getContentProviderInterface();
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XUniversalContentBroker > xUcb =
+              com::sun::star::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext());
 
-        sal_Int32 nCompare = xProv->compareContentIds( xRef1, xRef2 );
+        sal_Int32 nCompare = xUcb->compareContentIds( xRef1, xRef2 );
         bCaseSensitive = 0 != nCompare;
     }
     catch( ::com::sun::star::uno::Exception& )
@@ -155,7 +156,7 @@ sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
     sal_Bool bIsReadOnly = sal_False;
     try
     {
-        ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly")));
         if(aAny.hasValue())
@@ -173,7 +174,7 @@ sal_Bool UCB_IsFile( const String& rURL )
     sal_Bool bExists = sal_False;
     try
     {
-        ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bExists = aContent.isDocument();
     }
     catch (::com::sun::star::uno::Exception &)
@@ -187,7 +188,7 @@ sal_Bool UCB_IsDirectory( const String& rURL )
     sal_Bool bExists = sal_False;
     try
     {
-        ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bExists = aContent.isFolder();
     }
     catch (::com::sun::star::uno::Exception &)
@@ -209,7 +210,7 @@ bool UCB_GetFileListOfFolder( const String& rURL,
     sal_Bool bOk = sal_False;
     try
     {
-        ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
 
         sal_uInt16 nSeqSize = pDateTimeList ? 2 : 1;

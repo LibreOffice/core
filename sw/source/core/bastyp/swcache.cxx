@@ -40,7 +40,7 @@ void SwCache::Check()
     SAL_WARN_IF( pLast->GetNext(), "sw", "Last but not last." );
     SAL_WARN_IF( pRealFirst->GetPrev(), "sw", "First but not first." );
     sal_uInt16 nCnt = 0;
-    sal_Bool bFirstFound = sal_False;
+    bool bFirstFound = false;
     SwCacheObj *pObj = pRealFirst;
     SwCacheObj *pRekursive = pObj;
     while ( pObj )
@@ -53,7 +53,7 @@ void SwCache::Check()
 
         ++nCnt;
         if ( pObj == pFirst )
-            bFirstFound = sal_True;
+            bFirstFound = true;
         if ( !pObj->GetNext() )
             SAL_WARN_IF( pObj != pLast, "sw", "Last not Found." );
         pObj = pObj->GetNext();
@@ -84,7 +84,6 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     pRealFirst( 0 ),
     pFirst( 0 ),
     pLast( 0 ),
-    nMax( nInitSize ),
     nCurMax( nInitSize )
 #ifdef DBG_UTIL
     , m_aName( rNm )

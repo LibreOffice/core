@@ -98,7 +98,7 @@ CREATEINSTANCE  ( StatusIndicator   )
 //  create right component factory
 //______________________________________________________________________________________________________________
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName ,
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL ctl_component_getFactory( const sal_Char* pImplementationName,
                                                         void*       pServiceManager     ,
                                                         void*       /*pRegistryKey*/        )
 {

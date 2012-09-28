@@ -19,10 +19,8 @@
 package ifc.awt.tree;
 
 import com.sun.star.awt.tree.TreeDataModelEvent;
-import com.sun.star.awt.tree.XMutableTreeNode;
 import com.sun.star.awt.tree.XTreeDataModel;
 import com.sun.star.awt.tree.XTreeDataModelListener;
-import com.sun.star.awt.tree.XTreeNode;
 import com.sun.star.lang.EventObject;
 import lib.MultiMethodTest;
 import lib.Status;

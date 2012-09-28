@@ -36,7 +36,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-
+#include <comphelper/processfactory.hxx>
 
 #include "util.hxx"
 
@@ -116,7 +116,7 @@ public:
 
     try
     {
-        ::ucbhelper::Content root( url, NULL );
+        ::ucbhelper::Content root( url, NULL, comphelper::getProcessComponentContext() );
         ::rtl::OUString propName =  OUSTR("DocumentModel");
         result = getUCBProperty( root, propName );
     }

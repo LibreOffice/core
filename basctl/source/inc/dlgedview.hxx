@@ -18,10 +18,13 @@
  */
 
 
-#ifndef _BASCTL_DLGEDVIEW_HXX
-#define _BASCTL_DLGEDVIEW_HXX
+#ifndef BASCTL_DLGEDVIEW_HXX
+#define BASCTL_DLGEDVIEW_HXX
 
 #include <svx/svdview.hxx>
+
+namespace basctl
+{
 
 class DlgEditor;
 
@@ -32,12 +35,12 @@ class DlgEditor;
 class DlgEdView : public SdrView
 {
 private:
-    DlgEditor* pDlgEditor;
+    DlgEditor& rDlgEditor;
 
 public:
     TYPEINFO();
 
-    DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor );
+    DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor);
     virtual ~DlgEdView();
 
     virtual void MarkListHasChanged();
@@ -49,6 +52,8 @@ protected:
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const;
 };
 
-#endif //_BASCTL_DLGEDVIEW_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

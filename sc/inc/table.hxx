@@ -753,7 +753,7 @@ public:
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 
-    void        Sort(const ScSortParam& rSortParam, bool bKeepQuery);
+    void        Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress);
     bool        ValidQuery(
         SCROW nRow, const ScQueryParam& rQueryParam, ScBaseCell* pCell = NULL,
         bool* pbTestEqualCondition = NULL);
@@ -863,7 +863,7 @@ private:
     short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     ScSortInfoArray*    CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 );
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
-    void        SortReorder( ScSortInfoArray*, ScProgress& );
+    void        SortReorder( ScSortInfoArray*, ScProgress* );
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);

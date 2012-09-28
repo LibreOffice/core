@@ -77,7 +77,7 @@
 #include <boost/unordered_map.hpp>
 
 #include <cassert>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 using namespace ::pdfparse;
 using namespace ::pdfi;

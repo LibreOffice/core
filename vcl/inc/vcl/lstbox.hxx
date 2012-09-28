@@ -101,17 +101,18 @@ public:
 
     virtual const Wallpaper& GetDisplayBackground() const;
 
-    virtual void        SetPosSizePixel( long nX, long nY,
+    virtual void        setPosSizePixel( long nX, long nY,
                                          long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
                         { Control::SetPosSizePixel( rNewPos, rNewSize ); }
     void                SetDropDownSizePixel( const Size& rNewSize )
-    { if( IsDropDownBox() ) SetPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
+    { if( IsDropDownBox() ) setPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
 
     Rectangle           GetDropDownPosSizePixel() const;
 
     void                SetDropDownLineCount( sal_uInt16 nLines );
-    sal_uInt16              GetDropDownLineCount() const;
+    sal_uInt16          GetDropDownLineCount() const;
+    void                SetBestDropDownLineCount() { SetDropDownLineCount(16);  }
 
     void                EnableAutoSize( sal_Bool bAuto );
     sal_Bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }
@@ -227,6 +228,7 @@ public:
      */
     using Control::GetIndexForPoint;
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const;
+    virtual void take_properties(Window &rOther);
 };
 
 // ----------------

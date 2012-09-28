@@ -36,6 +36,7 @@
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -54,6 +55,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -132,56 +134,52 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
     uno::Reference< io::XInputStream > xResult;
 
-    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-    uno::Reference < io::XStream > xTempStream = uno::Reference < io::XStream > (
-                                                            xFactory->createInstance ( aServiceName ),
-                                                            uno::UNO_QUERY );
-    if ( xTempStream.is() )
+    uno::Reference < io::XStream > xTempStream( io::TempFile::create(comphelper::getComponentContext(xFactory)),
+                                                            uno::UNO_QUERY_THROW );
+
+    uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
+                xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" )) ),
+                uno::UNO_QUERY );
+
+    uno::Sequence< uno::Any > aArgs( 2 );
+    aArgs[0] <<= xTempStream;
+    aArgs[1] <<= embed::ElementModes::READWRITE;
+    uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
+                                                    uno::UNO_QUERY );
+    if ( !xTempStorage.is() )
+        throw uno::RuntimeException(); // TODO:
+
+    try
     {
-        uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" )) ),
-                    uno::UNO_QUERY );
-
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[0] <<= xTempStream;
-        aArgs[1] <<= embed::ElementModes::READWRITE;
-        uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
-                                                        uno::UNO_QUERY );
-        if ( !xTempStorage.is() )
-            throw uno::RuntimeException(); // TODO:
-
-        try
-        {
-            xStorage->copyToStorage( xTempStorage );
-        } catch( const uno::Exception& e )
-        {
-            throw embed::StorageWrappedTargetException(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't copy storage!" )),
-                        uno::Reference< uno::XInterface >(),
-                        uno::makeAny( e ) );
-        }
-
-        try {
-            uno::Reference< lang::XComponent > xComponent( xTempStorage, uno::UNO_QUERY );
-            OSL_ENSURE( xComponent.is(), "Wrong storage implementation!" );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
-        catch ( const uno::Exception& )
-        {
-        }
-
-        try {
-            uno::Reference< io::XOutputStream > xTempOut = xTempStream->getOutputStream();
-            if ( xTempOut.is() )
-                xTempOut->closeOutput();
-        }
-        catch ( const uno::Exception& )
-        {
-        }
-
-        xResult = xTempStream->getInputStream();
+        xStorage->copyToStorage( xTempStorage );
+    } catch( const uno::Exception& e )
+    {
+        throw embed::StorageWrappedTargetException(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't copy storage!" )),
+                    uno::Reference< uno::XInterface >(),
+                    uno::makeAny( e ) );
     }
+
+    try {
+        uno::Reference< lang::XComponent > xComponent( xTempStorage, uno::UNO_QUERY );
+        OSL_ENSURE( xComponent.is(), "Wrong storage implementation!" );
+        if ( xComponent.is() )
+            xComponent->dispose();
+    }
+    catch ( const uno::Exception& )
+    {
+    }
+
+    try {
+        uno::Reference< io::XOutputStream > xTempOut = xTempStream->getOutputStream();
+        if ( xTempOut.is() )
+            xTempOut->closeOutput();
+    }
+    catch ( const uno::Exception& )
+    {
+    }
+
+    xResult = xTempStream->getInputStream();
 
     return xResult;
 
@@ -587,11 +585,11 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
                                                                             const ::rtl::OUString& aHierarchName )
 {
     uno::Reference < io::XOutputStream > xTempOut(
-                m_xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" )) ),
-                uno::UNO_QUERY );
+                io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                uno::UNO_QUERY_THROW );
     uno::Reference< io::XInputStream > aResult( xTempOut, uno::UNO_QUERY );
 
-    if ( !xTempOut.is() || !aResult.is() )
+    if ( !aResult.is() )
         throw uno::RuntimeException(); // TODO:
 
     uno::Reference< frame::XStorable > xStorable;

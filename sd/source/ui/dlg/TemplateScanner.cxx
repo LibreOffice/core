@@ -276,7 +276,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
             ::rtl::OUString sContentType (xRow->getString (3));
 
             ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
-            ::ucbhelper::Content  aContent = ::ucbhelper::Content (aId, mxEntryEnvironment);
+            ::ucbhelper::Content  aContent = ::ucbhelper::Content (aId, mxEntryEnvironment, comphelper::getProcessComponentContext());
             if (aContent.isDocument ())
             {
                 //  Check whether the entry is an impress template.  If so
@@ -332,7 +332,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
     {
         //  Create content for template folders.
         mxFolderEnvironment = Reference<com::sun::star::ucb::XCommandEnvironment>();
-        ::ucbhelper::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment);
+        ::ucbhelper::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment, comphelper::getProcessComponentContext());
 
         //  Define the list of properties we are interested in.
         Sequence<rtl::OUString> aProps (2);
@@ -405,7 +405,7 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
         ::rtl::OUString sTargetDir (aDescriptor.msTargetDir);
         ::rtl::OUString aId (aDescriptor.msContentIdentifier);
 
-        maFolderContent = ::ucbhelper::Content (aId, aDescriptor.mxFolderEnvironment);
+        maFolderContent = ::ucbhelper::Content (aId, aDescriptor.mxFolderEnvironment, comphelper::getProcessComponentContext());
         if (maFolderContent.isFolder())
         {
             // Scan the folder and insert it into the list of template

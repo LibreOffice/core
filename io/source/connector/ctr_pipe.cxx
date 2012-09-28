@@ -92,7 +92,7 @@ namespace stoc_connector {
                   ::com::sun::star::uno::RuntimeException)
     {
         // ensure that close is called only once
-        if(1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
+        if(1 == osl_atomic_increment( (&m_nStatus) ) )
         {
             m_pipe.close();
         }

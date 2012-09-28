@@ -103,15 +103,16 @@ class Desktop : public Application
         static ResMgr*          GetDesktopResManager();
         static CommandLineArgs& GetCommandLineArgs();
 
-        void                    HandleBootstrapErrors( BootstrapError );
-        void                    SetBootstrapError( BootstrapError nError )
+        void                    HandleBootstrapErrors(
+            BootstrapError nError, OUString const & aMessage );
+        void                    SetBootstrapError(
+            BootstrapError nError, OUString const & aMessage )
         {
             if ( m_aBootstrapError == BE_OK )
+            {
                 m_aBootstrapError = nError;
-        }
-        BootstrapError          GetBootstrapError() const
-        {
-            return m_aBootstrapError;
+                m_aBootstrapErrorMessage = aMessage;
+            }
         }
 
         void                    SetBootstrapStatus( BootstrapStatus nStatus )
@@ -135,13 +136,11 @@ class Desktop : public Application
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
-        static void             ensureProcessServiceFactory();
+        // Bootstrap methods
+        static void             InitApplicationServiceManager();
+            // throws an exception upon failure
 
     private:
-        // Bootstrap methods
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
-            // returns a non-null reference or throws an exception
-
         void                    RegisterServices();
         void                    DeregisterServices();
 
@@ -158,9 +157,6 @@ class Desktop : public Application
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
         void                    StartSetup( const ::rtl::OUString& aParameters );
-
-        // Get a resource message string securely e.g. if resource cannot be retrieved return aFaultBackMsg
-        ::rtl::OUString         GetMsgString( sal_uInt16 nId, const ::rtl::OUString& aFaultBackMsg );
 
         // Create a error message depending on bootstrap failure code and an optional file url
         ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
@@ -200,6 +196,7 @@ class Desktop : public Application
         bool                            m_bCleanedExtensionCache;
         bool                            m_bServicesRegistered;
         BootstrapError                  m_aBootstrapError;
+        OUString                        m_aBootstrapErrorMessage;
         BootstrapStatus                 m_aBootstrapStatus;
 
         std::auto_ptr< Lockfile > m_pLockfile;

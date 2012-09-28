@@ -55,10 +55,12 @@
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
+#define LOTUS123_FORMAT_TYPE 268435649
 
 #define ODS     0
 #define XLS     1
 #define XLSX    2
+#define LOTUS123 3
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -72,7 +74,8 @@ struct FileFormat {
 FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
+    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
+    { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE }
 };
 
 }
@@ -106,6 +109,7 @@ public:
     void testContentODS();
     void testContentXLS();
     void testContentXLSX();
+    void testContentLotus123();
 
 #if TEST_BUG_FILES
     //goes recursively through all files in this dir and tries to open them
@@ -122,6 +126,7 @@ public:
     CPPUNIT_TEST(testContentODS);
     CPPUNIT_TEST(testContentXLS);
     CPPUNIT_TEST(testContentXLSX);
+    CPPUNIT_TEST(testContentLotus123);
 
 #if TEST_BUG_FILES
     CPPUNIT_TEST(testBugFiles);
@@ -191,6 +196,7 @@ void ScFiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString&
 
 void ScFiltersTest::testCVEs()
 {
+#ifndef DISABLE_CVE_TESTS
     testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
         getURLFromSrc("/sc/qa/unit/data/qpro/"), rtl::OUString());
 
@@ -202,6 +208,7 @@ void ScFiltersTest::testCVEs()
 
     testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Excel 97")),
         getURLFromSrc("/sc/qa/unit/data/xls/"), rtl::OUString());
+#endif
 }
 
 #if TEST_BUG_FILES
@@ -319,7 +326,7 @@ void ScFiltersTest::testRangeNameODS()
 
 namespace {
 
-void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
+void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, xls, xlsx
 {
     double fValue;
     //check value import
@@ -329,10 +336,12 @@ void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
     CPPUNIT_ASSERT_MESSAGE("value not imported correctly", fValue == 2);
     rtl::OUString aString;
     pDoc->GetString(1,0,0,aString);
+
     //check string import
     CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String1")));
     pDoc->GetString(1,1,0,aString);
     CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String2")));
+
     //check basic formula import
     pDoc->GetValue(2,0,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=2*3", fValue == 6);
@@ -342,16 +351,22 @@ void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
     CPPUNIT_ASSERT_MESSAGE("=2-3", fValue == -1);
     pDoc->GetValue(2,3,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=C1+C2", fValue == 11);
+
     //check merged cells import
-    SCCOL nCol = 4;
-    SCROW nRow = 1;
-    pDoc->ExtendMerge(4, 1, nCol, nRow, 0, false);
-    CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
-    //check notes import
-    ScAddress aAddress(7, 2, 0);
-    ScPostIt* pNote = pDoc->GetNotes(aAddress.Tab())->findByAddress(aAddress);
-    CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
-    CPPUNIT_ASSERT_MESSAGE("note text not imported correctly", pNote->GetText() == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
+    if(nFormat != LOTUS123)
+    {
+        SCCOL nCol = 4;
+        SCROW nRow = 1;
+        pDoc->ExtendMerge(4, 1, nCol, nRow, 0, false);
+        CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
+
+        //check notes import
+        ScAddress aAddress(7, 2, 0);
+        ScPostIt* pNote = pDoc->GetNotes(aAddress.Tab())->findByAddress(aAddress);
+        CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", pNote->GetText(), rtl::OUString("Test"));
+    }
+
     //add additional checks here
 }
 
@@ -360,33 +375,45 @@ void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
 void ScFiltersTest::testContentODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, ODS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc);
+    testContentImpl(pDoc, ODS);
     xDocSh->DoClose();
 }
 
 void ScFiltersTest::testContentXLS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 1);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, XLS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc);
+    testContentImpl(pDoc, XLS);
     xDocSh->DoClose();
 }
 
 void ScFiltersTest::testContentXLSX()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 2);
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, XLSX);
     xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc);
+    testContentImpl(pDoc, XLSX);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testContentLotus123()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, LOTUS123);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    testContentImpl(pDoc, LOTUS123);
     xDocSh->DoClose();
 }
 

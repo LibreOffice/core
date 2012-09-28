@@ -16,23 +16,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package storagetesting;
-
-import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.DisposedException;
-
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-
 import com.sun.star.container.XNameAccess;
 
 import com.sun.star.embed.*;
-
-import storagetesting.TestHelper;
-import storagetesting.StorageTest;
 
 public class Test04 implements StorageTest {
 
@@ -73,7 +62,7 @@ public class Test04 implements StorageTest {
             // first substorage of the root storage
             XStorage xTempSubStorage1 = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_WRITE );
+                                                                        ElementModes.WRITE );
             if ( xTempSubStorage1 == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -89,7 +78,7 @@ public class Test04 implements StorageTest {
             // second substorage of the root storage
             XStorage xTempSubStorage2 = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage2",
-                                                                        ElementModes.ELEMENT_WRITE );
+                                                                        ElementModes.WRITE );
             if ( xTempSubStorage2 == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -106,27 +95,27 @@ public class Test04 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType3",
                                                             true,
-                                                            ElementModes.ELEMENT_READWRITE ) )
+                                                            ElementModes.READWRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage1,
                                                             "MediaType4",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage2,
                                                             "MediaType5",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
-            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
+            pArgs[1] = new Integer( ElementModes.WRITE );
 
             Object oTempFileStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempFileStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oTempFileStorage );
@@ -187,7 +176,7 @@ public class Test04 implements StorageTest {
             // ================================================
 
             // the temporary file must not be locked any more after storage disposing
-            pArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+            pArgs[1] = new Integer( ElementModes.READWRITE );
             Object oResStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResStorage );
             if ( xResStorage == null )
@@ -199,28 +188,28 @@ public class Test04 implements StorageTest {
             // open and check SubStorage1
             XStorage xResSubStorage1 = m_aTestHelper.openSubStorage( xResStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_READ );
+                                                                        ElementModes.READ );
             if ( xResSubStorage1 == null )
             {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResSubStorage1, "MediaType4", false, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResSubStorage1, "MediaType4", false, ElementModes.READ ) )
                 return false;
 
 
             // open and check SubStorage2
             XStorage xResSubStorage2 = m_aTestHelper.openSubStorage( xResStorage,
                                                                         "SubStorage2",
-                                                                        ElementModes.ELEMENT_READ );
+                                                                        ElementModes.READ );
             if ( xResSubStorage2 == null )
             {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResSubStorage2, "MediaType5", false, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResSubStorage2, "MediaType5", false, ElementModes.READ ) )
                 return false;
 
 

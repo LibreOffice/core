@@ -89,7 +89,7 @@ HRESULT STDMETHODCALLTYPE VistaFilePickerEventHandler::QueryInterface(REFIID rII
 //-----------------------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::AddRef()
 {
-    return osl_incrementInterlockedCount(&m_nRefCount);
+    return osl_atomic_increment(&m_nRefCount);
 }
 
 //-----------------------------------------------------------------------------------------

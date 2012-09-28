@@ -31,6 +31,7 @@
 #include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <tools/diagnose_ex.h>
@@ -83,7 +84,7 @@ namespace toolkit
             {
                 rbTriedCreation = true;
                 rDefaultFormats = Reference< XNumberFormatsSupplier >(
-                    ::comphelper::createProcessComponent(
+                    ::comphelper::getProcessServiceFactory()->createInstance(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatsSupplier" ) ) ),
                     UNO_QUERY_THROW
                 );
@@ -100,14 +101,14 @@ namespace toolkit
         // ...............................................................
         void    lcl_registerDefaultFormatsClient()
         {
-            osl_incrementInterlockedCount( &s_refCount );
+            osl_atomic_increment( &s_refCount );
         }
 
         // ...............................................................
         void    lcl_revokeDefaultFormatsClient()
         {
             ::osl::ClearableMutexGuard aGuard( getDefaultFormatsMutex() );
-            if ( 0 == osl_decrementInterlockedCount( &s_refCount ) )
+            if ( 0 == osl_atomic_decrement( &s_refCount ) )
             {
                 Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
                 Reference< XNumberFormatsSupplier > xReleasePotentialLastReference( rDefaultFormats );
@@ -251,7 +252,7 @@ namespace toolkit
             if ( !m_xCachedFormatter.is() )
             {
                 m_xCachedFormatter = Reference< XNumberFormatter >(
-                    ::comphelper::createProcessComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter" ) ) ),
+                    NumberFormatter::create(::comphelper::getProcessComponentContext()),
                     UNO_QUERY_THROW
                 );
             }

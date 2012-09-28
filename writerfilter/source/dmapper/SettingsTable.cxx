@@ -68,6 +68,10 @@ struct SettingsTable_Impl
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
     bool                m_bEvenAndOddHeaders;
+    bool                m_bUsePrinterMetrics;
+    bool                embedTrueTypeFonts;
+    bool                embedSystemFonts;
+    bool                m_bDoNotUseHTMLParagraphAutoSpacing;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -87,6 +91,10 @@ struct SettingsTable_Impl
     , m_bLinkStyles(false)
     , m_nZoomFactor(0)
     , m_bEvenAndOddHeaders(false)
+    , m_bUsePrinterMetrics(false)
+    , embedTrueTypeFonts(false)
+    , embedSystemFonts(false)
+    , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     {}
 
 };
@@ -194,6 +202,18 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             resolveSprmProps(*this, rSprm);
         }
         break;
+    case NS_ooxml::LN_CT_Compat_usePrinterMetrics:
+        m_pImpl->m_bUsePrinterMetrics = nIntValue;
+        break;
+    case NS_ooxml::LN_CT_Settings_embedTrueTypeFonts:
+        m_pImpl->embedTrueTypeFonts = nIntValue != 0;
+        break;
+    case NS_ooxml::LN_CT_Settings_embedSystemFonts:
+        m_pImpl->embedSystemFonts = nIntValue != 0;
+        break;
+    case NS_ooxml::LN_CT_Compat_doNotUseHTMLParagraphAutoSpacing:
+        m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -226,9 +246,29 @@ sal_Int16 SettingsTable::GetZoomFactor() const
     return m_pImpl->m_nZoomFactor;
 }
 
+bool SettingsTable::GetUsePrinterMetrics() const
+{
+    return m_pImpl->m_bUsePrinterMetrics;
+}
+
 bool SettingsTable::GetEvenAndOddHeaders() const
 {
     return m_pImpl->m_bEvenAndOddHeaders;
+}
+
+bool SettingsTable::GetEmbedTrueTypeFonts() const
+{
+    return m_pImpl->embedTrueTypeFonts;
+}
+
+bool SettingsTable::GetEmbedSystemFonts() const
+{
+    return m_pImpl->embedSystemFonts;
+}
+
+bool SettingsTable::GetDoNotUseHTMLParagraphAutoSpacing() const
+{
+    return m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )

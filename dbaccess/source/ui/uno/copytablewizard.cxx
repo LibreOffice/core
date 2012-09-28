@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -103,6 +104,8 @@ namespace dbaui
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::task::XInteractionHandler;
     using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::sdb::DatabaseContext;
+    using ::com::sun::star::sdb::XDatabaseContext;
     using ::com::sun::star::sdb::XDocumentDataSource;
     using ::com::sun::star::sdb::XCompletedConnection;
     using ::com::sun::star::lang::WrappedTargetException;
@@ -911,7 +914,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
         OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_DATABASE_LOCATION ) >>= sDatabaseLocation );
 
     // need a DatabaseContext for loading the data source
-    Reference< XNameAccess > xDatabaseContext( m_aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
+    Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create( m_aContext.getUNOContext() );
     Reference< XDataSource > xDataSource;
     if ( !sDataSource.isEmpty() )
         xDataSource.set( xDatabaseContext->getByName( sDataSource ), UNO_QUERY_THROW );

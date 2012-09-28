@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// *** HideableTreeModel ***
-import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -29,7 +26,7 @@ import javax.swing.tree.*;
 
 public class HideableTreeModel implements TreeModel {
 
-    private Vector modelListeners = new Vector();
+    private Vector<TreeModelListener> modelListeners = new Vector<TreeModelListener>();
     private Object root = null;
 
 
@@ -139,39 +136,39 @@ public class HideableTreeModel implements TreeModel {
 
         protected void fireTreeNodesChanged(TreeModelEvent event) {
             for(int i = 0; i < modelListeners.size(); i++) {
-                ((TreeModelListener)modelListeners.elementAt(i)).treeNodesChanged(event);
+                modelListeners.elementAt(i).treeNodesChanged(event);
             }
     }
 
 
         protected void fireTreeNodesInserted(TreeModelEvent event) {
             for(int i = 0; i < modelListeners.size(); i++) {
-                ((TreeModelListener)modelListeners.elementAt(i)).treeNodesInserted(event);
+                modelListeners.elementAt(i).treeNodesInserted(event);
             }
     }
 
 
         protected void fireTreeNodesRemoved(TreeModelEvent event) {
             for(int i = 0; i < modelListeners.size(); i++) {
-                ((TreeModelListener)modelListeners.elementAt(i)).treeNodesRemoved(event);
+                modelListeners.elementAt(i).treeNodesRemoved(event);
             }
     }
 
     protected void fireTreeStructureChanged(TreeModelEvent event) {
             for(int i = 0; i < modelListeners.size(); i++) {
-                ((TreeModelListener)modelListeners.elementAt(i)).treeStructureChanged(event);
+                modelListeners.elementAt(i).treeStructureChanged(event);
             }
     }
 
 
-        public ArrayList getExpandedPaths(JTree tree) {
-        ArrayList expandedPaths = new ArrayList();
+        public ArrayList<TreePath> getExpandedPaths(JTree tree) {
+        ArrayList<TreePath> expandedPaths = new ArrayList<TreePath>();
         addExpandedPaths(tree, tree.getPathForRow(0), expandedPaths);
         return expandedPaths;
     }
 
 
-        private void addExpandedPaths(JTree tree, TreePath path, ArrayList pathlist) {
+        private void addExpandedPaths(JTree tree, TreePath path, ArrayList<TreePath> pathlist) {
             Enumeration aEnum = tree.getExpandedDescendants(path);
             while(aEnum.hasMoreElements()) {
                 TreePath tp = (TreePath) aEnum.nextElement();
@@ -181,9 +178,9 @@ public class HideableTreeModel implements TreeModel {
     }
 
 
-        public void expandPaths(JTree tree, ArrayList pathlist) {
+        public void expandPaths(JTree tree, ArrayList<TreePath> pathlist) {
             for(int i = 0; i < pathlist.size(); i++) {
-                tree.expandPath((TreePath)pathlist.get(i));
+                tree.expandPath(pathlist.get(i));
             }
     }
 

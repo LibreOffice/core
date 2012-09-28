@@ -28,13 +28,14 @@
 #include <boost/shared_ptr.hpp>
 
 class DockingWindow;
-class BasicDockingWindow;
-class IDEBaseWindow;
 class SfxRequest;
 class SfxItemSet;
 
 namespace basctl
 {
+
+class DockingWindow;
+class BaseWindow;
 
 //
 // Layout -- the common base of ModulLayout and DialogLayout.
@@ -46,8 +47,9 @@ public:
     void DockaWindow (DockingWindow*);
     void ArrangeWindows ();
 
-    virtual void Activating (IDEBaseWindow&);
+    virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
+    virtual void ExecuteGlobal (SfxRequest&) { }
     virtual void GetState (SfxItemSet&, unsigned nWhich) = 0;
     virtual void UpdateDebug (bool bBasicStopped ) = 0;
 
@@ -55,19 +57,21 @@ protected:
     Layout (Window* pParent);
     virtual ~Layout ();
 
-    void AddToLeft   (BasicDockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
-    void AddToBottom (BasicDockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
+    void AddToLeft   (DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
+    void AddToBottom (DockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
+    void Remove (DockingWindow*);
+    bool HasSize () const { return !bFirstSize; }
 
 protected:
     // Window:
     virtual void Resize ();
     virtual void DataChanged (DataChangedEvent const& rDCEvt);
     // new:
-    virtual void OnFirstSize (int nWidth, int nHeight) = 0;
+    virtual void OnFirstSize (long nWidth, long nHeight) = 0;
 
 private:
     // the main child window (either ModulWindow or DialogWindow)
-    IDEBaseWindow* pChild;
+    BaseWindow* pChild;
 
     // when this window has at first (nonempty) size
     bool bFirstSize;
@@ -78,16 +82,15 @@ private:
     public:
         enum Side {Right, Top, Left, Bottom};
         SplittedSide (Layout*, Side);
-        void Add (BasicDockingWindow*, Size const&);
+        void Add (DockingWindow*, Size const&);
+        void Remove (DockingWindow*);
         bool IsEmpty () const;
-        int  GetSize () const;
+        long GetSize () const;
         void ArrangeIn (Rectangle const&);
 
     private:
         // the layout window
         Layout& rLayout;
-        // ArrangeIn() is called at first time?
-        bool bFirstArrange;
         // horizontal or vertical strip?
         bool bVertical;
         // lower (top or left) or higher (bottom or right) strip?
@@ -95,19 +98,30 @@ private:
         // rectangle to move in
         Rectangle aRect;
         // size (width or height)
-        int nSize;
-        // last position (between Add()s)
-        int nLastPos;
+        long nSize;
         // the main splitting line
         Splitter aSplitter;
-        // the dockable windows
-        std::vector<BasicDockingWindow*> vWindows;
-        // splitting lines between the docking windows (vWindows.size() - 1)
-        std::vector<boost::shared_ptr<Splitter> > vSplitters;
-
+        // the dockable windows (and some data)
+        struct Item
+        {
+            // pointer to the dockable window
+            DockingWindow* pWin;
+            // starting and ending position in the strip
+            // They may be different from the actual window position, because
+            // the window may fill the space of the adjacent currently
+            // non-docking windows, but this change is not stored in these
+            // variables. These change only when the splitter lines are moved.
+            long nStartPos, nEndPos;
+            // splitter line window before the window
+            // (the first one is always nullptr)
+            boost::shared_ptr<Splitter> pSplit;
+        };
+        std::vector<Item> vItems;
     private:
-        Point MakePoint (int, int) const;
-        Size MakeSize (int, int) const;
+        Point MakePoint (long, long) const;
+        Size MakeSize (long, long) const;
+    private:
+        static bool IsDocking (DockingWindow const&);
     private:
         DECL_LINK(SplitHdl, Splitter*);
         void CheckMarginsFor (Splitter*);

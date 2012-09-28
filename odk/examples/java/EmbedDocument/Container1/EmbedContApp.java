@@ -46,6 +46,8 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
 
+import com.sun.star.util.XCloseable;
+
 import com.sun.star.embed.*;
 
 public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClient
@@ -152,20 +154,20 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             try {
                 int nOldState = m_xEmbedObj.getCurrentState();
                 int nState = nOldState;
-                if ( nOldState == EmbedStates.EMBED_LOADED )
+                if ( nOldState == EmbedStates.LOADED )
                 {
-                    m_xEmbedObj.changeState( EmbedStates.EMBED_RUNNING );
-                    nState = EmbedStates.EMBED_RUNNING;
+                    m_xEmbedObj.changeState( EmbedStates.RUNNING );
+                    nState = EmbedStates.RUNNING;
                 }
 
-                if ( nState == EmbedStates.EMBED_ACTIVE || nState == EmbedStates.EMBED_RUNNING )
+                if ( nState == EmbedStates.ACTIVE || nState == EmbedStates.RUNNING )
                 {
                     XComponentSupplier xCompProv = (XComponentSupplier)UnoRuntime.queryInterface(
                                                                                     XComponentSupplier.class,
                                                                                     m_xEmbedObj );
                     if ( xCompProv != null )
                     {
-                        XComponent xComp = xCompProv.getComponent();
+                        XCloseable xComp = xCompProv.getComponent();
                         XTransferable xTransfer = (XTransferable)UnoRuntime.queryInterface(
                                                                                     XTransferable.class,
                                                                                     xComp );
@@ -208,7 +210,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             if ( m_xEmbedObj != null )
             {
                 try {
-                    m_xEmbedObj.changeState( EmbedStates.EMBED_ACTIVE );
+                    m_xEmbedObj.changeState( EmbedStates.ACTIVE );
                 }
                 catch( Exception ex )
                 {
@@ -639,7 +641,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                         if ( xPersist != null )
                         {
                             PropertyValue[] pEmp = new PropertyValue[0];
-                            xPersist.setPersistentEntry( m_xStorage, "EmbedSub", EntryInitModes.ENTRY_NO_INIT, pEmp );
+                            xPersist.setPersistentEntry( m_xStorage, "EmbedSub", EntryInitModes.NO_INIT, pEmp );
                             m_bLinkObj = false;
                             m_aLinkURI = null;
                         }
@@ -890,7 +892,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             {
                 Object aArgs[] = new Object[2];
                 aArgs[0] = aFileURI;
-                aArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+                aArgs[1] = new Integer( ElementModes.READWRITE );
 
                 Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
                 XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
@@ -925,7 +927,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                                                                         oStorageFactory );
             Object aArgs[] = new Object[2];
             aArgs[0] = aFileURI;
-            aArgs[1] = new Integer( ElementModes.ELEMENT_READWRITE );
+            aArgs[1] = new Integer( ElementModes.READWRITE );
 
             Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
             XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
@@ -946,7 +948,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             Object oEmbObj = null;
             if ( xNameAccess.hasByName( "LinkName" ) && xTargetStorage.isStreamElement( "LinkName" ) )
             {
-                XStream xLinkStream = xTargetStorage.openStreamElement( "LinkName", ElementModes.ELEMENT_READ );
+                XStream xLinkStream = xTargetStorage.openStreamElement( "LinkName", ElementModes.READ );
                 if ( xLinkStream != null )
                 {
                     XInputStream xInStream = xLinkStream.getInputStream();
@@ -990,7 +992,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         if ( m_xStorage != null && m_bLinkObj )
         {
             try {
-                XStream xLinkStream = m_xStorage.openStreamElement( "LinkName", ElementModes.ELEMENT_WRITE );
+                XStream xLinkStream = m_xStorage.openStreamElement( "LinkName", ElementModes.WRITE );
 
                 if ( xLinkStream != null )
                 {

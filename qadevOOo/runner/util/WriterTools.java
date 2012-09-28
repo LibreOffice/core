@@ -30,9 +30,6 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 
-// access the implementations via names
-import com.sun.star.uno.XInterface;
-
 import util.DesktopTools;
 
 

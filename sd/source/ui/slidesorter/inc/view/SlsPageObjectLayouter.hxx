@@ -122,7 +122,6 @@ public:
 private:
     SharedSdWindow mpWindow;
     Size maPageObjectSize;
-    double mnModelToWindowScale;
     Rectangle maFocusIndicatorBoundingBox;
     Rectangle maPageObjectBoundingBox;
     Rectangle maPageNumberAreaBoundingBox;

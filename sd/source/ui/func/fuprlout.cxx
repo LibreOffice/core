@@ -159,7 +159,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     else
     {
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        AbstractSdPresLayoutDlg* pDlg = pFact ? pFact->CreateSdPresLayoutDlg(mpDocSh, mpViewShell, NULL, aSet ) : 0;
+        AbstractSdPresLayoutDlg* pDlg = pFact ? pFact->CreateSdPresLayoutDlg(mpDocSh, NULL, aSet ) : 0;
 
         sal_uInt16 nResult = pDlg ? pDlg->Execute() : RET_CANCEL;
 

@@ -68,18 +68,16 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
     if (! xSMgr.is())
     {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no service manager available!") ),
+        throw RuntimeException("no service manager available!",
             Reference< XInterface >() );
     }
 
     Reference< xml::sax::XExtendedDocumentHandler > xHandler( xSMgr->createInstanceWithContext(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ), xContext ), UNO_QUERY );
+        "com.sun.star.xml.sax.Writer", xContext ), UNO_QUERY );
     OSL_ASSERT( xHandler.is() );
     if (! xHandler.is())
     {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("could not create sax-writer component!") ),
+        throw RuntimeException("could not create sax-writer component!",
             Reference< XInterface >() );
     }
 
@@ -103,18 +101,16 @@ void SAL_CALL importDialogModel(
     Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
     if (! xSMgr.is())
     {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no service manager available!") ),
+        throw RuntimeException("no service manager available!",
             Reference< XInterface >() );
     }
 
     Reference< xml::sax::XParser > xParser( xSMgr->createInstanceWithContext(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ), xContext ), UNO_QUERY );
+        "com.sun.star.xml.sax.Parser", xContext ), UNO_QUERY );
     OSL_ASSERT( xParser.is() );
     if (! xParser.is())
     {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("could not create sax-parser component!") ),
+        throw RuntimeException("could not create sax-parser component!",
             Reference< XInterface >() );
     }
 
@@ -123,7 +119,7 @@ void SAL_CALL importDialogModel(
 
     xml::sax::InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId = OUString( RTL_CONSTASCII_USTRINGPARAM("virtual file") );
+    source.sSystemId = "virtual file";
 
     xParser->parseStream( source );
 }

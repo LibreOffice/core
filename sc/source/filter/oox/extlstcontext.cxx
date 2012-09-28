@@ -200,7 +200,13 @@ ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const A
         if(nElement == XLS_EXT_TOKEN( cfRule ))
         {
             rtl::OUString aId = rAttribs.getString( XML_id, rtl::OUString() );
-            void* pInfo = getExtLst().find( aId )->second;
+
+            // an ext entrie does not need to have an existing corresponding entry
+            ExtLst::const_iterator aExt = getExtLst().find( aId );
+            if(aExt == getExtLst().end())
+                return NULL;
+
+            void* pInfo = aExt->second;
             if (!pInfo)
             {
                 return NULL;

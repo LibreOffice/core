@@ -351,16 +351,17 @@ MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-kab.xcu
 MY_DRIVERS += kab
 .END
-.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO" && \
-        "$(OS)" != "MACOSX"
+
 .IF "$(OS)" == "WNT"
+.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
 MY_DRIVERS += mozab
-.ELSE
-MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab2.xcu
-MY_DRIVERS += mozab2
 .END
+.ELIF "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
+MY_DRIVERS += mork
 .END
+
 .IF "$(SYSTEM_LIBEXTTEXTCAT_DATA)" != ""
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-externallibexttextcatdata.xcu
 .ELSE

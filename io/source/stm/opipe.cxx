@@ -19,6 +19,7 @@
 
 
 // streams
+#include <com/sun/star/io/XPipe.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
@@ -27,7 +28,7 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <cppuhelper/implbase4.hxx>      // OWeakObject
+#include <cppuhelper/implbase3.hxx>      // OWeakObject
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
@@ -52,7 +53,7 @@ using namespace ::com::sun::star::lang;
 namespace io_stm{
 
 class OPipeImpl :
-    public WeakImplHelper4< XInputStream , XOutputStream , XConnectable , XServiceInfo >
+    public WeakImplHelper3< XPipe , XConnectable , XServiceInfo >
 {
 public:
     OPipeImpl( );

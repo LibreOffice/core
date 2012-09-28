@@ -121,7 +121,7 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
     // dann suche den StartNode der Box
     const SwTableSortBoxes& rSortBoxes = pTblNd->GetTable().GetTabSortBoxes();
     sal_uLong nIdx = _rNd.GetIndex();
-    for( sal_uInt16 n = 0; n < rSortBoxes.size(); ++n )
+    for (size_t n = 0; n < rSortBoxes.size(); ++n)
     {
         const SwStartNode* pNd = rSortBoxes[ n ]->GetSttNd();
         if ( pNd->GetIndex() < nIdx && nIdx < pNd->EndOfSectionIndex() )
@@ -165,7 +165,9 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     if( rRange.HasMark() &&
         0 == ( nRegionRet = IsInsRegionAvailable( rRange, &pPrvNd ) ))
     {
-        OSL_ENSURE( !this, "Selection ueber verschiedene Sections" );
+        // demoted to info because this is called from SwXTextSection::attach,
+        // so it could be invalid input
+        SAL_INFO("sw.core" , "InsertSwSection: rRange overlaps other sections");
         return 0;
     }
 

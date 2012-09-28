@@ -45,12 +45,12 @@ class SW_DLLPUBLIC SwOLEObj
     const SwOLENode* pOLENd;
     SwOLEListener_Impl* pListener;
 
-    // Either ref or name are known. If only name is known, ref is obtained
-    // on demand by GetOleRef() from Sfx.
+    /** Either ref or name are known. If only name is known, ref is obtained
+       on demand by GetOleRef() from Sfx. */
     svt::EmbeddedObjectRef xOLERef;
     String aName;
 
-    SwOLEObj( const SwOLEObj& rObj );   // Not allowed.
+    SwOLEObj( const SwOLEObj& rObj );   /// Not allowed.
     SwOLEObj();
 
     void SetNode( SwOLENode* pNode );
@@ -71,7 +71,7 @@ public:
     const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     const String& GetCurrentPersistName() const { return aName; }
-    sal_Bool IsOleRef() const;  // To avoid unneccessary loading of object.
+    sal_Bool IsOleRef() const;  ///< To avoid unneccessary loading of object.
 #endif
 };
 
@@ -84,9 +84,9 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
     friend class SwNodes;
     mutable SwOLEObj aOLEObj;
     Graphic*    pGraphic;
-    String sChartTblName;       // with chart objects: name of referenced table.
-    sal_Bool   bOLESizeInvalid; // Should be considered at SwDoc::PrtOLENotify
-                                // (e.g. copied). Is not persistent.
+    String sChartTblName;       ///< with chart objects: name of referenced table.
+    sal_Bool   bOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
+                                   (e.g. copied). Is not persistent. */
 
     SwEmbedObjectLink*  mpObjectLink;
     String maLinkURL;
@@ -102,7 +102,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
                 SwGrfFmtColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
 
-    // aOLEObj has a private Copy-Ctor. We need one too:
+    /// aOLEObj has a private Copy-Ctor. We need one too:
     SwOLENode( const SwOLENode & );
 
     using SwNoTxtNode::GetGraphic;
@@ -114,7 +114,7 @@ public:
 
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
 
-    // Is in ndcopy.cxx.
+    /// Is in ndcopy.cxx.
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
     virtual Size GetTwipSize() const;
@@ -135,8 +135,8 @@ public:
     sal_Int64 GetAspect() const { return aOLEObj.GetObject().GetViewAspect(); }
     void SetAspect( sal_Int64 nAspect) { aOLEObj.GetObject().SetViewAspect( nAspect ); }
 
-    // Remove OLE-object from "memory".
-    // inline void Unload() { aOLEObj.Unload(); }
+    /** Remove OLE-object from "memory".
+       inline void Unload() { aOLEObj.Unload(); } */
     String GetDescription() const { return aOLEObj.GetDescription(); }
 
     sal_Bool UpdateLinkURL_Impl();
@@ -156,7 +156,7 @@ public:
 };
 
 
-// Inline methods from Node.hxx
+/// Inline methods from Node.hxx
 inline SwOLENode *SwNode::GetOLENode()
 {
      return ND_OLENODE == nNodeType ? (SwOLENode*)this : 0;

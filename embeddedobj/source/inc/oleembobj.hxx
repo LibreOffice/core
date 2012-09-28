@@ -58,8 +58,10 @@ class VerbExecutionController
     ::osl::Mutex    m_aVerbExecutionMutex;
 
     sal_Bool m_bVerbExecutionInProgress;
+#ifdef WNT
     oslThreadIdentifier m_nVerbExecutionThreadIdentifier;
     sal_Bool m_bChangedOnVerbExecution;
+#endif
 
     sal_Bool m_bWasEverActive;
     sal_Int32 m_nNotificationLock;
@@ -68,8 +70,10 @@ public:
 
     VerbExecutionController()
     : m_bVerbExecutionInProgress( sal_False )
+#ifdef WNT
     , m_nVerbExecutionThreadIdentifier( 0 )
     , m_bChangedOnVerbExecution( sal_False )
+#endif
     , m_bWasEverActive( sal_False )
     , m_nNotificationLock( 0 )
     {}

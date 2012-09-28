@@ -65,7 +65,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
     DBG_CTOR( rpt_OStartMarker,NULL);
     SetUniqueId(HID_RPT_STARTMARKER);
 
-    osl_incrementInterlockedCount(&s_nImageRefCount);
+    osl_atomic_increment(&s_nImageRefCount);
     initDefaultNodeImages();
     ImplInitSettings();
     m_aText.SetHelpId(HID_RPT_START_TITLE);
@@ -90,7 +90,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
 OStartMarker::~OStartMarker()
 {
     DBG_DTOR( rpt_OStartMarker,NULL);
-    if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
+    if ( osl_atomic_decrement(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);

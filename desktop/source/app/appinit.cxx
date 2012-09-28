@@ -42,18 +42,16 @@
 
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
-#include <com/sun/star/ucb/XContentProviderFactory.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <uno/current_context.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <osl/module.h>
-#include <osl/security.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
-#include <ucbhelper/configurationkeys.hxx>
 
 #include <tools/rcid.h>
 
@@ -63,7 +61,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/startoptions.hxx>
 #include <unotools/pathoptions.hxx>
@@ -84,99 +81,51 @@ namespace desktop
 
 // -----------------------------------------------------------------------------
 
-static bool configureUcb()
+static void configureUcb()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (sb93797) ::configureUcb" );
-    Reference< XMultiServiceFactory >
-        xServiceFactory( comphelper::getProcessServiceFactory() );
-    if (!xServiceFactory.is())
-    {
-        OSL_FAIL("configureUcb(): No XMultiServiceFactory");
-        return false;
-    }
 
-    rtl::OUString aPipe;
-    osl::Security().getUserIdent(aPipe);
-
-    rtl::OUStringBuffer aPortal;
-
-    Sequence< Any > aArgs(2);
-    aArgs[0]
-        <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL);
-    aArgs[1]
-        <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE);
-
-    bool ret =
-        ::ucbhelper::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
+    // For backwards compatibility, in case some code still uses plain
+    // createInstance w/o args directly to obtain an instance:
+    UniversalContentBroker::create(comphelper::getProcessComponentContext());
 
 #ifdef GNOME_VFS_ENABLED
-    // register GnomeUCP if necessary
-    ::ucbhelper::ContentBroker* cb = ::ucbhelper::ContentBroker::get();
-    if(cb)
+    // Instantiate GNOME-VFS UCP in the thread that initialized GNOME in order
+    // to avoid a deadlock that may occure in case the UCP gets initialized from
+    // a different thread (which may happen when calling remotely via UNO); this
+    // is not a fix, just a workaround:
+    Reference< XCurrentContext > xCurrentContext(getCurrentContext());
+    Any aValue(xCurrentContext->getValueByName("system.desktop-environment"));
+    OUString aDesktopEnvironment;
+    if ((aValue >>= aDesktopEnvironment) && aDesktopEnvironment == "GNOME")
     {
-        try
-        {
-            Reference< XCurrentContext > xCurrentContext(
-                getCurrentContext());
-            if (xCurrentContext.is())
-            {
-                Any aValue = xCurrentContext->getValueByName(
-                    rtl::OUString( "system.desktop-environment"  )
-                );
-                rtl::OUString aDesktopEnvironment;
-                if ( (aValue >>= aDesktopEnvironment) && aDesktopEnvironment == "GNOME" )
-                {
-                    Reference<XContentProviderManager> xCPM =
-                        cb->getContentProviderManagerInterface();
-
-
-            //Instanciate GNOME-VFS-UCP in the thread that initialized
-             // GNOME in order to avoid a deadlock that may occure in case UCP gets initialized from
-            // a different thread. The latter may happen when calling the Office remotely via UNO.
-            // THIS IS NOT A FIX, JUST A WORKAROUND!
-
-                    try
-                    {
-                        Reference<XContentProvider> xCP(
-                            xServiceFactory->createInstance(
-                                rtl::OUString(
-                                    "com.sun.star.ucb.GnomeVFSContentProvider")),
-                            UNO_QUERY);
-                        if(xCP.is())
-                            xCPM->registerContentProvider(
-                                xCP,
-                                rtl::OUString(".*"),
-                                false);
-                    }
-                    catch (...)
-                    {
-                    }
-                }
-            }
-        }
-        catch (const RuntimeException &)
-        {
-        }
+        UniversalContentBroker::create(
+            comphelper::getProcessComponentContext())->
+            registerContentProvider(
+                Reference<XContentProvider>(
+                    comphelper::getProcessServiceFactory()->createInstance(
+                        "com.sun.star.ucb.GnomeVFSContentProvider"),
+                    UNO_QUERY_THROW),
+                ".*", false);
     }
 #endif // GNOME_VFS_ENABLED
-
-    return ret;
 }
 
-Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
+void Desktop::InitApplicationServiceManager()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
-
+    Reference<XMultiServiceFactory> sm;
 #ifdef ANDROID
     rtl::OUString aUnoRc( OUString( "file:///assets/program/unorc"  ) );
-    return Reference<XMultiServiceFactory>(
+    sm.set(
         cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
         UNO_QUERY_THROW);
 #else
-    return Reference<XMultiServiceFactory>(
+    sm.set(
         cppu::defaultBootstrap_InitialComponentContext()->getServiceManager(),
         UNO_QUERY_THROW);
 #endif
+    comphelper::setProcessServiceFactory(sm);
 }
 
 void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )
@@ -228,11 +177,7 @@ void Desktop::RegisterServices()
             createAcceptor(*i);
         }
 
-        if ( !configureUcb() )
-        {
-            OSL_FAIL( "Can't configure UCB" );
-            throw com::sun::star::uno::Exception(rtl::OUString("RegisterServices, configureUcb"), NULL);
-        }
+        configureUcb();
 
         CreateTemporaryDirectory();
         m_bServicesRegistered = true;

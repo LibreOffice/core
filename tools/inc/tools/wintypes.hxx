@@ -35,7 +35,7 @@ typedef sal_uInt16 WindowType;
 #define WINDOW_WINDOW               (WINDOW_FIRST + 0x05)
 #define WINDOW_SYSWINDOW            (WINDOW_FIRST + 0x06)
 #define WINDOW_WORKWINDOW           (WINDOW_FIRST + 0x07)
-// #define WINDOW_MDIWINDOW            (WINDOW_FIRST + 0x08)
+#define WINDOW_CONTAINER            (WINDOW_FIRST + 0x08)
 #define WINDOW_FLOATINGWINDOW       (WINDOW_FIRST + 0x09)
 #define WINDOW_DIALOG               (WINDOW_FIRST + 0x0a)
 #define WINDOW_MODELESSDIALOG       (WINDOW_FIRST + 0x0b)
@@ -311,7 +311,8 @@ typedef sal_uInt16 StandardButtonType;
 #define BUTTON_IGNORE       ((StandardButtonType)8)
 #define BUTTON_ABORT        ((StandardButtonType)9)
 #define BUTTON_LESS         ((StandardButtonType)10)
-#define BUTTON_COUNT        11
+#define BUTTON_RESET        ((StandardButtonType)11)
+#define BUTTON_COUNT        12
 
 // prominent place for ListBox window types
 

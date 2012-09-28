@@ -29,8 +29,11 @@
 #ifndef _OSL_PROFILE_H_
 #define _OSL_PROFILE_H_
 
-#include <sal/types.h>
-#include <rtl/ustring.h>
+#include "sal/config.h"
+
+#include "rtl/ustring.h"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C" {

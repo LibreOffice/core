@@ -29,9 +29,13 @@
 #ifndef _SAL_MAIN_H_
 #define _SAL_MAIN_H_
 
-#include <sal/types.h>
-#if defined(AIX)
-#   include <unistd.h>
+#include "sal/config.h"
+
+#include "sal/saldllapi.h"
+#include "sal/types.h"
+
+#if defined AIX
+#include <unistd.h>
 #endif
 
 #ifdef __cplusplus

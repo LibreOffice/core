@@ -20,8 +20,6 @@
 #ifndef __com_sun_star_system_SystemProxySettings_idl__
 #define __com_sun_star_system_SystemProxySettings_idl__
 
-#include <com/sun/star/lang/XServiceInfo.idl>
-#include <com/sun/star/lang/XTypeProvider.idl>
 #include <com/sun/star/system/ProxySettings.idl>
 
 

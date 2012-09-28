@@ -136,7 +136,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
 
         m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
                                          xChartModel, xContext,
-                                         xObjectProperties, *aIt, rItemPool, rDrawModel, NULL,
+                                         xObjectProperties, *aIt, rItemPool, rDrawModel,
                                          xNamedPropertyContainerFactory,
                                          GraphicPropertyItemConverter::FILLED_DATA_POINT,
                                          ::std::auto_ptr< awt::Size >( pRefSize.get() ? new awt::Size( *pRefSize ) : 0),

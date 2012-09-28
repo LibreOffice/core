@@ -348,7 +348,7 @@ public class _XUserInputInterception extends MultiMethodTest {
         public void disposing( EventObject oEvent ){
             log.println("XMouseClickHandler 1: disposing-Event");
         }
-    };
+    }
 
     /**
      * Listener which added and removed. Its method must NOT be called
@@ -387,7 +387,7 @@ public class _XUserInputInterception extends MultiMethodTest {
             log.println("XMouseClickHandler 2: disposing-Event: " +
                     "   This should not be happen because listener is removed!");
         }
-    };
+    }
 
     /**
      * To check the events this class is a thread which click a mouse button and

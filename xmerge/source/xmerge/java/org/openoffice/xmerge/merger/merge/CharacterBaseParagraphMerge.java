@@ -31,8 +31,6 @@ import org.openoffice.xmerge.util.Debug;
  *  This is an implementation of the <code>NodeMergeAlgorithm</code>
  *  interface.  It is used to merge two paragraph <code>Node</code>
  *  objects based on character comparisons.
- *
- * @author smak
  */
 public final class CharacterBaseParagraphMerge
                    implements NodeMergeAlgorithm {
@@ -130,14 +128,14 @@ public final class CharacterBaseParagraphMerge
                   orgTextNode.endChar() + ">");
                 Debug.log(Debug.INFO, "  extraChar value <" + extraChar + ">");
 
-                coreMerge(orgDiffCount, diffCount, diffs, orgParser,
+                coreMerge(orgDiffCount, diffCount, diffs,
                           modParser, orgTextNode, extraChar);
             }
         }
     }
 
     private void coreMerge(int startDiffNum, int endDiffNum, Difference[] diffs,
-                        CharacterParser orgParser, CharacterParser modParser,
+                        CharacterParser modParser,
                         TextNodeEntry orgTextNode, int extraChar) {
 
         Node orgNode = orgTextNode.node();

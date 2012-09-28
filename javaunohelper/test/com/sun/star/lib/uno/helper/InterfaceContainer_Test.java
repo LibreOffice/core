@@ -18,30 +18,14 @@
 
 package com.sun.star.lib.uno.helper;
 
-import com.sun.star.uno.XInterface;
 import java.util.Iterator;
 import java.util.ListIterator;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.XWeak;
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.lang.XEventListener;
 import java.util.ArrayList;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.comp.helper.Bootstrap;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.uno.IQueryInterface;
-//import com.sun.star.lib.uno.environments.java.IRequester;
-import com.sun.star.bridge.XBridge;
 //import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.lib.uno.environments.java.java_environment;
-import com.sun.star.lib.uno.typedesc.TypeDescription;
-import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class InterfaceContainer_Test
 {

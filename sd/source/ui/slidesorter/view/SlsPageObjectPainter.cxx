@@ -34,7 +34,6 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsTheme.hxx"
-#include "view/SlsButtonBar.hxx"
 #include "SlsFramePainter.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "controller/SlsProperties.hxx"
@@ -67,7 +66,6 @@ PageObjectPainter::PageObjectPainter (
       maFocusedSelectionBackground(),
       maMouseOverBackground(),
       maMouseOverFocusedBackground(),
-      mrButtonBar(rSlideSorter.GetView().GetButtonBar()),
       maSize()
 {
     // Replace the color (not the alpha values) in the focus border with a
@@ -111,7 +109,6 @@ void PageObjectPainter::PaintPageObject (
     PaintPreview(rDevice, rpDescriptor);
     PaintPageNumber(rDevice, rpDescriptor);
     PaintTransitionEffect(rDevice, rpDescriptor);
-    mrButtonBar.Paint(rDevice, rpDescriptor);
 
     rDevice.SetAntialiasing(nSavedAntialiasingMode);
 }

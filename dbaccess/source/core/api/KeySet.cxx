@@ -1441,11 +1441,12 @@ sal_Bool OKeySet::fetchRow()
         bRet = m_xDriverSet->next();
     if ( bRet )
     {
+        const int cc = m_xSetMetaData->getColumnCount();
+
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size() + m_pForeignColumnNames->size());
-        ORowSetRow aFullRow = new connectivity::ORowVector< ORowSetValue >(m_pColumnNames->size());
+        ORowSetRow aFullRow = new connectivity::ORowVector< ORowSetValue >(cc);
 
         // Fetch the columns only once and in order, to satisfy restrictive backends such as ODBC
-        const int cc = m_xSetMetaData->getColumnCount();
         connectivity::ORowVector< ORowSetValue >::Vector::iterator aFRIter = aFullRow->get().begin();
         // Column 0 is reserved for the bookmark; unused here.
         ++aFRIter;

@@ -35,8 +35,6 @@
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -219,7 +217,7 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
 OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleGridControlHeader" ) );
+    return OUString( "com.sun.star.accessibility.AccessibleGridControlHeader" );
 }
 
 namespace
@@ -237,12 +235,24 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
 
 Rectangle AccessibleGridControlHeader::implGetBoundingBox()
 {
-    return m_aTable.calcHeaderRect(isColumnBar());
+    Window* pParent = m_aTable.GetAccessibleParentWindow();
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
+    Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
+    if(isColumnBar())
+        return Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));
+    else
+        return Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
+
 }
 
 Rectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
 {
-    return m_aTable.calcHeaderRect(isColumnBar());
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( NULL ) );
+    Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
+    if(isColumnBar())
+        return Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));
+    else
+        return Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
 }
 
 sal_Int32 AccessibleGridControlHeader::implGetRowCount() const

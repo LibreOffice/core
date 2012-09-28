@@ -34,7 +34,7 @@
 #endif
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include "connectivity/IParseContext.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sqlerror.hxx"
@@ -165,7 +165,7 @@ namespace connectivity
         sal_Int32                   m_nDateFormatKey;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification> m_xCharClass;
-        static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>       s_xLocaleData;
+        static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4>       s_xLocaleData;
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>      xDummy; // can be deleted after 627
 
         // convert a string into double trim it to scale of _nscale and than transform it back to string

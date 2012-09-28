@@ -533,6 +533,9 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
             aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
+
+        if( nDelFlag & IDF_ATTRIB )
+            mpCondFormatList->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
     }
 
     if (nDelFlag & IDF_NOTE)
@@ -561,6 +564,9 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
         ScRange* pRange = aRangeList[i];
         if (nDelFlag & IDF_NOTE && pRange)
             maNotes.erase(pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row(), true);
+
+        if(pRange && pRange->aStart.Tab() == nTab)
+            mpCondFormatList->DeleteArea( pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row() );
     }
 
         //
@@ -664,6 +670,12 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
             if (aOldIdToNewId.find(nId) == aOldIdToNewId.end())
             {
                 ScConditionalFormat* pFormat = pOldCondFormatList->GetFormat(nId);
+                if(!pFormat)
+                {
+                    // may happen in some strange circumstances where cell storage and
+                    // cond format storage are not in sync
+                    continue;
+                }
                 ScConditionalFormat* pNewFormat = pFormat->Clone(pDocument);
                 pNewFormat->SetKey(0);
                 //not in list => create entries in both maps and new format
@@ -1898,7 +1910,8 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
         bIsEditable = false;
     else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
-        if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )) != false)
+        bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED );
+        if(bIsEditable)
         {
             // If Sheet is protected and cells are not protected then
             // check the active scenario protect flag if this range is

@@ -47,8 +47,6 @@ class SidebarTxtControl : public Control
         SwView& mrDocView;
         SwPostItMgr& mrPostItMgr;
 
-        bool mbMouseOver;
-
     protected:
         virtual void    Paint( const Rectangle& rRect);
         virtual void    KeyInput( const KeyEvent& rKeyEvt );

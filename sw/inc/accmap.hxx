@@ -103,7 +103,7 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     sal_Int32 mnEndnote;
 
 
-    sal_Bool mbShapeSelected;
+    bool mbShapeSelected;
 
     void FireEvent( const SwAccessibleEvent_Impl& rEvent );
 
@@ -116,11 +116,11 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     void DoInvalidateShapeFocus();
     void InvalidateShapeSelection();
 
-    void _InvalidateRelationSet( const SwFrm* pFrm, sal_Bool bFrom );
+    void _InvalidateRelationSet( const SwFrm* pFrm, bool bFrom );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-            _GetDocumentView( sal_Bool bPagePreview );
+            _GetDocumentView( bool bPagePreview );
 
     /** method to build up a new data structure of the accessible pararaphs,
         which have a selection
@@ -250,7 +250,7 @@ public:
                         const Size&      _rPrevwWinSize );
 
     void InvalidatePreViewSelection( sal_uInt16 nSelPage );
-    sal_Bool IsPageSelected( const SwPageFrm *pPageFrm ) const;
+    bool IsPageSelected( const SwPageFrm *pPageFrm ) const;
 
     void FireEvents();
 

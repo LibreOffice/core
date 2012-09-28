@@ -31,7 +31,6 @@ import org.openoffice.xmerge.util.Debug;
  *  to decode the AportisDoc format.  It currently decodes
  *  the text content into a single <code>String</code> object.
  *
- *  @author   Herbie Ong
  */
 final class DocDecoder implements DocConstants {
 

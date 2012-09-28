@@ -35,8 +35,15 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 
+#include <rtl/math.hxx>
+
+#include <map>
+
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
+
+#include <map>
 
 class ScBaseCell;
 class ScFormulaCell;
@@ -111,12 +118,29 @@ public:
 
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
 
+    bool operator==( const ScFormatEntry& ) const;
+
 #if DUMP_FORMAT_INFO
-    virtual void dumpInfo() const = 0;
+    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const = 0;
 #endif
+
+    virtual void startRendering();
+    virtual void endRendering();
 protected:
     ScDocument* mpDoc;
 
+};
+
+class approx_less : public std::binary_function<double, double, bool>
+{
+public:
+    bool operator() (double nVal1, double nVal2) const
+    {
+        if(nVal1 < nVal2 && !rtl::math::approxEqual(nVal1, nVal2))
+            return true;
+
+        return false;
+    }
 };
 
 class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
@@ -211,13 +235,30 @@ public:
     static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
 
 #if DUMP_FORMAT_INFO
-    virtual void dumpInfo() const {}
+    virtual void dumpInfo(rtl::OUStringBuffer& ) const {}
 #endif
+
+    virtual void endRendering();
+    virtual void startRendering();
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
     ScDocument*     GetDocument() const     { return mpDoc; }
     ScConditionalFormat*    pCondFormat;
+
+private:
+
+    bool IsDuplicate(double nArg, const rtl::OUString& rStr, const ScAddress& rAddr, const ScRangeList& rRanges) const;
+
+    struct ScConditionEntryCache
+    {
+        typedef std::map<rtl::OUString, sal_Int32> StringCacheType;
+        StringCacheType maStrings;
+        typedef std::map<double, sal_Int32, approx_less> ValueCacheType;
+        ValueCacheType maValues;
+    };
+
+    mutable boost::scoped_ptr<ScConditionEntryCache> mpCache;
 };
 
 //
@@ -282,6 +323,8 @@ public:
     void            AddEntry( ScFormatEntry* pNew );
     void            AddRange( const ScRangeList& rRanges );
     const ScRangeList&  GetRange() const  { return maRanges; }
+    // don't use the same name as for the const version
+    ScRangeList& GetRangeList() { return maRanges; }
 
     bool IsEmpty() const         { return maEntries.empty(); }
     size_t size() const           { return maEntries.size(); }
@@ -290,6 +333,7 @@ public:
     void            CompileXML();
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
     void            RenameCellStyle( const String& rOld, const String& rNew );
 
@@ -314,13 +358,16 @@ public:
     bool            MarkUsedExternalReferences() const;
 
 #if DUMP_FORMAT_INFO
-    void dumpInfo() const;
+    void dumpInfo(rtl::OUStringBuffer& rBuf) const;
 #endif
 
     //  sorted (via PTRARR) by Index
     //  operator== only for sorting
     bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
     bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
+
+    void startRendering();
+    void endRendering();
 };
 
 //
@@ -349,6 +396,7 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void    RenameCellStyle( const String& rOld, const String& rNew );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void    DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void    SourceChanged( const ScAddress& rAddr );
 
@@ -365,6 +413,9 @@ public:
     size_t size() const;
 
     void erase(sal_uLong nIndex);
+
+    void startRendering();
+    void endRendering();
 };
 
 // see http://www.boost.org/doc/libs/1_49_0/libs/ptr_container/doc/tutorial.html#cloneability

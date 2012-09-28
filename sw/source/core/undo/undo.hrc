@@ -161,7 +161,8 @@
 #define STR_DELETE_INVISIBLECNTNT       (UI_UNDO_BEGIN + 12)
 #define STR_REPLACE_STYLE               (UI_UNDO_BEGIN + 13)
 #define STR_DELETE_PAGE_BREAK           (UI_UNDO_BEGIN + 14)
-#define UI_UNDO_END                     STR_DELETE_PAGE_BREAK
+#define STR_TEXT_CORRECTION             (UI_UNDO_BEGIN + 15)
+#define UI_UNDO_END                     STR_TEXT_CORRECTION
 
 #define UNDO_MORE_STRINGS_BEGIN         (UI_UNDO_END + 1)
 #define STR_OCCURRENCES_OF              (UNDO_MORE_STRINGS_BEGIN)

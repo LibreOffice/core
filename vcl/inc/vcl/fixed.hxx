@@ -74,6 +74,7 @@ public:
     static Size     CalcMinimumTextSize( Control const* pControl, long nMaxWidth = 0 );
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual void take_properties(Window &rOther);
 };
 
 // -------------
@@ -108,6 +109,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
+    virtual void take_properties(Window &rOther);
 };
 
 // ---------------

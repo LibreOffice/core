@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>ebo</LangID>
+      <DefaultName>Teke-Eboo</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>CG</CountryID>
+      <DefaultName>Congo</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE unoid="generic">
+    <Separators>
+      <DateSeparator>/</DateSeparator>
+      <ThousandSeparator>.</ThousandSeparator>
+      <DecimalSeparator>,</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>,</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator>, </LongDateDaySeparator>
+      <LongDateMonthSeparator> </LongDateMonthSeparator>
+      <LongDateYearSeparator> </LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>«</DoubleQuotationStart>
+      <DoubleQuotationEnd>»</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>ND</TimeAM>
+    <TimePM>LK</TimePM>
+    <MeasurementSystem>metric</MeasurementSystem>
+  </LC_CTYPE>
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$CFA-63A]">
+    <DateAcceptancePattern>D/M</DateAcceptancePattern>
+    <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
+      <FormatCode>General</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER" formatindex="1">
+      <FormatCode>0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey3" default="false" type="medium" usage="FIXED_NUMBER" formatindex="2">
+      <FormatCode>0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER" formatindex="3">
+      <FormatCode>#.##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER" formatindex="4">
+      <FormatCode>#.##0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
+      <FormatCode>#.###,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
+      <FormatCode>0,00E+00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
+      <FormatCode>0,00E+000</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
+      <FormatCode>0%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
+      <FormatCode>0,00%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
+      <FormatCode>[CURRENCY] #.##0;[CURRENCY]-#.##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
+      <FormatCode>[CURRENCY] #.##0,00;[CURRENCY]-#.##0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
+      <FormatCode>[CURRENCY] #.##0;[RED][CURRENCY]-#.##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
+      <FormatCode>[CURRENCY] #.##0,00;[RED][CURRENCY]-#.##0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
+      <FormatCode>CCC #.##0,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
+      <FormatCode>[CURRENCY] #.##0,--;[RED][CURRENCY]-#.##0,--</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
+      <FormatCode>D/MM/YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
+      <FormatCode>NNNNDD, MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
+      <FormatCode>DD/MM/YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="21">
+      <FormatCode>DD/MM/YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="22">
+      <FormatCode>D, MMM YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="23">
+      <FormatCode>D, MMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey21" default="false" type="long" usage="DATE" formatindex="24">
+      <FormatCode>D, MMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
+      <FormatCode>D, MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="26">
+      <FormatCode>D, MMMM YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
+      <FormatCode>NN, DD/MMM/YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey18" default="false" type="long" usage="DATE" formatindex="28">
+      <FormatCode>NN, D, MMM YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey19" default="false" type="long" usage="DATE" formatindex="29">
+      <FormatCode>NN, D, MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey20" default="false" type="long" usage="DATE" formatindex="30">
+      <FormatCode>NNNND, MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
+      <FormatCode>MM/DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="32">
+      <FormatCode>YY-MM-DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="33">
+      <FormatCode>YYYY-MM-DD</FormatCode>
+      <DefaultName>ISO 8601</DefaultName>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="34">
+      <FormatCode>MM/YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="35">
+      <FormatCode>MMM/DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="36">
+      <FormatCode>MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="37">
+      <FormatCode>QQ YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="38">
+      <FormatCode>WW</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey1" default="false" type="short" usage="TIME" formatindex="39">
+      <FormatCode>HH:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey2" default="false" type="medium" usage="TIME" formatindex="40">
+      <FormatCode>HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey3" default="true" type="short" usage="TIME" formatindex="41">
+      <FormatCode>HH:MM AM/PM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey4" default="true" type="medium" usage="TIME" formatindex="42">
+      <FormatCode>HH:MM:SS AM/PM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
+      <FormatCode>[HH]:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME" formatindex="44">
+      <FormatCode>MM:SS,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
+      <FormatCode>[HH]:MM:SS,00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
+      <FormatCode>DD/MM/YY HH:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
+      <FormatCode>DD/MM/YYYY HH:MM:SS AM/PM</FormatCode>
+    </FormatElement>
+  </LC_FORMAT>
+  <LC_COLLATION>
+    <Collator default="true" unoid="alphanumeric"/>
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
+  <LC_SEARCH>
+    <SearchOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </SearchOptions>
+  </LC_SEARCH>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A B D E Ɛ F I Ɨ K L M N Ŋ O Ɔ P R S T U Ʉ W Y</IndexKey>
+    <UnicodeScript>0</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
+    <UnicodeScript>3</UnicodeScript>
+    <UnicodeScript>4</UnicodeScript>
+    <UnicodeScript>6</UnicodeScript>
+    <FollowPageWord>tln.</FollowPageWord><!--tswɨ li nkula-->
+    <FollowPageWord>amn.</FollowPageWord><!--atswɨ ma nkula-->
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>AS7</DefaultAbbrvName>
+          <DefaultFullName>Ansala-Ntsaɔ̃</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>US1</DefaultAbbrvName>
+          <DefaultFullName>Usala-Umwɔ̃</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>AS2</DefaultAbbrvName>
+          <DefaultFullName>Ansala-Mwɔɔlɛ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>AS3</DefaultAbbrvName>
+          <DefaultFullName>Ansala-Antyeri</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>AS4</DefaultAbbrvName>
+          <DefaultFullName>Ansala-Ana</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>AS5</DefaultAbbrvName>
+          <DefaultFullName>Ansala-Ataani</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>AS6</DefaultAbbrvName>
+          <DefaultFullName>Ansala-Ashooni</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Nts01</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Nstɔ̃</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Nts02</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Bwɔɔlɛ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Nts03</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Atyeri</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Nts04</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Na</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Nts05</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Taani</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Nts06</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Ashooni</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Nts07</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Ntsaɔ̃</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Nts08</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Mpuɔ̃</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Nts09</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Wa</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Nts10</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Kũ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Nts11</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Kũ ya Umwɔ̃</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Nts12</DefaultAbbrvName>
+          <DefaultFullName>Ntswii wa Kũ ya Bwɔɔlɛ</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>Nk.Y.</DefaultAbbrvName>
+          <DefaultFullName>Nkula a Yesu</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>Mb.Y.</DefaultAbbrvName>
+          <DefaultFullName>Mbɨa a Yesu</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>7</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>XAF</CurrencyID>
+      <CurrencySymbol>CFA</CurrencySymbol>
+      <BankSymbol>XAF</BankSymbol>
+      <CurrencyName>Upari</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION>
+    <Transliteration unoid="SENTENCE_CASE"/>
+    <Transliteration unoid="LOWERCASE_UPPERCASE"/>
+    <Transliteration unoid="UPPERCASE_LOWERCASE"/>
+    <Transliteration unoid="TITLE_CASE"/>
+    <Transliteration unoid="TOGGLE_CASE"/>
+    <Transliteration unoid="IGNORE_CASE"/>
+  </LC_TRANSLITERATION>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>ngaŋwa</trueWord>
+      <falseWord>mpya</falseWord>
+      <quarter1Word>Trimeste 1</quarter1Word>
+      <quarter2Word>Trimeste 2</quarter2Word>
+      <quarter3Word>Trimeste 3</quarter3Word>
+      <quarter4Word>Trimeste 4</quarter4Word>
+      <aboveWord>ku ntsina a</aboveWord>
+      <belowWord>ku yulu a</belowWord>
+      <quarter1Abbreviation>T1</quarter1Abbreviation>
+      <quarter2Abbreviation>T2</quarter2Abbreviation>
+      <quarter3Abbreviation>T3</quarter3Abbreviation>
+      <quarter4Abbreviation>T4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
+<!--Version 1.0  -->

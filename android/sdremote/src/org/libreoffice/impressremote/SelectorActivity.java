@@ -8,6 +8,7 @@
  */
 package org.libreoffice.impressremote;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -17,10 +18,12 @@ import org.libreoffice.impressremote.communication.Server;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -49,6 +52,9 @@ public class SelectorActivity extends SherlockActivity {
     private View mNetworkContainer;
     private LinearLayout mNetworkList;
     private TextView mNoServerLabel;
+    private ActivityChangeBroadcastProcessor mBroadcastProcessor;
+
+    ProgressDialog mProgressDialog = null;
 
     /** Called when the activity is first created. */
     @Override
@@ -58,6 +64,11 @@ public class SelectorActivity extends SherlockActivity {
 
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_SERVERLIST_CHANGED);
+        aFilter.addAction(CommunicationService.STATUS_CONNECTION_FAILED);
+
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+        mBroadcastProcessor.addToFilter(aFilter);
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
                         aFilter);
 
@@ -130,7 +141,8 @@ public class SelectorActivity extends SherlockActivity {
 
     @Override
     public void onBackPressed() {
-        mCommunicationService.stopSearching();
+        if (mCommunicationService != null)
+            mCommunicationService.stopSearching();
         Intent aIntent = new Intent(this, CommunicationService.class);
         stopService(aIntent);
         super.onBackPressed();
@@ -154,6 +166,9 @@ public class SelectorActivity extends SherlockActivity {
             mCommunicationService.stopSearching();
         }
         doUnbindService();
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
     }
 
     void doBindService() {
@@ -190,7 +205,35 @@ public class SelectorActivity extends SherlockActivity {
             if (aIntent.getAction().equals(
                             CommunicationService.MSG_SERVERLIST_CHANGED)) {
                 refreshLists();
+                return;
+            } else if (aIntent.getAction().equals(
+                            CommunicationService.STATUS_CONNECTION_FAILED)) {
+                if (mProgressDialog != null) {
+                    mProgressDialog.dismiss();
+
+                    String aFormat = getResources().getString(
+                                    R.string.selector_dialog_connectionfailed);
+                    String aDialogText = MessageFormat.format(aFormat,
+                                    mCommunicationService
+                                                    .getPairingDeviceName());
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(
+                                    SelectorActivity.this);
+                    builder.setMessage(aDialogText)
+                                    .setCancelable(false)
+                                    .setPositiveButton(
+                                                    R.string.selector_dialog_connectionfailed_ok,
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(
+                                                                        DialogInterface dialog,
+                                                                        int id) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    });
+                    builder.show();
+                }
             }
+            mBroadcastProcessor.onReceive(aContext, aIntent);
 
         }
     };
@@ -220,8 +263,6 @@ public class SelectorActivity extends SherlockActivity {
             // Bluetooth -- Remove old
             for (Entry<Server, View> aEntry : mBluetoothServers.entrySet()) {
                 if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-                    System.out.println("Removing view "
-                                    + aEntry.getKey().getName());
                     mBluetoothServers.remove(aEntry.getKey());
                     mBluetoothList.removeView((View) aEntry.getValue()
                                     .getParent());
@@ -230,8 +271,7 @@ public class SelectorActivity extends SherlockActivity {
             // Network -- Remove old
             for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
                 if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-                    System.out.println("Removing view");
-                    mNetworkServers.remove(aEntry.getKey().getName());
+                    mNetworkServers.remove(aEntry.getKey());
                     mNetworkList.removeView((View) aEntry.getValue()
                                     .getParent());
                 }
@@ -262,8 +302,8 @@ public class SelectorActivity extends SherlockActivity {
 
             }
         }
-        // Hide as necessary
 
+        // Hide as necessary
         mBluetoothContainer
                         .setVisibility((mBluetoothServers.size() != 0) ? View.VISIBLE
                                         : View.GONE);
@@ -298,9 +338,22 @@ public class SelectorActivity extends SherlockActivity {
             }
             if (aDesiredServer != null) {
                 mCommunicationService.connectTo(aDesiredServer);
-                Intent aIntent = new Intent(SelectorActivity.this,
-                                PairingActivity.class);
-                startActivity(aIntent);
+                // Connect Service and wait for broadcast
+                String aFormat = getResources().getString(
+                                R.string.selector_dialog_connecting);
+                String aDialogText = MessageFormat.format(aFormat,
+                                aDesiredServer.getName());
+
+                mProgressDialog = ProgressDialog.show(SelectorActivity.this,
+                                "", aDialogText, true);
+                mProgressDialog.setCancelable(true);
+                mProgressDialog.setOnCancelListener(new OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        mCommunicationService.disconnect();
+                    }
+                });
             }
 
         }

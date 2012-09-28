@@ -38,13 +38,14 @@
 
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 #include "acccfg.hrc"
 #include "helpid.hrc"
@@ -76,7 +77,6 @@ using namespace ::com::sun::star::document;
 namespace css = ::com::sun::star;
 
 static ::rtl::OUString SERVICE_UICATEGORYDESCRIPTION (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UICategoryDescription") );
-static ::rtl::OUString SERVICE_UICMDDESCRIPTION      (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription") );
 
 SfxStylesInfo_Impl::SfxStylesInfo_Impl()
 {}
@@ -585,7 +585,8 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
 
         m_xGlobalCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICATEGORYDESCRIPTION), css::uno::UNO_QUERY_THROW);
         m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName)   , css::uno::UNO_QUERY_THROW);
-        m_xUICmdDescription   = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICMDDESCRIPTION)     , css::uno::UNO_QUERY_THROW);
+        m_xUICmdDescription   = css::frame::UICommandDescription::create(
+                ::comphelper::getComponentContext(m_xSMGR));
 
         InitModule();
         InitBasic();
@@ -765,21 +766,12 @@ Image SfxConfigGroupListBox_Impl::GetImage(
             Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, nodeName );
             if ( xDocumentModel.is() )
             {
-                Reference< ::com::sun::star::frame::XModuleManager >
-                    xModuleManager(
-                        xCtx->getServiceManager()
-                            ->createInstanceWithContext(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("" // xxx todo
-                                      "com.sun.star.frame.ModuleManager") ),
-                                xCtx ),
-                            UNO_QUERY_THROW );
-                Reference<container::XNameAccess> xModuleConfig(
-                    xModuleManager, UNO_QUERY_THROW );
+                Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
                 // get the long name of the document:
                 ::rtl::OUString appModule( xModuleManager->identify(
                                     xDocumentModel ) );
                 Sequence<beans::PropertyValue> moduleDescr;
-                Any aAny = xModuleConfig->getByName(appModule);
+                Any aAny = xModuleManager->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
                     throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue") ), Reference< XInterface >());

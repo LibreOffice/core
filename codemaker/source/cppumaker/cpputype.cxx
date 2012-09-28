@@ -119,6 +119,7 @@ bool isBootstrapType(rtl::OString const & name) {
         "com/sun/star/reflection/XMethodParameter",
         "com/sun/star/reflection/XStructTypeDescription",
         "com/sun/star/reflection/XTypeDescription",
+        "com/sun/star/reflection/XTypeDescriptionEnumerationAccess",
         "com/sun/star/reflection/XUnionTypeDescription",
         "com/sun/star/registry/XImplementationRegistration",
         "com/sun/star/registry/XRegistryKey",
@@ -3872,10 +3873,10 @@ sal_Bool ServiceType::dumpHxxFile(
         //TODO: Decide whether the types added to includes should rather be
         // added to m_dependencies (and thus be generated during
         // dumpDependedTypes):
+        includes.addCassert();
         includes.addReference();
         includes.addRtlUstringH();
         includes.addRtlUstringHxx();
-        includes.add("com/sun/star/lang/XMultiComponentFactory");
         includes.add("com/sun/star/uno/DeploymentException");
         includes.add("com/sun/star/uno/XComponentContext");
         for (sal_uInt16 i = 0; i < ctors; ++i) {
@@ -3949,27 +3950,16 @@ sal_Bool ServiceType::dumpHxxFile(
                       " ::com::sun::star::uno::XComponentContext > const &"
                       " the_context) {\n");
                 inc();
-                o << indent()
-                  << ("::com::sun::star::uno::Reference<"
-                      " ::com::sun::star::lang::XMultiComponentFactory >"
-                      " the_factory(the_context->getServiceManager());\n")
-                  << indent() << "if (!the_factory.is()) {\n";
-                inc();
-                o << indent()
-                  << ("throw ::com::sun::star::uno::DeploymentException("
-                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"component"
-                      " context fails to supply service manager\")),"
-                      " the_context);\n");
-                dec();
-                o << indent() << "}\n" << indent()
+                o << indent() << "assert(the_context.is());\n" << indent()
                   << "::com::sun::star::uno::Reference< " << scopedBaseName
                   << " > the_instance;\n" << indent() << "try {\n";
                 inc();
                 o << indent()
                   << "the_instance = ::com::sun::star::uno::Reference< "
                   << scopedBaseName
-                  << (" >(the_factory->createInstanceWithContext("
-                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"")
+                  << (" >(the_context->getServiceManager()->"
+                      "createInstanceWithContext(::rtl::OUString("
+                      "RTL_CONSTASCII_USTRINGPARAM(\"")
                   << fullName
                   << "\")), the_context), ::com::sun::star::uno::UNO_QUERY);\n";
                 dec();
@@ -4038,19 +4028,7 @@ sal_Bool ServiceType::dumpHxxFile(
                 }
                 o << ") {\n";
                 inc();
-                o << indent()
-                  << ("::com::sun::star::uno::Reference<"
-                      " ::com::sun::star::lang::XMultiComponentFactory >"
-                      " the_factory(the_context->getServiceManager());\n")
-                  << indent() << "if (!the_factory.is()) {\n";
-                inc();
-                o << indent()
-                  << ("throw com::sun::star::uno::DeploymentException("
-                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
-                      "\"component context fails to supply service manager\")),"
-                      " the_context);\n");
-                dec();
-                o << indent() << "}\n";
+                o << indent() << "assert(the_context.is());\n";
                 if (!rest && params > 0) {
                     o << indent()
                       << ("::com::sun::star::uno::Sequence<"
@@ -4108,8 +4086,9 @@ sal_Bool ServiceType::dumpHxxFile(
                 o << indent()
                   << "the_instance = ::com::sun::star::uno::Reference< "
                   << scopedBaseName
-                  << (" >(the_factory->createInstanceWithArgumentsAndContext("
-                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"")
+                  << (" >(the_context->getServiceManager()->"
+                      "createInstanceWithArgumentsAndContext(::rtl::OUString("
+                      "RTL_CONSTASCII_USTRINGPARAM(\"")
                   << fullName << "\")), ";
                 if (rest) {
                     o << translateUnoToCppIdentifier(
@@ -4243,6 +4222,7 @@ sal_Bool SingletonType::dumpHxxFile(
     // m_dependencies (and thus be generated during dumpDependedTypes):
     includes.add("com/sun/star/uno/DeploymentException");
     includes.add("com/sun/star/uno/XComponentContext");
+    includes.addCassert();
     includes.addAny();
     includes.addReference();
     includes.addRtlUstringH();
@@ -4258,11 +4238,13 @@ sal_Bool SingletonType::dumpHxxFile(
       << scopedBaseName << " > "
       << translateUnoToCppIdentifier("get", "method", ITM_NONGLOBAL, &cppName)
       << ("(::com::sun::star::uno::Reference<"
-          " ::com::sun::star::uno::XComponentContext > const & context) {\n");
+          " ::com::sun::star::uno::XComponentContext > const & the_context)"
+          " {\n");
     inc();
-    o << indent() << "::com::sun::star::uno::Reference< " << scopedBaseName
+    o << indent() << "assert(the_context.is());\n" << indent()
+      << "::com::sun::star::uno::Reference< " << scopedBaseName
       << " > instance;\n" << indent()
-      << ("if (!(context->getValueByName("
+      << ("if (!(the_context->getValueByName("
           "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"/singletons/")
       << fullName << "\"))) >>= instance) || !instance.is()) {\n";
     inc();
@@ -4270,7 +4252,7 @@ sal_Bool SingletonType::dumpHxxFile(
       << ("throw ::com::sun::star::uno::DeploymentException("
           "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"component context"
           " fails to supply singleton ")
-      << fullName << " of type " << fullBaseName << "\")), context);\n";
+      << fullName << " of type " << fullBaseName << "\")), the_context);\n";
     dec();
     o << indent() << "}\n" << indent() << "return instance;\n";
     dec();

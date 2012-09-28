@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <ucbhelper/fileidentifierconverter.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
 #include <osl/file.hxx>
@@ -128,34 +130,28 @@ String ConstructTempDir_Impl( const String* pParent )
     String aName;
     if ( pParent && pParent->Len() )
     {
-        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-        if ( pBroker )
+        com::sun::star::uno::Reference<
+            com::sun::star::ucb::XUniversalContentBroker > pBroker(
+                com::sun::star::ucb::UniversalContentBroker::create(
+                    comphelper::getProcessComponentContext() ) );
+
+        // if parent given try to use it
+        rtl::OUString aTmp( *pParent );
+
+        // test for valid filename
+        rtl::OUString aRet;
+        ::osl::FileBase::getFileURLFromSystemPath(
+            ::ucbhelper::getSystemPathFromFileURL( pBroker, aTmp ),
+            aRet );
+        if ( !aRet.isEmpty() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
-                    pBroker->getContentProviderManagerInterface();
+            ::osl::DirectoryItem aItem;
+            sal_Int32 i = aRet.getLength();
+            if ( aRet[i-1] == '/' )
+                i--;
 
-            // if parent given try to use it
-            rtl::OUString aTmp( *pParent );
-
-            // test for valid filename
-            rtl::OUString aRet;
-            ::osl::FileBase::getFileURLFromSystemPath(
-                ::ucbhelper::getSystemPathFromFileURL( xManager, aTmp ),
-                aRet );
-            if ( !aRet.isEmpty() )
-            {
-                ::osl::DirectoryItem aItem;
-                sal_Int32 i = aRet.getLength();
-                if ( aRet[i-1] == '/' )
-                    i--;
-
-                if ( DirectoryItem::get( aRet.copy(0, i), aItem ) == FileBase::E_None )
-                    aName = aRet;
-            }
-        }
-        else
-        {
-            DBG_WARNING( "::unotools::TempFile : UCB not present or not initialized!" );
+            if ( DirectoryItem::get( aRet.copy(0, i), aItem ) == FileBase::E_None )
+                aName = aRet;
         }
     }
 

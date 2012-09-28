@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Extension_minimizer \
     Library_minimizer \
     Rdb_minimizer \
-    Zip_minimizer \
 ))
 endif
 
@@ -57,11 +56,9 @@ endif
 ifeq ($(ENABLE_PRESENTER_SCREEN),YES)
 $(eval $(call gb_Module_add_targets,sdext,\
     Configuration_presenter \
-    CustomTarget_presenter \
     Extension_presenter \
     Library_presenter \
     Rdb_presenter \
-    Zip_presenter \
 ))
 endif
 

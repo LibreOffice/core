@@ -68,7 +68,7 @@ ZipPackageFolder::ZipPackageFolder ( const uno::Reference< XMultiServiceFactory 
     aEntry.nMethod      = STORED;
     aEntry.nTime        = -1;
     aEntry.nCrc         = 0;
-    aEntry.nCompressedSize  = 0;
+    aEntry.nCompressedSize = 0;
     aEntry.nSize        = 0;
     aEntry.nOffset      = -1;
     uno::Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
@@ -368,7 +368,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
         sal_Bool bTransportOwnEncrStreamAsRaw = sal_False;
         // During the storing the original size of the stream can be changed
         // TODO/LATER: get rid of this hack
-        sal_Int32 nOwnStreamOrigSize = bRawStream ? rInfo.pStream->GetMagicalHackSize() : rInfo.pStream->getSize();
+        sal_Int64 nOwnStreamOrigSize = bRawStream ? rInfo.pStream->GetMagicalHackSize() : rInfo.pStream->getSize();
 
         sal_Bool bUseNonSeekableAccess = sal_False;
         uno::Reference < XInputStream > xStream;
@@ -414,7 +414,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
                     else if ( bToBeEncrypted )
                     {
                         // this is the correct original size
-                        pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
+                        pTempEntry->nSize = xSeek->getLength();
                         nOwnStreamOrigSize = pTempEntry->nSize;
                     }
 
@@ -584,7 +584,8 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
             if ( bToBeCompressed )
             {
                 pTempEntry->nMethod = DEFLATED;
-                pTempEntry->nCrc = pTempEntry->nCompressedSize = pTempEntry->nSize = -1;
+                pTempEntry->nCrc = -1;
+                pTempEntry->nCompressedSize = pTempEntry->nSize = -1;
             }
 
             try

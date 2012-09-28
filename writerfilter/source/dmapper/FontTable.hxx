@@ -24,6 +24,7 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 
 namespace writerfilter {
 namespace dmapper
@@ -96,6 +97,23 @@ class WRITERFILTER_DLLPRIVATE FontTable : public LoggedProperties, public Logged
 
 };
 typedef boost::shared_ptr< FontTable >          FontTablePtr;
+
+class EmbeddedFontHandler : public LoggedProperties
+{
+public:
+    EmbeddedFontHandler( const OUString& fontName, const char* style );
+    virtual ~EmbeddedFontHandler();
+private:
+    virtual void lcl_attribute( Id name, Value& val );
+    virtual void lcl_sprm( Sprm& rSprm );
+    OUString fontName;
+    const char* const style;
+    OUString id;
+    OUString fontKey;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > inputStream;
+};
+
+
 }}
 
 #endif //

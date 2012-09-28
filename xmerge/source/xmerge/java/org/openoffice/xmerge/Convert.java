@@ -35,8 +35,6 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
  *  @see  ConverterFactory
  *  @see  PluginFactory
  *  @see  org.openoffice.xmerge.util.registry.ConverterInfo
- *
- *  @author  Martin Maher
  */
 public class Convert implements Cloneable {
 

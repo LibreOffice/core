@@ -537,15 +537,15 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
 static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
-    ::osl_incrementInterlockedCount( &that->nWeakRef );
-    ::osl_incrementInterlockedCount( &that->nRef );
+    osl_atomic_increment( &that->nWeakRef );
+    osl_atomic_increment( &that->nRef );
 }
 
 //------------------------------------------------------------------------------
 static void SAL_CALL defenv_release( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
-    if (! ::osl_decrementInterlockedCount( &that->nRef ))
+    if (! osl_atomic_decrement( &that->nRef ))
     {
         // invoke dispose callback
         if (pEnv->environmentDisposing)
@@ -556,7 +556,7 @@ static void SAL_CALL defenv_release( uno_Environment * pEnv )
         OSL_ENSURE( that->aOId2ObjectMap.empty(), "### object entries left!" );
     }
     // free memory if no weak refs left
-    if (! ::osl_decrementInterlockedCount( &that->nWeakRef ))
+    if (! osl_atomic_decrement( &that->nWeakRef ))
     {
         delete that;
     }
@@ -566,14 +566,14 @@ static void SAL_CALL defenv_release( uno_Environment * pEnv )
 static void SAL_CALL defenv_acquireWeak( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
-    ::osl_incrementInterlockedCount( &that->nWeakRef );
+    osl_atomic_increment( &that->nWeakRef );
 }
 
 //------------------------------------------------------------------------------
 static void SAL_CALL defenv_releaseWeak( uno_Environment * pEnv )
 {
     uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
-    if (! ::osl_decrementInterlockedCount( &that->nWeakRef ))
+    if (! osl_atomic_decrement( &that->nWeakRef ))
     {
         delete that;
     }
@@ -597,13 +597,13 @@ static void SAL_CALL defenv_harden(
     uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
     {
     ::osl::MutexGuard guard( rData.mutex );
-    if (1 == ::osl_incrementInterlockedCount( &that->nRef )) // is dead
+    if (1 == osl_atomic_increment( &that->nRef )) // is dead
     {
         that->nRef = 0;
         return;
     }
     }
-    ::osl_incrementInterlockedCount( &that->nWeakRef );
+    osl_atomic_increment( &that->nWeakRef );
     *ppHardEnv = pEnv;
 }
 
@@ -1058,6 +1058,10 @@ static bool loadEnv(OUString const  & cLibStem,
 
     if ( cLibStem == CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" )
         fpInit = CPPU_ENV_uno_initEnvironment;
+#ifdef SOLAR_JAVA
+    else if ( cLibStem == "java_uno" )
+        fpInit = java_uno_initEnvironment;
+#endif
     else
     {
 #if OSL_DEBUG_LEVEL > 1

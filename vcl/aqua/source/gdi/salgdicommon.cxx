@@ -1,3 +1,5 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
 #include <sal/types.h>
 #include <osl/file.hxx>
 
@@ -118,7 +120,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
 
 sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
                                             const PhysicalFontFace* pFontData,
-                                            long* pGlyphIDs, sal_uInt8* pEncoding,
+                                            sal_Int32* pGlyphIDs, sal_uInt8* pEncoding,
                                             sal_Int32* pGlyphWidths, int nGlyphCount,
                                             FontSubsetInfo& rInfo )
 {
@@ -148,8 +150,16 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
         // make the subsetter provide the requested subset
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
+#ifdef __LP64__
+        long *pLongGlyphIDs = (long*)alloca(nGlyphCount * sizeof(long));
+        for (int i = 0; i < nGlyphCount; i++)
+            pLongGlyphIDs[i] = pGlyphIDs[i];
+        bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
+            pLongGlyphIDs, pEncoding, nGlyphCount, pGlyphWidths );
+#else
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
             pGlyphIDs, pEncoding, nGlyphCount, pGlyphWidths );
+#endif
         fclose( pOutFile );
         return bRC;
     }
@@ -798,7 +808,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     return true;
 }
 
-void AquaSalGraphics::drawPolyPolygon( sal_uLong nPolyCount, const sal_uLong *pPoints, PCONSTSALPOINT  *ppPtAry )
+void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *pPoints, PCONSTSALPOINT  *ppPtAry )
 {
     if( nPolyCount <= 0 )
         return;
@@ -957,7 +967,7 @@ sal_Bool AquaSalGraphics::drawPolygonBezier( sal_uLong, const SalPoint*, const s
     return sal_False;
 }
 
-sal_Bool AquaSalGraphics::drawPolyPolygonBezier( sal_uLong, const sal_uLong*,
+sal_Bool AquaSalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
                                                  const SalPoint* const*, const sal_uInt8* const* )
 {
     return sal_False;
@@ -1106,15 +1116,15 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     return nSalColor;
 }
 
-void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
+void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     if( !mnRealDPIY )
     {
         initResolution( (mbWindow && mpFrame) ? mpFrame->mpWindow : nil );
     }
 
-    rDPIX = static_cast<long>(mfFakeDPIScale * mnRealDPIX);
-    rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
+    rDPIX = static_cast<sal_Int32>(mfFakeDPIScale * mnRealDPIX);
+    rDPIY = static_cast<sal_Int32>(mfFakeDPIScale * mnRealDPIY);
 }
 
 void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
@@ -1234,7 +1244,7 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
 
         if ( nFlags & SAL_INVERT_TRACKFRAME )
         {
-            const float dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
+            const CGFloat dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
             CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
             CGContextSetRGBStrokeColor ( mrContext, 1.0, 1.0, 1.0, 1.0 );
             CGContextSetLineDash ( mrContext, 0, dashLengths, 2 );
@@ -1269,7 +1279,7 @@ void AquaSalGraphics::invert( sal_uLong nPoints, const SalPoint*  pPtAry, SalInv
         CGContextAddLines ( mrContext, CGpoints, nPoints );
         if ( nSalFlags & SAL_INVERT_TRACKFRAME )
         {
-            const float dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
+            const CGFloat dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
             CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
             CGContextSetRGBStrokeColor ( mrContext, 1.0, 1.0, 1.0, 1.0 );
             CGContextSetLineDash ( mrContext, 0, dashLengths, 2 );
@@ -1296,7 +1306,7 @@ void AquaSalGraphics::invert( sal_uLong nPoints, const SalPoint*  pPtAry, SalInv
 
 void AquaSalGraphics::Pattern50Fill()
 {
-    static const float aFillCol[4] = { 1,1,1,1 };
+    static const CGFloat aFillCol[4] = { 1,1,1,1 };
     static const CGPatternCallbacks aCallback = { 0, &DrawPattern50, NULL };
     if( ! GetSalData()->mxP50Space )
     {
@@ -1647,3 +1657,5 @@ bool XorEmulation::UpdateTarget()
     // TODO: return FALSE if target was not changed
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

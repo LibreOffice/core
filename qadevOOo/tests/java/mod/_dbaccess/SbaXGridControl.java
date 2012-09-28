@@ -45,7 +45,6 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
 import com.sun.star.form.XBoundComponent;
 import com.sun.star.form.XGridColumnFactory;
 import com.sun.star.form.XLoadable;

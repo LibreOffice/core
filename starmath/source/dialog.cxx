@@ -343,7 +343,7 @@ SmFontDialog::SmFontDialog(Window * pParent,
     aHelpButton1.SetClickHdl(LINK(this, SmFontDialog, HelpButtonClickHdl));
 
     {
-        WaitObject( this );
+        WaitObject aWait( this );
 
         FontList aFontList( pFntListDevice );
 

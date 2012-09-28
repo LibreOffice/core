@@ -332,6 +332,11 @@ particular) and Mac OS X. The Android cross-buld tool-chain (the
 X. Sure, for Windows, too, but trying to cross-compile LO from Windows
 will probably drive you insane.
 
+You will also need the SDK as full "make" also builds a couple of
+Android apps (written in Java). Use the "android" tool from the SDK to
+install the SDK Tools, SDK Platform Tools, the API 14 SDK Platform,
+and the Android Support Library. (Hopefully that list is enough.)
+
 Here is an autogen.lastrun for Android, when cross-compiling from Mac
 OS X 10.8 with Xcode 4.4.1:
 
@@ -348,22 +353,17 @@ OS X 10.8 with Xcode 4.4.1:
 
 And here is an autogen.lastrun for Android when cross-compiling from Linux:
 
-CC_FOR_BUILD=ccache gcc
-CXX_FOR_BUILD=ccache g++
---with-android-ndk=/home/tml/android-ndk-r7b
+--with-android-ndk=/home/tml/android-ndk-r8b
+--with-android-ndk-toolchain-version=4.6
 --with-android-sdk=/home/tml/android-sdk-linux_x86
 --with-ant-home=/opt/apache-ant-1.8.2
 --build=x86_64-unknown-linux-gnu
 --disable-zenity
 --disable-python
 --with-distro=LibreOfficeAndroid
---with-num-cpus=1
---with-max-jobs=1
 
 And here is an autogen.lastrun for Android when cross-compiling to x86 from Linux:
 
-CC_FOR_BUILD=ccache gcc
-CXX_FOR_BUILD=ccache g++
 --with-android-ndk=/opt/libreoffice/android-ndk-r8b
 --with-android-ndk-toolchain-version=4.6
 --with-android-sdk=/opt/libreoffice/android-sdk-linux
@@ -374,46 +374,33 @@ CXX_FOR_BUILD=ccache g++
 --with-num-cpus=6
 --with-max-jobs=6
 
-There is no interactive end-user "app" you could run yet that would
-use LibreOffice code, but you can build some non-interactive unit
-tests and run them on the emulator (or, presumably, on a device,
-although that hasn't been tested as nobody with an actual Android
-device has worked on it yet...)  The simple unit tests will succeed,
-the complex one still fails.
+There are a couple of (more or less) interactive apps that you can run
+on the emulator or on a device that use LibreOffice code. Look in
+android/experimental. DocumentLoader is just a testbench, really for
+code to load a document (just Weiter ones so far) and display one page
+at a time. LibreOffice4Android is what resulted from a Google Summer
+of Code project in 2012, a document viewer.
 
-These unit tests *are* proper "apps" from Android'd point of view, but
-they don't have any GUI and thus don't take part in the normal Android
-message passing and Android thinks they are stuck and offers to kill
-them...
+There are also a couple of non-interactive unit tests that are also
+built as real "apps", only the one in android/qa/sc works to any
+extent any more.
 
-The activity used for these apps is in android/Bootstrap. See
-README.Android.
+To run some of the apps, do "make install" followed by either "make
+run" or starting it from Android itself. You most likely want to have
+an "adb logcat" running in another window.
 
-To build the complex unit test for Calc functionality which invokes the
-"ucalc" unit test code from sc, cd to android/qa/sc and run a "make". The
-Makefile here is completely manually written, this stuff is so experimental it
-doesn't make sense yet to try to integrate with the normal gbuild mechanism.
-
-Note that lately (as of May 2012) the android/qa/sc test has not been
-maintained, and might not build cleanly.
-
-Then to run the unit test, do "make install" followed by "make
-run". You most likely want to have an "adb logcat" running in another
-window.
-
-To debug, do manually what "make run" would do, adding args "-e lo-main-delay
-20" to the command line, and when the app has started, run
-ndk-gdb. Unfortunately the gdb in NDK r7 and r8 is a bit broken, you can use
-the one in a NDK build with newer versions of gcc and gdb from
+To debug, do manually what "make run" would do, adding args "-e
+lo-main-delay 20" to the command line, and when the app has started,
+run ndk-gdb. That works just for the sc unit test. Unfortunately the
+gdb in NDK r7 and r8 is a bit broken, you can use the one in a NDK
+build with newer versions of gcc and gdb from
 http://code.google.com/p/mingw-and-ndk/ instead.
 
 Running strace on the unit test in progress is often useful to find
 out what is going wrong. Pass something like -e lo-strace '-tt -f -e
 trace=file,process,network -o /system/sc/strace.out' to the am start
-command line.
-
-The Android test app which has been exercised lately is in
-android/experimental/DocumentLoader.
+command line. This too works only for NativeActivity-based apps,
+i.e. the sc unit test.
 
 
 PowerPC Mac OS X
@@ -423,7 +410,7 @@ Cross-compiling for PowerPC Mac OS X from Intel Mac OS X will probably
 be easy. The APIs available should after all be closely identical to
 those on Intel Mac OS X, and LibreOffice builds fine natively on
 PowerPC Mac already. Only a little experimenting has been done with
-it. An autogen.lastrun looks like this:
+it. An autogen.lastrun looked like this when last tried:
 
 CC=ccache /Xcode3/usr/bin/gcc-4.0 -arch ppc
 CXX=ccache /Xcode3/usr/bin/g++-4.0 -arch ppc

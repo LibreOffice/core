@@ -44,17 +44,16 @@ namespace dbaccess
 
 DBG_NAME(OContainerMediator)
 OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer, const Reference< XNameAccess >& _xSettings,
-    const Reference< XConnection >& _rxConnection, ContainerType _eType )
+    const Reference< XConnection >& _rxConnection )
     : m_xSettings( _xSettings )
     , m_xContainer( _xContainer )
     , m_aConnection( _rxConnection )
-    , m_eType( _eType )
 {
     DBG_CTOR(OContainerMediator,NULL);
 
     if ( _xSettings.is() && _xContainer.is() )
     {
-        osl_incrementInterlockedCount(&m_refCount);
+        osl_atomic_increment(&m_refCount);
         try
         {
             m_xContainer->addContainerListener(this);
@@ -66,7 +65,7 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
         {
             OSL_FAIL("OContainerMediator::OContainerMediator: caught an exception!");
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
     else
     {

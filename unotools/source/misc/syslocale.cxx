@@ -26,6 +26,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
+#include <vector>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -47,6 +48,9 @@ public:
 
     CharClass*                      GetCharClass();
     virtual void                    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+
+private:
+    void                            setDateAcceptancePatternsConfig();
 };
 
 // -----------------------------------------------------------------------
@@ -54,6 +58,7 @@ public:
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
     pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aSysLocaleOptions.GetRealLocale() );
+    setDateAcceptancePatternsConfig();
 
     // listen for further changes
     aSysLocaleOptions.AddListener( this );
@@ -77,11 +82,37 @@ CharClass* SvtSysLocale_Impl::GetCharClass()
 void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 nHint )
 {
     MutexGuard aGuard( SvtSysLocale::GetMutex() );
+
     if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
     {
         com::sun::star::lang::Locale aLocale( aSysLocaleOptions.GetRealLocale() );
         pLocaleData->setLocale( aLocale );
         GetCharClass()->setLocale( aLocale );
+    }
+    if ( nHint & SYSLOCALEOPTIONS_HINT_DATEPATTERNS )
+    {
+        setDateAcceptancePatternsConfig();
+    }
+}
+
+void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
+{
+    OUString aStr( aSysLocaleOptions.GetDatePatternsConfigString());
+    if (aStr.isEmpty())
+        pLocaleData->setDateAcceptancePatterns( uno::Sequence<OUString>());     // reset
+    else
+    {
+        ::std::vector< OUString > aVec;
+        for (sal_Int32 nIndex = 0; nIndex >= 0; /*nop*/)
+        {
+            OUString aTok( aStr.getToken( 0, ';', nIndex));
+            if (!aTok.isEmpty())
+                aVec.push_back( aTok);
+        }
+        uno::Sequence< OUString > aSeq( aVec.size());
+        for (sal_Int32 i=0; i < aSeq.getLength(); ++i)
+            aSeq[i] = aVec[i];
+        pLocaleData->setDateAcceptancePatterns( aSeq);
     }
 }
 

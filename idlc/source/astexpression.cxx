@@ -490,41 +490,41 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
-                    ev->u.bval = (ev->u.sval == 0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.sval != 0;
                     ev->et = ET_boolean;
                     return ev;
                 case ET_ushort:
-                    ev->u.bval = (ev->u.usval == 0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.usval != 0;
                     ev->et = ET_boolean;
                     return ev;
                 case ET_long:
-                    ev->u.bval = (ev->u.lval == 0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.lval != 0;
                     ev->et = ET_boolean;
                     return ev;
                 case ET_ulong:
-                    ev->u.bval = (ev->u.ulval == 0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.ulval != 0;
                     ev->et = ET_boolean;
                     return ev;
                 case ET_hyper:
-                    ev->u.bval = (ev->u.hval == 0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.hval != 0;
                     ev->et = ET_boolean;
                     return ev;
                 case ET_uhyper:
-                    ev->u.bval = (ev->u.uhval == 0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.uhval != 0;
                     ev->et = ET_boolean;
                     return ev;
                 case ET_boolean:
                     return ev;
                 case ET_float:
-                    ev->u.bval = (ev->u.fval == 0.0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.fval != 0.0;
                     ev->et = ET_boolean;
                     return ev;
                 case ET_double:
-                    ev->u.bval = (ev->u.dval == 0.0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.dval != 0.0;
                     ev->et = ET_boolean;
                     return ev;
                 case ET_byte:
-                    ev->u.bval = (ev->u.byval == 0) ? sal_False : sal_True;
+                    ev->u.bval = ev->u.byval != 0;
                     ev->et = ET_boolean;
                     return ev;
                 default:
@@ -561,7 +561,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                     ev->et = ET_float;
                     return ev;
                 case ET_boolean:
-                    ev->u.fval = (ev->u.bval == sal_True) ? 1.0f : 0.0f;
+                    ev->u.fval = ev->u.bval ? 1.0f : 0.0f;
                     ev->et = ET_float;
                     return ev;
                 case ET_float:
@@ -610,7 +610,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                     ev->et = ET_double;
                     return ev;
                 case ET_boolean:
-                    ev->u.dval = (ev->u.bval == sal_True) ? 1.0 : 0.0;
+                    ev->u.dval = ev->u.bval ? 1.0 : 0.0;
                     ev->et = ET_double;
                     return ev;
                 case ET_float:
@@ -667,7 +667,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                     ev->et = ET_byte;
                     return ev;
                 case ET_boolean:
-                    ev->u.byval = (ev->u.bval == sal_False) ? 1 : 0;
+                    ev->u.byval = ev->u.bval ? 1 : 0;
                     ev->et = ET_byte;
                     return ev;
                 case ET_float:

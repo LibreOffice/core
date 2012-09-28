@@ -106,6 +106,42 @@ namespace svt { namespace table
         */
         sal_Int32  GetCurrentColumn() const;
 
+        /** activates the cell at the given position
+
+            @return
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
+                failure conditions include some other instance vetoing the move,
+                or impossibility to execute the move at all (for instance because
+                of invalid coordinates).
+        */
+        bool    GoTo( ColPos _nColumnPos, RowPos _nRow);
+
+        /** moves the active cell to the given column, by keeping the active row
+
+            @return
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
+                failure conditions include some other instance vetoing the move,
+                or impossibility to execute the move at all (for instance because
+                of invalid coordinates).
+        */
+        inline  bool    GoToColumn( ColPos _nColumn )
+        {
+            return GoTo( _nColumn, GetCurrentRow() );
+        }
+
+        /** moves the active cell to the given row, by keeping the active column
+
+            @return
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
+                failure conditions include some other instance vetoing the move,
+                or impossibility to execute the move at all (for instance because
+                of invalid coordinates).
+        */
+        bool    GoToRow( RowPos _nRow )
+        {
+            return GoTo( GetCurrentColumn(), _nRow );
+        }
+
         SVT_DLLPRIVATE virtual void Resize();
         virtual void    Select();
 
@@ -127,9 +163,14 @@ namespace svt { namespace table
         SVT_DLLPRIVATE virtual ::rtl::OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const;
         SVT_DLLPRIVATE virtual sal_Bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow );
         SVT_DLLPRIVATE virtual ::rtl::OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const;
-        virtual void FillAccessibleStateSet(
-            ::utl::AccessibleStateSetHelper& rStateSet,
-        AccessibleTableControlObjType eObjType ) const;
+        SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, AccessibleTableControlObjType eObjType ) const;
+
+        // temporary methods
+        // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,
+        // firing those events should be an implementation internal to the TableControl resp. TableControl_Impl,
+        // instead of something triggered externally.
+        void commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const ::com::sun::star::uno::Any& i_newValue, const ::com::sun::star::uno::Any& i_oldValue );
+        void commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const ::com::sun::star::uno::Any& i_newValue, const ::com::sun::star::uno::Any& i_oldValue );
 
         // .............................................................................................................
         // IAccessibleTable
@@ -145,7 +186,9 @@ namespace svt { namespace table
         virtual sal_Bool HasRowHeader() const;
         virtual sal_Bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint );
         virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True );
+        virtual Rectangle calcHeaderCellRect( sal_Bool _bIsColumnBar, sal_Int32 nPos);
         virtual Rectangle calcTableRect( sal_Bool _bOnScreen = sal_True );
+        virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos );
         virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
         virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const;
@@ -166,9 +209,6 @@ namespace svt { namespace table
         // .............................................................................................................
 
     private:
-        DECL_DLLPRIVATE_LINK( ImplMouseButtonDownHdl, MouseEvent* );
-        DECL_DLLPRIVATE_LINK( ImplMouseButtonUpHdl, MouseEvent* );
-
         DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
     private:

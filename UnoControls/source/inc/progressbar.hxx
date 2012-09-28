@@ -345,7 +345,7 @@ public:
         @onerror
     */
 
-    static const ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
+    static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
     /**_________________________________________________________________________________________________________
         @short
@@ -360,7 +360,7 @@ public:
         @onerror
     */
 
-    static const ::rtl::OUString impl_getStaticImplementationName();
+    static const OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
 //  protected methods

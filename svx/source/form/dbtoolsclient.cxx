@@ -249,11 +249,11 @@ namespace svxform
     }
 
     //----------------------------------------------------------------
-    Reference< XDataSource > OStaticDataAccessTools::getDataSource( const ::rtl::OUString& _rsRegisteredName, const Reference< XMultiServiceFactory>& _rxFactory ) const
+    Reference< XDataSource > OStaticDataAccessTools::getDataSource( const ::rtl::OUString& _rsRegisteredName, const Reference< XComponentContext>& _rxContext ) const
     {
         Reference< XDataSource > xReturn;
         if ( ensureLoaded() )
-            xReturn = m_xDataAccessTools->getDataSource(_rsRegisteredName,_rxFactory);
+            xReturn = m_xDataAccessTools->getDataSource(_rsRegisteredName,_rxContext);
         return xReturn;
     }
 

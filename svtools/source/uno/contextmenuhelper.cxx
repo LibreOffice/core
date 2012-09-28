@@ -33,13 +33,14 @@
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -416,51 +417,36 @@ ContextMenuHelper::associateUIConfigurationManagers()
                 }
             }
 
-            uno::Reference< frame::XModuleManager > xModuleManager(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.frame.ModuleManager" ))),
-                uno::UNO_QUERY );
+            uno::Reference< frame::XModuleManager2 > xModuleManager(
+                frame::ModuleManager::create( ::comphelper::getProcessComponentContext() ) );
 
             uno::Reference< ui::XImageManager > xModuleImageManager;
             rtl::OUString                       aModuleId;
-            if ( xModuleManager.is() )
-            {
-                // retrieve module image manager
-                aModuleId = xModuleManager->identify( xFrame );
+            // retrieve module image manager
+            aModuleId = xModuleManager->identify( xFrame );
 
-                uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
-                        uno::UNO_QUERY );
-                if ( xModuleCfgMgrSupplier.is() )
-                {
-                    uno::Reference< ui::XUIConfigurationManager > xUICfgMgr(
-                        xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));
-                    if ( xUICfgMgr.is() )
-                    {
-                        m_xModuleImageMgr = uno::Reference< ui::XImageManager >(
-                            xUICfgMgr->getImageManager(), uno::UNO_QUERY );
-                    }
-                }
+            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
+                ui::ModuleUIConfigurationManagerSupplier::create(
+                    ::comphelper::getProcessComponentContext() ) );
+            uno::Reference< ui::XUIConfigurationManager > xUICfgMgr(
+                xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));
+            if ( xUICfgMgr.is() )
+            {
+                m_xModuleImageMgr = uno::Reference< ui::XImageManager >(
+                    xUICfgMgr->getImageManager(), uno::UNO_QUERY );
             }
 
             uno::Reference< container::XNameAccess > xNameAccess(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.frame.UICommandDescription" ))),
-                    uno::UNO_QUERY );
-            if ( xNameAccess.is() )
+                frame::UICommandDescription::create(
+                        ::comphelper::getProcessComponentContext()),
+                    uno::UNO_QUERY_THROW );
+            try
             {
-                try
-                {
-                    uno::Any a = xNameAccess->getByName( aModuleId );
-                    a >>= m_xUICommandLabels;
-                }
-                catch ( container::NoSuchElementException& )
-                {
-                }
+                uno::Any a = xNameAccess->getByName( aModuleId );
+                a >>= m_xUICommandLabels;
+            }
+            catch ( container::NoSuchElementException& )
+            {
             }
         }
         catch ( uno::RuntimeException& )

@@ -19,11 +19,10 @@
 #ifndef __com_sun_star_frame_GlobalEventBroadcaster_idl__
 #define __com_sun_star_frame_GlobalEventBroadcaster_idl__
 
-#include <com/sun/star/document/XEventBroadcaster.idl>
-#include <com/sun/star/document/XEventsSupplier.idl>
+#include <com/sun/star/frame/XGlobalEventBroadcaster.idl>
 
 
- module com {  module sun {  module star {  module frame {
+module com {  module sun {  module star {  module frame {
 
 /**
     This service offers the document event functionality that can be found at any
@@ -32,17 +31,7 @@
     documents.
  */
 
-service GlobalEventBroadcaster
-{
-        /** makes it possible to register listeners which are called whenever
-            a document event occurs in any document
-         */
-        interface ::com::sun::star::document::XEventsSupplier;
-
-        /** access to bound event handlers
-         */
-        interface ::com::sun::star::document::XEventBroadcaster;
-};
+service GlobalEventBroadcaster : XGlobalEventBroadcaster;
 
 
 }; }; }; };

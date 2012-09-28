@@ -93,10 +93,7 @@ ControlElement::ControlElement(
 Reference< xml::input::XElement > ControlElement::getStyle(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
-    OUString aStyleId(
-        xAttributes->getValueByUidName(
-            _pImport->XMLNS_DIALOGS_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("style-id") ) ) );
+    OUString aStyleId( xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID,"style-id" ) );
     if (!aStyleId.isEmpty())
     {
         return _pImport->getStyle( aStyleId );
@@ -107,15 +104,10 @@ Reference< xml::input::XElement > ControlElement::getStyle(
 OUString ControlElement::getControlId(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
-    OUString aId(
-        xAttributes->getValueByUidName(
-            _pImport->XMLNS_DIALOGS_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("id") ) ) );
+    OUString aId( xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "id" ) );
     if (aId.isEmpty())
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("missing id attribute!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "missing id attribute!", Reference< XInterface >(), Any() );
     }
     return aId;
 }
@@ -125,9 +117,7 @@ OUString ControlElement::getControlModelName(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     OUString aModel;
-    aModel = xAttributes->getValueByUidName(
-        _pImport->XMLNS_DIALOGS_UID,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("control-implementation") ) );
+    aModel = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "control-implementation");
     if (aModel.isEmpty())
         aModel = rDefaultModel;
     return aModel;
@@ -144,23 +134,17 @@ bool StyleElement::importTextColorStyle(
     {
         if ((_hasValue & 0x2) != 0)
         {
-            xProps->setPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ),
-                makeAny( _textColor ) );
+            xProps->setPropertyValue("TextColor", makeAny( _textColor ) );
             return true;
         }
         return false;
     }
     _inited |= 0x2;
 
-    if (getLongAttr( &_textColor,
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("text-color") ),
-                     _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getLongAttr( &_textColor, "text-color", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x2;
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ),
-            makeAny( _textColor ) );
+        xProps->setPropertyValue( "TextColor", makeAny( _textColor ) );
         return true;
     }
     return false;
@@ -173,23 +157,17 @@ bool StyleElement::importTextLineColorStyle(
     {
         if ((_hasValue & 0x20) != 0)
         {
-            xProps->setPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ),
-                makeAny( _textLineColor ) );
+            xProps->setPropertyValue( "TextLineColor", makeAny( _textLineColor ) );
             return true;
         }
         return false;
     }
     _inited |= 0x20;
 
-    if (getLongAttr( &_textLineColor,
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("textline-color") ),
-                     _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getLongAttr( &_textLineColor, "textline-color", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x20;
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ),
-            makeAny( _textLineColor ) );
+        xProps->setPropertyValue( "TextLineColor", makeAny( _textLineColor ) );
         return true;
     }
     return false;
@@ -202,23 +180,17 @@ bool StyleElement::importFillColorStyle(
     {
         if ((_hasValue & 0x10) != 0)
         {
-            xProps->setPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("FillColor") ), makeAny( _fillColor ) );
+            xProps->setPropertyValue( "FillColor", makeAny( _fillColor ) );
             return true;
         }
         return false;
     }
     _inited |= 0x10;
 
-    if (getLongAttr(
-            &_fillColor,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("fill-color") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getLongAttr( &_fillColor, "fill-color", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x10;
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("FillColor") ),
-            makeAny( _fillColor ) );
+        xProps->setPropertyValue( "FillColor", makeAny( _fillColor ) );
         return true;
     }
     return false;
@@ -231,22 +203,17 @@ bool StyleElement::importBackgroundColorStyle(
     {
         if ((_hasValue & 0x1) != 0)
         {
-            xProps->setPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ), makeAny( _backgroundColor ) );
+            xProps->setPropertyValue( "BackgroundColor", makeAny( _backgroundColor ) );
             return true;
         }
         return false;
     }
     _inited |= 0x1;
 
-    if (getLongAttr(
-            &_backgroundColor,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("background-color") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getLongAttr( &_backgroundColor, "background-color", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x1;
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ), makeAny( _backgroundColor ) );
+        xProps->setPropertyValue( "BackgroundColor", makeAny( _backgroundColor ) );
         return true;
     }
     return false;
@@ -260,12 +227,9 @@ bool StyleElement::importBorderStyle(
     {
         if ((_hasValue & 0x4) != 0)
         {
-            xProps->setPropertyValue(
-                OUSTR("Border"), makeAny( _border == BORDER_SIMPLE_COLOR
-                                          ? BORDER_SIMPLE : _border ) );
+            xProps->setPropertyValue( "Border", makeAny( _border == BORDER_SIMPLE_COLOR ? BORDER_SIMPLE : _border ) );
             if (_border == BORDER_SIMPLE_COLOR)
-                xProps->setPropertyValue( OUSTR("BorderColor"),
-                                          makeAny(_borderColor) );
+                xProps->setPropertyValue( "BorderColor", makeAny(_borderColor) );
             return true;
         }
         return false;
@@ -273,9 +237,8 @@ bool StyleElement::importBorderStyle(
     _inited |= 0x4;
 
     OUString aValue;
-    if (getStringAttr(
-            &aValue, OUSTR("border"),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID )) {
+    if (getStringAttr(&aValue, "border", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+        {
         if ( aValue == "none" )
             _border = BORDER_NONE;
         else if ( aValue == "3d" )
@@ -301,8 +264,7 @@ bool StyleElement::importVisualEffectStyle(
     {
         if ((_hasValue & 0x40) != 0)
         {
-            xProps->setPropertyValue( OUSTR("VisualEffect"),
-                                      makeAny(_visualEffect) );
+            xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
             return true;
         }
         return false;
@@ -310,8 +272,7 @@ bool StyleElement::importVisualEffectStyle(
     _inited |= 0x40;
 
     OUString aValue;
-    if (getStringAttr( &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("look") ),
-                       _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "look", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
         {
@@ -329,8 +290,7 @@ bool StyleElement::importVisualEffectStyle(
             OSL_ASSERT( 0 );
 
         _hasValue |= 0x40;
-        xProps->setPropertyValue( OUSTR("VisualEffect"),
-                                  makeAny(_visualEffect) );
+        xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
     }
     return false;
 }
@@ -339,12 +299,9 @@ bool StyleElement::importVisualEffectStyle(
 void StyleElement::setFontProperties(
     Reference< beans::XPropertySet > const & xProps )
 {
-    xProps->setPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ), makeAny( _descr ) );
-    xProps->setPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("FontEmphasisMark") ), makeAny( _fontEmphasisMark ) );
-    xProps->setPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("FontRelief") ), makeAny( _fontRelief ) );
+    xProps->setPropertyValue("FontDescriptor", makeAny( _descr ) );
+    xProps->setPropertyValue("FontEmphasisMark", makeAny( _fontEmphasisMark ) );
+    xProps->setPropertyValue("FontRelief", makeAny( _fontRelief ) );
 }
 //__________________________________________________________________________________________________
 bool StyleElement::importFontStyle(
@@ -365,36 +322,25 @@ bool StyleElement::importFontStyle(
     bool bFontImport;
 
     // dialog:font-name CDATA #IMPLIED
-    bFontImport = getStringAttr(
-        &_descr.Name, OUString( RTL_CONSTASCII_USTRINGPARAM("font-name") ),
-        _xAttributes, _pImport->XMLNS_DIALOGS_UID );
+    bFontImport = getStringAttr( &_descr.Name, "font-name", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
     // dialog:font-height %numeric; #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-height") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-height", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Height = (sal_Int16)toInt32( aValue );
         bFontImport = true;
     }
     // dialog:font-width %numeric; #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-width") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "font-width", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Width = (sal_Int16)toInt32( aValue );
         bFontImport = true;
     }
     // dialog:font-stylename CDATA #IMPLIED
-    bFontImport |= getStringAttr(
-        &_descr.StyleName,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("font-stylename") ),
-        _xAttributes, _pImport->XMLNS_DIALOGS_UID );
+    bFontImport |= getStringAttr( &_descr.StyleName, "font-stylename", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
     // dialog:font-family "(decorative|modern|roman|script|swiss|system)" #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-family") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "font-family", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "decorative" )
         {
@@ -422,17 +368,13 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-family style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException("invalid font-family style!", Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
 
     // dialog:font-charset "(ansi|mac|ibmpc_437|ibmpc_850|ibmpc_860|ibmpc_861|ibmpc_863|ibmpc_865|system|symbol)" #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-charset") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "font-charset", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "ansi" )
         {
@@ -476,17 +418,13 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-charset style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException("invalid font-charset style!", Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
 
     // dialog:font-pitch "(fixed|variable)" #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-pitch") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-pitch", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "fixed" )
         {
@@ -498,34 +436,26 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-pitch style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException("invalid font-pitch style!", Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
 
     // dialog:font-charwidth CDATA #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-charwidth") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-charwidth", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.CharacterWidth = aValue.toFloat();
         bFontImport = true;
     }
     // dialog:font-weight CDATA #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-weight") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-weight", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Weight = aValue.toFloat();
         bFontImport = true;
     }
 
     // dialog:font-slant "(oblique|italic|reverse_oblique|reverse_italic)" #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-slant") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-slant", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "oblique" )
         {
@@ -545,17 +475,13 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-slant style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException("invalid font-slant style!", Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
 
     // dialog:font-underline "(single|double|dotted|dash|longdash|dashdot|dashdotdot|smallwave|wave|doublewave|bold|bolddotted|bolddash|boldlongdash|bolddashdot|bolddashdotdot|boldwave)" #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-underline") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-underline", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "single" )
         {
@@ -627,17 +553,13 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-underline style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException("invalid font-underline style!", Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
 
     // dialog:font-strikeout "(single|double|bold|slash|x)" #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-strikeout") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-strikeout", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "single" )
         {
@@ -661,37 +583,24 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-strikeout style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid font-strikeout style!" , Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
 
     // dialog:font-orientation CDATA #IMPLIED
-    if (getStringAttr(
-            &aValue,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("font-orientation") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-orientation", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Orientation = aValue.toFloat();
         bFontImport = true;
     }
     // dialog:font-kerning %boolean; #IMPLIED
-    bFontImport |= getBoolAttr(
-        &_descr.Kerning,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("font-kerning") ),
-        _xAttributes, _pImport->XMLNS_DIALOGS_UID );
+    bFontImport |= getBoolAttr( &_descr.Kerning, "font-kerning", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
     // dialog:font-wordlinemode %boolean; #IMPLIED
-    bFontImport |= getBoolAttr(
-        &_descr.WordLineMode,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("font-wordlinemode") ),
-        _xAttributes, _pImport->XMLNS_DIALOGS_UID );
+    bFontImport |= getBoolAttr( &_descr.WordLineMode,"font-wordlinemode", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
 
     // dialog:font-type "(raster|device|scalable)" #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-type") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-type", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "raster" )
         {
@@ -707,18 +616,14 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-type style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid font-type style!", Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
 
     // additional properties which are not part of the FontDescriptor struct
     // dialog:font-relief (none|embossed|engraved) #IMPLIED
-    if (getStringAttr(
-            &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-relief") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-relief", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
         {
@@ -734,17 +639,12 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-relief style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException("invalid font-relief style!", Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
     // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
-    if (getStringAttr(
-            &aValue,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("font-emphasismark") ),
-            _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "font-emphasismark", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
         {
@@ -776,9 +676,7 @@ bool StyleElement::importFontStyle(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-emphasismark style!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid font-emphasismark style!", Reference< XInterface >(), Any() );
         }
         bFontImport = true;
     }
@@ -930,9 +828,7 @@ bool ImportContext::importAlignProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid align value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException("invalid align value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
@@ -966,9 +862,7 @@ bool ImportContext::importVerticalAlignProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid vertical align value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid vertical align value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( eAlign ) );
@@ -992,10 +886,10 @@ bool ImportContext::importImageURLProperty(
             uno::Sequence< Any > aArgs( 1 );
             aArgs[ 0 ] <<= xDocStorage->getDocumentStorage();
             ::comphelper::ComponentContext aContext( _pImport->getComponentContext() );
-            aContext.createComponentWithArguments( OUSTR( "com.sun.star.comp.Svx.GraphicImportHelper" ), aArgs, xGraphicResolver );
+            aContext.createComponentWithArguments( "com.sun.star.comp.Svx.GraphicImportHelper" , aArgs, xGraphicResolver );
             if ( xGraphicResolver.is() )
             {
-                rtl::OUString aTmp( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
+                OUString aTmp("vnd.sun.star.Package:");
                 aTmp += sURL;
                 try
                 {
@@ -1029,9 +923,9 @@ bool ImportContext::importImageURLProperty(
 {
     OUString sLinkedCell;
     OUString sCellRange;
-    if ( rPropName.equals( OUSTR("linked-cell" ) ) )
+    if ( rPropName.equals( "linked-cell" ) )
        sLinkedCell = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rPropName );
-    if ( rPropName.equals( OUSTR(  "source-cell-range" ) ) )
+    if ( rPropName.equals( "source-cell-range" ) )
         sCellRange = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rPropName );
     bool bRes = false;
     Reference< lang::XMultiServiceFactory > xFac( _pImport->getDocOwner(), UNO_QUERY );
@@ -1041,20 +935,20 @@ bool ImportContext::importImageURLProperty(
         if ( !sLinkedCell.isEmpty() )
         {
             Reference< form::binding::XBindableValue > xBindable( getControlModel(), uno::UNO_QUERY );
-            Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellAddressConversion" )), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellAddressConversion" ), uno::UNO_QUERY );
             if ( xBindable.is() && xConvertor.is() )
             {
                 table::CellAddress aAddress;
-                xConvertor->setPropertyValue( OUSTR( "PersistentRepresentation" ), uno::makeAny( sLinkedCell ) );
-                xConvertor->getPropertyValue( OUSTR( "Address" ) ) >>= aAddress;
+                xConvertor->setPropertyValue( "PersistentRepresentation" , uno::makeAny( sLinkedCell ) );
+                xConvertor->getPropertyValue( "Address" ) >>= aAddress;
                 beans::NamedValue aArg1;
-                aArg1.Name = OUSTR("BoundCell");
+                aArg1.Name = "BoundCell";
                 aArg1.Value <<= aAddress;
 
                 uno::Sequence< uno::Any > aArgs(1);
                 aArgs[ 0 ]  <<= aArg1;
 
-                uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( OUSTR("com.sun.star.table.CellValueBinding" ), aArgs ), uno::UNO_QUERY );
+                uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( "com.sun.star.table.CellValueBinding" , aArgs ), uno::UNO_QUERY );
                 xBindable->setValueBinding( xBinding );
                 bRes = true;
             }
@@ -1063,20 +957,20 @@ bool ImportContext::importImageURLProperty(
         if ( !sCellRange.isEmpty() )
         {
             Reference< form::binding::XListEntrySink  > xListEntrySink( getControlModel(), uno::UNO_QUERY );
-            Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellRangeAddressConversion" )), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellRangeAddressConversion" ), uno::UNO_QUERY );
             if ( xListEntrySink.is() && xConvertor.is() )
             {
                 table::CellRangeAddress aAddress;
-                xConvertor->setPropertyValue( OUSTR( "PersistentRepresentation" ), uno::makeAny( sCellRange ) );
-                xConvertor->getPropertyValue( OUSTR( "Address" ) ) >>= aAddress;
+                xConvertor->setPropertyValue( "PersistentRepresentation" , uno::makeAny( sCellRange ) );
+                xConvertor->getPropertyValue( "Address" ) >>= aAddress;
                 beans::NamedValue aArg1;
-                aArg1.Name = OUSTR("CellRange");
+                aArg1.Name = "CellRange";
                 aArg1.Value <<= aAddress;
 
                 uno::Sequence< uno::Any > aArgs(1);
                 aArgs[ 0 ]  <<= aArg1;
 
-                uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( OUSTR("com.sun.star.table.CellRangeListSource" ), aArgs ), uno::UNO_QUERY );
+                uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( "com.sun.star.table.CellRangeListSource" , aArgs ), uno::UNO_QUERY );
                 xListEntrySink->setListEntrySource( xSource );
                 bRes = true;
             }
@@ -1113,9 +1007,7 @@ bool ImportContext::importImageAlignProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid image align value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid image align value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
@@ -1188,9 +1080,7 @@ bool ImportContext::importImagePositionProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid image position value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid image position value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nPosition ) );
@@ -1227,9 +1117,7 @@ bool ImportContext::importButtonTypeProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid button-type value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid button-type value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nButtonType ) );
@@ -1298,9 +1186,7 @@ bool ImportContext::importDateFormatProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid date-format value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid date-format value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
@@ -1345,9 +1231,7 @@ bool ImportContext::importTimeFormatProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid time-format value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid time-format value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
@@ -1376,9 +1260,7 @@ bool ImportContext::importOrientationProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid orientation value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid orientation value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nOrient ) );
@@ -1411,9 +1293,7 @@ bool ImportContext::importLineEndFormatProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid line end format value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid line end format value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
@@ -1451,9 +1331,7 @@ bool ImportContext::importSelectionTypeProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid selection type value!") ),
-                Reference< XInterface >(), Any() );
+            throw xml::sax::SAXException( "invalid selection type value!", Reference< XInterface >(), Any() );
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( eSelectionType ) );
@@ -1529,40 +1407,23 @@ void ImportContext::importEvents(
                 EventElement * pEventElement = static_cast< EventElement * >( rEvents[ nPos ].get() );
                 sal_Int32 nUid = pEventElement->getUid();
                 OUString aLocalName( pEventElement->getLocalName() );
-                Reference< xml::input::XAttributes > xAttributes(
-                    pEventElement->getAttributes() );
+                Reference< xml::input::XAttributes > xAttributes( pEventElement->getAttributes() );
 
                 // nowadays script events
                 if (_pImport->XMLNS_SCRIPT_UID == nUid)
                 {
-                    if (!getStringAttr( &descr.ScriptType,
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                      "language") ),
-                                        xAttributes,
-                                        _pImport->XMLNS_SCRIPT_UID ) ||
-                        !getStringAttr( &descr.ScriptCode,
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                      "macro-name") ),
-                                        xAttributes,
-                                        _pImport->XMLNS_SCRIPT_UID ))
+                    if (!getStringAttr( &descr.ScriptType, "language"  , xAttributes, _pImport->XMLNS_SCRIPT_UID ) ||
+                        !getStringAttr( &descr.ScriptCode, "macro-name", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
                     {
-                        throw xml::sax::SAXException(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                          "missing language or macro-name "
-                                          "attribute(s) of event!") ),
-                            Reference< XInterface >(), Any() );
+                        throw xml::sax::SAXException( "missing language or macro-name attribute(s) of event!", Reference< XInterface >(), Any() );
                     }
                     if ( descr.ScriptType == "StarBasic" )
                     {
                         OUString aLocation;
-                        if (getStringAttr( &aLocation,
-                                           OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                         "location") ),
-                                           xAttributes,
-                                           _pImport->XMLNS_SCRIPT_UID ))
+                        if (getStringAttr( &aLocation, "location", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
                         {
                             // prepend location
-                            ::rtl::OUStringBuffer buf;
+                            OUStringBuffer buf;
                             buf.append( aLocation );
                             buf.append( (sal_Unicode)':' );
                             buf.append( descr.ScriptCode );
@@ -1576,8 +1437,8 @@ void ImportContext::importEvents(
                         // the protocol ) and fix it up!!
                         if ( descr.ScriptCode.indexOf( ':' ) == -1 )
                         {
-                            ::rtl::OUStringBuffer buf;
-                            buf.append( OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ) ) );
+                            OUStringBuffer buf;
+                            buf.append( "vnd.sun.star.script:" );
                             buf.append( descr.ScriptCode );
                             descr.ScriptCode = buf.makeStringAndClear();
                         }
@@ -1587,24 +1448,13 @@ void ImportContext::importEvents(
                     if ( aLocalName == "event" )
                     {
                         OUString aEventName;
-                        if (! getStringAttr(
-                                &aEventName,
-                                OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM("event-name") ),
-                                xAttributes,
-                                _pImport->XMLNS_SCRIPT_UID ))
+                        if (! getStringAttr( &aEventName, "event-name", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
                         {
-                            throw xml::sax::SAXException(
-                                OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "missing event-name attribute!") ),
-                                Reference< XInterface >(), Any() );
+                            throw xml::sax::SAXException( "missing event-name attribute!", Reference< XInterface >(), Any() );
                         }
 
                         // lookup in table
-                        ::rtl::OString str(
-                            ::rtl::OUStringToOString(
-                                aEventName, RTL_TEXTENCODING_ASCII_US ) );
+                        OString str( OUStringToOString( aEventName, RTL_TEXTENCODING_ASCII_US ) );
                         StringTriple const * p = g_pEventTranslations;
                         while (p->first)
                         {
@@ -1623,82 +1473,40 @@ void ImportContext::importEvents(
 
                         if (! p->first)
                         {
-                            throw xml::sax::SAXException(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM("no matching event-name found!") ),
-                                Reference< XInterface >(), Any() );
+                            throw xml::sax::SAXException( "no matching event-name found!", Reference< XInterface >(), Any() );
                         }
                     }
                     else // script:listener-event element
                     {
-                        OSL_ASSERT( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("listener-event") ) );
+                        OSL_ASSERT( aLocalName == "listener-event" );
 
-                        if (!getStringAttr(
-                                &descr.ListenerType,
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                              "listener-type") ),
-                                xAttributes,
-                                _pImport->XMLNS_SCRIPT_UID ) ||
-                            !getStringAttr(
-                                &descr.EventMethod,
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                              "listener-method") ),
-                                xAttributes, _pImport->XMLNS_SCRIPT_UID ))
+                        if (!getStringAttr( &descr.ListenerType, "listener-type"  , xAttributes, _pImport->XMLNS_SCRIPT_UID ) ||
+                            !getStringAttr( &descr.EventMethod , "listener-method", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
                         {
-                            throw xml::sax::SAXException(
-                                OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "missing listener-type or "
-                                        "listener-method attribute(s)!") ),
-                                Reference< XInterface >(), Any() );
+                            throw xml::sax::SAXException("missing listener-type or listener-method attribute(s)!", Reference< XInterface >(), Any() );
                         }
                         // optional listener param
-                        getStringAttr(
-                            &descr.AddListenerParam,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                          "listener-param") ),
-                            xAttributes, _pImport->XMLNS_SCRIPT_UID );
+                        getStringAttr( &descr.AddListenerParam,  "listener-param", xAttributes, _pImport->XMLNS_SCRIPT_UID );
                     }
                 }
                 else // deprecated dlg:event element
                 {
-                    OSL_ASSERT(
-                        _pImport->XMLNS_DIALOGS_UID == nUid &&
-                        aLocalName.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM("event") ) );
+                    OSL_ASSERT( _pImport->XMLNS_DIALOGS_UID == nUid && aLocalName == "event" );
 
-                    if (!getStringAttr( &descr.ListenerType,
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                      "listener-type") ),
-                                        xAttributes,
-                                        _pImport->XMLNS_DIALOGS_UID ) ||
-                        !getStringAttr( &descr.EventMethod,
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                      "event-method") ),
-                                        xAttributes,
-                                        _pImport->XMLNS_DIALOGS_UID ))
+                    if (!getStringAttr( &descr.ListenerType, "listener-type", xAttributes, _pImport->XMLNS_DIALOGS_UID ) ||
+                        !getStringAttr( &descr.EventMethod,  "event-method",  xAttributes, _pImport->XMLNS_DIALOGS_UID ))
                     {
-                        throw xml::sax::SAXException(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("missing listener-type or event-method attribute(s)!") ),
-                            Reference< XInterface >(), Any() );
+                        throw xml::sax::SAXException("missing listener-type or event-method attribute(s)!", Reference< XInterface >(), Any() );
                     }
 
-                    getStringAttr(
-                        &descr.ScriptType,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("script-type") ),
-                        xAttributes, _pImport->XMLNS_DIALOGS_UID );
-                    getStringAttr(
-                        &descr.ScriptCode,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("script-code") ),
-                        xAttributes, _pImport->XMLNS_DIALOGS_UID );
-                    getStringAttr(
-                        &descr.AddListenerParam,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("param") ),
-                        xAttributes, _pImport->XMLNS_DIALOGS_UID );
+                    getStringAttr( &descr.ScriptType, "script-type", xAttributes, _pImport->XMLNS_DIALOGS_UID );
+                    getStringAttr( &descr.ScriptCode, "script-code", xAttributes, _pImport->XMLNS_DIALOGS_UID );
+                    getStringAttr( &descr.AddListenerParam, "param", xAttributes, _pImport->XMLNS_DIALOGS_UID );
                 }
 
-                ::rtl::OUStringBuffer buf;
+                OUStringBuffer buf;
                 buf.append( descr.ListenerType );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
+                buf.appendAscii( "::" );
                 buf.append( descr.EventMethod );
                 xEvents->insertByName( buf.makeStringAndClear(), makeAny( descr ) );
             }
@@ -1706,39 +1514,50 @@ void ImportContext::importEvents(
     }
 }
 //__________________________________________________________________________________________________
+void ImportContext::importScollableSettings(
+    Reference< xml::input::XAttributes > const & _xAttributes )
+{
+    importLongProperty( OUString( "ScrollHeight" ),
+                        OUString( "scrollheight" ),
+                        _xAttributes );
+    importLongProperty( OUString( "ScrollWidth" ),
+                        OUString( "scrollwidth" ),
+                        _xAttributes );
+    importLongProperty( OUString( "ScrollTop" ),
+                        OUString( "scrolltop" ),
+                        _xAttributes );
+    importLongProperty( OUString( "ScrollLeft" ),
+                        OUString( "scrollleft" ),
+                        _xAttributes );
+    importBooleanProperty( OUString( "HScroll" ),
+                           OUString( "hscroll" ),
+                           _xAttributes );
+    importBooleanProperty( OUString( "VScroll" ),
+                           OUString( "vscroll" ),
+                           _xAttributes );
+}
+
 void ImportContext::importDefaults(
     sal_Int32 nBaseX, sal_Int32 nBaseY,
     Reference< xml::input::XAttributes > const & xAttributes,
     bool supportPrintable )
 {
-    _xControlModel->setPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
-        makeAny( _aId ) );
+    _xControlModel->setPropertyValue( "Name", makeAny( _aId ) );
 
-    importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TabIndex") ),
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("tab-index") ),
-                         xAttributes );
+    importShortProperty( "TabIndex", "tab-index", xAttributes );
 
     sal_Bool bDisable = sal_False;
-    if (getBoolAttr(
-            &bDisable, OUString( RTL_CONSTASCII_USTRINGPARAM("disabled") ),
-            xAttributes, _pImport->XMLNS_DIALOGS_UID ) &&
-        bDisable)
+    if (getBoolAttr( &bDisable,"disabled", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bDisable)
     {
-        _xControlModel->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ), makeAny( sal_False ) );
+        _xControlModel->setPropertyValue( "Enabled", makeAny( sal_False ) );
     }
 
     sal_Bool bVisible = sal_True;
-    if (getBoolAttr(
-            &bVisible, OUString( RTL_CONSTASCII_USTRINGPARAM("visible") ),
-            xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !bVisible)
+    if (getBoolAttr( &bVisible, "visible", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !bVisible)
     {
     try
     {
-
-            _xControlModel->setPropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("EnableVisible") ), makeAny( sal_False ) );
+            _xControlModel->setPropertyValue( "EnableVisible", makeAny( sal_False ) );
     }
     catch( Exception& )
     {
@@ -1746,55 +1565,29 @@ void ImportContext::importDefaults(
     }
     }
 
-    if (!importLongProperty( nBaseX,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("left") ),
-                             xAttributes ) ||
-        !importLongProperty( nBaseY,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("top") ),
-                             xAttributes ) ||
-        !importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("width") ),
-                             xAttributes ) ||
-        !importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("height") ),
-                             xAttributes ))
+    if (!importLongProperty( nBaseX, "PositionX", "left", xAttributes ) ||
+        !importLongProperty( nBaseY, "PositionY", "top",  xAttributes ) ||
+        !importLongProperty( "Width", "width", xAttributes ) ||
+        !importLongProperty( "Height", "height", xAttributes ))
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("missing pos size attribute(s)!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "missing pos size attribute(s)!", Reference< XInterface >(), Any() );
     }
 
     if (supportPrintable)
     {
-        importBooleanProperty(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM("printable") ),
-            xAttributes );
+        importBooleanProperty("Printable", "printable", xAttributes );
     }
 
     sal_Int32 nLong;
-    if (! getLongAttr(
-            &nLong,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("page") ),
-            xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (! getLongAttr( &nLong, "page", xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
         nLong = 0;
     }
-    _xControlModel->setPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
-        makeAny( nLong ) );
+    _xControlModel->setPropertyValue( "Step", makeAny( nLong ) );
 
-    importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
-                          OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ),
-                          xAttributes );
-    importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
-                          OUString( RTL_CONSTASCII_USTRINGPARAM("help-text") ),
-                          xAttributes );
-    importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpURL") ),
-                          OUString( RTL_CONSTASCII_USTRINGPARAM("help-url") ),
-                          xAttributes );
+    importStringProperty("Tag", "tag", xAttributes );
+    importStringProperty( "HelpText", "help-text", xAttributes );
+    importStringProperty( "HelpURL", "help-url", xAttributes );
 }
 
 //##################################################################################################
@@ -1853,9 +1646,7 @@ Reference< xml::input::XElement > ElementBase::startChildElement(
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    throw xml::sax::SAXException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected element!") ),
-        Reference< XInterface >(), Any() );
+    throw xml::sax::SAXException( "unexpected element!", Reference< XInterface >(), Any() );
 }
 
 //__________________________________________________________________________________________________
@@ -1905,10 +1696,8 @@ void DialogImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    XMLNS_DIALOGS_UID = xNamespaceMapping->getUidByUri(
-        OUSTR(XMLNS_DIALOGS_URI) );
-    XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri(
-        OUSTR(XMLNS_SCRIPT_URI) );
+    XMLNS_DIALOGS_UID = xNamespaceMapping->getUidByUri( XMLNS_DIALOGS_URI );
+    XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri( XMLNS_SCRIPT_URI );
 }
 //__________________________________________________________________________________________________
 void DialogImport::endDocument()
@@ -1938,9 +1727,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
 {
     if (XMLNS_DIALOGS_UID != nUid)
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
     }
     // window
     else if ( rLocalName == "window" )
@@ -1949,10 +1736,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                          "illegal root element (expected window) given: ") ) +
-            rLocalName, Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "illegal root element (expected window) given: " + rLocalName, Reference< XInterface >(), Any() );
     }
 }
 //__________________________________________________________________________________________________
@@ -1970,10 +1754,7 @@ Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormats
     {
         Reference< XComponentContext > xContext( getComponentContext() );
         Reference< util::XNumberFormatsSupplier > xSupplier(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "com.sun.star.util.NumberFormatsSupplier") ),
-                xContext ), UNO_QUERY );
+            xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.util.NumberFormatsSupplier", xContext ), UNO_QUERY );
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (! _xSupplier.is())

@@ -193,6 +193,10 @@ String STR_DELETE_PAGE_BREAK
 {
     Text [ en-US ] = "Delete page break" ;
 };
+String STR_TEXT_CORRECTION
+{
+    Text [ en-US ] = "Text Correction" ;
+};
 String STR_OUTLINE_LR
 {
     Text [ en-US ] = "Promote/demote outline" ;

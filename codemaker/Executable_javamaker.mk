@@ -26,11 +26,6 @@
 
 $(eval $(call gb_Executable_Executable,javamaker))
 
-$(eval $(call gb_Executable_set_include,javamaker,\
-    -I$(SRCDIR)/codemaker/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_use_libraries,javamaker,\
     reg \
     sal \

@@ -493,8 +493,10 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
     if( bCheckNumFmt )
     {
         SwTableSortBoxes& rBxs = pTblNd->GetTable().GetTabSortBoxes();
-        for( sal_uInt16 nBoxes = rBxs.size(); nBoxes; )
+        for (size_t nBoxes = rBxs.size(); nBoxes; )
+        {
             rDoc.ChkBoxNumFmt( *rBxs[ --nBoxes ], sal_False );
+        }
     }
 
     if( pHistory )
@@ -1521,11 +1523,13 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
 
 void SwUndoTblNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
 {
-    if( rBoxes.size() != aBoxes.size() )
+    if (rBoxes.size() != m_Boxes.size())
     {
-        aBoxes.clear();
-        for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
-            aBoxes.insert( rBoxes[n]->GetSttIdx() );
+        m_Boxes.clear();
+        for (size_t n = 0; n < rBoxes.size(); ++n)
+        {
+            m_Boxes.insert( rBoxes[n]->GetSttIdx() );
+        }
     }
 }
 
@@ -1539,13 +1543,12 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 {
     const SwTable& rTbl = rTblNd.GetTable();
     const SwTableSortBoxes& rTblBoxes = rTbl.GetTabSortBoxes();
-    sal_uInt16 n;
-    sal_uInt16 i;
 
     OSL_ENSURE( ! IsDelBox(), "wrong Action" );
     pNewSttNds.reset( new std::set<_BoxMove> );
 
-    for( n = 0, i = 0; n < rOld.size(); ++i )
+    size_t i = 0;
+    for (size_t  n = 0; n < rOld.size(); ++i)
     {
         if( rOld[ n ] == rTblBoxes[ i ] )
             ++n;
@@ -1599,7 +1602,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     OSL_ENSURE( rTbl.IsNewModel() || rOld.size() + nCount * rBoxes.size() == rTblBoxes.size(),
         "unexpected boxes" );
     OSL_ENSURE( rOld.size() <= rTblBoxes.size(), "more unexpected boxes" );
-    for( sal_uInt16 n = 0, i = 0; i < rTblBoxes.size(); ++i )
+    for (size_t n = 0, i = 0; i < rTblBoxes.size(); ++i)
     {
         if( ( n < rOld.size() ) &&
             ( rOld[ n ] == rTblBoxes[ i ] ) )
@@ -1621,7 +1624,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             const SwTableLine* pBoxLine = pBox->GetUpper();
             sal_uInt16 nLineDiff = lcl_FindParentLines(rTbl,*pBox).GetPos(pBoxLine);
             sal_uInt16 nLineNo = 0;
-            for( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
+            for (size_t j = 0; j < rBoxes.size(); ++j)
             {
                 pCheckBox = rBoxes[j];
                 if( pCheckBox->GetUpper()->GetUpper() == pBox->GetUpper()->GetUpper() )
@@ -1643,7 +1646,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             OSL_ENSURE( pSourceBox, "Splitted source box not found!" );
             // find out how many nodes the source box used to have
             // (to help determine bNodesMoved flag below)
-            sal_uInt16 nNdsPos = 0;
+            size_t nNdsPos = 0;
             while( rBoxes[ nNdsPos ] != pSourceBox )
                 ++nNdsPos;
             sal_uLong nNodes = rNodeCnts[ nNdsPos ];
@@ -1726,8 +1729,9 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         std::vector<_BoxMove> aTmp( pNewSttNds->begin(), pNewSttNds->end() );
 
         // backwards
-        for( int n = aTmp.size() - 1; n >= 0 ; --n)
+        for (size_t n = aTmp.size(); n > 0 ; )
         {
+            --n;
             // delete box from table structure
             sal_uLong nIdx = aTmp[n].index;
             SwTableBox* pBox = pTblNd->GetTable().GetTblBox( nIdx );
@@ -1746,7 +1750,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwNodeIndex aInsPos( *(pLine->GetTabBoxes()[0]->GetSttNd()), 2 );
 
                 // adjust all StartNode indices
-                sal_uInt16 i = n;
+                size_t i = n;
                 sal_uLong nSttIdx = aInsPos.GetIndex() - 2,
                        nNdCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
                 while( i && aTmp[ --i ].index > nSttIdx )
@@ -1758,7 +1762,11 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 rDoc.GetNodes()._MoveNodes( aRg, rDoc.GetNodes(), aInsPos, sal_False );
             }
             else
+            {   // first disconnect box from node, otherwise ~SwTableBox would
+                // access pBox->pSttNd, deleted by DeleteSection
+                pBox->RemoveFromTable();
                 rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
+            }
             aDelBoxes.insert( aDelBoxes.end(), pBox );
         }
     }
@@ -1774,6 +1782,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             // TL_CHART2: notify chart about box to be removed
             if (pPCD)
                 pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
+            pBox->RemoveFromTable(); // ~SwTableBox would access pBox->pSttNd
             aDelBoxes.insert( aDelBoxes.end(), pBox );
             rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
         }
@@ -1807,7 +1816,8 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     CHECK_TABLE( pTblNd->GetTable() )
 
     SwSelBoxes aSelBoxes;
-    for( std::set<sal_uLong>::iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
+    for (std::set<sal_uLong>::iterator it = m_Boxes.begin();
+            it != m_Boxes.end(); ++it)
     {
         SwTableBox* pBox = pTblNd->GetTable().GetTblBox( *it );
         aSelBoxes.insert( pBox );
@@ -1954,7 +1964,7 @@ CHECKTABLE(pTblNd->GetTable())
     sal_uInt16 n;
 
     std::set<sal_uLong>::iterator it;
-    for( it = aBoxes.begin(); it != aBoxes.end(); ++it )
+    for (it = m_Boxes.begin(); it != m_Boxes.end(); ++it)
     {
         aIdx = *it;
         SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx,
@@ -2097,8 +2107,10 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
 void SwUndoTblMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
 {
     // memorize selection
-    for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
-        aBoxes.insert( rBoxes[n]->GetSttIdx() );
+    for (size_t n = 0; n < rBoxes.size(); ++n)
+    {
+        m_Boxes.insert(rBoxes[n]->GetSttIdx());
+    }
 
     // as separator for inserts of new boxes after shifting
     aNewSttNds.push_back( (sal_uLong)0 );
@@ -3103,7 +3115,7 @@ void CheckTable( const SwTable& rTbl )
 {
     const SwNodes& rNds = rTbl.GetFrmFmt()->GetDoc()->GetNodes();
     const SwTableSortBoxes& rSrtArr = rTbl.GetTabSortBoxes();
-    for( sal_uInt16 n = 0; n < rSrtArr.size(); ++n )
+    for (size_t n = 0; n < rSrtArr.size(); ++n)
     {
         const SwTableBox* pBox = rSrtArr[ n ];
         const SwNode* pNd = pBox->GetSttNd();

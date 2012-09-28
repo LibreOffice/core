@@ -28,7 +28,6 @@
 
 
 class TkpContext;
-class StateMachineContext;
 
 /**
 **/
@@ -37,8 +36,6 @@ class StmBoundsStatu2 : public StmStatu2
   public:
     // LIFECYCLE
                         StmBoundsStatu2(
-                            StateMachineContext &
-                                                o_rOwner,
                             TkpContext &        i_rFollowUpContext,
                             uintt               i_nStatusFunctionNr,
                             bool                i_bIsDefault  );
@@ -52,8 +49,6 @@ class StmBoundsStatu2 : public StmStatu2
                         AsBounds();
 
   private:
-    StateMachineContext *
-                        pOwner;
     TkpContext *        pFollowUpContext;
     uintt               nStatusFunctionNr;
     bool                bIsDefault;

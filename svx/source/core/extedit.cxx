@@ -38,7 +38,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
 
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include <comphelper/processfactory.hxx>
 
@@ -90,8 +90,7 @@ void ExternalToolEdit::threadWorker(void* pThreadData)
     Application::PostUserEvent( LINK( NULL, ExternalToolEdit, StartListeningEvent ), pThreadData);
 
     uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
+        com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
     xSystemShellExecute->execute( pData->m_aFileName, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
 }
 

@@ -79,7 +79,6 @@ PreviewRenderer::PreviewRenderer (
     : mpPreviewDevice (new VirtualDevice()),
       mpView(NULL),
       mpDocShellOfView(NULL),
-      mnWidthOfView(0),
       maFrameColor (svtools::ColorConfig().GetColorValue(svtools::DOCBOUNDARIES).nColor),
       mbHasFrame(bHasFrame)
 {

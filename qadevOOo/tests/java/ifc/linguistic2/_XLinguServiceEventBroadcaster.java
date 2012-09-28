@@ -52,7 +52,7 @@ public class _XLinguServiceEventBroadcaster extends MultiMethodTest {
             log.println("Listener called");
         }
 
-    };
+    }
 
     XLinguServiceEventListener listener = new MyLinguServiceEventListener();
 

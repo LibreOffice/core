@@ -37,7 +37,10 @@ class SW_DLLPUBLIC SwNumberingTypeListBox : public ListBox
 public:
     SwNumberingTypeListBox( Window* pWin, const ResId& rResId,
         sal_uInt16 nTypeFlags = INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING|INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES );
+    SwNumberingTypeListBox( Window* pWin, WinBits nStyle = WB_BORDER );
     ~SwNumberingTypeListBox();
+
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
     void        Reload(sal_uInt16 nTypeFlags);
 

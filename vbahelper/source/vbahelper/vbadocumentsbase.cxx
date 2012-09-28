@@ -44,7 +44,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include <vbahelper/vbadocumentbase.hxx>
 #include <boost/unordered_map.hpp>
 #include <osl/file.hxx>
 
@@ -57,9 +56,9 @@ using namespace ::com::sun::star;
 static const char aSpreadsheetDocument[] = "com.sun.star.sheet.SpreadsheetDocument";
 static const char aTextDocument[] = "com.sun.star.text.TextDocument";
 
-typedef  boost::unordered_map< rtl::OUString,
-sal_Int32, ::rtl::OUStringHash,
-::std::equal_to< ::rtl::OUString > > NameIndexHash;
+typedef  boost::unordered_map< OUString,
+sal_Int32, OUStringHash,
+::std::equal_to< OUString > > NameIndexHash;
 
 typedef std::vector < uno::Reference< frame::XModel > > Documents;
 
@@ -85,7 +84,7 @@ public:
             m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
         uno::Reference< frame::XDesktop > xDesktop
-            (xSMgr->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Desktop"), m_xContext), uno::UNO_QUERY_THROW );
+            (xSMgr->createInstanceWithContext( "com.sun.star.frame.Desktop" , m_xContext), uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
         while( mxComponents->hasMoreElements() )
         {
@@ -137,18 +136,13 @@ public:
         {
             uno::Reference< lang::XServiceInfo > xServiceInfo( xEnum->nextElement(), uno::UNO_QUERY );
             if ( xServiceInfo.is()
-                && (  ( xServiceInfo->supportsService( rtl::OUString(aSpreadsheetDocument) ) && meDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
-                || ( xServiceInfo->supportsService( rtl::OUString(aTextDocument) ) && meDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
+                && (  ( xServiceInfo->supportsService( OUString(aSpreadsheetDocument) ) && meDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
+                || ( xServiceInfo->supportsService( OUString(aTextDocument) ) && meDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );
-                rtl::OUString sName;
-                uno::Reference< ::ooo::vba::XDocumentBase > xVbaDocument = new VbaDocumentBase( uno::Reference< XHelperInterface >(), xContext, xModel );
-                if ( xVbaDocument.is() )
-                {
-                    sName = xVbaDocument->getName();
-                }
-                namesToIndices[ sName ] = nIndex++;
+                INetURLObject aURL( xModel->getURL() );
+                namesToIndices[ aURL.GetLastName() ] = nIndex++;
             }
         }
 
@@ -184,7 +178,7 @@ public:
     }
 
     //XNameAccess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
@@ -193,10 +187,10 @@ public:
 
     }
 
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< ::rtl::OUString > names( namesToIndices.size() );
-        ::rtl::OUString* pString = names.getArray();
+        uno::Sequence< OUString > names( namesToIndices.size() );
+        OUString* pString = names.getArray();
         NameIndexHash::const_iterator it = namesToIndices.begin();
         NameIndexHash::const_iterator it_end = namesToIndices.end();
         for ( ; it != it_end; ++it, ++pString )
@@ -204,7 +198,7 @@ public:
         return names;
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());
@@ -253,26 +247,23 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
      uno::Reference< frame::XComponentLoader > xLoader(
-        xSMgr->createInstanceWithContext(
-            ::rtl::OUString("com.sun.star.frame.Desktop"),
-                mxContext), uno::UNO_QUERY_THROW );
-    rtl::OUString sURL;
+        xSMgr->createInstanceWithContext("com.sun.star.frame.Desktop" , mxContext), uno::UNO_QUERY_THROW );
+    OUString sURL;
     if( meDocType == WORD_DOCUMENT )
-        sURL = rtl::OUString( "private:factory/swriter" );
+        sURL = "private:factory/swriter";
     else if( meDocType == EXCEL_DOCUMENT )
-        sURL = rtl::OUString( "private:factory/scalc" );
+        sURL = "private:factory/scalc";
     else
-        throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
 
     // prepare the media descriptor
     ::comphelper::MediaDescriptor aMediaDesc;
     aMediaDesc[ ::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE() ] <<= document::MacroExecMode::USE_CONFIG;
-    aMediaDesc.setComponentDataEntry( ::rtl::OUString(  "ApplyFormDesignMode"  ), uno::Any( false ) );
+    aMediaDesc.setComponentDataEntry( "ApplyFormDesignMode" , uno::Any( false ) );
 
-    // craete the new document
+    // create the new document
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
-                                       sURL ,
-                                       rtl::OUString( "_blank" ), 0,
+                                       sURL , "_blank", 0,
                                        aMediaDesc.getAsConstPropertyValueList() );
 
     // #163808# lock document controllers and container window if specified by application
@@ -295,7 +286,7 @@ void VbaDocumentsBase::closeDocuments() throw (uno::RuntimeException)
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
+uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
@@ -303,7 +294,7 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
     sal_Bool bInteractive = !xApplication.is() || xApplication->getInteractive();
 
     // we need to detect if this is a URL, if not then assume its a file path
-        rtl::OUString aURL;
+        OUString aURL;
         INetURLObject aObj;
     aObj.SetURL( rFileName );
     bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
@@ -313,18 +304,13 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XDesktop > xDesktop
-        (xSMgr->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Desktop")                    , mxContext),
-        uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XDesktop > xDesktop(xSMgr->createInstanceWithContext( "com.sun.star.frame.Desktop" , mxContext), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XComponentLoader > xLoader(
-        xSMgr->createInstanceWithContext(
-        ::rtl::OUString("com.sun.star.frame.Desktop"),
-        mxContext),
-        uno::UNO_QUERY_THROW );
+        xSMgr->createInstanceWithContext( "com.sun.star.frame.Desktop" , mxContext), uno::UNO_QUERY_THROW );
 
     uno::Sequence< beans::PropertyValue > sProps( rProps );
     sProps.realloc( sProps.getLength() + 1 );
-    sProps[ sProps.getLength() - 1 ].Name = rtl::OUString( "MacroExecutionMode" );
+    sProps[ sProps.getLength() - 1 ].Name = "MacroExecutionMode";
     sProps[ sProps.getLength() - 1 ].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
 
     if ( ReadOnly.hasValue()  )
@@ -333,13 +319,13 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
         if ( bIsReadOnly )
         {
             sProps.realloc( sProps.getLength() + 1 );
-            sProps[ sProps.getLength() - 1 ].Name = rtl::OUString( "ReadOnly" );
+            sProps[ sProps.getLength() - 1 ].Name = "ReadOnly";
             sProps[ sProps.getLength() - 1 ].Value <<= true;
         }
     }
 
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL( aURL,
-        rtl::OUString( "_default" ),
+        "_default" ,
         frame::FrameSearchFlag::CREATE,
         sProps);
 

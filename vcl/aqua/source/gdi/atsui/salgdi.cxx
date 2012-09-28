@@ -354,6 +354,8 @@ AquaSalGraphics::AquaSalGraphics()
 {
     // create the style object for font attributes
     ATSUCreateStyle( &maATSUStyle );
+
+    ResetFontStyle();
 }
 
 // -----------------------------------------------------------------------
@@ -528,6 +530,13 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
+void AquaSalGraphics::ClearDevFontCache()
+{
+    SalData* pSalData = GetSalData();
+    delete pSalData->mpFontList;
+    pSalData->mpFontList = NULL;
+}
+
 // -----------------------------------------------------------------------
 
 bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
@@ -568,6 +577,29 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
     // TODO: ATSFontDeactivate( oContainer ) when fonts are no longer needed
     // TODO: register new ImplMacFontdata in pFontList
     return true;
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalGraphics::ResetFontStyle()
+{
+    ATSUClearStyle(maATSUStyle);
+
+    // Set justification attributes
+    ATSJustPriorityWidthDeltaOverrides nPriorityJustOverrides;
+    memset(nPriorityJustOverrides, 0, sizeof(nPriorityJustOverrides));
+
+    nPriorityJustOverrides[kJUSTLetterPriority].growFlags = kJUSTOverrideLimits;
+    nPriorityJustOverrides[kJUSTLetterPriority].shrinkFlags = kJUSTOverrideLimits;
+
+    ATSUAttributeTag        theTag = kATSUPriorityJustOverrideTag;
+    ByteCount               theSize = sizeof(ATSJustPriorityWidthDeltaOverrides);
+    ATSUAttributeValuePtr   thePtr = &nPriorityJustOverrides;
+    OSStatus eStatus = ATSUSetAttributes(maATSUStyle, 1, &theTag, &theSize, &thePtr);
+    if (eStatus != noErr)
+    {
+        DBG_WARNING("AquaSalGraphics::ResetFontStyle() : Could not override justification attributes!\n");
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -691,7 +723,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
 {
     if( !pReqFont )
     {
-        ATSUClearStyle( maATSUStyle );
+        ResetFontStyle();
         mpMacFontData = NULL;
         return 0;
     }
@@ -777,7 +809,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     if( eStatus != noErr )
     {
         DBG_WARNING( "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
-        ATSUClearStyle( maATSUStyle );
+        ResetFontStyle();
         mpMacFontData = NULL;
         return 0;
     }

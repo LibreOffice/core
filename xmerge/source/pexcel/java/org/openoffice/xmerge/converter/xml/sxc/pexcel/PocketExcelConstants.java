@@ -22,7 +22,6 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 /**
  * Interface defining constants for Pocket Excel attributes.
  *
- * @author  Martin Maher
  */
 public interface PocketExcelConstants {
     /** File extension for Pocket Word files. */

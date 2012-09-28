@@ -26,9 +26,6 @@
 #include <tools/solar.h>
 #include "tools/errcode.hxx"
 
-#ifndef _SBX_CLASS_TYPE
-#define _SBX_CLASS_TYPE
-
 enum SbxClassType {         // SBX-class-IDs (order is important!)
     SbxCLASS_DONTCARE = 1,  // don't care (search, not 0 due to StarBASIC)
     SbxCLASS_ARRAY,         // Array of SbxVariables
@@ -38,11 +35,6 @@ enum SbxClassType {         // SBX-class-IDs (order is important!)
     SbxCLASS_PROPERTY,      // Property
     SbxCLASS_OBJECT         // Object
 };
-
-#endif
-
-#ifndef _SBX_DATA_TYPE
-#define _SBX_DATA_TYPE
 
 enum SbxDataType {
     SbxEMPTY    =  0,    // * Uninitialized
@@ -107,11 +99,6 @@ const sal_uInt32 SBX_TYPE_DIM_AS_NEW_FLAG  = 0x20000;
 const sal_uInt32 SBX_FIXED_LEN_STRING_FLAG = 0x10000;   // same value as above as no conflict possible
 const sal_uInt32 SBX_TYPE_VAR_TO_DIM_FLAG  = 0x40000;
 
-#endif
-
-#ifndef _SBX_OPERATOR
-#define _SBX_OPERATOR
-
 enum SbxOperator {
     // Arithmetical:
     SbxEXP,     // this ^ var
@@ -143,19 +130,12 @@ enum SbxOperator {
     SbxGE       // this >= var
 };
 
-#endif
-
-#ifndef _SBX_NAME_TYPE
-#define _SBX_NAME_TYPE
-
 enum SbxNameType {          // Type of the questioned name of a variable
     SbxNAME_NONE,           // plain name
     SbxNAME_SHORT,          // Name(A,B)
     SbxNAME_SHORT_TYPES,    // Name%(A%,B$)
     SbxNAME_LONG_TYPES      // Name(A As Integer, B As String) As Integer
 };
-
-#endif
 
 // from 1996/3/20: New error messages
 typedef sal_uIntPtr SbxError;           // Preserve old type

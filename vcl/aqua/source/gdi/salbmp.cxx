@@ -781,7 +781,7 @@ CGImageRef AquaSalBitmap::CreateWithMask( const AquaSalBitmap& rMask,
         CFRelease( xMask );
         CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( NULL,
         pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
-        static const float* pDecode = NULL;
+        static const CGFloat* pDecode = NULL;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
         CFRelease( xDataProvider );
         CFRelease( xMaskContext );

@@ -73,11 +73,11 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_nBorder = 0; // no border
     m_aProps.aComponent.m_xFactory = _xFactory;
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_aProps.aComponent.setShape(_xShape,this,m_refCount);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OFixedText::~OFixedText()

@@ -30,8 +30,11 @@
 #ifndef _OSL_NLSUPPORT_H_
 #define _OSL_NLSUPPORT_H_
 
-#   include <rtl/locale.h>
-#   include <rtl/textenc.h>
+#include "sal/config.h"
+
+#include "rtl/locale.h"
+#include "rtl/textenc.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

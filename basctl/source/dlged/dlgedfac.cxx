@@ -25,6 +25,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 
 
@@ -233,5 +236,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 
     return 0;
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

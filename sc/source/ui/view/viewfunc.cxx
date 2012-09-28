@@ -597,9 +597,6 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
         {
             ScAddress aPos( nCol, nRow, nTab );
             ScBaseCell* pOldCell = pDoc->GetCell( aPos );
-            sal_Bool bNeedHeight = ( pOldCell && pOldCell->GetCellType() == CELLTYPE_EDIT )
-                                || pDoc->HasAttrib(
-                                    nCol,nRow,nTab, nCol,nRow,nTab, HASATTR_NEEDHEIGHT );
 
             //  undo
             ScBaseCell* pUndoCell = (bUndo && pOldCell) ? pOldCell->Clone( *pDoc ) : 0;
@@ -610,7 +607,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
             if (bUndo)
             {
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterValue( pDocSh, aPos, pUndoCell, rValue, bNeedHeight ) );
+                    new ScUndoEnterValue( pDocSh, aPos, pUndoCell, rValue ) );
             }
 
             pDocSh->PostPaintCell( aPos );

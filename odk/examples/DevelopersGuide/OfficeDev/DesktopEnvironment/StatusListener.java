@@ -34,13 +34,14 @@
 
 // __________ Imports __________
 
-import com.sun.star.uno.UnoRuntime;
-
-import java.lang.String;
 import java.awt.Component;
+import java.util.Vector;
+
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import java.util.Vector;
+
+import com.sun.star.frame.FrameActionEvent;
+import com.sun.star.uno.UnoRuntime;
 
 // __________ Implementation __________
 
@@ -166,7 +167,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * @param lParams
      *          the vector with all packed parameters of the original request
      */
-    public void execOneway(/*IN*/  int nRequest,/*IN*/  Vector lParams )
+    public void execOneway(/*IN*/  int nRequest,/*IN*/  Vector<Object> lParams )
     {
         synchronized(this)
         {
@@ -176,14 +177,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         // was it frameAction()?
         if (nRequest==OnewayExecutor.REQUEST_FRAMEACTION)
         {
-            com.sun.star.frame.FrameActionEvent[] lOutAction   = new com.sun.star.frame.FrameActionEvent[1];
-            Vector[]                              lInParams    = new Vector[1];
-                                                  lInParams[0] = lParams;
-
-            OnewayExecutor.codeFrameAction( OnewayExecutor.DECODE_PARAMS ,
-                                            lInParams                    ,
-                                            lOutAction                   );
-            impl_frameAction(lOutAction[0]);
+            impl_frameAction((FrameActionEvent) lParams.get(0));
         }
     }
 
@@ -220,16 +214,12 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         if (! bHandle)
             return;
 
-        Vector[]                              lOutParams   = new Vector[1];
-        com.sun.star.frame.FrameActionEvent[] lInAction    = new com.sun.star.frame.FrameActionEvent[1];
-                                              lInAction[0] = aEvent;
+        Vector<Object> lOutParams   = new Vector<Object>();
+        lOutParams.add(aEvent);
 
-        OnewayExecutor.codeFrameAction( OnewayExecutor.ENCODE_PARAMS ,
-                                        lOutParams                   ,
-                                        lInAction                    );
         OnewayExecutor aExecutor = new OnewayExecutor( (IOnewayLink)this                  ,
                                                        OnewayExecutor.REQUEST_FRAMEACTION ,
-                                                       lOutParams[0]                      );
+                                                       lOutParams                      );
         aExecutor.start();
     }
 

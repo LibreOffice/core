@@ -48,13 +48,6 @@ namespace connectivity
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
         typedef ::std::vector< TWeakPair > TWeakPairVector;
         DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,TJDBCDrivers);
-        typedef enum
-        {
-            D_ODBC,
-            D_JDBC,
-            D_NATIVE
-        } T_DRIVERTYPE;
-
 
         /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.
 
@@ -70,7 +63,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xNativeDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
             ::rtl::OUString     m_sOldDriverClass;
-            T_DRIVERTYPE        m_eDriverType;
 
             /** load the driver we want to delegate.
                 The <member>m_xODBCDriver</member> or <member>m_xDBCDriver</member> may be <NULL/> if the driver could not be loaded.

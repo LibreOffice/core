@@ -31,78 +31,67 @@
 #include <boost/scoped_ptr.hpp>
 
 class SfxViewFactory;
+class SdrView;
+class TabBar;
+class SbxObject;
+class SbModule;
+class StarBASIC;
 
+namespace basctl
+{
 //----------------------------------------------------------------------------
 
 const sal_uLong BASICIDE_UI_FEATURE_SHOW_BROWSER = 0x00000001;
 
 //----------------------------------------------------------------------------
 
-namespace basctl
-{
-    class Layout;
-    class ModulWindow;
-    class ModulWindowLayout;
-    class DialogWindow;
-    class DialogWindowLayout;
-}
-class SdrView;
-class BasicIDETabBar;
+class Layout;
+class ModulWindow;
+class ModulWindowLayout;
+class DialogWindow;
+class DialogWindowLayout;
 class TabBar;
-class IDEBaseWindow;
-class SbxObject;
-class SbModule;
-class StarBASIC;
+class BaseWindow;
 class LocalizationMgr;
 
-#if _SOLAR__PRIVATE
-typedef std::map<sal_uInt16, IDEBaseWindow*> IDEWindowTable;
-#else
-typedef std::map<sal_uInt16, void*> IDEWindowTable;
-#endif
+bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 
-namespace BasicIDE
-{
-    bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
-}
-
-class BasicIDEShell :
+class Shell :
     public SfxViewShell,
-    public basctl::DocumentEventListener
+    public DocumentEventListener
 {
-    typedef basctl::DialogWindow DialogWindow;
-    typedef basctl::ModulWindow ModulWindow;
+public:
+    typedef std::map<sal_uInt16, BaseWindow*> WindowTable;
+    typedef WindowTable::const_iterator WindowTableIt;
 
+private:
     friend class JavaDebuggingListenerImpl;
     friend class LocalizationMgr;
-    friend bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
+    friend bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName ); // defined in baside3.cxx
 
-    typedef IDEWindowTable::const_iterator WindowTableIt;
-
-    IDEWindowTable      aIDEWindowTable;
+    WindowTable         aWindowTable;
     sal_uInt16          nCurKey;
-    IDEBaseWindow*      pCurWin;
+    BaseWindow*         pCurWin;
     ScriptDocument      m_aCurDocument;
-    ::rtl::OUString     m_aCurLibName;
+    OUString            m_aCurLibName;
     boost::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
     ScrollBar           aHScrollBar;
     ScrollBar           aVScrollBar;
     ScrollBarBox        aScrollBarBox;
-    BasicIDETabBar*     pTabBar;
+    boost::scoped_ptr<TabBar> pTabBar; // basctl::TabBar
     bool                bTabBarSplitted;
     bool                bCreatingWindow;
     // layout windows
-    boost::scoped_ptr<basctl::ModulWindowLayout> pModulLayout;
-    boost::scoped_ptr<basctl::DialogWindowLayout> pDialogLayout;
+    boost::scoped_ptr<ModulWindowLayout> pModulLayout;
+    boost::scoped_ptr<DialogWindowLayout> pDialogLayout;
     // the active layout window
-    basctl::Layout* pLayout;
+    Layout* pLayout;
     // common object catalog window
-    basctl::ObjectCatalog aObjectCatalog;
+    ObjectCatalog aObjectCatalog;
 
     bool                m_bAppBasicModified;
-    ::basctl::DocumentEventNotifier
-                        m_aNotifier;
+    DocumentEventNotifier m_aNotifier;
     friend class ContainerListenerImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
 
@@ -111,14 +100,14 @@ class BasicIDEShell :
     void                InitTabBar();
     void                InitScrollBars();
     void                CheckWindows();
-    void                RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, bool bDestroy );
+    void                RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy );
     void                UpdateWindows();
     void                InvalidateBasicIDESlots();
     void                StoreAllWindowData( bool bPersistent = true );
     void                SetMDITitle();
     void                EnableScrollbars( bool bEnable );
-    void                SetCurLib( const ScriptDocument& rDocument, ::rtl::OUString aLibName, bool bUpdateWindows = true , bool bCheck = true );
-    void                SetCurLibForLocalization( const ScriptDocument& rDocument, ::rtl::OUString aLibName );
+    void                SetCurLib( const ScriptDocument& rDocument, OUString aLibName, bool bUpdateWindows = true , bool bCheck = true );
+    void                SetCurLibForLocalization( const ScriptDocument& rDocument, OUString aLibName );
 
     void                ImplStartListening( StarBASIC* pBasic );
 
@@ -126,19 +115,21 @@ class BasicIDEShell :
     DECL_LINK( TabBarSplitHdl, TabBar * );
 #endif
 
-protected:
+    static unsigned nShellCount;
+
+private:
     virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize );
     virtual void        OuterResizePixel( const Point &rPos, const Size &rSize );
     virtual Size        GetOptimalSizePixel() const;
-    sal_uInt16              InsertWindowInTable( IDEBaseWindow* pNewWin );
+    sal_uInt16              InsertWindowInTable (BaseWindow* pNewWin);
     virtual sal_uInt16      PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing );
 
-    void                SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true );
+    void                SetCurWindow (BaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true);
     void                ManageToolbars();
     void                ArrangeTabBar();
 
-    ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName );
-    DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
+    ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
+    DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
@@ -163,30 +154,28 @@ protected:
     virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
 
 public:
-                        TYPEINFO();
-                        SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_VIEWSH )
-                        SFX_DECL_VIEWFACTORY(BasicIDEShell);
+    TYPEINFO();
+    SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_VIEWSH )
+    SFX_DECL_VIEWFACTORY(Shell);
 
-                        BasicIDEShell( SfxViewFrame *pFrame, SfxViewShell *pOldSh );
-                        ~BasicIDEShell();
+    Shell( SfxViewFrame *pFrame, SfxViewShell *pOldSh );
+    ~Shell();
 
-    IDEBaseWindow*      GetCurWindow() const    { return pCurWin; }
-    const ScriptDocument&
-                        GetCurDocument() const { return m_aCurDocument; }
-    const ::rtl::OUString&       GetCurLibName() const { return m_aCurLibName; }
+    BaseWindow*      GetCurWindow() const    { return pCurWin; }
+    ScriptDocument const& GetCurDocument() const { return m_aCurDocument; }
+    OUString const&  GetCurLibName() const { return m_aCurLibName; }
     boost::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
     ScrollBar&          GetHScrollBar()         { return aHScrollBar; }
     ScrollBar&          GetVScrollBar()         { return aVScrollBar; }
     ScrollBarBox&       GetScrollBarBox()       { return aScrollBarBox; }
-    TabBar*             GetTabBar()             { return (TabBar*)pTabBar; }
-    IDEWindowTable&     GetIDEWindowTable()     { return aIDEWindowTable; }
-    sal_uInt16          GetIDEWindowId(const IDEBaseWindow* pWin) const;
+    TabBar&             GetTabBar()             { return *pTabBar; }
+    WindowTable&        GetWindowTable()        { return aWindowTable; }
+    sal_uInt16          GetWindowId (BaseWindow const* pWin) const;
 
     SdrView*            GetCurDlgView() const;
 
-    ::svl::IUndoManager*
-                        GetUndoManager();
+    svl::IUndoManager*  GetUndoManager();
 
     virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
 
@@ -207,28 +196,35 @@ public:
     long                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );
 
-    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName = ::rtl::OUString(), const ::rtl::OUString& rName = ::rtl::OUString(), BasicIDEType nType = BASICIDE_TYPE_UNKNOWN, bool bFindSuspended = false );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
-    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
-    IDEBaseWindow*      FindApplicationWindow();
+    BaseWindow*         FindWindow( const ScriptDocument& rDocument, const OUString& rLibName = OUString(), const OUString& rName = OUString(), ItemType nType = TYPE_UNKNOWN, bool bFindSuspended = false );
+    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
+    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
+    BaseWindow*         FindApplicationWindow();
     bool                NextPage( bool bPrev = false );
 
     bool                IsAppBasicModified () const { return m_bAppBasicModified; }
     void                SetAppBasicModified (bool bModified = true) { m_bAppBasicModified = bModified; }
 
-    // For Dialog Drag&Drop in Dialog Organizer
+    // For Dialog Drag&Drop in Dialog Organizer:
+    // (defined in moduldlg.cxx)
     static void CopyDialogResources(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& io_xISP,
-        const ScriptDocument& rSourceDoc, const ::rtl::OUString& rSourceLibName, const ScriptDocument& rDestDoc,
-        const ::rtl::OUString& rDestLibName, const ::rtl::OUString& rDlgName );
+        const ScriptDocument& rSourceDoc, const OUString& rSourceLibName, const ScriptDocument& rDestDoc,
+        const OUString& rDestLibName, const OUString& rDlgName );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         GetCurrentDocument() const;
 
     void UpdateObjectCatalog () { aObjectCatalog.UpdateEntries(); }
 
-    void RemoveWindow (IDEBaseWindow* pWindow, bool bDestroy, bool bAllowChangeCurWindow = true);
+    void RemoveWindow (BaseWindow* pWindow, bool bDestroy, bool bAllowChangeCurWindow = true);
 };
+
+} // namespace basctl
+
+// This typedef helps baside.sdi,
+// because I don't know how to use nested names in it.
+typedef basctl::Shell basctl_Shell;
 
 #endif // BASCTL_BASIDESH_HXX
 

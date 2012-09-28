@@ -53,21 +53,13 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/script/XErrorQuery.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
+
 using namespace comphelper;
 using namespace osl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::io;
-using namespace com::sun::star::script;
-using namespace com::sun::star::frame;
+using namespace com::sun::star;
 
 #include <comphelper/string.hxx>
 
@@ -115,7 +107,7 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
 
 // from source/classes/sbxmod.cxx
-Reference< XModel > getDocumentModel( StarBASIC* );
+uno::Reference< frame::XModel > getDocumentModel( StarBASIC* );
 
 static void FilterWhiteSpace( String& rStr )
 {
@@ -142,7 +134,7 @@ static long GetDayDiff( const Date& rDate );
 static const CharClass& GetCharClass( void )
 {
     static bool bNeedsInit = true;
-    static ::com::sun::star::lang::Locale aLocale;
+    static lang::Locale aLocale;
     if( bNeedsInit )
     {
         bNeedsInit = false;
@@ -179,16 +171,16 @@ String getFullPath( const String& aRelPath )
 }
 
 // TODO: -> SbiGlobals
-static com::sun::star::uno::Reference< XSimpleFileAccess3 > getFileAccess( void )
+static uno::Reference< ucb::XSimpleFileAccess3 > getFileAccess( void )
 {
-    static com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI;
+    static uno::Reference< ucb::XSimpleFileAccess3 > xSFI;
     if( !xSFI.is() )
     {
-        com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( xSMgr.is() )
         {
-            xSFI = com::sun::star::uno::Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+            xSFI = uno::Reference< ucb::XSimpleFileAccess3 >( xSMgr->createInstance
+                ( ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY );
         }
     }
     return xSFI;
@@ -260,7 +252,7 @@ RTLFUNC(Error)
         // ( complicated isn't it ? )
         if ( bVBA && rPar.Count() > 1 )
         {
-            com::sun::star::uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
+            uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
             if ( xErrObj.is() && xErrObj->getNumber() == nCode && !xErrObj->getDescription().isEmpty() )
                 tmpErrMsg = xErrObj->getDescription();
         }
@@ -501,7 +493,7 @@ RTLFUNC(ChDrive)
 // Implementation of StepRENAME with UCB
 void implStepRenameUCB( const String& aSource, const String& aDest )
 {
-    com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+    uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
     if( xSFI.is() )
     {
         try
@@ -548,7 +540,7 @@ RTLFUNC(FileCopy)
         String aDest = rPar.Get(2)->GetString();
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -586,7 +578,7 @@ RTLFUNC(Kill)
 
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 String aFullPath = getFullPath( aFileSpec );
@@ -626,41 +618,11 @@ RTLFUNC(MkDir)
 
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
                 {
-                    if ( SbiRuntime::isVBAEnabled() )
-                    {
-                        // If aPath is the folder name, not a path, then create the folder under current directory.
-                        INetURLObject aTryPathURL( aPath );
-                        ::rtl::OUString sPathURL = aTryPathURL.GetMainURL( INetURLObject::NO_DECODE );
-                        if ( sPathURL.isEmpty() )
-                        {
-                            File::getFileURLFromSystemPath( aPath, sPathURL );
-                        }
-                        INetURLObject aPathURL( sPathURL );
-                        if ( aPathURL.GetPath().isEmpty() )
-                        {
-                            ::rtl::OUString sCurDirURL;
-                            SbxArrayRef pPar = new SbxArray;
-                            SbxVariableRef pVar = new SbxVariable();
-                            pPar->Put( pVar, 0 );
-                            SbRtl_CurDir( pBasic, *pPar, sal_False );
-                            String aCurPath = pPar->Get(0)->GetString();
-
-                            File::getFileURLFromSystemPath( aCurPath, sCurDirURL );
-                            INetURLObject aDirURL( sCurDirURL );
-                            aDirURL.Append( aPath );
-                            ::rtl::OUString aTmpPath = aDirURL.GetMainURL( INetURLObject::NO_DECODE );
-                            if ( !aTmpPath.isEmpty() )
-                            {
-                                aPath = aTmpPath;
-                            }
-                        }
-                    }
-
                     xSFI->createFolder( getFullPath( aPath ) );
                 }
                 catch(const Exception & )
@@ -747,7 +709,7 @@ RTLFUNC(RmDir)
         String aPath = rPar.Get(1)->GetString();
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -826,7 +788,7 @@ RTLFUNC(FileLen)
         sal_Int32 nLen = 0;
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -1585,12 +1547,12 @@ RTLFUNC(StrComp)
         ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
         if( !pTransliterationWrapper )
         {
-            com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+            uno::Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
             pTransliterationWrapper = GetSbData()->pTransliterationWrapper =
                 new ::utl::TransliterationWrapper( xSMgr,
-                    ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
-                    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA |
-                    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
+                    i18n::TransliterationModules_IGNORE_CASE |
+                    i18n::TransliterationModules_IGNORE_KANA |
+                    i18n::TransliterationModules_IGNORE_WIDTH );
         }
 
         LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
@@ -1871,7 +1833,7 @@ RTLFUNC(DateValue)
         if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
         {
             // Create a new SvNumberFormatter by using LANGUAGE_ENGLISH to get the date value;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+            uno::Reference< lang::XMultiServiceFactory >
                 xFactory = comphelper::getProcessServiceFactory();
             SvNumberFormatter aFormatter( xFactory, LANGUAGE_ENGLISH_US );
             bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, fResult );
@@ -2304,9 +2266,9 @@ RTLFUNC(IsError)
                     if ( SbxBase* pBaseObj = pVar->GetObject() )
                         pObj = PTR_CAST(SbUnoObject, pBaseObj );
                 }
-        Reference< XErrorQuery > xError;
+        uno::Reference< script::XErrorQuery > xError;
         if ( pObj )
-            xError.set( pObj->getUnoAny(), UNO_QUERY );
+            xError.set( pObj->getUnoAny(), uno::UNO_QUERY );
         if ( xError.is() )
             rPar.Get( 0 )->PutBool( xError->hasError() );
         else
@@ -2485,7 +2447,7 @@ RTLFUNC(Dir)
 
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 if ( nParCount >= 2 )
@@ -2763,7 +2725,7 @@ RTLFUNC(GetAttr)
 
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -2831,12 +2793,12 @@ RTLFUNC(FileDateTime)
         Date aDate( Date::EMPTY );
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
                 {
-                    com::sun::star::util::DateTime aUnoDT = xSFI->getDateTimeModified( aPath );
+                    util::DateTime aUnoDT = xSFI->getDateTimeModified( aPath );
                     aTime = Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds );
                     aDate = Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year );
                 }
@@ -3287,20 +3249,10 @@ RTLFUNC(Shell)
             pParamList[j] = NULL;
         }
 
-        long nResult = 0;
-        // We should return the identifier of the executing process when is running VBA, because method Shell(...) returns it in Excel.
-        if ( bSucc && SbiRuntime::isVBAEnabled())
-        {
-            oslProcessInfo aInfo;
-            aInfo.Size = sizeof(oslProcessInfo);
-            osl_getProcessInfo( pApp, osl_Process_IDENTIFIER, &aInfo );
-            nResult = aInfo.Ident;
-        }
-
         if( !bSucc )
             StarBASIC::Error( SbERR_FILE_NOT_FOUND );
         else
-            rPar.Get(0)->PutLong( nResult );
+            rPar.Get(0)->PutLong( 0 );
     }
 }
 
@@ -3393,21 +3345,21 @@ String getObjectTypeName( SbxVariable* pVar )
                 // we need to get detect the vba-ness of the object in some
                 // other way
                 // note: Automation objects do not support XServiceInfo
-                Reference< XServiceInfo > xServInfo( aObj, UNO_QUERY );
+                uno::Reference< XServiceInfo > xServInfo( aObj, uno::UNO_QUERY );
                 if ( xServInfo.is() )
                 {
                     // is this a VBA object ?
-                    Reference< ooo::vba::XHelperInterface > xVBA( aObj, UNO_QUERY );
+                    uno::Reference< ooo::vba::XHelperInterface > xVBA( aObj, uno::UNO_QUERY );
                     Sequence< rtl::OUString > sServices = xServInfo->getSupportedServiceNames();
                     if ( sServices.getLength() )
                         sRet = sServices[ 0 ];
                 }
                 else
                 {
-                    Reference< com::sun::star::bridge::oleautomation::XAutomationObject > xAutoMation( aObj, UNO_QUERY );
+                    uno::Reference< bridge::oleautomation::XAutomationObject > xAutoMation( aObj, uno::UNO_QUERY );
                     if ( xAutoMation.is() )
                     {
-                        Reference< XInvocation > xInv( aObj, UNO_QUERY );
+                        uno::Reference< script::XInvocation > xInv( aObj, uno::UNO_QUERY );
                         if ( xInv.is() )
                         {
                             try
@@ -3815,26 +3767,26 @@ RTLFUNC(StrConv)
         aOldStr = rCharClass.titlecase( aOldStr.ToLowerAscii(), 0, nOldLen );
     }
     else if ( (nConversion & 0x01) == 1 ) // vbUpperCase
-        nType |= ::com::sun::star::i18n::TransliterationModules_LOWERCASE_UPPERCASE;
+        nType |= i18n::TransliterationModules_LOWERCASE_UPPERCASE;
     else if ( (nConversion & 0x02) == 2 ) // vbLowerCase
-        nType |= ::com::sun::star::i18n::TransliterationModules_UPPERCASE_LOWERCASE;
+        nType |= i18n::TransliterationModules_UPPERCASE_LOWERCASE;
 
     if ( (nConversion & 0x04) == 4 ) // vbWide
-        nType |= ::com::sun::star::i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
+        nType |= i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
     else if ( (nConversion & 0x08) == 8 ) // vbNarrow
-        nType |= ::com::sun::star::i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
+        nType |= i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
 
     if ( (nConversion & 0x10) == 16) // vbKatakana
-        nType |= ::com::sun::star::i18n::TransliterationModules_HIRAGANA_KATAKANA;
+        nType |= i18n::TransliterationModules_HIRAGANA_KATAKANA;
     else if ( (nConversion & 0x20) == 32 ) // vbHiragana
-        nType |= ::com::sun::star::i18n::TransliterationModules_KATAKANA_HIRAGANA;
+        nType |= i18n::TransliterationModules_KATAKANA_HIRAGANA;
 
     String aNewStr( aOldStr );
     if( nType != 0 )
     {
-        com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         ::utl::TransliterationWrapper aTransliterationWrapper( xSMgr,nType );
-        com::sun::star::uno::Sequence<sal_Int32> aOffsets;
+        uno::Sequence<sal_Int32> aOffsets;
         aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
         aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
     }
@@ -4158,7 +4110,7 @@ RTLFUNC(SetAttr)
 
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try
@@ -4227,7 +4179,7 @@ RTLFUNC(FileExists)
 
         if( hasUno() )
         {
-            com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
+            uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
             if( xSFI.is() )
             {
                 try

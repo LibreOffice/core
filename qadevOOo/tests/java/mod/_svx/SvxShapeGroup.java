@@ -66,7 +66,7 @@ public class SvxShapeGroup extends TestCase {
 
     try {
         log.println( "creating a draw document" );
-        xDrawDoc = SOF.createDrawDoc(null);;
+        xDrawDoc = SOF.createDrawDoc(null);
      } catch ( Exception e ) {
         // Some exception occures.FAILED
         e.printStackTrace( log );

@@ -1587,7 +1587,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
                     if ( !bCurFontIsSel )
                     {
                         SetTextColor( aHighlightTextColor );
-                        SetFont( aHighlightFont );
+                        Control::SetFont( aHighlightFont );
                         bCurFontIsSel = true;
                     }
                 }
@@ -1601,7 +1601,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
                 {
                     bCurFontIsSel = false;
                     SetTextColor( aBackupTextColor );
-                    SetFont( aBackupFont );
+                    Control::SetFont( aBackupFont );
                 }
             }
 
@@ -1681,7 +1681,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
     if( bCurFontIsSel )
     {
         SetTextColor( aBackupTextColor );
-        SetFont( aBackupFont );
+        Control::SetFont( aBackupFont );
     }
 
     sal_uInt16 nFirstDynTabPos;

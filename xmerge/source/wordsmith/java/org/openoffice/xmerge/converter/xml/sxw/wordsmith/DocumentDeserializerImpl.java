@@ -55,7 +55,6 @@ import org.w3c.dom.Text;
  *  <code>String</code> object, then it calls <code>buildDocument</code>
  *  to create a <code>SxwDocument</code> object from it.
  *
- *  @author      Herbie Ong, David Proulx
  */
 public final class DocumentDeserializerImpl
 implements DOCConstants, OfficeConstants, DocumentDeserializer {
@@ -457,30 +456,29 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
             origSxwDoc.read(new ByteArrayInputStream(bos.toByteArray()));
             org.w3c.dom.Document origDomDoc = origSxwDoc.getContentDOM();
 
-            XmlUtil xu = new XmlUtil();
             org.w3c.dom.DocumentFragment df;
             org.w3c.dom.Node newNode;
 
             // copy font declarations from original document to the new document
             nl = origDomDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
             df = doc.createDocumentFragment();
-            newNode = xu.deepClone(df, nl.item(0));
+            newNode = XmlUtil.deepClone(df, nl.item(0));
             rootNode.insertBefore(newNode, bodyNode);
 
             // copy style catalog from original document to the new document
             nl = origDomDoc.getElementsByTagName(TAG_OFFICE_STYLES);
             df = doc.createDocumentFragment();
-            newNode = xu.deepClone(df, nl.item(0));
+            newNode = XmlUtil.deepClone(df, nl.item(0));
             rootNode.insertBefore(newNode, bodyNode);
 
             nl = origDomDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
             df = doc.createDocumentFragment();
-            newNode = xu.deepClone(df, nl.item(0));
+            newNode = XmlUtil.deepClone(df, nl.item(0));
             rootNode.insertBefore(newNode, bodyNode);
 
             nl = origDomDoc.getElementsByTagName(TAG_OFFICE_MASTER_STYLES);
             df = doc.createDocumentFragment();
-            newNode = xu.deepClone(df, nl.item(0));
+            newNode = XmlUtil.deepClone(df, nl.item(0));
             rootNode.insertBefore(newNode, bodyNode);
         }
 

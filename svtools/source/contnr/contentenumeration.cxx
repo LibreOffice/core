@@ -189,7 +189,7 @@ namespace svt
                 }
                 if ( !aFolder.aContent.get().is() )
                 {
-                    aFolder.aContent = ::ucbhelper::Content( aFolder.sURL, xEnvironment );
+                    aFolder.aContent = ::ucbhelper::Content( aFolder.sURL, xEnvironment, comphelper::getProcessComponentContext() );
                     {
                         ::osl::MutexGuard aGuard( m_aMutex );
                         m_aFolder.aContent = aFolder.aContent;
@@ -269,7 +269,7 @@ namespace svt
                             if ( bHasTargetURL &&
                                 INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
                             {
-                                ::ucbhelper::Content aCnt( aTargetURL, xEnvironment );
+                                ::ucbhelper::Content aCnt( aTargetURL, xEnvironment, comphelper::getProcessComponentContext() );
                                 try
                                 {
                                 aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" )) ) >>= pData->maSize;

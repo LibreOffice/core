@@ -572,7 +572,7 @@ sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
 // If a multi-column section is cancelled, the ContentFrms have to be
 // invalidated
 
-void lcl_InvalidateInfFlags( SwFrm* pFrm, sal_Bool bInva )
+void lcl_InvalidateInfFlags( SwFrm* pFrm, bool bInva )
 {
     while ( pFrm )
     {
@@ -646,7 +646,7 @@ SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
 
 void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, sal_Bool bSave )
 {
-    sal_Bool bSize = pDel->Lower() && pDel->Lower()->IsColumnFrm();
+    bool bSize = pDel->Lower() && pDel->Lower()->IsColumnFrm();
     SwFrm* pPrv = pDel->GetPrev();
     SwLayoutFrm* pUp = pDel->GetUpper();
     // OD 27.03.2003 #i12711# - initialize local pointer variables.
@@ -1353,7 +1353,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         // Column widths have to be adjusted before calling _CheckClipping.
         // _CheckClipping can cause the formatting of the lower frames
         // which still have a width of 0.
-        const sal_Bool bHasColumns = Lower() && Lower()->IsColumnFrm();
+        const bool bHasColumns = Lower() && Lower()->IsColumnFrm();
         if ( bHasColumns && Lower()->GetNext() )
             AdjustColumns( 0, sal_False );
 
@@ -1989,7 +1989,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
 
         sal_Bool bInCalcCntnt = GetUpper() && IsInFly() && FindFlyFrm()->IsLocked();
         // OD 2004-03-15 #116561# - allow grow in online layout
-        sal_Bool bGrow = !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
+        bool bGrow = !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
              GetSection()->GetFmt()->GetBalancedColumns().GetValue();
         if( !bGrow )
         {

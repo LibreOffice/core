@@ -23,11 +23,6 @@ import com.sun.star.uno.UnoRuntime;
 
 import lib.MultiMethodTest;
 
-
-/**
- *
- * @author  sw93809
- */
 public class _XScenarioEnhanced extends MultiMethodTest {
     public XScenarioEnhanced oObj = null;
 

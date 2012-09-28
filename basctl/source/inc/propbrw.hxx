@@ -17,35 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_PROPBRW_HXX
-#define _BASCTL_PROPBRW_HXX
+#ifndef BASCTL_PROPBRW_HXX
+#define BASCTL_PROPBRW_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/stl_types.hxx>
-#include <sfx2/basedlgs.hxx>
-#include <sfx2/dockwin.hxx>
 #include <svl/lstner.hxx>
+#include <svl/brdcst.hxx>
 #include <svx/svdmark.hxx>
-
-//============================================================================
-// PropBrwMgr
-//============================================================================
-
-class PropBrwMgr : public SfxChildWindow
-{
-public:
-    PropBrwMgr(Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo *pInfo);
-    SFX_DECL_CHILDWINDOW(PropBrwMgr);
-};
-
-//============================================================================
-// PropBrw
-//============================================================================
+#include "bastypes.hxx"
 
 class SfxBindings;
 class SdrView;
+class SfxViewShell;
 
-class PropBrw : public SfxDockingWindow , public SfxListener, public SfxBroadcaster
+namespace basctl
+{
+
+class DialogWindowLayout;
+
+class PropBrw : public DockingWindow, public SfxListener, public SfxBroadcaster
 {
 private:
     bool        m_bInitialStateChange;
@@ -61,10 +52,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                     m_xContextDocument;
 
+    DialogWindowLayout& rLayout;
+
 protected:
     SdrView*        pView;
     virtual void Resize();
-    virtual void FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual sal_Bool Close();
 
     DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, InterfaceArray);
@@ -81,17 +73,12 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
 public:
-    PropBrw( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
-             SfxBindings *pBindings,
-             PropBrwMgr* pMgr,
-             Window* pParent,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
-    );
+    explicit PropBrw (DialogWindowLayout&);
     virtual ~PropBrw();
     using Window::Update;
     // note: changing the Context document to an instance other than the one given in the ctor is not supported
     // currently
-    void    Update( const SfxViewShell* _pShell );
+    void    Update( const SfxViewShell* pShell );
     SdrView*        GetCurView() const { return pView; }
 
 private:
@@ -100,6 +87,8 @@ private:
     void    ImplReCreateController();
 };
 
-#endif // _BASCTL_PROPBRW_HXX
+} // namespace basctl
+
+#endif // BASCTL_PROPBRW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

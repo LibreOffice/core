@@ -32,22 +32,14 @@
  *
  *************************************************************************/
 
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.Locale;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.reflection.ParamInfo;
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.reflection.XTypeDescription;
-import com.sun.star.text.XTextTablesSupplier;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
-import com.sun.star.uno.UnoRuntime;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -55,21 +47,21 @@ import java.util.Vector;
 
 
 public class SourceCodeGenerator {
-    private Vector sExceptions = new Vector();
-    Vector sHeaderStatements = new HeaderStatements();
+    private Vector<String> sExceptions = new Vector<String>();
+    Vector<String> sHeaderStatements = new HeaderStatements();
     private XLanguageSourceCodeGenerator m_xLanguageSourceCodeGenerator;
     private String sHeaderCode = "";
     private String sStatementCode = "";
     private String sMainMethodSignature = "";
 
-    private Hashtable aVariables = new Hashtable();
+    private Hashtable<String, UnoObjectDefinition> aVariables = new Hashtable<String, UnoObjectDefinition>();
     private final String SSUFFIXSEPARATOR = "_";
     private final String SVARIABLENAME = "VariableName";
     private final String SARRAYVARIABLENAME = "VariableNameList";
     private final String SUNOOBJECTNAME = "oUnobject";
     private final String SUNOSTRUCTNAME = "aUnoStruct";
     private Introspector m_oIntrospector;
-    private Vector aTreepathProviders = new Vector();
+    private Vector<XTreePathProvider> aTreepathProviders = new Vector<XTreePathProvider>();
     private XTreePathProvider xTreepathProvider = null;
     private boolean baddExceptionHandling = false;
     private boolean bXPropertySetExceptionsAreAdded = false;
@@ -215,7 +207,7 @@ public class SourceCodeGenerator {
         resetSourceCodeGeneration(_nLanguage);
         int ncount = aTreepathProviders.size();
         for (int i=0; i< ncount; i++){
-            sSourceCode = addSourceCodeOfUnoObject((XTreePathProvider) aTreepathProviders.get(i), false, (i==0), (i == (ncount-1)));
+            sSourceCode = addSourceCodeOfUnoObject(aTreepathProviders.get(i), false, (i==0), (i == (ncount-1)));
     }
         return sSourceCode;
     }
@@ -353,9 +345,9 @@ public class SourceCodeGenerator {
 
 
     private String getHeaderSourceCode(){
-        Enumeration aEnumeration = aVariables.elements();
+        Enumeration<UnoObjectDefinition> aEnumeration = aVariables.elements();
         while(aEnumeration.hasMoreElements()){
-            UnoObjectDefinition oUnoObjectDefinition = (UnoObjectDefinition) aEnumeration.nextElement();
+            UnoObjectDefinition oUnoObjectDefinition = aEnumeration.nextElement();
             String sCurHeaderStatement = m_xLanguageSourceCodeGenerator.getHeaderSourceCode(oUnoObjectDefinition.getUnoObject(), oUnoObjectDefinition.getTypeName(), oUnoObjectDefinition.getTypeClass());
             sHeaderStatements.add(sCurHeaderStatement);
         }
@@ -371,9 +363,9 @@ public class SourceCodeGenerator {
     }
 
 
-    private class HeaderStatements extends Vector{
+    private class HeaderStatements extends Vector<String> {
 
-        public boolean contains(Object _oElement){
+        public boolean contains(String _oElement){
            String sCompName = (String) _oElement;
            for (int i = 0; i < this.size(); i++){
                String sElement = (String) this.get(i);
@@ -385,13 +377,11 @@ public class SourceCodeGenerator {
        }
 
 
-       public boolean add(Object _oElement){
-           if (_oElement instanceof String){
-                if (!contains(_oElement)){
-                    super.add(_oElement);
-                    return true;
-                }
-           }
+       public boolean add(String _oElement){
+            if (!contains(_oElement)){
+                super.add(_oElement);
+                return true;
+            }
            return false;
        }
     }
@@ -419,7 +409,7 @@ public class SourceCodeGenerator {
                 int a = 2;
                 while (!bleaveloop){
                     if (aVariables.containsKey(sCompVariableName)){
-                        Object oUnoCompObject = ((UnoObjectDefinition) aVariables.get(sCompVariableName)).getUnoObject();
+                        Object oUnoCompObject = aVariables.get(sCompVariableName).getUnoObject();
                         String sUnoCompObjectIdentity = oUnoCompObject.toString();
                         bleaveloop = sUnoCompObjectIdentity.equals(sUnoObjectIdentity);
                         bisDeclared = bleaveloop;
@@ -766,7 +756,7 @@ class UnoObjectDefinition{
                 boolean bleaveloop = false;
                 while (!bleaveloop){
                     if (aVariables.containsKey(sVariableName)){
-                        String sUnoObjectIdentity = ((UnoObjectDefinition) aVariables.get(sVariableName)).getUnoObject().toString();
+                        String sUnoObjectIdentity = aVariables.get(sVariableName).getUnoObject().toString();
                         if (m_oUnoObject != null){
                             if ((sUnoObjectIdentity.equals(m_oUnoObject.toString()) && (!m_oIntrospector.isPrimitive(this.getTypeClass())) &&
                                 (! m_oIntrospector.isObjectSequence(m_oUnoObject)))){
@@ -1045,7 +1035,7 @@ class UnoObjectDefinition{
             String sExceptionName = "e";
             if (baddExceptionHandling){
                 for (int i = 0; i < sExceptions.size(); i++){
-                    String sCurException = (String) sExceptions.get(i);
+                    String sCurException = sExceptions.get(i);
                     if (sReturn.indexOf(sCurException) == -1){
                         if (nIndex > 1){
                             sExceptionName = "e"+ nIndex;
@@ -1508,7 +1498,7 @@ class UnoObjectDefinition{
             if (baddExceptionHandling){
                 sReturn += "\n//throw ";
                 for (int i = 0; i < sExceptions.size(); i++){
-                    String sCurException = (String) sExceptions.get(i);
+                    String sCurException = sExceptions.get(i);
                     if (sReturn.indexOf(sCurException) == -1){
                         if (a++ > 0){
                             sReturn += ", ";

@@ -52,8 +52,6 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
  *  DocumentSerializer} and {@link
  *  org.openoffice.xmerge.DocumentDeserializer
  *  DocumentDeserializer}</p>
- *
- *  @author   Aidan Butler
  */
 public final class PluginFactoryImpl extends PluginFactory
     implements DocumentDeserializerFactory, DocumentSerializerFactory, DocumentMergerFactory

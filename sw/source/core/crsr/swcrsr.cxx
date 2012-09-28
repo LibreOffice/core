@@ -2099,21 +2099,23 @@ SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
 SwTableCursor::~SwTableCursor() {}
 
 
-sal_Bool lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, sal_uInt16& rFndPos )
+static bool
+lcl_SeekEntry(const SwSelBoxes& rTmp, SwStartNode const*const pSrch,
+        size_t & o_rFndPos)
 {
     sal_uLong nIdx = pSrch->GetIndex();
 
-    sal_uInt16 nO = rTmp.size();
+    size_t nO = rTmp.size();
     if( nO > 0 )
     {
         nO--;
-        sal_uInt16 nU = 0;
+        size_t nU = 0;
         while( nU <= nO )
         {
-            sal_uInt16 nM = nU + ( nO - nU ) / 2;
+            size_t nM = nU + ( nO - nU ) / 2;
             if( rTmp[ nM ]->GetSttNd() == pSrch )
             {
-                rFndPos = nM;
+                o_rFndPos = nM;
                 return sal_True;
             }
             else if( rTmp[ nM ]->GetSttIdx() < nIdx )
@@ -2146,14 +2148,14 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 
         // create temporary copies so that all boxes that
         // have already cursors can be removed
-        SwSelBoxes aTmp( aSelBoxes );
+        SwSelBoxes aTmp(m_SelectedBoxes);
 
         // compare old and new ones
         SwNodes& rNds = pAktCrsr->GetDoc()->GetNodes();
-        sal_uInt16 nPos;
         const SwStartNode* pSttNd;
         SwPaM* pCur = pAktCrsr;
         do {
+            size_t nPos;
             sal_Bool bDel = sal_False;
             pSttNd = pCur->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
             if( !pCur->HasMark() || !pSttNd ||
@@ -2198,7 +2200,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             }
         } while ( pAktCrsr != pCur );
 
-        for( nPos = 0; nPos < aTmp.size(); ++nPos )
+        for (size_t nPos = 0; nPos < aTmp.size(); ++nPos)
         {
             pSttNd = aTmp[ nPos ]->GetSttNd();
 
@@ -2239,7 +2241,14 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 void SwTableCursor::InsertBox( const SwTableBox& rTblBox )
 {
     SwTableBox* pBox = (SwTableBox*)&rTblBox;
-    aSelBoxes.insert( pBox );
+    m_SelectedBoxes.insert(pBox);
+    bChg = sal_True;
+}
+
+
+void SwTableCursor::DeleteBox(size_t const nPos)
+{
+    m_SelectedBoxes.erase(m_SelectedBoxes.begin() + nPos);
     bChg = sal_True;
 }
 
@@ -2255,7 +2264,7 @@ bool SwTableCursor::NewTableSelection()
             pTableNode->GetTable().IsNewModel() )
         {
             bRet = true;
-            SwSelBoxes aNew( aSelBoxes );
+            SwSelBoxes aNew(m_SelectedBoxes);
             pTableNode->GetTable().CreateSelection( pStart, pEnd, aNew,
                 SwTable::SEARCH_NONE, false );
             ActualizeSelection( aNew );
@@ -2266,10 +2275,10 @@ bool SwTableCursor::NewTableSelection()
 
 void SwTableCursor::ActualizeSelection( const SwSelBoxes &rNew )
 {
-    sal_uInt16 nOld = 0, nNew = 0;
-    while ( nOld < aSelBoxes.size() && nNew < rNew.size() )
+    size_t nOld = 0, nNew = 0;
+    while (nOld < m_SelectedBoxes.size() && nNew < rNew.size())
     {
-        const SwTableBox* pPOld = aSelBoxes[ nOld ];
+        SwTableBox const*const pPOld = m_SelectedBoxes[ nOld ];
         const SwTableBox* pPNew = rNew[ nNew ];
         if( pPOld == pPNew )
         {   // this box will stay
@@ -2277,7 +2286,9 @@ void SwTableCursor::ActualizeSelection( const SwSelBoxes &rNew )
             ++nNew;
         }
         else if( pPOld->GetSttIdx() < pPNew->GetSttIdx() )
+        {
             DeleteBox( nOld ); // this box has to go
+        }
         else
         {
             InsertBox( *pPNew ); // this is a new one
@@ -2286,11 +2297,15 @@ void SwTableCursor::ActualizeSelection( const SwSelBoxes &rNew )
         }
     }
 
-    while( nOld < aSelBoxes.size() )
+    while (nOld < m_SelectedBoxes.size())
+    {
         DeleteBox( nOld ); // some more to delete
+    }
 
-    for( ; nNew < rNew.size(); ++nNew ) // some more to insert
+    for ( ; nNew < rNew.size(); ++nNew ) // some more to insert
+    {
         InsertBox( *rNew[ nNew ] );
+    }
 }
 
 sal_Bool SwTableCursor::IsCrsrMovedUpdt()
@@ -2329,14 +2344,15 @@ void SwTableCursor::ParkCrsr()
 sal_Bool SwTableCursor::HasReadOnlyBoxSel() const
 {
     sal_Bool bRet = sal_False;
-    for( sal_uInt16 n = aSelBoxes.size(); n;  )
-        if( aSelBoxes[ --n ]->GetFrmFmt()->GetProtect().IsCntntProtected() )
+    for (size_t n = m_SelectedBoxes.size(); n; )
+    {
+        if (m_SelectedBoxes[--n]->GetFrmFmt()->GetProtect().IsCntntProtected())
         {
             bRet = sal_True;
             break;
         }
+    }
     return bRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/diagnose_ex.h>
 
@@ -60,10 +61,10 @@ namespace basctl { namespace docs {
     //====================================================================
     struct DocumentEnumeration_Data
     {
-        ::comphelper::ComponentContext      aContext;
+        Reference< com::sun::star::uno::XComponentContext > aContext;
         const IDocumentDescriptorFilter*    pFilter;
 
-        DocumentEnumeration_Data( const ::comphelper::ComponentContext& _rContext, const IDocumentDescriptorFilter* _pFilter )
+        DocumentEnumeration_Data( Reference< com::sun::star::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
             :aContext( _rContext )
             ,pFilter( _pFilter )
         {
@@ -74,7 +75,7 @@ namespace basctl { namespace docs {
     //= DocumentEnumeration
     //====================================================================
     //--------------------------------------------------------------------
-    DocumentEnumeration::DocumentEnumeration( const ::comphelper::ComponentContext& _rContext, const IDocumentDescriptorFilter* _pFilter )
+    DocumentEnumeration::DocumentEnumeration( Reference< com::sun::star::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
         :m_pData( new DocumentEnumeration_Data( _rContext, _pFilter ) )
     {
     }
@@ -173,7 +174,7 @@ namespace basctl { namespace docs {
 
         try
         {
-            const Reference< XDesktop > xDesktop( m_pData->aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+            const Reference< XDesktop > xDesktop( m_pData->aContext->getServiceManager()->createInstanceWithContext( "com.sun.star.frame.Desktop", m_pData->aContext ), UNO_QUERY_THROW );
             const Reference< XFramesSupplier > xSuppFrames( xDesktop, UNO_QUERY_THROW );
             const Reference< XFrames > xFrames( xSuppFrames->getFrames(), UNO_SET_THROW );
             const Sequence< Reference< XFrame > > aFrames( xFrames->queryFrames( FrameSearchFlag::ALL ) );

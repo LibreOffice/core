@@ -18,8 +18,6 @@
 
 package complex.memCheck;
 
-import java.io.File;
-
 /**
  *
  * @author ll93751

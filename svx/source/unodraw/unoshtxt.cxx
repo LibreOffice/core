@@ -285,14 +285,14 @@ const SvxUnoTextRangeBaseList& SvxTextEditSourceImpl::getRanges() const
 
 void SAL_CALL SvxTextEditSourceImpl::acquire()
 {
-    osl_incrementInterlockedCount( &maRefCount );
+    osl_atomic_increment( &maRefCount );
 }
 
 //------------------------------------------------------------------------
 
 void SAL_CALL SvxTextEditSourceImpl::release()
 {
-    if( ! osl_decrementInterlockedCount( &maRefCount ) )
+    if( ! osl_atomic_decrement( &maRefCount ) )
         delete this;
 }
 

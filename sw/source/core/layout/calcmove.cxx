@@ -85,16 +85,16 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
         // The most common case is the following: The Frm wants to float to
         // somewhere where the FixSize is the same that the Frm itself has already.
         // In that case it's pretty easy to check if the Frm has enough space
-        // for it's VarSize. If this is NOT the case, we already know that
+        // for its VarSize. If this is NOT the case, we already know that
         // we don't need to move.
         // The Frm checks itself whether it has enough space - respecting the fact
-        // that it could probably split itself if needed.
-        // If, however, the FixSize differs from the Frm or there are Flys involved
-        // (either in the old or the new position), we don't need to check anything,
+        // that it could possibly split itself if needed.
+        // If, however, the FixSize differs from the Frm or Flys are involved
+        // (either in the old or the new position), checking is pointless,
         // and we have to move the Frm just to see what happens - if there's
         // some space available to do it, that is.
 
-        // The FixSize of the surroundings of Cntnts is always the width.
+        // The FixSize of the containers of Cntnts is always the width.
 
         // If we moved more than one sheet back (for example jumping over empty
         // pages), we have to move either way. Otherwise, if the Frm doesn't fit
@@ -124,9 +124,7 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
         SWRECTFNX( pNewUpper )
         if( Abs( (pNewUpper->Prt().*fnRectX->fnGetWidth)() -
                  (GetUpper()->Prt().*fnRect->fnGetWidth)() ) > 1 ) {
-            // In this case, only a _WouldFit with relocating is possible
-            // TODO after translating the comment: what did the original german "umhaengen"
-            //      mean? What does actually make sense in context of the code here?
+            // In this case, only a _WouldFit with test move is possible
             nMoveAnyway = 2;
         }
 
@@ -193,16 +191,18 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
             {
                 if ( nSpace )
                 {
-                    // Not respecting footnotes which are stuck to the paragraph:
-                    // This would require extremely confusing code, regarding the widths
+                    // Do not notify footnotes which are stuck to the paragraph:
+                    // This would require extremely confusing code, taking into
+                    // account the widths
                     // and Flys, that in turn influence the footnotes, ...
 
-                    // _WouldFit can only be used if the width is the same and ONLY
-                    // with self-anchored Flys.
+                    // _WouldFit can only be used if the width is the same and
+                    // ONLY self-anchored Flys are present.
 
-                    // _WouldFit can also be used if ONLY Flys anchored somewhere else are present.
-                    // In this case, the width doesn't even matter, because we're running a TestFormat
-                    // in the new surrounding.
+                    // _WouldFit can also be used if ONLY Flys anchored
+                    // somewhere else are present.
+                    // In this case, the width doesn't even matter,
+                    // because we're running a TestFormat in the new upper.
                     const sal_uInt8 nBwdMoveNecessaryResult =
                                             BwdMoveNecessary( pNewPage, aRect);
                     const bool bObjsInNewUpper( nBwdMoveNecessaryResult == 2 ||
@@ -289,8 +289,8 @@ void SwFrm::PrepareMake()
         if ( !GetUpper() )
             return;
 
-        const sal_Bool bCnt = IsCntntFrm();
-        const sal_Bool bTab = IsTabFrm();
+        const bool bCnt = IsCntntFrm();
+        const bool bTab = IsTabFrm();
         sal_Bool bNoSect = IsInSct();
         sal_Bool bOldTabLock = sal_False, bFoll = sal_False;
         SwFlowFrm* pThis = bCnt ? (SwCntntFrm*)this : NULL;
@@ -418,8 +418,8 @@ void SwFrm::PrepareCrsr()
         if ( !GetUpper() )
             return;
 
-        const sal_Bool bCnt = IsCntntFrm();
-        const sal_Bool bTab = IsTabFrm();
+        const bool bCnt = IsCntntFrm();
+        const bool bTab = IsTabFrm();
         sal_Bool bNoSect = IsInSct();
 
         sal_Bool bOldTabLock = sal_False, bFoll;
@@ -489,7 +489,7 @@ void SwFrm::PrepareCrsr()
 |*
 |*************************************************************************/
 
-// Here we return GetPrev(); however we will overlook empty SectionFrms
+// Here we return GetPrev(); however we will ignore empty SectionFrms
 SwFrm* lcl_Prev( SwFrm* pFrm, sal_Bool bSectPrv = sal_True )
 {
     SwFrm* pRet = pFrm->GetPrev();
@@ -966,7 +966,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         bValidPrtArea = sal_True;
 
         SWRECTFN( this )
-        const sal_Bool bTxtFrm = IsTxtFrm();
+        const bool bTxtFrm = IsTxtFrm();
         SwTwips nUpper = 0;
         if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
         {
@@ -993,7 +993,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             ViewShell *pSh = getRootFrm()->GetCurrShell();
             SwTwips nWidthArea;
             if( pSh && 0!=(nWidthArea=(pSh->VisArea().*fnRect->fnGetWidth)()) &&
-                GetUpper()->IsPageBodyFrm() &&  // Not against for BodyFrms in Columns
+                GetUpper()->IsPageBodyFrm() && // but not for BodyFrms in Columns
                 pSh->GetViewOptions()->getBrowseMode() )
             {
                 // Do not protrude the edge of the visible area. The page may be
@@ -1283,8 +1283,9 @@ void SwCntntFrm::MakeAll()
                 bMovedFwd = true;
                 if ( bMovedBwd )
                 {
-                    // while floating back, the Upper was encouraged to completely
-                    // re-paint itself. We can skip this now after floating sideways.
+                    // While flowing back, the Upper was encouraged to
+                    // completely re-paint itself. We can skip this now after
+                    // flowing back and forth.
                     GetUpper()->ResetCompletePaint();
                     // The predecessor was invalidated, so this is obsolete as well now.
                     OSL_ENSURE( pPre, "missing old Prev" );
@@ -1635,11 +1636,11 @@ void SwCntntFrm::MakeAll()
                 }
                 /* --------------------------------------------------
                  * In earlier days, we never tried to fit TextFrms in
-                 * frames and sections using bMoveOrFit by setting aside
-                 * the attributes (Widows, Keep).
+                 * frames and sections using bMoveOrFit by ignoring
+                 * its attributes (Widows, Keep).
                  * This should have been done at least for column frames;
                  * as it must be tried anyway with linked frames and sections.
-                 * Exception: If we sit in FormatWidthCols, we may not ignore
+                 * Exception: If we sit in FormatWidthCols, we must not ignore
                  * the attributes.
                  * --------------------------------------------------*/
                 else if ( !bFtn && bMoveable &&
@@ -1865,7 +1866,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
         {
             // This is going to get a bit insidious now. If you're faint of heart,
             // you'd better look away here. If a Fly contains columns, then the Cntnts
-            // are movable, except the one in the last column (see SwFrm::IsMoveable()).
+            // are movable, except ones in the last column (see SwFrm::IsMoveable()).
             // Of course they're allowed to float back. WouldFit() only returns a usable
             // value if the Frm is movable. To fool WouldFit() into believing there's
             // a movable Frm, I'm just going to hang it somewhere else for the time.

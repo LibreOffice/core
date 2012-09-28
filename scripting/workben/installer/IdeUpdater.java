@@ -20,13 +20,6 @@ package installer;
 
 import java.io.*;
 import java.util.*;
-import java.util.jar.*;
-//import org.xml.sax.*;
-//import org.w3c.dom.*;
-//import javax.xml.parsers.*;
-import java.net.URL;
-import java.net.JarURLConnection;
-//import javax.xml.parsers.*;
 import javax.swing.*;
 
 /**
@@ -34,8 +27,6 @@ import javax.swing.*;
  *  file out of a jar file and parses it, providing access to this
  *  information in a <code>Vector</code> of <code>ConverterInfo</code>
  *  objects.
- *
- *  @author  Aidan Butler
  */
 public class IdeUpdater extends Thread {
 
@@ -45,7 +36,7 @@ public class IdeUpdater extends Thread {
 
     private JLabel statusLabel;
 
-    private Vector listeners;
+    private Vector<InstallListener> listeners;
     private Thread internalThread;
     private boolean threadSuspended;
     private JProgressBar progressBar;
@@ -58,24 +49,17 @@ public class IdeUpdater extends Thread {
         if (installPath.endsWith(File.separator) == false)
             installPath += File.separator;
 
-    //File jeditLauncher = new File( installPath + "jedit.jar" );
     File netbeansLauncher = new File( installPath + "bin" );
 
     if( netbeansLauncher.isDirectory() ) {
         isNetbeansPath = true;
         installPath = installPath +"modules" + File.separator;
     }
-    /*
-    else if( jeditLauncher.isFile() ){
-        isNetbeansPath =  false;
-        installPath = installPath + "jars" + File.separator;
-    }
-    */
 
     System.out.println( "IdeUpdater installPath is " + installPath + " isNetbeansPath is " + isNetbeansPath );
         this.installPath = installPath;
         this.statusLabel = statusLabel;
-    listeners = new Vector();
+    listeners = new Vector<InstallListener>();
     threadSuspended = false;
     progressBar=pBar;
     progressBar.setStringPainted(true);
@@ -130,10 +114,6 @@ public class IdeUpdater extends Thread {
 
     public void run() {
 
-        //InputStream istream;
-        //URL url;
-        //String fileName = null;
-
     internalThread = Thread.currentThread();
 
     progressBar.setString("Unzipping Required Files");
@@ -160,9 +140,6 @@ public class IdeUpdater extends Thread {
         }
     }
 
-        //System.out.println("About to call register");
-    //Register.register(installPath+File.separator, statusLabel, progressBar);
-
     statusLabel.setText("Installation Complete");
     progressBar.setString("Installation Complete");
     progressBar.setValue(10);
@@ -179,10 +156,10 @@ public class IdeUpdater extends Thread {
 
     private void onInstallComplete()
     {
-        Enumeration e = listeners.elements();
+        Enumeration<InstallListener> e = listeners.elements();
         while (e.hasMoreElements())
         {
-            InstallListener listener = (InstallListener)e.nextElement();
+            InstallListener listener = e.nextElement();
             listener.installationComplete(null);
         }
     }// onInstallComplete

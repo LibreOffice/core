@@ -179,7 +179,7 @@ cpyBootstrapSocketPath(sal_Char *name, size_t len)
                                OUSTRING_TO_OSTRING_CVTFLAGS);
             if (pStrValue && pStrValue->length > 0)
             {
-                size_t nCopy = SAL_MIN (len-1, (size_t)pStrValue->length);
+                size_t nCopy = (len-1 < (size_t)pStrValue->length) ? len-1 : (size_t)pStrValue->length;
                 strncpy (name, pStrValue->buffer, nCopy);
                 name[nCopy] = '\0';
                 bRet = (size_t)pStrValue->length < len;
@@ -354,7 +354,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
 void SAL_CALL osl_acquirePipe( oslPipe pPipe )
 {
-    osl_incrementInterlockedCount( &(pPipe->m_nRefCount) );
+    osl_atomic_increment( &(pPipe->m_nRefCount) );
 }
 
 void SAL_CALL osl_releasePipe( oslPipe pPipe )
@@ -363,7 +363,7 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
     if( 0 == pPipe )
         return;
 
-    if( 0 == osl_decrementInterlockedCount( &(pPipe->m_nRefCount) ) )
+    if( 0 == osl_atomic_decrement( &(pPipe->m_nRefCount) ) )
     {
         if( ! pPipe->m_bClosed )
             osl_closePipe( pPipe );

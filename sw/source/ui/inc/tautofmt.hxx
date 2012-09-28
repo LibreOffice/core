@@ -52,21 +52,18 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
 class SwAutoFormatDlg : public SfxModalDialog
 {
-    FixedLine       aFlFormat;
-    ListBox         aLbFormat;
-    FixedLine       aFlFormats;
-    CheckBox        aBtnNumFormat;
-    CheckBox        aBtnBorder;
-    CheckBox        aBtnFont;
-    CheckBox        aBtnPattern;
-    CheckBox        aBtnAlignment;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    PushButton      aBtnRename;
-    MoreButton      aBtnMore;
+    ListBox*        m_pLbFormat;
+    VclContainer*   m_pFormatting;
+    CheckBox*       m_pBtnNumFormat;
+    CheckBox*       m_pBtnBorder;
+    CheckBox*       m_pBtnFont;
+    CheckBox*       m_pBtnPattern;
+    CheckBox*       m_pBtnAlignment;
+    OKButton*       m_pBtnOk;
+    CancelButton*   m_pBtnCancel;
+    PushButton*     m_pBtnAdd;
+    PushButton*     m_pBtnRemove;
+    PushButton*     m_pBtnRename;
     String          aStrTitle;
     String          aStrLabel;
     String          aStrClose;
@@ -74,7 +71,7 @@ class SwAutoFormatDlg : public SfxModalDialog
     String          aStrDelMsg;
     String          aStrRenameTitle;
     String          aStrInvalidFmt;
-    AutoFmtPreview* pWndPreview;
+    AutoFmtPreview* m_pWndPreview;
 
     //------------------------
     SwWrtShell*             pShell;

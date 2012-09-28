@@ -1,45 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="acor_pt-BR">
-  <block-list:block block-list:abbreviated-name="&lt;-" block-list:package-name="+ADwALQ-" block-list:name="&lt;-" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="&lt;--" block-list:package-name="+ADwALQAt-" block-list:name="&lt;--" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="-&gt;" block-list:package-name="+AC0APg-" block-list:name="-&gt;" block-list:unformatted-text="false"/>
   <block-list:block block-list:abbreviated-name="&lt;--&gt;" block-list:package-name="+ADwALQAtAD4-" block-list:name="&lt;--&gt;" block-list:unformatted-text="false"/>
   <block-list:block block-list:abbreviated-name="&lt;-&gt;" block-list:package-name="+ADwALQA+-" block-list:name="&lt;-&gt;" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="AERO-ESPACIAL" block-list:package-name="aero+AC0-espacial" block-list:name="aero-espacial" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="ANTI-EDUCATIVO" block-list:package-name="anti+AC0-educativo" block-list:name="anti-educativo" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="ANTI-NATURAL" block-list:package-name="anti+AC0-natural" block-list:name="anti-natural" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="AUTO-COMANDO" block-list:package-name="auto+AC0-comando" block-list:name="auto-comando" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="AUTO-IDÓLATRA" block-list:package-name="auto+AC0-id+APM-latra" block-list:name="auto-idólatra" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="AZUIS-CELESTE" block-list:package-name="azuis+AC0-celeste" block-list:name="azuis-celeste" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="AZUIS-CELESTES" block-list:package-name="azuis+AC0-celestes" block-list:name="azuis-celestes" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="AZUIS-MARINHO" block-list:package-name="azuis+AC0-marinho" block-list:name="azuis-marinho" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="AZUIS-MARINHOS" block-list:package-name="azuis+AC0-marinhos" block-list:name="azuis-marinhos" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="AZÚIS-MARINHO" block-list:package-name="az+APo-is+AC0-marinho" block-list:name="azúis-marinho" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="CONHECIDÊNCIA" block-list:package-name="conhecid+AOo-ncia" block-list:name="conhecidência" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="CONSCIECIA" block-list:package-name="consciecia" block-list:name="consciecia" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="CONSCIENCIA" block-list:package-name="consciencia" block-list:name="consciencia" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="CONTRA-SENSO" block-list:package-name="contra+AC0-senso" block-list:name="contra-senso" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="ENGª" block-list:package-name="Eng+AKo-" block-list:name="Engª" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="ESQUENCI" block-list:package-name="esquenci" block-list:name="esquenci" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="GIRA-SOL" block-list:package-name="gira+AC0-sol" block-list:name="gira-sol" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="GIRA-SÓIS" block-list:package-name="gira+AC0-s+APM-is" block-list:name="gira-sóis" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="HIPER-ATIVO" block-list:package-name="hiper+AC0-ativo" block-list:name="hiper-ativo" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INFRA-BUCAIS" block-list:package-name="infra+AC0-bucais" block-list:name="infra-bucais" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INFRA-SÔNICO" block-list:package-name="infra+AC0-s+APQ-nico" block-list:name="infra-sônico" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTER-ESTADUAL" block-list:package-name="inter+AC0-estadual" block-list:name="inter-estadual" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTRA-CAPILAR" block-list:package-name="intra+AC0-capilar" block-list:name="intra-capilar" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTRA-EPIDÉRMICA" block-list:package-name="intra+AC0-epid+AOk-rmica" block-list:name="intra-epidérmica" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTRA-FASCICULAR" block-list:package-name="intra+AC0-fascicular" block-list:name="intra-fascicular" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTRA-MEDULAR" block-list:package-name="intra+AC0-medular" block-list:name="intra-medular" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTRA-PARIETAIS" block-list:package-name="intra+AC0-parietais" block-list:name="intra-parietais" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTRA-SUBJETIVA" block-list:package-name="intra+AC0-subjetiva" block-list:name="intra-subjetiva" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTRA-VEICULAR" block-list:package-name="intra+AC0-veicular" block-list:name="intra-veicular" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="INTRA-VESICAL" block-list:package-name="intra+AC0-vesical" block-list:name="intra-vesical" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="PRO-ABORTO" block-list:package-name="pro+AC0-aborto" block-list:name="pro-aborto" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="PRO-GOVERNAMENTAL" block-list:package-name="pro+AC0-governamental" block-list:name="pro-governamental" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="SAÍNDO" block-list:package-name="sa+AO0-ndo" block-list:name="saíndo" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="SEMI-SELVAGEM" block-list:package-name="semi+AC0-selvagem" block-list:name="semi-selvagem" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="SISTO-DIASTÓLICA" block-list:package-name="sisto+AC0-diast+APM-lica" block-list:name="sisto-diastólica" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="SOBRE-USO" block-list:package-name="sobre+AC0-uso" block-list:name="sobre-uso" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="SUPER-SÔNICO" block-list:package-name="super+AC0-s+APQ-nico" block-list:name="super-sônico" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="extra-tireoidiano" block-list:package-name="extra+AC0-tireoidiano" block-list:name="extra-tireoidiano" block-list:unformatted-text="false"/>
 </block-list:block-list>

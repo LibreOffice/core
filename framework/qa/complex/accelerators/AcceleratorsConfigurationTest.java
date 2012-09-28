@@ -22,7 +22,6 @@ import com.sun.star.awt.KeyEvent;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XNameContainer;
 import com.sun.star.embed.XStorage;
 import com.sun.star.embed.XTransactedObject;
 import com.sun.star.lang.XInitialization;
@@ -33,7 +32,6 @@ import com.sun.star.ui.XUIConfigurationManager;
 import com.sun.star.ui.XUIConfigurationPersistence;
 import com.sun.star.ui.XUIConfigurationStorage;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XChangesBatch;
 

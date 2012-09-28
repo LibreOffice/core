@@ -62,17 +62,17 @@ interface XWorksheet
     [attribute, readonly] XWorksheet Next;
     [attribute, readonly] XWorksheet Previous;
     [attribute, readonly] string CodeName;
-     [attribute, readonly] short Index;
-     [attribute] long EnableSelection;
+    [attribute, readonly] short Index;
+    [attribute] long EnableSelection;
     [attribute] boolean AutoFilterMode;
 
     void Activate();
-    void Calculate( );
-    void Select([in] any Replace);
+    void Calculate();
+    void Select();
     void Move([in] any Before,[in] any After );
     void Copy([in] any Before,[in] any After );
     void Paste([in] any Destination,[in] any Link);
-    void Delete( );
+    void Delete();
     void Protect([in] any Password,[in] any DrawingObjects ,[in] any Contents,[in] any Scenarios,[in] any UserInterfaceOnly);
     void Unprotect([in] any Password );
     void CheckSpelling([in] any CustomDictionary,[in] any IgnoreUppercase, [in] any AlwaysSuggest,[in] any SpellingLang );

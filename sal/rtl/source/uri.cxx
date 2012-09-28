@@ -201,15 +201,13 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     &nInfo, &nConverted);
                 if (nInfo == 0)
                 {
-                    OSL_ASSERT(
-                        nConverted
+                    assert( nConverted
                         == sal::static_int_cast< sal_uInt32 >(
                             aBuf.getLength()));
                     rtl_destroyTextToUnicodeConverter(aConverter);
                     *pBegin = p;
                     *pType = EscapeChar;
-                    OSL_ASSERT(
-                        nDstSize == 1
+                    assert( nDstSize == 1
                         || (nDstSize == 2 && isHighSurrogate(aDst[0])
                             && isLowSurrogate(aDst[1])));
                     return nDstSize == 1
@@ -230,7 +228,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                 }
                 else
                 {
-                    OSL_ASSERT(
+                    assert(
                         (nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL)
                         == 0);
                     break;
@@ -252,7 +250,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
 
 void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
 {
-    OSL_ENSURE(nUtf32 <= 0x10FFFF, "bad UTF-32 char");
+    assert(nUtf32 <= 0x10FFFF); // bad UTF-32 char
     if (nUtf32 <= 0xFFFF) {
         writeUnicode(
             pBuffer, pCapacity, static_cast< sal_Unicode >(nUtf32));
@@ -270,7 +268,7 @@ void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
 void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
                       sal_uInt32 nOctet)
 {
-    OSL_ENSURE(nOctet <= 0xFF, "bad octet");
+    assert(nOctet <= 0xFF); // bad octet
 
     static sal_Unicode const aHex[16]
         = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
@@ -284,7 +282,7 @@ void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
 bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
                      sal_uInt32 nUtf32, rtl_TextEncoding eCharset, bool bStrict)
 {
-    OSL_ENSURE(nUtf32 <= 0x10FFFF, "bad UTF-32 char");
+    assert(nUtf32 <= 0x10FFFF); // bad UTF-32 char
     if (eCharset == RTL_TEXTENCODING_UTF8) {
         if (nUtf32 < 0x80)
             writeEscapeOctet(pBuffer, pCapacity, nUtf32);
@@ -333,10 +331,10 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
             | RTL_UNICODETOTEXT_FLAGS_FLUSH,
             &nInfo, &nConverted);
-        OSL_ASSERT((nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0);
+        assert((nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0);
         rtl_destroyUnicodeToTextConverter(aConverter);
         if (nInfo == 0) {
-            OSL_ENSURE(nConverted == nSrcSize, "bad rtl_convertUnicodeToText");
+            assert(nConverted == nSrcSize); // bad rtl_convertUnicodeToText
             for (sal_Size i = 0; i < nDstSize; ++i)
                 writeEscapeOctet(pBuffer, pCapacity,
                                  static_cast< unsigned char >(aDst[i]));
@@ -366,7 +364,7 @@ struct Component
 
 inline sal_Int32 Component::getLength() const
 {
-    OSL_ENSURE(isPresent(), "taking length of non-present component");
+    assert(isPresent()); // taking length of non-present component
     return static_cast< sal_Int32 >(pEnd - pBegin);
 }
 
@@ -430,7 +428,7 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
 
     if (pPos != pEnd)
     {
-        OSL_ASSERT(*pPos == '#');
+        assert(*pPos == '#');
         pComponents->aFragment.pBegin = pPos;
         pComponents->aFragment.pEnd = pEnd;
     }
@@ -438,8 +436,8 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
 
 rtl::OUString joinPaths(Component const & rBasePath, Component const & rRelPath)
 {
-    OSL_ASSERT(rBasePath.isPresent() && *rBasePath.pBegin == '/');
-    OSL_ASSERT(rRelPath.isPresent());
+    assert(rBasePath.isPresent() && *rBasePath.pBegin == '/');
+    assert(rRelPath.isPresent());
 
     // The invariant of aBuffer is that it always starts and ends with a slash
     // (until probably right at the end of the algorithm, when the last segment
@@ -591,11 +589,10 @@ sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
          0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*`abcdefghijklmno*/
          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /*pqrstuvwxyz{|}~ */
        }};
-    OSL_ENSURE(
+    assert(
         (eCharClass >= 0
          && (sal::static_int_cast< std::size_t >(eCharClass)
-             < SAL_N_ELEMENTS(aCharClass))),
-        "bad eCharClass");
+             < SAL_N_ELEMENTS(aCharClass)))); // bad eCharClass
     return aCharClass[eCharClass];
 }
 
@@ -604,8 +601,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
                             rtl_TextEncoding eCharset, rtl_uString ** pResult)
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE(!pCharClass[0x25], "bad pCharClass");
-        // make sure the percent sign is encoded...
+    assert(!pCharClass[0x25]); // make sure the percent sign is encoded...
 
     sal_Unicode const * p = pText->buffer;
     sal_Unicode const * pEnd = p + pText->length;

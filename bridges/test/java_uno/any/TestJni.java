@@ -16,7 +16,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package test.java_uno.anytest;
+package test.java_uno.any;
+
+//"any" is a reserved word in IDL, so we need to use a different packagename
+import test.java_uno.anytest.*;
 
 public class TestJni
 {

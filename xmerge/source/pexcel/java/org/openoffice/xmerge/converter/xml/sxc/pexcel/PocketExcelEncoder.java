@@ -33,7 +33,6 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 /**
  *  This class is used by {@link SxcDocumentSerializerImpl} to encode the Pocket Excel format.
  *
- *  @author  Martin Maher
  */
 final class PocketExcelEncoder extends SpreadsheetEncoder {
 
@@ -43,15 +42,11 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      *  Constructor creates a Pocket Excel WorkBook.
      *
      *  @param  name      The name of the WorkBook.
-     *  @param  password  The password for the WorkBook.
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    PocketExcelEncoder(String name, String password) throws IOException {
-
-        super(name, password);
+    PocketExcelEncoder(String name) throws IOException {
         wb = new Workbook(name);
-
     }
 
 

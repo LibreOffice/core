@@ -33,7 +33,6 @@
 #include "cppuhelper/implbase1.hxx"
 
 class ScCheckListMenuWindow;
-class ScDocument;
 
 class ScAccessibleFilterTopWindow : public ScAccessibleFilterMenu
 {
@@ -41,7 +40,7 @@ public:
     ScAccessibleFilterTopWindow(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent,
-            ScCheckListMenuWindow* pWin, const ::rtl::OUString& rName, ScDocument* pDoc);
+            ScCheckListMenuWindow* pWin, const ::rtl::OUString& rName);
     virtual ~ScAccessibleFilterTopWindow();
 
     // XAccessibleContext
@@ -90,9 +89,6 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         mxAccCancelBtn;
-
-    ScCheckListMenuWindow* mpWindow;
-    ScDocument* mpDoc;
 };
 
 #endif

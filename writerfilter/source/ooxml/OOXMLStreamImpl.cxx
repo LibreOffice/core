@@ -35,12 +35,14 @@ using namespace ::std;
 
 OOXMLStreamImpl::OOXMLStreamImpl
 (uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<io::XInputStream> xStorageStream, StreamType_t nType)
+ uno::Reference<io::XInputStream> xStorageStream,
+ StreamType_t nType, bool bRepairStorage)
 : mxContext(xContext), mxStorageStream(xStorageStream), mnStreamType(nType)
 {
+    uno::Reference< lang::XMultiServiceFactory > xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     mxStorage.set
         (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
-         (OFOPXML_STORAGE_FORMAT_STRING, mxStorageStream));
+         (OFOPXML_STORAGE_FORMAT_STRING, mxStorageStream, xFactory, bRepairStorage));
     mxRelationshipAccess.set(mxStorage, uno::UNO_QUERY_THROW);
 
     init();
@@ -297,10 +299,11 @@ OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
 (uno::Reference<uno::XComponentContext> xContext,
  uno::Reference<io::XInputStream> rStream,
+ bool bRepairStorage,
  OOXMLStream::StreamType_t nStreamType)
 {
     OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, rStream,
-                                                    nStreamType);
+                                                    nStreamType, bRepairStorage);
     return OOXMLStream::Pointer_t(pStream);
 }
 

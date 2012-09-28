@@ -23,7 +23,7 @@
 #include "dbu_app.hrc"
 #include "AppView.hxx"
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
@@ -43,6 +43,7 @@
 #include "dbtreelistbox.hxx"
 #include "IApplicationController.hxx"
 #include "imageprovider.hxx"
+#include "comphelper/processfactory.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -475,11 +476,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
     try
     {
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-            getDetailView()->getBorderWin().getView()->getORB()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) )
-            ) ,
-            UNO_QUERY
-        );
+            ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(getDetailView()->getBorderWin().getView()->getORB())) );
         Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OfficeDatabaseDocument" ) )
         );

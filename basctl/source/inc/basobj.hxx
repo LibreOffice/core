@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BASOBJ_HXX
-#define _BASOBJ_HXX
+#ifndef BASCTL_BASOBJ_HXX
+#define BASCTL_BASOBJ_HXX
 
 #include "scriptdocument.hxx"
 
@@ -30,9 +30,10 @@ class StarBASIC;
 class String;
 class SfxUInt16Item;
 class SfxBindings;
+class SfxDispatcher;
 class Window;
 
-namespace BasicIDE
+namespace basctl
 {
     void            Organize( sal_Int16 tabId );
 
@@ -53,6 +54,8 @@ namespace BasicIDE
 
     SfxBindings*        GetBindingsPtr();
 
+    SfxDispatcher*      GetDispatcher ();
+
     void            InvalidateDebuggerSlots();
 
     // libraries
@@ -60,12 +63,6 @@ namespace BasicIDE
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMergedLibraryNames(
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xModLibContainer,
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xDlgLibContainer );
-
-    // new methods for modules
-
-    ::rtl::OUString     GetModule(
-        const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
-        throw( ::com::sun::star::container::NoSuchElementException );
 
     /** renames a module
 
@@ -89,10 +86,6 @@ namespace BasicIDE
 
     // new methods for dialogs
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider > GetDialog(
-        const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
-        throw( ::com::sun::star::container::NoSuchElementException );
-
     /** renames a dialog
 
         Will show an error message when renaming fails because the new name is already used.
@@ -105,8 +98,9 @@ namespace BasicIDE
         const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 
     void                MarkDocumentModified( const ScriptDocument& rDocument );
-}
 
-#endif  // _BASOBJ_HXX
+} // namespace basctl
+
+#endif // BASCTL_BASOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

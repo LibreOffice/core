@@ -20,7 +20,6 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -48,7 +47,6 @@ import org.openoffice.xmerge.util.Debug;
  *  This class is used by {@link SxcDocumentDeserializerImpl}
  *  SxcDocumentDeserializerImpl} to decode the Pocket Excel format.
  *
- *  @author   Paul Rank
  */
 final class PocketExcelDecoder extends SpreadsheetDecoder {
 
@@ -63,17 +61,8 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
 
     /**
      *  Constructor creates a Pocket Excel WorkBook.
-     *
-     *  @param  name            The name of the WorkBook.
-     *  @param  worksheetNames  set of Strings equivalent to the worksheets
-     *                          contained in the workbook
-     *  @param  password        The password for the workBook.
-     *
-     *  @throws  IOException    If any I/O error occurs.
      */
-    PocketExcelDecoder(String name, String[] worksheetNames, String password) throws IOException {
-        super(name, password);
-
+    PocketExcelDecoder() {
         fmt = new Format();
     }
 

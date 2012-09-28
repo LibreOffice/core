@@ -35,46 +35,28 @@
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XWordCursor;
 import com.sun.star.text.XTextContent;
-import com.sun.star.text.XTextTable;
-import com.sun.star.text.XTextTableCursor;
-import com.sun.star.table.XTableRows;
 import com.sun.star.table.XCellRange;
 import com.sun.star.table.XCell;
-import com.sun.star.table.XCellCursor;
 import com.sun.star.table.TableBorder;
 import com.sun.star.table.BorderLine;
 import com.sun.star.drawing.XShape;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
 import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSheetCellCursor;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XDrawPage;
-
-import com.sun.star.text.XTextTablesSupplier;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XNamed;
-import com.sun.star.text.XBookmarksSupplier;
-import com.sun.star.text.XTextRange;
 
 /**
  *

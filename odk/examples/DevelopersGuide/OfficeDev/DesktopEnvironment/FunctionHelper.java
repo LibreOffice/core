@@ -37,7 +37,6 @@
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 
-import java.lang.*;
 import java.awt.*;
 import javax.swing.*;
 import java.io.*;

@@ -1416,7 +1416,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     aActionStack(),
     pTabIdBuffer( NULL ),
     pTempDoc( NULL ),
-    nNewAction( 1 ),
     pHeader( NULL ),
     bValidGUID( false )
 {

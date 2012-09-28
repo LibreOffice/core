@@ -289,6 +289,9 @@ enum PropertyIds
         ,PROP_PARA_CONTEXT_MARGIN
         ,PROP_PAGE_STYLE_LAYOUT
         ,PROP_Z_ORDER
+        ,PROP_EMBED_FONTS
+        ,PROP_EMBED_SYSTEM_FONTS
+        ,PROP_SHADOW_FORMAT
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "soundhandler.hxx"
 
@@ -132,16 +123,13 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
     return pTypeCollection->getTypes();
 }
 
-#define DECLARE_ASCII( SASCIIVALUE ) \
-        ::rtl::OUString( SASCIIVALUE  )
-
-#define IMPLEMENTATIONNAME_SOUNDHANDLER DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler")
-#define SERVICENAME_CONTENTHANDLER DECLARE_ASCII("com.sun.star.frame.ContentHandler")
+#define IMPLEMENTATIONNAME_SOUNDHANDLER OUString("com.sun.star.comp.framework.SoundHandler")
+#define SERVICENAME_CONTENTHANDLER OUString("com.sun.star.frame.ContentHandler")
 
 /*===========================================================================================================*/
 /* XServiceInfo */
 /*===========================================================================================================*/
-::rtl::OUString SAL_CALL SoundHandler::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL SoundHandler::getImplementationName() throw( css::uno::RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
@@ -149,13 +137,13 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
 /*===========================================================================================================*/
 /* XServiceInfo */
 /*===========================================================================================================*/
-sal_Bool SAL_CALL SoundHandler::supportsService( const ::rtl::OUString& sServiceName ) throw( css::uno::RuntimeException )
+sal_Bool SAL_CALL SoundHandler::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )
 {
     /* Set default return value. */
-    sal_Bool bReturn = sal_False ;
+    bool bReturn = sal_False ;
     /* Get names of all supported servicenames. */
-    css::uno::Sequence< ::rtl::OUString >  seqServiceNames =   getSupportedServiceNames();
-    const ::rtl::OUString*                 pArray          =   seqServiceNames.getConstArray();
+    css::uno::Sequence < OUString >  seqServiceNames       =   getSupportedServiceNames();
+    const OUString*                        pArray          =   seqServiceNames.getConstArray();
     sal_Int32                              nCounter        =   0;
     sal_Int32                              nLength         =   seqServiceNames.getLength();
     /* Search for right name in list. */
@@ -179,7 +167,7 @@ sal_Bool SAL_CALL SoundHandler::supportsService( const ::rtl::OUString& sService
 /*===========================================================================================================*/
 /* XServiceInfo */
 /*===========================================================================================================*/
-css::uno::Sequence< ::rtl::OUString > SAL_CALL SoundHandler::getSupportedServiceNames() throw( css::uno::RuntimeException )
+css::uno::Sequence< OUString > SAL_CALL SoundHandler::getSupportedServiceNames() throw( css::uno::RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
@@ -187,9 +175,9 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SoundHandler::getSupportedService
 /*===========================================================================================================*/
 /* Helper for XServiceInfo                                                                                   */
 /*===========================================================================================================*/
-css::uno::Sequence< ::rtl::OUString > SoundHandler::impl_getStaticSupportedServiceNames()
+css::uno::Sequence< OUString > SoundHandler::impl_getStaticSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > seqServiceNames( 1 );
+    css::uno::Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = SERVICENAME_CONTENTHANDLER;
     return seqServiceNames;
 }
@@ -197,7 +185,7 @@ css::uno::Sequence< ::rtl::OUString > SoundHandler::impl_getStaticSupportedServi
 /*===========================================================================================================*/
 /* Helper for XServiceInfo */
 /*===========================================================================================================*/
-::rtl::OUString SoundHandler::impl_getStaticImplementationName()
+OUString SoundHandler::impl_getStaticImplementationName()
 {
     return IMPLEMENTATIONNAME_SOUNDHANDLER;
 }
@@ -379,14 +367,14 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
     @onerror    We return nothing.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-::rtl::OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException )
+OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException )
 {
     // Our default is "nothing". So we can return it, if detection failed or fily type is realy unknown.
-    ::rtl::OUString sTypeName;
+    OUString sTypeName;
 
     // Analyze given descriptor to find filename or input stream or ...
     ::comphelper::MediaDescriptor aDescriptor(lDescriptor);
-    ::rtl::OUString               sURL       = aDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString());
+    OUString                      sURL       = aDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), OUString());
 
     if (
         (sURL.getLength()           ) &&
@@ -397,7 +385,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString("wav_Wave_Audio_File");
+        sTypeName = "wav_Wave_Audio_File";
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
@@ -468,7 +456,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Ch
         css::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
             xServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager )  ;
 
-        if ( avmedia::SoundHandler::impl_getStaticImplementationName().equals( ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+        if ( avmedia::SoundHandler::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )
             xFactory = avmedia::SoundHandler::impl_createFactory( xServiceManager );
 
         if ( xFactory.is() == sal_True )

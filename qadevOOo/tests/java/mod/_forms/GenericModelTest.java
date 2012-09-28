@@ -31,7 +31,6 @@ import util.WriterTools;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
 import com.sun.star.form.XBoundComponent;
 import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;
@@ -96,7 +95,7 @@ import util.utils;
 * @see com.sun.star.form.XUpdateBroadcaster
 * @see com.sun.star.form.DataAwareControlModel
 * @see com.sun.star.beans.XPropertyState
-* @see com.sun.star.form.FormControlModel
+* @see com.sun.star.form
 * @see com.sun.star.container.XNamed
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.lang.XEventListener

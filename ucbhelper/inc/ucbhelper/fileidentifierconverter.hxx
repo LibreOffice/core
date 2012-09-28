@@ -26,7 +26,7 @@
 #include "ucbhelper/ucbhelperdllapi.h"
 
 namespace com { namespace sun { namespace star { namespace ucb {
-    class XContentProviderManager;
+    class XUniversalContentBroker;
 } } } }
 namespace rtl { class OUString; }
 
@@ -73,8 +73,8 @@ UCBHELPER_DLLPUBLIC rtl::OUString getLocalFileURL()
 UCBHELPER_DLLPUBLIC rtl::OUString
 getFileURLFromSystemPath(
     com::sun::star::uno::Reference<
-            com::sun::star::ucb::XContentProviderManager > const &
-        rManager,
+            com::sun::star::ucb::XUniversalContentBroker > const &
+        rUcb,
     rtl::OUString const & rBaseURL,
     rtl::OUString const & rSystemPath)
     SAL_THROW((com::sun::star::uno::RuntimeException));
@@ -103,8 +103,8 @@ getFileURLFromSystemPath(
 UCBHELPER_DLLPUBLIC rtl::OUString
 getSystemPathFromFileURL(
     com::sun::star::uno::Reference<
-            com::sun::star::ucb::XContentProviderManager > const &
-        rManager,
+            com::sun::star::ucb::XUniversalContentBroker > const &
+        rUcb,
     rtl::OUString const & rURL)
     SAL_THROW((com::sun::star::uno::RuntimeException));
 

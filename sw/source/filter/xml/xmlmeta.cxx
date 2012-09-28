@@ -74,14 +74,10 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
 
     if (getImportFlags() & IMPORT_META)
     {
-        uno::Reference<xml::sax::XDocumentHandler> const xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
-            uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
                 GetDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
-                    XML_NAMESPACE_OFFICE, rLocalName, xDocProps, xDocBuilder);
+                    XML_NAMESPACE_OFFICE, rLocalName, xDocProps);
     }
 
     if( !pContext )
@@ -159,8 +155,6 @@ void SwXMLImport::SetStatistics(
         }
     }
 
-    if( 255 == nTokens )
-        aDocStat.bModified = sal_False;
     if( nTokens )
         pDoc->SetDocStat( aDocStat );
 

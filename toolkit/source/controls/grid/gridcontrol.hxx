@@ -30,11 +30,12 @@
 #define TOOLKIT_GRID_CONTROL_HXX
 
 #include <com/sun/star/awt/grid/XGridControl.hpp>
+#include <com/sun/star/awt/grid/XGridRowSelection.hpp>
 
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
@@ -80,8 +81,9 @@ public:
 // ===================================================================
 // = UnoGridControl
 // ===================================================================
-typedef ::cppu::ImplInheritanceHelper1  <   UnoControlBase
+typedef ::cppu::ImplInheritanceHelper2  <   UnoControlBase
                                         ,   ::com::sun::star::awt::grid::XGridControl
+                                        ,   ::com::sun::star::awt::grid::XGridRowSelection
                                         >   UnoGridControl_Base;
 class UnoGridControl : public UnoGridControl_Base
 {
@@ -101,15 +103,16 @@ public:
     virtual ::sal_Int32 SAL_CALL getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getCurrentColumn(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getCurrentRow(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::util::VetoException);
 
-    // ::com::sun::star::awt::grid::XGridSelection
-    virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException);
+    // ::com::sun::star::awt::grid::XGridRowSelection
+    virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException );
     virtual void SAL_CALL selectAllRows() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException );
     virtual void SAL_CALL deselectAllRows() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getSelection() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasSelectedRows() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isRowSelected(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
 

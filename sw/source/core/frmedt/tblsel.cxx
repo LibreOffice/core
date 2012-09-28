@@ -138,21 +138,25 @@ void GetTblSelCrs( const SwCrsrShell &rShell, SwSelBoxes& rBoxes )
 {
     rBoxes.clear();
     if( rShell.IsTableMode() && ((SwCrsrShell&)rShell).UpdateTblSelBoxes())
-        rBoxes.insert( (SwSelBoxes&)rShell.GetTableCrsr()->GetBoxes() );
+    {
+        rBoxes.insert(rShell.GetTableCrsr()->GetSelectedBoxes());
+    }
 }
 
 void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
 {
     rBoxes.clear();
 
-    if( rTblCrsr.IsChgd() || !rTblCrsr.GetBoxesCount() )
+    if (rTblCrsr.IsChgd() || !rTblCrsr.GetSelectedBoxesCount())
     {
         SwTableCursor* pTCrsr = (SwTableCursor*)&rTblCrsr;
         pTCrsr->GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );  //swmod 080218
     }
 
-    if( rTblCrsr.GetBoxesCount() )
-        rBoxes.insert( (SwSelBoxes&)rTblCrsr.GetBoxes() );
+    if (rTblCrsr.GetSelectedBoxesCount())
+    {
+        rBoxes.insert(rTblCrsr.GetSelectedBoxes());
+    }
 }
 
 void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
@@ -267,7 +271,6 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
     sal_Bool bTblIsValid;
     // #i55421# Reduced value 10
     int nLoopMax = 10;
-    sal_uInt16 i;
 
     do {
         bTblIsValid = sal_True;
@@ -286,7 +289,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         const SwCellFrm* pCurrentBottomRightFrm  = 0;
 
         // Now find boxes for each entry and emit
-        for( i = 0; i < aUnions.size() && bTblIsValid; ++i )
+        for (size_t i = 0; i < aUnions.size() && bTblIsValid; ++i)
         {
             SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
@@ -421,8 +424,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             break;
         }
 
-        i = 0;
-        rBoxes.erase( rBoxes.begin() + i, rBoxes.end() );
+        rBoxes.clear();
         --nLoopMax;
 
     } while( sal_True );
@@ -848,12 +850,14 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
 sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes )
 {
     sal_Bool bRet = sal_False;
-    for( sal_uInt16 n = 0, nCnt = rBoxes.size(); n < nCnt; ++n )
+    for (size_t n = 0; n < rBoxes.size(); ++n)
+    {
         if( rBoxes[ n ]->GetFrmFmt()->GetProtect().IsCntntProtected() )
         {
             bRet = sal_True;
             break;
         }
+    }
     return bRet;
 }
 
@@ -2112,7 +2116,7 @@ void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
     sal_uInt16 nStPos = USHRT_MAX;
     sal_uInt16 nEndPos= 0;
 
-    for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
+    for (size_t i = 0; i < rBoxes.size(); ++i)
     {
         SwTableLine *pLine = rBoxes[i]->GetUpper();
         while ( pLine->GetUpper() )

@@ -21,13 +21,13 @@
 #include "doceventnotifier.hxx"
 #include "scriptdocument.hxx"
 
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 
 #include <vcl/svapp.hxx>
 
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <osl/mutex.hxx>
@@ -45,17 +45,19 @@ namespace basctl
     using ::com::sun::star::document::XEventBroadcaster;
     using ::com::sun::star::document::XEventListener;
     using ::com::sun::star::document::EventObject;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::frame::GlobalEventBroadcaster;
     using ::com::sun::star::uno::UNO_QUERY;
     /** === end UNO using === **/
     namespace csslang = ::com::sun::star::lang;
 
     //====================================================================
-    //= DocumentEventNotifier_Impl
+    //= DocumentEventNotifier::Impl
     //====================================================================
     typedef ::cppu::WeakComponentImplHelper1    <   XEventListener
                                                 >   DocumentEventNotifier_Impl_Base;
@@ -68,12 +70,13 @@ namespace basctl
 
     /** impl class for DocumentEventNotifier
     */
-    class DocumentEventNotifier_Impl    :public ::boost::noncopyable
+    class DocumentEventNotifier::Impl   :public ::boost::noncopyable
                                         ,public ::cppu::BaseMutex
                                         ,public DocumentEventNotifier_Impl_Base
     {
     public:
-        DocumentEventNotifier_Impl( DocumentEventListener& _rListener, const Reference< XModel >& _rxDocument );
+        Impl (DocumentEventListener&, Reference<XModel> const& rxDocument);
+        ~Impl ();
 
         // document::XEventListener
         virtual void SAL_CALL notifyEvent( const EventObject& Event ) throw (RuntimeException);
@@ -83,9 +86,6 @@ namespace basctl
 
         // ComponentHelper
         virtual void SAL_CALL disposing();
-
-    protected:
-        ~DocumentEventNotifier_Impl();
 
     private:
         /// determines whether the instance is already disposed
@@ -103,18 +103,18 @@ namespace basctl
     };
 
     //--------------------------------------------------------------------
-    DocumentEventNotifier_Impl::DocumentEventNotifier_Impl( DocumentEventListener& _rListener, const Reference< XModel >& _rxDocument )
-        :DocumentEventNotifier_Impl_Base( m_aMutex )
-        ,m_pListener( &_rListener )
-        ,m_xModel( _rxDocument )
+    DocumentEventNotifier::Impl::Impl (DocumentEventListener& rListener, Reference<XModel> const& rxDocument) :
+        DocumentEventNotifier_Impl_Base(m_aMutex),
+        m_pListener(&rListener),
+        m_xModel(rxDocument)
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         impl_listenerAction_nothrow( RegisterListener );
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------
-    DocumentEventNotifier_Impl::~DocumentEventNotifier_Impl()
+    DocumentEventNotifier::Impl::~Impl ()
     {
         if ( !impl_isDisposed_nothrow() )
         {
@@ -124,16 +124,16 @@ namespace basctl
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL DocumentEventNotifier_Impl::notifyEvent( const EventObject& _rEvent ) throw (RuntimeException)
+    void SAL_CALL DocumentEventNotifier::Impl::notifyEvent( const EventObject& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        OSL_PRECOND( !impl_isDisposed_nothrow(), "DocumentEventNotifier_Impl::notifyEvent: disposed, but still getting events?" );
+        OSL_PRECOND( !impl_isDisposed_nothrow(), "DocumentEventNotifier::Impl::notifyEvent: disposed, but still getting events?" );
         if ( impl_isDisposed_nothrow() )
             return;
 
         Reference< XModel > xDocument( _rEvent.Source, UNO_QUERY );
-        OSL_ENSURE( xDocument.is(), "DocumentEventNotifier_Impl::notifyEvent: illegal source document!" );
+        OSL_ENSURE( xDocument.is(), "DocumentEventNotifier::Impl::notifyEvent: illegal source document!" );
         if ( !xDocument.is() )
             return;
 
@@ -178,7 +178,7 @@ namespace basctl
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL DocumentEventNotifier_Impl::disposing( const csslang::EventObject& /*Event*/ ) throw (RuntimeException)
+    void SAL_CALL DocumentEventNotifier::Impl::disposing( const csslang::EventObject& /*Event*/ ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -188,21 +188,21 @@ namespace basctl
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL DocumentEventNotifier_Impl::disposing()
+    void SAL_CALL DocumentEventNotifier::Impl::disposing()
     {
         impl_listenerAction_nothrow( RemoveListener );
         impl_dispose_nothrow();
     }
 
     //--------------------------------------------------------------------
-    void DocumentEventNotifier_Impl::impl_dispose_nothrow()
+    void DocumentEventNotifier::Impl::impl_dispose_nothrow()
     {
         m_pListener = NULL;
         m_xModel.clear();
     }
 
     //--------------------------------------------------------------------
-    void DocumentEventNotifier_Impl::impl_listenerAction_nothrow( ListenerAction _eAction )
+    void DocumentEventNotifier::Impl::impl_listenerAction_nothrow( ListenerAction _eAction )
     {
         try
         {
@@ -211,10 +211,9 @@ namespace basctl
                 xBroadcaster.set( m_xModel, UNO_QUERY_THROW );
             else
             {
-                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                xBroadcaster.set(
-                    aContext.createComponent( "com.sun.star.frame.GlobalEventBroadcaster" ),
-                    UNO_QUERY_THROW );
+                Reference< com::sun::star::uno::XComponentContext > aContext(
+                    comphelper::getProcessComponentContext() );
+                xBroadcaster.set( GlobalEventBroadcaster::create(aContext), UNO_QUERY_THROW );
             }
 
             void ( SAL_CALL XEventBroadcaster::*listenerAction )( const Reference< XEventListener >& ) =
@@ -231,16 +230,14 @@ namespace basctl
     //= DocumentEventNotifier
     //====================================================================
     //--------------------------------------------------------------------
-    DocumentEventNotifier::DocumentEventNotifier( DocumentEventListener& _rListener, const Reference< XModel >& _rxDocument )
-        :m_pImpl( new DocumentEventNotifier_Impl( _rListener, _rxDocument ) )
-    {
-    }
+    DocumentEventNotifier::DocumentEventNotifier (DocumentEventListener& rListener, Reference<XModel> const& rxDocument) :
+        m_pImpl(new Impl(rListener, rxDocument))
+    { }
 
     //--------------------------------------------------------------------
-    DocumentEventNotifier::DocumentEventNotifier( DocumentEventListener& _rListener )
-        :m_pImpl( new DocumentEventNotifier_Impl( _rListener, Reference< XModel >() ) )
-    {
-    }
+    DocumentEventNotifier::DocumentEventNotifier (DocumentEventListener& rListener) :
+        m_pImpl(new Impl(rListener, Reference<XModel>()))
+    { }
 
     //--------------------------------------------------------------------
     DocumentEventNotifier::~DocumentEventNotifier()

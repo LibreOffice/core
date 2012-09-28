@@ -37,7 +37,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -58,6 +58,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
 
     try {
         Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("all"))
          || aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("document"))) {
             Reference< XComponentLoader > xLoader;
@@ -85,8 +86,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
         } else if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("instance"))) {
             if (aDocument.is()) {
                 // parse the result stream into a new document
-                Reference< XDocumentBuilder > xBuilder(xFactory->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder") ) ), UNO_QUERY_THROW);
+                Reference< XDocumentBuilder > xBuilder(DocumentBuilder::create(xContext));
                 Reference< XDocument > aNewDocument = xBuilder->parse(m_aResultStream);
 
                 if (aNewDocument.is()) {

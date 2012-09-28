@@ -665,7 +665,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 if (rSh.HasMark())
                 {
-                    MV_KONTEXT(&rSh);
+                    SwMvContext aMvContext(&rSh);
                     if (rSh.IsCrsrPtAtEnd())
                         rSh.SwapPam();
                     rSh.ClearMark();
@@ -837,8 +837,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(
-                            GetView(),DLG_CONV_TEXT_TABLE , bToTable);
+                AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(GetView(), bToTable);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -1585,10 +1584,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             (eSet == FLY_AS_CHAR));
                     if(nWhich != FN_TOOL_ANCHOR)
                     {
-                        sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
-                        if( ( nWhich == FN_TOOL_ANCHOR_PAGE &&
-                              ((HTMLMODE_ON & nHtmlMode) && (0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS)))) ||
-                            ( nWhich == FN_TOOL_ANCHOR_FRAME && !rSh.IsFlyInFly() ) )
+                        if( nWhich == FN_TOOL_ANCHOR_FRAME && !rSh.IsFlyInFly() )
                             rSet.DisableItem(nWhich);
                         else
                             rSet.Put(SfxBoolItem(nWhich, bSet));
@@ -2622,7 +2618,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( DLG_INSERT_TABLE, rTempView );
+                AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg(rTempView);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {

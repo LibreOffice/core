@@ -18,58 +18,14 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 
-import java.io.IOException;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
-
-import org.openoffice.xmerge.Document;
-import org.openoffice.xmerge.ConverterCapabilities;
-import org.openoffice.xmerge.converter.xml.OfficeDocument;
-import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
-import org.openoffice.xmerge.converter.xml.*;
 
 
 /**
  * This is the superclass for all elements in a WordSmith document.
  * Elements can be paragraphs, text runs, font tables, or color tables.
  *
- *  @author   David Proulx
  */
 abstract class Wse {
-
-    /**
-     *  Return true if <code>dataArray[startIndex]</code> is the start
-     *  of a valid element of this type.
-     *
-     *  @param  dataArray   <code>byte</code> array.
-     *  @param  startIndex  The start index.
-     *
-     *  @return  true if <code>dataArray[startIndex]</code> is the
-     *           start of a valid element of this type, false otherwise.
-     */
-    static boolean isValid(byte dataArray[], int startIndex) {
-        return false;
-    }
-
-
-    /**
-     *  Compute and return the index of the first <code>byte</code>
-     *  following this element.  It is assumed that the element
-     *  starting at <code>dataArray[startIndex]</code> is valid.
-     *
-     *  @param  dataArray   <code>byte</code> array.
-     *  @param  startIndex  The start index.
-     *
-     *  @return  The index of the first <code>byte</code> following
-     *           this element.
-     */
-    static int computeNewIndex(byte dataArray[], int startIndex) {
-        return 0;
-    }
-
 
     /**
      *  Return the total number of bytes needed to represent this

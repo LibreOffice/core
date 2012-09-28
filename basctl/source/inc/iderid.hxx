@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IDERID_HXX
-#define _IDERID_HXX
+#ifndef BASCTL_IDERID_HXX
+#define BASCTL_IDERID_HXX
 
 #include <tools/resid.hxx>
+
+namespace basctl
+{
 
 class IDEResId: public ResId
 {
@@ -28,8 +31,13 @@ public:
     IDEResId( sal_uInt16 nId );
 };
 
-#define IDE_RESSTR(x) IDEResId(x).toString()
+inline OUString IDE_RESSTR (sal_uInt16 nId)
+{
+    return IDEResId(nId).toString();
+}
 
-#endif //_IDERID_HXX
+} // namespace basctl
+
+#endif // BASCTL_IDERID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,40 +1,25 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 #ifndef __com_sun_star_ucb_UniversalContentBroker_idl__
 #define __com_sun_star_ucb_UniversalContentBroker_idl__
 
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/ucb/XCommandProcessor.idl>
-#include <com/sun/star/ucb/XCommandProcessor2.idl>
-#include <com/sun/star/ucb/XContentProviderManager.idl>
-#include <com/sun/star/ucb/XContentProvider.idl>
-#include <com/sun/star/ucb/XContentIdentifierFactory.idl>
-#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/ucb/XUniversalContentBroker.idl>
 
 
 module com { module sun { module star { module ucb {
@@ -42,127 +27,39 @@ module com { module sun { module star { module ucb {
 /** is a one-instance service that provides access to a set of
     <type>Content</type>s via <type>ContentProvider</type>s.
 
-    <p>If the instance is created with two arguments of type string,
-    these two strings are used to configure the newly instantiated broker;
-    see the description of the required
-    <type scope="com::sun::star::lang">XInitialization</type> interface for
-    details.
+    <p>Traditionally, this service implements
+    <type scope="com::sun::star::lang">XInitialization</type> and needed to be
+    instantiated once with two arguments via
+    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext</method>
+    for configuration before it could be obtained via plain
+    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContext</method>.
 
-    <p>If the instance is created without arguments, the newly instantiated
-    broker is not configured.
+    <p>However, the only pair of initialization arguments used in practice is
+    <code>"Local"</code>/<code>"Office"</code>, so this service is simplified
+    now to automatically configure itself with that argument pair upon first
+    instantiation.
+
+    <p>(For backwards compatibility, the service implementation still supports
+    <type scope="com::sun::star::lang">XInitialization</type> and can still
+    explicitly be initialized via
+    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext</method>
+    with two arguments of type string.  These strings are used as a pair of keys
+    to retrieve a set of content provider descriptions from the configuration
+    management (stored at
+    <code>org.openoffice.ucb.Configuration.ContentProviders.<var>key<sub>1</sub></var>.SecondaryKeys.<var>key<sub>2</sub></var>.ProviderData</code>
+    within the configuration management's hierarchy).  The retrieved
+    descriptions are in turn used to register the corresponding content provider
+    services at the broker.)
 */
-published service UniversalContentBroker
+published service UniversalContentBroker : XUniversalContentBroker
 {
-    /** must be implemented to make it possible to resolve cyclic object
-        references.
+    /** The (default) constructor.
 
-        <p>Those references i.e. may occur if content provider  implementations
-        hold references to the Broker. The Broker itself always holds its
-        providers. If the Broker shall be released,
-        <member scope="com::sun::star::lang">XComponent::dispose</member>
-        must be called at the Broker. The implementation of this method must
-        call
-        <member scope="com::sun::star::lang">XEventListener::disposing</member>
-        on the registered listeners (the providers holding the Broker must be
-        those listeners) and release the appropriate object references. At
-        the other hand, the implementation of XEventListener::disposing must
-        release its appropriate references.
-
-        <p>This interface is required.
+        <p>(This default constructor is only mentioned explicitly for technical
+        reasons, so that its implementation calls the service implementation's
+        <method scope="com::sun::star::lang">XInitialization::initialize</method>.)
      */
-    interface com::sun::star::lang::XComponent;
-
-    /** provides access to all kind of contents provided by the registered
-        content providers.
-
-        <p>This interface is required.
-     */
-    interface com::sun::star::ucb::XContentProvider;
-
-    /** provides access to a set of content providers registered with the UCB.
-
-        <p>This interface is required.
-     */
-    interface com::sun::star::ucb::XContentProviderManager;
-
-    /** creates <type>XContentIdentifier</type> implementation objects for
-        all kind of contents provided by the UCB.
-
-        <p>This interface is required.
-      */
-    interface com::sun::star::ucb::XContentIdentifierFactory;
-
-    /** supports the configuration of a newly created broker.
-
-        <p>The
-        <member scope="com::sun::star::lang">XInitialization::initialize</member>
-        method should be called with two arguments of type string. These strings
-        are used as a pair of keys to retrieve a set of content provider
-        descriptions from the configuration management (stored at
-        <code>org.openoffice.ucb.Configuration.ContentProviders.<var>key<sub>1</sub></var>.SecondaryKeys.<var>key<sub>2</sub></var>.ProviderData</code>
-        within the configuration management's hierarchy). The retrieved
-        descriptions are in turn used to register the corresponding content
-        provider services at the broker.
-
-        <p>Typical values for the pair of strings would be
-        <code>"Local"</code>/<code>"Office"</code>, to configure a broker that
-        contains all the relevant content providers.
-
-        <p>This interface is required.
-     */
-    interface com::sun::star::lang::XInitialization;
-
-    /** enables the caller to execute commands at the broker.
-
-        <p>This interface is required.
-
-        <p><pre>
-        =======================================================================
-        Commands:
-        =======================================================================
-
-        [return type]
-            [command name]
-                [parameter type and name]
-
-        -----------------------------------------------------------------------
-        Required commands:
-        -----------------------------------------------------------------------
-
-        // This command obtains an interface which allows to query
-        // information on commands supported by the Content Broker.
-
-        <type>XCommandInfo</type>
-            getCommandInfo
-                void
-
-        // This command transfers Contents from one location to another.
-        // Additionally, it can be used to create a link to a Content.
-        // The implementation must be able to handle Contents provided
-        // by any Content Provider. This is different from the command
-        // "transfer" that can be supported by a Content. That command
-        // typically can only handle <type>Content</type>s provided by one
-        // <type>ContentProvider</type>.
-
-        void
-            globalTransfer
-                <type>GlobalTransferCommandArgument</type>
-        </pre>
-     */
-    interface com::sun::star::ucb::XCommandProcessor;
-
-    /** is an enhanced version of <type>XCommandProcessor</type> that has an
-        additional method for releasing command identifiers obtained via
-        <member>XCommandProcessor::createCommandIdentifier</member> to avoid
-        resource leaks. For a detailed description of the problem refer to
-        <member>XCommandProcessor2::releaseCommandIdentifier</member>.
-
-        <p>Where many existing <type>UniversalContentBroker</type>
-        implementations do not (yet), every new implementation should support
-        this interface.
-     */
-    [optional] interface com::sun::star::ucb::XCommandProcessor2;
-
+    create();
 };
 
 

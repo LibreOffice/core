@@ -17,46 +17,55 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "basidectrlr.hxx"
 
-#include <basidectrlr.hxx>
+#include "basidesh.hxx"
+
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <vcl/syswin.hxx>
 
-#include <basidesh.hxx>
-
+namespace basctl
+{
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
+namespace
+{
 
-#define PROPERTY_ID_ICONID      1
-#define PROPERTY_ICONID         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IconId" ) )
+int const nPropertyIconId = 1;
+rtl::OUString const sPropertyIconId("IconId");
+
+}
 
 
 //----------------------------------------------------------------------------
 
-BasicIDEController::BasicIDEController( BasicIDEShell* pViewShell )
+Controller::Controller (Shell* pViewShell)
     :OPropertyContainer( m_aBHelper )
     ,SfxBaseController( pViewShell )
     ,m_nIconId( ICON_MACROLIBRARY )
 {
-    registerProperty( PROPERTY_ICONID, PROPERTY_ID_ICONID, PropertyAttribute::READONLY, &m_nIconId, ::getCppuType( &m_nIconId ) );
+    registerProperty(
+        sPropertyIconId, nPropertyIconId,
+        PropertyAttribute::READONLY,
+        &m_nIconId, getCppuType(&m_nIconId)
+    );
 }
 
 //----------------------------------------------------------------------------
 
-BasicIDEController::~BasicIDEController()
-{
-}
+Controller::~Controller()
+{ }
 
 // XInterface
 //----------------------------------------------------------------------------
 
-Any SAL_CALL BasicIDEController::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL Controller::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aReturn = SfxBaseController::queryInterface( rType );
     if ( !aReturn.hasValue() )
@@ -67,14 +76,14 @@ Any SAL_CALL BasicIDEController::queryInterface( const Type & rType ) throw(Runt
 
 //----------------------------------------------------------------------------
 
-void SAL_CALL BasicIDEController::acquire() throw()
+void SAL_CALL Controller::acquire() throw()
 {
     SfxBaseController::acquire();
 }
 
 //----------------------------------------------------------------------------
 
-void SAL_CALL BasicIDEController::release() throw()
+void SAL_CALL Controller::release() throw()
 {
     SfxBaseController::release();
 }
@@ -83,19 +92,19 @@ void SAL_CALL BasicIDEController::release() throw()
 // XTypeProvider ( ::SfxBaseController )
 //----------------------------------------------------------------------------
 
-Sequence< Type > SAL_CALL BasicIDEController::getTypes() throw(RuntimeException)
+Sequence< Type > SAL_CALL Controller::getTypes() throw(RuntimeException)
 {
     Sequence< Type > aTypes = ::comphelper::concatSequences(
         SfxBaseController::getTypes(),
         OPropertyContainer::getTypes()
-        );
+    );
 
     return aTypes;
 }
 
 //----------------------------------------------------------------------------
 
-Sequence< sal_Int8 > SAL_CALL BasicIDEController::getImplementationId() throw(RuntimeException)
+Sequence< sal_Int8 > SAL_CALL Controller::getImplementationId() throw(RuntimeException)
 {
     static ::cppu::OImplementationId * pId = 0;
     if ( !pId )
@@ -113,7 +122,7 @@ Sequence< sal_Int8 > SAL_CALL BasicIDEController::getImplementationId() throw(Ru
 // XPropertySet
 //----------------------------------------------------------------------------
 
-Reference< beans::XPropertySetInfo > SAL_CALL BasicIDEController::getPropertySetInfo() throw(RuntimeException)
+Reference< beans::XPropertySetInfo > SAL_CALL Controller::getPropertySetInfo() throw(RuntimeException)
 {
     Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -122,7 +131,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL BasicIDEController::getPropertySet
 // OPropertySetHelper
 //----------------------------------------------------------------------------
 
-::cppu::IPropertyArrayHelper& BasicIDEController::getInfoHelper()
+::cppu::IPropertyArrayHelper& Controller::getInfoHelper()
 {
     return *getArrayHelper();
 }
@@ -130,7 +139,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL BasicIDEController::getPropertySet
 // OPropertyArrayUsageHelper
 //----------------------------------------------------------------------------
 
-::cppu::IPropertyArrayHelper* BasicIDEController::createArrayHelper( ) const
+::cppu::IPropertyArrayHelper* Controller::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
     describeProperties( aProps );
@@ -138,5 +147,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL BasicIDEController::getPropertySet
 }
 
 //----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

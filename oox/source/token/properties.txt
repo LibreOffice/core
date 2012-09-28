@@ -101,6 +101,7 @@ CopyBack
 CopyFormulas
 CopyOutputData
 CopyStyles
+CornerRadius
 CrossoverPosition
 CrossoverValue
 CursorPositionX
@@ -222,6 +223,7 @@ HoriJustify
 HoriJustifyMethod
 HoriOrient
 HoriOrientPosition
+HoriOrientRelation
 HorizontalSplitMode
 HorizontalSplitPositionTwips
 IgnoreBlankCells
@@ -334,6 +336,7 @@ PercentageNumberFormat
 PersistName
 Perspective
 PolyPolygon
+PolyPolygonBezier
 PolygonKind
 Position
 PositionBottom
@@ -371,9 +374,11 @@ ReferenceSheet
 RefreshPeriod
 RegularExpressions
 RelId
+RelativeHeight
 RelativeHorizontalTabbarWidth
 RelativePosition
 RelativeSize
+RelativeWidth
 Repeat
 RepeatDelay
 Representation
@@ -394,12 +399,21 @@ ScaleMode
 ScaleToPages
 ScaleToPagesX
 ScaleToPagesY
+ScrollHeight
+ScrollLeft
+ScrollTop
 ScrollValue
 ScrollValueMax
 ScrollValueMin
+ScrollWidth
 Segments
 SelectedItems
 SelectedPage
+Shadow
+ShadowColor
+ShadowTransparence
+ShadowXDistance
+ShadowYDistance
 Show
 ShowBorder
 ShowCharts
@@ -506,6 +520,7 @@ VertJustifyMethod
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+VertOrient
 VertOrientPosition
 VertOrientRelation
 ViewBox

@@ -434,7 +434,6 @@ css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubCo
         // Create uno sub controller for the main view shell.
         xSubController = css::uno::Reference<css::drawing::XDrawSubController>(
             new SdUnoDrawView (
-                GetViewShellBase().GetDrawController(),
                 *this,
                 *GetView()));
     }

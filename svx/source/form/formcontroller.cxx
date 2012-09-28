@@ -66,7 +66,7 @@
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 
@@ -143,6 +143,7 @@ namespace svxform
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::sdbc::XDatabaseMetaData;
     using ::com::sun::star::util::XNumberFormatsSupplier;
+    using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::sdbcx::XColumnsSupplier;
     using ::com::sun::star::container::XNameAccess;
@@ -845,7 +846,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
             {
                 Reference< XDatabaseMetaData> xMetaData(xConnection->getMetaData());
                 Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats( xConnection, sal_True ) );
-                Reference< XNumberFormatter> xFormatter( m_aContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY_THROW );
+                Reference< XNumberFormatter> xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
                 Reference< XColumnsSupplier> xSupplyCols(m_xModelAsIndex, UNO_QUERY);
@@ -3165,7 +3166,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         // need to parse criteria localized
         OStaticDataAccessTools aStaticTools;
         Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, sal_True));
-        Reference< XNumberFormatter> xFormatter( m_aContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY );
+        Reference< XNumberFormatter> xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
         Locale aAppLocale = Application::GetSettings().GetUILocale();
         LocaleDataWrapper aLocaleWrapper( m_aContext.getLegacyServiceFactory(), aAppLocale );
@@ -3309,7 +3310,7 @@ void FormController::startFiltering()
     // the control we have to activate after replacement
     Reference< XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
     Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
-    Reference< XNumberFormatter >  xFormatter( m_aContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY );
+    Reference< XNumberFormatter >  xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
     // structure for storing the field info

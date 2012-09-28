@@ -30,7 +30,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 #include "sfx2/sfxhelp.hxx"
 #include <sfx2/app.hxx>
@@ -744,8 +745,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     pStyleSheetPool         ( NULL ),
     pTreeBox                ( NULL ),
     pCurObjShell            ( NULL ),
-    xModuleManager          ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY ),
+    xModuleManager          ( frame::ModuleManager::create(::comphelper::getProcessComponentContext()) ),
     m_pDeletionWatcher      ( NULL ),
 
     aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH ),
@@ -1876,7 +1876,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
 
 //-------------------------------------------------------------------------
 
-static rtl::OUString getModuleIdentifier( const Reference< XModuleManager >& i_xModMgr, SfxObjectShell* i_pObjSh )
+static rtl::OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModMgr, SfxObjectShell* i_pObjSh )
 {
     OSL_ENSURE( i_xModMgr.is(), "getModuleIdentifier(): no XModuleManager" );
     OSL_ENSURE( i_pObjSh, "getModuleIdentifier(): no ObjectShell" );
@@ -1907,14 +1907,10 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
     sal_Int32 nFilter = -1;
 
     Sequence< PropertyValue > lProps;
-    Reference< ::com::sun::star::container::XNameAccess > xContainer( xModuleManager, UNO_QUERY );
-    if ( xContainer.is() )
-    {
-        ::comphelper::SequenceAsHashMap aFactoryProps(
-            xContainer->getByName( getModuleIdentifier( xModuleManager, i_pObjSh ) ) );
-        sal_Int32 nDefault = -1;
-        nFilter = aFactoryProps.getUnpackedValueOrDefault( DEFINE_CONST_UNICODE("ooSetupFactoryStyleFilter"), nDefault );
-    }
+    ::comphelper::SequenceAsHashMap aFactoryProps(
+        xModuleManager->getByName( getModuleIdentifier( xModuleManager, i_pObjSh ) ) );
+    sal_Int32 nDefault = -1;
+    nFilter = aFactoryProps.getUnpackedValueOrDefault( DEFINE_CONST_UNICODE("ooSetupFactoryStyleFilter"), nDefault );
 
     return nFilter;
 }
@@ -1924,14 +1920,10 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
 void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter )
 {
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
-    Reference< ::com::sun::star::container::XNameReplace > xContainer( xModuleManager, UNO_QUERY );
-    if ( xContainer.is() )
-    {
-        Sequence< PropertyValue > lProps(1);
-        lProps[0].Name = DEFINE_CONST_UNICODE("ooSetupFactoryStyleFilter");
-        lProps[0].Value = makeAny( i_nFilter );;
-        xContainer->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
-    }
+    Sequence< PropertyValue > lProps(1);
+    lProps[0].Name = DEFINE_CONST_UNICODE("ooSetupFactoryStyleFilter");
+    lProps[0].Value = makeAny( i_nFilter );;
+    xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
 }
 
 //-------------------------------------------------------------------------
@@ -2542,18 +2534,14 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         //create a popup menu in Writer
         boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
         uno::Reference< container::XNameAccess > xNameAccess(
-                    ::comphelper::getProcessServiceFactory()->
-                    createInstance( ::rtl::OUString(
-                            "com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+                frame::UICommandDescription::create(
+                    ::comphelper::getProcessComponentContext()) );
         uno::Reference< container::XNameAccess > xUICommands;
-        if ( xNameAccess.is() )
+        rtl::OUString sTextDoc("com.sun.star.text.TextDocument");
+        if(xNameAccess->hasByName(sTextDoc))
         {
-            rtl::OUString sTextDoc("com.sun.star.text.TextDocument");
-            if(xNameAccess->hasByName(sTextDoc))
-            {
-                uno::Any a = xNameAccess->getByName( sTextDoc );
-                a >>= xUICommands;
-            }
+            uno::Any a = xNameAccess->getByName( sTextDoc );
+            a >>= xUICommands;
         }
         if(!xUICommands.is())
             return 0;

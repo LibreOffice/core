@@ -30,12 +30,11 @@
 
 #include "cppuhelper/bootstrap.hxx"
 #include "comphelper/processfactory.hxx"
-#include "ucbhelper/contentbroker.hxx"
-#include "ucbhelper/configurationkeys.hxx"
 #include "unotools/configmgr.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/ucb/UniversalContentBroker.hpp"
 
 using namespace padmin;
 using namespace cppu;
@@ -108,24 +107,9 @@ int MyApp::Main()
     com::sun::star::uno::setCurrentContext(
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
-    /*
-     *  Create UCB.
-     */
-    Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= OUString( UCB_CONFIGURATION_KEY2_OFFICE );
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bSuccess =
-#endif
-        ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
-
-#if OSL_DEBUG_LEVEL > 1
-    if ( !bSuccess )
-    {
-        fprintf( stderr, "Error creating UCB, installation must be in disorder. Exiting.\n" );
-        exit( 1 );
-    }
-#endif
+    // Create UCB (for backwards compatibility, in case some code still uses
+    // plain createInstance w/o args directly to obtain an instance):
+    com::sun::star::ucb::UniversalContentBroker::create(xCtx);
 
     /*
      * Initialize the Java UNO AccessBridge if accessibility is turned on
@@ -133,7 +117,7 @@ int MyApp::Main()
 
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
     {
-        sal_Bool bQuitApp;
+        bool bQuitApp;
         if( !InitAccessBridge( true, bQuitApp ) )
             if( bQuitApp )
                 return EXIT_FAILURE;
@@ -146,11 +130,6 @@ int MyApp::Main()
     pPADialog->SetIcon(501);
     pPADialog->Execute();
     delete pPADialog;
-
-    /*
-     *  clean up UCB
-     */
-    ::ucbhelper::ContentBroker::deinitialize();
 
     /*
      *  clean up UNO

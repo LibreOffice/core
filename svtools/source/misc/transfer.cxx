@@ -181,7 +181,7 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
             pToAccept[nBInd] = sal_False;
 
         const char aQuotedParamChars[] =
-            "()<>@,;:\\\"/[]?=!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
+            "()<>@,;:\\\"/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
 
         for ( sal_Int32 nInd = 0; nInd < RTL_CONSTASCII_LENGTH(aQuotedParamChars); ++nInd )
         {
@@ -1240,7 +1240,7 @@ TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< X
     ,mxNotifier( _rxClipboard, UNO_QUERY )
     ,mpListener( &_rListener )
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         if ( mxNotifier.is() )
             mxNotifier->addClipboardListener( this );
@@ -1248,7 +1248,7 @@ TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< X
             // born dead
             mpListener = NULL;
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 // -----------------------------------------------------------------------------

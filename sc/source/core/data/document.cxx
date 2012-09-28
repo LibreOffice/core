@@ -1926,9 +1926,9 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     else
         pClipDoc->ResetClip(this, pMarks);
 
-    if ( bUseRangeForVBA )
-        CopyRangeNamesToClip(pClipDoc, aClipRange, nTab );
-    else
+//  if ( bUseRangeForVBA )
+//      CopyRangeNamesToClip(pClipDoc, aClipRange, nTab );
+//    else
         CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
 
     for ( ; i < nEndTab; ++i)
@@ -2110,24 +2110,6 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
                 maTabs[i]->FindRangeNamesInUse(
                     rClipRange.aStart.Col(), rClipRange.aStart.Row(),
                     rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames);
-
-    copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName, aUsedNames);
-}
-
-void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab)
-{
-    if (!pRangeName || pRangeName->empty())
-        return;
-
-    // Indexes of named ranges that are used in the copied cells
-    std::set<sal_uInt16> aUsedNames;
-    if ( nTab < static_cast<SCTAB>(maTabs.size()) && nTab < static_cast<SCTAB>(pClipDoc->maTabs.size()) )
-        if ( maTabs[nTab] && pClipDoc->maTabs[nTab] )
-        {
-            maTabs[nTab]->FindRangeNamesInUse(
-                rClipRange.aStart.Col(), rClipRange.aStart.Row(),
-                rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames );
-        }
 
     copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName, aUsedNames);
 }
@@ -4814,16 +4796,6 @@ bool ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRo
             if (maTabs[*itr]->HasBlockMatrixFragment( nStartCol, nStartRow, nEndCol, nEndRow ))
                 bOk = false;
 
-    return !bOk;
-}
-
-bool ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
-{
-    bool bOk = true;
-    if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->HasBlockMatrixFragment( nStartCol, nStartRow, nEndCol, nEndRow ) )
-    {
-        bOk = false;
-    }
     return !bOk;
 }
 

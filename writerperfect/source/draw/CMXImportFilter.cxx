@@ -145,14 +145,14 @@ throw( com::sun::star::uno::RuntimeException )
     WPXSvInputStream input( xInputStream );
 
     if (libcdr::CMXDocument::isSupported(&input))
-        sTypeName = OUString( "draw_Corel_Presentation_Exchange" );
+        sTypeName = "draw_Corel_Presentation_Exchange";
 
     if (sTypeName.getLength())
     {
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString( "TypeName" );
+            Descriptor[location].Name = "TypeName";
         }
 
         Descriptor[location].Value <<=sTypeName;

@@ -29,7 +29,7 @@
 #ifndef __SERIALIZATION_APP_XML_HXX
 #define __SERIALIZATION_APP_XML_HXX
 
-#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XPipe.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "serialization.hxx"
@@ -39,7 +39,7 @@ class CSerializationAppXML : public CSerialization
 {
 private:
     CSS::uno::Reference< CSS::lang::XMultiServiceFactory > m_aFactory;
-    CSS::uno::Reference< CSS::io::XOutputStream > m_aPipe;
+    CSS::uno::Reference< CSS::io::XPipe > m_aPipe;
 
     void serialize_node(const CSS::uno::Reference< CSS::xml::dom::XNode >& aNode);
     void serialize_nodeset();

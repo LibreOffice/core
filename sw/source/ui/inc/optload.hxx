@@ -55,6 +55,9 @@ private:
     MetricField aTabMF;
     CheckBox    aUseSquaredPageMode;
     CheckBox    aUseCharUnit;
+    FixedLine   aWordCountFL;
+    FixedText   aWordCountFT;
+    Edit        aWordCountED;
 
     SwWrtShell* pWrtShell;
     sal_Bool    bHTMLMode;
@@ -156,7 +159,6 @@ private:
     String          sNone;
 
     SwFldMgr        *pMgr;
-    sal_uInt16          eType;
     sal_Bool            bHTMLMode;
 
     DECL_LINK(SelectHdl, void *);

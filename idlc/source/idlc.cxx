@@ -270,6 +270,8 @@ void Idlc::reset()
     // push the root node on the stack
     m_pScopes->push(m_pRoot);
     initializePredefinedTypes(m_pRoot);
+
+    m_includes.clear();
 }
 
 sal_Bool Idlc::isDocValid()

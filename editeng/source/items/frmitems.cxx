@@ -28,7 +28,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
@@ -2013,8 +2013,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             // serialization for basic macro recording
             uno::Reference < script::XTypeConverter > xConverter
-                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.script.Converter")),
-                    uno::UNO_QUERY );
+                    ( script::Converter::create(::comphelper::getProcessComponentContext()) );
             uno::Sequence < uno::Any > aSeq;
             uno::Any aNew;
             try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }
@@ -2817,9 +2816,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             else if (rVal.getValueTypeClass() == uno::TypeClass_SEQUENCE )
             {
                 // serialization for basic macro recording
-                uno::Reference < script::XTypeConverter > xConverter
-                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.script.Converter")),
-                        uno::UNO_QUERY );
+                uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(::comphelper::getProcessComponentContext()) );
                 uno::Any aNew;
                 uno::Sequence < uno::Any > aSeq;
                 try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }

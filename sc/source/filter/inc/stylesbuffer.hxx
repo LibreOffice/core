@@ -831,7 +831,7 @@ public:
     inline const CellStyleModel& getModel() const { return maModel; }
     /** Returns the final style name used in the document. */
     inline const ::rtl::OUString& getFinalStyleName() const { return maFinalName; }
-
+    inline ::ScStyleSheet* getStyleSheet() { return mpStyleSheet; }
 private:
     CellStyleModel      maModel;
     ::rtl::OUString     maFinalName;        /// Final style name used in API.
@@ -863,12 +863,14 @@ public:
     ::rtl::OUString     getDefaultStyleName() const;
     /** Creates the style sheet described by the style XF with the passed identifier. */
     ::rtl::OUString     createCellStyle( sal_Int32 nXfId ) const;
+    ::ScStyleSheet*     getCellStyleSheet( sal_Int32 nXfId ) const;
 
 private:
     /** Inserts the passed cell style object into the internal maps. */
     void                insertCellStyle( CellStyleRef xCellStyle );
     /** Creates the style sheet described by the passed cell style object. */
     ::rtl::OUString     createCellStyle( const CellStyleRef& rxCellStyle ) const;
+    ::ScStyleSheet*     getCellStyleSheet( const CellStyleRef& rxCellStyle ) const;
 
 private:
     typedef RefVector< CellStyle >          CellStyleVector;
@@ -907,6 +909,7 @@ public:
     FontRef             createFont( sal_Int32* opnFontId = 0 );
     /** Creates a number format. */
     NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const ::rtl::OUString& rFmtCode );
+    sal_Int32           nextFreeNumFmtId();
     /** Creates a new empty border object.
         @param opnBorderId  (out-param) The identifier of the new border object. */
     BorderRef           createBorder( sal_Int32* opnBorderId = 0 );
@@ -967,6 +970,7 @@ public:
     ::rtl::OUString     getDefaultStyleName() const;
     /** Creates the style sheet described by the style XF with the passed identifier. */
     ::rtl::OUString     createCellStyle( sal_Int32 nXfId ) const;
+    ::ScStyleSheet*     getCellStyleSheet( sal_Int32 nXfId ) const;
     /** Creates the style sheet described by the DXF with the passed identifier. */
     ::rtl::OUString     createDxfStyle( sal_Int32 nDxfId ) const;
 

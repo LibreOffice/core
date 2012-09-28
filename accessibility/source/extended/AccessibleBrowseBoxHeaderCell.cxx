@@ -112,10 +112,10 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
 /** @return
         The name of this class.
 */
-::rtl::OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
+OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell" ) );
+    return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell" );
 }
 // -----------------------------------------------------------------------------
 namespace

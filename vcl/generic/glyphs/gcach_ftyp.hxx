@@ -102,7 +102,6 @@ public:
 
     bool                  HasExtraKerning() const;
     int                   GetExtraKernPairs( ImplKernPairData** ) const;
-    int                   GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
 
 private:
     FT_FaceRec_*    maFaceFT;

@@ -33,7 +33,7 @@ Module gid_Module_Optional_Kde
     Default = YES;
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_KDE);
-    Styles = (DONTSHOWINUSERINSTALL);
+    Styles = ();
     Files = (
 #ifdef ENABLE_KDE
     gid_File_Lib_Kdebe

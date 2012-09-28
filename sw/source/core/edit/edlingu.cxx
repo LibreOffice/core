@@ -351,7 +351,7 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     OSL_ENSURE( GetEnd(), "SwEditShell::SpellContinue() ohne Start?");
 
     uno::Reference< uno::XInterface >  xSpellRet;
-    sal_Bool bGoOn = sal_True;
+    bool bGoOn = true;
     do {
         SwPaM *pCrsr = pMySh->GetCrsr();
         if ( !pCrsr->HasMark() )
@@ -365,7 +365,7 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         bGoOn = GetCrsrCnt() > 1;
         if( xSpellRet.is() )
         {
-            bGoOn = sal_False;
+            bGoOn = false;
             SwPosition* pNewPoint = new SwPosition( *pCrsr->GetPoint() );
             SwPosition* pNewMark = new SwPosition( *pCrsr->GetMark() );
             SetCurr( pNewPoint );
@@ -425,7 +425,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     OSL_ENSURE( GetEnd(), "SwConvIter::Continue() ohne Start?");
 
     rtl::OUString aConvText;
-    sal_Bool bGoOn = sal_True;
+    bool bGoOn = true;
     do {
         SwPaM *pCrsr = pMySh->GetCrsr();
         if ( !pCrsr->HasMark() )
@@ -442,7 +442,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         bGoOn = GetCrsrCnt() > 1;
         if( !aConvText.isEmpty() )
         {
-            bGoOn = sal_False;
+            bGoOn = false;
             SwPosition* pNewPoint = new SwPosition( *pCrsr->GetPoint() );
             SwPosition* pNewMark = new SwPosition( *pCrsr->GetMark() );
 
@@ -548,7 +548,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 
     const sal_Bool bAuto = IsAuto();
      uno::Reference< XHyphenatedWord >  xHyphWord;
-    sal_Bool bGoOn = sal_False;
+    bool bGoOn = false;
     do {
         SwPaM *pCrsr;
         do {
@@ -1289,7 +1289,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
 
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, NULL );
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_UI_TEXT_CORRECTION, NULL );
         StartAction();
 
         SwPaM *pCrsr = GetCrsr();
@@ -1418,7 +1418,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // set continuation position for spell/grammar checking to the end of this sentence
         pSpellIter->SetCurr( new SwPosition( *pCrsr->Start() ) );
 
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, NULL );
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_UI_TEXT_CORRECTION, NULL );
         EndAction();
     }
 }
@@ -1514,7 +1514,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
 
     uno::Reference< XSpellAlternatives >  xSpellRet;
     linguistic2::ProofreadingResult aGrammarResult;
-    sal_Bool bGoOn = sal_True;
+    bool bGoOn = true;
     bool bGrammarErrorFound = false;
     do {
         SwPaM *pCrsr = pMySh->GetCrsr();
@@ -1538,7 +1538,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         bGrammarErrorFound = aGrammarResult.aErrors.getLength() > 0;
         if( xSpellRet.is() || bGrammarErrorFound )
         {
-            bGoOn = sal_False;
+            bGoOn = false;
             SwPosition* pNewPoint = new SwPosition( *pCrsr->GetPoint() );
             SwPosition* pNewMark = new SwPosition( *pCrsr->GetMark() );
 

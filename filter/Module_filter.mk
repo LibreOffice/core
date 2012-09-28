@@ -38,7 +38,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_eti \
 	Library_exp \
 	Library_filterconfig \
-	Library_filtertracer \
 	Library_flash \
 	Library_icd \
 	Library_icg \
@@ -81,11 +80,13 @@ $(eval $(call gb_Module_add_targets,filter,\
 ))
 endif
 
+ifneq ($(DISABLE_CVE_TESTS),TRUE)
 $(eval $(call gb_Module_add_check_targets,filter,\
     CppunitTest_filter_pict_test \
     CppunitTest_filter_tga_test \
     CppunitTest_filter_tiff_test \
 ))
+endif
 
 # TODO
 #$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\

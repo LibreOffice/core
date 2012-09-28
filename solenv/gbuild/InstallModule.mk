@@ -40,20 +40,12 @@ $(call gb_InstallModule_get_clean_target,%) :
 
 define gb_InstallModule_InstallModule
 $(call gb_InstallModuleTarget_InstallModuleTarget,$(1))
-$(call gb_Package_Package_internal,$(1)_par,$(call gb_InstallModuleTarget_get_workdir,$(1)))
 
 $(call gb_InstallModule_get_target,$(1)) : $(call gb_InstallModuleTarget_get_target,$(1))
-$(call gb_InstallModule_get_target,$(1)) : $(call gb_Package_get_target,$(1)_par)
 $(call gb_InstallModule_get_target,$(1)) :| $(dir $(call gb_InstallModule_get_target,$(1))).dir
 $(call gb_InstallModule_get_clean_target,$(1)) : $(call gb_InstallModuleTarget_get_clean_target,$(1))
-$(call gb_InstallModule_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_par)
 
 $$(eval $$(call gb_Module_register_target,$(call gb_InstallModule_get_target,$(1)),$(call gb_InstallModule_get_clean_target,$(1))))
-
-endef
-
-define gb_InstallModule_set_include
-$(call gb_InstallModuleTarget_set_include,$(1),$(2))
 
 endef
 
@@ -77,52 +69,23 @@ $(call gb_InstallModuleTarget_define_mingw_dll_if_set,$(1),$(2))
 
 endef
 
-define gb_InstallModule_use_package
-$(call gb_InstallModuleTarget_use_package,$(1),$(2))
-
-endef
-
-define gb_InstallModule_use_packages
-$(call gb_InstallModuleTarget_use_packages,$(1),$(2))
-
-endef
-
-define gb_InstallModule__add_scpfile_impl
-$(call gb_Package_add_file,$(1)_par,par/osl/$(notdir $(2)),$(2))
-
-endef
-
-define gb_InstallModule__add_scpfile
-$(call gb_InstallModule__add_scpfile_impl,$(1),$(dir $(2))$(notdir $(call gb_ScpTarget_get_target,$(2))))
-
-endef
-
-define gb_InstallModule__add_scpfiles
-$(foreach scpfile,$(2),$(call gb_InstallModule__add_scpfile,$(1),$(scpfile)))
-
-endef
-
 define gb_InstallModule_add_scpfile
 $(call gb_InstallModuleTarget_add_scpfile,$(1),$(2))
-$(call gb_InstallModule__add_scpfile,$(1),$(2))
 
 endef
 
 define gb_InstallModule_add_scpfiles
 $(call gb_InstallModuleTarget_add_scpfiles,$(1),$(2))
-$(call gb_InstallModule__add_scpfiles,$(1),$(2))
 
 endef
 
 define gb_InstallModule_add_localized_scpfile
 $(call gb_InstallModuleTarget_add_localized_scpfile,$(1),$(2))
-$(call gb_InstallModule__add_scpfile,$(1),$(2))
 
 endef
 
 define gb_InstallModule_add_localized_scpfiles
 $(call gb_InstallModuleTarget_add_localized_scpfiles,$(1),$(2))
-$(call gb_InstallModule__add_scpfiles,$(1),$(2))
 
 endef
 

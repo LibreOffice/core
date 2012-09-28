@@ -21,7 +21,9 @@
 #define BASCTL_BASIDE3_HXX
 
 #include "../basicide/layout.hxx"
-#include <bastypes.hxx>
+#include "bastypes.hxx"
+#include "propbrw.hxx"
+
 #include <svl/undo.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -30,29 +32,32 @@
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 class Printer;
 class StarBASIC;
 class SfxItemSet;
-class DlgEditor;
-class DlgEdModel;
-class DlgEdPage;
-class DlgEdView;
 class SfxUndoManager;
 
 namespace basctl
 {
 
+class DlgEditor;
+class DlgEdModel;
+class DlgEdPage;
+class DlgEdView;
+
 class DialogWindowLayout;
 class ObjectCatalog;
 
-class DialogWindow: public IDEBaseWindow
+class DialogWindow: public BaseWindow
 {
 private:
     DialogWindowLayout& rLayout;
-    DlgEditor*          pEditor;
-    SfxUndoManager*     pUndoMgr;
+    boost::scoped_ptr<DlgEditor> pEditor; // never nullptr
+    boost::scoped_ptr<SfxUndoManager> pUndoMgr; // never nullptr
     Link                aOldNotifyUndoActionHdl;
-    ::rtl::OUString     aCurPath;
+    OUString            aCurPath;
 
 protected:
     virtual void        Paint( const Rectangle& );
@@ -73,25 +78,25 @@ protected:
 
 public:
                         TYPEINFO();
-    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, rtl::OUString aLibName, rtl::OUString aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
+    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, OUString aLibName, OUString aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
                         DialogWindow( DialogWindow* pCurView ); // never implemented
                         ~DialogWindow();
 
     virtual void        ExecuteCommand( SfxRequest& rReq );
     virtual void        GetState( SfxItemSet& );
-    DlgEditor*          GetEditor() const   { return pEditor; }
+    DlgEditor&          GetEditor() const   { return *pEditor; }
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const;
-    DlgEdModel*         GetModel() const;
-    DlgEdPage*          GetPage() const;
-    DlgEdView*          GetView() const;
-    bool                RenameDialog( const ::rtl::OUString& rNewName );
+    DlgEdModel&         GetModel() const;
+    DlgEdPage&          GetPage() const;
+    DlgEdView&          GetView() const;
+    bool                RenameDialog( const OUString& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();
     bool                SaveDialog();
     bool                ImportDialog();
 
-    virtual ::rtl::OUString      GetTitle();
-    virtual BasicEntryDescriptor CreateEntryDescriptor();
+    virtual OUString             GetTitle();
+    virtual EntryDescriptor      CreateEntryDescriptor();
     virtual void        SetReadOnly (bool bReadOnly);
     virtual bool        IsReadOnly();
 
@@ -99,8 +104,7 @@ public:
     virtual bool        IsModified();
     virtual bool        IsPasteAllowed();
 
-    virtual ::svl::IUndoManager*
-                        GetUndoManager();
+    virtual svl::IUndoManager* GetUndoManager();
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
@@ -112,7 +116,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     virtual char const* GetHid () const;
-    virtual BasicIDEType GetType () const;
+    virtual ItemType GetType () const;
 };
 
 //
@@ -123,26 +127,39 @@ class DialogWindowLayout : public Layout
 public:
     DialogWindowLayout (Window* pParent, ObjectCatalog&);
 public:
+    void ShowPropertyBrowser ();
+    void UpdatePropertyBrowser ();
+    void DisablePropertyBrowser ();
+    void RemovePropertyBrowser ();
+public:
     // Layout:
-    virtual void Activating (IDEBaseWindow&);
+    virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
+    virtual void ExecuteGlobal (SfxRequest&);
     virtual void GetState (SfxItemSet&, unsigned nWhich);
     virtual void UpdateDebug (bool){};
 protected:
     // Layout:
-    virtual void OnFirstSize (int nWidth, int nHeight);
+    virtual void OnFirstSize (long nWidth, long nHeight);
 
 private:
     // child window
     DialogWindow* pChild;
-    // dockable windows
+    // dockable windows:
+    // object catalog (owned by Shell)
     ObjectCatalog& rObjectCatalog;
-    // TODO property browser
+    // property browser (created by this, deleted by toolkit)
+    PropBrw* pPropertyBrowser;
+
+private:
+    void AddPropertyBrowser ();
+private:
+    friend class DialogWindow;
 };
 
 
 } // namespace basctl
 
-#endif  // BASCTL_BASIDE3_HXX
+#endif // BASCTL_BASIDE3_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

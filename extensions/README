@@ -1,1 +1,14 @@
-Browser plugin, activex control, scanner bits.
+Browser plugin, activex control, scanner bits.  Online update.
+
+== Application online update checking ==
+
+When we start LO, first InitUpdateCheckJobThread is created, via
+UpdateCheckJob::execute() (from extensions/source/update/check/updatecheckjob.cxx),
+as a reaction to a "onFirstVisibleTask" event. It waits 25 seconds (so that it
+does not interfere with the startup itself), and then calls
+UpdateCheck::initialize() (from extensions/source/update/check/updatecheck.cxx).
+
+This creates one more thread, UpdateCheckThread, that regularly checks whether
+we have reached the time when we should ask for the update.  If yes, asks for
+that, and shows the download button in the menu (if the new update is
+available).

@@ -575,13 +575,9 @@ public:
     void  SetMaxUndoActionCount(sal_uIntPtr nAnz);
     sal_uIntPtr GetMaxUndoActionCount() const { return nMaxUndoCount; }
     void  ClearUndoBuffer();
-    // UndoAction(0) ist die aktuelle (also die zuletzt eingegangene)
-    sal_uIntPtr GetUndoActionCount() const                      { return pUndoStack!=NULL ? pUndoStack->size() : 0; }
-    const SfxUndoAction* GetUndoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pUndoStack!=NULL ? (*pUndoStack)[nNum] : NULL); }
-    // RedoAction(0) ist die aktuelle (also die des letzten Undo)
-    sal_uIntPtr GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->size() : 0; }
-    const SfxUndoAction* GetRedoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? (*pRedoStack)[nNum] : NULL); }
 
+    bool HasUndoActions() const;
+    bool HasRedoActions() const;
     bool Undo();
     bool Redo();
     bool Repeat(SfxRepeatTarget&);

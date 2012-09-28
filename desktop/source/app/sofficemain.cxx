@@ -38,21 +38,14 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
-#if defined WNT
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
-
 int SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
-#if defined ANDROID || defined WNT
+#if defined ANDROID
     try {
-#endif
-#if defined(ANDROID)
         rtl::Bootstrap::setIniFilename(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///assets/program/lofficerc")));
 #endif
@@ -67,36 +60,31 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     // handle --version and --help already here, otherwise they would be handled
     // after VCL initialization that might fail if $DISPLAY is not set
     const desktop::CommandLineArgs& rCmdLineArgs = aDesktop.GetCommandLineArgs();
+    OUString aUnknown( rCmdLineArgs.GetUnknown() );
+    if ( !aUnknown.isEmpty() )
+    {
+        desktop::Desktop::InitApplicationServiceManager();
+        desktop::displayCmdlineHelp( aUnknown );
+        return EXIT_FAILURE;
+    }
     if ( rCmdLineArgs.IsHelp() )
     {
-        desktop::displayCmdlineHelp();
+        desktop::Desktop::InitApplicationServiceManager();
+        desktop::displayCmdlineHelp( OUString() );
         return EXIT_SUCCESS;
     }
-    else if ( rCmdLineArgs.IsVersion() )
+    if ( rCmdLineArgs.IsVersion() )
     {
+        desktop::Desktop::InitApplicationServiceManager();
         desktop::displayVersion();
         return EXIT_SUCCESS;
     }
-    else if ( rCmdLineArgs.HasUnknown() )
-    {
-        return EXIT_FAILURE;
-    }
 #endif
     return SVMain();
-#if defined ANDROID || defined WNT
-    } catch (const ::com::sun::star::uno::Exception &e) {
 #if defined ANDROID
+    } catch (const ::com::sun::star::uno::Exception &e) {
         fprintf (stderr, "Not handled UNO exception at main: '%s'\n",
                  rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-#elif defined WNT
-        MessageBoxW(
-            0,
-            reinterpret_cast< LPCWSTR >(
-                rtl::OUString("Unhandled exception:\n" + e.Message).getStr()),
-            reinterpret_cast< LPCWSTR >(rtl::OUString("Fatal Error").getStr()),
-            (MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_TASKMODAL
-             | MB_SETFOREGROUND | MB_TOPMOST));
-#endif
         throw; // to get exception type printed
     }
 #endif

@@ -18,11 +18,9 @@
 
 package com.sun.star.wiki;
 
-import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.DispatchDescriptor;
-import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
@@ -31,14 +29,12 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStatusListener;
 import com.sun.star.frame.XStorable;
-import com.sun.star.io.XInputStream;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.util.XCloseBroadcaster;
 import com.sun.star.view.XSelectionSupplier;

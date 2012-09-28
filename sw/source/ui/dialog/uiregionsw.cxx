@@ -374,7 +374,6 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aImageIL            (       SW_RES(IL_BITMAPS)),
 
     rSh( rWrtSh ),
-    pAktEntry( 0 ),
     m_pDocInserter        ( NULL ),
     m_pOldDefDlgParent    ( NULL ),
     bDontCheckPasswd    ( sal_True)

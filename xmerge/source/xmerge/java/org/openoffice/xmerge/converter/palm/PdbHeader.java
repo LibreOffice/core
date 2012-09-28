@@ -35,7 +35,6 @@ import java.io.IOException;
  *  The <code>read</code> and <code>write</code> methods should
  *  handle them properly.</p>
  *
- *  @author  Herbie Ong
  *  @see     PalmDB
  *  @see     Record
  */

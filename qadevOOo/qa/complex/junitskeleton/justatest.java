@@ -17,16 +17,13 @@
  */
 
 /**
- * @author: ll93751
  * @copyright: Sun Microsystems Inc. 2010
  */
 
 package complex.junitskeleton;
 
-public class justatest /* extends *//* implements */ {
-    //public static void main( String[] argv ) {
-    //
-    //    }
+public class justatest {
+
     public void justatest()
         {
             System.out.println("justatest CTor.");

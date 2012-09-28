@@ -141,7 +141,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(NATIVERES) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
-		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
 		$(LIBS) \
 		-Wl$(COMMA)-Map$(COMMA)$(basename $(1)).map \
 		-o $(1)))
@@ -161,9 +161,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(NATIVERES) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
-		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
 		$(LIBS) \
-		-Wl$(COMMA)-Map$(COMMA)$(basename $(DLLTARGET)).map \
+		-Wl$(COMMA)-Map$(COMMA)$(dir $(1))$(notdir $(basename $(DLLTARGET)).map) \
 		-Wl$(COMMA)--out-implib$(COMMA)$(1) \
 		-o $(dir $(1))/$(notdir $(DLLTARGET))))
 endef
@@ -298,16 +298,16 @@ gb_Library_IARCEXT := .a
 gb_Library_ILIBEXT := .lib
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(OUTDIR)/bin/$(notdir $(3)))
+$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.dll,%.map,$(3)) \
 )
 
-$(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3))
+$(call gb_Library_get_target,$(1)) :| $(OUTDIR)/bin/.dir
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
+$(call gb_Library_get_target,$(1)) \
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)) $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.map,$(3)))
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
@@ -338,23 +338,13 @@ define gb_Library_get_dllname
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
 endef
 
-define gb_Library_get_implibname
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
-endef
-
-
 # StaticLibrary class
 
-gb_StaticLibrary_DEFS :=
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
-gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
 
 gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
 	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
-
-gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
 gb_StaticLibrary_StaticLibrary_platform =
 
@@ -441,11 +431,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
-$(call gb_InstallModuleTarget_set_include,$(1),\
-	$(SOLARINC) \
-	$(SCP_INCLUDE) \
-)
-
 endef
 
 # ScpConvertTarget class
@@ -459,6 +444,11 @@ endef
 # InstallScript class
 
 gb_InstallScript_EXT := .inf
+
+# CliAssemblyTarget class
+
+gb_CliAssemblyTarget_POLICYEXT :=
+gb_CliAssemblyTarget_get_dll :=
 
 # ExtensionTarget class
 

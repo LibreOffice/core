@@ -89,7 +89,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
 
     //setBackground(Color.WHITE);
     setBackground(new Color(0,0,0));
-    locations = new ArrayList();
+    locations = new ArrayList<String>();
     //Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
     Point center = new Point( 400, 400 );
     int windowWidth=200;
@@ -208,7 +208,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         locations.add(path);
     }
 
-    public static ArrayList getLocations()
+    public static ArrayList<String> getLocations()
     {
         return locations;
     }
@@ -370,7 +370,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     private IdeVersion ideversion = null;
     private IdeFinal idefinal = null;
     private IdeWelcome idewelcome = null;
-    private static ArrayList locations = null;
+    private static ArrayList<String> locations = null;
 
     public static String VERSIONS = "VERSIONS";
     public static String WELCOME  = "WELCOME";

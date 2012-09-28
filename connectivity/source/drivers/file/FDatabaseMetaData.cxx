@@ -24,18 +24,17 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/ucb/SearchRecursion.hpp>
 #include <com/sun/star/ucb/SearchCommandArgument.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <tools/urlobj.hxx>
 #include "file/FDriver.hxx"
 #include "file/FTable.hxx"
 #include <comphelper/extract.hxx>
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <rtl/logfile.hxx>
-
+#include <ucbhelper/content.hxx>
 
 using namespace com::sun::star::ucb;
 using namespace connectivity::file;
@@ -94,14 +93,14 @@ namespace
             INetURLObject aContentURL( _rFolderOrDoc );
             ::ucbhelper::Content aContent1;
             {
-                ::ucbhelper::Content aFolderOrDoc( _rFolderOrDoc, Reference< XCommandEnvironment >() );
+                ::ucbhelper::Content aFolderOrDoc( _rFolderOrDoc, Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 if ( aFolderOrDoc.isDocument() )
                     aContent1 = aFolderOrDoc;
                 else
                 {
                     aContentURL = INetURLObject( _rFolderOrDoc, INetURLObject::WAS_ENCODED );
                     aContentURL.Append( _rDocName );
-                    aContent1 = ::ucbhelper::Content( aContentURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+                    aContent1 = ::ucbhelper::Content( aContentURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 }
             }
 
@@ -125,7 +124,7 @@ namespace
             ::ucbhelper::Content aContent2;
             try
             {
-                aContent2 = ::ucbhelper::Content( aURL2.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+                aContent2 = ::ucbhelper::Content( aURL2.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 bCanAccess = aContent2.isDocument();
             }
             catch( const Exception& )
@@ -144,20 +143,13 @@ namespace
                     Reference< XContentIdentifier > xID1 = xContent1->getIdentifier();
                     Reference< XContentIdentifier > xID2 = xContent2->getIdentifier();
                     OSL_ENSURE( xID1.is() && xID2.is(), "isCaseSensitiveParentFolder: invalid ID interfaces!" );
-                    if ( xID1.is() && xID2.is() )
+                    if ( xID1.is() && xID2.is()
+                         && ( UniversalContentBroker::create(
+                                  comphelper::getProcessComponentContext() )->
+                              compareContentIds( xID1, xID2 ) == 0 ) )
                     {
-                        // get a generic content provider
-                        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-                        Reference< XContentProvider > xProvider;
-                        if ( pBroker )
-                            xProvider = pBroker->getContentProviderInterface();
-                        OSL_ENSURE( xProvider.is(), "isCaseSensitiveParentFolder: invalid content broker!" );
-                        if ( xProvider.is() )
-                        {
-                            if ( 0 == xProvider->compareContentIds( xID1, xID2 ) )
-                                // finally, we know that the folder is not case-sensitive ....
-                                nIsCS = 0;
-                        }
+                        // finally, we know that the folder is not case-sensitive ....
+                        nIsCS = 0;
                     }
                 }
             }

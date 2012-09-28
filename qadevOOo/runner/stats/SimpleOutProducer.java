@@ -19,10 +19,7 @@
 package stats;
 
 import share.LogWriter;
-/**
- *
- * @author  sw93809
- */
+
 public class SimpleOutProducer implements LogWriter {
 
 

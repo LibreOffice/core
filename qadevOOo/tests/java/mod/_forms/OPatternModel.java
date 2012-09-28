@@ -68,7 +68,7 @@ import util.DBTools;
  * @see com.sun.star.form.XUpdateBroadcaster
  * @see com.sun.star.awt.UnoControlPatternFieldModel
  * @see com.sun.star.form.component.DatabasePatternField
- * @see com.sun.star.form.FormControlModel
+ * @see com.sun.star.form
  * @see com.sun.star.beans.XPropertyState
  * @see com.sun.star.container.XNamed
  * @see com.sun.star.lang.XComponent

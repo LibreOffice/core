@@ -41,8 +41,6 @@ namespace connectivity
 
         public:
 
-            inline KabConnection* getOwnConnection() const { return m_xConnection.get(); }
-
             KabDatabaseMetaData(KabConnection* _pCon);
             static const ::rtl::OUString & getAddressBookTableName();
             virtual ~KabDatabaseMetaData();

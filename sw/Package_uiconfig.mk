@@ -27,6 +27,7 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,sw_uiconfig,$(SRCDIR)/sw/uiconfig))
+
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/menubar/menubar.xml,sglobal/menubar/menubar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/statusbar/statusbar.xml,sglobal/statusbar/statusbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolbar/alignmentbar.xml,sglobal/toolbar/alignmentbar.xml))
@@ -193,7 +194,6 @@ $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolb
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/drawingobjectbar.xml,swriter/toolbar/drawingobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/drawtextobjectbar.xml,swriter/toolbar/drawtextobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/extrusionobjectbar.xml,swriter/toolbar/extrusionobjectbar.xml))
-$(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/findbar.xml,swriter/toolbar/findbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/flowchartshapes.xml,swriter/toolbar/flowchartshapes.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/fontworkobjectbar.xml,swriter/toolbar/fontworkobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/fontworkshapetype.xml,swriter/toolbar/fontworkshapetype.xml))

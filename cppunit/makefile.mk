@@ -29,8 +29,8 @@ TARGET = cppunit
 
 .INCLUDE: settings.mk
 
-TARFILE_NAME=cppunit-1.13.0
-TARFILE_MD5=0c65c839854edd43d9294d1431a2b292
+TARFILE_NAME=cppunit-1.13.1
+TARFILE_MD5=fa9aa839145cdf860bf596532bb8af97
 
 PATCH_FILES = windows.patch unix.patch
 
@@ -40,6 +40,10 @@ PATCH_FILES += android.patch
 
 .IF "$(OS)" == "IOS"
 PATCH_FILES += ios.patch
+.ENDIF
+
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
+PATCH_FILES += disable-dynloading.patch
 .ENDIF
 
 .IF "$(OS)" == "WNT"
@@ -148,7 +152,7 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     LDFLAGS='$(LDFLAGS)' \
     LIBS='$(MY_LIBS)'
 
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
 CONFIGURE_FLAGS+=--disable-shared
 .ELSE
 CONFIGURE_FLAGS+=--disable-static
@@ -173,7 +177,7 @@ PACKAGE_DIR = \
 OUT2LIB = ooo-install/lib/libcppunit-1.13.a
 .ELIF "$(OS)" == "OPENBSD"
 OUT2LIB = ooo-install/lib/libcppunit-1.13.so.0.0
-.ELIF "$(OS)" == "IOS"
+.ELIF "$(DISABLE_DYNLOADING)" == "TRUE"
 OUT2LIB = ooo-install/lib/libcppunit.a
 .ELIF "$(OS)" == "ANDROID"
 OUT2LIB = ooo-install/lib/libcppunit-1.13.so

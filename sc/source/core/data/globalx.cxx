@@ -29,7 +29,6 @@
 #include "callform.hxx"
 #include "global.hxx"
 #include <tools/urlobj.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 
@@ -79,7 +78,8 @@ void ScGlobal::InitAddIns()
         try
         {
             ::ucbhelper::Content aCnt( aObj.GetMainURL(INetURLObject::NO_DECODE),
-                Reference< XCommandEnvironment > () );
+                Reference< XCommandEnvironment >(),
+                comphelper::getProcessComponentContext() );
             Reference< sdbc::XResultSet > xResultSet;
             Sequence< rtl::OUString > aProps;
             try

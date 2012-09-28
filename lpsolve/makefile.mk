@@ -36,6 +36,8 @@ TARGET=lpsolve
 
 # --- Files --------------------------------------------------------
 
+.IF "$(OS)" != "IOS"
+
 TARFILE_NAME=lp_solve_5.5
 TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 
@@ -45,12 +47,16 @@ PATCH_FILES=lp_solve_5.5-windows.patch
 PATCH_FILES=\
     lp_solve_5.5.patch \
     lp_solve-aix.patch
-ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.ios
+ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.static
 .ENDIF
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 CONFIGURE_FLAGS=
+
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
+CONFIGURE_FLAGS+=--enable-static --disable-shared
+.ENDIF
 
 BUILD_DIR=lpsolve55
 .IF "$(GUI)"=="WNT"
@@ -77,9 +83,8 @@ OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
 .EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS verbose
 BUILD_ACTION=sh ccc.osx
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
-.ELIF "$(OS)"=="IOS"
-.EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
-BUILD_ACTION=sh ccc.ios
+.ELIF "$(DISABLE_DYNLOADING)" == "TRUE"
+BUILD_ACTION=sh ccc.static
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.a
 .ELSE
 .IF "$(COMNAME)"=="sunpro5"
@@ -95,9 +100,17 @@ OUT2LIB=$(BUILD_DIR)$/liblpsolve55.so
 
 OUT2INC=lp_lib.h lp_types.h lp_utils.h lp_Hash.h lp_matrix.h lp_mipbb.h lp_SOS.h
 
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	set_ext.mk
+
+.ENDIF
+
 .INCLUDE :	target.mk
+
+.IF "$(OS)" != "IOS"
+
 .INCLUDE :	tg_ext.mk
 
+.ENDIF

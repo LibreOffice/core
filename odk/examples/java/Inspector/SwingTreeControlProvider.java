@@ -37,7 +37,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.NullPointerException;
 import com.sun.star.reflection.XConstantTypeDescription;
 import com.sun.star.reflection.XIdlMethod;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import java.awt.BorderLayout;
 import java.awt.Container;

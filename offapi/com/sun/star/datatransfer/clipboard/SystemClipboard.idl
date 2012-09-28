@@ -21,7 +21,6 @@
 #define __com_sun_star_datatransfer_clipboard_SystemClipboard_idl__
 
 #include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XTypeProvider.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 
 
@@ -67,10 +66,6 @@ published service SystemClipboard
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
-
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XTypeProvider;
 };
 
 

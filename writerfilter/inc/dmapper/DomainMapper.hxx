@@ -80,7 +80,8 @@ public:
     DomainMapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModel,
-                                SourceDocumentType eDocumentType );
+                                bool bRepairStorage,
+                                SourceDocumentType eDocumentType);
     virtual ~DomainMapper();
 
     // Stream

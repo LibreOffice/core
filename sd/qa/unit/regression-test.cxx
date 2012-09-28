@@ -55,7 +55,6 @@
 
 #include <string>
 #include <iostream>
-#include <rtl/oustringostreaminserter.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <drawinglayer/XShapeDumper.hxx>
@@ -185,7 +184,7 @@ void SdFiltersTest::testN759180()
         CPPUNIT_ASSERT(pULSpace);
         CPPUNIT_ASSERT_MESSAGE( "Para bottom spacing is wrong!", pULSpace->GetLower() == 0 );
         aEdit.GetCharAttribs(1, rLst);
-        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); it++)
+        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
         {
             const SvxFontHeightItem * pFontHeight = dynamic_cast<const SvxFontHeightItem *>((*it).pAttr);
             if(pFontHeight)

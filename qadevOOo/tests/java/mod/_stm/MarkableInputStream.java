@@ -83,7 +83,7 @@ public class MarkableInputStream extends TestCase {
     public TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) throws StatusException {
 
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
 
         Object aPipe = null;
         Object mostream = null;

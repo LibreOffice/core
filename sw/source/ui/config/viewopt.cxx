@@ -326,16 +326,13 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
         switch ( rHtmlOpt.GetExportMode() )
         {
             case HTML_CFG_MSIE:
-                nRet |= HTMLMODE_FULL_STYLES|
-                        HTMLMODE_SOME_ABS_POS;
+                nRet |= HTMLMODE_FULL_STYLES;
             break;
             case HTML_CFG_NS40:
-                nRet |= HTMLMODE_FRM_COLUMNS|
-                        HTMLMODE_SOME_ABS_POS;
+                nRet |= HTMLMODE_FRM_COLUMNS;
             break;
             case HTML_CFG_WRITER:
-                nRet |= HTMLMODE_FRM_COLUMNS|HTMLMODE_FULL_STYLES|
-                        HTMLMODE_SOME_ABS_POS;
+                nRet |= HTMLMODE_FRM_COLUMNS|HTMLMODE_FULL_STYLES;
             break;
         }
     }

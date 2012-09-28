@@ -144,8 +144,8 @@ int bText=0;
 	pChar[1] = 0x00;
 	pChar[0] = c3;
 
-	WorkOnTokenSet( COMMEND, yytext );
-	WorkOnTokenSet( COMMEND, pChar );
+	WorkOnTokenSet( COMMENT, yytext );
+	WorkOnTokenSet( COMMENT, pChar );
 
 	for(;;) {
 		if ( c3 == EOF )
@@ -156,7 +156,7 @@ int bText=0;
 		c2 = c3;
 		c3 = yyinput();
 		pChar[0] = c3;
-		WorkOnTokenSet( COMMEND, pChar );
+		WorkOnTokenSet( COMMENT, pChar );
 	}
 }
 

@@ -113,9 +113,9 @@ class VCL_DLLPUBLIC ApplicationEvent
 {
 public:
     enum Type {
-        TYPE_ACCEPT, TYPE_APPEAR, TYPE_HELP, TYPE_OPEN, TYPE_OPENHELPURL,
-        TYPE_PRINT, TYPE_PRIVATE_DOSHUTDOWN, TYPE_QUICKSTART, TYPE_SHOWDIALOG,
-        TYPE_UNACCEPT
+        TYPE_ACCEPT, TYPE_APPEAR, TYPE_HELP, TYPE_VERSION, TYPE_OPEN,
+        TYPE_OPENHELPURL, TYPE_PRINT, TYPE_PRIVATE_DOSHUTDOWN, TYPE_QUICKSTART,
+        TYPE_SHOWDIALOG, TYPE_UNACCEPT
     };
 
     ApplicationEvent() {}
@@ -554,7 +554,7 @@ VCL_DLLPUBLIC Application* GetpApp();
 VCL_DLLPUBLIC sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 VCL_DLLPUBLIC void DeInitVCL();
 
-VCL_DLLPUBLIC sal_Bool InitAccessBridge( sal_Bool bAllowCancel, sal_Bool &rCancelled );
+VCL_DLLPUBLIC bool InitAccessBridge( bool bAllowCancel, bool &rCancelled );
 
 // only allowed to call, if no thread is running. You must call JoinMainLoopThread to free all memory.
 VCL_DLLPUBLIC void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData );

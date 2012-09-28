@@ -27,58 +27,58 @@
 #include "unomodel.hxx"
 
 #include <basdoc.hxx>
-#define BasicDocShell     // This CANNOT come before basdoc apparently
+#define basctl_DocShell     // This CANNOT come before basdoc apparently
 #include <basslots.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svx/svxids.hrc>
 
-TYPEINIT1(BasicDocShell, SfxObjectShell);
-DBG_NAME(BasicDocShell);
+namespace basctl
+{
 
-SFX_IMPL_OBJECTFACTORY( BasicDocShell, SvGlobalName(), SFXOBJECTSHELL_STD_NORMAL, "sbasic" )
+TYPEINIT1(DocShell, SfxObjectShell);
 
-SFX_IMPL_INTERFACE( BasicDocShell, SfxObjectShell, IDEResId( 0 ) )
+SFX_IMPL_OBJECTFACTORY( DocShell, SvGlobalName(), SFXOBJECTSHELL_STD_NORMAL, "sbasic" )
+
+SFX_IMPL_INTERFACE( basctl_DocShell, SfxObjectShell, IDEResId( 0 ) )
 {
     SFX_STATUSBAR_REGISTRATION( IDEResId( SID_BASICIDE_STATUSBAR ) );
 }
 
-BasicDocShell::BasicDocShell()
+DocShell::DocShell()
     :SfxObjectShell( SFXMODEL_DISABLE_EMBEDDED_SCRIPTS | SFXMODEL_DISABLE_DOCUMENT_RECOVERY )
 {
-    pPrinter = 0;
     SetPool( &SFX_APP()->GetPool() );
     SetBaseModel( new SIDEModel(this) );
 }
 
-BasicDocShell::~BasicDocShell()
-{
-    delete pPrinter;
-}
+DocShell::~DocShell()
+{ }
 
-SfxPrinter* BasicDocShell::GetPrinter( bool bCreate )
+SfxPrinter* DocShell::GetPrinter( bool bCreate )
 {
     if ( !pPrinter && bCreate )
-        pPrinter = new SfxPrinter( new SfxItemSet( GetPool(), SID_PRINTER_NOTFOUND_WARN , SID_PRINTER_NOTFOUND_WARN ) );
+        pPrinter.reset(new SfxPrinter(new SfxItemSet(
+            GetPool(), SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN
+        )));
 
-    return pPrinter;
+    return pPrinter.get();
 }
 
-void BasicDocShell::SetPrinter( SfxPrinter* pPr )
+void DocShell::SetPrinter( SfxPrinter* pPr )
 {
-    if ( pPr != pPrinter )
-    {
-        delete pPrinter;
-        pPrinter = pPr;
-    }
+    if (pPr != pPrinter.get())
+        pPrinter.reset(pPr);
 }
 
-void BasicDocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, String*, sal_Int32, sal_Bool bTemplate) const
+void DocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, String*, sal_Int32, sal_Bool bTemplate) const
 {
     (void)bTemplate;
     DBG_ASSERT( !bTemplate, "No template for Basic" );
 }
 
-void BasicDocShell::Draw( OutputDevice *, const JobSetup &, sal_uInt16 )
+void DocShell::Draw( OutputDevice *, const JobSetup &, sal_uInt16 )
 {}
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

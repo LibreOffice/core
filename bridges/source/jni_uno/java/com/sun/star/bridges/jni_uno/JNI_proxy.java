@@ -1,3 +1,4 @@
+// -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 /*
  * This file is part of the LibreOffice project.
  *
@@ -30,8 +31,24 @@ import com.sun.star.uno.IQueryInterface;
 public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 {
     static {
-        NativeLibraryLoader.loadLibrary(JNI_proxy.class.getClassLoader(),
-                                        "java_uno");
+        if (System.getProperty("java.vendor") == "The Android Project") {
+            // See corresponding code in
+            // javaunohelper/com/sun/star/comp/helper/Bootstrap.java for more
+            // comments.
+
+            boolean disable_dynloading = false;
+            try {
+                System.loadLibrary("lo-bootstrap");
+            } catch (UnsatisfiedLinkError e) {
+                disable_dynloading = true;
+            }
+
+            if (!disable_dynloading)
+                NativeLibraryLoader.loadLibrary(JNI_info_holder.class.getClassLoader(),
+                                                "java_uno");
+        } else
+            NativeLibraryLoader.loadLibrary(JNI_proxy.class.getClassLoader(),
+                                            "java_uno");
     }
     protected static ClassLoader s_classloader =
         JNI_proxy.class.getClassLoader();
@@ -204,3 +221,5 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
                            && m_oid.equals(UnoRuntime.generateOid(obj)));
     }
 }
+
+// vim:set shiftwidth=4 softtabstop=4 expandtab:

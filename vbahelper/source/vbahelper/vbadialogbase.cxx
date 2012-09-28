@@ -22,21 +22,19 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-sal_Bool SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException )
+void SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException )
 {
-    rtl::OUString aURL;
+    OUString aURL;
     if ( m_xModel.is() )
     {
         aURL = mapIndexToName( mnIndex );
         if( aURL.isEmpty() )
             throw uno::RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " Unable to open the specified dialog " ) ),
+                " Unable to open the specified dialog ",
                 uno::Reference< XInterface > () );
 
         uno::Sequence< beans::PropertyValue > dispatchProps(0);
         dispatchRequests( m_xModel, aURL, dispatchProps );
-
     }
-    return sal_True;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

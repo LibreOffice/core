@@ -41,7 +41,6 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include "connectivity/sqlnode.hxx"
-#include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/process.h>

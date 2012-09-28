@@ -77,6 +77,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/configurat
 	Update \
     theDefaultProvider \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer,\
+	DataFormatTranslator \
+	MimeContentTypeFactory \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment,\
 	ExtensionManager \
 	PackageInformationProvider \
@@ -99,6 +103,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
 	OOXMLDocumentPropertiesImporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
+	ShapeCollection \
 	SlideRenderer \
 	SlideSorter \
 ))
@@ -128,7 +133,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	DispatchHelper \
 	DispatchRecorderSupplier \
 	DocumentTemplates \
+	GlobalEventBroadcaster \
 	MediaTypeDetectionHelper \
+	ModuleManager \
+	UICommandDescription \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/graphic,\
 	GraphicObject \
@@ -140,6 +148,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/inspection
 	ObjectInspector \
 	ObjectInspectorModel \
 	StringRepresentation \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
+	BreakIterator \
+	LocaleData \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguistic2,\
 	LanguageGuessing \
@@ -223,6 +235,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/vba
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
 	DataAccessDescriptorFactory \
+	DatabaseContext \
 	DatabaseInteractionHandler \
 	InteractionHandler \
 ))
@@ -234,6 +247,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdbc,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/security,\
 	CertificateContainer \
+	DocumentDigitalSignatures \
 	SerialNumberAdapter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sheet,\
@@ -249,10 +263,17 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/smarttags,
 	SmartTagAction \
 	SmartTagRecognizer \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/system,\
+	ProxySettings \
+	SimpleCommandMail \
+	SimpleSystemMail \
+	SystemShellExecute \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
 	InteractionRequestStringResolver \
 	JobExecutor \
 	OfficeRestartManager \
+	PasswordContainer \
 	PasswordContainerInteractionHandler \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/text,\
@@ -270,9 +291,11 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
 	SimpleFileAccess \
 	SortedDynamicResultSetFactory \
 	Store \
+	UniversalContentBroker \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	GlobalAcceleratorConfiguration \
+    ModuleUIConfigurationManagerSupplier \
 	WindowContentFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
@@ -280,10 +303,15 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	JobManager \
+	NumberFormatter \
 	PathSubstitution \
 	TextSearch \
 	UriAbbreviation \
 	URLTransformer \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
+	DocumentBuilder \
+	SAXDocumentBuilder \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	FastShapeContextHandler \
@@ -551,10 +579,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configu
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration/bootstrap,\
 	BootstrapContext \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer,\
-	DataFormatTranslator \
-	MimeContentTypeFactory \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer/clipboard,\
 	ClipboardManager \
 	GenericClipboard \
@@ -633,6 +657,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing
 	HatchTable \
 	Layer \
 	LayerManager \
+	LineCap \
 	LineProperties \
 	LineShape \
 	MarkerTable \
@@ -653,7 +678,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing
 	RotationDescriptor \
 	ShadowProperties \
 	Shape \
-	ShapeCollection \
 	Shapes \
 	Text \
 	TextProperties \
@@ -793,9 +817,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	FrameLoader \
 	FrameLoaderFactory \
 	FramesContainer \
-	GlobalEventBroadcaster \
 	LayoutManager \
-	ModuleManager \
 	PopupMenuController \
 	PopupMenuControllerFactory \
 	ProtocolHandler \
@@ -822,14 +844,12 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/graphic
 	MediaProperties \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
-	BreakIterator \
 	ChapterCollator \
 	CharacterClassification \
 	Collator \
 	IndexEntrySupplier \
 	InputSequenceChecker \
 	LocaleCalendar \
-	LocaleData \
 	NativeNumberSupplier \
 	NumberFormatMapper \
 	OrdinalSuffix \
@@ -954,7 +974,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb,\
 	DatabaseAccessConnection \
 	DatabaseAccessContext \
 	DatabaseAccessDataSource \
-	DatabaseContext \
 	DatabaseDocument \
 	DatabaseEnvironment \
 	DatasourceAdministrationDialog \
@@ -1031,9 +1050,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbcx,\
 	UserDescriptor \
 	View \
 	ViewDescriptor \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/security,\
-	DocumentDigitalSignatures \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/setup,\
 	ProductRegistration \
@@ -1175,12 +1191,8 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sync,\
 	Synchronizer \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/system,\
-	ProxySettings \
 	SOffice52ProxySettings \
-	SimpleCommandMail \
-	SimpleSystemMail \
 	SystemProxySettings \
-	SystemShellExecute \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/table,\
 	AccessibleCellView \
@@ -1208,7 +1220,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/task,\
 	AsyncJob \
 	InteractionHandler \
 	Job \
-	PasswordContainer \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	AccessibleEndnoteView \
@@ -1440,7 +1451,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ucb,\
 	TransientDocumentsFolderContent \
 	TransientDocumentsRootContent \
 	TransientDocumentsStreamContent \
-	UniversalContentBroker \
 	WebDAVContentProvider \
 	WebDAVDocumentContent \
 	WebDAVFolderContent \
@@ -1454,10 +1464,8 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	ModuleUICategoryDescription \
 	ModuleUICommandDescription \
 	ModuleUIConfigurationManager \
-	ModuleUIConfigurationManagerSupplier \
 	ModuleWindowStateConfiguration \
 	UICategoryDescription \
-	UICommandDescription \
 	UIConfigurationManager \
 	UIElement \
 	UIElementFactory \
@@ -1475,7 +1483,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util,\
 	NumberFormatSettings \
 	NumberFormats \
 	NumberFormatsSupplier \
-	NumberFormatter \
 	OfficeInstallationDirectories \
 	PathSettings \
 	ReplaceDescriptor \
@@ -1523,10 +1530,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/cry
 	SAXEventKeeper \
 	SignatureCreator \
 	SignatureVerifier \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/dom,\
-	SAXDocumentBuilder \
-	DocumentBuilder \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/input,\
 	SaxDocumentHandler \
@@ -1838,14 +1841,13 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/grid,\
 	GridInvalidDataException \
 	GridInvalidModelException \
 	GridSelectionEvent \
-	SelectionEventType \
 	XGridColumn \
 	XGridColumnListener \
 	XGridColumnModel \
 	XGridControl \
 	XGridDataListener \
 	XGridDataModel \
-	XGridSelection \
+	XGridRowSelection \
 	XGridSelectionListener \
 	XMutableGridDataModel \
 	XMutableGridDataModel \
@@ -2170,7 +2172,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	XUndoManager \
 	XUndoManagerListener \
 	XUndoManagerSupplier \
-	XVbaMethodParameter \
 	XViewDataSupplier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\
@@ -2522,6 +2523,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XFrameSetModel \
 	XFrames \
 	XFramesSupplier \
+	XGlobalEventBroadcaster \
 	XInterceptorInfo \
 	XLayoutManager \
 	XLayoutManagerEventBroadcaster \
@@ -2534,6 +2536,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XModel2 \
 	XModule \
 	XModuleManager \
+	XModuleManager2 \
 	XNotifyingDispatch \
 	XPopupMenuController \
 	XRecordableDispatch \
@@ -2870,7 +2873,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/presentation,\
 	XTransitionFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/qa,\
-    	XDumper \
+	XDumper \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/rdf,\
 	FileFormat \
@@ -3089,6 +3092,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb,\
 	XDataAccessDescriptorFactory \
 	XDatabaseAccess \
 	XDatabaseAccessListener \
+	XDatabaseContext \
 	XDatabaseEnvironment \
 	XDatabaseRegistrations \
 	XDatabaseRegistrationsListener \
@@ -3611,6 +3615,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/task,\
 	XMasterPasswordHandling \
 	XMasterPasswordHandling2 \
 	XPasswordContainer \
+	XPasswordContainer2 \
 	XRestartManager \
 	XStatusIndicator \
 	XStatusIndicatorFactory \
@@ -3916,6 +3921,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	XSimpleFileAccess3 \
 	XSortedDynamicResultSetFactory \
 	XSourceInitialization \
+	XUniversalContentBroker \
 	XWebDAVCommandEnvironment \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
@@ -4055,6 +4061,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	XNumberFormats \
 	XNumberFormatsSupplier \
 	XNumberFormatter \
+	XNumberFormatter2 \
 	XOfficeInstallationDirectories \
 	XPropertyReplace \
 	XProtectable \
@@ -4194,6 +4201,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom,\
 	XNotation \
 	XProcessingInstruction \
 	XSAXDocumentBuilder \
+	XSAXDocumentBuilder2 \
 	XText \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom/events,\
@@ -4236,7 +4244,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/sax,\
 	XFastDocumentHandler \
 	XFastParser \
 	XFastSAXSerializable \
-	XFastSerializer \
 	XFastShapeContextHandler \
 	XFastTokenHandler \
 	XLocator \

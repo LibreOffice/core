@@ -174,7 +174,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
         }
     }
 
-    SetInFrontOfLabel( sal_False ); // #i27615#
+    SetInFrontOfLabel( false ); // #i27615#
 
     EndAllAction();
 }

@@ -101,16 +101,17 @@ class ScTokenArray;
     bool                bRaw;       // not cloned yet and trimmed to real size
  */
 
-#define SC_TOKEN_FIX_MEMBERS    \
-    OpCode   eOp;               \
-    formula::StackVar eType;    \
-    mutable sal_uInt16   nRefCnt;   \
-    bool     bRaw;
-
-struct ScDoubleRawToken
+struct ScRawTokenBase
 {
-private:
-    SC_TOKEN_FIX_MEMBERS
+protected:
+    OpCode   eOp;
+    formula::StackVar eType;
+    mutable sal_uInt16   nRefCnt;
+    bool     bRaw;
+};
+
+struct ScDoubleRawToken: private ScRawTokenBase
+{
 public:
     union
     {   // union only to assure alignment identical to ScRawToken
@@ -123,15 +124,13 @@ public:
                 DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken );
 };
 
-struct ScRawToken
+struct ScRawToken: private ScRawTokenBase
 {
     friend class ScCompiler;
     // Friends that use a temporary ScRawToken on the stack (and therefor need
     // the private dtor) and know what they're doing..
     friend class ScTokenArray;
     friend sal_uInt16 lcl_ScRawTokenOffset();
-private:
-    SC_TOKEN_FIX_MEMBERS
 public:
     union {
         double       nValue;
@@ -160,7 +159,7 @@ public:
     };
 
                 //! other members not initialized
-                ScRawToken() : bRaw( true ) {}
+                ScRawToken() { bRaw = true; }
 private:
                 ~ScRawToken() {}                //! only delete via Delete()
 public:

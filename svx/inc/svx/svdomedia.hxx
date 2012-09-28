@@ -77,9 +77,10 @@ public:
 
         Size                        getPreferredSize() const;
 
-        void                        setGraphic( const Graphic* pGraphic = NULL );
+        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+                                    getSnapshot();
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>
-            GetInputStream();
+                                    GetInputStream();
 
 protected:
 

@@ -30,3 +30,4 @@ msvcr80d.dll
 msvcr80.dll
 msvcr90d.dll
 msvcr90.dll
+dbghelp.dll

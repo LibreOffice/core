@@ -33,7 +33,8 @@
 
  *************************************************************************/
 
-#include <ucbhelper/contentbroker.hxx>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <comphelper/processfactory.hxx>
 #include <osl/socket.hxx>
 #include "ftpcontentprovider.hxx"
 #include "ftpcontent.hxx"
@@ -258,23 +259,10 @@ FTPContentProvider::getHttpProvider()
     throw(RuntimeException)
 {
     // used for access to ftp-proxy
-    ucbhelper::ContentBroker *pBroker = ucbhelper::ContentBroker::get();
-
-    if(pBroker) {
-        Reference<XContentProviderManager > xManager(
-            pBroker->getContentProviderManagerInterface());
-
-        if(xManager.is())
-            return
-                xManager->queryContentProvider(
-                    rtl::OUString("http:"));
-        else
-            throw RuntimeException(
-                rtl::OUString( "bad ucbhelper::ContentBroker"),
-                *this);
-    } else
-        return 0;
-
+    return
+        UniversalContentBroker::create(
+            comphelper::getComponentContext(m_xSMgr))->
+        queryContentProvider("http:");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

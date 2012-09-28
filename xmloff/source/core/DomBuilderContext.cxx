@@ -37,7 +37,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/XAttr.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -50,10 +50,12 @@
 
 
 using com::sun::star::lang::XMultiServiceFactory;
+using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
+using com::sun::star::xml::dom::DocumentBuilder;
 using com::sun::star::xml::dom::XAttr;
 using com::sun::star::xml::dom::XDocument;
 using com::sun::star::xml::dom::XDocumentBuilder;
@@ -191,17 +193,12 @@ void DomBuilderContext::Characters( const OUString& rCharacters )
 // helper function implementations
 //
 
-const sal_Char sDocumentBuilder[] = "com.sun.star.xml.dom.DocumentBuilder";
-
 Reference<XNode> lcl_createDomInstance()
 {
-    Reference<XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
-    DBG_ASSERT( xFactory.is(), "can't get service factory" );
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    DBG_ASSERT( xContext.is(), "can't get service factory" );
 
-    Reference<XDocumentBuilder> xBuilder(
-        xFactory->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( sDocumentBuilder ) ) ),
-        UNO_QUERY_THROW );
+    Reference<XDocumentBuilder> xBuilder( DocumentBuilder::create(xContext) );
 
     return Reference<XNode>( xBuilder->newDocument(), UNO_QUERY_THROW );
 }

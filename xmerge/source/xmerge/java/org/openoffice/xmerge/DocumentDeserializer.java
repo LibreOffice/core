@@ -31,7 +31,6 @@ import java.io.IOException;
  *  createDocumentDeserializer} method.  When it is constructed, a
  *  <code>ConvertData</code> object is passed in to be used as input.</p>
  *
- *  @author  Herbie Ong
  *  @see     org.openoffice.xmerge.PluginFactory
  *  @see     org.openoffice.xmerge.DocumentDeserializerFactory
  */

@@ -187,7 +187,7 @@ void OAccessibleMenuItemComponent::SetItemPos( sal_uInt16 nItemPos )
 
 // -----------------------------------------------------------------------------
 
-void OAccessibleMenuItemComponent::SetAccessibleName( const ::rtl::OUString& sAccessibleName )
+void OAccessibleMenuItemComponent::SetAccessibleName( const OUString& sAccessibleName )
 {
     if ( !m_sAccessibleName.equals( sAccessibleName ) )
     {
@@ -201,9 +201,9 @@ void OAccessibleMenuItemComponent::SetAccessibleName( const ::rtl::OUString& sAc
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuItemComponent::GetAccessibleName()
+OUString OAccessibleMenuItemComponent::GetAccessibleName()
 {
-    ::rtl::OUString sName;
+    OUString sName;
     if ( m_pParent )
     {
         sal_uInt16 nItemId = m_pParent->GetItemId( m_nItemPos );
@@ -218,7 +218,7 @@ void OAccessibleMenuItemComponent::SetAccessibleName( const ::rtl::OUString& sAc
 
 // -----------------------------------------------------------------------------
 
-void OAccessibleMenuItemComponent::SetItemText( const ::rtl::OUString& sItemText )
+void OAccessibleMenuItemComponent::SetItemText( const OUString& sItemText )
 {
     Any aOldValue, aNewValue;
     if ( OCommonAccessibleText::implInitTextChangedEvent( m_sItemText, sItemText, aOldValue, aNewValue ) )
@@ -230,9 +230,9 @@ void OAccessibleMenuItemComponent::SetItemText( const ::rtl::OUString& sItemText
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuItemComponent::GetItemText()
+OUString OAccessibleMenuItemComponent::GetItemText()
 {
-    ::rtl::OUString sText;
+    OUString sText;
     if ( m_pParent )
         sText = OutputDevice::GetNonMnemonicString( m_pParent->GetItemText( m_pParent->GetItemId( m_nItemPos ) ) );
 
@@ -307,8 +307,8 @@ void SAL_CALL OAccessibleMenuItemComponent::disposing()
     OAccessibleMenuBaseComponent::disposing();
 
     m_pParent = NULL;
-    m_sAccessibleName = ::rtl::OUString();
-    m_sItemText = ::rtl::OUString();
+    m_sAccessibleName = OUString();
+    m_sItemText = OUString();
 }
 
 // -----------------------------------------------------------------------------
@@ -363,11 +363,11 @@ sal_Int16 OAccessibleMenuItemComponent::getAccessibleRole(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuItemComponent::getAccessibleDescription( ) throw (RuntimeException)
+OUString OAccessibleMenuItemComponent::getAccessibleDescription( ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sDescription;
+    OUString sDescription;
     if ( m_pParent )
         sDescription = m_pParent->GetHelpText( m_pParent->GetItemId( m_nItemPos ) );
 
@@ -376,7 +376,7 @@ sal_Int16 OAccessibleMenuItemComponent::getAccessibleRole(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuItemComponent::getAccessibleName(  ) throw (RuntimeException)
+OUString OAccessibleMenuItemComponent::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -479,20 +479,20 @@ Reference< awt::XFont > OAccessibleMenuItemComponent::getFont(  ) throw (Runtime
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuItemComponent::getTitledBorderText(  ) throw (RuntimeException)
+OUString OAccessibleMenuItemComponent::getTitledBorderText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuItemComponent::getToolTipText(  ) throw (RuntimeException)
+OUString OAccessibleMenuItemComponent::getToolTipText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     if ( m_pParent )
         sRet = m_pParent->GetTipHelpText( m_pParent->GetItemId( m_nItemPos ) );
 

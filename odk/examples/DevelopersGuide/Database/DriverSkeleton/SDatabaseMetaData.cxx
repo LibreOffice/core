@@ -52,9 +52,9 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
     if(!m_pConnection->isCatalogUsed())
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 }
 // -------------------------------------------------------------------------

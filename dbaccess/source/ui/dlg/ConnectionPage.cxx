@@ -93,7 +93,6 @@ namespace dbaui
     DBG_NAME(OConnectionTabPage)
     OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionHelper(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
-        ,m_bUserGrabFocus(sal_True)
         ,m_aFL1(this, ModuleRes(FL_SEPARATOR1))
         ,m_aFL2(this, ModuleRes(FL_SEPARATOR2))
         ,m_aUserNameLabel(this, ModuleRes(FT_USERNAME))

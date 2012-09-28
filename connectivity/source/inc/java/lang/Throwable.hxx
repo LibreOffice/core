@@ -39,6 +39,10 @@ namespace connectivity
         ::rtl::OUString getMessage() const;
         ::rtl::OUString getLocalizedMessage() const;
 
+#if OSL_DEBUG_LEVEL > 0
+        void printStackTrace() const;
+#endif
+
         static jclass st_getMyClass();
     };
 }

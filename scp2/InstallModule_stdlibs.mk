@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/stdlibs))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/stdlibs,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/stdlibs,\
     scp2/source/stdlibs/file_stdlibs \
 ))

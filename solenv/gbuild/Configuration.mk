@@ -329,10 +329,14 @@ endef
 $(call gb_Configuration_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CFG,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Configuration_get_target,$*))
+		rm -f $(call gb_Configuration_get_target,$*) $(call gb_Configuration_get_preparation_target,$*))
 
 $(call gb_Configuration_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),CFG,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && touch $@)
+
+$(call gb_Configuration_get_preparation_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
@@ -368,7 +372,8 @@ define gb_Configuration_add_schema
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcsTarget_get_clean_target,$(2)/$(3))
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : \
-	$(call gb_Configuration__get_source,$(1),$(2)/$(3))
+	$(call gb_Configuration__get_source,$(1),$(2)/$(3)) \
+	$(call gb_Configuration_get_preparation_target,$(1))
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : XCSFILE := $(3)
 $(call gb_XcsTarget_get_clean_target,$(2)/$(3)) : XCSFILE := $(3)
 $(call gb_Configuration_get_target,$(1)) : \
@@ -506,9 +511,9 @@ endef
 #
 # Example:
 # # foo needs schemas from the main configuration
-# $(eval $(call gb_Configuration_use_configuration,foo,officecfg))
+# $(eval $(call gb_Configuration_use_configuration,foo,registry))
 define gb_Configuration_use_configuration
-$(call gb_Configuration_get_target,$(1)) : $(call gb_Configuration_get_target,$(2))
+$(call gb_Configuration_get_preparation_target,$(1)) : $(call gb_Configuration_get_target,$(2))
 $(call gb_Configuration_get_target,$(1)) : SCHEMA_ROOT := $(gb_Configuration_registry)/schema
 
 endef

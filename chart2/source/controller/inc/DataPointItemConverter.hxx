@@ -21,7 +21,6 @@
 
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
-#include "NumberFormatterWrapper.hxx"
 
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -54,7 +53,6 @@ public:
             ::com::sun::star::chart2::XDataSeries > & xSeries,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        NumberFormatterWrapper * pNumFormatter,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
@@ -85,10 +83,8 @@ protected:
 
 private:
     ::std::vector< ItemConverter * >    m_aConverters;
-    NumberFormatterWrapper *            m_pNumberFormatterWrapper;
     bool                                m_bDataSeries;
     bool                                m_bOverwriteLabelsForAttributedDataPointsAlso;
-    bool                                m_bColorPerPoint;
     bool                                m_bUseSpecialFillColor;
     sal_Int32                           m_nSpecialFillColor;
     sal_Int32                           m_nNumberFormat;

@@ -27,8 +27,6 @@ import com.sun.star.script.framework.log.LogUtils;
  * the Resolver strategy. It will only return a ScriptProxy object if a
  * method accepting all of the arguments specified in the ScriptDescriptor
  * can be found in the Class.
- *
- * @author     Tomas O'Connor
  */
 public class StrictResolver implements Resolver
 {
@@ -39,7 +37,6 @@ public class StrictResolver implements Resolver
     {
         LogUtils.DEBUG( this.getClass().getName() + " created" );
     }
-
 
     /**
      * Returns a ScriptProxy object for the given ScriptDescriptor and Class.

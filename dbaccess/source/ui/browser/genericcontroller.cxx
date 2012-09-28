@@ -28,12 +28,13 @@
 #include <osl/diagnose.h>
 #include "dbustrings.hrc"
 #include <vcl/stdtext.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -189,17 +190,17 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_bCurrentlyModified(sal_False)
     ,m_bExternalTitle(sal_False)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_pData.reset( new OGenericUnoController_Data( *this, getMutex() ) );
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 
     DBG_CTOR(OGenericUnoController,NULL);
 
     try
     {
-        m_xUrlTransformer = URLTransformer::create(comphelper::ComponentContext(_rM).getUNOContext());
+        m_xUrlTransformer = URLTransformer::create(comphelper::getComponentContext(_rM));
     }
     catch(Exception&)
     {
@@ -255,7 +256,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     OSL_ENSURE(getORB().is(), "OGenericUnoController::Construct need a service factory!");
     try
     {
-        m_xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(getORB()));
     }
     catch(Exception&)
     {

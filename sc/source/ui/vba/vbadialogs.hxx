@@ -45,7 +45,6 @@ public:
 
     // XCollection
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);
 
     // XDialogs
     virtual void SAL_CALL Dummy() throw (css::uno::RuntimeException);

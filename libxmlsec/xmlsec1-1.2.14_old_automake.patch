@@ -1,0 +1,126 @@
+--- misc/xmlsec1-1.2.14/configure.in	2012-09-12 19:15:56.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/configure.in	2012-09-12 18:56:01.000000000 +0200
+@@ -21,8 +21,8 @@
+ AC_SUBST(XMLSEC_VERSION_INFO)
+ 
+ AC_CONFIG_MACRO_DIR(m4)
+-AM_INIT_AUTOMAKE([1.7 tar-ustar])
+-AC_CONFIG_HEADERS([config.h])
++AM_INIT_AUTOMAKE([1.6.3])
++AM_CONFIG_HEADER([config.h])
+ AM_MAINTAINER_MODE
+ 
+ dnl
+--- misc/xmlsec1-1.2.14/src/gnutls/Makefile.am	2009-12-05 22:19:18.000000000 +0100
++++ misc/build/xmlsec1-1.2.14/src/gnutls/Makefile.am	2012-09-12 19:09:38.000000000 +0200
+@@ -18,7 +18,11 @@
+ 	$(LIBXML_CFLAGS) \
+ 	$(NULL)
+ 
+-libxmlsec1_gnutls_la_SOURCES =\
++if SHAREDLIB_HACK
++SHAREDLIBHACKDEP = ../strings.c
++endif
++
++libxmlsec1_gnutls_la_SOURCES = $(SHAREDLIBHACKDEP) \
+ 	app.c \
+ 	ciphers.c \
+ 	crypto.c \
+@@ -28,10 +32,6 @@
+ 	globals.h \
+ 	$(NULL)
+ 
+-if SHAREDLIB_HACK
+-libxmlsec1_gnutls_la_SOURCES += ../strings.c
+-endif
+-
+ libxmlsec1_gnutls_la_LIBADD = \
+ 	../libxmlsec1.la \
+ 	$(GNUTLS_LIBS) \
+--- misc/xmlsec1-1.2.14/src/mscrypto/Makefile.am	2012-09-12 19:15:56.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/mscrypto/Makefile.am	2012-09-12 19:10:52.000000000 +0200
+@@ -19,7 +19,11 @@
+ 	$(LIBXML_CFLAGS) \
+ 	$(NULL)
+ 
+-libxmlsec1_mscrypto_la_SOURCES =\
++if SHAREDLIB_HACK
++SHAREDLIBHACKDEP = ../strings.c
++endif
++
++libxmlsec1_mscrypto_la_SOURCES = $(SHAREDLIBHACKDEP) \
+ 	app.c \
+ 	certkeys.c \
+ 	ciphers.c \
+@@ -38,10 +42,6 @@
+ 	akmngr.c \
+ 	$(NULL)
+ 
+-if SHAREDLIB_HACK
+-libxmlsec1_mscrypto_la_SOURCES += ../strings.c
+-endif
+-
+ libxmlsec1_mscrypto_la_LIBADD = \
+ 	../libxmlsec1.la \
+ 	$(MSCRYPTO_LIBS) \
+--- misc/xmlsec1-1.2.14/src/nss/Makefile.am	2012-09-12 19:15:56.000000000 +0200
++++ misc/build/xmlsec1-1.2.14/src/nss/Makefile.am	2012-09-12 19:11:58.000000000 +0200
+@@ -8,7 +8,7 @@
+ 	libxmlsec1-nss.la \
+ 	$(NULL)
+ 
+-libxmlsec1_nss_la_CPPFLAGS = \
++libxmlsec1_nss_la_CFLAGS = \
+ 	-DPACKAGE=\"@PACKAGE@\" \
+ 	-I../../include \
+ 	-I$(top_srcdir)/include \
+@@ -18,7 +18,11 @@
+ 	$(LIBXML_CFLAGS) \
+ 	$(NULL)
+ 
+-libxmlsec1_nss_la_SOURCES =\
++if SHAREDLIB_HACK
++SHAREDLIBHACKDEP = ../strings.c
++endif
++
++libxmlsec1_nss_la_SOURCES = $(SHAREDLIBHACKDEP) \
+ 	app.c \
+ 	bignum.c \
+ 	ciphers.c \
+@@ -40,10 +44,6 @@
+ 	tokens.c \
+ 	$(NULL)
+ 
+-if SHAREDLIB_HACK
+-libxmlsec1_nss_la_SOURCES += ../strings.c
+-endif
+-
+ libxmlsec1_nss_la_LIBADD = \
+ 	../libxmlsec1.la \
+ 	$(NSS_LIBS) \
+--- misc/xmlsec1-1.2.14/src/openssl/Makefile.am	2009-12-05 22:19:18.000000000 +0100
++++ misc/build/xmlsec1-1.2.14/src/openssl/Makefile.am	2012-09-12 19:12:55.000000000 +0200
+@@ -18,7 +18,11 @@
+ 	$(LIBXML_CFLAGS) \
+ 	$(NULL)
+ 
+-libxmlsec1_openssl_la_SOURCES =\
++if SHAREDLIB_HACK
++SHAREDLIBHACKDEP = ../strings.c
++endif
++
++libxmlsec1_openssl_la_SOURCES = $(SHAREDLIBHACKDEP) \
+ 	app.c \
+ 	bn.c \
+ 	ciphers.c \
+@@ -36,10 +40,6 @@
+ 	globals.h \
+ 	$(NULL)
+ 
+-if SHAREDLIB_HACK
+-libxmlsec1_openssl_la_SOURCES += ../strings.c
+-endif
+-
+ libxmlsec1_openssl_la_LIBADD = \
+ 	../libxmlsec1.la \
+ 	$(OPENSSL_LIBS) \

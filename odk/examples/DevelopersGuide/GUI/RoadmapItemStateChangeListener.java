@@ -32,7 +32,6 @@
  *
  *************************************************************************/
 
-import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.beans.XPropertySet;

@@ -16,24 +16,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.comp.servicemanager.ServiceManager;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.connection.XConnector;
-import com.sun.star.connection.XConnection;
-
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
 import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.container.*;
-import com.sun.star.beans.*;
 import com.sun.star.lang.*;
-
-import storagetesting.*;
 
 public class StorageFunctionality  {
 

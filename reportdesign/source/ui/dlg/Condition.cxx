@@ -297,12 +297,12 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     Size aRelatedControls( LogicToPixel( Size( RELATED_CONTROLS, 0 ), MAP_APPFONT ) );
     Point aToolbarPos( m_aActions.GetPosPixel() );
     Size aToolbarSize( m_aActions.GetSizePixel() );
-    m_aPreview.SetPosSizePixel( aToolbarPos.X() + aToolbarSize.Width() + 2 * aRelatedControls.Width(),
+    m_aPreview.setPosSizePixel( aToolbarPos.X() + aToolbarSize.Width() + 2 * aRelatedControls.Width(),
         0, 0, 0, WINDOW_POSSIZE_X );
 
     // ensure the toolbar is vertically centered, relative to the preview
     Size aPreviewSize( m_aPreview.GetSizePixel() );
-    m_aActions.SetPosSizePixel( 0, aToolbarPos.Y() + ( aPreviewSize.Height() - aToolbarSize.Height() ) / 2, 0, 0, WINDOW_POSSIZE_Y );
+    m_aActions.setPosSizePixel( 0, aToolbarPos.Y() + ( aPreviewSize.Height() - aToolbarSize.Height() ) / 2, 0, 0, WINDOW_POSSIZE_Y );
 
     m_pBtnUpdaterBackgroundColor = new ::svx::ToolboxButtonColorUpdater(
                                             SID_BACKGROUND_COLOR, SID_BACKGROUND_COLOR, &m_aActions );
@@ -490,27 +490,27 @@ void Condition::impl_layoutAll()
     const Point aRow3( LogicToPixel( Point( 0, ROW_3_POS ), MAP_APPFONT ) );
 
     // resize the header line
-    m_aHeader.SetPosSizePixel( 0, 0, aSize.Width() - 2 * aRelatedControls.Width(), 0, WINDOW_POSSIZE_WIDTH );
+    m_aHeader.setPosSizePixel( 0, 0, aSize.Width() - 2 * aRelatedControls.Width(), 0, WINDOW_POSSIZE_WIDTH );
 
     // position the up/down buttons
     const Size aButtonSize( LogicToPixel( Size( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT ), MAP_APPFONT ) );
     Point aButtonPos( aSize.Width() - aUnrelatedControls.Width() - aButtonSize.Width(), aRow1.Y() );
-    m_aMoveUp.SetPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
+    m_aMoveUp.setPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
     aButtonPos.Move( 0, aButtonSize.Height() + aRelatedControls.Height() );
-    m_aMoveDown.SetPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
+    m_aMoveDown.setPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
 
     // resize the preview
     const long nNewPreviewRight = aButtonPos.X() - aRelatedControls.Width();
 
     const Point aPreviewPos( m_aPreview.GetPosPixel() );
     OSL_ENSURE( aPreviewPos.X() < nNewPreviewRight, "Condition::impl_layoutAll: being *that* small should not be allowed!" );
-    m_aPreview.SetPosSizePixel( 0, 0, nNewPreviewRight - aPreviewPos.X(), 0, WINDOW_POSSIZE_WIDTH );
+    m_aPreview.setPosSizePixel( 0, 0, nNewPreviewRight - aPreviewPos.X(), 0, WINDOW_POSSIZE_WIDTH );
 
     // position the add/remove buttons
     aButtonPos = Point( nNewPreviewRight - aButtonSize.Width(), aRow3.Y() );
-    m_aRemoveCondition.SetPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
+    m_aRemoveCondition.setPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
     aButtonPos.Move( -( aButtonSize.Width() + aRelatedControls.Width() ), 0 );
-    m_aAddCondition.SetPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
+    m_aAddCondition.setPosSizePixel( aButtonPos.X(), aButtonPos.Y(), aButtonSize.Width(), aButtonSize.Height() );
 
     // layout the operands input controls
     impl_layoutOperands();
@@ -551,7 +551,7 @@ void Condition::impl_layoutOperands()
     const Rectangle aCondTypeRect( m_aConditionType.GetPosPixel(), m_aConditionType.GetSizePixel() );
     const Point aOpListPos( aCondTypeRect.Right() + aRelatedControls.Width(), aCondTypeRect.Top() );
     const Size aOpListSize( LogicToPixel( Size( COND_OP_WIDTH, 60 ), MAP_APPFONT ) );
-    m_aOperationList.SetPosSizePixel( aOpListPos.X(), aOpListPos.Y(),aOpListSize.Width(), aOpListSize.Height() );
+    m_aOperationList.setPosSizePixel( aOpListPos.X(), aOpListPos.Y(),aOpListSize.Width(), aOpListSize.Height() );
     m_aOperationList.Show( !bIsExpression );
 
     // the LHS input field
@@ -561,19 +561,19 @@ void Condition::impl_layoutOperands()
     Size aLHSSize( LogicToPixel( Size( EDIT_WIDTH, EDIT_HEIGHT ), MAP_APPFONT ) );
     if ( !bHaveRHS )
         aLHSSize.Width() = aPreviewRect.Right() - aLHSPos.X();
-    m_aCondLHS.SetPosSizePixel( aLHSPos.X(), aLHSPos.Y(), aLHSSize.Width(), aLHSSize.Height() );
+    m_aCondLHS.setPosSizePixel( aLHSPos.X(), aLHSPos.Y(), aLHSSize.Width(), aLHSSize.Height() );
 
     if ( bHaveRHS )
     {
         // the "and" text being the glue between LHS and RHS
         const Point aOpGluePos( aLHSPos.X() + aLHSSize.Width() + aRelatedControls.Width(), aLHSPos.Y() );
         const Size aOpGlueSize( m_aOperandGlue.GetTextWidth( m_aOperandGlue.GetText() ) + aRelatedControls.Width(), aLHSSize.Height() );
-        m_aOperandGlue.SetPosSizePixel( aOpGluePos.X(), aOpGluePos.Y(), aOpGlueSize.Width(), aOpGlueSize.Height() );
+        m_aOperandGlue.setPosSizePixel( aOpGluePos.X(), aOpGluePos.Y(), aOpGlueSize.Width(), aOpGlueSize.Height() );
 
         // the RHS input field
         const Point aRHSPos( aOpGluePos.X() + aOpGlueSize.Width() + aRelatedControls.Width(), aOpGluePos.Y() );
         const Size aRHSSize( aPreviewRect.Right() - aRHSPos.X(), aLHSSize.Height() );
-        m_aCondRHS.SetPosSizePixel( aRHSPos.X(), aRHSPos.Y(), aRHSSize.Width(), aRHSSize.Height() );
+        m_aCondRHS.setPosSizePixel( aRHSPos.X(), aRHSPos.Y(), aRHSSize.Width(), aRHSSize.Height() );
     }
 
     m_aOperandGlue.Show( bHaveRHS );

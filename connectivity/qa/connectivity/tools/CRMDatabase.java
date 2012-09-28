@@ -29,12 +29,9 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XRefreshable;
 import connectivity.tools.sdb.Connection;
 
 /** implements a small Customer Relationship Management database
@@ -47,7 +44,6 @@ public class CRMDatabase
     private static final String VARCHAR50 = "VARCHAR(50)";
     private final XMultiServiceFactory        m_orb;
     private final HsqlDatabase                m_database;
-    private final DataSource                  m_dataSource;
     private final Connection                  m_connection;
 
     /** constructs the CRM database
@@ -57,7 +53,6 @@ public class CRMDatabase
         m_orb = _orb;
 
         m_database = new HsqlDatabase( m_orb );
-        m_dataSource = m_database.getDataSource();
 
         if ( _withUI )
         {
@@ -90,7 +85,6 @@ public class CRMDatabase
         m_orb = _orb;
 
         m_database = new HsqlDatabase( m_orb, _existingDocumentURL );
-        m_dataSource = m_database.getDataSource();
         m_connection = m_database.defaultConnection();
     }
 

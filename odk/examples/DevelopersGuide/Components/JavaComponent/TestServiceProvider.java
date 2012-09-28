@@ -34,8 +34,6 @@
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.comp.loader.FactoryHelper;
 
 public class TestServiceProvider

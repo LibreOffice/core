@@ -40,49 +40,38 @@ class CollatorResource;
 
 class SwSortDlg : public SvxStandardDialog
 {
-    FixedText           aColLbl;
-    FixedText           aTypLbl;
-    FixedText           aDirLbl;
+    FixedText*          m_pColLbl;
+    FixedText*          m_pTypLbl;
 
-    FixedLine           aSortFL;
+    CheckBox*           m_pKeyCB1;
+    NumericField*       m_pColEdt1;
+    ListBox*            m_pTypDLB1;
+    RadioButton*        m_pSortUp1RB;
+    RadioButton*        m_pSortDn1RB;
 
-    CheckBox            aKeyCB1;
-    NumericField        aColEdt1;
-    ListBox             aTypDLB1;
-    RadioButton         aSortUpRB;
-    RadioButton         aSortDnRB;
+    CheckBox*           m_pKeyCB2;
+    NumericField*       m_pColEdt2;
+    ListBox*            m_pTypDLB2;
+    RadioButton*        m_pSortUp2RB;
+    RadioButton*        m_pSortDn2RB;
 
-    CheckBox            aKeyCB2;
-    NumericField        aColEdt2;
-    ListBox             aTypDLB2;
-    RadioButton         aSortUp2RB;
-    RadioButton         aSortDn2RB;
+    CheckBox*           m_pKeyCB3;
+    NumericField*       m_pColEdt3;
+    ListBox*            m_pTypDLB3;
+    RadioButton*        m_pSortUp3RB;
+    RadioButton*        m_pSortDn3RB;
 
-    CheckBox            aKeyCB3;
-    NumericField        aColEdt3;
-    ListBox             aTypDLB3;
-    RadioButton         aSortUp3RB;
-    RadioButton         aSortDn3RB;
+    RadioButton*        m_pColumnRB;
+    RadioButton*        m_pRowRB;
 
-    FixedLine           aDirFL;
-    RadioButton         aColumnRB;
-    RadioButton         aRowRB;
+    RadioButton*        m_pDelimTabRB;
+    RadioButton*        m_pDelimFreeRB;
+    Edit*               m_pDelimEdt;
+    PushButton*         m_pDelimPB;
 
-    FixedLine           aDelimFL;
-    RadioButton         aDelimTabRB;
-    RadioButton         aDelimFreeRB;
-    Edit                aDelimEdt;
-    PushButton          aDelimPB;
+    SvxLanguageBox*     m_pLangLB;
 
-    FixedLine           aLangFL;
-    SvxLanguageBox      aLangLB;
-
-    FixedLine           aSortOptFL;
-    CheckBox            aCaseCB;
-
-    OKButton            aOkBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
+    CheckBox*           m_pCaseCB;
 
     String aColTxt;
     String aRowTxt;

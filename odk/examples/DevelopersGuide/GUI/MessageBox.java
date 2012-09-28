@@ -38,7 +38,6 @@ import com.sun.star.awt.XMessageBoxFactory;
 import com.sun.star.awt.XVclWindowPeer;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.util.XCloseable;

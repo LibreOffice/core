@@ -73,8 +73,7 @@ Reference< XComponentContext > createInitialComponentContext(
             inst_dir.pData, &file_url.pData );
         OSL_ASSERT( osl_File_E_None == rc );
 
-        ::rtl::OUString unorc = file_url + OUString(
-            RTL_CONSTASCII_USTRINGPARAM("/program/" SAL_CONFIGFILE("uno")) );
+        OUString unorc = file_url + OUString("/program/" SAL_CONFIGFILE("uno") );
 
         return defaultBootstrap_InitialComponentContext( unorc );
     }
@@ -108,15 +107,14 @@ Reference< container::XNameContainer > importFile(
         ::fclose( f );
 
         Reference< container::XNameContainer > xModel( xContext->getServiceManager()->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), xContext ), UNO_QUERY );
+            "com.sun.star.awt.UnoControlDialogModel", xContext ), UNO_QUERY );
         ::xmlscript::importDialogModel( ::xmlscript::createInputStream( bytes ), xModel, xContext );
 
         return xModel;
     }
     else
     {
-        throw Exception( OUString( RTL_CONSTASCII_USTRINGPARAM("### Cannot read file!") ),
-                         Reference< XInterface >() );
+        throw Exception( "### Cannot read file!", Reference< XInterface >() );
     }
 }
 
@@ -178,8 +176,7 @@ void MyApp::Main()
     {
         ::comphelper::setProcessServiceFactory( xMSF );
 
-        Reference< awt::XToolkit> xToolkit( xMSF->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
+        Reference< awt::XToolkit> xToolkit( xMSF->createInstance( "com.sun.star.awt.ExtToolkit" ), UNO_QUERY );
 
         // import dialogs
         OString aParam1( OUStringToOString(
@@ -189,8 +186,7 @@ void MyApp::Main()
             importFile( aParam1.getStr(), xContext ) );
         OSL_ASSERT( xModel.is() );
 
-        Reference< awt::XControl > xDlg( xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
+        Reference< awt::XControl > xDlg( xMSF->createInstance( "com.sun.star.awt.UnoControlDialog" ), UNO_QUERY );
         xDlg->setModel( Reference< awt::XControlModel >::query( xModel ) );
         xDlg->createPeer( xToolkit, 0 );
         Reference< awt::XDialog > xD( xDlg, UNO_QUERY );

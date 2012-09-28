@@ -124,12 +124,12 @@ ScCsvRuler::~ScCsvRuler()
 
 // common ruler handling ------------------------------------------------------
 
-void ScCsvRuler::SetPosSizePixel(
+void ScCsvRuler::setPosSizePixel(
         long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     if( nFlags & WINDOW_POSSIZE_HEIGHT )
         nHeight = GetTextHeight() + mnSplitSize + 2;
-    ScCsvControl::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    ScCsvControl::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )

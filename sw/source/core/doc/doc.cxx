@@ -146,13 +146,13 @@ using ::rtl::OUString;
 sal_Int32 SwDoc::acquire()
 {
     OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
-    return osl_incrementInterlockedCount(&mReferenceCount);
+    return osl_atomic_increment(&mReferenceCount);
 }
 
 sal_Int32 SwDoc::release()
 {
     OSL_PRECOND(mReferenceCount >= 1, "Object is already released! Releasing it again leads to a negative reference count.");
-    return osl_decrementInterlockedCount(&mReferenceCount);
+    return osl_atomic_decrement(&mReferenceCount);
 }
 
 sal_Int32 SwDoc::getReferenceCount() const
@@ -199,6 +199,8 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case SMALL_CAPS_PERCENTAGE_66: return mbSmallCapsPercentage66;
         case TAB_OVERFLOW: return mbTabOverflow;
         case UNBREAKABLE_NUMBERINGS: return mbUnbreakableNumberings;
+        case CLIPPED_PICTURES: return mbClippedPictures;
+        case BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
 
         case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the ViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
@@ -211,6 +213,8 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
         case STYLES_NODEFAULT: return mbStylesNoDefault;
         case FLOATTABLE_NOMARGINS: return mbFloattableNomargins;
+        case EMBED_FONTS: return mEmbedFonts;
+        case EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -343,6 +347,15 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case UNBREAKABLE_NUMBERINGS:
             mbUnbreakableNumberings = value;
             break;
+
+        case CLIPPED_PICTURES:
+            mbClippedPictures = value;
+            break;
+
+        case BACKGROUND_PARA_OVER_DRAWINGS:
+            mbBackgroundParaOverDrawings = value;
+            break;
+
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: //can be used temporary (load/save) when no ViewShell is avaiable
@@ -384,6 +397,12 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
         case FLOATTABLE_NOMARGINS:
             mbFloattableNomargins = value;
+            break;
+        case EMBED_FONTS:
+            mEmbedFonts = value;
+            break;
+        case EMBED_SYSTEM_FONTS:
+            mEmbedSystemFonts = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");
@@ -747,7 +766,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     {
         // BUG 26675: Send DataChanged before deleting, so that we notice which objects are in scope.
         //            After that they can be before/after the position.
-        SwDataChanged aTmp( this, rPos, 0 );
+        SwDataChanged aTmp( this, rPos );
     }
 
     SwUndoSplitNode* pUndo = 0;
@@ -930,7 +949,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
     if(!pNode)
         return false;
 
-    SwDataChanged aTmp( rRg, 0 );
+    SwDataChanged aTmp( rRg );
 
     if (!bDoesUndo || !GetIDocumentUndoRedo().DoesGroupUndo())
     {
@@ -1927,10 +1946,6 @@ void SwDoc::ResetModified()
     //  Bit 1:  -> new state
     long nCall = mbModified ? 1 : 0;
     mbModified = sal_False;
-    // If there is already a document statistic, we assume that
-    // it is correct. In this case we reset the modified flag.
-    if ( 0 != pDocStat->nCharExcludingSpaces )
-        pDocStat->bModified = sal_False;
     GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( nCall && aOle2Link.IsSet() )
     {

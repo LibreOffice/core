@@ -89,9 +89,9 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
     OSL_TRACE("ODatabaseMetaData::ODatabaseMetaData");
     if (!m_rConnection.isCatalogUsed())
     {
-        osl_incrementInterlockedCount(&m_refCount);
+        osl_atomic_increment(&m_refCount);
         m_bUseCatalog = !(usesLocalFiles() || usesLocalFilePerTable());
-        osl_decrementInterlockedCount(&m_refCount);
+        osl_atomic_decrement(&m_refCount);
     }
 }
 /* }}} */

@@ -122,7 +122,7 @@ xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
 CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
@@ -151,7 +151,7 @@ EXTRPATH=URELIB
 OUT2LIB+=.libs$/libxml2.*.dylib
 OUT2BIN_NONE+=.libs$/xmllint
 OUT2BIN+=xml2-config
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)" == "TRUE"
 OUT2LIB+=.libs$/libxml2.a
 OUT2BIN+=xml2-config
 .ELIF "$(OS)"=="WNT"

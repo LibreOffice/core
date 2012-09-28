@@ -35,7 +35,6 @@ class ScXMLTextPContext : public SvXMLImportContext
     rtl::OUString               sSimpleContent;     // copy of the first Character call's argument
     rtl::OUStringBuffer*        pContentBuffer;     // used if there's more than one string
     sal_uInt16                      nPrefix;
-    sal_Bool                    bIsOwn;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

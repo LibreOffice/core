@@ -88,7 +88,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
 
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     OSL_ENSURE(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
     if ( m_xCommandDefinition.is() )
     {
@@ -106,7 +106,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
     }
     OSL_ENSURE(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 
 OQuery::~OQuery()
@@ -133,7 +133,7 @@ void OQuery::rebuildColumns()
         {
             xColumnDefinitions = xColSup->getColumns();
             if ( xColumnDefinitions.is() )
-                m_pColumnMediator = new OContainerMediator( m_pColumns, xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
+                m_pColumnMediator = new OContainerMediator( m_pColumns, xColumnDefinitions, m_xConnection );
         }
 
         // fill the columns with columns from the statement

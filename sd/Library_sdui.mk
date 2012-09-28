@@ -37,6 +37,12 @@ $(eval $(call gb_Library_add_defs,sdui,\
     -DSD_DLLIMPLEMENTATION \
 ))
 
+ifeq ($(ENABLE_SDREMOTE),YES)
+$(eval $(call gb_Library_add_defs,sdui,\
+    -DENABLE_SDREMOTE \
+))
+endif
+
 $(eval $(call gb_Library_use_sdk_api,sdui))
 
 $(eval $(call gb_Library_use_libraries,sdui,\

@@ -19,27 +19,20 @@
 package complex.writer;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.Pair;
-import com.sun.star.util.XCloseable;
 import com.sun.star.frame.XStorable;
 import com.sun.star.document.DocumentEvent;
 import com.sun.star.document.XDocumentEventBroadcaster;
 import com.sun.star.document.XDocumentEventListener;
-import com.sun.star.text.XTextDocument;
-
 import org.openoffice.test.OfficeConnection;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

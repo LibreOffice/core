@@ -2877,7 +2877,6 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     (*mpKeywordTable)[ NF_KEY_NNNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
     // Export the Thai T NatNum modifier.
     (*mpKeywordTable)[ NF_KEY_THAI_T ] = String( RTL_CONSTASCII_USTRINGPARAM( "T" ) );
-    sal_Int32 nNumFmtIndex = 0;
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
@@ -2938,7 +2937,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         XclExpFont* pFont = NULL;
                         // check if non default font is set and only export then
-                        if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ))>SFX_ITEM_DEFAULT )
+                        if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT )) == SFX_ITEM_SET )
                         {
                             Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
                             pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
@@ -2946,12 +2945,11 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         XclExpNumFmt* pNumFormat = NULL;
                         const SfxPoolItem *pPoolItem = NULL;
-                        if( rSet.GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+                        if( rSet.GetItemState( ATTR_VALUE_FORMAT, sal_True, &pPoolItem ) == SFX_ITEM_SET )
                         {
                             sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
-                            sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( EXC_FORMAT_OFFSET8 + nIndex );
+                            sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
                             pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
-                            ++nNumFmtIndex;
                         }
 
                         maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pColor ));

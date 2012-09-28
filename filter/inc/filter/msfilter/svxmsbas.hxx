@@ -60,10 +60,8 @@ typedef std::map< String, ObjIdToName >  ControlAttributeInfo;
 class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
 public:
-    SvxImportMSVBasic( SfxObjectShell &rDocS, SotStorage &rRoot,
-                        sal_Bool bImportCode = sal_True, sal_Bool bCopyStorage = sal_True )
-        :   xRoot(&rRoot), rDocSh(rDocS),
-            bImport(bImportCode), bCopy(bCopyStorage)
+    SvxImportMSVBasic( SfxObjectShell &rDocS, SotStorage &rRoot )
+        :   xRoot(&rRoot), rDocSh(rDocS)
         {}
     // only for the export - copy or delete the saved VBA-macro-storage
     // form the ObjectShell
@@ -79,8 +77,6 @@ public:
 private:
     SotStorageRef xRoot;
     SfxObjectShell &rDocSh;
-    sal_Bool bImport;
-    sal_Bool bCopy;
 };
 
 #endif

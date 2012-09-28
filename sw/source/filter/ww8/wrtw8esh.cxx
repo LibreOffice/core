@@ -53,7 +53,6 @@
 #include <svx/svdoole2.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/flditem.hxx>
-#include <comphelper/seqstream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
@@ -97,10 +96,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
-#include <comphelper/processfactory.hxx>
 #include "docsh.hxx"
 #include <oox/ole/olehelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <fstream>
 #include <unotools/streamwrap.hxx>
 
@@ -2772,14 +2769,6 @@ sal_uInt32 SwEscherEx::QueryTextID(
     }
     return nId;
 }
-
-uno::Reference< uno::XComponentContext >
-lcl_getUnoCtx()
-{
-    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
-    return aCtx.getUNOContext();
-}
-
 
 SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : oox
 ::ole::MSConvertOCXControls(  pDSh ? pDSh->GetModel() : NULL ), pPaM( pP )

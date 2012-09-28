@@ -36,13 +36,8 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.Type;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getComponentFactory</CODE>) and a

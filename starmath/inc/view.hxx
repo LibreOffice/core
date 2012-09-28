@@ -70,7 +70,6 @@ private:
 
     SmViewShell    *pViewShell;
     sal_uInt16          nZoom;
-    short           nModifyCount;
 
 protected:
     void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }

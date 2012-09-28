@@ -60,7 +60,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <toolkit/unohlp.hxx>
 #include <tools/gen.hxx>
@@ -189,9 +188,9 @@ throw (::com::sun::star::uno::RuntimeException)
         return;
 
     //add context menu
-    Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+    Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( comphelper::getComponentContext(m_xServiceManager) ) );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
-    Reference< awt::XPopupMenu > subPopupMenu( awt::PopupMenu::create( comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+    Reference< awt::XPopupMenu > subPopupMenu( awt::PopupMenu::create( comphelper::getComponentContext(m_xServiceManager) ) );
 
     SvtLanguageTable    aLanguageTable;
 
@@ -319,7 +318,7 @@ throw (::com::sun::star::uno::RuntimeException)
             aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontDialogForParagraph"));
         }
 
-        uno::Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create(::comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
+        uno::Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create(::comphelper::getComponentContext(m_xServiceManager)) );
         xURLTransformer->parseStrict( aURL );
         uno::Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, OUString(), 0);
         if( xDispatch.is() )

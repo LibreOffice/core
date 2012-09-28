@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/ure_standalone))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/ure_standalone,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/ure_standalone,\
     scp2/source/ooo/ure_standalone \
 ))

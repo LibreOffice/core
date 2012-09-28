@@ -46,6 +46,13 @@ $(eval $(call gb_Executable_add_scanners,idlc,\
     idlc/source/scanner \
 ))
 
+ifneq (,$(SYSTEM_UCPP))
+$(eval $(call gb_Executable_add_defs,idlc,\
+    -DSYSTEM_UCPP \
+    -DUCPP=\"file:$(SYSTEM_UCPP)\" \
+))
+endif
+
 $(eval $(call gb_Executable_add_exception_objects,idlc,\
     idlc/source/idlcmain \
     idlc/source/idlc \

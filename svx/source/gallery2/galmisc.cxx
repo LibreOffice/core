@@ -280,7 +280,7 @@ sal_Bool FileExists( const INetURLObject& rURL )
     {
         try
         {
-            ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
+            ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             OUString    aTitle;
 
             aCnt.getPropertyValue( OUString("Title") ) >>= aTitle;
@@ -313,14 +313,14 @@ sal_Bool CreateDir( const INetURLObject& rURL )
             uno::Reference< ucb::XCommandEnvironment >  aCmdEnv;
             INetURLObject                           aNewFolderURL( rURL );
             INetURLObject                           aParentURL( aNewFolderURL ); aParentURL.removeSegment();
-            ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+            ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
             uno::Sequence< OUString >               aProps( 1 );
             uno::Sequence< uno::Any >               aValues( 1 );
 
             aProps.getArray()[ 0 ] = OUString("Title");
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
-        ::ucbhelper::Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+        ::ucbhelper::Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
         bRet = aParent.insertNewContent( OUString("application/vnd.sun.staroffice.fsys-folder"), aProps, aValues, aContent );
         }
         catch( const ucb::ContentCreationException& )
@@ -345,7 +345,7 @@ sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 
     try
     {
-        ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
+        ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
 
         aDestPath.executeCommand( OUString("transfer"),
                                   uno::makeAny( ucb::TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
@@ -375,7 +375,7 @@ sal_Bool KillFile( const INetURLObject& rURL )
     {
         try
         {
-            ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
+            ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             aCnt.executeCommand( OUString("delete"), uno::makeAny( sal_Bool( sal_True ) ) );
         }
         catch( const ucb::ContentCreationException& )

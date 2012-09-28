@@ -32,8 +32,6 @@ import org.w3c.dom.NodeList;
 /**
  * This is a class representing the different attributes for a worksheet
  * contained in settings.xml.
- *
- * @author Martin Maher
  */
 public class BookSettings implements OfficeConstants {
 

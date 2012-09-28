@@ -129,7 +129,7 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
 
 void CppInterfaceProxy::acquireProxy() SAL_THROW(())
 {
-    if (1 == osl_incrementInterlockedCount( &nRef ))
+    if (1 == osl_atomic_increment( &nRef ))
     {
         // rebirth of proxy zombie
         // register at cpp env
@@ -143,7 +143,7 @@ void CppInterfaceProxy::acquireProxy() SAL_THROW(())
 
 void CppInterfaceProxy::releaseProxy() SAL_THROW(())
 {
-    if (! osl_decrementInterlockedCount( &nRef )) // last release
+    if (! osl_atomic_decrement( &nRef )) // last release
     {
         // revoke from cpp env
         (*pBridge->getCppEnv()->revokeInterface)(

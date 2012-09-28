@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -78,13 +69,13 @@ FrameGrabber::~FrameGrabber()
 
 // ------------------------------------------------------------------------------
 
-IMediaDet* FrameGrabber::implCreateMediaDet( const ::rtl::OUString& rURL ) const
+IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
 {
     IMediaDet* pDet = NULL;
 
     if( SUCCEEDED( CoCreateInstance( CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void**) &pDet ) ) )
     {
-        rtl::OUString aLocalStr;
+        OUString aLocalStr;
 
         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, aLocalStr ) && !aLocalStr.isEmpty() )
         {
@@ -101,7 +92,7 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const ::rtl::OUString& rURL ) const
 
 // ------------------------------------------------------------------------------
 
-bool FrameGrabber::create( const ::rtl::OUString& rURL )
+bool FrameGrabber::create( const OUString& rURL )
 {
     // just check if a MediaDet interface can be created with the given URL
     IMediaDet*  pDet = implCreateMediaDet( rURL );
@@ -113,7 +104,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
         pDet = NULL;
     }
     else
-        maURL = ::rtl::OUString();
+        maURL = OUString();
 
     return( maURL.getLength() > 0 );
 }
@@ -218,15 +209,15 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
+OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME ) );
+    return OUString( AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME;
@@ -234,11 +225,11 @@ sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceN
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME ) );
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME ;
 
     return aRet;
 }

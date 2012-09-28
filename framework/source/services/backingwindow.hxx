@@ -154,6 +154,7 @@ namespace framework
         DECL_LINK( SelectHdl, Button* );
         DECL_LINK( ActivateHdl, Button* );
         DECL_LINK( ToolboxHdl, void* );
+        DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
         void initControls();
         void initBackground();
@@ -165,7 +166,6 @@ namespace framework
         virtual void        Paint( const Rectangle& rRect );
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& rNEvt );
-        virtual void        DataChanged( const DataChangedEvent& rDCEvt );
         virtual void        GetFocus();
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );

@@ -15,9 +15,9 @@ $(call gb_CustomTarget_get_target,android/docloader) : \
 
 # We know that CustomTarget_sdremote.mk is included first, so sdremote_DIR is
 # defined.  We want that to be built completely first, so that we can
-# serialize Ant access to abs-lib, which is used both by DocumentLoader and
-# sdremote. We don't want one Ant to be cleaning out abs-lib while another is
-# building stuff that depends on it. Yeah, this sucks
+# serialize Ant access to Bootstrap, which is used both by DocumentLoader and
+# sdremote. We don't want one Ant to be cleaning out Bootstrap while another
+# is building stuff that depends on it. Yeah, this sucks
 
 $(docloader_DIR)/done : $(sdremote_DIR)/done
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,1)

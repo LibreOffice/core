@@ -17,14 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LOCALIZATIONMGR_HXX
-#define _LOCALIZATIONMGR_HXX
+#ifndef BASCTL_LOCALIZATIONMGR_HXX
+#define BASCTL_LOCALIZATIONMGR_HXX
 
 #include "scriptdocument.hxx"
 
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 
-class BasicIDEShell;
+namespace basctl
+{
+
+class Shell;
 class DlgEditor;
 
 class LocalizationMgr
@@ -32,7 +35,7 @@ class LocalizationMgr
     ::com::sun::star::uno::Reference
         < ::com::sun::star::resource::XStringResourceManager >  m_xStringResourceManager;
 
-    BasicIDEShell*                                              m_pIDEShell;
+    Shell*                                                      m_pShell;
 
     ScriptDocument                                              m_aDocument;
     ::rtl::OUString                                             m_aLibName;
@@ -66,7 +69,7 @@ class LocalizationMgr
     void implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode );
 
 public:
-    LocalizationMgr( BasicIDEShell* pIDEShell, const ScriptDocument& rDocument, ::rtl::OUString aLibName,
+    LocalizationMgr(Shell*, ScriptDocument const&, rtl::OUString const& aLibName,
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager );
     ::com::sun::star::uno::Reference
@@ -143,6 +146,8 @@ public:
             XStringResourceManager >& xTargetStringResourceManager );
 };
 
-#endif
+} // namespace basctl
+
+#endif // BASCTL_LOCALIZATIONMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

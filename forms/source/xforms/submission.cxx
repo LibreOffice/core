@@ -49,7 +49,7 @@
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -662,8 +662,7 @@ Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathOb
 Reference< XDocumentFragment > Submission::createSubmissionDocument(const Reference< XXPathObject >& aObj, sal_Bool bRemoveWSNodes)
 {
     using namespace com::sun::star::xml::xpath;
-    Reference< XDocumentBuilder > aDocBuilder(m_aFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder"))), UNO_QUERY);
+    Reference< XDocumentBuilder > aDocBuilder(DocumentBuilder::create(comphelper::getComponentContext(m_aFactory)));
     Reference< XDocument > aDocument = aDocBuilder->newDocument();
     Reference< XDocumentFragment > aFragment = aDocument->createDocumentFragment();
 

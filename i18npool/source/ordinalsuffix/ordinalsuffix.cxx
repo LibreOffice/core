@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/scoped_ptr.hpp>
 #include <comphelper/processfactory.hxx>
 #include <string.h>
 #include "ordinalsuffix.hxx"
@@ -44,6 +45,23 @@ OrdinalSuffix::~OrdinalSuffix()
 {
 }
 
+namespace
+{
+    OUString mungeUnicodeStringToOUString(const icu::UnicodeString &rIn, UErrorCode &rCode)
+    {
+        // Apply NFKC normalization to get normal letters
+        icu::UnicodeString normalized;
+        icu::Normalizer::normalize(rIn, UNORM_NFKC, 0, normalized, rCode);
+        // Convert the normalized UnicodeString to OUString
+        OUString sRet = (U_SUCCESS(rCode))
+            ? OUString(reinterpret_cast<const sal_Unicode *>(normalized.getBuffer()), normalized.length())
+            : OUString();
+        // replace any minus signs with hyphen-minus so that negative numbers
+        // from the simple number formatter and heavy-duty pattern formatter
+        // agree as to their negative number sign
+        return sRet.replace(0x2212, '-');
+    }
+}
 
 /*
  * For this method to properly return the ordinal suffix for other locales
@@ -60,45 +78,63 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
             CSTR( aLocale.Language ),
             CSTR( aLocale.Country ),
             CSTR( aLocale.Variant ) );
-    icu::RuleBasedNumberFormat formatter(
-            icu::URBNF_ORDINAL, rIcuLocale, nCode );
 
-    if ( U_SUCCESS( nCode ) )
+    icu::RuleBasedNumberFormat formatter(icu::URBNF_ORDINAL, rIcuLocale, nCode);
+    if (!U_SUCCESS(nCode))
+        return retValue;
+
+    boost::scoped_ptr<NumberFormat> xNumberFormat(icu::NumberFormat::createInstance(rIcuLocale, nCode));
+    if (!U_SUCCESS(nCode))
+        return retValue;
+
+    icu::UnicodeString sFormatWithNoOrdinal;
+    xNumberFormat->format((int32_t)nNumber, sFormatWithNoOrdinal, NULL, nCode);
+    if (!U_SUCCESS(nCode))
+        return retValue;
+
+    OUString sValueWithNoOrdinal = mungeUnicodeStringToOUString(sFormatWithNoOrdinal, nCode);
+    if (!U_SUCCESS(nCode))
+        return retValue;
+
+    int32_t nRuleSets = formatter.getNumberOfRuleSetNames( );
+    for (int32_t i = 0; i < nRuleSets; ++i)
     {
-        int32_t nRuleSets = formatter.getNumberOfRuleSetNames( );
-        for ( int32_t i = 0; i < nRuleSets; i++ )
-        {
-            icu::UnicodeString ruleSet = formatter.getRuleSetName( i );
-            // format the string
-            icu::UnicodeString icuRet;
-            icu::FieldPosition icuPos;
-            formatter.format( (int32_t)nNumber, ruleSet, icuRet, icuPos, nCode );
+        icu::UnicodeString ruleSet = formatter.getRuleSetName(i);
 
-            if ( U_SUCCESS( nCode ) )
-            {
-                // Apply NFKC normalization to get normal letters
-                icu::UnicodeString normalized;
-                nCode = U_ZERO_ERROR;
-                icu::Normalizer::normalize( icuRet, UNORM_NFKC, 0, normalized, nCode );
-                if ( U_SUCCESS( nCode ) && ( normalized != icuRet ) )
-                {
-                    // Convert the normalized UnicodeString to OUString
-                    OUString sValue( reinterpret_cast<const sal_Unicode *>( normalized.getBuffer( ) ), normalized.length() );
+        // format the string
+        icu::UnicodeString sFormatWithOrdinal;
+        icu::FieldPosition icuPos;
+        formatter.format( (int32_t)nNumber, ruleSet, sFormatWithOrdinal, icuPos, nCode );
 
-                    // Remove the number to get the prefix
-                    sal_Int32 len = OUString::valueOf( nNumber ).getLength( );
+        if (!U_SUCCESS(nCode))
+            continue;
 
-                    sal_Int32 newLength = retValue.getLength() + 1;
-                    retValue.realloc( newLength );
-                    retValue[ newLength - 1 ] = sValue.copy( len );
-                }
-            }
-        }
+        OUString sValueWithOrdinal = mungeUnicodeStringToOUString(sFormatWithOrdinal, nCode);
+        if (!U_SUCCESS(nCode))
+            continue;
+
+        // fdo#54486 lets make sure that the ordinal format and the non-ordinal
+        // format match at the start, so that the expectation can be verified
+        // that there is some trailing "ordinal suffix" which can be extracted
+        bool bSimpleOrdinalSuffix = sValueWithOrdinal.startsWith(sValueWithNoOrdinal);
+
+        SAL_WARN_IF(!bSimpleOrdinalSuffix, "i18npool", "ordinal " <<
+            sValueWithOrdinal << " didn't start with expected " <<
+            sValueWithNoOrdinal << " prefix");
+
+        if (!bSimpleOrdinalSuffix)
+            continue;
+
+        // Remove the number to get the prefix
+        sal_Int32 len = sValueWithNoOrdinal.getLength();
+
+        sal_Int32 newLength = retValue.getLength() + 1;
+        retValue.realloc( newLength );
+        retValue[ newLength - 1 ] = sValueWithOrdinal.copy( len );
     }
 
     return retValue;
 }
-
 
 const sal_Char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";
 

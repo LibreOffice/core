@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
-#include <l10ntools/HelpSearch.hxx>
+#include <helpcompiler/HelpSearch.hxx>
 
 #if defined _MSC_VER
 #pragma warning(push)
@@ -52,11 +52,10 @@
 #pragma warning(pop)
 #endif
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 #include <algorithm>
 #include <set>
-
 #include <qe/Query.hxx>
 #include <qe/DocGenerator.hxx>
 #include "resultsetforquery.hxx"
@@ -233,8 +232,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                     for( int i = 0 ; i < nItemCount ; ++i )
                     {
                         const HitItem& rItem = rQueryResultVector[ i ];
-                        set< rtl::OUString >::iterator it;
-                        if( (it = aResultSet.find( rItem.m_aURL )) != aResultSet.end() )
+                        if( (aResultSet.find( rItem.m_aURL )) != aResultSet.end() )
                         {
                             HitItem aItemCopy( rItem );
                             aItemCopy.m_fScore /= nQueryListSize;   // To get average score

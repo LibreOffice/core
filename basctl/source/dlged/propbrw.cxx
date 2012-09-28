@@ -18,10 +18,11 @@
  */
 
 
+#include "propbrw.hxx"
 #include "basidesh.hxx"
 #include "dlgedobj.hxx"
 #include "iderid.hxx"
-#include "propbrw.hxx"
+#include "baside3.hxx"
 
 #include "dlgresid.hrc"
 #include <svx/svxids.hrc>
@@ -37,6 +38,11 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -45,47 +51,22 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 
-SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
 
-PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
-                        SfxBindings *pBindings, SfxChildWinInfo* pInfo)
-              :SfxChildWindow( _pParent, nId )
+void PropBrw::Update( const SfxViewShell* pShell )
 {
-    // set current selection
-    SfxViewShell* pShell = SfxViewShell::Current();
-    pWindow = new PropBrw(
-        ::comphelper::getProcessServiceFactory(),
-        pBindings,
-        this,
-        _pParent,
-        pShell ? pShell->GetCurrentDocument() : Reference< XModel >()
-        );
-
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxDockingWindow*)pWindow)->Initialize( pInfo );
-
-    ((PropBrw*)pWindow)->Update( pShell );
-}
-
-
-void PropBrw::Update( const SfxViewShell* _pShell )
-{
-    const BasicIDEShell* pBasicIDEShell = dynamic_cast< const BasicIDEShell* >( _pShell );
-    OSL_ENSURE( pBasicIDEShell || !_pShell, "PropBrw::Update: invalid shell!" );
-    if ( pBasicIDEShell )
-    {
-        ImplUpdate( pBasicIDEShell->GetCurrentDocument(), pBasicIDEShell->GetCurDlgView() );
-    }
-    else if ( _pShell )
-    {
-        ImplUpdate( NULL, _pShell->GetDrawView() );
-    }
+    Shell const* pIdeShell = dynamic_cast<Shell const*>(pShell);
+    OSL_ENSURE( pIdeShell || !pShell, "PropBrw::Update: invalid shell!" );
+    if (pIdeShell)
+        ImplUpdate(pIdeShell->GetCurrentDocument(), pIdeShell->GetCurDlgView());
+    else if (pShell)
+        ImplUpdate(NULL, pShell->GetDrawView());
     else
-    {
-        ImplUpdate( NULL, NULL );
-    }
+        ImplUpdate(NULL, NULL);
 }
 
+
+namespace
+{
 
 const long STD_WIN_SIZE_X = 300;
 const long STD_WIN_SIZE_Y = 350;
@@ -95,16 +76,19 @@ const long STD_MIN_SIZE_Y = 250;
 
 const long WIN_BORDER = 2;
 
+} // namespace
+
+
 DBG_NAME(PropBrw)
 
 
-PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings, PropBrwMgr* _pMgr, Window* _pParent,
-            const Reference< XModel >& _rxContextDocument )
-    :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits( WB_DOCKABLE | WB_STDMODELESS | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE ) )
-    ,m_bInitialStateChange(true)
-    ,m_xORB(_xORB)
-    ,m_xContextDocument( _rxContextDocument )
-    ,pView( NULL )
+PropBrw::PropBrw (DialogWindowLayout& rLayout_):
+    DockingWindow(&rLayout_),
+    m_bInitialStateChange(true),
+    m_xORB(comphelper::getProcessServiceFactory()),
+    m_xContextDocument(SfxViewShell::Current() ? SfxViewShell::Current()->GetCurrentDocument() : Reference<XModel>()),
+    rLayout(rLayout_),
+    pView(0)
 {
     DBG_CTOR(PropBrw,NULL);
 
@@ -221,6 +205,7 @@ PropBrw::~PropBrw()
 {
     if ( m_xBrowserController.is() )
         ImplDestroyController();
+    rLayout.RemovePropertyBrowser();
 
     DBG_DTOR(PropBrw,NULL);
 }
@@ -257,7 +242,7 @@ sal_Bool PropBrw::Close()
     if( IsRollUp() )
         RollDown();
 
-    return SfxDockingWindow::Close();
+    return DockingWindow::Close();
 }
 
 
@@ -272,10 +257,10 @@ Sequence< Reference< XInterface > >
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 
-        SdrObjListIter* pGroupIterator = NULL;
+        boost::scoped_ptr<SdrObjListIter> pGroupIterator;
         if (pCurrent->IsGroupObject())
         {
-            pGroupIterator = new SdrObjListIter(*pCurrent->GetSubList());
+            pGroupIterator.reset(new SdrObjListIter(*pCurrent->GetSubList()));
             pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
 
@@ -291,7 +276,6 @@ Sequence< Reference< XInterface > >
             // next element
             pCurrent = pGroupIterator && pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
-        delete pGroupIterator;
     }
 
     sal_Int32 nCount = aInterfaces.size();
@@ -447,15 +431,9 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 }
 
 
-void PropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
-{
-    rInfo.bVisible = false;
-}
-
-
 void PropBrw::Resize()
 {
-    SfxDockingWindow::Resize();
+    DockingWindow::Resize();
 
     // adjust size
     Size aSize_ = GetOutputSizePixel();
@@ -550,5 +528,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         DBG_UNHANDLED_EXCEPTION();
     }
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

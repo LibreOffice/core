@@ -386,37 +386,37 @@ Context_Docu::SetupStateMachine()
             = new StmArrayStatu2( C_nStatusSize, A_nWordStatus, 0, true);
 
     DYN StmBoundsStatu2 *   dpBst_goto_EoHtml
-            = new StmBoundsStatu2( *this, *pCx_EoHtml, nF_goto_EoHtml, true );
+            = new StmBoundsStatu2( *pCx_EoHtml, nF_goto_EoHtml, true );
     DYN StmBoundsStatu2 *   dpBst_goto_EoXmlConst
-            = new StmBoundsStatu2( *this, *pCx_EoXmlConst, nF_goto_EoXmlConst, true );
+            = new StmBoundsStatu2( *pCx_EoXmlConst, nF_goto_EoXmlConst, true );
     DYN StmBoundsStatu2 *   dpBst_goto_EoXmlLink_BeginTag
-            = new StmBoundsStatu2( *this, *pCx_EoXmlLink_BeginTag, nF_goto_EoXmlLink_BeginTag, true );
+            = new StmBoundsStatu2( *pCx_EoXmlLink_BeginTag, nF_goto_EoXmlLink_BeginTag, true );
     DYN StmBoundsStatu2 *   dpBst_goto_EoXmlLink_EndTag
-            = new StmBoundsStatu2( *this, *pCx_EoXmlLink_EndTag, nF_goto_EoXmlLink_EndTag, true );
+            = new StmBoundsStatu2( *pCx_EoXmlLink_EndTag, nF_goto_EoXmlLink_EndTag, true );
     DYN StmBoundsStatu2 *   dpBst_goto_EoXmlFormat_BeginTag
-            = new StmBoundsStatu2( *this, *pCx_EoXmlFormat_BeginTag, nF_goto_EoXmlFormat_BeginTag, true );
+            = new StmBoundsStatu2( *pCx_EoXmlFormat_BeginTag, nF_goto_EoXmlFormat_BeginTag, true );
     DYN StmBoundsStatu2 *   dpBst_goto_EoXmlFormat_EndTag
-            = new StmBoundsStatu2( *this, *pCx_EoXmlFormat_EndTag, nF_goto_EoXmlFormat_EndTag, true );
+            = new StmBoundsStatu2( *pCx_EoXmlFormat_EndTag, nF_goto_EoXmlFormat_EndTag, true );
     DYN StmBoundsStatu2 *   dpBst_goto_CheckStar
-            = new StmBoundsStatu2( *this, *pCx_CheckStar, nF_goto_CheckStar, true );
+            = new StmBoundsStatu2( *pCx_CheckStar, nF_goto_CheckStar, true );
 
 
     DYN StmBoundsStatu2 *   dpBst_finError
-            = new StmBoundsStatu2( *this, TkpContext_Null2_(), nF_fin_Error, true );
+            = new StmBoundsStatu2( TkpContext_Null2_(), nF_fin_Error, true );
     DYN StmBoundsStatu2 *   dpBst_finIgnore
-            = new StmBoundsStatu2( *this, *this, nF_fin_Ignore, true);
+            = new StmBoundsStatu2( *this, nF_fin_Ignore, true);
     DYN StmBoundsStatu2 *   dpBst_finEof
-            = new StmBoundsStatu2(  *this, TkpContext_Null2_(), nF_fin_Eof, false);
+            = new StmBoundsStatu2( TkpContext_Null2_(), nF_fin_Eof, false);
     DYN StmBoundsStatu2 *   dpBst_finAnyWord
-            = new StmBoundsStatu2( *this, *this, nF_fin_AnyWord, true);
+            = new StmBoundsStatu2( *this, nF_fin_AnyWord, true);
     DYN StmBoundsStatu2 *   dpBst_finAtTag
-            = new StmBoundsStatu2( *this, *this, nF_fin_AtTag, false);
+            = new StmBoundsStatu2( *this, nF_fin_AtTag, false);
     DYN StmBoundsStatu2 *   dpBst_finEndSign
-            = new StmBoundsStatu2( *this, *pParentContext, nF_fin_EndSign, false);
+            = new StmBoundsStatu2( *pParentContext, nF_fin_EndSign, false);
     DYN StmBoundsStatu2 *   dpBst_fin_Comma
-            = new StmBoundsStatu2( *this, *this, nF_fin_Comma, false );
+            = new StmBoundsStatu2( *this, nF_fin_Comma, false );
     DYN StmBoundsStatu2 *   dpBst_finWhite
-            = new StmBoundsStatu2( *this, *this, nF_fin_White, false);
+            = new StmBoundsStatu2( *this, nF_fin_White, false);
 
 
     // construct dpMain:

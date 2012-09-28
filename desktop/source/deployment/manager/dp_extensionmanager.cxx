@@ -112,12 +112,12 @@ OUString CompIdentifiers::getName(::std::vector<Reference<deploy::XPackage> > co
     return extension->getDisplayName();
 }
 
-void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const & xCmdEnv)
+void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const & xCmdEnv, Reference< uno::XComponentContext > const & xContext)
 {
     //Write the lastmodified file
     try {
         ::rtl::Bootstrap::expandMacros(url);
-        ::ucbhelper::Content ucbStamp(url, xCmdEnv );
+        ::ucbhelper::Content ucbStamp(url, xCmdEnv, xContext);
         dp_misc::erase_path( url, xCmdEnv );
         ::rtl::OString stamp("1" );
         Reference<css::io::XInputStream> xData(
@@ -589,7 +589,7 @@ bool ExtensionManager::doChecksForAddExtension(
         }
         //Prevent showing the license if requested.
         Reference<ucb::XCommandEnvironment> _xCmdEnv(xCmdEnv);
-        ExtensionProperties props(OUString(), properties, Reference<ucb::XCommandEnvironment>());
+        ExtensionProperties props(OUString(), properties, Reference<ucb::XCommandEnvironment>(), m_xContext);
 
         dp_misc::DescriptionInfoset info(dp_misc::getDescriptionInfoset(xTmpExtension->getURL()));
         const ::boost::optional<dp_misc::SimpleLicenseAttributes> licenseAttributes =
@@ -1315,10 +1315,10 @@ sal_Bool ExtensionManager::synchronize(
         }
         OUString lastSyncBundled(RTL_CONSTASCII_USTRINGPARAM(
                                      "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
-        writeLastModified(lastSyncBundled, xCmdEnv);
+        writeLastModified(lastSyncBundled, xCmdEnv, m_xContext);
         OUString lastSyncShared(RTL_CONSTASCII_USTRINGPARAM(
                                     "$SHARED_EXTENSIONS_USER/lastsynchronized"));
-        writeLastModified(lastSyncShared, xCmdEnv);
+        writeLastModified(lastSyncShared, xCmdEnv, m_xContext);
         return bModified;
     } catch ( const deploy::DeploymentException& ) {
         throw;

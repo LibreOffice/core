@@ -181,7 +181,7 @@ namespace rptui
             pCon->setCondition( xCond );
             m_aConditions.insert( m_aConditions.begin() + _nNewCondIndex, pCon );
 
-            pCon->SetPosSizePixel( 0, 0, impl_getConditionWidth(), 0, WINDOW_POSSIZE_WIDTH );
+            pCon->setPosSizePixel( 0, 0, impl_getConditionWidth(), 0, WINDOW_POSSIZE_WIDTH );
         }
         catch( const Exception& )
         {
@@ -339,7 +339,7 @@ namespace rptui
                 ++cond
             )
         {
-            (*cond)->SetPosSizePixel( aConditionPos.X(), aConditionPos.Y(), nConditionWidth, nConditionHeight );
+            (*cond)->setPosSizePixel( aConditionPos.X(), aConditionPos.Y(), nConditionWidth, nConditionHeight );
             aConditionPos.Move( 0, nConditionHeight );
         }
     }
@@ -352,24 +352,24 @@ namespace rptui
         impl_layoutConditions( aPos );
 
         // scrollbar size and visibility
-        m_aCondScroll.SetPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
+        m_aCondScroll.setPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
         if ( !impl_needScrollBar() )
             // normalize the position, so it can, in all situations, be used as top index
             m_aCondScroll.SetThumbPos( 0 );
 
         // the separator and the buttons below it
         aPos += LogicToPixel( Point( 0 , RELATED_CONTROLS ), MAP_APPFONT );
-        m_aSeparator.SetPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
+        m_aSeparator.setPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
 
         aPos += LogicToPixel( Point( 0 , UNRELATED_CONTROLS ), MAP_APPFONT );
         Window* pWindows[] = { &m_aPB_OK, &m_aPB_CANCEL, &m_aPB_Help };
         for ( size_t i= 0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i )
         {
-            pWindows[i]->SetPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
+            pWindows[i]->setPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
         }
 
         aPos += LogicToPixel( Point( 0, BUTTON_HEIGHT + RELATED_CONTROLS ), MAP_APPFONT );
-        SetPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
+        setPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
     }
     // -----------------------------------------------------------------------------
     void ConditionalFormattingDialog::impl_initializeConditions()

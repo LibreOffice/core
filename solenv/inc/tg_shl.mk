@@ -478,7 +478,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(SHL$(TNR)NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(DISABLE_DYNLOADING)"=="TRUE"
     $(COMMAND_ECHO)$(AR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL$(TNR)OBJS)) $(shell cat /dev/null $(LIB$(TNR)TARGET) $(SHL$(TNR)LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"

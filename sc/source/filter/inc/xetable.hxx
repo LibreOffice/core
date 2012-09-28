@@ -239,7 +239,6 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    SCTAB               mnScTab;        /// Sheet index of this record.
     sal_uInt16          mnLastAppXclCol;/// Column index of last appended cell.
     sal_uInt16          mnColInpXclCol; /// Column index of column input cell.
     sal_uInt32          mnColInpXclRow; /// Row index of column input cell.

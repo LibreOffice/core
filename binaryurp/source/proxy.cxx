@@ -84,13 +84,13 @@ css::uno::TypeDescription Proxy::getType() const {
 }
 
 void Proxy::do_acquire() {
-    if (osl_incrementInterlockedCount(&references_) == 1) {
+    if (osl_atomic_increment(&references_) == 1) {
         bridge_->resurrectProxy(*this);
     }
 }
 
 void Proxy::do_release() {
-    if (osl_decrementInterlockedCount(&references_) == 0) {
+    if (osl_atomic_decrement(&references_) == 0) {
         bridge_->revokeProxy(*this);
     }
 }
@@ -109,10 +109,9 @@ void Proxy::do_dispatch(
             do_dispatch_throw(member, returnValue, arguments, exception);
         } catch (const std::exception & e) {
             throw css::uno::RuntimeException(
-                (OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("caught C++ exception: ")) +
-                 rtl::OStringToOUString(
-                     rtl::OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
+                ("caught C++ exception: " +
+                OStringToOUString(
+                    OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
                 css::uno::Reference< css::uno::XInterface >());
                 // best-effort string conversion
         }

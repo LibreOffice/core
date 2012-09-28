@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
@@ -216,7 +217,7 @@ ORowSet::~ORowSet()
     if ( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose )
     {
         OSL_FAIL("Please check who doesn't dispose this component!");
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }
@@ -558,6 +559,8 @@ void ORowSet::freeResources( bool _bComplete )
         // the columns must be disposed before the querycomposer is disposed because
         // their owner can be the composer
         TDataColumns().swap(m_aDataColumns);// clear and resize capacity
+        ::std::vector<bool>().swap(m_aReadOnlyDataColumns);
+
         m_xColumns      = NULL;
         if ( m_pColumns )
             m_pColumns->disposing();
@@ -1239,6 +1242,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
 
 void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
+    assert(m_aDataColumns.size() == m_aReadOnlyDataColumns.size() || m_aReadOnlyDataColumns.size() == 0 );
     TDataColumns::iterator aIter = m_aDataColumns.begin();
     ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aReadIter != m_aReadOnlyDataColumns.end();++aIter,++aReadIter)
@@ -2151,9 +2155,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
         Reference< XConnection > xNewConn;
         if ( !m_aDataSourceName.isEmpty() )
         {
-            Reference< XNameAccess > xDatabaseContext(
-                m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ),
-                UNO_QUERY_THROW );
+            Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext.getUNOContext()) );
             try
             {
                 Reference< XDataSource > xDataSource( xDatabaseContext->getByName( m_aDataSourceName ), UNO_QUERY_THROW );

@@ -33,8 +33,9 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
+#include <vcl/edit.hxx>
 
-#define _SVX_OPTGENRL_CXX
+#define SVX_OPTGENRL_CXX
 
 #include <cuires.hrc>
 #include "optgenrl.hrc"
@@ -42,29 +43,174 @@
 #include "cuioptgenrl.hxx"
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/strarray.hxx>
 #include <svx/svxids.hrc> // SID_FIELD_GRABFOCUS
 
-#define TRIM(s) comphelper::string::strip(s, ' ')
+#include <boost/ref.hpp>
+#include <boost/make_shared.hpp>
 
-// struct GeneralTabPage_Impl --------------------------------------------
-
-struct GeneralTabPage_Impl
+namespace
 {
-    sal_Bool    mbStreetEnabled;
-    sal_Bool    mbPLZEnabled;
-    sal_Bool    mbCityEnabled;
-    sal_Bool    mbUsCityEnabled;
-    sal_Bool    mbUsZipEnabled;
 
-    String  maQueryStr;
+// rows
+enum RowType
+{
+    Row_Company,
+    Row_Name,
+    Row_Name_Russian,
+    Row_Name_Eastern,
+    Row_Street,
+    Row_Street_Russian,
+    Row_City,
+    Row_City_US,
+    Row_Country,
+    Row_TitlePos,
+    Row_Phone,
+    Row_FaxMail,
 
-    GeneralTabPage_Impl() :
-        mbStreetEnabled ( sal_False ),
-        mbPLZEnabled    ( sal_False ),
-        mbCityEnabled   ( sal_False ),
-        mbUsCityEnabled ( sal_False ),
-        mbUsZipEnabled  ( sal_False ) {}
+    nRowCount
+};
+
+// language flags
+namespace Lang
+{
+    unsigned const Others = 1;
+    unsigned const Russian = 2;
+    unsigned const Eastern = 4;
+    unsigned const US = 8;
+    unsigned const All = -1;
+}
+
+//
+// vRowInfo[] -- rows (text + one or more edit boxes)
+// The order is the same as in RowType above, which is up to down.
+//
+struct
+{
+    // id of the text
+    int nTextId;
+    // language flags (see Lang above):
+    // which language is this row for?
+    unsigned nLangFlags;
+}
+const vRowInfo[] =
+{
+    { FT_COMPANY,      Lang::All },
+    { FT_NAME,         Lang::All & ~Lang::Russian & ~Lang::Eastern },
+    { FT_NAME_RUSS,    Lang::Russian },
+    { FT_NAME_EASTERN, Lang::Eastern },
+    { FT_STREET,       Lang::All & ~Lang::Russian },
+    { FT_STREET_RUSS,  Lang::Russian },
+    { FT_CITY,         Lang::All & ~Lang::US },
+    { FT_CITY_US,      Lang::US },
+    { FT_COUNTRY,      Lang::All },
+    { FT_TITLEPOS,     Lang::All },
+    { FT_PHONE,        Lang::All },
+    { FT_FAXMAIL,      Lang::All },
+};
+
+//
+// vFieldInfo[] -- edit boxes
+// The order is up to down, and then left to right.
+//
+struct
+{
+    // in which row?
+    RowType eRow;
+    // id of the edit box
+    int nEditId;
+    // relative width
+    // The actual width is calculated from the relative width to fill
+    // the entire row. See PositionControls() below.
+    float fRelativeWidth;
+    // id for SvtUserOptions in unotools/useroptions.hxx
+    int nUserOptionsId;
+    // id for settings the focus (defined in svx/optgenrl.hxx)
+    int nGrabFocusId;
+}
+const vFieldInfo[] =
+{
+    // Company
+    { Row_Company,  ED_COMPANY, 1,  USER_OPT_COMPANY,  COMPANY_EDIT },
+    // Name
+    { Row_Name,         ED_FIRSTNAME,  5,  USER_OPT_FIRSTNAME, FIRSTNAME_EDIT },
+    { Row_Name,         ED_NAME,       5,  USER_OPT_LASTNAME,  LASTNAME_EDIT  },
+    { Row_Name,         ED_SHORTNAME,  2,  USER_OPT_ID,        SHORTNAME_EDIT },
+    // Name (russian)
+    { Row_Name_Russian, ED_NAME,       5,  USER_OPT_LASTNAME,  LASTNAME_EDIT  },
+    { Row_Name_Russian, ED_FIRSTNAME,  5,  USER_OPT_FIRSTNAME, FIRSTNAME_EDIT },
+    { Row_Name_Russian, ED_FATHERNAME, 5,  USER_OPT_FATHERSNAME, 0 },
+    { Row_Name_Russian, ED_SHORTNAME,  2,  USER_OPT_ID,        SHORTNAME_EDIT },
+    // Name (eastern: reversed name order)
+    { Row_Name_Eastern, ED_NAME,       5,  USER_OPT_LASTNAME,  LASTNAME_EDIT  },
+    { Row_Name_Eastern, ED_FIRSTNAME,  5,  USER_OPT_FIRSTNAME, FIRSTNAME_EDIT },
+    { Row_Name_Eastern, ED_SHORTNAME,  2,  USER_OPT_ID,        SHORTNAME_EDIT },
+    // Street
+    { Row_Street,          ED_STREET,      1,  USER_OPT_STREET, STREET_EDIT },
+    // Street (russian)
+    { Row_Street_Russian,  ED_STREET,      8,  USER_OPT_STREET, STREET_EDIT },
+    { Row_Street_Russian,  ED_APARTMENTNR, 1,  USER_OPT_APARTMENT, 0 },
+    // City
+    { Row_City,     ED_PLZ,        1,  USER_OPT_ZIP,   PLZ_EDIT },
+    { Row_City,     ED_CITY,       5,  USER_OPT_CITY,  CITY_EDIT },
+    // City (US)
+    { Row_City_US,  ED_US_CITY,   15,  USER_OPT_CITY,  CITY_EDIT },
+    { Row_City_US,  ED_US_STATE,   5,  USER_OPT_STATE, STATE_EDIT },
+    { Row_City_US,  ED_US_ZIPCODE, 4,  USER_OPT_ZIP,   PLZ_EDIT },
+    // Country
+    { Row_Country,  ED_COUNTRY,    1,  USER_OPT_COUNTRY, COUNTRY_EDIT },
+    // Title/Position
+    { Row_TitlePos, ED_TITLE,      1,  USER_OPT_TITLE,    TITLE_EDIT },
+    { Row_TitlePos, ED_POSITION,   1,  USER_OPT_POSITION, POSITION_EDIT },
+    // Phone
+    { Row_Phone,    ED_TELPRIVAT,  1,  USER_OPT_TELEPHONEHOME, TELPRIV_EDIT },
+    { Row_Phone,    ED_TELCOMPANY, 1,  USER_OPT_TELEPHONEWORK, TELCOMPANY_EDIT },
+    // Fax/Mail
+    { Row_FaxMail,  ED_FAX,        1,  USER_OPT_FAX,   FAX_EDIT },
+    { Row_FaxMail,  ED_EMAIL,      1,  USER_OPT_EMAIL, EMAIL_EDIT },
+};
+
+
+} // namespace
+
+// -----------------------------------------------------------------------
+
+//
+// Row
+//
+struct SvxGeneralTabPage::Row
+{
+    // which row is it?
+    RowType eRow;
+    // row label
+    FixedText aLabel;
+    // first and last field in the row (last is exclusive)
+    unsigned nFirstField, nLastField;
+
+public:
+    Row (Window& rParent, int nResId, RowType eRow_) :
+        eRow(eRow_),
+        aLabel(&rParent, CUI_RES(nResId), true),
+        nFirstField(0), nLastField(0)
+    { }
+};
+
+// -----------------------------------------------------------------------
+
+//
+// Field
+//
+struct SvxGeneralTabPage::Field
+{
+    // which field is this? (in vFieldInfo[] above)
+    unsigned iField;
+    // edit box
+    Edit aEdit;
+
+public:
+    Field (Window& rParent, int nResId, unsigned iField_) :
+        iField(iField_),
+        aEdit(&rParent, CUI_RES(nResId), true)
+    { }
 };
 
 // -----------------------------------------------------------------------
@@ -74,160 +220,176 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     SfxTabPage( pParent, CUI_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
 
     aAddrFrm        ( this, CUI_RES( GB_ADDRESS ) ),
-    aCompanyLbl     ( this, CUI_RES( FT_COMPANY ), true ),
-    aCompanyEdit    ( this, CUI_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
-    aNameLbl        ( this, CUI_RES( FT_NAME ), true ),
-    aNameLblRuss    ( this, CUI_RES( FT_NAME_RUSS ), true ),
-    aNameLblEastern ( this, CUI_RES( FT_NAME_EASTERN ), true ),
-    aFirstName      ( this, CUI_RES( ED_FIRSTNAME ), 0, &aNameLbl ),
-    aFatherName     ( this, CUI_RES( ED_FATHERNAME ) ),
-    aName           ( this, CUI_RES( ED_NAME ), 1, &aNameLbl ),
-    aShortName      ( this, CUI_RES( ED_SHORTNAME ), 2, &aNameLbl ),
-    aStreetLbl      ( this, CUI_RES( FT_STREET ), true ),
-    aStreetLblRuss  ( this, CUI_RES( FT_STREET_RUSS ), true ),
-    aStreetEdit     ( this, CUI_RES( ED_STREET ), 0, &aStreetLbl ),
-    aApartmentNrEdit( this, CUI_RES( ED_APARTMENTNR ), 1, &aStreetLblRuss ),
-    aCityLbl        ( this, CUI_RES( FT_CITY ), true ),
-    aPLZEdit        ( this, CUI_RES( ED_PLZ ), 0, &aCityLbl ),
-    aCityEdit       ( this, CUI_RES( ED_CITY ), 1, &aCityLbl ),
-    aUsCityEdit     ( this, CUI_RES( ED_US_CITY ), 0, &aCityLbl ),
-    aUsStateEdit    ( this, CUI_RES( ED_US_STATE ), 1, &aCityLbl ),
-    aUsZipEdit      ( this, CUI_RES( ED_US_ZIPCODE ), 2, &aCityLbl ),
-    aCountryLbl     ( this, CUI_RES( FT_COUNTRY ), true ),
-    aCountryEdit    ( this, CUI_RES( ED_COUNTRY ), INDEX_NOTSET, &aCountryLbl ),
-    aTitlePosLbl    ( this, CUI_RES( FT_TITLEPOS ), true ),
-    aTitleEdit      ( this, CUI_RES( ED_TITLE ), 0, &aTitlePosLbl ),
-    aPositionEdit   ( this, CUI_RES( ED_POSITION ), 1, &aTitlePosLbl ),
-    aPhoneLbl       ( this, CUI_RES( FT_PHONE ), true ),
-    aTelPrivEdit    ( this, CUI_RES( ED_TELPRIVAT ), 0, &aPhoneLbl ),
-    aTelCompanyEdit ( this, CUI_RES( ED_TELCOMPANY ), 1, &aPhoneLbl ),
-    aFaxMailLbl     ( this, CUI_RES( FT_FAXMAIL ), true ),
-    aFaxEdit        ( this, CUI_RES( ED_FAX ), 0, &aFaxMailLbl ),
-    aEmailEdit      ( this, CUI_RES( ED_EMAIL ), 1, &aFaxMailLbl ),
-    aUseDataCB      ( this, CUI_RES( CB_USEDATA ) ),
-    pImpl           ( new GeneralTabPage_Impl )
-
+    aUseDataCB      ( this, CUI_RES( CB_USEDATA ) )
 {
-    LanguageType eLang = Application::GetSettings().GetUILanguage();
-    pImpl->maQueryStr = String( CUI_RES( STR_QUERY_REG ) );
+    CreateControls();
+    PositionControls();
+    SetExchangeSupport(); // this page needs ExchangeSupport
+    SetLinks();
+    SetAccessibleNames();
+}
 
-    if ( LANGUAGE_ENGLISH_US == eLang )
+//------------------------------------------------------------------------
+
+SvxGeneralTabPage::~SvxGeneralTabPage ()
+{ }
+
+//------------------------------------------------------------------------
+
+// Creates and initializes the titles and the edit boxes,
+// according to vRowInfo[] and vFieldInfo[] above.
+void SvxGeneralTabPage::CreateControls ()
+{
+    // which language bit do we use? (see Lang and vRowInfo[] above)
+    unsigned LangBit;
+    switch (LanguageType const eLang = Application::GetSettings().GetUILanguage())
     {
-        // construct American post/mail address
-        aPLZEdit.Hide();
-        aCityEdit.Hide();
-        aCityLbl.SetText( CUI_RES( STR_US_STATE ) );
+        case LANGUAGE_ENGLISH_US:
+            LangBit = Lang::US;
+            break;
+        case LANGUAGE_RUSSIAN:
+            LangBit = Lang::Russian;
+            break;
+        default:
+            if (MsLangId::isFamilyNameFirst(eLang))
+                LangBit = Lang::Eastern;
+            else
+                LangBit = Lang::Others;
+            break;
     }
-    else if ( LANGUAGE_RUSSIAN == eLang )
+
+    // creating rows
+    unsigned iField = 0;
+    for (unsigned iRow = 0; iRow != nRowCount; ++iRow)
     {
-        aUsCityEdit.Hide();
-        aUsStateEdit.Hide();
-        aUsZipEdit.Hide();
-        aNameLbl.Hide();
-        aNameLblRuss.Show();
-        aStreetLbl.Hide();
-        aStreetLblRuss.Show();
-        aFatherName.Show();
-        aName.SetIndex( 0 );
-        aName.SetLabel( &aNameLblRuss );
-        aFirstName.SetIndex( 1 );
-        aFirstName.SetLabel( &aNameLblRuss );
-        aFatherName.SetIndex( 2 );
-        aFatherName.SetLabel( &aNameLblRuss );
-        aShortName.SetIndex( 3 );
-        aShortName.SetLabel( &aNameLblRuss );
-
-        Point aEditPoint = LogicToPixel( Point( MID, LINE(1) ), MAP_APPFONT );
-        Point aRightPoint = LogicToPixel( Point( RIGHT, LINE(1) ), MAP_APPFONT );
-        Size aEditSize = LogicToPixel( Size( 42, 12 ), MAP_APPFONT );
-        Size a2Size = LogicToPixel( Size( 2, 2 ), MAP_APPFONT );
-        long nDelta = aEditSize.Width() + a2Size.Width();
-        aName.SetPosSizePixel( aEditPoint, aEditSize );
-        aEditPoint.X() = aEditPoint.X() + nDelta;
-        aFirstName.SetPosSizePixel( aEditPoint, aEditSize );
-        aEditPoint.X() = aEditPoint.X() + nDelta;
-        aFatherName.SetPosSizePixel( aEditPoint, aEditSize );
-        aEditPoint.X() = aEditPoint.X() + nDelta;
-        aEditSize.Width() = aRightPoint.X() - aEditPoint.X();
-        aShortName.SetPosSizePixel( aEditPoint, aEditSize );
-
-        Size aStreetSize = aStreetEdit.GetSizePixel();
-        aStreetSize.Width() = aStreetSize.Width() - aEditSize.Width() - a2Size.Width();
-        aStreetEdit.SetSizePixel( aStreetSize );
-        aApartmentNrEdit.Show();
-        Point aApartmentPoint = LogicToPixel( Point( MID, LINE(2) ), MAP_APPFONT );
-        aApartmentPoint.X() = aEditPoint.X();
-        aApartmentNrEdit.SetPosSizePixel( aApartmentPoint, aEditSize );
-
-        aName.SetZOrder( &aNameLblRuss, WINDOW_ZORDER_BEHIND );
-        aFirstName.SetZOrder( &aName, WINDOW_ZORDER_BEHIND );
-        aFatherName.SetZOrder( &aFirstName, WINDOW_ZORDER_BEHIND );
-    }
-    else if (MsLangId::isFamilyNameFirst(eLang))
-    {
-        aUsCityEdit.Hide();
-        aUsStateEdit.Hide();
-        aUsZipEdit.Hide();
-        aNameLbl.Hide();
-        aNameLblEastern.Show();
-
-        // swap "first name" field and "last name" field
-        Point aPosTmp = aFirstName.GetPosPixel();
-        aFirstName.SetPosPixel( aName.GetPosPixel() );
-        aName.SetPosPixel( aPosTmp );
-        aFirstName.SetZOrder( &aName, WINDOW_ZORDER_BEHIND );
-    }
-    else
-    {
-        aUsCityEdit.Hide();
-        aUsStateEdit.Hide();
-        aUsZipEdit.Hide();
+        RowType const eRow = static_cast<RowType>(iRow);
+        // is the row visible?
+        if (!(vRowInfo[iRow].nLangFlags & LangBit))
+            continue;
+        // creating row
+        vRows.push_back(boost::make_shared<Row>(
+            boost::ref(*this), vRowInfo[iRow].nTextId, eRow
+        ));
+        Row& rRow = *vRows.back();
+        // fields in the row
+        static unsigned const nFieldCount = SAL_N_ELEMENTS(vFieldInfo);
+        // skipping other (invisible) rows
+        while (iField != nFieldCount && vFieldInfo[iField].eRow != eRow)
+            ++iField;
+        // fields in the row
+        rRow.nFirstField = vFields.size();
+        for ( ; iField != nFieldCount && vFieldInfo[iField].eRow == eRow; ++iField)
+        {
+            // creating edit field
+            vFields.push_back(boost::make_shared<Field>(
+                boost::ref(*this), vFieldInfo[iField].nEditId, iField
+            ));
+            // "short name" field?
+            if (vFieldInfo[iField].nEditId == ED_SHORTNAME)
+            {
+                nNameRow = vRows.size() - 1;
+                nShortNameField = vFields.size() - 1;
+            }
+        }
+        rRow.nLastField = vFields.size();
     }
 
     FreeResource();
+}
 
-    // this page needs ExchangeSupport
-    SetExchangeSupport();
+//------------------------------------------------------------------------
 
-    Link aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
-    aFirstName.SetModifyHdl( aLink );
-    aName.SetModifyHdl( aLink );
+// sets the size and the position of the controls
+void SvxGeneralTabPage::PositionControls ()
+{
+    // sizes and locations
+    int const nLeft = 12, nMid = 100, nRight = 250;
+    int const nTop = 14;
+    unsigned const nHSpace = 2, nVSpace = 3;
+    unsigned const nRowHeight = 15, nTextVMargin = 2;
 
-    // because some labels have text for more than one edit field we have to split these texts
-    // and set these texts as accessible name of the corresponding edit fields
-    SvxUserEdit* pEdits[] =
+    Point aLabelPos(nLeft, nTop + nTextVMargin);
+    Size aLabelSize(nMid - nLeft - nHSpace, nRowHeight - nVSpace - 2*nTextVMargin);
+    for (unsigned iRow = 0; iRow != vRows.size(); ++iRow, aLabelPos.Y() += nRowHeight)
     {
-        &aCompanyEdit, &aFirstName, &aFatherName, &aName, &aShortName, &aStreetEdit,
-        &aApartmentNrEdit, &aPLZEdit, &aCityEdit, &aUsCityEdit, &aUsStateEdit, &aUsZipEdit,
-        &aCountryEdit, &aTitleEdit, &aPositionEdit, &aTelPrivEdit, &aTelCompanyEdit,
-        &aFaxEdit, &aEmailEdit, NULL
-    };
-    SvxUserEdit** pCurrent = pEdits;
-    while ( *pCurrent )
-    {
-        Window* pLabel = (*pCurrent)->GetLabel();
-        if ( pLabel )
+        Row& rRow = *vRows[iRow];
+        // label
+        rRow.aLabel.SetPosSizePixel(
+            LogicToPixel(aLabelPos,  MAP_APPFONT),
+            LogicToPixel(aLabelSize, MAP_APPFONT)
+        );
+        // field position
+        Point aFieldPos(nMid, aLabelPos.Y() - nTextVMargin);
+        Size aFieldSize(0, nRowHeight - nVSpace);
+        // sum of the relative widths
+        float fRelWidthSum = 0;
+        for (unsigned iField = rRow.nFirstField; iField != rRow.nLastField; ++iField)
+            fRelWidthSum += vFieldInfo[vFields[iField]->iField].fRelativeWidth;
+        // sum of the actual widths (total width - spaces)
+        unsigned const nActWidthSum =
+            (nRight - nMid) - nHSpace*(rRow.nLastField - rRow.nFirstField);
+        // calculating the actual widths
+        float X = nMid; // starting position
+        for (unsigned iField = rRow.nFirstField; iField != rRow.nLastField; ++iField)
         {
-            String sName, sText = pLabel->GetDisplayText();
-            sal_Int16 nIndex = (*pCurrent)->GetIndex();
-            if ( INDEX_NOTSET == nIndex )
-                sName = sText;
-            else
-                sName = sText.GetToken( nIndex, '/' );
-            sName = comphelper::string::remove(sName, '(');
-            sName = comphelper::string::remove(sName, ')');
-            if ( sName.Len() > 0 )
-                (*pCurrent)->SetAccessibleName( sName );
+            // calculating position and size
+            Field& rField = *vFields[iField];
+            aFieldPos.X() = X;
+            X += vFieldInfo[rField.iField].fRelativeWidth * nActWidthSum / fRelWidthSum;
+            aFieldSize.Width() = X - aFieldPos.X();
+            X += 2;
+            // setting size
+            rField.aEdit.SetPosSizePixel(
+                LogicToPixel(aFieldPos,  MAP_APPFONT),
+                LogicToPixel(aFieldSize, MAP_APPFONT)
+            );
         }
-        pCurrent++;
     }
 }
 
 //------------------------------------------------------------------------
 
-SvxGeneralTabPage::~SvxGeneralTabPage()
+void SvxGeneralTabPage::SetLinks ()
 {
-    delete pImpl;
+    // link for updating the initials
+    Link aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
+    Row& rNameRow = *vRows[nNameRow];
+    for (unsigned i = rNameRow.nFirstField; i != rNameRow.nLastField - 1; ++i)
+        vFields[i]->aEdit.SetModifyHdl(aLink);
+}
+
+//------------------------------------------------------------------------
+
+void SvxGeneralTabPage::SetAccessibleNames ()
+{
+    // Because some labels have text for more than one edit field we have to
+    // split these texts and set these texts as accessible name
+    // of the corresponding edit fields.
+    // E.g. "City/State/Zip" -> "City", "State", "Zip" or
+    // "Tel. (Home/Work)" -> "Tel. (Home)", "Tel. (Work)"
+    for (unsigned i = 0; i != vRows.size(); ++i)
+    {
+        Row& rRow = *vRows[i];
+        rtl::OUString const sLabel = rRow.aLabel.GetDisplayText();
+        rtl::OUString sList = sLabel; // between brackets or the whole label
+        // brackets?
+        int iBracket = sLabel.indexOf('(');
+        if (iBracket != -1)
+            sList = sList.copy(iBracket + 1, sLabel.lastIndexOf(')') - iBracket - 1);
+        // cutting at '/'s
+        sal_Int32 nIndex = 0;
+        for (unsigned iField = rRow.nFirstField; iField != rRow.nLastField; ++iField)
+        {
+            // the token
+            rtl::OUString sPart = sList.getToken(0, static_cast<sal_Unicode>('/'), nIndex).trim();
+            Edit& rEdit = vFields[iField]->aEdit;
+            // creating the accessible name
+            if (iBracket != -1)
+                rEdit.SetAccessibleName(sLabel.copy(0, iBracket) + "(" + sPart + ")");
+            else
+                rEdit.SetAccessibleName(sPart);
+        }
+    }
 }
 
 //------------------------------------------------------------------------
@@ -242,23 +404,8 @@ SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrS
 sal_Bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
 {
     // remove leading and trailing whitespaces
-    aCompanyEdit.SetText( TRIM(aCompanyEdit.GetText()) );
-    aFirstName.SetText( TRIM(aFirstName.GetText()) );
-    aName.SetText( TRIM(aName.GetText()) );
-    aShortName.SetText( TRIM(aShortName.GetText()) );
-    aStreetEdit.SetText( TRIM(aStreetEdit.GetText()) );
-    aCountryEdit.SetText( TRIM(aCountryEdit.GetText()) );
-    aPLZEdit.SetText( TRIM(aPLZEdit.GetText()) );
-    aCityEdit.SetText( TRIM(aCityEdit.GetText()) );
-    aUsCityEdit.SetText( TRIM(aUsCityEdit.GetText()) );
-    aUsStateEdit.SetText( TRIM(aUsStateEdit.GetText()) );
-    aUsZipEdit.SetText( TRIM(aUsZipEdit.GetText()) );
-    aTitleEdit.SetText( TRIM(aTitleEdit.GetText()) );
-    aPositionEdit.SetText( TRIM(aPositionEdit.GetText()) );
-    aTelPrivEdit.SetText( TRIM(aTelPrivEdit.GetText()) );
-    aTelCompanyEdit.SetText( TRIM(aTelCompanyEdit.GetText()) );
-    aFaxEdit.SetText( TRIM(aFaxEdit.GetText()) );
-    aEmailEdit.SetText( TRIM(aEmailEdit.GetText()) );
+    for (unsigned i = 0; i != vFields.size(); ++i)
+        vFields[i]->aEdit.SetText( comphelper::string::strip(vFields[i]->aEdit.GetText(), ' ') );
 
     sal_Bool bModified = sal_False;
     bModified |= GetAddress_Impl();
@@ -277,45 +424,18 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
 {
     SetAddress_Impl();
 
-    sal_uInt16 nWhich = GetWhich( SID_FIELD_GRABFOCUS );
-    if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET )
-    {
-        sal_uInt16 nField = ( (SfxUInt16Item&)rSet.Get( nWhich ) ).GetValue();
+    sal_uInt16 const nWhich = GetWhich(SID_FIELD_GRABFOCUS);
 
-        switch ( nField )
+    if (rSet.GetItemState(nWhich) == SFX_ITEM_SET)
+    {
+        if (sal_uInt16 const nField = ((SfxUInt16Item&)rSet.Get(nWhich)).GetValue())
         {
-            case COMPANY_EDIT:      aCompanyEdit.GrabFocus(); break;
-            case FIRSTNAME_EDIT:    aFirstName.GrabFocus(); break;
-            case LASTNAME_EDIT:     aName.GrabFocus(); break;
-            case STREET_EDIT:       aStreetEdit.GrabFocus(); break;
-            case COUNTRY_EDIT:      aCountryEdit.GrabFocus(); break;
-            case PLZ_EDIT:
-                if ( aPLZEdit.IsVisible() )
-                    aPLZEdit.GrabFocus();
-                else
-                    aUsZipEdit.GrabFocus();
-                break;
-            case CITY_EDIT:
-                if ( aCityEdit.IsVisible() )
-                    aCityEdit.GrabFocus();
-                else
-                    aUsCityEdit.GrabFocus();
-                break;
-            case STATE_EDIT:
-                if ( aUsStateEdit.IsVisible() )
-                    aUsStateEdit.GrabFocus();
-                else
-                    aCityEdit.GrabFocus();
-                break;
-            case TITLE_EDIT:        aTitleEdit.GrabFocus(); break;
-            case POSITION_EDIT:     aPositionEdit.GrabFocus(); break;
-            case SHORTNAME_EDIT:    aShortName.GrabFocus(); break;
-            case TELPRIV_EDIT:      aTelPrivEdit.GrabFocus(); break;
-            case TELCOMPANY_EDIT:   aTelCompanyEdit.GrabFocus(); break;
-            case FAX_EDIT:          aFaxEdit.GrabFocus(); break;
-            case EMAIL_EDIT:        aEmailEdit.GrabFocus(); break;
-            default:                aCompanyEdit.GrabFocus();
+            for (unsigned i = 0; i != vFields.size(); ++i)
+                if (nField == vFieldInfo[vFields[i]->iField].nGrabFocusId)
+                    vFields[i]->aEdit.GrabFocus();
         }
+        else
+            vFields.front()->aEdit.GrabFocus();
     }
 
     aUseDataCB.Check( SvtSaveOptions().IsUseUserData() );
@@ -323,27 +443,37 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------------
 
+// ModifyHdl_Impl()
+// This handler updates the initials (short name)
+// when one of the name fields was updated.
 IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
 {
-    if ( aShortName.IsEnabled() )
+    // short name field and row
+    Field& rShortName = *vFields[nShortNameField];
+    Row& rNameRow = *vRows[nNameRow];
+    // number of initials
+    unsigned const nInits = rNameRow.nLastField - rNameRow.nFirstField - 1;
+    // which field was updated? (in rNameRow)
+    unsigned nField = nInits;
+    for (unsigned i = 0; i != nInits; ++i)
+        if (&vFields[rNameRow.nFirstField + i]->aEdit == pEdit)
+            nField = i;
+	// Since middle names are not supported, clear shortname if it
+	// contains a middle initial
+	if (rtl::OUString(rShortName.aEdit.GetText()).getLength() > 2)
+	{
+		rtl::OUString sEmptyString;
+		rShortName.aEdit.SetText(sEmptyString);
+	}
+    // updating the initial
+    if (nField < nInits && rShortName.aEdit.IsEnabled())
     {
-        String aShortStr( aShortName.GetText() );
-        switch ( aShortStr.Len() )
-        {
-            case 0:
-                aShortStr = String( RTL_CONSTASCII_USTRINGPARAM("  ") );
-                break;
-
-            case 1:
-                aShortStr += ' ';
-                break;
-        }
-
-        sal_uInt16 nPos = ( pEdit == &aFirstName ) ? 0 : 1;
-        String aTxt = pEdit->GetText();
-        sal_Unicode cChar = ( aTxt.Len() > 0 ) ? aTxt.GetChar(0) : ' ';
-        aShortStr.SetChar( nPos, cChar );
-        aShortName.SetText(comphelper::string::stripEnd(aShortStr, ' '));
+        rtl::OUString sShortName = rShortName.aEdit.GetText();
+        while ((unsigned)sShortName.getLength() < nInits)
+            sShortName += rtl::OUString(' ');
+        rtl::OUString sName = pEdit->GetText();
+        rtl::OUString sLetter = rtl::OUString(sName.getLength() ? sName.toChar() : ' ');
+        rShortName.aEdit.SetText(sShortName.replaceAt(nField, 1, sLetter).trim());
     }
     return 0;
 }
@@ -352,205 +482,57 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
 
 sal_Bool SvxGeneralTabPage::GetAddress_Impl()
 {
-    sal_Bool bRet =
-    (   aCompanyEdit.GetSavedValue()  !=        aCompanyEdit.GetText()  ||
-        aFirstName.GetSavedValue()  !=          aFirstName.GetText()  ||
-        aFatherName.GetSavedValue()  !=         aFatherName.GetText()  ||
-        aName.GetSavedValue()  !=               aName.GetText()  ||
-        aShortName.GetSavedValue()  !=          aShortName.GetText()  ||
-        aStreetEdit.GetSavedValue()  !=         aStreetEdit.GetText()  ||
-        aApartmentNrEdit.GetSavedValue()  !=    aApartmentNrEdit.GetText()  ||
-        aPLZEdit.GetSavedValue()  !=            aPLZEdit.GetText()  ||
-        aCityEdit.GetSavedValue()  !=           aCityEdit.GetText()  ||
-        aUsCityEdit.GetSavedValue()  !=         aUsCityEdit.GetText()  ||
-        aUsStateEdit.GetSavedValue()  !=        aUsStateEdit.GetText()  ||
-        aUsZipEdit.GetSavedValue()  !=          aUsZipEdit.GetText()  ||
-        aCountryEdit.GetSavedValue()  !=        aCountryEdit.GetText()  ||
-        aTitleEdit.GetSavedValue()  !=          aTitleEdit.GetText()  ||
-        aPositionEdit.GetSavedValue()  !=       aPositionEdit.GetText()  ||
-        aTelPrivEdit.GetSavedValue()  !=        aTelPrivEdit.GetText()  ||
-        aTelCompanyEdit.GetSavedValue()  !=     aTelCompanyEdit.GetText()  ||
-        aFaxEdit.GetSavedValue()  !=            aFaxEdit.GetText()  ||
-        aEmailEdit.GetSavedValue()  !=          aEmailEdit.GetText() );
-
-    LanguageType eLang = Application::GetSettings().GetUILanguage();
-    sal_Bool bUS = ( LANGUAGE_ENGLISH_US == eLang );
-
+    // updating
     SvtUserOptions aUserOpt;
-    aUserOpt.SetCompany(aCompanyEdit.GetText());
-    aUserOpt.SetFirstName(aFirstName.GetText());
-    aUserOpt.SetLastName(aName.GetText());
-    aUserOpt.SetID( aShortName.GetText());
+    for (unsigned i = 0; i != vFields.size(); ++i)
+        aUserOpt.SetToken(
+            vFieldInfo[vFields[i]->iField].nUserOptionsId,
+            vFields[i]->aEdit.GetText()
+        );
 
-    aUserOpt.SetStreet(aStreetEdit.GetText() );
-
-    aUserOpt.SetCountry(aCountryEdit.GetText() );
-
-    aUserOpt.SetZip(bUS ? aUsZipEdit.GetText() : aPLZEdit.GetText() );
-    aUserOpt.SetCity(bUS ? aUsCityEdit.GetText() : aCityEdit.GetText() );
-
-    aUserOpt.SetTitle( aTitleEdit.GetText() );
-    aUserOpt.SetPosition(aPositionEdit.GetText() );
-    aUserOpt.SetTelephoneHome( aTelPrivEdit.GetText() );
-    aUserOpt.SetTelephoneWork( aTelCompanyEdit.GetText() );
-    aUserOpt.SetFax( aFaxEdit.GetText() );
-    aUserOpt.SetEmail( aEmailEdit.GetText() );
-    aUserOpt.SetState( bUS ? aUsStateEdit.GetText() : String() );
-
-    if ( LANGUAGE_RUSSIAN == eLang )
-    {
-        aUserOpt.SetFathersName( aFatherName.GetText() );
-        aUserOpt.SetApartment( aApartmentNrEdit.GetText() );
-    }
-    return bRet;
+    // modified?
+    for (unsigned i = 0; i != vFields.size(); ++i)
+        if (vFields[i]->aEdit.GetSavedValue() != vFields[i]->aEdit.GetText())
+            return true;
+    return false;
 }
 
 //------------------------------------------------------------------------
 
 void SvxGeneralTabPage::SetAddress_Impl()
 {
-    LanguageType eLang = Application::GetSettings().GetUILanguage();
-    sal_Bool bUS = ( LANGUAGE_ENGLISH_US == eLang );
+    // updating and disabling edit boxes
     SvtUserOptions aUserOpt;
-    aCompanyEdit.SetText( aUserOpt.GetCompany() );
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_COMPANY ) )
+    for (unsigned iRow = 0; iRow != vRows.size(); ++iRow)
     {
-        aCompanyLbl.Disable();
-        aCompanyEdit.Disable();
-    }
-    sal_Int16 nEditCount = 0;
-    aFirstName.SetText( aUserOpt.GetFirstName() );
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_FIRSTNAME ) )
-    {
-        aFirstName.Disable();
-        nEditCount++;
-    }
-    aName.SetText( aUserOpt.GetLastName() );
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_LASTNAME ) )
-    {
-        aName.Disable();
-        nEditCount++;
-    }
-    aShortName.SetText( aUserOpt.GetID() );
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_ID ) )
-    {
-        aShortName.Disable();
-        nEditCount++;
-    }
-    aNameLbl.Enable( ( nEditCount != 3 ) );
-    aStreetEdit.SetText( aUserOpt.GetStreet() );
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_STREET ) )
-    {
-        aStreetLbl.Disable();
-        aStreetEdit.Disable();
-    }
-    Edit* pPLZEdit = bUS ? &aUsZipEdit : &aPLZEdit;
-    Edit* pCityEdit = bUS ? &aUsCityEdit : &aCityEdit;
-    pPLZEdit->SetText( aUserOpt.GetZip() );
-    pCityEdit->SetText( aUserOpt.GetCity() );
-    nEditCount = 0;
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_ZIP ) )
-    {
-        pPLZEdit->Disable();
-        nEditCount++;
-    }
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_CITY ) )
-    {
-        pCityEdit->Disable();
-        nEditCount++;
-    }
-    if ( bUS )
-    {
-        aUsStateEdit.SetText( aUserOpt.GetState() );
-        if ( aUserOpt.IsTokenReadonly( USER_OPT_STATE ) )
+        Row& rRow = *vRows[iRow];
+        // the label is enabled if any of its edit fields are enabled
+        bool bEnableLabel = false;
+        for (unsigned iField = rRow.nFirstField; iField != rRow.nLastField; ++iField)
         {
-            aUsStateEdit.Disable();
-            nEditCount++;
+            Field& rField = *vFields[iField];
+            // updating content
+            unsigned const nToken = vFieldInfo[rField.iField].nUserOptionsId;
+            rField.aEdit.SetText(aUserOpt.GetToken(nToken));
+            // is enabled?
+            bool const bEnableEdit = !aUserOpt.IsTokenReadonly(nToken);
+            rField.aEdit.Enable(bEnableEdit);
+            bEnableLabel = bEnableLabel || bEnableEdit;
         }
-    }
-    aCityLbl.Enable( ( nEditCount != ( bUS ? 3 : 2 ) ) );
-    aCountryEdit.SetText( aUserOpt.GetCountry() );
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_COUNTRY ) )
-    {
-        aCountryLbl.Disable();
-        aCountryEdit.Disable();
-    }
-    aTitleEdit.SetText( aUserOpt.GetTitle() );
-    aPositionEdit.SetText( aUserOpt.GetPosition() );
-    nEditCount = 0;
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_TITLE ) )
-    {
-        aTitleEdit.Disable();
-        nEditCount++;
-    }
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_POSITION ) )
-    {
-        aPositionEdit.Disable();
-        nEditCount++;
-    }
-    aTitlePosLbl.Enable( ( nEditCount != 2 ) );
-    aTelPrivEdit.SetText( aUserOpt.GetTelephoneHome() );
-    aTelCompanyEdit.SetText( aUserOpt.GetTelephoneWork() );
-    nEditCount = 0;
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_TELEPHONEHOME ) )
-    {
-        aTelPrivEdit.Disable();
-        nEditCount++;
-    }
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_TELEPHONEWORK ) )
-    {
-        aTelCompanyEdit.Disable();
-        nEditCount++;
-    }
-    aPhoneLbl.Enable( ( nEditCount != 2 ) );
-    aFaxEdit.SetText( aUserOpt.GetFax() );
-    aEmailEdit.SetText( aUserOpt.GetEmail() );
-    nEditCount = 0;
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_FAX ) )
-    {
-        aFaxEdit.Disable();
-        nEditCount++;
-    }
-    if ( aUserOpt.IsTokenReadonly( USER_OPT_EMAIL ) )
-    {
-        aEmailEdit.Disable();
-        nEditCount++;
-    }
-    aFaxMailLbl.Enable( ( nEditCount != 2 ) );
-
-    if ( LANGUAGE_RUSSIAN == eLang )
-    {
-        aFatherName.SetText( aUserOpt.GetFathersName() );
-        aApartmentNrEdit.SetText( aUserOpt.GetApartment() );
+        rRow.aLabel.Enable(bEnableLabel);
     }
 
-    aCompanyEdit.SaveValue();
-    aFirstName.SaveValue();
-    aFatherName.SaveValue();
-    aName.SaveValue();
-    aShortName.SaveValue();
-    aStreetEdit.SaveValue();
-    aApartmentNrEdit.SaveValue();
-    aPLZEdit.SaveValue();
-    aCityEdit.SaveValue();
-    aUsCityEdit.SaveValue();
-    aUsStateEdit.SaveValue();
-    aUsZipEdit.SaveValue();
-    aCountryEdit.SaveValue();
-    aTitleEdit.SaveValue();
-    aPositionEdit.SaveValue();
-    aTelPrivEdit.SaveValue();
-    aTelCompanyEdit.SaveValue();
-    aFaxEdit.SaveValue();
-    aEmailEdit.SaveValue();
+    // saving
+    for (unsigned i = 0; i != vFields.size(); ++i)
+        vFields[i]->aEdit.SaveValue();
 }
 
 // -----------------------------------------------------------------------
 
-int SvxGeneralTabPage::DeactivatePage( SfxItemSet* _pSet )
+int SvxGeneralTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
-    if ( _pSet )
-        FillItemSet( *_pSet );
+    if ( pSet_ )
+        FillItemSet( *pSet_ );
     return LEAVE_PAGE;
 }
 

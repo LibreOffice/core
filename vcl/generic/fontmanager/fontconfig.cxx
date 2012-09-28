@@ -29,10 +29,17 @@
 
 #include "fontcache.hxx"
 #include "impfont.hxx"
-#include "vcl/fontmanager.hxx"
-#include "vcl/vclenum.hxx"
+#include <vcl/fontmanager.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/wrkwin.hxx>
 #include "outfont.hxx"
-#include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
+#include <i18nutil/unicode.hxx>
+#include <rtl/strbuf.hxx>
+#include <unicode/uchar.h>
+#include <unicode/uscript.h>
 
 using namespace psp;
 
@@ -73,6 +80,10 @@ using namespace psp;
 #endif
 #ifndef FC_FONTFORMAT
     #define FC_FONTFORMAT "fontformat"
+#endif
+
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#include <dbus/dbus-glib.h>
 #endif
 
 #include <cstdio>
@@ -116,6 +127,8 @@ public:
     static void release();
 
     FcFontSet* getFontSet();
+
+    void clear();
 
 public:
     FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
@@ -252,8 +265,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
 
 FontCfgWrapper::~FontCfgWrapper()
 {
-    if( m_pOutlineSet )
-        FcFontSetDestroy( m_pOutlineSet );
+    clear();
     //To-Do: get gtk vclplug smoketest to pass
     //FcFini();
 }
@@ -391,12 +403,24 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
     return eElementRes;
 }
 
+void FontCfgWrapper::clear()
+{
+    m_aFontNameToLocalized.clear();
+    m_aLocalizedToCanonical.clear();
+    if( m_pOutlineSet )
+    {
+        FcFontSetDestroy( m_pOutlineSet );
+        m_pOutlineSet = NULL;
+    }
+}
+
 /*
  * PrintFontManager::initFontconfig
  */
 void PrintFontManager::initFontconfig()
 {
-    FontCfgWrapper::get();
+    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
+    rWrapper.clear();
 }
 
 namespace
@@ -777,6 +801,118 @@ static void addtopattern(FcPattern *pPattern,
     }
 }
 
+namespace
+{
+    //Someday fontconfig will hopefully use bcp47, see fdo#19869
+    //In the meantime try something that will fit to workaround fdo#35118
+    OString mapToFontConfigLangTag(const LanguageTag &rLangTag)
+    {
+        FcStrSet *pLangSet = FcGetLangs();
+        OString sLangAttrib;
+
+        sLangAttrib = OUStringToOString(rLangTag.getBcp47(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+        if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+            return sLangAttrib;
+
+        sLangAttrib = OUStringToOString(rLangTag.getLanguageAndScript(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+        if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+            return sLangAttrib;
+
+        OString sLang = OUStringToOString(rLangTag.getLanguage(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+        OString sRegion = OUStringToOString(rLangTag.getCountry(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
+
+        if (!sRegion.isEmpty())
+        {
+            sLangAttrib = sLang + OString('-') + sRegion;
+            if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+                return sLangAttrib;
+        }
+
+        if (FcStrSetMember(pLangSet, (const FcChar8*)sLang.getStr()))
+            return sLang;
+
+        return OString();
+    }
+
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+    LanguageTag getExemplerLangTagForCodePoint(sal_uInt32 currentChar)
+    {
+        int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
+        UScriptCode eScript = static_cast<UScriptCode>(script);
+        OStringBuffer aBuf(unicode::getExemplerLanguageForUScriptCode(eScript));
+        const char* pScriptCode = uscript_getShortName(eScript);
+        if (pScriptCode)
+            aBuf.append('-').append(pScriptCode);
+        return LanguageTag(OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+    }
+
+    guint get_xid_for_dbus()
+    {
+        const Window *pTopWindow = Application::IsHeadlessModeEnabled() ? NULL : Application::GetActiveTopWindow();
+        const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : NULL;
+        return pEnvData ? pEnvData->aWindow : 0;
+    }
+#endif
+}
+
+IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
+{
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+    guint xid = get_xid_for_dbus();
+
+    if (!xid)
+        return -1;
+
+    GError *error = NULL;
+    /* get the DBUS session connection */
+    DBusGConnection *session_connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
+    if (error != NULL)
+    {
+        g_debug ("DBUS cannot connect : %s", error->message);
+        g_error_free (error);
+        return -1;
+    }
+
+    /* get the proxy with gnome-session-manager */
+    DBusGProxy *proxy = dbus_g_proxy_new_for_name(session_connection,
+                                       "org.freedesktop.PackageKit",
+                                       "/org/freedesktop/PackageKit",
+                                       "org.freedesktop.PackageKit.Modify");
+    if (proxy == NULL)
+    {
+        g_debug("Could not get DBUS proxy: org.freedesktop.PackageKit");
+        return -1;
+    }
+
+    gchar **fonts = (gchar**)g_malloc((m_aCurrentRequests.size() + 1) * sizeof(gchar*));
+    gchar **font = fonts;
+    for (std::vector<OString>::const_iterator aI = m_aCurrentRequests.begin(); aI != m_aCurrentRequests.end(); ++aI)
+        *font++ = (gchar*)aI->getStr();
+    *font = NULL;
+    gboolean res = dbus_g_proxy_call(proxy, "InstallFontconfigResources", &error,
+                 G_TYPE_UINT, xid, /* xid */
+                 G_TYPE_STRV, fonts, /* data */
+                 G_TYPE_STRING, "hide-finished", /* interaction */
+                 G_TYPE_INVALID,
+                 G_TYPE_INVALID);
+    /* check the return value */
+    if (!res)
+       g_debug("InstallFontconfigResources method failed");
+
+    /* check the error value */
+    if (error != NULL)
+    {
+        g_debug("InstallFontconfigResources problem : %s", error->message);
+        g_error_free(error);
+    }
+
+    g_free(fonts);
+    g_object_unref(G_OBJECT (proxy));
+    m_aCurrentRequests.clear();
+#endif
+    return 0;
+}
+
 bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes )
 {
     bool bRet = false;
@@ -793,16 +929,10 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
     const FcChar8* pTargetNameUtf8 = (FcChar8*)aTargetName.getStr();
     FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
-    const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString(rPattern.meLanguage);
-    if( !aLangAttrib.isEmpty() )
-    {
-        const FcChar8* pLangAttribUtf8;
-        if (aLangAttrib.equalsIgnoreAsciiCase(OString(RTL_CONSTASCII_STRINGPARAM("pa-in"))))
-            pLangAttribUtf8 = (FcChar8*)"pa";
-        else
-            pLangAttribUtf8 = (FcChar8*)aLangAttrib.getStr();
-        FcPatternAddString(pPattern, FC_LANG, pLangAttribUtf8);
-    }
+    const LanguageTag aLangTag(rPattern.meLanguage);
+    const rtl::OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
+    if (!aLangAttrib.isEmpty())
+        FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
 
     // Add required Unicode characters, if any
     if ( !rMissingCodes.isEmpty() )
@@ -925,7 +1055,40 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
                             pRemainingCodes[ nRemainingLen++ ] = nCode;
                     }
                 }
-                rMissingCodes = OUString( pRemainingCodes, nRemainingLen );
+                OUString sStillMissing(pRemainingCodes, nRemainingLen);
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+                if (get_xid_for_dbus())
+                {
+                    if (sStillMissing == rMissingCodes) //replaced nothing
+                    {
+                        //It'd be better if we could ask packagekit using the
+                        //missing codepoints or some such rather than using
+                        //"language" as a proxy to how fontconfig considers
+                        //scripts to default to a given language.
+                        for (sal_Int32 i = 0; i < nRemainingLen; ++i)
+                        {
+                            LanguageTag aOurTag = getExemplerLangTagForCodePoint(pRemainingCodes[i]);
+                            OString sTag = OUStringToOString(aOurTag.getBcp47(), RTL_TEXTENCODING_UTF8);
+                            if (m_aPreviousLangSupportRequests.find(sTag) != m_aPreviousLangSupportRequests.end())
+                                continue;
+                            m_aPreviousLangSupportRequests.insert(sTag);
+                            sTag = mapToFontConfigLangTag(aOurTag);
+                            if (!sTag.isEmpty() && m_aPreviousLangSupportRequests.find(sTag) == m_aPreviousLangSupportRequests.end())
+                            {
+                                OString sReq = OString(":lang=") + sTag;
+                                m_aCurrentRequests.push_back(sReq);
+                                m_aPreviousLangSupportRequests.insert(sTag);
+                            }
+                        }
+                    }
+                    if (!m_aCurrentRequests.empty())
+                    {
+                        m_aFontInstallerTimer.Stop();
+                        m_aFontInstallerTimer.Start();
+                    }
+                }
+#endif
+                rMissingCodes = sStillMissing;
             }
         }
 
@@ -1040,20 +1203,10 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
     FcConfig* pConfig = FcConfigGetCurrent();
     FcPattern* pPattern = FcPatternCreate();
 
-    OString aLangAttrib;
     // populate pattern with font characteristics
-    if( !rLocale.Language.isEmpty() )
-    {
-        OUStringBuffer aLang(6);
-        aLang.append( rLocale.Language );
-        if( !rLocale.Country.isEmpty() )
-        {
-            aLang.append( sal_Unicode('-') );
-            aLang.append( rLocale.Country );
-        }
-        aLangAttrib = OUStringToOString( aLang.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
-    }
-    if( !aLangAttrib.isEmpty() )
+    const LanguageTag aLangTag(rLocale);
+    const rtl::OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
+    if (!aLangAttrib.isEmpty())
         FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
 
     OString aFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );

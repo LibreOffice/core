@@ -1,7 +1,0 @@
-mkdir: %_DEST%\inc\libcdr
-..\%__SRC%\misc\build\libcdr*\src\lib\libcdr.h %_DEST%\inc\libcdr
-..\%__SRC%\misc\build\libcdr*\src\lib\CDRDocument.h %_DEST%\inc\libcdr\
-..\%__SRC%\misc\build\libcdr*\src\lib\CDRStringVector.h %_DEST%\inc\libcdr\
-..\%__SRC%\misc\build\libcdr*\src\lib\CMXDocument.h %_DEST%\inc\libcdr\
-..\%__SRC%\lib\*.a %_DEST%\lib\*.a
-..\%__SRC%\slb\*.lib %_DEST%\lib\*.lib

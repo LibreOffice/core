@@ -45,8 +45,6 @@ typedef sal_uInt16 ChangeType;
 class SdPageDlg : public SfxTabDialog
 {
 private:
-    const SfxItemSet&   mrOutAttrs;
-
     const SfxObjectShell* mpDocShell;
 
     XColorListRef         mpColorList;

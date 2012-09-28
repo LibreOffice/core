@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -108,7 +108,7 @@ throw ( RuntimeException )
              m_xServiceManager.is() &&
              !m_aCommandURL.isEmpty() )
         {
-            xURLTransformer = com::sun::star::util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() );
+            xURLTransformer = com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) );
 
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );

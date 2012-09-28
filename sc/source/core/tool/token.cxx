@@ -1162,6 +1162,8 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             AddRangeName(aTokenData.Index, aTokenData.Global);
                         else if (eOpCode == ocDBArea)
                             AddDBRange(aTokenData.Index);
+                        else
+                            bError = true;
                     }
                     else if ( aType.equals( cppu::UnoType<sheet::ExternalReference>::get() ) )
                     {

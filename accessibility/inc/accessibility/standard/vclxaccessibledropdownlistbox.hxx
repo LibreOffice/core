@@ -40,10 +40,10 @@ public:
     VCLXAccessibleDropDownListBox (VCLXWindow* pVCLXindow);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName (void)
+    virtual OUString SAL_CALL getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
     // Return drop down list box specific services.
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 

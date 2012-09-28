@@ -2,6 +2,9 @@ The originals of these come from svn checkout
 http://source.icu-project.org/repos/icu/icu/trunk/source/data/brkitr they no
 longer appear in the icu tarballs, but are in icu's svn
 
+dict_word is used for dictionary word break, edit_word is for cursor
+travelling, while count_word is for word count.
+
 At various stages these copies have been customized and are now horribly out of
 sync. It unclear which diffs from the base versions are deliberate and which
 are now accidental :-(
@@ -13,61 +16,12 @@ latest versions.
 
 to-review, later are ok:
 
-commit 681082b57612ef325c7f695846369d44c68dda11
-Author: Caolán McNamara <caolanm@redhat.com>
-Date:   Sat Jan 29 12:51:52 2011 +0000
-
-    Resolves: fdo#31271 wrong line break with (
-
-commit 109fa8224194edfc4ca75ee5cc5e760e54d76a3f
-Author: Thomas Lange [tl] <tl@openoffice.org>
-Date:   Wed Dec 8 14:39:09 2010 +0100
-
-    cws tl84: #i89042# word count fix
-
-commit 42be5541baf18e3292a14a9d478eda33f61e10ab
-Author: Mattias Johnsson <m.t.johnsson@gmail.com>
-Date:   Thu Nov 4 23:25:02 2010 +1100
-
-    An opening quote should not be counted as a word by word count tool
-
-commit 600c6460a6ffa169ad0cc9bed4b77c545cc50f52
-Author: Thomas Lange [tl] <tl@openoffice.org>
-Date:   Tue Aug 24 16:46:29 2010 +0200
-
-    cws tl82: #i113785# ligatures for spell checking will no longer break words
-
-commit ae9d7c2cef9ecd42687d64f985b9e2dcbc68a034
-Author: Thomas Lange [tl] <tl@openoffice.org>
-Date:   Tue Apr 27 10:09:22 2010 +0200
-
-    cws tl80: #i103552# Japanese word for 'shutdown' added to ja.dic
-
-commit ffdc043d7272d2e0a664f530bbc112f952acadab
-Author: Thomas Lange [tl] <tl@openoffice.org>
-Date:   Mon Mar 15 09:22:49 2010 +0100
-
-    cws sw321bf01: #i107843# em-dash/en-dash breakiterator fix for spell checking
-
 commit e1ad946ef5db3f7c0a540207d0f0fd85799e3b66
 Author: Release Engineers <releng@openoffice.org>
 Date:   Thu Aug 6 18:13:57 2009 +0000
 
     CWS-TOOLING: integrate CWS tl73
     2009-07-31 15:29:33 +0200 tl  r274535 : #i64400# dash/hyphen should not break words
-
-commit 4e1fd2fa161708049f1c3b6039659d0bf4f4539e
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Tue Jan 6 12:54:16 2009 +0000
-
-    2008-12-03 16:14:17 +0100 erack  r264797 : #i93694# update script+language -> unicode digit mapping; patch from <hdu>
-    2008-11-25 02:01:18 +0100 erack  r264270 : #i83349# apply remaining parts of the patch, now that we use ICU 4.0; contributed by <kstribley>
-
-commit 16b796fcce6430448535e3692f624cb469380442
-Author: Release Engineers <releng@openoffice.org>
-Date:   Thu Oct 2 13:51:29 2008 +0000
-
-    #i80412#
 
 commit 9964a76ef58786bba47d409970512d7ded6c8889
 Author: Rüdiger Timm <rt@openoffice.org>
@@ -351,13 +305,6 @@ Date:   Tue Oct 24 12:53:13 2006 +0000
     INTEGRATION: CWS tl29 (1.12.24); FILE MERGED
     2006/09/20 01:24:53 khong 1.12.24.1: #i69482# fixed mismatch of nextWord and getWordBoundary
 
-commit be43820c99d96a9e03e2ec5871f6259283b53b58
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Thu May 4 08:11:17 2006 +0000
-
-    INTEGRATION: CWS locales203 (1.1.2); FILE ADDED
-    2006/04/25 22:47:02 khong 1.1.2.1: #i58513 add break iterator rules for Finish
-
 commit 97d89862a2285071202cc8010d888ffcbf96279a
 Author: Jens-Heiner Rechtien <hr@openoffice.org>
 Date:   Thu Nov 17 19:30:35 2005 +0000
@@ -430,13 +377,6 @@ Date:   Mon Oct 17 14:43:17 2005 +0000
 
     INTEGRATION: CWS i18n20 (1.1.2); FILE ADDED
     2005/09/22 23:47:49 khong 1.1.2.1: #i51661# add quotation mark as middle letter for Hebrew in word breakiterator rule.
-
-commit 268567aa88a991e055c41d9115bccce951f7e308
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Mon Oct 17 14:42:47 2005 +0000
-
-    INTEGRATION: CWS i18n20 (1.1.2); FILE ADDED
-    2005/08/26 23:33:38 khong 1.1.2.1: #i50172# add cell breakiterator rule for Tamil
 
 commit a428a8927006a10ccfe7182e6fe5a8b677281eca
 Author: Rüdiger Timm <rt@openoffice.org>
@@ -555,13 +495,6 @@ Date:   Fri May 28 15:33:02 2004 +0000
     2004/04/30 11:25:47 er 1.13.22.2: RESYNC: (1.13-1.14); FILE MERGED
     2004/04/13 11:55:32 er 1.13.22.1: #i27711# Hungarian breakiterator
 
-commit 170eb11a6d894ace40b2e4708264b0142ac4e603
-Author: Oliver Bolte <obo@openoffice.org>
-Date:   Wed Mar 17 08:02:36 2004 +0000
-
-    INTEGRATION: CWS i18n11 (1.1.124); FILE MERGED
-    2004/01/06 19:36:16 khong 1.1.124.1: #112623# update Japanese word breakiterator dictionary
-
 commit f5bc5f04e4de8fa502d498a99f4ef6a340d796c0
 Author: Oliver Bolte <obo@openoffice.org>
 Date:   Wed Mar 17 08:02:14 2004 +0000
@@ -589,6 +522,16 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
 
 done, regression tests added:
 
+#112623# update Japanese word breakiterator dictionary
+#i50172# add cell breakiterator rule for Tamil
+#i80412# indic cursoring
+#i107843# em-dash/en-dash breakiterator fix for spell checking
+#i103552# Japanese word for 'shutdown' added to ja.dic
+#i113785# ligatures for spell checking will no longer break words
+An opening quote should not be counted as a word by word count tool (regression test in in writer)
+fdo#31271 wrong line break with (
+#i89042# word count fix (regression test is in writer)
+#i58513# add break iterator rules for Finish
 #i19716# fix wrong line break on bracket characters
 #i21290# extend Greek script type
 #i21907# fix isBeginWord and isEndWord problem

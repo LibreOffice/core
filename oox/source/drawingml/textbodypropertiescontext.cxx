@@ -113,6 +113,10 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
         }
         mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= mrTextBodyProp.meVA;
     }
+
+    // Push defaults
+    mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
+    mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= drawing::TextFitToSizeType_NONE;
 }
 
 // --------------------------------------------------------------------

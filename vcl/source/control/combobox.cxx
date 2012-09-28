@@ -61,6 +61,7 @@ ComboBox::ComboBox( WindowType nType ) :
     Edit( nType )
 {
     ImplInitComboBoxData();
+    SetMaxWidthInChars(0);
 }
 
 // -----------------------------------------------------------------------
@@ -70,6 +71,7 @@ ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
 {
     ImplInitComboBoxData();
     ImplInit( pParent, nStyle );
+    SetMaxWidthInChars(0);
 }
 
 // -----------------------------------------------------------------------
@@ -83,6 +85,7 @@ ComboBox::ComboBox( Window* pParent, const ResId& rResId ) :
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
+    SetMaxWidthInChars(0);
     if ( !(nStyle & WB_HIDE ) )
         Show();
 }
@@ -94,8 +97,9 @@ ComboBox::~ComboBox()
     SetSubEdit( NULL );
     delete mpSubEdit;
 
-    delete mpImplLB;
+    ImplListBox *pImplLB = mpImplLB;
     mpImplLB = NULL;
+    delete pImplLB;
 
     delete mpFloatWin;
     delete mpBtn;
@@ -457,10 +461,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
         mbSyntheticModify = sal_True;
         Modify();
         mbSyntheticModify = sal_False;
-        if (ImplGetWindowImpl() != NULL) //liuchen 2009-7-28, resolve the problem that soffice get crashed if in ComboBox_Change event a Worksheets("SheetX").Activate sentence needs to be executed
-        {
-            Select();
-        }
+        Select();
     }
 
     return 0;
@@ -577,7 +578,7 @@ sal_uInt16 ComboBox::GetDropDownLineCount() const
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight,
+void ComboBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight,
                                 sal_uInt16 nFlags )
 {
     if( IsDropDownBox() && ( nFlags & WINDOW_POSSIZE_SIZE ) )
@@ -593,7 +594,7 @@ void ComboBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight,
             nHeight = mnDDHeight;
     }
 
-    Edit::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    Edit::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -605,7 +606,6 @@ void ComboBox::Resize()
     Size aOutSz = GetOutputSizePixel();
     if( IsDropDownBox() )
     {
-        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
         long    nTop = 0;
         long    nBottom = aOutSz.Height();
 
@@ -624,7 +624,7 @@ void ComboBox::Resize()
             aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
             aContent.Move(-aPoint.X(), -aPoint.Y());
 
-            mpBtn->SetPosSizePixel( aContent.Left(), nTop, aContent.getWidth(), (nBottom-nTop) );
+            mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.getWidth(), (nBottom-nTop) );
 
             // adjust the size of the edit field
             if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
@@ -645,15 +645,16 @@ void ComboBox::Resize()
         }
         else
         {
+            long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             nSBWidth = CalcZoom( nSBWidth );
             mpSubEdit->SetPosSizePixel( Point( 0, 0 ), Size( aOutSz.Width() - nSBWidth, aOutSz.Height() ) );
-            mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, nTop, nSBWidth, (nBottom-nTop) );
+            mpBtn->setPosSizePixel( aOutSz.Width() - nSBWidth, nTop, nSBWidth, (nBottom-nTop) );
         }
     }
     else
     {
         mpSubEdit->SetSizePixel( Size( aOutSz.Width(), mnDDHeight ) );
-        mpImplLB->SetPosSizePixel( 0, mnDDHeight, aOutSz.Width(), aOutSz.Height() - mnDDHeight );
+        mpImplLB->setPosSizePixel( 0, mnDDHeight, aOutSz.Width(), aOutSz.Height() - mnDDHeight );
         if ( GetText().Len() )
             ImplUpdateFloatSelection();
     }
@@ -1102,6 +1103,10 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
 Size ComboBox::CalcMinimumSize() const
 {
     Size aSz;
+
+    if (!mpImplLB)
+        return aSz;
+
     if ( !IsDropDownBox() )
     {
         aSz = mpImplLB->CalcSize( mpImplLB->GetEntryList()->GetEntryCount() );
@@ -1113,6 +1118,9 @@ Size ComboBox::CalcMinimumSize() const
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
         aSz.Width() += getMaxWidthScrollBarAndDownButton();
     }
+
+    aSz.Width() += ImplGetExtraOffset() * 2;
+    aSz.Width() += mpSubEdit->GetPosPixel().X();
 
     aSz = CalcWindowSize( aSz );
     return aSz;

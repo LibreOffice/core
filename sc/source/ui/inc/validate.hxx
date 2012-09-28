@@ -259,8 +259,6 @@ private:
     FixedText       aFtInputHelp;
     MultiLineEdit   aEdInputHelp;
 
-    const SfxItemSet& mrArgSet;
-
     void    Init();
 
     // Handler ------------------------
@@ -290,8 +288,6 @@ private:
     Edit            aEdtTitle;
     FixedText       aFtError;
     MultiLineEdit   aEdError;
-
-    const SfxItemSet& mrArgSet;
 
     void    Init();
 

@@ -41,7 +41,6 @@ import java.util.Date;
  *     encoder.write(new FileOutputStream("sample.pdb"));
  *  </code></pre></blockquote>
  *
- *  @author  Herbie Ong
  *  @see     PalmDB
  *  @see     Record
  */

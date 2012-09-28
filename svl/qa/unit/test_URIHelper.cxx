@@ -22,21 +22,19 @@
 
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/ucb/Command.hpp"
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
 #include "com/sun/star/ucb/IllegalIdentifierException.hpp"
+#include "com/sun/star/ucb/UniversalContentBroker.hpp"
 #include "com/sun/star/ucb/XCommandProcessor.hpp"
 #include "com/sun/star/ucb/XContent.hpp"
 #include "com/sun/star/ucb/XContentIdentifier.hpp"
 #include "com/sun/star/ucb/XContentProvider.hpp"
-#include "com/sun/star/ucb/XContentProviderManager.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "cppuhelper/bootstrap.hxx"
@@ -230,16 +228,8 @@ void Test::finish() {
 }
 
 void Test::testNormalizedMakeRelative() {
-    css::uno::Sequence< css::uno::Any > args(2);
-    args[0] <<= rtl::OUString("Local");
-    args[1] <<= rtl::OUString("Office");
-    css::uno::Reference< css::ucb::XContentProviderManager >(
-        (css::uno::Reference< css::lang::XMultiComponentFactory >(
-            m_context->getServiceManager(), css::uno::UNO_QUERY_THROW)->
-         createInstanceWithArgumentsAndContext(
-             rtl::OUString("com.sun.star.ucb.UniversalContentBroker"),
-             args, m_context)),
-        css::uno::UNO_QUERY_THROW)->registerContentProvider(
+    css::ucb::UniversalContentBroker::create(m_context)->
+        registerContentProvider(
             new Provider, rtl::OUString("test"),
             true);
     struct Data {

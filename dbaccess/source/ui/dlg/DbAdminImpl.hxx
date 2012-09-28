@@ -21,10 +21,9 @@
 #define _DBAUI_DBADMINIMPL_HXX_
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <comphelper/stl_types.hxx>
@@ -60,10 +59,8 @@ namespace dbaui
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                             m_xORB;                 /// service factory
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
                                 m_xDatabaseContext;     /// database context we're working in
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService >
-                                m_xDynamicContext;      /// just another interface of the context ...
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDatasource;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         m_xModel;
 
@@ -97,8 +94,7 @@ namespace dbaui
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getDatabaseContext() const { return m_xDatabaseContext; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService > getDynamicContext() const { return m_xDynamicContext; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext > getDatabaseContext() const { return m_xDatabaseContext; }
 
         /** creates a new connection. The caller is responsible to dispose it !!!!
         */

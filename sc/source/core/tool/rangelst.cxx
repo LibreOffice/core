@@ -48,7 +48,7 @@ using ::formula::FormulaGrammar;
 namespace {
 
 template<typename T>
-class FindEnclosingRange : public ::std::unary_function<bool, ScRange*>
+class FindEnclosingRange : public ::std::unary_function<ScRange*, bool>
 {
 public:
     FindEnclosingRange(const T& rTest) : mrTest(rTest) {}
@@ -62,7 +62,21 @@ private:
 };
 
 template<typename T>
-class FindIntersectingRange : public ::std::unary_function<bool, ScRange*>
+class FindRangeIn : public ::std::unary_function<ScRange*, bool>
+{
+public:
+    FindRangeIn(const T& rTest) : mrTest(rTest) {}
+    FindRangeIn(const FindRangeIn& r) : mrTest(r.mrTest) {}
+    bool operator() (const ScRange* pRange) const
+    {
+        return mrTest.In(*pRange);
+    }
+private:
+    const T& mrTest;
+};
+
+template<typename T>
+class FindIntersectingRange : public ::std::unary_function<ScRange*, bool>
 {
 public:
     FindIntersectingRange(const T& rTest) : mrTest(rTest) {}
@@ -75,7 +89,7 @@ private:
     const T& mrTest;
 };
 
-class AppendToList : public ::std::unary_function<void, const ScRange*>
+class AppendToList : public ::std::unary_function<const ScRange*, void>
 {
 public:
     AppendToList(vector<ScRange*>& rRanges) : mrRanges(rRanges) {}
@@ -88,7 +102,7 @@ private:
     vector<ScRange*>& mrRanges;
 };
 
-class CountCells : public ::std::unary_function<void, const ScRange*>
+class CountCells : public ::std::unary_function<const ScRange*, void>
 {
 public:
     CountCells() : mnCellCount(0) {}
@@ -108,7 +122,7 @@ private:
     size_t mnCellCount;
 };
 
-class FormatString : public ::std::unary_function<void, const ScRange*>
+class FormatString : public ::std::unary_function<const ScRange*, void>
 {
 public:
     FormatString(String& rStr, sal_uInt16 nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
@@ -146,15 +160,15 @@ private:
     bool mbFirst;
 };
 
-class FindDeletedRange : public ::std::unary_function<bool, const ScRange*>
+class FindDeletedRange : public ::std::unary_function<const ScRange*, bool>
 {
 public:
     FindDeletedRange( SCsCOL nDx, SCsROW nDy): mnDx(nDx), mnDy(nDy) {}
     FindDeletedRange( const FindDeletedRange& r) : mnDx(r.mnDx), mnDy(r.mnDy) {}
     bool operator() (const ScRange* p)
     {
-        ScAddress rStart = p->aStart;
-        ScAddress rEnd = p->aEnd;
+        const ScAddress& rStart = p->aStart;
+        const ScAddress& rEnd = p->aEnd;
 
         if( rEnd.Col() +mnDx < rStart.Col() )
             return true;
@@ -403,15 +417,27 @@ bool ScRangeList::UpdateReference(
     SCTAB nTab2;
     rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
-    // delete all entries that are fully deleted
-    if( eUpdateRefMode == URM_INSDEL && (nDx < 0 || nDy < 0) )
+    if(eUpdateRefMode == URM_INSDEL)
     {
-        vector<ScRange*>::iterator itr = std::remove_if(maRanges.begin(), maRanges.end(), FindDeletedRange(nDx, nDy));
-        for_each(itr, maRanges.end(), ScDeleteObjectByPtr<ScRange>());
-        maRanges.erase(itr, maRanges.end());
+        // right now this only works for nTab1 == nTab2
+        if(nTab1 == nTab2)
+        {
+            if(nDx < 0)
+            {
+                DeleteArea(nCol1+nDx, nRow1, nTab1, nCol1-1, nRow2, nTab2);
+            }
+            if(nDy < 0)
+            {
+                DeleteArea(nCol1, nRow1+nDy, nTab1, nCol2, nRow1-1, nTab2);
+            }
+            SAL_WARN_IF(nDx < 0 && nDy < 0, "sc", "nDx and nDy are negative, check why");
+        }
     }
 
-    vector<ScRange*>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    if(maRanges.empty())
+        return true;
+
+    iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
     {
         ScRange* pR = *itr;
@@ -433,19 +459,542 @@ bool ScRangeList::UpdateReference(
             pR->aEnd.Set( theCol2, theRow2, theTab2 );
         }
     }
+
+    if(eUpdateRefMode == URM_INSDEL)
+    {
+        if( nDx < 0 || nDy < 0 )
+        {
+            size_t n = maRanges.size();
+            for(size_t i = n-1; i > 0; --i)
+                Join(*maRanges[i], true);
+        }
+    }
+
     return bChanged;
+}
+
+namespace {
+
+/**
+ * Check if the deleting range cuts the test range exactly into a single
+ * piece.
+ *
+ * X = column ; Y = row
+ * +------+    +------+
+ * |xxxxxx|    |      |
+ * +------+ or +------+
+ * |      |    |xxxxxx|
+ * +------+    +------+
+ *
+ * X = row; Y = column
+ * +--+--+    +--+--+
+ * |xx|  |    |  |xx|
+ * |xx|  | or |  |xx|
+ * |xx|  |    |  |xx|
+ * +--+--+    +--+--+
+ * where xxx is the deleted region.
+ */
+template<typename X, typename Y>
+bool checkForOneRange(
+   X nDeleteX1, X nDeleteX2, Y nDeleteY1, Y nDeleteY2, X nX1, X nX2, Y nY1, Y nY2)
+{
+    if (nDeleteX1 <= nX1 && nX2 <= nDeleteX2 && (nDeleteY1 <= nY1 || nY2 <= nDeleteY2))
+        return true;
+
+    return false;
+}
+
+bool handleOneRange( const ScRange& rDeleteRange, ScRange* p )
+{
+    const ScAddress& rDelStart = rDeleteRange.aStart;
+    const ScAddress& rDelEnd = rDeleteRange.aEnd;
+    ScAddress aPStart = p->aStart;
+    ScAddress aPEnd = p->aEnd;
+    SCCOL nDeleteCol1 = rDelStart.Col();
+    SCCOL nDeleteCol2 = rDelEnd.Col();
+    SCROW nDeleteRow1 = rDelStart.Row();
+    SCROW nDeleteRow2 = rDelEnd.Row();
+    SCCOL nCol1 = aPStart.Col();
+    SCCOL nCol2 = aPEnd.Col();
+    SCROW nRow1 = aPStart.Row();
+    SCROW nRow2 = aPEnd.Row();
+
+    if (checkForOneRange(nDeleteCol1, nDeleteCol2, nDeleteRow1, nDeleteRow2, nCol1, nCol2, nRow1, nRow2))
+    {
+        // Deleting range fully overlaps the column range.  Adjust the row span.
+        if (nDeleteRow1 <= nRow1)
+        {
+            // +------+
+            // |xxxxxx|
+            // +------+
+            // |      |
+            // +------+ (xxx) = deleted region
+
+            p->aStart.SetRow(nDeleteRow1+1);
+            return true;
+        }
+        else if (nRow2 <= nDeleteRow2)
+        {
+            // +------+
+            // |      |
+            // +------+
+            // |xxxxxx|
+            // +------+ (xxx) = deleted region
+
+            p->aEnd.SetRow(nDeleteRow1-1);
+            return true;
+        }
+    }
+    else if (checkForOneRange(nDeleteRow1, nDeleteRow2, nDeleteCol1, nDeleteCol2, nRow1, nRow2, nCol1, nCol2))
+    {
+        // Deleting range fully overlaps the row range.  Adjust the column span.
+        if (nDeleteCol1 <= nCol1)
+        {
+            // +--+--+
+            // |xx|  |
+            // |xx|  |
+            // |xx|  |
+            // +--+--+ (xxx) = deleted region
+
+            p->aStart.SetCol(nDeleteCol2+1);
+            return true;
+        }
+        else if (nCol2 <= nDeleteCol2)
+        {
+            // +--+--+
+            // |  |xx|
+            // |  |xx|
+            // |  |xx|
+            // +--+--+ (xxx) = deleted region
+
+            p->aEnd.SetCol(nDeleteCol1-1);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Check if the deleting range cuts the test range in the middle, to
+ * separate it into exactly two pieces.
+ *
+ * Either
+ * +--------+    +--+-+--+
+ * |        |    |  |x|  |
+ * +--------+    |  |x|  |
+ * |xxxxxxxx| or |  |x|  |
+ * +--------+    |  |x|  |
+ * |        |    |  |x|  |
+ * +--------+    +--+-+--+
+ * where xxx is the deleted region.
+ */
+template<typename X, typename Y>
+bool checkForTwoRangesCase2(
+   X nDeleteX1, X nDeleteX2, Y nDeleteY1, Y nDeleteY2, X nX1, X nX2, Y nY1, Y nY2)
+{
+    if (nY1 < nDeleteY1 && nDeleteY2 < nY2 && nDeleteX1 <= nX1 && nX2 <= nDeleteX2)
+        return true;
+
+    return false;
+}
+
+bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRange>& rNewRanges )
+{
+    const ScAddress& rDelStart = rDeleteRange.aStart;
+    const ScAddress& rDelEnd = rDeleteRange.aEnd;
+    ScAddress aPStart = p->aStart;
+    ScAddress aPEnd = p->aEnd;
+    SCCOL nDeleteCol1 = rDelStart.Col();
+    SCCOL nDeleteCol2 = rDelEnd.Col();
+    SCROW nDeleteRow1 = rDelStart.Row();
+    SCROW nDeleteRow2 = rDelEnd.Row();
+    SCCOL nCol1 = aPStart.Col();
+    SCCOL nCol2 = aPEnd.Col();
+    SCROW nRow1 = aPStart.Row();
+    SCROW nRow2 = aPEnd.Row();
+    SCTAB nTab = aPStart.Tab();
+
+    if (nCol1 < nDeleteCol1 && nDeleteCol1 <= nCol2 && nCol2 <= nDeleteCol2)
+    {
+        // column deleted :     |-------|
+        // column original: |-------|
+        if (nRow1 < nDeleteRow1 && nDeleteRow1 <= nRow2 && nRow2 <= nDeleteRow2)
+        {
+            // row deleted:     |------|
+            // row original: |------|
+            //
+            // +-------+
+            // |   1   |
+            // +---+---+---+
+            // | 2 |xxxxxxx|
+            // +---+xxxxxxx|
+            //     |xxxxxxx|
+            //     +-------+ (xxx) deleted region
+
+            ScRange aNewRange( nCol1, nDeleteRow1, nTab, nDeleteCol1-1, nRow2, nTab ); // 2
+            rNewRanges.push_back(aNewRange);
+
+            p->aEnd.SetRow(nDeleteRow1-1); // 1
+            return true;
+        }
+        else if (nRow1 <= nDeleteRow2 && nDeleteRow2 < nRow2 && nDeleteRow1 <= nRow1)
+        {
+            // row deleted:  |------|
+            // row original:    |------|
+            //
+            //     +-------+
+            //     |xxxxxxx|
+            // +---+xxxxxxx|
+            // | 1 |xxxxxxx|
+            // +---+---+---+
+            // |   2   |    (xxx) deleted region
+            // +-------+
+
+            ScRange aNewRange( aPStart, ScAddress(nDeleteCol1-1, nRow2, nTab) ); // 1
+            rNewRanges.push_back(aNewRange);
+
+            p->aStart.SetRow(nDeleteRow2+1); // 2
+            return true;
+        }
+    }
+    else if (nCol1 <= nDeleteCol2 && nDeleteCol2 < nCol2 && nDeleteCol1 <= nCol1)
+    {
+        // column deleted : |-------|
+        // column original:     |-------|
+        if (nRow1 < nDeleteRow1 && nDeleteRow1 <= nRow2 && nRow2 <= nDeleteRow2)
+        {
+            // row deleted:     |------|
+            // row original: |------|
+            //
+            //     +-------+
+            //     |   1   |
+            // +-------+---+
+            // |xxxxxxx| 2 |
+            // |xxxxxxx+---+
+            // |xxxxxxx|
+            // +-------+
+            //  (xxx) deleted region
+
+            ScRange aNewRange( ScAddress( nDeleteCol2+1, nDeleteRow1, nTab ), aPEnd ); // 2
+            rNewRanges.push_back(aNewRange);
+
+            p->aEnd.SetRow(nDeleteRow1-1); // 1
+            return true;
+        }
+        else if (nRow1 <= nDeleteRow2 && nDeleteRow2 < nRow2 && nDeleteRow1 <= nRow1)
+        {
+            // row deleted:  |-------|
+            // row original:     |--------|
+            //
+            // +-------+
+            // |xxxxxxx|
+            // |xxxxxxx+---+
+            // |xxxxxxx| 1 |
+            // +-------+---+
+            //     |   2   |
+            //     +-------+ (xxx) deleted region
+
+            ScRange aNewRange(nDeleteCol2+1, nRow1, nTab, nCol2, nDeleteRow2, nTab); // 1
+            rNewRanges.push_back(aNewRange);
+
+            p->aStart.SetRow(nDeleteRow2+1); // 2
+            return true;
+        }
+    }
+    else if (nRow1 < nDeleteRow1 && nDeleteRow2 < nRow2 && nDeleteCol1 <= nCol1 && nCol2 <= nDeleteCol2)
+    {
+        // +--------+
+        // |   1    |
+        // +--------+
+        // |xxxxxxxx| (xxx) deleted region
+        // +--------+
+        // |   2    |
+        // +--------+
+
+        ScRange aNewRange( aPStart, ScAddress(nCol2, nDeleteRow1-1, nTab) ); // 1
+        rNewRanges.push_back(aNewRange);
+
+        p->aStart.SetRow(nDeleteRow2+1); // 2
+        return true;
+    }
+    else if (nCol1 < nDeleteCol1 && nDeleteCol2 < nCol2 && nDeleteRow1 <= nRow1 && nRow2 <= nDeleteRow2)
+    {
+        // +---+-+---+
+        // |   |x|   |
+        // |   |x|   |
+        // | 1 |x| 2 | (xxx) deleted region
+        // |   |x|   |
+        // |   |x|   |
+        // +---+-+---+
+
+        ScRange aNewRange( aPStart, ScAddress(nDeleteCol1-1, nRow2, nTab) ); // 1
+        rNewRanges.push_back(aNewRange);
+
+        p->aStart.SetCol(nDeleteCol2+1); // 2
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Check if any of the followings applies:
+ *
+ * X = column; Y = row
+ * +----------+           +----------+
+ * |          |           |          |
+ * |  +-------+---+    +--+-------+  |
+ * |  |xxxxxxxxxxx| or |xxxxxxxxxx|  |
+ * |  +-------+---+    +--+-------+  |
+ * |          |           |          |
+ * +----------+           +----------+
+ *
+ * X = row; Y = column
+ *     +--+
+ *     |xx|
+ * +---+xx+---+    +----------+
+ * |   |xx|   |    |          |
+ * |   |xx|   | or |   +--+   |
+ * |   +--+   |    |   |xx|   |
+ * |          |    |   |xx|   |
+ * +----------+    +---+xx+---+
+ *                     |xx|
+ *                     +--+     (xxx) deleted region
+ */
+template<typename X, typename Y>
+bool checkForThreeRanges(
+   X nDeleteX1, X nDeleteX2, Y nDeleteY1, Y nDeleteY2, X nX1, X nX2, Y nY1, Y nY2)
+{
+    if (nX1 <= nDeleteX1 && nX2 <= nDeleteX2 && nY1 < nDeleteY1 && nDeleteY2 < nY2)
+        return true;
+
+    if (nDeleteX1 <= nX1 && nDeleteX2 <= nX2 && nY1 < nDeleteY1 && nDeleteY2 < nY2)
+        return true;
+
+    return false;
+}
+
+bool handleThreeRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRange>& rNewRanges )
+{
+    const ScAddress& rDelStart = rDeleteRange.aStart;
+    const ScAddress& rDelEnd = rDeleteRange.aEnd;
+    ScAddress aPStart = p->aStart;
+    ScAddress aPEnd = p->aEnd;
+    SCCOL nDeleteCol1 = rDelStart.Col();
+    SCCOL nDeleteCol2 = rDelEnd.Col();
+    SCROW nDeleteRow1 = rDelStart.Row();
+    SCROW nDeleteRow2 = rDelEnd.Row();
+    SCCOL nCol1 = aPStart.Col();
+    SCCOL nCol2 = aPEnd.Col();
+    SCROW nRow1 = aPStart.Row();
+    SCROW nRow2 = aPEnd.Row();
+    SCTAB nTab = aPStart.Tab();
+
+    if (checkForThreeRanges(nDeleteCol1, nDeleteCol2, nDeleteRow1, nDeleteRow2, nCol1, nCol2, nRow1, nRow2))
+    {
+        if (nCol1 < nDeleteCol1)
+        {
+            // +---+------+
+            // |   |  2   |
+            // |   +------+---+
+            // | 1 |xxxxxxxxxx|
+            // |   +------+---+
+            // |   |  3   |
+            // +---+------+
+
+            ScRange aNewRange(nDeleteCol1, nRow1, nTab, nCol2, nDeleteRow1-1, nTab); // 2
+            rNewRanges.push_back(aNewRange);
+
+            aNewRange = ScRange(ScAddress(nDeleteCol1, nDeleteRow2+1, nTab), aPEnd); // 3
+            rNewRanges.push_back(aNewRange);
+
+            p->aEnd.SetCol(nDeleteCol1-1); // 1
+        }
+        else
+        {
+            //     +------+---+
+            //     |  1   |   |
+            // +---+------+   |
+            // |xxxxxxxxxx| 2 |
+            // +---+------+   |
+            //     |  3   |   |
+            //     +------+---+
+
+            ScRange aNewRange(aPStart, ScAddress(nDeleteCol2, nDeleteRow1-1, nTab)); // 1
+            rNewRanges.push_back(aNewRange);
+
+            aNewRange = ScRange(nCol1, nDeleteRow2+1, nTab, nDeleteCol2, nRow2, nTab); // 3
+            rNewRanges.push_back(aNewRange);
+
+            p->aStart.SetCol(nDeleteCol2+1); // 2
+        }
+        return true;
+    }
+    else if (checkForThreeRanges(nDeleteRow1, nDeleteRow2, nDeleteCol1, nDeleteCol2, nRow1, nRow2, nCol1, nCol2))
+    {
+        if (nRow1 < nDeleteRow1)
+        {
+            // +----------+
+            // |    1     |
+            // +---+--+---+
+            // |   |xx|   |
+            // | 2 |xx| 3 |
+            // |   |xx|   |
+            // +---+xx+---+
+            //     |xx|
+            //     +--+
+
+            ScRange aNewRange(nCol1, nDeleteRow1, nTab, nDeleteCol1-1, nRow2, nTab); // 2
+            rNewRanges.push_back( aNewRange );
+
+            aNewRange = ScRange(ScAddress(nDeleteCol2+1, nDeleteRow1, nTab), aPEnd); // 3
+            rNewRanges.push_back( aNewRange );
+
+            p->aEnd.SetRow(nDeleteRow1-1); // 1
+        }
+        else
+        {
+            //     +--+
+            //     |xx|
+            // +---+xx+---+
+            // | 1 |xx| 2 |
+            // |   |xx|   |
+            // +---+--+---+
+            // |    3     |
+            // +----------+
+
+            ScRange aNewRange(aPStart, ScAddress(nDeleteCol1-1, nDeleteRow2, nTab)); // 1
+            rNewRanges.push_back(aNewRange);
+
+            aNewRange = ScRange(nDeleteCol2+1, nRow1, nTab, nCol2, nDeleteRow2, nTab); // 2
+            rNewRanges.push_back( aNewRange );
+
+            p->aStart.SetRow(nDeleteRow2+1); // 3
+        }
+        return true;
+    }
+
+    return false;
+}
+
+bool handleFourRanges( const ScRange& rDelRange, ScRange* p, std::vector<ScRange>& rNewRanges )
+{
+    const ScAddress& rDelStart = rDelRange.aStart;
+    const ScAddress& rDelEnd = rDelRange.aEnd;
+    ScAddress aPStart = p->aStart;
+    ScAddress aPEnd = p->aEnd;
+    SCCOL nDeleteCol1 = rDelStart.Col();
+    SCCOL nDeleteCol2 = rDelEnd.Col();
+    SCROW nDeleteRow1 = rDelStart.Row();
+    SCROW nDeleteRow2 = rDelEnd.Row();
+    SCCOL nCol1 = aPStart.Col();
+    SCCOL nCol2 = aPEnd.Col();
+    SCROW nRow1 = aPStart.Row();
+    SCROW nRow2 = aPEnd.Row();
+    SCTAB nTab = aPStart.Tab();
+
+    if (nCol1 < nDeleteCol1 && nDeleteCol2 < nCol2 && nRow1 < nDeleteRow1 && nDeleteRow2 < nRow2)
+    {
+        // +---------------+
+        // |       1       |
+        // +---+-------+---+
+        // |   |xxxxxxx|   |
+        // | 2 |xxxxxxx| 3 |
+        // |   |xxxxxxx|   |
+        // +---+-------+---+
+        // |       4       |
+        // +---------------+
+
+        ScRange aNewRange(ScAddress(nCol1, nDeleteRow2+1, nTab), aPEnd); // 4
+        rNewRanges.push_back( aNewRange );
+
+        aNewRange = ScRange(nCol1, nDeleteRow1, nTab, nDeleteCol1-1, nDeleteRow2, nTab); // 2
+        rNewRanges.push_back( aNewRange );
+
+        aNewRange = ScRange(nDeleteCol2+1, nDeleteRow1, nTab, nCol2, nDeleteRow2, nTab); // 3
+        rNewRanges.push_back( aNewRange );
+
+        p->aEnd.SetRow(nDeleteRow1-1); // 1
+
+        return true;
+    }
+
+    return false;
+}
+
+}
+
+void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
+{
+    ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+    for(size_t i = 0; i < maRanges.size();)
+    {
+        if(FindRangeIn< ScRange >(aRange)(maRanges[i]))
+        {
+            ScRange* pRange = Remove(i);
+            delete pRange;
+        }
+        else
+            ++i;
+    }
+
+    std::vector<ScRange> aNewRanges;
+
+    for(iterator itr = maRanges.begin(); itr != maRanges.end(); ++itr)
+    {
+        // we have two basic cases here:
+        // 1. Delete area and pRange intersect
+        // 2. Delete area and pRange are not intersecting
+        // checking for 2 and if true skip this range
+        if(!(*itr)->Intersects(aRange))
+            continue;
+
+        // We get between 1 and 4 ranges from the difference of the first with the second
+
+        // X either Col or Row and Y then the opposite
+        // r = deleteRange, p = entry from ScRangeList
+
+        // getting exactly one range is the simple case
+        // r.aStart.X() <= p.aStart.X() && r.aEnd.X() >= p.aEnd.X()
+        // && ( r.aStart.Y() <= p.aStart.Y() || r.aEnd.Y() >= r.aEnd.Y() )
+        if(handleOneRange( aRange, *itr ))
+            continue;
+
+        // getting two ranges
+        // r.aStart.X()
+        else if(handleTwoRanges( aRange, *itr, aNewRanges ))
+            continue;
+
+        // getting 3 ranges
+        // r.aStart.X() > p.aStart.X() && r.aEnd.X() >= p.aEnd.X()
+        // && r.aStart.Y() > p.aStart.Y() && r.aEnd.Y() < p.aEnd.Y()
+        // or
+        // r.aStart.X() <= p.aStart.X() && r.aEnd.X() < p.aEnd.X()
+        // && r.aStart.Y() > p.aStart.Y() && r.aEnd.Y() < p.aEnd.Y()
+        else if(handleThreeRanges( aRange, *itr, aNewRanges ))
+            continue;
+
+        // getting 4 ranges
+        // r.aStart.X() > p.aStart.X() && r.aEnd().X() < p.aEnd.X()
+        // && r.aStart.Y() > p.aStart.Y() && r.aEnd().Y() < p.aEnd.Y()
+        else if(handleFourRanges( aRange, *itr, aNewRanges ))
+            continue;
+    }
+    for(vector<ScRange>::iterator itr = aNewRanges.begin(); itr != aNewRanges.end(); ++itr)
+        Join( *itr, false);
 }
 
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
-    vector<ScRange*>::const_iterator itr = find_if(
+    const_iterator itr = find_if(
         maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
     return itr == maRanges.end() ? NULL : *itr;
 }
 
 ScRange* ScRangeList::Find( const ScAddress& rAdr )
 {
-    vector<ScRange*>::iterator itr = find_if(
+    iterator itr = find_if(
         maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
     return itr == maRanges.end() ? NULL : *itr;
 }
@@ -481,16 +1030,16 @@ void ScRangeList::Append( const ScRange& rRange )
 
 bool ScRangeList::Intersects( const ScRange& rRange ) const
 {
-    vector<ScRange*>::const_iterator itrEnd = maRanges.end();
-    vector<ScRange*>::const_iterator itr =
+    const_iterator itrEnd = maRanges.end();
+    const_iterator itr =
         find_if(maRanges.begin(), itrEnd, FindIntersectingRange<ScRange>(rRange));
     return itr != itrEnd;
 }
 
 bool ScRangeList::In( const ScRange& rRange ) const
 {
-    vector<ScRange*>::const_iterator itrEnd = maRanges.end();
-    vector<ScRange*>::const_iterator itr =
+    const_iterator itrEnd = maRanges.end();
+    const_iterator itr =
         find_if(maRanges.begin(), itrEnd, FindEnclosingRange<ScRange>(rRange));
     return itr != itrEnd;
 }
@@ -508,7 +1057,7 @@ ScRange* ScRangeList::Remove(size_t nPos)
         // Out-of-bound condition.  Bail out.
         return NULL;
 
-    vector<ScRange*>::iterator itr = maRanges.begin();
+    iterator itr = maRanges.begin();
     advance(itr, nPos);
     ScRange* p = *itr;
     maRanges.erase(itr);
@@ -526,7 +1075,7 @@ ScRange ScRangeList::Combine() const
     if (maRanges.empty())
         return ScRange();
 
-    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     ScRange aRet = **itr;
     ++itr;
     for (; itr != itrEnd; ++itr)

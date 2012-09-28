@@ -30,6 +30,7 @@ $(eval $(call gb_Package_Package,i18npool_inc,$(SRCDIR)/i18npool/inc))
 
 $(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/i18npooldllapi.h,i18npool/i18npooldllapi.h))
 $(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/lang.h,i18npool/lang.h))
+$(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/languagetag.hxx,i18npool/languagetag.hxx))
 $(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/mslangid.hxx,i18npool/mslangid.hxx))
 
 # vim: set noet sw=4 ts=4:

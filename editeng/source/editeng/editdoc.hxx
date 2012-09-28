@@ -534,7 +534,7 @@ public:
     sal_uInt16          GetLen() const                  { return nEnd - nStart; }
 
     sal_uInt16          GetStartPosX() const            { return nStartPosX; }
-    void            SetStartPosX( sal_uInt16 start )    { nStartPosX = start; }
+    void            SetStartPosX( long start )      { if (start > 0) nStartPosX = start; else nStartPosX = 0; }
 
     Size            CalcTextSize( ParaPortion& rParaPortion );
 

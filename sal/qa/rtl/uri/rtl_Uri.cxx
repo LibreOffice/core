@@ -28,64 +28,25 @@
 
 
 #include <stdlib.h>
-#include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
 #include <osl/thread.h>
 #include <osl/file.hxx>
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 // -----------------------------------------------------------------------------
 
 namespace Stringtest
 {
-    rtl::OString toHex(unsigned char _c)
-    {
-        rtl::OStringBuffer sStrBuf;
-        static char cHex[] = "0123456789ABCDEF";
-
-        int nhigh = int(_c) >> 4 & 0xf;
-        int nlow  = int(_c) & 0xf;
-        sStrBuf.append( cHex[nhigh] );
-        sStrBuf.append( cHex[nlow] );
-        return sStrBuf.makeStringAndClear();
-    }
-
-    rtl::OString escapeString(rtl::OString const& _sStr)
-    {
-        rtl::OStringBuffer sStrBuf;
-        sal_Int32 nLength = _sStr.getLength();
-        for(int i=0;i<nLength;++i)
-        {
-            unsigned char c = (unsigned char)_sStr[i];
-            if (c > 127)
-            {
-                sStrBuf.append("%");
-                sStrBuf.append(toHex(c));
-            }
-            else
-            {
-                sStrBuf.append((char)c);
-            }
-        }
-        return sStrBuf.makeStringAndClear();
-    }
-
     // -----------------------------------------------------------------------------
 
     class Convert : public CppUnit::TestFixture
     {
         rtl::OUString m_aStr;
     public:
-        /*
-          rtl::OString toUTF8(rtl::OUString const& _suStr)
-            {
-                rtl::OString sStrAsUTF8 = rtl::OUStringToOString(_suStr, RTL_TEXTENCODING_UTF8);
-                t_print("%s\n", escapeString(sStrAsUTF8).getStr());
-                return sStrAsUTF8;
-            }
-        */
         rtl::OUString fromUTF8(rtl::OString const& _suStr)
             {
                 rtl::OUString suStr = rtl::OStringToOUString(_suStr, RTL_TEXTENCODING_UTF8);
@@ -100,7 +61,7 @@ namespace Stringtest
         void showContent(rtl::OUString const& _suStr)
             {
                 rtl::OString sStr = convertToOString(_suStr);
-                t_print("%s\n", sStr.getStr());
+                printf("%s\n", sStr.getStr());
             }
 
         void toUTF8_mech(rtl::OUString const& _suStr, rtl_UriEncodeMechanism _eMechanism)
@@ -126,15 +87,15 @@ namespace Stringtest
 
         void toUTF8(rtl::OUString const& _suStr)
             {
-                t_print("rtl_UriEncodeIgnoreEscapes \n");
+                printf("rtl_UriEncodeIgnoreEscapes \n");
                 toUTF8_mech(_suStr, rtl_UriEncodeIgnoreEscapes);
-                t_print("\n");
-                t_print("# rtl_UriEncodeKeepEscapes\n");
+                printf("\n");
+                printf("# rtl_UriEncodeKeepEscapes\n");
                 toUTF8_mech(_suStr, rtl_UriEncodeKeepEscapes);
-                t_print("\n");
-                t_print("# rtl_UriEncodeCheckEscapes\n");
+                printf("\n");
+                printf("# rtl_UriEncodeCheckEscapes\n");
                 toUTF8_mech(_suStr, rtl_UriEncodeCheckEscapes);
-                t_print("\n");
+                printf("\n");
             }
 
         void test_FromUTF8_001()
@@ -148,7 +109,7 @@ namespace Stringtest
                 showContent(suStr_UriDecodeToIuri);
 
                 // string --> ustring
-                rtl::OString sStr("h\xE4llo");
+                rtl::OString sStr("h\xE4llo", strlen("h\xE4llo"));
                 rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
 
                 CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suString.equals(suStr_UriDecodeToIuri) == sal_True);
@@ -244,7 +205,7 @@ namespace Stringtest
 
                             rtl::OUString suStrUTF8 = rtl::Uri::encode(suFilename, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
                             rtl::OString sStrUTF8 = convertToOString(suStrUTF8);
-                            t_print("Type: '%s' file name '%s'\n", sType.getStr(), sStrUTF8.getStr());
+                            printf("Type: '%s' file name '%s'\n", sType.getStr(), sStrUTF8.getStr());
                         }
                     }
                     aDir.close();
@@ -253,7 +214,7 @@ namespace Stringtest
                 {
                     rtl::OString sStr;
                     sStr = rtl::OUStringToOString(suDirURL, osl_getThreadTextEncoding());
-                    t_print("can't open dir:'%s'\n", sStr.getStr());
+                    printf("can't open dir:'%s'\n", sStr.getStr());
                 }
             }
 
@@ -289,10 +250,10 @@ namespace Stringtest
 }
 
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Stringtest::Convert, "Stringtest" );
+CPPUNIT_TEST_SUITE_REGISTRATION( Stringtest::Convert );
 
 // LLA: doku anpassen!!!
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

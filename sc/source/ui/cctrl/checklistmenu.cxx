@@ -91,8 +91,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sa
     mnSelectedMenu(MENU_NOT_SELECTED),
     mnClickedMenu(MENU_NOT_SELECTED),
     mpDoc(pDoc),
-    mpParentMenu(dynamic_cast<ScMenuFloatingWindow*>(pParent)),
-    mpActiveSubMenu(NULL)
+    mpParentMenu(dynamic_cast<ScMenuFloatingWindow*>(pParent))
 {
     SetMenuStackLevel(nMenuStackLevel);
 
@@ -282,7 +281,7 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         Reference<XAccessible> xAccParent = mpParentMenu ?
             mpParentMenu->GetAccessible() : GetAccessibleParentWindow()->GetAccessible();
 
-        mxAccessible.set(new ScAccessibleFilterMenu(xAccParent, this, maName, 999, getDoc()));
+        mxAccessible.set(new ScAccessibleFilterMenu(xAccParent, this, maName, 999));
         ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(
             mxAccessible.get());
 
@@ -1255,7 +1254,7 @@ Reference<XAccessible> ScCheckListMenuWindow::CreateAccessible()
     if (!mxAccessible.is())
     {
         mxAccessible.set(new ScAccessibleFilterTopWindow(
-            GetAccessibleParentWindow()->GetAccessible(), this, getName(), getDoc()));
+            GetAccessibleParentWindow()->GetAccessible(), this, getName()));
         ScAccessibleFilterTopWindow* pAccTop = static_cast<ScAccessibleFilterTopWindow*>(mxAccessible.get());
         fillMenuItemsToAccessible(pAccTop);
 

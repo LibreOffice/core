@@ -18,7 +18,6 @@
 
 package mod._scripting;
 
-import java.net.URLEncoder;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -26,7 +25,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-import util.utils;
 import util.SOfficeFactory;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -37,9 +35,6 @@ import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XDesktop;
-
-
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 
@@ -58,7 +53,7 @@ public class Dispatch extends TestCase {
         URL dispatchURL = null;
         try {
 
-            XMultiServiceFactory xMSF = tParam.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
             SOfficeFactory SOF = null;
             SOF = SOfficeFactory.getFactory( xMSF );
             String docPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
@@ -70,7 +65,7 @@ public class Dispatch extends TestCase {
 
             XURLTransformer xParser=(XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-                    tParam.getMSF().createInstance
+                    ((XMultiServiceFactory)tParam.getMSF()).createInstance
                         ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.

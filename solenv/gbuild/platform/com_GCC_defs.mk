@@ -52,10 +52,18 @@ endif
 
 gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 
+gb_CPPU_ENV := gcc3
+
 gb_COMPILERDEFS := \
 	-D$(COM) \
-	-DCPPU_ENV=gcc3 \
+	-DCPPU_ENV=$(gb_CPPU_ENV) \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
+
+ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)
+gb_COMPILERDEFS += \
+    -DHAVE_GCC_BUILTIN_ATOMIC \
+
+endif
 
 gb_CFLAGS_COMMON := \
 	-Wall \
@@ -72,6 +80,13 @@ gb_CXXFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
+
+ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
+gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE -fvisibility=hidden
+ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
+gb_CXXFLAGS_COMMON += -fvisibility-inlines-hidden
+endif
+endif
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
@@ -146,7 +161,7 @@ else
 gb_Helper_LIBRARY_PATH_VAR := LD_LIBRARY_PATH
 endif
 
-gb_Helper_set_ld_path := $(gb_Helper_LIBRARY_PATH_VAR)="$(OUTDIR_FOR_BUILD)/lib"
+gb_Helper_set_ld_path := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}"$(OUTDIR_FOR_BUILD)/lib"
 
 # $(1): list of directory pathnames to append at the end of the ld path
 define gb_Helper_extend_ld_path

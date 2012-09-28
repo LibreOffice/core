@@ -88,7 +88,6 @@ private:
     std::vector<SCCOLROW>  nFieldArr;
     sal_uInt16          nFieldCount;
     sal_uInt16          nSortKeyCount;
-    sal_uInt16          nCurrentOffset;
 
     SCCOL               nFirstCol;
     SCROW               nFirstRow;

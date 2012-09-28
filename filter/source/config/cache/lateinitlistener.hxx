@@ -52,10 +52,6 @@ class LateInitListener : public BaseLock // must be the first one to guarantee r
 
     private:
 
-        /** @short  reference to an uno service manager, which can be used
-                    to create own needed services. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
         /** @short  reference to the global event broadcaster, which is usde to find
                     out, when the first office document was opened successfully. */
         css::uno::Reference< css::document::XEventBroadcaster > m_xBroadcaster;
@@ -75,11 +71,11 @@ class LateInitListener : public BaseLock // must be the first one to guarantee r
                     on the global event broadcaster to get the information, when
                     loading of the first document was finished.
 
-            @param  xSMGR
-                    reference to a service manager, which can be used to create
+            @param  rxContext
+                    reference to a component context, which can be used to create
                     own needed uno services.
          */
-        LateInitListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        LateInitListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
         //---------------------------------------
 

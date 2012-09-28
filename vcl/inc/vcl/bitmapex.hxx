@@ -268,11 +268,6 @@ public:
      */
     sal_Bool                Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
 
-    /** Scale, crop and rotate the bitmap */
-    sal_Bool                    ScaleCropRotate(
-        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
-        const Color& rFillColor, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
-
     /** Rotate bitmap by the specified angle
 
         @param nAngle10

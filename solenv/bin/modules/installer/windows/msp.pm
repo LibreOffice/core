@@ -86,196 +86,6 @@ sub install_installation_sets
 }
 
 #################################################################################
-# Collecting the destinations of all files with flag PATCH in a hash.
-#################################################################################
-
-sub collect_patch_file_destinations
-{
-    my ( $filesarray ) = @_;
-
-    my %patchfiledestinations = ();
-    my %nopatchfiledestinations = ();
-    my $patchcounter = 0;
-    my $nopatchcounter = 0;
-
-    for ( my $i = 0; $i <= $#{$filesarray}; $i++ )
-    {
-        my $onefile = ${$filesarray}[$i];
-        my $styles = "";
-
-        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'} };
-
-        if ( $styles =~ /\bPATCH\b/ )
-        {
-            $patchfiledestinations{$onefile->{'destination'}} = 1;
-            $patchcounter++;
-        }
-        else
-        {
-            $nopatchfiledestinations{$onefile->{'destination'}} = 1;
-            $nopatchcounter++;
-        }
-    }
-
-    return (\%patchfiledestinations, \%nopatchfiledestinations, $patchcounter, $nopatchcounter);
-}
-
-#################################################################################
-# Returning the first path segment of a path
-#################################################################################
-
-sub get_first_path_segment
-{
-    my ( $path ) = @_;
-
-    my $firstsegment = "";
-    my $remainder = $path;
-
-    if ( $path =~ /^\s*(.*?)[\/\\](.*)\s*$/ )
-    {
-        $firstsegment = $1;
-        $remainder = $2;
-    }
-
-    return ($firstsegment, $remainder);
-}
-
-#################################################################################
-# Finding the flexible path in the destinations, that are saved in
-# the hash $nopatchfiledestinations.
-#################################################################################
-
-sub prepare_path_in_nopatchfilehash
-{
-    my ($nopatchfiledestinations, $newpath) = @_;
-
-    my $infoline = "";
-    my $flexiblepath = "";
-    my $found = 0;
-    my %checked_destinations = ();
-
-    foreach my $onedestination ( keys %{$nopatchfiledestinations} )
-    {
-        $flexiblepath = "";
-        $found = 0;
-
-        my $found_first_segement = 1;
-        my $firstsegement = "";
-        my $fixedpath = $onedestination;
-        my $testfile = $newpath . $installer::globals::separator . $fixedpath;
-
-        while (( ! -f $testfile ) && ( $found_first_segement ))
-        {
-            $firstsegement = "";
-            ( $firstsegement, $fixedpath ) = get_first_path_segment($fixedpath);
-
-            if ( $firstsegement ne "" )
-            {
-                $found_first_segement = 1;
-                $flexiblepath = $flexiblepath . $firstsegement . $installer::globals::separator;
-            }
-            else
-            {
-                $found_first_segement = 0;
-            }
-
-            $testfile = $newpath . $installer::globals::separator . $fixedpath;
-        }
-
-        if ( -f $testfile ) { $found = 1; }
-
-        if ( $found ) { last; }
-    }
-
-    if ( ! $found ) { installer::exiter::exit_program("ERROR: Could not determine flexible destination path for msp patch creation!", "prepare_path_in_nopatchfilehash"); }
-
-    $infoline = "Setting flexible path for msp creation: $flexiblepath\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    foreach my $onedestination ( keys %{$nopatchfiledestinations} )
-    {
-        $onedestination =~ s/^\s*\Q$flexiblepath\E//;
-        $checked_destinations{$onedestination} = 1;
-    }
-
-    return \%checked_destinations;
-}
-
-#################################################################################
-# Synchronizing the two installed products in that way, that only
-# files with flag PATCH are different.
-#################################################################################
-
-sub synchronize_installation_sets
-{
-    my ($olddatabase, $newdatabase, $filesarray) = @_;
-
-    my $infoline = "\nSynchronizing installed products because of PATCH flag\n";
-    push( @installer::globals::logfileinfo, $infoline);
-    $infoline = "Old product: $olddatabase\n";
-    push( @installer::globals::logfileinfo, $infoline);
-    $infoline = "New product: $newdatabase\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    my ( $patchfiledestinations, $nopatchfiledestinations, $patchfilecounter, $nopatchfilecounter ) = collect_patch_file_destinations($filesarray);
-
-    $infoline = "Number of files with PATCH flag: $patchfilecounter\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    $infoline = "Number of files without PATCH flag: $nopatchfilecounter\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    foreach my $localfile ( sort keys %{$patchfiledestinations} )
-    {
-        $infoline = "\tPATCH file: $localfile\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    my $oldpath = $olddatabase;
-    if ( $^O =~ /cygwin/i ) { $oldpath =~ s/\\/\//g; }
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$oldpath);
-    $oldpath =~ s/\\\s*$//;
-    $oldpath =~ s/\/\s*$//;
-
-    my $newpath = $newdatabase;
-    if ( $^O =~ /cygwin/i ) { $newpath =~ s/\\/\//g; }
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$newpath);
-    $newpath =~ s/\\\s*$//;
-    $newpath =~ s/\/\s*$//;
-
-    # The destination path is not correct. destinations in the hash contain
-    # the flexible installation path, that is not part in the administrative installation
-    $nopatchfiledestinations = prepare_path_in_nopatchfilehash($nopatchfiledestinations, $newpath);
-
-    foreach my $onedestination ( keys %{$nopatchfiledestinations} )
-    {
-        my $source = $oldpath . $installer::globals::separator . $onedestination;
-        my $dest = $newpath . $installer::globals::separator . $onedestination;
-
-        if ( -f $source )
-        {
-            if ( -f $dest )
-            {
-                my $copyreturn = copy($source, $dest);
-                # installer::systemactions::copy_one_file($source, $dest);
-                # $infoline = "Synchronizing file: $source to $dest\n";
-                # push( @installer::globals::logfileinfo, $infoline);
-            }
-            else
-            {
-                $infoline = "Not synchronizing. Destination file \"$dest\" does not exist.\n";
-                push( @installer::globals::logfileinfo, $infoline);
-            }
-        }
-        else
-        {
-            $infoline = "Not synchronizing. Source file \"$source\" does not exist.\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-    }
-}
-
-#################################################################################
 # Extracting all tables from a pcp file
 #################################################################################
 
@@ -365,23 +175,27 @@ sub include_tables_into_pcpfile
         $localworkdir =~ s/\//\\\\/g;
     }
 
-    $systemcall = $msidb . " -d " . $localfullpcpfilepath . " -f " . $localworkdir . " -i " . $tables;
-
-    $returnvalue = system($systemcall);
-
-    $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ($returnvalue)
+    my @tables = split(' ', $tables); # I found that msidb from Windows SDK 7.1 did not accept more than one table.
+    foreach my $table (@tables)
     {
-        $infoline = "ERROR: Could not execute $systemcall !\n";
+        $systemcall = $msidb . " -d " . $localfullpcpfilepath . " -f " . $localworkdir . " -i " . $table;
+
+        $returnvalue = system($systemcall);
+
+        $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
-        installer::exiter::exit_program("ERROR: Could not include tables into pcp file: $fullpcpfilepath !", "include_tables_into_pcpfile");
-    }
-    else
-    {
-        $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute $systemcall !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            installer::exiter::exit_program("ERROR: Could not include tables into pcp file: $fullpcpfilepath !", "include_tables_into_pcpfile");
+        }
+        else
+        {
+            $infoline = "Success: Executed $systemcall successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
     }
 }
 
@@ -497,41 +311,7 @@ sub set_mspfilename
 {
     my ($allvariables, $mspdir, $languagesarrayref) = @_;
 
-    my $databasename = $allvariables->{'PRODUCTNAME'};
-    $databasename = lc($databasename);
-    $databasename =~ s/\.//g;
-    $databasename =~ s/\-//g;
-    $databasename =~ s/\s//g;
-
-    if ( $allvariables->{'MSPPRODUCTVERSION'} ) { $databasename = $databasename . $allvariables->{'MSPPRODUCTVERSION'}; }
-
-    # possibility to overwrite the name with variable DATABASENAME
-    # if ( $allvariables->{'DATABASENAME'} ) { $databasename = $allvariables->{'DATABASENAME'}; }
-
-    # Adding patch info to database name
-    # if ( $installer::globals::buildid ) { $databasename = $databasename . "_" . $installer::globals::buildid; }
-
-    # if ( $allvariables->{'VENDORPATCHVERSION'} ) { $databasename = $databasename . "_" . $allvariables->{'VENDORPATCHVERSION'}; }
-
-
-    if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
-    {
-        my $windowspatchlevel = 0;
-        if ( $allvariables->{'MSPPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'MSPPATCHLEVEL'}; }
-        $databasename = $databasename . "_servicepack_" . $windowspatchlevel;
-        my $languagestring = create_langstring($languagesarrayref);
-        $databasename = $databasename . $languagestring;
-    }
-    else
-    {
-        my $hotfixaddon = "hotfix_";
-        $hotfixaddon = $hotfixaddon . $installer::globals::buildid;
-        my $cwsname = "";
-        if ( $allvariables->{'OVERWRITE_CWSNAME'} ) { $hotfixaddon = $allvariables->{'OVERWRITE_CWSNAME'}; }
-        $databasename = $databasename . "_" . $hotfixaddon;
-    }
-
-    $databasename = $databasename . ".msp";
+    my $databasename = $allvariables->{'PRODUCTNAME'} . "-PTF-" . $allvariables->{'PRODUCTVERSION'} . "-" . $allvariables->{'WINDOWSPATCHLEVEL'} . ".msp";
 
     my $fullmspname = $mspdir . $installer::globals::separator . $databasename;
 
@@ -1385,12 +1165,6 @@ sub create_msp_patch
     # Installing both installation sets
     installer::logger::print_message( "... installing products ...\n" );
     my ($olddatabase, $newdatabase) = install_installation_sets($installationdir);
-
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting synchronization of installation sets");
-
-    # Synchronizing installed products, allowing only different files with PATCH flag
-    installer::logger::print_message( "... synchronizing installation sets ...\n" );
-    synchronize_installation_sets($olddatabase, $newdatabase, $filesarray);
 
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting pcp file creation");
 

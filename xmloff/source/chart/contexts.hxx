@@ -70,8 +70,7 @@ public:
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
         sal_uInt16 i_nPrefix, const ::rtl::OUString & i_rLName,
-        const com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties>& i_xDocProps,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& i_xDocBuilder);
+        const com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties>& i_xDocProps);
 
     virtual ~SchXMLFlatDocContext_Impl();
 

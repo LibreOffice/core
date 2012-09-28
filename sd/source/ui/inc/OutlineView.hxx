@@ -221,7 +221,6 @@ private:
     std::auto_ptr< OutlineViewModelChangeGuard > maDragAndDropModelGuard;
 
     Font maPageNumberFont;
-    sal_Int32 mnPageNumberWidthPixel;
     Font maBulletFont;
 
     SvxLRSpaceItem maLRSpaceItem;

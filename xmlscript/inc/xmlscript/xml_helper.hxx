@@ -42,7 +42,7 @@ class XMLSCRIPT_DLLPUBLIC XMLElement
     : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XAttributeList >
 {
 public:
-    inline XMLElement( ::rtl::OUString const & name )
+    inline XMLElement( OUString const & name )
         SAL_THROW(())
         : _name( name )
         {}
@@ -67,7 +67,7 @@ public:
         @param rAttrName qname of attribute
         @param rValue value string of element
     */
-    void SAL_CALL addAttribute( ::rtl::OUString const & rAttrName, ::rtl::OUString const & rValue )
+    void SAL_CALL addAttribute( OUString const & rAttrName, OUString const & rValue )
         SAL_THROW(());
 
     /** Gets the tag name (qname) of element.
@@ -75,7 +75,7 @@ public:
         @return
                 qname of element
     */
-    inline ::rtl::OUString SAL_CALL getName() SAL_THROW(())
+    inline OUString SAL_CALL getName() SAL_THROW(())
         { return _name; }
 
     /** Dumps out element (and all sub elements).
@@ -94,22 +94,22 @@ public:
     // XAttributeList
     virtual sal_Int16 SAL_CALL getLength()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getNameByIndex( sal_Int16 nPos )
+    virtual OUString SAL_CALL getNameByIndex( sal_Int16 nPos )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTypeByIndex( sal_Int16 nPos )
+    virtual OUString SAL_CALL getTypeByIndex( sal_Int16 nPos )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTypeByName( ::rtl::OUString const & rName )
+    virtual OUString SAL_CALL getTypeByName( OUString const & rName )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getValueByIndex( sal_Int16 nPos )
+    virtual OUString SAL_CALL getValueByIndex( sal_Int16 nPos )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getValueByName( ::rtl::OUString const & rName )
+    virtual OUString SAL_CALL getValueByName( OUString const & rName )
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::rtl::OUString _name;
+    OUString _name;
 
-    ::std::vector< ::rtl::OUString > _attrNames;
-    ::std::vector< ::rtl::OUString > _attrValues;
+    ::std::vector< OUString > _attrNames;
+    ::std::vector< OUString > _attrValues;
 
     ::std::vector< ::com::sun::star::uno::Reference<
                    ::com::sun::star::xml::sax::XAttributeList > > _subElems;

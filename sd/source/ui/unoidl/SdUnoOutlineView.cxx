@@ -51,13 +51,9 @@ using namespace ::com::sun::star::uno;
 namespace sd {
 
 SdUnoOutlineView::SdUnoOutlineView(
-    DrawController& rController,
-    OutlineViewShell& rViewShell,
-    View& rView) throw()
+    OutlineViewShell& rViewShell) throw()
     :   DrawSubControllerInterfaceBase(m_aMutex),
-        mrController(rController),
-        mrOutlineViewShell(rViewShell),
-        mrView(rView)
+        mrOutlineViewShell(rViewShell)
 {
 }
 

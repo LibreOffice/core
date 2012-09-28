@@ -263,6 +263,10 @@ namespace pcr
         DEF_INFO_2( SCROLLVALUE,       SCROLLVALUE,        SCROLLVALUE,       DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( SCROLLVALUE_MIN,   SCROLLVALUE_MIN,    SCROLLVALUE_MIN,   FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( SCROLLVALUE_MAX,   SCROLLVALUE_MAX,    SCROLLVALUE_MAX,   FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( SCROLL_WIDTH,      SCROLL_WIDTH,       SCROLL_WIDTH,      FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( SCROLL_HEIGHT,     SCROLL_HEIGHT,      SCROLL_HEIGHT,     DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( SCROLL_TOP,        SCROLL_TOP,         SCROLL_TOP,        DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( SCROLL_LEFT,       SCROLL_LEFT,        SCROLL_LEFT,       DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( DEFAULT_SCROLLVALUE,DEFAULT_SCROLLVALUE,DEFAULT_SCROLLVALUE,FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( LINEINCREMENT,     LINEINCREMENT,      LINEINCREMENT,     FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( BLOCKINCREMENT,    BLOCKINCREMENT,     BLOCKINCREMENT,    FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
@@ -681,13 +685,13 @@ namespace pcr
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL DefaultEnumRepresentation::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL DefaultEnumRepresentation::release()
     {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        if ( 0 == osl_atomic_decrement( &m_refCount ) )
         {
            delete this;
            return 0;

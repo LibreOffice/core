@@ -96,10 +96,6 @@ private:
     SCROW   nNewStartY;
     SCCOL   nNewEndX;
     SCROW   nNewEndY;
-    SCCOL   nContX1;
-    SCROW   nContY1;
-    SCCOL   nContX2;
-    SCROW   nContY2;
 public:
             ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     void    SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );

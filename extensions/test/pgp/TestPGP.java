@@ -19,41 +19,21 @@
 
 import java.io.IOException;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyState;
-
-import com.sun.star.bridge.XBridge;
-
-//  import com.sun.star.comp.bootstrap.Bootstrap;
-
-import com.sun.star.connection.XConnector;
+import com.sun.star.bridge.UnoUrlResolver;
+import com.sun.star.bridge.XUnoUrlResolver;
+import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.connection.XConnection;
-
-import com.sun.star.io.BufferSizeExceededException;
-import com.sun.star.io.NotConnectedException;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
-
-import com.sun.star.frame.XComponentLoader;
-
-import com.sun.star.lang.XComponent;
+import com.sun.star.connection.XConnector;
+import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
-
-import com.sun.star.text.XSimpleText;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextRange;
-
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.pgp.SimplePGPMailerFactoryReg;
 import com.sun.star.uno.IBridge;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
-import com.sun.star.container.*;
-import com.sun.star.lang.*;
-
-import com.sun.star.pgp.*;
+//  import com.sun.star.comp.bootstrap.Bootstrap;
 
 
 
@@ -98,13 +78,6 @@ public class TestPGP {
 
 
 
-    static String neededServices[] = new String[] {
-        "com.sun.star.comp.servicemanager.ServiceManager",
-        "com.sun.star.comp.loader.JavaLoader",
-        "com.sun.star.comp.connections.Connector",
-          "com.sun.star.comp.connections.Acceptor"
-    };
-
     public static void main(String argv[]) throws Exception {
         if(argv.length != 1)    {
             System.err.println("usage : testoffice protocol:host:port");
@@ -112,16 +85,15 @@ public class TestPGP {
         }
 
 //          try {
-            com.sun.star.comp.servicemanager.ServiceManager smgr = new com.sun.star.comp.servicemanager.ServiceManager();
-            smgr.addFactories(neededServices, null);
+              XUnoUrlResolver resolver = UnoUrlResolver.create(Bootstrap.createInitialComponentContext(null));
 
-              XConnector  xConnector  = (XConnector)smgr.createInstance("com.sun.star.connection.Connector");
+              XConnector  xConnector  = UnoRuntime.queryInterface(XConnector.class, resolver.resolve("com.sun.star.connection.Connector"));
               XConnection xConnection = xConnector.connect(argv[0]);
 
             String rootOid = "classic_uno";
               IBridge iBridge = UnoRuntime.getBridgeByName("java", null, "remote", null, new Object[]{"iiop", xConnection, null});
 
-            Object rInitialObject = iBridge.mapInterfaceFrom(rootOid, XInterface.class);
+            Object rInitialObject = iBridge.mapInterfaceFrom(rootOid, new Type(XInterface.class));
 //              Object rInitialObject = xBridge.getInstance("NamingService");
 
             if(rInitialObject != null) {

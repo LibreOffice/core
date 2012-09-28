@@ -220,7 +220,7 @@ static int DEFAULT_BTN_MAPPING_TABLE[][8] =
     { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }  //RETRY_CANCEL
 };
 
-int WinSalSystem::ShowNativeMessageBox(const rtl::OUString& rTitle, const rtl::OUString& rMessage, int nButtonCombination, int nDefaultButton)
+int WinSalSystem::ShowNativeMessageBox(const rtl::OUString& rTitle, const rtl::OUString& rMessage, int nButtonCombination, int nDefaultButton, SAL_UNUSED_PARAMETER bool)
 {
     DBG_ASSERT( nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
                 nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&

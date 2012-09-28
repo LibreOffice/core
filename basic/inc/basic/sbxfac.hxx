@@ -29,11 +29,11 @@ class SbxObject;
 
 class BASIC_DLLPUBLIC SbxFactory
 {
-    sal_Bool bHandleLast;   // sal_True: Factory is asked at last because of its expensiveness
+    bool bHandleLast;   // true: Factory is asked at last because of its expensiveness
 public:
     virtual ~SbxFactory();
-    SbxFactory( sal_Bool bLast=sal_False )  { bHandleLast = bLast; }
-    sal_Bool IsHandleLast( void )       { return bHandleLast; }
+    SbxFactory( bool bLast=false )  { bHandleLast = bLast; }
+    bool IsHandleLast( void )       { return bHandleLast; }
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
     virtual SbxObject* CreateObject( const rtl::OUString& );
 };

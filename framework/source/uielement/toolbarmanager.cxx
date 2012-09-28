@@ -65,8 +65,8 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/unohlp.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
@@ -254,7 +254,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
 
         m_xURLTransformer.set(
              URLTransformer::create(
-                 ::comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
+                 ::comphelper::getComponentContext(m_xServiceManager)) );
     }
 
     m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );

@@ -20,7 +20,9 @@
 
 #include <collatorImpl.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
@@ -33,12 +35,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF(rxMSF)
 {
-    if ( rxMSF.is()) {
-        Reference < XInterface > xI =
-            xMSF->createInstance( OUString("com.sun.star.i18n.LocaleData"));
-        if ( xI.is() )
-            xI->queryInterface(::getCppuType((const Reference< XLocaleData>*)0)) >>= localedata;
-    }
+    mxLocaleData.set(LocaleData::create(comphelper::getComponentContext(xMSF)));
     cachedItem = NULL;
 }
 
@@ -78,7 +75,7 @@ CollatorImpl::compareString( const OUString& in_str1, const OUString& in_str2) t
 sal_Int32 SAL_CALL
 CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collatorOptions) throw(RuntimeException)
 {
-    const Sequence< Implementation > &imp = localedata->getCollatorImplementations(rLocale);
+    const Sequence< Implementation > &imp = mxLocaleData->getCollatorImplementations(rLocale);
     for (sal_Int16 i = 0; i < imp.getLength(); i++)
         if (imp[i].isDefault)
             return loadCollatorAlgorithm(imp[i].unoID, rLocale, collatorOptions);
@@ -116,7 +113,7 @@ Sequence< OUString > SAL_CALL
 CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale ) throw(RuntimeException)
 {
     nLocale = rLocale;
-    const Sequence< Implementation > &imp = localedata->getCollatorImplementations(rLocale);
+    const Sequence< Implementation > &imp = mxLocaleData->getCollatorImplementations(rLocale);
     Sequence< OUString > list(imp.getLength());
 
     for (sal_Int32 i = 0; i < imp.getLength(); i++) {
@@ -134,7 +131,7 @@ CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale ) throw(Runtim
 Sequence< sal_Int32 > SAL_CALL
 CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ ) throw(RuntimeException)
 {
-    Sequence< OUString > option_str = localedata->getCollationOptions(nLocale);
+    Sequence< OUString > option_str = mxLocaleData->getCollationOptions(nLocale);
     Sequence< sal_Int32 > option_int(option_str.getLength());
 
     for (sal_Int32 i = 0; i < option_str.getLength(); i++)
@@ -157,21 +154,18 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
             return sal_True;
         }
     }
-    if (xMSF.is()) {
-        Reference < XInterface > xI =
-            xMSF->createInstance(OUString("com.sun.star.i18n.Collator_") + serviceName);
+    Reference < XInterface > xI =
+        xMSF->createInstance(OUString("com.sun.star.i18n.Collator_") + serviceName);
 
-        if (xI.is()) {
-            Reference < XCollator > xC;
-            xI->queryInterface( getCppuType((const Reference< XCollator>*)0) ) >>= xC;
-            if (xC.is()) {
-                lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
-                return sal_True;
-            }
+    if (xI.is()) {
+        Reference < XCollator > xC;
+        xI->queryInterface( getCppuType((const Reference< XCollator>*)0) ) >>= xC;
+        if (xC.is()) {
+            lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
+            return sal_True;
         }
-        return sal_False;
     }
-    throw RuntimeException();
+    return sal_False;
 }
 
 void SAL_CALL

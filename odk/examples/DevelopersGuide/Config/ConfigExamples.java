@@ -41,8 +41,6 @@ import com.sun.star.beans.XMultiHierarchicalPropertySet;
 import com.sun.star.beans.XPropertyState;
 import com.sun.star.beans.XMultiPropertyStates;
 
-import com.sun.star.bridge.XUnoUrlResolver;
-
 import com.sun.star.configuration.XTemplateInstance;
 
 import com.sun.star.container.XNameAccess;
@@ -57,14 +55,12 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.EventObject;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
 import com.sun.star.uno.AnyConverter;
 
 import com.sun.star.util.XChangesBatch;

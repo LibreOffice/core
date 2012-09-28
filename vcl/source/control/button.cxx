@@ -42,6 +42,7 @@
 #include <vcl/button.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/layout.hxx>
 
 #include <svids.hrc>
 #include <svdata.hxx>
@@ -104,6 +105,13 @@ Button::Button( WindowType nType ) :
     mpButtonData = new ImplCommonButtonData;
 }
 
+void Button::take_properties(Window &rOther)
+{
+    Control::take_properties(rOther);
+    Button &rOtherButton = static_cast<Button&>(rOther);
+    *mpButtonData = *rOtherButton.mpButtonData;
+}
+
 // -----------------------------------------------------------------------
 
 Button::~Button()
@@ -138,7 +146,8 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         { SV_BUTTONTEXT_MORE, "~More" },
         { SV_BUTTONTEXT_IGNORE, "~Ignore" },
         { SV_BUTTONTEXT_ABORT, "~Abort" },
-        { SV_BUTTONTEXT_LESS, "~Less" }
+        { SV_BUTTONTEXT_LESS, "~Less" },
+        { SV_BUTTONTEXT_RESET, "R~eset" }
     };
 
     String aText;
@@ -1172,7 +1181,7 @@ void PushButton::ImplSetDefButton( sal_Bool bSet )
         ImplGetButtonState() &= ~BUTTON_DRAW_DEFAULT;
     }
     if( bSetPos )
-        SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
 
     Invalidate();
 }
@@ -1206,14 +1215,29 @@ PushButton::PushButton( Window* pParent, WinBits nStyle ) :
 PushButton::PushButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_PUSHBUTTON )
 {
-    ImplInitPushButtonData();
     rResId.SetRT( RSC_PUSHBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
+    ImplInitPushButtonData();
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void PushButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitPushButtonData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Button::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -1724,6 +1748,22 @@ Size PushButton::GetOptimalSize(WindowSizeType eType) const
     }
 }
 
+bool PushButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("has-default")))
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_DEFBUTTON);
+        if (toBool(rValue))
+            nBits |= WB_DEFBUTTON;
+        SetStyle(nBits);
+    }
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
+}
+
+
 // =======================================================================
 
 void OKButton::ImplInit( Window* pParent, WinBits nStyle )
@@ -1749,6 +1789,10 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_OKBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -1756,15 +1800,21 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void OKButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    PushButton::take_properties(rOther);
+}
+
 // -----------------------------------------------------------------------
 
 void OKButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for OKButton");
     // close parent if no link set
     if ( !GetClickHdl() )
     {
-        Window* pParent = GetParent();
+        Window* pParent = getNonLayoutParent(this);
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )
@@ -1816,6 +1866,10 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_CANCELBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -1823,15 +1877,21 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void CancelButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    PushButton::take_properties(rOther);
+}
+
 // -----------------------------------------------------------------------
 
 void CancelButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for CancelButton");
     // close parent if link not set
     if ( !GetClickHdl() )
     {
-        Window* pParent = GetParent();
+        Window* pParent = getNonLayoutParent(this);
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )
@@ -1883,6 +1943,10 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_HELPBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -1890,11 +1954,17 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void HelpButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    PushButton::take_properties(rOther);
+}
+
 // -----------------------------------------------------------------------
 
 void HelpButton::Click()
 {
-    SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for HelpButton");
     // trigger help if no link set
     if ( !GetClickHdl() )
     {
@@ -2290,12 +2360,52 @@ void RadioButton::ImplDrawRadioButton( bool bLayout )
     }
 }
 
-// -----------------------------------------------------------------------
-
-void RadioButton::GetRadioButtonGroup( std::vector< RadioButton* >& io_rGroup, bool bIncludeThis ) const
+void RadioButton::group(RadioButton &rOther)
 {
-    // empty the list
-    io_rGroup.clear();
+    if (!m_xGroup)
+    {
+        m_xGroup.reset(new std::set<RadioButton*>);
+        m_xGroup->insert(this);
+    }
+
+    if (rOther.m_xGroup)
+        m_xGroup->insert(rOther.m_xGroup->begin(), rOther.m_xGroup->end());
+
+    m_xGroup->insert(&rOther);
+
+    //make all members of the group share the same button group
+    for (std::set<RadioButton*>::iterator aI = m_xGroup->begin(), aEnd = m_xGroup->end();
+        aI != aEnd; ++aI)
+    {
+        RadioButton* pButton = *aI;
+        pButton->m_xGroup = m_xGroup;
+    }
+
+    //if this one is checked, uncheck all the others
+    if (mbChecked)
+        ImplUncheckAllOther();
+}
+
+// .-----------------------------------------------------------------------
+
+std::vector< RadioButton* > RadioButton::GetRadioButtonGroup(bool bIncludeThis) const
+{
+    std::vector< RadioButton* > aGroup;
+
+    if (m_xGroup)
+    {
+        for (std::set<RadioButton*>::iterator aI = m_xGroup->begin(), aEnd = m_xGroup->end(); aI != aEnd; ++aI)
+        {
+            RadioButton *pRadioButton = *aI;
+            if (!bIncludeThis && pRadioButton == this)
+                continue;
+            aGroup.push_back(pRadioButton);
+        }
+        return aGroup;
+    }
+
+    //old-school
+    SAL_WARN("vcl", "No new-style group set on radiobutton, using old-style digging around");
 
     // go back to first in group;
     Window* pFirst = const_cast<RadioButton*>(this);
@@ -2313,10 +2423,12 @@ void RadioButton::GetRadioButtonGroup( std::vector< RadioButton* >& io_rGroup, b
         if( pFirst->GetType() == WINDOW_RADIOBUTTON )
         {
             if( pFirst != this || bIncludeThis )
-                io_rGroup.push_back( static_cast<RadioButton*>(pFirst) );
+                aGroup.push_back( static_cast<RadioButton*>(pFirst) );
         }
         pFirst = pFirst->GetWindow( WINDOW_NEXT );
     } while( pFirst && ( ( pFirst->GetStyle() & WB_GROUP ) == 0 ) );
+
+    return aGroup;
 }
 
 // -----------------------------------------------------------------------
@@ -2325,63 +2437,23 @@ void RadioButton::ImplUncheckAllOther()
 {
     mpWindowImpl->mnStyle |= WB_TABSTOP;
 
+    std::vector<RadioButton*> aGroup(GetRadioButtonGroup(false));
     // iterate over radio button group and checked buttons
-    Window* pWindow;
-    WinBits nStyle;
-    if ( !(GetStyle() & WB_GROUP) )
+    for (std::vector<RadioButton*>::iterator aI = aGroup.begin(), aEnd = aGroup.end(); aI != aEnd; ++aI)
     {
-        pWindow = GetWindow( WINDOW_PREV );
-        while ( pWindow )
+        RadioButton *pWindow = *aI;
+        if ( pWindow->IsChecked() )
         {
-            nStyle = pWindow->GetStyle();
-
-            if ( pWindow->GetType() == WINDOW_RADIOBUTTON )
-            {
-                if ( ((RadioButton*)pWindow)->IsChecked() )
-                {
-                    ImplDelData aDelData;
-                    pWindow->ImplAddDel( &aDelData );
-                    ((RadioButton*)pWindow)->SetState( sal_False );
-                    if ( aDelData.IsDead() )
-                        return;
-                    pWindow->ImplRemoveDel( &aDelData );
-                }
-                // not inside if clause to always remove wrongly set WB_TABSTOPS
-                pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
-            }
-
-            if ( nStyle & WB_GROUP )
-                break;
-
-            pWindow = pWindow->GetWindow( WINDOW_PREV );
-        }
-    }
-
-    pWindow = GetWindow( WINDOW_NEXT );
-    while ( pWindow )
-    {
-        nStyle = pWindow->GetStyle();
-
-        if ( nStyle & WB_GROUP )
-            break;
-
-        if ( pWindow->GetType() == WINDOW_RADIOBUTTON )
-        {
-            if ( ((RadioButton*)pWindow)->IsChecked() )
-            {
-                ImplDelData aDelData;
-                pWindow->ImplAddDel( &aDelData );
-                ((RadioButton*)pWindow)->SetState( sal_False );
-                if ( aDelData.IsDead() )
-                    return;
-                pWindow->ImplRemoveDel( &aDelData );
-            }
-
-            // not inside if clause to always remove wrongly set WB_TABSTOPS
-            pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
+            ImplDelData aDelData;
+            pWindow->ImplAddDel( &aDelData );
+            pWindow->SetState( sal_False );
+            if ( aDelData.IsDead() )
+                return;
+            pWindow->ImplRemoveDel( &aDelData );
         }
 
-        pWindow = pWindow->GetWindow( WINDOW_NEXT );
+        // not inside if clause to always remove wrongly set WB_TABSTOPS
+        pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
     }
 }
 
@@ -2428,14 +2500,41 @@ RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
 RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
-    ImplInitRadioButtonData();
     rResId.SetRT( RSC_RADIOBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
+    ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void RadioButton::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitRadioButtonData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Button::take_properties(rOther);
+
+    RadioButton &rOtherRadio = static_cast<RadioButton&>(rOther);
+    if (rOtherRadio.m_xGroup.get())
+    {
+        rOtherRadio.m_xGroup->erase(&rOtherRadio);
+        rOtherRadio.m_xGroup->insert(this);
+    }
+    std::swap(m_xGroup, rOtherRadio.m_xGroup);
+    mbChecked = rOtherRadio.mbChecked;
+    mbSaveValue = rOtherRadio.mbSaveValue;
+    mbRadioCheck = rOtherRadio.mbRadioCheck;
+    mbStateChanged = rOtherRadio.mbStateChanged;
 }
 
 // -----------------------------------------------------------------------
@@ -2454,6 +2553,8 @@ void RadioButton::ImplLoadRes( const ResId& rResId )
 
 RadioButton::~RadioButton()
 {
+    if (m_xGroup)
+        m_xGroup->erase(this);
 }
 
 // -----------------------------------------------------------------------
@@ -2809,6 +2910,15 @@ void RadioButton::SetState( sal_Bool bCheck )
         StateChanged( STATE_CHANGE_STATE );
         Toggle();
     }
+}
+
+bool RadioButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("active")))
+        SetState(toBool(rValue));
+    else
+        return Window::set_property(rKey, rValue);
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -3361,14 +3471,34 @@ CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
 CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
     Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
 {
-    ImplInitCheckBoxData();
     rResId.SetRT( RSC_CHECKBOX );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
+    ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void CheckBox::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitCheckBoxData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Button::take_properties(rOther);
+
+    CheckBox &rOtherCheck = static_cast<CheckBox&>(rOther);
+    meState = rOtherCheck.meState;
+    meSaveValue = rOtherCheck.meSaveValue;
+    mbTriState = rOtherCheck.mbTriState;
 }
 
 // -----------------------------------------------------------------------
@@ -3602,7 +3732,7 @@ void CheckBox::GetFocus()
         aPos.Move(-1,-1);
         aSize.Height() += 2;
         aSize.Width() += 2;
-        SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
         ImplDrawCheckBox();
     }
     else
@@ -3634,7 +3764,7 @@ void CheckBox::LoseFocus()
         aPos.Move(1,1);
         aSize.Height() -= 2;
         aSize.Width() -= 2;
-        SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+        setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
         ImplDrawCheckBox();
     }
 }
@@ -3753,6 +3883,15 @@ void CheckBox::SetState( TriState eState )
         StateChanged( STATE_CHANGE_STATE );
         Toggle();
     }
+}
+
+bool CheckBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("active")))
+        SetState(toBool(rValue) ? STATE_CHECK : STATE_NOCHECK);
+    else
+        return Window::set_property(rKey, rValue);
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -4053,6 +4192,11 @@ TriStateBox::~TriStateBox()
 }
 
 // =======================================================================
+
+DisclosureButton::DisclosureButton( Window* pParent, WinBits nStyle ) :
+    CheckBox( pParent, nStyle )
+{
+}
 
 DisclosureButton::DisclosureButton( Window* pParent, const ResId& rResId ) :
     CheckBox( pParent, rResId.SetRT( RSC_CHECKBOX ) )

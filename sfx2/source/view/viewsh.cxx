@@ -26,13 +26,14 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <cppuhelper/implbase1.hxx>
 
 #include <osl/file.hxx>
@@ -222,23 +223,22 @@ static ::rtl::OUString RetrieveLabelFromCommand(
     const ::rtl::OUString& rCommandURL,
     const css::uno::Reference< css::frame::XFrame >& rFrame )
 {
-    static css::uno::WeakReference< frame::XModuleManager > s_xModuleManager;
+    static css::uno::WeakReference< frame::XModuleManager2 > s_xModuleManager;
     static css::uno::WeakReference< container::XNameAccess > s_xNameAccess;
 
     ::rtl::OUString aLabel;
-    css::uno::Reference< css::frame::XModuleManager > xModuleManager( s_xModuleManager );
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( s_xModuleManager );
     css::uno::Reference< css::container::XNameAccess > xNameAccess( s_xNameAccess );
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR(
         ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::uno::XComponentContext >     xContext(
+        ::comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW);
 
     try
     {
         if ( !xModuleManager.is() )
         {
-            xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
-                xSMGR->createInstance(
-                    ::rtl::OUString( "com.sun.star.frame.ModuleManager" )),
-                    css::uno::UNO_QUERY_THROW );
+            xModuleManager = css::frame::ModuleManager::create(xContext);
             s_xModuleManager = xModuleManager;
         }
 
@@ -247,8 +247,8 @@ static ::rtl::OUString RetrieveLabelFromCommand(
         if ( !xNameAccess.is() )
         {
             xNameAccess = css::uno::Reference< css::container::XNameAccess >(
-                xSMGR->createInstance(
-                    ::rtl::OUString( "com.sun.star.frame.UICommandDescription" )),
+                css::frame::UICommandDescription::create(
+                        comphelper::getComponentContext(xSMGR)),
                     css::uno::UNO_QUERY_THROW );
             s_xNameAccess = xNameAccess;
         }
@@ -361,12 +361,11 @@ enum ETypeFamily
 ::rtl::OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFrame >& xFrame     ,
                                                   ETypeFamily                                eTypeFamily)
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER("com.sun.star.frame.ModuleManager");
-
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR         (::comphelper::getProcessServiceFactory()        , css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XModuleManager >      xModuleManager(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::uno::XComponentContext >     xContext      (::comphelper::getProcessComponentContext()        , css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 >      xModuleManager(css::frame::ModuleManager::create(xContext));
 
         ::rtl::OUString sModule = xModuleManager->identify(xFrame);
         ::rtl::OUString sType   ;
@@ -624,16 +623,11 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
 
             css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference < css::frame::XFrame >        xFrame( pFrame->GetFrame().GetFrameInterface() );
+            css::uno::Reference< uno::XComponentContext >     xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::frame::XFrame >         xFrame( pFrame->GetFrame().GetFrameInterface() );
             css::uno::Reference< css::frame::XModel >         xModel;
 
-            const rtl::OUString aModuleManager( "com.sun.star.frame.ModuleManager" );
-            css::uno::Reference< css::frame::XModuleManager > xModuleManager( xSMGR->createInstance( aModuleManager ), css::uno::UNO_QUERY_THROW );
-            if ( !xModuleManager.is() )
-            {
-                rReq.Done(sal_False);
-                return;
-            }
+            css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( css::frame::ModuleManager::create(xContext) );
 
             rtl::OUString aModule;
             try

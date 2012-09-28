@@ -170,7 +170,10 @@ static bool isOperator( char c )
     static const char * operators = "<>=()!/&%.,;";
 
     const char * w = operators;
-    for( ; *w && *w != c ; w ++);
+    while (*w && *w != c)
+    {
+        ++w;
+    }
     return *w != 0;
 }
 
@@ -425,8 +428,12 @@ sal_Bool PreparedStatement::execute( )
                         buf.append( m_vars[vars] );
 
                         // skip to the end of the named parameter
-                        for( ; index < str.getLength() &&
-                                 ! ( isWhitespace( str[index] ) || isOperator( str[index] ) ) ; index ++ );
+                        while (   index < str.getLength()
+                               && !(   isWhitespace(str[index])
+                                    || isOperator  (str[index])))
+                        {
+                            ++index;
+                        }
                         start = index;
                         vars ++;
                     }

@@ -135,7 +135,15 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
         currentDirectory = homeDirectory;
         //Load default settings
         
+        Bootstrap.setup(this);
 
+        Bootstrap.putenv("SAL_LOG=yes");
+
+        // Load a lot of shlibs here explicitly in advance because that
+        // makes debugging work better, sigh
+        Bootstrap.dlopen("libmergedlo.so");
+        Bootstrap.dlopen("libswdlo.so");
+        Bootstrap.dlopen("libswlo.so");
     }
     
     public void createUI(){
@@ -741,16 +749,6 @@ class ListItemAdapter implements ListAdapter{
                     long t1 = System.currentTimeMillis();
                     timingOverhead = t1 - t0;
 
-                    Bootstrap.setup(LibreOfficeUIActivity.this);
-
-                    Bootstrap.putenv("SAL_LOG=yes");
-
-                    // Load a lot of shlibs here explicitly in advance because that
-                    // makes debugging work better, sigh
-                    Bootstrap.dlopen("libmergedlo.so");
-                    Bootstrap.dlopen("libswdlo.so");
-                    Bootstrap.dlopen("libswlo.so");
-
                     // Log.i(TAG, "Sleeping NOW");
                     // Thread.sleep(20000);
 
@@ -777,8 +775,6 @@ class ListItemAdapter implements ListAdapter{
                         ("com.sun.star.frame.Desktop", context);
 
                     Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
-
-                    Bootstrap.initUCBHelper();
 
                     componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 

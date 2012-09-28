@@ -1,5 +1,0 @@
-mkdir: %_DEST%\inc\libwps
-..\%__SRC%\misc\build\libwps*\src\lib\libwps.h %_DEST%\inc\libwps\
-..\%__SRC%\misc\build\libwps*\src\lib\WPSDocument.h %_DEST%\inc\libwps\
-..\%__SRC%\lib\*.a %_DEST%\lib\*.a
-..\%__SRC%\slb\*.lib %_DEST%\lib\*.lib

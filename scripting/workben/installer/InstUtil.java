@@ -21,10 +21,6 @@ package installer;
 import java.net.URLDecoder;
 import java.io.*;
 import java.util.*;
-import java.util.zip.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 import java.net.*;
 
 public class InstUtil {
@@ -335,7 +331,6 @@ public class InstUtil {
 
     public static Properties getOfficeVersions(File sversionFile) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(sversionFile));
-        Vector values;
         String sectionName = null;
         Properties results = new Properties();
 

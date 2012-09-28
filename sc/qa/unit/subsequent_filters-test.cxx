@@ -48,10 +48,15 @@
 #include "cell.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include "dpobject.hxx"
+#include "dpsave.hxx"
+#include "stlsheet.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -137,9 +142,10 @@ public:
     void testRepeatedColumnsODS();
     void testDataValidityODS();
 
-    void testColorScale();
-    void testDataBar();
-    void testCondFormat();
+    void testColorScaleODS();
+    void testColorScaleXLSX();
+    void testDataBarODS();
+    void testNewCondFormat();
 
     //change this test file only in excel and not in calc
     void testSharedFormulaXLSX();
@@ -156,6 +162,8 @@ public:
     void testNumberFormatCSV();
 
     void testCellAnchoredShapesODS();
+
+    void testPivotTableBasicODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -187,14 +195,17 @@ public:
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
 
-    CPPUNIT_TEST(testColorScale);
-    CPPUNIT_TEST(testDataBar);
-    CPPUNIT_TEST(testCondFormat);
+    //CPPUNIT_TEST(testColorScaleODS);
+    //CPPUNIT_TEST(testColorScaleXLSX);
+    CPPUNIT_TEST(testDataBarODS);
+    CPPUNIT_TEST(testNewCondFormat);
 
     CPPUNIT_TEST(testNumberFormatHTML);
     CPPUNIT_TEST(testNumberFormatCSV);
 
     CPPUNIT_TEST(testCellAnchoredShapesODS);
+
+    CPPUNIT_TEST(testPivotTableBasicODS);
 
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
@@ -311,6 +322,9 @@ void testRangeNameImpl(ScDocument* pDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("=SUM(global3) should be 10", 10.0, aValue);
     pDoc->GetValue(1,0,1,aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", 5.0, aValue);
+    // Test if Global5 ( which depends on Global6 ) is evaluated
+    pDoc->GetValue(0,5,1, aValue);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
 }
@@ -341,8 +355,6 @@ void ScFiltersTest::testRangeNameXLSX()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     testRangeNameImpl(pDoc);
-
-    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testHardRecalcODS()
@@ -618,12 +630,47 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SVX_HOR_JUSTIFY_BLOCK, eHorJustify);
 
     //test Sheet3 only for ods
-    if ( nFormat == ODS )
+    if ( nFormat == ODS || nFormat == XLSX )
     {
         rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
         pFiltersTest->createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
         testCondFile(aCSVFileName, pDoc, 2);
+        // test parent cell style import ( fdo#55198 )
+        if ( nFormat == XLSX )
+        {
+            pPattern = pDoc->GetPattern(1,1,3);
+            ScStyleSheet* pStyleSheet = (ScStyleSheet*)pPattern->GetStyleSheet();
+            // check parent style name
+            rtl::OUString sExpected("Excel Built-in Date");
+            rtl::OUString sResult = pStyleSheet->GetName();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("parent style for Sheet4.B2 is 'Excel Built-in Date'", sExpected, sResult);
+            // check  align of style
+            SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+            eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(rItemSet.Get( ATTR_HOR_JUSTIFY ) ).GetValue() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+            // check date format ( should be just month e.g. 29 )
+            sResult =pDoc->GetString( 1,1,3 );
+            sExpected = rtl::OUString("29");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should just display month", sExpected, sResult );
+
+            // check actual align applied to cell, should be the same as
+            // the style
+            eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(pPattern->GetItem( ATTR_HOR_JUSTIFY ) ).GetValue() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("cell with 'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+        }
     }
+
+    ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0,0,2);
+    const ScRangeList& rRange = pCondFormat->GetRange();
+    CPPUNIT_ASSERT(rRange == ScRange(0,0,2,3,0,2));
+
+    pCondFormat = pDoc->GetCondFormat(0,1,2);
+    const ScRangeList& rRange2 = pCondFormat->GetRange();
+    CPPUNIT_ASSERT(rRange2 == ScRange(0,1,2,0,1,2));
+
+    pCondFormat = pDoc->GetCondFormat(1,1,2);
+    const ScRangeList& rRange3 = pCondFormat->GetRange();
+    CPPUNIT_ASSERT(rRange3 == ScRange(1,1,2,3,1,2));
 }
 
 }
@@ -757,19 +804,19 @@ void ScFiltersTest::testBorderXLS()
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
             table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),6L);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),4L);
 
     pDoc->GetBorderLines( 3, 5, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
             table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),18L);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),12L);
 
     pDoc->GetBorderLines( 5, 7, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
             table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),24L);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),16L);
 }
 struct Border
 {
@@ -1389,7 +1436,130 @@ void ScFiltersTest::testCellAnchoredShapesODS()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testColorScale()
+namespace {
+
+class FindDimByName : std::unary_function<const ScDPSaveDimension*, bool>
+{
+    OUString maName;
+public:
+    FindDimByName(const OUString& rName) : maName(rName) {}
+
+    bool operator() (const ScDPSaveDimension* p) const
+    {
+        return p && p->GetName() == maName;
+    }
+};
+
+bool hasDimension(const std::vector<const ScDPSaveDimension*>& rDims, const OUString& aName)
+{
+    return std::find_if(rDims.begin(), rDims.end(), FindDimByName(aName)) != rDims.end();
+}
+
+}
+
+void ScFiltersTest::testPivotTableBasicODS()
+{
+    OUString aFileNameBase("pivot-table-basic.");
+    OUString aFileExt = OUString::createFromAscii(aFileFormats[ODS].pName);
+    OUString aFilterName = OUString::createFromAscii(aFileFormats[ODS].pFilterName);
+    OUString aFilterType = OUString::createFromAscii(aFileFormats[ODS].pTypeName);
+
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExt, aFileName);
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[ODS].nFormatType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load pivot-table-basic.ods", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly two sheets.", pDoc->GetTableCount() == 2);
+
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly one pivot table instance.", pDPs->GetCount() == 1);
+
+    const ScDPObject* pDPObj = (*pDPs)[0];
+    CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+    const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get ScDPSaveData instance.", pSaveData);
+    std::vector<const ScDPSaveDimension*> aDims;
+
+    // Row fields
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 3 row fields (2 normal dimensions and 1 layout dimension).", aDims.size() == 3);
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Row1"));
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Row2"));
+    const ScDPSaveDimension* pDataLayout = pSaveData->GetExistingDataLayoutDimension();
+    CPPUNIT_ASSERT_MESSAGE("There should be a data layout field as a row field.",
+                           pDataLayout && pDataLayout->GetOrientation() == sheet::DataPilotFieldOrientation_ROW);
+
+    // Column fields
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aDims);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 2 column fields.", aDims.size() == 2);
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Col1"));
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Col2"));
+
+    // Page fields
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_PAGE, aDims);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 2 page fields.", aDims.size() == 2);
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Page1"));
+    CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Page2"));
+
+    // Check the data field.
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 1 data field.", aDims.size() == 1);
+    const ScDPSaveDimension* pDim = aDims.back();
+    CPPUNIT_ASSERT_MESSAGE("Function for the data field should be COUNT.", pDim->GetFunction() == sheet::GeneralFunction_COUNT);
+
+    xDocSh->DoClose();
+}
+
+namespace {
+
+void testColorScaleFormat_Impl(const rtl::OUString& rFilePath, const ScConditionalFormat* pFormat)
+{
+    rtl::OUStringBuffer aBuf;
+    CPPUNIT_ASSERT(pFormat);
+    pFormat->dumpInfo(aBuf);
+    rtl::OUString aString = aBuf.makeStringAndClear();
+    std::string aStdString;
+    loadFile(rFilePath, aStdString);
+    rtl::OUString aRefString = rtl::OUString::createFromAscii(aStdString.c_str());
+    CPPUNIT_ASSERT_EQUAL(aRefString, aString);
+}
+
+void testColorScale_Impl(ScDocument* pDoc, const rtl::OUString& aBaseString)
+{
+    // first color scale
+    {
+        const ScConditionalFormat* pFormat = pDoc->GetCondFormat(1,1,0);
+        rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_1.txt");
+        testColorScaleFormat_Impl(aFilePath, pFormat);
+    }
+
+    // second cond format
+    {
+        const ScConditionalFormat* pFormat = pDoc->GetCondFormat(4,1,0);
+        rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_2.txt");
+        testColorScaleFormat_Impl(aFilePath, pFormat);
+    }
+
+    // third cond format
+    {
+        const ScConditionalFormat* pFormat = pDoc->GetCondFormat(7,1,0);
+        rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_3.txt");
+        testColorScaleFormat_Impl(aFilePath, pFormat);
+    }
+
+    // forth cond format
+    {
+        const ScConditionalFormat* pFormat = pDoc->GetCondFormat(10,1,0);
+        rtl::OUString aFilePath = aBaseString + rtl::OUString("colorScale_4.txt");
+        testColorScaleFormat_Impl(aFilePath, pFormat);
+    }
+}
+
+}
+
+void ScFiltersTest::testColorScaleODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
     rtl::OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
@@ -1404,27 +1574,37 @@ void ScFiltersTest::testColorScale()
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    const ScPatternAttr* pPattern = pDoc->GetPattern(1,1,0);
-    sal_uLong nIndex = static_cast<const SfxUInt32Item&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
-    CPPUNIT_ASSERT(nIndex);
-    ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(0);
-    const ScConditionalFormat* pFormat = pCondFormatList->GetFormat(nIndex);
-    CPPUNIT_ASSERT(pFormat);
-    pFormat->dumpInfo();
-
-    pPattern = pDoc->GetPattern(1,5,0);
-    nIndex = static_cast<const SfxUInt32Item&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
-    CPPUNIT_ASSERT(nIndex);
-    pFormat = pCondFormatList->GetFormat(nIndex);
-    CPPUNIT_ASSERT(pFormat);
+    rtl::OUStringBuffer aBuffer(getSrcRootPath());
+    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
+    testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
 }
 
-void ScFiltersTest::testDataBar()
+void ScFiltersTest::testColorScaleXLSX()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
+    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[XLSX].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.xlsx", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    rtl::OUStringBuffer aBuffer(getSrcRootPath());
+    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
+    testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
+}
+
+void ScFiltersTest::testDataBarODS()
 {
 
 }
 
-void ScFiltersTest::testCondFormat()
+void ScFiltersTest::testNewCondFormat()
 {
 
 }

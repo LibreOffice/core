@@ -91,20 +91,7 @@ class DT_White : public DT_Dsapi
     virtual bool        IsWhiteOnly() const;
 };
 
-
-class DT_MLTag : public DT_Dsapi
-{
-  public:
-    enum E_Kind
-    {
-        k_unknown = 0,
-        k_begin,
-        k_end,
-        k_single
-    };
-};
-
-class DT_MupType : public DT_MLTag
+class DT_MupType : public DT_Dsapi
 {
   public:
     explicit            DT_MupType()            /// Constructor for End-Tag
@@ -125,7 +112,7 @@ class DT_MupType : public DT_MLTag
     bool                bIsBegin;
 };
 
-class DT_MupMember : public DT_MLTag
+class DT_MupMember : public DT_Dsapi
 {
   public:
     explicit            DT_MupMember()          /// Constructor for End-Tag
@@ -164,7 +151,7 @@ class DT_MupConst : public DT_Dsapi
 };
 
 
-class DT_Style : public DT_MLTag
+class DT_Style : public DT_Dsapi
 {
   public:
                         DT_Style(
@@ -181,7 +168,6 @@ class DT_Style : public DT_MLTag
                                                 { return bNewLine; }
   private:
     String              sText;                  /// With HTML.
-    E_Kind              eKind;
     bool                bNewLine;
 };
 

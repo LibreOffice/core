@@ -1,6 +1,9 @@
 Android-specific notes
 
-* Getting something running
+Note that this document has not necessarily been updated to match
+reality... 
+
+* Getting something running on an emulated device
 
 	Create an AVD in the android UI, don't even try to get
 the data partition size right in the GUI, that is doomed to producing
@@ -29,6 +32,12 @@ hand, this phenomenon might not happen on actual devices.
 
 	and continue onwards & upwards.
 
+* What about using a real device?
+
+	That works fine, too. You won't be able to use the "adb shell
+stop" and "adb shell start" commands to do anything, as far as I
+know. But don't seem to be necessary on a real device anyway?
+
 * Debugging
 
 	Debugging is fun, the default NDK gdb (in v7) is busted, you
@@ -49,6 +58,10 @@ to run: ndk-gdb and it will attach the process.
 	backtrace
 
 	may show you the native code trace.
+
+	In r8b the ndk-gdb seems to work a bit better, and I think it isn't
+necessary to use the mingw-and-ndk ndb-gdb any longer.
+
 
 * Common Errors / Gotchas
 
@@ -75,7 +88,7 @@ which real end-user apps with GUI etc run. We have no intent to
 require LibreOffice code to be used only on "rooted" devices etc.
 
 All Android apps are basically Java programs. They run "in" a Dalvik
-virtual machine. Yes, you can also have apps where *your* code is only
+virtual machine. Yes, you can also have apps where all *your* code is
 native code, written in a compiled language like C or C++. But also
 also such apps are actually started by system-provided Java
 bootstrapping code (NativeActivity) running in a Dalvik VM.
@@ -83,6 +96,11 @@ bootstrapping code (NativeActivity) running in a Dalvik VM.
 Such a native app (or actually, "activity") is not built as a
 executable program, but as a shared object. The Java NativeActivity
 bootstrapper loads that shared object with dlopen.
+
+Anyway, our current "experimental" apps (DocumentLoader and
+LibreOffice4Android) are not based on NativeActivity any more. They
+have normal Java code for the activity, and just call out to native
+libraries to do all the heavy lifting.
 
 It is somewhat problematic to construct .apk packages except by using
 the high-level tools in the Android SDK. At least I haven't figured

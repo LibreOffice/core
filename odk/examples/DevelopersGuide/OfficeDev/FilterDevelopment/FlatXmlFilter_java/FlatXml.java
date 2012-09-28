@@ -32,8 +32,6 @@
  *
  *************************************************************************/
 
-import java.io.*;
-import java.util.*;
 import com.sun.star.uno.*;
 import com.sun.star.lang.*;
 import com.sun.star.beans.*;

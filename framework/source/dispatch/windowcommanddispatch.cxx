@@ -37,7 +37,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cmdevt.hxx>
@@ -175,7 +175,7 @@ void WindowCommandDispatch::impl_dispatchCommand(const ::rtl::OUString& sCommand
         if ( ! xProvider.is())
             return;
 
-        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(xSMGR).getUNOContext()));
+        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(xSMGR)));
         css::util::URL aCommand;
         aCommand.Complete = sCommand;
         xParser->parseStrict(aCommand);

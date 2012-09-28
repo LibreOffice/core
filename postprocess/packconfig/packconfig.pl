@@ -124,7 +124,7 @@ sub wanted
 {
     my $file = $_;
 
-    if ( $file =~ /.*\.xml$/ && -f $file ) {
+    if ( $file =~ /.*\.(ui|xml)$/ && -f $file ) {
         push @main::file_list, $File::Find::name;
     }
 }

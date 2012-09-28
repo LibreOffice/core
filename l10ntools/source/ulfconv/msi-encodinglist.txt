@@ -16,62 +16,64 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# Syntax: language ANSI-Codepage LCID
+# Syntax: language 0 LCID
+# 2nd field used to be the ANSI codepage,
+# but now we are using UTF-8 everywhere.
 # comment lines begin with hash
-af    1252  1078   # Afrikaans
+af       0  1078   # Afrikaans
 am       0  1118   # Amharic
-ar    1256  1025
-ar-SA 1256  1025
+ar       0  1025
+ar-SA    0  1025
 as       0  1101   # Assamese
 as-IN    0  1101   # Assamese
-ast   1252  1610
-be    1251  1059   # Belarusian
-be-BY 1251  1059
-bg    1251  1026   # Bulgarian
+ast      0  1610
+be       0  1059   # Belarusian
+be-BY    0  1059
+bg       0  1026   # Bulgarian
 bn       0  2117   # Bengali
 bn-BD    0  2117   # Bengali Bangladesh
 bn-IN    0  1093   # Bengali India
 bo       0  2121   
-br    1252  1150   # Breton
+br       0  1150   # Breton
 brx      0  1603   # Bodo (India)
 bs       0  5146   # bosnian
-ca    1252  1027   # Catalan
-ca-XV   1252  32771  # Catalan Valencian
-cs    1250  1029   # Czech
-cy    1252  1106   # Welsh
-da    1252  1030
-de    1252  1031
+ca       0  1027   # Catalan
+ca-XV    0  32771  # Catalan Valencian
+cs       0  1029   # Czech
+cy       0  1106   # Welsh
+da       0  1030
+de       0  1031
 dgo      0  1604   # Dogri (India)
 dz       0  2129   # Dzongkha (same ID as tibetan bhutan (s. i40713))
-el    1253  1032
-en-GB 1252  2057
-en-US 1252  1033
-en-ZA 1252  7177
+el       0  1032
+en-GB    0  2057
+en-US    0  1033
+en-ZA    0  7177
 eo       0  1553   # Esperanto
-es    1252  1034
-et    1257  1061
-eu    1252  1069   # Basque
+es       0  1034
+et       0  1061
+eu       0  1069   # Basque
 fa       0  1065   # Farsi
-fi    1252  1035
-fo    1252  1080   # Faroese
-fr    1252  1036
-fr-CA 1252  3084
+fi       0  1035
+fo       0  1080   # Faroese
+fr       0  1036
+fr-CA    0  3084
 fur      0  1585
 ga       0  2108   # Irish
 gd       0  1084   # Gaelic (Scotland)
-gl    1252  1110   # Galician
+gl       0  1110   # Galician
 gu       0  1095   # Gujarati
 gu-IN    0  1095   # Gujarati
-he    1255  1037
+he       0  1037
 hi       0  1081
-hr    1250  1050   # Croatian
-ht    1252  1626   # Haitian
-hu    1250  1038
+hr       0  1050   # Croatian
+ht       0  1626   # Haitian
+hu       0  1038
 hy       0  1067   # Armenian
-id    1252  1057   # Indonesian
-is    1252  1039   # Icelandic
-it    1252  1040
-ja     932  1041
+id       0  1057   # Indonesian
+is       0  1039   # Icelandic
+it       0  1040
+ja       0  1041
 jbo      0  1624
 ka       0  1079   # Georgian
 kab      0  1625
@@ -79,18 +81,18 @@ kk       0  1087
 km       0  1107   # Khmer
 kn       0  1099   # Kannada
 kn-IN    0  1099   # Kannada
-ko     949  1042
+ko       0  1042
 kok      0  1111   # Konkani
 ks       0  1120   # Kashmiri
 ku       0  1574
 ky       0  1088   # Kyrgyz
 ky-CN    0  1640   # Kyrgyz (China)
-lb    1252  1134
+lb       0  1134
 lo       0  1108   # Lao
-lt    1257  1063   # Lithuanian
-lv    1257  1062   # Latvian
+lt       0  1063   # Lithuanian
+lv       0  1062   # Latvian
 mai      0  1605   # Maithili (India)
-mk    1251  1071   # Macedonian
+mk       0  1071   # Macedonian
 ml       0  1100
 ml-IN    0  1100
 mn       0  1104   # Mongolian
@@ -101,70 +103,70 @@ mr-IN    0  1102
 ms       0  1086   # Malay (Malaysian)
 mt       0  1082   # Maltese
 my       0  1109   # Burmese
-nb    1252  1044
+nb       0  1044
 ne       0  1121   # Nepali
-nl    1252  1043
-nn    1252  2068
-no    1252  1044
+nl       0  1043
+nn       0  2068
+no       0  1044
 nr       0  1580   # Ndebele South
 nso      0  1132
 ny       0  1598
-oc    1252  1154   # Occitan-lengadocian
+oc       0  1154   # Occitan-lengadocian
 om       0  2162
 or       0  1096   # Oriya
 or-IN    0  1096
 pa-IN    0  1094   # Punjabi
 pap      0  2171 
-pl    1250  1045
+pl       0  1045
 ps       0  2171
-pt    1252  2070
-pt-BR 1252  1046
-pt-PT 1252  2070
-qtz   1252  1033   # key id pseudo language
+pt       0  2070
+pt-BR    0  1046
+pt-PT    0  2070
+qtz      0  1033   # key id pseudo language
 rm       0  1047   # Raeto-Romance
-ro    1250  1048   # Romanian
-ru    1251  1049
+ro       0  1048   # Romanian
+ru       0  1049
 rw       0  1569   # Kinyarwanda
 sa-IN    0  1103   # Sanskrit
 sat      0  1606   # Santali
 sb       0  1070   # Sorbian
 sc       0  3047
 sd       0  1113   # Sindhi
-sh    1250  2074   # Serbian Latin
+sh       0  2074   # Serbian Latin
 si       0  2133
-sk    1250  1051   # Slovak
-sl    1250  1060   # Slovenian
-sq    1250  1052   # Albanian
-sr    1251  3098   # Serbian Cyrillic
-sr-SP 1251  3098   # Serbian Cyrillic
+sk       0  1051   # Slovak
+sl       0  1060   # Slovenian
+sq       0  1052   # Albanian
+sr       0  3098   # Serbian Cyrillic
+sr-SP    0  3098   # Serbian Cyrillic
 ss       0  1579   # Swazi
 st       0  1072   # Southern Sotho, Sutu
-sv    1252  1053
-sw    1252  1089   # Swahili
-sw-TZ 1252  1089   # Swahili
+sv       0  1053
+sw       0  1089   # Swahili
+sw-TZ    0  1089   # Swahili
 so       0  1143  
 ta       0  1097   # Tamil
 ta-IN    0  1097   # Tamil
 te       0  1098
 te-IN    0  1098
 tg       0  1064   # Tajik
-th     874  1054
+th       0  1054
 ti       0  1139   # Tigrinya
 ti-ER    0  1139   # Tigrinya
 tn       0  1074   # Setsuana
-tr    1254  1055   # Turkish
+tr       0  1055   # Turkish
 ts       0  1073   # Tsonga
 tk       0  1090
-tt    1251  1092   # Tatar
+tt       0  1092   # Tatar
 ug       0  1152
-uk    1251  1058   # Ukrainian
-ur    1256  1056   # Urdu
+uk       0  1058   # Ukrainian
+ur       0  1056   # Urdu
 ur-IN    0  2080
 uz       0  1091   # Uzbek (Latin)
 ve       0  1075   # Venda
-vi    1258  1066   # Vietnamese
+vi       0  1066   # Vietnamese
 xh       0  1076   # Xhosa
 yi       0  1085   # Yiddish
-zh-CN  936  2052
-zh-TW  950  1028
+zh-CN    0  2052
+zh-TW    0  1028
 zu       0  1077   # Zulu

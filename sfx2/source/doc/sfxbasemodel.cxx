@@ -43,7 +43,7 @@
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <comphelper/enumhelper.hxx>  // can be removed when this is a "real" service
@@ -921,9 +921,7 @@ SfxBaseModel::getDocumentProperties()
     if ( !m_pData->m_xDocumentProperties.is() )
     {
         uno::Reference< document::XDocumentProperties > xDocProps(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.document.DocumentProperties") ),
-            uno::UNO_QUERY_THROW);
+            document::DocumentProperties::create( ::comphelper::getProcessComponentContext() ) );
         m_pData->impl_setDocumentProperties(xDocProps);
     }
 
@@ -1833,9 +1831,23 @@ void SAL_CALL SfxBaseModel::initNew()
     }
 }
 
-//________________________________________________________________________________________________________
-// XLoadable
-//________________________________________________________________________________________________________
+namespace {
+
+OUString getFilterProvider(const uno::Sequence<beans::PropertyValue>& rArgs)
+{
+    OUString aStr;
+    for (sal_Int32 i = 0, n = rArgs.getLength(); i < n; ++i)
+    {
+        if (rArgs[i].Name == "FilterProvider")
+        {
+            rArgs[i].Value >>= aStr;
+            return aStr;
+        }
+    }
+    return aStr;
+}
+
+}
 
 void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >& seqArguments )
         throw (::com::sun::star::frame::DoubleInitializationException,
@@ -1857,6 +1869,17 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             throw frame::DoubleInitializationException();
 
         SfxMedium* pMedium = new SfxMedium( seqArguments );
+
+        OUString aFilterProvider = getFilterProvider(seqArguments);
+        if (!aFilterProvider.isEmpty())
+        {
+            if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium, aFilterProvider))
+                delete pMedium;
+
+            pMedium->SetUpdatePickList(false);
+            return;
+        }
+
         String aFilterName;
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if( pFilterNameItem )
@@ -3760,7 +3783,8 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
         {
             try {
                 ::ucbhelper::Content aContent( pMedium->GetName(),
-                    uno::Reference<ucb::XCommandEnvironment>() );
+                    uno::Reference<ucb::XCommandEnvironment>(),
+                    comphelper::getProcessComponentContext() );
                 const uno::Reference < beans::XPropertySetInfo > xProps
                      = aContent.getProperties();
                 if ( xProps.is() )

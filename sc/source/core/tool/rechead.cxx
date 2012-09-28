@@ -51,7 +51,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
-        //  alles auf 0, damit BytesLeft() wenigstens abbricht
+        //  everything to 0, so  BytesLeft() aborts at least
         pBuf = NULL; pMemStream = NULL;
         nEntryEnd = nDataPos;
     }
@@ -90,10 +90,10 @@ void ScMultipleReadHeader::EndEntry()
     {
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
-        rStream.Seek( nEntryEnd );          // Rest ueberspringen
+        rStream.Seek( nEntryEnd );          // ignore the rest
     }
 
-    nEntryEnd = nTotalEnd;          // den ganzen Rest, wenn kein StartEntry kommt
+    nEntryEnd = nTotalEnd;          // all remaining, if no StartEntry follows
 }
 
 void ScMultipleReadHeader::StartEntry()
@@ -137,12 +137,12 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
     rStream << static_cast<sal_uInt32>(aMemStream.Tell());
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
-    if ( nDataEnd - nDataPos != nDataSize )                 // Default getroffen?
+    if ( nDataEnd - nDataPos != nDataSize )                 // matched default ?
     {
         nDataSize = nDataEnd - nDataPos;
         sal_uLong nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream << nDataSize;                               // Groesse am Anfang eintragen
+        rStream << nDataSize;                               // record size at the beginning
         rStream.Seek(nPos);
     }
 }

@@ -36,6 +36,7 @@
 
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
+#include "vcl/timer.hxx"
 #include "vcl/vclenum.hxx"
 #include "com/sun/star/lang/Locale.hpp"
 
@@ -352,6 +353,12 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     bool addFontconfigDir(const rtl::OString& rDirectory);
 
     bool readOverrideMetrics();
+
+    std::set<OString> m_aPreviousLangSupportRequests;
+    std::vector<OString> m_aCurrentRequests;
+    Timer m_aFontInstallerTimer;
+
+    DECL_LINK( autoInstallFontLangSupport, void* );
 
     PrintFontManager();
     ~PrintFontManager();

@@ -18,10 +18,6 @@
 
 package graphical;
 
-/**
- *
- * @author ll93751
- */
 public class WrongSuffixException extends OfficeException
 {
     public WrongSuffixException(String _aMessage)

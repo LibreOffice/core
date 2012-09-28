@@ -41,7 +41,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -77,7 +77,7 @@ PopupMenuControllerBase::PopupMenuControllerBase( const Reference< XMultiService
     m_xServiceManager( xServiceManager )
 {
     if ( m_xServiceManager.is() )
-        m_xURLTransformer.set( util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+        m_xURLTransformer.set( util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
 }
 
 PopupMenuControllerBase::~PopupMenuControllerBase()

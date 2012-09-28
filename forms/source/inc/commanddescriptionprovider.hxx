@@ -21,8 +21,7 @@
 #define COMMANDDESCRIPTIONPROVIDER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
-
-#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <boost/shared_ptr.hpp>
 
@@ -49,7 +48,7 @@ namespace frm
     //=====================================================================
     PCommandDescriptionProvider
         createDocumentCommandDescriptionProvider(
-            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
         );
 

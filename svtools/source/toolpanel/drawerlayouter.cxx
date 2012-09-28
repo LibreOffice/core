@@ -87,7 +87,7 @@ namespace svt
         const size_t nUpperBound = !!aActivePanel ? *aActivePanel : nPanelCount - 1;
         for ( size_t i=0; i<=nUpperBound; ++i )
         {
-            long nDrawerHeight = m_aDrawers[i]->GetPreferredHeightPixel();
+            long const nDrawerHeight = m_aDrawers[i]->GetPreferredHeightPixel();
             m_aDrawers[i]->SetPosSizePixel(
                 aUpperDrawerPos, Size( nWidth, nDrawerHeight ) );
             aUpperDrawerPos.Move( 0, nDrawerHeight );
@@ -97,7 +97,7 @@ namespace svt
         Point aLowerDrawerPos( i_rDeckPlayground.BottomLeft() );
         for ( size_t j = nPanelCount - 1; j > nUpperBound; --j )
         {
-            long nDrawerHeight = m_aDrawers[j]->GetPreferredHeightPixel();
+            long const nDrawerHeight = m_aDrawers[j]->GetPreferredHeightPixel();
             m_aDrawers[j]->SetPosSizePixel(
                 Point( aLowerDrawerPos.X(), aLowerDrawerPos.Y() - nDrawerHeight + 1 ),
                 Size( nWidth, nDrawerHeight )

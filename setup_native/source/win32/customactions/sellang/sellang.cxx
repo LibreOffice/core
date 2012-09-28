@@ -49,6 +49,8 @@
 #include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
 
+#include "spellchecker_selection.hxx"
+
 BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 {
     DWORD sz = 0;
@@ -65,19 +67,14 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 }
 
 static const char *
-langid_to_string( LANGID langid, int *have_default_lang )
+langid_to_string( LANGID langid )
 {
     /* Map from LANGID to string. The languages below are now in
      * alphabetical order of codes as in
-     * setup_native/source/win32/msi-encodinglist.txt. Only the
+     * l10ntools/source/ulfconv/msi-encodinglist.txt. Only the
      * language part is returned in the string.
      */
     switch (PRIMARYLANGID (langid)) {
-    case LANG_ENGLISH:
-        if (have_default_lang != NULL &&
-            langid == MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT))
-            *have_default_lang = 1;
-        return "en";
 #define CASE(name, primary) \
         case LANG_##primary: return #name
     CASE(af, AFRIKAANS);
@@ -94,6 +91,7 @@ langid_to_string( LANGID langid, int *have_default_lang )
     CASE(da, DANISH);
     CASE(de, GERMAN);
     CASE(el, GREEK);
+    CASE(en, ENGLISH);
     CASE(es, SPANISH);
     CASE(et, ESTONIAN);
     CASE(eu, BASQUE);
@@ -174,7 +172,7 @@ langid_to_string( LANGID langid, int *have_default_lang )
         CASE(sh, SERBIAN, SERBIAN_LATIN);
         CASE(sr, SERBIAN, SERBIAN_CYRILLIC);
 #undef CASE
-        default: return "";
+        default: return 0;
         }
     }
 }
@@ -185,14 +183,20 @@ langid_to_string( LANGID langid, int *have_default_lang )
 static const char *ui_langs[MAX_LANGUAGES];
 static int num_ui_langs = 0;
 
+void add_ui_lang(char const * lang)
+{
+    if (lang != 0 && num_ui_langs != SAL_N_ELEMENTS(ui_langs)) {
+        ui_langs[num_ui_langs++] = lang;
+    }
+}
+
 BOOL CALLBACK
 enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
 {
     long langid = strtol(language, NULL, 16);
     if (langid > 0xFFFF)
         return TRUE;
-    ui_langs[num_ui_langs] = langid_to_string((LANGID) langid, NULL);
-    num_ui_langs++;
+    add_ui_lang(langid_to_string((LANGID) langid));
     if (num_ui_langs == SAL_N_ELEMENTS(ui_langs) )
         return FALSE;
     return TRUE;
@@ -207,13 +211,47 @@ present_in_ui_langs(const char *lang)
     return FALSE;
 }
 
+namespace {
+
+struct InstallLocalized {
+    char lang[sizeof("xx_XX")];
+    bool install;
+};
+
+void addMatchingDictionaries(
+    char const * lang, InstallLocalized * dicts, int ndicts)
+{
+    for (int i = 0; i != SAL_N_ELEMENTS(setup_native::languageDictionaries);
+         ++i)
+    {
+        if (strcmp(lang, setup_native::languageDictionaries[i].language) == 0) {
+            for (char const * const * p = setup_native::languageDictionaries[i].
+                     dictionaries;
+                 *p != NULL; ++p)
+            {
+                for (int j = 0; j != ndicts; ++j) {
+                    if (_stricmp(*p, dicts[j].lang) == 0) {
+                        dicts[j].install = true;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+    }
+}
+
+}
+
 extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
 {
     char feature[100];
     MSIHANDLE database, view, record;
     DWORD length;
     int nlangs = 0;
-    char langs[MAX_LANGUAGES][6];
+    InstallLocalized langs[MAX_LANGUAGES];
+    int ndicts = 0;
+    InstallLocalized dicts[MAX_LANGUAGES];
 
     database = MsiGetActiveDatabase(handle);
 
@@ -238,100 +276,118 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
             return ERROR_SUCCESS;
         }
 
-        /* Keep track of what languages are included in this installer, if
-         * it is a multilanguage one.
+        /* Keep track of what langpacks are included in this installer.
          */
-        if (strcmp(feature, "gm_Langpack_r_en_US") != 0)
-            strcpy(langs[nlangs++], feature + strlen("gm_Langpack_r_"));
+        strcpy(langs[nlangs].lang, feature + strlen("gm_Langpack_r_"));
+        langs[nlangs].install = false;
+        ++nlangs;
 
         MsiCloseHandle(record);
     }
 
     MsiCloseHandle(view);
 
-    if (nlangs > 0) {
-        int i;
-        char* pVal = NULL;
-        if ( (GetMsiProp( handle, "UI_LANGS", &pVal )) && pVal ) {
-            /* user gave UI languages explicitely with UI_LANGS property */
-            int sel_ui_lang = 0;
-            strcpy(langs[nlangs++], "en_US");
-            char *str_ptr;
-            str_ptr = strtok(pVal, ",");
-            for(; str_ptr != NULL ;) {
-                ui_langs[num_ui_langs] = str_ptr;
-                num_ui_langs++;
-                str_ptr = strtok(NULL, ",");
-            }
-            for (i = 0; i < nlangs; i++) {
-                if (!present_in_ui_langs(langs[i])) {
-                    UINT rc;
-                    sprintf(feature, "gm_Langpack_r_%s", langs[i]);
-                    rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
+    /* Keep track of what dictionaries are included in this installer:
+     */
+    if (MsiDatabaseOpenViewA(
+            database,
+            ("SELECT Feature from Feature WHERE"
+             " Feature_Parent = 'gm_Dictionaries'"),
+            &view)
+        == ERROR_SUCCESS)
+    {
+        if (MsiViewExecute(view, NULL) == ERROR_SUCCESS) {
+            while (ndicts < MAX_LANGUAGES &&
+                   MsiViewFetch(view, &record) == ERROR_SUCCESS)
+            {
+                length = sizeof(feature);
+                if (MsiRecordGetStringA(record, 1, feature, &length)
+                    == ERROR_SUCCESS)
+                {
+                    if (strncmp(
+                            feature, "gm_r_ex_Dictionary_",
+                            strlen("gm_r_ex_Dictionary_"))
+                        == 0)
+                    {
+                        strcpy(
+                            dicts[ndicts].lang,
+                            feature + strlen("gm_r_ex_Dictionary_"));
+                        dicts[ndicts].install = false;
+                        ++ndicts;
+                    }
                 }
-                else {
-                    sel_ui_lang++;
-                }
-            }
-            if ( sel_ui_lang == 0 ) {
-                /* When UI_LANG property contains only languages that are not present
-                 * in the installer, install at least en_US localization.
-                 */
-                MsiSetFeatureStateA(handle, "gm_Langpack_r_en_US", INSTALLSTATE_LOCAL);
+                MsiCloseHandle(record);
             }
         }
-        else {
-            /* Deselect those languages that don't match any of the UI languages
-             * available on the system.
-             */
+        MsiCloseHandle(view);
+    }
 
-            int have_system_default_lang = 0;
-            const char *system_default_lang = langid_to_string(GetSystemDefaultUILanguage(), &have_system_default_lang);
-            const char *user_locale_lang = langid_to_string(LANGIDFROMLCID(GetThreadLocale()), NULL);
+    /* Keep track of what UI languages are relevant, either the ones explicitly
+     * requested with the UI_LANGS property, or all available on the system:
+     */
+    char* pVal = NULL;
+    if ( (GetMsiProp( handle, "UI_LANGS", &pVal )) && pVal ) {
+        char *str_ptr;
+        str_ptr = strtok(pVal, ",");
+        for(; str_ptr != NULL ;) {
+            add_ui_lang(str_ptr);
+            str_ptr = strtok(NULL, ",");
+        }
+    } else {
+        add_ui_lang(langid_to_string(GetSystemDefaultUILanguage()));
+        add_ui_lang(langid_to_string(LANGIDFROMLCID(GetThreadLocale())));
+            //TODO: are the above two explicit additions necessary, or will
+            // those values always be included in the below EnumUILanguages
+            // anyway?
+        EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
+    }
 
-            EnumUILanguagesA(enum_ui_lang_proc, 0, 0);
-
-            /* If one of the alternative languages in a multi-language installer
-             * is the system default UI language, deselect those languages that
-             * aren't among the UI languages available on the system.
-             * (On most Windows installations, just one UI language is present,
-             * which obviously is the same as the default UI language. But
-             * we want to be generic.)
-             * If none of the languages in a multi-language installer is the
-             * system default UI language (this happens now in 2.4.0 where we
-             * cannot put as many UI languages into the installer as we would
-             * like, but only half a dozen: en-US,de,es,fr,it,pt-BR), pretend
-             * that English is the system default UI language,
-             * so that we will by default deselect everything except
-             * English. We don't want to by default install all half dozen
-             * languages for an unsuspecting user of a Finnish Windows, for
-             * instance. Sigh.
-             */
-            if (system_default_lang[0]) {
-                for (i = 0; i < nlangs; i++) {
-                    if (memcmp (system_default_lang, langs[i], 2) == 0) {
-                        have_system_default_lang = 1;
-                    }
-                }
+    // If the set of langpacks that match any of the relevant UI languages is
+    // non-empty, select just those matching langpacks; otherwise, if an en_US
+    // langpack is included, select just that langpack (this happens if, e.g.,
+    // a multi-language en-US,de,es,fr,it,pt-BR installation set is installed on
+    // a Finnish Windows); otherwise, select all langpacks (this happens if,
+    // e.g., a single-language de installation set is installed on a Finnish
+    // Windows):
+    bool matches = false;
+    for (int i = 0; i < nlangs; i++) {
+        if (present_in_ui_langs(langs[i].lang)) {
+            langs[i].install = true;
+            matches = true;
+        }
+    }
+    if (!matches) {
+        for (int i = 0; i < nlangs; i++) {
+            if (strcmp(langs[nlangs].lang, "en_US") == 0) {
+                langs[i].install = true;
+                matches = true;
+                break;
             }
-
-            if (!have_system_default_lang) {
-                system_default_lang = "en";
-                have_system_default_lang = 1;
-            }
-            if (have_system_default_lang) {
-                for (i = 0; i < nlangs; i++) {
-                    if (memcmp(system_default_lang, langs[i], 2) != 0 &&
-                        memcmp(user_locale_lang, langs[i], 2) != 0 &&
-                        !present_in_ui_langs(langs[i])) {
-                        UINT rc;
-                        sprintf(feature, "gm_Langpack_r_%s", langs[i]);
-                        rc = MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
-                    }
-                }
+        }
+        if (!matches) {
+            for (int i = 0; i < nlangs; i++) {
+                langs[i].install = true;
             }
         }
     }
+
+    for (int i = 0; i < nlangs; i++) {
+        if (langs[i].install) {
+            addMatchingDictionaries(langs[i].lang, dicts, ndicts);
+        } else {
+            sprintf(feature, "gm_Langpack_r_%s", langs[i].lang);
+            MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
+        }
+    }
+
+    // Select just those dictionaries that match any of the selected langpacks:
+    for (int i = 0; i != ndicts; ++i) {
+        if (!dicts[i].install) {
+            sprintf(feature, "gm_r_ex_Dictionary_%s", dicts[i].lang);
+            MsiSetFeatureStateA(handle, feature, INSTALLSTATE_ABSENT);
+        }
+    }
+
     MsiCloseHandle(database);
 
     return ERROR_SUCCESS;

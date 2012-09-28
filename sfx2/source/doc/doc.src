@@ -46,9 +46,13 @@ QueryBox MSG_REGION_NOTEMPTY
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "The category is not empty.\nDelete anyway?" ;
 };
+String STR_QUERY_SAVE_DOCUMENT_TITLE
+{
+    Text [ en-US ] = "Save document" ;
+};
 String STR_QUERY_SAVE_DOCUMENT
 {
-    Text [ en-US ] = "The document \"$(DOC)\" has been modified.\nDo you want to save your changes?" ;
+    Text [ en-US ] = "Save changes to document \"$(DOC)\" before closing?" ;
 };
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
 Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
@@ -307,7 +311,7 @@ String STR_DOCTYPENAME_MESSAGE
 
 String STR_NOSAVEANDCLOSE
 {
-    Text [ en-US ] = "~Discard" ;
+    Text [ en-US ] = "Close ~without saving" ;
 };
 
 String STR_PACKNGO_NOACCESS

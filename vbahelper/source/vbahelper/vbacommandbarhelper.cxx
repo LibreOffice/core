@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbacommandbarhelper.hxx"
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
@@ -32,9 +33,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-#define CREATEOUSTRING(asciistr) rtl::OUString(asciistr)
-
-typedef std::map< rtl::OUString, rtl::OUString > MSO2OOCommandbarMap;
+typedef std::map< OUString, OUString > MSO2OOCommandbarMap;
 
 class MSO2OOCommandbarHelper
 {
@@ -45,17 +44,17 @@ private:
     MSO2OOCommandbarHelper()
     {
         // Buildin toolbars
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Standard"),CREATEOUSTRING("private:resource/toolbar/standardbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Formatting"),CREATEOUSTRING("private:resource/toolbar/formatobjectbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Drawing"),CREATEOUSTRING("private:resource/toolbar/drawbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Toolbar List"),CREATEOUSTRING("private:resource/toolbar/toolbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Forms"),CREATEOUSTRING("private:resource/toolbar/formcontrols") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Form Controls"),CREATEOUSTRING("private:resource/toolbar/formcontrols") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Full Screen"),CREATEOUSTRING("private:resource/toolbar/fullscreenbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Chart"),CREATEOUSTRING("private:resource/toolbar/flowchartshapes") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("Picture"),CREATEOUSTRING("private:resource/toolbar/graphicobjectbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("WordArt"),CREATEOUSTRING("private:resource/toolbar/fontworkobjectbar") ) );
-        maBuildinToolbarMap.insert( std::make_pair( CREATEOUSTRING("3-D Settings"),CREATEOUSTRING("private:resource/toolbar/extrusionobjectbar") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Standard") ,    OUString("private:resource/toolbar/standardbar" ) ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Formatting"),   OUString("private:resource/toolbar/formatobjectbar") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Drawing"),      OUString("private:resource/toolbar/drawbar") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Toolbar List"), OUString("private:resource/toolbar/toolbar") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Forms"),        OUString("private:resource/toolbar/formcontrols") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Form Controls"),OUString("private:resource/toolbar/formcontrols") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Full Screen"),  OUString("private:resource/toolbar/fullscreenbar") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Chart"),        OUString("private:resource/toolbar/flowchartshapes") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("Picture"),      OUString("private:resource/toolbar/graphicobjectbar") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("WordArt"),      OUString("private:resource/toolbar/fontworkobjectbar") ) );
+        maBuildinToolbarMap.insert( std::make_pair( OUString("3-D Settings"), OUString("private:resource/toolbar/extrusionobjectbar") ) );
     }
 
 public:
@@ -69,16 +68,16 @@ public:
         return pMSO2OOCommandbarHelper;
     }
 
-    rtl::OUString findBuildinToolbar( const rtl::OUString& sToolbarName )
+    OUString findBuildinToolbar( const OUString& sToolbarName )
     {
         MSO2OOCommandbarMap::iterator it = maBuildinToolbarMap.begin();
         for(; it != maBuildinToolbarMap.end(); ++it )
         {
-            rtl::OUString sName = it->first;
+            OUString sName = it->first;
             if( sName.equalsIgnoreAsciiCase( sToolbarName ) )
                 return it->second;
         }
-        return rtl::OUString();
+        return OUString();
     }
 };
 
@@ -96,32 +95,33 @@ void VbaCommandBarHelper::Init( ) throw (css::uno::RuntimeException)
     m_xDocCfgMgr = xUICfgSupplier->getUIConfigurationManager();
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+    if( xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
     {
-        maModuleId = rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" );
+        maModuleId = "com.sun.star.sheet.SpreadsheetDocument";
     }
-    else if( xServiceInfo->supportsService( rtl::OUString( "com.sun.star.text.TextDocument"  ) ) )
+    else if( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ) )
     {
-        maModuleId = rtl::OUString( "com.sun.star.text.TextDocument" );
+        maModuleId = "com.sun.star.text.TextDocument";
     }
 
     if( maModuleId.isEmpty() )
     {
-        throw uno::RuntimeException( rtl::OUString( "Not implemented" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
     }
 
     uno::Reference< lang::XMultiServiceFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp( xServiceManager->createInstance( rtl::OUString(  "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" )), uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp(
+        css::ui::ModuleUIConfigurationManagerSupplier::create(mxContext) );
 
     m_xAppCfgMgr.set( xUICfgMgrSupp->getUIConfigurationManager( maModuleId ), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::container::XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString(  "com.sun.star.ui.WindowStateConfiguration" )), uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::container::XNameAccess > xNameAccess( xServiceManager->createInstance( "com.sun.star.ui.WindowStateConfiguration" ), uno::UNO_QUERY_THROW );
 
     m_xWindowState.set( xNameAccess->getByName( maModuleId ), uno::UNO_QUERY_THROW );
 }
 
-css::uno::Reference< css::container::XIndexAccess > VbaCommandBarHelper::getSettings( const rtl::OUString& sResourceUrl ) throw (css::uno::RuntimeException)
+css::uno::Reference< css::container::XIndexAccess > VbaCommandBarHelper::getSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException)
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
         return m_xDocCfgMgr->getSettings( sResourceUrl, sal_True );
@@ -134,7 +134,7 @@ css::uno::Reference< css::container::XIndexAccess > VbaCommandBarHelper::getSett
     }
 }
 
-void VbaCommandBarHelper::removeSettings( const rtl::OUString& sResourceUrl ) throw (css::uno::RuntimeException)
+void VbaCommandBarHelper::removeSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException)
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
         m_xDocCfgMgr->removeSettings( sResourceUrl );
@@ -144,7 +144,7 @@ void VbaCommandBarHelper::removeSettings( const rtl::OUString& sResourceUrl ) th
     // persistChanges();
 }
 
-void VbaCommandBarHelper::ApplyChange( const rtl::OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, sal_Bool bTemporary ) throw (css::uno::RuntimeException)
+void VbaCommandBarHelper::ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, sal_Bool bTemporary ) throw (css::uno::RuntimeException)
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
     {
@@ -176,17 +176,17 @@ uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager() 
 {
     uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xFrame, uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( rtl::OUString("LayoutManager") ), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( "LayoutManager" ), uno::UNO_QUERY_THROW );
     return xLayoutManager;
 }
 
-sal_Bool VbaCommandBarHelper::hasToolbar( const rtl::OUString& sResourceUrl, const rtl::OUString& sName ) throw (css::uno::RuntimeException)
+sal_Bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, const OUString& sName ) throw (css::uno::RuntimeException)
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
     {
-        rtl::OUString sUIName;
+        OUString sUIName;
         uno::Reference< beans::XPropertySet > xPropertySet( m_xDocCfgMgr->getSettings( sResourceUrl, sal_False ), uno::UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( rtl::OUString(ITEM_DESCRIPTOR_UINAME) ) >>= sUIName;
+        xPropertySet->getPropertyValue( ITEM_DESCRIPTOR_UINAME ) >>= sUIName;
         if( sName.equalsIgnoreAsciiCase( sUIName ) )
             return sal_True;
     }
@@ -194,16 +194,16 @@ sal_Bool VbaCommandBarHelper::hasToolbar( const rtl::OUString& sResourceUrl, con
 }
 
 // return the resource url if found
-rtl::OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const rtl::OUString& sName ) throw (css::uno::RuntimeException)
+OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName ) throw (css::uno::RuntimeException)
 {
-    rtl::OUString sResourceUrl;
+    OUString sResourceUrl;
 
     // check if it is an buildin toolbar
     sResourceUrl = MSO2OOCommandbarHelper::getMSO2OOCommandbarHelper()->findBuildinToolbar( sName );
     if( !sResourceUrl.isEmpty() )
         return sResourceUrl;
 
-    uno::Sequence< ::rtl::OUString > allNames = xNameAccess->getElementNames();
+    uno::Sequence< OUString > allNames = xNameAccess->getElementNames();
     for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
     {
         sResourceUrl = allNames[i];
@@ -215,26 +215,26 @@ rtl::OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference<
     }
 
     // the customize toolbars creating during importing, shoud found there.
-    static rtl::OUString sToolbarPrefix(  "private:resource/toolbar/custom_"  );
+    static OUString sToolbarPrefix(  "private:resource/toolbar/custom_"  );
     sResourceUrl = sToolbarPrefix.concat( sName );
     if( hasToolbar( sResourceUrl, sName ) )
         return sResourceUrl;
 
-    return rtl::OUString();
+    return OUString();
 }
 
 // if found, return the position of the control. if not found, return -1
-sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const rtl::OUString& sName, bool bMenu ) throw (css::uno::RuntimeException)
+sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const OUString& sName, bool bMenu ) throw (css::uno::RuntimeException)
 {
     sal_Int32 nCount = xIndexAccess->getCount();
     css::uno::Sequence< css::beans::PropertyValue > aProps;
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        rtl::OUString sLabel;
+        OUString sLabel;
         xIndexAccess->getByIndex( i ) >>= aProps;
-        getPropertyValue( aProps, rtl::OUString(ITEM_DESCRIPTOR_LABEL) ) >>= sLabel;
+        getPropertyValue( aProps, ITEM_DESCRIPTOR_LABEL ) >>= sLabel;
         // handle the hotkey marker '~' (remove in toolbars (?), replace by '&' in menus)
-        ::rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         sal_Int32 index = sLabel.indexOf( sal_Unicode('~') );
         if( index < 0 )
         {
@@ -247,8 +247,8 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
                 aBuffer.append( sal_Unicode( '&' ) );
             aBuffer.append( sLabel.copy( index + 1 ) );
         }
-        rtl::OUString sNewLabel = aBuffer.makeStringAndClear();
-        OSL_TRACE("VbaCommandBarHelper::findControlByName, control name: %s", rtl::OUStringToOString( sNewLabel, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUString sNewLabel = aBuffer.makeStringAndClear();
+        OSL_TRACE("VbaCommandBarHelper::findControlByName, control name: %s", OUStringToOString( sNewLabel, RTL_TEXTENCODING_UTF8 ).getStr() );
         if( sName.equalsIgnoreAsciiCase( sNewLabel ) )
             return i;
     }
@@ -257,14 +257,14 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
     return -1;
 }
 
-rtl::OUString VbaCommandBarHelper::generateCustomURL()
+OUString VbaCommandBarHelper::generateCustomURL()
 {
-    rtl::OUString url( ITEM_TOOLBAR_URL );
-    url += rtl::OUString( CUSTOM_TOOLBAR_STR );
+    OUString url( ITEM_TOOLBAR_URL );
+    url += CUSTOM_TOOLBAR_STR;
 
     // use a random number to minimize possible clash with existing custom toolbars
     srand( unsigned( time( NULL ) ));
-    url += rtl::OUString::valueOf( sal_Int64( rand() ), 16 );
+    url += OUString::valueOf( sal_Int64( rand() ), 16 );
     return url;
 }
 

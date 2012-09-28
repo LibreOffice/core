@@ -101,7 +101,6 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     /**
      * This method currently does nothing
      * @param PropertyName the name of the property whose user interface is to be described
-     * @param  out_Descriptor the descriptor of the property line, to be filled by the XPropertyHandler implementation
      * @param ControlFactory a factory for creating XPropertyControl instances. Must not be NULL .
      * @throws com.sun.star.beans.UnknownPropertyException ::com::sun::star::beans::UnknownPropertyException if the given property is not supported by this handler
      * @throws com.sun.star.lang.NullPointerException ::com::sun::star::lang::NullPointerException if ControlFactory is NULL .

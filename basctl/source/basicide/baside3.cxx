@@ -54,6 +54,9 @@
 #include <vcl/msgbox.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -61,18 +64,15 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::ui::dialogs;
 
-namespace basctl
-{
-
 #if defined(UNX)
-#define FILTERMASK_ALL "*"
+char const FilterMask_All[] = "*";
 #else
-#define FILTERMASK_ALL "*.*"
+char const FilterMask_All[] = "*.*";
 #endif
 
 DBG_NAME( DialogWindow )
 
-TYPEINIT1( DialogWindow, IDEBaseWindow );
+TYPEINIT1( DialogWindow, BaseWindow );
 
 DialogWindow::DialogWindow (
     DialogWindowLayout* pParent,
@@ -80,22 +80,17 @@ DialogWindow::DialogWindow (
     rtl::OUString aLibName, rtl::OUString aName,
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel
 ) :
-    IDEBaseWindow(pParent, rDocument, aLibName, aName),
+    BaseWindow(pParent, rDocument, aLibName, aName),
     rLayout(*pParent),
-    pUndoMgr(0)
+    pEditor(new DlgEditor(*this, rLayout, rDocument.isDocument() ? rDocument.getDocument() : Reference<frame::XModel>(), xDialogModel)),
+    pUndoMgr(new SfxUndoManager)
 {
     InitSettings( true, true, true );
 
-    pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
-    pEditor->SetWindow( this );
-    pEditor->SetDialog( xDialogModel );
-
-    pUndoMgr = new SfxUndoManager;
-
-    Link aDummyLink;
-    aOldNotifyUndoActionHdl = pEditor->GetModel()->GetNotifyUndoActionHdl();
-    pEditor->GetModel()->SetNotifyUndoActionHdl(
-        LINK(this, DialogWindow, NotifyUndoActionHdl));
+    aOldNotifyUndoActionHdl = pEditor->GetModel().GetNotifyUndoActionHdl();
+    pEditor->GetModel().SetNotifyUndoActionHdl(
+        LINK(this, DialogWindow, NotifyUndoActionHdl)
+    );
 
     SetHelpId( HID_BASICIDE_DIALOGWINDOW );
 
@@ -109,10 +104,7 @@ DialogWindow::DialogWindow (
 }
 
 DialogWindow::~DialogWindow()
-{
-    delete pEditor;
-    delete pUndoMgr;
-}
+{ }
 
 void DialogWindow::LoseFocus()
 {
@@ -144,8 +136,7 @@ void DialogWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     pEditor->MouseButtonDown( rMEvt );
 
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if ( pBindings )
+    if (SfxBindings* pBindings = GetBindingsPtr())
         pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
 }
 
@@ -154,14 +145,13 @@ void DialogWindow::MouseButtonDown( const MouseEvent& rMEvt )
 void DialogWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEditor->MouseButtonUp( rMEvt );
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if( (pEditor->GetMode() == DLGED_INSERT) && !pEditor->IsCreateOK() )
+    if( (pEditor->GetMode() == DlgEditor::INSERT) && !pEditor->IsCreateOK() )
     {
-        pEditor->SetMode( DLGED_SELECT );
-        if ( pBindings )
+        pEditor->SetMode( DlgEditor::SELECT );
+        if (SfxBindings* pBindings = GetBindingsPtr())
             pBindings->Invalidate( SID_CHOOSE_CONTROLS );
     }
-    if ( pBindings )
+    if (SfxBindings* pBindings = GetBindingsPtr())
     {
         pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
         pBindings->Invalidate( SID_DOC_MODIFIED );
@@ -182,19 +172,14 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 {
     if( rKEvt.GetKeyCode() == KEY_BACKSPACE )
     {
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BACKSPACE );
-        }
     }
     else
     {
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if( pBindings && rKEvt.GetKeyCode() == KEY_TAB )
-            pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
+        if (rKEvt.GetKeyCode() == KEY_TAB)
+            if (SfxBindings* pBindings = GetBindingsPtr())
+                pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
 
         if( !pEditor->KeyInput( rKEvt ) )
         {
@@ -214,15 +199,12 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if ( pDispatcher )
+        if (SfxDispatcher* pDispatcher = GetDispatcher())
         {
-            SdrView* pView = GetView();
-            if( !rCEvt.IsMouseEvent() && pView->AreObjectsMarked() )
+            SdrView& rView = GetView();
+            if( !rCEvt.IsMouseEvent() && rView.AreObjectsMarked() )
             {
-                Rectangle aMarkedRect( pView->GetMarkedRect() );
+                Rectangle aMarkedRect( rView.GetMarkedRect() );
                 Point MarkedCenter( aMarkedRect.Center() );
                 Point PosPixel( LogicToPixel( MarkedCenter ) );
                 pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED), this, &PosPixel );
@@ -235,7 +217,7 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
         }
     }
     else
-        IDEBaseWindow::Command( rCEvt );
+        BaseWindow::Command( rCEvt );
 }
 
 
@@ -295,7 +277,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_COPY:
             {
                 // any object selected?
-                if ( !pEditor->GetView()->AreObjectsMarked() )
+                if ( !pEditor->GetView().AreObjectsMarked() )
                     rSet.DisableItem( nWh );
             }
             break;
@@ -304,7 +286,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_BACKSPACE:
             {
                 // any object selected?
-                if ( !pEditor->GetView()->AreObjectsMarked() )
+                if ( !pEditor->GetView().AreObjectsMarked() )
                     rSet.DisableItem( nWh );
 
                 if ( IsReadOnly() )
@@ -321,8 +303,8 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_DIALOG_TESTMODE:
             {
                 // is the IDE still active?
-                bool const bBool = BasicIDEGlobals::GetShell()->GetFrame() &&
-                    pEditor->GetMode() == DLGED_TEST;
+                bool const bBool = GetShell()->GetFrame() &&
+                    pEditor->GetMode() == DlgEditor::TEST;
                 rSet.Put(SfxBoolItem(SID_DIALOG_TESTMODE, bBool));
             }
             break;
@@ -336,7 +318,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                 else
                 {
                     SfxAllEnumItem aItem( SID_CHOOSE_CONTROLS );
-                    if ( GetEditor()->GetMode() == DLGED_SELECT )
+                    if ( GetEditor().GetMode() == DlgEditor::SELECT )
                         aItem.SetValue( SVX_SNAP_SELECT );
                     else
                     {
@@ -384,9 +366,9 @@ void DialogWindow::GetState( SfxItemSet& rSet )
 
             case SID_SHOW_PROPERTYBROWSER:
             {
-                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-                if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView()->AreObjectsMarked() )
+                Shell* pShell = GetShell();
+                SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : NULL;
+                if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView().AreObjectsMarked() )
                     rSet.DisableItem( nWh );
 
                 if ( IsReadOnly() )
@@ -425,60 +407,57 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
         case SID_CUT:
             if ( !IsReadOnly() )
             {
-                GetEditor()->Cut();
-                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-                if ( pBindings )
+                GetEditor().Cut();
+                if (SfxBindings* pBindings = GetBindingsPtr())
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
             break;
         case SID_DELETE:
             if ( !IsReadOnly() )
             {
-                GetEditor()->Delete();
-                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-                if ( pBindings )
+                GetEditor().Delete();
+                if (SfxBindings* pBindings = GetBindingsPtr())
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
             break;
         case SID_COPY:
-            GetEditor()->Copy();
+            GetEditor().Copy();
             break;
         case SID_PASTE:
             if ( !IsReadOnly() )
             {
-                GetEditor()->Paste();
-                SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-                if ( pBindings )
+                GetEditor().Paste();
+                if (SfxBindings* pBindings = GetBindingsPtr())
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
             break;
         case SID_INSERT_FORM_RADIO:
-            GetEditor()->SetMode( DLGED_INSERT );
-            GetEditor()->SetInsertObj( OBJ_DLG_FORMRADIO );
+            GetEditor().SetMode( DlgEditor::INSERT );
+            GetEditor().SetInsertObj( OBJ_DLG_FORMRADIO );
             break;
         case SID_INSERT_FORM_CHECK:
-            GetEditor()->SetMode( DLGED_INSERT );
-            GetEditor()->SetInsertObj( OBJ_DLG_FORMCHECK );
+            GetEditor().SetMode( DlgEditor::INSERT );
+            GetEditor().SetInsertObj( OBJ_DLG_FORMCHECK );
             break;
         case SID_INSERT_FORM_LIST:
-            GetEditor()->SetMode( DLGED_INSERT );
-            GetEditor()->SetInsertObj( OBJ_DLG_FORMLIST );
+            GetEditor().SetMode( DlgEditor::INSERT );
+            GetEditor().SetInsertObj( OBJ_DLG_FORMLIST );
             break;
         case SID_INSERT_FORM_COMBO:
-            GetEditor()->SetMode( DLGED_INSERT );
-            GetEditor()->SetInsertObj( OBJ_DLG_FORMCOMBO );
+            GetEditor().SetMode( DlgEditor::INSERT );
+            GetEditor().SetInsertObj( OBJ_DLG_FORMCOMBO );
             break;
         case SID_INSERT_FORM_SPIN:
-            GetEditor()->SetMode( DLGED_INSERT );
-            GetEditor()->SetInsertObj( OBJ_DLG_FORMSPIN );
+            GetEditor().SetMode( DlgEditor::INSERT );
+            GetEditor().SetInsertObj( OBJ_DLG_FORMSPIN );
             break;
         case SID_INSERT_FORM_VSCROLL:
-            GetEditor()->SetMode( DLGED_INSERT );
-            GetEditor()->SetInsertObj( OBJ_DLG_FORMVSCROLL );
+            GetEditor().SetMode( DlgEditor::INSERT );
+            GetEditor().SetInsertObj( OBJ_DLG_FORMVSCROLL );
             break;
         case SID_INSERT_FORM_HSCROLL:
-            GetEditor()->SetMode( DLGED_INSERT );
-            GetEditor()->SetInsertObj( OBJ_DLG_FORMHSCROLL );
+            GetEditor().SetMode( DlgEditor::INSERT );
+            GetEditor().SetInsertObj( OBJ_DLG_FORMHSCROLL );
             break;
         case SID_CHOOSE_CONTROLS:
         {
@@ -490,170 +469,168 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
             {
                 case SVX_SNAP_PUSHBUTTON:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_PUSHBUTTON );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_PUSHBUTTON );
                 }
                 break;
                 case SVX_SNAP_RADIOBUTTON:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_RADIOBUTTON );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_RADIOBUTTON );
                 }
                 break;
                 case SVX_SNAP_CHECKBOX:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_CHECKBOX);
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_CHECKBOX);
                 }
                 break;
                 case SVX_SNAP_LISTBOX:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_LISTBOX );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_LISTBOX );
                 }
                 break;
                 case SVX_SNAP_COMBOBOX:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_COMBOBOX );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_COMBOBOX );
                 }
                 break;
                 case SVX_SNAP_GROUPBOX:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_GROUPBOX );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_GROUPBOX );
                 }
                 break;
                 case SVX_SNAP_EDIT:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_EDIT );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_EDIT );
                 }
                 break;
                 case SVX_SNAP_FIXEDTEXT:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_FIXEDTEXT );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_FIXEDTEXT );
                 }
                 break;
                 case SVX_SNAP_IMAGECONTROL:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_IMAGECONTROL );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_IMAGECONTROL );
                 }
                 break;
                 case SVX_SNAP_PROGRESSBAR:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_PROGRESSBAR );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_PROGRESSBAR );
                 }
                 break;
                 case SVX_SNAP_HSCROLLBAR:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_HSCROLLBAR );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_HSCROLLBAR );
                 }
                 break;
                 case SVX_SNAP_VSCROLLBAR:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_VSCROLLBAR );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_VSCROLLBAR );
                 }
                 break;
                 case SVX_SNAP_HFIXEDLINE:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_HFIXEDLINE );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_HFIXEDLINE );
                 }
                 break;
                 case SVX_SNAP_VFIXEDLINE:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_VFIXEDLINE );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_VFIXEDLINE );
                 }
                 break;
                 case SVX_SNAP_DATEFIELD:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_DATEFIELD );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_DATEFIELD );
                 }
                 break;
                 case SVX_SNAP_TIMEFIELD:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_TIMEFIELD );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_TIMEFIELD );
                 }
                 break;
                 case SVX_SNAP_NUMERICFIELD:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_NUMERICFIELD );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_NUMERICFIELD );
                 }
                 break;
                 case SVX_SNAP_CURRENCYFIELD:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_CURRENCYFIELD );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_CURRENCYFIELD );
                 }
                 break;
                 case SVX_SNAP_FORMATTEDFIELD:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_FORMATTEDFIELD );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_FORMATTEDFIELD );
                 }
                 break;
                 case SVX_SNAP_PATTERNFIELD:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_PATTERNFIELD );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_PATTERNFIELD );
                 }
                 break;
                 case SVX_SNAP_FILECONTROL:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_FILECONTROL );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_FILECONTROL );
                 }
                 break;
                 case SVX_SNAP_SPINBUTTON:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_SPINBUTTON );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_SPINBUTTON );
                 }
                 break;
                 case SVX_SNAP_TREECONTROL:
                 {
-                    GetEditor()->SetMode( DLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_TREECONTROL );
+                    GetEditor().SetMode( DlgEditor::INSERT );
+                    GetEditor().SetInsertObj( OBJ_DLG_TREECONTROL );
                 }
                 break;
 
                 case SVX_SNAP_SELECT:
                 {
-                    GetEditor()->SetMode( DLGED_SELECT );
+                    GetEditor().SetMode( DlgEditor::SELECT );
                 }
                 break;
             }
 
             if ( rReq.GetModifier() & KEY_MOD1 )
             {
-                if ( GetEditor()->GetMode() == DLGED_INSERT )
-                    GetEditor()->CreateDefaultObject();
+                if ( GetEditor().GetMode() == DlgEditor::INSERT )
+                    GetEditor().CreateDefaultObject();
             }
 
-            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-            if ( pBindings )
+            if (SfxBindings* pBindings = GetBindingsPtr())
                 pBindings->Invalidate( SID_DOC_MODIFIED );
         }
         break;
 
         case SID_DIALOG_TESTMODE:
         {
-            DlgEdMode eOldMode = GetEditor()->GetMode();
-            GetEditor()->SetMode( DLGED_TEST );
-            GetEditor()->SetMode( eOldMode );
+            DlgEditor::Mode eOldMode = GetEditor().GetMode();
+            GetEditor().SetMode( DlgEditor::TEST );
+            GetEditor().SetMode( eOldMode );
             rReq.Done();
-            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-            if ( pBindings )
+            if (SfxBindings* pBindings = GetBindingsPtr())
                 pBindings->Invalidate( SID_DIALOG_TESTMODE );
             return;
         }
@@ -668,10 +645,10 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
         case SID_BASICIDE_DELETECURRENT:
             if (QueryDelDialog(m_aName, this))
             {
-                if (BasicIDE::RemoveDialog(m_aDocument, m_aLibName, m_aName))
+                if (RemoveDialog(m_aDocument, m_aLibName, m_aName))
                 {
-                    BasicIDE::MarkDocumentModified(m_aDocument);
-                    BasicIDEGlobals::GetShell()->RemoveWindow(this, true);
+                    MarkDocumentModified(m_aDocument);
+                    GetShell()->RemoveWindow(this, true);
                 }
             }
             break;
@@ -687,11 +664,10 @@ Reference< container::XNameContainer > DialogWindow::GetDialog() const
 
 bool DialogWindow::RenameDialog( const ::rtl::OUString& rNewName )
 {
-    if ( !BasicIDE::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
+    if ( !basctl::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
         return false;
 
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if ( pBindings )
+    if (SfxBindings* pBindings = GetBindingsPtr())
         pBindings->Invalidate( SID_DOC_MODIFIED );
 
     return true;
@@ -699,20 +675,12 @@ bool DialogWindow::RenameDialog( const ::rtl::OUString& rNewName )
 
 void DialogWindow::DisableBrowser()
 {
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
-    if( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update( NULL );
+    rLayout.DisablePropertyBrowser();
 }
 
 void DialogWindow::UpdateBrowser()
 {
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
-    if( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
+    rLayout.UpdatePropertyBrowser();
 }
 
 static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
@@ -746,7 +714,7 @@ bool DialogWindow::SaveDialog()
     ::rtl::OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( RTL_CONSTASCII_USTRINGPARAM( FilterMask_All ) ) );
     xFltMgr->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -893,9 +861,6 @@ bool DialogWindow::SaveDialog()
     return bDone;
 }
 
-} // namespace basctl
-
-
 extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
                              const ::com::sun::star::lang::Locale& rLocaleRight );
 
@@ -1011,7 +976,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
     ::rtl::OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( RTL_CONSTASCII_USTRINGPARAM( FilterMask_All ) ) );
     xFltMgr->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -1098,10 +1063,10 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
                 }
             }
 
-            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-            if( pIDEShell == NULL )
+            Shell* pShell = GetShell();
+            if (!pShell)
             {
-                OSL_ASSERT( pIDEShell != NULL );
+                OSL_ASSERT(pShell);
                 return bDone;
             }
 
@@ -1163,7 +1128,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
                 bool bCopyResourcesForDialog = true;
                 if( bAddDialogLanguagesToLib )
                 {
-                    boost::shared_ptr<LocalizationMgr> pCurMgr = pIDEShell->GetCurLocalizationMgr();
+                    boost::shared_ptr<LocalizationMgr> pCurMgr = pShell->GetCurLocalizationMgr();
 
                     lang::Locale aFirstLocale;
                     aFirstLocale = aOnlyInImportLanguages[0];
@@ -1225,12 +1190,12 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
 
             if( eNameClashMode == CLASH_OVERWRITE_DIALOG )
             {
-                if ( BasicIDE::RemoveDialog( rDocument, aLibName, aNewDlgName ) )
+                if (basctl::RemoveDialog( rDocument, aLibName, aNewDlgName ) )
                 {
-                    IDEBaseWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, aLibName, aNewDlgName, false, true );
+                    BaseWindow* pDlgWin = pShell->FindDlgWin( rDocument, aLibName, aNewDlgName, false, true );
                     if( pDlgWin != NULL )
-                        pIDEShell->RemoveWindow( pDlgWin, true );
-                    BasicIDE::MarkDocumentModified( rDocument );
+                        pShell->RemoveWindow( pDlgWin, true );
+                    MarkDocumentModified( rDocument );
                 }
                 else
                 {
@@ -1271,8 +1236,8 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
             bool bSuccess = rDocument.insertDialog( aLibName, aNewDlgName, xISP );
             if( bSuccess )
             {
-                basctl::DialogWindow* pNewDlgWin = pIDEShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
-                pIDEShell->SetCurWindow( pNewDlgWin, true );
+                DialogWindow* pNewDlgWin = pShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
+                pShell->SetCurWindow( pNewDlgWin, true );
             }
 
             bDone = true;
@@ -1285,9 +1250,6 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
 }
 
 
-namespace basctl
-{
-
 bool DialogWindow::ImportDialog()
 {
     DBG_CHKTHIS( DialogWindow, 0 );
@@ -1297,19 +1259,19 @@ bool DialogWindow::ImportDialog()
     return implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
-DlgEdModel* DialogWindow::GetModel() const
+DlgEdModel& DialogWindow::GetModel() const
 {
-    return pEditor ? pEditor->GetModel() : NULL;
+    return pEditor->GetModel();
 }
 
-DlgEdPage* DialogWindow::GetPage() const
+DlgEdPage& DialogWindow::GetPage() const
 {
-    return pEditor ? pEditor->GetPage() : NULL;
+    return pEditor->GetPage();
 }
 
-DlgEdView* DialogWindow::GetView() const
+DlgEdView& DialogWindow::GetView() const
 {
-    return pEditor ? pEditor->GetView() : NULL;
+    return pEditor->GetView();
 }
 
 bool DialogWindow::IsModified()
@@ -1319,7 +1281,7 @@ bool DialogWindow::IsModified()
 
 ::svl::IUndoManager* DialogWindow::GetUndoManager()
 {
-    return pUndoMgr;
+    return pUndoMgr.get();
 }
 
 ::rtl::OUString DialogWindow::GetTitle()
@@ -1327,29 +1289,28 @@ bool DialogWindow::IsModified()
     return GetName();
 }
 
-BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
+EntryDescriptor DialogWindow::CreateEntryDescriptor()
 {
     ScriptDocument aDocument( GetDocument() );
     ::rtl::OUString aLibName( GetLibName() );
     ::rtl::OUString aLibSubName;
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
+    return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
 }
 
 void DialogWindow::SetReadOnly (bool bReadOnly)
 {
-    if (pEditor)
-        pEditor->SetMode(bReadOnly ? DLGED_READONLY : DLGED_SELECT);
+    pEditor->SetMode(bReadOnly ? DlgEditor::READONLY : DlgEditor::SELECT);
 }
 
 bool DialogWindow::IsReadOnly ()
 {
-    return pEditor && pEditor->GetMode() == DLGED_READONLY;
+    return pEditor->GetMode() == DlgEditor::READONLY;
 }
 
 bool DialogWindow::IsPasteAllowed()
 {
-    return pEditor && pEditor->IsPasteAllowed();
+    return pEditor->IsPasteAllowed();
 }
 
 void DialogWindow::StoreData()
@@ -1379,7 +1340,7 @@ void DialogWindow::StoreData()
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        BasicIDE::MarkDocumentModified( GetDocument() );
+        MarkDocumentModified( GetDocument() );
         pEditor->ClearModifyFlag();
     }
 }
@@ -1394,7 +1355,7 @@ void DialogWindow::Deactivating()
 {
     Hide();
     if ( IsModified() )
-        BasicIDE::MarkDocumentModified( GetDocument() );
+        MarkDocumentModified( GetDocument() );
     DisableBrowser();
 }
 
@@ -1416,7 +1377,7 @@ void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
     else
-        IDEBaseWindow::DataChanged( rDCEvt );
+        BaseWindow::DataChanged( rDCEvt );
 }
 
 void DialogWindow::InitSettings(bool bFont, bool bForeground, bool bBackground)
@@ -1448,9 +1409,9 @@ char const* DialogWindow::GetHid () const
 {
     return HID_BASICIDE_DIALOGWINDOW;
 }
-BasicIDEType DialogWindow::GetType () const
+ItemType DialogWindow::GetType () const
 {
-    return BASICIDE_TYPE_DIALOG;
+    return TYPE_DIALOG;
 }
 
 
@@ -1462,16 +1423,69 @@ BasicIDEType DialogWindow::GetType () const
 DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(0),
-    rObjectCatalog(rObjectCatalog_)
-{ }
+    rObjectCatalog(rObjectCatalog_),
+    pPropertyBrowser(0)
+{
+    ShowPropertyBrowser();
+}
 
-void DialogWindowLayout::Activating (IDEBaseWindow& rChild)
+// shows the property browser (and creates if neccessary)
+void DialogWindowLayout::ShowPropertyBrowser ()
+{
+    // not exists?
+    if (!pPropertyBrowser)
+    {
+        // creating
+        pPropertyBrowser = new PropBrw(*this);
+        pPropertyBrowser->Show();
+        // after OnFirstSize():
+        if (HasSize())
+            AddPropertyBrowser();
+        // updating if neccessary
+        UpdatePropertyBrowser();
+    }
+    else
+        pPropertyBrowser->Show();
+    // refreshing the button state
+    if (SfxBindings* pBindings = GetBindingsPtr())
+        pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
+}
+
+// disables the property browser
+void DialogWindowLayout::DisablePropertyBrowser ()
+{
+    if (pPropertyBrowser)
+        pPropertyBrowser->Update(0);
+}
+
+// updates the property browser
+void DialogWindowLayout::UpdatePropertyBrowser ()
+{
+    if (pPropertyBrowser)
+        pPropertyBrowser->Update(GetShell());
+}
+
+// Removes the property browser from the layout.
+// Called by PropBrw when closed. It'll destroy itself.
+void DialogWindowLayout::RemovePropertyBrowser ()
+{
+    if (pPropertyBrowser)
+        Remove(pPropertyBrowser);
+    pPropertyBrowser = 0;
+    // refreshing the button state
+    if (SfxBindings* pBindings = GetBindingsPtr())
+        pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
+}
+
+void DialogWindowLayout::Activating (BaseWindow& rChild)
 {
     assert(dynamic_cast<DialogWindow*>(&rChild));
     pChild = &static_cast<DialogWindow&>(rChild);
     rObjectCatalog.SetLayoutWindow(this);
     rObjectCatalog.UpdateEntries();
     rObjectCatalog.Show();
+    if (pPropertyBrowser)
+        pPropertyBrowser->Show();
     Layout::Activating(rChild);
 }
 
@@ -1479,22 +1493,53 @@ void DialogWindowLayout::Deactivating ()
 {
     Layout::Deactivating();
     rObjectCatalog.Hide();
+    if (pPropertyBrowser)
+        pPropertyBrowser->Hide();
     pChild = 0;
+}
+
+void DialogWindowLayout::ExecuteGlobal (SfxRequest& rReq)
+{
+    switch (rReq.GetSlot())
+    {
+        case SID_SHOW_PROPERTYBROWSER:
+            // toggling property browser
+            if (pPropertyBrowser && pPropertyBrowser->IsVisible())
+                pPropertyBrowser->Hide();
+            else
+                ShowPropertyBrowser();
+            ArrangeWindows();
+            // refreshing the button state
+            if (SfxBindings* pBindings = GetBindingsPtr())
+                pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
+            break;
+    }
 }
 
 void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
 {
     switch (nWhich)
     {
+        case SID_SHOW_PROPERTYBROWSER:
+            rSet.Put(SfxBoolItem(nWhich, pPropertyBrowser && pPropertyBrowser->IsVisible()));
+            break;
+
         case SID_BASICIDE_CHOOSEMACRO:
             rSet.Put(SfxVisibilityItem(nWhich, false));
             break;
     }
 }
 
-void DialogWindowLayout::OnFirstSize (int const nWidth, int const nHeight)
+void DialogWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
 {
-    AddToLeft(&rObjectCatalog, Size(nWidth * 0.2, nHeight));
+    AddToLeft(&rObjectCatalog, Size(nWidth * 0.25, nHeight * 0.35));
+    if (pPropertyBrowser)
+        AddPropertyBrowser();
+}
+
+void DialogWindowLayout::AddPropertyBrowser () {
+    Size const aSize = GetOutputSizePixel();
+    AddToLeft(pPropertyBrowser, Size(aSize.Width() * 0.25, aSize.Height() * 0.65));
 }
 
 

@@ -125,9 +125,6 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdasaitm.hxx>
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
-
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -142,7 +139,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include "svx/EnhancedCustomShape2d.hxx"
 #include <rtl/strbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star    ;

@@ -34,6 +34,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/shlib.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/unload.h>
@@ -258,13 +259,7 @@ sal_Bool OSingleFactoryHelper::supportsService(
     const OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > seqServices = getSupportedServiceNames();
-    const OUString * pServices = seqServices.getConstArray();
-    for( sal_Int32 i = 0; i < seqServices.getLength(); i++ )
-        if( pServices[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -1012,9 +1007,7 @@ sal_Bool OFactoryProxyHelper::supportsService(const OUString& ServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
     Reference<XServiceInfo > xInfo( xFactory, UNO_QUERY  );
-    if( xInfo.is() )
-        return xInfo->supportsService( ServiceName );
-    return sal_False;
+    return xInfo.is() && xInfo->supportsService( ServiceName );
 }
 
 // XServiceInfo

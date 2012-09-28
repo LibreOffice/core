@@ -24,8 +24,8 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
@@ -33,7 +33,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 
@@ -75,7 +75,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "frmload.hxx"
@@ -427,9 +427,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             try
             {
                 uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-                xSystemShellExecute->execute( sURL, ::rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                    com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             }
             catch ( uno::Exception& )
             {
@@ -936,7 +935,7 @@ namespace
             Reference < XFramesSupplier > xSupplier( i_rContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
             Reference < XIndexAccess > xContainer( xSupplier->getFrames(), UNO_QUERY_THROW );
 
-            Reference< XModuleManager > xCheck( i_rContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+            Reference< XModuleManager2 > xCheck( ModuleManager::create(i_rContext.getUNOContext()) );
 
             sal_Int32 nCount = xContainer->getCount();
             for ( sal_Int32 i=0; i<nCount; ++i )
@@ -1039,9 +1038,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             {
                 uno::Reference< lang::XMultiServiceFactory > xSMGR =
                     ::comphelper::getProcessServiceFactory();
+                uno::Reference< uno::XComponentContext > xContext =
+                    ::comphelper::getProcessComponentContext();
                 uno::Reference< css::system::XSystemShellExecute > xSystemShell(
-                    xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute" ) ),
-                    uno::UNO_QUERY_THROW );
+                    css::system::SystemShellExecute::create(xContext) );
 
                 // read repository URL from configuration
                 ::rtl::OUString sTemplRepoURL =
@@ -1308,27 +1308,24 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
 
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+            Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
                 xORB->createInstance( ::rtl::OUString("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
 
             if ( xProv.is() )
             {
                 ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
-                Reference< com::sun::star::frame::XDispatchHelper > xHelper(
-                    xORB->createInstance( ::rtl::OUString("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
-                if ( xHelper.is() )
-                {
-                    Sequence < com::sun::star::beans::PropertyValue > aSeq;
-                    if ( rReq.GetArgs() )
-                        TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
-                    Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
-                    ::com::sun::star::frame::DispatchResultEvent aEvent;
-                    sal_Bool bSuccess = (
-                                         (aResult >>= aEvent) &&
-                                         (aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS)
-                                        );
-                    rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
-                }
+                Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
+                Sequence < com::sun::star::beans::PropertyValue > aSeq;
+                if ( rReq.GetArgs() )
+                    TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
+                Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+                ::com::sun::star::frame::DispatchResultEvent aEvent;
+                sal_Bool bSuccess = (
+                                     (aResult >>= aEvent) &&
+                                     (aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS)
+                                    );
+                rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
             }
         }
         break;
@@ -1338,27 +1335,24 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case FN_XFORMS_INIT :
         {
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+            Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
                 xORB->createInstance( ::rtl::OUString("com.sun.star.text.ModuleDispatcher")), UNO_QUERY );
 
             if ( xProv.is() )
             {
                 ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
-                Reference< com::sun::star::frame::XDispatchHelper > xHelper(
-                    xORB->createInstance( ::rtl::OUString("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
-                if ( xHelper.is() )
-                {
-                    Sequence < com::sun::star::beans::PropertyValue > aSeq;
-                    if ( rReq.GetArgs() )
-                        TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
-                    Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
-                    ::com::sun::star::frame::DispatchResultEvent aEvent;
-                    sal_Bool bSuccess = (
-                                         (aResult >>= aEvent) &&
-                                         (aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS)
-                                        );
-                    rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
-                }
+                Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
+                Sequence < com::sun::star::beans::PropertyValue > aSeq;
+                if ( rReq.GetArgs() )
+                    TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
+                Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+                ::com::sun::star::frame::DispatchResultEvent aEvent;
+                sal_Bool bSuccess = (
+                                     (aResult >>= aEvent) &&
+                                     (aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS)
+                                    );
+                rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
             }
         }
         break;

@@ -307,7 +307,7 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
                         >> *new Html::TableCell
                             << new Html::ClassAttr(C_sCellStyle_SummaryLeft);
         HF_IdlTypeText
-            aTypeDisplay( Env(), rTerm, false, 0);
+            aTypeDisplay( Env(), rTerm, 0);
         aTypeDisplay.Produce_byData((*it).Type());
 
         Xml::Element &

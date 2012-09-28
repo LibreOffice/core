@@ -39,6 +39,11 @@ bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
 
   bool result = false;
 
+#ifdef __LP64__
+  // FIXME
+  (void) aPict;
+  (void) aBmp;
+#else
   ComponentInstance bmpExporter;
   if (OpenADefaultComponent(GraphicsExporterComponentType,
                             kQTFileTypeBMP,
@@ -78,7 +83,7 @@ bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
   DisposeHandle(hPict);
   DisposeHandle(hBmp);
   CloseComponent(bmpExporter);
-
+#endif
   return result;
 }
 
@@ -103,11 +108,16 @@ bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
   bool result = false;
 
   Handle hBmp;
-  ComponentInstance pictExporter;
   if ((PtrToHand(aBmp.getArray(), &hBmp, aBmp.getLength()) != noErr))
     {
       return result;
     }
+
+#ifdef __LP64__
+  // FIXME
+  (void) aPict;
+#else
+  ComponentInstance pictExporter;
 
   if (OpenADefaultComponent(GraphicsImporterComponentType,
                             kQTFileTypeBMP,
@@ -145,7 +155,7 @@ bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
 
   DisposeHandle(hBmp);
   CloseComponent(pictExporter);
-
+#endif
   return result;
 }
 

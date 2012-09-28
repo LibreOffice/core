@@ -67,7 +67,7 @@ typedef  wchar_t TCHAR;
 /* #undef _CL_HAVE_WIN32_THREADS */
 
 /* Define if we have gcc atomic functions */
-#define _CL_HAVE_GCC_ATOMIC_FUNCTIONS 1
+/* #undef _CL_HAVE_GCC_ATOMIC_FUNCTIONS */
 
 /* Define what eval method is required for float_t to be defined (for GCC). */
 /* #undef _FLT_EVAL_METHOD */

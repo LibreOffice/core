@@ -25,10 +25,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/errinf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
 
@@ -55,7 +54,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>
@@ -378,9 +377,9 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     mxMSF = comphelper::getProcessServiceFactory();
     SAL_WARN_IF(!mxMSF.is(), "basic", "couldn't get ProcessServiceFactory");
 
-    mxSFI = ucb::SimpleFileAccess::create( comphelper::ComponentContext(mxMSF).getUNOContext() );
+    mxSFI = ucb::SimpleFileAccess::create( comphelper::getComponentContext(mxMSF) );
 
-    mxStringSubstitution = util::PathSubstitution::create( comphelper::ComponentContext(mxMSF).getUNOContext() );
+    mxStringSubstitution = util::PathSubstitution::create( comphelper::getComponentContext(mxMSF) );
 }
 
 SfxLibraryContainer::~SfxLibraryContainer()
@@ -579,9 +578,9 @@ void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::
     // this might be called from within the ctor, and the impl_init might (indirectly) create
     // an UNO reference to ourself.
     // Ensure that we're not destroyed while we're in here
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     init_Impl( rInitialDocumentURL, rxInitialStorage );
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
@@ -1759,7 +1758,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             Any aLibAny = maNameContainer.getByName( aNames[0] );
             Reference< XNameAccess > xNameAccess;
             aLibAny >>= xNameAccess;
-            if ( ! ( xNameAccess->hasElements() || isModified() ) )
+            if ( ! ( xNameAccess->hasElements() || ( bInplaceStorage && isModified() ) ) )
                 return;
         }
 
@@ -2695,7 +2694,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
     Reference< XSimpleFileAccess2 > xToUseSFI;
     if( Handler.is() )
     {
-        xToUseSFI = ucb::SimpleFileAccess::create( comphelper::ComponentContext(mxMSF).getUNOContext() );
+        xToUseSFI = ucb::SimpleFileAccess::create( comphelper::getComponentContext(mxMSF) );
         xToUseSFI->setInteractionHandler( Handler );
     }
 

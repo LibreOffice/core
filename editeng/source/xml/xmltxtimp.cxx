@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -199,12 +200,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
                 break;
             }
 
-            uno::Reference< XInterface > xPipe( xServiceFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ) );
-            if( !xPipe.is() )
-            {
-                OSL_FAIL( "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-                break;
-            }
+            uno::Reference< XInterface > xPipe( Pipe::create(comphelper::getComponentContext(xServiceFactory)), UNO_QUERY );
 
             // connect pipe's output stream to the data source
             xSource->setOutputStream( uno::Reference< io::XOutputStream >::query( xPipe ) );

@@ -21,12 +21,8 @@
 #define __com_sun_star_mail_MailServiceProvider_idl__
 
 #include <com/sun/star/mail/XMailServiceProvider.idl>
-#include <com/sun/star/mail/NoMailServiceProviderException.idl>
-#include <com/sun/star/mail/MailServiceType.idl>
 
 module com { module sun { module star { module mail {
-
-interface XMailService;
 
 /**
     @since OOo 2.0

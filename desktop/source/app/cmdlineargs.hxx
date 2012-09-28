@@ -93,8 +93,9 @@ class CommandLineArgs: private boost::noncopyable
         bool                IsWeb() const;
         bool                IsVersion() const;
         bool                HasModuleParam() const;
-        bool                HasUnknown() const;
         bool                WantsToLoadDocument() const;
+
+        OUString            GetUnknown() const;
 
         // Access to string parameters
         bool                    HasSplashPipe() const;
@@ -153,8 +154,9 @@ class CommandLineArgs: private boost::noncopyable
         bool m_helpbase;
         bool m_psn;
         bool m_version;
-        bool m_unknown;
         bool m_splashpipe;
+
+        OUString m_unknown;
 
         bool m_bEmpty; // No Args at all
         bool m_bDocumentArgs; // A document creation/open/load arg is used

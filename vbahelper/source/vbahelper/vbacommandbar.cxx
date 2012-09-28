@@ -29,17 +29,17 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface > xParent, const uno::Reference< uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const uno::Reference< container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Bool bIsMenu, sal_Bool bTemporary ) throw( uno::RuntimeException ) : CommandBar_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl ), m_bIsMenu( bIsMenu ), m_bTemporary( bTemporary )
+ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface > xParent, const uno::Reference< uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const uno::Reference< container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Bool bIsMenu ) throw( uno::RuntimeException ) : CommandBar_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl ), m_bIsMenu( bIsMenu )
 {
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaCommandBar::getName() throw ( uno::RuntimeException )
 {
     // This will get a "NULL length string" when Name is not set.
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString("UIName") );
-    rtl::OUString sName;
+    uno::Any aName = xPropertySet->getPropertyValue( "UIName" );
+    OUString sName;
     aName >>= sName;
     if( sName.isEmpty() )
     {
@@ -48,9 +48,9 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
             if( m_sResourceUrl.equalsAscii( ITEM_MENUBAR_URL ) )
             {
                 if( pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sName = rtl::OUString( "Worksheet Menu Bar" );
+                    sName = "Worksheet Menu Bar";
                 else if( pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
-                    sName = rtl::OUString( "Menu Bar" );
+                    sName = "Menu Bar";
                 return sName;
             }
         }
@@ -60,16 +60,16 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
         {
             uno::Sequence< beans::PropertyValue > aToolBar;
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
-            getPropertyValue( aToolBar, rtl::OUString( "UIName" ) ) >>= sName;
+            getPropertyValue( aToolBar, "UIName" ) >>= sName;
         }
     }
     return sName;
 }
 void SAL_CALL
-ScVbaCommandBar::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException)
+ScVbaCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( rtl::OUString("UIName"), uno::makeAny( _name ) );
+    xPropertySet->setPropertyValue( "UIName" , uno::makeAny( _name ) );
 
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 }
@@ -88,7 +88,7 @@ ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
         {
             uno::Sequence< beans::PropertyValue > aToolBar;
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
-            getPropertyValue( aToolBar, rtl::OUString( "Visible" ) ) >>= bVisible;
+            getPropertyValue( aToolBar, "Visible" ) >>= bVisible;
         }
     }
     catch (const uno::Exception&)
@@ -170,20 +170,20 @@ ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/
     return uno::makeAny( uno::Reference< XCommandBarControl > () );
 }
 
-rtl::OUString
+OUString
 ScVbaCommandBar::getServiceImplName()
 {
-    return rtl::OUString("ScVbaCommandBar");
+    return OUString("ScVbaCommandBar");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 ScVbaCommandBar::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBar"  );
+        aServiceNames[ 0 ] = "ooo.vba.CommandBar";
     }
     return aServiceNames;
 }
@@ -192,19 +192,19 @@ ScVbaCommandBar::getServiceNames()
 VbaDummyCommandBar::VbaDummyCommandBar(
         const uno::Reference< ov::XHelperInterface > xParent,
         const uno::Reference< uno::XComponentContext > xContext,
-        const ::rtl::OUString& rName, sal_Int32 nType ) throw( uno::RuntimeException ) :
+        const OUString& rName, sal_Int32 nType ) throw( uno::RuntimeException ) :
     CommandBar_BASE( xParent, xContext ),
     maName( rName ),
     mnType( nType )
 {
 }
 
-::rtl::OUString SAL_CALL VbaDummyCommandBar::getName() throw ( uno::RuntimeException )
+OUString SAL_CALL VbaDummyCommandBar::getName() throw ( uno::RuntimeException )
 {
     return maName;
 }
 
-void SAL_CALL VbaDummyCommandBar::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException)
+void SAL_CALL VbaDummyCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException)
 {
     maName = _name;
 }
@@ -256,18 +256,18 @@ uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, co
     return uno::Any( uno::Reference< XCommandBarControl >() );
 }
 
-rtl::OUString VbaDummyCommandBar::getServiceImplName()
+OUString VbaDummyCommandBar::getServiceImplName()
 {
-    return rtl::OUString("VbaDummyCommandBar");
+    return OUString("VbaDummyCommandBar");
 }
 
-uno::Sequence< rtl::OUString > VbaDummyCommandBar::getServiceNames()
+uno::Sequence< OUString > VbaDummyCommandBar::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.CommandBar"  );
+        aServiceNames[ 0 ] = "ooo.vba.CommandBar";
     }
     return aServiceNames;
 }

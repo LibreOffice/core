@@ -95,7 +95,7 @@ public class ScCellRangesObj extends TestCase {
 
         try {
             log.println( "creating a sheetdocument" );
-            xSheetDoc = SOF.createCalcDoc(null);;
+            xSheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

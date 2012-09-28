@@ -29,55 +29,35 @@
 #define SW_WORDCOUNTDIALOG_HXX
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/button.hxx>
 struct SwDocStat;
 #include <sfx2/childwin.hxx>
 #include "swabstdlg.hxx"
 
-class SwWordCountDialog
-{
-    FixedLine       aCurrentFL;
-    FixedText       aCurrentWordFT;
-    FixedInfo       aCurrentWordFI;
-    FixedText       aCurrentCharacterFT;
-    FixedInfo       aCurrentCharacterFI;
-    FixedText       aCurrentCharacterExcludingSpacesFT;
-    FixedInfo       aCurrentCharacterExcludingSpacesFI;
-
-    FixedLine       aDocFL;
-    FixedText       aDocWordFT;
-    FixedInfo       aDocWordFI;
-    FixedText       aDocCharacterFT;
-    FixedInfo       aDocCharacterFI;
-    FixedText       aDocCharacterExcludingSpacesFT;
-    FixedInfo       aDocCharacterExcludingSpacesFI;
-
-    FixedLine       aBottomFL;
-
-    OKButton        aOK;
-    HelpButton      aHelp;
-
-    void InitControls();
-
-public:
-    SwWordCountDialog(Window* pParent);
-    ~SwWordCountDialog();
-
-    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
-
-    SW_DLLPRIVATE DECL_LINK( OkHdl,     void* );
-};
-
 class SwWordCountFloatDlg : public SfxModelessDialog
 {
-    SwWordCountDialog   aDlg;
     virtual void    Activate();
-    public:
+    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
+
+    FixedText* m_pCurrentWordFT;
+    FixedText* m_pCurrentCharacterFT;
+    FixedText* m_pCurrentCharacterExcludingSpacesFT;
+    FixedText* m_pDocWordFT;
+    FixedText* m_pDocCharacterFT;
+    FixedText* m_pDocCharacterExcludingSpacesFT;
+    PushButton* m_pClosePB;
+
+    SW_DLLPRIVATE DECL_LINK( CloseHdl,     void* );
+public:
     SwWordCountFloatDlg(     SfxBindings* pBindings,
                              SfxChildWindow* pChild,
                              Window *pParent,
                              SfxChildWinInfo* pInfo);
+    ~SwWordCountFloatDlg();
     void    UpdateCounts();
+
+    void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);
 };
 
 class SwWordCountWrapper : public SfxChildWindow
@@ -93,6 +73,7 @@ protected:
 
 public:
     void    UpdateCounts();
+    void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);
 };
 
 #endif

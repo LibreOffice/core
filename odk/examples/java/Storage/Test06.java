@@ -16,24 +16,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package storagetesting;
-
-import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.container.ElementExistException;
-
 import com.sun.star.embed.*;
-
-import storagetesting.TestHelper;
-import storagetesting.StorageTest;
 
 public class Test06 implements StorageTest {
 
@@ -81,10 +68,10 @@ public class Test06 implements StorageTest {
             // open new substorages
             XStorage xTempSubStorage1 = m_aTestHelper.openSubStorage( xTempStorage,
                                                                     "SubStorage1",
-                                                                    ElementModes.ELEMENT_WRITE );
+                                                                    ElementModes.WRITE );
             XStorage xTempSubStorage2 = m_aTestHelper.openSubStorage( xTempStorage,
                                                                     "SubStorage2",
-                                                                    ElementModes.ELEMENT_WRITE );
+                                                                    ElementModes.WRITE );
             if ( xTempSubStorage1 == null || xTempSubStorage2 == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -94,7 +81,7 @@ public class Test06 implements StorageTest {
             // in case stream is open for reading it must exist
             try
             {
-                xTempSubStorage1.openStreamElement( "NonExistingStream", ElementModes.ELEMENT_READ );
+                xTempSubStorage1.openStreamElement( "NonExistingStream", ElementModes.READ );
                 m_aTestHelper.Error( "The method must throw an exception in case of try to open nonexistent stream for reading!" );
                 return false;
             }
@@ -109,7 +96,7 @@ public class Test06 implements StorageTest {
             // in case a storage is open for reading it must exist
             try
             {
-                xTempSubStorage1.openStreamElement( "NonExistingStorage", ElementModes.ELEMENT_READ );
+                xTempSubStorage1.openStreamElement( "NonExistingStorage", ElementModes.READ );
                 m_aTestHelper.Error( "The method must throw an exception in case of try to open nonexistent storage for reading!" );
                 return false;
             }
@@ -215,7 +202,7 @@ public class Test06 implements StorageTest {
             // open a new substorage
             XStorage xTargetSubStorage = m_aTestHelper.openSubStorage( xTargetStorage,
                                                                     "SubStorage1",
-                                                                    ElementModes.ELEMENT_WRITE );
+                                                                    ElementModes.WRITE );
             if ( xTargetSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );

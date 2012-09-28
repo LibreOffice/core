@@ -381,7 +381,7 @@ extern VCL_PLUGIN_PUBLIC ImplSVData* pImplSVData;
 inline VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
 VCL_PLUGIN_PUBLIC void ImplHideSplash();
 
-bool ImplInitAccessBridge( sal_Bool bAllowCancel, sal_Bool &rCancelled );
+bool ImplInitAccessBridge( bool bAllowCancel, bool &rCancelled );
 
 FieldUnitStringList* ImplGetFieldUnits();
 FieldUnitStringList* ImplGetCleanedFieldUnits();

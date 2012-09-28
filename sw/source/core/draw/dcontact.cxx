@@ -2472,12 +2472,12 @@ void SwDrawVirtObj::Move(const Size& rSiz)
     SdrObject::Move( rSiz );
 }
 
-void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
     if(xFact.GetNumerator() != xFact.GetDenominator() || yFact.GetNumerator() != yFact.GetDenominator())
     {
         Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Resize(rRef - GetOffset(), xFact, yFact);
+        rRefObj.Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
     }

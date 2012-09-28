@@ -75,7 +75,7 @@ void TextControlCombo::Arrange( FixedText& _rFTcomplete, sal_Bool /*bShow*/ )
     long            nWidth = GetTextWidth( aTxtBefore );
 
     mrFTbefore.SetText( aTxtBefore );
-    mrFTbefore.SetPosSizePixel( nX, nYFT, nWidth, nTextHeight );
+    mrFTbefore.setPosSizePixel( nX, nYFT, nWidth, nTextHeight );
 
     nX += nWidth;
     nX += aMetricVals.Width();
@@ -84,7 +84,7 @@ void TextControlCombo::Arrange( FixedText& _rFTcomplete, sal_Bool /*bShow*/ )
     nX += mrCtrl.GetSizePixel().Width();
     nX += aMetricVals.Width();
     mrFTafter.SetText( aTxtAfter );
-    mrFTafter.SetPosSizePixel( nX, nYFT, GetTextWidth( aTxtAfter ), nTextHeight );
+    mrFTafter.setPosSizePixel( nX, nYFT, GetTextWidth( aTxtAfter ), nTextHeight );
 
     _rFTcomplete.Hide();
 

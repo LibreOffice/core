@@ -29,8 +29,6 @@ import org.openoffice.netbeans.modules.office.actions.ParcelDescriptorEditorSupp
 import org.openoffice.netbeans.modules.office.actions.ParcelDescriptorParserSupport;
 
 /** Represents a ParcelDescriptor object in the Repository.
- *
- * @author tomaso
  */
 public class ParcelDescriptorDataObject extends MultiDataObject {
 

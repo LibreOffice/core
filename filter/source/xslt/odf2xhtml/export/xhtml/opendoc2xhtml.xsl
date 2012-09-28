@@ -154,7 +154,7 @@
 		<xsl:param name="globalData" />
 
 		<xsl:element name="html">
-			<xsl:comment>This file was converted to xhtml by OpenOffice.org - see http://xml.openoffice.org/odf2xhtml for more info.</xsl:comment>
+			<xsl:comment>This file was converted to xhtml by LibreOffice - see http://cgit.freedesktop.org/libreoffice/core/tree/filter/source/xslt for the code.</xsl:comment>
 			<xsl:call-template name='create-header'>
 				<xsl:with-param name="globalData" select="$globalData" />
 			</xsl:call-template>

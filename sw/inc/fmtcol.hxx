@@ -52,7 +52,7 @@ protected:
 
 private:
 
-    // For now don't copy and don't assign.
+    /// For now don't copy and don't assign.
     SwFmtColl(const SwFmtColl & );
     const SwFmtColl &operator=(const SwFmtColl &);
 };
@@ -93,12 +93,12 @@ protected:
           mbAssignedToOutlineStyle(false)
     { pNextTxtFmtColl = this; }
 
-    // To get UL- / LR- / FontHeight-changes.
+    /// To get UL- / LR- / FontHeight-changes.
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
 
-    TYPEINFO(); // Already in base class Client.
+    TYPEINFO(); ///< Already in base class Client.
 
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
@@ -115,13 +115,13 @@ public:
     void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
     void DeleteAssignmentToListLevelOfOutlineStyle();
 
-    // Override to recognize changes on the <SwNumRuleItem> and register/unregister
-    // the paragragh style at the corresponding <SwNumRule> instance.
+    /** Override to recognize changes on the <SwNumRuleItem> and register/unregister
+     the paragragh style at the corresponding <SwNumRule> instance. */
     virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
     virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
     virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
 
-    // Override <ResetAllFmtAttr()> to stay assigned to list level of outline style.
+    /// Override <ResetAllFmtAttr()> to stay assigned to list level of outline style.
     virtual sal_uInt16 ResetAllFmtAttr();
 
     inline bool StayAssignedToListLevelOfOutlineStyle() const
@@ -171,11 +171,11 @@ protected:
     {}
 
 public:
-    TYPEINFO(); // Already in base class Client.
+    TYPEINFO(); ///< Already in base class Client.
 };
 
 // FEATURE::CONDCOLL
-// Conditional styles.
+/// Conditional styles.
 enum Master_CollConditions
 {
     PARA_IN_LIST        = 0x0001,
@@ -202,7 +202,7 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
     } aSubCondition;
 
 public:
-    TYPEINFO(); // Already in base class Client.
+    TYPEINFO(); ///< Already in base class Client.
 
     SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
                     sal_uLong nSubCond = 0 );
@@ -210,10 +210,10 @@ public:
                     const String& rSubExp );
     virtual ~SwCollCondition();
 
-    // @@@ public copy ctor, but no copy assignment?
+    /// @@@ public copy ctor, but no copy assignment?
     SwCollCondition( const SwCollCondition& rCpy );
 private:
-    // @@@ public copy ctor, but no copy assignment?
+    /// @@@ public copy ctor, but no copy assignment?
     SwCollCondition & operator= (const SwCollCondition &);
 public:
 
@@ -249,7 +249,7 @@ protected:
     {}
 
 public:
-    TYPEINFO(); // Already in base class Client.
+    TYPEINFO(); ///< Already in base class Client.
 
     virtual ~SwConditionTxtFmtColl();
 
@@ -262,7 +262,7 @@ public:
 };
 
 // FEATURE::CONDCOLL
-// Inline implementations.
+/// Inline implementations.
 inline void SwTxtFmtColl::SetNextTxtFmtColl( SwTxtFmtColl& rNext )
 {
     pNextTxtFmtColl = &rNext;

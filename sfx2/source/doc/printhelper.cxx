@@ -30,7 +30,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <svl/lstner.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -534,11 +534,13 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 {
                     ::ucbhelper::Content aSource(
                             ::rtl::OUString((*ppTempFile)->GetURL()),
-                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                            comphelper::getProcessComponentContext());
 
                     ::ucbhelper::Content aTarget(
                             ::rtl::OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
-                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                            comphelper::getProcessComponentContext());
 
                     aTarget.transferContent(
                             aSource,

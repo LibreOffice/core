@@ -115,7 +115,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/dialog/dialog.src \
     sw/source/ui/dialog/docstdlg.src \
     sw/source/ui/dialog/regionsw.src \
-    sw/source/ui/dialog/wordcountdialog.src \
     sw/source/ui/dochdl/dochdl.src \
     sw/source/ui/dochdl/selglos.src \
     sw/source/ui/docvw/annotation.src \
@@ -159,7 +158,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/misc/glossary.src \
     sw/source/ui/misc/insfnote.src \
     sw/source/ui/misc/insrule.src \
-    sw/source/ui/misc/linenum.src \
     sw/source/ui/misc/num.src \
     sw/source/ui/misc/numberingtypelistbox.src \
     sw/source/ui/misc/outline.src \
@@ -174,15 +172,10 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/shells/shells.src \
     sw/source/ui/smartmenu/stmenu.src \
     sw/source/ui/table/chartins.src \
-    sw/source/ui/table/colwd.src \
-    sw/source/ui/table/convert.src \
-    sw/source/ui/table/instable.src \
     sw/source/ui/table/mergetbl.src \
     sw/source/ui/table/rowht.src \
-    sw/source/ui/table/splittbl.src \
     sw/source/ui/table/table.src \
     sw/source/ui/table/tabledlg.src \
-    sw/source/ui/table/tautofmt.src \
     sw/source/ui/uiview/pview.src \
     sw/source/ui/uiview/view.src \
     sw/source/ui/utlui/attrdesc.src \

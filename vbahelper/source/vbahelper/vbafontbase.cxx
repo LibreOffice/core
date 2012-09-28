@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 
 // form controls use other property name as the remaining OOo API
 #define VBAFONTBASE_PROPNAME( ascii_normal, ascii_control ) \
-    mbFormControl ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii_control ) ) : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii_normal ) )
+    mbFormControl ? OUString( ascii_control ) : OUString( ascii_normal )
 
 VbaFontBase::VbaFontBase(
         const uno::Reference< XHelperInterface >& xParent,
@@ -65,8 +65,8 @@ VbaFontBase::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExcept
         nValue = SUPERSCRIPT;
         nValue2 = SUPERSCRIPTHEIGHT;
     }
-    mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharEscapement" ) ), ( uno::Any )nValue );
-     mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharEscapementHeight" ) ), ( uno::Any )nValue2 );
+    mxFont->setPropertyValue( "CharEscapement" , ( uno::Any )nValue );
+    mxFont->setPropertyValue( "CharEscapementHeight" , ( uno::Any )nValue2 );
 }
 
 uno::Any SAL_CALL
@@ -75,7 +75,7 @@ VbaFontBase::getSuperscript() throw ( uno::RuntimeException )
     short nValue = NORMAL;
     // not supported in form controls
     if( !mbFormControl )
-       mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharEscapement" ) ) ) >>= nValue;
+       mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
     return uno::makeAny( ( nValue == SUPERSCRIPT ) );
 }
 
@@ -97,8 +97,8 @@ VbaFontBase::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeExceptio
         nValue2 = SUBSCRIPTHEIGHT;
     }
 
-     mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharEscapementHeight" ) ), ( uno::Any )nValue2 );
-    mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharEscapement" ) ), ( uno::Any )nValue );
+     mxFont->setPropertyValue( "CharEscapementHeight" , ( uno::Any )nValue2 );
+    mxFont->setPropertyValue( "CharEscapement" , ( uno::Any )nValue );
 
 }
 
@@ -108,7 +108,7 @@ VbaFontBase::getSubscript() throw ( uno::RuntimeException )
     short nValue = NORMAL;
     // not supported in form controls
     if( !mbFormControl )
-       mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharEscapement" ) ) ) >>= nValue;
+       mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
     return uno::makeAny( ( nValue == SUBSCRIPT ) );
 }
 
@@ -211,13 +211,13 @@ void  SAL_CALL
 VbaFontBase::setShadow( const uno::Any& aValue ) throw ( uno::RuntimeException )
 {
     if( !mbFormControl )
-       mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ), aValue );
+       mxFont->setPropertyValue( "CharShadowed" , aValue );
 }
 
 uno::Any SAL_CALL
 VbaFontBase::getShadow() throw (uno::RuntimeException)
 {
-    return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ) );
+    return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue( "CharShadowed" );
 }
 
 void  SAL_CALL
@@ -242,7 +242,7 @@ VbaFontBase::getItalic() throw ( uno::RuntimeException )
 void  SAL_CALL
 VbaFontBase::setName( const uno::Any& aValue ) throw ( uno::RuntimeException )
 {
-    rtl::OUString sString;
+    OUString sString;
     aValue >>= sString;
     mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharFontName", "FontName" ), aValue );
 }

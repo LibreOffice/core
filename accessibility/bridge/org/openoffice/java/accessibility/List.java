@@ -19,8 +19,6 @@
 package org.openoffice.java.accessibility;
 
 import javax.accessibility.AccessibleContext;
-import javax.accessibility.AccessibleState;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.accessibility.*;
@@ -255,10 +253,8 @@ public class List extends DescendantManager implements javax.accessibility.Acces
                     XAccessibleContext xAccessibleContext = unoAccessible.getAccessibleContext();
                     if (xAccessibleContext != null) {
                         javax.accessibility.AccessibleContext ac = new AccessibleListItem(xAccessibleContext);
-                        if (ac != null) {
-                            ac.setAccessibleParent(List.this);
-                            accessibleContext = ac;
-                        }
+                        ac.setAccessibleParent(List.this);
+                        accessibleContext = ac;
                         AccessibleStateAdapter.setComponentState(this, xAccessibleContext.getAccessibleStateSet());
                     }
                 } catch (com.sun.star.uno.RuntimeException e) {

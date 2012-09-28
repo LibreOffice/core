@@ -25,8 +25,6 @@ import org.w3c.dom.Node;
  *  org.openoffice.xmerge.merger.MergeAlgorithm
  *  MergeAlgorithm} to merge two <code>Node</code> objects.  It is an
  *  interface so that  different merge algorithms may be plugged-in.
- *
- *  @author smak
  */
 public interface NodeMergeAlgorithm {
 

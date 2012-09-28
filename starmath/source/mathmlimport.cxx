@@ -1854,8 +1854,7 @@ class SmXMLFlatDocContext_Impl
 public:
     SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     virtual ~SmXMLFlatDocContext_Impl();
 
@@ -1864,12 +1863,11 @@ public:
 
 SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
     SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
     SmXMLOfficeContext_Impl(i_rImport, i_nPrefix, i_rLName),
     SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
-        i_xDocProps, i_xDocBuilder)
+        i_xDocProps)
 {
 }
 
@@ -2656,19 +2654,15 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
         if ( (IsXMLToken(rLocalName, XML_DOCUMENT) ||
               IsXMLToken(rLocalName, XML_DOCUMENT_META)))
         {
-            uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-                mxServiceFactory->createInstance(
-                    "com.sun.star.xml.dom.SAXDocumentBuilder"),
-                    uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
             return IsXMLToken(rLocalName, XML_DOCUMENT_META)
                 ? new SvXMLMetaDocumentContext(*this,
                         XML_NAMESPACE_OFFICE, rLocalName,
-                        xDPS->getDocumentProperties(), xDocBuilder)
+                        xDPS->getDocumentProperties())
                 // flat OpenDocument file format -- this has not been tested...
                 : new SmXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
-                            xDPS->getDocumentProperties(), xDocBuilder);
+                            xDPS->getDocumentProperties());
         }
         else
         {

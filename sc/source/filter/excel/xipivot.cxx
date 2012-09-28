@@ -1091,7 +1091,11 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     if( !pCacheField || !pCacheField->IsSupportedField() )
         return 0;
 
-    ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName( rFieldName );
+    ScDPSaveDimension* pTest = rSaveData.GetNewDimensionByName(rFieldName);
+    if (!pTest)
+        return NULL;
+
+    ScDPSaveDimension& rSaveDim = *pTest;
 
     // orientation
     rSaveDim.SetOrientation( static_cast< sal_uInt16 >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) ) );

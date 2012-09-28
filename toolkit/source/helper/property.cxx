@@ -224,6 +224,10 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_DEP_PROP_3 ( "ScrollValue",            SCROLLVALUE,        sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "ScrollValueMax",         SCROLLVALUE_MAX,    sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ScrollValueMin",         SCROLLVALUE_MIN,    sal_Int32,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ScrollWidth",            SCROLLWIDTH,        sal_Int32,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ScrollHeight",           SCROLLHEIGHT,       sal_Int32,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ScrollTop",              SCROLLTOP,          sal_Int32,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ScrollLeft",             SCROLLLEFT,         sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_2 ( "SelectedItems",          SELECTEDITEMS,      Sequence<sal_Int16>, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ShowThousandsSeparator", NUMSHOWTHOUSANDSEP,     bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Sizeable",               SIZEABLE,               bool,           BOUND, MAYBEDEFAULT ),
@@ -293,6 +297,10 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "UseGridLines",           USE_GRID_LINES,             sal_Bool,               BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_3 ( "MultiPageValue",          MULTIPAGEVALUE,      sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "AllDialogChildren",                USERFORMCONTAINEES,                Reference< ::com::sun::star::container::XNameContainer >,           BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "ActiveSelectionBackgroundColor",     ACTIVE_SEL_BACKGROUND_COLOR,    sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "InactiveSelectionBackgroundColor",   INACTIVE_SEL_BACKGROUND_COLOR,  sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "ActiveSelectionTextColor",           ACTIVE_SEL_TEXT_COLOR,          sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "InactiveSelectionTextColor",         INACTIVE_SEL_TEXT_COLOR,        sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
     };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );

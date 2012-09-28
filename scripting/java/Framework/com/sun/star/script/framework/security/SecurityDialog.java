@@ -20,7 +20,6 @@ package com.sun.star.script.framework.security;
 
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.ItemEvent;
-import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XControl;

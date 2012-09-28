@@ -53,7 +53,7 @@ namespace accessibility
         /** @return
                 The name of this class.
         */
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException );
 
         /** Creates a new AccessibleStateSetHelper and fills it with states of the
             current object.

@@ -32,8 +32,6 @@ import java.net.JarURLConnection;
  *  file out of a jar file and parses it, providing access to this
  *  information in a <code>Vector</code> of <code>ConverterInfo</code>
  *  objects.
- *
- *  @author  Brian Cameron
  */
 public class ConverterInfoReader {
 

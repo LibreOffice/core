@@ -46,7 +46,6 @@
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/sdb/RowChangeEvent.hpp>
 #include <com/sun/star/sdb/RowChangeAction.hpp>
-#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -1497,14 +1496,8 @@ namespace frm
             // automatic sort by field is expected to always resets the previous sort order
             m_xParser->setOrder( ::rtl::OUString() );
 
-            param_appendOrderByColumn aParam;
-            aParam.xField = xBoundField;
-            aParam.bUp = _bUp;
-            impl_doActionInSQLContext_throw(
-                (Action)&FormOperations::impl_appendOrderByColumn_throw,
-                static_cast< const void* >( &aParam ),
-                (sal_uInt16)RID_STR_COULD_NOT_SET_ORDER
-            );
+            impl_appendOrderByColumn_throw aAction(this, xBoundField, _bUp);
+            impl_doActionInSQLContext_throw(aAction, RID_STR_COULD_NOT_SET_ORDER );
 
             WaitObject aWO( NULL );
             try
@@ -1569,13 +1562,8 @@ namespace frm
             if ( !bApplied )
                 m_xParser->setFilter( ::rtl::OUString() );
 
-            param_appendFilterByColumn aParam;
-            aParam.xField = xBoundField;
-            impl_doActionInSQLContext_throw(
-                (Action)&FormOperations::impl_appendFilterByColumn_throw,
-                static_cast< const void* >( &aParam ),
-                (sal_uInt16)RID_STR_COULD_NOT_SET_FILTER
-            );
+            impl_appendFilterByColumn_throw aAction(this, xBoundField);
+            impl_doActionInSQLContext_throw( aAction, RID_STR_COULD_NOT_SET_FILTER );
 
             WaitObject aWO( NULL );
             try
@@ -1675,41 +1663,12 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void FormOperations::impl_appendOrderByColumn_throw( const void* _pActionParam ) const
-    {
-        const param_appendOrderByColumn* pParam = static_cast< const param_appendOrderByColumn* >( _pActionParam );
-        m_xParser->appendOrderByColumn( pParam->xField, pParam->bUp );
-    }
-
-    //------------------------------------------------------------------------------
-    void FormOperations::impl_appendFilterByColumn_throw( const void* _pActionParam ) const
-    {
-        const param_appendFilterByColumn* pParam = static_cast< const param_appendFilterByColumn* >( _pActionParam );
-        sal_Int32 nOp = SQLFilterOperator::EQUAL;
-        if ( pParam->xField.is() )
-        {
-            sal_Int32 nType = 0;
-            pParam->xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nType;
-            switch(nType)
-            {
-                case DataType::VARCHAR:
-                case DataType::CHAR:
-                case DataType::LONGVARCHAR:
-                    nOp = SQLFilterOperator::LIKE;
-                    break;
-                default:
-                    nOp = SQLFilterOperator::EQUAL;
-            }
-        }
-        m_xParser->appendFilterByColumn( pParam->xField, sal_True,nOp );
-    }
-
-    //------------------------------------------------------------------------------
-    void FormOperations::impl_doActionInSQLContext_throw( Action _pAction, const void* _pParam, sal_uInt16 _nErrorResourceId ) const
+    template < typename FunctObj >
+    void FormOperations::impl_doActionInSQLContext_throw( FunctObj f, sal_uInt16 _nErrorResourceId ) const
     {
         try
         {
-            (this->*_pAction)( _pParam );
+            f();
         }
         catch( const SQLException& e )
         {

@@ -16,9 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.security;
+package ifc.scripting;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Collection;
 
@@ -35,10 +34,6 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.frame.XModel;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.util.XChangesBatch;
-import com.sun.star.reflection.InvocationTargetException;
-
-import ifc.script.framework.SecurityDialogUtil;
-
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Parameters;
@@ -150,7 +145,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             {
                 checkBox = true;
             }
-            new SecurityDialogUtil( tParam.getMSF(), buttonName, checkBox ).start();
+            new SecurityDialogUtil( (XMultiServiceFactory) tParam.getMSF(), buttonName, checkBox ).start();
         }
         // need to set up dialog utils thread first
         int storageId = getStorageId(location);
@@ -205,7 +200,7 @@ public class _XScriptSecurity extends MultiMethodTest {
     {
         String result = "";
         try {
-        Object oProv = tParam.getMSF().createInstance(
+        Object oProv = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
             "com.sun.star.configuration.ConfigurationProvider" );
 
         XMultiServiceFactory xProv = (XMultiServiceFactory)
@@ -247,7 +242,7 @@ public class _XScriptSecurity extends MultiMethodTest {
     {
         boolean success=false;
         try {
-        Object oProv = tParam.getMSF().createInstance(
+        Object oProv = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
             "com.sun.star.configuration.ConfigurationProvider" );
 
         XMultiServiceFactory xProv = (XMultiServiceFactory)
@@ -360,7 +355,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         XSimpleFileAccess access = null;
 
         try {
-            Object fa = tParam.getMSF().createInstance(
+            Object fa = ((XMultiServiceFactory)tParam.getMSF()).createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
             access = (XSimpleFileAccess)
@@ -374,7 +369,7 @@ public class _XScriptSecurity extends MultiMethodTest {
 
     private XModel loadDocument(String name) {
         XModel model = null;
-        SOfficeFactory factory = SOfficeFactory.getFactory(tParam.getMSF());
+        SOfficeFactory factory = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
 
         String fullname = util.utils.getFullTestURL(name);
 

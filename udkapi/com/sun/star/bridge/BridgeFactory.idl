@@ -19,11 +19,10 @@
 #ifndef __com_sun_star_bridge_BridgeFactory_idl__
 #define __com_sun_star_bridge_BridgeFactory_idl__
 
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/bridge/XBridgeFactory.idl>
+#include <com/sun/star/bridge/XBridgeFactory2.idl>
 
 
- module com {  module sun {  module star {  module bridge {
+module com {  module sun {  module star {  module bridge {
 
 
 /** allows to create new or access existing interprocess bridges.
@@ -34,16 +33,7 @@
 
     @see com::sun::star::bridge::Bridge
  */
-published service BridgeFactory
-{
-    /** The main interface of the service
-     */
-    interface com::sun::star::bridge::XBridgeFactory;
-
-    /** This interface allows to break possible cyclic references.
-     */
-    interface com::sun::star::lang::XComponent;
-};
+published service BridgeFactory : com::sun::star::bridge::XBridgeFactory2;
 
 
 }; }; }; };

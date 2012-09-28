@@ -38,10 +38,6 @@ import com.sun.star.beans.*;
 import com.sun.star.form.*;
 import com.sun.star.lang.*;
 import com.sun.star.sdb.*;
-import com.sun.star.sdbc.*;
-import com.sun.star.sdbcx.*;
-import com.sun.star.container.*;
-import com.sun.star.awt.*;
 import com.sun.star.task.*;
 
 /**************************************************************************/

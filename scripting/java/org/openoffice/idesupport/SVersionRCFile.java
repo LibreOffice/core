@@ -57,11 +57,11 @@ public class SVersionRCFile {
     /* Make sure this is in LowerCase !!!!! */
     private static final String SCRIPTF = "scriptf";
 
-    private static final HashMap files = new HashMap(3);
+    private static final HashMap<String, SVersionRCFile> files = new HashMap<String, SVersionRCFile>(3);
 
     private File sversionrc = null;
     private OfficeInstallation defaultversion = null;
-    private Vector versions = null;
+    private Vector<OfficeInstallation> versions = null;
     private long lastModified = 0;
 
     public SVersionRCFile() {
@@ -70,7 +70,7 @@ public class SVersionRCFile {
 
     public SVersionRCFile(String name) {
         sversionrc = new File(name);
-        versions = new Vector(5);
+        versions = new Vector<OfficeInstallation>(5);
     }
 
     public static SVersionRCFile createInstance() {
@@ -81,7 +81,7 @@ public class SVersionRCFile {
         SVersionRCFile result = null;
 
         synchronized(SVersionRCFile.class) {
-            result = (SVersionRCFile)files.get(name);
+            result = files.get(name);
 
             if (result == null) {
                 result = new SVersionRCFile(name);
@@ -99,7 +99,7 @@ public class SVersionRCFile {
         return defaultversion;
     }
 
-    public Enumeration getVersions() throws IOException {
+    public Enumeration<OfficeInstallation> getVersions() throws IOException {
 
         long l = sversionrc.lastModified();
 
@@ -209,7 +209,7 @@ public class SVersionRCFile {
         else
             ov = new SVersionRCFile(args[0]);
 
-        Enumeration enumer;
+        Enumeration<OfficeInstallation> enumer;
 
         try {
             enumer = ov.getVersions();
@@ -220,7 +220,7 @@ public class SVersionRCFile {
         }
 
         while (enumer.hasMoreElements()) {
-            OfficeInstallation oi = (OfficeInstallation)enumer.nextElement();
+            OfficeInstallation oi = enumer.nextElement();
             System.out.println("Name: " + oi.getName() + ", Path: " + oi.getPath() +
                 ", URL: " + oi.getURL());
         }

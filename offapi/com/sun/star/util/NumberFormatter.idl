@@ -19,13 +19,10 @@
 #ifndef __com_sun_star_util_NumberFormatter_idl__
 #define __com_sun_star_util_NumberFormatter_idl__
 
-#include <com/sun/star/util/XNumberFormatter.idl>
-
-#include <com/sun/star/util/XNumberFormatPreviewer.idl>
+#include <com/sun/star/util/XNumberFormatter2.idl>
 
 
-
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 
 /** represents an object which can format numbers and strings.
@@ -33,19 +30,7 @@
     <p>A NumberFormatter, if available, can be created by the global
     service manager.</p>
  */
-published service NumberFormatter
-{
-    /** is used to format or parse numbers using formats from a
-        <type>NumberFormats</type> object.
-     */
-    interface com::sun::star::util::XNumberFormatter;
-
-    /** is used to format numbers using a number format string
-        that is not inserted into a <type>NumberFormats</type> object.
-     */
-    interface com::sun::star::util::XNumberFormatPreviewer;
-
-};
+published service NumberFormatter : XNumberFormatter2;
 
 
 }; }; }; };

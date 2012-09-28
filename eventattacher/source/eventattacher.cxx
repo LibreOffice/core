@@ -25,13 +25,15 @@
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/script/XEventAttacher2.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 
 // InvocationToAllListenerMapper
 #include <com/sun/star/script/XInvocation.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -406,8 +408,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception 
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xReflection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.reflection.CoreReflection") ) );
-        m_xReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
+        m_xReflection = theCoreReflection::get(comphelper::getComponentContext(m_xSMgr));
     }
     return m_xReflection;
 }
@@ -433,8 +434,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xConverter.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.script.Converter") ) );
-        m_xConverter = Reference< XTypeConverter >( xIFace, UNO_QUERY );
+        m_xConverter = Converter::create(comphelper::getComponentContext(m_xSMgr));
     }
     return m_xConverter;
 }
@@ -905,7 +905,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventList
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL evtatt_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;

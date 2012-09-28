@@ -22,7 +22,6 @@ package org.openoffice.xmerge.converter.xml;
  *  This interface contains constants for StarOffice XML tags,
  *  attributes (StarCalc cell types, etc.).
  *
- *  @author      Herbie Ong, Paul Rank, Martin Maher
  */
 public interface OfficeConstants {
 

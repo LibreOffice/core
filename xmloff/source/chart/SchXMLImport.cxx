@@ -606,19 +606,14 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
             GetModel(), uno::UNO_QUERY);
         // mst@: right now, this seems to be not supported, so it is untested
         if (xDPS.is()) {
-            uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-                mxServiceFactory->createInstance(
-                    ::rtl::OUString(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
-                    uno::UNO_QUERY_THROW);
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? new SvXMLMetaDocumentContext(*this,
                             XML_NAMESPACE_OFFICE, rLocalName,
-                            xDPS->getDocumentProperties(), xDocBuilder)
+                            xDPS->getDocumentProperties())
                 // flat OpenDocument file format
                 : new SchXMLFlatDocContext_Impl(
                             maImportHelper, *this, nPrefix, rLocalName,
-                            xDPS->getDocumentProperties(), xDocBuilder);
+                            xDPS->getDocumentProperties());
         } else {
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList )

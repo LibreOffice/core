@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
 
 #include <sal/main.h>
@@ -54,16 +55,9 @@ SAL_IMPLEMENT_MAIN()
     // create the initial component context
     uno::Reference< uno::XComponentContext > rComponentContext = cppu::defaultBootstrap_InitialComponentContext();
 
-    // initialize UCB
-    uno::Sequence< uno::Any > theArguments(2);
-    theArguments[0] = uno::makeAny( UNISTRING( "Local") );
-    theArguments[1] = uno::makeAny( UNISTRING( "Office") );
-
-    uno::Reference< uno::XInterface > xUCB =
-        rComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ),
-            theArguments,
-            rComponentContext );
+    // initialize UCB (for backwards compatibility, in case some code still uses
+    // plain createInstance w/o args directly to obtain an instance):
+    ucb::UniversalContentBroker::create(rComponentContext);
 
     // retrieve the update information provider
     uno::Reference< deployment::XUpdateInformationProvider > rUpdateInformationProvider =

@@ -66,8 +66,6 @@ private:
     ChangeType          nBitmapListState;
     ChangeType          nGradientListState;
     ChangeType          nHatchingListState;
-    ChangeType          nLineEndListState;
-    ChangeType          nDashListState;
 
     PresentationObjects ePO;
 

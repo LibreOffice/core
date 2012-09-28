@@ -30,7 +30,7 @@ public class AccessibleTreeCellRenderer
     public Color
         maDefaultColor,
         maChangedColor;
-    protected Vector
+    protected Vector<Boolean>
         maChangedLines;
 
 
@@ -39,7 +39,7 @@ public class AccessibleTreeCellRenderer
     {
         maDefaultColor = Color.black;
         maChangedColor = Color.red;
-        maChangedLines = new Vector ();
+        maChangedLines = new Vector<Boolean> ();
     }
 
     public Component getTreeCellRendererComponent (
@@ -79,7 +79,7 @@ public class AccessibleTreeCellRenderer
         if (maChangedLines.size() <= nRow)
             maChangedLines.setSize (nRow+1);
         nRow -= 1; // row index is one to large for some reason.
-        maChangedLines.set (nRow, new Boolean (true));
+        maChangedLines.set (nRow, true);
     }
 
     /** Inform the cell renderer of a set of changed line which to paint
@@ -90,11 +90,11 @@ public class AccessibleTreeCellRenderer
             The JTree that is used to transform the given TreePath objects
             into rows.
     */
-    public void addChangedNodes (Vector aChangedNodes, JTree aTree)
+    public void addChangedNodes (Vector<TreePath> aChangedNodes, JTree aTree)
     {
         for (int i=0; i<aChangedNodes.size(); i++)
         {
-            TreePath aPath = (TreePath)aChangedNodes.elementAt (i);
+            TreePath aPath = aChangedNodes.elementAt (i);
             int nRow = aTree.getRowForPath (aPath);
             addChangedLine (nRow);
         }

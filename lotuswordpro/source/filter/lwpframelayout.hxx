@@ -234,8 +234,6 @@ private:
     sal_Int32 m_nXOffset;
     sal_Int32 m_nYOffset;
     LwpObjectID m_objRubyMarker;
-    sal_Int32 m_nBodyX;
-    sal_Int32 m_nBodyWidth;
 };
 
 #endif

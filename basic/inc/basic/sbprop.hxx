@@ -41,10 +41,7 @@ public:
     SbModule* GetModule() { return pMod; }
 };
 
-#ifndef __SB_SBPROPERTYREF_HXX
-#define __SB_SBPROPERTYREF_HXX
 SV_DECL_IMPL_REF(SbProperty)
-#endif
 
 class BASIC_DLLPUBLIC SbProcedureProperty : public SbxProperty
 {
@@ -64,11 +61,6 @@ public:
     void setSet( bool bSet )
         { mbSet = bSet; }
 };
-
-#ifndef __SB_SBPROCEDUREPROPERTYREF_HXX
-#define __SB_SBPROCEDUREPROPERTYREF_HXX
-SV_DECL_IMPL_REF(SbProcedureProperty)
-#endif
 
 #endif
 

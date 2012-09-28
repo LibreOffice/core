@@ -24,6 +24,7 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -31,10 +32,11 @@
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XEngineListener.hpp>
 #include <com/sun/star/script/XEventAttacher2.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
@@ -93,14 +95,14 @@ class ImplEventAttacherManager
     OInterfaceContainerHelper           aScriptListeners;
     // Instance of EventAttacher
     Reference< XEventAttacher2 >        xAttacher;
-    Reference< XMultiServiceFactory >   mxSMgr;
+    Reference< XComponentContext >      mxContext;
     Reference< XIdlReflection >         mxCoreReflection;
     Reference< XIntrospection >         mxIntrospection;
     Reference< XTypeConverter >         xConverter;
     sal_Int16                           nVersion;
 public:
     ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
-                              const Reference< XMultiServiceFactory > rSMgr );
+                              const Reference< XComponentContext > xContext );
     ~ImplEventAttacherManager();
 
     // Methods of XEventAttacherManager
@@ -360,7 +362,7 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
         if ( xIFace.is() )
         {
             Reference< XIntrospection > xIntrospection( xIFace, UNO_QUERY);
-            return new ImplEventAttacherManager( xIntrospection, rSMgr );
+            return new ImplEventAttacherManager( xIntrospection, comphelper::getComponentContext(rSMgr) );
         }
     }
 
@@ -369,23 +371,20 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
 
 //-----------------------------------------------------------------------------
 ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
-                                                    const Reference< XMultiServiceFactory > rSMgr )
+                                                    const Reference< XComponentContext > xContext )
     : aScriptListeners( aLock )
-    , mxSMgr( rSMgr )
+    , mxContext( xContext )
     , mxIntrospection( rIntrospection )
 {
-    if ( rSMgr.is() )
+    if ( xContext.is() )
     {
-        Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.EventAttacher" )) ) );
+        Reference< XInterface > xIFace( xContext->getServiceManager()->createInstanceWithContext(
+             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.EventAttacher" )), xContext)  );
         if ( xIFace.is() )
         {
             xAttacher = Reference< XEventAttacher2 >::query( xIFace );
         }
-        xIFace = rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" )) );
-        if ( xIFace.is() )
-        {
-            xConverter = Reference< XTypeConverter >::query( xIFace );
-        }
+        xConverter = Converter::create(xContext);
     }
 
     Reference< XInitialization > xInit( xAttacher, UNO_QUERY );
@@ -408,8 +407,7 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
     // Do we already have a service? If not, create one.
     if( !mxCoreReflection.is() )
     {
-        Reference< XInterface > xIFace( mxSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.CoreReflection" )) ) );
-        mxCoreReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
+        mxCoreReflection = theCoreReflection::get(mxContext);
     }
     return mxCoreReflection;
 }

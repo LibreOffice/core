@@ -19,7 +19,6 @@ package mod._toolkit;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
@@ -128,7 +127,6 @@ public class AccessibleMenuBar extends TestCase {
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**

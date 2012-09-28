@@ -63,13 +63,6 @@ public:
     Point GetLocationOffset (void) const;
     bool SetLocationOffset (const Point& rPoint);
 
-    double GetButtonAlpha (void) const;
-    void SetButtonAlpha (const double nAlpha);
-    double GetButtonBarAlpha (void) const;
-    void SetButtonBarAlpha (const double nAlpha);
-    sal_Int32 GetButtonAlphaAnimationId (void) const;
-    void SetButtonAlphaAnimationId (const sal_Int32 nAnimationId);
-
     sal_Int32 mnPageId; // For debugging
 
 private:
@@ -81,10 +74,6 @@ private:
 
     Point maLocationOffset;
     sal_Int32 mnLocationAnimationId;
-
-    double mnButtonAlpha;
-    double mnButtonBarAlpha;
-    sal_Int32 mnButtonAlphaAnimationId;
 };
 
 } } } // end of namespace ::sd::slidesorter::model

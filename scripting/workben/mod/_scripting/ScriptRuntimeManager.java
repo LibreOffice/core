@@ -19,6 +19,7 @@
 package mod._scripting;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -38,7 +39,7 @@ public class ScriptRuntimeManager extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;

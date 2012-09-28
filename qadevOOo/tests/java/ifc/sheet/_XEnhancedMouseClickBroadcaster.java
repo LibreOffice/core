@@ -23,23 +23,16 @@ import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XEnhancedMouseClickHandler;
-import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XEnhancedMouseClickBroadcaster;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 import lib.MultiMethodTest;
-import lib.StatusException;
-
 import util.AccessibilityTools;
 import util.DesktopTools;
-import util.utils;
-
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 

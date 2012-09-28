@@ -998,8 +998,6 @@ public class DocumentLoader
 
             Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
 
-            Bootstrap.initUCBHelper();
-
             componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 
             Log.i(TAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
@@ -1021,7 +1019,7 @@ public class DocumentLoader
                 flipper.addView(new PageViewer(i+1), i+1, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
                 flipper.addView(new PageViewer(-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
-                
+
             ll = (LinearLayout)findViewById( R.id.navigator);
             inflater = (LayoutInflater) getApplicationContext().getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);

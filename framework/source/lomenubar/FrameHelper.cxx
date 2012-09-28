@@ -42,14 +42,14 @@
 #include <com/sun/star/awt/XMenuExtended.hpp>
 #include <com/sun/star/awt/XMenuListener.hpp>
 #include <com/sun/star/awt/XPopupMenuExtended.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
@@ -58,13 +58,15 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <rtl/process.h>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <gio/gio.h>
 //#pragma GCC diagnostic push
@@ -95,6 +97,7 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::NoSuchElementException;
+using com::sun::star::frame::DispatchHelper;
 using com::sun::star::frame::XController;
 using com::sun::star::frame::XComponentLoader;
 using com::sun::star::frame::XDispatch;
@@ -111,10 +114,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 using com::sun::star::ui::XUIElement;
+using com::sun::star::frame::UICommandDescription;
 using com::sun::star::ui::XUIConfigurationManager;
 using com::sun::star::ui::XUIConfigurationManagerSupplier;
 using com::sun::star::ui::XAcceleratorConfiguration;
 using com::sun::star::ui::XModuleUIConfigurationManagerSupplier;
+using com::sun::star::ui::ModuleUIConfigurationManagerSupplier;
 using com::sun::star::util::URL;
 using com::sun::star::util::XURLTransformer;
 
@@ -262,8 +267,8 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
     : m_xStatusListener(new MenuItemStatusListener(this))
     , m_pDispatchRegistry(new framework::lomenubar::DispatchRegistry(m_xStatusListener))
     , m_xMSF(rServiceManager)
-    , m_xTrans(util::URLTransformer::create(comphelper::ComponentContext(m_xMSF).getUNOContext()))
-    , m_xMM(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))),UNO_QUERY)
+    , m_xTrans(util::URLTransformer::create(comphelper::getComponentContext(m_xMSF)))
+    , m_xMM(frame::ModuleManager(comphelper::getComponentContext(m_xMSF)),UNO_QUERY)
     , m_xPCF(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.PopupMenuControllerFactory"))), UNO_QUERY)
     , m_xFrame(xFrame)
     , m_xdp(xFrame, UNO_QUERY)
@@ -275,8 +280,7 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
 {
 
     //Get xUICommands database (to retrieve labels, see FrameJob::getLabelFromCommandURL ())
-    Reference < XNameAccess > xNameAccess (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription"))),
-                                           UNO_QUERY);
+    Reference < XNameAccess > xNameAccess (UICommandDescription::create(comphelper::getComponentContext(m_xMSF)));
     xNameAccess->getByName(m_xMM->identify(xFrame)) >>= m_xUICommands;
 
 
@@ -718,8 +722,7 @@ void
 FrameHelper::dispatchCommand (OUString command)
 {
     OUString target = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
-    Reference < XDispatchHelper > xdh (m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))),
-                                       UNO_QUERY);
+    Reference < XDispatchHelper > xdh( DispatchHelper::create(comphelper::getComponentContext(m_xMSF)) );
 
     // This is a special case, we don't want the helper to be disconnected from the frame
     // when PrintPreview dettaches. See the frameAction method.
@@ -792,8 +795,7 @@ FrameHelper::getAcceleratorConfigurations (Reference < XModel >        xModel,
     this->m_docAccelConf = docAccelConf;
 
     //Get module shurtcut database
-    Reference< XModuleUIConfigurationManagerSupplier > modUISupplier(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),
-                                                                     UNO_QUERY);
+    Reference< XModuleUIConfigurationManagerSupplier > modUISupplier( ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(m_xMSF)) );
     Reference< XUIConfigurationManager >   modUIManager = modUISupplier->getUIConfigurationManager(xModuleManager->identify(m_xFrame));
     Reference< XAcceleratorConfiguration > modAccelConf(modUIManager->getShortCutManager(), UNO_QUERY);
     this->m_modAccelConf = modAccelConf;

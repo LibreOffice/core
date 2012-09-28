@@ -45,7 +45,6 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
  *  org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializerImpl
  * SxcDocumentSerializerImpl} to encode the MiniCalc format.
  *
- *  @author   Paul Rank
  */
 final class MinicalcEncoder extends SpreadsheetEncoder {
 

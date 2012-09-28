@@ -184,7 +184,7 @@ void ThumbnailView::ImplInitScrollBar()
         {
             // adapt the width because of the changed settings
             long nScrBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-            mpScrBar->SetPosSizePixel( 0, 0, nScrBarWidth, 0, WINDOW_POSSIZE_WIDTH );
+            mpScrBar->setPosSizePixel( 0, 0, nScrBarWidth, 0, WINDOW_POSSIZE_WIDTH );
         }
     }
 }

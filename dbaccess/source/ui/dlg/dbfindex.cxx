@@ -18,6 +18,7 @@
  */
 
 #include "dbfindex.hxx"
+#include <comphelper/processfactory.hxx>
 #include <tools/config.hxx>
 #include <sfx2/app.hxx>
 #include "moduledbu.hxx"
@@ -298,7 +299,7 @@ void ODbaseIndexDialog::Init()
     sal_Bool bFolder=sal_True;
     try
     {
-        aFile = ::ucbhelper::Content(m_aDSN,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        aFile = ::ucbhelper::Content(m_aDSN,Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
         bFolder = aFile.isFolder();
     }
     catch(Exception&)
@@ -489,7 +490,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     {
         try
         {
-            ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+            ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
             aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),makeAny( sal_Bool( sal_True ) ) );
         }
         catch (const Exception& e )

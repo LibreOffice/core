@@ -19,17 +19,8 @@
 // base classes
 import com.sun.star.uno.UnoRuntime;
 
-// factory for creating components
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
-
-// Exceptions
-import com.sun.star.uno.RuntimeException;
 
 
 /** @descr  This class establishes a connection to a LibreOffice application.
@@ -90,12 +81,12 @@ public class OfficeConnection
             //  Create a URL Resolver.
             XMultiServiceFactory aLocalServiceManager =
                 com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
-            XUnoUrlResolver aURLResolver = (XUnoUrlResolver) UnoRuntime.queryInterface (
+            XUnoUrlResolver aURLResolver = UnoRuntime.queryInterface (
                 XUnoUrlResolver.class,
                 aLocalServiceManager.createInstance ("com.sun.star.bridge.UnoUrlResolver")
                 );
 
-            maServiceManager = (XMultiServiceFactory) UnoRuntime.queryInterface (
+            maServiceManager = UnoRuntime.queryInterface (
                     XMultiServiceFactory.class,
                     aURLResolver.resolve (sConnectString)
                     );

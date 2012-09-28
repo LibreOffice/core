@@ -16,8 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_MANAGELANG_HRC
-#define _BASCTL_MANAGELANG_HRC
+#ifndef BASCTL_MANAGELANG_HRC
+#define BASCTL_MANAGELANG_HRC
 
 // Include -----------------------------------------------------------------------
 
@@ -93,5 +93,5 @@
 #define SETDEF_LB_WIDTH     (SETDEF_COL4A - SETDEF_COL1)
 #define SETDEF_LB_HEIGHT    (SETDEF_ROW3A - SETDEF_ROW2)
 
-#endif  // _BASCTL_MANAGELANG_HRC
+#endif // BASCTL_MANAGELANG_HRC
 

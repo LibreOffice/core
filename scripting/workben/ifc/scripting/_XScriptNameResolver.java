@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.runtime;
+package ifc.scripting;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -163,7 +163,7 @@ public class _XScriptNameResolver extends MultiMethodTest {
         XSimpleFileAccess access = null;
 
         try {
-            Object fa = tParam.getMSF().createInstance(
+            Object fa = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
             access = (XSimpleFileAccess)

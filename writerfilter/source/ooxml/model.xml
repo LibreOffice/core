@@ -22153,7 +22153,7 @@
       <action name="start" action="printproperty" sendtokenid="ooxml:CT_SimpleField_instr"/>
       <action name="start" action="endCharacterGroup"/>
       <action name="start" action="fieldsep"/>
-      <action name="end" action="fieldend"/>
+      <action name="end" action="simplefieldend"/>
     </resource>
     <resource name="ST_FldCharType" resource="List">
       <value name="begin" tokenid="ooxml:Value_ST_FldCharType_begin">begin</value>
@@ -22748,6 +22748,9 @@
       <element name="sdtPr" tokenid="ooxml:CT_SdtBlock_sdtPr"/>
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtBlock_sdtEndPr"/>
       <element name="sdtContent" tokenid="ooxml:CT_SdtBlock_sdtContent"/>
+      <element name="sdtEndContent" tokenid="ooxml:CT_SdtBlock_sdtEndContent"/>
+      <action name="start" action="startSdt"/>
+      <action name="end" action="endSdt"/>
     </resource>
     <resource name="CT_SdtRun" resource="Stream" tag="field">
       <element name="sdtPr" tokenid="ooxml:CT_SdtRun_sdtPr"/>
@@ -23511,6 +23514,7 @@
     <resource name="CT_FontRel" resource="Properties" tag="font">
       <attribute name="fontKey" tokenid="ooxml:CT_FontRel_fontKey"/>
       <attribute name="subsetted" tokenid="ooxml:CT_FontRel_subsetted"/>
+      <action name="start" action="handleFontRel"/>
     </resource>
     <resource name="CT_Font" resource="Properties" tag="font">
       <kind name="character"/>

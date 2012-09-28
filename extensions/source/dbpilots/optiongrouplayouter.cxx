@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -62,8 +63,8 @@ namespace dbp
     //= OOptionGroupLayouter
     //=====================================================================
     //---------------------------------------------------------------------
-    OOptionGroupLayouter::OOptionGroupLayouter(const Reference< XMultiServiceFactory >& _rxORB)
-        :m_xORB(_rxORB)
+    OOptionGroupLayouter::OOptionGroupLayouter(const Reference< XComponentContext >& _rxContext)
+        :mxContext(_rxContext)
     {
     }
 
@@ -103,9 +104,7 @@ namespace dbp
         implAnchorShape(Reference< XPropertySet >(_rContext.xObjectShape, UNO_QUERY));
 
         // shape collection (for grouping the shapes)
-        Reference< XShapes > xButtonCollection(m_xORB->createInstance(
-                ::rtl::OUString("com.sun.star.drawing.ShapeCollection")),
-            UNO_QUERY);
+        Reference< XShapes > xButtonCollection( ShapeCollection::create(mxContext) );
         // first member : the shape of the control
         xButtonCollection->add(_rContext.xObjectShape.get());
 

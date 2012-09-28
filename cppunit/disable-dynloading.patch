@@ -1,0 +1,25 @@
+--- misc/build/cppunit-1.13.1/include/cppunit/plugin/TestPlugIn.h
++++ misc/build/cppunit-1.13.1/include/cppunit/plugin/TestPlugIn.h
+@@ -106,7 +106,9 @@
+  * CppUnitTestPlugIn *CPPUNIT_PLUGIN_EXPORTED_NAME(void);
+  * \endcode
+  */
++#ifndef CPPUNIT_PLUGIN_EXPORTED_NAME
+ #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTestPlugIn
++#endif
+ 
+ /*! \brief Type of the function exported by a plug-in.
+  * \ingroup WritingTestPlugIn
+@@ -143,6 +143,12 @@
+ #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
+   typedef char __CppUnitPlugInImplementMainDummyTypeDef
+ 
++// Actually this is for iOS and Android where we build the cppunit tests libraries
++// as plain archives and just link them statically into test fixture programs,
++// and don't want any stinking duplicate main(), but shouldn't hurt for MacOSX either.
++#elif defined(__APPLE__) || defined(__ANDROID__)
++#define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
++  typedef char __CppUnitPlugInImplementMainDummyTypeDef
+ // Unix
+ #elif defined(CPPUNIT_HAVE_UNIX_DLL_LOADER) || defined(CPPUNIT_HAVE_UNIX_SHL_LOADER)
+ #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \

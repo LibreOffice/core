@@ -19,6 +19,7 @@
 
 #include "oox/core/filterdetect.hxx"
 
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -574,8 +575,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
             else
             {
                 // create temporary file for unencrypted package
-                Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
-                Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+                Reference< XStream > xTempFile( TempFile::create(mxContext), UNO_QUERY_THROW );
                 Reference< XOutputStream > xDecryptedPackage( xTempFile->getOutputStream(), UNO_SET_THROW );
                 BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
                 BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );

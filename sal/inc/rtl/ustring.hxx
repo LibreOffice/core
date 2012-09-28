@@ -32,12 +32,14 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <ostream>
 
 #include "osl/diagnose.h"
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/memory.h>
+#include <rtl/textenc.h>
 #include "sal/log.hxx"
 
 #if defined EXCEPTIONS_OFF
@@ -169,7 +171,7 @@ public:
     }
 
     /**
-      New string from a Uniocde character buffer array.
+      New string from a Unicode character buffer array.
 
       @param    value       a Unicode character array.
       @param    length      the number of character which should be copied.
@@ -879,6 +881,65 @@ public:
     void matchIgnoreAsciiCaseAsciiL(char const *, sal_Int32, rtl_TextEncoding)
         const;
 #endif
+
+    /**
+      Check whether this string starts with a given substring.
+
+      @param str  the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      start of this string
+
+      @since LibreOffice 3.7
+    */
+    bool startsWith(OUString const & str) const {
+        return match(str, 0);
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.7
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
+    {
+        return rtl_ustr_asciil_reverseEquals_WithLength( pData->buffer, literal,
+                internal::ConstCharArrayDetector< T, void >::size - 1);
+    }
+
+    /**
+      Check whether this string starts with a given string, ignoring the case of
+      ASCII letters.
+
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @return true if this string starts with str, ignoring the case of ASCII
+      letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
+      @since LibreOffice 3.7
+    */
+    sal_Bool startsWithIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
+    {
+        return matchIgnoreAsciiCase(str, 0);
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.7
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type startsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
+    {
+        return (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    pData->buffer,
+                    internal::ConstCharArrayDetector< T, void >::size - 1, literal,
+                    internal::ConstCharArrayDetector< T, void >::size - 1)
+                == 0);
+    }
 
     /**
       Check whether this string ends with a given substring.
@@ -2082,6 +2143,35 @@ inline OString OUStringToOString( const OUString & rUnicode,
 
 } /* Namespace */
 
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+namespace rtl
+{
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+#endif
+
+/**
+    Support for rtl::OUString in std::ostream (and thus in
+    CPPUNIT_ASSERT or SAL_INFO macros, for example).
+
+    The rtl::OUString is converted to UTF-8.
+
+    @since LibreOffice 3.5.
+*/
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, OUString const & string)
+{
+    return stream <<
+        rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
+        // best effort; potentially loses data due to conversion failures
+        // (stray surrogate halves) and embedded null characters
+}
+
+} // namespace
+
 // RTL_USING is defined by gbuild for all modules except those with stable public API
 // (as listed in ure/source/README). It allows to use classes like OUString without
 // having to explicitly refer to the rtl namespace, which is kind of superfluous
@@ -2094,10 +2184,5 @@ using ::rtl::OUStringToOString;
 #endif
 
 #endif /* _RTL_USTRING_HXX */
-
-// Include the ostream << operator directly here, so that it's always available
-// for SAL_INFO etc. Make sure it's outside of #ifdef _RTL_USTRING_HXX, because
-// includes ustring.hxx back.
-#include <rtl/oustringostreaminserter.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

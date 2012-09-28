@@ -41,7 +41,7 @@
 #include <framework/interaction.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 namespace filter{
@@ -75,7 +75,7 @@ TypeDetection::~TypeDetection()
 
     css::util::URL  aURL;
     aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(comphelper::getComponentContext(m_xSMGR)));
     xParser->parseStrict(aURL);
 
     // set std types as minimum requirement first!
@@ -259,7 +259,7 @@ struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectio
 
     css::util::URL  aURL;
     aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(comphelper::getComponentContext(m_xSMGR)));
     xParser->parseStrict(aURL);
 
     rtl::OUString aSelectedFilter = stlDescriptor.getUnpackedValueOrDefault(

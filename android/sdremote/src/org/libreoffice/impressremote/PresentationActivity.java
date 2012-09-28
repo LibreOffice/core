@@ -8,9 +8,11 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,7 +21,9 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
+import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,45 +40,54 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class PresentationActivity extends SherlockFragmentActivity {
     private CommunicationService mCommunicationService;
-    private FrameLayout mLayout;
     private FrameLayout mOuterLayout;
     private ThumbnailFragment mThumbnailFragment;
     private PresentationFragment mPresentationFragment;
-    private ActionBarManager mActionBarManager;
+    private static ActionBarManager mActionBarManager;
+    private ActivityChangeBroadcastProcessor mBroadcastProcessor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+
         bindService(new Intent(this, CommunicationService.class), mConnection,
                         Context.BIND_IMPORTANT);
 
-        setContentView(R.layout.activity_presentation);
-        mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
-        mOuterLayout.removeAllViews();
-        mLayout = new InterceptorLayout(this);
-        mOuterLayout.addView(mLayout);
-        mLayout.setId(R.id.presentation_innerFrame);
+        IntentFilter aFilter = new IntentFilter();
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+        mBroadcastProcessor.addToFilter(aFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
+                        aFilter);
 
         //((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
+        setContentView(R.layout.activity_presentation);
         if (savedInstanceState == null) {
-            mThumbnailFragment = new ThumbnailFragment();
+
             mPresentationFragment = new PresentationFragment();
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             FragmentTransaction fragmentTransaction = fragmentManager
                             .beginTransaction();
-            fragmentTransaction.add(R.id.presentation_innerFrame,
+            fragmentTransaction.add(R.id.presentation_interceptor,
                             mPresentationFragment, "fragment_presentation");
             fragmentTransaction.commit();
         }
+        mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("thumbnail_enabled", mThumbnailFragment.isVisible());
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+            return;
+        }
+        Intent aIntent = new Intent(this, SelectorActivity.class);
+        aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(aIntent);
+        mCommunicationService.disconnect();
     }
 
     @Override
@@ -90,8 +103,10 @@ public class PresentationActivity extends SherlockFragmentActivity {
                         .getDefaultSharedPreferences(this);
         boolean aVolumeSwitching = aPref.getBoolean("option_volumeswitching",
                         false);
-        boolean aRelevantFragmentVisible = mPresentationFragment.isVisible()
-                        || mThumbnailFragment.isVisible();
+        boolean aRelevantFragmentVisible = ((mPresentationFragment != null) && mPresentationFragment
+                        .isVisible())
+                        || ((mThumbnailFragment != null) && mThumbnailFragment
+                                        .isVisible());
         if (aVolumeSwitching && aRelevantFragmentVisible) {
 
             int action = event.getAction();
@@ -119,7 +134,9 @@ public class PresentationActivity extends SherlockFragmentActivity {
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
 
-            mThumbnailFragment.setCommunicationService(mCommunicationService);
+            if (mThumbnailFragment != null)
+                mThumbnailFragment
+                                .setCommunicationService(mCommunicationService);
 
         }
 
@@ -149,8 +166,10 @@ public class PresentationActivity extends SherlockFragmentActivity {
             startActivity(aIntent);
             return true;
         case R.id.actionbar_presentation_submenu_blank:
-            boolean aRelevantFragmentVisible = mPresentationFragment
-                            .isVisible() || mThumbnailFragment.isVisible();
+            boolean aRelevantFragmentVisible = (mPresentationFragment != null && mPresentationFragment
+                            .isVisible())
+                            || (mThumbnailFragment != null && mThumbnailFragment
+                                            .isVisible());
             if (aRelevantFragmentVisible) {
 
                 BlankScreenFragment aFragment = new BlankScreenFragment(
@@ -158,7 +177,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
                 FragmentTransaction ft = getSupportFragmentManager()
                                 .beginTransaction();
-                ft.replace(R.id.presentation_innerFrame, aFragment);
+                ft.replace(R.id.presentation_interceptor, aFragment);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 ft.addToBackStack(null);
                 ft.commit();
@@ -210,7 +229,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
         private boolean mTimerOn = false;
 
         public void stop() {
-            timerHandler.removeCallbacks(timerUpdateThread);
+            timerHandler.removeCallbacks(timerUpdateRunnable);
         }
 
         public ActionBarManager() {
@@ -231,8 +250,8 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
             getSupportFragmentManager().addOnBackStackChangedListener(this);
 
-            timerHandler.removeCallbacks(timerUpdateThread);
-            timerHandler.postDelayed(timerUpdateThread, 50);
+            timerHandler.removeCallbacks(timerUpdateRunnable);
+            timerHandler.postDelayed(timerUpdateRunnable, 50);
 
         }
 
@@ -347,22 +366,21 @@ public class PresentationActivity extends SherlockFragmentActivity {
 
         }
 
-        private Thread timerUpdateThread = new Thread() {
+        private Runnable timerUpdateRunnable = new Runnable() {
 
             @Override
             public void run() {
                 CharSequence aTimeString;
-                long aTime = mCommunicationService.getSlideShow().getTimer()
-                                .getTimeMillis();
-                if (mTimerOn) {
+                long aTime = System.currentTimeMillis();
+                if (mTimerOn && mCommunicationService != null) {
+                    aTime = mCommunicationService.getSlideShow().getTimer()
+                                    .getTimeMillis();
                     aTimeString = DateFormat.format(aTimerFormat, aTime);
                 } else {
-                    aTimeString = DateFormat.format(aTimeFormat,
-                                    System.currentTimeMillis());
+                    aTimeString = DateFormat.format(aTimeFormat, aTime);
                 }
                 mTimeLabel.setText(aTimeString);
                 timerHandler.postDelayed(this, 50);
-
             }
 
         };
@@ -372,10 +390,20 @@ public class PresentationActivity extends SherlockFragmentActivity {
             Timer aTimer = mCommunicationService.getSlideShow().getTimer();
             // --------------------------------- ACTIONBAR BUTTONS -------------
             if (aSource == mThumbnailButton) {
+                if (mThumbnailFragment == null) {
+                    mThumbnailFragment = (ThumbnailFragment) getSupportFragmentManager()
+                                    .findFragmentByTag("ThumbnailFragment");
+                    if (mThumbnailFragment == null) {
+                        mThumbnailFragment = new ThumbnailFragment();
+                        mThumbnailFragment
+                                        .setCommunicationService(mCommunicationService);
+                    }
+                }
                 if (!mThumbnailFragment.isVisible()) {
                     FragmentTransaction ft = getSupportFragmentManager()
                                     .beginTransaction();
-                    ft.replace(R.id.presentation_innerFrame, mThumbnailFragment);
+                    ft.replace(R.id.presentation_interceptor,
+                                    mThumbnailFragment, "ThumbnailFragment");
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.addToBackStack(null);
                     ft.commit();
@@ -477,13 +505,12 @@ public class PresentationActivity extends SherlockFragmentActivity {
     /**
      * Intermediate layout that catches all touches, used in order to hide
      * the clock menu as appropriate.
-     * @author andy
      *
      */
-    private class InterceptorLayout extends FrameLayout {
+    public static class InterceptorLayout extends FrameLayout {
 
-        public InterceptorLayout(Context context) {
-            super(context);
+        public InterceptorLayout(Context context, AttributeSet aAttrs) {
+            super(context, aAttrs);
         }
 
         @Override
@@ -498,4 +525,12 @@ public class PresentationActivity extends SherlockFragmentActivity {
         }
 
     }
+
+    private BroadcastReceiver mListener = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context aContext, Intent aIntent) {
+            mBroadcastProcessor.onReceive(aContext, aIntent);
+        }
+    };
 }

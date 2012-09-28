@@ -35,8 +35,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/listenernotification.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -133,7 +133,7 @@ namespace connectivity { namespace hsqldb
     {
         if ( !OHsqlConnection_BASE::rBHelper.bDisposed )
         {
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             dispose();
         }
     }
@@ -344,7 +344,7 @@ namespace connectivity { namespace hsqldb
             // create a graphic provider
             Reference< XGraphicProvider > xProvider;
             if ( m_xORB.is() )
-                xProvider.set( GraphicProvider::create(::comphelper::ComponentContext(m_xORB).getUNOContext()) );
+                xProvider.set( GraphicProvider::create(::comphelper::getComponentContext(m_xORB)) );
 
             // assemble the image URL
             ::rtl::OUStringBuffer aImageURL;

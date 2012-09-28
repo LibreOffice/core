@@ -18,25 +18,14 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 
-import java.io.IOException;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
-
-import org.openoffice.xmerge.Document;
-import org.openoffice.xmerge.ConverterCapabilities;
-import org.openoffice.xmerge.converter.xml.OfficeDocument;
-import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
-import org.openoffice.xmerge.converter.xml.*;
+import org.openoffice.xmerge.converter.xml.ParaStyle;
+import org.openoffice.xmerge.converter.xml.StyleCatalog;
 
 
 /**
  *  This class represents a paragraph in a WordSmith document.
  *  (A paragraph is "5" followed by 12 bytes of attributes.)
  *
- *  @author   David Proulx
  */
 class WsePara extends Wse {
 
@@ -165,13 +154,12 @@ class WsePara extends Wse {
      *  <code>dataArray[startIndex]</code> is the beginning of a valid
      *  paragraph descriptor.
      *
-     *  @param  dataArray   <code>byte</code> array.
      *  @param  startIndex  The start index.
      *
      *  @return  The index of the first <code>byte</code> following the
      *           paragraph description.
      */
-    static int computeNewIndex(byte dataArray[], int startIndex) {
+    static int computeNewIndex(int startIndex) {
         return startIndex + 13;
     }
 

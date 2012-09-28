@@ -32,14 +32,11 @@
  *
  *************************************************************************/
 
-import java.util.Vector;
-
 import java.io.File;
 import java.io.FileOutputStream;
 
-import com.sun.star.lang.XMultiComponentFactory;
-
 import com.sun.star.ucb.Command;
+import com.sun.star.ucb.UniversalContentBroker;
 import com.sun.star.ucb.XContent;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XContentIdentifier;
@@ -79,11 +76,8 @@ public class Helper {
             System.out.println("Connected to a running office ...");
         }
 
-        XMultiComponentFactory xMCF = m_xContext.getServiceManager();
-
-        m_ucb = (XInterface)UnoRuntime.queryInterface(XInterface.class,
-            xMCF.createInstanceWithContext(
-                        "com.sun.star.ucb.UniversalContentBroker", m_xContext));
+        m_ucb = (XInterface)UnoRuntime.queryInterface(
+            XInterface.class, UniversalContentBroker.create(m_xContext));
     }
 
     /**

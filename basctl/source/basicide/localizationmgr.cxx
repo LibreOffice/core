@@ -29,48 +29,50 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sfx2/dispatch.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::resource;
 
-using basctl::DialogWindow;
-using basctl::ModulWindow;
-
-static ::rtl::OUString aDot( RTL_CONSTASCII_USTRINGPARAM( "." ));
-static ::rtl::OUString aEsc( RTL_CONSTASCII_USTRINGPARAM( "&" ));
-static ::rtl::OUString aSemi( RTL_CONSTASCII_USTRINGPARAM( ";" ));
-
-
-LocalizationMgr::LocalizationMgr( BasicIDEShell* pIDEShell,
-    const ScriptDocument& rDocument, ::rtl::OUString aLibName,
-    const Reference< XStringResourceManager >& xStringResourceManager )
-        : m_xStringResourceManager( xStringResourceManager )
-        , m_pIDEShell( pIDEShell )
-        , m_aDocument( rDocument )
-        , m_aLibName( aLibName )
+namespace
 {
+
+rtl::OUString const aDot(".");
+rtl::OUString const aEsc("&");
+rtl::OUString const aSemi(";");
+
+} // namespace
+
+LocalizationMgr::LocalizationMgr(
+    Shell* pShell,
+    ScriptDocument const& rDocument,
+    rtl::OUString const& aLibName,
+    Reference<XStringResourceManager> const& xStringResourceManager
+) :
+    m_xStringResourceManager(xStringResourceManager),
+    m_pShell(pShell),
+    m_aDocument(rDocument),
+    m_aLibName(aLibName)
+{ }
+
+bool LocalizationMgr::isLibraryLocalized ()
+{
+    if (m_xStringResourceManager.is())
+        return m_xStringResourceManager->getLocales().getLength() > 0;
+    return false;
 }
 
-bool LocalizationMgr::isLibraryLocalized( void )
+void LocalizationMgr::handleTranslationbar ()
 {
-    bool bRet = false;
-    if( m_xStringResourceManager.is() )
-    {
-        Sequence< Locale > aLocaleSeq = m_xStringResourceManager->getLocales();
-        bRet = ( aLocaleSeq.getLength() > 0 );
-    }
-    return bRet;
-}
-
-void LocalizationMgr::handleTranslationbar( void )
-{
-    static ::rtl::OUString aLayoutManagerName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
-    static ::rtl::OUString aToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/translationbar" ));
+    static rtl::OUString const aLayoutManagerName("LayoutManager");
+    static rtl::OUString const aToolBarResName("private:resource/toolbar/translationbar");
 
     Reference< beans::XPropertySet > xFrameProps
-        ( m_pIDEShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
+        ( m_pShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xFrameProps.is() )
     {
         Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
@@ -94,38 +96,34 @@ void LocalizationMgr::handleTranslationbar( void )
 
 // TODO: -> export from toolkit
 
-struct LanguageDependentProp
+namespace
 {
-    const char* pPropName;
-    sal_Int32   nPropNameLength;
-};
 
-static LanguageDependentProp aLanguageDependentProp[] =
-{
-    { "Text",            4 },
-    { "Label",           5 },
-    { "Title",           5 },
-    { "HelpText",        8 },
-    { "CurrencySymbol", 14 },
-    { "StringItemList", 14 },
-    { 0, 0                 }
-};
+
+}
 
 bool isLanguageDependentProperty( ::rtl::OUString aName )
 {
-    bool bRet = false;
-
-    LanguageDependentProp* pLangDepProp = aLanguageDependentProp;
-    while( pLangDepProp->pPropName != 0 )
+    static struct Prop
     {
-        if( aName.equalsAsciiL( pLangDepProp->pPropName, pLangDepProp->nPropNameLength ))
-        {
-            bRet = true;
-            break;
-        }
-        pLangDepProp++;
+        const char* sName;
+        sal_Int32 nNameLength;
     }
-    return bRet;
+    const vProp[] =
+    {
+        { "Text",            4 },
+        { "Label",           5 },
+        { "Title",           5 },
+        { "HelpText",        8 },
+        { "CurrencySymbol", 14 },
+        { "StringItemList", 14 },
+        { 0, 0                 }
+    };
+
+    for (Prop const* pProp = vProp; pProp->sName; ++pProp)
+        if (aName.equalsAsciiL(pProp->sName, pProp->nNameLength))
+            return true;
+    return false;
 }
 
 
@@ -139,7 +137,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     for( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
     {
         String aDlgName = pDlgNames[ i ];
-        if (DialogWindow* pWin = m_pIDEShell->FindDlgWin(m_aDocument, m_aLibName, aDlgName))
+        if (DialogWindow* pWin = m_pShell->FindDlgWin(m_aDocument, m_aLibName, aDlgName))
         {
             Reference< container::XNameContainer > xDialog = pWin->GetDialog();
             if( xDialog.is() )
@@ -670,11 +668,10 @@ void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
         enableResourceForAllLibraryDialogs();
     }
 
-    BasicIDE::MarkDocumentModified( m_aDocument );
+    MarkDocumentModified( m_aDocument );
 
     // update locale toolbar
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if ( pBindings )
+    if (SfxBindings* pBindings = GetBindingsPtr())
         pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
 
     handleTranslationbar();
@@ -725,11 +722,10 @@ void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
     }
     if( bModified )
     {
-        BasicIDE::MarkDocumentModified( m_aDocument );
+        MarkDocumentModified( m_aDocument );
 
         // update slots
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
+        if (SfxBindings* pBindings = GetBindingsPtr())
         {
             pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
             pBindings->Invalidate( SID_BASICIDE_MANAGE_LANG );
@@ -757,8 +753,7 @@ void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
         }
 
         // update locale toolbar
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
+        if (SfxBindings* pBindings = GetBindingsPtr())
             pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
     }
 }
@@ -777,14 +772,12 @@ void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLo
         }
 
         // update locale toolbar
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
+        if (SfxBindings* pBindings = GetBindingsPtr())
             pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
 
-        if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(m_pIDEShell->GetCurWindow()))
+        if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(m_pShell->GetCurWindow()))
             if (!pDlgWin->IsSuspended())
-                if (DlgEditor* pWinEditor = pDlgWin->GetEditor())
-                    pWinEditor->UpdatePropertyBrowserDelayed();
+                pDlgWin->GetEditor().UpdatePropertyBrowserDelayed();
     }
 }
 
@@ -809,16 +802,14 @@ void LocalizationMgr::handleBasicStopped( void )
 
 DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
 {
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
-    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
+    Shell::WindowTable const& aWindowTable = GetShell()->GetWindowTable();
+    for (Shell::WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it )
     {
-        IDEBaseWindow* pWin = it->second;
+        BaseWindow* pWin = it->second;
         if (!pWin->IsSuspended())
             if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(pWin))
             {
-                DlgEditor* pWinEditor = pDlgWin->GetEditor();
-                if( pWinEditor == pEditor )
+                if (&pDlgWin->GetEditor() == pEditor)
                     return pDlgWin;
             }
     }
@@ -853,7 +844,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
           xDummyStringResolver, SET_IDS );
 
     if( nChangedCount )
-        BasicIDE::MarkDocumentModified( aDocument );
+        MarkDocumentModified( aDocument );
 }
 
 void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
@@ -907,7 +898,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
           xDummyStringResolver, REMOVE_IDS_FROM_RESOURCE );
 
     if( nChangedCount )
-        BasicIDE::MarkDocumentModified( aDocument );
+        MarkDocumentModified( aDocument );
 }
 
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const ::rtl::OUString& aLibName,
@@ -1158,5 +1149,7 @@ Reference< XStringResourceManager > LocalizationMgr::getStringResourceFromDialog
     }
     return xStringResourceManager;
 }
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

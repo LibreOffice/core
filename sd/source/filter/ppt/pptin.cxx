@@ -97,19 +97,10 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
 
 using namespace ::com::sun::star;
-
-uno::Reference< uno::XComponentContext >
-lcl_getUnoCtx()
-{
-    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
-    return aCtx.getUNOContext();
-}
 
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
 {
@@ -822,8 +813,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             {
                                                 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xPage( pMPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY );
                                                 ppt::AnimationImporter aImporter( this, rStCtrl );
-                                                aImporter.import( xPage, aProgTagContentHd );
-                                                bNewAnimationsUsed = sal_True;
+                                                bNewAnimationsUsed = aImporter.import( xPage, aProgTagContentHd ) > 0;
                                             }
                                             break;
                                         }
@@ -940,8 +930,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             {
                                                 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xPage( pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY );
                                                 ppt::AnimationImporter aImporter( this, rStCtrl );
-                                                aImporter.import( xPage, aProgTagContentHd );
-                                                bNewAnimationsUsed = sal_True;
+                                                bNewAnimationsUsed = aImporter.import( xPage, aProgTagContentHd ) > 0;
                                             }
                                             break;
 

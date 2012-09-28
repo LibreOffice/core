@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <connectivity/sqlparse.hxx>
 #include "connectivity/dbtoolsdllapi.hxx"
 
@@ -48,7 +48,7 @@ namespace dbtools
                 m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
                 m_xFormatter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData >
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4 >
                 m_xLocaleData;
 
         ::connectivity::OSQLParser

@@ -20,7 +20,7 @@
 #ifndef _NUMFMUNO_HXX
 #define _NUMFMUNO_HXX
 
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/XNumberFormatter2.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -37,9 +37,8 @@ class SvNumberFormatsSupplierObj;
 
 //  SvNumberFormatterServiceObj wird global als Service angemeldet
 
-class SvNumberFormatterServiceObj : public cppu::WeakImplHelper3<
-                                        com::sun::star::util::XNumberFormatter,
-                                        com::sun::star::util::XNumberFormatPreviewer,
+class SvNumberFormatterServiceObj : public cppu::WeakImplHelper2<
+                                        com::sun::star::util::XNumberFormatter2,
                                         com::sun::star::lang::XServiceInfo>
 {
 private:

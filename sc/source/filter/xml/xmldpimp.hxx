@@ -337,7 +337,6 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     sal_Int32                   nGroupPart;
     sal_Int16                   nFunction;
     sal_Int16                   nOrientation;
-    sal_Bool                    bShowEmpty:1;
     sal_Bool                    bSelectedPage:1;
     sal_Bool                    bIsGroupField:1;
     sal_Bool                    bDateValue:1;

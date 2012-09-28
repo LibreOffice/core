@@ -22,7 +22,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.UnoRuntime;
 
 import helper.URLHelper;
@@ -80,26 +79,13 @@ class FlatFileDatabase extends AbstractDatabase
 
         m_databaseDocument = UnoRuntime.queryInterface( XOfficeDatabaseDocument.class,
             m_orb.createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-        m_dataSource = new DataSource(m_orb, m_databaseDocument.getDataSource());
+        m_dataSource = new DataSource(m_databaseDocument.getDataSource());
 
         final XPropertySet dsProperties = UnoRuntime.queryInterface(XPropertySet.class, m_databaseDocument.getDataSource());
         dsProperties.setPropertyValue("URL", "sdbc:" + m_urlSubScheme + ":" + path);
 
         final XStorable storable = UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );
         storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[] { } );
-    }
-
-    /** drops the table with a given name
-
-    @param _name
-    the name of the table to drop
-    @param _ifExists
-    TRUE if it should be dropped only when it exists.
-     */
-    public void dropTable(final String _name,final boolean _ifExists) throws SQLException
-    {
-        String dropStatement = "DROP TABLE \"" + _name;
-        executeSQL(dropStatement);
     }
 
     final String    m_urlSubScheme;

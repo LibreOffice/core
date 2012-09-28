@@ -21,12 +21,8 @@ package org.openoffice.idesupport.zip;
 import java.io.*;
 import java.util.Enumeration;
 import java.util.zip.*;
-import java.beans.PropertyVetoException;
-
 import org.openoffice.idesupport.filter.FileFilter;
 import org.openoffice.idesupport.filter.BinaryOnlyFilter;
-import org.openoffice.idesupport.filter.ExceptParcelFilter;
-
 import com.sun.star.script.framework.container.ParcelDescriptor;
 import org.openoffice.idesupport.xml.Manifest;
 

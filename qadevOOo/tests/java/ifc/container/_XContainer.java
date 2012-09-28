@@ -18,8 +18,6 @@
 
 package ifc.container;
 
-import java.io.PrintWriter;
-
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
@@ -144,7 +142,7 @@ public class _XContainer extends MultiMethodTest {
             bElementReplaced = true;
          }
          public void disposing (EventObject obj) {}
-    };
+    }
 
     MyListener listener = new MyListener();
 

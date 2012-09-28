@@ -114,7 +114,7 @@ namespace sd { namespace colortoolpanel
         // retrieve the parent window for our to-be-created pane window
         Reference< XWindowPeer > xParentPeer( i_rParentWindow, UNO_QUERY );
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         if ( xParentPeer.is() )
         {
             m_xWindow = lcl_createPlainWindow_nothrow( i_rContext, xParentPeer );
@@ -126,7 +126,7 @@ namespace sd { namespace colortoolpanel
                 m_xWindow->setVisible( sal_True );
             }
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //------------------------------------------------------------------------------------------------------------------

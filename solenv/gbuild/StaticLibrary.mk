@@ -32,7 +32,6 @@
 # defined globally in gbuild.mk
 #  gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 # defined by platform
-#  gb_StaticLibrary_DEFS
 #  gb_StaticLibrary_FILENAMES
 #  gb_StaticLibrary_TARGETS
 
@@ -63,9 +62,6 @@ endef
 define gb_StaticLibrary__StaticLibrary_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
-$(call gb_LinkTarget_add_defs,$(2),\
-	$(gb_StaticLibrary_DEFS) \
-)
 $(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_StaticLibrary_get_target,$(1))).dir
 $(call gb_StaticLibrary_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
@@ -125,8 +121,10 @@ $(eval $(foreach method,\
 	use_package \
 	use_packages \
 	use_unpacked \
+	use_static_libraries \
 	add_sdi_headers \
 	set_warnings_not_errors \
+	set_generated_cxx_suffix \
 ,\
 	$(call gb_StaticLibrary_forward_to_Linktarget,$(method))\
 ))

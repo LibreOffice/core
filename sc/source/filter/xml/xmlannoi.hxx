@@ -109,7 +109,6 @@ private:
     rtl::OUStringBuffer maAuthorBuffer;
     rtl::OUStringBuffer maCreateDateBuffer;
     rtl::OUStringBuffer maCreateDateStringBuffer;
-    sal_Int32           nParagraphCount;
     ScXMLTableRowCellContext* pCellContext;
     SvXMLImportContext* pShapeContext;
 

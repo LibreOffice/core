@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -56,8 +55,6 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
  *  <p>The <code>serialize</code> method transforms the DOM
  *  document from the given <code>Document</code> object by
  *  means of a supplied Xsl Stylesheet.</p>
- *
- *  @author      Aidan Butler
  */
 public final class DocumentDeserializerImpl
     implements  DocumentDeserializer,URIResolver {

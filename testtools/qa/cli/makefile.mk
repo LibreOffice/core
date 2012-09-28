@@ -19,7 +19,7 @@
 PRJ := ..$/..
 PRJNAME := testtools
 TARGET := test_cli
-PACKAGE = clitest
+PACKAGE = cli
 
 .INCLUDE: settings.mk
 

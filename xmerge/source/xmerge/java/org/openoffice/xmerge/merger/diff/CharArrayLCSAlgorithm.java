@@ -28,8 +28,6 @@ import org.openoffice.xmerge.merger.Difference;
  *  <p>It also use Longest Common Subsequence (LCS).  The algorithm is based
  *  on the book "Introduction to Algorithms" by Thomas H.Cormen,
  *  Charles E.Leiserson, and Ronald L.Riverst (MIT Press 1990) page 314.</p>
- *
- *  @author smak
  */
 public class CharArrayLCSAlgorithm {
 

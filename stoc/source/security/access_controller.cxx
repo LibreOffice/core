@@ -301,13 +301,13 @@ acc_CurrentContext::~acc_CurrentContext()
 void acc_CurrentContext::acquire()
     throw ()
 {
-    ::osl_incrementInterlockedCount( &m_refcount );
+    ::osl_atomic_increment( &m_refcount );
 }
 //__________________________________________________________________________________________________
 void acc_CurrentContext::release()
     throw ()
 {
-    if (! ::osl_decrementInterlockedCount( &m_refcount ))
+    if (! ::osl_atomic_decrement( &m_refcount ))
     {
         delete this;
     }

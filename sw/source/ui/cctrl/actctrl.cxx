@@ -28,6 +28,7 @@
 
 
 #include <comphelper/string.hxx>
+#include <vcl/builder.hxx>
 #include "actctrl.hxx"
 
 void NumEditAction::Action()
@@ -60,6 +61,12 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
 
 NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
     : Edit(pParent, rResId),
+    sForbiddenChars(rtl::OUString(" "))
+{
+}
+
+NoSpaceEdit::NoSpaceEdit(Window* pParent)
+    : Edit(pParent),
     sForbiddenChars(rtl::OUString(" "))
 {
 }
@@ -117,6 +124,18 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
     }
     else
         Edit::KeyInput(rEvt);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTableNameEdit(Window *pParent, VclBuilder::stringmap &)
+{
+    TableNameEdit* pTableNameEdit = new TableNameEdit(pParent);
+    pTableNameEdit->SetMaxWidthInChars(25);
+    return pTableNameEdit;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNoSpaceEdit(Window *pParent, VclBuilder::stringmap &)
+{
+    return new NoSpaceEdit(pParent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

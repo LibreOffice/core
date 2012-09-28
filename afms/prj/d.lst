@@ -1,3 +1,0 @@
-mkdir: %_DEST%\pck
-..\%__SRC%\bin\*.zip %_DEST%\pck\*.zip
-

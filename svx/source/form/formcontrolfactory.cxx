@@ -222,7 +222,7 @@ namespace svxform
 
                 Reference< XPropertySet > xDsProperties;
                 if ( !sDataSourceName.isEmpty() )
-                    xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext.getLegacyServiceFactory() ) );
+                    xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext.getUNOContext() ) );
                 if ( xDsProperties.is() )
                     xDsProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Info" ) ) ) >>= aInfo;
             }

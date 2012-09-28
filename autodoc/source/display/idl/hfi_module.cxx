@@ -242,7 +242,7 @@ HF_IdlModule::produce_Link( Xml::Element &      o_row,
     if ( NOT ary::is_type<ary::idl::Module>(*i_ce) )
     {
         HF_IdlTypeText
-            aText(Env(), rCell, true);
+            aText(Env(), rCell);
         aText.Produce_byData(i_ce->CeId());
     }
     else

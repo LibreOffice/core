@@ -70,9 +70,11 @@ public:
     void test();
     // Ensure CVEs remain unbroken
     void testCVEs();
+    void testN778859();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 
@@ -158,6 +160,24 @@ void SdFiltersTest::test()
     xDocShRef->DoClose();
 }
 
+void SdFiltersTest::testN778859()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        // Get the object
+        SdrObject *pObj = pPage->GetObj(1);
+        SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
+    }
+}
+
 bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {
@@ -176,9 +196,11 @@ bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
 
 void SdFiltersTest::testCVEs()
 {
+#ifndef DISABLE_CVE_TESTS
     testDir(rtl::OUString("MS PowerPoint 97"),
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
             rtl::OUString("sdfilt"));
+#endif
 }
 
 SdFiltersTest::SdFiltersTest()

@@ -28,6 +28,7 @@
 #include "../swmodeltestbase.hxx"
 #include "bordertest.hxx"
 
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -47,17 +48,14 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-
-using rtl::OString;
-using rtl::OUString;
-using rtl::OUStringBuffer;
 
 class Test : public SwModelTestBase
 {
@@ -106,6 +104,10 @@ public:
     void testFdo48446();
     void testFdo47495();
     void testAllGapsWord();
+    void testFdo52052();
+    void testInk();
+    void testFdo52389();
+    void testFdo49655();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -153,6 +155,10 @@ public:
     CPPUNIT_TEST(testFdo48446);
     CPPUNIT_TEST(testFdo47495);
     CPPUNIT_TEST(testAllGapsWord);
+    CPPUNIT_TEST(testFdo52052);
+    CPPUNIT_TEST(testInk);
+    CPPUNIT_TEST(testFdo52389);
+    CPPUNIT_TEST(testFdo49655);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -335,7 +341,7 @@ void Test::testFdo46662()
         }
         else if ( rProp.Name == "Suffix" )
         {
-            rtl::OUString sValue;
+            OUString sValue;
             rProp.Value >>= sValue;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
         }
@@ -730,7 +736,7 @@ void Test::testFdo49692()
 
         if (rProp.Name == "Suffix")
         {
-            rtl::OUString sValue;
+            OUString sValue;
             rProp.Value >>= sValue;
 
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
@@ -913,6 +919,66 @@ void Test::testAllGapsWord()
     load("all_gaps_word.rtf");
     BorderTest borderTest;
     borderTest.testTheBorders(mxComponent);
+}
+
+void Test::testFdo52052()
+{
+    load("fdo52052.rtf");
+    // Make sure the textframe containing the text "third" appears on the 3rd page.
+    CPPUNIT_ASSERT_EQUAL(OUString("third"), parseDump("/root/page[3]/body/txt/anchored/fly/txt/text()"));
+}
+
+void Test::testInk()
+{
+    /*
+     * The problem was that the second segment had wrong command count and wrap type.
+     *
+     * oShape = ThisComponent.DrawPage(0)
+     * oPathPropVec = oShape.CustomShapeGeometry(1).Value
+     * oSegments = oPathPropVec(1).Value
+     * msgbox oSegments(1).Count ' was 0x2000 | 10, should be 10
+     * msgbox oShape.Surround ' was 2, should be 1
+     */
+    load("ink.rtf");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xDraws->getByIndex(0), "CustomShapeGeometry");
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Path")
+            rProp.Value >>= aProps;
+    }
+    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Segments")
+            rProp.Value >>= aSegments;
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(10), aSegments[1].Count);
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xDraws->getByIndex(0), "Surround"));
+}
+
+void Test::testFdo52389()
+{
+    // The last '!' character at the end of the document was lost
+    load("fdo52389.rtf");
+    CPPUNIT_ASSERT_EQUAL(6, getLength());
+}
+
+void Test::testFdo49655()
+{
+    /*
+     * The problem was that the table was not imported due to the '  ' string in the middle of the table definition.
+     *
+     * xray ThisComponent.TextTables.Count 'was 0
+     */
+    load("fdo49655.rtf");
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -1,3 +1,5 @@
+import com.sun.star.sheet.XResultListener;
+
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -36,7 +38,7 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
 {
     private String aName;
     private int nValue;
-    private java.util.Vector aListeners = new java.util.Vector();
+    private java.util.Vector<XResultListener> aListeners = new java.util.Vector<XResultListener>();
 
     public ExampleAddInResult( String aNewName )
     {
@@ -70,18 +72,18 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
         ++nValue;
         com.sun.star.sheet.ResultEvent aEvent = getResult();
 
-        java.util.Enumeration aEnum = aListeners.elements();
+        java.util.Enumeration<XResultListener> aEnum = aListeners.elements();
         while (aEnum.hasMoreElements())
-            ((com.sun.star.sheet.XResultListener)aEnum.nextElement()).modified(
+            aEnum.nextElement().modified(
                 aEvent);
     }
 }
 
 class ExampleAddInThread extends Thread
 {
-    private java.util.Hashtable aCounters;
+    private java.util.Hashtable<String, ExampleAddInResult> aCounters;
 
-    public ExampleAddInThread( java.util.Hashtable aResults )
+    public ExampleAddInThread( java.util.Hashtable<String, ExampleAddInResult> aResults )
     {
         aCounters = aResults;
     }
@@ -99,9 +101,9 @@ class ExampleAddInThread extends Thread
             }
 
             // increment all counters
-            java.util.Enumeration aEnum = aCounters.elements();
+            java.util.Enumeration<ExampleAddInResult> aEnum = aCounters.elements();
             while (aEnum.hasMoreElements())
-                ((ExampleAddInResult)aEnum.nextElement()).incrementValue();
+                aEnum.nextElement().incrementValue();
         }
     }
 }
@@ -149,7 +151,7 @@ public class ExampleAddIn
         };
 
         private com.sun.star.lang.Locale aFuncLocale;
-        private java.util.Hashtable aResults;
+        private java.util.Hashtable<String, ExampleAddInResult> aResults;
 
         public _ExampleAddIn( com.sun.star.lang.XMultiServiceFactory xFactory )
         {
@@ -176,12 +178,12 @@ public class ExampleAddIn
             {
                 // create the table of results, and start a thread to increment
                 // all counters
-                aResults = new java.util.Hashtable();
+                aResults = new java.util.Hashtable<String, ExampleAddInResult>();
                 ExampleAddInThread aThread = new ExampleAddInThread( aResults );
                 aThread.start();
             }
 
-            ExampleAddInResult aResult = (ExampleAddInResult) aResults.get(aName);
+            ExampleAddInResult aResult = aResults.get(aName);
             if ( aResult == null )
             {
                 aResult = new ExampleAddInResult(aName);

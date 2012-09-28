@@ -259,9 +259,12 @@ static bool areHeadersConsistent(const LocalFileHeader &header, const CentralDir
     return true;
 }
 
-static bool findCentralDirectoryEnd(StreamInterface *stream, long &startOffset)
+static bool findCentralDirectoryEnd(StreamInterface *stream)
 {
-    stream->sseek(startOffset, SEEK_SET);
+    if (!stream)
+        return false;
+    stream->sseek(0, SEEK_SET);
+    if (stream->sseek(-1024, SEEK_END)) stream->sseek(0, SEEK_SET);
     try
     {
         while (stream->stell() != -1)
@@ -270,7 +273,6 @@ static bool findCentralDirectoryEnd(StreamInterface *stream, long &startOffset)
             if (signature == CDIR_END_SIG)
             {
                 stream->sseek(-4, SEEK_CUR);
-                startOffset = stream->stell();
                 return true;
             }
             else
@@ -284,9 +286,9 @@ static bool findCentralDirectoryEnd(StreamInterface *stream, long &startOffset)
     return false;
 }
 
-static bool isZipStream(StreamInterface *stream, long &startOffset)
+static bool isZipStream(StreamInterface *stream)
 {
-    if (!findCentralDirectoryEnd(stream, startOffset))
+    if (!findCentralDirectoryEnd(stream))
         return false;
     CentralDirectoryEnd end;
     if (!readCentralDirectoryEnd(stream, end))
@@ -387,11 +389,10 @@ bool ZipFile::IsValidZipFileVersionNumber(void* /* stream*/)
 */
 ZipFile::ZipFile(const std::string &FileName) :
     m_pStream(0),
-    m_bShouldFree(true),
-    m_iStartOffset(0)
+    m_bShouldFree(true)
 {
     m_pStream = new FileStream(FileName.c_str());
-    if (m_pStream && !isZipStream(m_pStream, m_iStartOffset))
+    if (m_pStream && !isZipStream(m_pStream))
     {
         delete m_pStream;
         m_pStream = 0;
@@ -400,10 +401,9 @@ ZipFile::ZipFile(const std::string &FileName) :
 
 ZipFile::ZipFile(StreamInterface *stream) :
     m_pStream(stream),
-    m_bShouldFree(false),
-    m_iStartOffset(0)
+    m_bShouldFree(false)
 {
-    if (!isZipStream(stream, m_iStartOffset))
+    if (!isZipStream(stream))
         m_pStream = 0;
 }
 
@@ -424,15 +424,14 @@ ZipFile::~ZipFile()
 void ZipFile::GetUncompressedContent(
     const std::string &ContentName, /*inout*/ ZipContentBuffer_t &ContentBuffer)
 {
-    long startOffset = m_iStartOffset;
-    if (!findCentralDirectoryEnd(m_pStream, startOffset))
+    if (!findCentralDirectoryEnd(m_pStream))
         return;
     CentralDirectoryEnd end;
     if (!readCentralDirectoryEnd(m_pStream, end))
         return;
     m_pStream->sseek(end.cdir_offset, SEEK_SET);
     CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && m_pStream->stell() < startOffset && (unsigned long)m_pStream->stell() < end.cdir_offset + end.cdir_size)
+    while (m_pStream->stell() != -1 && (unsigned long)m_pStream->stell() < end.cdir_offset + end.cdir_size)
     {
         if (!readCentralDirectoryEntry(m_pStream, entry))
             return;
@@ -487,7 +486,7 @@ void ZipFile::GetUncompressedContent(
             ContentBuffer.clear();
             return;
         }
-		(void)inflateEnd(&strm);
+        (void)inflateEnd(&strm);
     }
 }
 
@@ -497,15 +496,14 @@ void ZipFile::GetUncompressedContent(
 ZipFile::DirectoryPtr_t ZipFile::GetDirectory() const
 {
     DirectoryPtr_t dir(new Directory_t());
-    long startOffset = m_iStartOffset;
-    if (!findCentralDirectoryEnd(m_pStream, startOffset))
+    if (!findCentralDirectoryEnd(m_pStream))
         return dir;
     CentralDirectoryEnd end;
     if (!readCentralDirectoryEnd(m_pStream, end))
         return dir;
     m_pStream->sseek(end.cdir_offset, SEEK_SET);
     CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && m_pStream->stell() < startOffset && (unsigned long)m_pStream->stell() < end.cdir_offset + end.cdir_size)
+    while (m_pStream->stell() != -1 && (unsigned long)m_pStream->stell() < end.cdir_offset + end.cdir_size)
     {
         if (!readCentralDirectoryEntry(m_pStream, entry))
             return dir;
@@ -537,15 +535,14 @@ bool ZipFile::HasContent(const std::string &ContentName) const
 long ZipFile::GetFileLongestFileNameLength() const
 {
     long lmax = 0;
-    long startOffset = m_iStartOffset;
-    if (!findCentralDirectoryEnd(m_pStream, startOffset))
+    if (!findCentralDirectoryEnd(m_pStream))
         return lmax;
     CentralDirectoryEnd end;
     if (!readCentralDirectoryEnd(m_pStream, end))
         return lmax;
     m_pStream->sseek(end.cdir_offset, SEEK_SET);
     CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && m_pStream->stell() < startOffset && (unsigned long)m_pStream->stell() < end.cdir_offset + end.cdir_size)
+    while (m_pStream->stell() != -1 && (unsigned long)m_pStream->stell() < end.cdir_offset + end.cdir_size)
     {
         if (!readCentralDirectoryEntry(m_pStream, entry))
             return lmax;

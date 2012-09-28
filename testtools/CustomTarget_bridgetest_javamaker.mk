@@ -30,8 +30,11 @@ testtools_JAVADIR := $(call gb_CustomTarget_get_workdir,testtools/bridgetest_jav
 
 $(call gb_CustomTarget_get_target,testtools/bridgetest_javamaker) : $(testtools_JAVADIR)/done
 
-$(testtools_JAVADIR)/done : $(call gb_UnoApiTarget_get_target,bridgetest) \
-	$(call gb_Executable_get_target_for_build,javamaker) | $(testtools_JAVADIR)/.dir
+$(testtools_JAVADIR)/done : \
+		$(call gb_UnoApiTarget_get_target,bridgetest) \
+		$(OUTDIR)/bin/types.rdb \
+		$(call gb_Executable_get_target_for_build,javamaker) \
+		| $(testtools_JAVADIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_Helper_execute,javamaker -BUCR -nD -O$(testtools_JAVADIR) -X$(OUTDIR)/bin/types.rdb $<) && touch $@)

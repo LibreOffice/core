@@ -31,18 +31,6 @@
 
 #include <stddef.h>
 
-#ifndef SAL_MAX
-#    define SAL_MAX(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef SAL_MIN
-#    define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
-
-#ifndef SAL_FIELDOFFSET
-#    define SAL_FIELDOFFSET(type, field) ((sal_Int32)(&((type *)16)->field) - 16)
-#endif
-
 #ifndef SAL_N_ELEMENTS
 #    if defined(__cplusplus) && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
         /*

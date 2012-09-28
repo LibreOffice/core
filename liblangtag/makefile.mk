@@ -42,6 +42,9 @@ PATCH_FILES+=liblangtag-0.2-configure.patch
 PATCH_FILES+=liblangtag-0.2-datadir.patch
 PATCH_FILES+=liblangtag-0.2-msvc-warning.patch
 PATCH_FILES+=liblangtag-0.2-reg2xml-encoding-problem.patch
+PATCH_FILES+=liblangtag-0.2-xmlCleanupParser.patch
+    # addressed upstream as <https://github.com/tagoh/liblangtag/pull/7> "Do not
+    # call xmlCleanupParser from liblangtag"
 
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -101,6 +104,14 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) && \
 			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install DESTDIR=$(my_destdir)
 
+.IF "$(SYSTEM_LIBXML)"!="YES" || "$(SYSTEM_GLIB)"!="YES"
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="LINUX"
+CONFIGURE_FLAGS+= \
+ LDFLAGS=-Wl,-z,origin\ -Wl,-rpath,\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
+.ELIF "$(OS)"=="SOLARIS"
+CONFIGURE_FLAGS+= LDFLAGS=-Wl,-R\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
+.END
+.END
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -109,6 +120,10 @@ CONFIGURE_FLAGS+= LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+PATCH_FILES+=liblangtag-0.2-mingw.patch
+# There's a tool used only at build time to create the .xml file, and this does not work
+# with cross-compiling. The file for this case is from a normal (non-cross) build.
+PATCH_FILES+=liblangtag-0.2-mingw-genfile.patch
 .ENDIF
 
 .ELSE	# "$(COM)"=="GCC"
@@ -121,8 +136,13 @@ PATCH_FILES+=liblangtag-0.2-msc-configure.patch
 
 OUT2INC += $(my_install_relative)/include/liblangtag/*
 
-.IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
+.IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+OUT2BIN += $(my_install_relative)/bin/liblangtag-0.dll
+OUT2LIB += $(my_install_relative)/lib/liblangtag.dll.a
+.ELSE
 OUT2LIB += $(my_install_relative)/lib/langtag.lib*
+.ENDIF
 .ELSE
 .IF "$(OS)" == "MACOSX"
 OUT2LIB += $(my_install_relative)/lib/liblangtag*.dylib

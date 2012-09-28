@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scfilt \
 	Library_scui \
 	Package_uiconfig \
+	UI_scalc \
 ))
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)
@@ -43,11 +44,7 @@ endif
 
 $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_ucalc \
-    CppunitTest_sc_filters_test \
-))
-
-$(eval $(call gb_Module_add_slowcheck_targets,sc,\
-    CppunitTest_sc_subsequent_filters_test \
+    CppunitTest_sc_rangelst_test \
 ))
 
 # Disabled to allow the check tinderbox execute the sd tests
@@ -69,6 +66,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_tablesheetsobj \
     CppunitTest_sc_editfieldobj_cell \
     CppunitTest_sc_editfieldobj_header \
+    CppunitTest_sc_modelobj \
 ))
 
 # vim: set noet sw=4 ts=4:

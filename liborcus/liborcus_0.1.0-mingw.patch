@@ -1,0 +1,123 @@
++++ configure.dt
++++ configure
+@@ -619,6 +619,8 @@ WITH_LIBZIP_FALSE
+ WITH_LIBZIP_TRUE
+ LIBZIP_LIBS
+ LIBZIP_CFLAGS
++HAVE_STATIC_LIB_FALSE
++HAVE_STATIC_LIB_TRUE
+ ORCUS_API_VERSION
+ LIBOBJS
+ POW_LIB
+@@ -15985,6 +15987,18 @@ if test x"$enable_werror" != "xno"; then
+ 
+ fi
+ 
++# =========================================================
++# Determine if we are going to build static lib (for MinGW)
++# =========================================================
++ if test "$enable_shared" = no -a "$enable_static" = yes; then
++  HAVE_STATIC_LIB_TRUE=
++  HAVE_STATIC_LIB_FALSE='#'
++else
++  HAVE_STATIC_LIB_TRUE='#'
++  HAVE_STATIC_LIB_FALSE=
++fi
++
++
+ # =====
+ # Debug
+ # =====
+@@ -16413,6 +16427,10 @@ if test -z "${am__fastdepCXX_TRUE}" && t
+   as_fn_error $? "conditional \"am__fastdepCXX\" was never defined.
+ Usually this means the macro was only invoked conditionally." "$LINENO" 5
+ fi
++if test -z "${HAVE_STATIC_LIB_TRUE}" && test -z "${HAVE_STATIC_LIB_FALSE}"; then
++  as_fn_error $? "conditional \"HAVE_STATIC_LIB\" was never defined.
++Usually this means the macro was only invoked conditionally." "$LINENO" 5
++fi
+ if test -z "${WITH_LIBZIP_TRUE}" && test -z "${WITH_LIBZIP_FALSE}"; then
+   as_fn_error $? "conditional \"WITH_LIBZIP\" was never defined.
+ Usually this means the macro was only invoked conditionally." "$LINENO" 5
++++ src/liborcus/Makefile.in.dt
++++ src/liborcus/Makefile.in
+@@ -362,7 +361,8 @@ INCDIR = $(top_srcdir)/include
+ SRCDIR = $(top_srcdir)/src/liborcus
+ BINDIR = $(top_srcdir)/bin
+ INCLUDES = -I$(top_srcdir)/include
+-AM_CXXFLAGS = -D__ORCUS_BUILDING_DLL=1
++@HAVE_STATIC_LIB_FALSE@AM_CPPFLAGS = -D__ORCUS_BUILDING_DLL=1
++@HAVE_STATIC_LIB_TRUE@AM_CPPFLAGS = -D__ORCUS_STATIC_LIB=1
+ lib_LTLIBRARIES = liborcus-@ORCUS_API_VERSION@.la
+ liborcus_@ORCUS_API_VERSION@_la_SOURCES = dom_tree.cpp exception.cpp \
+ 	global.cpp spreadsheet_interface.cpp orcus_css.cpp \
++++ src/Makefile.in.dt
++++ src/Makefile.in
+@@ -37,26 +37,35 @@ host_triplet = @host@
+ bin_PROGRAMS = orcus-xml-dump$(EXEEXT) $(am__EXEEXT_2) $(am__EXEEXT_3)
+ EXTRA_PROGRAMS = orcus-test-common$(EXEEXT) orcus-test-xml$(EXEEXT) \
+ 	$(am__EXEEXT_1)
++@HAVE_STATIC_LIB_TRUE@am__append_1 = -D__ORCUS_STATIC_LIB=1
++@HAVE_STATIC_LIB_TRUE@am__append_2 = -D__ORCUS_STATIC_LIB=1
++@HAVE_STATIC_LIB_TRUE@am__append_3 = -D__ORCUS_STATIC_LIB=1
+ TESTS = orcus-test-common$(EXEEXT) orcus-test-xml$(EXEEXT) \
+ 	$(am__EXEEXT_1)
+ 
+ #----------------------------------------------------------------------------
+ # spreadsheet model
+ #----------------------------------------------------------------------------
+-@BUILD_SPREADSHEET_MODEL_TRUE@am__append_1 = \
++@BUILD_SPREADSHEET_MODEL_TRUE@am__append_4 = \
+ @BUILD_SPREADSHEET_MODEL_TRUE@	orcus-csv orcus-xml
+ 
+-@BUILD_SPREADSHEET_MODEL_TRUE@am__append_2 = \
++@BUILD_SPREADSHEET_MODEL_TRUE@am__append_5 = \
+ @BUILD_SPREADSHEET_MODEL_TRUE@	orcus-test-csv \
+ @BUILD_SPREADSHEET_MODEL_TRUE@	orcus-test-xml-mapped
+ 
+-@BUILD_SPREADSHEET_MODEL_TRUE@am__append_3 = \
++@BUILD_SPREADSHEET_MODEL_TRUE@@HAVE_STATIC_LIB_TRUE@am__append_6 = -D__ORCUS_STATIC_LIB=1
++@BUILD_SPREADSHEET_MODEL_TRUE@@HAVE_STATIC_LIB_TRUE@am__append_7 = -D__ORCUS_STATIC_LIB=1
++@BUILD_SPREADSHEET_MODEL_TRUE@@HAVE_STATIC_LIB_TRUE@am__append_8 = -D__ORCUS_STATIC_LIB=1
++@BUILD_SPREADSHEET_MODEL_TRUE@@HAVE_STATIC_LIB_TRUE@am__append_9 = -D__ORCUS_STATIC_LIB=1
++@BUILD_SPREADSHEET_MODEL_TRUE@am__append_10 = \
+ @BUILD_SPREADSHEET_MODEL_TRUE@	orcus-test-csv \
+ @BUILD_SPREADSHEET_MODEL_TRUE@	orcus-test-xml-mapped
+ 
+-@BUILD_SPREADSHEET_MODEL_TRUE@@WITH_LIBZIP_TRUE@am__append_4 = \
++@BUILD_SPREADSHEET_MODEL_TRUE@@WITH_LIBZIP_TRUE@am__append_11 = \
+ @BUILD_SPREADSHEET_MODEL_TRUE@@WITH_LIBZIP_TRUE@	orcus-ods orcus-xlsx
+ 
++@BUILD_SPREADSHEET_MODEL_TRUE@@HAVE_STATIC_LIB_TRUE@@WITH_LIBZIP_TRUE@am__append_12 = -D__ORCUS_STATIC_LIB=1
++@BUILD_SPREADSHEET_MODEL_TRUE@@HAVE_STATIC_LIB_TRUE@@WITH_LIBZIP_TRUE@am__append_13 = -D__ORCUS_STATIC_LIB=1
+ subdir = src
+ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+@@ -344,21 +353,24 @@ orcus_format_xml_SOURCES = orcus_format_xml.
+ orcus_format_xml_LDADD = \
+ 	liborcus/liborcus-@ORCUS_API_VERSION@.la
+ 
+-orcus_format_xml_CPPFLAGS = -I$(top_builddir)/lib/liborcus/liborcus.la
++orcus_format_xml_CPPFLAGS = -I$(top_builddir)/lib/liborcus/liborcus.la \
++	$(am__append_1)
+ 
+ # orcus-test-common
+ orcus_test_common_SOURCES = orcus_test_common.cpp
+ orcus_test_common_LDADD = \
+ 	liborcus/liborcus-@ORCUS_API_VERSION@.la
+ 
+-orcus_test_common_CPPFLAGS = -I$(top_builddir)/lib/liborcus/liborcus.la
++orcus_test_common_CPPFLAGS =  \
++	-I$(top_builddir)/lib/liborcus/liborcus.la $(am__append_2)
+ 
+ # orcus-test-xml
+ orcus_test_xml_SOURCES = orcus_test_xml.cpp
+ orcus_test_xml_LDADD = \
+ 	liborcus/liborcus-@ORCUS_API_VERSION@.la
+ 
+-orcus_test_xml_CPPFLAGS = -I$(top_builddir)/lib/liborcus/liborcus.la
++orcus_test_xml_CPPFLAGS = -I$(top_builddir)/lib/liborcus/liborcus.la \
++	$(am__append_3)
+ 
+ # orcus-csv
+ @BUILD_SPREADSHEET_MODEL_TRUE@orcus_csv_SOURCES = \

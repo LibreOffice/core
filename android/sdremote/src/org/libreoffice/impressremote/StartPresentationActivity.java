@@ -19,11 +19,13 @@ import com.actionbarsherlock.app.SherlockActivity;
 public class StartPresentationActivity extends SherlockActivity {
     private CommunicationService mCommunicationService = null;
     private boolean mIsBound = false;
+    private ActivityChangeBroadcastProcessor mBroadcastProcessor;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_startpresentation);
         bindService(new Intent(this, CommunicationService.class), mConnection,
                         Context.BIND_IMPORTANT);
@@ -31,6 +33,10 @@ public class StartPresentationActivity extends SherlockActivity {
 
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_SLIDESHOW_STARTED);
+
+        mBroadcastProcessor = new ActivityChangeBroadcastProcessor(this);
+        mBroadcastProcessor.addToFilter(aFilter);
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
                         aFilter);
 
@@ -39,8 +45,17 @@ public class StartPresentationActivity extends SherlockActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Intent aIntent = new Intent(this, SelectorActivity.class);
+        aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(aIntent);
+        mCommunicationService.disconnect();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        unbindService(mConnection);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mListener);
     }
 
@@ -50,12 +65,6 @@ public class StartPresentationActivity extends SherlockActivity {
                         IBinder aService) {
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
-
-            if (mCommunicationService.isSlideShowRunning()) {
-                Intent nIntent = new Intent(StartPresentationActivity.this,
-                                PresentationActivity.class);
-                startActivity(nIntent);
-            }
 
         }
 
@@ -80,13 +89,7 @@ public class StartPresentationActivity extends SherlockActivity {
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
-            if (aIntent.getAction().equals(
-                            CommunicationService.MSG_SLIDESHOW_STARTED)) {
-                Intent nIntent = new Intent(StartPresentationActivity.this,
-                                PresentationActivity.class);
-                startActivity(nIntent);
-            }
-
+            mBroadcastProcessor.onReceive(aContext, aIntent);
         }
     };
 }

@@ -41,10 +41,6 @@ import com.sun.star.uno.XComponentContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Andreas Schneider
- */
 public abstract class BaseControl {
     
     protected XComponentContext context;

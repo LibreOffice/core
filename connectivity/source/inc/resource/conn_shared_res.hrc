@@ -24,6 +24,8 @@
 
 // Mozilla driver resource ids
 #define STR_MOZAB_BASE                  1000
+//  either mozab or mork is actually used
+#define STR_MORK_BASE                   1000
 
 // common resource ids
 #define STR_COMMON_BASE                 1200

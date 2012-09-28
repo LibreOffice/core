@@ -50,7 +50,6 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectLayouter.hxx"
-#include "view/SlsButtonBar.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
@@ -87,8 +86,6 @@ static const sal_uInt32 MOUSE_DRAG               (0x00000800);
 static const sal_uInt32 OVER_SELECTED_PAGE       (0x00010000);
 static const sal_uInt32 OVER_UNSELECTED_PAGE     (0x00020000);
 static const sal_uInt32 OVER_FADE_INDICATOR      (0x00040000);
-static const sal_uInt32 OVER_BUTTON_AREA         (0x00080000);
-static const sal_uInt32 OVER_BUTTON              (0x00100000);
 static const sal_uInt32 SHIFT_MODIFIER           (0x00200000);
 static const sal_uInt32 CONTROL_MODIFIER         (0x00400000);
 
@@ -124,7 +121,6 @@ public:
     model::SharedPageDescriptor mpHitDescriptor;
     SdrPage* mpHitPage;
     sal_uInt32 mnEventCode;
-    bool mbIsOverButton;
     InsertionIndicatorHandler::Mode meDragMode;
     bool mbMakeSelectionVisible;
     bool mbIsLeaving;
@@ -276,7 +272,6 @@ private:
     bool mbAutoScrollInstalled;
     sal_Int32 mnAnchorIndex;
     sal_Int32 mnSecondIndex;
-    view::ButtonBar::Lock maButtonBarLock;
 
     virtual void UpdateModelPosition (const Point& rMouseModelPosition);
     virtual void UpdateSelection (void);
@@ -315,29 +310,6 @@ protected:
 private:
     ::boost::scoped_ptr<DragAndDropContext> mpDragAndDropContext;
 };
-
-
-/** Handle events while the left mouse button is pressed over the button
-    bar.
-*/
-class ButtonModeHandler : public SelectionFunction::ModeHandler
-{
-public:
-    ButtonModeHandler (
-        SlideSorter& rSlideSorter,
-        SelectionFunction& rSelectionFunction);
-    virtual ~ButtonModeHandler (void);
-    virtual void Abort (void);
-
-    virtual SelectionFunction::Mode GetMode (void) const;
-
-protected:
-    virtual bool ProcessButtonDownEvent (SelectionFunction::EventDescriptor& rDescriptor);
-    virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor);
-    virtual bool ProcessMotionEvent (SelectionFunction::EventDescriptor& rDescriptor);
-};
-
-
 
 
 //===== SelectionFunction =====================================================
@@ -834,24 +806,6 @@ void SelectionFunction::SwitchToMultiSelectionMode (
 
 
 
-bool SelectionFunction::SwitchToButtonMode (void)
-{
-    // Do not show the buttons for draw pages.
-    ::boost::shared_ptr<ViewShell> pMainViewShell (mrSlideSorter.GetViewShellBase()->GetMainViewShell());
-    if (pMainViewShell
-        && pMainViewShell->GetShellType()!=ViewShell::ST_DRAW
-        && mpModeHandler->GetMode() != ButtonMode)
-    {
-        SwitchMode(::boost::shared_ptr<ModeHandler>(new ButtonModeHandler(mrSlideSorter, *this)));
-        return true;
-    }
-    else
-        return false;
-}
-
-
-
-
 void SelectionFunction::SwitchMode (const ::boost::shared_ptr<ModeHandler>& rpHandler)
 {
     // Not all modes allow mouse over indicator.
@@ -860,10 +814,9 @@ void SelectionFunction::SwitchMode (const ::boost::shared_ptr<ModeHandler>& rpHa
         if ( ! rpHandler->IsMouseOverIndicatorAllowed())
         {
             mrSlideSorter.GetView().SetPageUnderMouse(model::SharedPageDescriptor());
-            mrSlideSorter.GetView().GetButtonBar().ResetPage();
         }
         else
-            mrSlideSorter.GetView().UpdatePageUnderMouse(false);
+            mrSlideSorter.GetView().UpdatePageUnderMouse();
     }
 
     mpModeHandler = rpHandler;
@@ -905,7 +858,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
       mpHitDescriptor(),
       mpHitPage(),
       mnEventCode(nEventType),
-      mbIsOverButton(rSlideSorter.GetView().GetButtonBar().IsMouseOverButton()),
       meDragMode(InsertionIndicatorHandler::MoveMode),
       mbMakeSelectionVisible(true),
       mbIsLeaving(false)
@@ -941,7 +893,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
       mpHitDescriptor(),
       mpHitPage(),
       mnEventCode(nEventType),
-      mbIsOverButton(rSlideSorter.GetView().GetButtonBar().IsMouseOverButton()),
       meDragMode(InsertionIndicatorHandler::GetModeFromDndAction(nDragAction)),
       mbMakeSelectionVisible(true),
       mbIsLeaving(false)
@@ -994,11 +945,6 @@ sal_uInt32 SelectionFunction::EventDescriptor::EncodeMouseEvent (
     if (rEvent.IsMod1())
         nEventCode |= CONTROL_MODIFIER;
 
-    // Detect whether the mouse is over one of the active elements inside a
-    // page object.
-    if (mbIsOverButton)
-        nEventCode |= OVER_BUTTON;
-
     return nEventCode;
 }
 
@@ -1013,11 +959,6 @@ sal_uInt32 SelectionFunction::EventDescriptor::EncodeState (void) const
             nEventCode |= OVER_SELECTED_PAGE;
         else
             nEventCode |= OVER_UNSELECTED_PAGE;
-
-        // Detect whether the mouse is over one of the active elements
-        // inside a page object.
-        if (mbIsOverButton)
-            nEventCode |= OVER_BUTTON;
     }
 
     return nEventCode;
@@ -1109,10 +1050,7 @@ bool SelectionFunction::ModeHandler::ProcessButtonUpEvent (EventDescriptor&)
 bool SelectionFunction::ModeHandler::ProcessMotionEvent (EventDescriptor& rDescriptor)
 {
     if (mbIsMouseOverIndicatorAllowed)
-        mrSlideSorter.GetView().UpdatePageUnderMouse(
-            rDescriptor.maMousePosition,
-            (rDescriptor.mnEventCode & LEFT_BUTTON) != 0,
-            true);
+        mrSlideSorter.GetView().UpdatePageUnderMouse(rDescriptor.maMousePosition);
 
     if (rDescriptor.mbIsLeaving)
     {
@@ -1294,26 +1232,6 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             RangeSelect(rDescriptor.mpHitDescriptor);
             break;
 
-        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | OVER_BUTTON:
-        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
-            OSL_ASSERT(mrSlideSorter.GetView().GetButtonBar().IsMouseOverButton());
-
-            // Switch to button mode only when the buttons are visible
-            // (or being faded in.)
-            if (mrSlideSorter.GetView().GetButtonBar().IsVisible(rDescriptor.mpHitDescriptor))
-            {
-                if (mrSelectionFunction.SwitchToButtonMode())
-                    ReprocessEvent(rDescriptor);
-            }
-            else
-            {
-                // When the buttons are not (yet) visible then behave like
-                // the left button had been clicked over any other part of
-                // the slide.
-                SetCurrentPage(rDescriptor.mpHitDescriptor);
-            }
-            break;
-
             // Right button for context menu.
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
             // Single right click and shift+F10 select as preparation to
@@ -1372,10 +1290,7 @@ bool NormalModeHandler::ProcessButtonUpEvent (
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | CONTROL_MODIFIER:
             mrSlideSorter.GetController().GetPageSelector().SelectPage(
                 rDescriptor.mpHitDescriptor);
-            mrSlideSorter.GetView().UpdatePageUnderMouse(
-                rDescriptor.mpHitDescriptor,
-                rDescriptor.maMousePosition,
-                false);
+            mrSlideSorter.GetView().SetPageUnderMouse(rDescriptor.mpHitDescriptor);
             break;
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
             break;
@@ -1506,8 +1421,7 @@ MultiSelectionModeHandler::MultiSelectionModeHandler (
       maSavedPointer(mrSlideSorter.GetContentWindow()->GetPointer()),
       mbAutoScrollInstalled(false),
       mnAnchorIndex(-1),
-      mnSecondIndex(-1),
-      maButtonBarLock(rSlideSorter)
+      mnSecondIndex(-1)
 {
 }
 
@@ -1862,105 +1776,6 @@ bool DragAndDropModeHandler::ProcessDragEvent (SelectionFunction::EventDescripto
     }
 
     return true;
-}
-
-
-
-
-//===== ButtonModeHandler =====================================================
-
-ButtonModeHandler::ButtonModeHandler (
-    SlideSorter& rSlideSorter,
-    SelectionFunction& rSelectionFunction)
-    : ModeHandler(rSlideSorter, rSelectionFunction, true)
-{
-}
-
-
-
-
-ButtonModeHandler::~ButtonModeHandler (void)
-{
-}
-
-
-
-
-SelectionFunction::Mode ButtonModeHandler::GetMode (void) const
-{
-    return SelectionFunction::ButtonMode;
-}
-
-
-
-
-void ButtonModeHandler::Abort (void)
-{
-}
-
-
-
-
-bool ButtonModeHandler::ProcessButtonDownEvent (SelectionFunction::EventDescriptor& rDescriptor)
-{
-    switch (rDescriptor.mnEventCode)
-    {
-        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | OVER_BUTTON:
-        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
-            // Remember page and button index.  When mouse button is
-            // released over same page and button then invoke action of that
-            // button.
-            mrSlideSorter.GetView().GetButtonBar().ProcessButtonDownEvent(
-                rDescriptor.mpHitDescriptor,
-                rDescriptor.maMouseModelPosition);
-            return true;
-
-        default:
-            return false;
-    }
-}
-
-
-
-
-bool ButtonModeHandler::ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor)
-{
-    switch (rDescriptor.mnEventCode & BUTTON_MASK)
-    {
-        case LEFT_BUTTON:
-            mrSlideSorter.GetView().GetButtonBar().ProcessButtonUpEvent(
-                rDescriptor.mpHitDescriptor,
-                rDescriptor.maMouseModelPosition);
-            mrSelectionFunction.SwitchToNormalMode();
-            return true;
-    }
-
-    return false;
-}
-
-
-
-
-bool ButtonModeHandler::ProcessMotionEvent (SelectionFunction::EventDescriptor& rDescriptor)
-{
-    switch (rDescriptor.mnEventCode & (MOUSE_MOTION | BUTTON_MASK))
-    {
-        case MOUSE_MOTION | LEFT_BUTTON:
-            mrSlideSorter.GetView().GetButtonBar().ProcessMouseMotionEvent(
-                rDescriptor.mpHitDescriptor,
-                rDescriptor.maMouseModelPosition,
-                true);
-            return true;
-
-        case MOUSE_MOTION:
-            mrSlideSorter.GetView().GetButtonBar().ProcessMouseMotionEvent(
-                rDescriptor.mpHitDescriptor,
-                rDescriptor.maMouseModelPosition,
-                false);
-            return true;
-    }
-
-    return false;
 }
 
 

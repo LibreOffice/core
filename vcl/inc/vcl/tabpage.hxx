@@ -31,21 +31,28 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/builder.hxx>
 #include <vcl/window.hxx>
 
 // -----------
 // - TabPage -
 // -----------
 
-class VCL_DLLPUBLIC TabPage : public Window
+class VCL_DLLPUBLIC TabPage
+    : public Window
+    , public VclBuilderContainer
 {
 private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
 
+    bool isLayoutEnabled() const;
+
 public:
                     TabPage( Window* pParent, WinBits nStyle = 0 );
+                    TabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription);
+
                     TabPage( Window* pParent, const ResId& rResId );
 
     virtual void    Paint( const Rectangle& rRect );
@@ -56,6 +63,12 @@ public:
 
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
+
+    //To-Do, consider inheriting from VclContainer
+    virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+    virtual void    SetPosPixel(const Point& rNewPos);
+    virtual void    SetSizePixel(const Size& rNewSize);
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
 };
 
 #endif  // _SV_TABPAGE_HXX

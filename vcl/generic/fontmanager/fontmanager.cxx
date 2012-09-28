@@ -43,6 +43,7 @@
 #include "vcl/fontmanager.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/ppdparser.hxx"
+#include <vcl/temporaryfonts.hxx>
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
@@ -1018,12 +1019,16 @@ PrintFontManager::PrintFontManager()
             m_aAdobecodeToUnicode.insert( ::boost::unordered_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCodes[i].aAdobeStandardCode, aAdobeCodes[i].aUnicode ) );
         }
     }
+
+    m_aFontInstallerTimer.SetTimeoutHdl(LINK(this, PrintFontManager, autoInstallFontLangSupport));
+    m_aFontInstallerTimer.SetTimeout(5000);
 }
 
 // -------------------------------------------------------------------------
 
 PrintFontManager::~PrintFontManager()
 {
+    m_aFontInstallerTimer.Stop();
     deinitFontconfig();
     for( ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
         delete (*it).second;
@@ -1673,7 +1678,9 @@ void PrintFontManager::initialize()
 #endif
     }
 
-    // initialize may be called twice in the future
+    // initialize can be called more than once, e.g.
+    // gtk-fontconfig-timestamp changes to reflect new font installed and
+    // PrintFontManager::initialize called again
     {
         for( ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
             delete (*it).second;

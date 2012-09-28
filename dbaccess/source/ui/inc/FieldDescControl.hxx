@@ -101,7 +101,6 @@ namespace dbaui
         ScrollBar*              m_pHorzScroll;
 
         TOTypeInfoSP            m_pPreviousType;
-        sal_uInt16              nCurChildId;
         short                   m_nPos;
         XubString               aYes;
         XubString               aNo;

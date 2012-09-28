@@ -30,7 +30,6 @@
 #include "svx/unoapi.hxx"
 #include <svx/unoshape.hxx>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <unotools/datetime.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -1535,9 +1534,9 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
         mpLastShadowGeometry->NbcMove( rSiz );
     }
 }
-void SdrObjCustomShape::Resize( const Point& rRef, const Fraction& xFact, const Fraction& yFact )
+void SdrObjCustomShape::Resize( const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative )
 {
-    SdrTextObj::Resize( rRef, xFact, yFact );
+    SdrTextObj::Resize( rRef, xFact, yFact, bUnsetRelative );
 }
 
 void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, const Fraction& ryFact )

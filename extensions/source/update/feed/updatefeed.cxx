@@ -42,6 +42,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor2.hpp>
@@ -52,7 +53,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 
 #include <rtl/ref.hxx>
@@ -209,15 +210,13 @@ private:
         uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
 
     UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
-                              const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
-                              const uno::Reference< ucb::XContentProvider >& xContentProvider,
+                              const uno::Reference< ucb::XUniversalContentBroker >& xUniversalContentBroker,
                               const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
                               const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI);
 
     const uno::Reference< uno::XComponentContext> m_xContext;
 
-    const uno::Reference< ucb::XContentIdentifierFactory > m_xContentIdFactory;
-    const uno::Reference< ucb::XContentProvider > m_xContentProvider;
+    const uno::Reference< ucb::XUniversalContentBroker > m_xUniversalContentBroker;
     const uno::Reference< xml::dom::XDocumentBuilder > m_xDocumentBuilder;
     const uno::Reference< xml::xpath::XXPathAPI > m_xXPathAPI;
 
@@ -330,12 +329,11 @@ private:
 
 UpdateInformationProvider::UpdateInformationProvider(
     const uno::Reference<uno::XComponentContext>& xContext,
-    const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
-    const uno::Reference< ucb::XContentProvider >& xContentProvider,
+    const uno::Reference< ucb::XUniversalContentBroker >& xUniversalContentBroker,
     const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
     const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI
-) : m_xContext(xContext), m_xContentIdFactory(xContentIdFactory),
-    m_xContentProvider(xContentProvider), m_xDocumentBuilder(xDocumentBuilder),
+) : m_xContext(xContext), m_xUniversalContentBroker(xUniversalContentBroker),
+    m_xDocumentBuilder(xDocumentBuilder),
     m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(1)
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
@@ -409,15 +407,11 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
             UNISTRING( "unable to obtain service manager from component context" ),
             uno::Reference< uno::XInterface > ());
 
-    uno::Reference< ucb::XContentIdentifierFactory > xContentIdFactory(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ), xContext ),
-        uno::UNO_QUERY_THROW);
-
-    uno::Reference< ucb::XContentProvider > xContentProvider(xContentIdFactory, uno::UNO_QUERY_THROW);
+    uno::Reference< ucb::XUniversalContentBroker > xUniversalContentBroker =
+        ucb::UniversalContentBroker::create(xContext);
 
     uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.dom.DocumentBuilder" ), xContext ),
-        uno::UNO_QUERY_THROW);
+        xml::dom::DocumentBuilder::create(xContext));
 
     uno::Reference< xml::xpath::XXPathAPI > xXPath(
         xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), xContext ),
@@ -425,7 +419,7 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
 
     xXPath->registerNS( UNISTRING("atom"), UNISTRING("http://www.w3.org/2005/Atom") );
 
-    return *new UpdateInformationProvider(xContext, xContentIdFactory, xContentProvider, xDocumentBuilder, xXPath);
+    return *new UpdateInformationProvider(xContext, xUniversalContentBroker, xDocumentBuilder, xXPath);
 }
 
 //------------------------------------------------------------------------------
@@ -473,13 +467,13 @@ UpdateInformationProvider::storeCommandInfo(
 uno::Reference< io::XInputStream >
 UpdateInformationProvider::load(const rtl::OUString& rURL)
 {
-    uno::Reference< ucb::XContentIdentifier > xId = m_xContentIdFactory->createContentIdentifier(rURL);
+    uno::Reference< ucb::XContentIdentifier > xId = m_xUniversalContentBroker->createContentIdentifier(rURL);
 
     if( !xId.is() )
         throw uno::RuntimeException(
             UNISTRING( "unable to obtain universal content id" ), *this);
 
-    uno::Reference< ucb::XCommandProcessor > xCommandProcessor(m_xContentProvider->queryContent(xId), uno::UNO_QUERY_THROW);
+    uno::Reference< ucb::XCommandProcessor > xCommandProcessor(m_xUniversalContentBroker->queryContent(xId), uno::UNO_QUERY_THROW);
     rtl::Reference< ActiveDataSink > aSink(new ActiveDataSink());
 
     // Disable KeepAlive in webdav - don't want millions of office

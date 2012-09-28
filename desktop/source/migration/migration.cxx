@@ -35,7 +35,6 @@
 #include "migration_impl.hxx"
 
 #include <unotools/textsearch.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/bootstrap.hxx>
@@ -60,6 +59,8 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -90,12 +91,10 @@ static const char XDG_CONFIG_PART[] = "/.config";
     ::rtl::OUString sLabel;
 
     uno::Reference< container::XNameAccess > xUICommands;
-    uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
-    if ( xNameAccess.is() )
-    {
-        uno::Any a = xNameAccess->getByName( sModuleIdentifier );
-        a >>= xUICommands;
-    }
+    uno::Reference< container::XNameAccess > const xNameAccess(
+            frame::UICommandDescription::create(
+                ::comphelper::getProcessComponentContext()) );
+    xNameAccess->getByName( sModuleIdentifier ) >>= xUICommands;
     if (xUICommands.is())
     {
         if ( !sCommand.isEmpty() )
@@ -275,7 +274,7 @@ sal_Bool MigrationImpl::doMigration()
             lArgs[1] <<= embed::ElementModes::READ;
 
             uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-                     embed::FileSystemStorageFactory::create(comphelper::ComponentContext(m_xFactory).getUNOContext()));
+                     embed::FileSystemStorageFactory::create(comphelper::getComponentContext(m_xFactory)));
             uno::Reference< embed::XStorage >             xModules(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
             uno::Reference< ui::XUIConfigurationManager > xOldCfgManager( m_xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"))), uno::UNO_QUERY );
             uno::Reference< ui::XUIConfigurationStorage > xOldCfgStorage( xOldCfgManager, uno::UNO_QUERY );
@@ -997,7 +996,7 @@ void MigrationImpl::runServices()
     lArgs[1] <<= embed::ElementModes::READ;
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-                     embed::FileSystemStorageFactory::create(comphelper::ComponentContext(m_xFactory).getUNOContext()));
+                     embed::FileSystemStorageFactory::create(comphelper::getComponentContext(m_xFactory)));
     uno::Reference< embed::XStorage >             xModules;
 
     xModules = uno::Reference< embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
@@ -1339,11 +1338,10 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
     m_lNewVersionMenubarSettingsSeq.realloc(vModulesInfo.size());
     m_lNewVersionToolbarSettingsSeq.realloc(vModulesInfo.size());
 
-    const ::rtl::OUString sModuleCfgSupplier(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"));
     const ::rtl::OUString sMenubarResourceURL(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar"));
     const ::rtl::OUString sToolbarResourcePre(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/"));
 
-    uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = uno::Reference< ui::XModuleUIConfigurationManagerSupplier >(::comphelper::getProcessServiceFactory()->createInstance(sModuleCfgSupplier), uno::UNO_QUERY);
+    uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier = ui::ModuleUIConfigurationManagerSupplier::create( ::comphelper::getProcessComponentContext() );
 
     for (sal_uInt32 i=0; i<vModulesInfo.size(); ++i)
     {

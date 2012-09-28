@@ -56,7 +56,7 @@ Control DLG_SLIDE_TRANSITION_PANE
     FixedText FT_SPEED
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ en-US ] = "Speed";
+        Text [ en-US ] = "S~peed";
     };
 
     ListBox LB_SPEED
@@ -78,7 +78,7 @@ Control DLG_SLIDE_TRANSITION_PANE
     FixedText FT_SOUND
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ en-US ] = "Sound";
+        Text [ en-US ] = "So~und";
     };
 
     ListBox LB_SOUND
@@ -104,7 +104,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_CHECKBOX_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Loop until next sound";
+        Text [ en-US ] = "~Loop until next sound";
     };
 
     Fixedline FL_ADVANCE_SLIDE
@@ -119,7 +119,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_RADIOBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "On mouse click";
+        Text [ en-US ] = "O~n mouse click";
     };
 
     RadioButton RB_ADVANCE_AUTO
@@ -128,7 +128,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_RADIOBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Automatically after";
+        Text [ en-US ] = "~Automatically after";
     };
 
     MetricField MF_ADVANCE_AUTO_AFTER
@@ -162,7 +162,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Apply to All Slides";
+        Text [ en-US ] = "A~pply to All Slides";
     };
 
 
@@ -172,7 +172,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Play";
+        Text [ en-US ] = "P~lay";
     };
 
     PushButton PB_SLIDE_SHOW
@@ -181,7 +181,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Slide Show";
+        Text [ en-US ] = "Sli~de Show";
     };
 
     FixedLine FL_EMPTY2
@@ -195,7 +195,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_CHECKBOX_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Automatic preview";
+        Text [ en-US ] = "Automatic p~review";
     };
 
     // --------------------

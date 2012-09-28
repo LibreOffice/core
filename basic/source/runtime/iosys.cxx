@@ -37,13 +37,15 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
+#include <com/sun/star/bridge/BridgeFactory.hpp>
+#include <com/sun/star/bridge/XBridge.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
@@ -51,8 +53,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/bridge/XBridge.hpp>
-#include <com/sun/star/bridge/XBridgeFactory.hpp>
 
 using namespace comphelper;
 using namespace com::sun::star::uno;
@@ -213,19 +213,11 @@ bool needSecurityRestrictions( void )
             return true;
         }
 
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( !xSMgr.is() )
-            return true;
-        Reference< XBridgeFactory > xBridgeFac( xSMgr->createInstance
-            ( ::rtl::OUString("com.sun.star.bridge.BridgeFactory" ) ), UNO_QUERY );
+        Reference< XComponentContext > xContext = getProcessComponentContext();
+        Reference< XBridgeFactory2 > xBridgeFac( BridgeFactory::create(xContext) );
 
-        Sequence< Reference< XBridge > > aBridgeSeq;
-        sal_Int32 nBridgeCount = 0;
-        if( xBridgeFac.is() )
-        {
-            aBridgeSeq = xBridgeFac->getExistingBridges();
-            nBridgeCount = aBridgeSeq.getLength();
-        }
+        Sequence< Reference< XBridge > > aBridgeSeq = xBridgeFac->getExistingBridges();
+        sal_Int32 nBridgeCount = aBridgeSeq.getLength();
 
         if( nBridgeCount == 0 )
         {
@@ -276,18 +268,17 @@ bool hasUno( void )
     if( bNeedInit )
     {
         bNeedInit = false;
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( !xSMgr.is() )
+        Reference< XComponentContext > xContext = getProcessComponentContext();
+        if( !xContext.is() )
         {
             // No service manager at all
             bRetVal = false;
         }
         else
         {
-            Reference< XContentProviderManager > xManager( xSMgr->createInstance(
-                                                               ::rtl::OUString( "com.sun.star.ucb.UniversalContentBroker" ) ), UNO_QUERY );
+            Reference< XUniversalContentBroker > xManager = UniversalContentBroker::create(xContext);
 
-            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
+            if ( !( xManager->queryContentProvider( ::rtl::OUString("file:///" ) ).is() ) )
             {
                 // No UCB
                 bRetVal = false;
@@ -551,7 +542,7 @@ SbError SbiStream::Open
         if( xSMgr.is() )
         {
             Reference< XSimpleFileAccess2 >
-                xSFI( SimpleFileAccess::create( comphelper::ComponentContext(xSMgr).getUNOContext() ) );
+                xSFI( SimpleFileAccess::create( comphelper::getComponentContext(xSMgr) ) );
             try
             {
 

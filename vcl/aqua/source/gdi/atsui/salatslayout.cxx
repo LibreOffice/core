@@ -63,9 +63,9 @@ public:
                         sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual long    GetTextWidth() const;
-    virtual long    FillDXArray( long* pDXArray ) const;
+    virtual long    FillDXArray( sal_Int32* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
     virtual bool    GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
@@ -683,7 +683,7 @@ long ATSLayout::GetTextWidth() const
  *
  * @return : typographical width of the complete text layout
 **/
-long ATSLayout::FillDXArray( long* pDXArray ) const
+long ATSLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
     // short circuit requests which don't need full details
     if( !pDXArray )
@@ -809,7 +809,7 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
  *
  * @return : none
 **/
-void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void ATSLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     DBG_ASSERT( ((nMaxIndex>0)&&!(nMaxIndex&1)),
         "ATSLayout::GetCaretPositions() : invalid number of caret pairs requested");

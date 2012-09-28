@@ -28,6 +28,9 @@
 
 # outdir target pattern
 
+gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
+gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
+gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_Dictionary_get_target = $(OUTDIR)/pck/$(1).oxt
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
@@ -49,7 +52,6 @@ gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
 gb_InternalUnoApi_get_target = $(OUTDIR)/rdb/$(1).rdb
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
-gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_UnoApiMerge_get_target = $(OUTDIR)/bin/$(1).rdb
@@ -80,8 +82,16 @@ gb_AllLangZip_get_target = $(WORKDIR)/AllLangZip/$(1)
 gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
+gb_CliAssembly_get_target = $(WORKDIR)/CliAssembly/$(1).done
+gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
+gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
+gb_CliLibraryTarget_get_target = $(WORKDIR)/CliLibraryTarget/$(1)$(gb_CliLibraryTarget_EXT)
+gb_CliNativeLibraryTarget_get_external_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).external
+gb_CliNativeLibraryTarget_get_target = $(WORKDIR)/CliNativeLibraryTarget/$(1)$(gb_CliNativeLibraryTarget_EXT)
+gb_CliUnoApiTarget_get_target = $(WORKDIR)/CliUnoApiTarget/$(1)$(gb_CliUnoApiTarget_EXT)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentsTarget_get_target = $(WORKDIR)/ComponentsTarget/$(1).components
+gb_Configuration_get_preparation_target = $(WORKDIR)/Configuration/$(1).prepared
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done
@@ -93,6 +103,7 @@ gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
 gb_ExtensionTarget_get_target = $(WORKDIR)/ExtensionTarget/$(1).oxt
 gb_ExtensionTarget_get_rootdir = $(WORKDIR)/ExtensionTarget/$(1)/root
 gb_ExtensionTarget_get_workdir = $(WORKDIR)/ExtensionTarget/$(1)
+gb_ExternalPackage_get_target = $(WORKDIR)/ExternalPackage/$(1)
 gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
 gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
 gb_ExternalProject_get_state_target = $(WORKDIR)/ExternalProject/$(1)/$(2)
@@ -102,7 +113,6 @@ gb_InstallModule_get_target = $(WORKDIR)/InstallModule/$(1).done
 gb_InstallModuleTarget_get_external_target = $(WORKDIR)/InstallModuleTarget/$(1).external
 gb_InstallModuleTarget_get_filelist = $(WORKDIR)/InstallModuleTarget/$(1).filelist
 gb_InstallModuleTarget_get_target = $(WORKDIR)/InstallModuleTarget/$(1).filelist
-gb_InstallModuleTarget_get_workdir = $(patsubst %/,%,$(dir $(call gb_ScpTarget_get_target,%)))
 gb_InstallScriptTarget_get_target = $(WORKDIR)/InstallScriptTarget/$(1)$(gb_InstallScript_EXT)
 gb_Jar_get_target = $(WORKDIR)/Jar/$(1).jar
 gb_Jar_get_classsetname = Jar/$(1)
@@ -147,6 +157,11 @@ gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/SrsTemplatePartTarget/$(firstwo
 gb_SrsTemplateTarget_get_include_dir = $(WORKDIR)/SrsTemplatePartTarget/$(firstword $(subst /, ,$(1)))
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
 gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename $(1)).idx
+gb_UI_get_target = $(WORKDIR)/UI/$(1).done
+gb_UILocalizeTarget_get_target = $(WORKDIR)/UILocalizeTarget/$(1).ui
+gb_UITarget_get_target = $(WORKDIR)/UITarget/$(1).done
+gb_UnoApiTarget_get_external_headers_target = $(WORKDIR)/UnoApiTarget/$(1).external
+gb_UnoApiTarget_get_headers_target = $(WORKDIR)/UnoApiTarget/$(1).headers
 gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
 gb_UnoApiHeadersTarget_get_bootstrap_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/bootstrap$(2)
 gb_UnoApiHeadersTarget_get_comprehensive_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/comprehensive$(2)
@@ -156,6 +171,7 @@ gb_UnoApiHeadersTarget_get_comprehensive_target = $(WORKDIR)/UnoApiHeadersTarget
 gb_UnoApiHeadersTarget_get_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/normal.done
 gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
 gb_UnpackedTarball_get_dir = $(WORKDIR)/UnpackedTarball/$(1)
+gb_UnpackedTarball_get_final_target = $(WORKDIR)/UnpackedTarball/$(1).update
 gb_UnpackedTarball_get_target = $(WORKDIR)/UnpackedTarball/$(1).done
 gb_UnpackedTarball_get_preparation_target = $(WORKDIR)/UnpackedTarball/$(1).prepare
 gb_UnpackedTarget_get_target = $(WORKDIR)/UnpackedTarget/$(1)
@@ -199,8 +215,15 @@ endef
 $(eval $(call gb_Helper_make_clean_targets,\
 	AllLangResTarget \
 	AllLangZip \
+	CliAssembly \
+	CliAssemblyTarget \
+	CliConfigTarget \
+	CliLibraryTarget \
+	CliNativeLibraryTarget \
+	CliUnoApiTarget \
 	ComponentTarget \
 	ComponentsTarget \
+	ExternalPackage \
 	ExtensionTarget \
 	InstallModule \
 	InstallModuleTarget \
@@ -228,6 +251,9 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CppunitTest \
 	CustomTarget \
 	ExternalProject \
+	UI \
+	UILocalizeTarget \
+	UITarget \
 	UnoApiHeadersTarget \
 	UnoApiTarget \
 	UnpackedTarball \
@@ -246,6 +272,9 @@ $(eval $(call gb_Helper_make_clean_targets,\
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
+	CliLibrary \
+	CliNativeLibrary \
+	CliUnoApi \
 	Dictionary \
 	Executable \
 	Extension \
@@ -266,7 +295,6 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	GenCObject \
 	GenCxxObject \
 	LinkTarget \
-	ScpTarget \
 	SdiTarget \
 	SrsPartTarget \
 	SrsTarget \
@@ -307,5 +335,6 @@ gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 # static variables declared here because they are used globally
 
 gb_POLOCATION := $(SRCDIR)/translations/source
+gb_EXTERNAL_HEADERS_DIR := $(OUTDIR)/inc/external
 
 # vim: set noet sw=4:

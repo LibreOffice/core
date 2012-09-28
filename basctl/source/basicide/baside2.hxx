@@ -21,9 +21,11 @@
 #define BASCTL_BASIDE2_HXX
 
 #include "layout.hxx"
-#include <bastypes.hxx>
-#include <bastype3.hxx>
-#include <basidesh.hxx>
+#include "bastypes.hxx"
+#include "bastype3.hxx"
+#include "basidesh.hxx"
+#include "breakpoint.hxx"
+#include "linenumberwindow.hxx"
 
 #include <svheader.hxx>
 
@@ -37,17 +39,15 @@ class SvxSearchItem;
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <vcl/split.hxx>
-#include "svl/lstner.hxx"
+#include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <sfx2/progress.hxx>
 #include <unotools/options.hxx>
+#include <rtl/ref.hxx>
 
-#include "breakpoint.hxx"
-#include "linenumberwindow.hxx"
 #include <set>
-
-#define MARKER_NOMARKER 0xFFFF
+#include <boost/scoped_ptr.hpp>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XMultiPropertySet;
@@ -63,40 +63,18 @@ DBG_NAMEEX( ModulWindow )
 // #108672 Helper functions to get/set text in TextEngine
 // using the stream interface (get/setText() only supports
 // tools Strings limited to 64K).
-::rtl::OUString getTextEngineText( ExtTextEngine* pEngine );
-void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr );
+// defined in baside2b.cxx
+rtl::OUString getTextEngineText (ExtTextEngine&);
+void setTextEngineText (ExtTextEngine&, rtl::OUString const&);
 
-class ProgressInfo : public SfxProgress
-{
-private:
-    sal_uLong                   nCurState;
-
-public:
-
-    inline          ProgressInfo( SfxObjectShell* pObjSh, const String& rText, sal_uLong nRange );
-    inline void     StepProgress();
-};
-
-inline ProgressInfo::ProgressInfo( SfxObjectShell* pObjSh, const String& rText, sal_uLong nRange )
-    : SfxProgress( pObjSh, rText, nRange )
-{
-    nCurState = 0;
-}
-
-inline void ProgressInfo::StepProgress()
-{
-    SetState( ++nCurState );
-}
-
-typedef std::set<sal_uInt16> SyntaxLineSet;
 
 class EditorWindow : public Window, public SfxListener
 {
 private:
     class ChangesListener;
 
-    ExtTextView*    pEditView;
-    ExtTextEngine*  pEditEngine;
+    boost::scoped_ptr<ExtTextView> pEditView;
+    boost::scoped_ptr<ExtTextEngine> pEditEngine;
     ModulWindow&    rModulWindow;
 
     rtl::Reference< ChangesListener > listener_;
@@ -108,9 +86,13 @@ private:
 
     SyntaxHighlighter   aHighlighter;
     Timer           aSyntaxIdleTimer;
+    typedef std::set<sal_uInt16> SyntaxLineSet;
     SyntaxLineSet   aSyntaxLineTable;
     DECL_LINK(SyntaxTimerHdl, void *);
-    ProgressInfo*   pProgress;
+
+    // progress bar
+    class ProgressInfo;
+    boost::scoped_ptr<ProgressInfo> pProgress;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -147,9 +129,8 @@ public:
                     EditorWindow (Window* pParent, ModulWindow*);
                     ~EditorWindow();
 
-    ExtTextEngine*  GetEditEngine() const   { return pEditEngine; }
-    ExtTextView*    GetEditView() const     { return pEditView; }
-    ProgressInfo*   GetProgress() const     { return pProgress; }
+    ExtTextEngine*  GetEditEngine() const   { return pEditEngine.get(); }
+    ExtTextView*    GetEditView() const     { return pEditView.get(); }
 
     void            CreateProgress( const String& rText, sal_uLong nRange );
     void            DestroyProgress();
@@ -185,7 +166,6 @@ private:
 
 protected:
     virtual void    Paint( const Rectangle& );
-    virtual void    Resize();
     BreakPoint*     FindBreakPoint( const Point& rMousePos );
     void            ShowMarker( bool bShow );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -198,6 +178,7 @@ public:
                     ~BreakPointWindow();
 
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
+    void            SetNoMarker ();
 
     void            DoScroll( long nHorzScroll, long nVertScroll );
     long&           GetCurYOffset()         { return nCurYOffset; }
@@ -229,7 +210,7 @@ public:
 
 
 
-class WatchWindow : public BasicDockingWindow
+class WatchWindow : public DockingWindow
 {
 private:
     String              aWatchStr;
@@ -260,7 +241,7 @@ public:
 };
 
 
-class StackWindow : public BasicDockingWindow
+class StackWindow : public DockingWindow
 {
 private:
     SvTreeListBox   aTreeListBox;
@@ -304,7 +285,7 @@ public:
 };
 
 
-class ModulWindow: public IDEBaseWindow
+class ModulWindow: public BaseWindow
 {
 private:
     ModulWindowLayout&  rLayout;
@@ -348,7 +329,7 @@ public:
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual ::rtl::OUString  GetTitle();
-    virtual BasicEntryDescriptor CreateEntryDescriptor();
+    virtual EntryDescriptor CreateEntryDescriptor();
     virtual bool    AllowUndo();
     virtual void    SetReadOnly (bool bReadOnly);
     virtual bool    IsReadOnly();
@@ -418,7 +399,7 @@ public:
 
     virtual void OnNewDocument ();
     virtual char const* GetHid () const;
-    virtual BasicIDEType GetType () const;
+    virtual ItemType GetType () const;
     virtual bool HasActiveEditor () const;
 
     void UpdateModule ();
@@ -430,7 +411,7 @@ public:
     ModulWindowLayout (Window* pParent, ObjectCatalog&);
 public:
     // Layout:
-    virtual void Activating (IDEBaseWindow&);
+    virtual void Activating (BaseWindow&);
     virtual void Deactivating ();
     virtual void GetState (SfxItemSet&, unsigned nWhich);
     virtual void UpdateDebug (bool bBasicStopped);
@@ -443,7 +424,7 @@ protected:
     // Window:
     virtual void Paint (const Rectangle& rRect);
     // Layout:
-    virtual void OnFirstSize (int nWidth, int nHeight);
+    virtual void OnFirstSize (long nWidth, long nHeight);
 
 private:
     // main child window

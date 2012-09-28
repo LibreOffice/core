@@ -39,10 +39,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
-#include "rtl/oustringostreaminserter.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;

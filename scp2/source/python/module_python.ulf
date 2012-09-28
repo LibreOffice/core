@@ -29,4 +29,4 @@
 en-US = "Python-UNO Bridge"
 
 [STR_DESC_MODULE_OPTIONAL_PYTHON]
-en-US = "Adds the ability to automate %PRODUCTNAME with the Python scripting language. See https://wiki.documentfoundation.org/Development/PyUno for a complete documentation."
+en-US = "Adds the ability to automate %PRODUCTNAME with the Python scripting language."

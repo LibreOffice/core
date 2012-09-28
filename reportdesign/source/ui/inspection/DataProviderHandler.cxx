@@ -48,6 +48,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XSection.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -73,7 +74,7 @@ DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext 
     try
     {
         m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.FormComponentPropertyHandler")),m_xContext),uno::UNO_QUERY_THROW);
-        m_xTypeConverter.set(m_xContext->getServiceManager()->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter" )),m_xContext),uno::UNO_QUERY_THROW);
+        m_xTypeConverter.set(script::Converter::create(m_xContext));
 
     }catch(const uno::Exception &)
     {

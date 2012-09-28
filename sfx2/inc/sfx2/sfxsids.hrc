@@ -57,7 +57,6 @@
 
 #define SID_VERSION_VISIBLE                 (SID_SFX_START + 313)
 #define SID_PASTE_UNFORMATTED               (SID_SFX_START + 314)
-#define SID_DIALOG_RETURN                   (SID_SFX_START + 318)
 #define SID_PRINTER_NOTFOUND_WARN           (SID_SFX_START + 320)
 #define SID_PRINTER_NAME                    (SID_SFX_START + 322)
 #define SID_PRINTER_CHANGESTODOC            (SID_SFX_START + 324)

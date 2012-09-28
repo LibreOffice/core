@@ -2006,7 +2006,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                         }
                                         if ( i && bCopied )
                                         {
-                                            SvxImportMSVBasic aMSVBas( *pShell, *xDest, sal_True, sal_False );
+                                            SvxImportMSVBasic aMSVBas( *pShell, *xDest );
 
                                             uno::Reference < embed::XStorage > xDoc( pShell->GetStorage() );
                                             if ( xDoc.is() )

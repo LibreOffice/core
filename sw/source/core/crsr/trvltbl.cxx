@@ -137,12 +137,12 @@ const SwFrm* lcl_FindMostUpperCellFrm( const SwFrm* pFrm )
     return pFrm;
 }
 
-sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
+bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 {
     // check if the current cursor's SPoint/Mark are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm->IsInTab() )
-        return sal_False;
+        return false;
 
     const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
     const SwTabFrm* pMasterTabFrm = pTabFrm->IsFollow() ? pTabFrm->FindMaster( true ) : pTabFrm;
@@ -166,7 +166,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         GetTblSel( *this, aBoxes, eType );
 
         if( aBoxes.empty() )
-            return sal_False;
+            return false;
 
         pStt = aBoxes[0];
         pEnd = aBoxes.back();
@@ -178,7 +178,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         SwTable::SearchType eSearchType = bRow ? SwTable::SEARCH_ROW : SwTable::SEARCH_COL;
         pTable->CreateSelection( *pCrsr, aBoxes, eSearchType, bCheckProtected );
         if( aBoxes.empty() )
-            return sal_False;
+            return false;
 
         pStt = aBoxes[0];
         pEnd = aBoxes.back();
@@ -197,7 +197,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         }
 
         if ( !pStartFrm || !pEndFrm )
-            return sal_False;
+            return false;
 
         const bool bVert = pFrm->ImplFindTabFrm()->IsVertical();
 
@@ -214,7 +214,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
                    aBoxes, bSelectUp ? 0 : &aCells, eType );
 
         if( aBoxes.empty() || ( !bSelectUp && 4 != aCells.size() ) )
-            return sal_False;
+            return false;
 
         if ( bSelectUp )
         {
@@ -255,7 +255,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
                                    : pMasterTabFrm->Frm().TopLeft();
 
     UpdateCrsr();
-    return sal_True;
+    return true;
 }
 
 sal_Bool SwCrsrShell::SelTbl()

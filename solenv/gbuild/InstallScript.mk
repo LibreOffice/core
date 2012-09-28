@@ -36,6 +36,10 @@ define gb_InstallScriptTarget__get_files
 $(notdir $(shell cat $(foreach module,$(1),$(call gb_InstallModule_get_filelist,$(module)))))
 endef
 
+define gb_InstallScriptTarget__get_dirs
+$(sort $(dir $(shell cat $(foreach module,$(1),$(call gb_InstallModule_get_filelist,$(module))))))
+endef
+
 # Pass first arg if make is running in silent mode, second arg otherwise
 define gb_InstallScriptTarget__if_silent
 $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),$(1),$(2))
@@ -50,7 +54,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	) && \
 	$(gb_InstallScriptTarget_COMMAND) \
 		$(call gb_InstallScriptTarget__if_silent,-q) \
-		-i $(OUTDIR)/par/osl \
+		-i $(call gb_InstallScriptTarget__make_arglist,$(call gb_InstallScriptTarget__get_dirs,$(SCP_MODULES))) \
 	   	-o $(1) \
 	   	@@$${RESPONSEFILE} && \
 	rm -f $${RESPONSEFILE} \
@@ -63,7 +67,7 @@ $(dir $(call gb_InstallScriptTarget_get_target,%))%/.dir :
 $(dir $(call gb_InstallScriptTarget_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_InstallScriptTarget_get_target,%) :
+$(call gb_InstallScriptTarget_get_target,%) : $(gb_InstallScriptTarget_TARGET)
 	$(call gb_InstallScriptTarget__command,$@,$*)
 
 .PHONY : $(call gb_InstallScriptTarget_get_clean_target,%)

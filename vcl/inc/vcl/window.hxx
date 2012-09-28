@@ -155,7 +155,7 @@ namespace svt { class PopupWindowControllerImpl; }
 #define WINDOW_PREVTOPWINDOWSIBLING     ((sal_uInt16)15)
 #define WINDOW_NEXTTOPWINDOWSIBLING     ((sal_uInt16)16)
 
-// Flags for SetPosSizePixel()
+// Flags for setPosSizePixel()
 #define WINDOW_POSSIZE_X                ((sal_uInt16)0x0001)
 #define WINDOW_POSSIZE_Y                ((sal_uInt16)0x0002)
 #define WINDOW_POSSIZE_WIDTH            ((sal_uInt16)0x0004)
@@ -262,6 +262,7 @@ typedef sal_uInt16 StateChangedType;
 #define STATE_CHANGE_READONLY           ((StateChangedType)16)
 #define STATE_CHANGE_EXTENDEDSTYLE      ((StateChangedType)17)
 #define STATE_CHANGE_MIRRORING          ((StateChangedType)18)
+#define STATE_CHANGE_CONTROL_FOCUS      ((StateChangedType)20)
 #define STATE_CHANGE_USER               ((StateChangedType)10000)
 
 // GetFocusFlags
@@ -326,7 +327,8 @@ typedef sal_uInt16 StateChangedType;
 #define DLGWINDOW_NEXT                  1
 #define DLGWINDOW_FIRST                 2
 
-enum WindowSizeType {
+enum WindowSizeType
+{
     WINDOWSIZE_MINIMUM,
     WINDOWSIZE_PREFERRED,
     WINDOWSIZE_MAXIMUM
@@ -341,7 +343,17 @@ const char* ImplDbgCheckWindow( const void* pObj );
 #endif
 
 class BitmapEx; // FIXME: really the SetBackgroundBitmap belongs in a toplevel 'window'
+class Dialog;
 class WindowImpl;
+class VclBuilder;
+
+struct WindowResHeader
+{
+    sal_uLong nObjMask;
+    rtl::OString aHelpId;
+    sal_uLong nRSStyle;
+};
+
 class VCL_DLLPUBLIC Window : public OutputDevice
 {
     friend class Cursor;
@@ -358,6 +370,7 @@ class VCL_DLLPUBLIC Window : public OutputDevice
     friend class RadioButton;
     friend class SystemChildWindow;
     friend class ImplBorderWindow;
+    friend class VclBuilder;
 
     // TODO: improve missing functionality
     // only required because of SetFloatingMode()
@@ -387,8 +400,9 @@ private:
 public:
     SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
+    SAL_DLLPRIVATE WindowResHeader     ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void                ImplWindowRes( const ResId& rResId );
+    SAL_DLLPRIVATE void                loadAndSetJustHelpID( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplSetFrameParent( const Window* pParent );
     SAL_DLLPRIVATE void                ImplInsertWindow( Window* pParent );
     SAL_DLLPRIVATE void                ImplRemoveWindow( sal_Bool bRemoveFrameData );
@@ -578,6 +592,15 @@ protected:
             void        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        FireVclEvent( VclSimpleEvent* pEvent );
 
+    /*
+     * Widgets call this to inform their owner container that the widget wants
+     * to renegotiate its size. Should be called when a widget has a new size
+     * request. e.g. a FixedText Control gets a new label.
+     *
+     * akin to gtk_widget_queue_resize
+     */
+    SAL_DLLPRIVATE void queue_resize();
+
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
 public:
@@ -729,7 +752,7 @@ public:
     void                SetParent( Window* pNewParent );
     Window*             GetParent() const;
     // return the dialog we are contained in or NULL if un-contained
-    Window*             GetParentDialog() const;
+    Dialog*             GetParentDialog() const;
 
     void                Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );
     void                Hide( sal_uInt16 nFlags = 0 ) { Show( sal_False, nFlags ); }
@@ -818,7 +841,7 @@ public:
     void                EnableAlwaysOnTop( sal_Bool bEnable = sal_True );
     sal_Bool                IsAlwaysOnTopEnabled() const;
 
-    virtual void        SetPosSizePixel( long nX, long nY,
+    virtual void        setPosSizePixel( long nX, long nY,
                                          long nWidth, long nHeight,
                                          sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     virtual void        SetPosPixel( const Point& rNewPos );
@@ -1054,8 +1077,205 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetClipboard();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetPrimarySelection();
 
-    // Advisory Sizing - what is a good size for this widget ?
+    /*
+     * Advisory Sizing - what is a good size for this widget
+     *
+     * Retrieves the preferred size of a widget ignoring
+     * "width-request" and "height-request" properties.
+     *
+     * Implement this in sub-classes to tell layout
+     * the preferred widget size.
+     */
     virtual Size GetOptimalSize(WindowSizeType eType) const;
+
+    /*
+     * Sets the "width-request" property
+     *
+     * Override for width request of the widget, or -1 if natural request
+     * should be used.
+     *
+     * @see get_preferred_size, set_width_request
+     */
+    void set_height_request(sal_Int32 nHeightRequest);
+
+    /*
+     * Sets the "height-request" property
+     *
+     * Override for height request of the widget, or -1 if natural request
+     * should be used.
+     *
+     * @see get_preferred_size, set_height_request
+     */
+    void set_width_request(sal_Int32 nWidthRequest);
+
+    /*
+     * Retrieves the preferred size of a widget taking
+     * into account the "width-request" and "height-request" properties.
+     *
+     * Overrides the result of GetOptimalSize to honor the
+     * width-request and height-request properties.
+     *
+     * @see GetOptimalSize
+     *
+     * akin to gtk_widget_get_preferred_size
+     */
+    Size get_preferred_size() const;
+
+    /*
+     * Gets the value of the "halign" property.
+     */
+    VclAlign get_halign() const;
+
+    /*
+     * Sets the horizontal alignment of widget. See the "halign" property.
+     */
+    void set_halign(VclAlign eAlign);
+
+    /*
+     * Gets the value of the "valign" property.
+     */
+    VclAlign get_valign() const;
+
+    /*
+     * Sets the horizontal alignment of widget. See the "valign" property.
+     */
+    void set_valign(VclAlign eAlign);
+
+    /*
+     * Gets whether the widget would like to use any available extra horizontal
+     * space.
+     */
+    bool get_hexpand() const;
+
+    /*
+     * Sets whether the widget would like to use any available extra horizontal
+     * space.
+     */
+    void set_hexpand(bool bExpand);
+
+    /*
+     * Gets whether the widget would like to use any available extra vertical
+     * space.
+     */
+    bool get_vexpand() const;
+
+    /*
+     * Sets whether the widget would like to use any available extra vertical
+     * space.
+     */
+    void set_vexpand(bool bExpand);
+
+    /*
+     * Gets whether the widget would like to use any available extra space.
+     */
+    bool get_expand() const;
+
+    /*
+     * Sets whether the widget would like to use any available extra space.
+     */
+    void set_expand(bool bExpand);
+
+    /*
+     * Gets whether the widget should receive extra space when the parent grows
+     */
+    bool get_fill() const;
+
+    /*
+     * Sets whether the widget should receive extra space when the parent grows
+     */
+    void set_fill(bool bFill);
+
+    void set_border_width(sal_Int32 nBorderWidth);
+    sal_Int32 get_border_width() const;
+
+    void set_margin_left(sal_Int32 nWidth);
+    sal_Int32 get_margin_left() const;
+
+    void set_margin_right(sal_Int32 nWidth);
+    sal_Int32 get_margin_right() const;
+
+    void set_margin_top(sal_Int32 nWidth);
+    sal_Int32 get_margin_top() const;
+
+    void set_margin_bottom(sal_Int32 nWidth);
+    sal_Int32 get_margin_bottom() const;
+
+    /*
+     * Gets how the widget is packed with reference to the start or end of the parent
+     */
+    VclPackType get_pack_type() const;
+
+    /*
+     * Sets how the widget is packed with reference to the start or end of the parent
+     */
+    void set_pack_type(VclPackType ePackType);
+
+    /*
+     * Sets extra space to put between the widget and its neighbors
+     */
+    sal_Int32 get_padding() const;
+
+    /*
+     * Sets extra space to put between the widget and its neighbors
+     */
+    void set_padding(sal_Int32 nPadding);
+
+    /*
+     * Gets the number of columns that the widget spans
+     */
+    sal_Int32 get_grid_width() const;
+
+    /*
+     * Sets the number of columns that the widget spans
+     */
+    void set_grid_width(sal_Int32 nCols);
+
+    /*
+     * Gets the column number to attach the left side of the widget to
+     */
+    sal_Int32 get_grid_left_attach() const;
+
+    /*
+     * Sets the column number to attach the left side of the widget to
+     */
+    void set_grid_left_attach(sal_Int32 nAttach);
+
+    /*
+     * Gets the number of row that the widget spans
+     */
+    sal_Int32 get_grid_height() const;
+
+    /*
+     * Sets the number of row that the widget spans
+     */
+    void set_grid_height(sal_Int32 nRows);
+
+    /*
+     * Gets the row number to attach the top side of the widget to
+     */
+    sal_Int32 get_grid_top_attach() const;
+
+    /*
+     * Sets the row number to attach the top side of the widget to
+     */
+    void set_grid_top_attach(sal_Int32 nAttach);
+
+    /*
+     * Sets a widget property
+     *
+     * @return false if property is unknown
+     */
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+
+    /*
+     * Move this widget to be the nNewPosition'd child of its parent
+     */
+    void reorderWithinParent(sal_uInt16 nNewPosition);
+
+    /*
+     * Takes ownership of the rOther properties
+     */
+    virtual void take_properties(Window &rOther);
 
     //-------------------------------------
     //  Native Widget Rendering functions

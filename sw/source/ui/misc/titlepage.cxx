@@ -128,64 +128,45 @@ namespace
  */
 void SwTitlePageDlg::FillList()
 {
-    sal_uInt16 nTitlePages = aPageCountNF.GetValue();
-    aPagePropertiesLB.Clear();
+    sal_uInt16 nTitlePages = m_pPageCountNF->GetValue();
+    m_pPagePropertiesLB->Clear();
     if (mpTitleDesc)
-        aPagePropertiesLB.InsertEntry(mpTitleDesc->GetName());
+        m_pPagePropertiesLB->InsertEntry(mpTitleDesc->GetName());
     if (nTitlePages > 1 && mpIndexDesc)
-        aPagePropertiesLB.InsertEntry(mpIndexDesc->GetName());
+        m_pPagePropertiesLB->InsertEntry(mpIndexDesc->GetName());
     if (mpNormalDesc)
-        aPagePropertiesLB.InsertEntry(mpNormalDesc->GetName());
-    aPagePropertiesLB.SelectEntryPos(0);
+        m_pPagePropertiesLB->InsertEntry(mpNormalDesc->GetName());
+    m_pPagePropertiesLB->SelectEntryPos(0);
 }
 
 sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 {
     sal_uInt16 nPage = 1;
-    if (aPageStartNF.IsEnabled())
-        nPage = aPageStartNF.GetValue();
+    if (m_pPageStartNF->IsEnabled())
+        nPage = m_pPageStartNF->GetValue();
     return nPage;
 }
 
 SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
-    SfxModalDialog( pParent, SW_RES(DLG_TITLEPAGE) ),
-#ifdef MSC
-#pragma warning (disable : 4355)
-#endif
-    aMakeInsertFL       ( this, SW_RES( FL_MAKEINSERT )),
-    aUseExistingPagesRB ( this, SW_RES( RB_USE_EXISTING_PAGES )),
-    aInsertNewPagesRB   ( this, SW_RES( RB_INSERT_NEW_PAGES )),
-    aPageCountFT        ( this, SW_RES( FT_PAGE_COUNT )),
-    aPageCountNF        ( this, SW_RES( NF_PAGE_COUNT )),
-    aPagePagesFT        ( this, SW_RES( FT_PAGE_PAGES )),
-    aPageStartFT        ( this, SW_RES( FT_PAGE_START )),
-    aDocumentStartRB    ( this, SW_RES( RB_DOCUMENT_START )),
-    aPageStartRB        ( this, SW_RES( RB_PAGE_START )),
-    aPageStartNF        ( this, SW_RES( NF_PAGE_START )),
-    aNumberingFL        ( this, SW_RES( FL_NUMBERING )),
-    aRestartNumberingCB ( this, SW_RES( CB_RESTART_NUMBERING )),
-    aRestartNumberingFT ( this, SW_RES( FT_RESTART_NUMBERING )),
-    aRestartNumberingNF ( this, SW_RES( NF_RESTART_NUMBERING )),
-    aSetPageNumberCB    ( this, SW_RES( CB_SET_PAGE_NUMBER )),
-    aSetPageNumberFT    ( this, SW_RES( FT_SET_PAGE_NUMBER )),
-    aSetPageNumberNF    ( this, SW_RES( NF_SET_PAGE_NUMBER )),
-    aPagePropertiesFL   ( this, SW_RES( FL_PAGE_PROPERTIES )),
-    aPagePropertiesLB   ( this, SW_RES( LB_PAGE_PROPERTIES )),
-    aPagePropertiesPB   ( this, SW_RES( PB_PAGE_PROPERTIES )),
-    aBottomFL           ( this, SW_RES( FL_BOTTOM )),
-    aOkPB               ( this, SW_RES( PB_OK )),
-    aCancelPB           ( this, SW_RES( PB_CANCEL )),
-    aHelpPB             ( this, SW_RES( PB_HELP )),
-    mpPageFmtDesc       (0)
-#ifdef MSC
-#pragma warning (default : 4355)
-#endif
+    SfxModalDialog( pParent, "DLG_TITLEPAGE", "modules/swriter/ui/titlepage.ui"),
+    mpPageFmtDesc(0)
 {
-    FreeResource();
+    get(m_pUseExistingPagesRB, "RB_USE_EXISTING_PAGES");
+    get(m_pPageCountNF, "NF_PAGE_COUNT");
+    get(m_pDocumentStartRB, "RB_DOCUMENT_START");
+    get(m_pPageStartRB, "RB_PAGE_START");
+    get(m_pPageStartNF, "NF_PAGE_START");
+    get(m_pRestartNumberingCB, "CB_RESTART_NUMBERING");
+    get(m_pRestartNumberingNF, "NF_RESTART_NUMBERING");
+    get(m_pSetPageNumberCB, "CB_SET_PAGE_NUMBER");
+    get(m_pSetPageNumberNF, "NF_SET_PAGE_NUMBER");
+    get(m_pPagePropertiesLB, "LB_PAGE_PROPERTIES");
+    get(m_pPagePropertiesPB, "PB_PAGE_PROPERTIES");
+    get(m_pOkPB, "PB_OK");
 
-    aOkPB.SetClickHdl(LINK(this, SwTitlePageDlg, OKHdl));
-    aRestartNumberingCB.SetClickHdl(LINK(this, SwTitlePageDlg, RestartNumberingHdl));
-    aSetPageNumberCB.SetClickHdl(LINK(this, SwTitlePageDlg, SetPageNumberHdl));
+    m_pOkPB->SetClickHdl(LINK(this, SwTitlePageDlg, OKHdl));
+    m_pRestartNumberingCB->SetClickHdl(LINK(this, SwTitlePageDlg, RestartNumberingHdl));
+    m_pSetPageNumberCB->SetClickHdl(LINK(this, SwTitlePageDlg, SetPageNumberHdl));
 
     sal_uInt16 nSetPage = 1;
     sal_uInt16 nResetPage = 1;
@@ -224,63 +205,63 @@ SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
     }
     lcl_PopCursor(mpSh);
 
-    aUseExistingPagesRB.Check();
-    aPageCountNF.SetValue(nTitlePages);
-    aPageCountNF.SetUpHdl(LINK(this, SwTitlePageDlg, UpHdl));
-    aPageCountNF.SetDownHdl(LINK(this, SwTitlePageDlg, DownHdl));
+    m_pUseExistingPagesRB->Check();
+    m_pPageCountNF->SetValue(nTitlePages);
+    m_pPageCountNF->SetUpHdl(LINK(this, SwTitlePageDlg, UpHdl));
+    m_pPageCountNF->SetDownHdl(LINK(this, SwTitlePageDlg, DownHdl));
 
-    aDocumentStartRB.Check();
-    aPageStartNF.Enable(false);
-    aPageStartNF.SetValue(lcl_GetCurrentPage(mpSh));
+    m_pDocumentStartRB->Check();
+    m_pPageStartNF->Enable(false);
+    m_pPageStartNF->SetValue(lcl_GetCurrentPage(mpSh));
     Link aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
-    aDocumentStartRB.SetClickHdl(aStartPageHdl);
-    aPageStartRB.SetClickHdl(aStartPageHdl);
+    m_pDocumentStartRB->SetClickHdl(aStartPageHdl);
+    m_pPageStartRB->SetClickHdl(aStartPageHdl);
 
     if (bMaybeResetNumbering && nResetPage > 0)
     {
-        aRestartNumberingCB.Check();
-        aRestartNumberingNF.SetValue(nResetPage);
+        m_pRestartNumberingCB->Check();
+        m_pRestartNumberingNF->SetValue(nResetPage);
     }
-    aRestartNumberingNF.Enable(aRestartNumberingCB.IsChecked());
+    m_pRestartNumberingNF->Enable(m_pRestartNumberingCB->IsChecked());
 
-    aSetPageNumberNF.SetValue(nSetPage);
+    m_pSetPageNumberNF->SetValue(nSetPage);
     if (nSetPage > 1)
-        aSetPageNumberCB.Check();
-    aSetPageNumberNF.Enable(aSetPageNumberCB.IsChecked());
+        m_pSetPageNumberCB->Check();
+    m_pSetPageNumberNF->Enable(m_pSetPageNumberCB->IsChecked());
 
     FillList();
-    aPagePropertiesPB.SetClickHdl(LINK(this, SwTitlePageDlg, EditHdl));
+    m_pPagePropertiesPB->SetClickHdl(LINK(this, SwTitlePageDlg, EditHdl));
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, UpHdl)
 {
-    if (aPageCountNF.GetValue() == 2)
+    if (m_pPageCountNF->GetValue() == 2)
         FillList();
     return 0;
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, DownHdl)
 {
-    if (aPageCountNF.GetValue() == 1)
+    if (m_pPageCountNF->GetValue() == 1)
         FillList();
     return 0;
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, RestartNumberingHdl)
 {
-    aRestartNumberingNF.Enable(aRestartNumberingCB.IsChecked());
+    m_pRestartNumberingNF->Enable(m_pRestartNumberingCB->IsChecked());
     return 0;
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, SetPageNumberHdl)
 {
-    aSetPageNumberNF.Enable(aSetPageNumberCB.IsChecked());
+    m_pSetPageNumberNF->Enable(m_pSetPageNumberCB->IsChecked());
     return 0;
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl)
 {
-    aPageStartNF.Enable(aPageStartRB.IsChecked());
+    m_pPageStartNF->Enable(m_pPageStartRB->IsChecked());
     return 0;
 }
 
@@ -292,7 +273,7 @@ SwTitlePageDlg::~SwTitlePageDlg()
 IMPL_LINK( SwTitlePageDlg, EditHdl, Button *, /*pBtn*/ )
 {
     SwView& rView = mpSh->GetView();
-    rView.GetDocShell()->FormatPage(aPagePropertiesLB.GetSelectEntry(), false, mpSh);
+    rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectEntry(), false, mpSh);
     rView.InvalidateRulerPos();
 
     return 0;
@@ -306,13 +287,13 @@ IMPL_LINK( SwTitlePageDlg, OKHdl, Button *, /*pBtn*/ )
 
     SwFmtPageDesc aTitleDesc(mpTitleDesc);
 
-    if (aSetPageNumberCB.IsChecked())
-        aTitleDesc.SetNumOffset(aSetPageNumberNF.GetValue());
+    if (m_pSetPageNumberCB->IsChecked())
+        aTitleDesc.SetNumOffset(m_pSetPageNumberNF->GetValue());
     else if (mpPageFmtDesc)
         aTitleDesc.SetNumOffset(mpPageFmtDesc->GetNumOffset());
 
-    sal_uInt16 nNoPages = aPageCountNF.GetValue();
-    if (!aUseExistingPagesRB.IsChecked())
+    sal_uInt16 nNoPages = m_pPageCountNF->GetValue();
+    if (!m_pUseExistingPagesRB->IsChecked())
     {
         mpSh->GotoPage(GetInsertPosition(), false);
         for (sal_uInt16 nI=0; nI < nNoPages; ++nI)
@@ -335,9 +316,9 @@ IMPL_LINK( SwTitlePageDlg, OKHdl, Button *, /*pBtn*/ )
         mpSh->SetAttr(aPageFmtDesc);
     }
 
-    if (aRestartNumberingCB.IsChecked() || nNoPages > 1)
+    if (m_pRestartNumberingCB->IsChecked() || nNoPages > 1)
     {
-        sal_uInt16 nPgNo = aRestartNumberingCB.IsChecked() ? aRestartNumberingNF.GetValue() : 0;
+        sal_uInt16 nPgNo = m_pRestartNumberingCB->IsChecked() ? m_pRestartNumberingNF->GetValue() : 0;
         const SwPageDesc *pNewDesc = nNoPages > 1 ? mpNormalDesc : 0;
         mpSh->GotoPage(GetInsertPosition() + nNoPages, false);
         lcl_ChangePage(mpSh, nPgNo, pNewDesc);
@@ -345,7 +326,7 @@ IMPL_LINK( SwTitlePageDlg, OKHdl, Button *, /*pBtn*/ )
 
     mpSh->EndUndo();
     lcl_PopCursor(mpSh);
-    if (!aUseExistingPagesRB.IsChecked())
+    if (!m_pUseExistingPagesRB->IsChecked())
         mpSh->GotoPage(GetInsertPosition(), false);
     EndDialog( RET_OK );
     return 0;

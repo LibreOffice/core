@@ -27,20 +27,8 @@ import java.util.ArrayList;
  *
  *  <p>TODO - Add appropriate exceptions to each of the methods.</p>
  *
- *  @author  Mark Murnane
  */
 public abstract class SpreadsheetEncoder {
-
-
-    /**
-     *  Creates new SpreadsheetEncoder.
-     *
-     *  @param  name      The name of the WorkBook to be created.
-     *  @param  password  An optional password for the WorkBook.
-     *
-     *  @throws  IOException  If any I/O error occurs.
-     */
-    public SpreadsheetEncoder(String name, String password) throws IOException { }
 
 
     /**

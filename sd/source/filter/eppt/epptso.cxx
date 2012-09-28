@@ -73,8 +73,6 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/extract.hxx>
 #include <cppuhelper/proptypehlp.hxx>
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <toolkit/unohlp.hxx>
 #include <rtl/crc.h>
 #include <sot/clsids.hxx>

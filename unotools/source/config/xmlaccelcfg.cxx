@@ -38,7 +38,7 @@ using ::rtl::OUString;
 
 #define ATTRIBUTE_TYPE_CDATA        "CDATA"
 
-// ------------------------------------------------------------------
+namespace {
 
 struct AttributeListImpl_impl;
 class AttributeListImpl : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XAttributeList >
@@ -60,7 +60,6 @@ public:
 
 public:
     void addAttribute( const ::rtl::OUString &sName , const ::rtl::OUString &sType , const ::rtl::OUString &sValue );
-    void clear();
 
 private:
     struct AttributeListImpl_impl *m_pImpl;
@@ -177,15 +176,7 @@ void AttributeListImpl::addAttribute(   const OUString &sName ,
     m_pImpl->vecAttribute.push_back( TagAttribute( sName , sType , sValue ) );
 }
 
-void AttributeListImpl::clear()
-{
-    ::std::vector<struct TagAttribute> dummy;
-    m_pImpl->vecAttribute.swap( dummy );
-
-    OSL_ASSERT( ! getLength() );
-}
-
-// ------------------------------------------------------------------
+} // anonymous namespace
 
 Any SAL_CALL OReadAccelatorDocumentHandler::queryInterface( const Type & rType ) throw( RuntimeException )
 {

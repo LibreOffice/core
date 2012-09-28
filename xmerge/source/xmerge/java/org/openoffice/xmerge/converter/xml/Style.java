@@ -27,7 +27,6 @@ import org.w3c.dom.NamedNodeMap;
  *  <code>Style</code>, such as <code>TextStyle</code>,
  *  <code>ParaStyle</code> are used.
  *
- *  @author   David Proulx
  *  @see <a href="TextStyle.html">TextStyle</a>
  *  @see <a href="ParaStyle.html">ParaStyle</a>
  */

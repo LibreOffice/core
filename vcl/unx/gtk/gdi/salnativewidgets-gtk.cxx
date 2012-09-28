@@ -111,6 +111,8 @@ struct NWFWidgetData
     GtkWidget *  gHScale;
     GtkWidget *  gVScale;
     GtkWidget *  gSeparator;
+    GtkWidget *  gDialog;
+    GtkWidget *  gFrame;
 
     NWPixmapCacheList* gNWPixmapCacheList;
     NWPixmapCache* gCacheTabItems;
@@ -150,6 +152,8 @@ struct NWFWidgetData
         gHScale( NULL ),
         gVScale( NULL ),
         gSeparator( NULL ),
+        gDialog( NULL ),
+        gFrame( NULL ),
         gNWPixmapCacheList( NULL ),
         gCacheTabItems( NULL ),
         gCacheTabPages( NULL )
@@ -192,6 +196,8 @@ static void NWEnsureGTKToolbar           ( SalX11Screen nScreen );
 static void NWEnsureGTKMenubar           ( SalX11Screen nScreen );
 static void NWEnsureGTKMenu              ( SalX11Screen nScreen );
 static void NWEnsureGTKTooltip           ( SalX11Screen nScreen );
+static void NWEnsureGTKDialog            ( SalX11Screen nScreen );
+static void NWEnsureGTKFrame             ( SalX11Screen nScreen );
 static void NWEnsureGTKProgressBar       ( SalX11Screen nScreen );
 static void NWEnsureGTKTreeView          ( SalX11Screen nScreen );
 static void NWEnsureGTKSlider            ( SalX11Screen nScreen );
@@ -490,6 +496,8 @@ void GtkData::deInitNWF( void )
             gtk_widget_destroy( gWidgetData[i].gMenuWidget );
         if( gWidgetData[i].gTooltipPopup )
             gtk_widget_destroy( gWidgetData[i].gTooltipPopup );
+        if( gWidgetData[i].gDialog )
+            gtk_widget_destroy( gWidgetData[i].gDialog );
         delete gWidgetData[i].gCacheTabPages;
         gWidgetData[i].gCacheTabPages = NULL;
         delete gWidgetData[i].gCacheTabItems;
@@ -1123,12 +1131,14 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         NWEnsureGTKRadio( m_nXScreen );
         NWEnsureGTKCheck( m_nXScreen );
         GtkWidget* widget = (nType == CTRL_RADIOBUTTON) ? gWidgetData[m_nXScreen].gRadioWidget : gWidgetData[m_nXScreen].gCheckWidget;
-        gint indicator_size, indicator_spacing;
+        gint indicator_size, indicator_spacing, focusPad, focusWidth;
         gtk_widget_style_get( widget,
                               "indicator_size", &indicator_size,
                               "indicator_spacing", &indicator_spacing,
+                              "focus-line-width", &focusWidth,
+                              "focus-padding", &focusPad,
                               (char *)NULL);
-        indicator_size += 2*indicator_spacing; // guess overpaint of theme
+        indicator_size += 2*indicator_spacing + 2*(focusWidth + focusWidth);
         rNativeBoundingRegion = rControlRegion;
         Rectangle aIndicatorRect( Point( 0,
                                          (rControlRegion.GetHeight()-indicator_size)/2),
@@ -1948,11 +1958,17 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     GTK_WIDGET(scrollbarWidget)->allocation.width = w;
     GTK_WIDGET(scrollbarWidget)->allocation.height = h;
 
+    bool backwardButtonInsensitive =
+        pScrollbarVal->mnCur == pScrollbarVal->mnMin;
+    bool forwardButtonInsensitive = pScrollbarVal->mnMax == 0 ||
+        pScrollbarVal->mnCur + pScrollbarVal->mnVisibleSize >= pScrollbarVal->mnMax;
+
     // ----------------- BUTTON 1 //
     if ( has_backward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
-        if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
+        if ( backwardButtonInsensitive )
+            stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType,
                        gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button11BoundRect.Left(), y+vShim+button11BoundRect.Top(),
@@ -1967,7 +1983,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     if ( has_forward2 )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
-        if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
+        if ( forwardButtonInsensitive )
+            stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType,
                        gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button12BoundRect.Left(), y+vShim+button12BoundRect.Top(),
@@ -1983,7 +2000,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     if ( has_backward2 )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
-        if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
+        if ( backwardButtonInsensitive )
+            stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
                        GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button21BoundRect.Left(), y+vShim+button21BoundRect.Top(),
@@ -1998,7 +2016,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     if ( has_forward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
-        if ( stateType == GTK_STATE_INSENSITIVE )    stateType = GTK_STATE_NORMAL;
+        if ( forwardButtonInsensitive )
+            stateType = GTK_STATE_INSENSITIVE;
         gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
                        GTK_WIDGET(scrollbarWidget), scrollbarTag,
                        x+hShim+button22BoundRect.Left(), y+vShim+button22BoundRect.Top(),
@@ -3690,12 +3709,25 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     GtkSettings* pSettings = gtk_widget_get_settings( m_pWindow );
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
+    guint latest_fontconfig_timestamp = 0;
+    static guint our_fontconfig_timestamp = 0;
+    g_object_get( pSettings, "gtk-fontconfig-timestamp", &latest_fontconfig_timestamp, (char *)NULL );
+    if (latest_fontconfig_timestamp != our_fontconfig_timestamp)
+    {
+        bool bFirstTime = our_fontconfig_timestamp == 0;
+        our_fontconfig_timestamp = latest_fontconfig_timestamp;
+        if (!bFirstTime)
+            psp::PrintFontManager::get().initialize();
+    }
+
     // get the widgets in place
     NWEnsureGTKMenu( m_nXScreen );
     NWEnsureGTKMenubar( m_nXScreen );
     NWEnsureGTKScrollbars( m_nXScreen );
     NWEnsureGTKEditBox( m_nXScreen );
     NWEnsureGTKTooltip( m_nXScreen );
+    NWEnsureGTKDialog( m_nXScreen );
+    NWEnsureGTKFrame( m_nXScreen );
 
 #if OSL_DEBUG_LEVEL > 2
     printStyleColors( pStyle );
@@ -3716,6 +3748,22 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nXScreen].gTooltipPopup );
     aTextColor = getColor( pTooltipStyle->fg[ GTK_STATE_NORMAL ] );
     aStyleSet.SetHelpTextColor( aTextColor );
+
+    DialogStyle aDialogStyle(aStyleSet.GetDialogStyle());
+    gtk_widget_style_get (gWidgetData[m_nXScreen].gDialog,
+        "content-area-border", &aDialogStyle.content_area_border,
+        "content-area-spacing", &aDialogStyle.content_area_spacing,
+        "button-spacing", &aDialogStyle.button_spacing,
+        "action-area-border", &aDialogStyle.action_area_border,
+        NULL);
+    aStyleSet.SetDialogStyle(aDialogStyle);
+
+    FrameStyle aFrameStyle(aStyleSet.GetFrameStyle());
+    aFrameStyle.left = aFrameStyle.right =
+        gWidgetData[m_nXScreen].gFrame->style->xthickness;
+    aFrameStyle.top = aFrameStyle.bottom =
+        gWidgetData[m_nXScreen].gFrame->style->ythickness;
+    aStyleSet.SetFrameStyle(aFrameStyle);
 
     // mouse over text colors
     aTextColor = getColor( pStyle->fg[ GTK_STATE_PRELIGHT ] );
@@ -4388,6 +4436,29 @@ static void NWEnsureGTKTooltip( SalX11Screen nScreen )
         gtk_widget_set_name( gWidgetData[nScreen].gTooltipPopup, "gtk-tooltips");
         gtk_widget_realize( gWidgetData[nScreen].gTooltipPopup );
         gtk_widget_ensure_style( gWidgetData[nScreen].gTooltipPopup );
+    }
+}
+
+static void NWEnsureGTKDialog( SalX11Screen nScreen )
+{
+    if( !gWidgetData[nScreen].gDialog )
+    {
+        gWidgetData[nScreen].gDialog = gtk_dialog_new();
+        GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(),
+                                                     nScreen.getXScreen() );
+        if( pScreen )
+            gtk_window_set_screen( GTK_WINDOW(gWidgetData[nScreen].gDialog), pScreen );
+        gtk_widget_realize(gWidgetData[nScreen].gDialog);
+        gtk_widget_ensure_style(gWidgetData[nScreen].gDialog);
+    }
+}
+
+static void NWEnsureGTKFrame( SalX11Screen nScreen )
+{
+    if( !gWidgetData[nScreen].gFrame )
+    {
+        gWidgetData[nScreen].gFrame = gtk_frame_new(NULL);
+        NWAddWidgetToCacheWindow( gWidgetData[nScreen].gFrame, nScreen );
     }
 }
 

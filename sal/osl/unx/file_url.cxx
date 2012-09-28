@@ -633,7 +633,6 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
 {
     FileBase::RC  rc;
     rtl::OUString unresolved_path;
-    static char *allow_symlinks = getenv( "SAL_ALLOW_LINKOO_SYMLINKS" );
 
     rc = FileBase::getSystemPathFromFileURL(rtl::OUString(ustrRelativeURL), unresolved_path);
 
@@ -656,6 +655,8 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
 
     rtl::OUString resolved_path;
 
+    static bool allow_symlinks = getenv("SAL_ALLOW_LINKOO_SYMLINKS") != 0;
+        // getenv is not thread safe, so minimize use of result
     if (!allow_symlinks)
     {
         rc = (FileBase::RC) osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);

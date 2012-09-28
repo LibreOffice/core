@@ -40,11 +40,13 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <vcl/svapp.hxx>
 
@@ -113,7 +115,7 @@ Reference< embed::XStorage > lcl_createStorage(
     try
     {
         Reference< io::XStream > xStream(
-            ::ucbhelper::Content( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >()).openStream(),
+            ::ucbhelper::Content( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext()).openStream(),
             uno::UNO_QUERY );
 
         Reference< lang::XSingleServiceFactory > xStorageFact(
@@ -311,7 +313,7 @@ void SAL_CALL ChartModel::storeToURL(
             {
                 Reference< lang::XMultiServiceFactory > xFact( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
                 Reference< io::XStream > xStream(
-                    xFact->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile"))), uno::UNO_QUERY_THROW );
+                    io::TempFile::create(m_xContext), uno::UNO_QUERY_THROW );
                 Reference< io::XInputStream > xInputStream( xStream->getInputStream());
 
                 Reference< embed::XStorage > xStorage(

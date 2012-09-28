@@ -21,19 +21,10 @@
 #include <rtl/ustring.hxx>
 #include "oox/helper/attributelist.hxx"
 
-
-using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
-using ::rtl::OUString;
-
 namespace oox { namespace ppt {
 
-    BuildListContext::BuildListContext( FragmentHandler2& rParent,
-                const Reference< XFastAttributeList >& /*xAttribs*/,
-                TimeNodePtrList & aTimeNodeList)
+    BuildListContext::BuildListContext( FragmentHandler2& rParent )
         : FragmentHandler2( rParent )
-        , maTimeNodeList( aTimeNodeList )
         , mbInBldGraphic( false )
         ,   mbBuildAsOne( false )
     {

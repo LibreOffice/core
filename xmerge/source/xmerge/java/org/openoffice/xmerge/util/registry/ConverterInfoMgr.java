@@ -28,7 +28,6 @@ import java.io.*;
  *  manager can exist at a time.  It is final, so it may not be
  *  subclassed.
  *
- *  @author Brian Cameron
  */
 public final class ConverterInfoMgr {
 

@@ -32,18 +32,10 @@
  *
  *************************************************************************/
 
-import java.io.*;
-
-//  import com.sun.star.comp.helper.RegistryServiceFactory;
-//  import com.sun.star.comp.servicemanager.ServiceManager;
-//  import com.sun.star.lang.XMultiServiceFactory;
-//  import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XComponent;
 //  import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.*;
 import com.sun.star.util.Date;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.*;
 
 public class Sales

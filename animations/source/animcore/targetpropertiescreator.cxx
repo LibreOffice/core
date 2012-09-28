@@ -70,12 +70,12 @@ namespace animcore
         virtual uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode ) throw (uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw( uno::RuntimeException );
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException );
-        virtual uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( uno::RuntimeException );
+        virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException );
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( uno::RuntimeException );
+        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( uno::RuntimeException );
 
         // XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException);
 
     protected:
         ~TargetPropertiesCreator(); // we're a ref-counted UNO class. _We_ destroy ourselves.
@@ -95,15 +95,15 @@ namespace animcore
         return TargetPropertiesCreator::createInstance( rSMgr );
     }
 
-    ::rtl::OUString getImplementationName_TargetPropertiesCreator()
+    OUString getImplementationName_TargetPropertiesCreator()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
-    uno::Sequence< ::rtl::OUString > getSupportedServiceNames_TargetPropertiesCreator(void)
+    uno::Sequence< OUString > getSupportedServiceNames_TargetPropertiesCreator(void)
     {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+        uno::Sequence< OUString > aRet(1);
+        aRet.getArray()[0] = SERVICE_NAME;
         return aRet;
     }
 
@@ -342,7 +342,7 @@ namespace animcore
                             if( !(aAny >>= bVisible) )
                             {
                                 // try to extract string
-                                ::rtl::OUString aString;
+                                OUString aString;
                                 if( (aAny >>= aString) )
                                 {
                                     // we also take the strings "true" and "false",
@@ -461,28 +461,28 @@ namespace animcore
     }
 
     // XServiceInfo
-    ::rtl::OUString SAL_CALL TargetPropertiesCreator::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL TargetPropertiesCreator::getImplementationName() throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
-    sal_Bool SAL_CALL TargetPropertiesCreator::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
+    sal_Bool SAL_CALL TargetPropertiesCreator::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
         return ServiceName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(SERVICE_NAME));
     }
 
-    uno::Sequence< ::rtl::OUString > SAL_CALL TargetPropertiesCreator::getSupportedServiceNames()  throw( uno::RuntimeException )
+    uno::Sequence< OUString > SAL_CALL TargetPropertiesCreator::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+        uno::Sequence< OUString > aRet(1);
+        aRet[0] = SERVICE_NAME;
 
         return aRet;
     }
 
     // XServiceName
-    ::rtl::OUString SAL_CALL TargetPropertiesCreator::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL TargetPropertiesCreator::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+        return OUString( SERVICE_NAME );
     }
 
 } // namespace animcore

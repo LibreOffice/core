@@ -175,7 +175,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
     /* alloc memory */
     pPipe= __osl_createPipeImpl();
-    osl_incrementInterlockedCount(&(pPipe->m_Reference));
+    osl_atomic_increment(&(pPipe->m_Reference));
 
     /* build system pipe name */
     rtl_uString_assign(&temp, path);
@@ -266,7 +266,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
 void SAL_CALL osl_acquirePipe( oslPipe pPipe )
 {
-    osl_incrementInterlockedCount( &(pPipe->m_Reference) );
+    osl_atomic_increment( &(pPipe->m_Reference) );
 }
 
 void SAL_CALL osl_releasePipe( oslPipe pPipe )
@@ -276,7 +276,7 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
     if( 0 == pPipe )
         return;
 
-    if( 0 == osl_decrementInterlockedCount( &(pPipe->m_Reference) ) )
+    if( 0 == osl_atomic_decrement( &(pPipe->m_Reference) ) )
     {
         if( ! pPipe->m_bClosed )
             osl_closePipe( pPipe );
@@ -357,7 +357,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     pAcceptedPipe = __osl_createPipeImpl();
     OSL_ASSERT(pAcceptedPipe);
 
-    osl_incrementInterlockedCount(&(pAcceptedPipe->m_Reference));
+    osl_atomic_increment(&(pAcceptedPipe->m_Reference));
     rtl_uString_assign(&pAcceptedPipe->m_Name, pPipe->m_Name);
     pAcceptedPipe->m_File = pPipe->m_File;
 

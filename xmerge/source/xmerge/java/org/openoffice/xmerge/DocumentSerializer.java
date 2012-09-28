@@ -31,8 +31,6 @@ import java.io.IOException;
  *  createDocumentSerializer} method.  When it is constructed, a
  *  &quot;Office&quot; <code>Document</code> object is passed in to
  *  be used as input.</p>
- *
- *  @author  Herbie Ong
  *  @see     org.openoffice.xmerge.PluginFactory
  *  @see     org.openoffice.xmerge.DocumentSerializerFactory
  */

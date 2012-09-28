@@ -19,19 +19,19 @@
 
 $(eval $(call gb_Module_Module,writerperfect))
 
-ifneq (,$(filter YES,$(SYSTEM_LIBWPD))$(filter LIBWPD,$(BUILD_TYPE)))
-ifneq (,$(filter YES,$(SYSTEM_LIBWPS))$(filter LIBWPS,$(BUILD_TYPE)))
+ifneq (,$(SYSTEM_LIBWPD))
+ifneq (,$(SYSTEM_LIBWPS))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftwriter \
 ))
 endif
 endif
 
-ifneq (,$(filter YES,$(SYSTEM_LIBWPD))$(filter LIBWPD,$(BUILD_TYPE)))
-ifneq (,$(filter YES,$(SYSTEM_LIBWPG))$(filter LIBWPG,$(BUILD_TYPE)))
-ifneq (,$(filter YES,$(SYSTEM_LIBVISIO))$(filter LIBVISIO,$(BUILD_TYPE)))
-ifneq (,$(filter YES,$(SYSTEM_LIBCDR))$(filter LIBCDR,$(BUILD_TYPE)))
-ifneq (,$(filter YES,$(SYSTEM_LIBMSPUB))$(filter LIBMSPUB,$(BUILD_TYPE)))
+ifneq (,$(SYSTEM_LIBWPD))
+ifneq (,$(SYSTEM_LIBWPG))
+ifneq (,$(SYSTEM_LIBVISIO))
+ifneq (,$(SYSTEM_LIBCDR))
+ifneq (,$(SYSTEM_LIBMSPUB))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftdraw \
 ))
@@ -41,8 +41,8 @@ endif
 endif
 endif
 
-ifneq (,$(filter YES,$(SYSTEM_LIBWPD))$(filter LIBWPD,$(BUILD_TYPE)))
-ifneq (,$(filter YES,$(SYSTEM_LIBWPG))$(filter LIBWPG,$(BUILD_TYPE)))
+ifneq (,$(SYSTEM_LIBWPD))
+ifneq (,$(SYSTEM_LIBWPG))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	StaticLibrary_writerperfect \
 ))

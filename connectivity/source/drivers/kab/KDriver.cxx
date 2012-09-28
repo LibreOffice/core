@@ -311,7 +311,7 @@ KabDriver::KabDriver(
     if ( !m_xMSFactory.is() )
         throw NullPointerException();
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     try
     {
         Reference< XDesktop > xDesktop(
@@ -323,7 +323,7 @@ KabDriver::KabDriver(
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // --------------------------------------------------------------------------------
 void KabDriver::disposing()

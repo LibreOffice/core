@@ -171,8 +171,6 @@ protected:
 protected:
                             NumericFormatter();
 
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
-
     void                    FieldUp();
     void                    FieldDown();
     void                    FieldFirst();
@@ -213,11 +211,14 @@ public:
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
+    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
     sal_Bool                    IsValueModified() const;
     sal_Int64               GetCorrectedValue() const { return mnCorrectedValue; }
 
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
+
+    void take_properties(NumericFormatter &rOther);
 };
 
 // -------------------
@@ -238,8 +239,6 @@ protected:
 
 protected:
                             MetricFormatter();
-
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE sal_Bool     ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr );
@@ -273,11 +272,14 @@ public:
     void                    SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const;
     virtual sal_Int64       GetValue() const;
+    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
     using NumericFormatter::GetCorrectedValue;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
     void                    SetCustomConvertHdl( const Link& rLink ) { maCustomConvertLink = rLink; }
     const Link&             GetCustomConvertHdl() const { return maCustomConvertLink; }
+
+    void take_properties(MetricFormatter &rOther);
 };
 
 
@@ -292,7 +294,6 @@ private:
 
 protected:
                             CurrencyFormatter();
-    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
     SAL_DLLPRIVATE sal_Bool     ImplCurrencyReformat( const XubString& rStr, XubString& rOutStr );
 
 public:
@@ -304,6 +305,7 @@ public:
 
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
+    virtual XubString       CreateFieldText( sal_Int64 nValue ) const;
 };
 
 
@@ -519,12 +521,15 @@ public:
     virtual long            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
+    virtual Size            CalcMinimumSize() const;
+
     virtual void            Modify();
 
     virtual void            Up();
     virtual void            Down();
     virtual void            First();
     virtual void            Last();
+    virtual bool            set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 
@@ -545,6 +550,8 @@ public:
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+
+    virtual Size            CalcMinimumSize() const;
 
     virtual void            Modify();
 
@@ -592,6 +599,9 @@ public:
     static double           ConvertDoubleValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
                                                 MapUnit eInUnit, FieldUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
+
+    virtual bool            set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual void            take_properties(Window &rOther);
 };
 
 

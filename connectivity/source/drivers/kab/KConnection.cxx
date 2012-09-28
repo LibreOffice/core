@@ -63,7 +63,7 @@ void SAL_CALL KabConnection::release() throw()
 // -----------------------------------------------------------------------------
 void KabConnection::construct(const ::rtl::OUString&, const Sequence< PropertyValue >&) throw(SQLException)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     // create a KDE address book object
     m_pAddressBook = KABC::StdAddressBook::self();
@@ -71,7 +71,7 @@ void KabConnection::construct(const ::rtl::OUString&, const Sequence< PropertyVa
 // perharps we should analyze the URL to know whether the addressbook is local, over LDAP, etc...
 // perharps we should get some user and password information from "info" properties
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // XServiceInfo
 // --------------------------------------------------------------------------------

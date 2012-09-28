@@ -448,7 +448,7 @@ sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
     return bRet;
 }
 
-sal_Bool SwNode::IsInProtectSect() const
+bool SwNode::IsInProtectSect() const
 {
     const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
     const SwSectionNode* pSectNd = pNd->FindSectionNode();
@@ -613,7 +613,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                         if( n >= rFmts.size() )
                         {
                             OSL_ENSURE( !this, "Fly-Section aber kein Format gefunden" );
-                            return sal_False;
+                            return 0;
                         }
                     }
                 }

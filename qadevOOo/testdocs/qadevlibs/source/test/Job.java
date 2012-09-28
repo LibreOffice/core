@@ -17,7 +17,6 @@
  */
 package test;
 
-import com.sun.star.lang.XInitialization;
 import com.sun.star.task.XJob;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.beans.*;
@@ -25,19 +24,7 @@ import com.sun.star.container.*;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.Any;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XModel;
-import com.sun.star.util.XURLTransformer;
-import com.sun.star.frame.XController;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.URL;
 import com.sun.star.lang.XMultiServiceFactory;
-import util.utils;
-import com.sun.star.lang.XComponent;
-import lib.StatusException;
-import util.SOfficeFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;
 

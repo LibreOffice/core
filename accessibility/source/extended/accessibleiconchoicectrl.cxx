@@ -34,6 +34,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 //........................................................................
@@ -110,41 +111,35 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     // XServiceInfo
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_Static();
     }
     // -----------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames() throw (RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        const ::rtl::OUString* pSupported = aSupported.getConstArray();
-        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
-        for ( ; pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported )
-            ;
-
-        return pSupported != pEnd;
+        return cppu::supportsService(this, _rServiceName);
     }
     // -----------------------------------------------------------------------------
     // XServiceInfo - static methods
     // -----------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > AccessibleIconChoiceCtrl::getSupportedServiceNames_Static(void) throw (RuntimeException)
+    Sequence< OUString > AccessibleIconChoiceCtrl::getSupportedServiceNames_Static(void) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(3);
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleContext") );
-        aSupported[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleComponent") );
-        aSupported[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleIconChoiceControl") );
+        Sequence< OUString > aSupported(3);
+        aSupported[0] = "com.sun.star.accessibility.AccessibleContext";
+        aSupported[1] = "com.sun.star.accessibility.AccessibleComponent";
+        aSupported[2] = "com.sun.star.awt.AccessibleIconChoiceControl";
         return aSupported;
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString AccessibleIconChoiceCtrl::getImplementationName_Static(void) throw (RuntimeException)
+    OUString AccessibleIconChoiceCtrl::getImplementationName_Static(void) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svtools.AccessibleIconChoiceControl") );
+        return OUString( "com.sun.star.comp.svtools.AccessibleIconChoiceControl" );
     }
     // -----------------------------------------------------------------------------
     // XAccessible
@@ -191,7 +186,7 @@ namespace accessibility
         return AccessibleRole::TREE;
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleDescription(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleDescription(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -199,15 +194,15 @@ namespace accessibility
         return getCtrl()->GetAccessibleDescription();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleName(  ) throw (RuntimeException)
+    OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleName(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
         ensureAlive();
 
-        ::rtl::OUString sName = getCtrl()->GetAccessibleName();
+        OUString sName = getCtrl()->GetAccessibleName();
         if ( sName.isEmpty() )
-            sName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IconChoiceControl" ) );
+            sName = "IconChoiceControl";
         return sName;
     }
     // -----------------------------------------------------------------------------
@@ -255,10 +250,9 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 i, nCount = 0;
         SvtIconChoiceCtrl* pCtrl = getCtrl();
-        nCount = pCtrl->GetEntryCount();
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = pCtrl->GetEntryCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
             if ( pCtrl->GetCursor() != pEntry )
@@ -272,10 +266,10 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 i, nSelCount = 0, nCount = 0;
+        sal_Int32 nSelCount = 0;
         SvtIconChoiceCtrl* pCtrl = getCtrl();
-        nCount = pCtrl->GetEntryCount();
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = pCtrl->GetEntryCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
             if ( pCtrl->GetCursor() == pEntry )
@@ -295,10 +289,10 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         Reference< XAccessible > xChild;
-        sal_Int32 i, nSelCount = 0, nCount = 0;
+        sal_Int32 nSelCount = 0;
         SvtIconChoiceCtrl* pCtrl = getCtrl();
-        nCount = pCtrl->GetEntryCount();
-        for ( i = 0; i < nCount; ++i )
+        sal_Int32 nCount = pCtrl->GetEntryCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
             if ( pCtrl->GetCursor() == pEntry )
@@ -324,11 +318,11 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         Reference< XAccessible > xChild;
-        sal_Int32 i, nSelCount = 0, nCount = 0;
+        sal_Int32 nSelCount = 0;
         SvtIconChoiceCtrl* pCtrl = getCtrl();
-        nCount = pCtrl->GetEntryCount();
+        sal_Int32 nCount = pCtrl->GetEntryCount();
         bool bFound = false;
-        for ( i = 0; i < nCount; ++i )
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry( i );
             if ( pEntry->IsSelected() )

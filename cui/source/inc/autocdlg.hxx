@@ -223,8 +223,17 @@ struct DoubleString
     String  sLong;
     void*   pUserData; ///< CheckBox -> form. Text Bool -> selection text
 };
+
 typedef std::vector<DoubleString> DoubleStringArray;
 typedef std::map<LanguageType, DoubleStringArray> DoubleStringTable;
+
+struct StringChangeList
+{
+    DoubleStringArray aNewEntries;
+    DoubleStringArray aDeletedEntries;
+};
+
+typedef std::map<LanguageType, StringChangeList> StringChangeTable;
 
 class OfaAutocorrReplacePage : public SfxTabPage
 {
@@ -233,7 +242,8 @@ class OfaAutocorrReplacePage : public SfxTabPage
 
 private:
 
-        
+        StringChangeTable aChangesTable;
+
         CheckBox        aTextOnlyCB;
         FixedText       aShortFT;
         AutoCorrEdit    aShortED;
@@ -252,32 +262,33 @@ private:
         CharClass*              pCharClass;
         LanguageType            eLang;
 
-        sal_Bool            bHasSelectionText;
-        sal_Bool            bFirstSelect:1;
-        sal_Bool            bReplaceEditChanged:1;
-        sal_Bool            bSWriter:1;
+        sal_Bool bHasSelectionText;
+        sal_Bool bFirstSelect:1;
+        sal_Bool bReplaceEditChanged:1;
+        sal_Bool bSWriter:1;
 
         DECL_LINK(SelectHdl, SvTabListBox*);
         DECL_LINK(NewDelHdl, PushButton*);
         DECL_LINK(ModifyHdl, Edit*);
 
-        void            RefillReplaceBox(sal_Bool bFromReset,
-                                        LanguageType eOldLanguage,
-                                        LanguageType eNewLanguage);
+        void RefillReplaceBox(  sal_Bool bFromReset,
+                                LanguageType eOldLanguage,
+                                LanguageType eNewLanguage);
 
 public:
                         OfaAutocorrReplacePage( Window* pParent, const SfxItemSet& rSet );
                         ~OfaAutocorrReplacePage();
 
-    static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
-    void                SetLanguage(LanguageType eSet);
+    void    SetLanguage(LanguageType eSet);
+    void    DeleteEntry(String sShort, String sLong);
+    void    NewEntry(String sShort, String sLong);
 };
 
 // class OfaAutocorrExceptPage ---------------------------------------------

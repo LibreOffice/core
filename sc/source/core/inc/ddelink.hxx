@@ -42,18 +42,18 @@ class SvStream;
 class ScDdeLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
 {
 private:
-static sal_Bool bIsInUpdate;
+static bool bIsInUpdate;
 
     ScDocument*     pDoc;
 
-    String          aAppl;          // Verbindungsdaten
+    String          aAppl;          // connection/ link data
     String          aTopic;
     String          aItem;
-    sal_uInt8           nMode;          // Zahlformat-Modus
+    sal_uInt8       nMode;          // number format mode
 
-    sal_Bool            bNeedUpdate;    // wird gesetzt, wenn Update nicht moeglich war
+    bool            bNeedUpdate;    // is set, if update was not possible
 
-    ScMatrixRef     pResult;        // Ergebnis
+    ScMatrixRef     pResult;
 
 public:
     TYPEINFO();
@@ -67,33 +67,32 @@ public:
 
     void            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
-                                            // von SvBaseLink ueberladen:
+                    // overloaded by SvBaseLink:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
-                                            // von SvtBroadcaster ueberladen:
+                    // overloaded by SvtBroadcaster:
     virtual void    ListenersGone();
 
-                                            // fuer Interpreter:
+                    // for interpreter:
 
     const ScMatrix* GetResult() const           { return pResult.get(); }
     void            SetResult( ScMatrixRef pRes ) { pResult = pRes; }
 
-                                            // XML and Excel import after NewData()
+                    // XML and Excel import after NewData()
     ScMatrixRef     GetModifiableResult()   { return pResult; }
 
     const String&   GetAppl() const     { return aAppl; }
     const String&   GetTopic() const    { return aTopic; }
     const String&   GetItem() const     { return aItem; }
-    sal_uInt8           GetMode() const     { return nMode; }
+    sal_uInt8       GetMode() const     { return nMode; }
 
     void            TryUpdate();
 
-    sal_Bool            NeedsUpdate() const { return bNeedUpdate; }
+    bool            NeedsUpdate() const { return bNeedUpdate; }
 
-    static sal_Bool     IsInUpdate()        { return bIsInUpdate; }
+    static bool     IsInUpdate()        { return bIsInUpdate; }
 };
-
 
 #endif
 

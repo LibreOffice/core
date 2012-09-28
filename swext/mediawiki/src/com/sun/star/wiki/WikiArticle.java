@@ -18,7 +18,6 @@
 
 package com.sun.star.wiki;
 
-import com.sun.star.task.UrlRecord;
 import java.io.*;
 import java.util.Hashtable;
 import javax.swing.text.html.*;

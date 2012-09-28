@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,7 +49,7 @@
 
 #include <rtl/logfile.hxx>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
@@ -71,7 +72,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     try
     {
         uno::Reference < ucb::XSimpleFileAccess2 > xAccess(
-                ucb::SimpleFileAccess::create( comphelper::ComponentContext(xFactory).getUNOContext() ) );
+                ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
         xAccess->kill( aURL );
         bRet = sal_True;
@@ -91,11 +92,8 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     ::rtl::OUString aResult;
 
     uno::Reference < beans::XPropertySet > xTempFile(
-            xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
-            uno::UNO_QUERY );
-
-    if ( !xTempFile.is() )
-        throw uno::RuntimeException(); // TODO
+            io::TempFile::create(comphelper::getComponentContext(xFactory)),
+            uno::UNO_QUERY_THROW );
 
     try {
         xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RemoveFile" )), uno::makeAny( sal_False ) );
@@ -126,7 +124,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     {
         try {
             uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
-                    ucb::SimpleFileAccess::create( comphelper::ComponentContext(xFactory).getUNOContext() ) );
+                    ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
             uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aResult );
             if ( xTempOutStream.is() )
@@ -172,7 +170,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     try
     {
         uno::Reference < beans::XPropertySet > xTempFile(
-                xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
+                io::TempFile::create(comphelper::getComponentContext(xFactory)),
                 uno::UNO_QUERY );
         uno::Reference < io::XStream > xTempStream( xTempFile, uno::UNO_QUERY_THROW );
 
@@ -278,7 +276,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( co
     OSL_ENSURE( xInStream.is(), "Wrong parameter is provided!\n" );
 
     uno::Reference < io::XStream > xTempFile(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
+            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
             uno::UNO_QUERY_THROW );
 
     uno::Reference< io::XOutputStream > xTempOutStream = xTempFile->getOutputStream();
@@ -355,7 +353,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
     {
         // this is either a bitmap or a metafile clipboard format, retrieve the pure stream
         uno::Reference < io::XStream > xResult(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
+            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
             uno::UNO_QUERY_THROW );
         uno::Reference < io::XSeekable > xResultSeek( xResult, uno::UNO_QUERY_THROW );
         uno::Reference < io::XOutputStream > xResultOut = xResult->getOutputStream();
@@ -403,7 +401,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         xCachedSeek->seek( 0 );
 
     uno::Reference < io::XStream > xTempFile(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
+            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
             uno::UNO_QUERY_THROW );
 
     uno::Reference< io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
@@ -589,7 +587,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
                 {
                     // open temporary file for reading
                     uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
-                            ucb::SimpleFileAccess::create( comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
+                            ucb::SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
 
                     xStream = xTempAccess->openFileRead( m_aTempURL );
                 }
@@ -1055,7 +1053,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
 
     // open temporary file for reading
     uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
-            ucb::SimpleFileAccess::create( comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
+            ucb::SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
 
     uno::Reference< io::XInputStream > xTempInStream = xTempAccess->openFileRead( m_aTempURL );
     OSL_ENSURE( xTempInStream.is(), "The object's temporary file can not be reopened for reading!\n" );

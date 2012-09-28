@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cassert>
 #include <stdlib.h>
 #include <time.h>
 
@@ -67,9 +70,11 @@
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -444,40 +449,35 @@ OUString GetModuleName( const OUString& aModuleId )
     return ::rtl::OUString();
 }
 
-OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::frame::XModuleManager >& rModuleManager )
+OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::frame::XModuleManager2 >& rModuleManager )
 {
+    assert(rModuleManager.is());
+
     OUString aModuleUIName;
 
-    if ( rModuleManager.is() )
+    try
     {
-        uno::Reference< css::container::XNameAccess > xNameAccess( rModuleManager, uno::UNO_QUERY );
-        if ( xNameAccess.is() )
-        {
-            try
-            {
-                uno::Any a = xNameAccess->getByName( aModuleId );
-                uno::Sequence< beans::PropertyValue > aSeq;
+        uno::Any a = rModuleManager->getByName( aModuleId );
+        uno::Sequence< beans::PropertyValue > aSeq;
 
-                if ( a >>= aSeq )
+        if ( a >>= aSeq )
+        {
+            for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
+            {
+                if ( aSeq[i].Name == "ooSetupFactoryUIName" )
                 {
-                    for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
-                    {
-                        if ( aSeq[i].Name == "ooSetupFactoryUIName" )
-                        {
-                            aSeq[i].Value >>= aModuleUIName;
-                            break;
-                        }
-                    }
+                    aSeq[i].Value >>= aModuleUIName;
+                    break;
                 }
             }
-            catch ( uno::RuntimeException& )
-            {
-                throw;
-            }
-            catch ( uno::Exception& )
-            {
-            }
         }
+    }
+    catch ( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch ( uno::Exception& )
+    {
     }
 
     if ( aModuleUIName.isEmpty() )
@@ -766,17 +766,17 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER ("com.sun.star.frame.ModuleManager" );
     static ::rtl::OUString SERVICENAME_DESKTOP       ("com.sun.star.frame.Desktop"            );
     static ::rtl::OUString MODULEID_STARTMODULE      ("com.sun.star.frame.StartModule"        );
 
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::uno::XComponentContext > xContext   = ::comphelper::getProcessComponentContext();
         css::uno::Reference< css::frame::XFramesSupplier >     xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::frame::XModuleManager >     xMM     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 >      xMM     (css::frame::ModuleManager::create(xContext));
 
-        if (xMM.is() && xFrame.is())
+        if (xFrame.is())
         {
             ::rtl::OUString sModuleId = xMM->identify(xFrame);
             if (
@@ -913,12 +913,10 @@ SaveInData::SaveInData(
         ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
 
     uno::Reference< container::XNameAccess > xNameAccess(
-        m_xServiceManager->createInstance(
-            OUString( "com.sun.star.frame.UICommandDescription"  ) ),
-        uno::UNO_QUERY );
+        css::frame::UICommandDescription::create(
+            comphelper::getComponentContext(m_xServiceManager)) );
 
-    if ( xNameAccess.is() )
-        xNameAccess->getByName( aModuleId ) >>= m_xCommandToLabelMap;
+    xNameAccess->getByName( aModuleId ) >>= m_xCommandToLabelMap;
 
     if ( !m_xImgMgr.is() )
     {
@@ -1665,15 +1663,15 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW );
 
         m_xFrame = GetFrame();
         OUString aModuleId = GetFrameWithDefaultAndIdentify( m_xFrame );
 
         // replace %MODULENAME in the label with the correct module name
-        uno::Reference< css::frame::XModuleManager > xModuleManager(
-            xServiceManager->createInstance(
-                OUString( "com.sun.star.frame.ModuleManager"  ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< css::frame::XModuleManager2 > xModuleManager(
+            css::frame::ModuleManager::create( xContext ));
         OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();
@@ -1688,9 +1686,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         }
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
-            xModuleCfgSupplier( xServiceManager->createInstance(
-                OUString( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" )),
-            uno::UNO_QUERY );
+            xModuleCfgSupplier( css::ui::ModuleUIConfigurationManagerSupplier::create(xContext) );
 
         // Set up data for module specific menus
         SaveInData* pModuleData = NULL;
@@ -1917,10 +1913,8 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             return sModuleID;
         }
 
-        uno::Reference< css::frame::XModuleManager > xModuleManager(
-            xServiceManager->createInstance(
-                OUString( "com.sun.star.frame.ModuleManager"  ) ),
-            uno::UNO_QUERY_THROW );
+        uno::Reference< css::frame::XModuleManager2 > xModuleManager(
+                css::frame::ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) );
 
         try
         {

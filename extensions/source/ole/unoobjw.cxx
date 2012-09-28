@@ -43,6 +43,7 @@
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/script/FailReason.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/ParamInfo.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -53,6 +54,7 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <osl/interlck.h>
 #include <com/sun/star/uno/genfunc.h>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include "comifaces.hxx"
@@ -1120,27 +1122,23 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             sal_Bool bStruct= sal_False;
 
 
-            Reference<XInterface> xIntCore= m_smgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")));
-            Reference<XIdlReflection> xRefl( xIntCore, UNO_QUERY);
-            if( xRefl.is() )
+            Reference<XIdlReflection> xRefl = theCoreReflection::get(comphelper::getComponentContext(m_smgr));
+            // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
+            CComVariant arg;
+            if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
             {
-                // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
-                CComVariant arg;
-                if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
+                Reference<XIdlClass> classStruct= xRefl->forName( reinterpret_cast<const sal_Unicode*>(arg.bstrVal));
+                if( classStruct.is())
                 {
-                    Reference<XIdlClass> classStruct= xRefl->forName( reinterpret_cast<const sal_Unicode*>(arg.bstrVal));
-                    if( classStruct.is())
-                    {
-                        Any anyStruct;
-                        classStruct->createObject( anyStruct);
-                        CComVariant var;
-                        anyToVariant( &var, anyStruct );
+                    Any anyStruct;
+                    classStruct->createObject( anyStruct);
+                    CComVariant var;
+                    anyToVariant( &var, anyStruct );
 
-                        if( var.vt == VT_DISPATCH)
-                        {
-                            VariantCopy( pvarResult, & var);
-                            bStruct= sal_True;
-                        }
+                    if( var.vt == VT_DISPATCH)
+                    {
+                        VariantCopy( pvarResult, & var);
+                        bStruct= sal_True;
                     }
                 }
             }

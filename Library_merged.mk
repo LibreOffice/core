@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,merged,\
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
+	cups \
 	icui18n \
 	icule \
 	icuuc \
@@ -58,8 +59,10 @@ $(eval $(call gb_Library_use_externals,merged,\
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_use_externals,merged,\
 	hunspell \
+	expat_utf8 \
 ))
 $(eval $(call gb_Library_use_static_libraries,merged,\
+	sax_shared \
 	ulingu \
 ))
 $(eval $(call gb_Library_add_libs,merged,\
@@ -153,7 +156,6 @@ $(eval $(call gb_Library_add_libs,merged,\
 $(eval $(call gb_Library_use_externals,merged,\
 	fontconfig \
 	freetype \
-	expat_utf8 \
 ))
 endif
 
@@ -174,6 +176,12 @@ ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_externals,merged,\
 	gtk \
 	telepathy \
+))
+endif
+
+ifeq ($(ENABLE_DBUS),TRUE)
+$(eval $(call gb_Library_use_externals,merged,\
+	dbus \
 ))
 endif
 

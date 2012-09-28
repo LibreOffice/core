@@ -36,6 +36,8 @@
 #include <rtl/ref.hxx>
 
 #include <algorithm>
+#include <functional>
+#include <boost/bind.hpp>
 
 //......................................................................................................................
 namespace toolkit
@@ -99,7 +101,7 @@ namespace toolkit
     ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount() throw (::com::sun::star::uno::RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
-        return m_aData.size();
+        return impl_getRowCount_nolck();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -174,51 +176,82 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException)
+    Sequence< Any > SAL_CALL DefaultGridDataModel::getRowData( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        sal_Int32 const columnCount = i_data.getLength();
+        Sequence< Any > resultData( m_nColumnCount );
+        RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
 
-        // store header name
-        m_aRowHeaders.push_back( i_heading );
+        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(),
+                          boost::bind(&CellData::first,_1));
+        return resultData;
+    }
 
-        // store row m_aData
-        impl_addRow( i_data );
+    //------------------------------------------------------------------------------------------------------------------
+    void DefaultGridDataModel::impl_insertRow( sal_Int32 const i_position, Any const & i_heading, Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount )
+    {
+        OSL_PRECOND( ( i_assumedColCount <= 0 ) || ( i_assumedColCount >= i_rowData.getLength() ),
+            "DefaultGridDataModel::impl_insertRow: invalid column count!" );
+
+        // insert heading
+        m_aRowHeaders.insert( m_aRowHeaders.begin() + i_position, i_heading );
+
+        // create new data row
+        RowData newRow( i_assumedColCount > 0 ? i_assumedColCount : i_rowData.getLength() );
+        RowData::iterator cellData = newRow.begin();
+        for ( const Any* pData = stl_begin( i_rowData ); pData != stl_end( i_rowData ); ++pData, ++cellData )
+            cellData->first = *pData;
+
+        // insert data row
+        m_aData.insert( m_aData.begin() + i_position, newRow );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException)
+    {
+        insertRow( getRowCount(), i_heading, i_data );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, RuntimeException)
+    {
+        insertRows( getRowCount(), i_headings, i_data );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException, IndexOutOfBoundsException)
+    {
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+
+        if ( ( i_index < 0 ) || ( i_index > impl_getRowCount_nolck() ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+
+        // actually insert the row
+        impl_insertRow( i_index, i_heading, i_data );
 
         // update column count
+        sal_Int32 const columnCount = i_data.getLength();
         if ( columnCount > m_nColumnCount )
             m_nColumnCount = columnCount;
 
-        sal_Int32 const rowIndex = sal_Int32( m_aData.size() - 1 );
         broadcast(
-            GridDataEvent( *this, -1, -1, rowIndex, rowIndex ),
+            GridDataEvent( *this, -1, -1, i_index, i_index ),
             &XGridDataListener::rowsInserted,
             aGuard
         );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void DefaultGridDataModel::impl_addRow( Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount )
-    {
-        OSL_PRECOND( ( i_assumedColCount <= 0 ) || ( i_assumedColCount >= i_rowData.getLength() ),
-            "DefaultGridDataModel::impl_addRow: invalid column count!" );
-
-        RowData newRow( i_assumedColCount > 0 ? i_assumedColCount : i_rowData.getLength() );
-        RowData::iterator cellData = newRow.begin();
-        for ( const Any* pData = stl_begin( i_rowData ); pData != stl_end( i_rowData ); ++pData, ++cellData )
-            cellData->first = *pData;
-
-        m_aData.push_back( newRow );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, RuntimeException)
+    void SAL_CALL DefaultGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
     {
         if ( i_headings.getLength() != i_data.getLength() )
             throw IllegalArgumentException( ::rtl::OUString(), *this, -1 );
 
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+
+        if ( ( i_index < 0 ) || ( i_index > impl_getRowCount_nolck() ) )
+            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
         sal_Int32 const rowCount = i_headings.getLength();
         if ( rowCount == 0 )
@@ -235,17 +268,14 @@ namespace toolkit
 
         for ( sal_Int32 row=0; row<rowCount;  ++row )
         {
-            m_aRowHeaders.push_back( i_headings[row] );
-            impl_addRow( i_data[row], maxColCount );
+            impl_insertRow( i_index + row, i_headings[row], i_data[row], maxColCount );
         }
 
         if ( maxColCount > m_nColumnCount )
             m_nColumnCount = maxColCount;
 
-        sal_Int32 const firstRow = sal_Int32( m_aData.size() - rowCount );
-        sal_Int32 const lastRow = sal_Int32( m_aData.size() - 1 );
         broadcast(
-            GridDataEvent( *this, -1, -1, firstRow, lastRow ),
+            GridDataEvent( *this, -1, -1, i_index, i_index + rowCount - 1 ),
             &XGridDataListener::rowsInserted,
             aGuard
         );

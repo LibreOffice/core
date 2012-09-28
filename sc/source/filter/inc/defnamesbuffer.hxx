@@ -212,7 +212,6 @@ private:
     DefNameNameMap      maModelNameMap;     /// Maps all defined names by sheet index and model name.
     DefNameBuiltinMap   maBuiltinMap;       /// Maps all defined names by sheet index and built-in identifier.
     DefNameTokenIdMap   maTokenIdMap;       /// Maps all defined names by API token index.
-    sal_Int16           mnCalcSheet;        /// Current sheet index for BIFF2-BIFF4 names (always sheet-local).
 };
 
 // ============================================================================

@@ -18,8 +18,6 @@
 
 package org.openoffice.java.accessibility;
 
-import javax.accessibility.AccessibleState;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.accessibility.*;
@@ -480,11 +478,9 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                 try {
                     XAccessibleContext xAccessibleContext = unoAccessible.getAccessibleContext();
                     if (xAccessibleContext != null) {
-                                            javax.accessibility.AccessibleContext ac = new AccessibleTableCell(xAccessibleContext);
-                                            if (ac != null) {
-                                                ac.setAccessibleParent(Table.this);
-                                                accessibleContext = ac;
-                                            }
+                        javax.accessibility.AccessibleContext ac = new AccessibleTableCell(xAccessibleContext);
+                        ac.setAccessibleParent(Table.this);
+                        accessibleContext = ac;
                     }
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }

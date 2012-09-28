@@ -41,7 +41,6 @@ class SwFrmDlg : public SfxTabDialog
     sal_Bool                m_bFormat;
     sal_Bool                m_bNew;
     sal_Bool                m_bHTMLMode;
-    bool                m_bEnableVertPos;
     const SfxItemSet&   m_rSet;
     sal_uInt16              m_nDlgType;
     SwWrtShell*         m_pWrtShell;

@@ -52,6 +52,8 @@
 #define HELPDELAY_SHORT         2
 #define HELPDELAY_NONE          3
 
+#define HELPTEXTMAXLEN        150
+
 // =======================================================================
 
 Help::Help()
@@ -248,6 +250,15 @@ sal_Bool Help::ShowQuickHelp( Window* pParent,
 
 // -----------------------------------------------------------------------
 
+void Help::HideBalloonAndQuickHelp()
+{
+    HelpTextWindow const * pHelpWin = ImplGetSVData()->maHelpData.mpHelpWin;
+    bool const bIsVisible = ( pHelpWin != NULL ) && pHelpWin->IsVisible();
+    ImplDestroyHelpWindow( bIsVisible );
+}
+
+// -----------------------------------------------------------------------
+
 sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
                      const XubString& rText, sal_uInt16 nStyle )
 {
@@ -274,6 +285,7 @@ void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreen
         pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
 
     pHelpWin->SetHelpText( rText );
+    pHelpWin->Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -358,7 +370,7 @@ HelpTextWindow::~HelpTextWindow()
 void HelpTextWindow::SetHelpText( const String& rHelpText )
 {
     maHelpText = rHelpText;
-    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
+    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.Len() < HELPTEXTMAXLEN)
     {
         Size aSize;
         aSize.Height() = GetTextHeight();
@@ -420,7 +432,7 @@ void HelpTextWindow::Paint( const Rectangle& )
     }
 
     // paint text
-    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
+    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.Len() < HELPTEXTMAXLEN)
     {
         if ( mnStyle & QUICKHELP_CTRLTEXT )
             DrawCtrlText( maTextRect.TopLeft(), maHelpText );

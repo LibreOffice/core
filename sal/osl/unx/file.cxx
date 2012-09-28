@@ -831,27 +831,20 @@ static int osl_file_adjustLockFlags (const char * path, int flags)
 /****************************************************************************
  *  osl_file_queryLocking
  ***************************************************************************/
-struct Locking_Impl
+static bool osl_file_queryLocking (sal_uInt32 uFlags)
 {
-    int m_enabled;
-    Locking_Impl() : m_enabled(0)
+#if !defined HAVE_O_EXLOCK
+    if (!(uFlags & osl_File_OpenFlag_NoLock)
+        && ((uFlags & osl_File_OpenFlag_Write)
+            || (uFlags & osl_File_OpenFlag_Create)))
     {
-#ifndef HAVE_O_EXLOCK
-        m_enabled = (getenv("SAL_ENABLE_FILE_LOCKING") != 0);
-#endif /* HAVE_O_EXLOCK */
+        static bool enabled = getenv("SAL_ENABLE_FILE_LOCKING") != 0;
+            // getenv is not thread safe, so minimize use of result
+        return enabled;
     }
-};
-static int osl_file_queryLocking (sal_uInt32 uFlags)
-{
-    if (!(uFlags & osl_File_OpenFlag_NoLock))
-    {
-        if ((uFlags & osl_File_OpenFlag_Write) || (uFlags & osl_File_OpenFlag_Create))
-        {
-            static Locking_Impl g_locking;
-            return (g_locking.m_enabled != 0);
-        }
-    }
-    return 0;
+#endif
+    (void) uFlags;
+    return false;
 }
 
 #ifdef UNX

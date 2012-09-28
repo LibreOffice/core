@@ -113,6 +113,8 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
 
 #ifndef MACOSX
     N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)(sal_IntPtr)nTimeOut,SQL_IS_UINTEGER);
+#else
+    (void)nTimeOut; /* WaE */
 #endif
 
 #ifdef LINUX

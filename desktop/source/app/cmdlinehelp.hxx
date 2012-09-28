@@ -5,7 +5,7 @@
 
 namespace desktop
 {
-    void displayCmdlineHelp( void );
+    void displayCmdlineHelp( OUString const & unknown );
     void displayVersion();
 #ifndef UNX
     class CmdlineHelpDialog : public ModalDialog

@@ -51,7 +51,6 @@ import com.sun.star.wizards.ui.SortingComponent;
 import com.sun.star.wizards.ui.TitlesComponent;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
-import com.sun.star.wizards.ui.XCompletion;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
@@ -338,7 +337,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         // CurReportDocument.getDoc().xProgressBar.setValue(60);
         CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34346);
         // CurReportDocument.getDoc().xProgressBar.setValue(70);
-        CurReportLayouter = new ReportLayouter(xMSF, m_reportDocument, this);
+        CurReportLayouter = new ReportLayouter(xMSF, m_reportDocument, this, isReportBuilderInstalled());
         // CurReportDocument.getDoc().xProgressBar.setValue(80);
         CurReportFinalizer = new ReportFinalizer(xMSF, m_reportDocument, this);
         // CurReportDocument.getDoc().xProgressBar.setValue(100);
@@ -481,7 +480,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             {
                 buildSteps();
 
-                CurReportLayouter.drawConstants();
+                if(!isReportBuilderInstalled()) CurReportLayouter.drawConstants();
 
                 m_reportDocument.checkInvariants();
 

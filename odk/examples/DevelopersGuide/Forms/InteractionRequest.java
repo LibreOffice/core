@@ -32,7 +32,6 @@
  *
  *************************************************************************/
 
-import com.sun.star.uno.*;
 import com.sun.star.task.*;
 import java.util.Vector;
 

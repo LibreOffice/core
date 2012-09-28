@@ -32,7 +32,6 @@
  *
  *************************************************************************/
 
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
 
 // A helper class to determine the menu element type

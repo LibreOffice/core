@@ -42,7 +42,7 @@
 #include <svtools/transfer.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <sot/filelist.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
@@ -221,7 +221,7 @@ void DropTargetListener::implts_OpenFile( const String& rFilePath )
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XFrame >         xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
-    css::uno::Reference< css::util::XURLTransformer > xParser     ( css::util::URLTransformer::create(::comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+    css::uno::Reference< css::util::XURLTransformer > xParser     ( css::util::URLTransformer::create(::comphelper::getComponentContext(m_xFactory)) );
     aReadLock.unlock();
     /* } SAFE */
     if (xTargetFrame.is() && xParser.is())

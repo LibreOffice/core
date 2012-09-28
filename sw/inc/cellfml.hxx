@@ -152,7 +152,7 @@ public:
             eNmType = EXTRNL_NAME;
         }
 
-    sal_uInt16 GetBoxesOfFormula( const SwTable& rTbl, SwSelBoxes& rBoxes );
+    void GetBoxesOfFormula(const SwTable& rTbl, SwSelBoxes& rBoxes);
     // are all boxes valid which this formula relies on?
     bool HasValidBoxes() const;
 };

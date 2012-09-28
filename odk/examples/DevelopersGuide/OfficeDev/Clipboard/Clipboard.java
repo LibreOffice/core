@@ -32,13 +32,10 @@
  *
  *************************************************************************/
 
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XComponentLoader;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.datatransfer.DataFlavor;
 import com.sun.star.datatransfer.UnsupportedFlavorException;
 import com.sun.star.datatransfer.XTransferable;

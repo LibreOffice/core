@@ -24,20 +24,29 @@
     <string name="wifi">WI-FI</string>
     <string name="selector_noservers">Searching for computers…</string>
     <string name="selector_delete">Remove server</string>
+    <string name="selector_choose_a_computer">Choose a Computer</string>
+    <string name="selector_dialog_connecting">Attempting to connect to {0}…</string>
+    <string name="selector_dialog_connectionfailed">Impress Remote couldn"''"t connect to {0}.</string>
+    <string name="selector_dialog_connectionfailed_ok">OK</string>
     <string name="pairing_instructions_1">In Impress, click on the "Slideshow" menu and select "Impress Remote".</string>
     <string name="pairing_instructions_2_deviceName">Choose \"{0}\" as your device.</string>
     <string name="pairing_instructions_3">Then input this PIN:</string>
     <string name="startpresentation_instruction">No presentation is currently running.</string>
     <string name="startpresentation_button">Start Presentation</string>
+    <string name="startpresentation_title">Start Presentation</string>
     <string name="about">About</string>
     <string name="about_close">Close</string>
     <string name="about_versionstring">Version: {0} (Build ID: {1})</string>
     <string name="about_copyright">Copyright \u00A9 2012 LibreOffice Contributors and/or their affiliates.</string>
+    <string name="about_licence">This app is release under the Mozilla Public License, v. 2.0.</string>
+    <string name="about_libraries">This app uses android-coverflow\n\tCopyright © 2011, Polidea\n\tAll rights reserved.\n\nThis app uses ActionBarSherlock:\n\tCopyright 2012 Jake Wharton\n\tLicensed under the Apache License, Version 2.0 (the "License")</string>
     <string name="addserver">Add Server</string>
     <string name="addserver_entername">Server name:</string>
     <string name="addserver_enteraddress">Server address as IP or hostname:</string>
     <string name="addserver_remember">Remember this server next time</string>
     <string name="addserver_add">Add</string>
     <string name="addserver_cancel">Cancel</string>
+    <string name="reconnect_description1">Your connection has been dropped.</string>
+    <string name="reconnect_description2">Attempting to reconnect…</string>
 
 </resources>

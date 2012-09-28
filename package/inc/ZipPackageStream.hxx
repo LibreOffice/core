@@ -98,7 +98,7 @@ public:
     { return m_xBaseEncryptionData->m_aSalt;}
     sal_Int32 getIterationCount () const
     { return m_xBaseEncryptionData->m_nIterationCount;}
-    sal_Int32 getSize () const
+    sal_Int64 getSize () const
     { return aEntry.nSize;}
 
     sal_uInt8 GetStreamMode() const { return m_nStreamMode; }
@@ -133,7 +133,7 @@ public:
     { m_xBaseEncryptionData->m_aDigest = rNewDigest;}
     void setIterationCount (const sal_Int32 nNewCount)
     { m_xBaseEncryptionData->m_nIterationCount = nNewCount;}
-    void setSize (const sal_Int32 nNewSize);
+    void setSize (const sal_Int64 nNewSize);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnStreamNoWrap() { return xStream; }
 

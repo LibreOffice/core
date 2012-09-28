@@ -253,7 +253,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
     state of the associated accessibility objects accordingly we exploit the
     fact that the
 */
-void VCLXAccessibleList::UpdateSelection (::rtl::OUString sTextOfSelectedItem)
+void VCLXAccessibleList::UpdateSelection (OUString sTextOfSelectedItem)
 {
     if ( m_aBoxType == COMBOBOX )
     {
@@ -319,7 +319,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
     if ( xChild.is() )
     {
         // Just add the SELECTED state.
-        sal_Bool bNowSelected = sal_False;
+        bool bNowSelected = false;
         if ( m_pListBoxHelper )
             bNowSelected = m_pListBoxHelper->IsEntryPosSelected ((sal_uInt16)i);
         VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(xChild.get());
@@ -330,7 +330,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         sal_uInt16 nTopEntry = 0;
         if ( m_pListBoxHelper )
             nTopEntry = m_pListBoxHelper->GetTopEntry();
-        sal_Bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
+        bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
         pItem->SetVisible( m_bVisible && bVisible );
     }
 
@@ -495,20 +495,20 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleAt( const awt
 
 //===== XServiceInfo ==========================================================
 
-::rtl::OUString VCLXAccessibleList::getImplementationName (void)
+OUString VCLXAccessibleList::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleList"));
+    return OUString( "com.sun.star.comp.toolkit.AccessibleList" );
 }
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleList::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();
+    Sequence< OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleList"));
+    aNames[nLength] = "com.sun.star.accessibility.AccessibleList";
     return aNames;
 }
 // -----------------------------------------------------------------------------

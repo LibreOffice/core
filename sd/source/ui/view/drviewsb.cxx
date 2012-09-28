@@ -825,7 +825,7 @@ void DrawViewShell::ModifyLayer (
         for( nPos = 0; nPos < nPageCount; nPos++ )
         {
             sal_uInt16 nId = GetLayerTabControl()->GetPageId( nPos );
-            if( pLayer->GetName() == GetLayerTabControl()->GetPageText( nId ) )
+            if (GetLayerTabControl()->GetPageText(nId).equals(pLayer->GetName()))
             {
                 nCurPage = nId;
                 break;

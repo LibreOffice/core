@@ -1496,14 +1496,6 @@ void GtkSalFrame::Enable( sal_Bool /*bEnable*/ )
 
 void GtkSalFrame::setMinMaxSize()
 {
-/*  FIXME: for yet unknown reasons the reported size is a little smaller
- *  than the max size hint; one would guess that this was due to the border
- *  sizes of the widgets involved (GtkWindow and GtkFixed), but setting the
- *  their border to 0 (which is the default anyway) does not change the
- *  behaviour. Until the reason is known we'll add some pixels here.
- */
-#define CONTAINER_ADJUSTMENT 6
-
     /*  #i34504# metacity (and possibly others) do not treat
      *  _NET_WM_STATE_FULLSCREEN and max_width/heigth independently;
      *  whether they should is undefined. So don't set the max size hint
@@ -1517,14 +1509,14 @@ void GtkSalFrame::setMinMaxSize()
         {
             if( m_aMinSize.Width() && m_aMinSize.Height() && ! m_bFullscreen )
             {
-                aGeo.min_width  = m_aMinSize.Width()+CONTAINER_ADJUSTMENT;
-                aGeo.min_height = m_aMinSize.Height()+CONTAINER_ADJUSTMENT;
+                aGeo.min_width  = m_aMinSize.Width();
+                aGeo.min_height = m_aMinSize.Height();
                 aHints |= GDK_HINT_MIN_SIZE;
             }
             if( m_aMaxSize.Width() && m_aMaxSize.Height() && ! m_bFullscreen )
             {
-                aGeo.max_width  = m_aMaxSize.Width()+CONTAINER_ADJUSTMENT;
-                aGeo.max_height = m_aMaxSize.Height()+CONTAINER_ADJUSTMENT;
+                aGeo.max_width  = m_aMaxSize.Width();
+                aGeo.max_height = m_aMaxSize.Height();
                 aHints |= GDK_HINT_MAX_SIZE;
             }
         }
@@ -2060,7 +2052,7 @@ dbus_inhibit_gsm (const gchar *appname,
         /* get the DBUS session connection */
         session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
         if (error != NULL) {
-                g_warning ("DBUS cannot connect : %s", error->message);
+                g_debug ("DBUS cannot connect : %s", error->message);
                 g_error_free (error);
                 return -1;
         }
@@ -2071,7 +2063,7 @@ dbus_inhibit_gsm (const gchar *appname,
                                            GSM_DBUS_PATH,
                                            GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
+                g_debug ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return -1;
         }
 
@@ -2088,12 +2080,12 @@ dbus_inhibit_gsm (const gchar *appname,
         /* check the return value */
         if (! res) {
                 cookie = -1;
-                g_warning ("Inhibit method failed");
+                g_debug ("Inhibit method failed");
         }
 
         /* check the error value */
         if (error != NULL) {
-                g_warning ("Inhibit problem : %s", error->message);
+                g_debug ("Inhibit problem : %s", error->message);
                 g_error_free (error);
                 cookie = -1;
         }
@@ -2111,14 +2103,14 @@ dbus_uninhibit_gsm (guint cookie)
         DBusGConnection *session_connection = NULL;
 
         if (cookie == guint(-1)) {
-                g_warning ("Invalid cookie");
+                g_debug ("Invalid cookie");
                 return;
         }
 
         /* get the DBUS session connection */
         session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
         if (error) {
-                g_warning ("DBUS cannot connect : %s", error->message);
+                g_debug ("DBUS cannot connect : %s", error->message);
                 g_error_free (error);
                 return;
         }
@@ -2129,7 +2121,7 @@ dbus_uninhibit_gsm (guint cookie)
                                            GSM_DBUS_PATH,
                                            GSM_DBUS_INTERFACE);
         if (proxy == NULL) {
-                g_warning ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
+                g_debug ("Could not get DBUS proxy: %s", GSM_DBUS_SERVICE);
                 return;
         }
 
@@ -2142,12 +2134,12 @@ dbus_uninhibit_gsm (guint cookie)
 
         /* check the return value */
         if (! res) {
-                g_warning ("Uninhibit method failed");
+                g_debug ("Uninhibit method failed");
         }
 
         /* check the error value */
         if (error != NULL) {
-                g_warning ("Uninhibit problem : %s", error->message);
+                g_debug ("Uninhibit problem : %s", error->message);
                 g_error_free (error);
                 cookie = -1;
         }

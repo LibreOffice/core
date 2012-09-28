@@ -407,9 +407,9 @@ Module gid_Module_Root_Extension_Dictionary_Pl
     Styles = ();
 End
 
-Module gid_Module_Root_Extension_Dictionary_Pt
-    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_PT );
-    Files = (gid_File_Extension_Dictionary_Pt);
+Module gid_Module_Root_Extension_Dictionary_Pt_Br
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_PT_BR );
+    Files = (gid_File_Extension_Dictionary_Pt_Br);
     InstallOrder = "2000";
     Sortkey = "515";
     Spellcheckerlanguage = "pt-BR";

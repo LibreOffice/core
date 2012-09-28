@@ -31,11 +31,12 @@
 #include "com/sun/star/ucb/IOErrorCode.hpp"
 #include "com/sun/star/ucb/InteractiveIOException.hpp"
 #include "com/sun/star/ucb/NameClashException.hpp"
+#include "com/sun/star/ucb/UniversalContentBroker.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/ucb/XContentAccess.hpp"
 #include "com/sun/star/ucb/XContentIdentifier.hpp"
-#include "com/sun/star/ucb/XContentIdentifierFactory.hpp"
 #include "com/sun/star/ucb/XProgressHandler.hpp"
+#include "com/sun/star/ucb/XUniversalContentBroker.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -45,7 +46,6 @@
 #include "comphelper/processfactory.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "osl/file.hxx"
-#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -55,7 +55,6 @@
 #include "tools/urlobj.hxx"
 #include "ucbhelper/commandenvironment.hxx"
 #include "ucbhelper/content.hxx"
-#include "ucbhelper/contentbroker.hxx"
 #include "unotools/localfilehelper.hxx"
 #include "unotools/ucbhelper.hxx"
 
@@ -72,13 +71,15 @@ rtl::OUString canonic(rtl::OUString const & url) {
 ucbhelper::Content content(rtl::OUString const & url) {
     return ucbhelper::Content(
         canonic(url),
-        css::uno::Reference<css::ucb::XCommandEnvironment>());
+        css::uno::Reference<css::ucb::XCommandEnvironment>(),
+        comphelper::getProcessComponentContext());
 }
 
 ucbhelper::Content content(INetURLObject const & url) {
     return ucbhelper::Content(
         url.GetMainURL(INetURLObject::NO_DECODE),
-        css::uno::Reference<css::ucb::XCommandEnvironment>());
+        css::uno::Reference<css::ucb::XCommandEnvironment>(),
+        comphelper::getProcessComponentContext());
 }
 
 std::vector<rtl::OUString> getContents(rtl::OUString const & url) {
@@ -444,18 +445,13 @@ bool utl::UCBContentHelper::EqualURLs(
     if (url1.isEmpty() || url2.isEmpty()) {
         return false;
     }
-    ucbhelper::ContentBroker * broker = ucbhelper::ContentBroker::get();
-    if (broker == 0) {
-        throw css::uno::RuntimeException(
-            rtl::OUString( "no ucbhelper::ContentBroker"),
-            css::uno::Reference<css::uno::XInterface>());
-    }
+    css::uno::Reference< css::ucb::XUniversalContentBroker > ucb(
+        css::ucb::UniversalContentBroker::create(
+            comphelper::getProcessComponentContext()));
     return
-        broker->getContentProviderInterface()->compareContentIds(
-            (broker->getContentIdentifierFactoryInterface()->
-             createContentIdentifier(canonic(url1))),
-            (broker->getContentIdentifierFactoryInterface()->
-             createContentIdentifier(canonic(url2))))
+        ucb->compareContentIds(
+            ucb->createContentIdentifier(canonic(url1)),
+            ucb->createContentIdentifier(canonic(url2)))
         == 0;
 }
 

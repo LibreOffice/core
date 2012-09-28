@@ -257,6 +257,7 @@ namespace writerfilter {
                 int nBottom;
                 sal_Int16 nHoriOrientRelation;
                 sal_Int16 nVertOrientRelation;
+                int nWrap;
         };
 
         /// Stores the properties of a drawing object.
@@ -424,8 +425,6 @@ namespace writerfilter {
                 void seek(sal_uInt32 nPos);
                 uno::Reference<lang::XMultiServiceFactory> getModelFactory();
                 RTFParserState& getState();
-                /// Number of states on the stack.
-                int getGroup() const;
                 void setDestinationText(rtl::OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
@@ -479,6 +478,8 @@ namespace writerfilter {
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 /// If we have some unicode or hex characters to send.
                 void checkUnicode(bool bUnicode = true, bool bHex = true);
+                /// If we have a pending continous section break.
+                void checkDeferredContSectBreak();
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -491,8 +492,6 @@ namespace writerfilter {
                 Stream* m_pMapperStream;
                 boost::shared_ptr<RTFSdrImport> m_pSdrImport;
                 boost::shared_ptr<RTFTokenizer> m_pTokenizer;
-                /// Same as m_aStates.size(), except that this can be negative for invalid input.
-                int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
                 /// Read by RTF_PARD.
                 RTFParserState m_aDefaultState;
@@ -573,6 +572,7 @@ namespace writerfilter {
                 rtl::OStringBuffer m_aHexBuffer;
                 /// Formula import.
                 oox::formulaimport::XmlStreamBuilder m_aMathBuffer;
+                bool m_bDeferredContSectBreak;
         };
     } // namespace rtftok
 } // namespace writerfilter

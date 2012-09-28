@@ -33,14 +33,12 @@ $(eval $(call gb_Module_add_targets,l10ntools,\
     Executable_ulfex \
     Executable_gsicheck \
     Executable_cfgex \
+    Executable_uiex \
     Executable_xrmex \
     Executable_localize \
     Executable_transex3 \
-    Executable_helpindexer \
-    Executable_helplinker \
     Executable_renewpo \
     StaticLibrary_transex \
-    Library_helplinker \
     Package_inc \
     Package_scripts \
     Package_ulfconv \

@@ -145,7 +145,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
             {
                 MasterPageEntity aMasterPageEntity;
                 aMasterPageEntity.xMasterPage = xMasterPage;
-                aMasterPageEntity.bUsed = sal_False;
+                aMasterPageEntity.bUsed = false;
                 rMasterPageList.push_back( aMasterPageEntity );
             }
         }
@@ -163,7 +163,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
             {
                 if ( aIter->xMasterPage == xMasterPage )
                 {
-                    aIter->bUsed = sal_True;
+                    aIter->bUsed = true;
                     break;
                 }
                 ++aIter;

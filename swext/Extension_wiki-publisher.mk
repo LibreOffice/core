@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -59,15 +60,14 @@ $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/scripts.xsl,$(OUT
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tables.xsl,$(OUTDIR)/bin/xslt/export/xsltml/tables.xsl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tokens.xsl,$(OUTDIR)/bin/xslt/export/xsltml/tokens.xsl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/odt2mediawiki.xsl,$(SRCDIR)/swext/mediawiki/src/filter/odt2mediawiki.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wikisend.xhp,$(SRCDIR)/swext/mediawiki/help/wikisend.xhp))
-$(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wikiformats.xhp,$(SRCDIR)/swext/mediawiki/help/wikiformats.xhp))
-$(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wikiaccount.xhp,$(SRCDIR)/swext/mediawiki/help/wikiaccount.xhp))
-$(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wiki.xhp,$(SRCDIR)/swext/mediawiki/help/wiki.xhp))
-$(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wikisettings.xhp,$(SRCDIR)/swext/mediawiki/help/wikisettings.xhp))
 $(eval $(call gb_Extension_add_file,wiki-publisher,license/THIRDPARTYLICENSEREADME.html,$(SRCDIR)/swext/mediawiki/src/THIRDPARTYLICENSEREADME.html))
 $(eval $(call gb_Extension_add_file,wiki-publisher,templates/MediaWiki/mediawiki.ott,$(SRCDIR)/swext/mediawiki/src/filter/mediawiki.ott))
-$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wikisend.xhp,$(SRCDIR)/swext/mediawiki/help/wikisend.xhp))
-$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wikiformats.xhp,$(SRCDIR)/swext/mediawiki/help/wikiformats.xhp))
-$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wikiaccount.xhp,$(SRCDIR)/swext/mediawiki/help/wikiaccount.xhp))
-$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wiki.xhp,$(SRCDIR)/swext/mediawiki/help/wiki.xhp))
-$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wikisettings.xhp,$(SRCDIR)/swext/mediawiki/help/wikisettings.xhp))
+$(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikisend.xhp,wikisend.xhp))
+$(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikiformats.xhp,wikiformats.xhp))
+$(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikiaccount.xhp,wikiaccount.xhp))
+$(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wiki.xhp,wiki.xhp))
+$(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikisettings.xhp,wikisettings.xhp))
+
+$(eval $(call gb_Extension_add_helptreefile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,/help.tree,/help.tree,com.sun.wiki-publisher))
+
+# vim: set noet sw=4 ts=4:

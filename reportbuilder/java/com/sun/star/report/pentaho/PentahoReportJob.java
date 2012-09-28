@@ -138,8 +138,8 @@ public class PentahoReportJob implements ReportJob
             throw new JobDefinitionException("A valid image-service implementation must be given.");
         }
 
-        this.masterValues = (ArrayList) jobProperties.getProperty(ReportEngineParameterNames.INPUT_MASTER_VALUES);
-        this.detailColumns = (ArrayList) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
+        this.masterValues = (ArrayList<?>) jobProperties.getProperty(ReportEngineParameterNames.INPUT_MASTER_VALUES);
+        this.detailColumns = (ArrayList<?>) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
         Integer maxRows=(Integer) jobProperties.getProperty(ReportEngineParameterNames.MAXROWS);
 
         this.resourceManager = new ResourceManager();

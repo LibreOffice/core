@@ -32,6 +32,7 @@
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 
 #include <cppuhelper/factory.hxx>
@@ -44,12 +45,11 @@ extern "C" void workerfunc (void * acc)
     ((Acceptor*)acc)->run();
 }
 
-static Reference<XInterface> getComponentContext( const Reference<XMultiServiceFactory>& rFactory)
+static Reference<XComponentContext> getComponentContext( const Reference<XMultiServiceFactory>& rFactory)
 {
-    Reference<XInterface> rContext;
+    Reference<XComponentContext> rContext;
     Reference< XPropertySet > rPropSet( rFactory, UNO_QUERY );
-    Any a = rPropSet->getPropertyValue(
-        ::rtl::OUString( "DefaultContext"  ) );
+    Any a = rPropSet->getPropertyValue( ::rtl::OUString( "DefaultContext"  ) );
     a >>= rContext;
     return rContext;
 }
@@ -65,14 +65,12 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
     , m_bDying(false)
 {
     m_rSMgr = rFactory;
+    // get component context
+    m_rContext = getComponentContext(m_rSMgr);
     m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
         rtl::OUString("com.sun.star.connection.Acceptor" )),
         UNO_QUERY );
-    m_rBridgeFactory = Reference < XBridgeFactory > (m_rSMgr->createInstance(
-        rtl::OUString("com.sun.star.bridge.BridgeFactory" )),
-        UNO_QUERY );
-    // get component context
-    m_rContext = getComponentContext(m_rSMgr);
+    m_rBridgeFactory = BridgeFactory::create(m_rContext);
 }
 
 
@@ -108,7 +106,7 @@ Acceptor::~Acceptor()
 
 void SAL_CALL Acceptor::run()
 {
-    while ( m_rAcceptor.is() && m_rBridgeFactory.is()  )
+    while ( m_rAcceptor.is() )
     {
         RTL_LOGFILE_CONTEXT( aLog, "desktop (lo119109) Acceptor::run" );
         try

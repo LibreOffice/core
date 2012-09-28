@@ -21,7 +21,6 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -143,7 +142,6 @@ public class AccessibleMenuSeparator extends TestCase {
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**

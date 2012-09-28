@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://openoffice.org/2010/uno-components">
   <component loader="com.sun.star.loader.Java2" uri="OwnEmbeddedObject.uno.jar">
-    <implementation name="org.openoffice.examples.embedding.OwnEmbeddedObjectFactory">
+    <implementation name="OwnEmbeddedObjectFactory">
       <service name="org.openoffice.examples.embedding.Factory69474366FD6F480683748EDD1B6E771D"/>
     </implementation>
   </component>

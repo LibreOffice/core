@@ -99,7 +99,6 @@ public class AccessibleWindow extends TestCase {
 
         if (xTextDoc != null) {
             util.DesktopTools.closeDoc(xTextDoc);
-            ;
         }
     }
 
@@ -133,8 +132,6 @@ public class AccessibleWindow extends TestCase {
         if (xTextDoc != null) {
             util.DesktopTools.closeDoc(xTextDoc);
         }
-
-        ;
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(

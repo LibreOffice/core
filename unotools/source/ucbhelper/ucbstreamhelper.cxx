@@ -22,12 +22,11 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/streamwrap.hxx>
 
@@ -47,93 +46,95 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
         UcbLockBytesHandler* pHandler, sal_Bool bEnsureFileExists )
 {
     SvStream* pStream = NULL;
-    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-    if ( pBroker )
+    Reference< XUniversalContentBroker > ucb(
+        UniversalContentBroker::create(
+            comphelper::getProcessComponentContext() ) );
+    UcbLockBytesRef xLockBytes;
+    if ( eOpenMode & STREAM_WRITE )
     {
-        UcbLockBytesRef xLockBytes;
-        if ( eOpenMode & STREAM_WRITE )
+        sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC ) != 0;
+        if ( bTruncate )
         {
-            sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC ) != 0;
-            if ( bTruncate )
+            try
             {
-                try
-                {
-                    // truncate is implemented with deleting the original file
-                    ::ucbhelper::Content aCnt( rFileName, Reference < XCommandEnvironment >() );
-                    aCnt.executeCommand( ::rtl::OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
-                }
-
-                catch ( const CommandAbortedException& )
-                {
-                    // couldn't truncate/delete
-                }
-                catch ( const ContentCreationException& )
-                {
-                }
-                catch ( const Exception& )
-                {
-                }
+                // truncate is implemented with deleting the original file
+                ::ucbhelper::Content aCnt(
+                    rFileName, Reference < XCommandEnvironment >(),
+                    comphelper::getProcessComponentContext() );
+                aCnt.executeCommand( ::rtl::OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
             }
 
-            if ( bEnsureFileExists || bTruncate )
+            catch ( const CommandAbortedException& )
             {
-                try
-                {
-                    // make sure that the desired file exists before trying to open
-                    SvMemoryStream aStream(0,0);
-                    ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
-                    Reference< XInputStream > xInput( pInput );
-
-                    ::ucbhelper::Content aContent( rFileName, Reference < XCommandEnvironment >() );
-                    InsertCommandArgument aInsertArg;
-                    aInsertArg.Data = xInput;
-
-                    aInsertArg.ReplaceExisting = sal_False;
-                    Any aCmdArg;
-                    aCmdArg <<= aInsertArg;
-                    aContent.executeCommand( ::rtl::OUString("insert"), aCmdArg );
-                }
-
-                // it is NOT an error when the stream already exists and no truncation was desired
-                catch ( const CommandAbortedException& )
-                {
-                    // currently never an error is detected !
-                }
-                catch ( const ContentCreationException& )
-                {
-                }
-                catch ( const Exception& )
-                {
-                }
+                // couldn't truncate/delete
+            }
+            catch ( const ContentCreationException& )
+            {
+            }
+            catch ( const Exception& )
+            {
             }
         }
 
-        try
+        if ( bEnsureFileExists || bTruncate )
         {
-            // create LockBytes using UCB
-            ::ucbhelper::Content aContent( rFileName, Reference < XCommandEnvironment >() );
-            xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(),
-                                                eOpenMode, xInteractionHandler, pHandler );
-            if ( xLockBytes.Is() )
+            try
             {
-                pStream = new SvStream( xLockBytes );
-                pStream->SetBufferSize( 4096 );
-                pStream->SetError( xLockBytes->GetError() );
+                // make sure that the desired file exists before trying to open
+                SvMemoryStream aStream(0,0);
+                ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
+                Reference< XInputStream > xInput( pInput );
+
+                ::ucbhelper::Content aContent(
+                    rFileName, Reference < XCommandEnvironment >(),
+                    comphelper::getProcessComponentContext() );
+                InsertCommandArgument aInsertArg;
+                aInsertArg.Data = xInput;
+
+                aInsertArg.ReplaceExisting = sal_False;
+                Any aCmdArg;
+                aCmdArg <<= aInsertArg;
+                aContent.executeCommand( ::rtl::OUString("insert"), aCmdArg );
             }
-        }
-        catch ( const CommandAbortedException& )
-        {
-        }
-        catch ( const ContentCreationException& )
-        {
-        }
-        catch ( const Exception& )
-        {
+
+            // it is NOT an error when the stream already exists and no truncation was desired
+            catch ( const CommandAbortedException& )
+            {
+                // currently never an error is detected !
+            }
+            catch ( const ContentCreationException& )
+            {
+            }
+            catch ( const Exception& )
+            {
+            }
         }
     }
-    else
-        // if no UCB is present at least conventional file io is supported
-        pStream = new SvFileStream( rFileName, eOpenMode );
+
+    try
+    {
+        // create LockBytes using UCB
+        ::ucbhelper::Content aContent(
+            rFileName, Reference < XCommandEnvironment >(),
+            comphelper::getProcessComponentContext() );
+        xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(),
+                                                    eOpenMode, xInteractionHandler, pHandler );
+        if ( xLockBytes.Is() )
+        {
+            pStream = new SvStream( xLockBytes );
+            pStream->SetBufferSize( 4096 );
+            pStream->SetError( xLockBytes->GetError() );
+        }
+    }
+    catch ( const CommandAbortedException& )
+    {
+    }
+    catch ( const ContentCreationException& )
+    {
+    }
+    catch ( const Exception& )
+    {
+    }
 
     return pStream;
 }

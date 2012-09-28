@@ -19,7 +19,8 @@
 #ifndef _TEXTUND2_HXX
 #define _TEXTUND2_HXX
 
-#include <textundo.hxx>
+#include "textundo.hxx"
+#include <vcl/textdata.hxx>
 
 
 class TextUndoDelPara : public TextUndo
@@ -36,6 +37,8 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
+
+    virtual rtl::OUString GetComment () const;
 };
 
 
@@ -52,6 +55,8 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
+
+    virtual rtl::OUString GetComment () const;
 };
 
 
@@ -68,6 +73,8 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
+
+    virtual rtl::OUString GetComment () const;
 };
 
 
@@ -85,6 +92,8 @@ public:
     virtual void    Redo();
 
     virtual sal_Bool    Merge( SfxUndoAction *pNextAction );
+
+    virtual rtl::OUString GetComment () const;
 };
 
 
@@ -100,6 +109,8 @@ public:
 
     virtual void    Undo();
     virtual void    Redo();
+
+    virtual rtl::OUString GetComment () const;
 };
 
 
@@ -115,6 +126,8 @@ public:
 
     virtual void        Undo();
     virtual void        Redo();
+
+    virtual rtl::OUString GetComment () const;
 };
 
 #endif // _TEXTUND2_HXX

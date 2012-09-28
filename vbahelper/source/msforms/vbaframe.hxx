@@ -38,11 +38,9 @@ public:
         const css::uno::Reference< css::awt::XControl >& xDialog );
 
     // XFrame attributes
-    virtual rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException);
 
-    virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getSpecialEffect() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBorderStyle() throw (css::uno::RuntimeException);
@@ -51,8 +49,8 @@ public:
     // XFrame methods
     css::uno::Any SAL_CALL Controls( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
     //XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 
 private:
     css::uno::Reference< css::awt::XControl > mxDialog;

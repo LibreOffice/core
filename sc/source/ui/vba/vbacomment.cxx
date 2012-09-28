@@ -39,14 +39,6 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
 
-#include <cellsuno.hxx>
-#include <postit.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdocapt.hxx>
-#include <ooo/vba/msforms/XShape.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-
 #include <vbahelper/vbashape.hxx>
 #include "vbaglobals.hxx"
 #include "vbacomments.hxx"
@@ -187,6 +179,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     aText >>= sText;
 
     uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY_THROW );
+    rtl::OUString sAnnoText = xAnnoText->getString();
 
     if ( aStart.hasValue() )
     {
@@ -225,7 +218,6 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
      getAnnotations()->insertNew( aAddress, sText );
     }
 
-    rtl::OUString sAnnoText = xAnnoText->getString();
     return sAnnoText;
 }
 

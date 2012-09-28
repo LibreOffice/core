@@ -38,6 +38,8 @@ $(eval $(call gb_Module_add_targets,sd,\
     Package_uiconfig \
     Package_web \
     Package_xml \
+    UI_sdraw \
+    UI_simpress \
 ))
 
 ifneq ($(OS),DRAGONFLY)

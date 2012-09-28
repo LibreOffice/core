@@ -56,6 +56,11 @@ void Communicator::execute()
         {
             presentationStarted( xPresentation->getController() );
         }
+        else
+        {
+            pTransmitter->addMessage( "slideshow_finished\n\n",
+                                      Transmitter::PRIORITY_HIGH );
+        }
     }
     catch (uno::RuntimeException &)
     {
@@ -81,7 +86,6 @@ void Communicator::execute()
             aCommand.clear();
         }
     }
-    // TODO: deal with transmision errors gracefully.
     disposeListener();
 
     pTransmitter->notifyFinished();
@@ -95,6 +99,8 @@ void Communicator::execute()
 
 void Communicator::informListenerDestroyed()
 {
+    pTransmitter->addMessage( "slideshow_finished\n\n",
+                               Transmitter::PRIORITY_HIGH );
     mListener.clear();
 }
 

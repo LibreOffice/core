@@ -44,7 +44,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/beans,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/bridge,\
 	Bridge \
-	BridgeFactory \
 	IiopBridge \
 	OleApplicationRegistration \
 	OleBridgeSupplier \
@@ -77,7 +76,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/io,\
 	MarkableOutputStream \
 	ObjectInputStream \
 	ObjectOutputStream \
-	Pipe \
 	Pump \
 	TextInputStream \
 	TextOutputStream \
@@ -129,6 +127,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/beans,\
 	Introspection \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/bridge,\
+	BridgeFactory \
 	UnoUrlResolver \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/connection,\
@@ -139,9 +138,13 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/container,
 	EnumerableMap \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
+	Pipe \
 	SequenceInputStream \
 	SequenceOutputStream \
 	TempFile \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/reflection,\
+	theCoreReflection \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/registry,\
 	ImplementationRegistration \
@@ -231,6 +234,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/bridge,\
 	ProtocolProperty \
 	XBridge \
 	XBridgeFactory \
+	XBridgeFactory2 \
 	XBridgeSupplier \
 	XBridgeSupplier2 \
 	XInstanceProvider \
@@ -328,6 +332,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/io,\
 	XOutputStream \
 	XPersist \
 	XPersistObject \
+    XPipe \
 	XSeekable \
 	XSeekableInputStream \
 	XSequenceOutputStream \

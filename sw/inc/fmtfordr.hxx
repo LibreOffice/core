@@ -49,7 +49,7 @@ public:
     SwFmtFillOrder( SwFillOrder = ATT_TOP_DOWN );
     inline SwFmtFillOrder &operator=( const SwFmtFillOrder &rCpy );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    /// "Pure virtual methods" of SfxPoolItem.
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual sal_uInt16          GetValueCount() const;
 

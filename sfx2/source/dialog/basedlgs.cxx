@@ -18,6 +18,8 @@
  */
 
 #include <stdlib.h>
+#include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
@@ -161,6 +163,15 @@ SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
 
 :   ModalDialog(pParent, rResId),
     nUniqId(rResId.GetId()),
+    pInputSet(0),
+    pOutputSet(0)
+{
+    init();
+}
+
+SfxModalDialog::SfxModalDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription )
+:   ModalDialog(pParent, rID, rUIXMLDescription),
+    nUniqId(0), //todo
     pInputSet(0),
     pOutputSet(0)
 {
@@ -328,19 +339,29 @@ IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
-                        SfxChildWindow *pCW, Window *pParent,
-                        const ResId& rResId ) :
-    ModelessDialog(pParent, rResId),
-    pBindings(pBindinx),
-    pImp( new SfxModelessDialog_Impl )
+SfxModelessDialog::SfxModelessDialog(SfxBindings *pBindinx,
+    SfxChildWindow *pCW, Window *pParent, const ResId& rResId)
+    : ModelessDialog(pParent, rResId)
 {
+    Init(pBindinx, pCW);
+    SetHelpId("");
+}
+
+SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
+    SfxChildWindow *pCW, Window *pParent, const rtl::OString& rID,
+    const rtl::OUString& rUIXMLDescription)
+    : ModelessDialog(pParent, rID, rUIXMLDescription)
+{
+    Init(pBindinx, pCW);
+}
+
+void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
+{
+    pBindings = pBindinx;
+    pImp = new SfxModelessDialog_Impl;
     pImp->pMgr = pCW;
     pImp->bConstructed = sal_False;
     SetUniqueId( GetHelpId() );
-    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);

@@ -31,7 +31,6 @@ import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
  *  @see  Convert
  *  @see  org.openoffice.xmerge.util.registry.ConverterInfoMgr
  *
- *  @author  Martin Maher
  */
 public class ConverterFactory {
 
@@ -51,7 +50,7 @@ public class ConverterFactory {
 
         // findConverterInfo expects the second paramenter to be the
         // destination MimeType
-        if (foundInfo.isValidOfficeType(mimeTypeOut))
+        if (ConverterInfo.isValidOfficeType(mimeTypeOut))
             foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeIn, mimeTypeOut);
         else
             foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeOut, mimeTypeIn);
@@ -80,7 +79,7 @@ public class ConverterFactory {
         ConverterInfo foundInfo = null;
         boolean toOffice;
 
-        toOffice = foundInfo.isValidOfficeType(mimeTypeOut);
+        toOffice = ConverterInfo.isValidOfficeType(mimeTypeOut);
 
         // findConverterInfo expects the second paramenter to be the
         // destination MimeType

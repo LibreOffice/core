@@ -242,9 +242,9 @@ class SVL_DLLPUBLIC NfCurrencyEntry
 private:
 
                         // nDecimalFormat := 0, 1, 2
-                        // #,##0 or #,##0.00 or #,##0.-- are assigned
-    SVL_DLLPRIVATE void             Impl_BuildFormatStringNumChars( String&,
-                            const LocaleDataWrapper&, sal_uInt16 nDecimalFormat ) const;
+                        // #,##0 or #,##0.00 or #,##0.-- is returned
+    SVL_DLLPRIVATE OUString Impl_BuildFormatStringNumChars(
+        const LocaleDataWrapper&, sal_uInt16 nDecimalFormat) const;
 
 public:
 
@@ -268,10 +268,10 @@ public:
     sal_Unicode         GetZeroChar() const         { return cZeroChar; }
 
                         /** [$DM-407] (bBank==false) or [$DEM] (bBank==true)
-                            is assigned to rStr, if bBank==false and
+                            is returned. If bBank==false and
                             bWithoutExtension==true only [$DM] */
-    void                BuildSymbolString( String& rStr, bool bBank,
-                            bool bWithoutExtension = false ) const;
+    OUString            BuildSymbolString(bool bBank,
+                            bool bWithoutExtension = false) const;
 
                         /** #,##0.00 [$DM-407] is assigned to rStr, separators
                               from rLoc,    incl. minus sign but without [RED] */
@@ -489,14 +489,14 @@ public:
         Formats only if the format code is of type text or the 4th subcode
         of a format code is specified, otherwise sOutString will be == "" */
     void GetOutputString( String& sString, sal_uInt32 nFIndex,
-                          String& sOutString, Color** ppColor );
+                          String& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
 
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode
         of a format code is specified, otherwise sOutString will be == "" */
     void GetOutputString( rtl::OUString& sString, sal_uInt32 nFIndex,
-                          rtl::OUString& sOutString, Color** ppColor );
+                          rtl::OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a number according to the standard default format matching
         the given format index */
@@ -870,7 +870,7 @@ private:
 
     // Test whether format code already exists, then return index key,
     // otherwise NUMBERFORMAT_ENTRY_NOT_FOUND
-    SVL_DLLPRIVATE sal_uInt32 ImpIsEntry( const String& rString,
+    SVL_DLLPRIVATE sal_uInt32 ImpIsEntry( const OUString& rString,
                         sal_uInt32 CLOffset,
                         LanguageType eLnge );
 
@@ -942,6 +942,10 @@ public:
 
     // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes
     void ResetDefaultSystemCurrency();
+
+    // Called by SvNumberFormatterRegistry_Impl::Notify if the system locale's
+    // date acceptence patterns change.
+    void InvalidateDateAcceptancePatterns();
 
     // Replace the SYSTEM language/country format codes. Called upon change of
     // the user configurable locale.

@@ -126,6 +126,17 @@ File gid_File_Bin_Gengal
   #endif
 End
 
+File gid_File_Bin_UIPreviewer
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "ui-previewer";
+  #else
+    Name = "ui-previewer.exe";
+  #endif
+End
+
 #ifdef UNX
 
 File gid_File_Script_Gengal
@@ -371,18 +382,18 @@ STD_FILTER_FILE( gid_File_Filter_Iti, iti)
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
+File gid_File_Help_Help_Zip
+    Dir = gid_Dir_Help;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "helpxsl.zip";
+End
+
 #if defined WITH_HELP
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(shared);
     Patchfiles = ();
-End
-
-File gid_File_Help_Help_Zip
-    Dir = gid_Dir_Help;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "helpxsl.zip";
 End
 
 File gid_File_Help_Sbasic_Zip
@@ -741,56 +752,9 @@ End
 #ifdef WNT
 
 STD_SHELLNEW_FILE(gid_File_Shellnew_Ods_Soffice, soffice.ods)
-
-File gid_File_Shellnew2_Ods_Soffice
-    TXT_FILE_BODY;
-    Styles = (PACKED,WORKSTATION, OVERWRITE);
-    Dir = PREDEFINED_OSWINSHELLNEWDIR;
-    NetDir = gid_Dir_ShellnewToo;
-    Name = "soffice.ods";
-End
-
-#endif
-
-#ifdef WNT
-
 STD_SHELLNEW_FILE(gid_File_Shellnew_Odg_Soffice, soffice.odg)
-
-File gid_File_Shellnew2_Odg_Soffice
-    TXT_FILE_BODY;
-    Styles = (PACKED,WORKSTATION, OVERWRITE);
-    Dir = PREDEFINED_OSWINSHELLNEWDIR;
-    NetDir = gid_Dir_ShellnewToo;
-    Name = "soffice.odg";
-End
-
-#endif
-
-#ifdef WNT
-
 STD_SHELLNEW_FILE(gid_File_Shellnew_Odp_Soffice, soffice.odp)
-
-File gid_File_Shellnew2_Odp_Soffice
-    TXT_FILE_BODY;
-    Styles = (PACKED,WORKSTATION, OVERWRITE);
-    Dir = PREDEFINED_OSWINSHELLNEWDIR;
-    NetDir = gid_Dir_ShellnewToo;
-    Name = "soffice.odp";
-End
-
-#endif
-
-#ifdef WNT
-
 STD_SHELLNEW_FILE(gid_File_Shellnew_Odt_Soffice, soffice.odt)
-
-File gid_File_Shellnew2_Odt_Soffice
-    TXT_FILE_BODY;
-    Styles = (PACKED,WORKSTATION, OVERWRITE);
-    Dir = PREDEFINED_OSWINSHELLNEWDIR;
-    NetDir = gid_Dir_ShellnewToo;
-    Name = "soffice.odt";
-End
 
 #endif
 
@@ -1291,6 +1255,15 @@ File gid_File_ImagesTango_Zip
 End
 #endif
 
+#ifdef THEME_TANGO_TESTING
+File gid_File_ImagesTangoTesting_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "images_tango_testing.zip";
+    Styles = (PACKED);
+End
+#endif
+
 #ifdef THEME_HUMAN
 File gid_File_ImagesHuman_Zip
     TXT_FILE_BODY;
@@ -1598,9 +1571,9 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_Pt
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt;
-	Name = "dict-pt.oxt";
+File gid_File_Extension_Dictionary_Pt_Br
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Br;
+	Name = "dict-pt-BR.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
@@ -1609,7 +1582,7 @@ End
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pt_Pt
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt;
-	Name = "dict-pt-pt.oxt";
+	Name = "dict-pt-PT.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End

@@ -1,6 +1,0 @@
-mkdir: %_DEST%\inc\libwpg
-..\%__SRC%\misc\build\libwpg*\src\lib\libwpg.h %_DEST%\inc\libwpg\
-..\%__SRC%\misc\build\libwpg*\src\lib\WPGPaintInterface.h %_DEST%\inc\libwpg\
-..\%__SRC%\misc\build\libwpg*\src\lib\WPGraphics.h %_DEST%\inc\libwpg\
-..\%__SRC%\lib\*.a %_DEST%\lib\*.a
-..\%__SRC%\slb\*.lib %_DEST%\lib\*.lib

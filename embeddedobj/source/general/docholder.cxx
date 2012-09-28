@@ -60,12 +60,12 @@
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 
@@ -575,19 +575,14 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     if ( !xResult.is() )
     {
         // no internal document configuration, use the one from the module
-        uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleMan(
-                m_xFactory->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ),
-                    uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XModuleManager2 > xModuleMan( frame::ModuleManager::create(comphelper::getComponentContext(m_xFactory)) );
         ::rtl::OUString aModuleIdent =
             xModuleMan->identify( uno::Reference< uno::XInterface >( m_xComponent, uno::UNO_QUERY ) );
 
         if ( !aModuleIdent.isEmpty() )
         {
-            uno::Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
-                    m_xFactory->createInstance( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ),
-                    uno::UNO_QUERY_THROW );
+            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
+                    ui::ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(m_xFactory)) );
             uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xModUIConfMan(
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );

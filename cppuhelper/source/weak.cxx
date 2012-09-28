@@ -100,13 +100,13 @@ Any SAL_CALL OWeakConnectionPoint::queryInterface( const Type & rType )
 // XInterface
 void SAL_CALL OWeakConnectionPoint::acquire() throw()
 {
-    osl_incrementInterlockedCount( &m_aRefCount );
+    osl_atomic_increment( &m_aRefCount );
 }
 
 // XInterface
 void SAL_CALL OWeakConnectionPoint::release() throw()
 {
-    if (! osl_decrementInterlockedCount( &m_aRefCount ))
+    if (! osl_atomic_decrement( &m_aRefCount ))
         delete this;
 }
 
@@ -141,7 +141,7 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted() throw(::co
 
     if (m_pObject)
     {
-        oslInterlockedCount n = osl_incrementInterlockedCount( &m_pObject->m_refCount );
+        oslInterlockedCount n = osl_atomic_increment( &m_pObject->m_refCount );
 
         if (n > 1)
         {
@@ -150,11 +150,11 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted() throw(::co
             guard.clear();
             // WeakObject has a (XInterface *) cast operator
             ret = *m_pObject;
-            n = osl_decrementInterlockedCount( &m_pObject->m_refCount );
+            n = osl_atomic_decrement( &m_pObject->m_refCount );
         }
         else
             // Another thread wait in the dispose method at the guard
-            n = osl_decrementInterlockedCount( &m_pObject->m_refCount );
+            n = osl_atomic_decrement( &m_pObject->m_refCount );
     }
 
     return ret;
@@ -199,13 +199,13 @@ Any SAL_CALL OWeakObject::queryInterface( const Type & rType ) throw(::com::sun:
 // XInterface
 void SAL_CALL OWeakObject::acquire() throw()
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 }
 
 // XInterface
 void SAL_CALL OWeakObject::release() throw()
 {
-    if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+    if (osl_atomic_decrement( &m_refCount ) == 0) {
         // notify/clear all weak-refs before object's dtor is executed
         // (which may check weak-refs to this object):
         disposeWeakConnectionPoint();
@@ -363,7 +363,7 @@ OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW(())
     }
     }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
-    osl_decrementInterlockedCount( &m_aRefCount );
+    osl_atomic_decrement( &m_aRefCount );
 }
 
 OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW(())
@@ -384,7 +384,7 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THRO
     }
     }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
-    osl_decrementInterlockedCount( &m_aRefCount );
+    osl_atomic_decrement( &m_aRefCount );
 }
 
 OWeakRefListener::~OWeakRefListener() SAL_THROW(())
@@ -410,13 +410,13 @@ Any SAL_CALL OWeakRefListener::queryInterface( const Type & rType ) throw(Runtim
 // XInterface
 void SAL_CALL OWeakRefListener::acquire() throw()
 {
-    osl_incrementInterlockedCount( &m_aRefCount );
+    osl_atomic_increment( &m_aRefCount );
 }
 
 // XInterface
 void SAL_CALL OWeakRefListener::release() throw()
 {
-    if( ! osl_decrementInterlockedCount( &m_aRefCount ) )
+    if( ! osl_atomic_decrement( &m_aRefCount ) )
         delete this;
 }
 

@@ -32,6 +32,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
@@ -131,7 +132,7 @@ namespace accessibility
                 {
                     if ( m_pTabBar )
                     {
-                        ::rtl::OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( (sal_uInt16)i ) );
+                        OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( (sal_uInt16)i ) );
                         pAccessibleTabBarPage->SetPageText( sPageText );
                     }
                 }
@@ -419,30 +420,24 @@ namespace accessibility
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPageList::getImplementationName() throw (RuntimeException)
+    OUString AccessibleTabBarPageList::getImplementationName() throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabBarPageList" ));
+        return OUString( "com.sun.star.comp.svtools.AccessibleTabBarPageList" );
     }
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool AccessibleTabBarPageList::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool AccessibleTabBarPageList::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-        for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-            ;
-
-        return pNames != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > AccessibleTabBarPageList::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > AccessibleTabBarPageList::getSupportedServiceNames() throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabBarPageList" ));
+        Sequence< OUString > aNames(1);
+        aNames[0] = "com.sun.star.awt.AccessibleTabBarPageList";
         return aNames;
     }
 
@@ -527,20 +522,20 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPageList::getAccessibleDescription( ) throw (RuntimeException)
+    OUString AccessibleTabBarPageList::getAccessibleDescription( ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
-        return ::rtl::OUString();
+        return OUString();
     }
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPageList::getAccessibleName(  ) throw (RuntimeException)
+    OUString AccessibleTabBarPageList::getAccessibleName(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
-        return ::rtl::OUString();
+        return OUString();
     }
 
     // -----------------------------------------------------------------------------
@@ -680,20 +675,20 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPageList::getTitledBorderText(  ) throw (RuntimeException)
+    OUString AccessibleTabBarPageList::getTitledBorderText(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
-        return ::rtl::OUString();
+        return OUString();
     }
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPageList::getToolTipText(  ) throw (RuntimeException)
+    OUString AccessibleTabBarPageList::getToolTipText(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
-        return ::rtl::OUString();
+        return OUString();
     }
 
     // -----------------------------------------------------------------------------

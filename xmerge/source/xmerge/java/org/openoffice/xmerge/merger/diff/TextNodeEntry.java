@@ -25,8 +25,6 @@ import org.w3c.dom.Node;
  *  <code>Node</code> pointer in a text <code>Node</code>.  It is
  *  mainly used for character parser to make a list of text
  *  <code>Node</code> cache entries.
- *
- *  @author smak
  */
 public class TextNodeEntry {
 

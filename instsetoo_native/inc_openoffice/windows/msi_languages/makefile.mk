@@ -44,7 +44,6 @@ ULFFILES = \
     LaunchCo.ulf \
     Property.ulf \
     RadioBut.ulf \
-    SIS.ulf      \
     UIText.ulf 
     
 MLFFILES = $(foreach,i,$(ULFFILES) $(MISC)$/$(TARGET)$/$(i:b).mlf)

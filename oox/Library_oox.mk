@@ -147,6 +147,8 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/diagram/diagramlayoutatoms \
     oox/source/drawingml/diagram/layoutnodecontext \
     oox/source/drawingml/drawingmltypes \
+    oox/source/drawingml/effectproperties \
+    oox/source/drawingml/effectpropertiescontext \
     oox/source/drawingml/embeddedwavaudiofile \
     oox/source/drawingml/fillproperties \
     oox/source/drawingml/fillpropertiesgroupcontext \

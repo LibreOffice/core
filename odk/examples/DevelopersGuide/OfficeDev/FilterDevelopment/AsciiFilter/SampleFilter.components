@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://openoffice.org/2010/uno-components">
   <component loader="com.sun.star.loader.Java2" uri="SampleFilter.uno.jar">
-    <implementation name="OfficeDev.samples.Filter.AsciiReplaceFilter$_AsciiReplaceFilter">
+    <implementation name="FilterDevelopment.AsciiFilter.AsciiReplaceFilter$_AsciiReplaceFilter">
       <service name="com.sun.star.comp.ansifilter.AsciiReplaceFilter"/>
       <service name="com.sun.star.document.ImportFilter"/>
       <service name="com.sun.star.document.ExportFilter"/>

@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.lang.IndexOutOfBoundsException;
+
 
 /**
     Base class for all tree nodes.

@@ -22,7 +22,6 @@
 
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/XTypeProvider.idl>
 
 
 module com { module sun { module star { module datatransfer { module dnd {
@@ -55,10 +54,6 @@ published service X11DropTarget
     /** For shutdown and listener support.
     */
     interface com::sun::star::lang::XComponent;
-
-    /** Service should always support this interface.
-    */
-    interface com::sun::star::lang::XTypeProvider;
 };
 
 

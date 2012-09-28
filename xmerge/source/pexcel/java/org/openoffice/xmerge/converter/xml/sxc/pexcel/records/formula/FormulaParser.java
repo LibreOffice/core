@@ -21,7 +21,6 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
 import java.util.ArrayList;
 
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 import org.openoffice.xmerge.util.Debug;
 
 /**

@@ -691,7 +691,7 @@ RegistryItem gid_Regitem_Odp_Openoffice_Impressdocument_1_Shellnew
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".odp\LibreOffice.ImpressDocument.1\ShellNew";
     Name = "FileName";
-    Value = "soffice.odp";
+    Value = "<progpath>\share\template\shellnew\soffice.odp";
 End
 
 RegistryItem gid_Regitem_Openoffice_Starimpressdocument_Curver

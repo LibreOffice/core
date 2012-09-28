@@ -73,10 +73,10 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
@@ -2774,7 +2774,7 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
     ::rtl::OUStringBuffer sUniqueName;
     if (!rInfo.OrgURL.isEmpty())
     {
-        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
         css::util::URL aURL;
         aURL.Complete = rInfo.OrgURL;
         xParser->parseStrict(aURL);
@@ -3227,7 +3227,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
 
     try
     {
-        aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment);
+        aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment, comphelper::getComponentContext(m_xSMGR));
     }
     catch(const css::uno::Exception&)
     {
@@ -3239,7 +3239,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
 
     try
     {
-        ::ucbhelper::Content::create(sSource, xEnvironment, aSourceContent);
+        ::ucbhelper::Content::create(sSource, xEnvironment, comphelper::getComponentContext(m_xSMGR), aSourceContent);
         aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation_COPY, sTargetName, nNameClash);
     }
     catch(const css::uno::Exception&)
@@ -3627,7 +3627,7 @@ void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
 
     try
     {
-        ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >());
+        ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getComponentContext(m_xSMGR));
         aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)

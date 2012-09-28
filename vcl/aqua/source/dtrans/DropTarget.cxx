@@ -296,6 +296,7 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
       //NSLog(@"Drag update: Source actions: %x proposed action %x selected action %x", mDragSourceSupportedActions, currentAction, mSelectedDropAction);
     }
 
+#ifndef __LP64__
   // Weird but it appears as if there is no method in Cocoa
   // to create a kThemeCopyArrowCursor hence we have to use
   // Carbon to do it
@@ -305,7 +306,9 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
     SetThemeCursor(kThemeCopyArrowCursor);
   else
     SetThemeCursor(kThemeArrowCursor);
-
+#else
+  // FIXME: SetThemeCursor replacement?
+#endif
   return dragOp;
 }
 
@@ -316,7 +319,9 @@ void DropTarget::draggingExited(id /*sender*/)
     fire_dragExit(dte);
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
+#ifndef __LP64__
     SetThemeCursor(kThemeArrowCursor);
+#endif
 }
 
 
@@ -370,7 +375,9 @@ void DropTarget::concludeDragOperation(id /*sender*/)
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
     mXCurrentDragClipboard = uno::Reference<XClipboard>();
+#ifndef __LP64__
     SetThemeCursor(kThemeArrowCursor);
+#endif
 }
 
 

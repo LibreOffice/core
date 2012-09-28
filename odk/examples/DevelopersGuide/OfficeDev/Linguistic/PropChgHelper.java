@@ -50,7 +50,7 @@ public class PropChgHelper implements
     XInterface          xEvtSource;
     String[]            aPropNames;
     XPropertySet        xPropSet;
-    ArrayList           aLngSvcEvtListeners;
+    ArrayList<XLinguServiceEventListener>           aLngSvcEvtListeners;
 
     public PropChgHelper(
             XInterface      xEvtSource,
@@ -59,7 +59,7 @@ public class PropChgHelper implements
         this.xEvtSource = xEvtSource;
         this.aPropNames = aPropNames;
         xPropSet        = null;
-        aLngSvcEvtListeners = new ArrayList();
+        aLngSvcEvtListeners = new ArrayList<XLinguServiceEventListener>();
     }
 
     public XInterface GetEvtSource()

@@ -27,7 +27,7 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-const static rtl::OUString LABEL( RTL_CONSTASCII_USTRINGPARAM("Label") );
+const static OUString LABEL( "Label" );
 
 ScVbaFrame::ScVbaFrame(
         const uno::Reference< XHelperInterface >& xParent,
@@ -43,14 +43,14 @@ ScVbaFrame::ScVbaFrame(
 
 // XFrame attributes
 
-rtl::OUString SAL_CALL ScVbaFrame::getCaption() throw (css::uno::RuntimeException)
+OUString SAL_CALL ScVbaFrame::getCaption() throw (css::uno::RuntimeException)
 {
-    rtl::OUString Label;
+    OUString Label;
     m_xProps->getPropertyValue( LABEL ) >>= Label;
     return Label;
 }
 
-void SAL_CALL ScVbaFrame::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ScVbaFrame::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
@@ -58,18 +58,6 @@ void SAL_CALL ScVbaFrame::setCaption( const rtl::OUString& _caption ) throw (::c
 sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect() throw (uno::RuntimeException)
 {
     return msforms::fmSpecialEffect::fmSpecialEffectEtched;
-}
-
-::sal_Int32 SAL_CALL ScVbaFrame::getForeColor() throw (::com::sun::star::uno::RuntimeException)
-{
-    // #STUB
-    return 0;
-}
-
-void SAL_CALL ScVbaFrame::setForeColor( ::sal_Int32 /*_forecolor*/ ) throw (::com::sun::star::uno::RuntimeException)
-{
-    // #STUB
-    return;
 }
 
 

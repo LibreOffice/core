@@ -162,6 +162,7 @@
 #define STR_KB                              (RID_SFX_START+112)
 #define STR_MB                              (RID_SFX_START+113)
 #define STR_GB                              (RID_SFX_START+114)
+#define STR_QUERY_SAVE_DOCUMENT_TITLE       (RID_SFX_START+115)
 
 #define STR_STANDARD_SHORTCUT               (RID_SFX_START+117)
 #define STR_REPAIREDDOCUMENT                (RID_SFX_START+118)

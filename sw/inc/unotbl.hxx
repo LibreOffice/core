@@ -25,8 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNOTBL_HXX
-#define _UNOTBL_HXX
+
+#ifndef SW_UNOTBL_HXX
+#define SW_UNOTBL_HXX
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -97,7 +98,8 @@ class SwXCell : public SwXCellBaseClass,
     const SwStartNode*      pStartNode; // only set in XML import
 
     // table position where pBox was found last
-    sal_uInt16              nFndPos;
+    size_t nFndPos;
+    static size_t const NOTFOUND = SAL_MAX_SIZE;
 
 protected:
     virtual const SwStartNode *GetStartNode() const;
@@ -115,7 +117,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-    SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, sal_uInt16 nPos=USHRT_MAX );
+    SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, size_t nPos = NOTFOUND);
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
 
 

@@ -87,7 +87,7 @@ void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
             VCLXAccessibleStatusBarItem* pVCLXAccessibleStatusBarItem = static_cast< VCLXAccessibleStatusBarItem* >( xChild.get() );
             if ( pVCLXAccessibleStatusBarItem )
             {
-                ::rtl::OUString sItemName = pVCLXAccessibleStatusBarItem->GetItemName();
+                OUString sItemName = pVCLXAccessibleStatusBarItem->GetItemName();
                 pVCLXAccessibleStatusBarItem->SetItemName( sItemName );
             }
         }
@@ -106,7 +106,7 @@ void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
             VCLXAccessibleStatusBarItem* pVCLXAccessibleStatusBarItem = static_cast< VCLXAccessibleStatusBarItem* >( xChild.get() );
             if ( pVCLXAccessibleStatusBarItem )
             {
-                ::rtl::OUString sItemText = pVCLXAccessibleStatusBarItem->GetItemText();
+                OUString sItemText = pVCLXAccessibleStatusBarItem->GetItemText();
                 pVCLXAccessibleStatusBarItem->SetItemText( sItemText );
             }
         }
@@ -291,17 +291,17 @@ void VCLXAccessibleStatusBar::disposing()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBar::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleStatusBar::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleStatusBar") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleStatusBar" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleStatusBar") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString( "com.sun.star.awt.AccessibleStatusBar" );
     return aNames;
 }
 

@@ -34,7 +34,7 @@ class ScVbaCommandBarControl : public CommandBarControl_BASE
 {
 protected:
     VbaCommandBarHelperRef pCBarHelper;
-    rtl::OUString       m_sResourceUrl;
+    OUString               m_sResourceUrl;
     css::uno::Reference< css::container::XIndexAccess > m_xCurrentSettings;
     css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
     css::uno::Sequence< css::beans::PropertyValue >     m_aPropertyValues;
@@ -46,13 +46,13 @@ private:
     void ApplyChange() throw (css::uno::RuntimeException);
 
 public:
-    ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl ) throw (css::uno::RuntimeException);
+    ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCaption( const ::rtl::OUString& _caption ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getOnAction() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setOnAction( const ::rtl::OUString& _onaction ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getOnAction() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setOnAction( const OUString& _onaction ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( ::sal_Bool _visible ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
@@ -69,38 +69,38 @@ public:
     virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& aIndex ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 typedef cppu::ImplInheritanceHelper1< ScVbaCommandBarControl, ov::XCommandBarPopup > CommandBarPopup_BASE;
 class ScVbaCommandBarPopup : public CommandBarPopup_BASE
 {
 public:
-    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException);
+    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException)
     {
         return ov::office::MsoControlType::msoControlPopup;
     }
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 typedef cppu::ImplInheritanceHelper1< ScVbaCommandBarControl, ov::XCommandBarButton > CommandBarButton_BASE;
 class ScVbaCommandBarButton : public CommandBarButton_BASE
 {
 public:
-    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException);
+    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException)
     {
         return ov::office::MsoControlType::msoControlButton;
     }
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif//SC_VBA_COMMANDBARCONTROL_HXX

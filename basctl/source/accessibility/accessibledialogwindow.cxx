@@ -36,6 +36,9 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 
+namespace basctl
+{
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -114,31 +117,25 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
 
     if ( m_pDialogWindow )
     {
-        SdrPage* pSdrPage = m_pDialogWindow->GetPage();
-        if ( pSdrPage )
-        {
-            sal_uLong nCount = pSdrPage->GetObjCount();
+        SdrPage& rPage = m_pDialogWindow->GetPage();
+        sal_uLong nCount = rPage.GetObjCount();
 
-            for ( sal_uLong i = 0; i < nCount; ++i )
+        for ( sal_uLong i = 0; i < nCount; ++i )
+        {
+            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rPage.GetObj(i)))
             {
-                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i)))
-                {
-                    ChildDescriptor aDesc( pDlgEdObj );
-                    if ( IsChildVisible( aDesc ) )
-                        m_aAccessibleChildren.push_back( aDesc );
-                }
+                ChildDescriptor aDesc( pDlgEdObj );
+                if ( IsChildVisible( aDesc ) )
+                    m_aAccessibleChildren.push_back( aDesc );
             }
         }
 
         m_pDialogWindow->AddEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
 
-        m_pDlgEditor = m_pDialogWindow->GetEditor();
-        if ( m_pDlgEditor )
-            StartListening( *m_pDlgEditor );
+        StartListening(m_pDialogWindow->GetEditor());
 
-        m_pDlgEdModel = m_pDialogWindow->GetModel();
-        if ( m_pDlgEdModel )
-            StartListening( *m_pDlgEdModel );
+        m_pDlgEdModel = &m_pDialogWindow->GetModel();
+        StartListening(*m_pDlgEdModel);
     }
 }
 
@@ -219,37 +216,33 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
     if ( m_pDialogWindow )
     {
         // first check, if the shape is in a visible layer
-        SdrModel* pSdrModel = m_pDialogWindow->GetModel();
-        if ( pSdrModel )
+        SdrLayerAdmin& rLayerAdmin = m_pDialogWindow->GetModel().GetLayerAdmin();
+        DlgEdObj* pDlgEdObj = rDesc.pDlgEdObj;
+        if ( pDlgEdObj )
         {
-            SdrLayerAdmin& rLayerAdmin = pSdrModel->GetLayerAdmin();
-            DlgEdObj* pDlgEdObj = rDesc.pDlgEdObj;
-            if ( pDlgEdObj )
+            SdrLayerID nLayerId = pDlgEdObj->GetLayer();
+            const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
+            if ( pSdrLayer )
             {
-                SdrLayerID nLayerId = pDlgEdObj->GetLayer();
-                const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
-                if ( pSdrLayer )
+                OUString aLayerName = pSdrLayer->GetName();
+                SdrView& rView = m_pDialogWindow->GetView();
+                if (rView.IsLayerVisible(aLayerName))
                 {
-                    ::rtl::OUString aLayerName = pSdrLayer->GetName();
-                    SdrView* pSdrView = m_pDialogWindow->GetView();
-                    if ( pSdrView && pSdrView->IsLayerVisible( aLayerName ) )
-                    {
-                        // get the bounding box of the shape in logic units
-                        Rectangle aRect = pDlgEdObj->GetSnapRect();
+                    // get the bounding box of the shape in logic units
+                    Rectangle aRect = pDlgEdObj->GetSnapRect();
 
-                        // transform coordinates relative to the parent
-                        MapMode aMap = m_pDialogWindow->GetMapMode();
-                        Point aOrg = aMap.GetOrigin();
-                        aRect.Move( aOrg.X(), aOrg.Y() );
+                    // transform coordinates relative to the parent
+                    MapMode aMap = m_pDialogWindow->GetMapMode();
+                    Point aOrg = aMap.GetOrigin();
+                    aRect.Move( aOrg.X(), aOrg.Y() );
 
-                        // convert logic units to pixel
-                        aRect = m_pDialogWindow->LogicToPixel( aRect, MapMode(MAP_100TH_MM) );
+                    // convert logic units to pixel
+                    aRect = m_pDialogWindow->LogicToPixel( aRect, MapMode(MAP_100TH_MM) );
 
-                        // check, if the shape's bounding box intersects with the bounding box of its parent
-                        Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
-                        if ( aParentRect.IsOver( aRect ) )
-                            bVisible = true;
-                    }
+                    // check, if the shape's bounding box intersects with the bounding box of its parent
+                    Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
+                    if ( aParentRect.IsOver( aRect ) )
+                        bVisible = true;
                 }
             }
         }
@@ -339,12 +332,10 @@ void AccessibleDialogWindow::UpdateChildren()
 {
     if ( m_pDialogWindow )
     {
-        if (SdrPage* pSdrPage = m_pDialogWindow->GetPage())
-        {
-            for ( sal_uLong i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
-                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i)))
-                    UpdateChild( ChildDescriptor( pDlgEdObj ) );
-        }
+        SdrPage& rPage = m_pDialogWindow->GetPage();
+        for ( sal_uLong i = 0, nCount = rPage.GetObjCount(); i < nCount; ++i )
+            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rPage.GetObj(i)))
+                UpdateChild( ChildDescriptor( pDlgEdObj ) );
     }
 }
 
@@ -538,26 +529,26 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if (DlgEdHint const* pDlgEdHint = dynamic_cast<DlgEdHint const*>(&rHint))
     {
-        switch ( pDlgEdHint->GetKind() )
+        switch (pDlgEdHint->GetKind())
         {
-            case DLGED_HINT_WINDOWSCROLLED:
+            case DlgEdHint::WINDOWSCROLLED:
             {
                 UpdateChildren();
                 UpdateBounds();
             }
             break;
-            case DLGED_HINT_LAYERCHANGED:
+            case DlgEdHint::LAYERCHANGED:
             {
                 if (DlgEdObj* pDlgEdObj = pDlgEdHint->GetObject())
                     UpdateChild( ChildDescriptor( pDlgEdObj ) );
             }
             break;
-            case DLGED_HINT_OBJORDERCHANGED:
+            case DlgEdHint::OBJORDERCHANGED:
             {
                 SortChildren();
             }
             break;
-            case DLGED_HINT_SELECTIONCHANGED:
+            case DlgEdHint::SELECTIONCHANGED:
             {
                 UpdateFocused();
                 UpdateSelected();
@@ -616,18 +607,18 @@ void AccessibleDialogWindow::disposing()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException)
+OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basctl.AccessibleWindow" ));
+    return OUString( "com.sun.star.comp.basctl.AccessibleWindow" );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AccessibleDialogWindow::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool AccessibleDialogWindow::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    Sequence< OUString > aNames( getSupportedServiceNames() );
+    const OUString* pNames = aNames.getConstArray();
+    const OUString* pEnd = pNames + aNames.getLength();
     for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
         ;
 
@@ -636,10 +627,10 @@ sal_Bool AccessibleDialogWindow::supportsService( const ::rtl::OUString& rServic
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleWindow" ));
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleWindow" ;
     return aNames;
 }
 
@@ -748,11 +739,11 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException)
+OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sDescription;
+    OUString sDescription;
     if ( m_pDialogWindow )
         sDescription = m_pDialogWindow->GetAccessibleDescription();
 
@@ -761,11 +752,11 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException)
+OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sName;
+    OUString sName;
     if ( m_pDialogWindow )
         sName = m_pDialogWindow->GetAccessibleName();
 
@@ -927,20 +918,20 @@ Reference< awt::XFont > AccessibleDialogWindow::getFont(  ) throw (RuntimeExcept
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getTitledBorderText(  ) throw (RuntimeException)
+OUString AccessibleDialogWindow::getTitledBorderText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getToolTipText(  ) throw (RuntimeException)
+OUString AccessibleDialogWindow::getToolTipText(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sText;
+    OUString sText;
     if ( m_pDialogWindow )
         sText = m_pDialogWindow->GetQuickHelpText();
 
@@ -960,16 +951,11 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
 
     if ( m_pDialogWindow )
     {
-        DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj;
-        if ( pDlgEdObj )
+        if (DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj)
         {
-            SdrView* pSdrView = m_pDialogWindow->GetView();
-            if ( pSdrView )
-            {
-                SdrPageView* pPgView = pSdrView->GetSdrPageView();
-                if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView );
-            }
+            SdrView& rView = m_pDialogWindow->GetView();
+            if (SdrPageView* pPgView = rView.GetSdrPageView())
+                rView.MarkObj(pDlgEdObj, pPgView);
         }
     }
 }
@@ -983,19 +969,10 @@ sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildInde
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
-    bool bSelected = false;
-    if ( m_pDialogWindow )
-    {
-        DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj;
-        if ( pDlgEdObj )
-        {
-            SdrView* pSdrView = m_pDialogWindow->GetView();
-            if ( pSdrView )
-                bSelected = pSdrView->IsObjMarked( pDlgEdObj );
-        }
-    }
-
-    return bSelected;
+    if (m_pDialogWindow)
+        if (DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj)
+            return m_pDialogWindow->GetView().IsObjMarked(pDlgEdObj);
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -1005,11 +982,7 @@ void AccessibleDialogWindow::clearAccessibleSelection(  ) throw (RuntimeExceptio
     OExternalLockGuard aGuard( this );
 
     if ( m_pDialogWindow )
-    {
-        SdrView* pSdrView = m_pDialogWindow->GetView();
-        if ( pSdrView )
-            pSdrView->UnmarkAll();
-    }
+        m_pDialogWindow->GetView().UnmarkAll();
 }
 
 // -----------------------------------------------------------------------------
@@ -1019,11 +992,7 @@ void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeExcep
     OExternalLockGuard aGuard( this );
 
     if ( m_pDialogWindow )
-    {
-        SdrView* pSdrView = m_pDialogWindow->GetView();
-        if ( pSdrView )
-            pSdrView->MarkAll();
-    }
+        m_pDialogWindow->GetView().MarkAll();
 }
 
 // -----------------------------------------------------------------------------
@@ -1077,20 +1046,18 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
 
     if ( m_pDialogWindow )
     {
-        DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj;
-        if ( pDlgEdObj )
+        if (DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj)
         {
-            SdrView* pSdrView = m_pDialogWindow->GetView();
-            if ( pSdrView )
-            {
-                SdrPageView* pPgView = pSdrView->GetSdrPageView();
-                if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView, true );
-            }
+            SdrView& rView = m_pDialogWindow->GetView();
+            SdrPageView* pPgView = rView.GetSdrPageView();
+            if (pPgView)
+                rView.MarkObj( pDlgEdObj, pPgView, true );
         }
     }
 }
 
 // -----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

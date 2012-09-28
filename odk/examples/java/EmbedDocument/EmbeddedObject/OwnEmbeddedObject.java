@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package org.openoffice.examples.embedding;
-
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -30,7 +28,6 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTruncate;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XComponent;
-import com.sun.star.document.EventObject;
 import com.sun.star.embed.VisualRepresentation;
 import com.sun.star.container.XNameAccess;
 
@@ -40,9 +37,6 @@ import com.sun.star.embed.*;
 import java.util.Vector;
 import java.awt.Dimension;
 import java.lang.Integer;
-import org.omg.CORBA.COMM_FAILURE;
-
-import org.openoffice.examples.embedding.EditorFrame;
 
 public final class OwnEmbeddedObject extends WeakBase
    implements com.sun.star.embed.XEmbedPersist,
@@ -65,7 +59,7 @@ public final class OwnEmbeddedObject extends WeakBase
 
     protected EditorFrame m_aEditorFrame;
 
-    protected Vector m_aListeners;
+    protected Vector<Object> m_aListeners;
 
     com.sun.star.embed.VerbDescriptor[] m_pOwnVerbs;
 
@@ -74,7 +68,7 @@ public final class OwnEmbeddedObject extends WeakBase
     Dimension m_aObjSize;
 
     // -------------------------------------------------------------
-    protected Vector GetListeners()
+    protected Vector<Object> GetListeners()
     {
         if ( m_aListeners == null )
             m_aListeners = new Vector<Object>( 10, 10 );
@@ -139,12 +133,12 @@ public final class OwnEmbeddedObject extends WeakBase
         {
             // save the text
             XStream xStream = xStorage.openStreamElement( "content.txt", com.sun.star.embed.ElementModes.READWRITE );
-            XComponent xStreamComp = ( XComponent ) UnoRuntime.queryInterface( XComponent.class, xStream );
+            XComponent xStreamComp = UnoRuntime.queryInterface( XComponent.class, xStream );
             if ( xStreamComp == null )
                 throw new com.sun.star.uno.RuntimeException();
 
             XOutputStream xOutStream = xStream.getOutputStream();
-            XTruncate xTruncate = ( XTruncate ) UnoRuntime.queryInterface( XTruncate.class, xOutStream );
+            XTruncate xTruncate = UnoRuntime.queryInterface( XTruncate.class, xOutStream );
             if ( xTruncate == null )
                 throw new com.sun.star.io.IOException();
 
@@ -153,12 +147,12 @@ public final class OwnEmbeddedObject extends WeakBase
 
             // save the size
             xStream = xStorage.openStreamElement( "properties.txt", com.sun.star.embed.ElementModes.READWRITE );
-            xStreamComp = ( XComponent ) UnoRuntime.queryInterface( XComponent.class, xStream );
+            xStreamComp = UnoRuntime.queryInterface( XComponent.class, xStream );
             if ( xStreamComp == null )
                 throw new com.sun.star.uno.RuntimeException();
 
             xOutStream = xStream.getOutputStream();
-            xTruncate = ( XTruncate ) UnoRuntime.queryInterface( XTruncate.class, xOutStream );
+            xTruncate = UnoRuntime.queryInterface( XTruncate.class, xOutStream );
             if ( xTruncate == null )
                 throw new com.sun.star.io.IOException();
 
@@ -167,12 +161,12 @@ public final class OwnEmbeddedObject extends WeakBase
             xOutStream.writeBytes( aProps.getBytes() );
 
             // set the media type
-            XPropertySet xPropSet = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xStorage );
+            XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, xStorage );
             if ( xPropSet == null )
                 throw new com.sun.star.uno.RuntimeException();
             xPropSet.setPropertyValue( "MediaType", "application/x-openoffice-embedded-69474366-FD6F-4806-8374-8EDD1B6E771D" );
 
-            XTransactedObject xTransact = ( XTransactedObject ) UnoRuntime.queryInterface( XTransactedObject.class, xStorage );
+            XTransactedObject xTransact = UnoRuntime.queryInterface( XTransactedObject.class, xStorage );
             if ( xTransact != null )
                 xTransact.commit();
 
@@ -202,8 +196,7 @@ public final class OwnEmbeddedObject extends WeakBase
             {
                 try
                 {
-                    com.sun.star.document.XEventListener xListener = ( com.sun.star.document.XEventListener )
-                        UnoRuntime.queryInterface( com.sun.star.document.XEventListener.class, m_aListeners.get( nInd ) );
+                    com.sun.star.document.XEventListener xListener = UnoRuntime.queryInterface( com.sun.star.document.XEventListener.class, m_aListeners.get( nInd ) );
 
                     if ( xListener != null )
                         xListener.notifyEvent( aEventObject );
@@ -226,8 +219,7 @@ public final class OwnEmbeddedObject extends WeakBase
             {
                 try
                 {
-                    com.sun.star.embed.XStateChangeListener xListener = ( com.sun.star.embed.XStateChangeListener )
-                        UnoRuntime.queryInterface( com.sun.star.embed.XStateChangeListener.class, m_aListeners.get( nInd ) );
+                    com.sun.star.embed.XStateChangeListener xListener = UnoRuntime.queryInterface( com.sun.star.embed.XStateChangeListener.class, m_aListeners.get( nInd ) );
 
                     if ( xListener != null )
                     {
@@ -254,7 +246,7 @@ public final class OwnEmbeddedObject extends WeakBase
         try
         {
             XStream xStream = xStorage.openStreamElement( aStreamName, com.sun.star.embed.ElementModes.READWRITE );
-            XComponent xStreamComp = ( XComponent ) UnoRuntime.queryInterface( XComponent.class, xStream );
+            XComponent xStreamComp = UnoRuntime.queryInterface( XComponent.class, xStream );
             if ( xStreamComp == null )
                 throw new com.sun.star.uno.RuntimeException();
 
@@ -421,7 +413,7 @@ public final class OwnEmbeddedObject extends WeakBase
             SwitchOwnPersistence( xStorage, aEntryName );
             if ( bElExists )
             {
-                XPropertySet xPropSet = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_xOwnStorage );
+                XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, m_xOwnStorage );
                 if ( xPropSet == null )
                     throw new com.sun.star.uno.RuntimeException();
 
@@ -999,19 +991,19 @@ public final class OwnEmbeddedObject extends WeakBase
             {
                 XMultiComponentFactory xFactory = m_xContext.getServiceManager();
                 Object obj = xFactory.createInstanceWithContext( "com.sun.star.configuration.ConfigurationProvider", m_xContext );
-                XMultiServiceFactory xConfProvider = (XMultiServiceFactory) UnoRuntime.queryInterface( XMultiServiceFactory.class, obj );
+                XMultiServiceFactory xConfProvider = UnoRuntime.queryInterface( XMultiServiceFactory.class, obj );
                 if ( xConfProvider == null )
                     throw new com.sun.star.uno.RuntimeException();
 
                 Object[] aArgs = new Object[1];
                 aArgs[0] = "/org.openoffice.Office.Embedding/Objects";
                 Object oSettings = xConfProvider.createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aArgs );
-                XNameAccess xObjConfNA = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oSettings );
+                XNameAccess xObjConfNA = UnoRuntime.queryInterface( XNameAccess.class, oSettings );
                 if ( xObjConfNA == null )
                     throw new com.sun.star.uno.RuntimeException();
 
                 Object oEmbObj = xObjConfNA.getByName( "69474366-FD6F-4806-8374-8EDD1B6E771D" );
-                XNameAccess xEmbObjNA = (XNameAccess) UnoRuntime.queryInterface( XNameAccess.class, oEmbObj );
+                XNameAccess xEmbObjNA = UnoRuntime.queryInterface( XNameAccess.class, oEmbObj );
                 if ( xEmbObjNA == null )
                     throw new com.sun.star.uno.RuntimeException();
 
@@ -1021,7 +1013,7 @@ public final class OwnEmbeddedObject extends WeakBase
                     com.sun.star.embed.VerbDescriptor[] pVerbs = new com.sun.star.embed.VerbDescriptor[pVerbShortcuts.length];
                        aArgs[0] = "/org.openoffice.Office.Embedding/Verbs";
                        Object oVerbs = xConfProvider.createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aArgs );
-                       XNameAccess xVerbsConfNA = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oVerbs );
+                       XNameAccess xVerbsConfNA = UnoRuntime.queryInterface( XNameAccess.class, oVerbs );
                        if ( xVerbsConfNA == null )
                         throw new com.sun.star.uno.RuntimeException();
 
@@ -1029,7 +1021,7 @@ public final class OwnEmbeddedObject extends WeakBase
                     {
                         try
                         {
-                            XNameAccess xVerbNA = (XNameAccess) UnoRuntime.queryInterface(
+                            XNameAccess xVerbNA = UnoRuntime.queryInterface(
                                                                 XNameAccess.class,
                                                                 xVerbsConfNA.getByName( pVerbShortcuts[nInd] ) );
                             if ( xVerbNA != null )

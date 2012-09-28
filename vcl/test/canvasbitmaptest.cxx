@@ -45,8 +45,6 @@
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
 
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/configurationkeys.hxx>
 #include <cppuhelper/compbase3.hxx>
 
 #include <tools/diagnose_ex.h>

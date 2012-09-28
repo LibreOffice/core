@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import android.content.Context;
+import android.content.Intent;
 
 /**
  * Generic Client for the remote control. To implement a Client for a specific
@@ -33,6 +33,7 @@ public abstract class Client {
     protected BufferedReader mReader;
     protected OutputStream mOutputStream;
     protected String mPin = "";
+    protected String mName = "";
 
     private static Client latestInstance = null;
 
@@ -40,15 +41,17 @@ public abstract class Client {
 
     private Receiver mReceiver;
 
-    protected Context mContext;
+    protected Server mServer;
 
-    public Client(Context aContext) {
-        mContext = aContext;
-        latestInstance = this;
-    }
+    protected CommunicationService mCommunicationService;
 
-    public void setReceiver(Receiver aReceiver) {
+    protected Client(Server aServer,
+                    CommunicationService aCommunicationService,
+                    Receiver aReceiver) {
+        mServer = aServer;
+        mCommunicationService = aCommunicationService;
         mReceiver = aReceiver;
+        latestInstance = this;
     }
 
     protected void startListening() {
@@ -62,25 +65,38 @@ public abstract class Client {
         t.start();
     }
 
-    private void listen() {
+    private final void listen() {
         try {
             while (true) {
                 ArrayList<String> aList = new ArrayList<String>();
                 String aTemp;
                 // read until empty line
-                while ((aTemp = mReader.readLine()).length() != 0) {
+                while ((aTemp = mReader.readLine()) != null
+                                && aTemp.length() != 0) {
                     aList.add(aTemp);
+                }
+                if (aTemp == null) {
+                    mCommunicationService.connectTo(mServer);
+                    Intent aIntent = new Intent(
+                                    mCommunicationService
+                                                    .getApplicationContext(),
+                                    ReconnectionActivity.class);
+                    aIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mCommunicationService.getApplicationContext()
+                                    .startActivity(aIntent);
+                    return;
                 }
                 mReceiver.parseCommand(aList);
             }
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e1) {
             // TODO stream couldn't be opened.
             e1.printStackTrace();
+        } finally {
+            latestInstance = null;
+            onDisconnect();
         }
-        latestInstance = null;
 
     }
 
@@ -92,11 +108,16 @@ public abstract class Client {
         }
     }
 
+    public static String getName() {
+        if (latestInstance != null) {
+            return latestInstance.mName;
+        } else {
+            return "";
+        }
+    }
+
     /**
-     * Send a valid JSON string to the server.
-     *
-     * @param command
-     *            Must be a valid JSON string.
+     * Send a valid command to the Server.
      */
     public void sendCommand(String command) {
         try {
@@ -105,8 +126,16 @@ public abstract class Client {
             throw new Error("Specified network encoding [" + CHARSET
                             + " not available.");
         } catch (IOException e) {
-            // TODO Notify that stream has closed.
+            // I.e. connection closed. This will be dealt with by the listening
+            // loop.
         }
+    }
+
+    /**
+     * Called after the Client disconnects. Can be extended to allow for
+     * cleaning up bluetooth properties etc.
+     */
+    protected void onDisconnect() {
     }
 
 }

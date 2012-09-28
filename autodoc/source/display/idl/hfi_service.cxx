@@ -285,7 +285,7 @@ HF_IdlService::produce_SummaryDeclaration( Xml::Element &      o_row,
     }   // end if
 
     HF_IdlTypeText
-        aType( Env(), rCell, true );
+        aType( Env(), rCell );
     aType.Produce_byData( PropertyAttr::Type(i_property) );
 
     StreamLock aLocalLink(100);
@@ -325,7 +325,7 @@ HF_IdlService::produce_Link( Xml::Element &     o_row,
                 >> *new Html::TableCell
                     << new Html::ClassAttr(C_sCellStyle_SummaryLeft);
     HF_IdlTypeText
-        aText(Env(), rCell, true);
+        aText(Env(), rCell);
     aText.Produce_byData(i_type);
 }
 

@@ -35,7 +35,6 @@
 class SwTxtFld;
 class SwIndex;
 class SwNodeIndex;
-class SwCntntNode;
 class SwCntntFrm;
 class SwSectionNode;
 class SwSection;
@@ -153,10 +152,6 @@ class SwDocUpdtFld
 {
     _SetGetExpFlds* pFldSortLst;    // current field list for calculation
     SwCalcFldType*  aFldTypeTable[ TBLSZ ];
-
-    // another optimization - currently not used!
-    long nFldUpdtPos;               // start update from this position
-    SwCntntNode* pCNode;            // TxtNode at update position
 
     sal_uLong nNodes;               // if the node count is different
     sal_uInt8 nFldLstGetMode;

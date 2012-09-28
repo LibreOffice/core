@@ -256,7 +256,7 @@ namespace svx
         :m_aContext( _rContext )
         ,m_pInvalidationCallback( _pInvalidationCallback )
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         try
         {
             m_xFormOperations = FormOperations::createWithFormController( m_aContext.getUNOContext(), _rxController );
@@ -273,7 +273,7 @@ namespace svx
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

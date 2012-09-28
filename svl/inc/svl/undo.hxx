@@ -66,8 +66,8 @@ public:
 
     virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
-    virtual rtl::OUString   GetComment() const;
-    virtual UniString       GetRepeatComment(SfxRepeatTarget&) const;
+    virtual OUString    GetComment() const;
+    virtual OUString    GetRepeatComment(SfxRepeatTarget&) const;
     virtual sal_uInt16  GetId() const;
 
 private:
@@ -162,8 +162,8 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
     public:
                             TYPEINFO();
 
-                            SfxListUndoAction( const UniString &rComment,
-                                const UniString rRepeatComment, sal_uInt16 Id, SfxUndoArray *pFather);
+                            SfxListUndoAction( const OUString &rComment,
+                                const OUString rRepeatComment, sal_uInt16 Id, SfxUndoArray *pFather);
     virtual void            Undo();
     virtual void            UndoWithContext( SfxUndoContext& i_context );
     virtual void            Redo();
@@ -173,17 +173,17 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 
     virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
-    virtual rtl::OUString   GetComment() const;
-    virtual UniString       GetRepeatComment(SfxRepeatTarget&) const;
+    virtual OUString    GetComment() const;
+    virtual OUString    GetRepeatComment(SfxRepeatTarget&) const;
     virtual sal_uInt16  GetId() const;
 
-    void SetComment( const UniString& rComment );
+    void SetComment(const OUString& rComment);
 
     private:
 
     sal_uInt16          nId;
-    UniString               aComment;
-    UniString               aRepeatComment;
+    OUString            aComment;
+    OUString            aRepeatComment;
 
 };
 
@@ -232,11 +232,11 @@ namespace svl
 
         virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual sal_uInt16      GetUndoActionId() const = 0;
-        virtual rtl::OUString   GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
+        virtual OUString        GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const = 0;
 
         virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
-        virtual rtl::OUString   GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
+        virtual OUString        GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
 
         virtual sal_Bool        Undo() = 0;
         virtual sal_Bool        Redo() = 0;
@@ -267,11 +267,11 @@ namespace svl
         virtual bool            IsDoing() const = 0;
 
         virtual size_t          GetRepeatActionCount() const = 0;
-        virtual UniString       GetRepeatActionComment( SfxRepeatTarget &rTarget) const = 0;
+        virtual OUString        GetRepeatActionComment( SfxRepeatTarget &rTarget) const = 0;
         virtual sal_Bool        Repeat( SfxRepeatTarget &rTarget ) = 0;
         virtual sal_Bool        CanRepeat( SfxRepeatTarget &rTarget ) const = 0;
 
-        virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId=0) = 0;
+        virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId=0) = 0;
 
         /** leaves the list action entered with EnterListAction
             @return the number of the sub actions in the list which has just been left. Note that in case no such
@@ -351,10 +351,10 @@ public:
     virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
     virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     virtual sal_uInt16      GetUndoActionId() const;
-    virtual rtl::OUString   GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
+    virtual OUString        GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const;
     virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const;
-    virtual rtl::OUString   GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
+    virtual OUString        GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     virtual sal_Bool        Undo();
     virtual sal_Bool        Redo();
     virtual void            Clear();
@@ -362,10 +362,10 @@ public:
     virtual void            Reset();
     virtual bool            IsDoing() const;
     virtual size_t          GetRepeatActionCount() const;
-    virtual UniString       GetRepeatActionComment( SfxRepeatTarget &rTarget) const;
+    virtual OUString        GetRepeatActionComment( SfxRepeatTarget &rTarget) const;
     virtual sal_Bool        Repeat( SfxRepeatTarget &rTarget );
     virtual sal_Bool        CanRepeat( SfxRepeatTarget &rTarget ) const;
-    virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId=0);
+    virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId=0);
     virtual size_t          LeaveListAction();
     virtual size_t          LeaveAndMergeListAction();
     virtual bool            IsInListAction() const;
@@ -457,8 +457,8 @@ public:
 
     virtual void            Repeat(SfxRepeatTarget&r);
 
-    virtual rtl::OUString   GetComment() const;
-    virtual UniString       GetRepeatComment(SfxRepeatTarget&r) const;
+    virtual OUString    GetComment() const;
+    virtual OUString    GetRepeatComment(SfxRepeatTarget&r) const;
     virtual sal_uInt16  GetId() const;
 
     SfxUndoAction*          GetAction() const { return pAction; }

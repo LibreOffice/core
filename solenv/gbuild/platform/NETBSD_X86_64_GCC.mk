@@ -33,7 +33,7 @@ include $(GBUILDDIR)/platform/unxgcc.mk
 
 NB_ADD_LIBPATH := /usr/pkg/lib:/usr/X11R7/lib
 
-gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib:$(NB_ADD_LIBPATH)
-gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib:$(NB_ADD_LIBPATH)
+gb_Helper_set_ld_path := LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}$(OUTDIR_FOR_BUILD)/lib:$(NB_ADD_LIBPATH)
+gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}$(OUTDIR)/lib:$(NB_ADD_LIBPATH)
 
 # vim: set noet sw=4:

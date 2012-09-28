@@ -23,10 +23,6 @@
 
 package graphical;
 
-/**
- *
- * @author ll93751
- */
 public class Tolerance
 {
     private int m_nTolerance;

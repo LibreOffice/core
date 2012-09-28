@@ -172,8 +172,8 @@ void FileControl::Resize()
     }
 
     long nButtonWidth = nButtonTextWidth+ButtonBorder;
-    maEdit.SetPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
-    maButton.SetPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
+    maEdit.setPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
+    maButton.setPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
 
     mnInternalFlags &= ~FILECTRL_INRESIZE; //InResize = sal_False
 }

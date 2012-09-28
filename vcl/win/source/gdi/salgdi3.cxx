@@ -2282,6 +2282,11 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     pFontList->SetFallbackHook( &aSubstFallback );
 }
 
+void WinSalGraphics::ClearDevFontCache()
+{
+    //anything to do here ?
+}
+
 // ----------------------------------------------------------------------------
 
 void WinSalGraphics::GetDevFontSubstList( OutputDevice* )

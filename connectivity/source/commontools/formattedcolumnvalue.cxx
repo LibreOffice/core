@@ -22,7 +22,7 @@
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbconversion.hxx"
 
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -51,6 +51,7 @@ namespace dbtools
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::util::Date;
     using ::com::sun::star::sdbc::XConnection;
@@ -199,7 +200,7 @@ namespace dbtools
                 Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, sal_True, i_rContext.getLegacyServiceFactory() ), UNO_SET_THROW );
 
                 // create a number formatter for it
-                xNumberFormatter.set( i_rContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY_THROW );
+                xNumberFormatter.set( NumberFormatter::create(i_rContext.getUNOContext()), UNO_QUERY_THROW );
                 xNumberFormatter->attachNumberFormatsSupplier( xSupplier );
             }
             catch( const Exception& )

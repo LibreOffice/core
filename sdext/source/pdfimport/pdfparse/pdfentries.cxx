@@ -46,6 +46,7 @@
 #include <map>
 
 #include <stdio.h>
+#include <string.h>
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -1059,9 +1060,9 @@ struct PDFFileImplData
         m_aCipher( NULL ),
         m_aDigest( NULL )
     {
-        rtl_zeroMemory( m_aOEntry, sizeof( m_aOEntry ) );
-        rtl_zeroMemory( m_aUEntry, sizeof( m_aUEntry ) );
-        rtl_zeroMemory( m_aDecryptionKey, sizeof( m_aDecryptionKey ) );
+        memset( m_aOEntry, 0, sizeof( m_aOEntry ) );
+        memset( m_aUEntry, 0, sizeof( m_aUEntry ) );
+        memset( m_aDecryptionKey, 0, sizeof( m_aDecryptionKey ) );
     }
 
     ~PDFFileImplData()
@@ -1132,7 +1133,7 @@ static void pad_or_truncate_to_32( const OString& rStr, sal_Char* pBuffer )
     if( nLen > 32 )
         nLen = 32;
     const sal_Char* pStr = rStr.getStr();
-    rtl_copyMemory( pBuffer, pStr, nLen );
+    memcpy( pBuffer, pStr, nLen );
     int i = 0;
     while( nLen < 32 )
         pBuffer[nLen++] = nPadString[i++];
@@ -1170,7 +1171,7 @@ static sal_uInt32 password_to_key( const OString& rPwd, sal_uInt8* pOutKey, PDFF
     sal_uInt32 nLen = pData->m_nKeyLength;
     if( nLen > RTL_DIGEST_LENGTH_MD5 )
         nLen = RTL_DIGEST_LENGTH_MD5;
-    rtl_copyMemory( pOutKey, nSum, nLen );
+    memcpy( pOutKey, nSum, nLen );
     return nLen;
 }
 
@@ -1180,10 +1181,10 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
     bool bValid = false;
     sal_uInt8 aKey[ENCRYPTION_KEY_LEN];
     sal_uInt8 nEncryptedEntry[ENCRYPTION_BUF_LEN];
-    rtl_zeroMemory( nEncryptedEntry, sizeof(nEncryptedEntry) );
+    memset( nEncryptedEntry, 0, sizeof(nEncryptedEntry) );
     sal_uInt32 nKeyLen = password_to_key( rPwd, aKey, pData, false );
     // save (at this time potential) decryption key for later use
-    rtl_copyMemory( pData->m_aDecryptionKey, aKey, nKeyLen );
+    memcpy( pData->m_aDecryptionKey, aKey, nKeyLen );
     if( pData->m_nStandardRevision == 2 )
     {
         // see PDF reference 1.4 Algorithm 3.4
@@ -1193,7 +1194,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
                                 NULL, 0 );
         rtl_cipher_encodeARCFOUR( pData->m_aCipher, nPadString, sizeof( nPadString ),
                                   nEncryptedEntry, sizeof( nEncryptedEntry ) );
-        bValid = (rtl_compareMemory( nEncryptedEntry, pData->m_aUEntry, 32 ) == 0);
+        bValid = (memcmp( nEncryptedEntry, pData->m_aUEntry, 32 ) == 0);
     }
     else if( pData->m_nStandardRevision == 3 )
     {
@@ -1218,7 +1219,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
                                       nEncryptedEntry, 16,
                                       nEncryptedEntry, 16 ); // encrypt in place
         }
-        bValid = (rtl_compareMemory( nEncryptedEntry, pData->m_aUEntry, 16 ) == 0);
+        bValid = (memcmp( nEncryptedEntry, pData->m_aUEntry, 16 ) == 0);
     }
     return bValid;
 }
@@ -1250,7 +1251,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
         // see PDF reference 1.4 Algorithm 3.7
         sal_uInt8 aKey[ENCRYPTION_KEY_LEN];
         sal_uInt8 nPwd[ENCRYPTION_BUF_LEN];
-        rtl_zeroMemory( nPwd, sizeof(nPwd) );
+        memset( nPwd, 0, sizeof(nPwd) );
         sal_uInt32 nKeyLen = password_to_key( rPwd, aKey, m_pData, true );
         if( m_pData->m_nStandardRevision == 2 )
         {
@@ -1262,7 +1263,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
         }
         else if( m_pData->m_nStandardRevision == 3 )
         {
-            rtl_copyMemory( nPwd, m_pData->m_aOEntry, 32 );
+            memcpy( nPwd, m_pData->m_aOEntry, 32 );
             for( int i = 19; i >= 0; i-- )
             {
                 sal_uInt8 nTempKey[ENCRYPTION_KEY_LEN];
@@ -1381,7 +1382,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                             {
                                 OString aEnt = pString->getFilteredString();
                                 if( aEnt.getLength() == 32 )
-                                    rtl_copyMemory( m_pData->m_aOEntry, aEnt.getStr(), 32 );
+                                    memcpy( m_pData->m_aOEntry, aEnt.getStr(), 32 );
                                 #if OSL_DEBUG_LEVEL > 1
                                 else
                                 {
@@ -1400,7 +1401,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                             {
                                 OString aEnt = pString->getFilteredString();
                                 if( aEnt.getLength() == 32 )
-                                    rtl_copyMemory( m_pData->m_aUEntry, aEnt.getStr(), 32 );
+                                    memcpy( m_pData->m_aUEntry, aEnt.getStr(), 32 );
                                 #if OSL_DEBUG_LEVEL > 1
                                 else
                                 {

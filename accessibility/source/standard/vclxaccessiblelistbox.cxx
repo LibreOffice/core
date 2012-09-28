@@ -85,22 +85,22 @@ void VCLXAccessibleListBox::ProcessWindowEvent (const VclWindowEvent& rVclWindow
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString VCLXAccessibleListBox::getImplementationName (void)
+OUString VCLXAccessibleListBox::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleListBox" ));
+    return OUString( "com.sun.star.comp.toolkit.AccessibleListBox" );
 }
 
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleListBox::getSupportedServiceNames (void)
+Sequence< OUString > VCLXAccessibleListBox::getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
+    Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleListBox" ));
+    aNames[nLength] = "com.sun.star.accessibility.AccessibleListBox";
     return aNames;
 }
 

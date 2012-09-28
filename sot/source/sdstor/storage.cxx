@@ -483,7 +483,7 @@ void SotStorage::CreateStorage( sal_Bool bForceUCBStorage, StreamMode nMode, Sto
             String aURL = UCBStorage::CreateLinkFile( m_aName );
             if ( aURL.Len() )
             {
-                ::ucbhelper::Content aContent( aURL, ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >() );
+                ::ucbhelper::Content aContent( aURL, ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 m_pOwnStg = new UCBStorage( aContent, aURL, nMode, sal_False );
             }
             else

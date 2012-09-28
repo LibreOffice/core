@@ -24,7 +24,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.DesktopTools;
 import util.SOfficeFactory;
 import util.XMLTools;
 
@@ -74,7 +73,7 @@ public class XMLExporter extends TestCase {
 
         try {
             log.println( "creating a chartdocument" );
-            xChartDoc = SOF.createChartDoc(null);;
+            xChartDoc = SOF.createChartDoc(null);
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

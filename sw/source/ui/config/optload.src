@@ -142,14 +142,30 @@ TabPage TP_OPTLOAD_PAGE
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Use square page mode for text grid";
     };
-
     CheckBox CB_USE_CHAR_UNIT
     {
         Pos = MAP_APPFONT ( 12 , 130) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "Enable char unit";
     };
-
+    FixedLine FL_WORDCOUNT
+    {
+        Pos = MAP_APPFONT ( 6 , 144 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Word Count";
+    };
+    FixedText FT_WORDCOUNT
+    {
+        Pos = MAP_APPFONT ( 12 , 157 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ en-US ] = "Additional separators";
+    };
+    Edit ED_WORDCOUNT
+    {
+        Pos = MAP_APPFONT ( 95 , 155 ) ;
+        Size = MAP_APPFONT ( 159 , 12 ) ;
+        Border = TRUE ;
+    };
 };
 
 TabPage TP_OPTCAPTION_PAGE

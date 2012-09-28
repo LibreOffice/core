@@ -338,6 +338,10 @@ namespace pcr
     #define PROPERTY_ID_WHEEL_BEHAVIOR              200
     #define PROPERTY_ID_TEXT_ANCHOR_TYPE            201
     #define PROPERTY_ID_SHEET_ANCHOR_TYPE           202
+    #define PROPERTY_ID_SCROLL_WIDTH                203
+    #define PROPERTY_ID_SCROLL_HEIGHT               204
+    #define PROPERTY_ID_SCROLL_TOP                  205
+    #define PROPERTY_ID_SCROLL_LEFT                 206
 
 //............................................................................
 } // namespace pcr

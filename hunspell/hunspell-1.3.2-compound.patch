@@ -1,0 +1,11 @@
+--- misc/hunspell-1.3.2/src/hunspell/affixmgr.cxx	2010-02-27 12:59:53.000000000 +0100
++++ misc/build/hunspell-1.3.2/src/hunspell/affixmgr.cxx	2012-09-18 11:50:04.535803282 +0200
+@@ -2125,7 +2125,7 @@
+         }        
+ 
+         if (!rv) {
+-            if (onlycpdrule) break;
++            if (onlycpdrule && strlen(*result) > MAXLNLEN/10) break;
+             if (compoundflag &&
+              !(rv = prefix_check(st, i, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN, compoundflag))) {
+                 if (((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL,

@@ -3130,7 +3130,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     sal_Bool bInWrd  = sal_False;
     sal_Bool bEndWrd = sal_False;
     sal_Bool bSttWrd = sal_False;
-    sal_Bool bSttPara= sal_False;
+    bool bSttPara = false;
     sal_Bool bTblSel = sal_False;
     sal_Bool bFrmSel = sal_False;
 

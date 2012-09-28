@@ -74,7 +74,7 @@ public class CheckTransientDocumentsContent {
      */
     @Test public void checkTransientDocumentsContent() {
         try {
-            // create the ucb
+            // create unconfigured ucb
             XContentIdentifierFactory xContentIdentifierFactory =
                             UnoRuntime.queryInterface(XContentIdentifierFactory.class, xMSF.createInstance("com.sun.star.ucb.UniversalContentBroker"));
             XContentProvider xContentProvider =

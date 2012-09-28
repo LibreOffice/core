@@ -35,7 +35,6 @@ import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XMasterPagesSupplier;
-import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -111,7 +110,7 @@ public class SdDrawPage extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xDrawDoc");
-        util.DesktopTools.closeDoc(xDrawDoc);;
+        util.DesktopTools.closeDoc(xDrawDoc);
     }
 
     /**

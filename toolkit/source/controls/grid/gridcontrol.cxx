@@ -53,6 +53,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::util;
 
 namespace toolkit
 {
@@ -110,6 +111,10 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_BACKGROUND );
     ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_TEXT_COLOR );
     ImplRegisterProperty( BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS );
+    ImplRegisterProperty( BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR );
+    ImplRegisterProperty( BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR );
+    ImplRegisterProperty( BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR );
+    ImplRegisterProperty( BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR );
     ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
 }
 
@@ -117,7 +122,7 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
 UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
     :UnoControlModel( rModel )
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         Reference< XGridDataModel > xDataModel;
         // clone the data model
@@ -155,7 +160,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( xColumnModel ) );
             // same comment as above: do not use our own setPropertyValue here.
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -239,6 +244,10 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         case BASEPROPERTY_GRID_HEADER_TEXT_COLOR:
         case BASEPROPERTY_GRID_LINE_COLOR:
         case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
+        case BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR:
+        case BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR:
+        case BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR:
+        case BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR:
             return Any();
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -302,8 +311,8 @@ void SAL_CALL UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > 
 {
     UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
-    const Reference< XGridControl >  xGrid( getPeer(), UNO_QUERY_THROW );
-    xGrid->addSelectionListener(&m_aSelectionListeners);
+    const Reference< XGridRowSelection > xGrid( getPeer(), UNO_QUERY_THROW );
+    xGrid->addSelectionListener( &m_aSelectionListeners );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -385,45 +394,52 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException, VetoException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectRow( i_rowIndex );
+    Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
+    xGrid->goToCell( i_columnIndex, i_rowIndex );
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void SAL_CALL UnoGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException )
+{
+    Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->selectRow( i_rowIndex );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL UnoGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectAllRows();
+    Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->selectAllRows();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SAL_CALL UnoGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (RuntimeException, IndexOutOfBoundsException )
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->deselectRow( i_rowIndex );
+    Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->deselectRow( i_rowIndex );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL UnoGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->deselectAllRows();
+    Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->deselectAllRows();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelection() throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelectedRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getSelection();
+    return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->getSelectedRows();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Bool SAL_CALL UnoGridControl::isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL UnoGridControl::hasSelectedRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->isSelectionEmpty();
+    return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->hasSelectedRows();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::sal_Bool SAL_CALL UnoGridControl::isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->isSelectedIndex( index );
+    return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->isRowSelected( index );
 }
 
 //----------------------------------------------------------------------------------------------------------------------

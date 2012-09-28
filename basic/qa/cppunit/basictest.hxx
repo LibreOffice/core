@@ -22,7 +22,7 @@ class BasicTestBase : public test::BootstrapFixture
     private:
     bool mbError;
     public:
-    BasicTestBase() : mbError(false) {};
+    BasicTestBase() : BootstrapFixture(true, false), mbError(false) {};
 
 
     DECL_LINK( BasicErrorHdl, StarBASIC * );

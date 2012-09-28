@@ -29,14 +29,14 @@
 
 #include <svx/svdomedia.hxx>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <ucbhelper/content.hxx>
-
+#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <vcl/svapp.hxx>
@@ -70,9 +70,9 @@ struct MediaTempFile
 
 struct SdrMediaObj::Impl
 {
-    ::avmedia::MediaItem               m_MediaProperties;
-    ::boost::scoped_ptr<Graphic>       m_pGraphic;
-    ::boost::shared_ptr<MediaTempFile> m_pTempFile;
+    ::avmedia::MediaItem                  m_MediaProperties;
+    ::boost::shared_ptr< MediaTempFile >  m_pTempFile;
+    uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
 };
 
 TYPEINIT1( SdrMediaObj, SdrRectObj );
@@ -185,8 +185,20 @@ SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
 
     m_pImpl->m_pTempFile = rObj.m_pImpl->m_pTempFile; // before props
     setMediaProperties( rObj.getMediaProperties() );
-    setGraphic( rObj.m_pImpl->m_pGraphic.get() );
+    m_pImpl->m_xCachedSnapshot = rObj.m_pImpl->m_xCachedSnapshot;
     return *this;
+}
+
+uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot()
+{
+    if( !m_pImpl->m_xCachedSnapshot.is() )
+    {
+        rtl::OUString aRealURL = m_pImpl->m_MediaProperties.getTempURL();
+        if( aRealURL.isEmpty() )
+            aRealURL = m_pImpl->m_MediaProperties.getURL();
+        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, true );
+    }
+    return m_pImpl->m_xCachedSnapshot;
 }
 
 // ------------------------------------------------------------------------------
@@ -276,12 +288,6 @@ Size SdrMediaObj::getPreferredSize() const
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::setGraphic( const Graphic* pGraphic )
-{
-    m_pImpl->m_pGraphic.reset( pGraphic ? new Graphic( *pGraphic ) : NULL );
-}
-
-// ------------------------------------------------------------------------------
 uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
 {
     if (!m_pImpl->m_pTempFile)
@@ -290,7 +296,8 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
         return 0;
     }
     ucbhelper::Content tempFile(m_pImpl->m_pTempFile->m_TempFileURL,
-                uno::Reference<ucb::XCommandEnvironment>());
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
     return tempFile.openStream();
 }
 
@@ -338,7 +345,8 @@ bool lcl_HandlePackageURL(
     try
     {
         ::ucbhelper::Content tempContent(tempFileURL,
-                uno::Reference<ucb::XCommandEnvironment>());
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
         tempContent.writeStream(xInStream, true); // copy stream to file
     }
     catch (uno::Exception const& e)
@@ -354,13 +362,14 @@ static char const s_PkgScheme[] = "vnd.sun.star.Package:";
 
 void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProperties )
 {
+    bool bBroadcastChanged = false;
     const sal_uInt32 nMaskSet = rNewProperties.getMaskSet();
 
     // use only a subset of MediaItem properties for own own properties
     if( ( AVMEDIA_SETMASK_URL & nMaskSet ) &&
         ( rNewProperties.getURL() != getURL() ))
     {
-        setGraphic();
+        m_pImpl->m_xCachedSnapshot.clear();
         ::rtl::OUString const url(rNewProperties.getURL());
         if ((0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
                 url.getStr(), url.getLength(),
@@ -395,6 +404,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
             m_pImpl->m_pTempFile.reset();
             m_pImpl->m_MediaProperties.setURL(url, 0);
         }
+        bBroadcastChanged = true;
     }
 
     if( AVMEDIA_SETMASK_LOOP & nMaskSet )
@@ -408,6 +418,12 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
 
     if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
         m_pImpl->m_MediaProperties.setZoom( rNewProperties.getZoom() );
+
+    if( bBroadcastChanged )
+    {
+        SetChanged();
+        BroadcastObjectChange();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

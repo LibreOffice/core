@@ -371,7 +371,7 @@ bool GlobalImageList::hasImage( sal_Int16 nImageType, const rtl::OUString& rComm
 
 oslInterlockedCount GlobalImageList::acquire()
 {
-    osl_incrementInterlockedCount( &m_nRefCount );
+    osl_atomic_increment( &m_nRefCount );
     return m_nRefCount;
 }
 
@@ -379,7 +379,7 @@ oslInterlockedCount GlobalImageList::release()
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
 
-    if ( !osl_decrementInterlockedCount( &m_nRefCount ))
+    if ( !osl_atomic_decrement( &m_nRefCount ))
     {
         oslInterlockedCount nCount( m_nRefCount );
         // remove global pointer as we destroy the object now

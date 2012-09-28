@@ -29,11 +29,9 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.xml.dom.*;
 import static com.sun.star.xml.dom.DOMExceptionType.*;
 import static com.sun.star.xml.dom.NodeType.*;
-import com.sun.star.xml.dom.events.*;
 import com.sun.star.xml.xpath.*;
 import static com.sun.star.xml.xpath.XPathObjectType.*;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

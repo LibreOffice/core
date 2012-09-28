@@ -38,6 +38,7 @@
 #include <sstream>
 
 #include <stdio.h> // vsnprintf
+#include <string.h> // strdup
 
 #include "osl/thread.hxx"
 #include "rtl/string.h"
@@ -82,14 +83,24 @@ char const * toString(sal_detail_LogLevel level) {
     }
 }
 
+// getenv is not thread safe, so minimize use of result:
+char const * getEnvironmentVariable() {
+    char const * p1 = std::getenv("SAL_LOG");
+    if (p1 == 0) {
+        return "+WARN";
+    }
+    char const * p2 = strdup(p1); // leaked
+    if (p2 == 0) {
+        std::abort(); // cannot do much here
+    }
+    return p2;
+}
+
 bool report(sal_detail_LogLevel level, char const * area) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
         return true;
     assert(area != 0);
-    char const * env = std::getenv("SAL_LOG");
-    if (env == 0) {
-        env = "+WARN";
-    }
+    static char const * env = getEnvironmentVariable();
     std::size_t areaLen = std::strlen(area);
     enum Sense { POSITIVE = 0, NEGATIVE = 1 };
     std::size_t senseLen[2] = { 0, 1 };
@@ -168,7 +179,7 @@ void log(
 
 }
 
-SAL_DLLPUBLIC void sal_detail_log(
+void sal_detail_log(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message)
 {
@@ -177,7 +188,7 @@ SAL_DLLPUBLIC void sal_detail_log(
     }
 }
 
-SAL_DLLPUBLIC void sal_detail_logFormat(
+void sal_detail_logFormat(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 {

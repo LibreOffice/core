@@ -31,32 +31,73 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	autodoc \
 	basegfx \
 	binaryurp \
+	bridges \
+	cli_ure \
+	$(if $(filter CLUCENE,$(BUILD_TYPE)),\
+		clucene \
+	) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		codemaker \
+	) \
+	comphelper \
 	cosv \
+	cppu \
+	cppuhelper \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		helpcompiler \
+	) \
 	i18npool \
 	i18nutil \
 	idl \
+	idlc \
 	io \
 	javaunohelper \
+	jurt \
+	jvmaccess \
+	jvmfwk \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
 		l10ntools \
 	) \
 	o3tl \
+	offapi \
+	officecfg \
 	oovbaapi \
 	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
 		qadevOOo \
 	) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		rdbmaker \
+	) \
 	regexp \
+	registry \
 	remotebridges \
+	ridljar \
 	rsc \
+	sal \
+	salhelper \
 	sax \
 	shell \
+	stoc \
+	store \
 	tools \
+	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
+		translations \
+	) \
+	ucbhelper \
+	$(if $(filter UCPP,$(BUILD_TYPE)),\
+		ucpp \
+	) \
+	udkapi \
 	udm \
 	unoil \
 	unotest \
 	unotools \
 	ure \
+	$(if $(filter NATIVE,$(BUILD_TYPE)),\
+		xml2cmp \
+	) \
 	xmlhelp \
+	xmlreader \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

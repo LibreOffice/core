@@ -153,8 +153,6 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     sal_uInt16          nKS_NUMINDENTINC_Count;
 
     SwFrameControlsManager m_aFrameControlsManager;
-    rtl::OUString   m_sTmpHFPageStyle;
-    bool            m_bTmpHFIsHeader;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
@@ -226,9 +224,6 @@ protected:
 
     void    ShowAutoTextCorrectQuickHelp( const String& rWord, SvxAutoCorrCfg* pACfg,
                                 SvxAutoCorrect* pACorr, sal_Bool bFromIME = sal_False );
-
-    /// Shows or hides the header & footer separators; only if there is a change.
-    void    ShowHeaderFooterSeparator( bool bShowHeader, bool bShowFooter );
 
     /// Returns true if in header/footer area, or in the header/footer control.
     bool    IsInHeaderFooter( const Point &rDocPt, FrameControlType &rControl ) const;

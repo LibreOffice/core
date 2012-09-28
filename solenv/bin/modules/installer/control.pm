@@ -271,16 +271,22 @@ sub check_makecab_version
 sub check_system_environment
 {
     my %variables = ();
-    my $key;
     my $error = 0;
 
-    foreach $key ( @installer::globals::environmentvariables )
-    {
-        my $value = "";
-        if ( $ENV{$key} ) { $value = $ENV{$key}; }
-        $variables{$key} = $value;
+    my @environmentvariables = qw(
+        SOLARVERSION
+        GUI
+        WORK_STAMP
+        OUTPATH
+        LOCAL_OUT
+        LOCAL_COMMON_OUT
+    );
 
-        if ( $value eq "" )
+    for my $key ( @environmentvariables )
+    {
+        $variables{$key} = $ENV{$key} || "";
+
+        if ( $variables{$key} eq "" )
         {
             installer::logger::print_error( "$key not set in environment\n" );
             $error = 1;
@@ -402,53 +408,41 @@ sub check_logfile
 }
 
 #############################################################
-# Reading the Windows list file for language encodings
+# Reading the Windows list file for Windows language codes
+# Encoding field is no longer used. We use UTF-8 everywhere.
 #############################################################
 
-sub read_encodinglist
+sub read_lcidlist
 {
     my ($patharrayref) = @_;
+    my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$installer::globals::lcidlistname, $patharrayref , 0);
 
-    my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$installer::globals::encodinglistname, $patharrayref , 0);
+    if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Did not find Windows LCID list $installer::globals::lcidlistname!", "read_lcidlist"); }
 
-    if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Did not find Windows encoding list $installer::globals::encodinglistname!", "read_encodinglist"); }
-
-    my $infoline = "Found encoding file: $$fileref\n";
+    my $infoline = "Found LCID file: $$fileref\n";
     push(@installer::globals::globallogfileinfo, $infoline);
 
-    my $encodinglist = installer::files::read_file($$fileref);
-
-    my %msiencoding = ();
+    my $lcidlist = installer::files::read_file($$fileref);
     my %msilanguage = ();
 
-    # Controlling the encoding list
-
-    for ( my $i = 0; $i <= $#{$encodinglist}; $i++ )
+    for ( my $i = 0; $i <= $#{$lcidlist}; $i++ )
     {
-        my $line = ${$encodinglist}[$i];
+        my $line = ${$lcidlist}[$i];
 
         if ( $line =~ /^\s*\#/ ) { next; }  # this is a comment line
-
         if ( $line =~ /^$/ ) { next; }  # this is an empty line
-
         if ( $line =~ /^(.*?)(\#.*)$/ ) { $line = $1; } # removing comments after "#"
-
         if ( $line =~ /^\s*([\w-]+)\s*(\d+)\s*(\d+)\s*$/ )
         {
             my $onelanguage = $1;
-            my $codepage = $2;
             my $windowslanguage = $3;
-
-            $msiencoding{$onelanguage} = $codepage;
             $msilanguage{$onelanguage} = $windowslanguage;
         }
         else
         {
-            installer::exiter::exit_program("ERROR: Wrong syntax in Windows encoding list $installer::globals::encodinglistname in line $i.", "read_encodinglist");
+            installer::exiter::exit_program("ERROR: Wrong syntax in Windows LCID list $installer::globals::lcidlistname in line $i.", "read_lcidlist");
         }
     }
-
-    $installer::globals::msiencoding = \%msiencoding;
     $installer::globals::msilanguage = \%msilanguage;
 }
 
@@ -476,26 +470,6 @@ sub check_oxtfiles
             }
         }
     }
-}
-
-####################################################################
-# Setting global variable "$installer::globals::addchildprojects"
-####################################################################
-
-sub set_addchildprojects
-{
-    my ($allvariables) = @_;
-
-    if (( $allvariables->{'UREPRODUCT'} ) ||
-        ( $allvariables->{'ADDREQUIREDPACKAGES'} )) { $installer::globals::addchildprojects = 1; }
-
-    if ( $installer::globals::patch )
-    {
-        $installer::globals::addchildprojects = 0;  # no child projects for patches
-    }
-
-    my $infoline = "Value of \$installer::globals::addchildprojects: $installer::globals::addchildprojects\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
 }
 
 #######################################################################

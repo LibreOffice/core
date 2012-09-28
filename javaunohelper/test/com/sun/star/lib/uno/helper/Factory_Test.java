@@ -31,7 +31,6 @@ import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.container.XSet;
 
 import com.sun.star.lib.uno.helper.Factory;
-import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.comp.helper.RegistryServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 

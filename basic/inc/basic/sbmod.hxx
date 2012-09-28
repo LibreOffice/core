@@ -42,7 +42,6 @@ class SbClassModuleObject;
 class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
-class SbModuleImpl;
 
 class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
 {
@@ -52,7 +51,6 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
     friend class    StarBASIC;
     friend class    SbClassModuleObject;
 
-    SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
 
     BASIC_DLLPRIVATE void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
@@ -80,7 +78,7 @@ protected:
     void            RunInit();
     void            ClearPrivateVars();
     void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
-    void            GlobalRunInit( sal_Bool bBasicStart );  // for all modules
+    void            GlobalRunInit( bool bBasicStart );  // for all modules
     void            GlobalRunDeInit( void );
     const sal_uInt8*    FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
     const sal_uInt8*    FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
@@ -141,12 +139,7 @@ public:
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 
-#ifndef __SB_SBMODULEREF_HXX
-#define __SB_SBMODULEREF_HXX
-
 SV_DECL_IMPL_REF(SbModule)
-
-#endif
 
 // Object class for instances of class modules
 class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
@@ -170,13 +163,6 @@ public:
     void triggerInitializeEvent( void );
     void triggerTerminateEvent( void );
 };
-
-#ifndef __SB_SBCLASSMODULEREF_HXX
-#define __SB_SBCLASSMODULEREF_HXX
-
-SV_DECL_IMPL_REF(SbClassModuleObject);
-
-#endif
 
 #endif
 

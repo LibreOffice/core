@@ -32,6 +32,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>        // GetCurFld
@@ -48,13 +49,8 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
-    uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if( !xMgr.is() )
-        return sal_False;
-    uno::Reference<uno::XInterface> xInstance = xMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext")));
-    uno::Reference<container::XNameAccess> xDBContext(xInstance, uno::UNO_QUERY) ;
-    if(!xDBContext.is())
-        return sal_False;
+    uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
     for(sal_uInt16 i = 0; i < nSize; ++i)
     {
         SwFieldType& rFldType = *((*pFldTypes)[i]);

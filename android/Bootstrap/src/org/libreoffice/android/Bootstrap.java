@@ -98,10 +98,6 @@ public class Bootstrap extends NativeActivity
     // where the lo-bootstrap library is.
     public static native void setCommandArgs(String[] argv);
 
-    // A wrapper for InitUCBHelper() in the ucbhelper library
-    // (contentbroker.cxx), also this called indirectly through the lo-bootstrap library
-    public static native void initUCBHelper();
-
     // A wrapper for createWindowFoo() in the vcl library
     public static native int createWindowFoo();
 
@@ -218,6 +214,7 @@ public class Bootstrap extends NativeActivity
         while (argv.length > 0 &&
                argv[0].matches("[A-Z_]+=.*")) {
             putenv(argv[0]);
+            argv = Arrays.copyOfRange(argv, 1, argv.length);
         }
 
         // argv[0] will be replaced by android_main() in lo-bootstrap.c by the

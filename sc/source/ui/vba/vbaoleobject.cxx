@@ -56,7 +56,7 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
 uno::Reference< uno::XInterface > SAL_CALL
 ScVbaOLEObject::getObject() throw (uno::RuntimeException)
 {
-    return uno::Reference< uno::XInterface >( m_xControl, uno::UNO_QUERY_THROW );
+    return uno::Reference< uno::XInterface >( m_xControlShape, uno::UNO_QUERY_THROW );
 }
 
 sal_Bool SAL_CALL

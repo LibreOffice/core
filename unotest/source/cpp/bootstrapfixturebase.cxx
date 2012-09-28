@@ -30,7 +30,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>

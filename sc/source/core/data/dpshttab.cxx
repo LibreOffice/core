@@ -56,7 +56,6 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, con
     aQuery ( rDesc.GetQueryParam() ),
     bIgnoreEmptyRows( false ),
     bRepeatIfEmpty(false),
-    mrDesc(rDesc),
     aCacheTable(pCache)
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());

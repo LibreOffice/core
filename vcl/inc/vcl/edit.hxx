@@ -76,8 +76,9 @@ private:
     XubString           maRedoText;
     long                mnXOffset;
     Selection           maSelection;
-    sal_uInt16              mnAlign;
+    sal_uInt16          mnAlign;
     xub_StrLen          mnMaxTextLen;
+    sal_Int32           mnMinWidthInChars;
     AutocompleteAction  meAutocompleteAction;
     xub_Unicode         mcEchoChar;
     sal_Bool                mbModified:1,
@@ -117,7 +118,6 @@ private:
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
     SAL_DLLPRIVATE void        ImplCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
     SAL_DLLPRIVATE void        ImplPaste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
-    SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
     SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
@@ -131,6 +131,7 @@ protected:
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, sal_Bool bPaint = sal_True );
     SAL_DLLPRIVATE int         ImplGetNativeControlType();
+    SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( Window* pWin );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
@@ -148,7 +149,6 @@ protected:
 
     protected:
     virtual void FillLayoutData() const;
-
                         Edit( WindowType nType );
 
 public:
@@ -199,6 +199,9 @@ public:
     virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
     virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
 
+    void                SetMaxWidthInChars(sal_Int32 nMinWidthInChars);
+    sal_Int32           GetMinWidthInChars() const { return mnMinWidthInChars; }
+
     virtual void        SetSelection( const Selection& rSelection );
     virtual const Selection&    GetSelection() const;
 
@@ -231,6 +234,7 @@ public:
     AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
 
     virtual Size        CalcMinimumSize() const;
+    virtual Size        CalcMinimumSizeForText(const rtl::OUString &rString) const;
     virtual Size        GetOptimalSize(WindowSizeType eType) const;
     virtual Size        CalcSize( sal_uInt16 nChars ) const;
     virtual xub_StrLen  GetMaxVisChars() const;
@@ -248,6 +252,8 @@ public:
 
     virtual rtl::OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
+    virtual void take_properties(Window &rOther);
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
     // returns the minimum size a bordered Edit should have given the current
     // global style settings (needed by sc's inputwin.cxx)

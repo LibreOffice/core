@@ -408,7 +408,6 @@ ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
     const Reference<XAttributeList>& /*xAttrList*/,
     ScXMLExternalRefCellContext& rParent ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
-    mrScImport(rImport),
     mrParent(rParent)
 {
 }

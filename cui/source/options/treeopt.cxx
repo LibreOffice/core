@@ -64,7 +64,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <comphelper/processfactory.hxx>
@@ -1492,8 +1492,7 @@ rtl::OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 {
     rtl::OUString sIdentifier;
     Reference < XFrame > xCurrentFrame( _xFrame );
-    Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
+    Reference < XModuleManager2 > xModuleManager( ModuleManager::create(::comphelper::getProcessComponentContext()) );
     if ( !xCurrentFrame.is() )
     {
         Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -1502,7 +1501,7 @@ rtl::OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
             xCurrentFrame = xDesktop->getCurrentFrame();
     }
 
-    if ( xCurrentFrame.is() && xModuleManager.is() )
+    if ( xCurrentFrame.is() )
     {
         try
         {
@@ -1945,8 +1944,7 @@ rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
 {
     rtl::OUString sModule;
     Reference < XFrame > xCurrentFrame( rFrame );
-    Reference < XModuleManager > xModuleManager( xMFac->createInstance(
-        C2U("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
+    Reference < XModuleManager2 > xModuleManager( ModuleManager::create(comphelper::getComponentContext(xMFac)) );
 
     if ( !xCurrentFrame.is() )
     {
@@ -1956,7 +1954,7 @@ rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
             xCurrentFrame = xDesktop->getCurrentFrame();
     }
 
-    if ( xCurrentFrame.is() && xModuleManager.is() )
+    if ( xCurrentFrame.is() )
     {
         try
         {

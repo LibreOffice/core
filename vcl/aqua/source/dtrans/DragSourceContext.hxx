@@ -27,8 +27,6 @@
 
 #include <boost/utility.hpp>
 
-#include "DragSource.hxx"
-
 // This class fires events to XDragSourceListener implementations.
 // Of that interface only dragDropEnd and dropActionChanged are called.
 // The functions dragEnter, dragExit and dragOver are not supported
@@ -40,7 +38,7 @@ class DragSourceContext: public cppu::BaseMutex,
                      private ::boost::noncopyable
 {
 public:
-  DragSourceContext(DragSource* pSource);
+  DragSourceContext();
   ~DragSourceContext();
 
   virtual sal_Int32 SAL_CALL getCurrentCursor(  )
@@ -54,9 +52,6 @@ public:
 
   virtual void SAL_CALL transferablesFlavorsChanged(  )
     throw( com::sun::star::uno::RuntimeException);
-
-private:
-  DragSource* m_pDragSource;
 };
 
 

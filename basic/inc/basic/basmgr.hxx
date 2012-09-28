@@ -124,15 +124,15 @@ private:
 
     String              aName;
     String              maStorageName;
-    sal_Bool                mbDocMgr;
+    bool                mbDocMgr;
 
     BasicManagerImpl*   mpImpl;
 
     BASIC_DLLPRIVATE void Init();
 
 protected:
-    sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
-    sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly = sal_False );
+    sal_Bool            ImpLoadLibrary( BasicLibInfo* pLibInfo ) const;
+    sal_Bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly = sal_False );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const String& rStorageName  );
     BasicLibInfo*   CreateLibInfo();
@@ -146,8 +146,8 @@ protected:
 
 public:
                     TYPEINFO();
-                    BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL, sal_Bool bDocMgr = sal_False );
-                    BasicManager( StarBASIC* pStdLib, String* pLibPath = NULL, sal_Bool bDocMgr = sal_False );
+                    BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL, bool bDocMgr = false );
+                    BasicManager( StarBASIC* pStdLib, String* pLibPath = NULL, bool bDocMgr = false );
 
     /** deletes the given BasicManager instance
 

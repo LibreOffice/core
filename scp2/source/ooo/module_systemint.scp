@@ -38,7 +38,7 @@ Module gid_Module_Optional_Systemintegration
   #ifdef WNT
     Styles = (HIDDEN_ROOT);
   #else
-    Styles = (SYSTEMMODULE,NOTRELOCATABLE,DONTSHOWINUSERINSTALL,INSTALLCANFAIL,USEFORCE);
+    Styles = (SYSTEMMODULE,NOTRELOCATABLE,INSTALLCANFAIL,USEFORCE);
   #endif
   #if (defined(LINUX)) || (defined(SOLARIS))
     PackageName = "${SYSTEMINTUNIXPACKAGENAME}-desktop-integration.tar.gz";

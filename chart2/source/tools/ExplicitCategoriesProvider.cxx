@@ -284,7 +284,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
     sal_Int32 nCurrentCount=0;
     for( sal_Int32 nN=0; nN<nMaxCount; nN++ )
     {
-        OUString aCurrent = rStrings[nN];
+        const OUString& aCurrent = rStrings[nN];
         if( bCreateSingleCategories || ::std::find( rLimitingBorders.begin(), rLimitingBorders.end(), nN ) != rLimitingBorders.end() )
         {
             aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
@@ -293,14 +293,18 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
         }
         else
         {
-            if( !aCurrent.isEmpty() && aPrevious != aCurrent )
+            // Empty value is interpreted as a continuation of the previous
+            // category. Note that having the same value as the previous one
+            // does not equate to a continuation of the category.
+
+            if (aCurrent.isEmpty())
+                ++nCurrentCount;
+            else
             {
                 aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
                 nCurrentCount=1;
                 aPrevious = aCurrent;
             }
-            else
-                nCurrentCount++;
         }
     }
     if( nCurrentCount )
@@ -552,14 +556,13 @@ Sequence< ::rtl::OUString > ExplicitCategoriesProvider::getSimpleCategories()
     return m_aExplicitCategories;
 }
 
-std::vector< ComplexCategory >  ExplicitCategoriesProvider::getCategoriesByLevel( sal_Int32 nLevel )
+const std::vector<ComplexCategory>* ExplicitCategoriesProvider::getCategoriesByLevel( sal_Int32 nLevel )
 {
-    std::vector< ComplexCategory > aRet;
     init();
     sal_Int32 nMaxIndex = m_aComplexCats.size()-1;
-    if( nLevel >= 0 && nLevel <= nMaxIndex  )
-        aRet = m_aComplexCats[nMaxIndex-nLevel];
-    return aRet;
+    if (nLevel >= 0 && nLevel <= nMaxIndex)
+        return &m_aComplexCats[nMaxIndex-nLevel];
+    return NULL;
 }
 
 OUString ExplicitCategoriesProvider::getCategoryByIndex(

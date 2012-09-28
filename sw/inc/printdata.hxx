@@ -42,7 +42,6 @@
 
 class SwDoc;
 class SwDocShell;
-class ViewShell;
 class _SetGetExpFlds;
 class SwViewOption;
 class OutputDevice;
@@ -71,10 +70,10 @@ public:
              bPrintLeftPages, bPrintRightPages, bPrintReverse, bPrintProspect,
              bPrintProspectRTL,
              bPrintSingleJobs, bPaperFromSetup,
-             // Print empty pages
+             /// Print empty pages
              bPrintEmptyPages,
 
-             // #i56195# no field update while printing mail merge documents
+             /// #i56195# no field update while printing mail merge documents
              bUpdateFieldsInPrinting,
              bModified;
 
@@ -135,8 +134,8 @@ public:
         bPrintTextPlaceholder   ==   rData.bPrintTextPlaceholder;
     }
 
-    // Note: in the context where this class ist used the pointers should always be valid
-    // during the lifetime of this object
+    /** Note: in the context where this class ist used the pointers should always be valid
+       during the lifetime of this object */
     const SwPrintUIOptions &    GetPrintUIOptions() const       { return *m_pPrintUIOptions; }
     const SwRenderData &        GetRenderData() const           { return *m_pRenderData; }
     void  SetPrintUIOptions( const SwPrintUIOptions *pOpt )     { m_pPrintUIOptions = pOpt; }
@@ -220,34 +219,34 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-// A class that stores temporary data that is needed for rendering the document.
-// Usually this data is created when 'getRendererCount' is called and
-// and it is used in the 'render' function of that same interface
+/** A class that stores temporary data that is needed for rendering the document.
+   Usually this data is created when 'getRendererCount' is called and
+   and it is used in the 'render' function of that same interface */
 class SwRenderData
 {
-    // pages valid for printing (according to the current settings)
-    // This set of pages does NOT depend on the 'PageRange' that is used as a printing option!
-    std::set< sal_Int32 >                       m_aValidPages;          // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
+    /** pages valid for printing (according to the current settings)
+     This set of pages does NOT depend on the 'PageRange' that is used as a printing option! */
+    std::set< sal_Int32 >                       m_aValidPages;          ///< the set of possible pages (see StringRangeEnumerator::getRangesFromString )
 
-    // printer paper tray to use for each of the m_aValidPages above
+    /// printer paper tray to use for each of the m_aValidPages above
     std::map< sal_Int32, sal_Int32 >            m_aPrinterPaperTrays;
 
-    // vector of pages and their order to be printed (duplicates and any order allowed!)
-    // (see 'render' in unotxdoc.cxx)
-    // negative entry indicates the page to be printed is from the post-it doc
+    /** vector of pages and their order to be printed (duplicates and any order allowed!)
+       (see 'render' in unotxdoc.cxx)
+       negative entry indicates the page to be printed is from the post-it doc */
     std::vector< sal_Int32 >                    m_aPagesToPrint;
 
-    // for prospect printing: the pairs of pages to be printed together on a single prospect page.
-    // -1 indicates a half page to be left empty.
+    /** for prospect printing: the pairs of pages to be printed together on a single prospect page.
+       -1 indicates a half page to be left empty. */
     std::vector< std::pair< sal_Int32, sal_Int32 > >    m_aPagePairs;
 
     rtl::OUString               m_aPageRange;
 
-    // temp print document -- must live longer than m_pViewOptionAdjust!
-    // also this is a Lock and not a Ref because Ref does not delete the doc
+    /** temp print document -- must live longer than m_pViewOptionAdjust!
+       also this is a Lock and not a Ref because Ref does not delete the doc */
     SfxObjectShellLock m_xTempDocShell;
 
-    // the view options to be applied for printing
+    /// the view options to be applied for printing
     ::boost::scoped_ptr<SwViewOptionAdjust_Impl> m_pViewOptionAdjust;
 
     ::boost::scoped_ptr<SwPrintData>    m_pPrtOptions;
@@ -277,6 +276,7 @@ public:
     void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions);
     void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
     void ViewOptionAdjustStop();
+    void ViewOptionAdjustCrashPreventionKludge();
 
     bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }
     SwPrintData const*  GetSwPrtOptions() const { return m_pPrtOptions.get(); }
@@ -289,18 +289,18 @@ public:
     std::set< sal_Int32 > &             GetValidPagesSet()          { return m_aValidPages; }
     const std::set< sal_Int32 > &       GetValidPagesSet() const    { return m_aValidPages; }
 
-    // a map for printer paper tray numbers to use for each document page
-    // a value of -1 for the tray means that there is no specific tray defined
+    /** a map for printer paper tray numbers to use for each document page
+       a value of -1 for the tray means that there is no specific tray defined */
     std::map< sal_Int32, sal_Int32 >&        GetPrinterPaperTrays()          { return m_aPrinterPaperTrays; }
     const std::map< sal_Int32, sal_Int32 >&  GetPrinterPaperTrays() const    { return m_aPrinterPaperTrays; }
 
-    // used for 'normal' printing
-    // A page value of 0 as entry indicates that this page is not from the document but
-    // from the post-it document. (See also GetPostItStartFrame below)
+    /** used for 'normal' printing
+       A page value of 0 as entry indicates that this page is not from the document but
+       from the post-it document. (See also GetPostItStartFrame below) */
     std::vector< sal_Int32 > &          GetPagesToPrint()           { return m_aPagesToPrint; }
     const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return m_aPagesToPrint; }
 
-    // used for prospect printing only
+    /// used for prospect printing only
     PagePairsVec_t &                    GetPagePairsForProspectPrinting()           { return m_aPagePairs; }
     const PagePairsVec_t &              GetPagePairsForProspectPrinting() const     { return m_aPagePairs; }
 
@@ -311,7 +311,7 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-// last remnants of swprtopt.hxx:
+/// last remnants of swprtopt.hxx:
 #define POSTITS_NONE    0
 #define POSTITS_ONLY    1
 #define POSTITS_ENDDOC  2
@@ -321,7 +321,7 @@ namespace sw {
 
 void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb);
 
-} // namespace sw
+} ///< namespace sw
 
 #endif  // SW_PRINTDATA_HXX
 

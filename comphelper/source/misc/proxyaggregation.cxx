@@ -59,7 +59,7 @@ namespace comphelper
                 m_xProxyAggregate->queryAggregation( ::getCppuType( &m_xProxyTypeAccess ) ) >>= m_xProxyTypeAccess;
 
             // aggregate the proxy
-            osl_incrementInterlockedCount( &_rRefCount );
+            osl_atomic_increment( &_rRefCount );
             if ( m_xProxyAggregate.is() )
             {
                 // At this point in time, the proxy has a ref count of exactly two - in m_xControlContextProxy,
@@ -67,7 +67,7 @@ namespace comphelper
                 // Remember to _not_ reset these members unless the delegator of the proxy has been reset, too!
                 m_xProxyAggregate->setDelegator( _rDelegator );
             }
-            osl_decrementInterlockedCount( &_rRefCount );
+            osl_atomic_decrement( &_rRefCount );
         }
     }
 
@@ -124,12 +124,12 @@ namespace comphelper
         baseAggregateProxyFor( m_xInner.get(), _rRefCount, _rDelegator );
 
         // add as event listener to the inner context, because we want to be notified of disposals
-        osl_incrementInterlockedCount( &_rRefCount );
+        osl_atomic_increment( &_rRefCount );
         {
             if ( m_xInner.is() )
                 m_xInner->addEventListener( this );
         }
-        osl_decrementInterlockedCount( &_rRefCount );
+        osl_atomic_decrement( &_rRefCount );
     }
 
     //-------------------------------------------------------------------------

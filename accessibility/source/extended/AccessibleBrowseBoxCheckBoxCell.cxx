@@ -34,11 +34,9 @@ namespace accessibility
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos
                                 ,const TriState& _eState,
-                                sal_Bool _bEnabled,
                                 sal_Bool _bIsTriState)
         :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos, BBTYPE_CHECKBOXCELL)
         ,m_eState(_eState)
-        ,m_bEnabled(_bEnabled)
         ,m_bIsTriState(_bIsTriState)
     {
     }
@@ -135,9 +133,9 @@ namespace accessibility
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AccessibleCheckBoxCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException )
+    OUString SAL_CALL AccessibleCheckBoxCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.TableCheckBoxCell" ) );
+        return OUString( "com.sun.star.comp.svtools.TableCheckBoxCell" );
     }
     // -----------------------------------------------------------------------------
     sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()

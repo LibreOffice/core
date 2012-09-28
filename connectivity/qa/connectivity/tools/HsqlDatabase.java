@@ -66,7 +66,7 @@ public class HsqlDatabase extends AbstractDatabase
 
         m_databaseDocument = UnoRuntime.queryInterface(
                 XOfficeDatabaseDocument.class, m_orb.createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-        m_dataSource = new DataSource(m_orb, m_databaseDocument.getDataSource());
+        m_dataSource = new DataSource(m_databaseDocument.getDataSource());
 
         final XPropertySet dsProperties = UnoRuntime.queryInterface(XPropertySet.class, m_databaseDocument.getDataSource());
         dsProperties.setPropertyValue("URL", "sdbc:embedded:hsqldb");
@@ -81,17 +81,12 @@ public class HsqlDatabase extends AbstractDatabase
 
     @param _name
     the name of the table to drop
-    @param _ifExists
-    TRUE if it should be dropped only when it exists.
      */
-    public void dropTable(final String _name, final boolean _ifExists) throws SQLException
+    private void dropTable(final String _name) throws SQLException
     {
         final StringBuffer dropStatement = new StringBuffer("DROP TABLE \"");
         dropStatement.append(_name);
-        if (_ifExists)
-        {
-            dropStatement.append("\" IF EXISTS");
-        }
+        dropStatement.append("\" IF EXISTS");
         executeSQL(dropStatement.toString());
     }
 
@@ -99,7 +94,7 @@ public class HsqlDatabase extends AbstractDatabase
     {
         if (_dropIfExists)
         {
-            dropTable(_tableDesc.getName(), true);
+            dropTable(_tableDesc.getName());
         }
         createTable(_tableDesc);
     }

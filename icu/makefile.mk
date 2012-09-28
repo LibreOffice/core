@@ -49,6 +49,7 @@ TARFILE_ROOTDIR=icu
 #http://bugs.icu-project.org/trac/ticket/8198 rendering with 0D30 and 0D31
 
 PATCH_FILES=\
+    icu4c-bsd.patch \
     icu4c-build.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c.8198.revert.icu5431.patch \
@@ -58,7 +59,6 @@ PATCH_FILES=\
     icu4c-warnings.patch \
     icu4c.9313.cygwin.patch \
     icu4c-macosx.patch \
-    icu4c-interlck.patch \
     icu4c-solarisgcc.patch \
 
 .IF "$(OS)"=="ANDROID"
@@ -67,6 +67,10 @@ PATCH_FILES+=\
 .ELSE
 PATCH_FILES+=\
     icu4c-rpath.patch
+.ENDIF
+
+.IF "$(HAVE_GCC_BUILTIN_ATOMIC)"=="TRUE"
+EXTRA_CDEFS+=-DU_HAVE_GCC_ATOMICS=1
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
@@ -120,6 +124,7 @@ LDFLAGSADD += -Wl,--hash-style=$(WITH_LINKER_HASH_STYLE)
 .IF "$(OS)"=="IOS"
 # Let's try this...
 icu_CFLAGS+=-DUCONFIG_NO_FILE_IO
+icu_CXXFLAGS+=-DUCONFIG_NO_FILE_IO
 .ENDIF
 
 .IF "$(OS)"=="ANDROID"
@@ -140,7 +145,7 @@ LDFLAGSADD += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-
 
 CONFIGURE_DIR=source
 
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
 STATIC_OR_SHARED=--enable-static --disable-shared
 .ELSE
 STATIC_OR_SHARED=--disable-static --enable-shared
@@ -152,7 +157,10 @@ BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-bu
 .ENDIF
 
 .IF "$(OS)"=="ANDROID"
+.IF "$(DISABLE_DYNLOADING)" != "TRUE"
 LIBRARY_SUFFIX= --with-library-suffix=lo
+.ENDIF
+# Just so that some executables that nobody will run anyway get built...
 icu_LDFLAGS+=-lgnustl_shared -lm
 .ENDIF
 
@@ -175,14 +183,14 @@ CONFIGURE_FLAGS=
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
-.IF "$(OS)"=="IOS"
+.IF "$(DISABLE_DYNLOADING)" == "TRUE"
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata.a \
     $(BUILD_DIR)$/lib$/libicuuc.a \
     $(BUILD_DIR)$/lib$/libicui18n.a \
     $(BUILD_DIR)$/lib$/libicule.a \
     $(BUILD_DIR)$/lib$/libicutu.a
-.ELIF "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="ANDROID" # The so far normal, non-DISABLE_DYNLOADING case for Android
 BUILD_ACTION+= && cat uconfig.h.prepend common/unicode/uconfig.h >common/unicode/uconfig.h.new && mv common/unicode/uconfig.h.new common/unicode/uconfig.h
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudatalo.so \
@@ -236,7 +244,7 @@ BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-bu
 BUILD_AND_HOST=--build=i586-pc-mingw32 --enable-64bit-libs=no
 .ENDIF
 
-CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" \
+CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" \
 ./configure $(BUILD_AND_HOST) --enable-layout --disable-static --enable-shared --disable-samples'
 
 CONFIGURE_FLAGS=

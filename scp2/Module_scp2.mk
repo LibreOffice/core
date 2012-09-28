@@ -50,8 +50,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallScript_sdkoo \
 	InstallScript_setup_osl \
 	InstallScript_test \
-	Package_inc \
-	Package_langmacros \
 	$(if $(filter WNT,$(GUI)),\
 		InstallModule_activex \
 		InstallModule_quickstart \
@@ -66,7 +64,7 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	$(if $(filter TRUE,$(ENABLE_CRASHDUMP)),\
 		InstallModule_crashrep \
 	) \
-	$(if $(filter TRUE,$(ENABLE_GCONF) $(ENABLE_GNOMEVFS) $(ENABLE_GIO)),\
+	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GCONF) $(ENABLE_GNOMEVFS) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
 		InstallModule_gnome \
 	) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),\

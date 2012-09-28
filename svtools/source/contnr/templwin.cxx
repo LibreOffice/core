@@ -62,14 +62,14 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -621,9 +621,7 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
     xFrame->initialize( xWindow );
 
     // create docinfo instance
-    m_xDocProps.set( ::comphelper::getProcessServiceFactory()->createInstance(
-            ASCII_STR("com.sun.star.document.DocumentProperties") ),
-        UNO_QUERY );
+    m_xDocProps.set( document::DocumentProperties::create(::comphelper::getProcessComponentContext()) );
 
     pEmptyWin = new Window( this, WB_BORDER | WB_3DLOOK );
 }
@@ -1682,12 +1680,10 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog, OpenLinkHdl_Impl)
         localizeWebserviceURI(sURL);
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
+            uno::Reference< uno::XComponentContext > xContext =
+                ::comphelper::getProcessComponentContext();
             uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                uno::UNO_QUERY_THROW );
+                com::sun::star::system::SystemShellExecute::create(xContext) );
             if ( xSystemShell.is() )
                 xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             EndDialog( RET_CANCEL );

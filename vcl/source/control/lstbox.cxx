@@ -32,6 +32,7 @@
 
 
 #include "vcl/decoview.hxx"
+#include "vcl/dialog.hxx"
 #include "vcl/event.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/button.hxx"
@@ -66,14 +67,39 @@ ListBox::ListBox( Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTBOX )
 ListBox::ListBox( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_LISTBOX )
 {
-    ImplInitListBoxData();
     rResId.SetRT( RSC_LISTBOX );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
+    ImplInitListBoxData();
     ImplInit( pParent, nStyle );
+
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
+}
+
+void ListBox::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitListBoxData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Control::take_properties(rOther);
+
+    ListBox &rOtherListBox = static_cast<ListBox&>(rOther);
+    mnDDHeight = rOtherListBox.mnDDHeight;
+    mnSaveValue = rOtherListBox.mnSaveValue;
+    EnableAutoSize(rOtherListBox.mbDDAutoSize);
+    SetDropDownLineCount(rOtherListBox.GetDropDownLineCount());
+    mpImplLB->take_properties(*rOtherListBox.mpImplLB);
+    if (mpImplWin && rOtherListBox.mpImplWin)
+        mpImplWin->take_properties(*rOtherListBox.mpImplWin);
 }
 
 // -----------------------------------------------------------------------
@@ -83,11 +109,11 @@ ListBox::~ListBox()
     //#109201#
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
-    delete mpImplLB;
-
     // Beim zerstoeren des FloatWins macht TH ein GrabFocus auf den Parent,
     // also diese ListBox => PreNotify()...
+    ImplListBox *pImplLB = mpImplLB;
     mpImplLB = NULL;
+    delete pImplLB;
 
     delete mpFloatWin;
     delete mpImplWin;
@@ -626,7 +652,7 @@ sal_uInt16 ListBox::GetDropDownLineCount() const
 
 // -----------------------------------------------------------------------
 
-void ListBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void ListBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     if( IsDropDownBox() && ( nFlags & WINDOW_POSSIZE_SIZE ) )
     {
@@ -641,7 +667,7 @@ void ListBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_
             nHeight = mnDDHeight;
     }
 
-    Control::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    Control::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -674,7 +700,7 @@ void ListBox::Resize()
 
             // use the themes drop down size for the button
             aOutSz.Width() = aContent.Left();
-            mpBtn->SetPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
+            mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
 
             // adjust the size of the edit field
             if ( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT,
@@ -703,8 +729,8 @@ void ListBox::Resize()
         else
         {
             nSBWidth = CalcZoom( nSBWidth );
-            mpImplWin->SetPosSizePixel( 0, 0, aOutSz.Width() - nSBWidth, aOutSz.Height() );
-            mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
+            mpImplWin->setPosSizePixel( 0, 0, aOutSz.Width() - nSBWidth, aOutSz.Height() );
+            mpBtn->setPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
         }
     }
     else
@@ -1292,6 +1318,10 @@ sal_Bool ListBox::IsMultiSelectionEnabled() const
 Size ListBox::CalcMinimumSize() const
 {
     Size aSz;
+
+    if (!mpImplLB)
+        return aSz;
+
     if ( !IsDropDownBox() )
         aSz = mpImplLB->CalcSize (mnLineCount ? mnLineCount : mpImplLB->GetEntryList()->GetEntryCount());
     else
@@ -1559,6 +1589,10 @@ MultiListBox::MultiListBox( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_MULTILISTBOX );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 

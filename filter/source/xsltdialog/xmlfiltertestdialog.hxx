@@ -69,8 +69,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::document::XEventListener > mxGlobalEventListener;
     com::sun::star::uno::WeakReference< com::sun::star::lang::XComponent > mxLastFocusModel;
 
-    ResMgr&             mrResMgr;
-
     rtl::OUString   maImportRecentFile;
     rtl::OUString   maExportRecentFile;
 

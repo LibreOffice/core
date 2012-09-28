@@ -45,7 +45,6 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
 
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
@@ -57,12 +56,10 @@
 
 SdPresLayoutDlg::SdPresLayoutDlg(
     ::sd::DrawDocShell* pDocShell,
-    ::sd::ViewShell* pViewShell,
     ::Window* pWindow,
     const SfxItemSet& rInAttrs ):
                 ModalDialog         (pWindow, SdResId(DLG_PRESLT)),
                 mpDocSh              ( pDocShell ),
-                mpViewSh             ( pViewShell ),
                 maFtLayout           (this, SdResId(FT_LAYOUT)),
                 maVS                 (this, SdResId(VS_LAYOUT)),
                 maBtnOK              (this, SdResId(BTN_OK)),

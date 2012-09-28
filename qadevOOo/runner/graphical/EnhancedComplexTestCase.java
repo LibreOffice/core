@@ -23,17 +23,12 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 
-/**
- *
- * @author ll93751
- */
 abstract public class EnhancedComplexTestCase extends ComplexTestCase implements IDocument
 {
 
 
 private void callEntry(String _sEntry, ParameterHelper _aParam)
 {
-    // log.println("- next file is: ------------------------------");
     log.println("      File: " + _sEntry);
     // TODO: check if 'sEntry' is a guilty document.
     File aFile = new File(_aParam.getInputPath());
@@ -50,25 +45,14 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
     }
     String sNewSubDir = FileHelper.removeFirstDirectorysAndBasenameFrom(_sEntry, sPath);
 
-//    String sNewReferencePath = _aParam.getReferencePath();
     String sNewOutputPath = _aParam.getOutputPath();
-    // String sNewDiffPath = m_sDiffPath;
 
     // if there exist a subdirectory, add it to all result path
     if (sNewSubDir.length() > 0)
     {
-//        if (sNewReferencePath != null)
-//        {
-//            sNewReferencePath = FileHelper.appendPath(sNewReferencePath, sNewSubDir);
-//        }
 
         sNewOutputPath = FileHelper.appendPath(sNewOutputPath, sNewSubDir);
-    //                        if (sNewDiffPath != null)
-    //                        {
-    //                            sNewDiffPath = FileHelper.appendPath(sNewDiffPath, sNewSubDir);
-    //                        }
     }
-    // log.println("sEntry: " + _sEntry + " " /* + sNewReferencePath + " " */ + sNewOutputPath);
     log.println("Outputpath: " + sNewOutputPath);
 
 
@@ -135,11 +119,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
         // TODO: auslagern in eine function, die ein Interface annimmt.
         String sInputPath = _aParam.getInputPath();
         File aInputPath = new File(sInputPath);
-//        if (!aInputPath.exists())
-//        {
-//            GlobalLogWriter.println("Error, InputPath or File in InputPath doesn't exists. Please check: '" + sInputPath + "'");
-//            assure("Error, InputPath or File in InputPath doesn't exists. Please check: '" + sInputPath + "'", false);
-//        }
         if (aInputPath.isDirectory())
         {
             // check a whole directory
@@ -328,11 +307,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
         // TODO: auslagern in eine function, die ein Interface annimmt.
         String sInputPath = _aParam.getInputPath();
         File aInputPath = new File(sInputPath);
-//        if (!aInputPath.exists())
-//        {
-//            GlobalLogWriter.println("Error, InputPath or File in InputPath doesn't exists. Please check: '" + sInputPath + "'");
-//            assure("Error, InputPath or File in InputPath doesn't exists. Please check: '" + sInputPath + "'", false);
-//        }
         if (aInputPath.isDirectory())
         {
             // check a whole directory
@@ -392,7 +366,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                     // TODO: unhandled yet.
                     GlobalLogWriter.println("Warning: caught OfficeException " + e.getMessage());
                 }
-            // callEntry(sInputPath, _aParam);
             }
         }
     }
@@ -462,7 +435,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                                 String sIndexFile2 = FileHelper.appendPath(sPath, sPSFile + ".ini");
                                 IniFile aIniFile2 = new IniFile(sIndexFile2);
                                 String sStatusRunThrough = aIniFile2.getValue("global", "state");
-                                String sStatusMessage = ""; // aIniFile2.getValue("global", "info");
+                                String sStatusMessage = "";
                                 aIniFile2.close();
 
 
@@ -471,34 +444,6 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                             }
                             aOutputter.close();
 
-//                            String sHTMLFile = FileHelper.appendPath(sPath, sBasename + ".ps.html");
-//                            try
-//                            {
-//
-//                                FileOutputStream out2 = new FileOutputStream(sHTMLFile);
-//                                PrintStream out = new PrintStream(out2);
-//
-//                                out.println("<HTML>");
-//                                out.println("<BODY>");
-//                                for (int i=0;i<aList.size();i++)
-//                                {
-//                                    // <A href="link">blah</A>
-//                                    String sPSFile = (String)aList.get(i);
-//                                    out.print("<A href=\"");
-//                                    out.print(sPSFile + ".html");
-//                                    out.print("\">");
-//                                    out.print(sPSFile);
-//                                    out.println("</A>");
-//                                    out.println("<BR>");
-//                                }
-//                                out.println("</BODY></HTML>");
-//                                out.close();
-//                                out2.close();
-//                            }
-//                            catch (java.io.IOException e)
-//                            {
-//
-//                            }
                         }
                     }
                     aIniFile.close();

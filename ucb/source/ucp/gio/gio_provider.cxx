@@ -101,7 +101,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char *pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpgio1_component_getFactory( const sal_Char *pImplName,
     void *pServiceManager, void * )
 {
     void * pRet = 0;

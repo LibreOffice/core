@@ -23,12 +23,14 @@
 #include "unohelper.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <comphelper/processfactory.hxx>
 
 using rtl::OUString;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::container::XNameContainer;
+using com::sun::star::xml::dom::DocumentBuilder;
 using com::sun::star::xml::dom::XDocumentBuilder;
 
 
@@ -128,11 +130,7 @@ bool isValidPrefixName( const OUString& sName,
 
 Reference<XDocumentBuilder> getDocumentBuilder()
 {
-    Reference<XDocumentBuilder> xBuilder(
-        xforms::createInstance(
-            OUSTRING("com.sun.star.xml.dom.DocumentBuilder") ),
-        UNO_QUERY_THROW );
-    OSL_ENSURE( xBuilder.is(), "no document builder?" );
+    Reference<XDocumentBuilder> xBuilder(DocumentBuilder::create(::comphelper::getProcessComponentContext()));
     return xBuilder;
 }
 

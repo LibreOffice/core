@@ -414,12 +414,12 @@ void AnnotationWindow::DoResize()
         mpVScrollbar->Hide();
     }
 
-    mpTextWindow->SetPosSizePixel(0,0,aWidth, aHeight);
+    mpTextWindow->setPosSizePixel(0,0,aWidth, aHeight);
 
     if( mbReadonly )
-        mpMeta->SetPosSizePixel(0,aHeight,GetSizePixel().Width(),POSTIT_META_HEIGHT);
+        mpMeta->setPosSizePixel(0,aHeight,GetSizePixel().Width(),POSTIT_META_HEIGHT);
     else
-        mpMeta->SetPosSizePixel(0,aHeight,GetSizePixel().Width()-METABUTTON_AREA_WIDTH,POSTIT_META_HEIGHT);
+        mpMeta->setPosSizePixel(0,aHeight,GetSizePixel().Width()-METABUTTON_AREA_WIDTH,POSTIT_META_HEIGHT);
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
@@ -427,7 +427,7 @@ void AnnotationWindow::DoResize()
     {   // if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     }
-    mpVScrollbar->SetPosSizePixel( 0 + aWidth, 0, GetScrollbarWidth(), aHeight );
+    mpVScrollbar->setPosSizePixel( 0 + aWidth, 0, GetScrollbarWidth(), aHeight );
     mpVScrollbar->SetVisibleSize( PixelToLogic(Size(0,aHeight)).Height() );
     mpVScrollbar->SetPageSize( PixelToLogic(Size(0,aHeight)).Height() * 8 / 10 );
     mpVScrollbar->SetLineSize( mpOutliner->GetTextHeight() / 10 );

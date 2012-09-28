@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -95,8 +96,7 @@ OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContex
 {
     try
     {
-        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
-        mxTempFile.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+        mxTempFile.set( TempFile::create(rxContext), UNO_QUERY_THROW );
         mxOutStrm = mxTempFile->getOutputStream();
         mxSeekable.set( mxOutStrm, UNO_QUERY );
     }
@@ -224,8 +224,7 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
     Reference< XInputStream > xInStrm = rxInStream;
     if( !Reference< XSeekable >( xInStrm, UNO_QUERY ).is() ) try
     {
-        Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+        Reference< XStream > xTempFile( TempFile::create(mxContext), UNO_QUERY_THROW );
         {
             Reference< XOutputStream > xOutStrm( xTempFile->getOutputStream(), UNO_SET_THROW );
             /*  Pass false to both binary stream objects to keep the UNO
@@ -335,8 +334,7 @@ StorageRef OleStorage::implOpenSubStorage( const OUString& rElementName, bool bC
         if( !isReadOnly() && (bCreateMissing || xSubStorage.get()) ) try
         {
             // create new storage based on a temp file
-            Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
-            Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+            Reference< XStream > xTempFile( TempFile::create(mxContext), UNO_QUERY_THROW );
             StorageRef xTempStorage( new OleStorage( *this, xTempFile, rElementName ) );
             // copy existing substorage into temp storage
             if( xSubStorage.get() )

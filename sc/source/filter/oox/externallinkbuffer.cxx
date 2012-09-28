@@ -105,7 +105,6 @@ ExternalNameModel::ExternalNameModel() :
 ExternalName::ExternalName( const ExternalLink& rParentLink ) :
     DefinedNameBase( rParentLink ),
     mrParentLink( rParentLink ),
-    mnStorageId( 0 ),
     mbDdeLinkCreated( false )
 {
 }

@@ -24,14 +24,11 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.ui.*;
 
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XSearchable;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.*;
-import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.TextElement;
 import com.sun.star.wizards.common.PlaceholderTextElement;
 import java.util.List;
@@ -68,10 +65,12 @@ public class ReportLayouter
     private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
     private TextElement         teTitleconst, teAuthorconst, teDateconst, tePageconst;
     private List<XTextRange>    constRangeList = new ArrayList<XTextRange>();
+    private boolean isBuilderInstalled;
 
-    public ReportLayouter(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, UnoDialog _CurUnoDialog)
+    public ReportLayouter(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, UnoDialog _CurUnoDialog, boolean _isBuilderInstalled)
     {
         m_xMSF = _xMSF;
+        isBuilderInstalled = _isBuilderInstalled;
         try
         {
             short curtabindex = (short) (100 * ReportWizard.SOTEMPLATEPAGE);
@@ -265,8 +264,11 @@ public class ReportLayouter
                         {
                             iOldContentPos = iPos;
                             CurReportDocument.liveupdate_changeContentTemplate(ContentFiles[1][iPos]);
-                            clearConstants();
-                            drawConstants();
+                            if(!isBuilderInstalled)
+                            {
+                              clearConstants();
+                              drawConstants();
+                            }
                         }
                         break;
 
@@ -276,8 +278,11 @@ public class ReportLayouter
                         {
                             iOldLayoutPos = iPos;
                             CurReportDocument.liveupdate_changeLayoutTemplate(LayoutFiles[1][iPos]/*, Desktop.getBitmapPath(m_xMSF)*/);
-                            clearConstants();
-                            drawConstants();
+                            if(!isBuilderInstalled)
+                            {
+                              clearConstants();
+                              drawConstants();
+                            }
                         }
                         break;
 

@@ -17,7 +17,7 @@
 #
 import uno
 import traceback
-from wizards.common.NoValidPathException import *
+from .NoValidPathException import NoValidPathException
 
 from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
@@ -50,16 +50,6 @@ class Desktop(object):
         return xFrame.getController().getModel()
 
     @classmethod
-    def getActiveTextDocument(self, _xMSF):
-        xComponent = getActiveComponent(_xMSF)
-        return xComponent #Text
-
-    @classmethod
-    def getActiveSpreadsheetDocument(self, _xMSF):
-        xComponent = getActiveComponent(_xMSF)
-        return xComponent
-
-    @classmethod
     def getDispatcher(self, xMSF, xFrame, _stargetframe, oURL):
         try:
             oURLArray = range(1)
@@ -67,7 +57,7 @@ class Desktop(object):
             xDispatch = xFrame.queryDispatch(oURLArray[0], _stargetframe, ALL)
             return xDispatch
         except Exception, e:
-            e.printStackTrace(System.out)
+            traceback.print_exc()
 
         return None
 
@@ -75,7 +65,7 @@ class Desktop(object):
     def connect(self, connectStr):
         localContext = uno.getComponentContext()
         resolver = localContext.ServiceManager.createInstanceWithContext(
-				        "com.sun.star.bridge.UnoUrlResolver", localContext)
+                        "com.sun.star.bridge.UnoUrlResolver", localContext)
         ctx = resolver.resolve( connectStr )
         orb = ctx.ServiceManager
         return orb
@@ -111,7 +101,7 @@ class Desktop(object):
                 _sString, 0, _aLocale, nStartFlags, "", nStartFlags, " ")
             return aResult.EndPos
         except Exception, e:
-            e.printStackTrace(System.out)
+            traceback.print_exc()
             return -1
 
     @classmethod
@@ -167,16 +157,6 @@ class OfficePathRetriever:
         return sTemplatePath
 
     @classmethod
-    def getUserTemplatePath(self, _xMSF):
-        sUserTemplatePath = ""
-        try:
-            sUserTemplatePath = FileAccess.getOfficePath(_xMSF,
-                "Template", "user", "")
-        except NoValidPathException, nopathexception:
-            pass
-        return sUserTemplatePath
-
-    @classmethod
     def getBitmapPath(self, _xMSF):
         sBitmapPath = ""
         try:
@@ -186,62 +166,3 @@ class OfficePathRetriever:
             pass
 
         return sBitmapPath
-
-    @classmethod
-    def getWorkPath(self, _xMSF):
-        sWorkPath = ""
-        try:
-            sWorkPath = FileAccess.getOfficePath(_xMSF, "Work", "", "")
-
-        except NoValidPathException, nopathexception:
-            pass
-
-        return sWorkPath
-
-    @classmethod
-    def createStringSubstitution(self, xMSF):
-        xPathSubst = None
-        try:
-            xPathSubst = xMSF.createInstance(
-                "com.sun.star.util.PathSubstitution")
-        except com.sun.star.uno.Exception, e:
-            e.printStackTrace()
-
-        if xPathSubst != None:
-            return xPathSubst
-        else:
-            return None
-
-    '''This method searches (and hopefully finds...) a frame
-    with a componentWindow.
-    It does it in three phases:
-    1. Check if the given desktop argument has a componentWindow.
-    If it is null, the myFrame argument is taken.
-    2. Go up the tree of frames and search a frame with a component window.
-    3. Get from the desktop all the components, and give the first one
-    which has a frame.
-    @param xMSF
-    @param myFrame
-    @param desktop
-    @return
-    @throws NoSuchElementException
-    @throws WrappedTargetException
-    '''
-
-    @classmethod
-    def findAFrame(self, xMSF, myFrame, desktop):
-        if desktop == None:
-            desktop = myFrame
-            #we go up in the tree...
-
-        while desktop != None and desktop.getComponentWindow() == None:
-            desktop = desktop.findFrame("_parent", FrameSearchFlag.PARENT)
-        if desktop == None:
-            e = Desktop.getDesktop(xMSF).getComponents().createEnumeration()
-            while e.hasMoreElements():
-                xModel = (e.nextElement()).getObject()
-                xFrame = xModel.getCurrentController().getFrame()
-                if xFrame != None and xFrame.getComponentWindow() != None:
-                    return xFrame
-
-        return desktop

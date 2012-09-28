@@ -99,23 +99,23 @@ void FormulaBuffer::finalizeImport()
             applyCellFormulas( cellIt->second );
         }
 
+        ArrayFormulaDataMap::iterator itArray = cellArrayFormulas.find( nTab );
+        if ( itArray != cellArrayFormulas.end() )
+        {
+            applyArrayFormulas( itArray->second );
+        }
+
         FormulaValueMap::iterator itValues = cellFormulaValues.find( nTab );
         if ( itValues != cellFormulaValues.end() )
         {
             std::vector< ValueAddressPair > & rVector = itValues->second;
             applyCellFormulaValues( rVector );
         }
-
-        ArrayFormulaDataMap::iterator itArray = cellArrayFormulas.find( nTab );
-
-        if ( itArray != cellArrayFormulas.end() )
-        {
-            applyArrayFormulas( itArray->second );
-        }
     }
     rDoc.SetAutoNameCache( NULL );
     xFormulaBar->setPosition( 1.0 );
 }
+
 void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress )
 {
         ScTokenArray aTokenArray;
@@ -145,7 +145,8 @@ void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair 
         ScAddress aCellPos;
         ScUnoConversion::FillScAddress( aCellPos, it->first );
         ScBaseCell* pBaseCell = rDoc.GetCell( aCellPos );
-        if ( pBaseCell->GetCellType() == CELLTYPE_FORMULA )
+        SAL_WARN_IF( !pBaseCell, "sc", "why is the formula not imported? bug?");
+        if ( pBaseCell && pBaseCell->GetCellType() == CELLTYPE_FORMULA )
         {
             ScFormulaCell* pCell = static_cast< ScFormulaCell* >( pBaseCell );
             pCell->SetHybridDouble( it->second );

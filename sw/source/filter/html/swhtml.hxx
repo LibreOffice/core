@@ -422,7 +422,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_uInt16  nFontStHeadStart;   // Elemente im Font-Stack bei <Hn>
     sal_uInt16  nSBModuleCnt;       // Zaehler fuer Basic-Module
     sal_uInt16  nMissingImgMaps;    // Wie viele Image-Maps fehlen noch?
-    sal_uInt16  nParaCnt;
+    size_t nParaCnt;
     sal_uInt16  nContextStMin;      // Untergrenze fuer PopContext
     sal_uInt16  nContextStAttrMin;  // Untergrenze fuer Attributierung
     sal_uInt16  nSelectEntryCnt;    // Anzahl der Eintraege der akt. Listbox

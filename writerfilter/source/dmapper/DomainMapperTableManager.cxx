@@ -42,7 +42,7 @@ using namespace ::std;
 
 DomainMapperTableManager::DomainMapperTableManager(bool bOOXML, bool bImplicitMerges) :
     m_nRow(0),
-    m_nCell(0),
+    m_nCell(),
     m_nGridSpan(1),
     m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
@@ -343,6 +343,7 @@ void DomainMapperTableManager::startLevel( )
     IntVectorPtr pNewSpans( new vector<sal_Int32> );
     m_aTableGrid.push_back( pNewGrid );
     m_aGridSpans.push_back( pNewSpans );
+    m_nCell.push_back( 0 );
     m_nTableWidth = 0;
 }
 
@@ -350,6 +351,7 @@ void DomainMapperTableManager::endLevel( )
 {
     m_aTableGrid.pop_back( );
     m_aGridSpans.pop_back( );
+    m_nCell.pop_back( );
     m_nTableWidth = 0;
 
     DomainMapperTableManager_Base_t::endLevel( );
@@ -373,7 +375,7 @@ void DomainMapperTableManager::endOfCellAction()
 
     getCurrentSpans()->push_back(m_nGridSpan);
     m_nGridSpan = 1;
-    ++m_nCell;
+    ++m_nCell.back( );
 }
 
 
@@ -416,10 +418,10 @@ void DomainMapperTableManager::endOfRowAction()
     }
 
     IntVectorPtr pCurrentSpans = getCurrentSpans( );
-    if( pCurrentSpans->size() < m_nCell)
+    if( pCurrentSpans->size() < m_nCell.back( ) )
     {
         //fill missing elements with '1'
-        pCurrentSpans->insert( pCurrentSpans->end( ), m_nCell - pCurrentSpans->size(), 1 );
+        pCurrentSpans->insert( pCurrentSpans->end( ), m_nCell.back( ) - pCurrentSpans->size(), 1 );
     }
 
 #ifdef DEBUG_DOMAINMAPPER
@@ -450,15 +452,15 @@ void DomainMapperTableManager::endOfRowAction()
     double nFullWidth = m_nTableWidth;
     //the positions have to be distibuted in a range of 10000
     const double nFullWidthRelative = 10000.;
-    if( pTableGrid->size() == nGrids && m_nCell > 0 )
+    if( pTableGrid->size() == nGrids && m_nCell.back( ) > 0 )
     {
-        uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell - 1 );
+        uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nLastRelPos = 0;
         sal_uInt32 nBorderGridIndex = 0;
 
         ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
-        for( sal_uInt32 nBorder = 0; nBorder < m_nCell - 1; ++nBorder )
+        for( sal_uInt32 nBorder = 0; nBorder < m_nCell.back( ) - 1; ++nBorder )
         {
             sal_Int32 nGridCount = *aSpansIter;
             double fGridWidth = 0.;
@@ -489,14 +491,14 @@ void DomainMapperTableManager::endOfRowAction()
     {
         // More grid than cells definitions? Then take the last ones.
         // This feature is used by the RTF implicit horizontal cell merges.
-        uno::Sequence< text::TableColumnSeparator > aSeparators(m_nCell - 1);
+        uno::Sequence< text::TableColumnSeparator > aSeparators(m_nCell.back( ) - 1);
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
 
         sal_Int16 nSum = 0;
         sal_uInt32 nPos = 0;
         sal_uInt32 nSizeTableGrid = pTableGrid->size();
         // Ignoring the i=0 case means we assume that the width of the last cell matches the table width
-        for (sal_uInt32 i = m_nCell; i > 1 && nSizeTableGrid >= i; i--)
+        for (sal_uInt32 i = m_nCell.back( ); i > 1 && nSizeTableGrid >= i; i--)
         {
             nSum += (*pTableGrid.get())[pTableGrid->size() - i]; // Size of the current cell
             pSeparators[nPos].Position = nSum * nFullWidthRelative / nFullWidth; // Relative position
@@ -515,7 +517,7 @@ void DomainMapperTableManager::endOfRowAction()
     }
 
     ++m_nRow;
-    m_nCell = 0;
+    m_nCell.back( ) = 0;
     m_nCellBorderIndex = 0;
     pCurrentSpans->clear();
 
@@ -527,7 +529,7 @@ void DomainMapperTableManager::endOfRowAction()
 
 void DomainMapperTableManager::clearData()
 {
-    m_nRow = m_nCell = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
+    m_nRow = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
     m_sTableStyleName = OUString();
     m_sTableVertAnchor = OUString();
     m_pTableStyleTextProperies.reset();

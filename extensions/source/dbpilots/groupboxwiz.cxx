@@ -33,6 +33,7 @@
 #include <vcl/msgbox.hxx>
 #include "optiongrouplayouter.hxx"
 #include "dbpilots.hrc"
+#include <comphelper/processfactory.hxx>
 
 #define GBW_STATE_OPTIONLIST        0
 #define GBW_STATE_DEFAULTOPTION     1
@@ -168,7 +169,7 @@ namespace dbp
     {
         try
         {
-            OOptionGroupLayouter aLayouter(getServiceFactory());
+            OOptionGroupLayouter aLayouter(comphelper::getComponentContext(getServiceFactory()));
             aLayouter.doLayout(getContext(), getSettings());
         }
         catch(const Exception&)

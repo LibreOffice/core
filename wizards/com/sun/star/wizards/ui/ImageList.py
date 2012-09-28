@@ -16,10 +16,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from threading import RLock
-from wizards.ui.PeerConfig import PeerConfig
-from wizards.common.PropertyNames import *
-from wizards.common.HelpIds import HelpIds
-from wizards.common.Helper import Helper
+from .PeerConfig import PeerConfig
+from ..common.PropertyNames import PropertyNames
+from ..common.HelpIds import HelpIds
+from ..common.Helper import Helper
 
 from com.sun.star.awt import Size
 

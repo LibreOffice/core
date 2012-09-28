@@ -1,15 +1,13 @@
 Dialog_	Control	Type	X	Y	Width	Height	Attributes	Property	Text	Control_Next	Help
 s72	s50	s20	i2	i2	i2	i2	I4	S50	L0	S50	L50
-WINDOWSENCODINGTEMPLATE	Control	Dialog_	Control
+65001	Control	Dialog_	Control
 AdminChangeFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 AdminChangeFolder	BannerLine	Line	0	44	374	0	1				
-AdminChangeFolder	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-AdminChangeFolder	Branding2	Text	3	228	88	13	65537		[ProductName]		
 AdminChangeFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_3	ComboText	
 AdminChangeFolder	Combo	DirectoryCombo	21	64	277	80	458755	TARGETDIR		Up	
 AdminChangeFolder	ComboText	Text	21	50	99	14	3		OOO_CONTROL_5	Combo	
 AdminChangeFolder	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_6		
-AdminChangeFolder	DlgLine	Line	90	234	284	0	1				
+AdminChangeFolder	DlgLine	Line	0	234	374	0	1				
 AdminChangeFolder	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_7		
 AdminChangeFolder	List	DirectoryList	21	90	332	97	7	TARGETDIR		TailText	
 AdminChangeFolder	NewFolder	PushButton	335	66	19	19	3670019		NewFolderIco	List	OOO_CONTROL_9
@@ -20,12 +18,10 @@ AdminChangeFolder	Up	PushButton	310	66	19	19	3670019		UpIco	NewFolder	OOO_CONTRO
 AdminNetworkLocation	Back	PushButton	164	243	66	17	3		OOO_CONTROL_14	InstallNow	
 AdminNetworkLocation	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 AdminNetworkLocation	BannerLine	Line	0	44	374	0	1				
-AdminNetworkLocation	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-AdminNetworkLocation	Branding2	Text	3	228	88	13	65537		[ProductName]		
 AdminNetworkLocation	Browse	PushButton	286	124	66	17	3		OOO_CONTROL_17	Back	
 AdminNetworkLocation	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_18	LBBrowse	
 AdminNetworkLocation	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_19		
-AdminNetworkLocation	DlgLine	Line	90	234	284	0	1				
+AdminNetworkLocation	DlgLine	Line	0	234	374	0	1				
 AdminNetworkLocation	DlgText	Text	21	51	326	40	3		OOO_CONTROL_20		
 AdminNetworkLocation	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_21		
 AdminNetworkLocation	InstallNow	PushButton	230	243	66	17	3		OOO_CONTROL_22	Cancel	
@@ -48,13 +44,11 @@ CancelSetup	Yes	PushButton	62	57	66	17	3		OOO_CONTROL_31	No
 CustomerInformation	Back	PushButton	164	243	66	17	3		OOO_CONTROL_32	Next	
 CustomerInformation	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomerInformation	BannerLine	Line	0	44	374	0	1				
-CustomerInformation	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-CustomerInformation	Branding2	Text	3	228	88	13	65537		[ProductName]		
 CustomerInformation	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_35	NameLabel	
 CustomerInformation	CompanyEdit	Edit	21	100	237	17	3	COMPANYNAME	OOO_CONTROL_36	RadioGroup	
 CustomerInformation	CompanyLabel	Text	21	89	75	10	3		OOO_CONTROL_37	CompanyEdit	
 CustomerInformation	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_38		
-CustomerInformation	DlgLine	Line	90	234	284	0	1				
+CustomerInformation	DlgLine	Line	0	234	374	0	1				
 CustomerInformation	DlgRadioGroupText	Text	21	161	300	14	3		OOO_CONTROL_39		
 CustomerInformation	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_40		
 CustomerInformation	NameEdit	Edit	21	63	237	17	3	USERNAME	OOO_CONTROL_41	CompanyLabel	
@@ -64,13 +58,11 @@ CustomerInformation	RadioGroup	RadioButtonGroup	63	170	300	50	3	ApplicationUsers
 CustomSetup	Back	PushButton	164	243	66	17	3		OOO_CONTROL_46	Next	
 CustomSetup	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomSetup	BannerLine	Line	0	44	374	0	1				
-CustomSetup	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-CustomSetup	Branding2	Text	3	228	88	13	65537		[ProductName]		
 CustomSetup	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_49	Tree	
 CustomSetup	ChangeFolder	PushButton	164	203	66	17	3		OOO_CONTROL_50	Help	
 CustomSetup	Details	PushButton	93	243	66	17	3		OOO_CONTROL_51	Back	
 CustomSetup	DlgDesc	Text	17	23	276	25	65539		OOO_CONTROL_52		
-CustomSetup	DlgLine	Line	90	234	284	0	1				
+CustomSetup	DlgLine	Line	0	234	374	0	1				
 CustomSetup	DlgText	Text	9	47	360	20	3		OOO_CONTROL_53		
 CustomSetup	DlgTitle	Text	9	6	284	25	65539		OOO_CONTROL_54		
 CustomSetup	FeatureGroup	GroupBox	235	67	131	152	1		OOO_CONTROL_55		
@@ -83,10 +75,8 @@ CustomSetup	Size	Text	241	148	120	65	3		OOO_CONTROL_61
 CustomSetup	Tree	SelectionTree	8	70	220	118	7	_BrowseProperty		ChangeFolder	
 CustomSetupTips	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomSetupTips	BannerLine	Line	0	44	374	0	1				
-CustomSetupTips	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-CustomSetupTips	Branding2	Text	3	228	88	13	65537		[ProductName]		
 CustomSetupTips	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_64		
-CustomSetupTips	DlgLine	Line	90	234	284	0	1				
+CustomSetupTips	DlgLine	Line	0	234	374	0	1				
 CustomSetupTips	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_65		
 CustomSetupTips	DontInstall	Icon	21	155	24	24	5242881		DontInstallIco		
 CustomSetupTips	DontInstallText	Text	60	155	300	20	3		OOO_CONTROL_66		
@@ -100,20 +90,16 @@ CustomSetupTips	OK	PushButton	301	243	66	17	3		OOO_CONTROL_72
 CustomSetupTips	PartialText	Text	60	130	300	20	3		OOO_CONTROL_73		
 DiskSpaceRequirements	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 DiskSpaceRequirements	BannerLine	Line	0	44	374	0	1				
-DiskSpaceRequirements	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-DiskSpaceRequirements	Branding2	Text	3	228	88	13	65537		[ProductName]		
 DiskSpaceRequirements	DlgDesc	Text	17	23	276	25	65539		OOO_CONTROL_96		
-DiskSpaceRequirements	DlgLine	Line	90	234	284	0	1				
+DiskSpaceRequirements	DlgLine	Line	0	234	374	0	1				
 DiskSpaceRequirements	DlgText	Text	10	185	358	41	3		OOO_CONTROL_97		
 DiskSpaceRequirements	DlgTitle	Text	9	6	284	25	65539		OOO_CONTROL_98		
 DiskSpaceRequirements	List	VolumeCostList	8	55	358	125	393223		{120}{70}{70}{70}{70}		
 DiskSpaceRequirements	OK	PushButton	301	243	66	17	3		OOO_CONTROL_100		
 FilesInUse	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 FilesInUse	BannerLine	Line	0	44	374	0	1				
-FilesInUse	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-FilesInUse	Branding2	Text	3	228	88	13	65537		[ProductName]		
 FilesInUse	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_103		
-FilesInUse	DlgLine	Line	90	234	284	0	1				
+FilesInUse	DlgLine	Line	0	234	374	0	1				
 FilesInUse	DlgText	Text	21	51	348	29	3		OOO_CONTROL_104		
 FilesInUse	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_105		
 FilesInUse	Exit	PushButton	301	243	66	17	3		OOO_CONTROL_106	List	
@@ -123,28 +109,24 @@ FilesInUse	Retry	PushButton	164	243	66	17	3		OOO_CONTROL_108	Ignore
 FileTypeDialog	Back	PushButton	164	243	66	17	3		OOO_CONTROL_135	Next	
 FileTypeDialog	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 FileTypeDialog	BannerLine	Line	0	44	374	0	1				
-FileTypeDialog	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-FileTypeDialog	Branding2	Text	3	228	88	13	65537		[ProductName]		
 FileTypeDialog	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_138	CheckBox1	
 FileTypeDialog	CheckBox1	CheckBox	41	106	200	10	3	SELECT_WORD	 OOO_CONTROL_270	CheckBox2	
 FileTypeDialog	CheckBox2	CheckBox	41	131	200	10	3	SELECT_EXCEL	 OOO_CONTROL_271	CheckBox3	
 FileTypeDialog	CheckBox3	CheckBox	41	156	200	10	3	SELECT_POWERPOINT	 OOO_CONTROL_272	CheckBox4	
 FileTypeDialog	CheckBox4	CheckBox	41	181	200	10	3	SELECT_VISIO	 OOO_CONTROL_273	Back	
 FileTypeDialog	DlgDesc	Text	21	20	272	25	65539		OOO_CONTROL_274		
-FileTypeDialog	DlgLine	Line	90	234	284	0	1				
+FileTypeDialog	DlgLine	Line	0	234	374	0	1				
 FileTypeDialog	DlgText	Text	21	56	326	40	3		OOO_CONTROL_275		
 FileTypeDialog	DlgText2	Text	21	200	326	30	3		OOO_CONTROL_309		
 FileTypeDialog	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_278		
 FileTypeDialog	Next	PushButton	230	243	66	17	3		OOO_CONTROL_134	Cancel	
 InstallChangeFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 InstallChangeFolder	BannerLine	Line	0	44	374	0	1				
-InstallChangeFolder	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-InstallChangeFolder	Branding2	Text	3	228	88	13	65537		[ProductName]		
 InstallChangeFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_111	ComboText	
 InstallChangeFolder	Combo	DirectoryCombo	21	64	277	80	4128779	_BrowseProperty		Up	
 InstallChangeFolder	ComboText	Text	21	50	99	14	3		OOO_CONTROL_113	Combo	
 InstallChangeFolder	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_114		
-InstallChangeFolder	DlgLine	Line	90	234	284	0	1				
+InstallChangeFolder	DlgLine	Line	0	234	374	0	1				
 InstallChangeFolder	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_115		
 InstallChangeFolder	List	DirectoryList	21	90	332	97	15	_BrowseProperty		TailText	
 InstallChangeFolder	NewFolder	PushButton	335	66	19	19	3670019		NewFolderIco	List	OOO_CONTROL_117
@@ -167,22 +149,18 @@ LicenseAgreement	Agree	RadioButtonGroup	8	190	330	40	3	AgreeToLicense		Back
 LicenseAgreement	Back	PushButton	164	243	66	17	3		OOO_CONTROL_128	Next	
 LicenseAgreement	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 LicenseAgreement	BannerLine	Line	0	44	374	0	1				
-LicenseAgreement	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-LicenseAgreement	Branding2	Text	3	228	88	13	65537		[ProductName]		
 LicenseAgreement	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_131	Agree	
 LicenseAgreement	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_132		
-LicenseAgreement	DlgLine	Line	90	234	284	0	1				
+LicenseAgreement	DlgLine	Line	0	234	374	0	1				
 LicenseAgreement	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_133		
 LicenseAgreement	Memo	ScrollableText	8	54	358	130	7				
 LicenseAgreement	Next	PushButton	230	243	66	17	3		OOO_CONTROL_134	Cancel	
 MaintenanceType	Back	PushButton	164	243	66	17	3		OOO_CONTROL_135	Next	
 MaintenanceType	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 MaintenanceType	BannerLine	Line	0	44	374	0	1				
-MaintenanceType	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-MaintenanceType	Branding2	Text	3	228	88	13	65537		[ProductName]		
 MaintenanceType	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_138	RadioGroup	
 MaintenanceType	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_139		
-MaintenanceType	DlgLine	Line	90	234	284	0	1				
+MaintenanceType	DlgLine	Line	0	234	374	0	1				
 MaintenanceType	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_140		
 MaintenanceType	Ico1	Icon	35	75	24	24	5242881		SetupPartialIco		
 MaintenanceType	Ico2	Icon	35	135	24	24	5242881		SetupRepairIco		
@@ -201,10 +179,8 @@ MaintenanceWelcome	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_149
 MaintenanceWelcome	TextLine2	Text	135	55	228	50	65539		OOO_CONTROL_150		
 OutOfSpace	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 OutOfSpace	BannerLine	Line	0	44	374	0	1				
-OutOfSpace	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-OutOfSpace	Branding2	Text	3	228	88	13	65537		[ProductName]		
 OutOfSpace	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_153		
-OutOfSpace	DlgLine	Line	90	234	284	0	1				
+OutOfSpace	DlgLine	Line	0	234	374	0	1				
 OutOfSpace	DlgText	Text	21	51	326	43	3		OOO_CONTROL_154		
 OutOfSpace	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_155		
 OutOfSpace	List	VolumeCostList	21	95	332	120	393223		OOO_CONTROL_156		
@@ -219,11 +195,9 @@ PatchWelcome	TextLine2	Text	135	54	228	45	65539		OOO_CONTROL_162
 ReadyToInstall	Back	PushButton	164	243	66	17	3		OOO_CONTROL_163	InstallNow	
 ReadyToInstall	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 ReadyToInstall	BannerLine	Line	0	44	374	0	1				
-ReadyToInstall	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-ReadyToInstall	Branding2	Text	3	228	88	13	65537		[ProductName]		
 ReadyToInstall	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_166	DesktopLink	
 ReadyToInstall	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_167		
-ReadyToInstall	DlgLine	Line	90	234	284	0	1				
+ReadyToInstall	DlgLine	Line	0	234	374	0	1				
 ReadyToInstall	DlgText	Text	21	51	326	20	3		OOO_CONTROL_168		
 ReadyToInstall	DlgText1	Text	21	70	330	24	3		OOO_CONTROL_169		
 ReadyToInstall	DlgTitle	Text	13	6	280	25	65538		OOO_CONTROL_170		
@@ -236,11 +210,9 @@ ReadyToInstall	EnableQuickstart	CheckBox	21	150	300	10	3	QUICKSTART	OOO_CONTROL_
 ReadyToRemove	Back	PushButton	164	243	66	17	3		OOO_CONTROL_174	RemoveNow	
 ReadyToRemove	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 ReadyToRemove	BannerLine	Line	0	44	374	0	1				
-ReadyToRemove	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-ReadyToRemove	Branding2	Text	3	228	88	13	65537		[ProductName]		
 ReadyToRemove	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_177	Back	
 ReadyToRemove	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_178		
-ReadyToRemove	DlgLine	Line	90	234	284	0	1				
+ReadyToRemove	DlgLine	Line	0	234	374	0	1				
 ReadyToRemove	DlgText	Text	21	51	326	24	3		OOO_CONTROL_179		
 ReadyToRemove	DlgText1	Text	21	79	330	23	3		OOO_CONTROL_180		
 ReadyToRemove	DlgText2	Text	21	102	330	24	3				
@@ -299,12 +271,10 @@ SetupProgress	ActionText	Text	59	100	275	12	3
 SetupProgress	Back	PushButton	164	243	66	17	1		OOO_CONTROL_230	Next	
 SetupProgress	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 SetupProgress	BannerLine	Line	0	44	374	0	1				
-SetupProgress	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-SetupProgress	Branding2	Text	3	228	88	13	65537		[ProductName]		
 SetupProgress	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_233	Back	
 SetupProgress	DlgDesc	Text	21	23	272	25	65538		OOO_CONTROL_234		
 SetupProgress	DlgDesc2	Text	21	23	272	25	65538		OOO_CONTROL_235		
-SetupProgress	DlgLine	Line	90	234	284	0	1				
+SetupProgress	DlgLine	Line	0	234	374	0	1				
 SetupProgress	DlgText	Text	59	51	275	30	65538		OOO_CONTROL_236		
 SetupProgress	DlgText2	Text	59	51	275	30	65538		OOO_CONTROL_237		
 SetupProgress	DlgTitle	Text	13	6	280	25	65538		OOO_CONTROL_238		
@@ -326,23 +296,19 @@ SetupResume	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_250
 SetupType	Back	PushButton	164	243	66	17	3		OOO_CONTROL_251	Next	
 SetupType	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 SetupType	BannerLine	Line	0	44	374	0	1				
-SetupType	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-SetupType	Branding2	Text	3	228	88	13	65537		[ProductName]		
 SetupType	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_254	RadioGroup	
 SetupType	CompleteIco	Icon	34	94	24	24	5242881		SetupCompleteIco		
 SetupType	CompText	Text	80	94	246	35	3		OOO_CONTROL_255		
 SetupType	CustomIco	Icon	34	154	24	24	5242881		SetupPartialIco		
 SetupType	CustText	Text	80	154	246	35	3		OOO_CONTROL_256		
 SetupType	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_257		
-SetupType	DlgLine	Line	90	234	284	0	1				
+SetupType	DlgLine	Line	0	234	374	0	1				
 SetupType	DlgText	Text	21	51	326	10	3		OOO_CONTROL_258		
 SetupType	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_259		
 SetupType	Next	PushButton	230	243	66	17	3		OOO_CONTROL_260	Cancel	
 SetupType	RadioGroup	RadioButtonGroup	21	79	264	120	3	_IsSetupTypeMin		Back	
 SplashBitmap	Back	PushButton	164	243	66	17	1		OOO_CONTROL_262	Next	
-SplashBitmap	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-SplashBitmap	Branding2	Text	3	228	88	13	65537		[ProductName]		
 SplashBitmap	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_265	Back	
-SplashBitmap	DlgLine	Line	90	234	284	0	1				
+SplashBitmap	DlgLine	Line	0	234	374	0	1				
 SplashBitmap	Image	Bitmap	13	12	114	211	1		ImageBmp		
 SplashBitmap	Next	PushButton	230	243	66	17	3		OOO_CONTROL_266	Cancel	

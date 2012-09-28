@@ -32,7 +32,10 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 
-LineNumberWindow::LineNumberWindow (Window* pParent, basctl::ModulWindow* pModulWindow) :
+namespace basctl
+{
+
+LineNumberWindow::LineNumberWindow (Window* pParent, ModulWindow* pModulWindow) :
     Window(pParent, WB_BORDER),
     m_pModulWindow(pModulWindow),
     m_nCurYOffset(0)
@@ -42,7 +45,8 @@ LineNumberWindow::LineNumberWindow (Window* pParent, basctl::ModulWindow* pModul
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
 }
 
-LineNumberWindow::~LineNumberWindow() { }
+LineNumberWindow::~LineNumberWindow()
+{ }
 
 void LineNumberWindow::Paint( const Rectangle& )
 {
@@ -132,4 +136,7 @@ int LineNumberWindow::GetWidth()
 {
     return m_nWidth;
 }
+
+} // namespace basctl
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

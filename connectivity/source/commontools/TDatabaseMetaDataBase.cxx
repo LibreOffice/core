@@ -54,14 +54,14 @@ ODatabaseMetaDataBase::ODatabaseMetaDataBase(const Reference< XConnection >& _rx
     ,m_storesMixedCaseQuotedIdentifiers(false,sal_False)
     , m_xConnection(_rxConnection)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         m_xListenerHelper = new OEventListenerHelper(this);
         Reference<XComponent> xCom(m_xConnection,UNO_QUERY);
         if(xCom.is())
             xCom->addEventListener(m_xListenerHelper);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -------------------------------------------------------------------------
 ODatabaseMetaDataBase::~ODatabaseMetaDataBase()

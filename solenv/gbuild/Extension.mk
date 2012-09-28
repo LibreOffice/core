@@ -93,9 +93,40 @@ $(call gb_ExtensionTarget_localize_properties,$(1),$(2),$(3))
 
 endef
 
-# localize extension help
-define gb_Extension_localize_help
-$(call gb_ExtensionTarget_localize_help,$(1),$(2),$(3))
+# add an .xhp help file, to be localized and compiled
+# $(1): extension identifier
+# $(2): absolute path prefix of en-US source file without $(3) (resp. $(4))
+#     suffix
+# $(3): relative path of (target) .xhp file (e.g.,
+#     com.sun.wiki-publisher/wiki.xhp)
+# $(4): optional relative path of source .xhp file, when it differs from $(3)
+#     (i.e., if $(4) is empty the en-US source file is $(2)/$(3), otherwise it
+#     is $(2)/$(4))
+define gb_Extension_add_helpfile
+$(call gb_ExtensionTarget_add_helpfile,$(1),$(2),$(3),$(4))
+
+endef
+
+# add a list of .xhp help files, to be localized and compiled
+# $(1): extension identifier
+# $(2): absolute path prefix of en-US source files without $(3) suffixes
+# $(3): list of relative paths of .xhp files (see gb_Extension_add_helpfile)
+define gb_Extension_add_helpfiles
+$(call gb_ExtensionTarget_add_helpfiles,$(1),$(2),$(3))
+
+endef
+
+# add a help.tree file, to be localized and compiled
+# $(1): extension identifier
+# $(2): absolute path prefix of en-US source file without $(3) (resp. $(4))
+#     suffix
+# $(3): relative path of (target) help.tree file (e.g.,
+#     com.sun.wiki-publisher/help.tree)
+# $(4): optional relative path of source help.tree file, when it differs from $(3)
+#     (i.e., if $(4) is empty the en-US source file is $(2)/$(3), otherwise it
+#     is $(2)/$(4))
+define gb_Extension_add_helptreefile
+$(call gb_ExtensionTarget_add_helptreefile,$(1),$(2),$(3),$(4),$(5))
 
 endef
 

@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
@@ -3310,7 +3309,7 @@ Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
         ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
         nHeight = 0;
 
-    pWindow->SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
+    pWindow->setPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
     return pWindow;
 }
 
@@ -5801,19 +5800,19 @@ void MenuBarWindow::Resize()
         Size aTbxSize( aCloser.CalcWindowSizePixel() );
         nX -= aTbxSize.Width();
         long nTbxY = (aOutSz.Height() - aTbxSize.Height())/2;
-        aCloser.SetPosSizePixel( nX, nTbxY, aTbxSize.Width(), aTbxSize.Height() );
+        aCloser.setPosSizePixel( nX, nTbxY, aTbxSize.Width(), aTbxSize.Height() );
         nX -= 3;
         aCloser.Show();
     }
     if ( aFloatBtn.IsVisible() )
     {
         nX -= n;
-        aFloatBtn.SetPosSizePixel( nX, nY, n, n );
+        aFloatBtn.setPosSizePixel( nX, nY, n, n );
     }
     if ( aHideBtn.IsVisible() )
     {
         nX -= n;
-        aHideBtn.SetPosSizePixel( nX, nY, n, n );
+        aHideBtn.setPosSizePixel( nX, nY, n, n );
     }
 
     aFloatBtn.SetSymbol( SYMBOL_FLOAT );
@@ -5883,7 +5882,7 @@ void MenuBarWindow::ImplLayoutChanged()
             ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
             nHeight = 0;
 
-        SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
+        setPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
         GetParent()->Resize();
         Invalidate();
         Resize();

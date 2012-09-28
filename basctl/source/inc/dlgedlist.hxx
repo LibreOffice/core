@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGEDLIST_HXX
-#define _BASCTL_DLGEDLIST_HXX
+#ifndef BASCTL_DLGEDLIST_HXX
+#define BASCTL_DLGEDLIST_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
+
+namespace basctl
+{
 
 class DlgEdObj;
 
@@ -35,10 +38,10 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListene
 class DlgEdPropListenerImpl: public PropertyChangeListenerHelper
 {
 private:
-    DlgEdObj*       pDlgEdObj;
+    DlgEdObj& rDlgEdObj;
 
 public:
-    DlgEdPropListenerImpl(DlgEdObj* pObj);
+    explicit DlgEdPropListenerImpl (DlgEdObj&);
     virtual ~DlgEdPropListenerImpl();
 
     // XEventListener
@@ -58,10 +61,10 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener
 class DlgEdEvtContListenerImpl: public ContainerListenerHelper
 {
 private:
-    DlgEdObj*       pDlgEdObj;
+    DlgEdObj& rDlgEdObj;
 
 public:
-    DlgEdEvtContListenerImpl(DlgEdObj* pObj);
+    explicit DlgEdEvtContListenerImpl (DlgEdObj&);
     virtual ~DlgEdEvtContListenerImpl();
 
     // XEventListener
@@ -73,6 +76,8 @@ public:
     virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-#endif // _BASCTL_DLGEDLIST_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

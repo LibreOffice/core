@@ -19,9 +19,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.table.XCell;
 import com.sun.star.util.XModifyListener;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.text.XTextRange;
-import com.sun.star.form.binding.IncompatibleTypesException;
 
 /** a value binding to be connected to a form control
 
@@ -47,15 +45,15 @@ public class TableCellTextBinding
     private String      m_newCellText;
     private String      m_lastKnownCellText;
     private boolean     m_haveNewCellText;
-    private java.util.List  m_listeners;
+    private java.util.List<XModifyListener>  m_listeners;
 
     /** Creates a new instance of TableCellTextBinding */
     public TableCellTextBinding( XCell cell )
     {
-        m_cellText = (XTextRange)UnoRuntime.queryInterface( XTextRange.class, cell );
+        m_cellText = UnoRuntime.queryInterface( XTextRange.class, cell );
 
         m_newCellText = new String();
-        m_listeners = new java.util.LinkedList();
+        m_listeners = new java.util.LinkedList<XModifyListener>();
 
         start();
     }
@@ -163,10 +161,10 @@ public class TableCellTextBinding
                     {
                         com.sun.star.lang.EventObject eventSource = new com.sun.star.lang.EventObject( this );
 
-                        java.util.Iterator loop = m_listeners.iterator();
+                        java.util.Iterator<XModifyListener> loop = m_listeners.iterator();
                         while ( loop.hasNext() )
                         {
-                            ((XModifyListener)loop.next()).modified( eventSource );
+                            loop.next().modified( eventSource );
                         }
                     }
                 }

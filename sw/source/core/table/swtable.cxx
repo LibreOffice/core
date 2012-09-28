@@ -281,8 +281,10 @@ SwTable::SwTable( const SwTable& rTable )
 
 void DelBoxNode( SwTableSortBoxes& rSortCntBoxes )
 {
-    for( sal_uInt16 n = 0; n < rSortCntBoxes.size(); ++n )
+    for (size_t n = 0; n < rSortCntBoxes.size(); ++n)
+    {
         rSortCntBoxes[ n ]->pSttNd = 0;
+    }
 }
 
 SwTable::~SwTable()
@@ -307,8 +309,8 @@ SwTable::~SwTable()
     // are preserved and are deleted by the lines/boxes arrays dtor.
     // Note: unfortunately not enough, pointers to the StartNode of the
     // section need deletion.
-    DelBoxNode( aSortCntBoxes );
-    aSortCntBoxes.clear();
+    DelBoxNode(m_TabSortContentBoxes);
+    m_TabSortContentBoxes.clear();
     delete pHTMLLayout;
 }
 
@@ -1502,9 +1504,13 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
     // In case the layout doesn't exist yet or anything else goes wrong.
     if ( !pRet )
     {
-        for( sal_uInt16 n = aSortCntBoxes.size(); n; )
-            if( aSortCntBoxes[ --n ]->GetSttIdx() == nSttIdx )
-                return aSortCntBoxes[ n ];
+        for (size_t n = m_TabSortContentBoxes.size(); n; )
+        {
+            if (m_TabSortContentBoxes[ --n ]->GetSttIdx() == nSttIdx)
+            {
+                return m_TabSortContentBoxes[ n ];
+            }
+        }
     }
     return pRet;
 }
@@ -1514,9 +1520,13 @@ sal_Bool SwTable::IsTblComplex() const
     // Returns sal_True for complex tables, i.e. tables that contain nestings,
     // like containing boxes not part of the first line, e.g. results of
     // splits/merges which lead to more complex structures.
-    for( sal_uInt16 n = 0; n < aSortCntBoxes.size(); ++n )
-        if( aSortCntBoxes[ n ]->GetUpper()->GetUpper() )
+    for (size_t n = 0; n < m_TabSortContentBoxes.size(); ++n)
+    {
+        if (m_TabSortContentBoxes[ n ]->GetUpper()->GetUpper())
+        {
             return sal_True;
+        }
+    }
     return sal_False;
 }
 
@@ -1724,10 +1734,9 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableL
     rSrtArr.insert( p );        // insert
 }
 
-SwTableBox::~SwTableBox()
+void SwTableBox::RemoveFromTable()
 {
-    // box containing contents?
-    if( !GetFrmFmt()->GetDoc()->IsInDtor() && pSttNd )
+    if (pSttNd) // box containing contents?
     {
         // remove from table
         const SwTableNode* pTblNd = pSttNd->FindTableNode();
@@ -1736,6 +1745,15 @@ SwTableBox::~SwTableBox()
                                     GetTabSortBoxes();
         SwTableBox *p = this;   // error: &this
         rSrtArr.erase( p );        // remove
+        pSttNd = 0; // clear it so this is only run once
+    }
+}
+
+SwTableBox::~SwTableBox()
+{
+    if (!GetFrmFmt()->GetDoc()->IsInDtor())
+    {
+        RemoveFromTable();
     }
 
     // the TabelleBox can be deleted if it's the last client of the FrameFormat
@@ -1942,9 +1960,9 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
         const SwTableNode* pTblNode = GetTableNode();
         if( pTblNode && &pTblNode->GetNodes() == ((SwAutoFmtGetDocNode&)rInfo).pNodes )
         {
-            if ( !aSortCntBoxes.empty() )
+            if (!m_TabSortContentBoxes.empty())
             {
-                  SwNodeIndex aIdx( *aSortCntBoxes[ 0 ]->GetSttNd() );
+                SwNodeIndex aIdx( *m_TabSortContentBoxes[0]->GetSttNd() );
                 ((SwAutoFmtGetDocNode&)rInfo).pCntntNode =
                                 GetFrmFmt()->GetDoc()->GetNodes().GoNext( &aIdx );
             }
@@ -1955,10 +1973,10 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
     case RES_FINDNEARESTNODE:
         if( GetFrmFmt() && ((SwFmtPageDesc&)GetFrmFmt()->GetFmtAttr(
             RES_PAGEDESC )).GetPageDesc() &&
-            !aSortCntBoxes.empty() &&
-            aSortCntBoxes[ 0 ]->GetSttNd()->GetNodes().IsDocNodes() )
-            ((SwFindNearestNode&)rInfo).CheckNode( *
-                aSortCntBoxes[ 0 ]->GetSttNd()->FindTableNode() );
+            !m_TabSortContentBoxes.empty() &&
+            m_TabSortContentBoxes[0]->GetSttNd()->GetNodes().IsDocNodes() )
+            static_cast<SwFindNearestNode&>(rInfo).CheckNode( *
+                m_TabSortContentBoxes[0]->GetSttNd()->FindTableNode() );
         break;
 
     case RES_CONTENT_VISIBLE:

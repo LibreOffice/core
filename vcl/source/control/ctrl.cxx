@@ -47,7 +47,7 @@ using namespace vcl;
 
 void Control::ImplInitControlData()
 {
-    mbHasFocus      = sal_False;
+    mbHasControlFocus       = sal_False;
     mpControlData   = new ImplControlData;
 }
 
@@ -65,10 +65,8 @@ Control::Control( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_CONTROL )
 {
     ImplInitControlData();
-    Window::ImplInit( pParent, nStyle, NULL );
+    ImplInit( pParent, nStyle, NULL );
 }
-
-// -----------------------------------------------------------------------
 
 Control::Control( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_CONTROL )
@@ -81,6 +79,21 @@ Control::Control( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void Control::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitControlData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle(), NULL);
+    }
+
+    Window::take_properties(rOther);
+
+    Control &rOtherControl = static_cast<Control&>(rOther);
+    std::swap(mpControlData, rOtherControl.mpControlData);
+    mbHasControlFocus = rOtherControl.mbHasControlFocus;
 }
 
 // -----------------------------------------------------------------------
@@ -295,9 +308,10 @@ long Control::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
     {
-        if ( !mbHasFocus )
+        if ( !mbHasControlFocus )
         {
-            mbHasFocus = sal_True;
+            mbHasControlFocus = sal_True;
+            StateChanged( STATE_CHANGE_CONTROL_FOCUS );
             if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
                 // been destroyed within the handler
                 return sal_True;
@@ -310,7 +324,8 @@ long Control::Notify( NotifyEvent& rNEvt )
             Window* pFocusWin = Application::GetFocusWindow();
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
-                mbHasFocus = sal_False;
+                mbHasControlFocus = sal_False;
+                StateChanged( STATE_CHANGE_CONTROL_FOCUS );
                 if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
                     // been destroyed within the handler
                     return sal_True;

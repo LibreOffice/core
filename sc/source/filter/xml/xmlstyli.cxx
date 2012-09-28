@@ -52,6 +52,15 @@
 #include "docuno.hxx"
 #include "unonames.hxx"
 #include "document.hxx"
+#include "conditio.hxx"
+#include "svl/intitem.hxx"
+#include "rangelst.hxx"
+#include "rangeutl.hxx"
+#include "docfunc.hxx"
+#include "markdata.hxx"
+#include "docpool.hxx"
+#include "scitems.hxx"
+#include "patattr.hxx"
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -279,9 +288,12 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
 
 class ScXMLMapContext : public SvXMLImportContext
 {
-    rtl::OUString sApplyStyle;
-    rtl::OUString sCondition;
-    rtl::OUString sBaseCell;
+    rtl::OUString msApplyStyle;
+    rtl::OUString msCondition;
+    rtl::OUString msBaseCell;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
 
     ScXMLMapContext(
@@ -290,9 +302,7 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~ScXMLMapContext();
 
-    const rtl::OUString& GetApplyStyle() const { return sApplyStyle; }
-    const rtl::OUString& GetCondition() const { return sCondition; }
-    const rtl::OUString& GetBaseCell() const { return sBaseCell; }
+    ScCondFormatEntry* CreateConditionEntry();
 };
 
 ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -311,134 +321,48 @@ ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
             if( IsXMLToken(aLocalName, XML_CONDITION ) )
-                sCondition = rValue;
+                msCondition = rValue;
             else if( IsXMLToken(aLocalName, XML_APPLY_STYLE_NAME ) )
-                sApplyStyle = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, rValue);
+                msApplyStyle = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, rValue);
             else if ( IsXMLToken(aLocalName, XML_BASE_CELL_ADDRESS ) )
-                sBaseCell = rValue;
+                msBaseCell = rValue;
         }
     }
+}
+
+ScCondFormatEntry* ScXMLMapContext::CreateConditionEntry()
+{
+    OUString aCondition, aConditionNmsp;
+    FormulaGrammar::Grammar eGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
+    GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eGrammar, msCondition );
+    bool bHasNmsp = aCondition.getLength() < msCondition.getLength();
+
+    // parse a condition from the attribute string
+    ScXMLConditionParseResult aParseResult;
+    ScXMLConditionHelper::parseCondition( aParseResult, aCondition, 0 );
+
+    if( !bHasNmsp )
+    {
+        // the attribute does not contain a namespace: try to find a namespace of an external grammar
+        FormulaGrammar::Grammar eNewGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
+        GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eNewGrammar, aCondition, true );
+        if( eNewGrammar != FormulaGrammar::GRAM_EXTERNAL )
+            eGrammar = eNewGrammar;
+    }
+
+    ScConditionMode eMode = ScConditionEntry::GetModeFromApi(aParseResult.meOperator);
+    rtl::OUString aExpr1, aExpr2, aNmsp1, aNmsp2;
+    ScDocument* pDoc = GetScImport().GetDocument();
+
+    ScCondFormatEntry* pEntry =  new ScCondFormatEntry(eMode, aParseResult.maOperand1, aParseResult.maOperand2, pDoc, ScAddress(), msApplyStyle,
+                                                    aNmsp1, aNmsp2, eGrammar, eGrammar);
+
+    pEntry->SetSrcString(msBaseCell);
+    return pEntry;
 }
 
 ScXMLMapContext::~ScXMLMapContext()
 {
-}
-
-namespace {
-
-template< typename Type >
-inline void lclAppendProperty( uno::Sequence< beans::PropertyValue >& rProps, const OUString& rPropName, const Type& rValue )
-{
-    sal_Int32 nLength = rProps.getLength();
-    rProps.realloc( nLength + 1 );
-    rProps[ nLength ].Name = rPropName;
-    rProps[ nLength ].Value <<= rValue;
-}
-
-} // namespace
-
-void XMLTableStyleContext::SetOperator( uno::Sequence< beans::PropertyValue >& rProps, sheet::ConditionOperator eOp ) const
-{
-    lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_OPERATOR ) ), eOp );
-}
-
-void XMLTableStyleContext::SetBaseCellAddress( uno::Sequence< beans::PropertyValue >& rProps, const OUString& rBaseCell ) const
-{
-    /*  Source position must be set as string, because it may refer
-        to a sheet that hasn't been loaded yet. */
-    lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SOURCESTR ) ), rBaseCell );
-}
-
-void XMLTableStyleContext::SetStyle( uno::Sequence<beans::PropertyValue>& rProps, const OUString& rApplyStyle ) const
-{
-    lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_STYLENAME ) ), rApplyStyle );
-}
-
-void XMLTableStyleContext::SetFormula( uno::Sequence< beans::PropertyValue >& rProps,
-        sal_Int32 nFormulaIdx, const OUString& rFormula, const OUString& rFormulaNmsp,
-        FormulaGrammar::Grammar eGrammar, bool bHasNmsp ) const
-{
-    OUString aFormula, aFormulaNmsp;
-    FormulaGrammar::Grammar eNewGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
-    if( bHasNmsp )
-    {
-        // the entire attribute contains a namespace: internal namespace not allowed
-        aFormula = rFormula;
-        aFormulaNmsp = rFormulaNmsp;
-        eNewGrammar = eGrammar;
-    }
-    else
-    {
-        // the attribute does not contain a namespace: try to find a namespace of an external grammar
-        GetScImport().ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eNewGrammar, rFormula, true );
-        if( eNewGrammar != FormulaGrammar::GRAM_EXTERNAL )
-            eNewGrammar = eGrammar;
-    }
-
-    // add formula, formula namespace, and grammar with appropriate property names
-    sal_Int32 nGrammar = static_cast< sal_Int32 >( eNewGrammar );
-    switch( nFormulaIdx )
-    {
-        case 1:
-            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FORMULA1 ) ), aFormula );
-            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FORMULANMSP1 ) ), aFormulaNmsp );
-            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_GRAMMAR1 ) ), nGrammar );
-        break;
-        case 2:
-            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FORMULA2 ) ), aFormula );
-            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FORMULANMSP2 ) ), aFormulaNmsp );
-            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_GRAMMAR2 ) ), nGrammar );
-        break;
-        default:
-            OSL_FAIL( "XMLTableStyleContext::SetFormula - invalid formula index" );
-    }
-}
-
-void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
-        const rtl::OUString& sTempCondition,
-        const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const
-{
-    if (!sTempCondition.isEmpty() && !sApplyStyle.isEmpty())
-    {
-        uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries(aAny, uno::UNO_QUERY);
-        if (xConditionalEntries.is())
-        {
-            uno::Sequence<beans::PropertyValue> aProps;
-            if (!sBaseCell.isEmpty())
-                SetBaseCellAddress(aProps, sBaseCell);
-            SetStyle(aProps, sApplyStyle);
-
-            // extract leading namespace from condition string
-            OUString aCondition, aConditionNmsp;
-            FormulaGrammar::Grammar eGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
-            GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eGrammar, sTempCondition );
-            bool bHasNmsp = aCondition.getLength() < sTempCondition.getLength();
-
-            // parse a condition from the attribute string
-            ScXMLConditionParseResult aParseResult;
-            ScXMLConditionHelper::parseCondition( aParseResult, aCondition, 0 );
-
-            /*  Check the result. A valid value in aParseResult.meToken implies
-                that the other members of aParseResult are filled with valid
-                data for that token. */
-            switch( aParseResult.meToken )
-            {
-                case XML_COND_CELLCONTENT:      // condition is 'cell-content()<operator><expression>'
-                case XML_COND_ISTRUEFORMULA:    // condition is 'is-true-formula(<expression>)'
-                case XML_COND_ISBETWEEN:        // condition is 'cell-content-is-between(<expression1>,<expression2>)'
-                case XML_COND_ISNOTBETWEEN:     // condition is 'cell-content-is-not-between(<expression1>,<expression2>)'
-                    SetOperator( aProps, aParseResult.meOperator );
-                    SetFormula( aProps, 1, aParseResult.maOperand1, aConditionNmsp, eGrammar, bHasNmsp );
-                    SetFormula( aProps, 2, aParseResult.maOperand2, aConditionNmsp, eGrammar, bHasNmsp );
-                break;
-
-                default:;   // unacceptable or unknown condition
-            }
-
-            xConditionalEntries->addNew( aProps );
-            aAny <<= xConditionalEntries;
-        }
-    }
 }
 
 void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
@@ -454,13 +378,6 @@ void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
 
-struct ScXMLMapContent
-{
-    rtl::OUString sCondition;
-    rtl::OUString sApplyStyle;
-    rtl::OUString sBaseCell;
-};
-
 TYPEINIT1( XMLTableStyleContext, XMLPropStyleContext );
 
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
@@ -469,12 +386,11 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
     sDataStyleName(),
-    sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
     pStyles(&rStyles),
     nNumberFormat(-1),
     nLastSheet(-1),
-    bConditionalFormatCreated(false),
-    bParentSet(false)
+    bParentSet(false),
+    mpCondFormat(NULL)
 {
 }
 
@@ -492,18 +408,78 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
     if( (XML_NAMESPACE_STYLE == nPrefix) &&
         IsXMLToken(rLocalName, XML_MAP ) )
     {
-        pContext = new ScXMLMapContext(GetImport(), nPrefix, rLocalName, xAttrList);
-
-        ScXMLMapContent aMap;
-        aMap.sCondition = ((ScXMLMapContext*)pContext)->GetCondition();
-        aMap.sApplyStyle = ((ScXMLMapContext*)pContext)->GetApplyStyle();
-        aMap.sBaseCell = ((ScXMLMapContext*)pContext)->GetBaseCell();
-        aMaps.push_back(aMap);
+        if(!mpCondFormat)
+            mpCondFormat = new ScConditionalFormat( 0, GetScImport().GetDocument() );
+        ScXMLMapContext* pMapContext = new ScXMLMapContext(GetImport(), nPrefix, rLocalName, xAttrList);
+        pContext = pMapContext;
+        mpCondFormat->AddEntry(pMapContext->CreateConditionEntry());
     }
     if (!pContext)
         pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                            xAttrList );
     return pContext;
+}
+
+void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddress> xCellRanges )
+{
+    if(!mpCondFormat || GetScImport().HasNewCondFormatData())
+        return;
+
+    ScRangeList rRange;
+    sal_Int32 nRanges = xCellRanges.getLength();
+    for(sal_Int32 i = 0; i < nRanges; ++i)
+    {
+        table::CellRangeAddress aAddress = xCellRanges[i];
+        ScRange aRange( aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet, aAddress.EndColumn, aAddress.EndRow, aAddress.Sheet );
+        rRange.Join( aRange, false );
+    }
+
+    ScDocument* pDoc = GetScImport().GetDocument();
+    SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+    ScConditionalFormatList* pFormatList = pDoc->GetCondFormList(nTab);
+    for(ScConditionalFormatList::iterator itr = pFormatList->begin(), itrEnd = pFormatList->end();
+                    itr != itrEnd; ++itr)
+    {
+        if(itr->EqualEntries(*mpCondFormat))
+        {
+            // we don't need the new cond format entry now
+            // the found one is the same and we just need to add the range to it
+            delete mpCondFormat;
+            mpCondFormat = NULL;
+
+            ScRangeList& rRangeList = itr->GetRangeList();
+            sal_uInt32 nCondId = itr->GetKey();
+            size_t n = rRange.size();
+            for(size_t i = 0; i < n; ++i)
+            {
+                const ScRange* pRange = rRange[i];
+                rRangeList.Join(*pRange);
+            }
+
+            ScPatternAttr aPattern( pDoc->GetPool() );
+            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nCondId ) );
+            ScMarkData aMarkData;
+            aMarkData.MarkFromRangeList(rRange, true);
+            pDoc->ApplySelectionPattern( aPattern , aMarkData);
+
+            break;
+        }
+    }
+
+    if(mpCondFormat)
+    {
+        sal_uLong nIndex = pDoc->AddCondFormat(mpCondFormat, nTab );
+        mpCondFormat->SetKey(nIndex);
+        mpCondFormat->AddRange(rRange);
+
+        ScPatternAttr aPattern( pDoc->GetPool() );
+        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
+        ScMarkData aMarkData;
+        aMarkData.MarkFromRangeList(rRange, true);
+        pDoc->ApplySelectionPattern( aPattern , aMarkData);
+    }
+
+
 }
 
 void XMLTableStyleContext::FillPropertySet(
@@ -521,21 +497,6 @@ void XMLTableStyleContext::FillPropertySet(
             sal_Int32 nNumFmt = GetNumberFormat();
             if (nNumFmt >= 0)
                 AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumFmt));
-            if (!GetScImport().HasNewCondFormatData() && !bConditionalFormatCreated && (!aMaps.empty()))
-            {
-                aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONDXML)));
-                std::vector<ScXMLMapContent>::iterator aItr(aMaps.begin());
-                std::vector<ScXMLMapContent>::iterator aEndItr(aMaps.end());
-                while(aItr != aEndItr)
-                {
-                    //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)),
-                    GetConditionalFormat(aConditionalFormat, aItr->sCondition, aItr->sApplyStyle, aItr->sBaseCell);
-
-                    ++aItr;
-                }
-                AddProperty(CTF_SC_IMPORT_MAP, aConditionalFormat);
-                bConditionalFormatCreated = true;
-            }
         }
         else if (GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE)
         {

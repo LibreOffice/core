@@ -23,7 +23,6 @@ import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.connection.Connector;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -34,13 +33,9 @@ public final class JavaClient {
     public static void main(String[] arguments) throws Exception {
         XComponentContext context = Bootstrap.createInitialComponentContext(
             null);
-        XMultiComponentFactory manager = context.getServiceManager();
-        if (manager == null) {
-            throw new NullPointerException("no service manager");
-        }
         XBridgeFactory factory = UnoRuntime.queryInterface(
             XBridgeFactory.class,
-            manager.createInstanceWithContext(
+            context.getServiceManager().createInstanceWithContext(
                 "com.sun.star.bridge.BridgeFactory", context));
         if (factory == null) {
             throw new NullPointerException("no bridge factory");

@@ -75,8 +75,21 @@ void TextBodyProperties::pushRotationAdjustments( sal_Int32 nRotation )
 
     for( sal_Int32 i = 0; i < n; i++ )
     {
+        sal_Int32 nVal = 0;
+
+        // Hack for n#760986
+        // TODO: Preferred method would be to have a textbox on top
+        // of the shape and the place it according to the (off,ext)
+        if( nOff == 0 && moTextOffX ) nVal = *moTextOffX;
+        if( nOff == 1 && moTextOffY ) nVal = *moTextOffY;
+        if( nVal < 0 ) nVal = 0;
+
         if( moInsets[i] )
-            maPropertyMap[ aProps[ ( nOff++ ) % n ] ] <<= static_cast< sal_Int32 >( *moInsets[i] );
+            maPropertyMap[ aProps[ nOff ] ] <<= static_cast< sal_Int32 >( *moInsets[i] + nVal );
+        else if( nVal )
+            maPropertyMap[ aProps[ nOff ] ] <<= static_cast< sal_Int32 >( nVal );
+
+        nOff = (nOff+1) % n;
     }
 }
 

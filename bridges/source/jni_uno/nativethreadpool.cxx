@@ -92,7 +92,7 @@ static void SAL_CALL executeRequest(void * data) {
 
 }
 
-extern "C" JNIEXPORT jbyteArray JNICALL
+extern "C" SAL_DLLPUBLIC_EXPORT jbyteArray JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_threadId(
     JNIEnv * env, SAL_UNUSED_PARAMETER jclass) SAL_THROW_EXTERN_C()
 {
@@ -117,7 +117,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_threadId(
     return a;
 }
 
-extern "C" JNIEXPORT jlong JNICALL
+extern "C" SAL_DLLPUBLIC_EXPORT jlong JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_create(
     JNIEnv * env, SAL_UNUSED_PARAMETER jclass) SAL_THROW_EXTERN_C()
 {
@@ -147,7 +147,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_create(
     }
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" SAL_DLLPUBLIC_EXPORT void JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_attach(
     SAL_UNUSED_PARAMETER JNIEnv *, SAL_UNUSED_PARAMETER jclass, jlong pool)
     SAL_THROW_EXTERN_C()
@@ -155,7 +155,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_attach(
     uno_threadpool_attach(reinterpret_cast< Pool * >(pool)->pool);
 }
 
-extern "C" JNIEXPORT jobject JNICALL
+extern "C" SAL_DLLPUBLIC_EXPORT jobject JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_enter(
     JNIEnv * env, SAL_UNUSED_PARAMETER jclass, jlong pool) SAL_THROW_EXTERN_C()
 {
@@ -171,7 +171,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_enter(
     return ref;
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" SAL_DLLPUBLIC_EXPORT void JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_detach(
     SAL_UNUSED_PARAMETER JNIEnv *, SAL_UNUSED_PARAMETER jclass, jlong pool)
     SAL_THROW_EXTERN_C()
@@ -179,7 +179,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_detach(
     uno_threadpool_detach(reinterpret_cast< Pool * >(pool)->pool);
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" SAL_DLLPUBLIC_EXPORT void JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_putJob(
     JNIEnv * env, SAL_UNUSED_PARAMETER jclass, jlong pool, jbyteArray threadId,
     jobject job, jboolean request, jboolean oneWay) SAL_THROW_EXTERN_C()
@@ -214,7 +214,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_putJob(
         request ? executeRequest : 0, oneWay);
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" SAL_DLLPUBLIC_EXPORT void JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_dispose(
     SAL_UNUSED_PARAMETER JNIEnv *, SAL_UNUSED_PARAMETER jclass, jlong pool)
     SAL_THROW_EXTERN_C()
@@ -222,7 +222,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_dispose(
     uno_threadpool_dispose(reinterpret_cast< Pool * >(pool)->pool);
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" SAL_DLLPUBLIC_EXPORT void JNICALL
 Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_destroy(
     SAL_UNUSED_PARAMETER JNIEnv *, SAL_UNUSED_PARAMETER jclass, jlong pool)
     SAL_THROW_EXTERN_C()

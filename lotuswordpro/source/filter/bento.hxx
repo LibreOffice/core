@@ -306,7 +306,6 @@ private: // Data
     pCBenProperty cpProperty;
     CUtOwningList cValueSegments;
     pCBenValue cpReferencedList;
-    unsigned long cReferencedObjectsSize;
 };
 
 class CBenProperty : public CBenIDListElmt

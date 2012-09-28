@@ -1,6 +1,3 @@
 ac      apache-commons  :       solenv TOMCAT:tomcat NULL
-ac	apache-commons								usr1	-	all	ac_mkout 							NULL
-ac	apache-commons\java\codec					nmake	-	all	ac_codec								NULL
-ac	apache-commons\java\lang					nmake	-	all	ac_lang									NULL
-ac	apache-commons\java\logging					nmake	-	all	ac_logging								NULL
-ac	apache-commons\java\httpclient					nmake	-	all	ac_httpclient ac_logging ac_codec					NULL
+ac	apache-commons\prj			nmake	-	all	ac_prj	 NULL
+

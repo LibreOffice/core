@@ -1189,7 +1189,41 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         {
             const ScProtectionAttr* pProtect =
                     (const ScProtectionAttr*) &pPattern->GetItem( ATTR_PROTECTION );
+            bool bFoundTemp = false;
             if ( pProtect->GetProtection() || pProtect->GetHideCell() )
+                bFoundTemp = true;
+
+            const SfxUInt32Item* pConditional =
+                    (const SfxUInt32Item*) &pPattern->GetItem( ATTR_CONDITIONAL );
+            if ( pConditional->GetValue() != 0 )
+            {
+                SCROW nRowStartCond = std::max<SCROW>( nRow1, i ? pData[i-1].nRow + 1: 0 );
+                SCROW nRowEndCond = std::min<SCROW>( nRow2, pData[i].nRow );
+                bool bFoundCond = false;
+                for(SCROW nRowCond = nRowStartCond; nRowCond <= nRowEndCond && !bFoundCond; ++nRowCond)
+                {
+                    const SfxItemSet* pSet = pDocument->GetCondResult( nCol, nRowCond, nTab );
+
+                    const SfxPoolItem* pItem;
+                    if( pSet && pSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SFX_ITEM_SET )
+                    {
+                        const ScProtectionAttr* pCondProtect = static_cast<const ScProtectionAttr*>(pItem);
+                        if( pCondProtect->GetProtection() || pProtect->GetHideCell() )
+                            bFoundCond = true;
+                    }
+                    else
+                    {
+                        // well it is not true that we found one
+                        // but existing one + cell where conditional
+                        // formatting does not remove it
+                        // => we have a protected cell
+                        bFoundCond = true;
+                    }
+                }
+                bFoundTemp = bFoundCond;
+            }
+
+            if(bFoundTemp)
                 bFound = true;
         }
         if ( nMask & HASATTR_ROTATE )

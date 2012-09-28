@@ -43,9 +43,12 @@ if (-d "$StartDir") {
     # check binaries
     print "check binaries: ";
     if (-d "$StartDir/bin") {
-	my @binarylist = ( "idlc","ucpp","cppumaker","javamaker",
+	my @binarylist = ( "idlc","cppumaker","javamaker",
                "regcompare","autodoc",
                "unoapploader", "uno-skeletonmaker" );
+    if ($ENV{SYSTEM_UCPP} eq "") {
+	push @binarylist,"ucpp";
+    }
 
     foreach $i (@binarylist)
     {

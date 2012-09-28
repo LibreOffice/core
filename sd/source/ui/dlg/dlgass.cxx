@@ -61,9 +61,10 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <unotools/historyoptions.hxx>
 #include <osl/file.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -1752,18 +1753,14 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
                 break;
 
             // Retrieve popup menu labels
-            Reference<lang::XMultiServiceFactory> xFactory (
-                ::comphelper::getProcessServiceFactory ());
-            if ( ! xFactory.is())
+            Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            if ( ! xContext.is())
                 break;
 
-            ::rtl::OUString sModuleIdentifier ("com.sun.star.presentation.PresentationDocument");
-            Reference<container::XNameAccess> xNameAccess (
-                xFactory->createInstance("com.sun.star.frame.UICommandDescription"),
-                UNO_QUERY);
-            if ( ! xNameAccess.is())
-                break;
-            Any a = xNameAccess->getByName(sModuleIdentifier);
+            Reference<container::XNameAccess> const xNameAccess(
+                    frame::UICommandDescription::create(xContext) );
+            Any a = xNameAccess->getByName(
+                "com.sun.star.presentation.PresentationDocument");
             a >>= xUICommandLabels;
             if ( ! xUICommandLabels.is())
                 break;
@@ -1811,19 +1808,16 @@ Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
                 break;
 
             // Retrieve popup menu labels
-            Reference<lang::XMultiServiceFactory> xFactory (
-                ::comphelper::getProcessServiceFactory ());
-            if ( ! xFactory.is())
+            Reference<uno::XComponentContext> xContext ( ::comphelper::getProcessComponentContext() );
+            if ( ! xContext.is())
                 break;
 
-            ::rtl::OUString sModuleIdentifier ("com.sun.star.presentation.PresentationDocument");
-
-            Reference<com::sun::star::ui::XModuleUIConfigurationManagerSupplier> xSupplier (
-                xFactory->createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"),
-                UNO_QUERY_THROW);
+            Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier (
+                ui::ModuleUIConfigurationManagerSupplier::create(xContext));
 
             Reference<com::sun::star::ui::XUIConfigurationManager> xManager (
-                xSupplier->getUIConfigurationManager(sModuleIdentifier));
+                xSupplier->getUIConfigurationManager(
+                    "com.sun.star.presentation.PresentationDocument"));
             if ( ! xManager.is())
                 break;
 

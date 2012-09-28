@@ -1011,7 +1011,7 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
         if( Window::GetDockingManager()->IsDockable( GetWindow() ) )
             Window::GetDockingManager()->SetPosSizePixel( GetWindow() , X, Y, Width, Height, Flags );
         else
-            GetWindow()->SetPosSizePixel( X, Y, Width, Height, Flags );
+            GetWindow()->setPosSizePixel( X, Y, Width, Height, Flags );
     }
 }
 

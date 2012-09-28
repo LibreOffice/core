@@ -24,12 +24,6 @@
 #include <vcl/seleng.hxx>
 #include "address.hxx"
 
-// ---------------------------------------------------------------------------
-
-
-#define HDR_HORIZONTAL      0
-#define HDR_VERTICAL        1
-
 #define HDR_SIZE_OPTIMUM    0xFFFF
 
 
@@ -44,7 +38,6 @@ private:
     Font                aBoldFont;
     sal_Bool                bBoldSet;
 
-    sal_uInt16          nFlags;
     sal_Bool            bVertical;              // Vertical = Row header
 
     long            nWidth;
@@ -110,7 +103,7 @@ protected:
 
 public:
             ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
-                                SCCOLROW nNewSize, sal_uInt16 nNewFlags );
+                                SCCOLROW nNewSize, bool bNewVertical );
             ~ScHeaderControl();
 
     void    SetIgnoreMove(sal_Bool bSet)            { bIgnoreMove = bSet; }

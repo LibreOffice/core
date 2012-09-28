@@ -1,12 +1,3 @@
 ure     cli_ure :       cppu cppuhelper sal DESKTOP:codemaker stoc udkapi bridges NULL
 ure	cli_ure						usr1	-	all	ure_mkout NULL
-ure	cli_ure\inc					nmake   -   all   ure_inc NULL
-ure	cli_ure\version				nmake   -   all   ure_source_version ure_inc NULL
-ure	cli_ure\source				nmake   -   w,vc7   ure_source_source ure_inc NULL
-ure	cli_ure\source\basetypes	nmake	-	w,vc7	ure_source_basetypes ure_source_version ure_source_source.w ure_inc NULL
-ure	cli_ure\source\climaker		nmake	-	w,vc7	ure_source_climaker ure_source_basetypes.w ure_inc NULL
-ure	cli_ure\unotypes			nmake	-	w,vc7	ure_unotypes ure_source_version ure_source_source.w ure_source_climaker.w ure_inc NULL
-ure	cli_ure\source\ure			nmake	-	w,vc7	ure_source_ure ure_source_version ure_source_source.w ure_source_basetypes.w ure_unotypes.w ure_inc NULL
-ure	cli_ure\source\uno_bridge	nmake	-	w,vc7	ure_source_uno_bridge ure_source_basetypes.w ure_unotypes.w ure_source_ure.w ure_inc NULL
-ure	cli_ure\source\native		nmake	-	w,vc7	ure_source_native ure_source_version ure_source_source.w ure_source_ure.w ure_unotypes.w ure_source_uno_bridge.w ure_inc NULL
-#ure	cli_ure\util			nmake	-	w,vc7	ure_util ure_source_ure.w ure_source_native.w NULL
+ure	cli_ure\prj					nmake   -   all   ure_prj NULL

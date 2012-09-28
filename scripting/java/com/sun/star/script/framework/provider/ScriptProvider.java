@@ -60,11 +60,11 @@ import com.sun.star.script.framework.container.ParsedScriptUri;
 import com.sun.star.script.framework.container.UnoPkgContainer;
 
 import com.sun.star.ucb.Command;
-import com.sun.star.ucb.XContentProvider;
+import com.sun.star.ucb.UniversalContentBroker;
 import com.sun.star.ucb.XContent;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.ucb.XContentIdentifier;
-import com.sun.star.ucb.XContentIdentifierFactory;
+import com.sun.star.ucb.XUniversalContentBroker;
 
 import com.sun.star.sdbc.XRow;
 
@@ -694,23 +694,12 @@ public abstract class ScriptProvider
         XModel xModel = null;
         try
         {
-            Object[] args = new String[] {"Local", "Office" };
+            XUniversalContentBroker ucb = UniversalContentBroker.create( m_xContext );
 
-            Object ucb = m_xMultiComponentFactory.createInstanceWithArgumentsAndContext( "com.sun.star.ucb.UniversalContentBroker", args, m_xContext );
-
-
-            XContentIdentifierFactory xFac  =  UnoRuntime.queryInterface( XContentIdentifierFactory.class,
-                ucb );
+            XContentIdentifier xCntId = ucb.createContentIdentifier( docUrl );
 
 
-            XContentIdentifier xCntId = xFac.createContentIdentifier( docUrl );
-
-
-            XContentProvider xCntAccess = UnoRuntime.queryInterface( XContentProvider.class,
-                ucb );
-
-
-            XContent xCnt = xCntAccess.queryContent( xCntId );
+            XContent xCnt = ucb.queryContent( xCntId );
 
 
             XCommandProcessor xCmd = UnoRuntime.queryInterface( XCommandProcessor.class, xCnt );

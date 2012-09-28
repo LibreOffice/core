@@ -206,7 +206,7 @@ throw( RuntimeException )
     {
         try
         {
-            Content aContent(sURL, xEnv);
+            Content aContent(sURL, xEnv, mxContext);
                     xInputStream = aContent.openStream();
         }
         catch ( ... )
@@ -226,14 +226,14 @@ throw( RuntimeException )
     confidence = WPDocument::isFileFormatSupported(&input);
 
     if (confidence == WPD_CONFIDENCE_EXCELLENT || confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
-        sTypeName = OUString(  "writer_WordPerfect_Document"  );
+        sTypeName = "writer_WordPerfect_Document";
 
     if (!sTypeName.isEmpty())
     {
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString("TypeName");
+            Descriptor[location].Name = "TypeName";
         }
 
         Descriptor[location].Value <<=sTypeName;
@@ -343,7 +343,7 @@ throw (RuntimeException)
             aPasswdDlg.SetMinLen(0);
             if(!aPasswdDlg.Execute())
                 return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
-            msPassword = ::rtl::OUString(aPasswdDlg.GetPassword().GetBuffer());
+            msPassword = aPasswdDlg.GetPassword().GetBuffer();
             aUtf8Passwd = OUStringToOString(msPassword, RTL_TEXTENCODING_UTF8);
             if (WPD_PASSWORD_MATCH_OK == WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;
@@ -361,7 +361,7 @@ Sequence<PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValue
     Sequence<PropertyValue> aRet(1);
     PropertyValue *pArray = aRet.getArray();
 
-    pArray[0].Name = rtl::OUString( "Password" );
+    pArray[0].Name = "Password";
     pArray[0].Value <<= msPassword;
 
     return aRet;
@@ -378,7 +378,7 @@ throw(com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::Pr
         const PropertyValue &rProp = pPropArray[i];
         ::rtl::OUString aPropName = rProp.Name;
 
-        if ( aPropName == ::rtl::OUString("Password") )
+        if ( aPropName == "Password" )
             rProp.Value >>= msPassword;
         else if ( aPropName == "InputStream" )
             rProp.Value >>= mxInputStream;

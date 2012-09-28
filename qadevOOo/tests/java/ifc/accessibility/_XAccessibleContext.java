@@ -20,7 +20,6 @@ package ifc.accessibility;
 import com.sun.star.accessibility.IllegalAccessibleComponentStateException;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleRelationSet;
 import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.lang.Locale;
 

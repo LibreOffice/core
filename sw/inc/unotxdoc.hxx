@@ -579,7 +579,7 @@ public:
   -----------------------------------------------------------------------*/
 class SwViewOptionAdjust_Impl
 {
-    ViewShell &    m_rShell;
+    ViewShell *     m_pShell;
     SwViewOption    m_aOldViewOptions;
 
 public:
@@ -587,7 +587,8 @@ public:
     ~SwViewOptionAdjust_Impl();
     void AdjustViewOptions( SwPrintData const* const pPrtOptions );
     bool checkShell( const ViewShell& rCompare ) const
-    { return &rCompare == &m_rShell; }
+    { return &rCompare == m_pShell; }
+    void DontTouchThatViewShellItSmellsFunny() { m_pShell = 0; }
 };
 
 

@@ -30,7 +30,6 @@
 #include "overlayobject.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/lineinfo.hxx"
-#include "vcl/window.hxx"
 #include "tools/fract.hxx"
 #include "basegfx/range/b2drange.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
@@ -45,9 +44,8 @@ using ::drawinglayer::primitive2d::Primitive2DSequence;
 
 #define DASH_UPDATE_INTERVAL 180    // in msec
 
-ScOverlayDashedBorder::ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, const Color& rColor, Window* pWin) :
+ScOverlayDashedBorder::ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, const Color& rColor) :
     OverlayObject(rColor),
-    mpParent(pWin),
     mbToggle(true)
 {
     mbAllowsAnimation = true;

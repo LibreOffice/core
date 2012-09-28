@@ -32,7 +32,6 @@ import java.io.IOException;
  *  When it is constructed, a
  *  <code>ConvertData</code> object is passed in to be used as input.</p>
  *
- *  @author  Henrik Just
  *  @see     org.openoffice.xmerge.PluginFactory
  *  @see     org.openoffice.xmerge.DocumentDeserializerFactory
  */

@@ -74,7 +74,6 @@ class SwLayoutViewConfig : public utl::ConfigItem
 class SwGridConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
-    sal_Bool                bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:

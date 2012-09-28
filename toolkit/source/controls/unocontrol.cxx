@@ -1117,7 +1117,6 @@ void UnoControl::peerCreated()
 void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Reference< XWindowPeer >& rParentPeer ) throw(RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-
     if ( !mxModel.is() )
     {
         RuntimeException aException;

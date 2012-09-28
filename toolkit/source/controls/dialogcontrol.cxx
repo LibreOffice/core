@@ -173,6 +173,12 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XMultiServiceFact
     ImplRegisterProperty( BASEPROPERTY_DIALOGSOURCEURL );
     ImplRegisterProperty( BASEPROPERTY_GRAPHIC );
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
+    ImplRegisterProperty( BASEPROPERTY_HSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_VSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLWIDTH );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLHEIGHT );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLTOP );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLLEFT );
 
     Any aBool;
     aBool <<= (sal_Bool) sal_True;
@@ -229,6 +235,12 @@ Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         case BASEPROPERTY_DEFAULTCONTROL:
             aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog );
+            break;
+        case BASEPROPERTY_SCROLLWIDTH:
+        case BASEPROPERTY_SCROLLHEIGHT:
+        case BASEPROPERTY_SCROLLTOP:
+        case BASEPROPERTY_SCROLLLEFT:
+            aAny <<= sal_Int32(0);
             break;
         default:
             aAny = UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -346,11 +358,18 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
 
         if ( maTopWindowListeners.getLength() )
             xTW->addTopWindowListener( &maTopWindowListeners );
+        // there must be a better way than doing this, we can't
+        // process the scrolltop & scrollleft in XDialog because
+        // the children haven't been added when those props are applied
+        ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLTOP ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLTOP ) ) );
+        ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLLEFT ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLLEFT ) ) );
+
     }
 }
 
 void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
 {
+    UnoControlContainer::PrepareWindowDescriptor( rDesc );
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( !bDecoration )
@@ -1077,6 +1096,7 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
             SimpleFontMetric aFM;
             FontDescriptor aFD;
             Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
+
             aVal >>= aFD;
             if ( !aFD.StyleName.isEmpty() )
             {
@@ -1114,6 +1134,13 @@ UnoFrameModel::UnoFrameModel(  const Reference< XMultiServiceFactory >& i_factor
     ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES );
+    ImplRegisterProperty( BASEPROPERTY_HSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_VSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLWIDTH );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLHEIGHT );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLTOP );
+    ImplRegisterProperty( BASEPROPERTY_SCROLLLEFT );
+
 
     uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
@@ -1144,11 +1171,25 @@ UnoFrameModel::Clone() const
 
 uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    uno::Any aAny;
+    switch ( nPropId )
     {
-        uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoFrameControl );
-        return aAny;
+        case BASEPROPERTY_DEFAULTCONTROL:
+        {
+            aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoFrameControl );
+            return aAny;
+        }
+        case BASEPROPERTY_SCROLLWIDTH:
+        case BASEPROPERTY_SCROLLHEIGHT:
+        case BASEPROPERTY_SCROLLTOP:
+        case BASEPROPERTY_SCROLLLEFT:
+            aAny <<= sal_Int32(0);
+            return aAny;
+        case BASEPROPERTY_USERFORMCONTAINEES:
+        {
+            uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+            return makeAny( xNameCont );
+        }
     }
     return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
 }

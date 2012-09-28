@@ -763,7 +763,7 @@ sal_Bool SwWrtShell::SelectTxtAttr( sal_uInt16 nWhich, const SwTxtAttr* pAttr )
 {
     sal_Bool bRet;
     {
-        MV_KONTEXT(this);
+        SwMvContext aMvContext(this);
         SttSelect();
         bRet = SwCrsrShell::SelectTxtAttr( nWhich, sal_False, pAttr );
     }

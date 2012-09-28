@@ -17,7 +17,6 @@
  */
 
 import com.sun.star.uno.*;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.table.XCellRange;
 import com.sun.star.table.CellAddress;

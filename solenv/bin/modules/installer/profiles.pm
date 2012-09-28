@@ -28,7 +28,6 @@
 package installer::profiles;
 
 use installer::converter;
-use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
@@ -98,7 +97,7 @@ sub add_profile_into_filelist
     if ( $allvariables->{'GLOBALFILEGID'} ) { $vclgid = $allvariables->{'GLOBALFILEGID'}; }
     my ($vclfile) = grep {$_->{gid} eq $vclgid} @{$filesarrayref};
     if (! defined $vclfile) {
-        installer::exiter::exit_program("ERROR: Could not find file $vclgid in list of files!", "add_profile_into_filelist");
+        die "Could not find file $vclgid in list of files!";
     }
 
     # copying all base data
@@ -207,7 +206,7 @@ sub create_profiles
         # Sorting the array @onefile
         my $onefileref = sorting_profile(\@onefile);
 
-        if ( $installer::globals::iswin && $installer::globals::plat =~ /cygwin/i)      # Windows line ends only for Cygwin
+        if ( $installer::globals::iswin && $^O =~ /cygwin/i)      # Windows line ends only for Cygwin
         {
             include_windows_lineends($onefileref);
         }

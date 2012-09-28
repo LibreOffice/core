@@ -969,12 +969,12 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/xml/sax/_XDocumentHandler \
     qadevOOo/tests/java/ifc/xml/_UserDefinedAttributeSupplier \
     qadevOOo/tests/java/mod/_acceptor/Acceptor \
-    qadevOOo/tests/java/mod/_acceptor.uno/Acceptor \
+    qadevOOo/tests/java/mod/_acceptor/uno/Acceptor \
     qadevOOo/tests/java/mod/_adabas/ODriver \
     qadevOOo/tests/java/mod/_ado/ODriver \
     qadevOOo/tests/java/mod/_basctl/AccessibleShape \
     qadevOOo/tests/java/mod/_brdgfctr/BridgeFactory \
-    qadevOOo/tests/java/mod/_bridgefac.uno/BridgeFactory \
+    qadevOOo/tests/java/mod/_bridgefac/uno/BridgeFactory \
     qadevOOo/tests/java/mod/_cached/CachedContentResultSetFactory \
     qadevOOo/tests/java/mod/_cached/CachedContentResultSetStubFactory \
     qadevOOo/tests/java/mod/_cached/CachedDynamicResultSetFactory \
@@ -986,10 +986,10 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_configmgr/ConfigurationProvider \
     qadevOOo/tests/java/mod/_configmgr/DefaultProvider \
     qadevOOo/tests/java/mod/_configmgr/ProviderTestEnvironment \
-    qadevOOo/tests/java/mod/_connector.uno/Connector \
+    qadevOOo/tests/java/mod/_connector/uno/Connector \
     qadevOOo/tests/java/mod/_connectr/Connector \
     qadevOOo/tests/java/mod/_corefl/CoreReflection \
-    qadevOOo/tests/java/mod/_corereflection.uno/CoreReflection \
+    qadevOOo/tests/java/mod/_corereflection/uno/CoreReflection \
     qadevOOo/tests/java/mod/_cpld/DLLComponentLoader \
     qadevOOo/tests/java/mod/_dbaccess/ConnectionLineAccessibility \
     qadevOOo/tests/java/mod/_dbaccess/DBContentLoader \
@@ -1105,17 +1105,17 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_i18n/NumberFormatCodeMapper \
     qadevOOo/tests/java/mod/_i18n/TextSearch \
     qadevOOo/tests/java/mod/_i18n/Transliteration \
-    qadevOOo/tests/java/mod/_implreg.uno/ImplementationRegistration \
+    qadevOOo/tests/java/mod/_implreg/uno/ImplementationRegistration \
     qadevOOo/tests/java/mod/_impreg/ImplementationRegistration \
     qadevOOo/tests/java/mod/_insp/Introspection \
-    qadevOOo/tests/java/mod/_introspection.uno/Introspection \
+    qadevOOo/tests/java/mod/_introspection/uno/Introspection \
     qadevOOo/tests/java/mod/_invadp/InvocationAdapterFactory \
     qadevOOo/tests/java/mod/_inv/Invocation \
-    qadevOOo/tests/java/mod/_invocadapt.uno/InvocationAdapterFactory \
-    qadevOOo/tests/java/mod/_invocation.uno/Invocation \
+    qadevOOo/tests/java/mod/_invocadapt/uno/InvocationAdapterFactory \
+    qadevOOo/tests/java/mod/_invocation/uno/Invocation \
     qadevOOo/tests/java/mod/_javaloader/JavaComponentLoader \
-    qadevOOo/tests/java/mod/_javaloader.uno/JavaComponentLoader \
-    qadevOOo/tests/java/mod/_javavm.uno/JavaVirtualMachine \
+    qadevOOo/tests/java/mod/_javaloader/uno/JavaComponentLoader \
+    qadevOOo/tests/java/mod/_javavm/uno/JavaVirtualMachine \
     qadevOOo/tests/java/mod/_jdbc/JDBCDriver \
     qadevOOo/tests/java/mod/_jen/JavaVirtualMachine \
     qadevOOo/tests/java/mod/_lng/DicList \
@@ -1127,19 +1127,19 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_mcnttype/MimeContentTypeFactory \
     qadevOOo/tests/java/mod/_mozab/MozabDriver \
     qadevOOo/tests/java/mod/_namingservice/NamingService \
-    qadevOOo/tests/java/mod/_namingservice.uno/NamingService \
-    qadevOOo/tests/java/mod/_nestedreg.uno/NestedRegistry \
+    qadevOOo/tests/java/mod/_namingservice/uno/NamingService \
+    qadevOOo/tests/java/mod/_nestedreg/uno/NestedRegistry \
     qadevOOo/tests/java/mod/_odbc/ODBCDriver \
     qadevOOo/tests/java/mod/_pcr/ObjectInspector \
     qadevOOo/tests/java/mod/_pcr/ObjectInspectorModel \
     qadevOOo/tests/java/mod/_proxyfac/ProxyFactory \
-    qadevOOo/tests/java/mod/_proxyfac.uno/ProxyFactory \
+    qadevOOo/tests/java/mod/_proxyfac/uno/ProxyFactory \
     qadevOOo/tests/java/mod/_proxyset/SOffice52ProxySettings \
     qadevOOo/tests/java/mod/_proxyset/SystemProxySettings \
     qadevOOo/tests/java/mod/_qadevOOo/SelfTest \
     qadevOOo/tests/java/mod/_rdbtdp/RegistryTypeDescriptionProvider \
-    qadevOOo/tests/java/mod/_regtypeprov.uno/RegistryTypeDescriptionProvider \
-    qadevOOo/tests/java/mod/_remotebridge.uno/various \
+    qadevOOo/tests/java/mod/_regtypeprov/uno/RegistryTypeDescriptionProvider \
+    qadevOOo/tests/java/mod/_remotebridge/uno/various \
     qadevOOo/tests/java/mod/_remotebridge/various \
     qadevOOo/tests/java/mod/_sc/AccessibleEditableTextPara_HeaderFooter \
     qadevOOo/tests/java/mod/_sc/AccessibleEditableTextPara_PreviewCell \
@@ -1319,14 +1319,14 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sd/SdXImpressDocument \
     qadevOOo/tests/java/mod/_sd/SdXPresentation \
     qadevOOo/tests/java/mod/_sd/SdXShape \
-    qadevOOo/tests/java/mod/_servicemgr.uno/OServiceManager \
+    qadevOOo/tests/java/mod/_servicemgr/uno/OServiceManager \
     qadevOOo/tests/java/mod/_sfx/AppDispatchProvider \
     qadevOOo/tests/java/mod/_sfx/DocumentTemplates \
     qadevOOo/tests/java/mod/_sfx/FrameLoader \
     qadevOOo/tests/java/mod/_sfx/SfxMacroLoader \
     qadevOOo/tests/java/mod/_sfx/StandaloneDocumentInfo \
-    qadevOOo/tests/java/mod/_shlibloader.uno/DLLComponentLoader \
-    qadevOOo/tests/java/mod/_simplereg.uno/SimpleRegistry \
+    qadevOOo/tests/java/mod/_shlibloader/uno/DLLComponentLoader \
+    qadevOOo/tests/java/mod/_simplereg/uno/SimpleRegistry \
     qadevOOo/tests/java/mod/_simreg/SimpleRegistry \
     qadevOOo/tests/java/mod/_smgr/OServiceManager \
     qadevOOo/tests/java/mod/_smplmail/SimpleSystemMail \
@@ -1348,14 +1348,14 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_stm/ObjectOutputStream \
     qadevOOo/tests/java/mod/_stm/Pipe \
     qadevOOo/tests/java/mod/_stm/Pump \
-    qadevOOo/tests/java/mod/_streams.uno/DataInputStream \
-    qadevOOo/tests/java/mod/_streams.uno/DataOutputStream \
-    qadevOOo/tests/java/mod/_streams.uno/MarkableInputStream \
-    qadevOOo/tests/java/mod/_streams.uno/MarkableOutputStream \
-    qadevOOo/tests/java/mod/_streams.uno/ObjectInputStream \
-    qadevOOo/tests/java/mod/_streams.uno/ObjectOutputStream \
-    qadevOOo/tests/java/mod/_streams.uno/Pipe \
-    qadevOOo/tests/java/mod/_streams.uno/Pump \
+    qadevOOo/tests/java/mod/_streams/uno/DataInputStream \
+    qadevOOo/tests/java/mod/_streams/uno/DataOutputStream \
+    qadevOOo/tests/java/mod/_streams/uno/MarkableInputStream \
+    qadevOOo/tests/java/mod/_streams/uno/MarkableOutputStream \
+    qadevOOo/tests/java/mod/_streams/uno/ObjectInputStream \
+    qadevOOo/tests/java/mod/_streams/uno/ObjectOutputStream \
+    qadevOOo/tests/java/mod/_streams/uno/Pipe \
+    qadevOOo/tests/java/mod/_streams/uno/Pump \
     qadevOOo/tests/java/mod/_svtools/AccessibleBrowseBox \
     qadevOOo/tests/java/mod/_svtools/AccessibleBrowseBoxHeaderBar \
     qadevOOo/tests/java/mod/_svtools/AccessibleBrowseBoxHeaderCell \
@@ -1571,8 +1571,8 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_toolkit/UnoSpinButtonControlModel \
     qadevOOo/tests/java/mod/_toolkit/UnoTreeControl \
     qadevOOo/tests/java/mod/_toolkit/UnoTreeModel \
-    qadevOOo/tests/java/mod/_typeconverter.uno/TypeConverter \
-    qadevOOo/tests/java/mod/_typemgr.uno/TypeDescriptionManager \
+    qadevOOo/tests/java/mod/_typeconverter/uno/TypeConverter \
+    qadevOOo/tests/java/mod/_typemgr/uno/TypeDescriptionManager \
     qadevOOo/tests/java/mod/_ucb/UcbContentProviderProxyFactory \
     qadevOOo/tests/java/mod/_ucb/UcbPropertiesManager \
     qadevOOo/tests/java/mod/_ucb/UcbStore \
@@ -1588,7 +1588,7 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_ucprmt/ProviderAcceptor \
     qadevOOo/tests/java/mod/_ucprmt/ProxyProvider \
     qadevOOo/tests/java/mod/_uui/UUIInteractionHandler \
-    qadevOOo/tests/java/mod/_uuresolver.uno/UnoUrlResolver \
+    qadevOOo/tests/java/mod/_uuresolver/uno/UnoUrlResolver \
     qadevOOo/tests/java/mod/_uuresolver/UnoUrlResolver \
     qadevOOo/tests/java/mod/_xmloff/Chart/XMLContentExporter \
     qadevOOo/tests/java/mod/_xmloff/Chart/XMLContentImporter \

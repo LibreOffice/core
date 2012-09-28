@@ -36,9 +36,9 @@ use installer::logger;
 use installer::packagelist;
 use installer::pathanalyzer;
 use installer::remover;
+use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::systemactions;
-use installer::worker;
 use POSIX;
 
 ############################################################################
@@ -413,7 +413,7 @@ sub create_epm_header
 
         if (( $installer::globals::issolarispkgbuild ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} ))
         {
-            if ( ! $installer::globals::englishlicenseset ) { installer::worker::set_english_license() }
+            if ( ! $installer::globals::englishlicenseset ) { _set_english_license() }
 
             # The location for the new file
             my $languagestring = "";
@@ -828,6 +828,8 @@ sub call_epm
 
     my $extraflags = "";
         if ($ENV{'EPM_FLAGS'}) { $extraflags = $ENV{'EPM_FLAGS'}; }
+
+    $extraflags .= ' -g' unless $installer::globals::strip;
 
     my $systemcall = $ldpreloadstring . $epmname . " -f " . $packageformat . " " . $extraflags . " " . $localpackagename . " " . $epmlistfilename . $outdirstring . " -v " . " 2\>\&1 |";
 
@@ -2225,7 +2227,7 @@ sub create_packages_without_epm
                 my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
                 my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
                 $systemcall = "cp -p $pkginfoorig $pkginfotmp";
-                 make_systemcall($systemcall);
+                installer::systemactions::make_systemcall($systemcall);
 
                 $faspac = $$compressorref;
                 $infoline = "Found compressor: $faspac\n";
@@ -2234,13 +2236,14 @@ sub create_packages_without_epm
                 installer::logger::print_message( "... $faspac ...\n" );
                 installer::logger::include_timestamp_into_logfile("Starting $faspac");
 
-                 $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
-                 make_systemcall($systemcall);
+                $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
+                installer::systemactions::make_systemcall($systemcall);
 
-                 # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
-                 # updated the size and checksum, but not the time stamp.
-                 $systemcall = "touch -r $pkginfotmp $pkginfoorig";
-                 make_systemcall($systemcall);
+                # Setting time stamp for pkginfo, because faspac-so.sh
+                # changed the pkginfo file, updated the size and
+                # checksum, but not the time stamp.
+                $systemcall = "touch -r $pkginfotmp $pkginfoorig";
+                installer::systemactions::make_systemcall($systemcall);
                 if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
 
                 installer::logger::include_timestamp_into_logfile("End of $faspac");
@@ -2401,7 +2404,7 @@ sub create_packages_without_epm
 
         if ( $rpm_failed )
         {
-            # Because of the problems with LD_LIBARY_PATH, a direct call of local "rpm" or "rpmbuild" might be successful
+            # Because of the problems with LD_LIBRARY_PATH, a direct call of local "rpm" or "rpmbuild" might be successful
             my $rpmprog = "";
             if ( -f "/usr/bin/rpmbuild" ) { $rpmprog = "/usr/bin/rpmbuild"; }
             elsif ( -f "/usr/bin/rpm" ) { $rpmprog = "/usr/bin/rpm"; }
@@ -2420,7 +2423,7 @@ sub create_packages_without_epm
 
                 my $helperreturnvalue = $?; # $? contains the return value of the systemcall
 
-                $infoline = "\nLast try: Using $rpmprog directly (problem with LD_LIBARY_PATH)\n";
+                $infoline = "\nLast try: Using $rpmprog directly (problem with LD_LIBRARY_PATH)\n";
                 push( @installer::globals::logfileinfo, $infoline);
 
                 $infoline = "\nSystemcall: $helpersystemcall\n";
@@ -2525,31 +2528,6 @@ sub remove_temporary_epm_files
             $infoline = "Success: Executed \"$systemcall\" successfully!\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
-    }
-}
-
-######################################################
-# Making the systemcall
-######################################################
-
-sub make_systemcall
-{
-    my ($systemcall) = @_;
-
-    my $returnvalue = system($systemcall);
-
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
     }
 }
 
@@ -2681,11 +2659,11 @@ sub unpack_tar_gz_file
 
         # unpacking gunzip
         my $systemcall = "cd $destdir; cat $packagename | gunzip | tar -xf -";
-        make_systemcall($systemcall);
+        installer::systemactions::make_systemcall($systemcall);
 
         # deleting the tar.gz files
         $systemcall = "cd $destdir; rm -f $packagename";
-        make_systemcall($systemcall);
+        installer::systemactions::make_systemcall($systemcall);
 
         # Finding new content -> that is the package name
         my ($newcontent, $allcontent ) = installer::systemactions::find_new_content_in_directory($destdir, $oldcontent);
@@ -2699,43 +2677,6 @@ sub unpack_tar_gz_file
 }
 
 ######################################################
-# Copying files of child projects.
-######################################################
-
-sub copy_childproject_files
-{
-    my ($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, $subdir, $includepatharrayref, $use_sopackpath) = @_;
-
-    for ( my $i = 0; $i <= $#{$allmodules}; $i++ )
-    {
-        my $localdestdir = $destdir;
-        my $onemodule = ${$allmodules}[$i];
-        my $packagename = $onemodule->{'PackageName'};
-        my $sourcefile = "";
-        if ( $use_sopackpath )
-        {
-            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . $subdir . $installer::globals::separator . $packagename;
-        }
-        else
-        {
-            my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packagename, $includepatharrayref, 1);
-            $sourcefile = $$sourcepathref;
-        }
-
-        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile ($packagename) !", "copy_childproject_files"); }
-        if ( $onemodule->{'Subdir'} )
-        {
-            $localdestdir = $localdestdir . $installer::globals::separator . $onemodule->{'Subdir'};
-            if ( ! -d $localdestdir ) { installer::systemactions::create_directory($localdestdir); }
-        }
-        installer::systemactions::copy_one_file($sourcefile, $localdestdir);
-        # Solaris: unpacking tar.gz files and setting new packagename
-        if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $localdestdir); }
-    }
-
-}
-
-######################################################
 # Copying files for system integration.
 ######################################################
 
@@ -2744,46 +2685,7 @@ sub copy_and_unpack_tar_gz_files
     my ($sourcefile, $destdir) = @_;
 
     my $systemcall = "cd $destdir; cat $sourcefile | gunzip | tar -xf -";
-    make_systemcall($systemcall);
-}
-
-######################################################
-# Including child packages into the
-# installation set.
-######################################################
-
-sub put_childprojects_into_installset
-{
-    my ($newdir, $allvariables, $modulesarrayref, $includepatharrayref) = @_;
-
-    my $infoline = "";
-
-    my $sopackpath = "";
-    if ( $ENV{'SO_PACK'} ) { $sopackpath  = $ENV{'SO_PACK'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "put_childprojects_into_installset"); }
-
-    my $destdir = "$newdir";
-
-    # adding Java
-
-    my $sourcefile = "";
-
-    # Adding additional required packages (freetype).
-    # This package names are stored in global array @installer::globals::requiredpackages
-
-    if ( $allvariables->{'ADDREQUIREDPACKAGES'} )
-    {
-        # Collect all modules with flag "REQUIREDPACKAGEMODULE"
-        my $allmodules = collect_modules_with_style("REQUIREDPACKAGEMODULE", $modulesarrayref);
-        $allmodules = remove_modules_without_package($allmodules);
-        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "requiredpackages", $includepatharrayref, 1);
-    }
-
-    # Collect all modules with flag "USERLANDMODULE"
-    my $alluserlandmodules = collect_modules_with_style("USERLANDMODULE", $modulesarrayref);
-    $alluserlandmodules = remove_modules_without_package($alluserlandmodules);
-    copy_childproject_files($alluserlandmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "", $includepatharrayref, 0);
-
+    installer::systemactions::make_systemcall($systemcall);
 }
 
 ######################################################
@@ -2871,7 +2773,7 @@ sub put_systemintegration_into_installset
         if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
 
         # Adding license content into Solaris packages
-        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
+        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { _add_license_into_systemintegrationpackages($destdir, $newcontent); }
     }
 }
 
@@ -3074,6 +2976,200 @@ sub finalize_linux_patch
 
     # Setting unix rights 755
     chmod 0755, $newscriptfilename;
+}
+
+################################################
+# Defining the English license text to add
+# it into Solaris packages.
+################################################
+
+sub _set_english_license
+{
+    my $additional_license_name = $installer::globals::englishsolarislicensename;   # always the English file
+    my $licensefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$additional_license_name, "" , 0);
+    if ( $$licensefileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $additional_license_name!", "set_english_license"); }
+    $installer::globals::englishlicenseset = 1;
+    $installer::globals::englishlicense = installer::files::read_file($$licensefileref);
+    installer::scpzipfiles::replace_all_ziplistvariables_in_file($installer::globals::englishlicense, $variableshashref);
+}
+
+################################################
+# Adding the content of the English license
+# file into the system integration packages.
+################################################
+
+sub _add_license_into_systemintegrationpackages
+{
+    my ($destdir, $packages) = @_;
+
+    for ( my $i = 0; $i <= $#{$packages}; $i++ )
+    {
+        my $copyrightfilename = ${$packages}[$i] . $installer::globals::separator . "install" . $installer::globals::separator . "copyright";
+        if ( ! -f $copyrightfilename ) { installer::exiter::exit_program("ERROR: Could not find license file in system integration package: $copyrightfilename!", "add_license_into_systemintegrationpackages"); }
+        my $copyrightfile = installer::files::read_file($copyrightfilename);
+
+        # Saving time stamp of old copyrightfile
+        my $savcopyrightfilename = $copyrightfilename . ".sav";
+        installer::systemactions::copy_one_file($copyrightfilename, $savcopyrightfilename);
+        _set_time_stamp_for_file($copyrightfilename, $savcopyrightfilename); # now $savcopyrightfile has the time stamp of $copyrightfile
+
+        # Adding license content to copyright file
+        push(@{$copyrightfile}, "\n");
+        for ( my $i = 0; $i <= $#{$installer::globals::englishlicense}; $i++ ) { push(@{$copyrightfile}, ${$installer::globals::englishlicense}[$i]); }
+        installer::files::save_file($copyrightfilename, $copyrightfile);
+
+        # Setting the old time stamp saved with $savcopyrightfilename
+        _set_time_stamp_for_file($savcopyrightfilename, $copyrightfilename); # now $copyrightfile has the time stamp of $savcopyrightfile
+        unlink($savcopyrightfilename);
+
+        # Changing content of copyright file in pkgmap
+        my $pkgmapfilename = ${$packages}[$i] . $installer::globals::separator . "pkgmap";
+        if ( ! -f $pkgmapfilename ) { installer::exiter::exit_program("ERROR: Could not find pkgmap in system integration package: $pkgmapfilename!", "add_license_into_systemintegrationpackages"); }
+        my $pkgmap = installer::files::read_file($pkgmapfilename);
+        _change_onefile_in_pkgmap($pkgmap, $copyrightfilename, "copyright");
+        installer::files::save_file($pkgmapfilename, $pkgmap);
+    }
+}
+
+##############################################
+# Setting time stamp of copied files to avoid
+# errors from pkgchk.
+##############################################
+
+sub _set_time_stamp_for_file
+{
+    my ($sourcefile, $destfile) = @_;
+
+    my $systemcall = "touch -r $sourcefile $destfile";
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: \"$systemcall\" failed!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: \"$systemcall\" !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+##############################################
+# Setting checksum and wordcount for changed
+# pkginfo file into pkgmap.
+##############################################
+
+sub _change_onefile_in_pkgmap
+{
+    my ($pkgmapfile, $fullfilename, $shortfilename) = @_;
+
+    # 1 i pkginfo 442 34577 1166716297
+    # ->
+    # 1 i pkginfo 443 34737 1166716297
+    #
+    # wc -c pkginfo | cut -f6 -d' '  -> 442  (variable)
+    # sum pkginfo | cut -f1 -d' '  -> 34577  (variable)
+    # grep 'pkginfo' pkgmap | cut -f6 -d' '  -> 1166716297  (fix)
+
+    my $checksum = _call_sum($fullfilename);
+    if ( $checksum =~ /^\s*(\d+)\s+.*$/ ) { $checksum = $1; }
+
+    my $wordcount = _call_wc($fullfilename);
+    if ( $wordcount =~ /^\s*(\d+)\s+.*$/ ) { $wordcount = $1; }
+
+    for ( my $i = 0; $i <= $#{$pkgmapfile}; $i++ )
+    {
+        if ( ${$pkgmapfile}[$i] =~ /(^.*\b\Q$shortfilename\E\b\s+)(\d+)(\s+)(\d+)(\s+)(\d+)(\s*$)/ )
+        {
+            my $newline = $1 . $wordcount . $3 . $checksum . $5 . $6 . $7;
+            ${$pkgmapfile}[$i] = $newline;
+            last;
+        }
+    }
+}
+
+#########################################################
+# Calling sum
+#########################################################
+
+sub _call_sum
+{
+    my ($filename) = @_;
+
+    $sumfile = "/usr/bin/sum";
+
+    if ( ! -f $sumfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/sum", "call_sum"); }
+
+    my $systemcall = "$sumfile $filename |";
+
+    my $sumoutput = "";
+
+    open (SUM, "$systemcall");
+    $sumoutput = <SUM>;
+    close (SUM);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $sumoutput;
+}
+
+#########################################################
+# Calling wc
+# wc -c pkginfo | cut -f6 -d' '
+#########################################################
+
+sub _call_wc
+{
+    my ($filename) = @_;
+
+    $wcfile = "/usr/bin/wc";
+
+    if ( ! -f $wcfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/wc", "call_wc"); }
+
+    my $systemcall = "$wcfile -c $filename |";
+
+    my $wcoutput = "";
+
+    open (WC, "$systemcall");
+    $wcoutput = <WC>;
+    close (WC);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $wcoutput;
 }
 
 1;

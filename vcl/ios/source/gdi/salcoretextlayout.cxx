@@ -173,7 +173,7 @@ long CoreTextLayout::FillDXArray( long* pDXArray ) const
         return GetTextWidth();
     }
     // check assumptions
-    DBG_ASSERT( !mnTrailingSpaceWidth, "CoreText::FillDXArray() with nTSW!=0" );
+    // DBG_ASSERT( !mnTrailingSpaceWidth, "CoreText::FillDXArray() with nTSW!=0" );
 
     // initialize details about the resulting layout
     InitGIA();
@@ -421,6 +421,19 @@ bool CoreTextLayout::LayoutText(ImplLayoutArgs& args)
     {
         return false;
     }
+
+    // If the string contains U+FFFD ("REPLACEMENT CHARACTER"), which
+    // happens at least for the ooo80484-1.slk document in
+    // sc_filters_test, the CTTypesetterCreateWithAttributedString()
+    // call below crashes, at least in the iOS simulator. Go figure.
+    // (In that case the string consists of *only* such characters,
+    // but play it safe.
+    for (int i = 0; i < m_chars_count; i++)
+    {
+        if (args.mpStr[args.mnMinCharPos+i] == 0xFFFD)
+            return false;
+    }
+
     /* c0 and c1 are construction objects */
     CFStringRef c0 = CFStringCreateWithCharactersNoCopy( NULL, &(args.mpStr[args.mnMinCharPos]), m_chars_count, kCFAllocatorNull );
     if ( !c0 )

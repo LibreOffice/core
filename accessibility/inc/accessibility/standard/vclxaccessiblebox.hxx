@@ -103,7 +103,7 @@ public:
     /** The returned string is assoicated with resource
         <const>RID_STR_ACC_ACTION_TOGGLEPOPUP</const>.
     */
-    virtual ::rtl::OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
+    virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
     /** No keybinding returned so far.

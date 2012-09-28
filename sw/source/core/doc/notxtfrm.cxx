@@ -49,6 +49,7 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <flyfrm.hxx>
+#include <flyfrms.hxx>
 #include <frmtool.hxx>
 #include <viewopt.hxx>
 #include <viewimp.hxx>
@@ -294,6 +295,16 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     SwRect aGrfArea( Frm() );
     SwRect aPaintArea( aGrfArea );
+
+    // In case the picture fly frm was clipped, render it with the origin
+    // size instead of scaling it
+    if ( rNoTNd.getIDocumentSettingAccess()->get( IDocumentSettingAccess::CLIPPED_PICTURES ) )
+    {
+        const SwFlyFreeFrm *pFly = dynamic_cast< const SwFlyFreeFrm* >( FindFlyFrm() );
+        if( pFly )
+            aGrfArea = SwRect( Frm().Pos( ), pFly->GetUnclippedFrm( ).SSize( ) );
+    }
+
     aPaintArea._Intersection( aOrigPaint );
 
     SwRect aNormal( Frm().Pos() + Prt().Pos(), Prt().SSize() );

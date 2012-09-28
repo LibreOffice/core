@@ -560,7 +560,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         if (!pDocDB->empty())
             pUndoDB = new ScDBCollection( *pDocDB );
 
-        pUndoAction = new ScUndoSort( &rDocShell, nTab, rSortParam, bRepeatQuery, pUndoDoc, pUndoDB, pR );
+        pUndoAction = new ScUndoSort( &rDocShell, nTab, rSortParam, pUndoDoc, pUndoDB, pR );
         rDocShell.GetUndoManager()->AddUndoAction( pUndoAction );
 
         // #i59745# collect all drawing undo actions affecting cell note captions
@@ -582,7 +582,10 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
-        pDoc->Sort( nTab, aLocalParam, bRepeatQuery );
+    {
+        ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0);
+        pDoc->Sort( nTab, aLocalParam, bRepeatQuery, &aProgress );
+    }
 
     sal_Bool bSave = sal_True;
     if (bCopy)
@@ -1467,7 +1470,8 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
     for (; it != itEnd; ++it)
     {
         ScDPObject* pObj = *it;
-        pObj->SyncAllDimensionMembers();
+        if (!pObj->SyncAllDimensionMembers())
+            continue;
 
         // This action is intentionally not undoable since it modifies cache.
         DataPilotUpdate(pObj, pObj, false, bApi);

@@ -307,6 +307,8 @@ sal_Bool SwTxtFrm::FormatEmpty()
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
 
+    bool bCollapse = EmptyHeight( ) == 1 && this->IsCollapse( );
+
     if ( HasFollow() || GetTxtNode()->GetpSwpHints() ||
         0 != GetTxtNode()->GetNumRule() ||
         GetTxtNode()->HasHiddenCharAttribute( true ) ||
@@ -314,21 +316,21 @@ sal_Bool SwTxtFrm::FormatEmpty()
         return sal_False;
     const SwAttrSet& aSet = GetTxtNode()->GetSwAttrSet();
     const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
-    if( ( ( ! IsRightToLeft() && ( SVX_ADJUST_LEFT != nAdjust ) ) ||
+    if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SVX_ADJUST_LEFT != nAdjust ) ) ||
           (   IsRightToLeft() && ( SVX_ADJUST_RIGHT != nAdjust ) ) ) ||
-          aSet.GetRegister().GetValue() )
+          aSet.GetRegister().GetValue() ) )
         return sal_False;
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
-    if( SVX_LINE_SPACE_MIN == rSpacing.GetLineSpaceRule() ||
+    if( !bCollapse && ( SVX_LINE_SPACE_MIN == rSpacing.GetLineSpaceRule() ||
         SVX_LINE_SPACE_FIX == rSpacing.GetLineSpaceRule() ||
-        aSet.GetLRSpace().IsAutoFirst() )
+        aSet.GetLRSpace().IsAutoFirst() ) )
         return sal_False;
     else
     {
         SwTxtFly aTxtFly( this );
         SwRect aRect;
         sal_Bool bFirstFlyCheck = 0 != Prt().Height();
-        if ( bFirstFlyCheck &&
+        if ( !bCollapse && bFirstFlyCheck &&
              aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
             return sal_False;
         else
@@ -361,7 +363,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
                 SetEmpty( sal_True );
                 SetCompletePaint();
             }
-            if( !bFirstFlyCheck &&
+            if( !bCollapse && !bFirstFlyCheck &&
                  aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
                  return sal_False;
 

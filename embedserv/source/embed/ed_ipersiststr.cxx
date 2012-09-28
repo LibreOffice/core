@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -36,7 +37,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 
@@ -64,51 +65,46 @@ uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
     if ( !pStream )
         return xResult;
 
-    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-    uno::Reference < io::XOutputStream > xTempOut = uno::Reference < io::XOutputStream > (
-                                                            xFactory->createInstance ( aServiceName ),
-                                                            uno::UNO_QUERY );
-    if ( xTempOut.is() )
+    uno::Reference < io::XOutputStream > xTempOut( io::TempFile::create(comphelper::getComponentContext(xFactory)),
+                                                            uno::UNO_QUERY_THROW );
+    ULARGE_INTEGER nNewPos;
+    LARGE_INTEGER aZero = { 0L, 0L };
+    HRESULT hr = pStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
+    if ( FAILED( hr ) ) return xResult;
+
+    STATSTG aStat;
+    hr = pStream->Stat( &aStat, STATFLAG_NONAME );
+    if ( FAILED( hr ) ) return xResult;
+
+    sal_uInt32 nSize = (sal_uInt32)aStat.cbSize.QuadPart;
+    sal_uInt32 nCopied = 0;
+    uno::Sequence< sal_Int8 > aBuffer( nConstBufferSize );
+    try
     {
-        ULARGE_INTEGER nNewPos;
-        LARGE_INTEGER aZero = { 0L, 0L };
-        HRESULT hr = pStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
-        if ( FAILED( hr ) ) return xResult;
-
-        STATSTG aStat;
-        hr = pStream->Stat( &aStat, STATFLAG_NONAME );
-        if ( FAILED( hr ) ) return xResult;
-
-        sal_uInt32 nSize = (sal_uInt32)aStat.cbSize.QuadPart;
-        sal_uInt32 nCopied = 0;
-        uno::Sequence< sal_Int8 > aBuffer( nConstBufferSize );
-        try
+        sal_uInt32 nRead = 0;
+        do
         {
-            sal_uInt32 nRead = 0;
-            do
+            pStream->Read( (void*)aBuffer.getArray(), nConstBufferSize, &nRead );
+
+            if ( nRead < nConstBufferSize )
+                aBuffer.realloc( nRead );
+
+            xTempOut->writeBytes( aBuffer );
+            nCopied += nRead;
+        } while( nRead == nConstBufferSize );
+
+        if ( nCopied == nSize )
+        {
+            uno::Reference < io::XSeekable > xTempSeek ( xTempOut, uno::UNO_QUERY );
+            if ( xTempSeek.is() )
             {
-                pStream->Read( (void*)aBuffer.getArray(), nConstBufferSize, &nRead );
-
-                if ( nRead < nConstBufferSize )
-                    aBuffer.realloc( nRead );
-
-                xTempOut->writeBytes( aBuffer );
-                nCopied += nRead;
-            } while( nRead == nConstBufferSize );
-
-            if ( nCopied == nSize )
-            {
-                uno::Reference < io::XSeekable > xTempSeek ( xTempOut, uno::UNO_QUERY );
-                if ( xTempSeek.is() )
-                {
-                    xTempSeek->seek ( 0 );
-                    xResult = uno::Reference< io::XInputStream >( xTempOut, uno::UNO_QUERY );
-                }
+                xTempSeek->seek ( 0 );
+                xResult = uno::Reference< io::XInputStream >( xTempOut, uno::UNO_QUERY );
             }
         }
-        catch( const uno::Exception& )
-        {
-        }
+    }
+    catch( const uno::Exception& )
+    {
     }
 
     return xResult;
@@ -220,7 +216,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
         rtl::OUString sDocUrl;
         if ( pFilePath )
         {
-            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
             util::URL aURL;
 
             aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pFilePath) );
@@ -345,7 +341,7 @@ STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv
 
 STDMETHODIMP_(ULONG) EmbedDocument_Impl::AddRef()
 {
-    return osl_incrementInterlockedCount( &m_refCount);
+    return osl_atomic_increment( &m_refCount);
 }
 
 STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
@@ -355,7 +351,7 @@ STDMETHODIMP_(ULONG) EmbedDocument_Impl::Release()
     if ( m_refCount == 1 )
         m_xOwnAccess->ClearEmbedDocument();
 
-    sal_Int32 nCount = osl_decrementInterlockedCount( &m_refCount );
+    sal_Int32 nCount = osl_atomic_decrement( &m_refCount );
     if ( nCount == 0 )
         delete this;
     return nCount;
@@ -620,63 +616,58 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 
     HRESULT hr = E_FAIL;
 
-    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-    uno::Reference < io::XOutputStream > xTempOut = uno::Reference < io::XOutputStream > (
-                                                            m_xFactory->createInstance ( aServiceName ),
-                                                            uno::UNO_QUERY );
+    uno::Reference < io::XOutputStream > xTempOut( io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                                                            uno::UNO_QUERY_THROW );
 
-    if ( xTempOut.is() )
+    uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+    if( xStorable.is() )
     {
-        uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
-        if( xStorable.is() )
+        try
         {
-            try
+            xStorable->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) ),
+                                        fillArgsForStoring_Impl( xTempOut ) );
+            hr = copyXTempOutToIStream( xTempOut, pTargetStream );
+            if ( SUCCEEDED( hr ) )
             {
-                xStorable->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) ),
-                                            fillArgsForStoring_Impl( xTempOut ) );
-                hr = copyXTempOutToIStream( xTempOut, pTargetStream );
+                // no need to truncate the stream, the size of the stream is always the same
+                ULARGE_INTEGER nNewPos;
+                LARGE_INTEGER aZero = { 0L, 0L };
+                hr = pNewExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
                 if ( SUCCEEDED( hr ) )
                 {
-                    // no need to truncate the stream, the size of the stream is always the same
-                    ULARGE_INTEGER nNewPos;
-                    LARGE_INTEGER aZero = { 0L, 0L };
-                    hr = pNewExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
+                    SIZEL aSize;
+                    hr = m_pDocHolder->GetExtent( &aSize );
+
                     if ( SUCCEEDED( hr ) )
                     {
-                        SIZEL aSize;
-                        hr = m_pDocHolder->GetExtent( &aSize );
+                        sal_uInt32 nWritten;
+                        sal_Int8 aInf[EXT_STREAM_LENGTH];
+                        *((sal_Int32*)aInf) = 0;
+                        *((sal_Int32*)&aInf[4]) = 0;
+                        *((sal_Int32*)&aInf[8]) = aSize.cx;
+                        *((sal_Int32*)&aInf[12]) = aSize.cy;
+
+                        hr = pNewExtStream->Write( (void*)aInf, EXT_STREAM_LENGTH, &nWritten );
+                        if ( nWritten != EXT_STREAM_LENGTH ) hr = E_FAIL;
 
                         if ( SUCCEEDED( hr ) )
                         {
-                            sal_uInt32 nWritten;
-                            sal_Int8 aInf[EXT_STREAM_LENGTH];
-                            *((sal_Int32*)aInf) = 0;
-                            *((sal_Int32*)&aInf[4]) = 0;
-                            *((sal_Int32*)&aInf[8]) = aSize.cx;
-                            *((sal_Int32*)&aInf[12]) = aSize.cy;
-
-                            hr = pNewExtStream->Write( (void*)aInf, EXT_STREAM_LENGTH, &nWritten );
-                            if ( nWritten != EXT_STREAM_LENGTH ) hr = E_FAIL;
-
-                            if ( SUCCEEDED( hr ) )
+                            m_pOwnStream = CComPtr< IStream >();
+                            m_pExtStream = CComPtr< IStream >();
+                            if ( fSameAsLoad || pStgSave == m_pMasterStorage )
                             {
-                                m_pOwnStream = CComPtr< IStream >();
-                                m_pExtStream = CComPtr< IStream >();
-                                if ( fSameAsLoad || pStgSave == m_pMasterStorage )
-                                {
-                                    uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
-                                    if ( xMod.is() )
-                                        xMod->setModified( sal_False );
-                                    m_bIsDirty = sal_False;
-                                }
+                                uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+                                if ( xMod.is() )
+                                    xMod->setModified( sal_False );
+                                m_bIsDirty = sal_False;
                             }
                         }
                     }
                 }
             }
-            catch( const uno::Exception& )
-            {
-            }
+        }
+        catch( const uno::Exception& )
+        {
         }
     }
 
@@ -881,7 +872,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
             util::URL aURL;
             aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>( pszFileName ) );
 
-            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::ComponentContext(m_xFactory).getUNOContext()) );
+            uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
 
             if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) && aURL.Complete.getLength() )
             {

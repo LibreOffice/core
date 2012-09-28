@@ -356,6 +356,11 @@ void SdrMarkList::operator=(const SdrMarkList& rLst)
     mbSorted = rLst.mbSorted;
 }
 
+SdrMark* SdrMarkList::GetMark(sal_uLong nNum) const
+{
+    return (nNum < maList.size()) ? maList[nNum] : NULL;
+}
+
 sal_uLong SdrMarkList::FindObject(const SdrObject* pObj) const
 {
     // Since relying on OrdNums is not allowed for the selection because objects in the

@@ -355,6 +355,8 @@ private:
     /// If the current paragraph contains section property definitions.
     bool                            m_bParaSectpr;
     bool                            m_bUsingEnhancedFields;
+    /// If the current paragraph is inside a structured document element.
+    bool                            m_bSdt;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
@@ -417,6 +419,10 @@ public:
     bool GetIsFirstParagraphInSection();
     void SetParaSectpr(bool bParaSectpr);
     bool GetParaSectpr();
+    /// Setter method for m_bSdt.
+    void SetSdt(bool bSdt);
+    /// Getter method for m_bSdt.
+    bool GetSdt();
     bool GetParaChanged();
 
     void deferBreak( BreakType deferredBreakType );
@@ -629,8 +635,10 @@ public:
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();
-    /// If the current paragraph has a numbering style associated, this method returns its character style
+    /// If the current paragraph has a numbering style associated, this method returns its character style (part of the numbering rules)
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> GetCurrentNumberingCharStyle();
+    /// If the current paragraph has a numbering style associated, this method returns its numbering rules
+    com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel = 0);
 
     /**
      Used for attributes/sprms which cannot be evaluated immediatelly (e.g. they depend

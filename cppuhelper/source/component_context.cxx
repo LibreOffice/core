@@ -60,6 +60,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 #include <memory>
@@ -672,6 +673,12 @@ Any ComponentContext::getValueByName( OUString const & rName )
 Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
     throw (RuntimeException)
 {
+    if ( !m_xSMgr.is() )
+    {
+        throw DeploymentException(
+            "null component context service manager",
+            static_cast<OWeakObject *>(this) );
+    }
     return m_xSMgr;
 }
 //__________________________________________________________________________________________________
@@ -796,7 +803,7 @@ ComponentContext::ComponentContext(
         Reference< lang::XMultiComponentFactory > xMgr( m_xDelegate->getServiceManager() );
         if (xMgr.is())
         {
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             try
             {
                 // create new smgr based on delegate's one
@@ -815,10 +822,10 @@ ComponentContext::ComponentContext(
             }
             catch (...)
             {
-                osl_decrementInterlockedCount( &m_refCount );
+                osl_atomic_decrement( &m_refCount );
                 throw;
             }
-            osl_decrementInterlockedCount( &m_refCount );
+            osl_atomic_decrement( &m_refCount );
             OSL_ASSERT( m_xSMgr.is() );
         }
     }

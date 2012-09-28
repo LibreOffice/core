@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _MACRODLG_HRC
-#define _MACRODLG_HRC
+#ifndef BASCTL_MACRODLG_HRC
+#define BASCTL_MACRODLG_HRC
 
 #include <svl/solar.hrc>
 
@@ -46,5 +46,5 @@
 #define RID_PB_NEWLIB                   19
 #define RID_PB_NEWMOD                   20
 
-#endif // _MACRODLG_HRC
+#endif // BASCTL_MACRODLG_HRC
 

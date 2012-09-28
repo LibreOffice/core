@@ -81,8 +81,6 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
-#include <ucbhelper/contentbroker.hxx>
-
 #include <iostream>
 #include <vector>
 
@@ -110,6 +108,7 @@ public:
     virtual void tearDown();
 
     void testCollator();
+    void testRangeList();
     void testInput();
     void testCellFunctions();
 
@@ -224,9 +223,11 @@ public:
 
     void testFindAreaPosRowDown();
     void testFindAreaPosColRight();
+    void testSort();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
+    CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testSheetsFunc);
@@ -271,6 +272,7 @@ public:
     CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
     CPPUNIT_TEST(testFindAreaPosRowDown);
     CPPUNIT_TEST(testFindAreaPosColRight);
+    CPPUNIT_TEST(testSort);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -355,6 +357,22 @@ void Test::testCollator()
     CollatorWrapper* p = ScGlobal::GetCollator();
     sal_Int32 nRes = p->compareString(s1, s2);
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
+}
+
+void Test::testRangeList()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    ScRangeList aRL;
+    aRL.Append(ScRange(1,1,0,3,10,0));
+    CPPUNIT_ASSERT_MESSAGE("List should have one range.", aRL.size() == 1);
+    const ScRange* p = aRL[0];
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the range object.", p);
+    CPPUNIT_ASSERT_MESSAGE("Wrong range.", p->aStart == ScAddress(1,1,0) && p->aEnd == ScAddress(3,10,0));
+
+    // TODO: Add more tests here.
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testInput()
@@ -1920,11 +1938,11 @@ void Test::testPivotTableFilters()
 
     // Set current page of 'Group2' to 'A'.
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
-    ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(
+    ScDPSaveDimension* pPageDim = aSaveData.GetDimensionByName(
         OUString("Group2"));
-    CPPUNIT_ASSERT_MESSAGE("Dimension not found", pDim);
+    CPPUNIT_ASSERT_MESSAGE("Dimension not found", pPageDim);
     OUString aPage("A");
-    pDim->SetCurrentPage(&aPage);
+    pPageDim->SetCurrentPage(&aPage);
     pDPObj->SetSaveData(aSaveData);
     aOutRange = refresh(pDPObj);
     {
@@ -1973,6 +1991,27 @@ void Test::testPivotTableFilters()
 
     fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 20.0);
+
+    // Set the current page of 'Group2' back to '- all -'. The query filter
+    // should still be in effect.
+    pPageDim->SetCurrentPage(NULL); // Remove the page.
+    pDPObj->SetSaveData(aSaveData);
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Filter", 0 },
+            { "Group2", "- all -" },
+            { 0, 0 },
+            { "Data", 0 },
+            { "Sum - Val1", "4" },
+            { "Sum - Val2", "40" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
 
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
@@ -4877,6 +4916,49 @@ void Test::testFindAreaPosColRight()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
+
+    pDoc->DeleteTab(0);
+}
+
+void Test::testSort()
+{
+    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    rtl::OUString aTabName1("test1");
+    pDoc->InsertTab(0, aTabName1);
+
+    const char* aData[][2] = {
+        { "2", "4" },
+        { "4", "1" },
+        { "1", "2" }
+    };
+
+    clearRange( pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
+    ScAddress aPos(0,0,0);
+    ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    rtl::OUString aHello("Hello");
+    rtl::OUString aJimBob("Jim Bob");
+    ScAddress rAddr(1, 1, 0);
+    ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
+    pNote->SetText(rAddr, aHello);
+    pNote->SetAuthor(aJimBob);
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 1;
+    aSortData.nCol2 = 1;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 2;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 1;
+
+    pDoc->Sort(0, aSortData, false, NULL);
+    double nVal = pDoc->GetValue(1,0,0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 1.0, 1e-8);
+
+    // check that note is also moved
+    pNote = m_pDoc->GetNotes(0)->findByAddress( 1, 0 );
+    CPPUNIT_ASSERT(pNote);
 
     pDoc->DeleteTab(0);
 }

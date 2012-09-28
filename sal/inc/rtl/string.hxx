@@ -663,6 +663,32 @@ public:
     }
 
     /**
+      Check whether this string starts with a given substring.
+
+      @param str  the substring to be compared
+
+      @return true if and only if the given str appears as a substring at the
+      start of this string
+
+      @since LibreOffice 3.7
+    */
+    bool startsWith(OString const & str) const {
+        return match(str, 0);
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.7
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
+    {
+        RTL_STRING_CONST_FUNCTION
+        return match(literal, 0);
+    }
+
+    /**
       Check whether this string ends with a given substring.
 
       @param str  the substring to be compared

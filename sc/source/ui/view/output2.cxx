@@ -65,6 +65,7 @@
 #include "fillinfo.hxx"
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <comphelper/string.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -508,8 +509,7 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
                 nPos = aString.Search( 0x1B );
                 if ( nPos != STRING_NOTFOUND )
                 {
-                    nPos = nPos - 1;
-                    nChar = aString.GetChar( nPos );
+                    nChar = aString.GetChar( nPos + 1 );
                     // delete placeholder and char to repeat
                     aString.Erase( nPos, 2 );
                 }
@@ -553,10 +553,11 @@ void ScDrawStringsVars::SetHashText()
 
 void ScDrawStringsVars::RepeatToFill( long colWidth )
 {
-    if ( nPos ==  STRING_NOTFOUND || nPos >= aString.Len() )
+    if ( nPos ==  STRING_NOTFOUND || nPos > aString.Len() )
         return;
 
     long charWidth = pOutput->pFmtDevice->GetTextWidth(rtl::OUString(nChar));
+    if ( charWidth < 1) return;
     if (bPixelToLogic)
         colWidth = pOutput->mpRefDevice->PixelToLogic(Size(colWidth,0)).Width();
     // Are there restrictions on the cell type we should filter out here ?
@@ -566,9 +567,9 @@ void ScDrawStringsVars::RepeatToFill( long colWidth )
         return;
 
     long nCharsToInsert = aSpaceToFill / charWidth;
-    String aFill;
-    aFill.Expand( nCharsToInsert, nChar);
-    aString.Insert( aFill, nPos);
+    OUStringBuffer aFill;
+    comphelper::string::padToLength(aFill, nCharsToInsert, nChar);
+    aString.Insert( aFill.makeStringAndClear(), nPos);
     TextChanged();
 }
 

@@ -28,6 +28,25 @@
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data oor:name="Impress" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="MultiPaneGUI">
+    <node oor:name="ToolPanel">
+      <node oor:name="Visible">
+        <prop oor:name="ImpressView">
+          <value>true</value>
+        </prop>
+        <prop oor:name="OutlineView">
+          <value>false</value>
+        </prop>
+        <prop oor:name="NotesView">
+          <value>true</value>
+        </prop>
+        <prop oor:name="HandoutView">
+          <value>true</value>
+        </prop>
+        <prop oor:name="SlideSorterView">
+          <value>true</value>
+        </prop>
+      </node>
+    </node>
     <node oor:name="SlideSorterBar">
       <node oor:name="Visible">
         <prop oor:name="ImpressView">
@@ -48,7 +67,7 @@
         <prop oor:name="DrawView">
           <value>true</value>
         </prop>
-     </node>
+      </node>
     </node>
     <node oor:name="Framework">
       <node oor:name="ResourceFactories">

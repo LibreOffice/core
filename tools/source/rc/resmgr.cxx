@@ -32,7 +32,6 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/signal.h>
-#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -1600,6 +1599,11 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
 
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, aLocale );
     return pImp ? new ResMgr( pImp ) : NULL;
+}
+
+rtl::OUString ResMgr::getPrefixName() const
+{
+    return pImpRes->aPrefix;
 }
 
 ResMgr* ResMgr::SearchCreateResMgr(

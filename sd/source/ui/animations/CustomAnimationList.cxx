@@ -358,7 +358,7 @@ CustomAnimationListEntry::~CustomAnimationListEntry()
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationTriggerEntryItem( SvLBoxEntry*,sal_uInt16 nFlags, OUString aDescription, CustomAnimationList* pParent  );
+                    CustomAnimationTriggerEntryItem( SvLBoxEntry*,sal_uInt16 nFlags, OUString aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
     virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
@@ -367,14 +367,13 @@ public:
     void            Clone( SvLBoxItem* pSource );
 
 private:
-    CustomAnimationList* mpParent;
     OUString        maDescription;
 };
 
 // --------------------------------------------------------------------
 
-CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvLBoxEntry* pEntry, sal_uInt16 nFlags, OUString aDescription, CustomAnimationList* pParent  )
-: SvLBoxString( pEntry, nFlags, aDescription ), mpParent( pParent ), maDescription( aDescription )
+CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvLBoxEntry* pEntry, sal_uInt16 nFlags, OUString aDescription )
+: SvLBoxString( pEntry, nFlags, aDescription ), maDescription( aDescription )
 {
 }
 
@@ -672,7 +671,7 @@ void CustomAnimationList::update()
                 OUString aDescription = String( SdResId( STR_CUSTOMANIMATION_TRIGGER ) );
                 aDescription += ": ";
                 aDescription += getShapeDescription( xShape, false );
-                pLBoxEntry->AddItem( new CustomAnimationTriggerEntryItem( pLBoxEntry, 0, aDescription, this ) );
+                pLBoxEntry->AddItem( new CustomAnimationTriggerEntryItem( pLBoxEntry, 0, aDescription ) );
                 Insert( pLBoxEntry );
                 SvViewData* pViewData = GetViewData( pLBoxEntry );
                 if( pViewData )

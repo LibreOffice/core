@@ -119,7 +119,7 @@ public:
 
     /** Writes the specified number format to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;
-
+    sal_Int32           nextFreeId(){ return ++mnHighestId; }
 private:
     /** Inserts built-in number formats for the current system language. */
     void                insertBuiltinFormats();
@@ -129,7 +129,7 @@ private:
 
     NumberFormatMap     maNumFmts;          /// List of number formats.
     ::rtl::OUString     maLocaleStr;        /// Current office locale.
-    sal_Int32           mnNextBiffIndex;    /// Format id counter for BIFF2-BIFF4.
+    sal_Int32           mnHighestId;
 };
 
 // ============================================================================

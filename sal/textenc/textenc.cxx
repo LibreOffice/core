@@ -390,14 +390,13 @@ class FullTextEncodingData: private boost::noncopyable {
 public:
     FullTextEncodingData() {
         if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenc"))) {
-            OSL_TRACE("Loading sal_textenc library failed");
+            SAL_WARN( "sal.textenc", "Loading sal_textenc library failed" );
             std::abort();
         }
         function_ = reinterpret_cast< TextEncodingFunction * >(
             module_.getFunctionSymbol("sal_getFullTextEncodingData"));
         if (function_ == 0) {
-            OSL_TRACE(
-                "Obtaining sal_getFullTextEncodingData fuction from sal_textenc"
+            SAL_WARN( "sal.textenc", "Obtaining sal_getFullTextEncodingData fuction from sal_textenc"
                 " library failed");
             std::abort();
         }

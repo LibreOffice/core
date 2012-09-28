@@ -45,7 +45,7 @@ $(packimages_DIR)/images.zip : \
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy -c $(packimages_DIR) \
-			-l $(packimages_DIR) -l $(OUTDIR)/res/img -s $< -o $@ \
+			-l $(packimages_DIR) -l $(dir $(call gb_ResTarget_get_imagelist_target)) -l $(OUTDIR)/res/img -s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 $(packimages_DIR)/images_%.zip : \
@@ -55,7 +55,7 @@ $(packimages_DIR)/images_%.zip : \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy -c $(SRCDIR)/icon-themes/$* \
 			$(packimages_CUSTOM_FALLBACK_1) $(packimages_CUSTOM_FALLBACK_2) \
-			-l $(packimages_DIR) -l $(OUTDIR)/res/img -s $< -o $@ \
+			-l $(packimages_DIR) -l $(dir $(call gb_ResTarget_get_imagelist_target)) -l $(OUTDIR)/res/img -s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # make sure to have one to keep packing happy

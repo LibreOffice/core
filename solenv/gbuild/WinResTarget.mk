@@ -79,7 +79,7 @@ endef
 define gb_WinResTarget_set_rcfile
 $(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE := $(SRCDIR)/$(strip $(2)).rc
 $(call gb_WinResTarget_get_target,$(1)) : RCFILE := $(SRCDIR)/$(strip $(2)).rc
-$(call gb_WinResTarget_get_target,$(1)) : $$(RCFILE)
+$(call gb_WinResTarget_get_target,$(1)) : $(SRCDIR)/$(strip $(2)).rc
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_WinResTarget_get_dep_target,$(1)) : RCFILE := $(SRCDIR)/$(strip $(2)).rc

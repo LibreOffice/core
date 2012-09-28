@@ -39,7 +39,7 @@ UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb  $(BIN)$/test.rdb
 # output directory (one dir for each project)
 UNOUCROUT=$(OUT)$/inc
 
-# adding to inludeoath
+# adding to includepath
 INCPRE+=$(UNOUCROUT)
 CFLAGS += -I..$/source$/remote$/urp
 

@@ -2260,10 +2260,13 @@ void Xf::writeToMarkData( ::ScMarkData& rMarkData, sal_Int32 nNumFmtId  )
     ScDocument& rDoc = getScDocument();
     if ( isCellXf() )
     {
+        StylesBuffer& rStyles = getStyles();
+        rStyles.createCellStyle( maModel.mnStyleXfId );
+
+        mpStyleSheet = rStyles.getCellStyleSheet( maModel.mnStyleXfId );
         if ( mpStyleSheet )
         {
-            // Apply style sheet.  Don't clear the direct formats.
-            rPat.SetStyleSheet(mpStyleSheet, false);
+            rDoc.ApplySelectionStyle( static_cast<ScStyleSheet&>(*mpStyleSheet), rMarkData );
         }
         else
         {
@@ -2275,7 +2278,7 @@ void Xf::writeToMarkData( ::ScMarkData& rMarkData, sal_Int32 nNumFmtId  )
                         ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA));
 
                 if (pStyleSheet)
-                    rPat.SetStyleSheet(pStyleSheet, false);
+                    rDoc.ApplySelectionStyle( static_cast<ScStyleSheet&>(*pStyleSheet), rMarkData );
             }
         }
     }
@@ -2329,7 +2332,6 @@ Xf::createPattern( bool bSkipPoolDefs )
 {
     if( mpPattern.get() )
         return *mpPattern;
-    // create new pattern attribute set
     mpPattern.reset( new ::ScPatternAttr( getScDocument().GetPool() ) );
     SfxItemSet& rItemSet = mpPattern->GetItemSet();
     /*  Enables the used flags, if the formatting attributes differ from the
@@ -2443,7 +2445,19 @@ FillRef Dxf::createFill( bool bAlwaysNew )
 
 void Dxf::importNumFmt( const AttributeList& rAttribs )
 {
-    mxNumFmt = getStyles().importNumFmt( rAttribs );
+    // don't propagate number formats defined in Dxf entries
+    // they can have the same id ( but different format codes ) as those
+    // defined globally earlier. We discard the id defined in XML_numFmtId
+    // and generate one ourselves ( this assumes that the normal numberformat
+    // import has already taken place )
+    sal_Int32 nNumFmtId  = getStyles().nextFreeNumFmtId();
+    OUString aFmtCode = rAttribs.getXString( XML_formatCode, OUString() );
+    // we might need to do this generally for format codes,
+    // specifically for a fraction code '\ ?/?' is passed to us in xml, the '\' is not
+    // an escape character but merely should be telling the formatter to display the next
+    // char in the format ( afaics it does that anyhow )
+    aFmtCode = aFmtCode.replaceAll("\\", "");
+    mxNumFmt = getStyles().createNumFmt( nNumFmtId, aFmtCode );
 }
 
 void Dxf::importDxf( SequenceInputStream& rStrm )
@@ -2858,6 +2872,11 @@ OUString CellStyleBuffer::createCellStyle( sal_Int32 nXfId ) const
     return createCellStyle( maStylesByXf.get( nXfId ) );
 }
 
+::ScStyleSheet*   CellStyleBuffer::getCellStyleSheet( sal_Int32 nXfId ) const
+{
+    return getCellStyleSheet( maStylesByXf.get( nXfId ) );
+}
+
 // private --------------------------------------------------------------------
 
 void CellStyleBuffer::insertCellStyle( CellStyleRef xCellStyle )
@@ -2876,6 +2895,14 @@ void CellStyleBuffer::insertCellStyle( CellStyleRef xCellStyle )
         if( rModel.isDefaultStyle() )
             mxDefStyle = xCellStyle;
     }
+}
+
+::ScStyleSheet* CellStyleBuffer::getCellStyleSheet( const CellStyleRef& rxCellStyle ) const
+{
+    ::ScStyleSheet* pStyleSheet = NULL;
+    if ( rxCellStyle.get() )
+        pStyleSheet = rxCellStyle->getStyleSheet();
+    return pStyleSheet;
 }
 
 OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle ) const
@@ -2925,6 +2952,11 @@ FontRef StylesBuffer::createFont( sal_Int32* opnFontId )
 NumberFormatRef StylesBuffer::createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode )
 {
     return maNumFmts.createNumFmt( nNumFmtId, rFmtCode );
+}
+
+sal_Int32 StylesBuffer::nextFreeNumFmtId()
+{
+    return maNumFmts.nextFreeId();
 }
 
 BorderRef StylesBuffer::createBorder( sal_Int32* opnBorderId )
@@ -3126,6 +3158,11 @@ OUString StylesBuffer::getDefaultStyleName() const
 OUString StylesBuffer::createCellStyle( sal_Int32 nXfId ) const
 {
     return maCellStyles.createCellStyle( nXfId );
+}
+
+::ScStyleSheet* StylesBuffer::getCellStyleSheet( sal_Int32 nXfId ) const
+{
+    return maCellStyles.getCellStyleSheet( nXfId );
 }
 
 OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const

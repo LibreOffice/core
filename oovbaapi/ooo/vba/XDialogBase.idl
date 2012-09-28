@@ -41,7 +41,7 @@ interface XDialogBase
 {
     interface ::ooo::vba::XHelperInterface;
 
-    boolean Show();
+    void Show();
 };
 
 }; };

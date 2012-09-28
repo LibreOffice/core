@@ -20,8 +20,6 @@ package ifc.drawing;
 
 import lib.MultiPropertyTest;
 
-import com.sun.star.container.XIndexReplace;
-
 public class _Text extends MultiPropertyTest {
 
     protected boolean compare(Object ob1, Object ob2) {

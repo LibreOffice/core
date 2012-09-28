@@ -80,15 +80,15 @@ namespace svt { namespace table
         virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle );
-        virtual void    PrepareRow( RowPos _nRow, bool _bActive, bool _bSelected,
+        virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rRowArea,
                             const StyleSettings& _rStyle );
         virtual void    PaintRowHeader(
-                            bool _bActive, bool _bSelected,
+                            bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle );
         virtual void    PaintCell( ColPos const i_col,
-                            bool _bActive, bool _bSelected,
+                            bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle );
         virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect);
@@ -98,7 +98,12 @@ namespace svt { namespace table
                             ColPos const i_colPos, RowPos const i_rowPos,
                             bool const i_active, bool const i_selected,
                             OutputDevice& i_targetDevice, Rectangle const & i_targetArea
-                        );
+                        ) const;
+        virtual bool    GetFormattedCellString(
+                            ::com::sun::star::uno::Any const & i_cellValue,
+                            ColPos const i_colPos, RowPos const i_rowPos,
+                            ::rtl::OUString & o_cellString
+                        ) const;
 
     private:
         struct CellRenderContext;

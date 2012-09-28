@@ -40,7 +40,6 @@ class ScVbaAxis : public ScVbaAxis_BASE
     css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
     sal_Int32 mnType;
     sal_Int32 mnGroup;
-    sal_Int32 mnCrosses;
     sal_Bool bCrossesAreCustomized;
     ScVbaChart* getChartPtr() throw( css::uno::RuntimeException );
     sal_Bool isValueAxis() throw( css::script::BasicErrorException );

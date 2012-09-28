@@ -42,6 +42,7 @@
 #include "vcl/configsettings.hxx"
 #include "vcl/help.hxx"
 #include "vcl/decoview.hxx"
+#include "vcl/layout.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/unohelp.hxx"
 
@@ -61,8 +62,18 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
-PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
-    : Window( i_pParent, i_rId )
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makePrintPreviewWindow(Window *pParent, VclBuilder::stringmap &)
+{
+    return new PrintDialog::PrintPreviewWindow(pParent);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeShowNupOrderWindow(Window *pParent, VclBuilder::stringmap &)
+{
+    return new PrintDialog::ShowNupOrderWindow(pParent);
+}
+
+PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent )
+    : Window( i_pParent, 0 )
     , maOrigSize( 10, 10 )
     , maPageVDev( *this )
     , maToolTipString(VclResId( SV_PRINT_PRINTPREVIEW_TXT).toString())
@@ -301,6 +312,11 @@ void PrintDialog::ShowNupOrderWindow::ImplInitSettings()
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
 }
 
+Size PrintDialog::ShowNupOrderWindow::GetOptimalSize(WindowSizeType) const
+{
+    return Size(70, 70);
+}
+
 void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
 {
     Window::Paint( i_rRect );
@@ -355,38 +371,75 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
     aVw.DrawFrame( Rectangle( Point( 0, 0), aOutSize ), FRAME_DRAW_GROUP );
 }
 
-PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
-    : TabPage( i_pParent, rResId )
-    , maNupLine( this, VclResId( SV_PRINT_PRT_NUP_LAYOUT_FL ) )
-    , maPagesBtn( this, VclResId( SV_PRINT_PRT_NUP_PAGES_BTN ) )
-    , maBrochureBtn( this, VclResId( SV_PRINT_PRT_NUP_BROCHURE_BTN ) )
-    , maPagesBoxTitleTxt( this, 0 )
-    , maNupPagesBox( this, VclResId( SV_PRINT_PRT_NUP_PAGES_BOX ) )
-    , maNupNumPagesTxt( this, VclResId( SV_PRINT_PRT_NUP_NUM_PAGES_TXT ) )
-    , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLS_EDT ) )
-    , maNupTimesTxt( this, VclResId( SV_PRINT_PRT_NUP_TIMES_TXT ) )
-    , maNupRowsEdt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_EDT ) )
-    , maPageMarginTxt1( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_1_TXT ) )
-    , maPageMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_EDT ) )
-    , maPageMarginTxt2( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_2_TXT ) )
-    , maSheetMarginTxt1( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_1_TXT ) )
-    , maSheetMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_EDT ) )
-    , maSheetMarginTxt2( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_2_TXT ) )
-    , maNupOrientationTxt( this, VclResId( SV_PRINT_PRT_NUP_ORIENTATION_TXT ) )
-    , maNupOrientationBox( this, VclResId( SV_PRINT_PRT_NUP_ORIENTATION_BOX ) )
-    , maNupOrderTxt( this, VclResId( SV_PRINT_PRT_NUP_ORDER_TXT ) )
-    , maNupOrderBox( this, VclResId( SV_PRINT_PRT_NUP_ORDER_BOX ) )
-    , maNupOrderWin( this )
-    , maBorderCB( this, VclResId( SV_PRINT_PRT_NUP_BORDER_CB ) )
+PrintDialog::NUpTabPage::NUpTabPage( VclBuilder *pUIBuilder )
 {
-    FreeResource();
+    pUIBuilder->get(mpPagesBtn, "pagespersheetbtn");
+    pUIBuilder->get(mpBrochureBtn, "brochure");
+    pUIBuilder->get(mpPagesBoxTitleTxt, "pagespersheettxt");
+    pUIBuilder->get(mpNupPagesBox, "paperspersheetlb");
+    pUIBuilder->get(mpNupNumPagesTxt, "pagestxt");
+    pUIBuilder->get(mpNupColEdt, "pagecols");
+    pUIBuilder->get(mpNupTimesTxt, "by");
+    pUIBuilder->get(mpNupRowsEdt, "pagerows");
+    pUIBuilder->get(mpPageMarginTxt1, "pagemargintxt1");
+    pUIBuilder->get(mpPageMarginEdt, "pagemarginsb");
+    pUIBuilder->get(mpPageMarginTxt2, "pagemargintxt2");
+    pUIBuilder->get(mpSheetMarginTxt1, "sheetmargintxt1");
+    pUIBuilder->get(mpSheetMarginEdt, "sheetmarginsb");
+    pUIBuilder->get(mpSheetMarginTxt2, "sheetmargintxt2");
+    pUIBuilder->get(mpNupOrientationTxt, "orientationtxt");
+    pUIBuilder->get(mpNupOrientationBox, "orientationlb");
+    pUIBuilder->get(mpNupOrderTxt, "ordertxt");
+    pUIBuilder->get(mpNupOrderBox, "orderlb");
+    pUIBuilder->get(mpNupOrderWin, "orderpreview");
+    pUIBuilder->get(mpBorderCB, "bordercb");
+}
 
-    maNupOrderWin.Show();
-    maPagesBtn.Check( sal_True );
-    maBrochureBtn.Show( sal_False );
+void PrintDialog::NUpTabPage::enableNupControls( bool bEnable )
+{
+    mpNupPagesBox->Enable( bEnable );
+    mpNupNumPagesTxt->Enable( bEnable );
+    mpNupColEdt->Enable( bEnable );
+    mpNupTimesTxt->Enable( bEnable );
+    mpNupRowsEdt->Enable( bEnable );
+    mpPageMarginTxt1->Enable( bEnable );
+    mpPageMarginEdt->Enable( bEnable );
+    mpPageMarginTxt2->Enable( bEnable );
+    mpSheetMarginTxt1->Enable( bEnable );
+    mpSheetMarginEdt->Enable( bEnable );
+    mpSheetMarginTxt2->Enable( bEnable );
+    mpNupOrientationTxt->Enable( bEnable );
+    mpNupOrientationBox->Enable( bEnable );
+    mpNupOrderTxt->Enable( bEnable );
+    mpNupOrderBox->Enable( bEnable );
+    mpNupOrderWin->Enable( bEnable );
+    mpBorderCB->Enable( bEnable );
+}
+
+void PrintDialog::NUpTabPage::showAdvancedControls( bool i_bShow )
+{
+    mpNupNumPagesTxt->Show( i_bShow );
+    mpNupColEdt->Show( i_bShow );
+    mpNupTimesTxt->Show( i_bShow );
+    mpNupRowsEdt->Show( i_bShow );
+    mpPageMarginTxt1->Show( i_bShow );
+    mpPageMarginEdt->Show( i_bShow );
+    mpPageMarginTxt2->Show( i_bShow );
+    mpSheetMarginTxt1->Show( i_bShow );
+    mpSheetMarginEdt->Show( i_bShow );
+    mpSheetMarginTxt2->Show( i_bShow );
+    mpNupOrientationTxt->Show( i_bShow );
+    mpNupOrientationBox->Show( i_bShow );
+}
+
+void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
+{
+    mpNupOrderWin->Show();
+    mpPagesBtn->Check( sal_True );
+    mpBrochureBtn->Show( sal_False );
 
     // setup field units for metric fields
-    const LocaleDataWrapper& rLocWrap( maPageMarginEdt.GetLocaleDataWrapper() );
+    const LocaleDataWrapper& rLocWrap( mpPageMarginEdt->GetLocaleDataWrapper() );
     FieldUnit eUnit = FUNIT_MM;
     sal_uInt16 nDigits = 0;
     if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
@@ -395,124 +448,18 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
         nDigits = 2;
     }
     // set units
-    maPageMarginEdt.SetUnit( eUnit );
-    maSheetMarginEdt.SetUnit( eUnit );
+    mpPageMarginEdt->SetUnit( eUnit );
+    mpSheetMarginEdt->SetUnit( eUnit );
 
     // set precision
-    maPageMarginEdt.SetDecimalDigits( nDigits );
-    maSheetMarginEdt.SetDecimalDigits( nDigits );
+    mpPageMarginEdt->SetDecimalDigits( nDigits );
+    mpSheetMarginEdt->SetDecimalDigits( nDigits );
 
-    setupLayout();
-}
-
-PrintDialog::NUpTabPage::~NUpTabPage()
-{
-}
-
-void PrintDialog::NUpTabPage::enableNupControls( bool bEnable )
-{
-    maNupPagesBox.Enable( sal_True );
-    maNupNumPagesTxt.Enable( bEnable );
-    maNupColEdt.Enable( bEnable );
-    maNupTimesTxt.Enable( bEnable );
-    maNupRowsEdt.Enable( bEnable );
-    maPageMarginTxt1.Enable( bEnable );
-    maPageMarginEdt.Enable( bEnable );
-    maPageMarginTxt2.Enable( bEnable );
-    maSheetMarginTxt1.Enable( bEnable );
-    maSheetMarginEdt.Enable( bEnable );
-    maSheetMarginTxt2.Enable( bEnable );
-    maNupOrientationTxt.Enable( bEnable );
-    maNupOrientationBox.Enable( bEnable );
-    maNupOrderTxt.Enable( bEnable );
-    maNupOrderBox.Enable( bEnable );
-    maNupOrderWin.Enable( bEnable );
-    maBorderCB.Enable( bEnable );
-}
-
-void PrintDialog::NUpTabPage::showAdvancedControls( bool i_bShow )
-{
-    maNupNumPagesTxt.Show( i_bShow );
-    maNupColEdt.Show( i_bShow );
-    maNupTimesTxt.Show( i_bShow );
-    maNupRowsEdt.Show( i_bShow );
-    maPageMarginTxt1.Show( i_bShow );
-    maPageMarginEdt.Show( i_bShow );
-    maPageMarginTxt2.Show( i_bShow );
-    maSheetMarginTxt1.Show( i_bShow );
-    maSheetMarginEdt.Show( i_bShow );
-    maSheetMarginTxt2.Show( i_bShow );
-    maNupOrientationTxt.Show( i_bShow );
-    maNupOrientationBox.Show( i_bShow );
-    getLayout()->resize();
-}
-
-void PrintDialog::NUpTabPage::setupLayout()
-{
-    boost::shared_ptr<vcl::RowOrColumn> xLayout =
-        boost::dynamic_pointer_cast<vcl::RowOrColumn>( getLayout() );
-    Size aBorder( LogicToPixel( Size( 6, 6 ), MapMode( MAP_APPFONT ) ) );
-    /*  According to OOo style guide, the horizontal indentation of child
-        elements to their parent element should always be 6 map units. */
-    long nIndent = aBorder.Width();
-
-    xLayout->addWindow( &maNupLine );
-    boost::shared_ptr< vcl::RowOrColumn > xRow( new vcl::RowOrColumn( xLayout.get(), false ) );
-    xLayout->addChild( xRow );
-    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( xRow.get() ) );
-    xRow->addChild( xIndent );
-
-    boost::shared_ptr< vcl::RowOrColumn > xShowNupCol( new vcl::RowOrColumn( xRow.get() ) );
-    xRow->addChild( xShowNupCol, -1 );
-    xShowNupCol->setMinimumSize( xShowNupCol->addWindow( &maNupOrderWin ), Size( 70, 70 ) );
-    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xShowNupCol.get() ) );
-    xShowNupCol->addChild( xSpacer );
-
-    boost::shared_ptr< vcl::LabelColumn > xMainCol( new vcl::LabelColumn( xIndent.get() ) );
-    xIndent->setChild( xMainCol );
-
-    size_t nPagesIndex = xMainCol->addRow( &maPagesBtn, &maNupPagesBox );
-    mxPagesBtnLabel = boost::dynamic_pointer_cast<vcl::LabeledElement>( xMainCol->getChild( nPagesIndex ) );
-
-    xRow.reset( new vcl::RowOrColumn( xMainCol.get(), false ) );
-    xMainCol->addRow( &maNupNumPagesTxt, xRow, nIndent );
-    xRow->addWindow( &maNupColEdt );
-    xRow->addWindow( &maNupTimesTxt );
-    xRow->addWindow( &maNupRowsEdt );
-
-    boost::shared_ptr< vcl::LabeledElement > xLab( new vcl::LabeledElement( xMainCol.get(), 2 ) );
-    xLab->setLabel( &maPageMarginEdt );
-    xLab->setElement( &maPageMarginTxt2 );
-    xMainCol->addRow( &maPageMarginTxt1, xLab, nIndent );
-
-    xLab.reset( new vcl::LabeledElement( xMainCol.get(), 2 ) );
-    xLab->setLabel( &maSheetMarginEdt );
-    xLab->setElement( &maSheetMarginTxt2 );
-    xMainCol->addRow( &maSheetMarginTxt1, xLab, nIndent );
-
-    xMainCol->addRow( &maNupOrientationTxt, &maNupOrientationBox, nIndent );
-    xMainCol->addRow( &maNupOrderTxt, &maNupOrderBox, nIndent );
-    xMainCol->setBorders( xMainCol->addWindow( &maBorderCB ), nIndent, 0, 0, 0 );
-
-    xSpacer.reset( new vcl::Spacer( xMainCol.get(), 0, Size( 10, WindowArranger::getDefaultBorder() ) ) );
-    xMainCol->addChild( xSpacer );
-
-    xRow.reset( new vcl::RowOrColumn( xMainCol.get(), false ) );
-    xMainCol->addRow( &maBrochureBtn, xRow );
-    // remember brochure row for dependencies
-    mxBrochureDep = xRow;
-
-    // initially advanced controls are not shown, rows=columns=1
-    showAdvancedControls( false );
-}
-
-void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
-{
-    maSheetMarginEdt.SetValue( maSheetMarginEdt.Normalize( i_rMPS.nLeftMargin ), FUNIT_100TH_MM );
-    maPageMarginEdt.SetValue( maPageMarginEdt.Normalize( i_rMPS.nHorizontalSpacing ), FUNIT_100TH_MM );
-    maBorderCB.Check( i_rMPS.bDrawBorder );
-    maNupRowsEdt.SetValue( i_rMPS.nRows );
-    maNupColEdt.SetValue( i_rMPS.nColumns );
+    mpSheetMarginEdt->SetValue( mpSheetMarginEdt->Normalize( i_rMPS.nLeftMargin ), FUNIT_100TH_MM );
+    mpPageMarginEdt->SetValue( mpPageMarginEdt->Normalize( i_rMPS.nHorizontalSpacing ), FUNIT_100TH_MM );
+    mpBorderCB->Check( i_rMPS.bDrawBorder );
+    mpNupRowsEdt->SetValue( i_rMPS.nRows );
+    mpNupColEdt->SetValue( i_rMPS.nColumns );
 }
 
 void PrintDialog::NUpTabPage::readFromSettings()
@@ -523,102 +470,24 @@ void PrintDialog::NUpTabPage::storeToSettings()
 {
 }
 
-PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
-    : TabPage( i_pParent, rResId )
-    , maPrinterFL( this, VclResId( SV_PRINT_PRINTERS_FL ) )
-    , maPrinters( this, VclResId( SV_PRINT_PRINTERS ) )
-    , maDetailsBtn( this, VclResId( SV_PRINT_DETAILS_BTN ) )
-    , maStatusLabel( this, VclResId( SV_PRINT_STATUS_TXT ) )
-    , maStatusTxt( this, 0 )
-    , maLocationLabel( this, VclResId( SV_PRINT_LOCATION_TXT ) )
-    , maLocationTxt( this, 0 )
-    , maCommentLabel( this, VclResId( SV_PRINT_COMMENT_TXT ) )
-    , maCommentTxt( this, 0 )
-    , maSetupButton( this, VclResId( SV_PRINT_PRT_SETUP ) )
-    , maCopies( this, VclResId( SV_PRINT_COPIES ) )
-    , maCopySpacer( this, WB_VERT )
-    , maCopyCount( this, VclResId( SV_PRINT_COPYCOUNT ) )
-    , maCopyCountField( this, VclResId( SV_PRINT_COPYCOUNT_FIELD ) )
-    , maCollateBox( this, VclResId( SV_PRINT_COLLATE ) )
-    , maCollateImage( this, VclResId( SV_PRINT_COLLATE_IMAGE ) )
-    , maReverseOrderBox( this, VclResId( SV_PRINT_OPT_REVERSE ) )
-    , maCollateImg( VclResId( SV_PRINT_COLLATE_IMG ) )
+PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
+    : maCollateImg( VclResId( SV_PRINT_COLLATE_IMG ) )
     , maNoCollateImg( VclResId( SV_PRINT_NOCOLLATE_IMG ) )
     , mnCollateUIMode( 0 )
 {
-    FreeResource();
-
-
-    maCopySpacer.Show();
-    maStatusTxt.Show();
-    maCommentTxt.Show();
-    maLocationTxt.Show();
-
-    setupLayout();
-}
-
-PrintDialog::JobTabPage::~JobTabPage()
-{
-}
-
-void PrintDialog::JobTabPage::setupLayout()
-{
+    pUIBuilder->get(mpPrinters, "printers");
+    pUIBuilder->get(mpStatusTxt, "status");
+    pUIBuilder->get(mpLocationTxt, "location");
+    pUIBuilder->get(mpCommentTxt, "comment");
+    pUIBuilder->get(mpSetupButton, "setup");
+    pUIBuilder->get(mpCopySpacer, "copyspacer");
+    pUIBuilder->get(mpCopyCountField, "copycount");
+    pUIBuilder->get(mpCollateBox, "collate");
+    pUIBuilder->get(mpCollateImage, "collateimage");
+    pUIBuilder->get(mpReverseOrderBox, "reverseorder");
     // HACK: this is not a dropdown box, but the dropdown line count
     // sets the results of GetOptimalSize in a normal ListBox
-    maPrinters.SetDropDownLineCount( 4 );
-
-    boost::shared_ptr<vcl::RowOrColumn> xLayout =
-        boost::dynamic_pointer_cast<vcl::RowOrColumn>( getLayout() );
-
-    // add printer fixed line
-    xLayout->addWindow( &maPrinterFL );
-    // add print LB
-    xLayout->addWindow( &maPrinters, 3 );
-
-    // create a row for details button/text and properties button
-    boost::shared_ptr< vcl::RowOrColumn > xDetRow( new vcl::RowOrColumn( xLayout.get(), false ) );
-    xLayout->addChild( xDetRow );
-    xDetRow->addWindow( &maDetailsBtn );
-    xDetRow->addChild( new vcl::Spacer( xDetRow.get(), 2 ) );
-    xDetRow->addWindow( &maSetupButton );
-
-    // create an indent for details
-    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( xLayout.get() ) );
-    xLayout->addChild( xIndent );
-    // remember details controls
-    mxDetails = xIndent;
-    // create a column for the details
-    boost::shared_ptr< vcl::LabelColumn > xLabelCol( new vcl::LabelColumn( xIndent.get() ) );
-    xIndent->setChild( xLabelCol );
-    xLabelCol->addRow( &maStatusLabel, &maStatusTxt );
-    xLabelCol->addRow( &maLocationLabel, &maLocationTxt );
-    xLabelCol->addRow( &maCommentLabel, &maCommentTxt );
-
-    // add print range and copies columns
-    xLayout->addWindow( &maCopies );
-    boost::shared_ptr< vcl::RowOrColumn > xRangeRow( new vcl::RowOrColumn( xLayout.get(), false ) );
-    xLayout->addChild( xRangeRow );
-
-    // create print range and add to range row
-    mxPrintRange.reset( new vcl::RowOrColumn( xRangeRow.get() ) );
-    xRangeRow->addChild( mxPrintRange );
-    xRangeRow->addWindow( &maCopySpacer );
-
-    boost::shared_ptr< vcl::RowOrColumn > xCopyCollateCol( new vcl::RowOrColumn( xRangeRow.get() ) );
-    xRangeRow->addChild( xCopyCollateCol );
-
-    // add copies row to copy/collate column
-    boost::shared_ptr< vcl::LabeledElement > xCopiesRow( new vcl::LabeledElement( xCopyCollateCol.get(), 2 ) );
-    xCopyCollateCol->addChild( xCopiesRow );
-    xCopiesRow->setLabel( &maCopyCount );
-    xCopiesRow->setElement( &maCopyCountField );
-    boost::shared_ptr< vcl::LabeledElement > xCollateRow( new vcl::LabeledElement( xCopyCollateCol.get(), 2 ) );
-    xCopyCollateCol->addChild( xCollateRow );
-    xCollateRow->setLabel( &maCollateBox );
-    xCollateRow->setElement( &maCollateImage );
-
-    // maDetailsBtn.SetStyle( maDetailsBtn.GetStyle() | (WB_SMALLSTYLE | WB_BEVELBUTTON) );
-    mxDetails->show( false, false );
+    mpPrinters->SetDropDownLineCount( 4 );
 }
 
 void PrintDialog::JobTabPage::readFromSettings()
@@ -631,17 +500,16 @@ void PrintDialog::JobTabPage::readFromSettings()
     if( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("alwaysoff")) )
     {
         mnCollateUIMode = 1;
-        maCollateBox.Check( sal_False );
-        maCollateBox.Enable( sal_False );
+        mpCollateBox->Check( sal_False );
+        mpCollateBox->Enable( sal_False );
     }
     else
     {
         mnCollateUIMode = 0;
         aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
                                   rtl::OUString( "Collate"  ) );
-        maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) );
+        mpCollateBox->Check( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) );
     }
-    Resize();
 }
 
 void PrintDialog::JobTabPage::storeToSettings()
@@ -649,41 +517,17 @@ void PrintDialog::JobTabPage::storeToSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( rtl::OUString( "PrintDialog"  ),
                      rtl::OUString( "CopyCount"  ),
-                     maCopyCountField.GetText() );
+                     mpCopyCountField->GetText() );
     pItem->setValue( rtl::OUString( "PrintDialog"  ),
                      rtl::OUString( "Collate"  ),
-                     maCollateBox.IsChecked() ? rtl::OUString("true") :
-                                                rtl::OUString("false") );
+                     mpCollateBox->IsChecked() ? rtl::OUString("true") :
+                                                 rtl::OUString("false") );
 }
 
-PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rResId )
-    : TabPage( i_pParent, i_rResId )
-    , maOptionsLine( this, VclResId( SV_PRINT_OPT_PRINT_FL ) )
-    , maToFileBox( this, VclResId( SV_PRINT_OPT_TOFILE ) )
-    , maCollateSingleJobsBox( this, VclResId( SV_PRINT_OPT_SINGLEJOBS ) )
+PrintDialog::OutputOptPage::OutputOptPage( VclBuilder *pUIBuilder )
 {
-    FreeResource();
-
-    setupLayout();
-}
-
-PrintDialog::OutputOptPage::~OutputOptPage()
-{
-}
-
-void PrintDialog::OutputOptPage::setupLayout()
-{
-    boost::shared_ptr<vcl::RowOrColumn> xLayout =
-        boost::dynamic_pointer_cast<vcl::RowOrColumn>( getLayout() );
-
-    xLayout->addWindow( &maOptionsLine );
-    boost::shared_ptr<vcl::Indenter> xIndent( new vcl::Indenter( xLayout.get(), -1 ) );
-    xLayout->addChild( xIndent );
-    boost::shared_ptr<vcl::RowOrColumn> xCol( new vcl::RowOrColumn( xIndent.get() ) );
-    xIndent->setChild( xCol );
-    mxOptGroup = xCol;
-    xCol->addWindow( &maToFileBox );
-    xCol->addWindow( &maCollateSingleJobsBox );
+    pUIBuilder->get(mpToFileBox, "printtofile");
+    pUIBuilder->get(mpCollateSingleJobsBox, "singleprintjob");
 }
 
 void PrintDialog::OutputOptPage::readFromSettings()
@@ -694,13 +538,12 @@ void PrintDialog::OutputOptPage::readFromSettings()
                               rtl::OUString( "CollateSingleJobs"  ) );
     if ( aValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
     {
-        maCollateSingleJobsBox.Check( sal_True );
+        mpCollateSingleJobsBox->Check( sal_True );
     }
     else
     {
-        maCollateSingleJobsBox.Check( sal_False );
+        mpCollateSingleJobsBox->Check( sal_False );
     }
-    Resize();
 }
 
 void PrintDialog::OutputOptPage::storeToSettings()
@@ -708,30 +551,21 @@ void PrintDialog::OutputOptPage::storeToSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( rtl::OUString( "PrintDialog"  ),
                      rtl::OUString( "ToFile"  ),
-                     maToFileBox.IsChecked() ? rtl::OUString("true")
+                     mpToFileBox->IsChecked() ? rtl::OUString("true")
                                              : rtl::OUString("false") );
     pItem->setValue( rtl::OUString( "PrintDialog"  ),
                      rtl::OUString( "CollateSingleJobs"  ),
-                     maCollateSingleJobsBox.IsChecked() ? rtl::OUString("true") :
+                     mpCollateSingleJobsBox->IsChecked() ? rtl::OUString("true") :
                                                 rtl::OUString("false") );
 }
 
 PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
-    : ModalDialog( i_pParent, VclResId( SV_DLG_PRINT ) )
-    , maTabCtrl( this, VclResId( SV_PRINT_TABCTRL ) )
-    , maNUpPage( &maTabCtrl, VclResId( SV_PRINT_TAB_NUP ) )
-    , maJobPage( &maTabCtrl, VclResId( SV_PRINT_TAB_JOB ) )
-    , maOptionsPage( &maTabCtrl, VclResId( SV_PRINT_TAB_OPT ) )
-    , maPreviewWindow( this, VclResId( SV_PRINT_PAGE_PREVIEW ) )
-    , maPageEdit( this, VclResId( SV_PRINT_PAGE_EDIT ) )
-    , maNumPagesText( this, VclResId( SV_PRINT_PAGE_TXT ) )
-    , maBackwardBtn( this, VclResId( SV_PRINT_PAGE_BACKWARD ) )
-    , maForwardBtn( this, VclResId( SV_PRINT_PAGE_FORWARD ) )
-    , maButtonLine( this, VclResId( SV_PRINT_BUTTONLINE ) )
-    , maOKButton( this, VclResId( SV_PRINT_OK ) )
-    , maCancelButton( this, VclResId( SV_PRINT_CANCEL ) )
-    , maHelpButton( this, VclResId( SV_PRINT_HELP ) )
+    : ModalDialog(i_pParent, "PrintDialog", "vcl/ui/printdialog.ui")
+    , mpCustomOptionsUIBuilder(NULL)
     , maPController( i_rController )
+    , maNUpPage(m_pUIBuilder)
+    , maJobPage(m_pUIBuilder)
+    , maOptionsPage(m_pUIBuilder)
     , maNoPageStr( VclResId( SV_PRINT_NOPAGES ).toString() )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
@@ -739,42 +573,45 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ).toString() )
     , mbShowLayoutPage( sal_True )
 {
-    FreeResource();
+    get(mpOKButton, "ok");
+    get(mpCancelButton, "cancel");
+    get(mpHelpButton, "help");
+    get(mpForwardBtn, "forward");
+    get(mpBackwardBtn, "backward");
+    get(mpNumPagesText, "totalnumpages");
+    get(mpPageEdit, "pageedit-nospin");
+    get(mpTabCtrl, "tabcontrol");
+    get(mpPreviewWindow, "preview");
 
     // save printbutton text, gets exchanged occasionally with print to file
-    maPrintText = maOKButton.GetText();
+    maPrintText = mpOKButton->GetText();
 
     // setup preview controls
-    maForwardBtn.SetStyle( maForwardBtn.GetStyle() | WB_BEVELBUTTON );
-    maBackwardBtn.SetStyle( maBackwardBtn.GetStyle() | WB_BEVELBUTTON );
-
-    // insert the job (general) tab page first
-    maTabCtrl.InsertPage( SV_PRINT_TAB_JOB, maJobPage.GetText() );
-    maTabCtrl.SetTabPage( SV_PRINT_TAB_JOB, &maJobPage );
+    mpForwardBtn->SetStyle( mpForwardBtn->GetStyle() | WB_BEVELBUTTON );
+    mpBackwardBtn->SetStyle( mpBackwardBtn->GetStyle() | WB_BEVELBUTTON );
 
     // set symbols on forward and backward button
-    maBackwardBtn.SetSymbol( SYMBOL_PREV );
-    maForwardBtn.SetSymbol( SYMBOL_NEXT );
-    maBackwardBtn.ImplSetSmallSymbol( sal_True );
-    maForwardBtn.ImplSetSmallSymbol( sal_True );
+    mpBackwardBtn->SetSymbol( SYMBOL_PREV );
+    mpForwardBtn->SetSymbol( SYMBOL_NEXT );
+    mpBackwardBtn->ImplSetSmallSymbol( sal_True );
+    mpForwardBtn->ImplSetSmallSymbol( sal_True );
 
-    maPageStr = maNumPagesText.GetText();
+    maPageStr = mpNumPagesText->GetText();
 
     // init reverse print
-    maJobPage.maReverseOrderBox.Check( maPController->getReversePrint() );
-
+    maJobPage.mpReverseOrderBox->Check( maPController->getReversePrint() );
 
     // fill printer listbox
     const std::vector< rtl::OUString >& rQueues( Printer::GetPrinterQueues() );
     for( std::vector< rtl::OUString >::const_iterator it = rQueues.begin();
          it != rQueues.end(); ++it )
     {
-        maJobPage.maPrinters.InsertEntry( *it );
+        maJobPage.mpPrinters->InsertEntry( *it );
     }
     // select current printer
-    if( maJobPage.maPrinters.GetEntryPos( maPController->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
+    if( maJobPage.mpPrinters->GetEntryPos( maPController->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
     {
-        maJobPage.maPrinters.SelectEntry( maPController->getPrinter()->GetName() );
+        maJobPage.mpPrinters->SelectEntry( maPController->getPrinter()->GetName() );
     }
     else
     {
@@ -782,15 +619,15 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
         SettingsConfigItem* pItem = SettingsConfigItem::get();
         String aValue( pItem->getValue( rtl::OUString( "PrintDialog"  ),
                                         rtl::OUString( "LastPrinter"  ) ) );
-        if( maJobPage.maPrinters.GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
+        if( maJobPage.mpPrinters->GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
         {
-            maJobPage.maPrinters.SelectEntry( aValue );
+            maJobPage.mpPrinters->SelectEntry( aValue );
             maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aValue ) ) );
         }
         else
         {
             // fall back to default printer
-            maJobPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
+            maJobPage.mpPrinters->SelectEntry( Printer::GetDefaultPrinterName() );
             maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
         }
     }
@@ -804,7 +641,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     updatePrinterText();
 
     // set a select handler
-    maJobPage.maPrinters.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    maJobPage.mpPrinters->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
     // setup sizes for N-Up
     Size aNupSize( maPController->getPrinter()->PixelToLogic(
@@ -821,39 +658,34 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     }
     maNUpPage.initFromMultiPageSetup( maPController->getMultipage() );
 
-
     // setup click handler on the various buttons
-    maOKButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    mpOKButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     #if OSL_DEBUG_LEVEL > 1
-    maCancelButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    mpCancelButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     #endif
-    maHelpButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maForwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maBackwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maJobPage.maCollateBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maJobPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maJobPage.maDetailsBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maJobPage.maReverseOrderBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maOptionsPage.maCollateSingleJobsBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maNUpPage.maPagesBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    mpHelpButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    mpForwardBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    mpBackwardBtn->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
 
+    maJobPage.mpCollateBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maJobPage.mpSetupButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maNUpPage.mpBorderCB->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maOptionsPage.mpToFileBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maJobPage.mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maOptionsPage.mpCollateSingleJobsBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maNUpPage.mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     // setup modify hdl
-    maPageEdit.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maJobPage.maCopyCountField.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maNupRowsEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maNupColEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maPageMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maSheetMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    mpPageEdit->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maJobPage.mpCopyCountField->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.mpNupRowsEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.mpNupColEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.mpPageMarginEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.mpSheetMarginEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
     // setup select hdl
-    maNUpPage.maNupPagesBox.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
-    maNUpPage.maNupOrientationBox.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
-    maNUpPage.maNupOrderBox.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
-
-    // setup the layout
-    setupLayout();
+    maNUpPage.mpNupPagesBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    maNUpPage.mpNupOrientationBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    maNUpPage.mpNupOrderBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
     // setup optional UI options set by application
     setupOptionalUI();
@@ -861,40 +693,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // set change handler for UI options
     maPController->setOptionChangeHdl( LINK( this, PrintDialog, UIOptionsChanged ) );
 
-    // set min size pixel to current size
-    Size aOutSize( GetOutputSizePixel() );
-    SetMinOutputSizePixel( aOutSize );
-
-    // if there is space enough, enlarge the preview so it gets roughly as
-    // high as the tab control
-    if( aOutSize.Width() < 768 )
-    {
-        Size aJobPageSize( getJobPageSize() );
-        Size aTabSize( maTabCtrl.GetSizePixel() );
-        if( aJobPageSize.Width() < 1 )
-            aJobPageSize.Width() = aTabSize.Width();
-        if( aJobPageSize.Height() < 1 )
-            aJobPageSize.Height() = aTabSize.Height();
-        long nOptPreviewWidth = aTabSize.Height() * aJobPageSize.Width() / aJobPageSize.Height();
-        // add space for borders
-        nOptPreviewWidth += 15;
-        if( aOutSize.Width() - aTabSize.Width() < nOptPreviewWidth )
-        {
-            aOutSize.Width() = aTabSize.Width() + nOptPreviewWidth;
-            if( aOutSize.Width() > 768 ) // don't enlarge the dialog too much
-                aOutSize.Width() = 768;
-            SetOutputSizePixel( aOutSize );
-        }
-    }
-
-    // append further tab pages
-    if( mbShowLayoutPage )
-    {
-        maTabCtrl.InsertPage( SV_PRINT_TAB_NUP, maNUpPage.GetText() );
-        maTabCtrl.SetTabPage( SV_PRINT_TAB_NUP, &maNUpPage );
-    }
-    maTabCtrl.InsertPage( SV_PRINT_TAB_OPT, maOptionsPage.GetText() );
-    maTabCtrl.SetTabPage( SV_PRINT_TAB_OPT, &maOptionsPage );
+    // remove layout page if unwanted
+    if (!mbShowLayoutPage)
+        mpTabCtrl->RemovePage(mpTabCtrl->GetPageId(2));
 
     // restore settings from last run
     readFromSettings();
@@ -903,70 +704,17 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     checkControlDependencies();
 
     if ( maPController->getBoolProperty( rtl::OUString( "HideHelpButton" ), sal_False ) )
-        maHelpButton.Hide();
-
+        mpHelpButton->Hide();
     // set initial focus to "Number of copies"
-    maJobPage.maCopyCountField.GrabFocus();
-    maJobPage.maCopyCountField.SetSelection( Selection(0, 0xFFFF) );
+    maJobPage.mpCopyCountField->GrabFocus();
+    maJobPage.mpCopyCountField->SetSelection( Selection(0, 0xFFFF) );
+
+    updateNupFromPages();
 }
 
 PrintDialog::~PrintDialog()
 {
-    while( ! maControls.empty() )
-    {
-        delete maControls.front();
-        maControls.pop_front();
-    }
-}
-
-void PrintDialog::setupLayout()
-{
-    boost::shared_ptr<vcl::RowOrColumn> xLayout =
-        boost::dynamic_pointer_cast<vcl::RowOrColumn>( getLayout() );
-    xLayout->setOuterBorder( 0 );
-
-
-    boost::shared_ptr< vcl::RowOrColumn > xPreviewAndTab( new vcl::RowOrColumn( xLayout.get(), false ) );
-    size_t nIndex = xLayout->addChild( xPreviewAndTab, 5 );
-    xLayout->setBorders( nIndex, -1, -1, -1, 0 );
-
-    // setup column for preview and sub controls
-    boost::shared_ptr< vcl::RowOrColumn > xPreview( new vcl::RowOrColumn( xPreviewAndTab.get() ) );
-    xPreviewAndTab->addChild( xPreview, 5 );
-    xPreview->addWindow( &maPreviewWindow, 5 );
-    // get a row for the preview controls
-    mxPreviewCtrls.reset( new vcl::RowOrColumn( xPreview.get(), false ) );
-    nIndex = xPreview->addChild( mxPreviewCtrls );
-    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( mxPreviewCtrls.get(), 2 ) );
-    mxPreviewCtrls->addChild( xSpacer );
-    mxPreviewCtrls->addWindow( &maPageEdit );
-    mxPreviewCtrls->addWindow( &maNumPagesText );
-    xSpacer.reset( new vcl::Spacer( mxPreviewCtrls.get(), 2 ) );
-    mxPreviewCtrls->addChild( xSpacer );
-    mxPreviewCtrls->addWindow( &maBackwardBtn );
-    mxPreviewCtrls->addWindow( &maForwardBtn );
-    xSpacer.reset( new vcl::Spacer( mxPreviewCtrls.get(), 2 ) );
-    mxPreviewCtrls->addChild( xSpacer );
-
-    // continue with the tab ctrl
-    xPreviewAndTab->addWindow( &maTabCtrl );
-
-    // add the button line
-    xLayout->addWindow( &maButtonLine );
-
-    // add the row for the buttons
-    boost::shared_ptr< vcl::RowOrColumn > xButtons( new vcl::RowOrColumn( xLayout.get(), false ) );
-    nIndex = xLayout->addChild( xButtons );
-    xLayout->setBorders( nIndex, -1, 0, -1, -1 );
-
-    Size aMinSize( maCancelButton.GetSizePixel() );
-    // insert help button
-    xButtons->setMinimumSize( xButtons->addWindow( &maHelpButton ), aMinSize );
-    // insert a spacer, cancel and OK buttons are right aligned
-    xSpacer.reset( new vcl::Spacer( xButtons.get(), 2 ) );
-    xButtons->addChild( xSpacer );
-    xButtons->setMinimumSize( xButtons->addWindow( &maOKButton ), aMinSize );
-    xButtons->setMinimumSize( xButtons->addWindow( &maCancelButton ), aMinSize );
+    delete mpCustomOptionsUIBuilder;
 }
 
 void PrintDialog::readFromSettings()
@@ -979,17 +727,17 @@ void PrintDialog::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
                                             rtl::OUString( "LastPage"  ) );
-    sal_uInt16 nCount = maTabCtrl.GetPageCount();
+    sal_uInt16 nCount = mpTabCtrl->GetPageCount();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        sal_uInt16 nPageId = maTabCtrl.GetPageId( i );
-        if( aValue.equals( maTabCtrl.GetPageText( nPageId ) ) )
+        sal_uInt16 nPageId = mpTabCtrl->GetPageId( i );
+        if( aValue.equals( mpTabCtrl->GetPageText( nPageId ) ) )
         {
-            maTabCtrl.SelectTabPage( nPageId );
+            mpTabCtrl->SelectTabPage( nPageId );
             break;
         }
     }
-    maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
+    mpOKButton->SetText( maOptionsPage.mpToFileBox->IsChecked() ? maPrintToFileText : maPrintText );
 
     // persistent window state
     rtl::OUString aWinState( pItem->getValue( rtl::OUString( "PrintDialog"  ),
@@ -997,7 +745,7 @@ void PrintDialog::readFromSettings()
     if( !aWinState.isEmpty() )
         SetWindowState( rtl::OUStringToOString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
-    if( maOptionsPage.maToFileBox.IsChecked() )
+    if( maOptionsPage.mpToFileBox->IsChecked() )
     {
         maPController->resetPrinterOptions( true );
         preparePreview( true, true );
@@ -1014,11 +762,11 @@ void PrintDialog::storeToSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( rtl::OUString( "PrintDialog"  ),
                      rtl::OUString( "LastPrinter"  ),
-                     maJobPage.maPrinters.GetSelectEntry() );
+                     maJobPage.mpPrinters->GetSelectEntry() );
 
     pItem->setValue( rtl::OUString( "PrintDialog"  ),
                      rtl::OUString( "LastPage"  ),
-                     maTabCtrl.GetPageText( maTabCtrl.GetCurPageId() ) );
+                     mpTabCtrl->GetPageText( mpTabCtrl->GetCurPageId() ) );
     pItem->setValue( rtl::OUString( "PrintDialog"  ),
                      rtl::OUString( "WindowState"  ),
                      rtl::OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 )
@@ -1028,17 +776,17 @@ void PrintDialog::storeToSettings()
 
 bool PrintDialog::isPrintToFile()
 {
-    return maOptionsPage.maToFileBox.IsChecked();
+    return maOptionsPage.mpToFileBox->IsChecked();
 }
 
 bool PrintDialog::isCollate()
 {
-    return maJobPage.maCopyCountField.GetValue() > 1 ? maJobPage.maCollateBox.IsChecked() : sal_False;
+    return maJobPage.mpCopyCountField->GetValue() > 1 ? maJobPage.mpCollateBox->IsChecked() : sal_False;
 }
 
 bool PrintDialog::isSingleJobs()
 {
-    return maOptionsPage.maCollateSingleJobsBox.IsChecked();
+    return maOptionsPage.mpCollateSingleJobsBox->IsChecked();
 }
 
 void setHelpId( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpIds, sal_Int32 i_nIndex )
@@ -1055,39 +803,37 @@ static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_r
         i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
 }
 
-void updateMaxSize( const Size& i_rCheckSize, Size& o_rMaxSize )
-{
-    if( i_rCheckSize.Width() > o_rMaxSize.Width() )
-        o_rMaxSize.Width() = i_rCheckSize.Width();
-    if( i_rCheckSize.Height() > o_rMaxSize.Height() )
-        o_rMaxSize.Height() = i_rCheckSize.Height();
-}
-
 void PrintDialog::setupOptionalUI()
 {
-    std::vector< boost::shared_ptr<vcl::RowOrColumn> > aDynamicColumns;
-    boost::shared_ptr< vcl::RowOrColumn > pCurColumn;
-
-    Window* pCurParent = 0, *pDynamicPageParent = 0;
-    sal_uInt16 nOptPageId = 9;
-    bool bOnStaticPage = false;
-    bool bSubgroupOnStaticPage = false;
-
-    std::multimap< rtl::OUString, boost::shared_ptr<vcl::RowOrColumn> > aPropertyToDependencyRowMap;
-
     const Sequence< PropertyValue >& rOptions( maPController->getUIOptions() );
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
+        if (rOptions[i].Name == "OptionsUIFile")
+        {
+            rtl::OUString sOptionsUIFile;
+            rOptions[i].Value >>= sOptionsUIFile;
+
+            Window *pCustom = get<Window>("customcontents");
+
+            delete mpCustomOptionsUIBuilder;
+            mpCustomOptionsUIBuilder = new VclBuilder(pCustom, getUIRootDir(), sOptionsUIFile);
+            Window *pWindow = mpCustomOptionsUIBuilder->get_widget_root();
+            pWindow->Show();
+            continue;
+        }
+
         Sequence< beans::PropertyValue > aOptProp;
         rOptions[i].Value >>= aOptProp;
 
         // extract ui element
         rtl::OUString aCtrlType;
+        rtl::OString aID;
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         Sequence< rtl::OUString > aChoices;
         Sequence< sal_Bool > aChoicesDisabled;
         Sequence< rtl::OUString > aHelpTexts;
+        Sequence< rtl::OUString > aIDs;
         Sequence< rtl::OUString > aHelpIds;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         rtl::OUString aGroupingHint;
@@ -1098,6 +844,11 @@ void PrintDialog::setupOptionalUI()
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
+            if ( rEntry.Name == "ID" )
+            {
+                rEntry.Value >>= aIDs;
+                aID = rtl::OUStringToOString(aIDs[0], RTL_TEXTENCODING_UTF8);
+            }
             if ( rEntry.Name == "Text" )
             {
                 rEntry.Value >>= aText;
@@ -1181,463 +932,231 @@ void PrintDialog::setupOptionalUI()
             }
         }
 
-        // bUseDependencyRow should only be true if a dependency exists
-        bUseDependencyRow = bUseDependencyRow && !aDependsOnName.isEmpty();
-
-        // is it necessary to switch between static and dynamic pages ?
-        bool bSwitchPage = false;
-        if( !aGroupingHint.isEmpty() )
-            bSwitchPage = true;
-        else if( aCtrlType == "Subgroup" || (bOnStaticPage && ! bSubgroupOnStaticPage ) )
-            bSwitchPage = true;
-        if( bSwitchPage )
+        if (aCtrlType == "Group" && !aID.isEmpty())
         {
-            // restore to dynamic
-            pCurParent = pDynamicPageParent;
-            if( ! aDynamicColumns.empty() )
-                pCurColumn = aDynamicColumns.back();
-            else
-                pCurColumn.reset();
-            bOnStaticPage = false;
-            bSubgroupOnStaticPage = false;
+            TabPage *pPage = get<TabPage>(aID);
+            if (!pPage && mpCustomOptionsUIBuilder)
+                pPage = mpCustomOptionsUIBuilder->get<TabPage>(aID);
+            sal_uInt16 nPageId = mpTabCtrl->GetPageId(*pPage);
 
-            if ( aGroupingHint == "PrintRange" )
-            {
-                pCurColumn = maJobPage.mxPrintRange;
-                pCurParent = &maJobPage;            // set job page as current parent
-                bOnStaticPage = true;
-            }
-            else if ( aGroupingHint == "OptionsPage" )
-            {
-                pCurColumn = boost::dynamic_pointer_cast<vcl::RowOrColumn>(maOptionsPage.getLayout());
-                pCurParent = &maOptionsPage;        // set options page as current parent
-                bOnStaticPage = true;
-            }
-            else if ( aGroupingHint == "OptionsPageOptGroup" )
-            {
-                pCurColumn = maOptionsPage.mxOptGroup;
-                pCurParent = &maOptionsPage;        // set options page as current parent
-                bOnStaticPage = true;
-            }
-            else if ( aGroupingHint == "LayoutPage" )
-            {
-                pCurColumn = boost::dynamic_pointer_cast<vcl::RowOrColumn>(maNUpPage.getLayout());
-                pCurParent = &maNUpPage;            // set layout page as current parent
-                bOnStaticPage = true;
-            }
-            else if( !aGroupingHint.isEmpty() )
-            {
-                pCurColumn = boost::dynamic_pointer_cast<vcl::RowOrColumn>(maJobPage.getLayout());
-                pCurParent = &maJobPage;            // set job page as current parent
-                bOnStaticPage = true;
-            }
-        }
-
-        if( aCtrlType == "Group" || ( ! pCurParent && ! (bOnStaticPage || !aGroupingHint.isEmpty() ) ) )
-        {
-            // add new tab page
-            TabPage* pNewGroup = new TabPage( &maTabCtrl );
-            maControls.push_front( pNewGroup );
-            pDynamicPageParent = pCurParent = pNewGroup;
-            pNewGroup->SetText( aText );
-            maTabCtrl.InsertPage( ++nOptPageId, aText );
-            maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
+            mpTabCtrl->SetPageText(nPageId, aText);
 
             // set help id
-            setHelpId( pNewGroup, aHelpIds, 0 );
+            if (aHelpIds.getLength() > 0)
+                mpTabCtrl->SetHelpId(nPageId, rtl::OUStringToOString(aHelpIds.getConstArray()[0], RTL_TEXTENCODING_UTF8));
+
             // set help text
-            setHelpText( pNewGroup, aHelpTexts, 0 );
+            if (aHelpTexts.getLength() > 0)
+                mpTabCtrl->SetHelpText(nPageId, aHelpTexts.getConstArray()[0]);
 
-            aDynamicColumns.push_back( boost::dynamic_pointer_cast<vcl::RowOrColumn>(pNewGroup->getLayout()) );
-            pCurColumn = aDynamicColumns.back();
-            pCurColumn->setParentWindow( pNewGroup );
-            bSubgroupOnStaticPage = false;
-            bOnStaticPage = false;
+            pPage->Show();
         }
-        else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) && (pCurParent || !aGroupingHint.isEmpty() ) )
+        else if (aCtrlType == "Subgroup" && !aID.isEmpty())
         {
-            bSubgroupOnStaticPage = !aGroupingHint.isEmpty();
-            // create group FixedLine
-            if( ! aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) ||
-                ! pCurColumn->countElements() == 0
-               )
-            {
-                Window* pNewSub = NULL;
-                if ( aGroupingHint == "PrintRange" )
-                    pNewSub = new FixedText( pCurParent, WB_VCENTER );
-                else
-                    pNewSub = new FixedLine( pCurParent );
-                maControls.push_front( pNewSub );
-                pNewSub->SetText( aText );
-                pNewSub->Show();
+            Window *pFrame = get<Window>(aID);
+            if (!pFrame && mpCustomOptionsUIBuilder)
+                pFrame = mpCustomOptionsUIBuilder->get<Window>(aID);
 
-                // set help id
-                setHelpId( pNewSub, aHelpIds, 0 );
-                // set help text
-                setHelpText( pNewSub, aHelpTexts, 0 );
-                // add group to current column
-                pCurColumn->addWindow( pNewSub );
-            }
+            pFrame->SetText(aText);
 
-            // add an indent to the current column
-            vcl::Indenter* pIndent = new vcl::Indenter( pCurColumn.get(), -1 );
-            pCurColumn->addChild( pIndent );
-            // and create a column inside the indent
-            pCurColumn.reset( new vcl::RowOrColumn( pIndent ) );
-            pIndent->setChild( pCurColumn );
+            // set help id
+            setHelpId(pFrame, aHelpIds, 0);
+            // set help text
+            setHelpText(pFrame, aHelpTexts, 0);
+
+            pFrame->Show();
         }
         // EVIL
         else if( aCtrlType == "Bool" && aGroupingHint == "LayoutPage" && aPropertyName == "PrintProspect" )
         {
-            maNUpPage.maBrochureBtn.SetText( aText );
-            maNUpPage.maBrochureBtn.Show();
-            setHelpText( &maNUpPage.maBrochureBtn, aHelpTexts, 0 );
+            maNUpPage.mpBrochureBtn->SetText( aText );
+            maNUpPage.mpBrochureBtn->Show();
 
             sal_Bool bVal = sal_False;
             PropertyValue* pVal = maPController->getValue( aPropertyName );
             if( pVal )
                 pVal->Value >>= bVal;
-            maNUpPage.maBrochureBtn.Check( bVal );
-            maNUpPage.maBrochureBtn.Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
-            maNUpPage.maBrochureBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+            maNUpPage.mpBrochureBtn->Check( bVal );
+            maNUpPage.mpBrochureBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
+            maNUpPage.mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
-            maPropertyToWindowMap[ aPropertyName ].push_back( &maNUpPage.maBrochureBtn );
-            maControlToPropertyMap[&maNUpPage.maBrochureBtn] = aPropertyName;
+            maPropertyToWindowMap[ aPropertyName ].push_back( maNUpPage.mpBrochureBtn );
+            maControlToPropertyMap[maNUpPage.mpBrochureBtn] = aPropertyName;
 
-            aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, boost::shared_ptr<vcl::RowOrColumn> >( aPropertyName, maNUpPage.mxBrochureDep ) );
+            // set help id
+            setHelpId( maNUpPage.mpBrochureBtn, aHelpIds, 0 );
+            // set help text
+            setHelpText( maNUpPage.mpBrochureBtn, aHelpTexts, 0 );
+        }
+        else if (aCtrlType == "Bool")
+        {
+            // add a check box
+            CheckBox* pNewBox = get<CheckBox>(aID);
+            if (!pNewBox && mpCustomOptionsUIBuilder)
+                pNewBox = mpCustomOptionsUIBuilder->get<CheckBox>(aID);
+
+            pNewBox->SetText( aText );
+            pNewBox->Show();
+
+            sal_Bool bVal = sal_False;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal )
+                pVal->Value >>= bVal;
+            pNewBox->Check( bVal );
+            pNewBox->SetToggleHdl( LINK( this, PrintDialog, UIOption_CheckHdl ) );
+
+            maPropertyToWindowMap[ aPropertyName ].push_back( pNewBox );
+            maControlToPropertyMap[pNewBox] = aPropertyName;
+
+            // set help id
+            setHelpId( pNewBox, aHelpIds, 0 );
+            // set help text
+            setHelpText( pNewBox, aHelpTexts, 0 );
+        }
+        else if (aCtrlType == "Radio")
+        {
+            sal_Int32 nCurHelpText = 0;
+
+            // iterate options
+            sal_Int32 nSelectVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nSelectVal;
+            for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+            {
+                aID = rtl::OUStringToOString(aIDs[m], RTL_TEXTENCODING_UTF8);
+                RadioButton* pBtn = get<RadioButton>(aID);
+                if (!pBtn && mpCustomOptionsUIBuilder)
+                    pBtn = mpCustomOptionsUIBuilder->get<RadioButton>(aID);
+
+                pBtn->SetText( aChoices[m] );
+                pBtn->Check( m == nSelectVal );
+                pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
+                if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] == sal_True )
+                    pBtn->Enable( sal_False );
+                pBtn->Show();
+                maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );
+                maControlToPropertyMap[pBtn] = aPropertyName;
+                maControlToNumValMap[pBtn] = m;
+
+                // set help id
+                setHelpId( pBtn, aHelpIds, nCurHelpText );
+                // set help text
+                setHelpText( pBtn, aHelpTexts, nCurHelpText );
+                nCurHelpText++;
+            }
+        }
+        else if ( aCtrlType == "List" )
+        {
+            ListBox* pList = get<ListBox>(aID);
+            if (!pList && mpCustomOptionsUIBuilder)
+                pList = mpCustomOptionsUIBuilder->get<ListBox>(aID);
+
+            // iterate options
+            for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+            {
+                pList->InsertEntry( aChoices[m] );
+            }
+            sal_Int32 nSelectVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nSelectVal;
+            pList->SelectEntryPos( static_cast<sal_uInt16>(nSelectVal) );
+            pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
+            pList->SetDropDownLineCount( static_cast<sal_uInt16>(aChoices.getLength()) );
+            pList->Show();
+
+            // set help id
+            setHelpId( pList, aHelpIds, 0 );
+            // set help text
+            setHelpText( pList, aHelpTexts, 0 );
+
+            maPropertyToWindowMap[ aPropertyName ].push_back( pList );
+            maControlToPropertyMap[pList] = aPropertyName;
+        }
+        else if ( aCtrlType == "Range" )
+        {
+            NumericField* pField = get<NumericField>(aID);
+            if (!pField && mpCustomOptionsUIBuilder)
+                pField = mpCustomOptionsUIBuilder->get<NumericField>(aID);
+
+            // set min/max and current value
+            if( nMinValue != nMaxValue )
+            {
+                pField->SetMin( nMinValue );
+                pField->SetMax( nMaxValue );
+            }
+            sal_Int64 nCurVal = 0;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= nCurVal;
+            pField->SetValue( nCurVal );
+            pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
+            pField->Show();
+
+            // set help id
+            setHelpId( pField, aHelpIds, 0 );
+            // set help text
+            setHelpText( pField, aHelpTexts, 0 );
+
+            maPropertyToWindowMap[ aPropertyName ].push_back( pField );
+            maControlToPropertyMap[pField] = aPropertyName;
+        }
+        else if (aCtrlType == "Edit")
+        {
+            Edit *pField = get<Edit>(aID);
+            if (!pField && mpCustomOptionsUIBuilder)
+                pField = mpCustomOptionsUIBuilder->get<Edit>(aID);
+
+            rtl::OUString aCurVal;
+            PropertyValue* pVal = maPController->getValue( aPropertyName );
+            if( pVal && pVal->Value.hasValue() )
+                pVal->Value >>= aCurVal;
+            pField->SetText( aCurVal );
+            pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
+            pField->Show();
+
+            // set help id
+            setHelpId( pField, aHelpIds, 0 );
+            // set help text
+            setHelpText( pField, aHelpTexts, 0 );
+
+            maPropertyToWindowMap[ aPropertyName ].push_back( pField );
+            maControlToPropertyMap[pField] = aPropertyName;
         }
         else
         {
-            boost::shared_ptr<vcl::RowOrColumn> pSaveCurColumn( pCurColumn );
-
-            if( bUseDependencyRow )
-            {
-                // find the correct dependency row (if any)
-                std::pair< std::multimap< rtl::OUString, boost::shared_ptr<vcl::RowOrColumn> >::iterator,
-                           std::multimap< rtl::OUString, boost::shared_ptr<vcl::RowOrColumn> >::iterator > aDepRange;
-                aDepRange = aPropertyToDependencyRowMap.equal_range( aDependsOnName );
-                if( aDepRange.first != aDepRange.second )
-                {
-                    while( nDependsOnValue && aDepRange.first != aDepRange.second )
-                    {
-                        nDependsOnValue--;
-                        ++aDepRange.first;
-                    }
-                    if( aDepRange.first != aPropertyToDependencyRowMap.end() )
-                    {
-                        pCurColumn = aDepRange.first->second;
-                        maReverseDependencySet.insert( aPropertyName );
-                    }
-                }
-            }
-            if( aCtrlType == "Bool" && pCurParent )
-            {
-                // add a check box
-                CheckBox* pNewBox = new CheckBox( pCurParent );
-                maControls.push_front( pNewBox );
-                pNewBox->SetText( aText );
-                pNewBox->Show();
-
-                sal_Bool bVal = sal_False;
-                PropertyValue* pVal = maPController->getValue( aPropertyName );
-                if( pVal )
-                    pVal->Value >>= bVal;
-                pNewBox->Check( bVal );
-                pNewBox->SetToggleHdl( LINK( this, PrintDialog, UIOption_CheckHdl ) );
-
-                maPropertyToWindowMap[ aPropertyName ].push_back( pNewBox );
-                maControlToPropertyMap[pNewBox] = aPropertyName;
-
-                // set help id
-                setHelpId( pNewBox, aHelpIds, 0 );
-                // set help text
-                setHelpText( pNewBox, aHelpTexts, 0 );
-
-                boost::shared_ptr<vcl::RowOrColumn> pDependencyRow( new vcl::RowOrColumn( pCurColumn.get(), false ) );
-                pCurColumn->addChild( pDependencyRow );
-                aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, boost::shared_ptr<vcl::RowOrColumn> >( aPropertyName, pDependencyRow ) );
-
-                // add checkbox to current column
-                pDependencyRow->addWindow( pNewBox );
-            }
-            else if( aCtrlType == "Radio" && pCurParent )
-            {
-                sal_Int32 nCurHelpText = 0;
-                boost::shared_ptr<vcl::RowOrColumn> pRadioColumn( pCurColumn );
-                if( !aText.isEmpty() )
-                {
-                    // add a FixedText:
-                    FixedText* pHeading = new FixedText( pCurParent );
-                    maControls.push_front( pHeading );
-                    pHeading->SetText( aText );
-                    pHeading->Show();
-
-                    // set help id
-                    setHelpId( pHeading, aHelpIds, nCurHelpText );
-                    // set help text
-                    setHelpText( pHeading, aHelpTexts, nCurHelpText );
-                    nCurHelpText++;
-                    // add fixed text to current column
-                    pCurColumn->addWindow( pHeading );
-                    // add an indent to the current column
-                    vcl::Indenter* pIndent = new vcl::Indenter( pCurColumn.get(), 15 );
-                    pCurColumn->addChild( pIndent );
-                    // and create a column inside the indent
-                    pRadioColumn.reset( new vcl::RowOrColumn( pIndent ) );
-                    pIndent->setChild( pRadioColumn );
-                }
-                // iterate options
-                sal_Int32 nSelectVal = 0;
-                PropertyValue* pVal = maPController->getValue( aPropertyName );
-                if( pVal && pVal->Value.hasValue() )
-                    pVal->Value >>= nSelectVal;
-                for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
-                {
-                    boost::shared_ptr<vcl::LabeledElement> pLabel( new vcl::LabeledElement( pRadioColumn.get(), 1 ) );
-                    pRadioColumn->addChild( pLabel );
-                    boost::shared_ptr<vcl::RowOrColumn> pDependencyRow( new vcl::RowOrColumn( pLabel.get(), false ) );
-                    pLabel->setElement( pDependencyRow );
-                    aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, boost::shared_ptr<vcl::RowOrColumn> >( aPropertyName, pDependencyRow ) );
-
-                    RadioButton* pBtn = new RadioButton( pCurParent, m == 0 ? WB_GROUP : 0 );
-                    maControls.push_front( pBtn );
-                    pBtn->SetText( aChoices[m] );
-                    pBtn->Check( m == nSelectVal );
-                    pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
-                    if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] == sal_True )
-                        pBtn->Enable( sal_False );
-                    pBtn->Show();
-                    maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );
-                    maControlToPropertyMap[pBtn] = aPropertyName;
-                    maControlToNumValMap[pBtn] = m;
-
-                    // set help id
-                    setHelpId( pBtn, aHelpIds, nCurHelpText );
-                    // set help text
-                    setHelpText( pBtn, aHelpTexts, nCurHelpText );
-                    nCurHelpText++;
-                    // add the radio button to the column
-                    pLabel->setLabel( pBtn );
-                }
-            }
-            else if( ( aCtrlType == "List" || aCtrlType == "Range" || aCtrlType == "Edit" ) && pCurParent )
-            {
-                // create a row in the current column
-                boost::shared_ptr<vcl::RowOrColumn> pFieldColumn( new vcl::RowOrColumn( pCurColumn.get(), false ) );
-                pCurColumn->addChild( pFieldColumn );
-                aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, boost::shared_ptr<vcl::RowOrColumn> >( aPropertyName, pFieldColumn ) );
-
-                vcl::LabeledElement* pLabel = NULL;
-                if( !aText.isEmpty() )
-                {
-                    // add a FixedText:
-                    FixedText* pHeading = new FixedText( pCurParent, WB_VCENTER );
-                    maControls.push_front( pHeading );
-                    pHeading->SetText( aText );
-                    pHeading->Show();
-
-
-                    // add to row
-                    pLabel = new vcl::LabeledElement( pFieldColumn.get(), 2 );
-                    pFieldColumn->addChild( pLabel );
-                    pLabel->setLabel( pHeading );
-                }
-
-                if ( aCtrlType == "List" )
-                {
-                    ListBox* pList = new ListBox( pCurParent, WB_DROPDOWN | WB_BORDER );
-                    maControls.push_front( pList );
-
-                    // iterate options
-                    for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
-                    {
-                        pList->InsertEntry( aChoices[m] );
-                    }
-                    sal_Int32 nSelectVal = 0;
-                    PropertyValue* pVal = maPController->getValue( aPropertyName );
-                    if( pVal && pVal->Value.hasValue() )
-                        pVal->Value >>= nSelectVal;
-                    pList->SelectEntryPos( static_cast<sal_uInt16>(nSelectVal) );
-                    pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
-                    pList->SetDropDownLineCount( static_cast<sal_uInt16>(aChoices.getLength()) );
-                    pList->Show();
-
-                    // set help id
-                    setHelpId( pList, aHelpIds, 0 );
-                    // set help text
-                    setHelpText( pList, aHelpTexts, 0 );
-
-                    maPropertyToWindowMap[ aPropertyName ].push_back( pList );
-                    maControlToPropertyMap[pList] = aPropertyName;
-
-                    // finish the pair
-                    if( pLabel )
-                        pLabel->setElement( pList );
-                    else
-                        pFieldColumn->addWindow( pList );
-                }
-                else if ( aCtrlType == "Range" )
-                {
-                    NumericField* pField = new NumericField( pCurParent, WB_BORDER | WB_SPIN );
-                    maControls.push_front( pField );
-
-                    // set min/max and current value
-                    if( nMinValue != nMaxValue )
-                    {
-                        pField->SetMin( nMinValue );
-                        pField->SetMax( nMaxValue );
-                    }
-                    sal_Int64 nCurVal = 0;
-                    PropertyValue* pVal = maPController->getValue( aPropertyName );
-                    if( pVal && pVal->Value.hasValue() )
-                        pVal->Value >>= nCurVal;
-                    pField->SetValue( nCurVal );
-                    pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
-                    pField->Show();
-
-                    // set help id
-                    setHelpId( pField, aHelpIds, 0 );
-                    // set help text
-                    setHelpText( pField, aHelpTexts, 0 );
-
-                    maPropertyToWindowMap[ aPropertyName ].push_back( pField );
-                    maControlToPropertyMap[pField] = aPropertyName;
-
-                    // add to row
-                    if( pLabel )
-                        pLabel->setElement( pField );
-                    else
-                        pFieldColumn->addWindow( pField );
-                }
-                else if ( aCtrlType == "Edit" )
-                {
-                    Edit* pField = new Edit( pCurParent, WB_BORDER );
-                    maControls.push_front( pField );
-
-                    rtl::OUString aCurVal;
-                    PropertyValue* pVal = maPController->getValue( aPropertyName );
-                    if( pVal && pVal->Value.hasValue() )
-                        pVal->Value >>= aCurVal;
-                    pField->SetText( aCurVal );
-                    pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
-                    pField->Show();
-
-                    // set help id
-                    setHelpId( pField, aHelpIds, 0 );
-                    // set help text
-                    setHelpText( pField, aHelpTexts, 0 );
-
-                    maPropertyToWindowMap[ aPropertyName ].push_back( pField );
-                    maControlToPropertyMap[pField] = aPropertyName;
-
-                    // add to row
-                    if( pLabel )
-                        pLabel->setElement( pField );
-                    else
-                        pFieldColumn->addWindow( pField, 2 );
-                }
-            }
-            else
-            {
-                rtl::OStringBuffer sMessage;
-                sMessage.append(RTL_CONSTASCII_STRINGPARAM("Unsupported UI option: \""));
-                sMessage.append(rtl::OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8));
-                sMessage.append('"');
-                OSL_FAIL( sMessage.getStr() );
-            }
-
-            pCurColumn = pSaveCurColumn;
+            rtl::OStringBuffer sMessage;
+            sMessage.append(RTL_CONSTASCII_STRINGPARAM("Unsupported UI option: \""));
+            sMessage.append(rtl::OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8));
+            sMessage.append('"');
+            OSL_FAIL( sMessage.getStr() );
         }
     }
 
     // #i106506# if no brochure button, then the singular Pages radio button
     // makes no sense, so replace it by a FixedText label
-    if( ! maNUpPage.maBrochureBtn.IsVisible() )
+    if (!maNUpPage.mpBrochureBtn->IsVisible() && maNUpPage.mpPagesBtn->IsVisible())
     {
-        if( maNUpPage.mxPagesBtnLabel.get() )
-        {
-            maNUpPage.maPagesBoxTitleTxt.SetText( maNUpPage.maPagesBtn.GetText() );
-            maNUpPage.maPagesBoxTitleTxt.Show( sal_True );
-            maNUpPage.mxPagesBtnLabel->setLabel( &maNUpPage.maPagesBoxTitleTxt );
-            maNUpPage.maPagesBtn.Show( sal_False );
-        }
+        maNUpPage.mpPagesBoxTitleTxt->SetText( maNUpPage.mpPagesBtn->GetText() );
+        maNUpPage.mpPagesBoxTitleTxt->Show( sal_True );
+        maNUpPage.mpPagesBtn->Show( sal_False );
     }
 
     // update enable states
     checkOptionalControlDependencies();
 
-    // print range empty (currently math only) -> hide print range and spacer line
-    if( maJobPage.mxPrintRange->countElements() == 0 )
+    Window *pPageRange = get<Window>("pagerange");
+
+    // print range not shown (currently math only) -> hide spacer line and reverse order
+    if (!pPageRange || !pPageRange->IsVisible())
     {
-        maJobPage.mxPrintRange->show( false, false );
-        maJobPage.maCopySpacer.Show( sal_False );
-        maJobPage.maReverseOrderBox.Show( sal_False );
-    }
-    else
-    {
-        // add an indent to the current column
-        vcl::Indenter* pIndent = new vcl::Indenter( maJobPage.mxPrintRange.get(), -1 );
-        maJobPage.mxPrintRange->addChild( pIndent );
-        // and create a column inside the indent
-        pIndent->setWindow( &maJobPage.maReverseOrderBox );
-        maJobPage.maReverseOrderBox.Show( sal_True );
+        maJobPage.mpCopySpacer->Show( sal_False );
+        maJobPage.mpReverseOrderBox->Show( sal_False );
     }
 
-#ifdef WNT
-    // FIXME: the GetNativeControlRegion call on Windows has some issues
-    // (which skew the results of GetOptimalSize())
-    // however fixing this thoroughly needs to take interaction with paint into
-    // account, making the right fix less simple. Fix this the right way
-    // at some point. For now simply add some space at the lowest element
-    size_t nIndex = maJobPage.getLayout()->countElements();
-    if( nIndex > 0 ) // sanity check
-        maJobPage.getLayout()->setBorders( nIndex-1, 0, 0, 0, -1 );
-#endif
-
-    // create auto mnemomnics now so they can be calculated in layout
-    ImplWindowAutoMnemonic( &maJobPage );
-    ImplWindowAutoMnemonic( &maNUpPage );
-    ImplWindowAutoMnemonic( &maOptionsPage );
-    ImplWindowAutoMnemonic( this );
-
-    // calculate job page
-    Size aMaxSize = maJobPage.getLayout()->getOptimalSize( WINDOWSIZE_PREFERRED );
-    // and layout page
-    updateMaxSize( maNUpPage.getLayout()->getOptimalSize( WINDOWSIZE_PREFERRED ), aMaxSize );
-    // and options page
-    updateMaxSize( maOptionsPage.getLayout()->getOptimalSize( WINDOWSIZE_PREFERRED ), aMaxSize );
-
-    for( std::vector< boost::shared_ptr<vcl::RowOrColumn> >::iterator it = aDynamicColumns.begin();
-         it != aDynamicColumns.end(); ++it )
-    {
-        Size aPageSize( (*it)->getOptimalSize( WINDOWSIZE_PREFERRED ) );
-        updateMaxSize( aPageSize, aMaxSize );
-    }
-
-    // resize dialog if necessary
-    Size aTabSize = maTabCtrl.GetTabPageSizePixel();
-    maTabCtrl.SetMinimumSizePixel( maTabCtrl.GetSizePixel() );
-    if( aMaxSize.Height() > aTabSize.Height() || aMaxSize.Width() > aTabSize.Width() )
-    {
-        Size aCurSize( GetOutputSizePixel() );
-        if( aMaxSize.Height() > aTabSize.Height() )
-        {
-            aCurSize.Height() += aMaxSize.Height() - aTabSize.Height();
-            aTabSize.Height() = aMaxSize.Height();
-        }
-        if( aMaxSize.Width() > aTabSize.Width() )
-        {
-            aCurSize.Width() += aMaxSize.Width() - aTabSize.Width();
-            // and the tab ctrl needs more space, too
-            aTabSize.Width() = aMaxSize.Width();
-        }
-        maTabCtrl.SetTabPageSizePixel( aTabSize );
-        maTabCtrl.SetMinimumSizePixel( maTabCtrl.GetSizePixel() );
-    }
-
-    Size aSz = getLayout()->getOptimalSize( WINDOWSIZE_PREFERRED );
-
-    SetOutputSizePixel( aSz );
+    if (!mpCustomOptionsUIBuilder)
+        mpTabCtrl->RemovePage(mpTabCtrl->GetPageId(1));
 }
 
 void PrintDialog::DataChanged( const DataChangedEvent& i_rDCEvt )
@@ -1650,50 +1169,22 @@ void PrintDialog::DataChanged( const DataChangedEvent& i_rDCEvt )
 
 void PrintDialog::checkControlDependencies()
 {
-    if( maJobPage.maCopyCountField.GetValue() > 1 )
-        maJobPage.maCollateBox.Enable( maJobPage.mnCollateUIMode == 0 );
+    if( maJobPage.mpCopyCountField->GetValue() > 1 )
+        maJobPage.mpCollateBox->Enable( maJobPage.mnCollateUIMode == 0 );
     else
-        maJobPage.maCollateBox.Enable( sal_False );
+        maJobPage.mpCollateBox->Enable( sal_False );
 
-    Image aImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateImg : maJobPage.maNoCollateImg );
+    Image aImg( maJobPage.mpCollateBox->IsChecked() ? maJobPage.maCollateImg : maJobPage.maNoCollateImg );
 
     Size aImgSize( aImg.GetSizePixel() );
 
     // adjust size of image
-    maJobPage.maCollateImage.SetSizePixel( aImgSize );
-    maJobPage.maCollateImage.SetImage( aImg );
-    maJobPage.getLayout()->resize();
+    maJobPage.mpCollateImage->SetSizePixel( aImgSize );
+    maJobPage.mpCollateImage->SetImage( aImg );
 
     // enable setup button only for printers that can be setup
     bool bHaveSetup = maPController->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );
-    maJobPage.maSetupButton.Enable( bHaveSetup );
-    if( bHaveSetup )
-    {
-        if( ! maJobPage.maSetupButton.IsVisible() )
-        {
-            Point aPrinterPos( maJobPage.maPrinters.GetPosPixel() );
-            Point aSetupPos( maJobPage.maSetupButton.GetPosPixel() );
-            Size aPrinterSize( maJobPage.maPrinters.GetSizePixel() );
-            aPrinterSize.Width() = aSetupPos.X() - aPrinterPos.X() - LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ).Width();
-            maJobPage.maPrinters.SetSizePixel( aPrinterSize );
-            maJobPage.maSetupButton.Show();
-            getLayout()->resize();
-        }
-    }
-    else
-    {
-        if( maJobPage.maSetupButton.IsVisible() )
-        {
-            Point aPrinterPos( maJobPage.maPrinters.GetPosPixel() );
-            Point aSetupPos( maJobPage.maSetupButton.GetPosPixel() );
-            Size aPrinterSize( maJobPage.maPrinters.GetSizePixel() );
-            Size aSetupSize( maJobPage.maSetupButton.GetSizePixel() );
-            aPrinterSize.Width() = aSetupPos.X() + aSetupSize.Width() - aPrinterPos.X();
-            maJobPage.maPrinters.SetSizePixel( aPrinterSize );
-            maJobPage.maSetupButton.Hide();
-            getLayout()->resize();
-        }
-    }
+    maJobPage.mpSetupButton->Enable(bHaveSetup);
 }
 
 void PrintDialog::checkOptionalControlDependencies()
@@ -1755,29 +1246,29 @@ static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char*
 void PrintDialog::updatePrinterText()
 {
     const rtl::OUString aDefPrt( Printer::GetDefaultPrinterName() );
-    const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.maPrinters.GetSelectEntry(), true );
+    const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.mpPrinters->GetSelectEntry(), true );
     if( pInfo )
     {
-        maJobPage.maLocationTxt.SetText( pInfo->GetLocation() );
-        maJobPage.maCommentTxt.SetText( pInfo->GetComment() );
+        maJobPage.mpLocationTxt->SetText( pInfo->GetLocation() );
+        maJobPage.mpCommentTxt->SetText( pInfo->GetComment() );
         // FIXME: status text
         rtl::OUString aStatus;
         if( aDefPrt == pInfo->GetPrinterName() )
             aStatus = maDefPrtText;
-        maJobPage.maStatusTxt.SetText( aStatus );
+        maJobPage.mpStatusTxt->SetText( aStatus );
     }
     else
     {
-        maJobPage.maLocationTxt.SetText( String() );
-        maJobPage.maCommentTxt.SetText( String() );
-        maJobPage.maStatusTxt.SetText( String() );
+        maJobPage.mpLocationTxt->SetText( String() );
+        maJobPage.mpCommentTxt->SetText( String() );
+        maJobPage.mpStatusTxt->SetText( String() );
     }
 }
 
 void PrintDialog::setPreviewText( sal_Int32 )
 {
     rtl::OUString aNewText( searchAndReplace( maPageStr, "%n", 2, rtl::OUString::valueOf( mnCachedPages )  ) );
-    maNumPagesText.SetText( aNewText );
+    mpNumPagesText->SetText( aNewText );
 
     // if layout is already established the refresh layout of
     // preview controls since text length may have changes
@@ -1798,8 +1289,8 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 
     setPreviewText( mnCurPage );
 
-    maPageEdit.SetMin( 1 );
-    maPageEdit.SetMax( nPages );
+    mpPageEdit->SetMin( 1 );
+    mpPageEdit->SetMax( nPages );
 
     if( i_bNewPage )
     {
@@ -1818,16 +1309,16 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
         }
 
         Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
-        maPreviewWindow.setPreview( aMtf, aCurPageSize,
+        mpPreviewWindow->setPreview( aMtf, aCurPageSize,
                                     aPrt->GetPaperName( false ),
                                     nPages > 0 ? rtl::OUString() : maNoPageStr,
                                     aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY(),
                                     aPrt->GetPrinterOptions().IsConvertToGreyscales()
                                    );
 
-        maForwardBtn.Enable( mnCurPage < nPages-1 );
-        maBackwardBtn.Enable( mnCurPage != 0 );
-        maPageEdit.Enable( nPages > 1 );
+        mpForwardBtn->Enable( mnCurPage < nPages-1 );
+        mpBackwardBtn->Enable( mnCurPage != 0 );
+        mpPageEdit->Enable( nPages > 1 );
     }
 }
 
@@ -1848,11 +1339,11 @@ Size PrintDialog::getJobPageSize()
 
 void PrintDialog::updateNupFromPages()
 {
-    long nPages = long(maNUpPage.maNupPagesBox.GetEntryData(maNUpPage.maNupPagesBox.GetSelectEntryPos()));
-    int nRows   = int(maNUpPage.maNupRowsEdt.GetValue());
-    int nCols   = int(maNUpPage.maNupColEdt.GetValue());
-    long nPageMargin  = long(maNUpPage.maPageMarginEdt.Denormalize(maNUpPage.maPageMarginEdt.GetValue( FUNIT_100TH_MM )));
-    long nSheetMargin = long(maNUpPage.maSheetMarginEdt.Denormalize(maNUpPage.maSheetMarginEdt.GetValue( FUNIT_100TH_MM )));
+    long nPages = long(maNUpPage.mpNupPagesBox->GetEntryData(maNUpPage.mpNupPagesBox->GetSelectEntryPos()));
+    int nRows   = int(maNUpPage.mpNupRowsEdt->GetValue());
+    int nCols   = int(maNUpPage.mpNupColEdt->GetValue());
+    long nPageMargin  = long(maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM )));
+    long nSheetMargin = long(maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM )));
     bool bCustom = false;
 
     if( nPages == 1 )
@@ -1904,8 +1395,8 @@ void PrintDialog::updateNupFromPages()
         if( nSheetMargin > nVertMax )
             nSheetMargin = nVertMax;
 
-        maNUpPage.maSheetMarginEdt.SetMax(
-                  maNUpPage.maSheetMarginEdt.Normalize(
+        maNUpPage.mpSheetMarginEdt->SetMax(
+                  maNUpPage.mpSheetMarginEdt->Normalize(
                            nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
 
         // maximum page distance
@@ -1921,39 +1412,27 @@ void PrintDialog::updateNupFromPages()
         if( nPageMargin > nVertMax )
             nPageMargin = nVertMax;
 
-        maNUpPage.maPageMarginEdt.SetMax(
-                 maNUpPage.maSheetMarginEdt.Normalize(
+        maNUpPage.mpPageMarginEdt->SetMax(
+                 maNUpPage.mpSheetMarginEdt->Normalize(
                            nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
     }
 
-    maNUpPage.maNupRowsEdt.SetValue( nRows );
-    maNUpPage.maNupColEdt.SetValue( nCols );
-    maNUpPage.maPageMarginEdt.SetValue( maNUpPage.maPageMarginEdt.Normalize( nPageMargin ), FUNIT_100TH_MM );
-    maNUpPage.maSheetMarginEdt.SetValue( maNUpPage.maSheetMarginEdt.Normalize( nSheetMargin ), FUNIT_100TH_MM );
+    maNUpPage.mpNupRowsEdt->SetValue( nRows );
+    maNUpPage.mpNupColEdt->SetValue( nCols );
+    maNUpPage.mpPageMarginEdt->SetValue( maNUpPage.mpPageMarginEdt->Normalize( nPageMargin ), FUNIT_100TH_MM );
+    maNUpPage.mpSheetMarginEdt->SetValue( maNUpPage.mpSheetMarginEdt->Normalize( nSheetMargin ), FUNIT_100TH_MM );
 
     maNUpPage.showAdvancedControls( bCustom );
-    if( bCustom )
-    {
-        // see if we have to enlarge the dialog to make the tab page fit
-        Size aCurSize( maNUpPage.getLayout()->getOptimalSize( WINDOWSIZE_PREFERRED ) );
-        Size aTabSize( maTabCtrl.GetTabPageSizePixel() );
-        if( aTabSize.Height() < aCurSize.Height() )
-        {
-            Size aDlgSize( GetSizePixel() );
-            aDlgSize.Height() += aCurSize.Height() - aTabSize.Height();
-            SetSizePixel( aDlgSize );
-        }
-    }
 
     updateNup();
 }
 
 void PrintDialog::updateNup()
 {
-    int nRows         = int(maNUpPage.maNupRowsEdt.GetValue());
-    int nCols         = int(maNUpPage.maNupColEdt.GetValue());
-    long nPageMargin  = long(maNUpPage.maPageMarginEdt.Denormalize(maNUpPage.maPageMarginEdt.GetValue( FUNIT_100TH_MM )));
-    long nSheetMargin = long(maNUpPage.maSheetMarginEdt.Denormalize(maNUpPage.maSheetMarginEdt.GetValue( FUNIT_100TH_MM )));
+    int nRows         = int(maNUpPage.mpNupRowsEdt->GetValue());
+    int nCols         = int(maNUpPage.mpNupColEdt->GetValue());
+    long nPageMargin  = long(maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM )));
+    long nSheetMargin = long(maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM )));
 
     PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;
@@ -1967,10 +1446,10 @@ void PrintDialog::updateNup()
     aMPS.nHorizontalSpacing =
     aMPS.nVerticalSpacing   = nPageMargin;
 
-    aMPS.bDrawBorder        = maNUpPage.maBorderCB.IsChecked();
+    aMPS.bDrawBorder        = maNUpPage.mpBorderCB->IsChecked();
 
-    int nOrderMode = int(sal_IntPtr(maNUpPage.maNupOrderBox.GetEntryData(
-                           maNUpPage.maNupOrderBox.GetSelectEntryPos() )));
+    int nOrderMode = int(sal_IntPtr(maNUpPage.mpNupOrderBox->GetEntryData(
+                           maNUpPage.mpNupOrderBox->GetSelectEntryPos() )));
     if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTB )
         aMPS.nOrder = PrinterController::LRTB;
     else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBLR )
@@ -1980,8 +1459,8 @@ void PrintDialog::updateNup()
     else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBRL )
         aMPS.nOrder = PrinterController::TBRL;
 
-    int nOrientationMode = int(sal_IntPtr(maNUpPage.maNupOrientationBox.GetEntryData(
-                                 maNUpPage.maNupOrientationBox.GetSelectEntryPos() )));
+    int nOrientationMode = int(sal_IntPtr(maNUpPage.mpNupOrientationBox->GetEntryData(
+                                 maNUpPage.mpNupOrientationBox->GetSelectEntryPos() )));
     if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE )
         aMPS.aPaperSize = maNupLandscapeSize;
     else if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT )
@@ -2001,31 +1480,31 @@ void PrintDialog::updateNup()
 
     maPController->setMultipage( aMPS );
 
-    maNUpPage.maNupOrderWin.setValues( nOrderMode, nCols, nRows );
+    maNUpPage.mpNupOrderWin->setValues( nOrderMode, nCols, nRows );
 
     preparePreview( true, true );
 }
 
 IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
 {
-    if(  pBox == &maJobPage.maPrinters )
+    if(  pBox == maJobPage.mpPrinters )
     {
         String aNewPrinter( pBox->GetSelectEntry() );
         // set new printer
         maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
-        maPController->resetPrinterOptions( maOptionsPage.maToFileBox.IsChecked() );
+        maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
         // update text fields
         updatePrinterText();
         preparePreview( true, false );
     }
-    else if( pBox == &maNUpPage.maNupOrientationBox || pBox == &maNUpPage.maNupOrderBox )
+    else if( pBox == maNUpPage.mpNupOrientationBox || pBox == maNUpPage.mpNupOrderBox )
     {
         updateNup();
     }
-    else if( pBox == &maNUpPage.maNupPagesBox )
+    else if( pBox == maNUpPage.mpNupPagesBox )
     {
-        if( !maNUpPage.maPagesBtn.IsChecked() )
-            maNUpPage.maPagesBtn.Check();
+        if( !maNUpPage.mpPagesBtn->IsChecked() )
+            maNUpPage.mpPagesBtn->Check();
         updateNupFromPages();
     }
 
@@ -2034,41 +1513,40 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
 
 IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 {
-    if( pButton == &maOKButton || pButton == &maCancelButton )
+    if( pButton == mpOKButton || pButton == mpCancelButton )
     {
         storeToSettings();
-        EndDialog( pButton == &maOKButton );
+        EndDialog( pButton == mpOKButton );
     }
-    else if( pButton == &maHelpButton )
+    else if( pButton == mpHelpButton )
     {
         // start help system
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            pHelp->Start( rtl::OUString( ".HelpID:vcl:PrintDialog:OK"  ), &maOKButton );
+            pHelp->Start( rtl::OUString("vcl/ui/printdialog"), mpOKButton );
         }
     }
-    else if( pButton == &maForwardBtn )
+    else if( pButton == mpForwardBtn )
     {
         previewForward();
     }
-    else if( pButton == &maBackwardBtn )
+    else if( pButton == mpBackwardBtn )
     {
         previewBackward();
     }
-    else if( pButton == &maOptionsPage.maToFileBox )
+    else if( pButton == maOptionsPage.mpToFileBox )
     {
-        maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
-        maPController->resetPrinterOptions( maOptionsPage.maToFileBox.IsChecked() );
-        getLayout()->resize();
+        mpOKButton->SetText( maOptionsPage.mpToFileBox->IsChecked() ? maPrintToFileText : maPrintText );
+        maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
         preparePreview( true, true );
     }
-    else if( pButton == &maNUpPage.maBrochureBtn )
+    else if( pButton == maNUpPage.mpBrochureBtn )
     {
         PropertyValue* pVal = getValueForWindow( pButton );
         if( pVal )
         {
-            sal_Bool bVal = maNUpPage.maBrochureBtn.IsChecked();
+            sal_Bool bVal = maNUpPage.mpBrochureBtn->IsChecked();
             pVal->Value <<= bVal;
 
             checkOptionalControlDependencies();
@@ -2076,71 +1554,40 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
             // update preview and page settings
             preparePreview();
         }
-        if( maNUpPage.maBrochureBtn.IsChecked() )
+        if( maNUpPage.mpBrochureBtn->IsChecked() )
         {
-            maNUpPage.maNupPagesBox.SelectEntryPos( 0 );
+            maNUpPage.mpNupPagesBox->SelectEntryPos( 0 );
             updateNupFromPages();
             maNUpPage.showAdvancedControls( false );
             maNUpPage.enableNupControls( false );
         }
     }
-    else if( pButton == &maNUpPage.maPagesBtn )
+    else if( pButton == maNUpPage.mpPagesBtn )
     {
         maNUpPage.enableNupControls( true );
         updateNupFromPages();
     }
-    else if( pButton == &maJobPage.maDetailsBtn )
-    {
-        bool bShow = maJobPage.maDetailsBtn.IsChecked();
-        maJobPage.mxDetails->show( bShow );
-        if( bShow )
-        {
-            maDetailsCollapsedSize = GetOutputSizePixel();
-            // enlarge dialog if necessary
-            Size aMinSize( maJobPage.getLayout()->getOptimalSize( WINDOWSIZE_MINIMUM ) );
-            Size aCurSize( maJobPage.GetSizePixel() );
-            if( aCurSize.Height() < aMinSize.Height() )
-            {
-                Size aDlgSize( GetOutputSizePixel() );
-                aDlgSize.Height() += aMinSize.Height() - aCurSize.Height();
-                SetOutputSizePixel( aDlgSize );
-            }
-            maDetailsExpandedSize = GetOutputSizePixel();
-        }
-        else if( maDetailsCollapsedSize.Width() > 0   &&
-                 maDetailsCollapsedSize.Height() > 0 )
-        {
-            // if the user did not resize the dialog
-            // make it smaller again on collapsing the details
-            Size aDlgSize( GetOutputSizePixel() );
-            if( aDlgSize == maDetailsExpandedSize &&
-                aDlgSize.Height() > maDetailsCollapsedSize.Height() )
-            {
-                SetOutputSizePixel( maDetailsCollapsedSize );
-            }
-        }
-    }
-    else if( pButton == &maJobPage.maCollateBox )
+    else if( pButton == maJobPage.mpCollateBox )
     {
         maPController->setValue( rtl::OUString( "Collate"  ),
                                  makeAny( sal_Bool(isCollate()) ) );
         checkControlDependencies();
     }
-    else if( pButton == &maJobPage.maReverseOrderBox )
+    else if( pButton == maJobPage.mpReverseOrderBox )
     {
-        sal_Bool bChecked = maJobPage.maReverseOrderBox.IsChecked();
+        sal_Bool bChecked = maJobPage.mpReverseOrderBox->IsChecked();
         maPController->setReversePrint( bChecked );
         maPController->setValue( rtl::OUString( "PrintReverse"  ),
                                  makeAny( bChecked ) );
         preparePreview( true, true );
     }
-    else if( pButton == &maNUpPage.maBorderCB )
+    else if( pButton == maNUpPage.mpBorderCB )
     {
         updateNup();
     }
     else
     {
-        if( pButton == &maJobPage.maSetupButton )
+        if( pButton == maJobPage.mpSetupButton )
         {
             maPController->setupPrinter( this );
             preparePreview( true, true );
@@ -2153,21 +1600,21 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
 {
     checkControlDependencies();
-    if( pEdit == &maNUpPage.maNupRowsEdt || pEdit == &maNUpPage.maNupColEdt ||
-        pEdit == &maNUpPage.maSheetMarginEdt || pEdit == &maNUpPage.maPageMarginEdt
+    if( pEdit == maNUpPage.mpNupRowsEdt || pEdit == maNUpPage.mpNupColEdt ||
+        pEdit == maNUpPage.mpSheetMarginEdt || pEdit == maNUpPage.mpPageMarginEdt
        )
     {
         updateNupFromPages();
     }
-    else if( pEdit == &maPageEdit )
+    else if( pEdit == mpPageEdit )
     {
-        mnCurPage = sal_Int32( maPageEdit.GetValue() - 1 );
+        mnCurPage = sal_Int32( mpPageEdit->GetValue() - 1 );
         preparePreview( true, true );
     }
-    else if( pEdit == &maJobPage.maCopyCountField )
+    else if( pEdit == maJobPage.mpCopyCountField )
     {
         maPController->setValue( rtl::OUString( "CopyCount"  ),
-                               makeAny( sal_Int32(maJobPage.maCopyCountField.GetValue()) ) );
+                               makeAny( sal_Int32(maJobPage.mpCopyCountField->GetValue()) ) );
         maPController->setValue( rtl::OUString( "Collate"  ),
                                makeAny( sal_Bool(isCollate()) ) );
     }
@@ -2219,9 +1666,9 @@ void PrintDialog::updateWindowFromProperty( const rtl::OUString& i_rProperty )
                 {
                     // EVIL special case
                     if( bVal )
-                        maNUpPage.maBrochureBtn.Check();
+                        maNUpPage.mpBrochureBtn->Check();
                     else
-                        maNUpPage.maPagesBtn.Check();
+                        maNUpPage.mpPagesBtn->Check();
                 }
                 else
                 {
@@ -2362,10 +1809,6 @@ void PrintDialog::Command( const CommandEvent& rEvt )
             previewForward();
         else if( pWheelData->GetDelta() < 0 )
             previewBackward();
-        /*
-        else
-            huh ?
-        */
     }
 }
 
@@ -2375,18 +1818,17 @@ void PrintDialog::Resize()
     // and do the preview; however the metafile does not need to be gotten anew
     preparePreview( false );
 
-    // do an invalidate for the benefit of the grouping elements
-    Invalidate();
+    Dialog::Resize();
 }
 
 void PrintDialog::previewForward()
 {
-    maPageEdit.Up();
+    mpPageEdit->Up();
 }
 
 void PrintDialog::previewBackward()
 {
-    maPageEdit.Down();
+    mpPageEdit->Down();
 }
 
 // -----------------------------------------------------------------------------

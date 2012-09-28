@@ -132,8 +132,6 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
 void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
     const Reference < XPropertySet >& xPropSet, TextListStylePtr pMasterTextListStyle )
 {
-    TableStyleListPtr( const_cast< ::oox::core::XmlFilterBase& >( rFilterBase ).getTableStyles() );
-
     uno::Reference< XColumnRowRange > xColumnRowRange(
          xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ), uno::UNO_QUERY_THROW );
 

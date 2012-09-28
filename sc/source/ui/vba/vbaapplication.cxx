@@ -28,14 +28,11 @@
 
 #include <stdio.h>
 
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <ooo/vba/excel/XlCalculation.hpp>
-#include <ooo/vba/excel/XlCutCopyMode.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -44,17 +41,10 @@
 #include <ooo/vba/excel/XlMousePointer.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
+#include <ooo/vba/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include<ooo/vba/XCommandBars.hpp>
-#include <ooo/vba/excel/XlEnableCancelKey.hpp>
-#include <ooo/vba/excel/XlApplicationInternational.hpp>
-#include <unotools/localedatawrapper.hxx>
 
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
@@ -73,18 +63,12 @@
 #include <vbahelper/vbashape.hxx>
 #include "vbatextboxshape.hxx"
 #include "vbaassistant.hxx"
-#include "vbafilesearch.hxx" // add the support of VBA Application.FileSearch
 #include "sc.hrc"
 #include "macromgr.hxx"
-#include "global.hxx"
-#include "scmod.hxx"
-#include "docoptio.hxx"
 #include "defaultsoptions.hxx"
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
-
-#include <map>
 
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
@@ -106,7 +90,6 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
 
-#include "transobj.hxx"
 #include "convuno.hxx"
 #include "cellsuno.hxx"
 #include "miscuno.hxx"
@@ -118,7 +101,6 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbxobj.hxx>
 
-#include "vbafiledialog.hxx"
 #include "viewutil.hxx"
 
 using namespace ::ooo::vba;
@@ -306,18 +288,6 @@ ScVbaApplication::getAssistant() throw (uno::RuntimeException)
     return uno::Reference< XAssistant >( new ScVbaAssistant( this, mxContext ) );
 }
 
-// add support of VBA Application.FileSearch
-uno::Reference< XFileSearch > SAL_CALL
-ScVbaApplication::getFileSearch() throw (uno::RuntimeException)
-{
-    if (! m_xFileSearch.get() )
-    {
-        m_xFileSearch = uno::Reference< XFileSearch >( new ScVbaFileSearch( this, uno::Reference< XHelperInterface >( this ), mxContext ) );
-    }
-
-    return m_xFileSearch;
-}
-
 uno::Any SAL_CALL
 ScVbaApplication::getSelection() throw (uno::RuntimeException)
 {
@@ -469,67 +439,16 @@ ScVbaApplication::getActiveWindow() throw (uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaApplication::getCutCopyMode() throw (uno::RuntimeException)
 {
+    //# FIXME TODO, implementation
     uno::Any result;
-    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( NULL );
-    ScDocument* pDoc = pOwnClip ? pOwnClip->GetDocument() : NULL;
-    if ( pDoc )
-    {
-        if ( pDoc->IsCutMode() )
-        {
-            result <<= excel::XlCutCopyMode::xlCut;
-        }
-        else
-        {
-            result <<= excel::XlCutCopyMode::xlCopy;
-        }
-    }
-    else
-    {
-        result <<= false;
-    }
+    result <<= sal_False;
     return result;
 }
 
 void SAL_CALL
-ScVbaApplication::setCutCopyMode( const uno::Any& _cutcopymode ) throw (uno::RuntimeException)
+ScVbaApplication::setCutCopyMode( const uno::Any& /* _cutcopymode */ ) throw (uno::RuntimeException)
 {
-    // According to Excel's behavior, no matter what is the value of _cutcopymode, always releases the clip object.
-    sal_Bool bCutCopyMode = false;
-    if ( ( _cutcopymode >>= bCutCopyMode ) )
-    {
-        ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( NULL );
-        if ( pOwnClip )
-        {
-            pOwnClip->ObjectReleased();
-            ScTabViewShell* pTabViewShell = excel::getBestViewShell( getCurrentDocument() );
-            if ( pTabViewShell )
-            {
-                ScViewData* pView = pTabViewShell->GetViewData();
-                Window* pWindow = pView ? pView->GetActiveWin() : NULL;
-                if ( pWindow )
-                {
-                    Reference< datatransfer::clipboard::XClipboard > xClipboard = pWindow->GetClipboard();
-                    Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
-                    if ( xClipboard.is() )
-                    {
-                        xClipboard->setContents( NULL, NULL );
-                        if ( xFlushableClipboard.is() )
-                        {
-                            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-                            try
-                            {
-                                xFlushableClipboard->flushClipboard();
-                            }
-                            catch (const uno::Exception&)
-                            {
-                            }
-                            Application::AcquireSolarMutex( nRef );
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //# FIXME TODO, implementation
 }
 
 uno::Any SAL_CALL
@@ -954,90 +873,6 @@ void SAL_CALL
 ScVbaApplication::setShowWindowsInTaskbar( sal_Bool bSet ) throw (css::uno::RuntimeException)
 {
     mrAppSettings.mbShowWindowsInTaskbar = bSet;
-}
-
-sal_Bool SAL_CALL
-ScVbaApplication::getVisible() throw (uno::RuntimeException)
-{
-    sal_Bool bVisible = sal_True;
-    return bVisible;
-}
-
-void SAL_CALL
-ScVbaApplication::setVisible(sal_Bool /*bVisible*/) throw (uno::RuntimeException)
-{
-}
-
-//add the support of Excel VBA Application.Iteration
-//The Excel Iteration option is global and unique, but in Symphony there is an Iteration property in ScModule and one in every ScDocument,
-//so the set method will set all the Iteration properties
-sal_Bool SAL_CALL
-ScVbaApplication::getIteration() throw (uno::RuntimeException)
-{
-    ScModule* pScMod = SC_MOD();
-    ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
-
-    return aDocOpt.IsIter();
-}
-
-void SAL_CALL
-ScVbaApplication::setIteration(sal_Bool bIteration) throw (uno::RuntimeException)
-{
-    ScModule* pScMod = SC_MOD();
-    ScDocOptions& aDocOpt = const_cast< ScDocOptions& > (pScMod->GetDocOptions());
-    aDocOpt.SetIter( bIteration );
-
-    uno::Any aIteration;
-    aIteration <<= bIteration;
-
-    OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "IsIterationEnabled" ));
-
-    uno::Reference< XCollection > xWorkbooks( new ScVbaWorkbooks( this, mxContext ) );
-    sal_Int32 nCount = xWorkbooks->getCount();
-
-    for (sal_Int32 i = 1; i <= nCount; i++)
-    {
-        uno::Reference< ooo::vba::excel::XWorkbook > xWorkbook;
-        uno::Any aWorkbook = xWorkbooks->Item(uno::makeAny(i), uno::Any());
-        aWorkbook >>= xWorkbook;
-        ScVbaWorkbook* pWorkbook = excel::getImplFromDocModuleWrapper<ScVbaWorkbook>( xWorkbook );
-        uno::Reference< frame::XModel > xModel( pWorkbook->getDocModel(), uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xPropertySet( xModel, uno::UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( aPropName, aIteration );
-    }
-}
-
-//add the support of Excel VBA Application.EnableCancelKey
-sal_Int32 SAL_CALL
-ScVbaApplication::getEnableCancelKey() throw (uno::RuntimeException)
-{
-    return ooo::vba::excel::XlEnableCancelKey::xlDisabled;
-}
-
-void SAL_CALL
-ScVbaApplication::setEnableCancelKey(sal_Int32 /*lEnableCancelKey*/) throw (uno::RuntimeException)
-{
-}
-
-sal_Int32 SAL_CALL ScVbaApplication::getSheetsInNewWorkbook() throw (uno::RuntimeException)
-{
-    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-    return rOpt.GetInitTabCount();
-}
-
-void SAL_CALL ScVbaApplication::setSheetsInNewWorkbook( sal_Int32 SheetsInNewWorkbook ) throw (script::BasicErrorException, uno::RuntimeException)
-{
-    if ( SheetsInNewWorkbook < MININITTAB
-      || SheetsInNewWorkbook > MAXINITTAB )
-    {
-        DebugHelper::exception( OUString(RTL_CONSTASCII_USTRINGPARAM("The number must be between 1 and 1024")),
-            uno::Exception(), SbERR_METHOD_FAILED, OUString() );
-    }
-    else
-    {
-        ScDefaultsOptions& rOpt = const_cast< ScDefaultsOptions& >(SC_MOD()->GetDefaultsOptions());
-        rOpt.SetInitTabCount( SheetsInNewWorkbook );
-    }
 }
 
 void SAL_CALL
@@ -1467,310 +1302,6 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
     return aRet;
 }
 
-uno::Any SAL_CALL
-ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& FilterIndex, const uno::Any& Title, const uno::Any& ButtonText, const uno::Any& MultiSelect)  throw (uno::RuntimeException)
-{
-    uno::Any aRet = uno::makeAny( false );
-    try
-    {
-        const rtl::OUString sServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
-        uno::Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-        // Set the type of File Picker Dialog: TemplateDescription::FILEOPEN_SIMPLE.
-        uno::Sequence< uno::Any > aDialogType( 1 );
-        aDialogType[0] <<= ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-        uno::Reference< ui::dialogs::XFilePicker > xFilePicker( xMSF->createInstanceWithArguments( sServiceName, aDialogType ), UNO_QUERY );
-        uno::Reference< ui::dialogs::XFilePicker2 > xFilePicker2( xFilePicker, UNO_QUERY );
-        uno::Reference< ui::dialogs::XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
-        uno::Reference< ui::dialogs::XExecutableDialog > xExecutableDialog( xFilePicker, UNO_QUERY );
-        uno::Reference< ui::dialogs::XFilePickerControlAccess > xPickerControlAccess( xFilePicker, UNO_QUERY );
-
-        if ( xFilterManager.is() && FileFilter.hasValue() )
-        {
-            sal_Int32 nFilterIndex = 1;
-            if ( FilterIndex.hasValue() )
-            {
-                FilterIndex >>= nFilterIndex;
-            }
-            ::rtl::OUString strFilter;
-            FileFilter >>= strFilter;
-            sal_Int32 nCommaID = 0;
-            sal_Int32 nIndex = 1;
-            do
-            {
-                ::rtl::OUString aFilterTitleToken = strFilter.getToken( 0, ',' , nCommaID );
-                ::rtl::OUString aFilterToken;
-                if ( nCommaID >= 0 )
-                {
-                    aFilterToken = strFilter.getToken( 0, ',' , nCommaID );
-                }
-                else if ( nCommaID < 0 && nIndex == 1 )
-                {
-                    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid FileFilter format!" )),
-                        uno::Reference< uno::XInterface >() );
-                }
-                xFilterManager->appendFilter( aFilterTitleToken, aFilterToken );
-                if ( nFilterIndex == nIndex )
-                {
-                    xFilterManager->setCurrentFilter( aFilterTitleToken );
-                }
-                nIndex++;
-            } while ( nCommaID >= 0 );
-        }
-        if ( xExecutableDialog.is() && Title.hasValue() )
-        {
-            ::rtl::OUString sTitle;
-            Title >>= sTitle;
-            xExecutableDialog->setTitle( sTitle );
-        }
-        if ( xPickerControlAccess.is() && ButtonText.hasValue() )
-        {
-            ::rtl::OUString sButtonText;
-            ButtonText >>= sButtonText;
-            xPickerControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, sButtonText );
-        }
-        sal_Bool bMultiSelect = false;
-        if ( xFilePicker.is() && MultiSelect.hasValue() )
-        {
-            MultiSelect >>= bMultiSelect;
-            xFilePicker->setMultiSelectionMode( bMultiSelect );
-        }
-
-        if ( xFilePicker.is() && xFilePicker->execute() )
-        {
-            uno::Sequence< rtl::OUString > aSelectedFiles;
-            if ( xFilePicker2.is() )
-            {
-                // On Linux, XFilePicker->getFiles() always return one selected file although we select more than one file, also on Vista
-                // XFilePicker->getFiles() does not work well too, so we call XFilePicker2->getSelectedFiles() to get selected files.
-                aSelectedFiles = xFilePicker2->getSelectedFiles();
-            }
-            else
-            {
-                // If only one file is selected, the first entry of the sequence contains the complete path/filename in URL format. If multiple files are selected,
-                // the first entry of the sequence contains the path in URL format, and the other entries contains the names of the selected files without path information.
-                uno::Sequence< rtl::OUString > aTmpFiles = xFilePicker->getFiles();
-                aSelectedFiles = aTmpFiles;
-                sal_Int32 iFileCount = aTmpFiles.getLength();
-                if ( iFileCount > 1 )
-                {
-                    aSelectedFiles.realloc( iFileCount - 1 );
-                    INetURLObject aPath( aTmpFiles[0] );
-                    aPath.setFinalSlash();
-                    for ( sal_Int32 i = 1; i < iFileCount; i++ )
-                    {
-                        if ( aTmpFiles[i].indexOf ('/') > 0 || aTmpFiles[i].indexOf ('\\') > 0 )
-                        {
-                            aSelectedFiles[i - 1] = aTmpFiles[i];
-                        }
-                        else
-                        {
-                            if ( i == 1 )
-                                aPath.Append( aTmpFiles[i] );
-                            else
-                                aPath.setName( aTmpFiles[i] );
-                            aSelectedFiles[i - 1] = aPath.GetMainURL( INetURLObject::NO_DECODE );
-                        }
-                    }
-                }
-            }
-
-            sal_Int32 iFileCount = aSelectedFiles.getLength();
-            for ( sal_Int32 i = 0; i < iFileCount; i++ )
-            {
-                INetURLObject aObj( aSelectedFiles[i] );
-                if ( aObj.GetProtocol() == INET_PROT_FILE )
-                {
-                    rtl::OUString aTemp = aObj.PathToFileName();
-                    aSelectedFiles[i] = aTemp.isEmpty() ? aSelectedFiles[i] : aTemp ;
-                }
-            }
-            if ( bMultiSelect )
-            {
-                aRet = uno::makeAny( aSelectedFiles );
-            }
-            else if ( aSelectedFiles.getLength() > 0 && !bMultiSelect )
-            {
-                aRet = uno::makeAny( aSelectedFiles[0] );
-            }
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
-    }
-
-    return aRet;
-}
-
-::com::sun::star::uno::Reference< ::ooo::vba::XFileDialog > SAL_CALL
-ScVbaApplication::getFileDialog() throw (::com::sun::star::uno::RuntimeException)
-{
-    uno::Reference< XFileDialog > xFileDialogs( new ScVbaFileDialog( uno::Reference< XHelperInterface >( this ), mxContext, getCurrentDocument() ) );
-    return  xFileDialogs;
-}
-
-typedef std::map< ::rtl::OUString, ::rtl::OUString > FileFilterMap;
-
-uno::Any SAL_CALL
-ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFilename, const ::com::sun::star::uno::Any& FileFilter, const ::com::sun::star::uno::Any& FilterIndex, const ::com::sun::star::uno::Any& Title, const ::com::sun::star::uno::Any& ButtonText ) throw (::com::sun::star::uno::RuntimeException)
-{
-    uno::Any strRet;
-    try
-    {
-        const rtl::OUString sServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
-        uno::Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-
-        uno::Sequence< uno::Any > aDialogType( 1 );
-        aDialogType[0] <<= ui::dialogs::TemplateDescription::FILESAVE_SIMPLE;
-        uno::Reference< ui::dialogs::XFilePicker > xFilePicker( xMSF->createInstanceWithArguments( sServiceName, aDialogType ), UNO_QUERY );
-
-        if (InitialFilename.hasValue())
-        {
-            ::rtl::OUString strInitFileName;
-            InitialFilename >>= strInitFileName;
-            xFilePicker->setDefaultName(strInitFileName);
-        }
-
-        // Begin from 1.
-        sal_Int32 nFilterIndex = 1;
-        if (FilterIndex.hasValue())
-        {
-            FilterIndex >>= nFilterIndex;
-        }
-
-        uno::Reference< ui::dialogs::XFilterManager > xFilter( xFilePicker, UNO_QUERY );
-        FileFilterMap mFilterNameMap;
-        if (FileFilter.hasValue())
-        {
-            ::rtl::OUString strFilter;
-            sal_Int32       nCommaID = 0;
-            FileFilter >>= strFilter;
-
-            sal_Int32 nIndex = 1;
-            do
-            {
-                ::rtl::OUString aFilterTitleToken = strFilter.getToken( 0, ',' , nCommaID );
-                ::rtl::OUString aFilterToken;
-                if ( nCommaID >= 0 )
-                {
-                    aFilterToken = strFilter.getToken( 0, ',' , nCommaID );
-                }
-                else if ( nCommaID < 0 && nIndex == 1 )
-                {
-                    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid FileFilter format!" )),
-                        uno::Reference< uno::XInterface >() );
-                }
-
-                FileFilterMap::const_iterator aIt = mFilterNameMap.find( aFilterTitleToken );
-                if ( aIt == mFilterNameMap.end() )
-                {
-                    xFilter->appendFilter( aFilterTitleToken, aFilterToken );
-                    if ( nFilterIndex == nIndex )
-                    {
-                        xFilter->setCurrentFilter( aFilterTitleToken );
-                    }
-                    nIndex++;
-                    mFilterNameMap[aFilterTitleToken] = aFilterToken;
-                }
-            } while ( nCommaID >= 0 );
-        }
-
-        if (Title.hasValue())
-        {
-            ::rtl::OUString strTitle;
-            Title >>= strTitle;
-            uno::Reference< ::com::sun::star::ui::dialogs::XExecutableDialog> xExcTblDlg(xFilePicker, UNO_QUERY );
-            xExcTblDlg->setTitle(strTitle);
-        }
-
-        if (ButtonText.hasValue())
-        {
-            ::rtl::OUString strBttTxt;
-            ButtonText >>= strBttTxt;
-        }
-
-
-        if ( xFilePicker.is() )
-        {
-            sal_Int16 nRet = xFilePicker->execute();
-            if (nRet == 0)
-            {
-                strRet <<= false;
-            }
-            else
-            {
-                uno::Sequence < rtl::OUString > aPathSeq = xFilePicker->getFiles();
-
-                if ( aPathSeq.getLength() )
-                {
-                    ::rtl::OUString sSelectedFilters;
-                    if ( xFilter.is() )
-                    {
-                        ::rtl::OUString sSelectedFilterName = xFilter->getCurrentFilter();
-                        FileFilterMap::const_iterator aIt = mFilterNameMap.find( sSelectedFilterName );
-                        if ( aIt != mFilterNameMap.end() )
-                        {
-                            sSelectedFilters = aIt->second;
-                        }
-                    }
-                    INetURLObject aURLObj( aPathSeq[0] );
-                    ::rtl::OUString aPathStr = aURLObj.PathToFileName();
-                    if ( aURLObj.GetProtocol() == INET_PROT_FILE )
-                    {
-                        sal_Int32 nSemicolonID = 0;
-                        ::rtl::OUString sFirstFilter = sSelectedFilters.getToken( 0, ';' , nSemicolonID );
-                        ::rtl::OUString sFileExtension = aURLObj.GetExtension();
-                        if ( sFileExtension.isEmpty() )
-                        {
-                            sFileExtension = sFirstFilter == "*.*" ? sFileExtension : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
-                            aPathStr = sFileExtension.isEmpty() ? aPathStr : aPathStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
-                        }
-                        else
-                        {
-                            sal_Bool bValidFilter = false;
-                            FileFilterMap::const_iterator aIt = mFilterNameMap.begin();
-                            while ( aIt != mFilterNameMap.end() )
-                            {
-                                sSelectedFilters = aIt->second;
-                                nSemicolonID = 0;
-                                do
-                                {
-                                    ::rtl::OUString aFilterToken = sSelectedFilters.getToken( 0, ';' , nSemicolonID );
-                                    if ( aFilterToken.trim().equalsIgnoreAsciiCase( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*.")) + sFileExtension) )
-                                    {
-                                        bValidFilter = sal_True;
-                                        break;
-                                    }
-                                } while ( nSemicolonID >= 0 );
-                                if ( bValidFilter )
-                                {
-                                    break;
-                                }
-                                ++aIt;
-                            }
-                            if ( !bValidFilter )
-                            {
-                                sFileExtension = sFirstFilter == "*.*" ? rtl::OUString()
-                                                                                 : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
-                                aPathStr = sFileExtension.isEmpty() ? aPathStr
-                                                                    : aPathStr + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
-                            }
-                        }
-                    }
-                    strRet <<= aPathStr;
-                }
-            }
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
-    }
-    return strRet;
-}
-
-//end add
-
 uno::Reference< frame::XModel >
 ScVbaApplication::getCurrentDocument() throw (css::uno::RuntimeException)
 {
@@ -1788,86 +1319,6 @@ ScVbaApplication::MenuBars( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
     }
 
     return uno::Any( xMenuBars );
-}
-
-//add the support of Application.International
-sal_Int32 SAL_CALL
-ConvertCountryCode(const OUString& language)
-{
-    sal_Int32 nCode = 0;
-
-    if( language == "ar" ) nCode = 966; // Arabic
-    else if ( language == "cs" ) nCode = 42; // Czech
-    else if ( language == "da" ) nCode = 45;  // Danish
-    else if ( language == "de" ) nCode = 49;  // German
-    else if ( language == "en" ) nCode = 1;   // English
-    else if ( language == "es" ) nCode = 34;  // Spanish
-    else if ( language == "el" ) nCode = 30;  // Greek
-    else if ( language == "fa" ) nCode = 98;  // Persian = Farsi
-    else if ( language == "fi" ) nCode = 358;  // Finnish
-    else if ( language == "fr" ) nCode = 33;  // French
-    else if ( language == "he" ) nCode = 972;     // Hebrew
-    else if ( language == "hi" ) nCode = 91;  // Indian = Hindi
-    else if ( language == "hu" ) nCode = 36;  // Hungarian
-    else if ( language == "it" ) nCode = 39;  // Italian
-    else if ( language == "ja" ) nCode = 81;  // Japanese
-    else if ( language == "ko" ) nCode = 82;  // Korean
-    else if ( language == "nl" ) nCode = 31;  // Dutch
-    else if ( language == "no" ) nCode = 47;  // Norwegian
-    else if ( language == "pl" ) nCode = 48;  // Polish
-    else if ( language == "pt" ) nCode = 351;     // Portuguese
-    else if ( language == "ru" ) nCode = 7;   // Russian
-    else if ( language == "sv" ) nCode = 46;  // Swedish
-    else if ( language == "th" ) nCode = 66;  // Thai
-    else if ( language == "tk" ) nCode = 90;  // Turkish
-    else if ( language == "ur" ) nCode = 92;  // Urdu
-    else if ( language == "vi" ) nCode = 84;  // Vietnamese
-    else if ( language == "zh" ) nCode = 86;  // Simplified Chinese
-
-    return nCode;
-}
-
-uno::Any SAL_CALL
-ScVbaApplication::International( sal_Int32 Index ) throw (uno::RuntimeException)
-{
-    uno::Any aRet;
-    OUString str;
-    const LocaleDataWrapper* pLocaleData = ScGlobal::GetpLocaleData();
-    switch ( Index )
-    {
-    case excel::XlApplicationInternational::xlCountryCode:
-        aRet <<= ConvertCountryCode( pLocaleData->getLanguageCountryInfo().Language );
-        break;
-    case excel::XlApplicationInternational::xlDecimalSeparator:
-        str = pLocaleData->getNumDecimalSep();
-        aRet <<= str;
-        break;
-    case excel::XlApplicationInternational::xlDateSeparator:
-        str = pLocaleData->getDateSep();
-        aRet <<= str;
-        break;
-    default:
-        break;
-    }
-    return aRet;
-}
-
-void SAL_CALL ScVbaApplication::Undo(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    SfxAllItemSet reqList(  SFX_APP()->GetPool() );
-    SfxRequest      rReq(SID_UNDO, 0, reqList);
-    ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
-
-    if (pViewShell != NULL)
-    {
-        pViewShell->ExecuteUndo(rReq);
-    }
-}
-
-double SAL_CALL ScVbaApplication::InchesToPoints( double Inches ) throw (uno::RuntimeException)
-{
-    // Convert a measurement from Inch to Point (1 inch = 72 points).
-    return MetricField::ConvertDoubleValue( Inches, 0, 0, FUNIT_INCH, FUNIT_POINT );
 }
 
 rtl::OUString

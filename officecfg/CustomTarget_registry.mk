@@ -26,12 +26,20 @@
 ## instead of those above.
 ##
 
-include $(SRCDIR)/officecfg/registry/files.mk
-
 $(eval $(call gb_CustomTarget_CustomTarget,officecfg/registry))
 
 $(call gb_CustomTarget_get_target,officecfg/registry) : \
-	$(foreach i,$(officecfg_FILES),$(call gb_CustomTarget_get_workdir,officecfg/registry)/$(i).hxx)
+	$(foreach i,officecfg_qa_allheaders $(officecfg_XCSFILES),\
+		$(call gb_CustomTarget_get_workdir,officecfg/registry)/$(i).hxx)
+
+# auto generated header file for unit test qa/cppheader.cxx
+$(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg_qa_allheaders.hxx: \
+		$(SRCDIR)/officecfg/registry/files.mk
+	$(call gb_Output_announce,officecfg_qa_allheaders.hxx,$(true),CAT,1)
+	mkdir -p $(dir $@) && \
+	rm -f $@ \
+	$(foreach file,$(officecfg_XCSFILES),\
+		&& echo "#include <officecfg/$(file).hxx>" >> $@)
 
 define officecfg_TARGET
 $(call gb_CustomTarget_get_workdir,officecfg/registry)/$(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \

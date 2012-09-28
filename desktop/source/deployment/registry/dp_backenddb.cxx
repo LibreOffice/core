@@ -33,7 +33,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "osl/file.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
+#include "com/sun/star/xml/dom/DocumentBuilder.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/io/XActiveDataSource.hpp"
 #include "com/sun/star/io/XActiveDataControl.hpp"
@@ -70,7 +70,7 @@ void BackendDb::save()
 
     const Reference<css::io::XInputStream> xData(
         ::xmlscript::createInputStream(bytes));
-    ::ucbhelper::Content ucbDb(m_urlDb, 0);
+    ::ucbhelper::Content ucbDb(m_urlDb, 0, m_xContext);
     ucbDb.writeStream(xData, true /*replace existing*/);
 }
 
@@ -79,19 +79,15 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
     if (!m_doc.is())
     {
         const Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.xml.dom.DocumentBuilder"),
-                m_xContext ), css::uno::UNO_QUERY);
-        if (!xDocBuilder.is())
-            throw css::uno::RuntimeException(
-                OUSTR(" Could not create service com.sun.star.xml.dom.DocumentBuilder"), 0);
+            css::xml::dom::DocumentBuilder::create(m_xContext) );
 
         ::osl::DirectoryItem item;
         ::osl::File::RC err = ::osl::DirectoryItem::get(m_urlDb, item);
         if (err == ::osl::File::E_None)
         {
             ::ucbhelper::Content descContent(
-                m_urlDb, css::uno::Reference<css::ucb::XCommandEnvironment>());
+                m_urlDb, css::uno::Reference<css::ucb::XCommandEnvironment>(),
+                m_xContext);
             Reference<css::io::XInputStream> xIn = descContent.openStream();
             m_doc = xDocBuilder->parse(xIn);
         }

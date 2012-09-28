@@ -30,6 +30,7 @@
 #include "dbase/DIndex.hxx"
 #include "connectivity/FValue.hxx"
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/logfile.hxx>
@@ -378,7 +379,7 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
 
     sal_Bool bReadOnly = sal_False;
     static ::rtl::OUString sReadOnly(  "IsReadOnly" );
-    ::ucbhelper::Content aFile(m_pConnection->getContent(),Reference< XCommandEnvironment >());
+    ::ucbhelper::Content aFile(m_pConnection->getContent(),Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
     aFile.getPropertyValue(sReadOnly) >>= bReadOnly;
 
     return bReadOnly;

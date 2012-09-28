@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>
@@ -64,6 +65,7 @@
 
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/conncleanup.hxx>
 #include <connectivity/dbconversion.hxx>
@@ -245,14 +247,11 @@ Reference< XConnection> findConnection(const Reference< XInterface >& xParent)
 //------------------------------------------------------------------------------
 Reference< XDataSource> getDataSource_allowException(
             const ::rtl::OUString& _rsTitleOrPath,
-            const Reference< XMultiServiceFactory >& _rxFactory )
+            const Reference< XComponentContext >& _rxContext )
 {
     ENSURE_OR_RETURN( !_rsTitleOrPath.isEmpty(), "getDataSource_allowException: invalid arg !", NULL );
 
-    Reference< XNameAccess> xDatabaseContext(
-        _rxFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DatabaseContext" )) ),UNO_QUERY );
-    OSL_ENSURE( xDatabaseContext.is(), "getDataSource_allowException: could not obtain the database context!" );
+    Reference< XDatabaseContext> xDatabaseContext = DatabaseContext::create(_rxContext);
 
     return Reference< XDataSource >( xDatabaseContext->getByName( _rsTitleOrPath ), UNO_QUERY );
 }
@@ -260,12 +259,12 @@ Reference< XDataSource> getDataSource_allowException(
 //------------------------------------------------------------------------------
 Reference< XDataSource > getDataSource(
             const ::rtl::OUString& _rsTitleOrPath,
-            const Reference< XMultiServiceFactory >& _rxFactory )
+            const Reference< XComponentContext >& _rxContext )
 {
     Reference< XDataSource > xDS;
     try
     {
-        xDS = getDataSource_allowException( _rsTitleOrPath, _rxFactory );
+        xDS = getDataSource_allowException( _rsTitleOrPath, _rxContext );
     }
     catch( const Exception& )
     {
@@ -282,7 +281,7 @@ Reference< XConnection > getConnection_allowException(
             const ::rtl::OUString& _rsPwd,
             const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    Reference< XDataSource> xDataSource( getDataSource_allowException(_rsTitleOrPath, _rxFactory) );
+    Reference< XDataSource> xDataSource( getDataSource_allowException(_rsTitleOrPath, comphelper::getComponentContext(_rxFactory)) );
     Reference<XConnection> xConnection;
     if (xDataSource.is())
     {
@@ -2063,9 +2062,9 @@ void release(oslInterlockedCount& _refCount,
              Reference< XInterface >& _xInterface,
              ::com::sun::star::lang::XComponent* _pObject)
 {
-    if (osl_decrementInterlockedCount( &_refCount ) == 0)
+    if (osl_atomic_decrement( &_refCount ) == 0)
     {
-        osl_incrementInterlockedCount( &_refCount );
+        osl_atomic_increment( &_refCount );
 
         if (!rBHelper.bDisposed && !rBHelper.bInDispose)
         {
@@ -2095,7 +2094,7 @@ void release(oslInterlockedCount& _refCount,
         }
     }
     else
-        osl_incrementInterlockedCount( &_refCount );
+        osl_atomic_increment( &_refCount );
 }
 
 void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )

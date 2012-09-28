@@ -638,7 +638,7 @@ public:
                                      const XubString& rStr, sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
                                      TextRectInfo* pInfo = NULL,
                                      const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
-    XubString           GetEllipsisString( const XubString& rStr, long nMaxWidth,
+    OUString            GetEllipsisString( const XubString& rStr, long nMaxWidth,
                                            sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
     void                DrawCtrlText( const Point& rPos, const XubString& rStr,
                                       xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,

@@ -135,6 +135,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bSolarMutexLocked(false),
     bFormulaTextResult(false)
 {
+    rtl::math::setNan(&fValue); // NaN by default
+
     rXMLImport.SetRemoveLastChar(false);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -273,12 +275,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
-    if (pContentValidationName)
-        delete pContentValidationName;
-    if (pDetectiveObjVec)
-        delete pDetectiveObjVec;
-    if (pCellRangeSource)
-        delete pCellRangeSource;
+    delete pContentValidationName;
+    delete pDetectiveObjVec;
+    delete pCellRangeSource;
 }
 
 void ScXMLTableRowCellContext::LockSolarMutex()
@@ -514,25 +513,6 @@ ScValidErrorStyle validAlertToValidError( const sheet::ValidationAlertStyle eVAl
     return eVErrStyle;
 }
 
-ScConditionMode conditionOpToMode( const sheet::ConditionOperator eOp )
-{
-    ScConditionMode eMode;
-    switch( eOp )
-    {
-        case sheet::ConditionOperator_EQUAL:            eMode = SC_COND_EQUAL;      break;
-        case sheet::ConditionOperator_NOT_EQUAL:        eMode = SC_COND_NOTEQUAL;   break;
-        case sheet::ConditionOperator_GREATER:          eMode = SC_COND_GREATER;    break;
-        case sheet::ConditionOperator_GREATER_EQUAL:    eMode = SC_COND_EQGREATER;  break;
-        case sheet::ConditionOperator_LESS:             eMode = SC_COND_LESS;       break;
-        case sheet::ConditionOperator_LESS_EQUAL:       eMode = SC_COND_EQLESS;     break;
-        case sheet::ConditionOperator_BETWEEN:          eMode = SC_COND_BETWEEN;    break;
-        case sheet::ConditionOperator_NOT_BETWEEN:      eMode = SC_COND_NOTBETWEEN; break;
-        case sheet::ConditionOperator_FORMULA:          eMode = SC_COND_DIRECT;     break;
-        default:                                        eMode = SC_COND_NONE;       break;
-    }
-    return eMode;
-}
-
 }
 
 void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
@@ -546,7 +526,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
         {
             ScValidationData aScValidationData(
                 validationTypeToMode(aValidation.aValidationType),
-                conditionOpToMode(aValidation.aOperator),
+                ScConditionEntry::GetModeFromApi(static_cast<sal_Int32>(aValidation.aOperator)),
                 aValidation.sFormula1, aValidation.sFormula2, pDoc, ScAddress(),
                 aValidation.sFormulaNmsp1, aValidation.sFormulaNmsp2,
                 aValidation.eGrammar1, aValidation.eGrammar2
@@ -754,10 +734,17 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
     if(pFCell)
     {
         if( bFormulaTextResult && pOUTextValue )
+        {
             pFCell->SetHybridString( *pOUTextValue );
-        else
-            pFCell->SetHybridDouble( fValue );
-        pFCell->ResetDirty();
+            pFCell->ResetDirty();
+        }
+        else if (!rtl::math::isNan(fValue))
+        {
+            pFCell->SetHybridDouble(fValue);
+            pFCell->ResetDirty();
+        }
+
+        // Leave the cell dirty when the cached result is not given.
     }
 }
 

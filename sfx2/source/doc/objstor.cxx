@@ -25,6 +25,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -33,6 +34,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAskLater.hpp>
 #include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
@@ -60,7 +62,7 @@
 #include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 
@@ -146,20 +148,16 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
     if (!xModel.is())
         return;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::container::XSet > xModelCollection(
-        xSMGR->createInstance(::rtl::OUString("com.sun.star.frame.GlobalEventBroadcaster")),
-        css::uno::UNO_QUERY);
-    if (xModelCollection.is())
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
+        css::frame::GlobalEventBroadcaster::create(xContext);
+    try
     {
-        try
-        {
-            xModelCollection->insert(css::uno::makeAny(xModel));
-        }
-        catch ( uno::Exception& )
-        {
-            OSL_FAIL( "The document seems to be in the collection already!\n" );
-        }
+        xModelCollection->insert(css::uno::makeAny(xModel));
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL( "The document seems to be in the collection already!\n" );
     }
 }
 
@@ -742,7 +740,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         try
         {
-            ::ucbhelper::Content aContent( pMedium->GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );
+            ::ucbhelper::Content aContent( pMedium->GetName(), com::sun::star::uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
@@ -819,6 +817,12 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     }
 
     return bOk;
+}
+
+bool SfxObjectShell::DoLoadExternal(SfxMedium *pMed, const OUString& rProvider)
+{
+    pMedium = pMed;
+    return LoadExternal(*pMedium, rProvider);
 }
 
 sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc )
@@ -1538,23 +1542,17 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             try
             {
                 // get the ODF version of the new medium
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= ::rtl::OUString();
+                OUString aVersion;
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
-                    aArgs[0] = xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) );
+                    xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) ) >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {
                 }
 
-                xDDSigns = uno::Reference< security::XDocumentDigitalSignatures >(
-                    comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                        rtl::OUString(
-                            "com.sun.star.security.DocumentDigitalSignatures"  ),
-                        aArgs ),
-                    uno::UNO_QUERY_THROW );
+                xDDSigns = security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion);
 
                 ::rtl::OUString aScriptSignName = xDDSigns->getScriptingContentSignatureDefaultStreamName();
 
@@ -1674,7 +1672,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         try
         {
-            ::ucbhelper::Content aContent( rMedium.GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );
+            ::ucbhelper::Content aContent( rMedium.GetName(), com::sun::star::uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
@@ -2219,7 +2217,12 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
         }
 
         return xLoader->filter( aArgs );
-        }catch(...)
+        }
+        catch (const packages::zip::ZipIOException&)
+        {
+            SetError( ERRCODE_IO_BROKENPACKAGE, "Badness in the underlying package format." );
+        }
+        catch(...)
         {}
     }
 
@@ -3515,6 +3518,12 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
 
 void SfxObjectShell::UpdateLinks()
 {
+}
+
+bool SfxObjectShell::LoadExternal(SfxMedium&, const OUString&)
+{
+    // Not implemented. It's an error if the code path ever comes here.
+    return false;
 }
 
 void SfxObjectShell::CheckConfigOptions()

@@ -29,6 +29,7 @@
 #define _SVX_TRANSFRM_HXX
 
 #include <svx/dlgctrl.hxx>
+#include <svx/dialcontrol.hxx>
 
 #include <vcl/fixed.hxx>
 
@@ -205,9 +206,9 @@ private:
 
     FixedLine           aFlAngle;
     FixedText           aFtAngle;
-    MetricField         aMtrAngle;
+    NumericField        maNfAngle;
     FixedText           aFtAnglePresets;
-    SvxRectCtl          aCtlAngle;
+    svx::DialControl    aCtlAngle;
 
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
@@ -218,11 +219,7 @@ private:
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eDlgUnit;
-    MapUnit             eMapUnit;
-    //------------------------------------
-#if _SOLAR__PRIVATE
-    DECL_LINK( ModifiedHdl, void * );
-#endif
+
 public:
          SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
@@ -268,7 +265,6 @@ private:
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eDlgUnit;
-    MapUnit             eMapUnit;
     //------------------------------------
 public:
          SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  );

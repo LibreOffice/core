@@ -187,7 +187,7 @@ namespace cli_uno
  */
 void Bridge::acquire()  const SAL_THROW(())
 {
-    if (1 == osl_incrementInterlockedCount( &m_ref ))
+    if (1 == osl_atomic_increment( &m_ref ))
     {
         if (m_registered_cli2uno)
         {
@@ -206,7 +206,7 @@ void Bridge::acquire()  const SAL_THROW(())
 //__________________________________________________________________________________________________
 void Bridge::release() const  SAL_THROW(())
 {
-    if (! osl_decrementInterlockedCount( &m_ref ))
+    if (! osl_atomic_decrement( &m_ref ))
     {
         uno_revokeMapping(
             m_registered_cli2uno
@@ -265,7 +265,7 @@ void SAL_CALL cli_env_disposing( uno_Environment * uno_cli_env )
 }
 
 //##################################################################################################
-void SAL_CALL uno_initEnvironment( uno_Environment * uno_cli_env )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cli_env )
     SAL_THROW_EXTERN_C()
 {
     //ToDo: remove when compiled with .NET 2
@@ -291,7 +291,7 @@ void SAL_CALL uno_initEnvironment( uno_Environment * uno_cli_env )
     CliEnvHolder::g_cli_env = new Cli_environment();
 }
 //##################################################################################################
-void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
 {

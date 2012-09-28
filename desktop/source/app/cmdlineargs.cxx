@@ -287,26 +287,25 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     {
                         bConversionOutEvent = true;
                     }
-#if defined UNX
                     else
                     // because it's impossible to filter these options that
                     // are handled in the soffice shell script with the
                     // primitive tools that /bin/sh offers, ignore them here
-                    if (!oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("backtrace")) &&
+                    if (
+#if defined UNX
+                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("backtrace")) &&
                         !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("strace")) &&
                         !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("valgrind")) &&
                     // for X Session Management, handled in
                     // vcl/unx/generic/app/sm.cxx:
                         !oArg.match("session=") &&
-                    //ignore additional legacy options that don't do anything anymore
-                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("nocrashreport")))
-                    {
-                        fprintf(stderr, "Unknown option %s\n",
-                            rtl::OUStringToOString(aArg, osl_getThreadTextEncoding()).getStr());
-                        fprintf(stderr, "Run 'soffice --help' to see a full list of available command line options.\n");
-                        m_unknown = true;
-                    }
 #endif
+                    //ignore additional legacy options that don't do anything anymore
+                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("nocrashreport")) &&
+                        m_unknown.isEmpty())
+                    {
+                        m_unknown = aArg;
+                    }
                 }
                 else
                 {
@@ -591,11 +590,12 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
 void CommandLineArgs::InitParamValues()
 {
     m_minimized = false;
-    m_invisible = false;
     m_norestore = false;
 #ifdef LIBO_HEADLESS
+    m_invisible = true;
     m_headless = true;
 #else
+    m_invisible = false;
     m_headless = false;
 #endif
     m_quickstart = false;
@@ -623,7 +623,6 @@ void CommandLineArgs::InitParamValues()
     m_helpbase = false;
     m_psn = false;
     m_version = false;
-    m_unknown = false;
     m_splashpipe = false;
     m_bEmpty = true;
     m_bDocumentArgs  = false;
@@ -761,7 +760,7 @@ bool CommandLineArgs::IsVersion() const
     return m_version;
 }
 
-bool CommandLineArgs::HasUnknown() const
+OUString CommandLineArgs::GetUnknown() const
 {
     return m_unknown;
 }

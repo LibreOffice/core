@@ -17,19 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASDOC_HXX
-#define _BASDOC_HXX
+#ifndef BASCTL_BASDOC_HXX
+#define BASCTL_BASDOC_HXX
 
 #include <iderid.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/ifaceids.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 class SfxPrinter;
 
-class BasicDocShell: public SfxObjectShell
+namespace basctl
 {
-    SfxPrinter*         pPrinter;
+
+class DocShell: public SfxObjectShell
+{
+    boost::scoped_ptr<SfxPrinter> pPrinter;
 
 protected:
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
@@ -48,13 +53,19 @@ public:
                         using SotObject::GetInterface;
                         SFX_DECL_OBJECTFACTORY();
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH )
-                        BasicDocShell();
-                        ~BasicDocShell();
+                        DocShell();
+                        ~DocShell();
 
     SfxPrinter*         GetPrinter( bool bCreate );
     void                SetPrinter( SfxPrinter* pPrinter );
 };
 
-#endif  // _BASDOC_HXX
+} // namespace basctl
+
+// This typedef helps baside.sdi,
+// because I don't know how to use nested names in it.
+typedef basctl::DocShell basctl_DocShell;
+
+#endif // BASCTL_BASDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

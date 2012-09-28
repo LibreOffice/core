@@ -363,6 +363,9 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     }
 
     ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
+    if(pCondFormList)
+        pCondFormList->startRendering();
+
     for (nArrX=0; nArrX<=nX2+2; nArrX++)                    // links & rechts + 1
     {
         nX = (nArrX>0) ? nArrX-1 : MAXCOL+1;                    // negativ -> ungueltig
@@ -490,6 +493,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                                 if (pBackground != pDefBackground)          // Spalten-HG == Standard ?
                                     pThisRowInfo->bEmptyBack = false;
+                                if (pCondForm)
+                                    pThisRowInfo->bEmptyBack = false;
                                 if (bAutoFilter)
                                     pThisRowInfo->bAutoFilter = true;
                                 if (bPushButton)
@@ -511,17 +516,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 pInfo->pShadowAttr  = pShadowAttr;
                                 //  nWidth wird nicht mehr einzeln gesetzt
 
-                                bool bEmbed = false; //bIsEmbedded &&
-#if 0 // Huh? Is this intentional or accidental? Clang warns
-      // "expression result unused", so ifdef out these lines. The
-      // code has been like this since 2004.
-                                        nTab    >= aEmbedRange.aStart.Tab() &&
-                                        nTab    <= aEmbedRange.aEnd.Tab()   &&
-                                        nX      >= aEmbedRange.aStart.Col() &&
-                                        nX      <= aEmbedRange.aEnd.Col()   &&
-                                        nCurRow >= aEmbedRange.aStart.Row() &&
-                                        nCurRow <= aEmbedRange.aEnd.Row();
-#endif
+                                bool bEmbed = false;
+
                                 if (bScenario)
                                 {
                                     pInfo->pBackground = ScGlobal::GetButtonBrushItem();
@@ -532,11 +528,6 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                     pInfo->pBackground = ScGlobal::GetEmbeddedBrushItem();
                                     pThisRowInfo->bEmptyBack = false;
                                 }
-
-                                if (bHidden || ( bFormulaMode && bHideFormula && pInfo->pCell
-                                                    && pInfo->pCell->GetCellType()
-                                                        == CELLTYPE_FORMULA ))
-                                    pInfo->bEmptyCellText = true;
 
                                 if ( pCondForm )
                                 {
@@ -551,6 +542,17 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                             //! Style-Sets cachen !!!
                                             pInfo->pConditionSet = &pStyleSheet->GetItemSet();
                                             bAnyCondition = true;
+
+                                            // we need to check already here for protected cells
+                                            const SfxPoolItem* pItem;
+                                            if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SFX_ITEM_SET )
+                                            {
+                                                const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(pItem);
+                                                bHidden = pProtAttr->GetHideCell();
+                                                bHideFormula = pProtAttr->GetHideFormula();
+
+                                            }
+
                                         }
                                         // if style is not there, treat like no condition
                                     }
@@ -564,6 +566,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         pInfo->pDataBar = aData.pDataBar;
                                     }
                                 }
+
+                                if (bHidden || ( bFormulaMode && bHideFormula && pInfo->pCell
+                                                    && pInfo->pCell->GetCellType()
+                                                        == CELLTYPE_FORMULA ))
+                                    pInfo->bEmptyCellText = true;
 
                                 ++nArrY;
                             }
@@ -643,6 +650,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         // STD_COL_WIDTH ganz links und rechts wird fuer DrawExtraShadow gebraucht
     }
 
+    if(pCondFormList)
+        pCondFormList->endRendering();
     //-------------------------------------------------------------------------
     //  bedingte Formatierung auswerten
 

@@ -17,8 +17,8 @@
 #
 import uno
 import traceback
-from wizards.common.PropertyNames import PropertyNames
-from wizards.common.Helper import *
+from .PropertyNames import PropertyNames
+from .Helper import Helper
 
 '''
 This class gives access to the OO configuration api.

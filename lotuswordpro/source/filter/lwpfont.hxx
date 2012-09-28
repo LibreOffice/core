@@ -253,7 +253,6 @@ public:
 private:
     LwpFontNameManager m_FNMgr;
     LwpFontAttrManager m_AttrMgr;
-    sal_uInt32 m_nDlfTxtStyleFontID;
 
 public:
     void Read(LwpObjectStream *pStrm);

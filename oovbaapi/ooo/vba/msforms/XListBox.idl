@@ -41,7 +41,7 @@ interface XListBox
 {
     [attribute] any Value;
     [attribute] string Text;
-    [attribute] long MultiSelect;
+    [attribute] boolean MultiSelect;
     [attribute] any ListIndex;
     [attribute, readonly] long ListCount;
     [attribute, readonly] XNewFont Font;

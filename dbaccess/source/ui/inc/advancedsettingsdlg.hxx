@@ -44,7 +44,6 @@ namespace dbaui
     {
         OModuleClient                                       m_aModuleClient;
         ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
-        SfxItemSet*                                         m_pItemSet;
 
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);

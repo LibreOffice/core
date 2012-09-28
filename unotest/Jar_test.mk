@@ -51,7 +51,6 @@ $(eval $(call gb_Jar_add_sourcefiles,test,\
 	unotest/source/java/org/openoffice/test/FileHelper \
 	unotest/source/java/org/openoffice/test/OfficeConnection \
 	unotest/source/java/org/openoffice/test/OfficeFileUrl \
-	unotest/source/java/org/openoffice/test/TestArgument \
 	unotest/source/java/org/openoffice/test/UnoApiTest \
 ))
 

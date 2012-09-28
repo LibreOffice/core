@@ -18,6 +18,8 @@
 
 $(eval $(call gb_Module_Module,officecfg))
 
+include $(SRCDIR)/officecfg/registry/files.mk
+
 $(eval $(call gb_Module_add_targets,officecfg,\
     CustomTarget_registry \
     Package_cppheader \

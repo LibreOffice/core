@@ -34,11 +34,10 @@
 
 // __________ Imports __________
 
-import com.sun.star.uno.UnoRuntime;
-
-import java.lang.*;
-import javax.swing.*;
 import java.util.Vector;
+
+import com.sun.star.frame.FrameActionEvent;
+import com.sun.star.uno.UnoRuntime;
 
 // __________ Implementation __________
 
@@ -163,7 +162,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * @param lParams
      *          the vector with all packed parameters of the original request
      */
-    public void execOneway(/*IN*/ int nRequest,/*IN*/ Vector lParams )
+    public void execOneway(/*IN*/ int nRequest,/*IN*/ Vector<Object> lParams )
     {
         synchronized(this)
         {
@@ -174,14 +173,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         // was it frameAction()?
         if (nRequest==OnewayExecutor.REQUEST_FRAMEACTION)
         {
-            com.sun.star.frame.FrameActionEvent[] lOutAction   = new com.sun.star.frame.FrameActionEvent[1];
-            Vector[]                              lInParams    = new Vector[1];
-                                                  lInParams[0] = lParams;
-
-            OnewayExecutor.codeFrameAction( OnewayExecutor.DECODE_PARAMS ,
-                                            lInParams                    ,
-                                            lOutAction                   );
-            impl_frameAction(lOutAction[0]);
+            impl_frameAction((FrameActionEvent) lParams.get(0));
         }
         else
         // was it dispatch()?
@@ -189,11 +181,9 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         {
             com.sun.star.util.URL[]              lOutURL      = new com.sun.star.util.URL[1];
             com.sun.star.beans.PropertyValue[][] lOutProps    = new com.sun.star.beans.PropertyValue[1][];
-            Vector[]                             lInParams    = new Vector[1];
-                                                 lInParams[0] = lParams;
 
-            OnewayExecutor.codeDispatch( OnewayExecutor.DECODE_PARAMS ,
-                                         lInParams                    ,
+            OnewayExecutor.decodeDispatch(
+                                         lParams                    ,
                                          lOutURL                      ,
                                          lOutProps                    );
             impl_dispatch(lOutURL[0],lOutProps[0]);
@@ -246,16 +236,12 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
             return;
 
         // pack the event and start thread - which call us back later
-        Vector[]                              lOutParams   = new Vector[1];
-        com.sun.star.frame.FrameActionEvent[] lInAction    = new com.sun.star.frame.FrameActionEvent[1];
-                                              lInAction[0] = aEvent;
+        Vector<Object> lOutParams = new Vector<Object>();
+        lOutParams.add(aEvent);
 
-        OnewayExecutor.codeFrameAction( OnewayExecutor.ENCODE_PARAMS ,
-                                        lOutParams                   ,
-                                        lInAction                    );
         OnewayExecutor aExecutor = new OnewayExecutor( (IOnewayLink)this                  ,
                                                        OnewayExecutor.REQUEST_FRAMEACTION ,
-                                                       lOutParams[0]                      );
+                                                       lOutParams                      );
         aExecutor.start();
     }
 
@@ -283,19 +269,17 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                 return;
         }
 
-        Vector[]                             lOutParams      = new Vector[1];
         com.sun.star.util.URL[]              lInURL          = new com.sun.star.util.URL[1];
         com.sun.star.beans.PropertyValue[][] lInArguments    = new com.sun.star.beans.PropertyValue[1][];
                                              lInURL[0]       = aURL      ;
                                              lInArguments[0] = lArguments;
 
-        OnewayExecutor.codeDispatch( OnewayExecutor.ENCODE_PARAMS ,
-                                     lOutParams                   ,
+        Vector<Object> lOutParams = OnewayExecutor.encodeDispatch(
                                      lInURL                       ,
                                      lInArguments                 );
         OnewayExecutor aExecutor = new OnewayExecutor( (IOnewayLink)this               ,
                                                        OnewayExecutor.REQUEST_DISPATCH ,
-                                                       lOutParams[0]                   );
+                                                       lOutParams                   );
         aExecutor.start();
     }
 
@@ -340,7 +324,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
             xFrame          = m_xFrame;
         }
 
-        com.sun.star.frame.XDispatchProviderInterception xRegistration = (com.sun.star.frame.XDispatchProviderInterception)UnoRuntime.queryInterface(
+        com.sun.star.frame.XDispatchProviderInterception xRegistration = UnoRuntime.queryInterface(
             com.sun.star.frame.XDispatchProviderInterception.class,
             xFrame);
 
@@ -652,7 +636,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
         if (bIsRegistered)
         {
-            com.sun.star.frame.XDispatchProviderInterception xRegistration = (com.sun.star.frame.XDispatchProviderInterception)UnoRuntime.queryInterface(
+            com.sun.star.frame.XDispatchProviderInterception xRegistration = UnoRuntime.queryInterface(
                 com.sun.star.frame.XDispatchProviderInterception.class,
                 xFrame);
 

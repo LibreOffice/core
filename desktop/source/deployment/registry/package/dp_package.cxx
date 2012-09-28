@@ -49,6 +49,7 @@
 #include "com/sun/star/graphic/XGraphic.hpp"
 #include "com/sun/star/graphic/GraphicProvider.hpp"
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
+#include <com/sun/star/io/Pipe.hpp>
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
@@ -436,7 +437,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             OUString name;
             if (!bRemoved)
             {
-                ::ucbhelper::Content ucbContent( url, xCmdEnv );
+                ::ucbhelper::Content ucbContent(
+                    url, xCmdEnv, getComponentContext() );
                 name = StrTitle::getTitle( ucbContent );
             }
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.package-bundle")) {
@@ -588,7 +590,8 @@ OUString BackendImpl::PackageImpl::getTextFromURL(
 {
     try
     {
-        ::ucbhelper::Content descContent(licenseUrl, xCmdEnv);
+        ::ucbhelper::Content descContent(
+            licenseUrl, xCmdEnv, getMyBackend()->getComponentContext());
         ::rtl::ByteSequence seq = dp_misc::readFile(descContent);
         return OUString( reinterpret_cast<sal_Char const *>(
             seq.getConstArray()), seq.getLength(), RTL_TEXTENCODING_UTF8);
@@ -1046,7 +1049,8 @@ void BackendImpl::PackageImpl::exportTo(
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
 
-    ::ucbhelper::Content sourceContent( m_url_expanded, xCmdEnv );
+    ::ucbhelper::Content sourceContent(
+        m_url_expanded, xCmdEnv, getMyBackend()->getComponentContext() );
     OUString title(newTitle);
     if (title.isEmpty())
         sourceContent.getPropertyValue( OUSTR( "Title" ) ) >>= title;
@@ -1088,7 +1092,8 @@ void BackendImpl::PackageImpl::exportTo(
     buf.append( static_cast<sal_Unicode>('/') );
     OUString destFolder( buf.makeStringAndClear() );
 
-    ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv );
+    ::ucbhelper::Content destFolderContent(
+        destFolder, xCmdEnv, getMyBackend()->getComponentContext() );
     {
         // transfer every item of folder into zip:
         Reference<sdbc::XResultSet> xResultSet(
@@ -1100,7 +1105,8 @@ void BackendImpl::PackageImpl::exportTo(
         {
             ::ucbhelper::Content subContent(
                 Reference<ucb::XContentAccess>(
-                    xResultSet, UNO_QUERY_THROW )->queryContent(), xCmdEnv );
+                    xResultSet, UNO_QUERY_THROW )->queryContent(),
+                xCmdEnv, getMyBackend()->getComponentContext() );
             if (! destFolderContent.transferContent(
                     subContent, ::ucbhelper::InsertOperation_COPY,
                     OUString(), ucb::NameClash::OVERWRITE ))
@@ -1155,7 +1161,8 @@ void BackendImpl::PackageImpl::exportTo(
             OUString fullPath;
             if (url_.getLength() > baseURLlen)
                 fullPath = url_.copy( baseURLlen + 1 );
-            ::ucbhelper::Content ucbContent( url_, xCmdEnv );
+            ::ucbhelper::Content ucbContent(
+                url_, xCmdEnv, getMyBackend()->getComponentContext() );
             if (ucbContent.getPropertyValue(strIsFolder).get<bool>())
                 fullPath += OUSTR("/");
             Sequence<beans::PropertyValue> attribs( 2 );
@@ -1182,16 +1189,14 @@ void BackendImpl::PackageImpl::exportTo(
             xContext->getServiceManager()->createInstanceWithContext(
                 OUSTR("com.sun.star.packages.manifest.ManifestWriter"),
                 xContext ), UNO_QUERY_THROW );
-        Reference<io::XOutputStream> xPipe(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.io.Pipe"), xContext ), UNO_QUERY_THROW );
+        Reference<io::XOutputStream> xPipe( io::Pipe::create(xContext), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, comphelper::containerToSequence(manifest) );
 
         // write buffered pipe data to content:
         ::ucbhelper::Content manifestContent(
             makeURL( metainfFolderContent.getURL(), OUSTR("manifest.xml") ),
-            xCmdEnv );
+            xCmdEnv, getMyBackend()->getComponentContext() );
         manifestContent.writeStream(
             Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ),
             true /* replace existing */ );
@@ -1554,7 +1559,8 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     bool skip_registration )
 {
-    ::ucbhelper::Content ucbContent( url, xCmdEnv );
+    ::ucbhelper::Content ucbContent(
+        url, xCmdEnv, getMyBackend()->getComponentContext() );
 
     // check for platform paths:
     const OUString title( StrTitle::getTitle( ucbContent ) );

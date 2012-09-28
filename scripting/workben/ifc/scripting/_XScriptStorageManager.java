@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.storage;
+package ifc.scripting;
 
 import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 import drafts.com.sun.star.script.framework.storage.XScriptInfoAccess;
@@ -28,9 +28,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.Exception;
-
-import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Parameters;
@@ -244,7 +241,7 @@ public class _XScriptStorageManager extends MultiMethodTest {
         XSimpleFileAccess access = null;
 
         try {
-            Object fa = tParam.getMSF().createInstance(
+            Object fa = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
             access = (XSimpleFileAccess)

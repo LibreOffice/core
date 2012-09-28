@@ -35,7 +35,6 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.UnoDialog;
-import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.ListModelBinder;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGDocument;

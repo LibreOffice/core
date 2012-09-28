@@ -23,10 +23,6 @@ import com.sun.star.task.XInteractionRequest;
 
 import static org.junit.Assert.*;
 
-/**
- *
- * @author oj93728
- */
 class CopyTableInterActionHandler extends WeakBase
         implements XInteractionHandler
 {

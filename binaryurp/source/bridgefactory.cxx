@@ -52,15 +52,12 @@ css::uno::Reference< css::uno::XInterface > BridgeFactory::static_create(
 }
 
 OUString BridgeFactory::static_getImplementationName() {
-    return OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.bridge.BridgeFactory"));
+    return OUString("com.sun.star.comp.bridge.BridgeFactory");
 }
 
 css::uno::Sequence< OUString >
 BridgeFactory::static_getSupportedServiceNames() {
-    OUString name(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory"));
+    OUString name("com.sun.star.bridge.BridgeFactory");
     return css::uno::Sequence< OUString >(&name, 1);
 }
 
@@ -133,13 +130,10 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
             throw css::bridge::BridgeExistsException(
                 sName, static_cast< cppu::OWeakObject * >(this));
         }
-        if ( sProtocol != "urp" || !aConnection.is() )
-        {
+        if (sProtocol != "urp" || !aConnection.is()) {
             throw css::lang::IllegalArgumentException(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "BridgeFactory::createBridge: sProtocol != urp ||"
-                        " aConnection == null")),
+                ("BridgeFactory::createBridge: sProtocol != urp ||"
+                 " aConnection == null"),
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
         b.set(new Bridge(this, sName, aConnection, anInstanceProvider));
@@ -168,17 +162,13 @@ BridgeFactory::getExistingBridges() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(*this);
     if (unnamed_.size() > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "BridgeFactory::getExistingBridges: too many")),
+            "BridgeFactory::getExistingBridges: too many",
             static_cast< cppu::OWeakObject * >(this));
     }
     sal_Int32 n = static_cast< sal_Int32 >(unnamed_.size());
     if (named_.size() > static_cast< sal_uInt32 >(SAL_MAX_INT32 - n)) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "BridgeFactory::getExistingBridges: too many")),
+            "BridgeFactory::getExistingBridges: too many",
             static_cast< cppu::OWeakObject * >(this));
     }
     n = static_cast< sal_Int32 >(n + named_.size());

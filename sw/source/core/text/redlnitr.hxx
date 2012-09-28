@@ -68,7 +68,6 @@ class SwRedlineItr
 {
     std::deque<SwTxtAttr *> m_Hints;
     const SwDoc& rDoc;
-    const SwTxtNode& rNd;
     SwAttrHandler& rAttrHandler;
     SfxItemSet *pSet;
     SwExtend *pExt;

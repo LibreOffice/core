@@ -43,6 +43,7 @@
 #include "migration.hxx"
 
 #include <svtools/javacontext.hxx>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
@@ -67,6 +68,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
@@ -93,7 +95,6 @@
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
-#include <ucbhelper/contentbroker.hxx>
 
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -378,28 +379,34 @@ ResMgr* Desktop::GetDesktopResManager()
     return Desktop::pResMgr;
 }
 
+namespace {
+
 // ----------------------------------------------------------------------------
 // Get a message string securely. There is a fallback string if the resource
 // is not available.
 
-OUString Desktop::GetMsgString( sal_uInt16 nId, const OUString& aFaultBackMsg )
+OUString GetMsgString(
+    sal_uInt16 nId, const OUString& aFaultBackMsg,
+    bool bAlwaysUseFaultBackMsg = false )
 {
-    ResMgr* resMgr = GetDesktopResManager();
-    if ( !resMgr )
-        return aFaultBackMsg;
-    else
-        return OUString( String( ResId( nId, *resMgr )));
+    if ( !bAlwaysUseFaultBackMsg )
+    {
+        ResMgr* resMgr = Desktop::GetDesktopResManager();
+        if ( resMgr )
+            return OUString( String( ResId( nId, *resMgr )));
+    }
+    return aFaultBackMsg;
 }
 
-OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
+OUString MakeStartupErrorMessage(
+    OUString const & aErrorMessage, bool bAlwaysUseFaultBackMsg = false )
 {
     OUStringBuffer    aDiagnosticMessage( 100 );
 
-    ResMgr* pResMgr = Desktop::GetDesktopResManager();
-    if ( pResMgr )
-        aDiagnosticMessage.append( OUString(String(ResId(STR_BOOTSTRAP_ERR_CANNOT_START, *pResMgr))) );
-    else
-        aDiagnosticMessage.appendAscii( "The program cannot be started." );
+    aDiagnosticMessage.append(
+        GetMsgString(
+            STR_BOOTSTRAP_ERR_CANNOT_START, "The program cannot be started.",
+            bAlwaysUseFaultBackMsg ) );
 
     aDiagnosticMessage.appendAscii( "\n" );
 
@@ -468,9 +475,8 @@ static bool ShouldSuppressUI(const CommandLineArgs& rCmdLine)
             rCmdLine.IsQuickstart();
 }
 
-namespace
-{
-    struct theCommandLineArgs : public rtl::Static< CommandLineArgs, theCommandLineArgs > {};
+struct theCommandLineArgs : public rtl::Static< CommandLineArgs, theCommandLineArgs > {};
+
 }
 
 CommandLineArgs& Desktop::GetCommandLineArgs()
@@ -591,29 +597,30 @@ void Desktop::Init()
     // We need to have service factory before going further, but see fdo#37195.
     // Doing this will mmap common.rdb, making it not overwritable on windows,
     // so this can't happen before the synchronization above. Lets rework this
-    // so that the above is called *from* ensureProcessServiceFactory or
+    // so that the above is called *from* CreateApplicationServiceManager or
     // something to enforce this gotcha
-    ensureProcessServiceFactory();
-
-    if( !::comphelper::getProcessServiceFactory().is())
+    try
     {
-        OSL_FAIL("Service factory should have been crated in soffice_main().");
-        SetBootstrapError( BE_UNO_SERVICEMANAGER );
+        InitApplicationServiceManager();
+    }
+    catch (css::uno::Exception & e)
+    {
+        SetBootstrapError( BE_UNO_SERVICEMANAGER, e.Message );
     }
 
-    if ( GetBootstrapError() == BE_OK )
+    if ( m_aBootstrapError == BE_OK )
     {
         // prepare language
         if ( !LanguageSelection::prepareLanguage() )
         {
             if ( LanguageSelection::getStatus() == LanguageSelection::LS_STATUS_CANNOT_DETERMINE_LANGUAGE )
-                SetBootstrapError( BE_LANGUAGE_MISSING );
+                SetBootstrapError( BE_LANGUAGE_MISSING, OUString() );
             else
-                SetBootstrapError( BE_OFFICECONFIG_BROKEN );
+                SetBootstrapError( BE_OFFICECONFIG_BROKEN, OUString() );
         }
     }
 
-    if ( GetBootstrapError() == BE_OK )
+    if ( m_aBootstrapError == BE_OK )
     {
         const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
         // start ipc thread only for non-remote offices
@@ -621,14 +628,15 @@ void Desktop::Init()
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
         if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
         {
-            SetBootstrapError( BE_PATHINFO_MISSING );
+            SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
         }
         else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
         {
             // 2nd office startup should terminate after sending cmdlineargs through pipe
             SetBootstrapStatus(BS_TERMINATE);
         }
-        else if ( rCmdLineArgs.IsHelp() )
+        else if ( !rCmdLineArgs.GetUnknown().isEmpty()
+                  || rCmdLineArgs.IsHelp() || rCmdLineArgs.IsVersion() )
         {
             // disable IPC thread in an instance that is just showing a help message
             OfficeIPCThread::DisableOfficeIPCThread();
@@ -642,29 +650,6 @@ void Desktop::InitFinished()
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::InitFinished" );
 
     CloseSplashScreen();
-}
-
-// GetCommandLineArgs() requires this code to work, otherwise it will abort, and
-// on Unix command line args needs to be checked before Desktop::Init()
-void Desktop::ensureProcessServiceFactory()
-{
-    if (!comphelper::getProcessServiceFactory().is())
-    {
-        try
-        {
-            comphelper::setProcessServiceFactory(
-                CreateApplicationServiceManager());
-        }
-        catch (const css::uno::Exception& e)
-        {
-            // Application::ShowNativeErrorBox would only work after InitVCL, so
-            // all we can realistically do here is hope the user can see stderr:
-            std::cerr << "UNO Exception: " << e.Message << std::endl;
-            // Let exceptions escape and tear down the process, it is completely
-            // broken anyway:
-            throw;
-        }
-    }
 }
 
 void Desktop::DeInit()
@@ -881,7 +866,8 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
     return MakeStartupErrorMessage( aMsg );
 }
 
-void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
+void Desktop::HandleBootstrapErrors(
+    BootstrapError aBootstrapError, OUString const & aErrorMessage )
 {
     if ( aBootstrapError == BE_PATHINFO_MISSING )
     {
@@ -962,16 +948,18 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         // PropertyValue is available).  To give the user a hint even if
         // generating and displaying a message box below crashes, print a
         // hard-coded message on stderr first:
-        fputs(
-            aBootstrapError == BE_UNO_SERVICEMANAGER
-            ? ("The application cannot be started. " "\n"
-               "The component manager is not available." "\n")
-                // STR_BOOTSTRAP_ERR_CANNOT_START, STR_BOOTSTRAP_ERR_NO_SERVICE
-            : ("The application cannot be started. " "\n"
-               "The configuration service is not available." "\n"),
-                // STR_BOOTSTRAP_ERR_CANNOT_START,
-                // STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
-            stderr);
+        std::cerr
+            << "The application cannot be started.\n"
+                // STR_BOOTSTRAP_ERR_CANNOT_START
+            << (aBootstrapError == BE_UNO_SERVICEMANAGER
+                ? "The component manager is not available.\n"
+                    // STR_BOOTSTRAP_ERR_NO_SERVICE
+                : "The configuration service is not available.\n");
+                    // STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
+        if ( !aErrorMessage.isEmpty() )
+        {
+            std::cerr << "(\"" << aErrorMessage << "\")\n";
+        }
 
         // First sentence. We cannot bootstrap office further!
         OUString            aMessage;
@@ -980,24 +968,32 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         OUString aErrorMsg;
 
         if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
-            aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SERVICE,
-                            OUString( "The service manager is not available." ) );
+            aErrorMsg = "The service manager is not available.";
         else
             aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_CFG_SERVICE,
                             OUString( "The configuration service is not available." ) );
 
         aDiagnosticMessage.append( aErrorMsg );
         aDiagnosticMessage.appendAscii( "\n" );
+        if ( !aErrorMessage.isEmpty() )
+        {
+            aDiagnosticMessage.appendAscii( "(\"" );
+            aDiagnosticMessage.append( aErrorMessage );
+            aDiagnosticMessage.appendAscii( "\")\n" );
+        }
 
         // Due to the fact the we haven't a backup applicat.rdb file anymore it is not possible to
         // repair the installation with the setup executable besides the office executable. Now
         // we have to ask the user to start the setup on CD/installation directory manually!!
         OUString aStartSetupManually( GetMsgString(
             STR_ASK_START_SETUP_MANUALLY,
-            OUString( "Start setup application to repair the installation from CD, or the folder containing the installation packages." ) ));
+            OUString( "Start setup application to repair the installation from CD, or the folder containing the installation packages." ),
+            aBootstrapError == BE_UNO_SERVICEMANAGER ) );
 
         aDiagnosticMessage.append( aStartSetupManually );
-        aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
+        aMessage = MakeStartupErrorMessage(
+            aDiagnosticMessage.makeStringAndClear(),
+            aBootstrapError == BE_UNO_SERVICEMANAGER );
 
         FatalError( aMessage);
     }
@@ -1378,10 +1374,9 @@ int Desktop::Main()
     com::sun::star::uno::ContextLayer layer(
         com::sun::star::uno::getCurrentContext() );
 
-    BootstrapError eError = GetBootstrapError();
-    if ( eError != BE_OK )
+    if ( m_aBootstrapError != BE_OK )
     {
-        HandleBootstrapErrors( eError );
+        HandleBootstrapErrors( m_aBootstrapError, m_aBootstrapErrorMessage );
         return EXIT_FAILURE;
     }
 
@@ -1395,6 +1390,22 @@ int Desktop::Main()
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
+    OUString aUnknown( rCmdLineArgs.GetUnknown() );
+    if ( !aUnknown.isEmpty() )
+    {
+        displayCmdlineHelp( aUnknown );
+        return EXIT_FAILURE;
+    }
+    if ( rCmdLineArgs.IsHelp() )
+    {
+        displayCmdlineHelp( OUString() );
+        return EXIT_SUCCESS;
+    }
+    if ( rCmdLineArgs.IsVersion() )
+    {
+        displayVersion();
+        return EXIT_SUCCESS;
+    }
 
     // setup configuration error handling
     ConfigurationErrorHandler aConfigErrHandler;
@@ -1415,11 +1426,12 @@ int Desktop::Main()
     {
         OSL_FAIL("userinstall failed");
         if ( inst_fin == UserInstall::E_NoDiskSpace )
-            HandleBootstrapErrors( BE_USERINSTALL_NOTENOUGHDISKSPACE );
+            HandleBootstrapErrors(
+                BE_USERINSTALL_NOTENOUGHDISKSPACE, OUString() );
         else if ( inst_fin == UserInstall::E_NoWriteAccess )
-            HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS );
+            HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS, OUString() );
         else
-            HandleBootstrapErrors( BE_USERINSTALL_FAILED );
+            HandleBootstrapErrors( BE_USERINSTALL_FAILED, OUString() );
         return EXIT_FAILURE;
     }
     // refresh path information
@@ -1436,14 +1448,6 @@ int Desktop::Main()
         RegisterServices();
 
         SetSplashScreenProgress(25);
-
-#ifndef UNX
-        if ( rCmdLineArgs.IsHelp() )
-        {
-            displayCmdlineHelp();
-            return EXIT_SUCCESS;
-        }
-#endif
 
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
@@ -1462,7 +1466,7 @@ int Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
-            sal_Bool bQuitApp;
+            bool bQuitApp;
 
             if( !InitAccessBridge( true, bQuitApp ) )
                 if( bQuitApp )
@@ -1528,8 +1532,7 @@ int Desktop::Main()
 
         // create service for loadin SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
-            ( xSMgr->createInstance(
-            rtl::OUString( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
+            ( css::frame::GlobalEventBroadcaster::create(comphelper::getComponentContext(xSMgr)), UNO_QUERY_THROW );
 
         /* ensure existance of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
@@ -1564,12 +1567,9 @@ int Desktop::Main()
         // keep a language options instance...
         pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
 
-        if (pExecGlobals->xGlobalBroadcaster.is())
-        {
-            css::document::EventObject aEvent;
-            aEvent.EventName = ::rtl::OUString("OnStartApp");
-            pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
-        }
+        css::document::EventObject aEvent;
+        aEvent.EventName = ::rtl::OUString("OnStartApp");
+        pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
 
         SetSplashScreenProgress(50);
 
@@ -1768,10 +1768,6 @@ int Desktop::doShutdown()
     pExecGlobals->pPathOptions.reset( 0 );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> deinit ucb" );
-    ::ucbhelper::ContentBroker::deinitialize();
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
-
     sal_Bool bRR = pExecGlobals->bRestartRequested;
     delete pExecGlobals, pExecGlobals = NULL;
 
@@ -1801,9 +1797,10 @@ bool Desktop::InitializeConfiguration()
             comphelper::getProcessComponentContext() );
         return true;
     }
-    catch( const ::com::sun::star::lang::ServiceNotRegisteredException& )
+    catch( ::com::sun::star::lang::ServiceNotRegisteredException & e )
     {
-        this->HandleBootstrapErrors( Desktop::BE_UNO_SERVICE_CONFIG_MISSING );
+        this->HandleBootstrapErrors(
+            Desktop::BE_UNO_SERVICE_CONFIG_MISSING, e.Message );
     }
     catch( const ::com::sun::star::configuration::MissingBootstrapFileException& e )
     {
@@ -2090,8 +2087,9 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 void Desktop::PreloadConfigurationData()
 {
     Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XNameAccess > xNameAccess( rFactory->createInstance(
-        rtl::OUString( "com.sun.star.frame.UICommandDescription" )), UNO_QUERY );
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference< XNameAccess > xNameAccess(
+            css::frame::UICommandDescription::create(xContext) );
 
     rtl::OUString aWriterDoc( "com.sun.star.text.TextDocument" );
     rtl::OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );
@@ -2099,47 +2097,44 @@ void Desktop::PreloadConfigurationData()
     rtl::OUString aImpressDoc( "com.sun.star.presentation.PresentationDocument" );
 
     // preload commands configuration
-    if ( xNameAccess.is() )
+    Any a;
+    Reference< XNameAccess > xCmdAccess;
+
+    try
     {
-        Any a;
-        Reference< XNameAccess > xCmdAccess;
+        a = xNameAccess->getByName( aWriterDoc );
+        a >>= xCmdAccess;
+        if ( xCmdAccess.is() )
+        {
+            xCmdAccess->getByName( rtl::OUString( ".uno:BasicShapes" ));
+            xCmdAccess->getByName( rtl::OUString( ".uno:EditGlossary" ));
+        }
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
+    }
 
-        try
-        {
-            a = xNameAccess->getByName( aWriterDoc );
-            a >>= xCmdAccess;
-            if ( xCmdAccess.is() )
-            {
-                xCmdAccess->getByName( rtl::OUString( ".uno:BasicShapes" ));
-                xCmdAccess->getByName( rtl::OUString( ".uno:EditGlossary" ));
-            }
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
+    try
+    {
+        a = xNameAccess->getByName( aCalcDoc );
+        a >>= xCmdAccess;
+        if ( xCmdAccess.is() )
+            xCmdAccess->getByName( rtl::OUString( ".uno:InsertObjectStarMath" ));
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
+    }
 
-        try
-        {
-            a = xNameAccess->getByName( aCalcDoc );
-            a >>= xCmdAccess;
-            if ( xCmdAccess.is() )
-                xCmdAccess->getByName( rtl::OUString( ".uno:InsertObjectStarMath" ));
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
-
-        try
-        {
-            // draw and impress share the same configuration file (DrawImpressCommands.xcu)
-            a = xNameAccess->getByName( aDrawDoc );
-            a >>= xCmdAccess;
-            if ( xCmdAccess.is() )
-                xCmdAccess->getByName( rtl::OUString( ".uno:Polygon" ));
-        }
-        catch ( const ::com::sun::star::uno::Exception& )
-        {
-        }
+    try
+    {
+        // draw and impress share the same configuration file (DrawImpressCommands.xcu)
+        a = xNameAccess->getByName( aDrawDoc );
+        a >>= xCmdAccess;
+        if ( xCmdAccess.is() )
+            xCmdAccess->getByName( rtl::OUString( ".uno:Polygon" ));
+    }
+    catch ( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     // preload window state configuration
@@ -2147,7 +2142,6 @@ void Desktop::PreloadConfigurationData()
                     rtl::OUString( "com.sun.star.ui.WindowStateConfiguration" )), UNO_QUERY );
     if ( xNameAccess.is() )
     {
-        Any a;
         Reference< XNameAccess > xWindowAccess;
         try
         {
@@ -2708,10 +2702,10 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
         break;
     case ApplicationEvent::TYPE_HELP:
-#ifndef UNX
-        // in non unix version allow showing of cmdline help window
-        displayCmdlineHelp();
-#endif
+        displayCmdlineHelp(rAppEvent.GetData());
+        break;
+    case ApplicationEvent::TYPE_VERSION:
+        displayVersion();
         break;
     case ApplicationEvent::TYPE_OPEN:
         {

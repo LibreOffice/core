@@ -438,7 +438,7 @@ public:
     virtual void    EndRenaming();
     virtual void    Mirror();
 
-    void            InsertPage( sal_uInt16 nPageId, const XubString& rText,
+    void            InsertPage( sal_uInt16 nPageId, const OUString& rText,
                                 TabBarPageBits nBits = 0,
                                 sal_uInt16 nPos = TabBar::APPEND );
     void            RemovePage( sal_uInt16 nPageId );
@@ -519,8 +519,8 @@ public:
     const Color&    GetSelectTextColor() const { return maSelTextColor; }
     sal_Bool            IsSelectTextColor() const { return mbSelTextColor; }
 
-    void            SetPageText( sal_uInt16 nPageId, const XubString& rText );
-    XubString       GetPageText( sal_uInt16 nPageId ) const;
+    void            SetPageText( sal_uInt16 nPageId, const OUString& rText );
+    OUString        GetPageText( sal_uInt16 nPageId ) const;
     XubString       GetHelpText( sal_uInt16 nPageId ) const;
     rtl::OString    GetHelpId( sal_uInt16 nPageId ) const;
 

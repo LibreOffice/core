@@ -54,7 +54,7 @@ struct ScExportTextOptions
     bool mbAddQuotes;
 };
 
-class SC_DLLPUBLIC ScImportExport
+class ScImportExport
 {
     ScDocShell* pDocSh;
     ScDocument* pDoc;

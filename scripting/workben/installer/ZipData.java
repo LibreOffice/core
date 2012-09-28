@@ -19,10 +19,6 @@
 package installer;
 
 import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 public class ZipData

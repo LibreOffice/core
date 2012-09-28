@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <toolkit/awt/vclxwindows.hxx>
+#include "toolkit/awt/scrollabledialog.hxx"
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -41,7 +42,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
@@ -67,6 +68,7 @@
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 
+#include <vcl/group.hxx>
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
@@ -2288,7 +2290,6 @@ VCLXDialog::~VCLXDialog()
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::document::XVbaMethodParameter* >(this)),
                                         (static_cast< ::com::sun::star::awt::XDialog2* >(this)),
                                         (static_cast< ::com::sun::star::awt::XDialog* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
@@ -2296,7 +2297,6 @@ VCLXDialog::~VCLXDialog()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::document::XVbaMethodParameter>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
     VCLXTopWindow::getTypes()
@@ -2407,36 +2407,6 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
     return aInfo;
 }
 
-// ::com::sun::star::document::XVbaMethodParameter
-void SAL_CALL VCLXDialog::setVbaMethodParameter(
-    const ::rtl::OUString& PropertyName,
-    const ::com::sun::star::uno::Any& Value )
-throw(::com::sun::star::uno::RuntimeException)
-{
-    if (rtl::OUString("Cancel") == PropertyName)
-    {
-        SolarMutexGuard aGuard;
-        if ( GetWindow() )
-        {
-            sal_Int8 nCancel = 0;
-            Value >>= nCancel;
-
-            Dialog* pDlg = (Dialog*) GetWindow();
-            pDlg->SetCloseFlag(nCancel);
-        }
-    }
-}
-
-::com::sun::star::uno::Any SAL_CALL VCLXDialog::getVbaMethodParameter(
-    const ::rtl::OUString& /*PropertyName*/ )
-throw(::com::sun::star::uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-
-    ::com::sun::star::uno::Any aRet;
-    return aRet;
-}
-
 void SAL_CALL VCLXDialog::setProperty(
     const ::rtl::OUString& PropertyName,
     const ::com::sun::star::uno::Any& Value )
@@ -2477,7 +2447,7 @@ throw(::com::sun::star::uno::RuntimeException)
 
             default:
             {
-                VCLXWindow::setProperty( PropertyName, Value );
+                VCLXContainer::setProperty( PropertyName, Value );
             }
         }
     }
@@ -2961,10 +2931,9 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
                 if ( pBase )
                     sURL = pBase->GetURL();
-                Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString("com.sun.star.system.SystemShellExecute")), uno::UNO_QUERY );
-                if ( !sURL.isEmpty() && xSystemShellExecute.is() )
+                Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( ::com::sun::star::system::SystemShellExecute::create(
+                    ::comphelper::getProcessComponentContext() ) );
+                if ( !sURL.isEmpty() )
                 {
                     try
                     {
@@ -6655,7 +6624,6 @@ throw(::com::sun::star::uno::RuntimeException)
     sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
     (void)bVoid;
 #endif
-
     VCLXContainer::setProperty( PropertyName, Value );
 }
 

@@ -149,7 +149,6 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
     SwWrtShell&         rWrtSh;
 
     String              sRemoveText;
-    int                 nRetOptionsDialog;
 
     protected:
         virtual short   Ok();

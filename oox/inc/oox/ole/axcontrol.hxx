@@ -249,6 +249,12 @@ public:
                             sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
                             sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel ) const;
 
+    /** Converts scrollability settings to UNO properties. */
+    void                convertScrollabilitySettings(
+                            PropertyMap& rPropMap,
+                            const AxPairData& rScrollPos, const AxPairData& rScrollArea,
+                            sal_Int32 nScrollBars ) const;
+
     /** Binds the passed control model to the passed data sources. The
         implementation will check which source types are supported. */
     void                bindToSources(
@@ -806,9 +812,6 @@ public:
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
-    /** Returns the caption with the specified zero-based index. */
-    ::rtl::OUString     getCaption( sal_Int32 nIndex ) const;
-
 private:
     AxStringArray       maCaptions;         ///< Captions of all tabs.
     sal_uInt32          mnBackColor;        ///< Fill color.
@@ -899,10 +902,6 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-
-    /** Sets the tabstrip control model related to this multipage control.
-        Contains all formatting attributes of the page tabs. */
-    void                setTabStripModel( const AxTabStripModelRef& rxTabStrip );
 
 private:
     AxTabStripModelRef  mxTabStrip;

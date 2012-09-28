@@ -863,7 +863,7 @@ sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bo
     // wegen ChangeTracking darf UndoAction erst nach PutCell angelegt werden
     if (bUndo)
         rDocShell.GetUndoManager()->AddUndoAction(
-                new ScUndoPutCell( &rDocShell, rPos, pUndoCell, pRedoCell, bHeight ) );
+                new ScUndoPutCell( &rDocShell, rPos, pUndoCell, pRedoCell ) );
 
     if (bHeight)
         AdjustRowHeight( ScRange(rPos) );
@@ -5063,6 +5063,9 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
 {
     ScDocShellModificator aModificator(rDocShell);
     ScDocument* pDoc = rDocShell.GetDocument();
+    if(pDoc->IsTabProtected(nTab))
+        return;
+
     if(nOldFormat)
     {
         pDoc->DeleteConditionalFormat(nOldFormat, nTab);

@@ -17,7 +17,6 @@
  */
 
 import java.awt.Font;
-import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JScrollPane;

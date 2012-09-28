@@ -316,6 +316,20 @@ void ControlConverter::convertVerticalAlign( PropertyMap& rPropMap, sal_Int32 nV
     rPropMap.setProperty( PROP_VerticalAlign, eAlign );
 }
 
+void ControlConverter::convertScrollabilitySettings( PropertyMap& rPropMap,
+                                         const AxPairData& rScrollPos, const AxPairData& rScrollArea,
+                                         sal_Int32 nScrollBars ) const
+{
+    Size tmpSize = mrGraphicHelper.convertHmmToAppFont( Size( rScrollArea.first, rScrollArea.second ) );
+    Point tmpPos = mrGraphicHelper.convertHmmToAppFont( Point( rScrollPos.first, rScrollPos.second ) );
+    rPropMap.setProperty( PROP_ScrollHeight, tmpSize.Height );
+    rPropMap.setProperty( PROP_ScrollWidth, tmpSize.Width );
+    rPropMap.setProperty( PROP_ScrollTop, tmpPos.Y );
+    rPropMap.setProperty( PROP_ScrollLeft, tmpPos.X );
+    rPropMap.setProperty( PROP_HScroll, ( nScrollBars & 0x1 ) == 0x1 );
+    rPropMap.setProperty( PROP_VScroll, ( nScrollBars & 0x2 ) == 0x2 );
+}
+
 void ControlConverter::convertScrollBar( PropertyMap& rPropMap,
         sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
         sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel ) const
@@ -611,7 +625,7 @@ OUString ControlModelBase::getServiceName() const
         case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.form.component.SpinButton" );
         case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.form.component.ScrollBar" );
         case API_CONTROL_PROGRESSBAR:   return CREATE_OUSTRING( "com.sun.star.awt.UnoControlProgressBarModel" );
-        case API_CONTROL_FRAME:         return CREATE_OUSTRING( "com.sun.star.awt.UnoFrameModel" );
+        case API_CONTROL_GROUPBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.GroupBox" );
         case API_CONTROL_PAGE:          return CREATE_OUSTRING( "com.sun.star.awt.UnoPageModel" );
         case API_CONTROL_MULTIPAGE:     return CREATE_OUSTRING( "com.sun.star.awt.UnoMultiPageModel" );
         case API_CONTROL_DIALOG:        return CREATE_OUSTRING( "com.sun.star.awt.UnoControlDialogModel" );
@@ -2305,11 +2319,6 @@ void AxTabStripModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     AxFontDataModel::convertProperties( rPropMap, rConv );
 }
 
-OUString AxTabStripModel::getCaption( sal_Int32 nIndex ) const
-{
-    return ContainerHelper::getVectorElement( maCaptions, nIndex, OUString() );
-}
-
 // ============================================================================
 
 AxContainerModelBase::AxContainerModelBase( bool bFontSupport ) :
@@ -2431,6 +2440,9 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+#if SCROLLABLEFRAME
+    rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
+#endif
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
@@ -2472,11 +2484,6 @@ void AxMultiPageModel::convertProperties( PropertyMap& rPropMap, const ControlCo
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
-void AxMultiPageModel::setTabStripModel( const AxTabStripModelRef& rxTabStrip )
-{
-    mxTabStrip = rxTabStrip;
-}
-
 // ============================================================================
 
 AxUserFormModel::AxUserFormModel()
@@ -2493,6 +2500,7 @@ void AxUserFormModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     rPropMap.setProperty( PROP_Title, maCaption );
     rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
     rConv.convertAxPicture( rPropMap, maPictureData, AX_PICPOS_CENTER  );
+    rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 

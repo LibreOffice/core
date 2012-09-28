@@ -611,7 +611,9 @@ SlideshowImpl::~SlideshowImpl()
 
 void SAL_CALL SlideshowImpl::disposing()
 {
+#ifdef ENABLE_SDREMOTE
     RemoteServer::presentationStopped();
+#endif
     if( mxShow.is() && mpDoc )
         NotifyDocumentEvent( mpDoc, "OnEndPresentation" );
 
@@ -1511,7 +1513,9 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
+#ifdef ENABLE_SDREMOTE
     RemoteServer::presentationStarted( this );
+#endif
 }
 
 // ---------------------------------------------------------

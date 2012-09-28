@@ -41,11 +41,10 @@
 #include "osl/file.hxx"
 #include "osl/thread.hxx"
 #include "tools/getprocessworkingdir.hxx"
-#include "ucbhelper/contentbroker.hxx"
-#include "ucbhelper/configurationkeys.hxx"
 #include "comphelper/processfactory.hxx"
 #include "unotools/configmgr.hxx"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/ucb/UniversalContentBroker.hpp"
 #include "cppuhelper/bootstrap.hxx"
 #include "comphelper/sequence.hxx"
 #include <stdio.h>
@@ -384,15 +383,10 @@ Reference<XComponentContext> bootstrapStandAlone(
     // set global process service factory used by unotools config helpers
     ::comphelper::setProcessServiceFactory( xServiceManager );
 
-    // initialize the ucbhelper ucb,
-    // because the package implementation uses it
-    Sequence<Any> ucb_args( 2 );
-    ucb_args[ 0 ] <<= OUSTR(UCB_CONFIGURATION_KEY1_LOCAL);
-    ucb_args[ 1 ] <<= OUSTR(UCB_CONFIGURATION_KEY2_OFFICE);
-    if (! ::ucbhelper::ContentBroker::initialize( xServiceManager, ucb_args ))
-        throw RuntimeException( OUSTR("cannot initialize UCB!"), 0 );
+    // Initialize the UCB (for backwards compatibility, in case some code still
+    // uses plain createInstance w/o args directly to obtain an instance):
+    UniversalContentBroker::create( xContext );
 
-    disposeGuard.setDeinitUCB();
     return xContext;
 }
 

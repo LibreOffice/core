@@ -20,23 +20,23 @@
 #ifndef __FRAMEWORK_SERVICES_MODULEMANAGER_HXX_
 #define __FRAMEWORK_SERVICES_MODULEMANAGER_HXX_
 
-#include <threadhelp/threadhelpbase.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
-#include <macros/xserviceinfo.hxx>
-#include <general.h>
-#include <general.h>
-#include <stdtypes.h>
+#include "sal/config.h"
 
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <threadhelp/threadhelpbase.hxx>
+
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <cppuhelper/implbase3.hxx>
 
-#include <cppuhelper/weak.hxx>
+namespace com { namespace sun { namespace star { namespace lang {
+    class XSingleServiceFactory;
+} } } }
+
+namespace css = com::sun::star;
 
 //_______________________________________________
 // definition
@@ -48,14 +48,12 @@ namespace framework
 /**
     implements the service com.sun.star.frame.ModuleManager
  */
-class ModuleManager : public  css::lang::XTypeProvider
-                    , public  css::lang::XServiceInfo
-                    , public  css::frame::XModuleManager
-                    , public  css::container::XNameReplace // => XNameAccess, XElementAccess
-                    , public  css::container::XContainerQuery
-                    // attention! Must be the first base class to guarentee right initialize lock ...
-                    , private ThreadHelpBase
-                    , public  ::cppu::OWeakObject
+class ModuleManager:
+    public cppu::WeakImplHelper3<
+        css::lang::XServiceInfo,
+        css::frame::XModuleManager2,
+        css::container::XContainerQuery >,
+    private ThreadHelpBase, private boost::noncopyable
 {
     //___________________________________________
     // member
@@ -80,13 +78,37 @@ class ModuleManager : public  css::lang::XTypeProvider
 
     public:
 
+        static rtl::OUString SAL_CALL impl_getStaticImplementationName();
+
+        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
+        impl_createFactory(
+            css::uno::Reference< css::lang::XMultiServiceFactory > const &
+                manager);
+
+    private:
+
+        static css::uno::Sequence< rtl::OUString >
+        impl_getSupportedServiceNames();
+
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        impl_createInstance(
+            css::uno::Reference< css::lang::XMultiServiceFactory > const &
+                manager);
+
                  ModuleManager(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+
         virtual ~ModuleManager(                                                                   );
 
-        // XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
-        DECLARE_XSERVICEINFO
+        // XServiceInfo
+        virtual rtl::OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL supportsService(
+            rtl::OUString const & ServiceName)
+            throw (css::uno::RuntimeException);
+
+        virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+        getSupportedServiceNames() throw (css::uno::RuntimeException);
 
         // XModuleManager
         virtual ::rtl::OUString SAL_CALL identify(const css::uno::Reference< css::uno::XInterface >& xModule)

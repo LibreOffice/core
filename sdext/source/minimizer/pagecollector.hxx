@@ -31,7 +31,7 @@ class PageCollector
     struct MasterPageEntity
     {
         com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xMasterPage;
-        sal_Bool bUsed;
+        bool bUsed;
     };
     static void CollectCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, const rtl::OUString& rCustomShow, std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > >& );
     static void CollectNonCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, const rtl::OUString& rCustomShow, std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > >& );

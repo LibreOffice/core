@@ -25,7 +25,7 @@ UniRefBase::~UniRefBase()
 
 void UniRefBase::release()
 {
-    if( !osl_decrementInterlockedCount( &m_refCount ) )
+    if( !osl_atomic_decrement( &m_refCount ) )
         delete this;
 }
 

@@ -26,7 +26,7 @@ abstract class NodeHandler
 {
     /** This vector is used as cache for the child objects.
     */
-    protected Vector maChildList;
+    protected Vector<AccessibleTreeNode> maChildList;
 
 
     public abstract NodeHandler createHandler (
@@ -34,7 +34,7 @@ abstract class NodeHandler
 
     public NodeHandler ()
     {
-        maChildList = new Vector ();
+        maChildList = new Vector<AccessibleTreeNode> ();
     }
 
     /** Clear the cache of child objects.
@@ -43,7 +43,7 @@ abstract class NodeHandler
     {
         synchronized (maChildList)
         {
-            maChildList = new Vector ();
+            maChildList = new Vector<AccessibleTreeNode> ();
         }
     }
 
@@ -70,7 +70,7 @@ abstract class NodeHandler
     {
         synchronized (maChildList)
         {
-            AccessibleTreeNode aChild = (AccessibleTreeNode)maChildList.get(nIndex);
+            AccessibleTreeNode aChild = maChildList.get(nIndex);
             if (aChild == null)
             {
                 aChild = createChild (aParent, nIndex);
@@ -86,7 +86,7 @@ abstract class NodeHandler
     {
         synchronized (maChildList)
         {
-            return (AccessibleTreeNode)maChildList.get(nIndex);
+            return maChildList.get(nIndex);
         }
     }
 

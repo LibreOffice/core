@@ -21,8 +21,6 @@ package org.openoffice.netbeans.modules.office.wizard;
 import org.openide.util.NbBundle;
 
 /** A single panel for a wizard - the GUI portion.
- *
- * @author tomaso
  */
 public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
 

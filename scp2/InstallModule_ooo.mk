@@ -27,14 +27,10 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/ooo))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/ooo,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	DISABLE_ATL \
 	DISABLE_NEON \
+	ENABLE_CAIRO_CANVAS \
 	ENABLE_DIRECTX \
 	ENABLE_EVOAB2 \
 	ENABLE_GTK \
@@ -143,9 +139,6 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	$(if $(filter MACOSX,$(OS)),\
-		-DENABLE_CAIROCANVAS \
-	) \
 	$(if $(filter INTERNAL,$(ENABLE_LIBRSVG)),\
 		-DENABLE_LIBRSVG \
 	) \
@@ -172,6 +165,9 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	) \
 	$(if $(filter-out YES,$(WITH_MYSPELL_DICTS)),\
 		-DWITHOUT_MYSPELL_DICTS \
+	) \
+	$(if $(BITNESS_OVERRIDE),\
+		-DBITNESS_OVERRIDE=$(BITNESS_OVERRIDE) \
 	) \
 ))
 
@@ -219,6 +215,7 @@ $(eval $(call gb_InstallModule_add_templates,scp2/ooo,\
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/common_brand \
     scp2/source/ooo/common_brand_readme \
+    scp2/source/ooo/directory_ooo \
     scp2/source/ooo/directory_ooo_macosx \
     scp2/source/ooo/file_extra_ooo \
     scp2/source/ooo/file_font_ooo \
@@ -241,7 +238,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
-    scp2/source/ooo/directory_ooo \
     scp2/source/ooo/module_helppack \
     scp2/source/ooo/module_langpack \
     scp2/source/ooo/module_ooo \

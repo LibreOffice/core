@@ -27,7 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -722,15 +722,9 @@ void OAccessibleMenuBaseComponent::disposing()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-sal_Bool OAccessibleMenuBaseComponent::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool OAccessibleMenuBaseComponent::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 // -----------------------------------------------------------------------------

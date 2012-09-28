@@ -214,7 +214,7 @@ namespace jni_uno
 //______________________________________________________________________________
 void Bridge::acquire() const SAL_THROW(())
 {
-    if (1 == osl_incrementInterlockedCount( &m_ref ))
+    if (1 == osl_atomic_increment( &m_ref ))
     {
         if (m_registered_java2uno)
         {
@@ -236,7 +236,7 @@ void Bridge::acquire() const SAL_THROW(())
 //______________________________________________________________________________
 void Bridge::release() const SAL_THROW(())
 {
-    if (! osl_decrementInterlockedCount( &m_ref ))
+    if (! osl_atomic_decrement( &m_ref ))
     {
         uno_revokeMapping(
             m_registered_java2uno
@@ -456,8 +456,12 @@ void SAL_CALL java_env_disposing( uno_Environment * java_env )
 }
 }
 
+#ifdef DISABLE_DYNLOADING
+#define uno_initEnvironment java_uno_initEnvironment
+#endif
+
 //------------------------------------------------------------------------------
-void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
     java_env->environmentDisposing = java_env_disposing;
@@ -470,8 +474,12 @@ void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     machine->acquire();
 }
 
+#ifdef DISABLE_DYNLOADING
+#define uno_ext_getMapping java_uno_ext_getMapping
+#endif
+
 //------------------------------------------------------------------------------
-void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
 {
@@ -554,12 +562,17 @@ void SAL_CALL uno_ext_getMapping(
     }
 }
 
+#ifndef DISABLE_DYNLOADING
+
 //------------------------------------------------------------------------------
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
     SAL_THROW_EXTERN_C()
 {
     return (*g_moduleCount.canUnload)( &g_moduleCount, pTime );
 }
+
+#endif
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -141,12 +141,11 @@ SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
         sal_uInt16 i_nPrefix, const ::rtl::OUString & i_rLName,
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
     SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
     SchXMLDocContext(i_rImpHelper, i_rImport, i_nPrefix, i_rLName),
     SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
-        i_xDocProps, i_xDocBuilder)
+        i_xDocProps)
 {
 }
 

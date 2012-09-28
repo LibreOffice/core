@@ -21,7 +21,6 @@ package com.sun.star.comp.bridgefactory;
 import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.comp.connections.PipedConnection;
-import com.sun.star.connection.XConnection;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import org.junit.Test;

@@ -191,7 +191,8 @@ public:
 //  ----------------------------------------------------
 
 class VCLXPrinterServer :   public ::com::sun::star::awt::XPrinterServer,
-                            public  ::cppu::OWeakObject
+                            public ::com::sun::star::lang::XTypeProvider,
+                            public ::cppu::OWeakObject
 {
 public:
 

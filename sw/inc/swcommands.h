@@ -61,7 +61,6 @@
 #define CMD_FN_INSERT_FLD_PGCOUNT                   ".uno:InsertPageCountField"
 #define CMD_FN_INSERT_FLD_PGNUMBER                  ".uno:InsertPageNumberField"
 #define CMD_FN_TABLE_INSERT_ROW_DLG                 ".uno:InsertRowDialog"
-#define CMD_FN_INSERT_TABLE                         ".uno:InsertTable"
 #define CMD_FN_INSERT_FLD_TIME                      ".uno:InsertTimeField"
 #define CMD_FN_INSERT_FLD_TITLE                     ".uno:InsertTitleField"
 #define CMD_FN_INSERT_FLD_TOPIC                     ".uno:InsertTopicField"

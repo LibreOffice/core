@@ -58,7 +58,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <CellColorHandler.hxx>
 #include <SectionColumnHandler.hxx>
@@ -88,7 +88,8 @@ struct _PageSz
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< io::XInputStream > xInputStream,
                             uno::Reference< lang::XComponent > xModel,
-                            SourceDocumentType eDocumentType) :
+                            bool bRepairStorage,
+                            SourceDocumentType eDocumentType ) :
 LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
 LoggedStream(dmapper_logger, "DomainMapper"),
@@ -100,17 +101,12 @@ LoggedStream(dmapper_logger, "DomainMapper"),
         PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TABS_RELATIVE_TO_INDENT ),
         uno::makeAny( false ) );
 
-    m_pImpl->SetDocumentSettingsProperty(
-        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ADD_PARA_TABLE_SPACING ),
-        uno::makeAny( false ) );
-
     //import document properties
-
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
         uno::Reference< embed::XStorage > xDocumentStorage =
-            (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream));
+            (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xFactory, bRepairStorage ));
 
         uno::Reference< uno::XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
                                 "com.sun.star.document.OOXMLDocumentPropertiesImporter",
@@ -1158,15 +1154,19 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                              uno::makeAny( aLocale ) );
         }
         break;
+// This is the value when the compat option is not enabled. No idea where it comes from, the spec doesn't mention it.
 #define AUTO_PARA_SPACING sal_Int32(49)
         case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
-            //TODO: autospacing depends on some document property (called fDontUseHTMLAutoSpacing in old ww8 filter) 100 or 280 twip
-            //and should be set to 0 on start of page
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+            if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+            else
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ) );
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
-            //TODO: autospacing depends on some document property (called fDontUseHTMLAutoSpacing in old ww8 filter) 100 or 280 twip
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+            if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+            else
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, false, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ) );
         break;
         case NS_ooxml::LN_CT_SmartTagRun_uri:
         case NS_ooxml::LN_CT_SmartTagRun_element:
@@ -1419,6 +1419,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
         }
         break;
+        case NS_ooxml::LN_CT_SdtBlock_sdtContent:
+            m_pImpl->SetSdt(true);
+        break;
+        case NS_ooxml::LN_CT_SdtBlock_sdtEndContent:
+            m_pImpl->SetSdt(false);
+        break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -1441,6 +1447,38 @@ void DomainMapper::lcl_sprm(Sprm & rSprm)
 {
     if( !m_pImpl->getTableManager().sprm(rSprm))
         sprmWithProps( rSprm, m_pImpl->GetTopContext() );
+}
+
+sal_Int32 lcl_getCurrentNumberingProperty(uno::Reference<container::XIndexAccess> xNumberingRules, sal_Int32 nNumberingLevel, OUString aProp)
+{
+    sal_Int32 nRet = 0;
+
+    try
+    {
+        if (nNumberingLevel < 0) // It seems it's valid to omit numbering level, and in that case it means zero.
+            nNumberingLevel = 0;
+        if (xNumberingRules.is())
+        {
+            uno::Sequence<beans::PropertyValue> aProps;
+            xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
+            for (int i = 0; i < aProps.getLength(); ++i)
+            {
+                const beans::PropertyValue& rProp = aProps[i];
+
+                if (rProp.Name == aProp)
+                {
+                    rProp.Value >>= nRet;
+                    break;
+                }
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        // This can happen when the doc contains some hand-crafted invalid list level.
+    }
+
+    return nRet;
 }
 
 void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
@@ -2094,7 +2132,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 if (xCharStyle.is())
                     xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT), aVal);
             }
-            m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
+            // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
+            if (!m_pImpl->IsStyleSheetImport())
+                m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
         }
         break;
     case NS_sprm::LN_CHpsInc:
@@ -2846,6 +2886,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     }
     break;
     case NS_ooxml::LN_CT_PPrBase_framePr:
+    // Avoid frames if we're inside a structured document tag, would just cause outher tables fail to create.
+    if (!m_pImpl->GetSdt())
     {
         PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
         if( pContext.get() )
@@ -2970,8 +3012,32 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
 
             if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
+            {
                 rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny(
                             ListDef::GetStyleName( pStyleSheetProperties->GetListId( ) ) ), false);
+
+                // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
+                sal_Int32 nParaRightMargin = 0;
+                if (!pEntry->sBaseStyleIdentifier.isEmpty())
+                {
+                    const StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+                    const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : 0);
+                    if (pParentProperties->find( PropertyDefinition( PROP_PARA_RIGHT_MARGIN, true )) != pParentProperties->end())
+                        nParaRightMargin = pParentProperties->find( PropertyDefinition( PROP_PARA_RIGHT_MARGIN, true ))->second.get<sal_Int32>();
+                }
+                if (nParaRightMargin != 0)
+                {
+                    // If we're setting the right margin, we should set the first / left margin as well from the numbering style.
+                    sal_Int32 nFirstLineIndent = lcl_getCurrentNumberingProperty(m_pImpl->GetCurrentNumberingRules(), pStyleSheetProperties->GetListLevel(), "FirstLineIndent");
+                    sal_Int32 nParaLeftMargin = lcl_getCurrentNumberingProperty(m_pImpl->GetCurrentNumberingRules(), pStyleSheetProperties->GetListLevel(), "IndentAt");
+                    if (nFirstLineIndent != 0)
+                        rContext->Insert(PROP_PARA_FIRST_LINE_INDENT, true, uno::makeAny(nFirstLineIndent));
+                    if (nParaLeftMargin != 0)
+                        rContext->Insert(PROP_PARA_LEFT_MARGIN, true, uno::makeAny(nParaLeftMargin));
+
+                    rContext->Insert(PROP_PARA_RIGHT_MARGIN, true, uno::makeAny(nParaRightMargin));
+                }
+            }
 
             if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
                 rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
@@ -3236,11 +3302,21 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
             else
             {
                 std::map< sal_Int32, uno::Any >::const_iterator font = deferredCharacterProperties.find( NS_sprm::LN_CHps );
+                PropertyMapPtr pDefaultCharProps = m_pImpl->GetStyleSheetTable()->GetDefaultCharProps();
+                PropertyMap::iterator aDefaultFont = pDefaultCharProps->find(PropertyDefinition( PROP_CHAR_HEIGHT, false ));
                 if( font != deferredCharacterProperties.end())
                 {
                     double fontSize = 0;
                     font->second >>= fontSize;
                     nEscapement = nIntValue * 100 / fontSize;
+                }
+                // TODO if not direct formatting, check the style first, not directly the default char props.
+                else if (aDefaultFont != pDefaultCharProps->end())
+                {
+                    double fHeight = 0;
+                    aDefaultFont->second >>= fHeight;
+                    // fHeight is in points, nIntValue is in half points, nEscapement is in percents.
+                    nEscapement = nIntValue * 100 / fHeight / 2;
                 }
                 else
                 { // TODO: Find out the font size. The 58/-58 values were here previous, but I have
@@ -3467,8 +3543,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         m_pImpl->getTableManager().utext(data_, len);
 
-        // RTF always uses text() instead of utext() for run break
-        if(len == 1 && ((*data_) == 0x0d || (*data_) == 0x07) && !IsRTFImport())
+        if(len == 1 && (sText[0] == 0x0d || sText[0] == 0x07))
         {
             bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
             // If the paragraph contains only the section properties and it has

@@ -120,14 +120,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 oslFileHandle *pErrorRead );
 
 
-oslProcessError SAL_CALL osl_searchPath_impl(
-    const sal_Char* pszName,
-    const sal_Char* pszPath,
-    sal_Char Separator,
-    sal_Char *pszBuffer,
-    sal_uInt32 Max);
-
-
 sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uInt32 MaxLen);
 
 static oslProcessImpl* ChildList;
@@ -140,8 +132,8 @@ static oslMutex        ChildListMutex;
  A new implemenation is in file_path_helper.cxx
  *****************************************************************************/
 
-oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_Char* pszPath,
-                   sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max)
+static oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName,
+                   sal_Char *pszBuffer, sal_uInt32 Max)
 {
     sal_Char path[PATH_MAX + 1];
     sal_Char *pchr;
@@ -155,14 +147,7 @@ oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_
         return osl_Process_E_NotFound;
     }
 
-    if (pszPath == NULL)
-        pszPath = "PATH";
-
-    if (Separator == '\0')
-        Separator = ':';
-
-
-    if ( (pchr = getenv(pszPath)) != 0 )
+    if ( (pchr = getenv("PATH")) != 0 )
     {
         sal_Char *pstr;
 
@@ -170,7 +155,7 @@ oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_
         {
             pstr = path;
 
-            while ((*pchr != '\0') && (*pchr != Separator))
+            while ((*pchr != '\0') && (*pchr != ':'))
                 *pstr++ = *pchr++;
 
             if ((pstr > path) && ((*(pstr - 1) != '/')))
@@ -192,7 +177,7 @@ oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_
                 return osl_Process_E_None;
             }
 
-            if (*pchr == Separator)
+            if (*pchr == ':')
                 pchr++;
         }
     }
@@ -698,7 +683,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     }
 
     if ((Options & osl_Process_SEARCHPATH) &&
-        (osl_searchPath_impl(pszImageName, NULL, '\0', path, sizeof(path)) == osl_Process_E_None))
+        (osl_searchPath_impl(pszImageName, path, sizeof(path)) == osl_Process_E_None))
         pszImageName = path;
 
     Data.m_pszArgs[0] = strdup(pszImageName);

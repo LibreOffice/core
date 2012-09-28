@@ -252,8 +252,7 @@ public:
     SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     virtual ~SdXMLFlatDocContext_Impl();
 
@@ -265,12 +264,11 @@ public:
 SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
     SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
     SdXMLDocContext_Impl(i_rImport, i_nPrefix, i_rLName, i_xAttrList),
     SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
-        i_xDocProps, i_xDocBuilder)
+        i_xDocProps)
 {
 }
 
@@ -731,15 +729,11 @@ SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
         pContext = CreateMetaContext(rLocalName, xAttrList);
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
                 ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
-                uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
         // flat OpenDocument file format
         pContext = new SdXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
-                        xAttrList, xDPS->getDocumentProperties(), xDocBuilder);
+                        xAttrList, xDPS->getDocumentProperties());
     } else {
         pContext = SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
     }
@@ -756,17 +750,13 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
 
     if (getImportFlags() & IMPORT_META)
     {
-        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
-                uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
             (IsStylesOnlyMode()) ? 0 : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this,
                         XML_NAMESPACE_OFFICE, rLocalName,
-                        xDocProps, xDocBuilder);
+                        xDocProps);
     }
 
     if(!pContext)

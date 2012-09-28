@@ -148,7 +148,6 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
 
 ColorScaleRule::ColorScaleRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
-    mrCondFormat( rFormat ),
     mnCfvo(0),
     mnCol(0)
 {
@@ -267,7 +266,6 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
 //
 DataBarRule::DataBarRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
-    mrCondFormat( rFormat ),
     mpFormat(new ScDataBarFormatData)
 {
     mpFormat->meAxisPosition = databar::NONE;
@@ -880,6 +878,7 @@ void CondFormat::importCondFormatting( SequenceInputStream& rStrm )
     rStrm.skip( 8 );
     rStrm >> aRanges;
     getAddressConverter().convertToCellRangeList( maModel.maRanges, aRanges, getSheetIndex(), true );
+    mpFormat = new ScConditionalFormat(0, &getScDocument());
 }
 
 void CondFormat::importCfRule( SequenceInputStream& rStrm )

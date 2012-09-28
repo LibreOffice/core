@@ -663,7 +663,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
             aTemp += rtl::OUString("?repairpackage");
         }
 
-        m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
+        m_pContent = new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() );
 
         if ( pKey )
         {
@@ -1539,7 +1539,7 @@ UCBStorage::UCBStorage( SvStream& rStrm, sal_Bool bDirect )
         if( rStrm.IsWritable() )
             nMode = STREAM_READ | STREAM_WRITE;
 
-        ::ucbhelper::Content aContent( aURL, Reference < XCommandEnvironment >() );
+        ::ucbhelper::Content aContent( aURL, Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         pImp = new UCBStorage_Impl( aContent, aURL, nMode, this, bDirect, sal_True );
     }
     else
@@ -1850,7 +1850,7 @@ void UCBStorage_Impl::CreateContent()
             aTemp += rtl::OUString("?repairpackage");
         }
 
-        m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
+        m_pContent = new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() );
     }
     catch (const ContentCreationException&)
     {
@@ -1935,7 +1935,7 @@ void UCBStorage_Impl::ReadContent()
                             aName += String(  "?repairpackage"  );
                     }
 
-                    ::ucbhelper::Content aContent( aName, xComEnv );
+                    ::ucbhelper::Content aContent( aName, xComEnv, comphelper::getProcessComponentContext() );
 
                     ::rtl::OUString aMediaType;
                     Any aAny = aContent.getPropertyValue( ::rtl::OUString("MediaType") );
@@ -2229,7 +2229,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     String aName( m_aURL );
                     aName += '/';
                     aName += pElement->m_aOriginalName;
-                    pContent = new ::ucbhelper::Content( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                    pContent = new ::ucbhelper::Content( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 }
 
                 if ( pElement->m_bIsRemoved )
@@ -2377,7 +2377,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             xWriter->writeManifestSequence( xOutputStream, aProps );
 
                             // move the stream to its desired location
-                            Content aSource( pTempFile->GetURL(), Reference < XCommandEnvironment >() );
+                            Content aSource( pTempFile->GetURL(), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                             xWriter = NULL;
                             xOutputStream = NULL;
                             DELETEZ( pTempFile );
@@ -2967,7 +2967,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
             String aName = aFolderObj.GetName();
             aFolderObj.removeSegment();
 
-            Content aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >() );
+            Content aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             pImp->m_pContent = new Content;
             sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, pImp->m_aName, *pImp->m_pContent );
             if ( !bRet )
@@ -3283,7 +3283,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
     aTitle += aTmpName;
 
     // create a folder and store its URL
-    Content aFolder( aFolderURL, Reference < XCommandEnvironment >() );
+    Content aFolder( aFolderURL, Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
     Content aNewFolder;
     sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTitle, aNewFolder );
     if ( !bRet )
@@ -3325,7 +3325,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
         pStream->Flush();
 
         // move the stream to its desired location
-        Content aSource( pTempFile->GetURL(), Reference < XCommandEnvironment >() );
+        Content aSource( pTempFile->GetURL(), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         DELETEZ( pTempFile );
         aFolder.transferContent( aSource, InsertOperation_MOVE, aName, NameClash::OVERWRITE );
         return aURL;

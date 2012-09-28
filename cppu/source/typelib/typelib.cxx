@@ -601,8 +601,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_IndirectTypeDescription * pIndirect = (typelib_IndirectTypeDescription *)pTmp;
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nArrayTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nArrayTypeDescriptionCount );
 #endif
             pIndirect->pType = 0;
             pTmp->nDimensions = 0;
@@ -616,8 +615,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_IndirectTypeDescription * pTmp = new typelib_IndirectTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nIndirectTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nIndirectTypeDescriptionCount );
 #endif
             pTmp->pType = 0;
         }
@@ -629,8 +627,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp = new typelib_UnionTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nUnionTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nUnionTypeDescriptionCount );
 #endif
             pTmp->nMembers = 0;
             pTmp->pDiscriminantTypeRef = 0;
@@ -648,8 +645,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp = new typelib_StructTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nCompoundTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nCompoundTypeDescriptionCount );
 #endif
             pTmp->aBase.pBaseTypeDescription = 0;
             pTmp->aBase.nMembers = 0;
@@ -667,8 +663,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp = new typelib_CompoundTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nCompoundTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nCompoundTypeDescriptionCount );
 #endif
             pTmp->pBaseTypeDescription = 0;
             pTmp->nMembers = 0;
@@ -683,8 +678,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_EnumTypeDescription * pTmp = new typelib_EnumTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nEnumTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nEnumTypeDescriptionCount );
 #endif
             pTmp->nDefaultEnumValue = 0;
             pTmp->nEnumValues       = 0;
@@ -698,8 +692,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_InterfaceTypeDescription * pTmp = new typelib_InterfaceTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nInterfaceTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nInterfaceTypeDescriptionCount );
 #endif
             pTmp->pBaseTypeDescription = 0;
             pTmp->nMembers = 0;
@@ -719,8 +712,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_InterfaceMethodTypeDescription * pTmp = new typelib_InterfaceMethodTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nInterfaceMethodTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nInterfaceMethodTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = 0;
             pTmp->pReturnTypeRef = 0;
@@ -739,8 +731,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             typelib_InterfaceAttributeTypeDescription * pTmp = new typelib_InterfaceAttributeTypeDescription();
             pRet = (typelib_TypeDescription *)pTmp;
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount(
-                &Init::get().nInterfaceAttributeTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nInterfaceAttributeTypeDescriptionCount );
 #endif
             pTmp->aBase.pMemberName = 0;
             pTmp->pAttributeTypeRef = 0;
@@ -758,7 +749,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         {
             pRet = new typelib_TypeDescription();
 #if OSL_DEBUG_LEVEL > 1
-            osl_incrementInterlockedCount( &Init::get().nTypeDescriptionCount );
+            osl_atomic_increment( &Init::get().nTypeDescriptionCount );
 #endif
         }
     }
@@ -1429,7 +1420,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_acquire(
     typelib_TypeDescription * pTypeDescription )
     SAL_THROW_EXTERN_C()
 {
-    ::osl_incrementInterlockedCount( &pTypeDescription->nRefCount );
+    osl_atomic_increment( &pTypeDescription->nRefCount );
 }
 
 //------------------------------------------------------------------------
@@ -1586,7 +1577,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_release(
     typelib_TypeDescription * pTD )
     SAL_THROW_EXTERN_C()
 {
-    sal_Int32 ref = ::osl_decrementInterlockedCount( &pTD->nRefCount );
+    sal_Int32 ref = osl_atomic_decrement( &pTD->nRefCount );
     OSL_ASSERT(ref >= 0);
     if (0 == ref)
     {
@@ -1625,32 +1616,32 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_release(
         switch( pTD->eTypeClass )
         {
         case typelib_TypeClass_ARRAY:
-            osl_decrementInterlockedCount( &rInit.nArrayTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nArrayTypeDescriptionCount );
             break;
         case typelib_TypeClass_SEQUENCE:
-            osl_decrementInterlockedCount( &rInit.nIndirectTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nIndirectTypeDescriptionCount );
             break;
         case typelib_TypeClass_UNION:
-            osl_decrementInterlockedCount( &rInit.nUnionTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nUnionTypeDescriptionCount );
             break;
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_EXCEPTION:
-            osl_decrementInterlockedCount( &rInit.nCompoundTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nCompoundTypeDescriptionCount );
             break;
         case typelib_TypeClass_INTERFACE:
-            osl_decrementInterlockedCount( &rInit.nInterfaceTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nInterfaceTypeDescriptionCount );
             break;
         case typelib_TypeClass_INTERFACE_METHOD:
-            osl_decrementInterlockedCount( &rInit.nInterfaceMethodTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nInterfaceMethodTypeDescriptionCount );
             break;
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-            osl_decrementInterlockedCount( &rInit.nInterfaceAttributeTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nInterfaceAttributeTypeDescriptionCount );
             break;
         case typelib_TypeClass_ENUM:
-            osl_decrementInterlockedCount( &rInit.nEnumTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nEnumTypeDescriptionCount );
             break;
         default:
-            osl_decrementInterlockedCount( &rInit.nTypeDescriptionCount );
+            osl_atomic_decrement( &rInit.nTypeDescriptionCount );
         }
 #endif
 
@@ -1681,7 +1672,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
                 // pRef->pType->pWeakRef == 0 means that the description is empty
                 if (pTDR->pType->pWeakRef)
                 {
-                    if (osl_incrementInterlockedCount( &pTDR->pType->nRefCount ) > 1)
+                    if (osl_atomic_increment( &pTDR->pType->nRefCount ) > 1)
                     {
                         // The refence is incremented. The object cannot be destroyed.
                         // Release the guard at the earliest point.
@@ -1694,7 +1685,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
                     else
                     {
                         // destruction of this type in progress (another thread!)
-                        osl_decrementInterlockedCount( &pTDR->pType->nRefCount );
+                        osl_atomic_decrement( &pTDR->pType->nRefCount );
                     }
                 }
                 // take new descr
@@ -2353,7 +2344,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_new(
     {
         typelib_TypeDescriptionReference * pTDR = new typelib_TypeDescriptionReference();
 #if OSL_DEBUG_LEVEL > 1
-        osl_incrementInterlockedCount( &rInit.nTypeDescriptionReferenceCount );
+        osl_atomic_increment( &rInit.nTypeDescriptionReferenceCount );
 #endif
         pTDR->nRefCount = 1;
         pTDR->nStaticRefCount = 0;
@@ -2384,7 +2375,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_acquire
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
 {
-    ::osl_incrementInterlockedCount( &pRef->nRefCount );
+    osl_atomic_increment( &pRef->nRefCount );
 }
 
 //------------------------------------------------------------------------
@@ -2395,7 +2386,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_release
     // Is it a type description?
     if( reallyWeak( pRef->eTypeClass ) )
     {
-        if( ! ::osl_decrementInterlockedCount( &pRef->nRefCount ) )
+        if( ! osl_atomic_decrement( &pRef->nRefCount ) )
         {
             TypeDescriptor_Init_Impl &rInit = Init::get();
             if( rInit.pWeakMap )
@@ -2412,7 +2403,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_release
             rtl_uString_release( pRef->pTypeName );
             OSL_ASSERT( pRef->pType == 0 );
 #if OSL_DEBUG_LEVEL > 1
-            osl_decrementInterlockedCount( &rInit.nTypeDescriptionReferenceCount );
+            osl_atomic_decrement( &rInit.nTypeDescriptionReferenceCount );
 #endif
             delete pRef;
         }
@@ -2437,7 +2428,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDesc
     if( !reallyWeak( pRef->eTypeClass ) && pRef->pType && pRef->pType->pWeakRef )
     {
         // reference is a description and initialized
-        osl_incrementInterlockedCount( &((typelib_TypeDescription *)pRef)->nRefCount );
+        osl_atomic_increment( &((typelib_TypeDescription *)pRef)->nRefCount );
         *ppRet = (typelib_TypeDescription *)pRef;
         return;
     }
@@ -2447,7 +2438,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDesc
     // pRef->pType->pWeakRef == 0 means that the description is empty
     if( pRef->pType && pRef->pType->pWeakRef )
     {
-        sal_Int32 n = ::osl_incrementInterlockedCount( &pRef->pType->nRefCount );
+        sal_Int32 n = osl_atomic_increment( &pRef->pType->nRefCount );
         if( n > 1 )
         {
             // The refence is incremented. The object cannot be destroyed.
@@ -2457,7 +2448,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDesc
         }
         else
         {
-            ::osl_decrementInterlockedCount( &pRef->pType->nRefCount );
+            osl_atomic_decrement( &pRef->pType->nRefCount );
             // detruction of this type in progress (another thread!)
             // no acces through this weak reference
             pRef->pType = 0;
@@ -2489,7 +2480,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
         WeakMap_Impl::const_iterator aIt = rInit.pWeakMap->find( (sal_Unicode*)pName->buffer );
         if( !(aIt == rInit.pWeakMap->end()) ) // != failed on msc4.2
         {
-            sal_Int32 n = ::osl_incrementInterlockedCount( &(*aIt).second->nRefCount );
+            sal_Int32 n = osl_atomic_increment( &(*aIt).second->nRefCount );
             if( n > 1 )
             {
                 // The refence is incremented. The object cannot be destroyed.
@@ -2500,7 +2491,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
             {
                 // detruction of this type in progress (another thread!)
                 // no acces through this weak reference
-                ::osl_decrementInterlockedCount( &(*aIt).second->nRefCount );
+                osl_atomic_decrement( &(*aIt).second->nRefCount );
             }
         }
     }

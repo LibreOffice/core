@@ -2,6 +2,8 @@
 #ifndef INCLUDED_SALDLLAPI_H
 #define INCLUDED_SALDLLAPI_H
 
+#include "sal/config.h"
+
 #include "sal/types.h"
 
 #if defined(SAL_DLLIMPLEMENTATION)

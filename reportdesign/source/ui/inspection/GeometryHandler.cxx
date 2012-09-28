@@ -53,6 +53,7 @@
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -256,7 +257,7 @@ GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const 
     {
         const uno::Reference< lang::XMultiComponentFactory > xFac = m_xContext->getServiceManager();
         m_xFormComponentHandler.set(xFac->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.FormComponentPropertyHandler")),m_xContext),uno::UNO_QUERY_THROW);
-        m_xTypeConverter.set(xFac->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter" )),m_xContext),uno::UNO_QUERY_THROW);
+        m_xTypeConverter.set(script::Converter::create(context));
         loadDefaultFunctions();
     }
     catch(const uno::Exception&)

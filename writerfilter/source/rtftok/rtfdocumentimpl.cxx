@@ -35,13 +35,14 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <rtl/tencinfo.h>
 #include <svtools/wmf.hxx>
 #include <svl/lngmisc.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -232,7 +233,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xDstDoc(xDstDoc),
     m_xFrame(xFrame),
     m_xStatusIndicator(xStatusIndicator),
-    m_nGroup(0),
     m_aDefaultState(this),
     m_bSkipUnknown(false),
     m_aFontEncodings(),
@@ -270,7 +270,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bFormField(false),
     m_bIsInFrame(false),
     m_aUnicodeBuffer(),
-    m_aHexBuffer()
+    m_aHexBuffer(),
+    m_bDeferredContSectBreak(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -597,7 +598,6 @@ int RTFDocumentImpl::resolvePict(bool bInline)
 {
     SvMemoryStream aStream;
     SvStream *pStream = 0;
-
     if (!m_pBinaryData.get())
     {
         pStream = &aStream;
@@ -1006,6 +1006,14 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
+    // Are we in the middle of the table definition? (No cell defs yet, but we already have some cell props.)
+    if (m_aStates.top().aTableCellSprms.find(NS_ooxml::LN_CT_TcPrBase_vAlign).get() &&
+        m_aStates.top().nCells == 0)
+    {
+        m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, RTFValue::Pointer_t(new RTFValue(rString))));
+        return;
+    }
+
     checkFirstRun();
     checkNeedPap();
 
@@ -1093,6 +1101,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
     checkUnicode();
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     switch (nKeyword)
     {
@@ -1516,6 +1525,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     if (nKeyword != RTF_HEXCHAR)
         checkUnicode();
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     sal_uInt8 cCh = 0;
 
@@ -1572,7 +1582,17 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             break;
         case RTF_SECT:
-                sectBreak();
+            {
+                RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
+                if (pBreak.get() && !pBreak->getInt())
+                {
+                    // This is a continous section break, don't send it yet.
+                    // It's possible that we'll have nothing after this token, and then we should ignore it.
+                    m_bDeferredContSectBreak = true;
+                }
+                else
+                    sectBreak();
+            }
             break;
         case RTF_NOBREAK:
             {
@@ -1693,10 +1713,21 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAGE:
             {
-                sal_uInt8 sBreak[] = { 0xc };
-                Mapper().text(sBreak, 1);
-                if (!m_bNeedPap)
-                    parBreak();
+                // If we're inside a continous section, we should send a section break, not a page one.
+                RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
+                if (pBreak.get() && !pBreak->getInt())
+                {
+                    dispatchFlag(RTF_SBKPAGE);
+                    sectBreak();
+                    dispatchFlag(RTF_SBKNONE);
+                }
+                else
+                {
+                    sal_uInt8 sBreak[] = { 0xc };
+                    Mapper().text(sBreak, 1);
+                    if (!m_bNeedPap)
+                        parBreak();
+                }
             }
             break;
         case RTF_CHPGN:
@@ -1719,6 +1750,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     checkUnicode();
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     int nParam = -1;
     int nSprm = -1;
@@ -2342,6 +2374,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
     checkUnicode(nKeyword != RTF_U, true);
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
     RTFValue::Pointer_t pIntValue(new RTFValue(nParam));
@@ -2721,6 +2754,23 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_WrapSquare_wrapText, pValue);
             }
             break;
+        case RTF_SHPWR:
+            {
+                switch (nParam)
+                {
+                case 1:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_NONE; break;
+                case 2:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_PARALLEL; break;
+                case 3:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_THROUGHT; break;
+                case 4:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_PARALLEL; break;
+                case 5:
+                    m_aStates.top().aShape.nWrap = com::sun::star::text::WrapTextMode_THROUGHT; break;
+                }
+            }
+            break;
         case RTF_CELLX:
             {
                 int nCellX = nParam - m_aStates.top().nCellX;
@@ -3081,6 +3131,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     checkUnicode();
+    checkDeferredContSectBreak();
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;
     RTFValue::Pointer_t pBoolValue(new RTFValue(!bParam || nParam != 0));
@@ -3176,7 +3227,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
 
 int RTFDocumentImpl::pushState()
 {
-    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before push: " << m_nGroup);
+    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before push: " << m_pTokenizer->getGroup());
 
     checkUnicode();
     m_nGroupStartPos = Strm().Tell();
@@ -3192,7 +3243,7 @@ int RTFDocumentImpl::pushState()
     m_aStates.push(aState);
     m_aStates.top().aDestinationText.setLength(0);
 
-    m_nGroup++;
+    m_pTokenizer->pushGroup();
 
     switch (m_aStates.top().nDestinationState)
     {
@@ -3270,7 +3321,7 @@ void RTFDocumentImpl::resetAttributes()
 
 int RTFDocumentImpl::popState()
 {
-    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_nGroup " << m_nGroup <<
+    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
     //                         ", dest state: " << m_aStates.top().nDestinationState);
 
     checkUnicode();
@@ -3729,12 +3780,17 @@ int RTFDocumentImpl::popState()
     }
 
     // This is the end of the doc, see if we need to close the last section.
-    if (m_nGroup == 1 && !m_bFirstRun)
+    if (m_pTokenizer->getGroup() == 1 && !m_bFirstRun)
+    {
+        if (m_bNeedCr)
+            dispatchSymbol(RTF_PAR);
+        m_bDeferredContSectBreak = false;
         sectBreak(true);
+    }
 
     m_aStates.pop();
 
-    m_nGroup--;
+    m_pTokenizer->popGroup();
 
     // list table
     if (aState.nDestinationState == DESTINATION_LISTENTRY)
@@ -3905,11 +3961,6 @@ RTFParserState& RTFDocumentImpl::getState()
     return m_aStates.top();
 }
 
-int RTFDocumentImpl::getGroup() const
-{
-    return m_nGroup;
-}
-
 void RTFDocumentImpl::setDestinationText(OUString& rString)
 {
     m_aStates.top().aDestinationText.setLength(0);
@@ -3944,6 +3995,15 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     {
         OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
         text(aString);
+    }
+}
+
+void RTFDocumentImpl::checkDeferredContSectBreak()
+{
+    if (m_bDeferredContSectBreak)
+    {
+        m_bDeferredContSectBreak = false;
+        sectBreak();
     }
 }
 
@@ -4026,7 +4086,8 @@ RTFShape::RTFShape()
     nRight(0),
     nBottom(0),
     nHoriOrientRelation(0),
-    nVertOrientRelation(0)
+    nVertOrientRelation(0),
+    nWrap(-1)
 {
 }
 

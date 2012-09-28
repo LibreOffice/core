@@ -51,7 +51,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 #include "scabstdlg.hxx"
@@ -112,6 +112,8 @@
 #include "cellsuno.hxx"
 #include "dpobject.hxx"
 #include "markdata.hxx"
+#include "orcusfilters.hxx"
+
 #ifdef ENABLE_TELEPATHY
 #include "sccollaboration.hxx"
 #endif
@@ -473,7 +475,7 @@ sal_Bool ScDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
     LoadMediumGuard aLoadGuard(&aDocument);
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     //  only the latin script language is loaded
     //  -> initialize the others from options (before loading)
@@ -957,7 +959,7 @@ sal_Bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
     LoadMediumGuard aLoadGuard(&aDocument);
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     WaitObject aWait( GetActiveDialogParent() );
 
@@ -1017,7 +1019,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     sal_Bool bRet = false;              // sal_False heisst Benutzerabbruch !!
                                     // bei Fehler: Fehler am Stream setzen!!
 
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     GetUndoManager()->Clear();
 
@@ -1497,6 +1499,24 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     return bRet;
 }
 
+bool ScDocShell::LoadExternal(SfxMedium& rMed, const OUString& rProvider)
+{
+    if (rProvider == "orcus")
+    {
+        ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+        if (!pOrcus)
+            return false;
+
+        if (!pOrcus->importCSV(aDocument, rMed.GetName()))
+            return false;
+
+        FinishedLoading(SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES);
+        return true;
+    }
+
+    return false;
+}
+
 
 ScDocShell::PrepareSaveGuard::PrepareSaveGuard( ScDocShell& rDocShell )
     : mrDocShell( rDocShell)
@@ -1540,7 +1560,7 @@ sal_Bool ScDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
 
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     PrepareSaveGuard aPrepareGuard( *this);
 
@@ -1570,7 +1590,7 @@ sal_Bool ScDocShell::SaveAs( SfxMedium& rMedium )
     }
 
 
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     PrepareSaveGuard aPrepareGuard( *this);
 
@@ -2083,7 +2103,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
 
-    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+    ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     //  #i6500# don't call DoEnterHandler here (doesn't work with AutoSave),
     //  it's already in ExecuteSave (as for Save and SaveAs)
@@ -2858,16 +2878,12 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
 {
     using namespace ::com::sun::star::ui;
 
-    Reference<XMultiServiceFactory> xServiceManager = ::comphelper::getProcessServiceFactory();
-    if (!xServiceManager.is())
+    Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    if (!xContext.is())
         return;
 
     Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgSupplier(
-        xServiceManager->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))), UNO_QUERY);
-
-    if (!xModuleCfgSupplier.is())
-        return;
+        ModuleUIConfigurationManagerSupplier::create(xContext) );
 
     // Grab the Calc configuration.
     Reference<XUIConfigurationManager> xConfigMgr =

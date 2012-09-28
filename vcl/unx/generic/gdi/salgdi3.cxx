@@ -573,7 +573,11 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     return true;
 }
 
-// ----------------------------------------------------------------------------
+void X11SalGraphics::ClearDevFontCache()
+{
+    X11GlyphCache& rGC = X11GlyphCache::GetInstance();
+    rGC.ClearFontCache();
+}
 
 void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {

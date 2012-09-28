@@ -153,18 +153,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class createUuid
 
-namespace ThreadHelper
-{
-     void thread_sleep(sal_Int32 _nSec)
-    {
-#ifdef WNT      //Windows
-        ::Sleep(_nSec * 10);
-#elif defined UNX
-        ::sleep(_nSec);
-#endif
-    }
-}
-
 class createNamedUuid : public CppUnit::TestFixture
 {
 public:

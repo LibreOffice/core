@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.Vector;
 import java.util.Enumeration;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.AbstractButton;
@@ -38,17 +37,15 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.w3c.dom.Document;
-
-import com.sun.star.script.framework.container.ScriptEntry;
 import com.sun.star.script.framework.container.ParcelDescriptor;
+import com.sun.star.script.framework.container.ScriptEntry;
 
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class ConfigurePanel extends JPanel {
 
     private File basedir;
-    private Vector classpath;
+    private Vector<String> classpath;
     private ParcelDescriptor descriptor;
 
     private MethodPanel methodPanel;
@@ -57,7 +54,7 @@ public class ConfigurePanel extends JPanel {
     public static final String DIALOG_TITLE =
         "Choose What to Export as Scripts";
 
-    public ConfigurePanel(String basedir, Vector classpath,
+    public ConfigurePanel(String basedir, Vector<String> classpath,
         ParcelDescriptor descriptor) {
 
         this.basedir = new File(basedir);
@@ -66,7 +63,7 @@ public class ConfigurePanel extends JPanel {
         initUI();
     }
 
-    public ConfigurePanel(String basedir, Vector classpath)
+    public ConfigurePanel(String basedir, Vector<String> classpath)
         throws IOException {
 
         this.basedir = new File(basedir);
@@ -76,7 +73,7 @@ public class ConfigurePanel extends JPanel {
         initUI();
     }
 
-    public void reload(String basedir, Vector classpath,
+    public void reload(String basedir, Vector<String> classpath,
         ParcelDescriptor descriptor) {
 
         if (basedir != null)
@@ -94,7 +91,7 @@ public class ConfigurePanel extends JPanel {
         scriptPanel.reload(descriptor.getScriptEntries());
     }
 
-    public void reload(String basedir, Vector classpath)
+    public void reload(String basedir, Vector<String> classpath)
         throws IOException {
 
         if (basedir != null)
@@ -112,7 +109,7 @@ public class ConfigurePanel extends JPanel {
     }
 
     public ParcelDescriptor getConfiguration() throws Exception {
-        Enumeration scripts = scriptPanel.getScriptEntries();
+        Enumeration<ScriptEntry> scripts = scriptPanel.getScriptEntries();
         descriptor.setScriptEntries(scripts);
         return descriptor;
     }

@@ -43,8 +43,23 @@ public class Receiver {
             int aCurrentSlide = Integer.parseInt(aCommand.get(2));
             mSlideShow.setLength(aSlideShowlength);
             mSlideShow.setCurrentSlide(aCurrentSlide);
+            //            Intent aIntent = new Intent(mContext.getApplicationContext(),
+            //                            PresentationActivity.class);
+            //            aIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //            aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //            mContext.getApplicationContext().startActivity(aIntent);
             Intent aIntent = new Intent(
-                            CommunicationService.MSG_SLIDESHOW_STARTED);
+                            CommunicationService.STATUS_CONNECTED_SLIDESHOW_RUNNING);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+        } else if (aInstruction.equals("slideshow_finished")) {
+            mSlideShow = new SlideShow(mContext);
+            //            Intent aIntent = new Intent(mContext.getApplicationContext(),
+            //                            StartPresentationActivity.class);
+            //            aIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //            aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //            mContext.getApplicationContext().startActivity(aIntent);
+            Intent aIntent = new Intent(
+                            CommunicationService.STATUS_CONNECTED_NOSLIDESHOW);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
         } else {
             if (mSlideShow == null)

@@ -192,9 +192,7 @@ Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController (vo
         // Create uno sub controller for the main view shell.
         xSubController = Reference<drawing::XDrawSubController>(
             new SdUnoOutlineView (
-                GetViewShellBase().GetDrawController(),
-                *this,
-                *GetView()));
+                *this));
     }
 
     return xSubController;

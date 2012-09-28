@@ -77,7 +77,7 @@ class OnewayExecutor extends Thread
      */
     private IOnewayLink m_rLink     ;
     private int         m_nRequest  ;
-    private Vector      m_lParams   ;
+    private Vector<Object>      m_lParams   ;
 
     // _______________________________
 
@@ -103,7 +103,7 @@ class OnewayExecutor extends Thread
      */
     public OnewayExecutor( IOnewayLink rLink    ,
                            int         nRequest ,
-                           Vector      lParams  )
+                           Vector<Object>      lParams  )
     {
         m_rLink    = rLink   ;
         m_nRequest = nRequest;
@@ -138,102 +138,49 @@ class OnewayExecutor extends Thread
 
     /**
      * static helper!
-     * To make convertion of the generic parameter list to the original
-     * one easier - you can use this helper methods. They know how suchlist
+     * To make conversion of the generic parameter list to the original
+     * one easier - you can use this helper methods. They know how such list
      * must be coded. It's not a must to use it - but you can ...
      */
-    public static void codeFrameAction(
-        boolean bEncode, Vector[] lParams,
-        com.sun.star.frame.FrameActionEvent[] aAction)
-    {
-        if (bEncode)
-        {
-            lParams[0] = new Vector(1);
-            lParams[0].add( (Object)(aAction[0]) );
-        }
-        else
-        {
-            aAction[0] = (com.sun.star.frame.FrameActionEvent)
-                (lParams[0].elementAt(0));
-        }
-    }
 
     // _______________________________
 
-    public static void codeStatusChanged(
-        boolean bEncode, Vector[] lParams,
-        com.sun.star.frame.FeatureStateEvent[] aStatus)
-    {
-        if (bEncode)
-        {
-            lParams[0] = new Vector(1);
-            lParams[0].add( (Object)aStatus[0] );
-        }
-        else
-        {
-            aStatus[0] = (com.sun.star.frame.FeatureStateEvent)
-                (lParams[0].elementAt(0));
-        }
-    }
-
-    // _______________________________
-
-    public static void codeAddOrRemoveStatusListener(
-        boolean bEncode, Vector[] lParams,
-        com.sun.star.frame.XStatusListener[] xListener,
-        com.sun.star.util.URL[] aURL)
-    {
-        if (bEncode)
-        {
-            lParams[0] = new Vector(2);
-            lParams[0].add( (Object)xListener[0] );
-            lParams[0].add( (Object)aURL[0]      );
-        }
-        else
-        {
-            xListener[0] = (com.sun.star.frame.XStatusListener)
-                (lParams[0].elementAt(0));
-            aURL[0] = (com.sun.star.util.URL)(lParams[0].elementAt(1));
-        }
-    }
-
-    // _______________________________
-
-    public static void codeDispatch(
-        boolean bEncode, Vector[] lParams,
+    public static Vector<Object> encodeDispatch(
         com.sun.star.util.URL[] aURL,
         com.sun.star.beans.PropertyValue[][] lArgs)
     {
-        if (bEncode)
-        {
-            int nLength = lArgs.length+1;
-            int nPos    = 0;
-            lParams[0] = new Vector(nLength);
+        int nLength = lArgs.length+1;
+        int nPos    = 0;
+        Vector<Object> lParams = new Vector<Object>(nLength);
 
-            lParams[0].add( (Object)aURL[0] );
+        lParams.add( aURL[0] );
+        --nLength;
+
+        while (nLength>0)
+        {
+            lParams.add( lArgs[0][nPos] );
             --nLength;
-
-            while (nLength>0)
-            {
-                lParams[0].add( (Object)lArgs[0][nPos] );
-                --nLength;
-                ++nPos   ;
-            }
+            ++nPos   ;
         }
-        else
-        {
-            int nLength = lParams[0].size()-1;
+        return lParams;
+    }
+
+    public static void decodeDispatch(
+            Vector<Object> lParams,
+            com.sun.star.util.URL[] aURL,
+            com.sun.star.beans.PropertyValue[][] lArgs)
+    {
+            int nLength = lParams.size()-1;
             int nPos    = 0;
 
             lArgs[0] = new com.sun.star.beans.PropertyValue[nLength];
-            aURL[0]  = (com.sun.star.util.URL)(lParams[0].elementAt(0));
+            aURL[0]  = (com.sun.star.util.URL) lParams.elementAt(0);
 
             while (nPos<nLength)
             {
                 lArgs[0][nPos] = (com.sun.star.beans.PropertyValue)
-                    (lParams[0].elementAt(nPos+1));
+                    (lParams.elementAt(nPos+1));
                 ++nPos;
             }
-        }
     }
 }

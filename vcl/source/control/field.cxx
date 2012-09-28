@@ -33,6 +33,7 @@
 
 #include "tools/rc.h"
 
+#include "vcl/dialog.hxx"
 #include "vcl/field.hxx"
 #include "vcl/event.hxx"
 #include "vcl/svapp.hxx"
@@ -771,6 +772,23 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
     }
 }
 
+void NumericFormatter::take_properties(NumericFormatter &rOther)
+{
+    mnFieldValue = rOther.mnFieldValue;
+    mnLastValue = rOther.mnLastValue;
+    mnMin = rOther.mnMin;
+    mnMax = rOther.mnMax;
+    mnCorrectedValue = rOther.mnCorrectedValue;
+    mnType = rOther.mnType;
+    mnDecimalDigits = rOther.mnDecimalDigits;
+    mbThousandSep = rOther.mbThousandSep;
+    mbShowTrailingZeros = rOther.mbThousandSep;
+
+    mnSpinSize = rOther.mnSpinSize;
+    mnFirst = rOther.mnFirst;
+    mnLast = rOther.mnLast;
+}
+
 // -----------------------------------------------------------------------
 
 NumericField::NumericField( Window* pParent, WinBits nWinStyle ) :
@@ -787,6 +805,13 @@ NumericField::NumericField( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_NUMERICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+    {
+        SetField( this );
+        return;
+    }
+
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
     ImplLoadRes( rResId );
@@ -794,6 +819,15 @@ NumericField::NumericField( Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
+}
+
+bool NumericField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("digits")))
+        SetDecimalDigits(rValue.toInt32());
+    else
+        return SpinField::set_property(rKey, rValue);
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -906,6 +940,35 @@ void NumericField::Last()
 {
     FieldLast();
     SpinField::Last();
+}
+
+namespace
+{
+    Size calcMinimumSize(const SpinField &rSpinField, const NumericFormatter &rFormatter)
+    {
+        rtl::OUStringBuffer aBuf;
+        sal_Int32 nTextLen;
+
+        nTextLen = rtl::OUString::valueOf(rFormatter.GetMin()).getLength();
+        comphelper::string::padToLength(aBuf, nTextLen, '9');
+        Size aMinTextSize = rSpinField.CalcMinimumSizeForText(
+            rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
+
+        nTextLen = rtl::OUString::valueOf(rFormatter.GetMax()).getLength();
+        comphelper::string::padToLength(aBuf, nTextLen, '9');
+        Size aMaxTextSize = rSpinField.CalcMinimumSizeForText(
+            rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
+
+        Size aRet(std::max(aMinTextSize.Width(), aMaxTextSize.Width()),
+                  std::max(aMinTextSize.Height(), aMaxTextSize.Height()));
+
+        return aRet;
+    }
+}
+
+Size NumericField::CalcMinimumSize() const
+{
+    return calcMinimumSize(*this, *this);
 }
 
 // -----------------------------------------------------------------------
@@ -1646,13 +1709,15 @@ MetricField::MetricField( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 MetricField::MetricField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_METRICFIELD )
 {
     rResId.SetRT( RSC_METRICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
     ImplLoadRes( rResId );
@@ -1661,7 +1726,47 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+Size MetricField::CalcMinimumSize() const
+{
+    return calcMinimumSize(*this, *this);
+}
+
+void MetricFormatter::take_properties(MetricFormatter &rOtherField)
+{
+    maCustomUnitText = rOtherField.maCustomUnitText;
+    maCurUnitText = rOtherField.maCurUnitText;
+    mnBaseValue = rOtherField.mnBaseValue;
+    meUnit = rOtherField.meUnit;
+    NumericFormatter::take_properties(rOtherField);
+}
+
+void MetricField::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        SpinField::ImplInit(rOther.GetParent(), rOther.GetStyle());
+        SetField( this );
+    }
+
+    SpinField::take_properties(rOther);
+
+    MetricField &rOtherField = static_cast<MetricField&>(rOther);
+    MetricFormatter::take_properties(rOtherField);
+}
+
+bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("format")))
+    {
+        maCustomUnitText = rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8);
+        meUnit = FUNIT_CUSTOM;
+    }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("digits")))
+        SetDecimalDigits(rValue.toInt32());
+    else
+        return SpinField::set_property(rKey, rValue);
+    return true;
+}
 
 void MetricField::ImplLoadRes( const ResId& rResId )
 {

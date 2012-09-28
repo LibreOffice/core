@@ -237,8 +237,7 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool b
     return bDone;
 }
 
-// Copy the content of the Range into clipboard. Adding this method for VBA API: Range.Copy().
-// also combine the old content of CopyToClip method to share this implementation
+// Copy the content of the Range into clipboard.
 sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, sal_Bool bCut, sal_Bool bApi, sal_Bool bIncludeObjects, sal_Bool bStopEdit, sal_Bool bUseRangeForVBA )
 {
     if ( rRanges.empty() )
@@ -256,7 +255,7 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange
 
     if ( !aClipParam.isMultiRange() )
     {
-        if ( pDoc && ( ( bUseRangeForVBA &&  !pDoc->HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() ) ) || ( !bUseRangeForVBA && !pDoc->HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), rMark ) ) ) )
+        if ( pDoc && ( !pDoc->HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), rMark ) ) )
         {
             sal_Bool bSysClip = false;
             if ( !pClipDoc )                                    // no clip doc specified
@@ -366,9 +365,8 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange
             for ( size_t i = 1; i < aClipParam.maRanges.size(); ++i )
             {
                 p = aClipParam.maRanges[i];
-                if ( ( bUseRangeForVBA && pDoc->HasSelectedBlockMatrixFragment(
-                    p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), p->aStart.Tab() ) ) || ( !bUseRangeForVBA && pDoc->HasSelectedBlockMatrixFragment(
-                    p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), rMark) ) )
+                if ( pDoc->HasSelectedBlockMatrixFragment(
+                    p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), rMark) )
                 {
                     if (!bApi)
                         ErrorMessage(STR_MATRIXFRAGMENTERR);

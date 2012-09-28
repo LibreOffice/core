@@ -32,6 +32,7 @@ use base 'Exporter';
 use Cwd;
 use Data::Dumper;
 use File::Copy;
+use List::Util qw(shuffle);
 use installer::archivefiles;
 use installer::control;
 use installer::converter;
@@ -39,7 +40,6 @@ use installer::copyproject;
 use installer::download;
 use installer::environment;
 use installer::epmfile;
-use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::helppack;
@@ -77,7 +77,6 @@ use installer::windows::msp;
 use installer::windows::property;
 use installer::windows::removefile;
 use installer::windows::registry;
-use installer::windows::selfreg;
 use installer::windows::shortcut;
 use installer::windows::strip;
 use installer::windows::update;
@@ -88,25 +87,29 @@ use installer::ziplist;
 our @EXPORT_OK = qw(main);
 
 sub main {
-    #################################################
-    # Main program
-    #################################################
-
-    #################################################
-    # Part 1: The platform independent part
-    #################################################
-
-    #################################################
-    # Part 1a: The language independent part
-    #################################################
-
     installer::logger::starttime();
 
-    #########################################
-    # Checking the environment and setting
-    # most important variables
-    #########################################
+    my $exit_code = 0;
 
+    eval {
+        run();
+    };
+    if ($@) {
+        my $message = "ERROR: $@";
+
+        warn "ERROR: Failure in installer.pm\n";
+        warn "$message\n";
+        $exit_code = -1;
+
+        cleanup_on_error($message);
+    }
+
+    installer::logger::stoptime();
+
+    return $exit_code;
+}
+
+sub run {
     installer::logger::print_message( "... checking environment variables ...\n" );
     my $environmentvariableshashref = installer::control::check_system_environment();
 
@@ -240,7 +243,6 @@ sub main {
     # setting global variables
     ####################################################################
 
-    installer::control::set_addchildprojects($allvariableshashref);
     installer::control::set_addsystemintegration($allvariableshashref);
 
     ########################################################
@@ -270,7 +272,7 @@ sub main {
     my $includepathref = installer::ziplist::getinfofromziplist($allsettingsarrayref, "include");
     if ( $$includepathref eq "" )
     {
-        installer::exiter::exit_program("ERROR: Definition for \"include\" not found in $installer::globals::ziplistname", "Main");
+        die 'Definition for "include" not found in ' . $installer::globals::ziplistname;
     }
 
     my $includepatharrayref = installer::converter::convert_stringlist_into_array($includepathref, ",");
@@ -300,10 +302,10 @@ sub main {
     if ($installer::globals::languages_defined_in_productlist) { installer::languages::get_info_about_languages($allsettingsarrayref); }
 
     #####################################
-    # Windows requires the encoding list
+    # Windows requires the LCID list
     #####################################
 
-    if ( $installer::globals::iswindowsbuild ) { installer::control::read_encodinglist($includepatharrayref); }
+    if ( $installer::globals::iswindowsbuild ) { installer::control::read_lcidlist($includepatharrayref); }
 
     #####################################################################
     # Including additional inc files for variable settings, if defined
@@ -514,7 +516,6 @@ sub main {
 
         if ( $installer::globals::languagepack )
         {
-            $installer::globals::addchildprojects = 0;
             $installer::globals::addsystemintegration = 0;
             $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
@@ -522,7 +523,6 @@ sub main {
 
         if ( $installer::globals::helppack )
         {
-            $installer::globals::addchildprojects = 0;
             $installer::globals::addsystemintegration = 0;
             $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
@@ -976,16 +976,6 @@ sub main {
 
         installer::worker::collect_scpactions($scpactionsinproductlanguageresolvedarrayref);
 
-        #########################################################
-        # creating inf files for user system integration
-        #########################################################
-
-        if (( $installer::globals::iswindowsbuild ) && ( ! $installer::globals::patch ))    # Windows specific items: Folder, FolderItem, RegistryItem
-        {
-            installer::logger::print_message( "... creating inf files ...\n" );
-            installer::worker::create_inf_file($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $modulesinproductlanguageresolvedarrayref, $languagesarrayref, $languagestringref, $allvariableshashref);
-        }
-
         ###########################################################
         # Simple package projects can now start to create the
         # installation structure by creating Directories, Files
@@ -1068,7 +1058,7 @@ sub main {
             }
 
             # shuffle array to reduce parallel packaging process in pool
-            installer::worker::shuffle_array($packages)
+            @{$packages} = shuffle @{$packages}
                 unless $installer::globals::simple;
 
             # iterating over all packages
@@ -1359,9 +1349,6 @@ sub main {
                 # Adding license and readme into installation set
                 if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
-                # Adding child projects to installation dynamically
-                if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::epmoutpath, $allvariableshashref, $modulesinproductarrayref, $includepatharrayref); }
-
                 # Adding license file into setup
                 if ( $allvariableshashref->{'PUT_LICENSE_INTO_SETUP'} ) { installer::worker::put_license_into_setup(".", $includepatharrayref); }
 
@@ -1548,8 +1535,6 @@ sub main {
             {
                 installer::windows::removefile::create_removefile_table($folderitemsinproductlanguageresolvedarrayref, $newidtdir);
 
-                installer::windows::selfreg::create_selfreg_table($filesinproductlanguageresolvedarrayref, $newidtdir);
-
                 # Adding Assemblies into the tables MsiAssembly and MsiAssemblyName dynamically
                 installer::windows::assembly::create_msiassembly_table($filesinproductlanguageresolvedarrayref, $newidtdir);
                 installer::windows::assembly::create_msiassemblyname_table($filesinproductlanguageresolvedarrayref, $newidtdir);
@@ -1569,7 +1554,8 @@ sub main {
                 my $onelanguage = ${$languagesarrayref}[$m];
 
                 my $is_rtl = 0;
-                if ( grep {$_ eq $onelanguage} @installer::globals::rtllanguages ) { $is_rtl = 1; }
+                my @rtllanguages = ("ar", "fa", "he", "ug", "ky-CN");
+                if ( grep {$_ eq $onelanguage} @rtllanguages ) { $is_rtl = 1; }
 
                 my $languageidtdir = $idtdirbase . $installer::globals::separator . $onelanguage;
                 if ( -d $languageidtdir ) { installer::systemactions::remove_complete_directory($languageidtdir, 1); }
@@ -1622,15 +1608,10 @@ sub main {
                     push(@installer::globals::logfileinfo, $infoline);
                 }
 
-                # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
-
-                installer::windows::idtglobal::setencoding($languageidtdir, $onelanguage);
-
                 # setting bidi attributes, if required
-
                 if ( $is_rtl ) { installer::windows::idtglobal::setbidiattributes($languageidtdir, $onelanguage); }
 
-                # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
+                # setting the condition, that at least one module is selected
                 installer::windows::idtglobal::set_multilanguageonly_condition($languageidtdir);
 
                 # include the license text into the table Control.idt
@@ -1639,7 +1620,7 @@ sub main {
                 {
                     my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
                     my $licensefile = installer::files::read_file($licensefilesource);
-                    installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
+                    installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariableshashref);
                     my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
                     my $controltable = installer::files::read_file($controltablename);
                     installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
@@ -1683,14 +1664,6 @@ sub main {
 
                 installer::windows::idtglobal::addcustomactions($languageidtdir, $windowscustomactionsarrayref, $filesinproductlanguageresolvedarrayref);
 
-                # Adding child projects if specified
-
-                if ($installer::globals::addchildprojects)
-                {
-                    # Adding child projects to installation dynamically (also in feature table)
-                    installer::windows::idtglobal::add_childprojects($languageidtdir, $filesinproductlanguageresolvedarrayref, $allvariableshashref);
-                }
-
                 # Then the language specific msi database can be created
 
                 if ( $installer::globals::iswin || $installer::globals::packageformat eq 'msi' )
@@ -1706,13 +1679,7 @@ sub main {
 
                     # validating the database   # ToDo
 
-                    my $languagefile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . "SIS.mlf");
-
                     installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile, $allvariableshashref);
-
-                    # if there are Merge Modules, they have to be integrated now
-                    $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $msifilename, $languagestringref, $onelanguage, $languagefile, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
-                    if ( $installer::globals::use_packages_for_cabs ) { installer::windows::media::create_media_table($filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref, $allupdatelastsequences, $allupdatediskids); }
 
                     # copy msi database into installation directory
 
@@ -1732,6 +1699,14 @@ sub main {
                 {
                     installer::windows::msiglobal::create_transforms($languagesarrayref, $defaultlanguage, $installdir, $allvariableshashref);
                 }
+                # if there are Merge Modules, they have to be integrated now
+                my $mergedbname = installer::windows::msiglobal::get_msidatabasename($allvariableshashref, $defaultlanguage);
+                my $mergeidtdir = $idtdirbase . $installer::globals::separator . "mergemodules";
+                if ( -d $mergeidtdir ) { installer::systemactions::remove_complete_directory($mergeidtdir, 1); }
+                installer::systemactions::create_directory($mergeidtdir);
+                installer::systemactions::copy_one_file($installdir . $installer::globals::separator . $mergedbname, $mergeidtdir . $installer::globals::separator . $mergedbname);
+                $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $mergeidtdir . $installer::globals::separator . $mergedbname, $languagestringref, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
+                installer::systemactions::copy_one_file($mergeidtdir . $installer::globals::separator . $mergedbname, $installdir . $installer::globals::separator . $mergedbname);
 
                 installer::windows::msiglobal::rename_msi_database_in_installset($defaultlanguage, $installdir, $allvariableshashref);
             }
@@ -1745,13 +1720,6 @@ sub main {
             # ... copying MergeModules into installation set
 
             if ( ! $installer::globals::fix_number_of_cab_files ) { installer::windows::msiglobal::copy_merge_modules_into_installset($installdir); }
-
-            # ... copying the child projects
-
-            if ($installer::globals::addchildprojects)
-            {
-                installer::windows::msiglobal::copy_child_projects_into_installset($installdir, $allvariableshashref);
-            }
 
             installer::logger::print_message( "... creating ddf files ...\n" );
 
@@ -1855,12 +1823,37 @@ sub main {
         print $log_fh Dumper($filesinproductlanguageresolvedarrayref);
 
     }   # end of iteration for one language group
+}
 
-    #######################################################
-    # Stopping time
-    #######################################################
+sub cleanup_on_error {
+    my $message = shift;
 
-    installer::logger::stoptime();
+    # If an installation set is currently created, the directory name
+    # is saved in $installer::globals::saveinstalldir.  If this
+    # directory name contains "_inprogress", it has to be renamed to
+    # "_witherror".
+    if ( $installer::globals::saveinstalldir =~ /_inprogress/ ) {
+        installer::systemactions::rename_string_in_directory($installer::globals::saveinstalldir, "_inprogress", "_witherror");
+    }
+
+    # Removing directories created in the output tree.
+    installer::worker::clean_output_tree();
+
+    $installer::globals::logfilename = $installer::globals::exitlog . $installer::globals::logfilename;
+
+    my @log = (@installer::globals::logfileinfo, @installer::globals::globallogfileinfo);
+
+    push(@log, "\n" . '*' x 65 . "\n");
+    push(@log, $message);
+    push(@log, '*' x 65 . "\n");
+
+    installer::files::save_file($installer::globals::logfilename, \@log);
+
+    print("ERROR, saved logfile $installer::globals::logfilename is:\n");
+    open(my $log, "<", $installer::globals::logfilename);
+    print ": $_" while (<$log>);
+    print "\n";
+    close($log);
 }
 
 1;

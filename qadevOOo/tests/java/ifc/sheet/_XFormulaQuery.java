@@ -29,10 +29,6 @@ import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.uno.UnoRuntime;
 
-/**
- *
- * @author  sw93809
- */
 public class _XFormulaQuery extends MultiMethodTest {
 
     public XFormulaQuery oObj;

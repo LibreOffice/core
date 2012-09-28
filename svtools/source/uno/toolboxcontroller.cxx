@@ -40,7 +40,7 @@
 #include <svtools/miscopt.hxx>
 #include <toolkit/unohlp.hxx>
 #include <vcl/toolbox.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
 const char TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE[] = "SupportsVisible";
@@ -107,7 +107,7 @@ ToolboxController::ToolboxController(
     {
         m_pImpl->m_xUrlTransformer.set(
             ::com::sun::star::util::URLTransformer::create(
-                ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+                ::comphelper::getComponentContext(m_xServiceManager) ) );
     }
     catch(const Exception&)
     {
@@ -245,7 +245,7 @@ throw ( Exception, RuntimeException )
             if ( !m_pImpl->m_xUrlTransformer.is() && m_xServiceManager.is() )
                 m_pImpl->m_xUrlTransformer.set(
                     ::com::sun::star::util::URLTransformer::create(
-                        ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
+                        ::comphelper::getComponentContext(m_xServiceManager) ) );
         }
         catch(const Exception&)
         {

@@ -739,7 +739,6 @@ public:
 private:
     ScDocument*     pUndoDoc;
     String          aFormula;
-    formula::FormulaGrammar::AddressConvention eConv;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 

@@ -1,32 +1,3 @@
 br	bridges	:	cppuhelper jurt jvmaccess salhelper NULL
 br	bridges									usr1	-	all	br_mkout NULL
-br	bridges\inc								nmake	-	all	br_inc NULL
-br	bridges\unotypes						nmake	-	all	br_unotypes NULL
-br	bridges\source\cpp_uno\mingw_intel	nmake	-	w	br_gcc3i br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\msvc_win32_intel	nmake	-	w	br_msci br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\msvc_win32_x86-64	nmake	-	w	br_mscx br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_intel	nmake	-	u	br_gcc3li br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_x86-64	nmake	-	u	br_gcc3lx br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_powerpc	nmake	-	u	br_gcc3lp br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_aix_powerpc	nmake	-	u	br_gcc3ap br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_powerpc64	nmake	-	u	br_gcc3lp_64 br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_mips		nmake	-	u	br_gcc3lmips br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_m68k		nmake	-	u	br_gcc3lm68k br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_s390		nmake	-	u	br_gcc3l3 br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_s390x		nmake	-	u	br_gcc3l3_64 br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_sparc		nmake	-	u	br_gcc3ls br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_arm		nmake	-	u	br_gcc3lr br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_ia64		nmake	-	u	br_gcc3la br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_hppa		nmake	-	u	br_gcc3lh br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_alpha		nmake	-	u	br_gcc3ll br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_macosx_intel			nmake	-	u	br_gcc3macoxi br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_macosx_powerpc			nmake	-	u	br_gcc3macoxp br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_ios_arm		nmake	-	u	br_gcc3iosr br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\cc50_solaris_sparc			nmake	-	u	br_cc50sols br_unotypes br_cppuno_shared br_inc NULL
-br  bridges\source\cpp_uno\cc5_solaris_sparc64 nmake - u br_cc5sols64 br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\cc50_solaris_intel			nmake	-	u	br_cc50soli br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_solaris_sparc			nmake	-	u	br_gcc3sogs br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_solaris_intel			nmake	-	u	br_gcc3sogi br_cppuno_shared br_unotypes br_inc NULL
-br  bridges\source\cpp_uno\shared           nmake   -   all br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\jni_uno					nmake	-	all	br_jni_uno br_unotypes br_inc NULL
-br	bridges\source\jni_uno\java\com\sun\star\bridges\jni_uno				nmake	-	all	br_jni_uno_java br_unotypes br_inc NULL
+br	bridges\prj								nmake	-	all	br_inc NULL

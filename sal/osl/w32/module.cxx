@@ -151,7 +151,8 @@ oslModule osl_loadModuleRelativeAscii(
 sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
-    HINSTANCE hInstance = GetModuleHandleW(reinterpret_cast<LPCWSTR>(pModuleName->buffer));
+    LPCWSTR pName = pModuleName ? reinterpret_cast<LPCWSTR>(pModuleName->buffer) : NULL;
+    HINSTANCE hInstance = GetModuleHandleW(pName);
     if( hInstance )
     {
         *pResult = (oslModule) hInstance;

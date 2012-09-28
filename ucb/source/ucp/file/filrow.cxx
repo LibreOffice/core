@@ -29,6 +29,8 @@
 #include "filrow.hxx"
 #include "shell.hxx"
 #include "prov.hxx"
+#include <com/sun/star/script/Converter.hpp>
+#include <comphelper/processfactory.hxx>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -51,8 +53,7 @@ sal_Bool convert( shell* pShell,
         if( ! xConverter.is() )
         {
             xConverter = uno::Reference< script::XTypeConverter >(
-                pShell->m_xMultiServiceFactory->createInstance(
-                    rtl::OUString("com.sun.star.script.Converter") ), uno::UNO_QUERY );
+                script::Converter::create(comphelper::getComponentContext(pShell->m_xMultiServiceFactory)) );
         }
 
         try

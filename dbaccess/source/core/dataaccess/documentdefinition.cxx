@@ -183,12 +183,12 @@ namespace dbaccess
             ,m_bInStateChange(false)
             ,m_bInChangingState(false)
         {
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             {
                 if ( m_xBroadCaster.is() )
                     m_xBroadCaster->addStateChangeListener(this);
             }
-            osl_decrementInterlockedCount( &m_refCount );
+            osl_atomic_decrement( &m_refCount );
         }
 
         virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (embed::WrongStateException, uno::RuntimeException);
@@ -329,11 +329,11 @@ namespace dbaccess
             :m_xClient( _rxClient )
         {
             OSL_ENSURE( _rxActor.is(), "LifetimeCoupler::LifetimeCoupler: this will crash!" );
-            osl_incrementInterlockedCount( &m_refCount );
+            osl_atomic_increment( &m_refCount );
             {
                 _rxActor->addEventListener( this );
             }
-            osl_decrementInterlockedCount( &m_refCount );
+            osl_atomic_decrement( &m_refCount );
             OSL_ENSURE( m_refCount, "LifetimeCoupler::LifetimeCoupler: the actor is not holding us by hard ref - this won't work!" );
         }
 
@@ -1543,7 +1543,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         m_pInterceptor = NULL;
     }
 
-    m_pInterceptor = new OInterceptor( this ,_bReadOnly);
+    m_pInterceptor = new OInterceptor( this );
     m_pInterceptor->acquire();
     Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
 

@@ -59,11 +59,9 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
     SvxSpellWrapper( &pVw->GetEditWin(), rxHyph, bStart, bOther ),
     pView( pVw ),
     xHyph( rxHyph ),
-    nLangError( 0 ),
     nPageCount( 0 ),
     nPageStart( 0 ),
     bInSelection( bSelect ),
-    bShowError( sal_False ),
     bInfoBox( sal_False )
 {
     uno::Reference< beans::XPropertySet >  xProp( GetLinguPropertySet() );
@@ -108,14 +106,6 @@ sal_Bool SwHyphWrapper::SpellContinue()
         delete pWait;
     }
 
-    if( bShowError )
-    {
-        bShowError = sal_False;
-        PSH->Push();
-        PSH->ClearMark();
-        pView->SpellError( nLangError );
-        PSH->Combine();
-    }
     return GetLast().is();
 }
 

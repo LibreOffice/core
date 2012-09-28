@@ -94,9 +94,6 @@
 #define CB_EXTHELP                  12
 #define CB_HELPAGENT                13
 #define PB_HELPAGENT_RESET          14
-#define FL_EXPERIMENTAL             15
-#define CB_EXPERIMENTAL             16
-#define CB_MACRORECORDER            17
 
 #define FL_TWOFIGURE                40
 #define FT_INTERPRET                41
@@ -176,6 +173,9 @@
 #define FI_USERINTERFACE        29
 #define FT_USERINTERFACE        30
 #define LB_USERINTERFACE        31
+#define FI_DATEPATTERNS         32
+#define FT_DATEPATTERNS         33
+#define ED_DATEPATTERNS         34
 
 #define FL_FILEDLG                  53
 #define FI_FILEDLG_RO               54

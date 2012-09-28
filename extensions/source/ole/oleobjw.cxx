@@ -48,7 +48,6 @@
 #include <com/sun/star/script/XEngine.hpp>
 #include <com/sun/star/script/InterruptEngineEvent.hpp>
 #include <com/sun/star/script/XLibraryAccess.hpp>
-#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 
 #include "com/sun/star/bridge/oleautomation/NamedArgument.hpp"
@@ -274,10 +273,6 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
         throw;
     }
     catch (const CannotConvertException &)
-    {
-        throw;
-    }
-    catch (const InvocationTargetException &)
     {
         throw;
     }
@@ -2156,22 +2151,12 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                   "DISP_E_BADVARTYPE."), 0);
             break;
         case DISP_E_EXCEPTION:
-            {
                 message = OUSTR("[automation bridge]: ");
                 message += OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription),
-                    ::SysStringLen(excepinfo.bstrDescription));
+                                    ::SysStringLen(excepinfo.bstrDescription));
 
-                // Add for VBA, to throw an exception with the correct error code and message.
-                sal_Int32 nErrorCode = excepinfo.wCode;
-                if ( nErrorCode == 0 )
-                {
-                    // The low 16-bit of scode describing the error or warning.
-                    nErrorCode = ( excepinfo.scode & 0xFFFF );
-                }
-                BasicErrorException aBasicErrExp(message, Reference<XInterface>(), nErrorCode, message);
-                throw InvocationTargetException(message, Reference<XInterface>(), makeAny(aBasicErrExp));
-                // End add
-            }
+                throw InvocationTargetException(message, Reference<XInterface>(), Any());
+            break;
         case DISP_E_MEMBERNOTFOUND:
             message = OUSTR("[automation bridge]: A function with the name \"")
                 + sFuncName + OUSTR("\" is not supported. Object returned "

@@ -24,8 +24,6 @@ package org.openoffice.xmerge.merger;
  *  <code>DiffAlgorithm</code> as a set of difference between two
  *  <code>Iterators</code> (the original and modified
  *  <code>Iterators</code>).
- *
- *  @author smak
  */
 public final class Difference {
 

@@ -113,8 +113,8 @@ private:
 
     DECL_LINK(          ElementSelectHdl, void* );
     void                Clear( void );
-    void                InsertElement( const String& _rField, const String& _rValue,
-                                        const String& _rDetails, bool _bFixedWidthFont = false );
+    void                InsertElement( const OUString& _rField, const OUString& _rValue,
+                                       const OUString& _rDetails, bool _bFixedWidthFont = false );
 public:
                         CertificateViewerDetailsTP( Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerDetailsTP();
@@ -136,13 +136,13 @@ private:
     bool                mbFirstActivateDone;
     Image               maCertImage;
     Image               maCertNotValidatedImage;
-    String              msCertOK;
-    String              msCertNotValidated;
+    OUString            msCertOK;
+    OUString            msCertNotValidated;
 
     DECL_LINK(          ViewCertHdl, void* );
     DECL_LINK(          CertSelectHdl, void* );
     void                Clear( void );
-    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const String& _rName,
+    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const OUString& _rName,
                                     cssu::Reference< dcss::security::XCertificate > rxCert,
                                     bool bValid);
 

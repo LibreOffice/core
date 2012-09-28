@@ -154,7 +154,7 @@ bool HelpParser::CreateSDF(
                         rtl::OUString()).
                     replaceAll(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t")),
-                        rtl::OUString()));
+                        rtl::OUString()).trim());
                 sBuffer.append( sOUPrj );
                 sBuffer.append('\t');
                 if ( !rRoot_in.isEmpty())
@@ -373,8 +373,23 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
             if( pEntrys != NULL)
             {
                 rtl::OString sNewText;
+                rtl::OUString sSourceText(
+                    pXMLElement->ToOUString().
+                    replaceAll(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")),
+                        rtl::OUString()).
+                    replaceAll(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t")),
+                        rtl::OUString()));
+                // re-add spaces to the beginning of translated string,
+                // important for indentation of Basic code examples
+                sal_Int32 nPreSpaces = 0;
+                sal_Int32 nLen = sSourceText.getLength();
+                while ( (nPreSpaces < nLen) && (*(sSourceText.getStr()+nPreSpaces) == ' ') )
+                    nPreSpaces++;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
                 rtl::OUString sNewdata(
+                    sSourceText.copy(0,nPreSpaces) +
                     rtl::OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8));
                 if (!sNewdata.isEmpty())
                 {

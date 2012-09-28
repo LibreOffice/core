@@ -29,7 +29,6 @@ package com.sun.star.comp.Calc.NLPSolver;
 
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
-import java.io.IOException;
 
 public final class Registration {
 

@@ -33,9 +33,7 @@
  *************************************************************************/
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.DispatchDescriptor;
-import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;

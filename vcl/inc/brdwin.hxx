@@ -186,6 +186,8 @@ public:
     long                    CalcTitleWidth() const;
 
     Rectangle               GetMenuRect() const;
+
+    virtual Size            GetOptimalSize(WindowSizeType eType) const;
 };
 
 // =======================================================================

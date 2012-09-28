@@ -40,16 +40,15 @@ namespace idl
 
 
 DYN InternalGate &
-InternalGate::Create_Partition_(RepositoryCenter & i_center)
+InternalGate::Create_Partition_()
 {
-    return *new RepositoryPartition(i_center);
+    return *new RepositoryPartition;
 }
 
 
 
-RepositoryPartition::RepositoryPartition( RepositoryCenter & i_repository )
-    :   pCenter(&i_repository),
-        pCes(0),
+RepositoryPartition::RepositoryPartition()
+    :   pCes(0),
         pTypes(0),
         pNamesDictionary(new NameLookup)
 {

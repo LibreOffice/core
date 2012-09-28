@@ -30,6 +30,8 @@
 #include <typelib/typedescription.hxx>
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/script/Converter.hpp>
+#include <com/sun/star/reflection/theCoreReflection.hpp>
 
 using rtl::OUString;
 using rtl::OUStringToOString;
@@ -49,7 +51,9 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XUnoTunnel;
+using com::sun::star::reflection::theCoreReflection;
 using com::sun::star::reflection::XIdlReflection;
+using com::sun::star::script::Converter;
 using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocationAdapterFactory2;
 using com::sun::star::script::XInvocation;
@@ -256,25 +260,13 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
             OUString(  "pyuno: couldn't instantiate invocation service"  ),
             Reference< XInterface > () );
 
-    c->xTypeConverter = Reference< XTypeConverter > (
-        ctx->getServiceManager()->createInstanceWithContext(
-            OUString(  "com.sun.star.script.Converter"  ),
-            ctx ),
-        UNO_QUERY );
+    c->xTypeConverter = Converter::create(ctx);
     if( ! c->xTypeConverter.is() )
         throw RuntimeException(
             OUString(  "pyuno: couldn't instantiate typeconverter service" ),
             Reference< XInterface > () );
 
-    c->xCoreReflection = Reference< XIdlReflection > (
-        ctx->getServiceManager()->createInstanceWithContext(
-            OUString(  "com.sun.star.reflection.CoreReflection"  ),
-            ctx ),
-        UNO_QUERY );
-    if( ! c->xCoreReflection.is() )
-        throw RuntimeException(
-            OUString(  "pyuno: couldn't instantiate corereflection service" ),
-            Reference< XInterface > () );
+    c->xCoreReflection = theCoreReflection::get(ctx);
 
     c->xAdapterFactory = Reference< XInvocationAdapterFactory2 > (
         ctx->getServiceManager()->createInstanceWithContext(

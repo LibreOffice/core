@@ -54,20 +54,9 @@ class SignatureCreatorImpl : public cppu::ImplInheritanceHelper4
 {
 private:
     /*
-     * the Id of the signature, which is used for the result listener to
-     * identify the signature.
-     */
-    sal_Int32 m_nSignatureId;
-
-    /*
      * the Id of template blocker.
      */
     sal_Int32 m_nIdOfBlocker;
-
-    /*
-     * the signature creation result
-     */
-    bool      m_bCreationSucceed;
 
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;

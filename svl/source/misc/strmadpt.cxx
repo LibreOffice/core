@@ -23,8 +23,9 @@
 #include <algorithm>
 #include <limits>
 #include <set>
+#include <string.h>
+
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 #include <svl/instrm.hxx>
 #include <svl/outstrm.hxx>
 #include <svl/strmadpt.hxx>
@@ -511,7 +512,7 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
                 SetError(ERRCODE_IO_CANTREAD);
                 return nRead;
             }
-            rtl_copyMemory(static_cast< sal_Int8 * >(pData) + nRead,
+            memcpy(static_cast< sal_Int8 * >(pData) + nRead,
                            aBuffer.getConstArray(), sal_uInt32(nCount));
             nRead += nCount;
             if (nCount < nRemain)
@@ -879,7 +880,7 @@ sal_uInt32 SvDataPipe_Impl::read()
         sal_uInt32 nBlock = std::min(sal_uInt32(m_pReadPage->m_pEnd
                                                     - m_pReadPage->m_pRead),
                                      nRemain);
-        rtl_copyMemory(m_pReadBuffer, m_pReadPage->m_pRead, nBlock);
+        memcpy(m_pReadBuffer, m_pReadPage->m_pRead, nBlock);
         m_pReadPage->m_pRead += nBlock;
         m_pReadBuffer += nBlock;
         m_nReadBufferSize -= nBlock;
@@ -942,7 +943,7 @@ sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
 
         if (nBlock > 0)
         {
-            rtl_copyMemory(m_pReadBuffer + m_nReadBufferFilled, pBuffer,
+            memcpy(m_pReadBuffer + m_nReadBufferFilled, pBuffer,
                            nBlock);
             m_nReadBufferFilled += nBlock;
             nRemain -= nBlock;
@@ -963,7 +964,7 @@ sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
                 = std::min(sal_uInt32(m_pWritePage->m_aBuffer + m_nPageSize
                                           - m_pWritePage->m_pEnd),
                            nRemain);
-            rtl_copyMemory(m_pWritePage->m_pEnd, pBuffer, nBlock);
+            memcpy(m_pWritePage->m_pEnd, pBuffer, nBlock);
             m_pWritePage->m_pEnd += nBlock;
             pBuffer += nBlock;
             nRemain -= nBlock;

@@ -29,8 +29,11 @@
 #ifndef _RTL_URI_H_
 #define _RTL_URI_H_
 
+#include "sal/config.h"
+
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
+#include "sal/saldllapi.h"
 #include "sal/types.h"
 
 #if defined __cplusplus

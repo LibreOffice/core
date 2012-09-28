@@ -49,6 +49,8 @@ public class PresentationFragment extends SherlockFragment {
     private float mNewCoverflowWidth = 0;
     private float mNewCoverflowHeight = 0;
 
+    private long lastUpdateTime = 0;
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName aClassName,
@@ -59,11 +61,13 @@ public class PresentationFragment extends SherlockFragment {
             if (mTopView != null) {
                 mTopView.setAdapter(new ThumbnailAdapter(mContext,
                                 mCommunicationService.getSlideShow()));
-                mTopView.setSelection(mCommunicationService.getSlideShow().getCurrentSlide(), true);
+                mTopView.setSelection(mCommunicationService.getSlideShow()
+                                .getCurrentSlide(), true);
                 mTopView.setOnItemSelectedListener(new ClickListener());
             }
 
-            updateSlideNumberDisplay();
+            updateSlideNumberDisplay(mCommunicationService.getSlideShow()
+                            .getCurrentSlide());
 
         }
 
@@ -75,12 +79,13 @@ public class PresentationFragment extends SherlockFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                     Bundle savedInstanceState) {
+        setRetainInstance(true);
         getActivity().bindService(
                         new Intent(getActivity().getApplicationContext(),
                                         CommunicationService.class),
                         mConnection, Context.BIND_IMPORTANT);
         mContext = getActivity().getApplicationContext();
-        container.removeAllViews();
+        //        container.removeAllViews();
         View v = inflater.inflate(R.layout.fragment_presentation, container,
                         false);
 
@@ -136,12 +141,12 @@ public class PresentationFragment extends SherlockFragment {
 
     }
 
-    private void updateSlideNumberDisplay() {
-        int aSlide = mCommunicationService.getSlideShow().getCurrentSlide();
-        mNumberText.setText((aSlide + 1) + "/"
+    private void updateSlideNumberDisplay(int aPosition) {
+        //        int aSlide = mCommunicationService.getSlideShow().getCurrentSlide();
+        mNumberText.setText((aPosition + 1) + "/"
                         + mCommunicationService.getSlideShow().getSize());
-        mNotes.loadData(mCommunicationService.getSlideShow().getNotes(aSlide),
-                        "text/html", null);
+        mNotes.loadData(mCommunicationService.getSlideShow()
+                        .getNotes(aPosition), "text/html", null);
     }
 
     // -------------------------------------------------- RESIZING LISTENER ----
@@ -230,6 +235,8 @@ public class PresentationFragment extends SherlockFragment {
                         int aPosition, long arg3) {
             if (mCommunicationService != null)
                 mCommunicationService.getTransmitter().gotoSlide(aPosition);
+            lastUpdateTime = System.currentTimeMillis();
+            updateSlideNumberDisplay(aPosition);
         }
 
         @Override
@@ -245,8 +252,13 @@ public class PresentationFragment extends SherlockFragment {
             if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_CHANGED)) {
                 int aSlide = aIntent.getExtras().getInt("slide_number");
+
+                if (aSlide == mTopView.getSelectedItemPosition())
+                    return;
+                if ((System.currentTimeMillis() - lastUpdateTime) < 5000) {
+                    return;
+                }
                 mTopView.setSelection(aSlide, true);
-                updateSlideNumberDisplay();
             } else if (aIntent.getAction().equals(
                             CommunicationService.MSG_SLIDE_PREVIEW)) {
                 // int aNSlide = aIntent.getExtras().getInt("slide_number");
@@ -293,7 +305,7 @@ public class PresentationFragment extends SherlockFragment {
                             * borderWidth, aBitmap.getHeight() + 2
                             * borderWidth, aBitmap.getConfig());
             Canvas canvas = new Canvas(aOut);
-            canvas.drawColor(Color.TRANSPARENT);
+            canvas.drawColor(getResources().getColor(R.color.light_grey));
             canvas.drawRect(aRect, p);
             canvas.drawBitmap(aBitmap, null, aRect, null);
 

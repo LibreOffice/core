@@ -63,20 +63,6 @@
 #define SV_MENU_MAC_SHOWALL                 2005
 #define SV_MENU_MAC_QUITAPP                 2006
 
-#define SV_DLG_PRINT                        2048
-#define SV_PRINT_OK                         1
-#define SV_PRINT_CANCEL                     2
-#define SV_PRINT_HELP                       3
-#define SV_PRINT_PAGE_PREVIEW               4
-#define SV_PRINT_PAGE_TXT                   5
-#define SV_PRINT_PAGE_FORWARD               6
-#define SV_PRINT_PAGE_BACKWARD              7
-#define SV_PRINT_PAGE_EDIT                  8
-#define SV_PRINT_TABCTRL                    9
-#define SV_PRINT_TOFILE_TXT                 14
-#define SV_PRINT_DEFPRT_TXT                 15
-#define SV_PRINT_PRINTPREVIEW_TXT           16
-
 #define SV_PRINT_TAB_NUP                       1
 #define SV_PRINT_PRT_NUP_LAYOUT_FL             1
 #define SV_PRINT_PRT_NUP_BROCHURE_BTN          3
@@ -117,9 +103,6 @@
 #define SV_PRINT_COLLATE                    12
 #define SV_PRINT_COLLATE_IMAGE              13
 #define SV_PRINT_BUTTONLINE                 14
-#define SV_PRINT_COLLATE_IMG                15
-#define SV_PRINT_NOCOLLATE_IMG              16
-#define SV_PRINT_NOPAGES                    19
 #define SV_PRINT_STATUS_TXT                 20
 #define SV_PRINT_LOCATION_TXT               21
 #define SV_PRINT_COMMENT_TXT                22
@@ -162,8 +145,11 @@
 #define SV_BUTTONTEXT_CLOSE                 SV_HELPTEXT_CLOSE
 #define SV_BUTTONTEXT_MORE                  10107
 #define SV_BUTTONTEXT_IGNORE                10108
-#define SV_BUTTONTEXT_ABORT             10109
+#define SV_BUTTONTEXT_ABORT                 10109
 #define SV_BUTTONTEXT_LESS                  10110
+#define SV_BUTTONTEXT_RESET                 10111
+#define SV_BUTTONTEXT_ADD                   10112
+#define SV_BUTTONTEXT_DELETE                10113
 
 #define SV_STDTEXT_FIRST                    SV_STDTEXT_SERVICENOTAVAILABLE
 #define SV_STDTEXT_SERVICENOTAVAILABLE      10200
@@ -216,6 +202,13 @@
 #define SV_SHORTCUT_MENUBAR                 10607
 #define SV_SHORTCUT_SPLITTER                10608
 
+#define SV_PRINT_NOPAGES                    10609
+#define SV_PRINT_TOFILE_TXT                 10610
+#define SV_PRINT_DEFPRT_TXT                 10611
+#define SV_PRINT_PRINTPREVIEW_TXT           10612
+#define SV_PRINT_COLLATE_IMG                10613
+#define SV_PRINT_NOCOLLATE_IMG              10614
+
 #define SV_EDIT_WARNING_BOX                 10650
 
 #define SV_FUNIT_STRINGS                    10700
@@ -239,7 +232,5 @@
 #define SV_ICON_ID_DATABASE                    12
 #define SV_ICON_ID_FORMULA                     13
 #define SV_ICON_ID_PRINTERADMIN               501
-
-#define HID_PRINTDLG                        HID_VCL_START
 
 #endif  // _SV_SVIDS_HRC

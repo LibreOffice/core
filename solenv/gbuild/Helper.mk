@@ -53,6 +53,11 @@ define gb_Helper_native_path
 $(call gb_Output_error,gb_Helper_native_path: Do not use. Should not be necessary.)
 endef
 
+# cygwin seems to eat one backslash when executing command, thus replace with '\\'
+define gb_Helper_windows_path
+$(subst /,\\,$(1))
+endef
+
 define gb_Helper_make_clean_target
 gb_$(1)_get_clean_target = $(WORKDIR)/Clean/$(1)/$$(1)
 
@@ -88,18 +93,6 @@ endef
 
 define gb_Helper_get_outdir_clean_target
 $$(subst $(OUTDIR)/,$(WORKDIR)/Clean/OutDir/,$(1))
-endef
-
-# RepositoryExternal.mk is optional
-define gb_Helper_add_repository
-include $(1)/Repository.mk
--include $(1)/RepositoryExternal.mk
-
-endef
-
-define gb_Helper_add_repositories
-$(foreach repo,$(1),$(call gb_Helper_add_repository,$(repo)))
-
 endef
 
 define gb_Helper_init_registries

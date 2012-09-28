@@ -132,8 +132,7 @@ void SvxNumberPreviewImpl::NotifyChange( const String& rPrevStr,
     mnPos = aPrevStr.Search( 0x1B );
     if ( mnPos != STRING_NOTFOUND )
     {
-        --mnPos;
-        mnChar = aPrevStr.GetChar( mnPos );
+        mnChar = aPrevStr.GetChar( mnPos + 1 );
         // delete placeholder and char to repeat
         aPrevStr.Erase( mnPos, 2 );
     }
@@ -168,9 +167,11 @@ void SvxNumberPreviewImpl::Paint( const Rectangle& )
     if ( mnPos != STRING_NOTFOUND )
     {
         long nCharWidth = GetTextWidth( rtl::OUString::valueOf( mnChar ) );
-        int nNumCharsToInsert = nLeadSpace / nCharWidth;
 
-        if ( nNumCharsToInsert )
+        int nNumCharsToInsert = 0;
+        if (nCharWidth > 0) nNumCharsToInsert = nLeadSpace / nCharWidth;
+
+        if ( nNumCharsToInsert > 0)
         {
             for ( int i = 0; i < nNumCharsToInsert; ++i )
                 aTmpStr.Insert( mnChar, mnPos );

@@ -505,9 +505,9 @@ SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplate
 }
 
 // add for SdPresLayoutDlg begin
-AbstractSdPresLayoutDlg *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg(  ::sd::DrawDocShell* pDocShell, ::sd::ViewShell* pViewShell, ::Window* pWindow, const SfxItemSet& rInAttrs)
+AbstractSdPresLayoutDlg *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg(  ::sd::DrawDocShell* pDocShell, ::Window* pWindow, const SfxItemSet& rInAttrs)
 {
-    return new AbstractSdPresLayoutDlg_Impl( new SdPresLayoutDlg( pDocShell, pViewShell, pWindow, rInAttrs ) );
+    return new AbstractSdPresLayoutDlg_Impl( new SdPresLayoutDlg( pDocShell, pWindow, rInAttrs ) );
 }
 // add for SdPresLayoutDlg end
 

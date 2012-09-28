@@ -29,6 +29,7 @@
 #include <tools/config.hxx>
 #include "dbase/DIndex.hxx"
 #include "dbase/DIndexes.hxx"
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/syslocale.hxx>
@@ -694,7 +695,7 @@ void ODbaseTable::refreshIndexes()
                 aURL.setName(rtl::OStringToOUString(aIndexName, m_eEncoding));
                 try
                 {
-                    Content aCnt(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+                    Content aCnt(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
                     if (aCnt.isDocument())
                     {
                         aVector.push_back(aURL.getBase());
@@ -1051,7 +1052,7 @@ sal_Bool ODbaseTable::CreateImpl()
 
     try
     {
-        Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+        Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
         if (aContent.isDocument())
         {
             // Only if the file exists with length > 0 raise an error
@@ -1078,7 +1079,7 @@ sal_Bool ODbaseTable::CreateImpl()
     {
         try
         {
-            Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+            Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
             aContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
         }
         catch(const Exception&) // an exception is thrown when no file exists
@@ -1091,7 +1092,7 @@ sal_Bool ODbaseTable::CreateImpl()
     {
         String aExt = aURL.getExtension();
         aURL.setExtension(rtl::OUString("dbt"));                      // extension for memo file
-        Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+        Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
         sal_Bool bMemoAlreadyExists = sal_False;
         try
@@ -1106,7 +1107,7 @@ sal_Bool ODbaseTable::CreateImpl()
             aURL.setExtension(aExt);      // kill dbf file
             try
             {
-                Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+                Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
                 aMemoContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
             }
             catch(const Exception&)
@@ -1122,7 +1123,7 @@ sal_Bool ODbaseTable::CreateImpl()
         if (!CreateMemoFile(aURL))
         {
             aURL.setExtension(aExt);      // kill dbf file
-            Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+            Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
             aMemoContent.executeCommand( rtl::OUString("delete"),bool2any( sal_True ) );
             return sal_False;
         }
@@ -1460,7 +1461,7 @@ sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMem
             // as the inf file does not necessarily exist, we aren't allowed to use UCBContentHelper::Kill
             try
             {
-                ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment > () );
+                ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                 aDeleteContent.executeCommand( ::rtl::OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
             }
             catch(const Exception&)
@@ -2319,7 +2320,7 @@ namespace
 
         try
         {
-            Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+            Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
             Sequence< PropertyValue > aProps( 1 );
             aProps[0].Name      = ::rtl::OUString("Title");

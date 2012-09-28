@@ -109,7 +109,6 @@ class SwEditRegionDlg : public SfxModalDialog
 
     SwWrtShell&             rSh;
     SectReprArr             aSectReprArr;
-    SvLBoxEntry*            pAktEntry;
     const SwSection*        pCurrSect;
     sfx2::DocumentInserter* m_pDocInserter;
     Window*                 m_pOldDefDlgParent;

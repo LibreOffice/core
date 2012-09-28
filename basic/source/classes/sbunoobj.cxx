@@ -50,7 +50,7 @@
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/script/XDirectInvocation.hpp>
@@ -263,11 +263,7 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
         Reference< XComponentContext > xContext = getComponentContext_Impl();
         if( xContext.is() )
         {
-            Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
-            xTypeConverter = Reference<XTypeConverter>(
-                xSMgr->createInstanceWithContext(
-                    ::rtl::OUString( "com.sun.star.script.Converter"),
-                        xContext ), UNO_QUERY );
+            xTypeConverter = Converter::create(xContext);
         }
         if( !xTypeConverter.is() )
         {
@@ -440,32 +436,6 @@ void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
 
     SbError nError( ERRCODE_BASIC_EXCEPTION );
     ::rtl::OUStringBuffer aMessageBuf;
-
-    // Add for VBA, to get the correct error code and message.
-    if ( SbiRuntime::isVBAEnabled() )
-    {
-        if ( aExamine >>= aBasicError )
-        {
-            if ( aBasicError.ErrorCode != 0 )
-            {
-                nError = StarBASIC::GetSfxFromVBError( (sal_uInt16) aBasicError.ErrorCode );
-                if ( nError == 0 )
-                {
-                    nError = (SbError) aBasicError.ErrorCode;
-                }
-                aMessageBuf.append( aBasicError.ErrorMessageArgument );
-                aExamine.clear();
-            }
-        }
-
-        IndexOutOfBoundsException aIdxOutBndsExp;
-        if ( aExamine >>= aIdxOutBndsExp )
-        {
-            nError = SbERR_OUT_OF_RANGE;
-            aExamine.clear();
-        }
-    }
-    // End add
 
     // strip any other WrappedTargetException instances, but this time preserve the error messages.
     WrappedTargetException aWrapped;
@@ -967,7 +937,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                 {
                     // If all elements of the arrays are from the same type, take
                     // this one - otherwise the whole will be considered as Any-Sequence
-                    sal_Bool bNeedsInit = sal_True;
+                    bool bNeedsInit = true;
 
                     sal_Int32 nSize = nUpper - nLower + 1;
                     sal_Int32 nIdx = nLower;
@@ -985,7 +955,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                                 break;
                             }
                             aElementType = aType;
-                            bNeedsInit = sal_False;
+                            bNeedsInit = false;
                         }
                         else if( aElementType != aType )
                         {
@@ -1009,7 +979,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                     // For this check the array's dim structure does not matter
                     sal_uInt32 nFlatArraySize = pArray->Count32();
 
-                    sal_Bool bNeedsInit = sal_True;
+                    bool bNeedsInit = true;
                     for( sal_uInt32 i = 0 ; i < nFlatArraySize ; i++ )
                     {
                         SbxVariableRef xVar = pArray->SbxArray::Get32( i );
@@ -1024,7 +994,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                                 break;
                             }
                             aElementType = aType;
-                            bNeedsInit = sal_False;
+                            bNeedsInit = false;
                         }
                         else if( aElementType != aType )
                         {

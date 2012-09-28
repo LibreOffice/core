@@ -16,18 +16,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.JViewport;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 /** This canvas displays accessible objects graphically.  Each accessible
     object with graphical representation is represented by an
@@ -47,10 +56,9 @@ class Canvas
     public Canvas ()
     {
         super (true);
-        maObjects = new java.util.HashMap ();
-        maNodes = new Vector ();
-        maObjectList = new Vector ();
-        maContexts = new Vector ();
+        maObjects = new java.util.HashMap<AccTreeNode, CanvasShape> ();
+        maNodes = new ArrayList<AccTreeNode> ();
+        maObjectList = new ArrayList<CanvasShape> ();
         addMouseListener (this);
         addMouseMotionListener (this);
         maBoundingBox = new Rectangle (0,0,100,100);
@@ -86,7 +94,7 @@ class Canvas
         {
             maNodes.add (aNode);
 
-            CanvasShape aObject = (CanvasShape) maObjects.get (aNode);
+            CanvasShape aObject = maObjects.get (aNode);
             if (aObject == null)
             {
                 aObject = new CanvasShape (aNode);
@@ -122,7 +130,7 @@ class Canvas
         int i = maNodes.indexOf (aNode);
         if (i != -1)
         {
-            CanvasShape aObject = (CanvasShape)maObjects.get(aNode);
+            CanvasShape aObject = maObjects.get(aNode);
             if (aObject != null)
                 aObject.update();
         }
@@ -130,7 +138,7 @@ class Canvas
 
     public void updateNodeGeometry (AccTreeNode aNode)
     {
-        CanvasShape aObject = (CanvasShape)maObjects.get(aNode);
+        CanvasShape aObject = maObjects.get(aNode);
         if (aObject != null)
             aObject.updateGeometry();
     }
@@ -138,7 +146,7 @@ class Canvas
     public void clear ()
     {
         while (maNodes.size() > 0)
-            removeNode ((AccTreeNode)maNodes.elementAt(0));
+            removeNode (maNodes.get(0));
 
         maNodes.clear();
         maObjects.clear();
@@ -239,7 +247,7 @@ class Canvas
                 boolean bShowText = getShowText();
                 for (int i=0; i<nCount; i++)
                 {
-                    CanvasShape aCanvasShape = (CanvasShape)maObjectList.elementAt(i);
+                    CanvasShape aCanvasShape = maObjectList.get(i);
                     aCanvasShape.paint (
                         g2,
                         mnHOffset, mnVOffset, mnScale,
@@ -389,7 +397,7 @@ class Canvas
         int nCount = maObjectList.size();
         for (int i=nCount-1; i>=0; --i)
         {
-            CanvasShape aObject = (CanvasShape)maObjectList.elementAt(i);
+            CanvasShape aObject = maObjectList.get(i);
             if (aObject != null)
                 if (aObject.contains (e.getX(),e.getY()))
                 {
@@ -434,7 +442,7 @@ class Canvas
         Object aObject = aPath.getLastPathComponent();
         if (aObject instanceof AccTreeNode)
         {
-            CanvasShape aCanvasShape = (CanvasShape)maObjects.get ((AccTreeNode)aObject);
+            CanvasShape aCanvasShape = maObjects.get (aObject);
             if (highlightObject (aCanvasShape))
                 repaint();
         }
@@ -450,11 +458,11 @@ class Canvas
         mnScale;
     private CanvasShape
         maActiveObject;
-    private java.util.HashMap
+    private java.util.HashMap<AccTreeNode, CanvasShape>
         maObjects;
-    private Vector
-        maObjectList,
-        maContexts,
+    private List<CanvasShape>
+        maObjectList;
+    private List<AccTreeNode>
         maNodes;
     private Rectangle
         maBoundingBox;

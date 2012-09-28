@@ -34,8 +34,8 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -44,7 +44,6 @@
 #include <svl/filenotation.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <list>
@@ -63,6 +62,7 @@ namespace dbmm
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -88,17 +88,17 @@ namespace dbmm
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::frame::XComponentLoader;
     using ::com::sun::star::util::XModifiable;
+    using ::com::sun::star::ucb::UniversalContentBroker;
     using ::com::sun::star::ucb::XCommandEnvironment;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XContentIdentifier;
-    using ::com::sun::star::ucb::XContentProvider;
     /** === end UNO using === **/
 
     //====================================================================
     //= helper
     //====================================================================
     //--------------------------------------------------------------------
-    static void lcl_getControllers_throw( const Reference< XModel2 >& _rxDocument,
+    static void lcl_getControllers_throw(const Reference< XModel2 >& _rxDocument,
         ::std::list< Reference< XController2 > >& _out_rControllers )
     {
         _out_rControllers.clear();
@@ -396,7 +396,9 @@ namespace dbmm
     //--------------------------------------------------------------------
     namespace
     {
-        bool    lcl_equalURLs_nothrow( const ::rtl::OUString& _lhs, const ::rtl::OUString _rhs )
+        bool    lcl_equalURLs_nothrow(
+            const Reference< XComponentContext >& context,
+            const ::rtl::OUString& _lhs, const ::rtl::OUString _rhs )
         {
             // the cheap situation: the URLs are equal
             if ( _lhs == _rhs )
@@ -405,18 +407,14 @@ namespace dbmm
             bool bEqual = true;
             try
             {
-                ::ucbhelper::Content aContentLHS = ::ucbhelper::Content( _lhs, Reference< XCommandEnvironment >() );
-                ::ucbhelper::Content aContentRHS = ::ucbhelper::Content( _rhs, Reference< XCommandEnvironment >() );
+                ::ucbhelper::Content aContentLHS = ::ucbhelper::Content( _lhs, Reference< XCommandEnvironment >(), context );
+                ::ucbhelper::Content aContentRHS = ::ucbhelper::Content( _rhs, Reference< XCommandEnvironment >(), context );
                 Reference< XContent > xContentLHS( aContentLHS.get(), UNO_SET_THROW );
                 Reference< XContent > xContentRHS( aContentRHS.get(), UNO_SET_THROW );
                 Reference< XContentIdentifier > xID1( xContentLHS->getIdentifier(), UNO_SET_THROW );
                 Reference< XContentIdentifier > xID2( xContentRHS->getIdentifier(), UNO_SET_THROW );
 
-                ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-                Reference< XContentProvider > xProvider(
-                    pBroker ? pBroker->getContentProviderInterface() : Reference< XContentProvider >(), UNO_SET_THROW );
-
-                bEqual = ( 0 == xProvider->compareContentIds( xID1, xID2 ) );
+                bEqual = UniversalContentBroker::create(context)->compareContentIds( xID1, xID2 ) == 0;
             }
             catch( const Exception& )
             {
@@ -440,7 +438,7 @@ namespace dbmm
         try
         {
             // check that the backup location isn't the same as the document itself
-            if ( lcl_equalURLs_nothrow( sBackupLocation, m_pData->xDocumentModel->getURL() ) )
+            if ( lcl_equalURLs_nothrow( m_pData->aContext.getUNOContext(), sBackupLocation, m_pData->xDocumentModel->getURL() ) )
             {
                 ErrorBox aErrorBox( const_cast< MacroMigrationDialog* >( this ), MacroMigrationResId( ERR_INVALID_BACKUP_LOCATION ) );
                 aErrorBox.Execute();

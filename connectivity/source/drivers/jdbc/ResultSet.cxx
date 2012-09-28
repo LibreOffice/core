@@ -72,11 +72,11 @@ java_sql_ResultSet::java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::java_sql_ResultSet" );
     SDBThreadAttach::addRef();
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     if ( pStmt )
         m_xStatement = *pStmt;
 
-    osl_decrementInterlockedCount(&m_refCount);
+    osl_atomic_decrement(&m_refCount);
 }
 // -----------------------------------------------------------------------------
 java_sql_ResultSet::~java_sql_ResultSet()
@@ -84,7 +84,7 @@ java_sql_ResultSet::~java_sql_ResultSet()
     if ( !java_sql_ResultSet_BASE::rBHelper.bDisposed && !java_sql_ResultSet_BASE::rBHelper.bInDispose )
     {
         // increment ref count to prevent double call of Dtor
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }

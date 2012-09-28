@@ -42,6 +42,8 @@
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include "xmlimprt.hxx"
 
+class ScConditionalFormat;
+
 class ScXMLCellImportPropertyMapper : public SvXMLImportPropertyMapper
 {
 protected:
@@ -89,44 +91,20 @@ public:
     virtual void finished(
             ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const;
 };
-struct ScXMLMapContent;
 
 class XMLTableStyleContext : public XMLPropStyleContext
 {
     ::rtl::OUString             sDataStyleName;
     rtl::OUString               sPageStyle;
-    const rtl::OUString         sNumberFormat;
     SvXMLStylesContext*         pStyles;
-    std::vector<ScXMLMapContent>    aMaps;
-    com::sun::star::uno::Any    aConditionalFormat;
     sal_Int32                   nNumberFormat;
     SCTAB                       nLastSheet;
-    bool                        bConditionalFormatCreated;
     bool                        bParentSet;
+    ScConditionalFormat*        mpCondFormat;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
-    void SetOperator(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
-            ::com::sun::star::sheet::ConditionOperator eOp ) const;
-
-    void SetBaseCellAddress(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
-            const ::rtl::OUString& rBaseCell ) const;
-
-    void SetStyle(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
-            const ::rtl::OUString& rApplyStyle ) const;
-
-    void SetFormula(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
-        sal_Int32 nFormulaIdx, const ::rtl::OUString& rFormula,
-        const ::rtl::OUString& rFormulaNmsp, ::formula::FormulaGrammar::Grammar eGrammar, bool bHasNmsp ) const;
-
-    void GetConditionalFormat(
-        ::com::sun::star::uno::Any& aAny, const rtl::OUString& sCondition,
-        const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const;
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
@@ -160,6 +138,8 @@ public:
 
     SCTAB GetLastSheet() const       { return nLastSheet; }
     void SetLastSheet(SCTAB nNew)    { nLastSheet = nNew; }
+
+    void ApplyCondFormat( com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress> xCellRanges );
 
 private:
     using XMLPropStyleContext::SetStyle;

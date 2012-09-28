@@ -68,6 +68,7 @@ protected:
 
     virtual void    FillLayoutData() const;
     Rectangle *     ImplFindPartRect( const Point& rPt );
+
 public:
                     SpinField( Window* pParent, WinBits nWinStyle = 0 );
                     SpinField( Window* pParent, const ResId& rResId );
@@ -100,8 +101,10 @@ public:
     const Link&     GetLastHdl() const { return maLastHdlLink; }
 
     virtual Size    CalcMinimumSize() const;
+    virtual Size    CalcMinimumSizeForText(const rtl::OUString &rString) const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     virtual Size    CalcSize( sal_uInt16 nChars ) const;
+    virtual void    take_properties(Window &rOther);
 };
 
 #endif // _SV_SPINFLD_HXX

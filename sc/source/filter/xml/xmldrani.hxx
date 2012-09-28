@@ -89,7 +89,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     com::sun::star::sheet::DataImportMode nSourceType;
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
-    sal_Int16       nSubTotalRuleGroupFieldNumber;
     bool            mbValidRange;
     bool            bContainsSort;
     bool            bContainsSubTotal;

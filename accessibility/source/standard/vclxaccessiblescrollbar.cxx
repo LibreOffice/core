@@ -112,17 +112,17 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleScrollBar, VCLXAccessibleCompone
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleScrollBar::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleScrollBar::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleScrollBar") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleScrollBar" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleScrollBar::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleScrollBar") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleScrollBar";
     return aNames;
 }
 
@@ -168,21 +168,21 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex ) throw 
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleScrollBar::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleScrollBar::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    ::rtl::OUString sDescription;
+    OUString sDescription;
 
     switch ( nIndex )
     {
-        case 0:     sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_DECLINE ) );      break;
-        case 1:     sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_INCLINE ) );      break;
-        case 2:     sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_DECBLOCK ) );     break;
-        case 3:     sDescription = ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_INCBLOCK ) );     break;
+        case 0:     sDescription = OUString( TK_RES_STRING( RID_STR_ACC_ACTION_DECLINE ) );      break;
+        case 1:     sDescription = OUString( TK_RES_STRING( RID_STR_ACC_ACTION_INCLINE ) );      break;
+        case 2:     sDescription = OUString( TK_RES_STRING( RID_STR_ACC_ACTION_DECBLOCK ) );     break;
+        case 3:     sDescription = OUString( TK_RES_STRING( RID_STR_ACC_ACTION_INCBLOCK ) );     break;
         default:                                                                                        break;
     }
 

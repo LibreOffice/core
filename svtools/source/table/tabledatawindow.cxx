@@ -31,7 +31,6 @@
 #include "tabledatawindow.hxx"
 #include "tablecontrol_impl.hxx"
 #include "tablegeometry.hxx"
-#include "cellvalueconversion.hxx"
 
 #include <vcl/help.hxx>
 
@@ -134,7 +133,7 @@ namespace svt { namespace table
                         aCellToolTip.clear();
                 }
 
-                sHelpText = CellValueConversion::convertToString( aCellToolTip );
+                pTableModel->getRenderer()->GetFormattedCellString( aCellToolTip, hitCol, hitRow, sHelpText );
 
                 if ( sHelpText.indexOf( '\n' ) >= 0 )
                     nHelpStyle = QUICKHELP_TIP_STYLE_BALLOON;
@@ -143,18 +142,26 @@ namespace svt { namespace table
 
         if ( !sHelpText.isEmpty() )
         {
+            // hide the standard (singleton) help window, so we do not have two help windows open at the same time
+            Help::HideBalloonAndQuickHelp();
+
             Rectangle const aControlScreenRect(
                 OutputToScreenPixel( Point( 0, 0 ) ),
                 GetOutputSizePixel()
             );
 
             if ( m_nTipWindowHandle )
+            {
                 Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
+            }
             else
                 m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText, nHelpStyle );
         }
         else
+        {
             impl_hideTipWindow();
+            Window::RequestHelp( rHEvt );
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -198,7 +205,6 @@ namespace svt { namespace table
         {
             m_aSelectHdl.Call( NULL );
         }
-        m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -207,7 +213,6 @@ namespace svt { namespace table
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
 
-        m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GrabFocus();
     }
 

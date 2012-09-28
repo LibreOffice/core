@@ -43,14 +43,12 @@ namespace connectivity
         ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;
         ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 
-        sal_Int32                                   m_nColCount;
     protected:
         virtual ~ODatabaseMetaDataResultSetMetaData();
     public:
         // a Constructor, that is needed for when Returning the Object is needed:
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         ODatabaseMetaDataResultSetMetaData( )
-                :   m_nColCount(0)
         {
         }
         /// Avoid ambigous cast error from the compiler.

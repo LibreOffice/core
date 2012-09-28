@@ -22,7 +22,6 @@
 #ifndef OOX_PPT_BUILDLISTCONTEXT
 #define OOX_PPT_BUILDLISTCONTEXT
 
-#include "oox/ppt/timenode.hxx"
 #include "oox/core/fragmenthandler2.hxx"
 
 namespace oox { namespace ppt {
@@ -33,9 +32,7 @@ namespace oox { namespace ppt {
         : public ::oox::core::FragmentHandler2
     {
     public:
-        BuildListContext( ::oox::core::FragmentHandler2& rParent,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
-                TimeNodePtrList & aTimeNodeList);
+        BuildListContext( ::oox::core::FragmentHandler2& rParent );
 
         ~BuildListContext( );
 
@@ -43,7 +40,6 @@ namespace oox { namespace ppt {
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
     private:
-        TimeNodePtrList & maTimeNodeList;
         bool              mbInBldGraphic;
         bool              mbBuildAsOne;
     };

@@ -52,7 +52,6 @@
 
 #include <osl/diagnose.h>
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Mapping;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;

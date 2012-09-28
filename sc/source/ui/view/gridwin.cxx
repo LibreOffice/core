@@ -1168,7 +1168,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     sal_uInt16 i;
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
     long nSizeX  = 0;
     long nSizeY  = 0;
@@ -1187,7 +1187,8 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
     pFilterBox = new ScFilterListBox(
         pFilterFloat, this, nCol, nRow, bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER );
-    if ( bLayoutRTL )
+    // Fix for bug fdo#44925
+    if (Application::GetSettings().GetLayoutRTL() != bLayoutRTL)
         pFilterBox->EnableMirroring();
 
     nSizeX += 1;
@@ -5430,7 +5431,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
 
         Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
         ::basegfx::B2DRange aRange(aLogic.Left(), aLogic.Top(), aLogic.Right(), aLogic.Bottom());
-        ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight, this);
+        ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight);
         xOverlayManager->add(*pDashedBorder);
         mpOOSelectionBorder->append(*pDashedBorder);
     }

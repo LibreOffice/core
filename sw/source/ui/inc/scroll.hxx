@@ -40,7 +40,6 @@ class SwScrollbar: public ScrollBar
     void    AutoShow();
 
     using Window::Hide;
-    using Window::SetPosSizePixel;
     using Window::IsVisible;
 
 public:

@@ -19,18 +19,7 @@ package complex.loadAllDocuments;
 
 // __________ Imports __________
 
-// structs, const, ...
-import com.sun.star.beans.PropertyValue;
 
-// exceptions
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
-
-// interfaces
-import com.sun.star.task.XStatusIndicator;
-
-// helper
-import com.sun.star.uno.UnoRuntime;
 
 // __________ Implementation __________
 

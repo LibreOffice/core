@@ -21,7 +21,6 @@ package convwatch;
 import java.io.File;
 import helper.OSHelper;
 import convwatch.IniFile;
-import java.util.Date;
 
 public class BuildID
 {

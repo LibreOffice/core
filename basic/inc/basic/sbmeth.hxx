@@ -26,7 +26,6 @@
 #include "basicdllapi.h"
 
 class SbModule;
-class SbMethodImpl;
 
 class BASIC_DLLPUBLIC SbMethod : public SbxMethod
 {
@@ -38,7 +37,6 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
     friend class SbJScriptMethod;
     friend class SbIfaceMapperMethod;
 
-    SbMethodImpl* mpSbMethodImpl;           // Impl data
     SbxVariable* mCaller;                   // caller
     SbModule* pMod;
     sal_uInt16    nDebugFlags;
@@ -69,10 +67,7 @@ public:
     virtual void Broadcast( sal_uIntPtr nHintId );
 };
 
-#ifndef __SB_SBMETHODREF_HXX
-#define __SB_SBMETHODREF_HXX
 SV_DECL_IMPL_REF(SbMethod)
-#endif
 
 class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
 {

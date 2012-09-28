@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef AVMEDIA_MEDIAITEM_HXX
 #define AVMEDIA_MEDIAITEM_HXX
@@ -102,11 +93,11 @@ public:
     void                    setTime( double fTime );
     double                  getTime() const;
 
-    void                    setLoop( sal_Bool bLoop );
-    sal_Bool                isLoop() const;
+    void                    setLoop( bool bLoop );
+    bool                    isLoop() const;
 
-    void                    setMute( sal_Bool bMute );
-    sal_Bool                isMute() const;
+    void                    setMute( bool bMute );
+    bool                    isMute() const;
 
     void                    setVolumeDB( sal_Int16 nDB );
     sal_Int16               getVolumeDB() const;
@@ -114,11 +105,11 @@ public:
     void                    setZoom( ::com::sun::star::media::ZoomLevel eZoom );
     ::com::sun::star::media::ZoomLevel  getZoom() const;
 
-    void                    setURL( const ::rtl::OUString& rURL,
-                                    ::rtl::OUString const*const pTempURL);
-    const ::rtl::OUString&  getURL() const;
+    void                    setURL( const OUString& rURL,
+                                    OUString const*const pTempURL);
+    const OUString&  getURL() const;
 
-    const ::rtl::OUString&  getTempURL() const;
+    const OUString&  getTempURL() const;
 
 private:
 
@@ -131,8 +122,8 @@ typedef ::avmedia::MediaItem avmedia_MediaItem;
 bool AVMEDIA_DLLPUBLIC EmbedMedia(
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>
             const& xModel,
-        ::rtl::OUString const& rSourceURL,
-        ::rtl::OUString & o_rEmbeddedURL);
+        OUString const& rSourceURL,
+        OUString & o_rEmbeddedURL);
 
 }
 

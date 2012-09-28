@@ -55,7 +55,6 @@
 
 using ::osl::Mutex;
 using ::osl::Guard;
-using ::rtl::OUString;
 using ::cppu::OInterfaceContainerHelper;
 using ::cppu::OInterfaceIteratorHelper;
 using ::com::sun::star::uno::Any;
@@ -515,12 +514,12 @@ Reference< XInterface > SAL_CALL createInstance_##N( const Reference< XComponent
 }\
 OUString getImplementationName_##N()\
 {\
-    return OUString( RTL_CONSTASCII_USTRINGPARAM ( IN ) );\
+    return OUString( IN );\
 }\
 Sequence<OUString> getSupportedServiceNames_##N(void)\
 {\
     Sequence<OUString> aRet(1);\
-    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SN ));\
+    aRet.getArray()[0] = SN;\
     return aRet;\
 }
 

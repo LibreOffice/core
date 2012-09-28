@@ -50,7 +50,7 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
     virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
                                       const rtl::OUString& rMessage,
                                       int nButtonCombination,
-                                      int nDefaultButton);
+                                      int nDefaultButton, bool bUseResources);
 
     // simple helpers primarily for X Windowing W_CLASS hints
     static const char *getFrameResName();

@@ -21,6 +21,7 @@
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -37,6 +38,7 @@
 #include <osl/diagnose.h>
 #include "wrapstreamforshare.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -175,12 +177,10 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
 
     // create temporary stream
     uno::Reference < io::XOutputStream > xTempOut(
-                        m_xFactory->createInstance("com.sun.star.io.TempFile"),
-                        uno::UNO_QUERY );
-    uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY );
-    uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY );
-    if ( !xTempOut.is() || !xTempIn.is() || !xTempSeek.is() )
-        throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+                        io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                        uno::UNO_QUERY_THROW );
+    uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY_THROW );
+    uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );
 
     // copy the raw stream to the temporary file starting from the current position
     ::comphelper::OStorageHelper::CopyInputToOutput( GetOwnSeekStream(), xTempOut );
@@ -282,10 +282,8 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     {
         // create temporary file
         uno::Reference < io::XStream > xTempStream(
-                            m_xFactory->createInstance ("com.sun.star.io.TempFile"),
-                            uno::UNO_QUERY );
-        if ( !xTempStream.is() )
-            throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+                            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                            uno::UNO_QUERY_THROW );
 
         // create a package based on it
         ZipPackage* pPackage = new ZipPackage( m_xFactory );
@@ -341,12 +339,10 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
 
         // create another temporary file
         uno::Reference < io::XOutputStream > xTempOut(
-                            m_xFactory->createInstance ("com.sun.star.io.TempFile"),
-                            uno::UNO_QUERY );
-        uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY );
-        uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY );
-        if ( !xTempOut.is() || !xTempIn.is() || !xTempSeek.is() )
-            throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+                            io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
+                            uno::UNO_QUERY_THROW );
+        uno::Reference < io::XInputStream > xTempIn( xTempOut, UNO_QUERY_THROW );
+        uno::Reference < io::XSeekable > xTempSeek( xTempOut, UNO_QUERY_THROW );
 
         // copy the raw stream to the temporary file
         ::comphelper::OStorageHelper::CopyInputToOutput( xInRaw, xTempOut );
@@ -901,7 +897,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
 }
 
 //--------------------------------------------------------------------------
-void ZipPackageStream::setSize ( const sal_Int32 nNewSize )
+void ZipPackageStream::setSize ( const sal_Int64 nNewSize )
 {
     if ( aEntry.nCompressedSize != nNewSize )
         aEntry.nMethod = DEFLATED;

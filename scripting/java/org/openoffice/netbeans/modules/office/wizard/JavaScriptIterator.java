@@ -50,8 +50,6 @@ import org.openoffice.netbeans.modules.office.utils.PackageRemover;
  * Associate this to a template inside a layer using the
  * Sequence of Panels extra property.
  * Create one or more panels from template as needed too.
- *
- * @author tomaso
  */
 public class JavaScriptIterator implements TemplateWizard.Iterator {
 

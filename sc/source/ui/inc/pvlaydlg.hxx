@@ -178,8 +178,6 @@ private:
     ScDPFuncDataVec         aRowArr;
     ScDPFuncDataVec         aDataArr;
 
-    long                    mnFieldObjSpace;
-
     ScDPObjectPtr           xDlgDPObject;
     ScRange                 aOldRange;
     ScPivotParam            thePivotData;

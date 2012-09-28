@@ -1,1 +1,8 @@
 UNO bindings for the Python programming language.
+
+To have much joy debugging python extensions you need to:
+  a) edit pythonloader.py in your install setting DEBUG=1 at the top
+  b) touch pyuno/source/module/pyuno_runtime.cxx and 'make debug=true' in pyuno
+
+Then you'll start to see your exceptions on the console instead of them getting
+lost at the UNO interface.

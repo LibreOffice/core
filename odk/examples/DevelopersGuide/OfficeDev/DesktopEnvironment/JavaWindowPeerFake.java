@@ -32,7 +32,7 @@
  *
  *************************************************************************/
 
-import java.awt.*;
+
 
 
 /** <p>Class to pass the system window handle to the OpenOffice.org toolkit.</p>

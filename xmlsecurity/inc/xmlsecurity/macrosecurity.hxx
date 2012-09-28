@@ -50,7 +50,7 @@ public:
     ~ReadOnlyImage();
 
     virtual void        RequestHelp( const HelpEvent& rHEvt );
-    static const String& GetHelpTip();
+    static const OUString& GetHelpTip();
 };
 
 class MacroSecurity : public TabDialog

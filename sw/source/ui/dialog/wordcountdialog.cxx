@@ -30,47 +30,16 @@
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
 #include <dialog.hrc>
-#include <wordcountdialog.hrc>
 #include <cmdid.h>
-#include "vcl/msgbox.hxx" // RET_CANCEL
 #include <swmodule.hxx>
 #include <wview.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
+#include <comphelper/string.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <vcl/msgbox.hxx>
 
-//TODO, add asian/non-asian word count to UI when CJK mode is enabled.
-
-SwWordCountDialog::SwWordCountDialog(Window* pParent) :
-#if defined _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    aCurrentFL( pParent, SW_RES(              FL_CURRENT            )),
-    aCurrentWordFT( pParent, SW_RES(          FT_CURRENTWORD        )),
-    aCurrentWordFI( pParent, SW_RES(          FI_CURRENTWORD        )),
-    aCurrentCharacterFT( pParent, SW_RES(     FT_CURRENTCHARACTER   )),
-    aCurrentCharacterFI( pParent, SW_RES(     FI_CURRENTCHARACTER   )),
-    aCurrentCharacterExcludingSpacesFT( pParent, SW_RES(     FT_CURRENTCHARACTEREXCLUDINGSPACES   )),
-    aCurrentCharacterExcludingSpacesFI( pParent, SW_RES(     FI_CURRENTCHARACTEREXCLUDINGSPACES   )),
-
-    aDocFL( pParent, SW_RES(                  FL_DOC                )),
-    aDocWordFT( pParent, SW_RES(              FT_DOCWORD            )),
-    aDocWordFI( pParent, SW_RES(              FI_DOCWORD            )),
-    aDocCharacterFT( pParent, SW_RES(         FT_DOCCHARACTER       )),
-    aDocCharacterFI( pParent, SW_RES(         FI_DOCCHARACTER       )),
-    aDocCharacterExcludingSpacesFT( pParent, SW_RES(         FT_DOCCHARACTEREXCLUDINGSPACES       )),
-    aDocCharacterExcludingSpacesFI( pParent, SW_RES(         FI_DOCCHARACTEREXCLUDINGSPACES       )),
-    aBottomFL(pParent, SW_RES(                FL_BOTTOM             )),
-    aOK( pParent, SW_RES(                     PB_OK                 )),
-    aHelp( pParent, SW_RES(                   PB_HELP               ))
-#if defined _MSC_VER
-#pragma warning (default : 4355)
-#endif
-{
-    aOK.SetClickHdl(LINK(this,SwWordCountDialog,        OkHdl));
-}
-
-IMPL_LINK_NOARG(SwWordCountDialog, OkHdl)
+IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
 {   
     SfxViewFrame* pVFrame = ::GetActiveView()->GetViewFrame();
     if (pVFrame != NULL)
@@ -80,37 +49,58 @@ IMPL_LINK_NOARG(SwWordCountDialog, OkHdl)
     return 0;
 }
 
-SwWordCountDialog::~SwWordCountDialog()
+SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
     ViewShell::SetCareWin( 0 );
 }
 
-void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
+namespace
 {
-    aCurrentWordFI.SetText(     String::CreateFromInt32(rCurrent.nWord ));
-    aCurrentCharacterFI.SetText(String::CreateFromInt32(rCurrent.nChar ));
-    aCurrentCharacterExcludingSpacesFI.SetText(String::CreateFromInt32(rCurrent.nCharExcludingSpaces ));
-    aDocWordFI.SetText(         String::CreateFromInt32(rDoc.nWord ));
-    aDocCharacterFI.SetText(    String::CreateFromInt32(rDoc.nChar ));
-    aDocCharacterExcludingSpacesFI.SetText(    String::CreateFromInt32(rDoc.nCharExcludingSpaces ));
+    void setValue(FixedText *pWidget, sal_uLong nValue)
+    {
+        rtl::OUString sValue(rtl::OUString::valueOf(static_cast<sal_Int64>(nValue)));
+        pWidget->SetText(sValue);
+    }
 }
 
+void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
+{
+    setValue(m_pCurrentWordFT, rCurrent.nWord);
+    setValue(m_pCurrentCharacterFT, rCurrent.nChar);
+    setValue(m_pCurrentCharacterExcludingSpacesFT, rCurrent.nCharExcludingSpaces);
+    setValue(m_pDocWordFT, rDoc.nWord);
+    setValue(m_pDocCharacterFT, rDoc.nChar);
+    setValue(m_pDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces);
+}
 
+//TODO, add asian/non-asian word count to UI when CJK mode is enabled.
 SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
                                          Window *pParent,
                                          SfxChildWinInfo* pInfo)
-    : SfxModelessDialog(_pBindings, pChild, pParent, SW_RES(DLG_WORDCOUNT)),
-#if defined _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-      aDlg(this)
-#if defined _MSC_VER
-#pragma warning (default : 4355)
-#endif
+    : SfxModelessDialog(_pBindings, pChild, pParent, "WordCountDialog", "modules/swriter/ui/wordcount.ui")
 {
-    FreeResource();
+    get(m_pCurrentWordFT, "selectwords");
+    get(m_pCurrentCharacterFT, "selectchars");
+    get(m_pCurrentCharacterExcludingSpacesFT, "selectcharsnospaces");
+    get(m_pDocWordFT, "docwords");
+    get(m_pDocCharacterFT, "docchars");
+    get(m_pDocCharacterExcludingSpacesFT, "doccharsnospaces");
+    get(m_pClosePB, "close");
+
+    long nPrefWidth = m_pCurrentWordFT->get_preferred_size().Width();
+
+    m_pCurrentWordFT->set_width_request(nPrefWidth);
+    m_pCurrentCharacterFT->set_width_request(nPrefWidth);
+    m_pCurrentCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
+    m_pDocWordFT->set_width_request(nPrefWidth);
+    m_pDocCharacterFT->set_width_request(nPrefWidth);
+    m_pDocCharacterExcludingSpacesFT->set_width_request(nPrefWidth);
+
     Initialize(pInfo);
+
+    m_pClosePB->SetClickHdl(LINK(this, SwWordCountFloatDlg, CloseHdl));
+    m_pClosePB->GrabFocus();
 }
 
 void SwWordCountFloatDlg::Activate()
@@ -130,7 +120,12 @@ void SwWordCountFloatDlg::UpdateCounts()
         aDocStat = rSh.GetUpdatedDocStat();
         rSh.EndAction();
     }
-    aDlg.SetValues(aCurrCnt, aDocStat);
+    SetValues(aCurrCnt, aDocStat);
+}
+
+void SwWordCountFloatDlg::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)
+{
+    SetValues(rCurrCnt, rDocStat);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,5 +1,7 @@
 mkdir: %_DEST%\inc\external\libxslt
+mkdir: %_DEST%\inc\external\libexslt
 ..\%__SRC%\inc\*.h %_DEST%\inc\external\libxslt\*.h
+..\%__SRC%\inc\exslt*.h %_DEST%\inc\external\libexslt\*.h
 ..\%__SRC%\lib\libxslt.1.dylib %_DEST%\lib\libxslt.1.dylib
 symlink: %_DEST%\lib\libxslt.1.dylib %_DEST%\lib\libxslt.dylib
 ...\%__SRC%\lib\libexslt.so %_DEST%\lib\libexslt.so
@@ -11,6 +13,8 @@ symlink: %_DEST%\lib\libexslt.so.0 %_DEST%\lib\libexslt.so
 ..\%__SRC%\lib\libexslt.0.dylib %_DEST%\lib\libexslt.0.dylib
 symlink: %_DEST%\lib\libexslt.0.dylib %_DEST%\lib\libexslt.dylib
 ..\%__SRC%\lib\libexslt.so %_DEST%\lib\libexslt.so
+..\%__SRC%\lib\libexslt.lib %_DEST%\lib\libexslt.lib
+..\%__SRC%\lib\libexslt.a %_DEST%\lib\libexslt.a
 ..\%__SRC%\lib\libxslt*.* %_DEST%\lib\libxslt*.*
 ..\%__SRC%\lib\lib*.dll.a %_DEST%\lib\*.a
 ..\%__SRC%\bin\lib*.dll %_DEST%\bin

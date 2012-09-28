@@ -44,7 +44,7 @@ static sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
     KEY_N | KEY_MOD1, 0, 0, 0,                                     // KEYFUNC_NEW
     KEY_O | KEY_MOD1, KEY_OPEN, 0, 0,                              // KEYFUNC_OPEN
     KEY_S | KEY_MOD1, 0, 0, 0,                                     // KEYFUNC_SAVE
-    0, 0, 0, 0,                                                    // KEYFUNC_SAVEAS
+    KEY_S | KEY_SHIFT | KEY_MOD1, 0, 0, 0,                         // KEYFUNC_SAVEAS
     KEY_P | KEY_MOD1, 0, 0, 0,                                     // KEYFUNC_PRINT
     KEY_W | KEY_MOD1, KEY_F4 | KEY_MOD1, 0, 0,                     // KEYFUNC_CLOSE
     KEY_Q | KEY_MOD1, KEY_F4 | KEY_MOD2, 0, 0,                     // KEYFUNC_QUIT
@@ -52,7 +52,7 @@ static sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
     KEY_C | KEY_MOD1, KEY_INSERT | KEY_MOD1, KEY_COPY, 0,          // KEYFUNC_COPY
     KEY_V | KEY_MOD1, KEY_INSERT | KEY_SHIFT, KEY_PASTE, 0,        // KEYFUNC_PASTE
     KEY_Z | KEY_MOD1, KEY_BACKSPACE | KEY_MOD2, KEY_UNDO, 0,       // KEYFUNC_UNDO
-    0, 0, 0, 0,                                                    // KEYFUNC_REDO
+    KEY_Y | KEY_MOD1, KEY_UNDO | KEY_SHIFT, 0, 0,                  // KEYFUNC_REDO
     KEY_DELETE, 0, 0, 0,                                           // KEYFUNC_DELETE
     KEY_REPEAT, 0, 0, 0,                                           // KEYFUNC_REPEAT
     KEY_F | KEY_MOD1, KEY_FIND, 0, 0,                              // KEYFUNC_FIND

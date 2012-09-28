@@ -71,13 +71,13 @@ namespace dbaui
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         lcl_setListener( _rxConnection, this, true );
 
         m_pHtml.set( new OHTMLImportExport( getDescriptor(), _rxORB, _rxFormatter ) );
         m_pRtf.set( new ORTFImportExport( getDescriptor(), _rxORB, _rxFormatter ) );
 
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     // -----------------------------------------------------------------------------
@@ -106,7 +106,7 @@ namespace dbaui
     {
         OSL_PRECOND( i_rORB.is(), "ODataClipboard::ODataClipboard: having no factory is not good ..." );
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
 
         Reference<XConnection> xConnection;
         getDescriptor()[ daConnection ] >>= xConnection;
@@ -136,7 +136,7 @@ namespace dbaui
             }
         }
 
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     // -----------------------------------------------------------------------------

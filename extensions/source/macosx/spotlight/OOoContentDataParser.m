@@ -135,9 +135,9 @@ typedef int NSColorRenderingIntent;
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     //NSLog(@"parsing finished with error");
-    NSLog(@"An error occurred parsing the document. (Error %i, Description: %@, Line: %i, Column: %i)", [parseError code], 
-        [[parser parserError] localizedDescription], [parser lineNumber],
-        [parser columnNumber]);
+    NSLog(@"An error occurred parsing the document. (Error %li, Description: %@, Line: %li, Column: %li)", (long) [parseError code], 
+          [[parser parserError] localizedDescription], (long) [parser lineNumber],
+          (long) [parser columnNumber]);
     
     if (runningTextContent != nil) {
         [runningTextContent release];

@@ -281,6 +281,8 @@ public:
     sal_Int32           mnTopBorder;
     sal_Int32           mnRightBorder;
     sal_Int32           mnBottomBorder;
+    sal_Int32           mnWidthRequest;
+    sal_Int32           mnHeightRequest;
     long                mnX;
     long                mnY;
     long                mnAbsScreenX;
@@ -313,7 +315,20 @@ public:
     sal_uInt16              mnDlgCtrlFlags;
     sal_uInt16              mnLockCount;
     AlwaysInputMode     meAlwaysInputMode;
-    sal_Bool                mbFrame:1,
+    VclAlign            meHalign;
+    VclAlign            meValign;
+    VclPackType         mePackType;
+    sal_Int32           mnPadding;
+    sal_Int32           mnGridHeight;
+    sal_Int32           mnGridLeftAttach;
+    sal_Int32           mnGridTopAttach;
+    sal_Int32           mnGridWidth;
+    sal_Int32           mnBorderWidth;
+    sal_Int32           mnMarginLeft;
+    sal_Int32           mnMarginRight;
+    sal_Int32           mnMarginTop;
+    sal_Int32           mnMarginBottom;
+    sal_uInt8           mbFrame:1,
                         mbBorderWin:1,
                         mbOverlapWin:1,
                         mbSysWin:1,
@@ -386,7 +401,11 @@ public:
                         mbDisableAccessibleLabelForRelation:1,
                         mbDisableAccessibleLabeledByRelation:1,
                         mbHelpTextDynamic:1,
-                        mbFakeFocusSet:1;
+                        mbFakeFocusSet:1,
+                        mbHexpand:1,
+                        mbVexpand:1,
+                        mbExpand:1,
+                        mbFill:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

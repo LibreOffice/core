@@ -27,14 +27,10 @@ class SwWrtShell;
 
 class SwSplitTblDlg : public SvxStandardDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-    FixedLine       aSplitFL;
-    RadioButton     aCntntCopyRB;
-    RadioButton     aBoxAttrCopyWithParaRB ;
-    RadioButton     aBoxAttrCopyNoParaRB ;
-    RadioButton     aBorderCopyRB;
+    RadioButton*    mpCntntCopyRB;
+    RadioButton*    mpBoxAttrCopyWithParaRB ;
+    RadioButton*    mpBoxAttrCopyNoParaRB ;
+    RadioButton*    mpBorderCopyRB;
 
     SwWrtShell      &rShell;
     sal_uInt16          m_nSplit;

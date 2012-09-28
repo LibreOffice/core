@@ -116,7 +116,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::OResultSet" );
     DBG_CTOR( file_OResultSet, NULL );
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     m_bIsCount = (m_pParseTree &&
             m_pParseTree->count() > 2                                                       &&
             SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)                      &&
@@ -128,14 +128,14 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
     m_nResultSetConcurrency = isCount() ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
     construct();
     m_aSkipDeletedSet.SetDeletedVisible(m_bShowDeleted);
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::~OResultSet" );
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     disposing();
     DBG_DTOR( file_OResultSet, NULL );
 }

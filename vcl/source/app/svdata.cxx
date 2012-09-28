@@ -327,9 +327,9 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
 }
 
 
-bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
+bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
 {
-    rCancelled = sal_False;
+    rCancelled = false;
 
     bool bErrorMessage = true;
 
@@ -407,11 +407,11 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = true;
         }
 
         return false;
@@ -430,11 +430,11 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = true;
         }
 
         return false;
@@ -453,11 +453,11 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = true;
         }
 
         return false;
@@ -476,11 +476,11 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = true;
         }
 
         return false;
@@ -515,7 +515,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                         aTitle,
                         ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
+                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
 
                     // Do not change the setting in case the user chooses to cancel
                     if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
@@ -529,7 +529,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                         aTitle,
                         ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
-                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
+                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK, true);
                 }
             }
         }

@@ -41,12 +41,12 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.ucb.Command;
+import com.sun.star.ucb.UniversalContentBroker;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.ucb.XContent;
 import com.sun.star.ucb.XContentIdentifier;
-import com.sun.star.ucb.XContentIdentifierFactory;
-import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XSimpleFileAccess;
+import com.sun.star.ucb.XUniversalContentBroker;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import javax.swing.JOptionPane;
@@ -105,14 +105,9 @@ public class TDocSupplier {
 
         private XRow getXRowOfTDocUrl(String _sTDocUrl, String _sPropertyName){
         try{
-            String[] keys = new String[2];
-            keys[ 0 ] = "Local";
-            keys[ 1 ] = "Office";
-            Object oUCB = getXMultiComponentFactory().createInstanceWithArgumentsAndContext( "com.sun.star.ucb.UniversalContentBroker", keys, getXComponentContext() );
-            XContentIdentifierFactory xIdFactory = (XContentIdentifierFactory)UnoRuntime.queryInterface(XContentIdentifierFactory.class, oUCB);
-            XContentProvider xProvider = (XContentProvider)UnoRuntime.queryInterface(XContentProvider.class, oUCB);
-            XContentIdentifier xId = xIdFactory.createContentIdentifier(_sTDocUrl);
-            XContent xContent = xProvider.queryContent(xId);
+            XUniversalContentBroker xUCB = UniversalContentBroker.create( getXComponentContext() );
+            XContentIdentifier xId = xUCB.createContentIdentifier(_sTDocUrl);
+            XContent xContent = xUCB.queryContent(xId);
             XCommandProcessor xCmdProcessor = (XCommandProcessor) UnoRuntime.queryInterface(XCommandProcessor.class, xContent);
             Property aProperty = new Property();
             aProperty.Name = _sPropertyName; // "DocumentModel";                //DocumentModel

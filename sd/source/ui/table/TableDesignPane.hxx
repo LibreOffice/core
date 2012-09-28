@@ -111,7 +111,6 @@ public:
 
     virtual short Execute();
 private:
-    ViewShellBase& mrBase;
     boost::scoped_ptr< TableDesignPane > mpDesignPane;
 
     boost::scoped_ptr< FixedLine >       mxFlSep1;

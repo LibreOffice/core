@@ -33,7 +33,6 @@ Public FileCount as Integer
 Public XMLTemplateCount as Integer
 Public PathCollection(7,3) as String
 Public bIsFirstLogTable as Boolean
-Public bFilterTracerIsinsideTable as Boolean
 
 
 Function ReadCollectionPaths(FilesList() as String, sFilterName() as String)
@@ -415,7 +414,7 @@ Dim sPrevMimeTypeorExtension as String
 							FileCount = FileCount + 1
 						End If
 						oDocument.Dispose()
-						InsertTargetUrlToLogDocument(sTargetUrl, sComment, ApplIndex)
+						InsertTargetUrlToLogDocument(sTargetUrl, sComment)
 					Else
 						sCurcouldnotopenDocument = ReplaceString(scouldnotopenDocument, ConvertFromUrl(sSourceUrl), &quot;&lt;1&gt;&quot;)
 						sComment = ConcatComment(sComment, sCurCouldnotopenDocument)
@@ -537,7 +536,6 @@ Dim oCell
 	If Not bLogExists Then
         Exit Sub
     End If 
-	bFilterTracerIsinsideTable = False
 	FilterIndex = GetIndexForPartStringinMultiArray(sFilterName(), CurFileContent, 0)
 	sDocumentType = sFiltername(FilterIndex,3)
 	oLogCursor = oLogDocument.Text.createTextCursor()
@@ -552,36 +550,15 @@ Dim oCell
 	oLogCursor.HyperLinkTarget = &quot;&quot;
 	oLogCursor.ParaStyleName = &quot;Heading 1&quot;
 	oLogCursor.setString(sDocumentType)
-	If WizardMode = SBMICROSOFTMODE Then
-		If bFilterTracingAvailable Then
-			If bMSApplFilterTracingAvailable(ApplIndex) Then
-				Dim CurFilterTracingPath as String
-				CurFilterTracingPath = FilterTracingLogPath(ApplIndex)
-				bFilterTracerIsinsideTable = (bTakeOverTargetName(ApplIndex) Or bTakeOverPathName(ApplIndex))
-				If Not bFilterTracerIsinsideTable Then
-					oLogCursor.CollapseToEnd()
-					oLogDocument.Text.insertControlCharacter(oLogCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, False)
-					InsertCommandButtonatViewCursor(oLogDocument, oLogCursor, CurFilterTracingPath)
-				End If
-			End If
-		End If
-	End If
 	oLogCursor.CollapsetoEnd()
 	oLogDocument.Text.insertControlCharacter(oLogCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, False)
 	oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 	oLogTable.RepeatHeadline = true
-	If bFilterTracerIsinsideTable Then
-		oLogTable.initialize(2,3)
-	End If
 	oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
 	oTextCursor = oLogTable.GetCellbyPosition(0,0).createTextCursor()
 	oTextCursor.SetString(sSourceDocuments)	
 	oTextCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor()
 	oTextCursor.SetString(sTargetDocuments)
-	If bFilterTracerIsinsideTable Then
-		oTextCursor = oLogTable.GetCellbyPosition(2,0).createTextCursor()
-		oTextCursor.SetString(&quot;FilterTracer&quot;)
-	End If
 	bInsertRow = False
 End Sub
 
@@ -648,27 +625,7 @@ Dim bLogIsThere as Boolean
 End Sub
 
 
-Function GetFilterTracingLogPath(sTargetUrl as String, ApplIndex) as String				
-Dim TargetFileName as String
-Dim sTargetFolder as String
-Dim CurFilterTracingPath as String
-Dim CurFilterTracingname as String
-Dim CurFilterFolder as String
-		CurFilterTracingPath = FilterTracingLogPath(ApplIndex)
-		If bTakeOverTargetName(ApplIndex) Then			
-			TargetFilename = GetFileNameWithoutextension(sTargetUrl, &quot;/&quot;)
-			CurFilterFolder = DirectoryNameoutofPath(FilterTracingLogPath(ApplIndex), &quot;/&quot;)
-			CurFilterTracingpath = CurFilterFolder &amp; &quot;/&quot; &amp; TargetFilename &amp; &quot;.log&quot;
-		End If
-		If bTakeOverPathName(ApplIndex) Then  &apos;Replace the Folder in the FilterTracerpath by the Folder of the targetUrl
-			sTargetFolder = DirectoryNameoutofPath(sTargetUrl,&quot;/&quot;)
-			CurFilterTracingPath = sTargetFolder &amp; &quot;/&quot; &amp; FileNameoutofPath(CurFilterTracingPath, &quot;/&quot;)
-		End If
-		GetFilterTracingLogPath() = CurFilterTracingPath
-End Function
-
-
-Sub InsertTargetUrlToLogDocument(sTargetUrl as String, sComment as String, ApplIndex as Integer)
+Sub InsertTargetUrlToLogDocument(sTargetUrl as String, sComment as String)
 Dim oCell
 Dim oTextCursor
 Dim CurFilterTracingpath as String
@@ -677,12 +634,6 @@ Dim CurFilterTracingpath as String
 			oCell = oLogTable.GetCellbyPosition(1,oLogTable.Rows.Count-1)
 			InsertCommentToLogCell(sComment, oCell)
 			InsertHyperLinkToLogCell(sTargetUrl, oCell)
-			If bFilterTracerIsinsideTable Then
-				oCell = oLogTable.getCellByPosition(2, oLogTable.Rows.Count-1)
-				oTextCursor = oCell.Text.CreateTextCursor()
-				CurFilterTracingpath = GetFilterTracingLogPath(sTargetUrl, ApplIndex)
-				InsertCommandButtonatViewCursor(oLogDocument, oTextCursor, CurFilterTracingPath)
-			End If
 			oLogDocument.Store()
 		End If
 	End If

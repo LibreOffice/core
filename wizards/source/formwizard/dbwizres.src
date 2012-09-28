@@ -21,10 +21,10 @@
 
 // db wizards
 
-#define RID_DB_FORM_WIZARD_START			2200
-#define RID_DB_QUERY_WIZARD_START			2300
+#define RID_DB_FORM_WIZARD_START	2200
+#define RID_DB_QUERY_WIZARD_START	2300
 #define RID_DB_REPORT_WIZARD_START		2400
-#define RID_DB_TABLE_WIZARD_START		2500
+#define RID_DB_TABLE_WIZARD_START    2600
 
 
 #define RID_LETTERWIZARDDIALOG_START		3000
@@ -1488,6 +1488,122 @@ String RID_DB_REPORT_WIZARD_START + 93
 {
     Text [ en-US ] = "Page:";
 };
+String RID_DB_REPORT_WIZARD_START + 94
+{
+    Text [ en-US ] = "Align Left - Border";
+};
+String RID_DB_REPORT_WIZARD_START + 95
+{
+    Text [ en-US ] = "Align Left - Compact";
+};
+String RID_DB_REPORT_WIZARD_START + 96
+{
+    Text [ en-US ] = "Align Left - Elegant";
+};
+String RID_DB_REPORT_WIZARD_START + 97
+{
+    Text [ en-US ] = "Align Left - Highlighted";
+};
+String RID_DB_REPORT_WIZARD_START + 98
+{
+    Text [ en-US ] = "Align Left - Modern";
+};
+String RID_DB_REPORT_WIZARD_START + 99
+{
+    Text [ en-US ] = "Align Left - Red & Blue";
+};
+String RID_DB_REPORT_WIZARD_START + 100
+{
+    Text [ en-US ] = "Default";
+};
+String RID_DB_REPORT_WIZARD_START + 101
+{
+    Text [ en-US ] = "Outline - Borders";
+};
+String RID_DB_REPORT_WIZARD_START + 102
+{
+    Text [ en-US ] = "Outline - Compact";
+};
+String RID_DB_REPORT_WIZARD_START + 103
+{
+    Text [ en-US ] = "Outline - Elegant";
+};
+String RID_DB_REPORT_WIZARD_START + 104
+{
+    Text [ en-US ] = "Outline - Highlighted";
+};
+String RID_DB_REPORT_WIZARD_START + 105
+{
+    Text [ en-US ] = "Outline - Modern";
+};
+String RID_DB_REPORT_WIZARD_START + 106
+{
+    Text [ en-US ] = "Outline - Red & Blue";
+};
+String RID_DB_REPORT_WIZARD_START + 107
+{
+    Text [ en-US ] = "Outline, indented - Borders";
+};
+String RID_DB_REPORT_WIZARD_START + 108
+{
+    Text [ en-US ] = "Outline, indented - Compact";
+};
+String RID_DB_REPORT_WIZARD_START + 109
+{
+    Text [ en-US ] = "Outline, indented - Elegant";
+};
+String RID_DB_REPORT_WIZARD_START + 110
+{
+    Text [ en-US ] = "Outline, indented - Highlighted";
+};
+String RID_DB_REPORT_WIZARD_START + 111
+{
+    Text [ en-US ] = "Outline, indented - Modern";
+};
+String RID_DB_REPORT_WIZARD_START + 112
+{
+    Text [ en-US ] = "Outline, indented - Red & Blue";
+};
+String RID_DB_REPORT_WIZARD_START + 113
+{
+    Text [ en-US ] = "Bubbles";
+};
+String RID_DB_REPORT_WIZARD_START + 114
+{
+    Text [ en-US ] = "Cinema";
+};
+String RID_DB_REPORT_WIZARD_START + 115
+{
+    Text [ en-US ] = "Controlling";
+};
+String RID_DB_REPORT_WIZARD_START + 116
+{
+    Text [ en-US ] = "Default";
+};
+String RID_DB_REPORT_WIZARD_START + 117
+{
+    Text [ en-US ] = "Drafting";
+};
+String RID_DB_REPORT_WIZARD_START + 118
+{
+    Text [ en-US ] = "Finances";
+};
+String RID_DB_REPORT_WIZARD_START + 119
+{
+    Text [ en-US ] = "Flipchart";
+};
+String RID_DB_REPORT_WIZARD_START + 120
+{
+    Text [ en-US ] = "Formal with Company Logo";
+};
+String RID_DB_REPORT_WIZARD_START + 121
+{
+    Text [ en-US ] = "Generic";
+};
+String RID_DB_REPORT_WIZARD_START + 122
+{
+    Text [ en-US ] = "Worldmap";
+};
 
 // ============================================================================
 
@@ -2044,6 +2160,41 @@ String RID_LETTERWIZARDDIALOG_START + 59
     Text [ en-US] = "Subject:";
 };
 
+String RID_LETTERWIZARDDIALOG_START + 60
+{
+    Text [ en-US] = "Elegant";
+};
+
+String RID_LETTERWIZARDDIALOG_START + 61
+{
+    Text [ en-US] = "Modern";
+};
+
+String RID_LETTERWIZARDDIALOG_START + 62
+{
+    Text [ en-US] = "Office";
+};
+
+String RID_LETTERWIZARDDIALOG_START + 63
+{
+    Text [ en-US] = "Bottle";
+};
+
+String RID_LETTERWIZARDDIALOG_START + 64
+{
+    Text [ en-US] = "Mail";
+};
+
+String RID_LETTERWIZARDDIALOG_START + 65
+{
+    Text [ en-US] = "Marine";
+};
+
+String RID_LETTERWIZARDDIALOG_START + 66
+{
+    Text [ en-US] = "Red Line";
+};
+
 //====================== Letter Wizard Greeting Start
 String RID_LETTERWIZARDSALUTATION_START + 1
 {
@@ -2356,6 +2507,40 @@ String RID_FAXWIZARDDIALOG_START + 48
     Text [ en-US] = "Please inform us if transmission errors occur.";
 };
 
+String RID_FAXWIZARDDIALOG_START + 49
+{
+    Text [ en-US] = "Bottle";
+};
+
+String RID_FAXWIZARDDIALOG_START + 50
+{
+    Text [ en-US] = "Lines";
+};
+
+String RID_FAXWIZARDDIALOG_START + 51
+{
+    Text [ en-US] = "Marine";
+};
+
+String RID_FAXWIZARDDIALOG_START + 52
+{
+    Text [ en-US] = "Classic Fax";
+};
+
+String RID_FAXWIZARDDIALOG_START + 53
+{
+    Text [ en-US] = "Classic Fax from Private";
+};
+
+String RID_FAXWIZARDDIALOG_START + 54
+{
+    Text [ en-US] = "Modern Fax";
+};
+
+String RID_FAXWIZARDDIALOG_START + 55
+{
+    Text [ en-US] = "Modern Fax from Private";
+};
 
 //====================== Fax Wizard Communication Start
 String RID_FAXWIZARDCOMMUNICATION_START + 1

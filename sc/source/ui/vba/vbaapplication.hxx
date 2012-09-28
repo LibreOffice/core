@@ -48,7 +48,6 @@ private:
     ScVbaAppSettings& mrAppSettings;
 
     rtl::OUString getOfficePath( const rtl::OUString& sPath ) throw ( css::uno::RuntimeException );
-    css::uno::Reference< ov::XFileSearch > m_xFileSearch;
 
 protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);
@@ -94,7 +93,6 @@ public:
     virtual void SAL_CALL setDisplayFormulaBar( ::sal_Bool _displayformulabar ) throw ( css::uno::RuntimeException );
 
     virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::XFileSearch > SAL_CALL getFileSearch() throw (css::uno::RuntimeException); // add the support of Application.FileSearch
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Workbooks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Worksheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
@@ -107,17 +105,6 @@ public:
     virtual void SAL_CALL setStatusBar( const css::uno::Any& _statusbar ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getCursor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) throw (css::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL getIteration() throw (css::uno::RuntimeException);  // add the support of Iteration
-    virtual void SAL_CALL setIteration( sal_Bool bIteration ) throw (css::uno::RuntimeException);  // add the support of Iteration
-    virtual sal_Int32 SAL_CALL getEnableCancelKey() throw (css::uno::RuntimeException);  // add the support of EnableCancelKey
-    virtual void SAL_CALL setEnableCancelKey( sal_Int32 lEnableCancelKey ) throw (css::uno::RuntimeException);  // add the support of EnableCancelKey
-
-    virtual sal_Int32 SAL_CALL getSheetsInNewWorkbook() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setSheetsInNewWorkbook( sal_Int32 SheetsInNewWorkbook ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL getEnableEvents() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEnableEvents( sal_Bool bEnable ) throw (css::uno::RuntimeException);
@@ -144,12 +131,6 @@ public:
     virtual void SAL_CALL Volatile( const css::uno::Any& Volatile ) throw (css::uno::RuntimeException );
     virtual css::uno::Any SAL_CALL Caller( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL MenuBars( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL GetOpenFilename( const css::uno::Any& FileFilter, const css::uno::Any& FilterIndex, const css::uno::Any& Title, const css::uno::Any& ButtonText, const css::uno::Any& MultiSelect ) throw (css::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::ooo::vba::XFileDialog > SAL_CALL getFileDialog() throw (::com::sun::star::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL International( sal_Int32 Index ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFilename, const ::com::sun::star::uno::Any& FileFilter, const ::com::sun::star::uno::Any& FilterIndex, const ::com::sun::star::uno::Any& Title, const ::com::sun::star::uno::Any& ButtonText ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL Undo(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual double SAL_CALL InchesToPoints( double Inches ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
     virtual rtl::OUString getServiceImplName();

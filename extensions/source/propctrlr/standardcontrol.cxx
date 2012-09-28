@@ -1099,11 +1099,11 @@ namespace pcr
         {
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             nSBWidth = CalcZoom( nSBWidth );
-            m_pImplEdit->SetPosSizePixel( 0, 1, aOutSz.Width() - nSBWidth, aOutSz.Height()-2 );
-            m_pDropdownButton->SetPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
+            m_pImplEdit->setPosSizePixel( 0, 1, aOutSz.Width() - nSBWidth, aOutSz.Height()-2 );
+            m_pDropdownButton->setPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
         }
         else
-            m_pImplEdit->SetPosSizePixel( 0, 1, aOutSz.Width(), aOutSz.Height()-2 );
+            m_pImplEdit->setPosSizePixel( 0, 1, aOutSz.Width(), aOutSz.Height()-2 );
     }
 
     //------------------------------------------------------------------

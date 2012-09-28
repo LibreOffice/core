@@ -280,18 +280,6 @@ en-US = "Removing backup files"
 [OOO_ACTIONTEXT_88]
 en-US = "File: [1]"
 
-[OOO_ACTIONTEXT_89]
-en-US = "Registering modules"
-
-[OOO_ACTIONTEXT_90]
-en-US = "File: [1], Folder: [2]"
-
-[OOO_ACTIONTEXT_91]
-en-US = "Unregistering modules"
-
-[OOO_ACTIONTEXT_92]
-en-US = "File: [1], Folder: [2]"
-
 [OOO_ACTIONTEXT_93]
 en-US = "Initializing ODBC directories"
 

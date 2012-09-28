@@ -21,12 +21,7 @@ package complex.desktop;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.uno.UnoRuntime;
-import helper.OfficeProvider;
-
-// ---------- junit imports -----------------
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;

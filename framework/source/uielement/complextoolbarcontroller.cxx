@@ -41,7 +41,7 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -72,7 +72,7 @@ ComplexToolbarController::ComplexToolbarController(
     ,   m_nID( nID )
     ,   m_bMadeInvisible( sal_False )
 {
-    m_xURLTransformer.set( URLTransformer::create(::comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
+    m_xURLTransformer.set( URLTransformer::create(::comphelper::getComponentContext(m_xServiceManager)) );
 }
 
 // ------------------------------------------------------------------

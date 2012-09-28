@@ -65,17 +65,9 @@ private:
     SfxBindings*        mpBindings;
     SfxItemSet*         mpItemSet;
 
-    sal_Bool            mbDummy1    : 1;
-    sal_Bool            mbDummy2    : 1;
-    sal_Bool            mbDummy3    : 1;
-    sal_Bool            mbDummy4    : 1;
-    sal_Bool            mbDummy5    : 1;
     sal_Bool            mbGrabFocus : 1;
     sal_Bool            mbReadOnly  : 1;
     sal_Bool            mbIsHTMLDoc : 1;
-
-    void*               mpDummy1;
-    void*               mpDummy2;
 
     DECL_LINK (ClickApplyHdl_Impl, void * );
     DECL_LINK (ClickCloseHdl_Impl, void * );

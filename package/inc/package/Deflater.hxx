@@ -37,7 +37,7 @@ protected:
     sal_Bool                bFinished;
     sal_Bool                bSetParams;
     sal_Int32               nLevel, nStrategy;
-    sal_Int32               nOffset, nLength;
+    sal_Int64               nOffset, nLength;
     z_stream*               pStream;
 
     void init (sal_Int32 nLevel, sal_Int32 nStrategy, sal_Bool bNowrap);
@@ -52,8 +52,8 @@ public:
     void SAL_CALL finish(  );
     sal_Bool SAL_CALL finished(  );
     sal_Int32 SAL_CALL doDeflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    sal_Int32 SAL_CALL getTotalIn(  );
-    sal_Int32 SAL_CALL getTotalOut(  );
+    sal_Int64 SAL_CALL getTotalIn(  );
+    sal_Int64 SAL_CALL getTotalOut(  );
     void SAL_CALL reset(  );
     void SAL_CALL end(  );
 };

@@ -16,22 +16,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package storagetesting;
 
-import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.io.XStream;
 import com.sun.star.io.XInputStream;
 
 import com.sun.star.embed.*;
-
-import storagetesting.TestHelper;
-import storagetesting.StorageTest;
 
 public class Test02 implements StorageTest {
 
@@ -57,7 +50,7 @@ public class Test02 implements StorageTest {
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
-            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
+            pArgs[1] = new Integer( ElementModes.WRITE );
 
             Object oTempStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oTempStorage );
@@ -70,7 +63,7 @@ public class Test02 implements StorageTest {
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                     "SubStorage1",
-                                                                    ElementModes.ELEMENT_WRITE );
+                                                                    ElementModes.WRITE );
             if ( xTempSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -87,14 +80,14 @@ public class Test02 implements StorageTest {
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType2",
                                                             true,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "MediaType3",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // commit substorage first
@@ -138,20 +131,20 @@ public class Test02 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType2", true, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType2", true, ElementModes.READ ) )
                 return false;
 
             // open existing substorage
             XStorage xResultSubStorage = m_aTestHelper.openSubStorage( xResultStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_READ );
+                                                                        ElementModes.READ );
             if ( xResultSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType3", false, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType3", false, ElementModes.READ ) )
                 return false;
 
             if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream1", "MediaType1", pBytes1 ) )

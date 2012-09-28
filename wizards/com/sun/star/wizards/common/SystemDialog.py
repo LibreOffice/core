@@ -15,14 +15,15 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import uno
 import traceback
-from wizards.common.Configuration import Configuration
-from wizards.common.Desktop import Desktop
-from wizards.common.Helper import Helper
+from .Configuration import Configuration
+from .Desktop import Desktop
+from .Helper import Helper
 
-from com.sun.star.ui.dialogs.TemplateDescription import FILESAVE_AUTOEXTENSION, FILEOPEN_SIMPLE
-from com.sun.star.ui.dialogs.ExtendedFilePickerElementIds import CHECKBOX_AUTOEXTENSION
+from com.sun.star.ui.dialogs.TemplateDescription import \
+    FILESAVE_AUTOEXTENSION, FILEOPEN_SIMPLE
+from com.sun.star.ui.dialogs.ExtendedFilePickerElementIds import \
+    CHECKBOX_AUTOEXTENSION
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt.WindowClass import MODALTOP
 from com.sun.star.lang import IllegalArgumentException
@@ -30,17 +31,15 @@ from com.sun.star.awt.VclWindowPeerAttribute import OK
 
 class SystemDialog(object):
 
-    '''
-    @param xMSF
-    @param ServiceName
-    @param type  according to com.sun.star.ui.dialogs.TemplateDescription
-    '''
-
     def __init__(self, xMSF, ServiceName, Type):
         try:
             self.xMSF = xMSF
             self.systemDialog = xMSF.createInstance(ServiceName)
             self.xStringSubstitution = self.createStringSubstitution(xMSF)
+
+			# Add a name textbox to the filepicker
+            if self.systemDialog is not None:
+				self.systemDialog.initialize((Type,))
 
         except Exception, exception:
             traceback.print_exc()
@@ -48,7 +47,8 @@ class SystemDialog(object):
     @classmethod
     def createStoreDialog(self, xmsf):
         return SystemDialog(
-            xmsf, "com.sun.star.ui.dialogs.FilePicker",FILESAVE_AUTOEXTENSION)
+            xmsf, "com.sun.star.ui.dialogs.FilePicker",
+                FILESAVE_AUTOEXTENSION)
 
     @classmethod
     def createOpenDialog(self, xmsf):
@@ -72,13 +72,6 @@ class SystemDialog(object):
         except Exception, ex:
             traceback.print_exc()
             return path
-
-    '''
-    @param displayDir
-    @param defaultName
-    given url to a local path.
-    @return
-    '''
 
     def callStoreDialog(self, displayDir, defaultName, sDocuType=None):
         if sDocuType is not None:

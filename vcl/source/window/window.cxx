@@ -35,6 +35,7 @@
 #include "unotools/fontcfg.hxx"
 #include "unotools/confignode.hxx"
 
+#include "vcl/layout.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/salgtype.hxx"
 #include "vcl/event.hxx"
@@ -614,6 +615,8 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnTopBorder         = 0;            // top border
     mpWindowImpl->mnRightBorder       = 0;            // right border
     mpWindowImpl->mnBottomBorder      = 0;            // bottom border
+    mpWindowImpl->mnWidthRequest      = -1;           // width request
+    mpWindowImpl->mnHeightRequest     = -1;           // height request
     mpWindowImpl->mnX                 = 0;            // X-Position to Parent
     mpWindowImpl->mnY                 = 0;            // Y-Position to Parent
     mpWindowImpl->mnAbsScreenX        = 0;            // absolute X-position on screen, used for RTL window positioning
@@ -632,6 +635,19 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnDlgCtrlFlags      = 0;            // DialogControl-Flags
     mpWindowImpl->mnLockCount         = 0;            // LockCount
     mpWindowImpl->meAlwaysInputMode   = AlwaysInputNone; // neither AlwaysEnableInput nor AlwaysDisableInput called
+    mpWindowImpl->meHalign            = VCL_ALIGN_FILL;
+    mpWindowImpl->meValign            = VCL_ALIGN_FILL;
+    mpWindowImpl->mePackType          = VCL_PACK_START;
+    mpWindowImpl->mnPadding           = 0;
+    mpWindowImpl->mnGridHeight        = 1;
+    mpWindowImpl->mnGridLeftAttach    = -1;
+    mpWindowImpl->mnGridTopAttach     = -1;
+    mpWindowImpl->mnGridWidth         = 1;
+    mpWindowImpl->mnBorderWidth       = 0;
+    mpWindowImpl->mnMarginLeft        = 0;
+    mpWindowImpl->mnMarginRight       = 0;
+    mpWindowImpl->mnMarginTop         = 0;
+    mpWindowImpl->mnMarginBottom      = 0;
     mpWindowImpl->mbFrame             = sal_False;        // sal_True: Window is a frame window
     mpWindowImpl->mbBorderWin         = sal_False;        // sal_True: Window is a border window
     mpWindowImpl->mbOverlapWin        = sal_False;        // sal_True: Window is a overlap window
@@ -707,6 +723,11 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbDisableAccessibleLabeledByRelation = sal_False; // sal_True: do not set LabeledBy relation on accessible objects
     mpWindowImpl->mbHelpTextDynamic = sal_False;          // sal_True: append help id in HELP_DEBUG case
     mpWindowImpl->mbFakeFocusSet = sal_False; // sal_True: pretend as if the window has focus.
+    mpWindowImpl->mbHexpand = false;
+    mpWindowImpl->mbVexpand = false;
+    mpWindowImpl->mbExpand = false;
+    mpWindowImpl->mbFill = true;
+
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // sal_True: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -1113,6 +1134,38 @@ void Window::ImplRemoveWindow( sal_Bool bRemoveFrameData )
     }
 }
 
+void Window::reorderWithinParent(sal_uInt16 nNewPosition)
+{
+    sal_uInt16 nChildCount = 0;
+    Window *pSource = mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild;
+    while (pSource)
+    {
+        if (nChildCount == nNewPosition)
+            break;
+        pSource = pSource->mpWindowImpl->mpNext;
+        nChildCount++;
+    }
+
+    if (pSource == this) //already at the right place
+        return;
+
+    ImplRemoveWindow(false);
+
+    if (pSource)
+    {
+        mpWindowImpl->mpNext = pSource;
+        mpWindowImpl->mpPrev = pSource->mpWindowImpl->mpPrev;
+        pSource->mpWindowImpl->mpPrev = this;
+    }
+    else
+        mpWindowImpl->mpParent->mpWindowImpl->mpLastChild = this;
+
+    if (mpWindowImpl->mpPrev)
+        mpWindowImpl->mpPrev->mpWindowImpl->mpNext = this;
+    else
+        mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild = this;
+}
+
 // -----------------------------------------------------------------------
 
 void Window::ImplCallResize()
@@ -1202,25 +1255,43 @@ WinBits Window::ImplInitRes( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplLoadRes( const ResId& rResId )
+WindowResHeader Window::ImplLoadResHeader( const ResId& rResId )
 {
-    sal_uLong nObjMask = ReadLongRes();
+    WindowResHeader aHeader;
+
+    aHeader.nObjMask = ReadLongRes();
 
     // we need to calculate auto helpids before the resource gets closed
     // if the resource  only contains flags, it will be closed before we try to read a help id
     // so we always create an auto help id that might be overwritten later
     // HelpId
-    rtl::OString aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
+    aHeader.aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
 
     // ResourceStyle
-    sal_uLong nRSStyle = ReadLongRes();
+    aHeader.nRSStyle = ReadLongRes();
     // WinBits
     ReadLongRes();
 
-    if( nObjMask & WINDOW_HELPID )
-        aHelpId = ReadByteStringRes();
+    if( aHeader.nObjMask & WINDOW_HELPID )
+        aHeader.aHelpId = ReadByteStringRes();
 
-    SetHelpId( aHelpId );
+    return aHeader;
+}
+
+void Window::loadAndSetJustHelpID(const ResId& rResId)
+{
+    WindowResHeader aHeader = ImplLoadResHeader(rResId);
+    SetHelpId(aHeader.aHelpId);
+    IncrementRes(GetRemainSizeRes());
+}
+
+void Window::ImplLoadRes( const ResId& rResId )
+{
+    WindowResHeader aHeader = ImplLoadResHeader( rResId );
+
+    SetHelpId( aHeader.aHelpId );
+
+    sal_uLong nObjMask = aHeader.nObjMask;
 
     sal_Bool  bPos  = sal_False;
     sal_Bool  bSize = sal_False;
@@ -1256,6 +1327,8 @@ void Window::ImplLoadRes( const ResId& rResId )
         if ( nObjMask & WINDOW_HEIGHT )
             aSize.Height() = ImplLogicUnitToPixelY( ReadLongRes(), eSizeMap );
     }
+
+    sal_uLong nRSStyle = aHeader.nRSStyle;
 
     // looks bad due to optimisation
     if ( nRSStyle & RSWND_CLIENTSIZE )
@@ -2476,6 +2549,13 @@ void Window::ImplPostPaint()
 
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
 {
+    // save paint events until layout is done
+    if (IsDialog() && static_cast<const Dialog*>(this)->hasPendingLayout())
+    {
+        mpWindowImpl->mpFrameData->maPaintTimer.Start();
+        return 0;
+    }
+
     // save paint events until resizing is done
     if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
         mpWindowImpl->mpFrameData->maPaintTimer.Start();
@@ -4133,12 +4213,17 @@ Window::Window( Window* pParent, WinBits nStyle )
 // -----------------------------------------------------------------------
 
 Window::Window( Window* pParent, const ResId& rResId )
+    : mpWindowImpl(NULL)
 {
     DBG_CTOR( Window, ImplDbgCheckWindow );
 
-    ImplInitWindowData( WINDOW_WINDOW );
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
+    ImplInitWindowData( WINDOW_WINDOW );
     ImplInit( pParent, nStyle, NULL );
     ImplLoadRes( rResId );
 
@@ -4871,9 +4956,27 @@ void Window::UserEvent( sal_uLong, void* )
 
 // -----------------------------------------------------------------------
 
-void Window::StateChanged( StateChangedType )
+void Window::StateChanged( StateChangedType eType )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+    switch (eType)
+    {
+        //stuff that doesn't invalidate the layout
+        case STATE_CHANGE_CONTROLFOREGROUND:
+        case STATE_CHANGE_CONTROLBACKGROUND:
+        case STATE_CHANGE_TRANSPARENT:
+        case STATE_CHANGE_UPDATEMODE:
+        case STATE_CHANGE_READONLY:
+        case STATE_CHANGE_ENABLE:
+        case STATE_CHANGE_STATE:
+        case STATE_CHANGE_DATA:
+        case STATE_CHANGE_INITSHOW:
+            break;
+        //stuff that does invalidate the layout
+        default:
+            queue_resize();
+            break;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -5116,7 +5219,7 @@ long Window::Notify( NotifyEvent& rNEvt )
         if ( (rNEvt.GetType() == EVENT_KEYINPUT) || (rNEvt.GetType() == EVENT_KEYUP) )
         {
             if ( ImplIsOverlapWindow() ||
-                 ((ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
+                 ((getNonLayoutRealParent(this)->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
             {
                 nRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == EVENT_KEYINPUT );
             }
@@ -5408,7 +5511,7 @@ void Window::SetBorderStyle( sal_uInt16 nBorderStyle )
             // set us to the position and size of our previous border
             Point aBorderPos( pBorderWin->GetPosPixel() );
             Size aBorderSize( pBorderWin->GetSizePixel() );
-            SetPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
+            setPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
             // release border window
             delete pBorderWin;
 
@@ -6414,6 +6517,12 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 
 Size Window::GetSizePixel() const
 {
+    if (!mpWindowImpl)
+    {
+        SAL_WARN("vcl.layout", "WTF no windowimpl");
+        return Size(0,0);
+    }
+
     // #i43257# trigger pending resize handler to assure correct window sizes
     if( mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
     {
@@ -6958,7 +7067,7 @@ void Window::EnableAlwaysOnTop( sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-void Window::SetPosSizePixel( long nX, long nY,
+void Window::setPosSizePixel( long nX, long nY,
                               long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -7762,6 +7871,9 @@ void Window::SetCursor( Cursor* pCursor )
 
 void Window::SetText( const XubString& rStr )
 {
+    if (rStr == mpWindowImpl->maText)
+        return;
+
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     String oldTitle( mpWindowImpl->maText );

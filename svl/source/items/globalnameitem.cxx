@@ -19,7 +19,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/Converter.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -73,8 +73,7 @@ SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     com::sun::star::uno::Reference < com::sun::star::script::XTypeConverter > xConverter
-            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.script.Converter")),
-            com::sun::star::uno::UNO_QUERY );
+            ( com::sun::star::script::Converter::create( ::comphelper::getProcessComponentContext() ));
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     com::sun::star::uno::Any aNew;
 

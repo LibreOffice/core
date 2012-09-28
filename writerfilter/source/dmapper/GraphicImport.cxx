@@ -38,10 +38,10 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 
 #include <dmapper/DomainMapper.hxx>
 #include <doctok/resourceids.hxx>
@@ -220,6 +220,12 @@ public:
     sal_Int32 nRightMargin;
     sal_Int32 nTopMargin;
     sal_Int32 nBottomMargin;
+
+    bool bShadow;
+    sal_Int32 nShadowXDistance;
+    sal_Int32 nShadowYDistance;
+    sal_Int32 nShadowColor;
+    sal_Int32 nShadowTransparence;
 
     sal_Int32 nContrast;
     sal_Int32 nBrightness;
@@ -893,6 +899,15 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         aMediaProperties[0].Name = "URL";
                         aMediaProperties[0].Value <<= sUrl;
 
+                        xShapeProps->getPropertyValue("Shadow") >>= m_pImpl->bShadow;
+                        if (m_pImpl->bShadow)
+                        {
+                            xShapeProps->getPropertyValue("ShadowXDistance") >>= m_pImpl->nShadowXDistance;
+                            xShapeProps->getPropertyValue("ShadowYDistance") >>= m_pImpl->nShadowYDistance;
+                            xShapeProps->getPropertyValue("ShadowColor") >>= m_pImpl->nShadowColor;
+                            xShapeProps->getPropertyValue("ShadowTransparence") >>= m_pImpl->nShadowTransparence;
+                        }
+
                         m_xGraphicObject = createGraphicObject( aMediaProperties );
 
                         bUseShape = !m_xGraphicObject.is( );
@@ -1309,6 +1324,36 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     PROP_BOTTOM_BORDER
                 };
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( aBorderProps[nBorder]), uno::makeAny(aBorderLine));
+            }
+
+            // setting graphic object shadow proerties
+            if (m_pImpl->bShadow)
+            {
+                // Shadow width is approximated by average of X and Y
+                table::ShadowFormat aShadow;
+                sal_Int32 nShadowColor = m_pImpl->nShadowColor;
+                sal_Int32 nShadowWidth = (abs(m_pImpl->nShadowXDistance)
+                                          + abs(m_pImpl->nShadowYDistance)) / 2;
+
+                aShadow.ShadowWidth = nShadowWidth;
+                aShadow.Color = nShadowColor;
+                // Distances -ve for top and right, +ve for bottom and left
+                if (m_pImpl->nShadowXDistance > 0)
+                {
+                    if (m_pImpl->nShadowYDistance > 0)
+                        aShadow.Location = com::sun::star::table::ShadowLocation_BOTTOM_RIGHT;
+                    else
+                        aShadow.Location = com::sun::star::table::ShadowLocation_TOP_RIGHT;
+                }
+                else
+                {
+                    if (m_pImpl->nShadowYDistance > 0)
+                        aShadow.Location = com::sun::star::table::ShadowLocation_BOTTOM_LEFT;
+                    else
+                        aShadow.Location = com::sun::star::table::ShadowLocation_TOP_LEFT;
+                }
+
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SHADOW_FORMAT), uno::makeAny(aShadow));
             }
 
             // setting properties for all types

@@ -32,56 +32,42 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-//solve the problem that "Application.Dialogs.Item(***).Show" and "Application.Dialogs.Count" cannot get the correct result
-struct DialogMatch
+static const rtl::OUString aStringList[]=
 {
-    sal_Int32       nVbaDlgIndex;
-    rtl::OUString   aOODlgName;
+    rtl::OUString( ".uno:Open" ),
+    rtl::OUString( ".uno:FormatCellDialog" ),
+    rtl::OUString( ".uno:InsertCell" ),
+    rtl::OUString( ".uno:Print" ),
+    rtl::OUString( ".uno:PasteSpecial" ),
+    rtl::OUString( ".uno:ToolProtectionDocument" ),
+    rtl::OUString( ".uno:ColumnWidth" ),
+    rtl::OUString( ".uno:DefineName" ),
+    rtl::OUString( ".uno:ConfigureDialog" ),
+    rtl::OUString( ".uno:HyperlinkDialog" ),
+    rtl::OUString( ".uno:InsertGraphic" ),
+    rtl::OUString( ".uno:InsertObject" ),
+    rtl::OUString( ".uno:PageFormatDialog" ),
+    rtl::OUString( ".uno:DataSort" ),
+    rtl::OUString( ".uno:RowHeight" ),
+    rtl::OUString( ".uno:AutoCorrectDlg" ),
+    rtl::OUString( ".uno:ConditionalFormatDialog" ),
+    rtl::OUString( ".uno:DataConsolidate" ),
+    rtl::OUString( ".uno:CreateNames" ),
+    rtl::OUString( ".uno:FillSeries" ),
+    rtl::OUString( ".uno:Validation"),
+    rtl::OUString( ".uno:DefineLabelRange" ),
+    rtl::OUString( ".uno:DataFilterAutoFilter" ),
+    rtl::OUString( ".uno:DataFilterSpecialFilter" ),
+    rtl::OUString( ".uno:AutoFormat" )
 };
 
-static const DialogMatch aDialogMatchList[] =
-{
-    { 1,    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Open" ) ) },                      // xlDialogOpen -> .uno:Open
-    { -1,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormatCellDialog" ) ) },          // ??? -> .uno:FormatCellDialog
-    { 55,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertCell" ) ) },                // xlDialogInsert -> .uno:InsertCell
-    { 8,    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Print" ) ) },                     // xlDialogPrint -> .uno:Print
-    { 9,    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrinterSetup" ) ) },              // xlDialogPrinterSetup -> .uno:PrinterSetup
-    { 53,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PasteSpecial" ) ) },              // xlDialogPasteSpecial -> .uno:PasteSpecial
-    { 28,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ToolProtectionDocument" ) ) },    // xlDialogProtectDocument -> uno:ToolProtectionDocument
-    { 47,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColumnWidth" ) ) },               // xlDialogColumnWidth -> .uno:ColumnWidth
-    { 61,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DefineName" ) ) },                // xlDialogDefineName -> .uno:DefineName
-    { -1,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ) ) },           // ??? -> .uno:ConfigureDialog
-    { 596,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:HyperlinkDialog" ) ) },           // xlDialogInsertHyperlink -> .uno:HyperlinkDialog
-    { 342,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertGraphic" ) ) },             // xlDialogInsertPicture -> .uno:InsertGraphic
-    { 259,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertObject" ) ) },              // xlDialogInsertObject -> .uno:InsertObject
-    { 7,    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PageFormatDialog" ) ) },          // xlDialogPageSetup -> .uno:PageFormatDialog
-    { 39,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DataSort" ) ) },                  // xlDialogSort -> .uno:DataSort
-    { 127,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:RowHeight" ) ) },                 // xlDialogRowHeight -> .uno:RowHeight
-    { 485,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoCorrectDlg" ) ) },            // xlDialogAutoCorrect -> .uno:AutoCorrectDlg
-    { 583,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConditionalFormatDialog" ) ) },   // xlDialogCondiationalFormatting -> .uno:ConditionalFormatDialog
-    { 191,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DataConsolidate" ) ) },           // xlDialogConsolidate -> .uno:DataConsolidate
-    { 62,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CreateNames" ) ) },               // xlDialogCreateNames -> .uno:CreateNames
-    { -1,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillSeries" ) ) },                // ??? -> .uno:FillSeries
-    { -1,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Validation" ) ) },                // ??? -> .uno:Validation"
-    { -1,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DefineLabelRange" ) ) },          // ??? -> .uno:DefineLabelRange
-    { -1,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DataFilterAutoFilter" ) ) },      // ??? -> .uno:DataFilterAutoFilter
-    { -1,   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DataFilterSpecialFilter" ) ) },   // ??? -> .uno:DataFilterSpecialFilter
-    { 269,  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoFormat" ) ) }                 // xlDialogFormatAuto -> .uno:AutoFormat
-};
-
-const sal_Int32 nDialogSize = sizeof (aDialogMatchList) / sizeof (aDialogMatchList[0]);
+const sal_Int32 nDialogSize = sizeof (aStringList) / sizeof (aStringList[0]);
 
 rtl::OUString
 ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
-    for (int i = 0; i < nDialogSize; i++)
-    {
-        if ( aDialogMatchList[i].nVbaDlgIndex == nIndex )
-        {
-            return aDialogMatchList[i].aOODlgName;
-        }
-    }
-
+    if( nIndex < nDialogSize )
+        return aStringList[ nIndex ];
     return rtl::OUString();
 }
 
@@ -101,10 +87,5 @@ ScVbaDialog::getServiceNames()
         aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Dialog" ) );
     }
     return aServiceNames;
-}
-
-sal_Int32 ScVbaDialog::GetSupportedDialogCount()
-{
-    return nDialogSize;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

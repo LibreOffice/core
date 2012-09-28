@@ -1,0 +1,103 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_awt_grid_XGridSelection_idl__
+#define __com_sun_star_awt_grid_XGridSelection_idl__
+
+#include <com/sun/star/awt/grid/XGridSelectionListener.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+
+module com {  module sun {  module star {  module awt { module grid {
+
+
+/** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>.
+
+    @since OpenOffice.org 3.4
+ */
+published interface XGridRowSelection
+{
+    /** Selects all rows.
+    */
+    void selectAllRows();
+
+    /** selects a given row
+
+        @param RowIndex
+            denotes the index of the row to select
+
+        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>RowIndex</code> does not denote a valid row index
+    */
+    void selectRow( [in] long RowIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** Deselects all selected rows.
+    */
+    void deselectAllRows();
+
+    /** removes the selection for a given row
+
+        @param RowIndex
+            denotes the index of the row to deselect
+    */
+    void deselectRow( [in] long RowIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** Returns the indices of all selected rows.
+        @returns
+            a sequence of indices.
+    */
+    sequence< long > getSelectedRows();
+
+    /** Returns whether rows are selected.
+        @returns
+            <true/> if and only if at least one row is selected.
+    */
+    boolean hasSelectedRows();
+
+    /** Returns whether a specific row is selected.
+
+        @param RowIndex
+            the index of a row. If the value does not denote a valid row index, i.e. is smaller than <code>0</code>
+            or greater than the number of rows, this is silently ignored, and <false/> is returned.
+
+        @returns
+            <true/> if and only if there is a row with the given index, and it is selected currently.
+    */
+    boolean isRowSelected( [in] long RowIndex );
+
+    /** Adds a listener for the <type>GridSelectionEvent</type> posted after the grid changes.
+        @param listener
+            the listener to add.
+    */
+    void addSelectionListener( [in] XGridSelectionListener  listener);
+
+    /** Removes a listener previously added with <method>addSelectionListener()</method>.
+        @param listener
+            the listener to remove.
+    */
+    void removeSelectionListener( [in] XGridSelectionListener listener);
+};
+
+
+}; }; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,7 +61,6 @@ protected:
 
 private:
     ListLevelStyle *mppListLevels[WP6_NUM_LIST_LEVELS];
-    int miNumListLevels;
     const int miListID;
 };
 

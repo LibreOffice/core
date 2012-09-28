@@ -229,16 +229,6 @@ namespace sdr
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
 
-            // always append an invisible outline for the cases where no visible content exists
-            const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
-            const basegfx::B2DRange aObjectRange(
-                aObjectBound.Left(), aObjectBound.Top(),
-                aObjectBound.Right(), aObjectBound.Bottom());
-
-            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
-                drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                    false, aObjectRange));
-
             return xRetval;
         }
     } // end of namespace contact

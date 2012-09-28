@@ -158,7 +158,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
     return _SwAccessibleChildMap::insert( aEntry );
 }
 
-/* static */ sal_Bool SwAccessibleChildMap::IsSortingRequired( const SwFrm& rFrm )
+/* static */ bool SwAccessibleChildMap::IsSortingRequired( const SwFrm& rFrm )
 {
     return ( rFrm.IsPageFrm() &&
              static_cast< const SwPageFrm& >( rFrm ).GetSortedObjs() ) ||

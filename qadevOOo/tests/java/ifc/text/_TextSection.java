@@ -106,7 +106,7 @@ public class _TextSection extends MultiPropertyTest {
         TC.setColumnCount(val2set);
 
         return TC;
-        };
+        }
 
         protected boolean compare(Object obj1, Object obj2) {
             short val1 = 0;

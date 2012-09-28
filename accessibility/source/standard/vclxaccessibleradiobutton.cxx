@@ -102,9 +102,8 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
     RadioButton* pRadioButton = dynamic_cast< RadioButton* >( GetWindow() );
     if ( pRadioButton )
     {
-        ::std::vector< RadioButton* > aGroup;
-        pRadioButton->GetRadioButtonGroup( aGroup, true );
-        if ( !aGroup.empty() )
+        ::std::vector< RadioButton* > aGroup(pRadioButton->GetRadioButtonGroup(true));
+        if (!aGroup.empty())
         {
             sal_Int32 i = 0;
             Sequence< Reference< XInterface > > aSequence( static_cast< sal_Int32 >( aGroup.size() ) );
@@ -149,17 +148,17 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleRadioButton, VCLXAccessibleTextC
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleRadioButton::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleRadioButton::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleRadioButton") );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleRadioButton" );
 }
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > VCLXAccessibleRadioButton::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleRadioButton") );
+    Sequence< OUString > aNames(1);
+    aNames[0] = "com.sun.star.awt.AccessibleRadioButton";
     return aNames;
 }
 
@@ -192,14 +191,14 @@ sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex ) thro
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
+    return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
 }
 
 // -----------------------------------------------------------------------------

@@ -33,6 +33,7 @@ $(eval $(call gb_Package_add_file,test_inc,inc/test/unoapi_test.hxx,test/unoapi_
 $(eval $(call gb_Package_add_file,test_inc,inc/test/beans/xpropertyset.hxx,test/beans/xpropertyset.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatapilotdescriptor.hxx,test/sheet/xdatapilotdescriptor.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xcellrangesquery.hxx,test/sheet/xcellrangesquery.hxx))
+$(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xgoalseek.hxx,test/sheet/xgoalseek.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xnamedranges.hxx,test/sheet/xnamedranges.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xnamedrange.hxx,test/sheet/xnamedrange.hxx))
 $(eval $(call gb_Package_add_file,test_inc,inc/test/sheet/xdatabaserange.hxx,test/sheet/xdatabaserange.hxx))

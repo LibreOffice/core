@@ -76,16 +76,14 @@ void writeString(
     std::vector< unsigned char > * buffer, OUString const & value)
 {
     assert(buffer != 0);
-    rtl::OString v;
+    OString v;
     if (!value.convertToString(
             &v, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "UNO string contains invalid UTF-16 sequence")),
+            "UNO string contains invalid UTF-16 sequence",
             css::uno::Reference< css::uno::XInterface >());
     }
     writeCompressed(buffer, static_cast< sal_uInt32 >(v.getLength()));

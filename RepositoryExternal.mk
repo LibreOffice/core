@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -109,6 +109,23 @@ endef
 
 endif
 
+ifeq ($(SYSTEM_MDDS),YES)
+
+gb_LinkTarget__use_mdds_headers :=
+
+else
+
+define gb_LinkTarget__use_mdds_headers
+$(call gb_LinkTarget_use_unpacked,$(1),mdds)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,mdds/include) \
+	$$(INCLUDE) \
+)
+
+endef
+
+endif
+
 # External libraries
 
 ifeq ($(SYSTEM_CPPUNIT),YES)
@@ -157,6 +174,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_zlib
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/external/zlib \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	zlib \
 )
@@ -311,7 +332,28 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	boostdatetime \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	boostthread \
+))
+
+define gb_LinkTarget__use_boostthread
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DBOOST_ALL_NO_LIB \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	boostthread \
+)
+endef
+
+endif # WNT
+
 define gb_LinkTarget__use_boostdatetime
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DBOOST_ALL_NO_LIB \
+)
+
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	boostdatetime \
 )
@@ -326,9 +368,9 @@ ifeq ($(SYSTEM_LIBCMIS),YES)
 define gb_LinkTarget__use_cmis
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(LIBCMIS_CFLAGS) \
+	$(CMIS_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LIBCMIS_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(CMIS_LIBS))
 
 endef
 
@@ -538,14 +580,9 @@ endif # ENABLE_LIBLANGTAG
 ifeq ($(SYSTEM_NEON),YES)
 
 define gb_LinkTarget__use_neon
-ifeq ($(NEON_VERSION),)
-NEON_VERSION=0295
-endif
-
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DNEON_VERSION=0x$(NEON_VERSION) \
 )
-
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(NEON_CFLAGS) \
@@ -557,16 +594,15 @@ endef
 
 else # !SYSTEM_NEON
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 	neon \
 ))
 
 define gb_LinkTarget__use_neon
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/external/neon \
+	-I$(call gb_UnpackedTarball_get_dir,neon/src) \
 	$$(INCLUDE) \
 )
-
 $(call gb_LinkTarget_use_libraries,$(1),\
 	neon \
 )
@@ -768,7 +804,7 @@ endef
 
 else # !SYSTEM_ICU
 
-ifeq ($(OS),ANDROID)
+ifeq ($(OS)$(DISABLE_DYNLOADING),ANDROID)
 gb_ICU_suffix:=lo
 else
 gb_ICU_suffix:=
@@ -985,12 +1021,15 @@ endef
 else # !SYSTEM_LIBWPD
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	wpdlib \
+	wpd-0.9 \
 ))
 
 define gb_LinkTarget__use_wpd
+$(call gb_LinkTarget_use_package,$(1),\
+	libwpd \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	wpdlib \
+	wpd-0.9 \
 )
 
 endef
@@ -1072,6 +1111,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/lcms2 \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	lcms2 \
 )
@@ -1085,6 +1128,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/lcms2 \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	lcms2 \
 )
@@ -1117,6 +1164,7 @@ endef
 
 endif # SYSTEM_LPSOLVE
 
+ifeq ($(ENABLE_GIO),TRUE)
 
 define gb_LinkTarget__use_gio
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1124,9 +1172,21 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(GIO_CFLAGS) \
 )
 
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DENABLE_GIO \
+)
+
 $(call gb_LinkTarget_add_libs,$(1),$(GIO_LIBS))
 
 endef
+
+else # ENABLE_GIO
+
+define gb_LinkTarget__use_gio
+
+endef
+
+endif # ENABLE_GIO
 
 define gb_LinkTarget__use_gtk
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1156,8 +1216,28 @@ $(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
 
 endef
 
+ifeq ($(ENABLE_CUPS),TRUE)
 
-ifeq ($(ENABLE_DBUS),YES)
+define gb_LinkTarget__use_cups
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DENABLE_CUPS \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lcups \
+)
+
+endef
+
+else # ENABLE_CUPS
+
+define gb_LinkTarget__use_cups
+
+endef
+
+endif # ENABLE_DBUS
+
+ifeq ($(ENABLE_DBUS),TRUE)
 
 define gb_LinkTarget__use_dbus
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1168,6 +1248,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_defs,$(1),\
     -DENABLE_DBUS \
 )
+
+ifeq ($(ENABLE_PACKAGEKIT),YES)
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DENABLE_PACKAGEKIT \
+)
+endif # ENABLE_PACKAGEKIT
 
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(DBUS_LIBS) \
@@ -1277,12 +1363,12 @@ endef
 
 else # !SYSTEM_LIBPNG
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 	png \
 ))
 
 define gb_LinkTarget__use_png
-$(call gb_LinkTarget_use_libraries,$(1),\
+$(call gb_LinkTarget_use_static_libraries,$(1),\
 	png \
 )
 
@@ -1727,7 +1813,7 @@ endef
 endif # ENABLE_KDE4
 
 
-ifeq ($(ENABLE_TDE),YES)
+ifeq ($(ENABLE_TDE),TRUE)
 
 define gb_LinkTarget__use_tde
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -1826,6 +1912,33 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 
 endif # SYSTEM_PYTHON
 
+# ORCUS
+ifeq ($(SYSTEM_LIBORCUS),YES)
+
+define gb_LinkTarget__use_orcus
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(ORCUS_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ORCUS_LIBS))
+
+endef
+
+else # !SYSTEM_LIBORCUS
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	orcus \
+))
+
+define gb_LinkTarget__use_orcus
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,orcus/include) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),orcus)
+endef
+
+endif # SYSTEM_LIBORCUS
 
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)

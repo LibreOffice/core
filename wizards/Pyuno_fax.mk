@@ -38,6 +38,6 @@ $(eval $(call gb_Pyuno_add_files,pyfax,\
     FaxWizardDialog.py \
     FaxWizardDialogResources.py \
 ))
-$(eval $(call gb_Pyuno_set_componentfile_full,pyfax,wizards/com/sun/star/wizards/fax/pyfax,vnd.sun.star.expand:\dLO_LIB_DIR/wizards/fax/CallWizard,.py))
+$(eval $(call gb_Pyuno_set_componentfile_full,pyfax,wizards/com/sun/star/wizards/fax/pyfax,vnd.openoffice.pymodule:wizards.fax,.CallWizard))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

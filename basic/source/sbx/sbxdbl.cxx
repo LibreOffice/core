@@ -134,7 +134,7 @@ double ImpGetDouble( const SbxValues* p )
     return nRes;
 }
 
-void ImpPutDouble( SbxValues* p, double n, sal_Bool bCoreString )
+void ImpPutDouble( SbxValues* p, double n, bool bCoreString )
 {
     SbxValues aTmp;
 start:

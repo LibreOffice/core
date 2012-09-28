@@ -51,7 +51,8 @@ PATCH_FILES=\
     hunspell-1.3.2-overflow.patch \
     hunspell-android.patch \
     hunspell-1.3.2-nullptr.patch \
-    hunspell-1.3.2-literal.patch
+    hunspell-1.3.2-literal.patch \
+    hunspell-1.3.2-compound.patch
 
 .IF "$(GUI)"=="UNX"
 

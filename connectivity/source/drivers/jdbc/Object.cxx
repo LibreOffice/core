@@ -79,12 +79,12 @@ oslInterlockedCount& getJavaVMRefCount()
 // -----------------------------------------------------------------------------
 void SDBThreadAttach::addRef()
 {
-    osl_incrementInterlockedCount(&getJavaVMRefCount());
+    osl_atomic_increment(&getJavaVMRefCount());
 }
 // -----------------------------------------------------------------------------
 void SDBThreadAttach::releaseRef()
 {
-    osl_decrementInterlockedCount(&getJavaVMRefCount());
+    osl_atomic_decrement(&getJavaVMRefCount());
     if ( getJavaVMRefCount() == 0 )
     {
         getJavaVM2(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);
@@ -180,6 +180,9 @@ namespace
         else if ( _pEnvironment->IsInstanceOf( jThrow, java_lang_Throwable::st_getMyClass() ) )
         {
             ::std::auto_ptr< java_lang_Throwable > pThrow( new java_lang_Throwable( _pEnvironment, jThrow ) );
+#if OSL_DEBUG_LEVEL > 0
+            pThrow->printStackTrace();
+#endif
             ::rtl::OUString sMessage = pThrow->getMessage();
             if ( sMessage.isEmpty() )
                 sMessage = pThrow->getLocalizedMessage();

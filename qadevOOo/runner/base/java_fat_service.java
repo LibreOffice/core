@@ -27,8 +27,6 @@ import lib.MultiMethodTest;
 import lib.TestEnvironment;
 import util.DynamicClassLoader;
 
-import com.sun.star.lang.XMultiServiceFactory;
-
 import share.DescEntry;
 import share.DescGetter;
 import helper.APIDescGetter;

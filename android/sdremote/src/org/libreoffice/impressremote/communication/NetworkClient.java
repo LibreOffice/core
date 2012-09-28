@@ -15,8 +15,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.support.v4.content.LocalBroadcastManager;
 
 /**
@@ -30,56 +31,94 @@ public class NetworkClient extends Client {
 
     private Socket mSocket;
 
-    public NetworkClient(String ipAddress, Context aContext) {
-        super(aContext);
-        try {
-            mSocket = new Socket(ipAddress, PORT);
-            mInputStream = mSocket.getInputStream();
-            mReader = new BufferedReader(new InputStreamReader(mInputStream,
-                            CHARSET));
-            mOutputStream = mSocket.getOutputStream();
-            // Pairing.
-            Random aRandom = new Random();
-            String aPin = "" + (aRandom.nextInt(9000) + 1000);
-            while (aPin.length() < 4) {
-                aPin = "0" + aPin; // Add leading zeros if necessary
-            }
-            Intent aIntent = new Intent(
-                            CommunicationService.MSG_PAIRING_STARTED);
-            aIntent.putExtra("PIN", aPin);
-            mPin = aPin;
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-            // Send out
-            String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
-            sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin
-                            + "\n\n");
+    public NetworkClient(Server aServer,
+                    CommunicationService aCommunicationService,
+                    Receiver aReceiver) throws UnknownHostException,
+                    IOException {
+        super(aServer, aCommunicationService, aReceiver);
+        mName = aServer.getName();
+        mSocket = new Socket(aServer.getAddress(), PORT);
+        mInputStream = mSocket.getInputStream();
+        mReader = new BufferedReader(new InputStreamReader(mInputStream,
+                        CHARSET));
+        mOutputStream = mSocket.getOutputStream();
+        // Pairing.
+        String aPin = setupPin(aServer);
+        Intent aIntent = new Intent(CommunicationService.MSG_PAIRING_STARTED);
+        aIntent.putExtra("PIN", aPin);
+        mPin = aPin;
+        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
+                        aIntent);
+        // Send out
+        String aName = CommunicationService.getDeviceName(); // TODO: get the proper name
+        sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + aPin + "\n\n");
 
-            // Wait until we get the appropriate string back...
-            System.out.println("SF:waiting");
-            String aTemp = mReader.readLine();
-            System.out.println("SF:waited");
-            if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
-                return;
-            } else {
-                aIntent = new Intent(
-                                CommunicationService.MSG_PAIRING_SUCCESSFUL);
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                                aIntent);
-            }
-            while (mReader.readLine().length() != 0) {
-                // Get rid of extra lines
-                System.out.println("SF: empty line");
-            }
-            System.out.println("SD: empty");
-            startListening();
-        } catch (UnknownHostException e) {
-            // TODO Tell the user we have a problem
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO As above
-            e.printStackTrace();
+        // Wait until we get the appropriate string back...
+        String aTemp = mReader.readLine();
+
+        if (aTemp == null) {
+            throw new IOException(
+                            "End of stream reached before any data received.");
         }
 
+        while (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
+            if (aTemp.equals("LO_SERVER_VALIDATING_PIN")) {
+                // Broadcast that we need a pin screen.
+                aIntent = new Intent(
+                                CommunicationService.STATUS_PAIRING_PINVALIDATION);
+                aIntent.putExtra("PIN", aPin);
+                aIntent.putExtra("SERVERNAME", aServer.getName());
+                mPin = aPin;
+                LocalBroadcastManager.getInstance(mCommunicationService)
+                                .sendBroadcast(aIntent);
+                while (mReader.readLine().length() != 0) {
+                    // Read off empty lines
+                }
+                aTemp = mReader.readLine();
+            } else {
+                return;
+            }
+        }
+
+        aIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
+        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
+                        aIntent);
+
+        while (mReader.readLine().length() != 0) {
+            // Get rid of extra lines
+            System.out.println("SF: empty line");
+        }
+        System.out.println("SD: empty");
+        startListening();
+
+    }
+
+    private String setupPin(Server aServer) {
+        // Get settings
+        SharedPreferences aPreferences = mCommunicationService
+                        .getSharedPreferences("sdremote_authorisedremotes",
+                                        android.content.Context.MODE_PRIVATE);
+        if (aPreferences.contains(aServer.getName())) {
+            return aPreferences.getString(aServer.getName(), "");
+        } else {
+            String aPin = generatePin();
+
+            Editor aEdit = aPreferences.edit();
+            aEdit.putString(aServer.getName(), aPin);
+            aEdit.commit();
+
+            return aPin;
+        }
+
+    }
+
+    private String generatePin() {
+        Random aRandom = new Random();
+        String aPin = "" + (aRandom.nextInt(9000) + 1000);
+        while (aPin.length() < 4) {
+            aPin = "0" + aPin; // Add leading zeros if necessary
+        }
+        return aPin;
     }
 
     @Override

@@ -257,7 +257,6 @@ private:
 
     XclExpCfvoList maCfvoList;
     XclExpColScaleColList maColList;
-    const ScColorScaleFormat& mrFormat;
     sal_Int32 mnPriority;
 };
 
@@ -274,6 +273,7 @@ private:
 
     const ScDataBarFormat& mrFormat;
     sal_Int32 mnPriority;
+    rtl::OString maGuid;
 };
 
 // ----------------------------------------------------------------------------

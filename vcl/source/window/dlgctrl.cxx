@@ -33,6 +33,7 @@
 #include <window.h>
 
 #include <vcl/event.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
@@ -51,8 +52,9 @@ static sal_Bool ImplHasIndirectTabParent( Window* pWindow )
     // The window has inderect tab parent if it is included in tab hierarchy
     // of the indirect parent window
 
-    return ( pWindow && pWindow->GetParent()
-          && ( pWindow->GetParent()->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) );
+    Window* pNonLayoutParent = getNonLayoutParent(pWindow);
+    return ( pNonLayoutParent
+          && ( pNonLayoutParent->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) );
 }
 
 // -----------------------------------------------------------------------
@@ -67,8 +69,12 @@ static Window* ImplGetTopParentOfTabHierarchy( Window* pParent )
 
     if ( pResult )
     {
-        while ( pResult->GetParent() && ( pResult->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) )
-            pResult = pResult->GetParent();
+        Window* pNonLayoutParent = getNonLayoutParent(pResult);
+        while ( pNonLayoutParent && ( pResult->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) )
+        {
+            pResult = pNonLayoutParent;
+            pNonLayoutParent = getNonLayoutParent(pResult);
+        }
     }
 
     return pResult;
@@ -88,7 +94,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
         pWindow = pWindow->ImplGetWindow();
 
         // Unsichtbare und disablte Fenster werden uebersprungen
-        if ( pTabPage || pWindow->IsVisible() )
+        if ( pTabPage || isVisibleInLayout(pWindow) )
         {
             // Wenn das letzte Control ein TabControl war, wird von
             // diesem die TabPage genommen
@@ -123,7 +129,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
                                 pTabPage = pTempTabPage;
                                 break;
                             }
-                            pTempWindow = pTempWindow->GetWindow( WINDOW_NEXT );
+                            pTempWindow = nextLogicalChildOfParent(pTabControl, pTempWindow);
                         }
                     }
                 }
@@ -141,7 +147,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
             pWindow = pTabPage;
         else
         {
-            pWindow = pNextWindow->GetWindow( WINDOW_NEXT );
+            pWindow = nextLogicalChildOfParent(pParent, pNextWindow);
             pNextWindow = pWindow;
         }
     }
@@ -161,7 +167,7 @@ static Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nI
     if ( bTestEnable )
     {
         sal_uInt16 n2 = nIndex;
-        while ( pWindow && (!pWindow->IsEnabled() || !pWindow->IsInputEnabled()) )
+        while ( pWindow && (!isEnabledInLayout(pWindow) || !pWindow->IsInputEnabled()) )
         {
             n2 = nIndex+1;
             nIndex = 0;
@@ -178,7 +184,7 @@ static Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nI
                 nIndex = 0;
                 pWindow = ImplGetSubChildWindow( pParent, n, nIndex );
             }
-            while ( pWindow && n && (!pWindow->IsEnabled() || !pWindow->IsInputEnabled()) );
+            while ( pWindow && n && (!isEnabledInLayout(pWindow) || !pWindow->IsInputEnabled()) );
         }
     }
     return pWindow;
@@ -272,7 +278,7 @@ Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
                 while ( (i != nStartIndex) && (i != nStartIndex2) );
 
                 if ( (i == nStartIndex2) &&
-                     (!(pWindow->GetStyle() & WB_TABSTOP) || !pWindow->IsEnabled()) )
+                     (!(pWindow->GetStyle() & WB_TABSTOP) || !isEnabledInLayout(pWindow)) )
                     i = nStartIndex;
             }
         }
@@ -803,14 +809,14 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
             WinBits nStyle = pSWindow->GetStyle();
             if ( !(nStyle & WB_GROUP) )
             {
-                pWindow = pWindow->GetWindow( WINDOW_PREV );
+                pWindow = prevLogicalChildOfParent(this, pWindow);
                 while ( pWindow )
                 {
                     pWindow = pWindow->ImplGetWindow();
 
                     nStyle = pWindow->GetStyle();
 
-                    if ( pWindow->IsVisible() && pWindow->IsEnabled() && pWindow->IsInputEnabled() )
+                    if ( isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() )
                     {
                         if ( pWindow != pSWindow )
                             pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
@@ -820,31 +826,29 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                     if ( nStyle & WB_GROUP )
                         break;
 
-                    pWindow = pWindow->GetWindow( WINDOW_PREV );
+                    pWindow = prevLogicalChildOfParent(this, pWindow);
                 }
             }
         }
         else if ( (nKeyCode == KEY_RIGHT) || (nKeyCode == KEY_DOWN) )
         {
-            Window* pWindow;
-            WinBits nStyle;
-            pWindow = pSWindow->GetWindow( WINDOW_NEXT );
+            Window* pWindow = nextLogicalChildOfParent(this, pSWindow);
             while ( pWindow )
             {
                 pWindow = pWindow->ImplGetWindow();
 
-                nStyle = pWindow->GetStyle();
+                WinBits nStyle = pWindow->GetStyle();
 
                 if ( nStyle & WB_GROUP )
                     break;
 
-                if ( pWindow->IsVisible() && pWindow->IsEnabled() && pWindow->IsInputEnabled() )
+                if ( isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() )
                 {
                     pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
                     return sal_True;
                 }
 
-                pWindow = pWindow->GetWindow( WINDOW_NEXT );
+                pWindow = nextLogicalChildOfParent(this, pWindow);
             }
         }
         else
@@ -865,7 +869,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
         }
     }
 
-    if ( pButtonWindow && pButtonWindow->IsVisible() && pButtonWindow->IsEnabled() && pButtonWindow->IsInputEnabled() )
+    if ( pButtonWindow && isVisibleInLayout(pButtonWindow) && isEnabledInLayout(pButtonWindow) && pButtonWindow->IsInputEnabled() )
     {
         if ( bKeyInput )
         {
@@ -1098,7 +1102,7 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
                                                  nIndex,
                                                  nIndex,
                                                  sal_False );
-                if( pSWindow && pSWindow->IsVisible() && ! (pSWindow->GetStyle() & WB_NOLABEL) )
+                if( pSWindow && isVisibleInLayout(pSWindow) && ! (pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     WindowType nType = pSWindow->GetType();
                     if( nType != WINDOW_FIXEDTEXT   &&
@@ -1188,7 +1192,7 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
                                                  nSearchIndex,
                                                  nFoundIndex,
                                                  sal_False );
-                if( pSWindow && pSWindow->IsVisible() && !(pSWindow->GetStyle() & WB_NOLABEL) )
+                if( pSWindow && isVisibleInLayout(pSWindow) && !(pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     WindowType nType = pSWindow->GetType();
                     if ( ( nType == WINDOW_FIXEDTEXT    ||

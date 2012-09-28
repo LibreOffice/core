@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BRKDLG_HRC
-#define _BRKDLG_HRC
+#ifndef BASCTL_BRKDLG_HRC
+#define BASCTL_BRKDLG_HRC
 
 #include <svl/solar.hrc>
 
@@ -32,5 +32,5 @@
 #define RID_FT_BRKPOINTS    9
 #define RID_FLD_PASS       10
 
-#endif  // _BRKDLG_HRC
+#endif // BASCTL_BRKDLG_HRC
 

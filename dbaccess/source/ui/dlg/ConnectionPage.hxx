@@ -38,7 +38,6 @@ namespace dbaui
     */
     class OConnectionTabPage : public OConnectionHelper
     {
-        sal_Bool            m_bUserGrabFocus : 1;
     protected:
         // connection
         FixedLine           m_aFL1;

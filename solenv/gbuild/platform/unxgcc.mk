@@ -78,24 +78,6 @@ else
 gb_CXXFLAGS += -Wnon-virtual-dtor
 endif
 
-ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
-gb_COMPILERDEFS += \
-        -DHAVE_GCC_VISIBILITY_FEATURE \
-
-gb_CFLAGS += \
-        -fvisibility=hidden
-
-gb_CXXFLAGS += \
-	-fvisibility=hidden \
-
-ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
-gb_CXXFLAGS += \
-        -fvisibility-inlines-hidden \
-
-endif
-
-endif
-
 ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
 gb_COMPILERDEFS += \
         -DHAVE_SFINAE_ANONYMOUS_BROKEN \
@@ -297,7 +279,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
 define gb_Library__get_rpath
-$(if $(1),$(strip '-Wl,-rpath,$(1)' '-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'))
+$(if $(1),$(strip -Wl,-z,origin '-Wl,-rpath,$(1)' '-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'))
 endef
 
 define gb_Library_get_rpath
@@ -314,13 +296,10 @@ gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
 
 # StaticLibrary class
 
-gb_StaticLibrary_DEFS :=
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
-gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
 
 gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
 	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
 gb_StaticLibrary_StaticLibrary_platform =
@@ -338,7 +317,7 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable_get_rpath
-'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))' \
+-Wl,-z,origin '-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))' \
 -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
 endef
 
@@ -377,7 +356,7 @@ endif
 
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR) \
+	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.postprocesscommand=$(GBUILDDIR)/platform/unxgcc_gdbforjunit.sh \
@@ -390,9 +369,8 @@ endef
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
 printf 'if [ -e $(DEVINSTALLDIR)/opt/program/ooenv ]; then . $(DEVINSTALLDIR)/opt/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
-printf "gdb --tui $(DEVINSTALLDIR)/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
+printf "gdb $(DEVINSTALLDIR)/opt/program/soffice.bin" >> $${OFFICESCRIPT} && \
 printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=file://$(DEVINSTALLDIR)/\"" >> $${OFFICESCRIPT} && \
-printf " -ex \"r\"\\n" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}
 endef
@@ -415,11 +393,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
-$(call gb_InstallModuleTarget_set_include,$(1),\
-	$(SOLARINC) \
-	$(SCP_INCLUDE) \
-)
-
 endef
 
 # ScpConvertTarget class
@@ -429,6 +402,11 @@ gb_ScpConvertTarget_ScpConvertTarget_platform :=
 # InstallScript class
 
 gb_InstallScript_EXT := .ins
+
+# CliAssemblyTarget class
+
+gb_CliAssemblyTarget_POLICYEXT :=
+gb_CliAssemblyTarget_get_dll :=
 
 # ExtensionTarget class
 

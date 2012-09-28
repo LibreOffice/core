@@ -1759,9 +1759,9 @@ const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/
     return NULL;
 }
 
-XubString SdrPage::GetLayoutName() const
+OUString SdrPage::GetLayoutName() const
 {
-    return String();
+    return OUString();
 }
 
 void SdrPage::SetInserted( bool bIns )
@@ -1785,10 +1785,13 @@ void SdrPage::SetInserted( bool bIns )
     }
 }
 
+void SdrPage::SetUnoPage(uno::Reference<drawing::XDrawPage> const& xNewPage)
+{
+    mxUnoPage = xNewPage;
+}
 
 uno::Reference< uno::XInterface > SdrPage::getUnoPage()
 {
-    // try weak reference first
     if( !mxUnoPage.is() )
     {
         // create one

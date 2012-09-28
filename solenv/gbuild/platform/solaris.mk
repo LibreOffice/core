@@ -79,24 +79,6 @@ gb_CXXFLAGS := \
 	-Woverloaded-virtual \
 	-Wno-non-virtual-dtor \
 
-ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
-gb_COMPILERDEFS += \
-        -DHAVE_GCC_VISIBILITY_FEATURE \
-
-gb_CFLAGS += \
-        -fvisibility=hidden
-
-gb_CXXFLAGS += \
-	-fvisibility=hidden \
-
-ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
-gb_CXXFLAGS += \
-        -fvisibility-inlines-hidden \
-
-endif
-
-endif
-
 # enable debug STL
 ifeq ($(gb_PRODUCT),$(false))
 gb_COMPILERDEFS += \
@@ -318,13 +300,10 @@ gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
 
 # StaticLibrary class
 
-gb_StaticLibrary_DEFS :=
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
-gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
 
 gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
 	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
 gb_StaticLibrary_StaticLibrary_platform =
@@ -382,7 +361,7 @@ endif
 
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR) \
+	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.postprocesscommand=$(GBUILDDIR)/platform/unxgcc_gdbforjunit.sh \
@@ -413,11 +392,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
-$(call gb_InstallModuleTarget_set_include,$(1),\
-	$(SOLARINC) \
-	$(SCP_INCLUDE) \
-)
-
 endef
 
 # ScpConvertTarget class
@@ -427,6 +401,11 @@ gb_ScpConvertTarget_ScpConvertTarget_platform :=
 # InstallScript class
 
 gb_InstallScript_EXT := .ins
+
+# CliAssemblyTarget class
+
+gb_CliAssemblyTarget_POLICYEXT :=
+gb_CliAssemblyTarget_get_dll :=
 
 # ExtensionTarget class
 

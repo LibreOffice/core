@@ -78,7 +78,7 @@ public:
             This string contains the text of the the currently selected
             item.  It is used to retrieve the index of that item.
     */
-    void UpdateSelection (::rtl::OUString sTextOfSelectedItem);
+    void UpdateSelection (OUString sTextOfSelectedItem);
 
     // XInterface
     DECLARE_XINTERFACE()
@@ -118,10 +118,10 @@ public:
 
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName (void)
+    virtual OUString SAL_CALL getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
     // Return list specific services.
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 

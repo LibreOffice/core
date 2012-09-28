@@ -25,7 +25,6 @@ Public Const SBFIRSTAPPLCHECKED = 0
 Public Const SBSECONDAPPLCHECKED = 1
 Public Const SBTHIRDAPPLCHECKED = 2
 Public Const SBFOURTHAPPLCHECKED = 3
-Public bFilterTracingAvailable as Boolean
 Public WizardMode as String
 Public Const SBMICROSOFTMODE = &quot;MS&quot;
 Public Const SBXMLMODE = &quot;SO&quot;
@@ -49,10 +48,6 @@ Public sValueName(SBMAXAPPLCOUNT-1) as String
 Public sCRLF as String
 Public MSFilterName(5,4) as String
 Public XMLFilterName(7,3) as String &apos;Number of different formats
-Public FilterTracingLogPath(2) as String
-Public bMSApplFilterTracingAvailable(2) as String
-Public bTakeOverTargetName(2) as Boolean
-Public bTakeOverPathName(2) as Boolean
 
 &apos; e.g.:
 &apos; XMLFilterName(x,0) = &quot;sdw&quot; 						&apos; in documents we take the extensions; in SO-templates the appropriate Filtername
@@ -272,7 +267,6 @@ Dim Index as Integer
 Dim sAddText as String
 	For i = 0 To ApplCount -1
 		Index = Applications(i,SBAPPLKEY)
-		GetFilterTracingLogPath(i, Index)
 		If 	Applications(i,SBTEMPLCONVERT) Then
 			&apos; Templates are to be converted
 			sAddText = &quot;&quot;
@@ -345,48 +339,6 @@ Sub FillStep_Progress()
 		ImportDialog.cmdShowLogFile.DefaultButton = True
 	End If
 End Sub
-
-
-Sub GetFilterTracingLogPath(i as Integer, Index as Integer)
-Dim aNodePath(0) as new com.sun.star.beans.PropertyValue
-Dim oMasterKey
-Dim oImportKey	
-Dim oWordKey
-Dim oExcelkey
-Dim oPowerpointKey
-Dim oFilterService
-	aNodePath(0).Name = &quot;nodepath&quot;
-	aNodePath(0).Value = &quot;org.openoffice.Office.Tracing&quot;
-	oFilterService = createUnoService(&quot;com.sun.star.util.FilterTracer&quot;)
-	bFilterTracingAvailable = Not IsNull(oFilterService)
-	If bFilterTracingAvailable Then
-		oMasterkey = GetRegistryKeyContent(&quot;org.openoffice.Office.Tracing/&quot;)
-		If oMasterKey.hasbyName(&quot;Import&quot;) Then
-			oImportKey = GetRegistryKeyContent(&quot;org.openoffice.Office.Tracing/Import&quot;)
-			bMSApplFilterTracingAvailable(i) = CheckMSImportAvailability(oImportkey, MSFiltername(Index, 4), FilterTracingLogPath(i), bTakeOverTargetName(i), bTakeOverPathName(i))
-		End If
-	End If
-End Sub
-
-
-Function CheckMSImportAvailability(oImportkey, MSApplName as String, MSLogPath as String, bTakeOverTargetname as String, bTakeOverpathName as String) as Boolean
-Dim bApplIsAvailable as Boolean
-Dim oApplKey
-Dim LocApplName as String
-Dim LocApplPath as String
-	bApplIsAvailable = oImportKey.hasbyName(MSApplName)
-	If bApplIsAvailable Then
-		oApplKey = oImportKey.getByName(MSApplName)
-		bApplIsAvailable = oApplKey.On
-		LocApplName = oApplKey.Name
-		LocApplPath = oApplKey.Path
-		bTakeOverTargetName = (LocApplName = &quot;&quot;)
-		bTakeOverPathName = (LocApplPath = &quot;&quot;)		
-		MSLogPath = LocApplPath &amp; &quot;/&quot; &amp; LocApplName &amp; &quot;.log&quot;
-	End If
-	CheckMSImportAvailability() = bApplIsAvailable
-End Function
-
 
 
 Sub	SetupMSConfiguration()

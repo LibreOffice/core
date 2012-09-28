@@ -362,6 +362,12 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
     ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
 }
 
+void SvpSalGraphics::ClearDevFontCache()
+{
+    GlyphCache& rGC = SvpGlyphCache::GetInstance();
+    rGC.ClearFontCache();
+}
+
 // ---------------------------------------------------------------------------
 
 void SvpSalGraphics::GetDevFontSubstList( OutputDevice* )

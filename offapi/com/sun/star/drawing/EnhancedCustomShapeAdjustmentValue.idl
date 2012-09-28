@@ -36,6 +36,11 @@ struct EnhancedCustomShapeAdjustmentValue
     /**
     */
     ::com::sun::star::beans::PropertyState State;
+
+
+    /** optional name, used by pptx import/export for custom shape presets
+    */
+    string Name;
 };
 
 

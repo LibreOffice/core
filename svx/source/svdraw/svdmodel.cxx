@@ -34,7 +34,6 @@
 #include <osl/endian.h>
 #include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -431,6 +430,16 @@ void SdrModel::ClearUndoBuffer()
     }
 }
 
+bool SdrModel::HasUndoActions() const
+{
+    return pUndoStack && !pUndoStack->empty();
+}
+
+bool SdrModel::HasRedoActions() const
+{
+    return pRedoStack && !pRedoStack->empty();
+}
+
 bool SdrModel::Undo()
 {
     bool bRet = false;
@@ -440,7 +449,7 @@ bool SdrModel::Undo()
     }
     else
     {
-        SfxUndoAction* pDo=(SfxUndoAction*)GetUndoAction(0);
+        SfxUndoAction* pDo = HasUndoActions() ? pUndoStack->front() : NULL;
         if(pDo!=NULL)
         {
             const bool bWasUndoEnabled = mbUndoEnabled;
@@ -466,7 +475,7 @@ bool SdrModel::Redo()
     }
     else
     {
-        SfxUndoAction* pDo=(SfxUndoAction*)GetRedoAction(0);
+        SfxUndoAction* pDo = HasRedoActions() ? pRedoStack->front() : NULL;
         if(pDo!=NULL)
         {
             const bool bWasUndoEnabled = mbUndoEnabled;
@@ -492,7 +501,7 @@ bool SdrModel::Repeat(SfxRepeatTarget& rView)
     }
     else
     {
-        SfxUndoAction* pDo=(SfxUndoAction*)GetUndoAction(0);
+        SfxUndoAction* pDo = HasUndoActions() ? pUndoStack->front() : NULL;
         if(pDo!=NULL)
         {
             if(pDo->CanRepeat(rView))

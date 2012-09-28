@@ -19,7 +19,6 @@
 package complex.writer;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
@@ -37,7 +36,6 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XContentEnumerationAccess;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XEnumeration;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.frame.XStorable;
 import com.sun.star.util.XCloseable;
 import com.sun.star.text.XText;

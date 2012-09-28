@@ -39,7 +39,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import org.openoffice.xmerge.util.Resources;
 import org.openoffice.xmerge.util.Debug;
 
 /**

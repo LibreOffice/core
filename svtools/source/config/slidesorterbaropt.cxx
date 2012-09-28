@@ -23,16 +23,9 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/link.hxx>
 
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
-#include "itemholder2.hxx"
-
-#include <svtools/imgdef.hxx>
-#include <vcl/svapp.hxx>
-
-#include <list>
 
 using namespace ::utl;
 using namespace ::rtl;
@@ -59,8 +52,6 @@ using namespace ::com::sun::star;
 
 class SvtSlideSorterBarOptions_Impl : public ConfigItem
 {
-    private:
-    ::std::list<Link> aList;
     Sequence< OUString > m_seqPropertyNames;
 
     public:
@@ -101,10 +92,6 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
         bool m_bVisibleHandoutView;
         bool m_bVisibleSlideSorterView;
         bool m_bVisibleDrawView;
-
-        void AddListenerLink( const Link& rLink );
-        void RemoveListenerLink( const Link& rLink );
-        void CallListeners();
 
     private:
         /** return list of key names of our configuration management which represent oue module tree
@@ -268,33 +255,9 @@ void SvtSlideSorterBarOptions_Impl::Load( const Sequence< OUString >& rPropertyN
     }
 }
 
-void SvtSlideSorterBarOptions_Impl::AddListenerLink( const Link& rLink )
-{
-    aList.push_back( rLink );
-}
-
-void SvtSlideSorterBarOptions_Impl::RemoveListenerLink( const Link& rLink )
-{
-    for ( ::std::list<Link>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
-    {
-        if ( *iter == rLink )
-        {
-            aList.erase(iter);
-            break;
-        }
-    }
-}
-
-void SvtSlideSorterBarOptions_Impl::CallListeners()
-{
-    for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
-        iter->Call( this );
-}
-
 void SvtSlideSorterBarOptions_Impl::Notify( const Sequence< OUString >& rPropertyNames )
 {
     Load( rPropertyNames );
-    CallListeners();
 }
 
 void SvtSlideSorterBarOptions_Impl::Commit()
@@ -460,16 +423,6 @@ namespace
 Mutex & SvtSlideSorterBarOptions::GetInitMutex()
 {
     return theSvtSlideSorterBarOptionsMutex::get();
-}
-
-void SvtSlideSorterBarOptions::AddListenerLink( const Link& rLink )
-{
-    m_pDataContainer->AddListenerLink( rLink );
-}
-
-void SvtSlideSorterBarOptions::RemoveListenerLink( const Link& rLink )
-{
-    m_pDataContainer->RemoveListenerLink( rLink );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

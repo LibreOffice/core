@@ -29,6 +29,7 @@
 
 #define _CTRLBOX_CXX
 #include <tools/stream.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
 #include <vcl/helper.hxx>
@@ -122,6 +123,33 @@ ColorListBox::ColorListBox( Window* pParent, const ResId& rResId ) :
     ListBox( pParent, rResId )
 {
     ImplInit();
+}
+
+namespace
+{
+    bool extractDropdown(VclBuilder::stringmap &rMap)
+    {
+        bool bDropdown = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("dropdown")));
+        if (aFind != rMap.end())
+        {
+            bDropdown = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bDropdown;
+    }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    ColorListBox *pListBox = new ColorListBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->SetBestDropDownLineCount();
+    return pListBox;
 }
 
 // -----------------------------------------------------------------------
@@ -1033,6 +1061,18 @@ FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
     InitFontMRUEntriesFile();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    FontNameBox *pListBox = new FontNameBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->SetBestDropDownLineCount();
+    return pListBox;
+}
+
 // -------------------------------------------------------------------
 
 FontNameBox::~FontNameBox()
@@ -1103,7 +1143,7 @@ void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode
 
 void FontNameBox::InitFontMRUEntriesFile()
 {
-    rtl::OUString sUserConfigDir(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
+    rtl::OUString sUserConfigDir("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
     rtl::Bootstrap::expandMacros(sUserConfigDir);
 
     maFontMRUEntriesFile = sUserConfigDir;
@@ -1476,7 +1516,23 @@ FontStyleBox::FontStyleBox( Window* pParent, const ResId& rResId ) :
     aLastStyle = GetText();
 }
 
-// -------------------------------------------------------------------
+FontStyleBox::FontStyleBox( Window* pParent, WinBits nBits ) :
+    ComboBox( pParent, nBits )
+{
+    aLastStyle = GetText();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontStyleBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    FontStyleBox *pListBox = new FontStyleBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->SetBestDropDownLineCount();
+    return pListBox;
+}
 
 FontStyleBox::~FontStyleBox()
 {
@@ -1684,6 +1740,18 @@ FontSizeBox::FontSizeBox( Window* pParent, const ResId& rResId ) :
     MetricBox( pParent, rResId )
 {
     ImplInit();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    bool bDropdown = extractDropdown(rMap);
+    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    if (bDropdown)
+        nWinBits |= WB_DROPDOWN;
+    FontSizeBox* pListBox = new FontSizeBox(pParent, nWinBits);
+    if (bDropdown)
+        pListBox->SetBestDropDownLineCount();
+    return pListBox;
 }
 
 // -----------------------------------------------------------------------

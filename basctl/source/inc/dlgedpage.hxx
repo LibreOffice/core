@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGEDPAGE_HXX
-#define _BASCTL_DLGEDPAGE_HXX
+#ifndef BASCTL_DLGEDPAGE_HXX
+#define BASCTL_DLGEDPAGE_HXX
 
 #include "svx/svdpage.hxx"
+
+namespace basctl
+{
 
 //============================================================================
 // DlgEdPage
@@ -38,7 +41,6 @@ public:
     TYPEINFO();
 
     DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
-    DlgEdPage( const DlgEdPage& );
     virtual ~DlgEdPage();
 
     using SdrPage::Clone;
@@ -50,6 +52,8 @@ public:
     virtual SdrObject* SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum);
 };
 
-#endif //_BASCTL_DLGEDPAGE_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

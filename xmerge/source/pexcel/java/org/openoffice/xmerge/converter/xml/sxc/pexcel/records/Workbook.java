@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
@@ -38,7 +37,6 @@ import org.openoffice.xmerge.util.Debug;
  *  This class is used by <code> PxlDocument</code> to maintain pexcel
  *  workbooks.
  *
- *  @author  Martin Maher
  */
 public class Workbook implements org.openoffice.xmerge.Document,
 OfficeConstants {

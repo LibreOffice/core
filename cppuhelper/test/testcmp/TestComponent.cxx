@@ -29,6 +29,7 @@
 
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include "cppuhelper/supportsservice.hxx"
 
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -146,15 +147,7 @@ uno::Any SAL_CALL TestComponent::queryInterface(uno::Type const & rType ) throw 
 sal_Bool SAL_CALL TestComponent::supportsService(rtl::OUString const & ServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> serviceNames = getSupportedServiceNames_Static();
-
-    for (sal_Int32 n = 0; n < serviceNames.getLength(); ++n)
-    {
-        if (serviceNames[n] == ServiceName)
-            return true;
-    }
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL TestComponent::getSupportedServiceNames()

@@ -472,7 +472,7 @@ void SwView::HyphenateDocument()
             pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
         sal_Bool bOther = pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
         sal_Bool bStart = bSelection || ( !bOther && pWrtShell->IsStartOfDoc() );
-        sal_Bool bStop = sal_False;
+        bool bStop = false;
         if( !bOther && !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY) && !bSelection )
         // kein Sonderbereich eingeschaltet
         {
@@ -489,7 +489,7 @@ void SwView::HyphenateDocument()
                 }
             }
             else
-                bStop = sal_True; // Nein Es wird nicht getrennt
+                bStop = true; // Nein Es wird nicht getrennt
         }
 
         if( !bStop )

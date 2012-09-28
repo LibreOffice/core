@@ -19,7 +19,6 @@
 package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.openoffice.xmerge.ConvertData;
@@ -45,9 +44,6 @@ import org.w3c.dom.NodeList;
  *  object, then it calls <code>buildDocument</code> to create a
  *  <code>SxcDocument</code> object from it.</p>
  *
- *  @author      Paul Rank
- *  @author      Mark Murnane
- *  @author      Martin Maher
  */
 public abstract class SxcDocumentDeserializer implements OfficeConstants,
     DocumentDeserializer {

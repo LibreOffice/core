@@ -31,8 +31,6 @@ namespace accessibility
 
 // ============================================================================
 
-using ::rtl::OUString;
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -211,7 +209,7 @@ Any SAL_CALL AccessibleBrowseBox::getAccessibleKeyBinding()
 OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleBrowseBox" ) );
+    return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBox" );
 }
 // -----------------------------------------------------------------------------
 

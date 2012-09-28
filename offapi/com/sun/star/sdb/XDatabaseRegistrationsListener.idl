@@ -34,7 +34,7 @@ module com { module sun { module star { module sdb {
 
     @since OOo 3.3
  */
-interface XDatabaseRegistrationsListener : ::com::sun::star::lang::XEventListener
+published interface XDatabaseRegistrationsListener : ::com::sun::star::lang::XEventListener
 {
     /** called when a database has been registered
     */

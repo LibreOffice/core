@@ -56,7 +56,6 @@ namespace dbaui
 
         ::std::auto_ptr< ::svt::ListBoxControl> m_pListCell;
         TTableConnectionData::value_type        m_pConnData;
-        const OJoinTableView::OTableWindowMap*  m_pTableMap;
         OTableListBoxControl*                   m_pBoxControl;
         long                                    m_nDataPos;
         Reference< XPropertySet>                m_xSourceDef;
@@ -72,7 +71,7 @@ namespace dbaui
         */
         sal_uInt16 getColumnIdent( sal_uInt16 _nColId ) const;
     public:
-        ORelationControl( OTableListBoxControl* pParent,const OJoinTableView::OTableWindowMap* _pTableMap );
+        ORelationControl( OTableListBoxControl* pParent );
         virtual ~ORelationControl();
 
         /** searches for a connection between these two tables
@@ -121,9 +120,8 @@ namespace dbaui
     //========================================================================
     DBG_NAME(ORelationControl)
     //------------------------------------------------------------------------
-    ORelationControl::ORelationControl( OTableListBoxControl* pParent ,const OJoinTableView::OTableWindowMap* _pTableMap)
+    ORelationControl::ORelationControl( OTableListBoxControl* pParent )
         :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
-        ,m_pTableMap(_pTableMap)
         ,m_pBoxControl(pParent)
         ,m_xSourceDef( NULL )
         ,m_xDestDef( NULL )
@@ -459,7 +457,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
      , m_pTableMap(_pTableMap)
      , m_pParentDialog(_pParentDialog)
     {
-        m_pRC_Tables = new ORelationControl( this,m_pTableMap );
+        m_pRC_Tables = new ORelationControl( this );
         m_pRC_Tables->SetHelpId(HID_RELDLG_KEYFIELDS);
         m_pRC_Tables->Init( );
         m_pRC_Tables->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);

@@ -64,11 +64,11 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/stl_types.hxx>
@@ -370,7 +370,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
 
     impl_construct();
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         // our aggregated rowset itself is not cloneable, so simply copy the properties
         ::comphelper::copyProperties( _cloneSource.m_xAggregateSet, m_xAggregateSet );
@@ -419,7 +419,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
             );
         }
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 //------------------------------------------------------------------
@@ -1480,9 +1480,9 @@ void SAL_CALL ODatabaseForm::clearWarnings(  ) throw (SQLException, RuntimeExcep
 Reference< XCloneable > SAL_CALL ODatabaseForm::createClone(  ) throw (RuntimeException)
 {
     ODatabaseForm* pClone = new ODatabaseForm( *this );
-    osl_incrementInterlockedCount( &pClone->m_refCount );
+    osl_atomic_increment( &pClone->m_refCount );
     pClone->clonedFrom( *this );
-    osl_decrementInterlockedCount( &pClone->m_refCount );
+    osl_atomic_decrement( &pClone->m_refCount );
     return pClone;
 }
 
@@ -2241,7 +2241,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     if (!xFrame.is())
         return;
 
-    Reference<XURLTransformer> xTransformer(URLTransformer::create(comphelper::ComponentContext(m_xServiceFactory).getUNOContext()));
+    Reference<XURLTransformer> xTransformer(URLTransformer::create(comphelper::getComponentContext(m_xServiceFactory)));
 
     // URL encoding
     if( eSubmitEncoding == FormSubmitEncoding_URL )

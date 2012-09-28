@@ -44,6 +44,7 @@
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLStringVector.hxx>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 class XMLTextListsHelper;
 class SvXMLExport;
@@ -76,6 +77,8 @@ namespace xmloff
 
 class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 {
+    struct Impl;
+    ::boost::scoped_ptr<Impl> m_pImpl;
 
 //  SvXMLExport& rExport;
     SvXMLAutoStylePoolP& rAutoStylePool;

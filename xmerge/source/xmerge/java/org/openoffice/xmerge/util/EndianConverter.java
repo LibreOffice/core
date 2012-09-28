@@ -27,7 +27,6 @@ package org.openoffice.xmerge.util;
  *    <code>java.nio.ByteBuffer</code> in Java 1.4, it may no longer be
  *    necessary to use this class in the future.</p>
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 public class EndianConverter {

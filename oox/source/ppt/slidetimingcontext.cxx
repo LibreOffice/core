@@ -51,12 +51,12 @@ SlideTimingContext::~SlideTimingContext() throw()
 
 }
 
-::oox::core::ContextHandlerRef SlideTimingContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+::oox::core::ContextHandlerRef SlideTimingContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& )
 {
     switch( aElementToken )
     {
     case PPT_TOKEN( bldLst ):
-        return new BuildListContext( *this, rAttribs.getFastAttributeList(), maTimeNodeList );
+        return new BuildListContext( *this );
     case PPT_TOKEN( extLst ):
         return this;
     case PPT_TOKEN( tnLst ):

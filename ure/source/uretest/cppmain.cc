@@ -26,7 +26,6 @@
 #include <boost/unordered_map.hpp>
 
 #include "com/sun/star/lang/XMain.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -141,18 +140,12 @@ private:
         "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript",
         "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"
     };
-    ::css::uno::Reference< ::css::lang::XMultiComponentFactory > manager(
-        context_->getServiceManager());
-    if (!manager.is()) {
-        throw ::css::uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no service manager")),
-            static_cast< ::cppu::OWeakObject * >(this));
-    }
     for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
         ::rtl::OUString name(::rtl::OUString::createFromAscii(services[i]));
         ::css::uno::Reference< ::css::uno::XInterface > instance;
         try {
-            instance = manager->createInstanceWithContext(name, context_);
+            instance = context_->getServiceManager()->createInstanceWithContext(
+                name, context_);
         } catch (::css::uno::RuntimeException &) {
             throw;
         } catch (::css::uno::Exception &) {

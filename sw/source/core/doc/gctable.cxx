@@ -352,19 +352,20 @@ static bool lcl_MergeGCBox(SwTableBox* pTblBox, _GCLinePara* pPara)
 
         if( 1 == pTblBox->GetTabLines().size() )
         {
-            // Box with a Line, then move all the Line's Boxes after this Box
-            // into the parent Line and delete this Box
+            // we have a box with a single line, so we just replace it by the line's boxes
             SwTableLine* pInsLine = pTblBox->GetUpper();
             SwTableLine* pCpyLine = pTblBox->GetTabLines()[0];
             SwTableBoxes::iterator it = std::find( pInsLine->GetTabBoxes().begin(), pInsLine->GetTabBoxes().end(), pTblBox );
             for( n = 0; n < pCpyLine->GetTabBoxes().size(); ++n )
                 pCpyLine->GetTabBoxes()[n]->SetUpper( pInsLine );
 
-            pInsLine->GetTabBoxes().insert( it + 1, pCpyLine->GetTabBoxes().begin(), pCpyLine->GetTabBoxes().end());
+            // remove the old box from its parent line
+            it = pInsLine->GetTabBoxes().erase( it );
+            // insert the nested line's boxes in its place
+            pInsLine->GetTabBoxes().insert( it, pCpyLine->GetTabBoxes().begin(), pCpyLine->GetTabBoxes().end());
             pCpyLine->GetTabBoxes().clear();
-            // Delete the old Box with the Line
-            delete *it;
-            pInsLine->GetTabBoxes().erase( it );
+            // destroy the removed box
+            delete pTblBox;
 
             return false; // set up anew
         }

@@ -314,7 +314,9 @@ struct QuickHelpData
         if( 0 == nCurArrPos-- )
             nCurArrPos = (bEndLess && !m_bIsAutoText ) ? m_aHelpStrings.size()-1 : 0;
     }
-    void FillStrArr( SwWrtShell& rSh, const String& rWord );
+
+    // Fills internal structures with hopefully helpful information.
+    void FillStrArr( SwWrtShell& rSh, const String& rWord, sal_Bool bIgnoreCurrentPos );
     void SortAndFilter();
 };
 
@@ -521,7 +523,10 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                                 (rSh.IsObjSelected() || rSh.IsFrmSelected()) &&
                                 (!rSh.IsSelObjProtected(FLYPROTECT_POS));
 
-                            eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
+                            SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
+                            // Don't update pointer if this is a background image only.
+                            if (pSelectableObj->GetLayer() != rSh.GetDoc()->GetHellId())
+                                eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
                             aActHitType = SDRHIT_OBJECT;
                         }
                     }
@@ -573,7 +578,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             eStyle = POINTER_ARROW;
         else
         {
-            if( bCntAtPos )
+            // Even if we already have something, prefer URLs if possible.
+            SwContentAtPos aUrlPos(SwContentAtPos::SW_INETATTR);
+            if (bCntAtPos || rSh.GetContentAtPos(rLPt, aUrlPos))
             {
                 SwContentAtPos aSwContentAtPos(
                     SwContentAtPos::SW_CLICKFIELD|
@@ -1160,8 +1167,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
             }
             else
             {
-                bSetPos = (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_SOME_ABS_POS) ?
-                    sal_True : sal_False;
+                bSetPos = sal_True;
             }
         }
         if( bSetPos )
@@ -1324,23 +1330,12 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             rSh.IsHeaderFooterEdit( ) )
     {
         bool bHeader = FRMTYPE_HEADER & rSh.GetFrmType(0,sal_False);
-
-        // Remove the temporary header/footer
-        if ( !m_sTmpHFPageStyle.isEmpty() )
-        {
-            rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
-        }
-
         if ( bHeader )
             rSh.SttPg();
         else
             rSh.EndPg();
         rSh.ToggleHeaderFooterEdit();
     }
-
-    // If we are inputing a key in a temporary header/footer, then make it definitive
-    if ( !m_sTmpHFPageStyle.isEmpty( ) )
-        m_sTmpHFPageStyle = rtl::OUString( );
 
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
     if ( bLockInput || (pObjSh && pObjSh->GetProgress()) )
@@ -1528,6 +1523,19 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     sal_Bool bStopKeyInputTimer = sal_True;
     String sFmlEntry;
 
+    enum SW_AutoCompleteAction { ACA_NoOp,            // No maintenance operation required for AutoComplete tree
+                                 ACA_ReturnToRoot,    // Input of a char marking the end of a word, like '.', ' ', etc.
+                                 ACA_SingleCharInput,
+                                 ACA_SingleBackspace,
+                                 ACA_Refresh };       // Refresh AutoComplete information completely.
+
+    // Do refresh by default to gracefully handle all unimplemented special cases.
+    SW_AutoCompleteAction eAutoCompleteAction = ACA_Refresh;
+    // TODO: Make sure eAutoCompleteAction is set to something other than ACA_Refresh to increase performance.
+
+    // Stores input char in case ACA_SingleCharInput is used. Defaults to aCh to avoid compiler warning.
+    sal_Unicode aSingleCharInput = aCh;
+
     enum SW_KeyState { KS_Start,
                        KS_CheckKey, KS_InsChar, KS_InsTab,
                        KS_NoNum, KS_NumOff, KS_NumOrNoNum, KS_NumDown, KS_NumUp,
@@ -1567,11 +1575,11 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_EnterCharCell,
                        KS_GotoNextFieldMark,
                        KS_GotoPrevFieldMark,
-                       KS_Ende };
+                       KS_End };
 
     SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
                                            : KS_CheckKey,
-                eNextKeyState = KS_Ende;
+                eNextKeyState = KS_End;
     sal_uInt8 nDir = 0;
 
     if (nKS_NUMDOWN_Count > 0)
@@ -1580,7 +1588,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     if (nKS_NUMINDENTINC_Count > 0)
         nKS_NUMINDENTINC_Count--;
 
-    while( KS_Ende != eKeyState )
+    while( KS_End != eKeyState )
     {
         SW_KeyState eFlyState = KS_KeyToView;
 
@@ -1709,9 +1717,11 @@ KEYINPUT_CHECKTABLE:
                     }
                     break;
 
-//-------
-// Insert/Delete
                 case KEY_LEFT:
+                {
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                // No break;
                 case KEY_LEFT | KEY_MOD1:
                 {
                     sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
@@ -1734,6 +1744,10 @@ KEYINPUT_CHECKTABLE:
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_UP:
+                {
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                // No break;
                 case KEY_UP | KEY_MOD1:
                 {
                     sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
@@ -1750,6 +1764,10 @@ KEYINPUT_CHECKTABLE:
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_DOWN:
+                {
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                // No break;
                 case KEY_DOWN | KEY_MOD1:
                 {
                     sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
@@ -1795,41 +1813,44 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_DELETE:
                     if ( !rSh.HasReadonlySel() )
                     {
-                        if (rSh.IsInFrontOfLabel() &&
-                            rSh.NumOrNoNum(sal_False))
+                        if (rSh.IsInFrontOfLabel() && rSh.NumOrNoNum(sal_False))
                             eKeyState = KS_NumOrNoNum;
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     else
                     {
                         InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                     }
                     break;
 
                 case KEY_DELETE | KEY_MOD2:
                     if( !rSh.IsTableMode() && rSh.GetTableFmt() )
                     {
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         bTblInsDelMode = sal_True;
                         bTblIsInsMode = sal_False;
                         bTblIsColMode = sal_True;
                         aKeyInputTimer.Start();
                         bStopKeyInputTimer = sal_False;
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     break;
                 case KEY_INSERT | KEY_MOD2:
                     if( !rSh.IsTableMode() && rSh.GetTableFmt() )
                     {
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         bTblInsDelMode = sal_True;
                         bTblIsInsMode = sal_True;
                         bTblIsColMode = sal_True;
                         aKeyInputTimer.Start();
                         bStopKeyInputTimer = sal_False;
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     break;
 
-                case KEY_RETURN:                // Return
+                case KEY_RETURN:
+                {
                     if( !rSh.HasReadonlySel() )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
@@ -1863,15 +1884,18 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else
                             eNextKeyState = eKeyState, eKeyState = KS_CheckAutoCorrect;
                     }
-                    break;
-
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                break;
                 case KEY_RETURN | KEY_MOD2:     // ALT-Return
+                {
                     if( !rSh.HasReadonlySel() && !rSh.IsSttPara() && rSh.GetCurNumRule() )
                         eKeyState = KS_NoNum;
                     else if( rSh.CanSpecialInsert() )
                         eKeyState = KS_SpecialInsert;
-                    break;
-
+                    eAutoCompleteAction = ACA_ReturnToRoot;
+                }
+                break;
                 case KEY_BACKSPACE:
                 case KEY_BACKSPACE | KEY_SHIFT:
                     if( !rSh.HasReadonlySel() )
@@ -1894,8 +1918,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             bDone = rSh.TryRemoveIndent();
                         }
 
+                        if ( bOnlyBackspaceKey )
+                        {
+                            eAutoCompleteAction = ACA_SingleBackspace;
+                        }
+
                         if (bDone)
-                            eKeyState = KS_Ende;
+                            eKeyState = KS_End;
                         else
                         {
                             if (rSh.IsSttPara() &&
@@ -1962,7 +1991,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     else
                     {
                         InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                     }
                     break;
 
@@ -1972,6 +2001,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         nDir = MOVE_RIGHT_BIG;
                         eTblChgMode = nsTblChgWidthHeightType::WH_FLAG_INSDEL | nsTblChgWidthHeightType::WH_COL_RIGHT;
                         nTblChgSize = pModOpt->GetTblVInsert();
+                        eAutoCompleteAction = ACA_ReturnToRoot;
                         goto KEYINPUT_CHECKTABLE_INSDEL;
                     }
                 case KEY_TAB:
@@ -2063,7 +2093,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_PrevObject;
                     else
                     {
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         if( rSh.IsSttOfPara() && !rSh.HasReadonlySel() )
                         {
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
@@ -2100,10 +2130,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         {
                             eKeyState = KS_InsTab;
                         }
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     break;
 
                     case KEY_TAB | KEY_MOD1 | KEY_SHIFT:
+                    {
                         if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
                             !rSh.HasReadonlySel() )
                         {
@@ -2115,7 +2147,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else if((rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM|
                                         nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF)) &&
                                 rSh.GetDrawView()->AreObjectsMarked())
+                        {
                             eKeyState = KS_EnterDrawHandleMode;
+                        }
+                        eAutoCompleteAction = ACA_NoOp;
+                    }
                     break;
                     case KEY_F2 :
                     if( !rSh.HasReadonlySel() )
@@ -2125,6 +2161,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_GoIntoFly;
                         else if((nSelectionType & nsSelectionType::SEL_DRW))
                             eKeyState = KS_GoIntoDrawing;
+                        eAutoCompleteAction = ACA_NoOp;
                     }
                     break;
                 }
@@ -2138,7 +2175,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     case KEY_TAB:
                     case KEY_TAB | KEY_SHIFT:
                         bNormalChar = sal_False;
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         if ( rSh.GetSelectionType() &
                                 (nsSelectionType::SEL_GRF |
                                     nsSelectionType::SEL_FRM |
@@ -2167,13 +2204,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             {
                                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, sal_True);
                                 bNormalChar = sal_False;
-                                eKeyState = KS_Ende;
+                                eKeyState = KS_End;
                                 rSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
                             }
                         }
                     }
                     break;
                 }
+                eAutoCompleteAction = ACA_NoOp;
             }
             break;
 
@@ -2184,28 +2222,29 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
                     case KEY_RIGHT | KEY_MOD2:
                         rSh.Right( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         FlushInBuffer();
                         break;
                     case KEY_LEFT | KEY_MOD2:
                         rSh.Left( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
-                        eKeyState = KS_Ende;
+                        eKeyState = KS_End;
                         FlushInBuffer();
                         break;
                 }
+                eAutoCompleteAction = ACA_NoOp;
             }
             break;
 
         case KS_KeyToView:
             {
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
                 bNormalChar =
                     !rKeyCode.IsMod2() &&
                     rKeyCode.GetModifier() != (KEY_MOD1) &&
                     rKeyCode.GetModifier() != (KEY_MOD1|KEY_SHIFT) &&
-                                SW_ISPRINTABLE( aCh );
+                    SW_ISPRINTABLE( aCh );
 
-                if (bNormalChar && rSh.IsInFrontOfLabel())
+                if( bNormalChar && rSh.IsInFrontOfLabel() )
                 {
                     rSh.NumOrNoNum(sal_False);
                 }
@@ -2254,20 +2293,38 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         Window::KeyInput( aKeyEvent );
                     }
                 }
+                if( bNormalChar )
+                {
+                    if ( aCh == ' ' )
+                    {
+                        eAutoCompleteAction = ACA_ReturnToRoot;
+                    }
+                    else
+                    {
+                        eAutoCompleteAction = ACA_SingleCharInput;
+                        aSingleCharInput = aCh;
+                    }
+                }
             }
             break;
         case KS_LaunchOLEObject:
+        {
             rSh.LaunchOLEObj();
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
+            eAutoCompleteAction = ACA_NoOp;
+        }
         break;
-        case KS_GoIntoFly :
+        case KS_GoIntoFly:
+        {
             rSh.UnSelectFrm();
             rSh.LeaveSelFrmMode();
             rView.AttrChangedNotify(&rSh);
             rSh.MoveSection( fnSectionCurr, fnSectionEnd );
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
+            eAutoCompleteAction = ACA_NoOp;
+        }
         break;
-        case KS_GoIntoDrawing :
+        case KS_GoIntoDrawing:
         {
             SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             if(pObj)
@@ -2276,7 +2333,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if ( rView.GetCurShell()->ISA(SwDrawTextShell) )
                     ((SwDrawTextShell*)rView.GetCurShell())->Init();
             }
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
+            eAutoCompleteAction = ACA_NoOp;
         }
         break;
         case KS_EnterDrawHandleMode:
@@ -2285,7 +2343,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
             sal_Bool bForward(!aKeyEvent.GetKeyCode().IsShift());
 
             ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
+            eAutoCompleteAction = ACA_NoOp;
         }
         break;
         case KS_InsTab:
@@ -2293,10 +2352,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
             {
                 // then it should be passed along
                 Window::KeyInput( aKeyEvent );
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
                 break;
             }
             aCh = '\t';
+            eAutoCompleteAction = ACA_ReturnToRoot;
             // no break!
         case KS_InsChar:
             if (rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT)
@@ -2328,7 +2388,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                     }
                 }
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
             }
             else if(!rSh.HasReadonlySel())
             {
@@ -2376,12 +2436,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( bFlushCharBuffer )
                         aKeyInputFlushTimer.Start();
                 }
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
             }
             else
             {
                 InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
-                eKeyState = KS_Ende;
+                eKeyState = KS_End;
             }
         break;
 
@@ -2398,6 +2458,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
             }
             eKeyState = eNextKeyState;
+            if ( eAutoCompleteAction == ACA_Refresh )
+                eAutoCompleteAction = ACA_NoOp;
         }
         break;
 
@@ -2446,7 +2508,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_GotoPrevFieldMark:
                 {
                     ::sw::mark::IFieldmark const * const pFieldmark = rSh.GetFieldmarkBefore();
-                    if(pFieldmark) rSh.GotoFieldmark(pFieldmark);
+                    if( pFieldmark )
+                        rSh.GotoFieldmark(pFieldmark);
                 }
                 break;
 
@@ -2518,6 +2581,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             pACorr->GetSwFlags().bAutoCmpltAppendBlanc;
                 }
                 rSh.EndUndo( UNDO_END );
+                eAutoCompleteAction = ACA_ReturnToRoot;
             }
             break;
 
@@ -2588,14 +2652,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_Draw_Change :
                 ChangeDrawing( nDir );
                 break;
-            default:; //prevent warning
+            default:
+                break;
             }
             if( nSlotId && rView.GetViewFrame()->GetBindings().GetRecorder().is() )
             {
                 SfxRequest aReq(rView.GetViewFrame(), nSlotId );
                 aReq.Done();
             }
-            eKeyState = KS_Ende;
+            eKeyState = KS_End;
         }
         }
     }
@@ -2606,29 +2671,69 @@ KEYINPUT_CHECKTABLE_INSDEL:
         bTblInsDelMode = sal_False;
     }
 
+    bool bInsertBufferedChars = bFlushBuffer && aInBuffer.Len();
+    bool bAutoCompleteEnabled = pACfg && pACorr && ( pACfg->IsAutoTextTip() || pACorr->GetSwFlags().bAutoCompleteWords );
+    bool bGotWord = false;
+    String sPrefix;
+
     // in case the buffered characters are inserted
-    if( bFlushBuffer && aInBuffer.Len() )
+    if( bInsertBufferedChars )
     {
         // bFlushCharBuffer was not resetted here
         // why not?
         sal_Bool bSave = bFlushCharBuffer;
         FlushInBuffer();
         bFlushCharBuffer = bSave;
+    }
 
-        // maybe show Tip-Help
-        String sWord;
-        if( bNormalChar && pACfg && pACorr &&
-            ( pACfg->IsAutoTextTip() ||
-              pACorr->GetSwFlags().bAutoCompleteWords ) &&
-            rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
+    // maintain AutoComplete tree
+    if( bAutoCompleteEnabled )
+    {
+        // avoid unnecessary calls to GetPrevAutoCorrWord
+        if( (bInsertBufferedChars && bNormalChar) || eAutoCompleteAction == ACA_Refresh )
         {
-            ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
+            bGotWord = rSh.GetPrevAutoCorrWord( *pACorr, sPrefix );
         }
+
+        SwAutoCompleteWord& rACList = rSh.GetAutoCompleteWords();
+
+        switch( eAutoCompleteAction )
+        {
+            case ACA_NoOp:
+                // do nothing
+            break;
+
+            case ACA_ReturnToRoot:
+                rACList.returnToRoot();
+            break;
+
+            case ACA_SingleCharInput:
+                rACList.advance( aSingleCharInput );
+            break;
+
+            case ACA_SingleBackspace:
+                rACList.goBack();
+            break;
+
+            case ACA_Refresh:
+            {
+                if( sPrefix.Len() > 0 )
+                    rACList.gotoNode( sPrefix );
+                else
+                    rACList.returnToRoot();
+            }
+            break;
+        }
+    }
+
+    if( bInsertBufferedChars && bNormalChar && bAutoCompleteEnabled && bGotWord )
+    {
+        ShowAutoTextCorrectQuickHelp( sPrefix, pACfg, pACorr );
     }
 
     // get the word count dialog to update itself
     SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
-    if (pWrdCnt)
+    if( pWrdCnt )
         pWrdCnt->UpdateCounts();
 
 }
@@ -2646,6 +2751,18 @@ void SwEditWin::RstMBDownFlags()
     bMBPressed = bNoInterrupt = sal_False;
     EnterArea();
     ReleaseMouse();
+}
+
+/**
+ * Determines if the current position has a clickable url over a background
+ * frame. In that case, ctrl-click should select the url, not the frame.
+ */
+bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
+{
+    SwContentAtPos aSwContentAtPos(SwContentAtPos::SW_INETATTR);
+    SdrObject* pSelectableObj = rSh.GetObjAt(rDocPos);
+
+    return rSh.GetContentAtPos(rDocPos, aSwContentAtPos) && pSelectableObj->GetLayer() == rSh.GetDoc()->GetHellId();
 }
 
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
@@ -2687,26 +2804,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    FrameControlType eControl;
-    bool bIsInHF = IsInHeaderFooter( aDocPos, eControl );
-    if ( !m_sTmpHFPageStyle.isEmpty( ) )
-    {
-        // Are we clicking outside the temporary header/footer? if so remove it
-        rtl::OUString sStyleName = rSh.GetCurPageStyle( false );
-        bool bMatchesTmpHF = sStyleName == m_sTmpHFPageStyle &&
-                        ( ( m_bTmpHFIsHeader && eControl == Header ) ||
-                          ( !m_bTmpHFIsHeader && eControl == Footer ) );
-
-        if ( ( !bIsInHF && rSh.IsHeaderFooterEdit( ) ) || !bMatchesTmpHF )
-            rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
-
-        m_sTmpHFPageStyle = rtl::OUString( );
-    }
-
     // Are we clicking on a blank header/footer area?
-    if ( bIsInHF && !rSh.IsHeaderFooterEdit( ) )
+    FrameControlType eControl;
+    if ( IsInHeaderFooter( aDocPos, eControl ) )
     {
-        // Create empty header/footer under the cursor and switch to it
         const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( aDocPos );
 
         // Is it active?
@@ -2727,10 +2828,25 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
         if ( !bActive )
         {
-            const String& rStyleName = pPageFrm->GetPageDesc()->GetName();
-            rSh.ChangeHeaderOrFooter( rStyleName, eControl == Header, true, false );
-            m_sTmpHFPageStyle = rStyleName;
-            m_bTmpHFIsHeader = eControl == Header;
+            SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
+            bool bWasInHeader = aPam.GetPoint( )->nNode.GetNode( ).FindHeaderStartNode( ) != NULL;
+            bool bWasInFooter = aPam.GetPoint( )->nNode.GetNode( ).FindFooterStartNode( ) != NULL;
+
+            // Is the cursor in a part like similar to the one we clicked on? For example,
+            // if the cursor is in a header and we click on an empty header... don't change anything to
+            // keep consistent behaviour due to header edit mode (and the same for the footer as well).
+            //
+            // Otherwise, we hide the header/footer control if a separator is shown, and vice versa.
+            if ( !( bWasInHeader && eControl == Header ) &&
+                 !( bWasInFooter && eControl == Footer ) )
+            {
+                rSh.SetShowHeaderFooterSeparator( eControl, !rSh.IsShowHeaderFooterSeparator( eControl ) );
+            }
+
+            // Repaint everything
+            Invalidate();
+
+            return;
         }
     }
 
@@ -3269,7 +3385,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case KEY_MOD1:
                     if ( !bExecDrawTextLink )
                     {
-                        if ( !bInsDraw && IsDrawObjSelectable( rSh, aDocPos ) )
+                        if ( !bInsDraw && IsDrawObjSelectable( rSh, aDocPos ) && !lcl_urlOverBackground( rSh, aDocPos ) )
                         {
                             rView.NoRotate();
                             rSh.HideCrsr();
@@ -3445,7 +3561,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     {   // only temporary generate Move-Kontext because otherwise
                         // the query to the content form doesn't work!!!
-                        MV_KONTEXT( &rSh );
+                        SwMvContext aMvContext( &rSh );
                         nTmpSetCrsr = rSh.SetCursor(&aDocPos, bOnlyText);
                         bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
                         bCallBase = sal_False;
@@ -3465,11 +3581,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     const int nSelType = rSh.GetSelectionType();
                     // Check in general, if an object is selectable at given position.
                     // Thus, also text fly frames in background become selectable via Ctrl-Click.
-                    if ( nSelType & nsSelectionType::SEL_OLE ||
+                    if ( ( nSelType & nsSelectionType::SEL_OLE ||
                          nSelType & nsSelectionType::SEL_GRF ||
-                         rSh.IsObjSelectable( aDocPos ) )
+                         rSh.IsObjSelectable( aDocPos ) ) && !lcl_urlOverBackground( rSh, aDocPos ) )
                     {
-                        MV_KONTEXT( &rSh );
+                        SwMvContext aMvContext( &rSh );
                         if( !rSh.IsFrmSelected() )
                             rSh.GotoNextFly();
                         rSh.EnterSelFrmMode();
@@ -4220,7 +4336,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     bNoInterrupt = sal_False;
                     {   // create only temporary move context because otherwise
                         // the query to the content form doesn't work!!!
-                        MV_KONTEXT( &rSh );
+                        SwMvContext aMvContext( &rSh );
                         const Point aDocPos( PixelToLogic( aStartPos ) );
                         bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
                     }
@@ -4628,9 +4744,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     bObjectSelect( sal_False ),
     nKS_NUMDOWN_Count(0),
     nKS_NUMINDENTINC_Count(0),
-    m_aFrameControlsManager( this ),
-    m_sTmpHFPageStyle( ),
-    m_bTmpHFIsHeader( false )
+    m_aFrameControlsManager( this )
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
@@ -4811,23 +4925,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             Point aDocPos( PixelToLogic( rCEvt.GetMousePosPixel() ) );
             if ( !rCEvt.IsMouseEvent() )
                 aDocPos = rSh.GetCharRect().Center();
-
-            // Triggering a command remove temporary header/footer status
-            FrameControlType eControl;
-            bool bIsInHF = IsInHeaderFooter( aDocPos, eControl );
-            if ( !m_sTmpHFPageStyle.isEmpty( ) )
-            {
-                const rtl::OUString sStyleName = rSh.GetCurPageStyle( false );
-                bool bMatchesTmpHF = sStyleName == m_sTmpHFPageStyle &&
-                                ( ( m_bTmpHFIsHeader && eControl == Header ) ||
-                                  ( !m_bTmpHFIsHeader && eControl == Footer ) );
-
-                // Are we clicking outside the temporary header/footer? if so remove it
-                if ( ( !bIsInHF && rSh.IsHeaderFooterEdit( ) ) || !bMatchesTmpHF )
-                    rSh.ChangeHeaderOrFooter( m_sTmpHFPageStyle, m_bTmpHFIsHeader, false, false );
-
-                m_sTmpHFPageStyle = rtl::OUString( );
-            }
 
             if (rCEvt.IsMouseEvent() && lcl_CheckHeaderFooterClick( rSh, aDocPos, 1 ) )
                 return;
@@ -5088,10 +5185,13 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
                     SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
                     if( pACorr &&
+                        // If autocompletion required...
                         ( rACfg.IsAutoTextTip() ||
                           pACorr->GetSwFlags().bAutoCompleteWords ) &&
+                        // ... and extraction of last word from text input was successful...
                         rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
                     {
+                        // ... request for auto completion help to be shown.
                         ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, sal_True);
                     }
                 }
@@ -5431,7 +5531,7 @@ sal_Bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     {
         {   // create only temporary move context because otherwise
             // the query against the content form doesn't work!!!
-            MV_KONTEXT( &rSh );
+            SwMvContext aMvContext( &rSh );
             rSh.SetCursor(&aDocPos, false);
             bRet = sal_True;
         }
@@ -5442,7 +5542,7 @@ sal_Bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         if( nSelType == nsSelectionType::SEL_OLE ||
             nSelType == nsSelectionType::SEL_GRF )
         {
-            MV_KONTEXT( &rSh );
+            SwMvContext aMvContext( &rSh );
             if( !rSh.IsFrmSelected() )
                 rSh.GotoNextFly();
             rSh.EnterSelFrmMode();
@@ -5613,7 +5713,7 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
     ClearCntnt();
 }
 
-void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
+void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord, sal_Bool bIgnoreCurrentPos )
 {
     enum Capitalization { CASE_LOWER, CASE_UPPER, CASE_SENTENCE, CASE_OTHER };
 
@@ -5680,7 +5780,8 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
     // Add matching words from AutoCompleteWord list
     const SwAutoCompleteWord& rACList = rSh.GetAutoCompleteWords();
     std::vector<String> strings;
-    if ( rACList.GetWordsMatching( rWord, strings ) )
+
+    if ( rACList.GetWordsMatching( rWord, strings, bIgnoreCurrentPos ) )
     {
         for (unsigned int i= 0; i<strings.size(); i++)
         {
@@ -5757,7 +5858,8 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
                     !pACorr ||
                     pACorr->GetSwFlags().bAutoCmpltShowAsTip;
 
-        pQuickHlpData->FillStrArr( rSh, rWord );
+        // Get the neccessary data to show help text.
+        pQuickHlpData->FillStrArr( rSh, rWord, bFromIME );
     }
 
 
@@ -5765,19 +5867,6 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
     {
         pQuickHlpData->SortAndFilter();
         pQuickHlpData->Start( rSh, rWord.Len() );
-    }
-}
-
-void SwEditWin::ShowHeaderFooterSeparator( bool bShowHeader, bool bShowFooter )
-{
-    SwWrtShell& rSh = rView.GetWrtShell();
-
-    if ( ( rSh.IsShowHeaderFooterSeparator( Header ) != bShowHeader ) ||
-         ( rSh.IsShowHeaderFooterSeparator( Footer ) != bShowFooter ) )
-    {
-        rSh.SetShowHeaderFooterSeparator( Header, bShowHeader );
-        rSh.SetShowHeaderFooterSeparator( Footer, bShowFooter );
-        Invalidate();
     }
 }
 

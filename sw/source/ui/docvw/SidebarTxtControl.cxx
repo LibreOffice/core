@@ -72,7 +72,6 @@ SidebarTxtControl::SidebarTxtControl( SwSidebarWin& rSidebarWin,
     , mrSidebarWin( rSidebarWin )
     , mrDocView( rDocView )
     , mrPostItMgr( rPostItMgr )
-    , mbMouseOver( false )
 {
     AddEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
 }

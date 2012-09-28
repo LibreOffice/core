@@ -57,7 +57,6 @@ private:
 
     HeaderFooterSettings    maSlideSettings;
     HeaderFooterSettings    maNotesHandoutSettings;
-    bool                    mbNotOnTitle;
 
     SdDrawDocument*         mpDoc;
     SdPage*                 mpCurrentPage;

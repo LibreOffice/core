@@ -367,7 +367,7 @@ public:
                                                                 const ScRangeList& rList, const ScAddress& rPos, int nId ) = 0; //add for ScCondFormatDlg
 
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
-                                                                const ScRangeList& rList, const ScAddress& rPos, int nId ) = 0;
+                                                                const ScAddress& rPos, int nId ) = 0;
 
     virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent, ScDocument* pDoc, int nId ) = 0; //add for ScDataBarSettingsDlg
 

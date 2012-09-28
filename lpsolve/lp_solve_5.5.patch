@@ -133,9 +133,9 @@
 +fi
 +
 +rm *.o 2>/dev/null
---- misc/build/lp_solve_5.5/lpsolve55/ccc.ios.orig	Sun May 22 11:19:48 2011
-+++ misc/build/lp_solve_5.5/lpsolve55/ccc.ios	Sun May 22 11:19:48 2011
-@@ -1 +1,11 @@
+--- misc/build/lp_solve_5.5/lpsolve55/ccc.static
++++ misc/build/lp_solve_5.5/lpsolve55/ccc.static
+@@ -1,1 +1,11 @@
 -dummy
 +src='../lp_MDO.c ../shared/commonlib.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../colamd/colamd.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
 +obj=`echo $src|sed -e 's/\.c/.o/g' -e 's!\([^ ]*/\)*!!g'`

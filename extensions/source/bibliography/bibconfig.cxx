@@ -33,12 +33,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdb;
 
 using ::rtl::OUString;
 
@@ -343,17 +345,9 @@ const Sequence<OUString>& DBChangeDialogConfig_Impl::GetDataSourceNames()
 {
     if(!aSourceNames.getLength())
     {
-        Reference<XNameAccess> xDBContext;
-        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        if( xMgr.is() )
-        {
-            Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
-            xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-        }
-        if(xDBContext.is())
-        {
-            aSourceNames = xDBContext->getElementNames();
-        }
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
+        aSourceNames = xDBContext->getElementNames();
     }
     return aSourceNames;
 }

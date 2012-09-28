@@ -106,13 +106,13 @@ class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrmFmt.
 
 protected:
     SwTableLines aLines;
-    SwTableSortBoxes aSortCntBoxes;
+    SwTableSortBoxes m_TabSortContentBoxes;
     SwServerObjectRef refObj;   // In case DataServer -> pointer is set.
 
     SwHTMLTableLayout *pHTMLLayout;
 
     // Usually, the table node of a SwTable can be accessed by getting a box
-    // out of aSortCntBoxes, which know their SwStartNode. But in some rare
+    // out of m_TabSortContentBoxes, which know their SwStartNode. But in some rare
     // cases, we need to know the table node of a SwTable, before the table
     // boxes have been build (SwTableNode::MakeCopy with tables in tables).
     SwTableNode* pTableNode;
@@ -263,8 +263,8 @@ public:
         { _FindSuperfluousRows( rBoxes, 0, 0 ); }
     void CheckRowSpan( SwTableLine* &rpLine, bool bUp ) const;
 
-          SwTableSortBoxes& GetTabSortBoxes()       { return aSortCntBoxes; }
-    const SwTableSortBoxes& GetTabSortBoxes() const { return aSortCntBoxes; }
+          SwTableSortBoxes& GetTabSortBoxes()       { return m_TabSortContentBoxes; }
+    const SwTableSortBoxes& GetTabSortBoxes() const { return m_TabSortContentBoxes; }
 
     // Read 1st number and delete it from string (used by GetTblBox and SwTblFld).
 
@@ -321,7 +321,7 @@ public:
     // Clean up structure a bit.
     void GCLines();
 
-    // Returns the table node via aSortCntBoxes or pTableNode.
+    // Returns the table node via m_TabSortContentBoxes or pTableNode.
     SwTableNode* GetTableNode() const;
     void SetTableNode( SwTableNode* pNode ) { pTableNode = pNode; }
 
@@ -431,6 +431,7 @@ public:
     SwFrmFmt* ClaimFrmFmt();
     void ChgFrmFmt( SwTableBoxFmt *pNewFmt );
 
+    void RemoveFromTable();
     const SwStartNode *GetSttNd() const { return pSttNd; }
     sal_uLong GetSttIdx() const;
 

@@ -426,45 +426,6 @@ sub create_feature_table
             }
         }
 
-        # Sorting names of language packs and dictionaries
-        my @tempfeaturetable;
-        my @langlist;
-        my @langpack;
-        my @dictlist;
-        my @sorteddictlist;
-        my @sortedlanglist;
-
-        foreach (@featuretable) {
-            if (/^gm_r_Extension_Dictionary_/) {
-                push (@dictlist, $_);
-            }
-            elsif (/^gm_Langpack_r_/) {
-                push (@langlist, $_);
-            }
-            elsif (/\tgm_Langpack_r_/) {
-                push (@langpack, $_);
-            }
-            else {
-                push (@tempfeaturetable, $_);
-            }
-        }
-
-        @sorteddictlist = sort { (split(/\t/, $a))[2] cmp (split(/\t/, $b))[2] } @dictlist;
-        @sortedlanglist = sort { (split(/\t/, $a))[2] cmp (split(/\t/, $b))[2] } @langlist;
-
-        @featuretable = (@tempfeaturetable, @sorteddictlist);
-
-        foreach (@sortedlanglist) {
-            my $sortedlanglistline = $_;
-            push (@featuretable, $sortedlanglistline);
-            foreach (@langpack) {
-                my $langpackline = $_;
-                if ( (split(/\t/, $langpackline))[1] eq (split(/\t/, $sortedlanglistline))[0] ) {
-                    push (@featuretable, $langpackline);
-                }
-            }
-        }
-
         # Saving the file
 
         my $featuretablename = $basedir . $installer::globals::separator . "Feature.idt" . "." . $onelanguage;

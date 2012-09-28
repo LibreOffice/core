@@ -100,7 +100,6 @@ namespace dbaui
         Link                m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
         Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definately chosen
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
-        sal_Bool            m_bUserGrabFocus : 1;
         bool                m_bInitTypeList : 1;
         bool                approveDataSourceType( const ::rtl::OUString& _sURLPrefix, String& _inout_rDisplayName );
         void                insertDatasourceTypeEntryData(const ::rtl::OUString& _sType, String sDisplayName);

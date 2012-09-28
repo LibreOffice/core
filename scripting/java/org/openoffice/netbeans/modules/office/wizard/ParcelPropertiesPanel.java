@@ -34,8 +34,6 @@ import org.openide.util.NbBundle;
 
 /** A single panel descriptor for a wizard.
  * You probably want to make a wizard iterator to hold it.
- *
- * @author tomaso
  */
 public class ParcelPropertiesPanel implements WizardDescriptor.FinishPanel {
 

@@ -50,7 +50,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 
-import org.openoffice.xmerge.util.Resources;
 import org.openoffice.xmerge.util.Debug;
 
 /**
@@ -511,104 +510,105 @@ public abstract class OfficeDocument
             throw new OfficeDocumentException(ex);
         }
 
-    if (isZip)
-    {
+        if (isZip) {
             read(is);
-    }
-    else{
-        try{
-               Reader r = secondHack(is);
-               InputSource ins = new InputSource(r);
-            org.w3c.dom.Document newDoc = builder.parse(ins);
-            Element rootElement=newDoc.getDocumentElement();
+        } else {
+            try {
+                Reader r = secondHack(is);
+                InputSource ins = new InputSource(r);
+                org.w3c.dom.Document newDoc = builder.parse(ins);
+                Element rootElement = newDoc.getDocumentElement();
 
-            NodeList nodeList;
-            Node tmpNode;
-            Node rootNode = rootElement;
-                if (newDoc !=null){
-            /*content*/
-                   contentDoc = createDOM(TAG_OFFICE_DOCUMENT_CONTENT);
-                   rootElement=contentDoc.getDocumentElement();
-                   rootNode = rootElement;
+                NodeList nodeList;
+                Node tmpNode;
+                Node rootNode = rootElement;
 
-                   // FIX (HJ): Include office:font-decls in content DOM
-                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
-                   if (nodeList.getLength()>0){
-                       tmpNode = contentDoc.importNode(nodeList.item(0),true);
-                       rootNode.appendChild(tmpNode);
-                   }
+                /* content */
+                contentDoc = createDOM(TAG_OFFICE_DOCUMENT_CONTENT);
+                rootElement = contentDoc.getDocumentElement();
+                rootNode = rootElement;
 
-                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
-                   if (nodeList.getLength()>0){
-                  tmpNode = contentDoc.importNode(nodeList.item(0),true);
-                  rootNode.appendChild(tmpNode);
-                   }
-
-                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_BODY);
-                   if (nodeList.getLength()>0){
-                  tmpNode = contentDoc.importNode(nodeList.item(0),true);
-                  rootNode.appendChild(tmpNode);
-                   }
-
-           /*Styles*/
-                   styleDoc = createDOM(TAG_OFFICE_DOCUMENT_STYLES);
-                   rootElement=styleDoc.getDocumentElement();
-                   rootNode = rootElement;
-
-                   // FIX (HJ): Include office:font-decls in styles DOM
-                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
-                   if (nodeList.getLength()>0){
-                      tmpNode = styleDoc.importNode(nodeList.item(0),true);
-                      rootNode.appendChild(tmpNode);
-                   }
-
-                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_STYLES);
-                   if (nodeList.getLength()>0){
-                  tmpNode = styleDoc.importNode(nodeList.item(0),true);
-                  rootNode.appendChild(tmpNode);
-                   }
-
-                   // FIX (HJ): Include office:automatic-styles in styles DOM
-                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
-                   if (nodeList.getLength()>0){
-                      tmpNode = styleDoc.importNode(nodeList.item(0),true);
-                      rootNode.appendChild(tmpNode);
-                   }
-
-                   // FIX (HJ): Include office:master-styles in styles DOM
-                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_MASTER_STYLES);
-                   if (nodeList.getLength()>0){
-                       tmpNode = styleDoc.importNode(nodeList.item(0),true);
-                       rootNode.appendChild(tmpNode);
-                   }
-
-           /*Settings*/
-                   settingsDoc = createDOM(TAG_OFFICE_DOCUMENT_SETTINGS);
-                   rootElement=settingsDoc.getDocumentElement();
-                   rootNode = rootElement;
-                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_SETTINGS);
-                   if (nodeList.getLength()>0){
-                  tmpNode = settingsDoc.importNode(nodeList.item(0),true);
-                  rootNode.appendChild(tmpNode);
-                   }
-           /*Meta*/
-                   metaDoc = createDOM(TAG_OFFICE_DOCUMENT_META);
-                   rootElement=metaDoc.getDocumentElement();
-                   rootNode = rootElement;
-                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_META);
-                   if (nodeList.getLength()>0){
-                  tmpNode = metaDoc.importNode(nodeList.item(0),true);
-                  rootNode.appendChild(tmpNode);
-                   }
+                // FIX (HJ): Include office:font-decls in content DOM
+                nodeList = newDoc
+                        .getElementsByTagName(TAG_OFFICE_FONT_DECLS);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = contentDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
                 }
+
+                nodeList = newDoc
+                        .getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = contentDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+
+                nodeList = newDoc.getElementsByTagName(TAG_OFFICE_BODY);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = contentDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+
+                /* Styles */
+                styleDoc = createDOM(TAG_OFFICE_DOCUMENT_STYLES);
+                rootElement = styleDoc.getDocumentElement();
+                rootNode = rootElement;
+
+                // FIX (HJ): Include office:font-decls in styles DOM
+                nodeList = newDoc
+                        .getElementsByTagName(TAG_OFFICE_FONT_DECLS);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = styleDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+
+                nodeList = newDoc.getElementsByTagName(TAG_OFFICE_STYLES);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = styleDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+
+                // FIX (HJ): Include office:automatic-styles in styles DOM
+                nodeList = newDoc
+                        .getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = styleDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+
+                // FIX (HJ): Include office:master-styles in styles DOM
+                nodeList = newDoc
+                        .getElementsByTagName(TAG_OFFICE_MASTER_STYLES);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = styleDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+
+                /* Settings */
+                settingsDoc = createDOM(TAG_OFFICE_DOCUMENT_SETTINGS);
+                rootElement = settingsDoc.getDocumentElement();
+                rootNode = rootElement;
+                nodeList = newDoc.getElementsByTagName(TAG_OFFICE_SETTINGS);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = settingsDoc
+                            .importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+                /* Meta */
+                metaDoc = createDOM(TAG_OFFICE_DOCUMENT_META);
+                rootElement = metaDoc.getDocumentElement();
+                rootNode = rootElement;
+                nodeList = newDoc.getElementsByTagName(TAG_OFFICE_META);
+                if (nodeList.getLength() > 0) {
+                    tmpNode = metaDoc.importNode(nodeList.item(0), true);
+                    rootNode.appendChild(tmpNode);
+                }
+            } catch (SAXException ex) {
+                throw new OfficeDocumentException(ex);
+            }
         }
-        catch (SAXException ex) {
-        throw new OfficeDocumentException(ex);
-        }
-    }
 
     }
-
 
 
     /**

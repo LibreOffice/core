@@ -40,7 +40,7 @@
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
 #include <toolkit/unohlp.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
@@ -94,7 +94,7 @@ Reference< XURLTransformer > StatusbarController::getURLTransformer() const
     SolarMutexGuard aSolarMutexGuard;
     if ( !m_xURLTransformer.is() && m_xServiceManager.is() )
     {
-        m_xURLTransformer = com::sun::star::util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() );
+        m_xURLTransformer = com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) );
     }
 
     return m_xURLTransformer;

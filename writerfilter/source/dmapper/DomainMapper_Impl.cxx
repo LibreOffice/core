@@ -22,29 +22,21 @@
 #include <DomainMapperTableHandler.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#include <com/sun/star/text/UserDataPart.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
@@ -55,25 +47,13 @@
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XRedline.hpp>
-#include <com/sun/star/text/XTextAppendAndConvert.hpp>
-#include <com/sun/star/text/XTextCopy.hpp>
-#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/string.h>
-#include <rtl/oustringostreaminserter.hxx>
-#include "FieldTypes.hxx"
 #include <oox/mathml/import.hxx>
 
-#include <tools/string.hxx>
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/util.hxx>
@@ -201,7 +181,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstParaInSection( true ),
         m_bIsLastParaInSection( false ),
         m_bParaSectpr( false ),
-        m_bUsingEnhancedFields( false )
+        m_bUsingEnhancedFields( false ),
+        m_bSdt(false)
 {
     appendTableManager( );
     GetBodyText();
@@ -323,6 +304,16 @@ void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 bool DomainMapper_Impl::GetParaSectpr()
 {
     return m_bParaSectpr;
+}
+
+void DomainMapper_Impl::SetSdt(bool bSdt)
+{
+    m_bSdt = bSdt;
+}
+
+bool DomainMapper_Impl::GetSdt()
+{
+    return m_bSdt;
 }
 
 bool DomainMapper_Impl::GetParaChanged()
@@ -1598,6 +1589,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         }
 
         appendTableManager( );
+        appendTableHandler( );
         getTableManager().startLevel();
     }
     catch ( const uno::Exception& e )
@@ -3663,6 +3655,14 @@ void DomainMapper_Impl::ApplySettingsTable()
                 uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_xTextDocument, uno::UNO_QUERY);
                 xViewDataSupplier->setViewData(xIndexAccess);
             }
+
+            uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+            if (m_pSettingsTable->GetUsePrinterMetrics())
+                xSettings->setPropertyValue("PrinterIndependentLayout", uno::makeAny(document::PrinterIndependentLayout::DISABLED));
+            if( m_pSettingsTable->GetEmbedTrueTypeFonts())
+                xSettings->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBED_FONTS ), uno::makeAny(true) );
+            if( m_pSettingsTable->GetEmbedSystemFonts())
+                xSettings->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
         }
         catch(const uno::Exception&)
         {
@@ -3670,9 +3670,9 @@ void DomainMapper_Impl::ApplySettingsTable()
     }
 }
 
-uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharStyle()
+uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRules(sal_Int32* pListLevel)
 {
-    uno::Reference<beans::XPropertySet> xRet;
+    uno::Reference<container::XIndexAccess> xRet;
     try
     {
         OUString aStyle = GetCurrentParaStyleId();
@@ -3683,18 +3683,35 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
             return xRet;
         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
         sal_Int32 nListId = pStyleSheetProperties->GetListId();
-        sal_Int32 nListLevel = pStyleSheetProperties->GetListLevel();
-        if (nListId < 0 || nListLevel < 0)
+        if (nListId < 0)
             return xRet;
+        if (pListLevel)
+            *pListLevel = pStyleSheetProperties->GetListLevel();
 
-        // So we are in a paragraph style and it has numbering. Look up the relevant character style.
+        // So we are in a paragraph style and it has numbering. Look up the relevant numbering rules.
         OUString aListName = ListDef::GetStyleName(nListId);
         uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY);
         uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xNumberingStyles;
         xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
         uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xLevels(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        xRet.set(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    }
+    catch( const uno::Exception& )
+    {
+    }
+    return xRet;
+}
+
+uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharStyle()
+{
+    uno::Reference<beans::XPropertySet> xRet;
+    try
+    {
+        sal_Int32 nListLevel = -1;
+        uno::Reference<container::XIndexAccess> xLevels = GetCurrentNumberingRules(&nListLevel);
+        if (!xLevels.is())
+            return xRet;
         uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(nListLevel) >>= aProps;
         for (int i = 0; i < aProps.getLength(); ++i)
@@ -3706,6 +3723,8 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
                 OUString aCharStyle;
                 rProp.Value >>= aCharStyle;
                 uno::Reference<container::XNameAccess> xCharacterStyles;
+                uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY);
+                uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
                 xStyleFamilies->getByName("CharacterStyles") >>= xCharacterStyles;
                 xRet.set(xCharacterStyles->getByName(aCharStyle), uno::UNO_QUERY_THROW);
                 break;

@@ -1,29 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+/*
+ * This file is part of the LibreOffice project.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * This file incorporates work covered by the following license notice:
  *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef __com_sun_star_awt_grid_XMutableGridDataModel_idl__
 #define __com_sun_star_awt_grid_XMutableGridDataModel_idl__
@@ -38,9 +30,9 @@ module com { module sun { module star { module awt { module grid {
 
 /** allows to modify the data represented by a <type>XGridDataModel</type>
  */
-interface XMutableGridDataModel : XGridDataModel
+published interface XMutableGridDataModel : XGridDataModel
 {
-    /** adds a row to the model.
+    /** appends a row to the model.
 
         @param Heading
             denotes the heading of the row.
@@ -49,7 +41,7 @@ interface XMutableGridDataModel : XGridDataModel
     */
     void addRow( [in] any Heading, [in] sequence< any > Data );
 
-    /** adds multiple rows of data to the model.
+    /** appends multiple rows of data to the model.
         @param Headings
             denotes the headings of the to-be-added rows.
         @param Data
@@ -59,6 +51,38 @@ interface XMutableGridDataModel : XGridDataModel
     */
     void addRows( [in] sequence< any > Headings, [in] sequence< sequence< any > > Data )
         raises ( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** inserts a row into the set of data rows
+
+        @param Index
+            denotes the position at which the row is to be inserted
+        @param Heading
+            denotes the heading of the row.
+        @param Data
+            specifies the content of the row.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Index</code> is smaller than <code>0</code> or greater than the number of
+            rows in the model.
+    */
+    void insertRow( [in] long Index, [in] any Heading, [in] sequence< any > Data )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** inserts multiple rows of data into the model.
+        @param Index
+            denotes the position at which the rows are to be inserted
+        @param Headings
+            denotes the headings of the to-be-added rows.
+        @param Data
+            specifies the data of the rows to be added.
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <code>Titles</code> and <code>Data</code> are of different length.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <code>Index</code> is smaller than <code>0</code> or greater than the number of
+            rows in the model.
+    */
+    void insertRows( [in] long Index, [in] sequence< any > Headings, [in] sequence< sequence< any > > Data )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException
+               , ::com::sun::star::lang::IllegalArgumentException );
 
     /** removes a row of data from the model
 

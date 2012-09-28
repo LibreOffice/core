@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _PLAYER_HXX
 #define _PLAYER_HXX
@@ -32,6 +23,9 @@
 #include "wincommon.hxx"
 
 #include "com/sun/star/media/XPlayer.hpp"
+
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 struct IGraphBuilder;
 struct IBaseFilter;
@@ -52,15 +46,18 @@ namespace avmedia { namespace win {
 // - Player -
 // ----------
 
-class Player : public ::cppu::WeakImplHelper2< ::com::sun::star::media::XPlayer,
-                                               ::com::sun::star::lang::XServiceInfo >
+typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
+                                          ::com::sun::star::lang::XServiceInfo > Player_BASE;
+
+class Player : public cppu::BaseMutex,
+               public Player_BASE
 {
 public:
 
                         Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
                         ~Player();
 
-    bool                create( const ::rtl::OUString& rURL );
+    bool                create( const OUString& rURL );
 
     void                setNotifyWnd( int nNotifyWnd );
     void                setDDrawParams( IDirectDraw* pDDraw, IDirectDrawSurface* pDDrawSurface );
@@ -87,15 +84,18 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XFrameGrabber > SAL_CALL createFrameGrabber(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::cppu::OComponentHelper
+    virtual void SAL_CALL disposing(void);
 
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
-    ::rtl::OUString         maURL;
+    OUString                maURL;
     IGraphBuilder*          mpGB;
     IBaseFilter*            mpOMF;
     IMediaControl*          mpMC;
@@ -107,8 +107,10 @@ private:
     IVideoWindow*           mpVW;
     IDDrawExclModeVideo*    mpEV;
     long                    mnUnmutedVolume;
-    sal_Bool                mbMuted;
-    sal_Bool                mbLooping;
+    int                     mnFrameWnd;
+    bool                    mbMuted;
+    bool                    mbLooping;
+    bool                    mbAddWindow;
 
     void                    ImplLayoutVideoWindow();
 };

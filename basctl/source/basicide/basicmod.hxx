@@ -18,23 +18,27 @@
  */
 
 
-#ifndef BASICMOD_HXX
-#define BASICMOD_HXX
+#ifndef BASCTL_BASICMOD_HXX
+#define BASCTL_BASICMOD_HXX
 
 #include <sfx2/module.hxx>
 #include <tools/shl.hxx>
 
-class BasicIDEModule : public SfxModule
+namespace basctl
+{
+
+class Module : public SfxModule
 {
 public:
-    BasicIDEModule( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
-       SfxModule( pMgr, false, pObjFact, NULL )
-       {}
+    Module ( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
+        SfxModule( pMgr, false, pObjFact, NULL )
+    { }
+public:
+    static Module*& Get () { return *reinterpret_cast<Module**>(GetAppData(SHL_IDE)); }
 };
 
+} // namespace basctl
 
-#define BASIC_MOD() ( *(BasicIDEModule**) GetAppData(SHL_IDE) )
-
-#endif
+#endif // BASCTL_BASICMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

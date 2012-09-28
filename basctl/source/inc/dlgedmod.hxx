@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef _BASCTL_DLGEDMOD_HXX
-#define _BASCTL_DLGEDMOD_HXX
+#ifndef BASCTL_DLGEDMOD_HXX
+#define BASCTL_DLGEDMOD_HXX
 
 #include <svx/svdmodel.hxx>
+
+namespace basctl
+{
 
 //============================================================================
 // DlgEdModel
@@ -48,6 +50,8 @@ public:
     virtual Window* GetCurDocViewWin();
 };
 
-#endif
+} // namespace basctl
+
+#endif // BASCTL_DLGEDMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

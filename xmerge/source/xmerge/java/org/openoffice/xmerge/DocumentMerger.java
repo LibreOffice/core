@@ -43,7 +43,6 @@ package org.openoffice.xmerge;
  *  &quot;Original Office&quot; <code>Document</code> object is
  *  passed in to be used as input.</p>
  *
- *  @author  Herbie Ong
  *  @see     org.openoffice.xmerge.PluginFactory
  *  @see     org.openoffice.xmerge.DocumentMergerFactory
  *  @see     org.openoffice.xmerge.ConverterCapabilities

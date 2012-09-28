@@ -33,10 +33,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.sun.star.comp.Calc.NLPSolver.dialogs.BaseDialog;
 
-/**
- *
- * @author Andreas Schneider <Andreas.Schneider@Sun.COM>
- */
 public class ProgressBar extends BaseControl {
 
     private String m_name;

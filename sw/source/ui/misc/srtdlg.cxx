@@ -43,7 +43,7 @@
 #include <cmdid.h>
 #include <wrtsh.hxx>
 #include <misc.hrc>
-#include <srtdlg.hrc>
+#include <app.hrc>
 #include <swtable.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>
@@ -115,187 +115,172 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 /*--------------------------------------------------------------------
      Description: init list
  --------------------------------------------------------------------*/
-SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
-
-    SvxStandardDialog(pParent, SW_RES(DLG_SORTING)),
-
-    aColLbl(this,       SW_RES(FT_COL   )),
-    aTypLbl(this,       SW_RES(FT_KEYTYP)),
-    aDirLbl(this,       SW_RES(FT_DIR   )),
-    aSortFL(this,      SW_RES(FL_SORT_2  )),
-
-
-    aKeyCB1(this,       SW_RES(CB_KEY1  )),
-    aColEdt1(this,      SW_RES(ED_KEY1  )),
-    aTypDLB1(this,      SW_RES(DLB_KEY1 )),
-    aSortUpRB(this,     SW_RES(RB_UP    )),
-    aSortDnRB(this,     SW_RES(RB_DN    )),
-
-    aKeyCB2(this,       SW_RES(CB_KEY2  )),
-    aColEdt2(this,      SW_RES(ED_KEY2  )),
-    aTypDLB2(this,      SW_RES(DLB_KEY2 )),
-    aSortUp2RB(this,    SW_RES(RB_UP2    )),
-    aSortDn2RB(this,    SW_RES(RB_DN2    )),
-
-    aKeyCB3(this,       SW_RES(CB_KEY3  )),
-    aColEdt3(this,      SW_RES(ED_KEY3  )),
-    aTypDLB3(this,      SW_RES(DLB_KEY3 )),
-    aSortUp3RB(this,    SW_RES(RB_UP3    )),
-    aSortDn3RB(this,    SW_RES(RB_DN3    )),
-    aDirFL(this,       SW_RES(FL_DIR   )),
-
-    aColumnRB(this,     SW_RES(RB_COL   )),
-    aRowRB(this,        SW_RES(RB_ROW   )),
-
-    aDelimFL(this,     SW_RES(FL_DELIM )),
-    aDelimTabRB(this,   SW_RES(RB_TAB   )),
-    aDelimFreeRB(this,  SW_RES(RB_TABCH )),
-    aDelimEdt(this,     SW_RES(ED_TABCH )),
-    aDelimPB(this,      SW_RES( PB_DELIM)),
-
-    aLangFL(this,       SW_RES( FL_LANG )),
-    aLangLB(this,       SW_RES( LB_LANG )),
-
-    aSortOptFL(this,    SW_RES( FL_SORT )),
-    aCaseCB(this,       SW_RES( CB_CASE )),
-
-    aOkBtn(this,        SW_RES(BT_OK    )),
-    aCancelBtn(this,    SW_RES(BT_CANCEL)),
-    aHelpBtn(this,      SW_RES(BT_HELP  )),
-
-    aColTxt(            SW_RES(STR_COL)),
-    aRowTxt(            SW_RES(STR_ROW)),
-    aNumericTxt(        SW_RES(STR_NUMERIC)),
-    rSh(rShell),
-    pColRes( 0 ),
-    nX( 99 ),
-    nY( 99 )
+SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
+    : SvxStandardDialog(pParent, "SortDialog", "modules/swriter/ui/sortdialog.ui")
+    , aColTxt(SW_RES(STR_COL))
+    , aRowTxt(SW_RES(STR_ROW))
+    , aNumericTxt(SW_RES(STR_NUMERIC))
+    , rSh(rShell)
+    , pColRes(0)
+    , nX(99)
+    , nY(99)
 {
-    aColEdt1.SetAccessibleName(aColLbl.GetText());
-    aColEdt2.SetAccessibleName(aColLbl.GetText());
-    aColEdt3.SetAccessibleName(aColLbl.GetText());
-    aTypDLB1.SetAccessibleName(aTypLbl.GetText());
-    aTypDLB2.SetAccessibleName(aTypLbl.GetText());
-    aTypDLB3.SetAccessibleName(aTypLbl.GetText());
-    aSortUpRB.SetAccessibleRelationMemberOf( &aKeyCB1 );
-    aSortDnRB.SetAccessibleRelationMemberOf( &aKeyCB1 );
-    aSortUp2RB.SetAccessibleRelationMemberOf( &aKeyCB2 );
-    aSortDn2RB.SetAccessibleRelationMemberOf( &aKeyCB2 );
-    aSortUp3RB.SetAccessibleRelationMemberOf( &aKeyCB3 );
-    aSortDn3RB.SetAccessibleRelationMemberOf( &aKeyCB3 );
+    get(m_pColLbl, "column");
+    get(m_pTypLbl, "keytype");
 
-    aDelimEdt.SetMaxTextLen( 1 );
+    get(m_pKeyCB1, "key1");
+    get(m_pColEdt1, "colsb1");
+    get(m_pTypDLB1, "typelb1");
+    get(m_pSortUp1RB, "up1");
+    get(m_pSortDn1RB, "down1");
+
+    get(m_pKeyCB2, "key2");
+    get(m_pColEdt2, "colsb2");
+    get(m_pTypDLB2, "typelb2");
+    get(m_pSortUp2RB, "up2");
+    get(m_pSortDn2RB, "down2");
+
+    get(m_pKeyCB3, "key3");
+    get(m_pColEdt3, "colsb3");
+    get(m_pTypDLB3, "typelb3");
+    get(m_pSortUp3RB, "up3");
+    get(m_pSortDn3RB, "down3");
+
+    get(m_pColumnRB, "columns");
+    get(m_pRowRB, "rows");
+
+    get(m_pDelimTabRB, "tabs");
+    get(m_pDelimFreeRB, "character");
+    get(m_pDelimEdt, "separator");
+    get(m_pDelimPB, "delimpb");
+
+    get(m_pLangLB, "langlb");
+    get(m_pCaseCB, "matchcase");
+
+    m_pColEdt1->SetAccessibleName(m_pColLbl->GetText());
+    m_pColEdt2->SetAccessibleName(m_pColLbl->GetText());
+    m_pColEdt3->SetAccessibleName(m_pColLbl->GetText());
+    m_pTypDLB1->SetAccessibleName(m_pTypLbl->GetText());
+    m_pTypDLB2->SetAccessibleName(m_pTypLbl->GetText());
+    m_pTypDLB3->SetAccessibleName(m_pTypLbl->GetText());
+    m_pSortUp1RB->SetAccessibleRelationMemberOf(m_pKeyCB1);
+    m_pSortDn1RB->SetAccessibleRelationMemberOf(m_pKeyCB1);
+    m_pSortUp2RB->SetAccessibleRelationMemberOf(m_pKeyCB2);
+    m_pSortDn2RB->SetAccessibleRelationMemberOf(m_pKeyCB2);
+    m_pSortUp3RB->SetAccessibleRelationMemberOf(m_pKeyCB3);
+    m_pSortDn3RB->SetAccessibleRelationMemberOf(m_pKeyCB3);
+
+    m_pDelimEdt->SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &
             (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
     {
-        aColumnRB.Check(bCol);
-        aColLbl.SetText(bCol ? aRowTxt : aColTxt);
-        aRowRB.Check(!bCol);
-        aDelimTabRB.Enable(sal_False);
-        aDelimFreeRB.Enable(sal_False);
-        aDelimEdt.Enable(sal_False);
+        m_pColumnRB->Check(bCol);
+        m_pColLbl->SetText(bCol ? aRowTxt : aColTxt);
+        m_pRowRB->Check(!bCol);
+        m_pDelimTabRB->Enable(sal_False);
+        m_pDelimFreeRB->Enable(sal_False);
+        m_pDelimEdt->Enable(sal_False);
     }
     else
     {
-        aColumnRB.Enable(sal_False);
-        aRowRB.Check(sal_True);
-        aColLbl.SetText(aColTxt);
+        m_pColumnRB->Enable(sal_False);
+        m_pRowRB->Check(sal_True);
+        m_pColLbl->SetText(aColTxt);
     }
 
     // initialise
     Link aLk = LINK(this,SwSortDlg, CheckHdl);
-    aKeyCB1.SetClickHdl( aLk );
-    aKeyCB2.SetClickHdl( aLk );
-    aKeyCB3.SetClickHdl( aLk );
-    aColumnRB.SetClickHdl( aLk );
-    aRowRB.SetClickHdl( aLk );
+    m_pKeyCB1->SetClickHdl( aLk );
+    m_pKeyCB2->SetClickHdl( aLk );
+    m_pKeyCB3->SetClickHdl( aLk );
+    m_pColumnRB->SetClickHdl( aLk );
+    m_pRowRB->SetClickHdl( aLk );
 
     aLk = LINK(this,SwSortDlg, DelimHdl);
-    aDelimFreeRB.SetClickHdl(aLk);
-    aDelimTabRB.SetClickHdl(aLk);
+    m_pDelimFreeRB->SetClickHdl(aLk);
+    m_pDelimTabRB->SetClickHdl(aLk);
 
-    aDelimPB.SetClickHdl( LINK( this, SwSortDlg, DelimCharHdl ));
+    m_pDelimPB->SetClickHdl( LINK( this, SwSortDlg, DelimCharHdl ));
 
-    aKeyCB1.Check(bCheck1);
-    aKeyCB2.Check(bCheck2);
-    aKeyCB3.Check(bCheck3);
+    m_pKeyCB1->Check(bCheck1);
+    m_pKeyCB2->Check(bCheck2);
+    m_pKeyCB3->Check(bCheck3);
 
-    aColEdt1.SetValue(nCol1);
-    aColEdt2.SetValue(nCol2);
-    aColEdt3.SetValue(nCol3);
+    m_pColEdt1->SetValue(nCol1);
+    m_pColEdt2->SetValue(nCol2);
+    m_pColEdt3->SetValue(nCol3);
 
     // first initialise the language, then select the
     if( LANGUAGE_NONE == nLang || LANGUAGE_DONTKNOW == nLang )
         nLang = (sal_uInt16)GetAppLanguage();
 
-    aLangLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, sal_True, sal_False);
-    aLangLB.SelectLanguage( nLang );
+    m_pLangLB->SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, sal_True, sal_False);
+    m_pLangLB->SelectLanguage( nLang );
 
     LanguageHdl( 0 );
-    aLangLB.SetSelectHdl( LINK( this, SwSortDlg, LanguageHdl ));
+    m_pLangLB->SetSelectHdl( LINK( this, SwSortDlg, LanguageHdl ));
 
-    aSortUpRB.Check(bAsc1);
-    aSortDnRB.Check(!bAsc1);
-    aSortUp2RB.Check(bAsc2);
-    aSortDn2RB.Check(!bAsc2);
-    aSortUp3RB.Check(bAsc3);
-    aSortDn3RB.Check(!bAsc3);
+    m_pSortUp1RB->Check(bAsc1);
+    m_pSortDn1RB->Check(!bAsc1);
+    m_pSortUp2RB->Check(bAsc2);
+    m_pSortDn2RB->Check(!bAsc2);
+    m_pSortUp3RB->Check(bAsc3);
+    m_pSortDn3RB->Check(!bAsc3);
 
-    aCaseCB.Check( bCsSens );
+    m_pCaseCB->Check( bCsSens );
 
-    aDelimTabRB.Check(cDeli == '\t');
-    if(!aDelimTabRB.IsChecked())
+    m_pDelimTabRB->Check(cDeli == '\t');
+    if(!m_pDelimTabRB->IsChecked())
     {
-        aDelimEdt.SetText(rtl::OUString(cDeli));
-        aDelimFreeRB.Check(sal_True);
-        DelimHdl(&aDelimFreeRB);
+        m_pDelimEdt->SetText(rtl::OUString(cDeli));
+        m_pDelimFreeRB->Check(sal_True);
+        DelimHdl(m_pDelimFreeRB);
     }
     else
-        DelimHdl(&aDelimTabRB);
+        DelimHdl(m_pDelimTabRB);
 
-    FreeResource();
     if( ::lcl_GetSelTbl( rSh, nX, nY) )
     {
-        sal_uInt16 nMax = aRowRB.IsChecked()? nY : nX;
-        aColEdt1.SetMax(nMax);
-        aColEdt2.SetMax(nMax);
-        aColEdt3.SetMax(nMax);
+        sal_uInt16 nMax = m_pRowRB->IsChecked()? nY : nX;
+        m_pColEdt1->SetMax(nMax);
+        m_pColEdt2->SetMax(nMax);
+        m_pColEdt3->SetMax(nMax);
     }
 
-    aDelimEdt.SetAccessibleRelationLabeledBy(&aDelimFreeRB);
-    aDelimPB.SetAccessibleRelationLabeledBy(&aDelimFreeRB);
-    aDelimPB.SetAccessibleRelationMemberOf(&aDelimFL);
+    m_pDelimEdt->SetAccessibleRelationLabeledBy(m_pDelimFreeRB);
+    m_pDelimPB->SetAccessibleRelationLabeledBy(m_pDelimFreeRB);
+    m_pDelimPB->SetAccessibleRelationMemberOf(m_pDelimFreeRB);
 
-    aColEdt1.SetAccessibleRelationMemberOf(&aKeyCB1);
-    aColEdt1.SetAccessibleRelationLabeledBy(&aColLbl);
-    aTypDLB1.SetAccessibleRelationMemberOf(&aKeyCB1);
-    aTypDLB1.SetAccessibleRelationLabeledBy(&aTypLbl);
+    m_pColEdt1->SetAccessibleRelationMemberOf(m_pKeyCB1);
+    m_pColEdt1->SetAccessibleRelationLabeledBy(m_pColLbl);
+    m_pTypDLB1->SetAccessibleRelationMemberOf(m_pKeyCB1);
+    m_pTypDLB1->SetAccessibleRelationLabeledBy(m_pTypLbl);
 
-    aColEdt2.SetAccessibleRelationMemberOf(&aKeyCB2);
-    aColEdt2.SetAccessibleRelationLabeledBy(&aColLbl);
-    aTypDLB2.SetAccessibleRelationMemberOf(&aKeyCB2);
-    aTypDLB2.SetAccessibleRelationLabeledBy(&aTypLbl);
+    m_pColEdt2->SetAccessibleRelationMemberOf(m_pKeyCB2);
+    m_pColEdt2->SetAccessibleRelationLabeledBy(m_pColLbl);
+    m_pTypDLB2->SetAccessibleRelationMemberOf(m_pKeyCB2);
+    m_pTypDLB2->SetAccessibleRelationLabeledBy(m_pTypLbl);
 
-    aColEdt3.SetAccessibleRelationMemberOf(&aKeyCB3);
-    aColEdt3.SetAccessibleRelationLabeledBy(&aColLbl);
-    aTypDLB3.SetAccessibleRelationMemberOf(&aKeyCB3);
-    aTypDLB3.SetAccessibleRelationLabeledBy(&aTypLbl);
+    m_pColEdt3->SetAccessibleRelationMemberOf(m_pKeyCB3);
+    m_pColEdt3->SetAccessibleRelationLabeledBy(m_pColLbl);
+    m_pTypDLB3->SetAccessibleRelationMemberOf(m_pKeyCB3);
+    m_pTypDLB3->SetAccessibleRelationLabeledBy(m_pTypLbl);
 }
 
 SwSortDlg::~SwSortDlg()
 {
-    ::lcl_ClearLstBoxAndDelUserData( aTypDLB1 );
-    ::lcl_ClearLstBoxAndDelUserData( aTypDLB2 );
-    ::lcl_ClearLstBoxAndDelUserData( aTypDLB3 );
+    ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB1);
+    ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB2);
+    ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB3);
     delete pColRes;
 }
 
 sal_Unicode SwSortDlg::GetDelimChar() const
 {
     sal_Unicode cRet = '\t';
-    if( !aDelimTabRB.IsChecked() )
+    if( !m_pDelimTabRB->IsChecked() )
     {
-        String aTmp( aDelimEdt.GetText() );
+        String aTmp( m_pDelimEdt->GetText() );
         if( aTmp.Len() )
             cRet = aTmp.GetChar( 0 );
     }
@@ -308,35 +293,35 @@ sal_Unicode SwSortDlg::GetDelimChar() const
 void SwSortDlg::Apply()
 {
     // save all settings
-    bCheck1 = aKeyCB1.IsChecked();
-    bCheck2 = aKeyCB2.IsChecked();
-    bCheck3 = aKeyCB3.IsChecked();
+    bCheck1 = m_pKeyCB1->IsChecked();
+    bCheck2 = m_pKeyCB2->IsChecked();
+    bCheck3 = m_pKeyCB3->IsChecked();
 
-    nCol1 = (sal_uInt16)aColEdt1.GetValue();
-    nCol2 = (sal_uInt16)aColEdt2.GetValue();
-    nCol3 = (sal_uInt16)aColEdt3.GetValue();
+    nCol1 = (sal_uInt16)m_pColEdt1->GetValue();
+    nCol2 = (sal_uInt16)m_pColEdt2->GetValue();
+    nCol3 = (sal_uInt16)m_pColEdt3->GetValue();
 
-    nType1 = aTypDLB1.GetSelectEntryPos();
-    nType2 = aTypDLB2.GetSelectEntryPos();
-    nType3 = aTypDLB3.GetSelectEntryPos();
+    nType1 = m_pTypDLB1->GetSelectEntryPos();
+    nType2 = m_pTypDLB2->GetSelectEntryPos();
+    nType3 = m_pTypDLB3->GetSelectEntryPos();
 
-    bAsc1 = aSortUpRB.IsChecked();
-    bAsc2 = aSortUp2RB.IsChecked();
-    bAsc3 = aSortUp3RB.IsChecked();
-    bCol = aColumnRB.IsChecked();
-    nLang = aLangLB.GetSelectLanguage();
+    bAsc1 = m_pSortUp1RB->IsChecked();
+    bAsc2 = m_pSortUp2RB->IsChecked();
+    bAsc3 = m_pSortUp3RB->IsChecked();
+    bCol = m_pColumnRB->IsChecked();
+    nLang = m_pLangLB->GetSelectLanguage();
     cDeli = GetDelimChar();
-    bCsSens = aCaseCB.IsChecked();
+    bCsSens = m_pCaseCB->IsChecked();
 
     void* pUserData;
     SwSortOptions aOptions;
     if( bCheck1 )
     {
-        String sEntry( aTypDLB1.GetSelectEntry() );
+        String sEntry( m_pTypDLB1->GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.Erase();
-        else if( 0 != (pUserData = aTypDLB1.GetEntryData(
-                                            aTypDLB1.GetSelectEntryPos())) )
+        else if( 0 != (pUserData = m_pTypDLB1->GetEntryData(
+                                            m_pTypDLB1->GetSelectEntryPos())) )
             sEntry = *(String*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol1, sEntry,
@@ -346,11 +331,11 @@ void SwSortDlg::Apply()
 
     if( bCheck2 )
     {
-        String sEntry( aTypDLB2.GetSelectEntry() );
+        String sEntry( m_pTypDLB2->GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.Erase();
-        else if( 0 != (pUserData = aTypDLB2.GetEntryData(
-                                            aTypDLB2.GetSelectEntryPos())) )
+        else if( 0 != (pUserData = m_pTypDLB2->GetEntryData(
+                                            m_pTypDLB2->GetSelectEntryPos())) )
             sEntry = *(String*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol2, sEntry,
@@ -360,11 +345,11 @@ void SwSortDlg::Apply()
 
     if( bCheck3 )
     {
-        String sEntry( aTypDLB3.GetSelectEntry() );
+        String sEntry( m_pTypDLB3->GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.Erase();
-        else if( 0 != (pUserData = aTypDLB3.GetEntryData(
-                                            aTypDLB3.GetSelectEntryPos())) )
+        else if( 0 != (pUserData = m_pTypDLB3->GetEntryData(
+                                            m_pTypDLB3->GetSelectEntryPos())) )
             sEntry = *(String*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol3, sEntry,
@@ -393,9 +378,9 @@ void SwSortDlg::Apply()
 
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
 {
-    sal_Bool bEnable = pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled();
-    aDelimEdt.Enable( bEnable );
-    aDelimPB.Enable( bEnable );
+    sal_Bool bEnable = pButton == m_pDelimFreeRB && m_pDelimFreeRB->IsEnabled();
+    m_pDelimEdt->Enable( bEnable );
+    m_pDelimPB->Enable( bEnable );
     return 0;
 }
 
@@ -406,13 +391,13 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
     {
         SfxAllItemSet aSet( rSh.GetAttrPool() );
         aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
-        SfxAbstractDialog* pMap = pFact->CreateSfxDialog( &aDelimPB, aSet,
+        SfxAbstractDialog* pMap = pFact->CreateSfxDialog( m_pDelimPB, aSet,
             rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pMap->Execute() )
         {
             SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
             if ( pItem )
-                aDelimEdt.SetText( rtl::OUString(pItem->GetValue()) );
+                m_pDelimEdt->SetText( rtl::OUString(pItem->GetValue()) );
         }
 
         delete pMap;
@@ -422,38 +407,38 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
 
 IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
 {
-    if( pCheck == ( CheckBox* ) &aRowRB)
+    if( pCheck == ( CheckBox* ) m_pRowRB)
     {
-        aColLbl.SetText(aColTxt);
-        aColEdt1.SetMax(nY);
-        aColEdt2.SetMax(nY);
-        aColEdt3.SetMax(nY);
+        m_pColLbl->SetText(aColTxt);
+        m_pColEdt1->SetMax(nY);
+        m_pColEdt2->SetMax(nY);
+        m_pColEdt3->SetMax(nY);
 
-        aColEdt1.SetAccessibleName(aColTxt);
-        aColEdt2.SetAccessibleName(aColTxt);
-        aColEdt3.SetAccessibleName(aColTxt);
+        m_pColEdt1->SetAccessibleName(aColTxt);
+        m_pColEdt2->SetAccessibleName(aColTxt);
+        m_pColEdt3->SetAccessibleName(aColTxt);
     }
-    else if( pCheck == ( CheckBox* ) &aColumnRB)
+    else if( pCheck == ( CheckBox* ) m_pColumnRB)
     {
-        aColLbl.SetText(aRowTxt);
-        aColEdt1.SetMax(nX);
-        aColEdt2.SetMax(nX);
-        aColEdt3.SetMax(nX);
+        m_pColLbl->SetText(aRowTxt);
+        m_pColEdt1->SetMax(nX);
+        m_pColEdt2->SetMax(nX);
+        m_pColEdt3->SetMax(nX);
 
-        aColEdt1.SetAccessibleName(aRowTxt);
-        aColEdt2.SetAccessibleName(aRowTxt);
-        aColEdt3.SetAccessibleName(aRowTxt);
+        m_pColEdt1->SetAccessibleName(aRowTxt);
+        m_pColEdt2->SetAccessibleName(aRowTxt);
+        m_pColEdt3->SetAccessibleName(aRowTxt);
     }
-    else if(!aKeyCB1.IsChecked() &&
-                !aKeyCB2.IsChecked() &&
-                    !aKeyCB3.IsChecked())
+    else if(!m_pKeyCB1->IsChecked() &&
+                !m_pKeyCB2->IsChecked() &&
+                    !m_pKeyCB3->IsChecked())
         pCheck->Check(sal_True);
     return 0;
 }
 
 IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
 {
-    lang::Locale aLcl( SvxCreateLocale( aLangLB.GetSelectLanguage() ) );
+    lang::Locale aLcl( SvxCreateLocale( m_pLangLB->GetSelectLanguage() ) );
     Sequence < OUString > aSeq(
                             GetAppCollator().listCollatorAlgorithms( aLcl ));
 
@@ -461,7 +446,7 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
         pColRes = new CollatorResource();
 
     const sal_uInt16 nLstBoxCnt = 3;
-    ListBox* aLstArr[ nLstBoxCnt ] = { &aTypDLB1, &aTypDLB2, &aTypDLB3 };
+    ListBox* aLstArr[ nLstBoxCnt ] = { m_pTypDLB1, m_pTypDLB2, m_pTypDLB3 };
     sal_uInt16* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
     String aOldStrArr[ nLstBoxCnt ];
     sal_uInt16 n;

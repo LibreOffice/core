@@ -66,11 +66,10 @@ String lcl_MetricString( long nTwips, const String& rText )
 
 ScColBar::ScColBar( Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
                     ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
-            ScHeaderControl( pParent, pEng, MAXCOL+1, HDR_HORIZONTAL ),
+            ScHeaderControl( pParent, pEng, MAXCOL+1, false ),
             pViewData( pData ),
             eWhich( eWhichPos ),
-            pFuncSet( pFunc ),
-            pSelEngine( pEng )
+            pFuncSet( pFunc )
 {
     Show();
 }
@@ -236,11 +235,10 @@ sal_Bool ScColBar::IsLayoutRTL()        // overloaded only for columns
 
 ScRowBar::ScRowBar( Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
                     ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
-            ScHeaderControl( pParent, pEng, MAXROW+1, HDR_VERTICAL ),
+            ScHeaderControl( pParent, pEng, MAXROW+1, true ),
             pViewData( pData ),
             eWhich( eWhichPos ),
-            pFuncSet( pFunc ),
-            pSelEngine( pEng )
+            pFuncSet( pFunc )
 {
     Show();
 }

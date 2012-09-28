@@ -114,7 +114,8 @@ void LiblantagDataRef::setupDataPath()
 {
     // maDataPath is assumed to be empty here.
     OUString aURL;
-    if (!rtl::Bootstrap::get( "BRAND_BASE_DIR", aURL))
+
+    if (!rtl::Bootstrap::get("BRAND_BASE_DIR", aURL) && !rtl::Bootstrap::get("LIBLANGTAG_SHARE", aURL))
         OSL_FAIL( "LiblantagDataRef: can't get BRAND_BASE_DIR");
     else
     {
@@ -249,8 +250,6 @@ LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
 
 LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
 {
-    theDataRef.incRef();
-
     maLocale            = rLanguageTag.maLocale;
     maBcp47             = rLanguageTag.maBcp47;
     maCachedLanguage    = rLanguageTag.maCachedLanguage;

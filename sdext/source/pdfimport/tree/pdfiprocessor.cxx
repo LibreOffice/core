@@ -83,7 +83,6 @@ namespace pdfi
     m_eTextDirection( LrTb ),
     m_nPages(0),
     m_nNextZOrder( 1 ),
-    m_fWordSpace(0.0),
     m_bIsWhiteSpaceInLine( false ),
     m_xStatusIndicator( xStat ),
     m_bHaveTextOnDocLevel(false),

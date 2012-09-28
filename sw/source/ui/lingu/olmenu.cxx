@@ -88,7 +88,8 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 
 using namespace ::com::sun::star;
@@ -101,7 +102,7 @@ extern void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 
 
 // tries to determine the language of 'rText'
 //
-LanguageType lcl_CheckLanguage(
+static LanguageType lcl_CheckLanguage(
     const OUString &rText,
     uno::Reference< linguistic2::XSpellChecker1 > xSpell,
     uno::Reference< linguistic2::XLanguageGuessing > xLangGuess,
@@ -332,29 +333,29 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
     {
         try
         {
-            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.frame.UICommandDescription" ), uno::UNO_QUERY );
-            if ( xNameAccess.is() )
+            uno::Reference< container::XNameAccess > const xNameAccess(
+                    frame::UICommandDescription::create(
+                        ::comphelper::getProcessComponentContext() ),
+                    uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNameAccess > xUICommandLabels;
+            uno::Any a = xNameAccess->getByName( "com.sun.star.text.TextDocument" );
+            uno::Reference< container::XNameAccess > xUICommands;
+            a >>= xUICommandLabels;
+            OUString aStr;
+            uno::Sequence< beans::PropertyValue > aPropSeq;
+            a = xUICommandLabels->getByName( aCmdURL );
+            if ( a >>= aPropSeq )
             {
-                uno::Reference< container::XNameAccess > xUICommandLabels;
-                uno::Any a = xNameAccess->getByName( "com.sun.star.text.TextDocument" );
-                uno::Reference< container::XNameAccess > xUICommands;
-                a >>= xUICommandLabels;
-                OUString aStr;
-                uno::Sequence< beans::PropertyValue > aPropSeq;
-                a = xUICommandLabels->getByName( aCmdURL );
-                if ( a >>= aPropSeq )
+                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                 {
-                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    if ( aPropSeq[i].Name == "Name" )
                     {
-                        if ( aPropSeq[i].Name == "Name" )
-                        {
-                            aPropSeq[i].Value >>= aStr;
-                            break;
-                        }
+                        aPropSeq[i].Value >>= aStr;
+                        break;
                     }
                 }
-                aLabel = aStr;
             }
+            aLabel = aStr;
         }
         catch (const uno::Exception&)
         {
@@ -854,8 +855,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         try
         {
             uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
+                com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
             xSystemShellExecute->execute( sExplanationLink, rtl::OUString(),
                     com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
         }

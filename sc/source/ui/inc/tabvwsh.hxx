@@ -295,7 +295,7 @@ public:
     void            GetSaveState( SfxItemSet& rSet );
     void            ExecSearch( SfxRequest& rReq );
 
-    SC_DLLPUBLIC    void            ExecuteUndo(SfxRequest& rReq);
+    void            ExecuteUndo(SfxRequest& rReq);
     void            GetUndoState(SfxItemSet &rSet);
 
     void            ExecuteSbx( SfxRequest& rReq );

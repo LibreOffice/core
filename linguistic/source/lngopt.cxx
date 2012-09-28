@@ -75,14 +75,14 @@ LinguOptions::LinguOptions()
         aLinguCfg.GetOptions( *pData );
     }
 
-    osl_incrementInterlockedCount( &nRefCount );
+    osl_atomic_increment( &nRefCount );
 }
 
 
 LinguOptions::LinguOptions(const LinguOptions & /*rOpt*/)
 {
     DBG_ASSERT( pData, "lng : data missing" );
-    osl_incrementInterlockedCount( &nRefCount );
+    osl_atomic_increment( &nRefCount );
 }
 
 
@@ -90,7 +90,7 @@ LinguOptions::~LinguOptions()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if ( osl_decrementInterlockedCount( &nRefCount ) == 0 )
+    if ( osl_atomic_decrement( &nRefCount ) == 0 )
     {
         delete pData;   pData  = NULL;
     }

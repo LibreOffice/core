@@ -23,8 +23,9 @@
 #include "dbu_dlg.hrc"
 #include "commontypes.hxx"
 #include "moduledbu.hxx"
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include "dbustrings.hrc"
 #include <vcl/svapp.hxx>
@@ -81,8 +82,7 @@ DBG_NAME(OParameterDialog)
         DBG_CTOR(OParameterDialog,NULL);
 
         if (_rxORB.is())
-            m_xFormatter = Reference< XNumberFormatter>(_rxORB->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
+            m_xFormatter = Reference< XNumberFormatter>( NumberFormatter::create(comphelper::getComponentContext(_rxORB)), UNO_QUERY_THROW);
         else {
             OSL_FAIL("OParameterDialog::OParameterDialog: need a service factory!");
         }
@@ -90,7 +90,7 @@ DBG_NAME(OParameterDialog)
         Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats(m_xConnection, sal_True);
         if (!xNumberFormats.is())
             ::comphelper::disposeComponent(m_xFormatter);
-        else if (m_xFormatter.is())
+        else
             m_xFormatter->attachNumberFormatsSupplier(xNumberFormats);
         try
         {

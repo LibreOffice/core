@@ -44,6 +44,7 @@
 #include <tools/debug.hxx>
 
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include <algorithm>
@@ -58,7 +59,7 @@
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
 
@@ -73,7 +74,8 @@ using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::util::VetoException;
 using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::lang::IllegalArgumentException;
-using com::sun::star::ucb::XSimpleFileAccess;
+using com::sun::star::ucb::XSimpleFileAccess2;
+using com::sun::star::ucb::SimpleFileAccess;
 using com::sun::star::io::XInputStream;
 
 using namespace com::sun::star::uno;
@@ -407,10 +409,7 @@ void Model::loadInstance( sal_Int32 nInstance )
         try
         {
             Reference<XInputStream> xInput =
-                Reference<XSimpleFileAccess>(
-                    createInstance(
-                        OUSTRING("com.sun.star.ucb.SimpleFileAccess") ),
-                    UNO_QUERY_THROW )->openFileRead( sURL );
+                Reference<XSimpleFileAccess2>( SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) )->openFileRead( sURL );
             if( xInput.is() )
             {
                 Reference<XDocument> xInstance =

@@ -703,192 +703,193 @@ void OfficeIPCThread::execute()
                 continue;
             }
 
-#ifdef UNX
-            if (aCmdLineArgs->HasUnknown() || aCmdLineArgs->IsVersion() || aCmdLineArgs->IsHelp())
-                continue;
-#endif
-
-            const CommandLineArgs &rCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
-
-            if ( aCmdLineArgs->IsQuickstart() )
-            {
-                // we have to use application event, because we have to start quickstart service in main thread!!
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent(ApplicationEvent::TYPE_QUICKSTART);
-                ImplPostForeignAppEvent( pAppEvent );
-            }
-
-            // handle request for acceptor
-            std::vector< rtl::OUString > const & accept = aCmdLineArgs->
-                GetAccept();
-            for (std::vector< rtl::OUString >::const_iterator i(accept.begin());
-                 i != accept.end(); ++i)
-            {
-                ApplicationEvent* pAppEvent = new ApplicationEvent(
-                    ApplicationEvent::TYPE_ACCEPT, *i);
-                ImplPostForeignAppEvent( pAppEvent );
-            }
-            // handle acceptor removal
-            std::vector< rtl::OUString > const & unaccept = aCmdLineArgs->
-                GetUnaccept();
-            for (std::vector< rtl::OUString >::const_iterator i(
-                     unaccept.begin());
-                 i != unaccept.end(); ++i)
-            {
-                ApplicationEvent* pAppEvent = new ApplicationEvent(
-                    ApplicationEvent::TYPE_UNACCEPT, *i);
-                ImplPostForeignAppEvent( pAppEvent );
-            }
-
-#ifndef UNX
-            // only in non-unix version, we need to handle a -help request
-            // in a running instance in order to display  the command line help
-            if ( aCmdLineArgs->IsHelp() ) {
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent(ApplicationEvent::TYPE_HELP);
-                ImplPostForeignAppEvent( pAppEvent );
-            }
-#endif
-
             sal_Bool bDocRequestSent = sal_False;
-            ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
-                aCmdLineArgs->getCwdUrl());
-            cProcessed.reset();
-            pRequest->pcProcessed = &cProcessed;
 
-            // Print requests are not dependent on the --invisible cmdline argument as they are
-            // loaded with the "hidden" flag! So they are always checked.
-            pRequest->aPrintList = aCmdLineArgs->GetPrintList();
-            bDocRequestSent |= !pRequest->aPrintList.empty();
-            pRequest->aPrintToList = aCmdLineArgs->GetPrintToList();
-            pRequest->aPrinterName = aCmdLineArgs->GetPrinterName();
-            bDocRequestSent |= !( pRequest->aPrintToList.empty() || pRequest->aPrinterName.isEmpty() );
-
-            if ( !rCurrentCmdLineArgs.IsInvisible() )
+            OUString aUnknown( aCmdLineArgs->GetUnknown() );
+            if ( !aUnknown.isEmpty() || aCmdLineArgs->IsHelp() )
             {
-                // Read cmdline args that can open/create documents. As they would open a window
-                // they are only allowed if the "--invisible" is currently not used!
-                pRequest->aOpenList = aCmdLineArgs->GetOpenList();
-                bDocRequestSent |= !pRequest->aOpenList.empty();
-                pRequest->aViewList = aCmdLineArgs->GetViewList();
-                bDocRequestSent |= !pRequest->aViewList.empty();
-                pRequest->aStartList = aCmdLineArgs->GetStartList();
-                bDocRequestSent |= !pRequest->aStartList.empty();
-                pRequest->aForceOpenList = aCmdLineArgs->GetForceOpenList();
-                bDocRequestSent |= !pRequest->aForceOpenList.empty();
-                pRequest->aForceNewList = aCmdLineArgs->GetForceNewList();
-                bDocRequestSent |= !pRequest->aForceNewList.empty();
-
-                // Special command line args to create an empty document for a given module
-
-                // #i18338# (lo)
-                // we only do this if no document was specified on the command line,
-                // since this would be inconsistent with the the behaviour of
-                // the first process, see OpenClients() (call to OpenDefault()) in app.cxx
-                if ( aCmdLineArgs->HasModuleParam() && (!bDocRequestSent) )
-                {
-                    SvtModuleOptions aOpt;
-                    SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
-                    if ( aCmdLineArgs->IsWriter() )
-                        eFactory = SvtModuleOptions::E_WRITER;
-                    else if ( aCmdLineArgs->IsCalc() )
-                        eFactory = SvtModuleOptions::E_CALC;
-                    else if ( aCmdLineArgs->IsDraw() )
-                        eFactory = SvtModuleOptions::E_DRAW;
-                    else if ( aCmdLineArgs->IsImpress() )
-                        eFactory = SvtModuleOptions::E_IMPRESS;
-                    else if ( aCmdLineArgs->IsBase() )
-                        eFactory = SvtModuleOptions::E_DATABASE;
-                    else if ( aCmdLineArgs->IsMath() )
-                        eFactory = SvtModuleOptions::E_MATH;
-                    else if ( aCmdLineArgs->IsGlobal() )
-                        eFactory = SvtModuleOptions::E_WRITERGLOBAL;
-                    else if ( aCmdLineArgs->IsWeb() )
-                        eFactory = SvtModuleOptions::E_WRITERWEB;
-
-                    if ( !pRequest->aOpenList.empty() )
-                        pRequest->aModule = aOpt.GetFactoryName( eFactory );
-                    else
-                        pRequest->aOpenList.push_back( aOpt.GetFactoryEmptyDocumentURL( eFactory ) );
-                    bDocRequestSent = sal_True;
-                }
+                ApplicationEvent* pAppEvent =
+                    new ApplicationEvent(ApplicationEvent::TYPE_HELP, aUnknown);
+                ImplPostForeignAppEvent( pAppEvent );
             }
-
-            if ( !aCmdLineArgs->IsQuickstart() ) {
-                sal_Bool bShowHelp = sal_False;
-                rtl::OUStringBuffer aHelpURLBuffer;
-                if (aCmdLineArgs->IsHelpWriter()) {
-                    bShowHelp = sal_True;
-                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
-                } else if (aCmdLineArgs->IsHelpCalc()) {
-                    bShowHelp = sal_True;
-                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
-                } else if (aCmdLineArgs->IsHelpDraw()) {
-                    bShowHelp = sal_True;
-                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
-                } else if (aCmdLineArgs->IsHelpImpress()) {
-                    bShowHelp = sal_True;
-                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
-                } else if (aCmdLineArgs->IsHelpBase()) {
-                    bShowHelp = sal_True;
-                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
-                } else if (aCmdLineArgs->IsHelpBasic()) {
-                    bShowHelp = sal_True;
-                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
-                } else if (aCmdLineArgs->IsHelpMath()) {
-                    bShowHelp = sal_True;
-                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
-                }
-                if (bShowHelp) {
-                    aHelpURLBuffer.appendAscii("?Language=");
-                    aHelpURLBuffer.append(utl::ConfigManager::getLocale());
-#if defined UNX
-                    aHelpURLBuffer.appendAscii("&System=UNX");
-#elif defined WNT
-                    aHelpURLBuffer.appendAscii("&System=WIN");
-#endif
-                    ApplicationEvent* pAppEvent = new ApplicationEvent(
-                        ApplicationEvent::TYPE_OPENHELPURL,
-                        aHelpURLBuffer.makeStringAndClear());
-                    ImplPostForeignAppEvent( pAppEvent );
-                }
-            }
-
-            if ( bDocRequestSent )
-             {
-                // Send requests to dispatch watcher if we have at least one. The receiver
-                // is responsible to delete the request after processing it.
-                if ( aCmdLineArgs->HasModuleParam() )
-                {
-                    SvtModuleOptions    aOpt;
-
-                    // Support command line parameters to start a module (as preselection)
-                    if ( aCmdLineArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-                        pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
-                    else if ( aCmdLineArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-                        pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
-                    else if ( aCmdLineArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-                        pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
-                    else if ( aCmdLineArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-                        pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
-                }
-
-
-                ImplPostProcessDocumentsEvent( pRequest );
+            else if ( aCmdLineArgs->IsVersion() )
+            {
+                ApplicationEvent* pAppEvent =
+                    new ApplicationEvent(ApplicationEvent::TYPE_VERSION);
+                ImplPostForeignAppEvent( pAppEvent );
             }
             else
             {
-                // delete not used request again
-                delete pRequest;
-                pRequest = NULL;
-            }
-            if (aArguments.equalsL(sc_aShowSequence, sc_nShSeqLength) ||
-                aCmdLineArgs->IsEmpty())
-            {
-                // no document was sent, just bring Office to front
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent(ApplicationEvent::TYPE_APPEAR);
-                ImplPostForeignAppEvent( pAppEvent );
+                const CommandLineArgs &rCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
+
+                if ( aCmdLineArgs->IsQuickstart() )
+                {
+                    // we have to use application event, because we have to start quickstart service in main thread!!
+                    ApplicationEvent* pAppEvent =
+                        new ApplicationEvent(ApplicationEvent::TYPE_QUICKSTART);
+                    ImplPostForeignAppEvent( pAppEvent );
+                }
+
+                // handle request for acceptor
+                std::vector< rtl::OUString > const & accept = aCmdLineArgs->
+                    GetAccept();
+                for (std::vector< rtl::OUString >::const_iterator i(accept.begin());
+                     i != accept.end(); ++i)
+                {
+                    ApplicationEvent* pAppEvent = new ApplicationEvent(
+                        ApplicationEvent::TYPE_ACCEPT, *i);
+                    ImplPostForeignAppEvent( pAppEvent );
+                }
+                // handle acceptor removal
+                std::vector< rtl::OUString > const & unaccept = aCmdLineArgs->
+                    GetUnaccept();
+                for (std::vector< rtl::OUString >::const_iterator i(
+                         unaccept.begin());
+                     i != unaccept.end(); ++i)
+                {
+                    ApplicationEvent* pAppEvent = new ApplicationEvent(
+                        ApplicationEvent::TYPE_UNACCEPT, *i);
+                    ImplPostForeignAppEvent( pAppEvent );
+                }
+
+                ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
+                    aCmdLineArgs->getCwdUrl());
+                cProcessed.reset();
+                pRequest->pcProcessed = &cProcessed;
+
+                // Print requests are not dependent on the --invisible cmdline argument as they are
+                // loaded with the "hidden" flag! So they are always checked.
+                pRequest->aPrintList = aCmdLineArgs->GetPrintList();
+                bDocRequestSent |= !pRequest->aPrintList.empty();
+                pRequest->aPrintToList = aCmdLineArgs->GetPrintToList();
+                pRequest->aPrinterName = aCmdLineArgs->GetPrinterName();
+                bDocRequestSent |= !( pRequest->aPrintToList.empty() || pRequest->aPrinterName.isEmpty() );
+
+                if ( !rCurrentCmdLineArgs.IsInvisible() )
+                {
+                    // Read cmdline args that can open/create documents. As they would open a window
+                    // they are only allowed if the "--invisible" is currently not used!
+                    pRequest->aOpenList = aCmdLineArgs->GetOpenList();
+                    bDocRequestSent |= !pRequest->aOpenList.empty();
+                    pRequest->aViewList = aCmdLineArgs->GetViewList();
+                    bDocRequestSent |= !pRequest->aViewList.empty();
+                    pRequest->aStartList = aCmdLineArgs->GetStartList();
+                    bDocRequestSent |= !pRequest->aStartList.empty();
+                    pRequest->aForceOpenList = aCmdLineArgs->GetForceOpenList();
+                    bDocRequestSent |= !pRequest->aForceOpenList.empty();
+                    pRequest->aForceNewList = aCmdLineArgs->GetForceNewList();
+                    bDocRequestSent |= !pRequest->aForceNewList.empty();
+
+                    // Special command line args to create an empty document for a given module
+
+                    // #i18338# (lo)
+                    // we only do this if no document was specified on the command line,
+                    // since this would be inconsistent with the the behaviour of
+                    // the first process, see OpenClients() (call to OpenDefault()) in app.cxx
+                    if ( aCmdLineArgs->HasModuleParam() && (!bDocRequestSent) )
+                    {
+                        SvtModuleOptions aOpt;
+                        SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
+                        if ( aCmdLineArgs->IsWriter() )
+                            eFactory = SvtModuleOptions::E_WRITER;
+                        else if ( aCmdLineArgs->IsCalc() )
+                            eFactory = SvtModuleOptions::E_CALC;
+                        else if ( aCmdLineArgs->IsDraw() )
+                            eFactory = SvtModuleOptions::E_DRAW;
+                        else if ( aCmdLineArgs->IsImpress() )
+                            eFactory = SvtModuleOptions::E_IMPRESS;
+                        else if ( aCmdLineArgs->IsBase() )
+                            eFactory = SvtModuleOptions::E_DATABASE;
+                        else if ( aCmdLineArgs->IsMath() )
+                            eFactory = SvtModuleOptions::E_MATH;
+                        else if ( aCmdLineArgs->IsGlobal() )
+                            eFactory = SvtModuleOptions::E_WRITERGLOBAL;
+                        else if ( aCmdLineArgs->IsWeb() )
+                            eFactory = SvtModuleOptions::E_WRITERWEB;
+
+                        if ( !pRequest->aOpenList.empty() )
+                            pRequest->aModule = aOpt.GetFactoryName( eFactory );
+                        else
+                            pRequest->aOpenList.push_back( aOpt.GetFactoryEmptyDocumentURL( eFactory ) );
+                        bDocRequestSent = sal_True;
+                    }
+                }
+
+                if ( !aCmdLineArgs->IsQuickstart() ) {
+                    sal_Bool bShowHelp = sal_False;
+                    rtl::OUStringBuffer aHelpURLBuffer;
+                    if (aCmdLineArgs->IsHelpWriter()) {
+                        bShowHelp = sal_True;
+                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
+                    } else if (aCmdLineArgs->IsHelpCalc()) {
+                        bShowHelp = sal_True;
+                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
+                    } else if (aCmdLineArgs->IsHelpDraw()) {
+                        bShowHelp = sal_True;
+                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
+                    } else if (aCmdLineArgs->IsHelpImpress()) {
+                        bShowHelp = sal_True;
+                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
+                    } else if (aCmdLineArgs->IsHelpBase()) {
+                        bShowHelp = sal_True;
+                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
+                    } else if (aCmdLineArgs->IsHelpBasic()) {
+                        bShowHelp = sal_True;
+                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
+                    } else if (aCmdLineArgs->IsHelpMath()) {
+                        bShowHelp = sal_True;
+                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
+                    }
+                    if (bShowHelp) {
+                        aHelpURLBuffer.appendAscii("?Language=");
+                        aHelpURLBuffer.append(utl::ConfigManager::getLocale());
+#if defined UNX
+                        aHelpURLBuffer.appendAscii("&System=UNX");
+#elif defined WNT
+                        aHelpURLBuffer.appendAscii("&System=WIN");
+#endif
+                        ApplicationEvent* pAppEvent = new ApplicationEvent(
+                            ApplicationEvent::TYPE_OPENHELPURL,
+                            aHelpURLBuffer.makeStringAndClear());
+                        ImplPostForeignAppEvent( pAppEvent );
+                    }
+                }
+
+                if ( bDocRequestSent )
+                {
+                    // Send requests to dispatch watcher if we have at least one. The receiver
+                    // is responsible to delete the request after processing it.
+                    if ( aCmdLineArgs->HasModuleParam() )
+                    {
+                        SvtModuleOptions    aOpt;
+
+                        // Support command line parameters to start a module (as preselection)
+                        if ( aCmdLineArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                            pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
+                        else if ( aCmdLineArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+                            pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
+                        else if ( aCmdLineArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+                            pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
+                        else if ( aCmdLineArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+                            pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
+                    }
+
+                    ImplPostProcessDocumentsEvent( pRequest );
+                }
+                else
+                {
+                    // delete not used request again
+                    delete pRequest;
+                    pRequest = NULL;
+                }
+                if (aArguments.equalsL(sc_aShowSequence, sc_nShSeqLength) ||
+                    aCmdLineArgs->IsEmpty())
+                {
+                    // no document was sent, just bring Office to front
+                    ApplicationEvent* pAppEvent =
+                        new ApplicationEvent(ApplicationEvent::TYPE_APPEAR);
+                    ImplPostForeignAppEvent( pAppEvent );
+                }
             }
 
             // we don't need the mutex any longer...

@@ -31,7 +31,6 @@
 #include "AccessibleFilterMenu.hxx"
 #include "AccessibleFilterMenuItem.hxx"
 #include "global.hxx"
-#include "document.hxx"
 #include "docpool.hxx"
 
 #include "tools/gen.hxx"
@@ -95,11 +94,10 @@ private:
 
 // ============================================================================
 
-ScAccessibleFilterMenu::ScAccessibleFilterMenu(const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos, ScDocument* pDoc) :
+ScAccessibleFilterMenu::ScAccessibleFilterMenu(const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :
     ScAccessibleContextBase(rxParent, AccessibleRole::MENU),
     mnMenuPos(nMenuPos),
     mpWindow(pWin),
-    mpDoc(pDoc),
     mbEnabled(true)
 {
     SetName(rName);

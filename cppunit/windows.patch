@@ -1,5 +1,5 @@
---- misc/cppunit-1.13.0/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:25.084658287 +0100
-+++ misc/build/cppunit-1.13.0/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:18.660706180 +0100
+--- misc/cppunit-1.13.1/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:25.084658287 +0100
++++ misc/build/cppunit-1.13.1/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:18.660706180 +0100
 @@ -133,9 +133,8 @@
  /*! \def CPPUNIT_PLUGIN_IMPLEMENT_MAIN()
   * \brief Implements the 'main' function for the plug-in.
@@ -34,8 +34,8 @@
    typedef char __CppUnitPlugInImplementMainDummyTypeDef
  
  // Unix
---- misc/cppunit-1.13.0/include/cppunit/TestAssert.h
-+++ misc/build/cppunit-1.13.0/include/cppunit/TestAssert.h
+--- misc/cppunit-1.13.1/include/cppunit/TestAssert.h
++++ misc/build/cppunit-1.13.1/include/cppunit/TestAssert.h
 @@ -76,7 +76,7 @@
         const int precision = 15;
  #endif  // #ifdef DBL_DIG

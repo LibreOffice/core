@@ -735,9 +735,9 @@
     </prop>
   </node>
  </node>
-<node oor:name="Notes">
-    <prop oor:name="ShowAnkor">
-        <value>false</value>
-    </prop>
-</node>
+ <node oor:name="Notes">
+  <prop oor:name="ShowAnkor">
+   <value>false</value>
+  </prop>
+ </node>
 </oor:component-data>

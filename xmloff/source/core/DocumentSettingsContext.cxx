@@ -40,7 +40,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <list>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -718,7 +718,7 @@ void XMLConfigItemContext::ManipulateConfigItem()
     {
         if( GetImport().getServiceFactory().is() ) try
         {
-            uno::Reference< uno::XComponentContext > xContext( comphelper::ComponentContext(GetImport().getServiceFactory()).getUNOContext() );
+            uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(GetImport().getServiceFactory()) );
             uno::Reference< util::XStringSubstitution > xStringSubsitution( util::PathSubstitution::create(xContext) );
 
             rtl::OUString aURL;

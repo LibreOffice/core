@@ -37,10 +37,10 @@ namespace oox { namespace drawingml {
             PERCENT
         };
         TextSpacing()
-            : nUnit( POINTS ), nValue( 0 ), bHasValue( sal_False )
+            : nUnit( POINTS ), nValue( 0 ), bHasValue( false )
             {
             }
-        TextSpacing( sal_Int32 nPoints ) : nUnit( POINTS ), nValue( nPoints ), bHasValue( sal_True ){};
+        TextSpacing( sal_Int32 nPoints ) : nUnit( POINTS ), nValue( nPoints ), bHasValue( true ){};
         ::com::sun::star::style::LineSpacing toLineSpacing() const
             {
                 ::com::sun::star::style::LineSpacing aSpacing;
@@ -59,7 +59,7 @@ namespace oox { namespace drawingml {
             }
         sal_Int32 nUnit;
         sal_Int32 nValue;
-        sal_Bool  bHasValue;
+        bool  bHasValue;
     };
 
 } }

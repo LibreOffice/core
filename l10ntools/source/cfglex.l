@@ -89,8 +89,8 @@ int bText=0;
 	pChar[1] = 0x00;
 	pChar[0] = c3;
 
-	workOnTokenSet( COMMEND, yytext );
-	workOnTokenSet( COMMEND, pChar );
+	workOnTokenSet( COMMENT, yytext );
+	workOnTokenSet( COMMENT, pChar );
 
 	for(;;) {
 		if ( c3 == EOF )
@@ -102,7 +102,7 @@ int bText=0;
 		c3 = yyinput();
 
 		pChar[0] = c3;
-		workOnTokenSet( COMMEND, pChar );
+		workOnTokenSet( COMMENT, pChar );
 	}
 }
 
@@ -114,7 +114,7 @@ int bText=0;
 \<[^\>\!]*\> {
 	bText = 0;
 	if ( yytext[ 1 ] == '!' && yytext[ 2 ] == '-' && yytext[ 3 ] == '-' )
-		workOnTokenSet( COMMEND, yytext );
+		workOnTokenSet( COMMENT, yytext );
 	else
 		workOnTokenSet( CFG_UNKNOWNTAG, yytext );
 }

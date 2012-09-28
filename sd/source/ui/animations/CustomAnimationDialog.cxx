@@ -415,8 +415,8 @@ void DropdownMenuBox::Resize()
 
     long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
     nSBWidth = CalcZoom( nSBWidth );
-    mpSubControl->SetPosSizePixel( 0, 1, aOutSz.Width() - nSBWidth, aOutSz.Height()-2 );
-    mpDropdownButton->SetPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
+    mpSubControl->setPosSizePixel( 0, 1, aOutSz.Width() - nSBWidth, aOutSz.Height()-2 );
+    mpDropdownButton->setPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
 }
 
 // --------------------------------------------------------------------
@@ -1148,17 +1148,6 @@ private:
     CheckBox*       mpCBSmoothStart;
     CheckBox*       mpCBSmoothEnd;
     CheckBox*       mpCBAutoRestart;
-
-    FixedLine*      mpFLPlay;
-    RadioButton*    mpRBFromStart;
-    RadioButton*    mpRBFromLast;
-    RadioButton*    mpRBFromTime;
-    MetricField*    mpMFStartTime;
-    FixedLine*      mpFLStop;
-    RadioButton*    mpRBStopOnClick;
-    RadioButton*    mpRBStopOnNextSlide;
-    RadioButton*    mpRBStopAfterSlides;
-    MetricField*    mpMFStopAfterSlides;
 
     FixedLine*      mpFLEnhancements;
     FixedText*      mpFTSound;

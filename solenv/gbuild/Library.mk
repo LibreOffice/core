@@ -62,7 +62,6 @@ $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk
 endif
 $(call gb_Library_get_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_get_target,$(1)) : SOVERSION :=
-$(call gb_Library_get_target,$(1)) : SOVERSIONSCRIPT :=
 $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))
 
 endef
@@ -84,15 +83,11 @@ $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_L
 endef
 
 define gb_Library__set_soversion_script
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
-	$(3)
+$(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktargetname,$(1)),$(2),$(3))
 $(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
-$(call gb_Library_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
 $(call gb_Library_get_target,$(1)) \
 $(call gb_Library_get_clean_target,$(1)) : \
 	AUXTARGETS += $(call gb_Library_get_target,$(1)).$(2)
-$(call gb_LinkTarget_add_auxtargets,$(call gb_Library_get_linktargetname,$(1)),\
-	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).$(2))
 endef
 
 # for libraries that maintain stable ABI: set SOVERSION and version script
@@ -217,7 +212,9 @@ $(eval $(foreach method,\
 	add_sdi_headers \
 	export_objects_list \
 	add_nativeres \
+	set_visibility_default \
 	set_warnings_not_errors \
+	set_generated_cxx_suffix \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))

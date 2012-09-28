@@ -26,7 +26,6 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStatusListener;
-import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.FillDirection;
 import com.sun.star.sheet.XCellSeries;

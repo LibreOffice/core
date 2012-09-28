@@ -61,7 +61,7 @@ import lib.TestParameters;
 * @see com.sun.star.form.DataAwareControlModel
 * @see com.sun.star.awt.UnoControlCurrencyFieldModel
 * @see com.sun.star.beans.XPropertyState
-* @see com.sun.star.form.FormControlModel
+* @see com.sun.star.form
 * @see com.sun.star.container.XNamed
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.lang.XEventListener

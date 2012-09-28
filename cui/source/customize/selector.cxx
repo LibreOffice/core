@@ -44,7 +44,6 @@
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -53,7 +52,7 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -62,6 +61,7 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/DispatchInformation.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -351,8 +351,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
 
                 SvLBoxEntry* pNewEntry = InsertEntry( sUIName, _pParentEntry );
 
-                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode );
+                Image aImage = GetImage( theChild, comphelper::getProcessComponentContext(), bIsRootNode );
                 SetExpandedEntryBmp( pNewEntry, aImage );
                 SetCollapsedEntryBmp( pNewEntry, aImage );
 
@@ -399,16 +398,11 @@ void SvxConfigGroupListBox_Impl::Init()
     SetUpdateMode(sal_False);
     ClearAll();
 
-    Reference< XComponentContext > xContext;
-    Reference < beans::XPropertySet > xProps(
-        ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-
-    xContext.set( xProps->getPropertyValue(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
-        UNO_QUERY );
+    Reference< XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
 
     // are we showing builtin commands?
-    if ( m_bShowSlots && xContext.is() && m_xFrame.is() )
+    if ( m_bShowSlots && m_xFrame.is() )
     {
         Reference< lang::XMultiComponentFactory > xMCF =
             xContext->getServiceManager();
@@ -416,12 +410,7 @@ void SvxConfigGroupListBox_Impl::Init()
         Reference< frame::XDispatchInformationProvider > xDIP(
             m_xFrame, UNO_QUERY );
 
-        Reference< ::com::sun::star::frame::XModuleManager >
-            xModuleManager( xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.ModuleManager" )),
-                xContext ),
-            UNO_QUERY );
+        Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
 
         OUString aModuleId;
         try{
@@ -429,17 +418,9 @@ void SvxConfigGroupListBox_Impl::Init()
         }catch(const uno::Exception&)
             { aModuleId = ::rtl::OUString(); }
 
-        Reference< container::XNameAccess > xNameAccess(
-            xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.UICommandDescription" )),
-                xContext ),
-            UNO_QUERY );
-
-        if ( xNameAccess.is() )
-        {
-            xNameAccess->getByName( aModuleId ) >>= m_xModuleCommands;
-        }
+        Reference< container::XNameAccess > const xNameAccess(
+                frame::UICommandDescription::create(xContext) );
+        xNameAccess->getByName( aModuleId ) >>= m_xModuleCommands;
 
         Reference< container::XNameAccess > xAllCategories(
             xMCF->createInstanceWithContext(
@@ -514,45 +495,38 @@ void SvxConfigGroupListBox_Impl::Init()
         }
     }
 
-    if ( xContext.is() )
+    // Add Scripting Framework entries
+    Reference< browse::XBrowseNode > rootNode;
+
+    try
     {
-        // Add Scripting Framework entries
-        Reference< browse::XBrowseNode > rootNode;
-        Reference< XComponentContext> xCtx;
+        Reference< browse::XBrowseNodeFactory > xFac( xContext->getValueByName(
+                                                          OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")) ), UNO_QUERY_THROW );
+        rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
-        try
+    if ( rootNode.is() )
+    {
+        if ( m_bShowSlots )
         {
-            Reference < beans::XPropertySet > _xProps(
-                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            xCtx.set( _xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
-            Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")) ), UNO_QUERY_THROW );
-            rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+            SvxGroupInfo_Impl *pInfo =
+                new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
+
+            String aTitle =
+                String( CUI_RES( STR_SELECTOR_MACROS ) );
+
+            SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
+            pNewEntry->SetUserData( pInfo );
+            pNewEntry->EnableChildrenOnDemand( sal_True );
+            aArr.push_back( pInfo );
         }
-        catch( const Exception& )
+        else
         {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        if ( rootNode.is() )
-        {
-            if ( m_bShowSlots )
-            {
-                SvxGroupInfo_Impl *pInfo =
-                    new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
-
-                String aTitle =
-                    String( CUI_RES( STR_SELECTOR_MACROS ) );
-
-                SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
-                pNewEntry->SetUserData( pInfo );
-                pNewEntry->EnableChildrenOnDemand( sal_True );
-                aArr.push_back( pInfo );
-            }
-            else
-            {
-                fillScriptList( rootNode, NULL, false );
-            }
+            fillScriptList( rootNode, NULL, false );
         }
     }
     MakeVisible( GetEntry( 0,0 ) );
@@ -579,20 +553,12 @@ Image SvxConfigGroupListBox_Impl::GetImage(
             Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, nodeName );
             if ( xDocumentModel.is() )
             {
-                Reference< ::com::sun::star::frame::XModuleManager >
-                    xModuleManager(
-                        xCtx->getServiceManager()
-                            ->createInstanceWithContext(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")),
-                                xCtx ),
-                            UNO_QUERY_THROW );
-                Reference<container::XNameAccess> xModuleConfig(
-                    xModuleManager, UNO_QUERY_THROW );
+                Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
                 // get the long name of the document:
                 OUString appModule( xModuleManager->identify(
                                     xDocumentModel ) );
                 Sequence<beans::PropertyValue> moduleDescr;
-                Any aAny = xModuleConfig->getByName(appModule);
+                Any aAny = xModuleManager->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
                     throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue")), Reference< XInterface >());

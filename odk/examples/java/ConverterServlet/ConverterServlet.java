@@ -36,8 +36,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.BufferedInputStream;
 import java.util.Enumeration;
 
 // Servlet API
@@ -45,8 +43,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletOutputStream;
-
 // Helper API
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.MultipartResponse;

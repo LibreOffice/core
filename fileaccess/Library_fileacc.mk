@@ -34,6 +34,7 @@ $(eval $(call gb_Library_set_include,fileacc,\
 $(eval $(call gb_Library_use_sdk_api,fileacc))
 
 $(eval $(call gb_Library_use_libraries,fileacc,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \

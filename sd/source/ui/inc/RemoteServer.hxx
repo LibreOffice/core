@@ -51,19 +51,7 @@ namespace sd
             mAddress( rAddress ) {}
     };
 
-    struct ClientInfoInternal:
-        ClientInfo
-    {
-        BufferedStreamSocket *mpStreamSocket;
-        rtl::OUString mPin;
-
-        ClientInfoInternal( const rtl::OUString rName,
-                            const rtl::OUString rAddress,
-                            BufferedStreamSocket *pSocket, rtl::OUString rPin ):
-                ClientInfo( rName, rAddress ),
-                mpStreamSocket( pSocket ),
-                mPin( rPin ) {}
-    };
+    struct ClientInfoInternal;
 
     class RemoteServer : public salhelper::Thread
     {
@@ -80,6 +68,9 @@ namespace sd
             SD_DLLPUBLIC static std::vector<ClientInfo*> getClients();
             SD_DLLPUBLIC static sal_Bool connectClient( ClientInfo *pClient,
                                                         rtl::OUString aPin );
+
+            SD_DLLPUBLIC static bool isBluetoothDiscoverable();
+            SD_DLLPUBLIC static void setBluetoothDiscoverable( bool aDiscoverable );
 
             // For the communicator
             static void removeCommunicator( Communicator* pCommunicator );

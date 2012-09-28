@@ -46,8 +46,10 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 
 #include <boost/scoped_ptr.hpp>
+#include <string.h>
 
 using namespace com::sun::star;
 
@@ -214,9 +216,7 @@ FileEmitContext::FileEmitContext( const rtl::OUString&                          
     m_xOut()
 {
     m_xContextStream = uno::Reference< io::XStream >(
-        xContext->getServiceManager()->createInstanceWithContext(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ),
-            xContext ), uno::UNO_QUERY_THROW );
+        io::TempFile::create(xContext), uno::UNO_QUERY_THROW );
     m_xOut = m_xContextStream->getOutputStream();
     m_xSeek = uno::Reference<io::XSeekable>(m_xOut, uno::UNO_QUERY_THROW );
 
@@ -257,7 +257,7 @@ bool FileEmitContext::write( const void* pBuf, unsigned int nLen )
         return false;
 
     uno::Sequence< sal_Int8 > aSeq( nLen );
-    rtl_copyMemory( aSeq.getArray(), pBuf, nLen );
+    memcpy( aSeq.getArray(), pBuf, nLen );
     m_xOut->writeBytes( aSeq );
     return true;
 }
@@ -561,7 +561,7 @@ bool checkDocChecksum( const rtl::OUString& rInPDFFileURL,
 
     // open file and calculate actual checksum up to index nBytes
     sal_uInt8 nActualChecksum[ RTL_DIGEST_LENGTH_MD5 ];
-    rtl_zeroMemory( nActualChecksum, sizeof(nActualChecksum) );
+    memset( nActualChecksum, 0, sizeof(nActualChecksum) );
     rtlDigest aActualDigest = rtl_digest_createMD5();
     oslFileHandle aRead = NULL;
     oslFileError aErr = osl_File_E_None;
@@ -691,8 +691,6 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                     rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                    RTL_TEXTENCODING_ISO_8859_1 );
                                     bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                                    // trash password string on heap
-                                    rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                                 }
                                 if( ! bAuthenticated )
                                 {
@@ -720,8 +718,6 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                         rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                        RTL_TEXTENCODING_ISO_8859_1 );
                                         bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                                        // trash password string on heap
-                                        rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                                     } while( bEntered && ! bAuthenticated );
                                 }
 

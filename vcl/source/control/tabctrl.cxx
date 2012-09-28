@@ -101,6 +101,8 @@ struct ImplTabCtrlData
 
 void TabControl::ImplInit( Window* pParent, WinBits nStyle )
 {
+    mbLayoutDirty = true;
+
     if ( !(nStyle & WB_NOTABSTOP) )
         nStyle |= WB_TABSTOP;
     if ( !(nStyle & WB_NOGROUP) )
@@ -154,18 +156,6 @@ const Font& TabControl::GetCanonicalFont( const StyleSettings& _rStyle ) const
 const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetButtonTextColor();
-}
-
-// -----------------------------------------------------------------------
-
-WinBits TabControl::ImplInitStyle( WinBits nStyle )
-{
-    if ( !(nStyle & WB_NOTABSTOP) )
-        nStyle |= WB_TABSTOP;
-    if ( !(nStyle & WB_NOGROUP) )
-        nStyle |= WB_GROUP;
-
-    return nStyle;
 }
 
 // -----------------------------------------------------------------------
@@ -1088,7 +1078,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     // in this case we're only interested in the top border of the tabpage because the tabitems are used
     // standalone (eg impress)
     sal_Bool bNoTabPage = sal_False;
-    TabPage*        pCurPage = (pCurItem) ? pCurItem->mpTabPage : NULL;
+    TabPage* pCurPage = pCurItem ? pCurItem->mpTabPage : NULL;
     if( !pCurPage || !pCurPage->IsVisible() )
     {
         bNoTabPage = sal_True;
@@ -1237,7 +1227,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
 
 // -----------------------------------------------------------------------
 
-void TabControl::Resize()
+void TabControl::setAllocation(const Size &rAllocation)
 {
     ImplFreeLayoutData();
 
@@ -1248,7 +1238,7 @@ void TabControl::Resize()
     {
         // get the listbox' preferred size
         Size aTabCtrlSize( GetSizePixel() );
-        long nPrefWidth = mpTabCtrlData->mpListBox->GetOptimalSize( WINDOWSIZE_PREFERRED ).Width();
+        long nPrefWidth = mpTabCtrlData->mpListBox->get_preferred_size().Width();
         if( nPrefWidth > aTabCtrlSize.Width() )
             nPrefWidth = aTabCtrlSize.Width();
         Size aNewSize( nPrefWidth, LogicToPixel( Size( 12, 12 ), MapMode( MAP_APPFONT ) ).Height() );
@@ -1261,7 +1251,7 @@ void TabControl::Resize()
     // Aktuelle TabPage resizen/positionieren
     sal_Bool bTabPage = ImplPosCurTabPage();
     // Feststellen, was invalidiert werden muss
-    Size aNewSize = Control::GetOutputSizePixel();
+    Size aNewSize = rAllocation;
     long nNewWidth = aNewSize.Width();
     for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
@@ -1294,6 +1284,36 @@ void TabControl::Resize()
         else
             Invalidate();
     }
+
+    mbLayoutDirty = false;
+}
+
+void TabControl::SetPosSizePixel(const Point& rNewPos, const Size& rNewSize)
+{
+    Window::SetPosSizePixel(rNewPos, rNewSize);
+    //if size changed, TabControl::Resize got called already
+    if (mbLayoutDirty)
+        setAllocation(rNewSize);
+}
+
+void TabControl::SetSizePixel(const Size& rNewSize)
+{
+    Window::SetSizePixel(rNewSize);
+    //if size changed, TabControl::Resize got called already
+    if (mbLayoutDirty)
+        setAllocation(rNewSize);
+}
+
+void TabControl::SetPosPixel(const Point& rPos)
+{
+    Window::SetPosPixel(rPos);
+    if (mbLayoutDirty)
+        setAllocation(GetOutputSizePixel());
+}
+
+void TabControl::Resize()
+{
+    setAllocation(Control::GetOutputSizePixel());
 }
 
 // -----------------------------------------------------------------------
@@ -1481,10 +1501,6 @@ void TabControl::StateChanged( StateChangedType nType )
     {
         ImplInitSettings( sal_False, sal_False, sal_True );
         Invalidate();
-    }
-    else if ( nType == STATE_CHANGE_STYLE )
-    {
-        SetStyle( ImplInitStyle( GetStyle() ) );
     }
 }
 
@@ -1839,6 +1855,18 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
     return 0;
 }
 
+sal_uInt16 TabControl::GetPageId( const TabPage& rPage ) const
+{
+    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
+    {
+        if ( it->mpTabPage == &rPage )
+            return it->mnId;
+    }
+
+    return 0;
+}
+
 // -----------------------------------------------------------------------
 
 void TabControl::SetCurPageId( sal_uInt16 nPageId )
@@ -1927,11 +1955,15 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
 
             // Erst hier setzen, damit Resize nicht TabPage umpositioniert
             pItem->mpTabPage = pTabPage;
+            queue_resize();
             if ( pItem->mnId == mnCurPageId )
                 ImplChangeTabPage( pItem->mnId, 0 );
         }
         else
+        {
             pItem->mpTabPage = NULL;
+            queue_resize();
+        }
     }
 }
 
@@ -2014,6 +2046,14 @@ const XubString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
 }
 
 // -----------------------------------------------------------------------
+
+void TabControl::SetHelpId( sal_uInt16 nPageId, const rtl::OString& rId ) const
+{
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+
+    if ( pItem )
+        pItem->maHelpId = rId;
+}
 
 rtl::OString TabControl::GetHelpId( sal_uInt16 nPageId ) const
 {
@@ -2137,14 +2177,55 @@ Point TabControl::GetItemsOffset() const
 
 // -----------------------------------------------------------------------
 
+Size TabControl::calculateRequisition() const
+{
+    Size aOptimalPageSize(0, 0);
+    long nTabLabelsBottom = 0;
+    long nTotalTabLabelWidths = 0;
+
+    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
+    {
+        Size aPageSize;
+        const TabPage *pPage = it->mpTabPage;
+        //it's a real nuisance if the page is not inserted yet :-(
+        if (pPage)
+            aPageSize = pPage->GetOptimalSize(WINDOWSIZE_PREFERRED);
+
+        if (aPageSize.Width() > aOptimalPageSize.Width())
+            aOptimalPageSize.Width() = aPageSize.Width();
+        if (aPageSize.Height() > aOptimalPageSize.Height())
+            aOptimalPageSize.Height() = aPageSize.Height();
+
+        TabControl* pThis = const_cast<TabControl*>(this);
+
+        sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
+        Rectangle aTabRect = pThis->ImplGetTabRect(nPos, LONG_MAX, LONG_MAX);
+        if (aTabRect.Bottom() > nTabLabelsBottom)
+            nTabLabelsBottom = aTabRect.Bottom();
+
+        ImplTabItem* pItem = const_cast<ImplTabItem*>(&(*it));
+        Size aTabSize = pThis->ImplGetItemSize(pItem, LONG_MAX);
+        nTotalTabLabelWidths += aTabSize.Width();
+    }
+
+    Size aOptimalSize(aOptimalPageSize);
+    aOptimalSize.Height() += nTabLabelsBottom;
+
+    if (nTotalTabLabelWidths > aOptimalSize.Width())
+        aOptimalSize.Width() = nTotalTabLabelWidths;
+
+    aOptimalSize.Width() += TAB_OFFSET * 2;
+    aOptimalSize.Height() += TAB_OFFSET * 2;
+
+    return aOptimalSize;
+}
+
 Size TabControl::GetOptimalSize(WindowSizeType eType) const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
+    if (eType == WINDOWSIZE_MINIMUM)
         return mpTabCtrlData ? mpTabCtrlData->maMinSize : Size();
-    default:
-        return Control::GetOptimalSize( eType );
-    }
+    return calculateRequisition();
 }
 
 // -----------------------------------------------------------------------
@@ -2155,7 +2236,20 @@ void TabControl::SetMinimumSizePixel( const Size& i_rSize )
         mpTabCtrlData->maMinSize = i_rSize;
 }
 
-// -----------------------------------------------------------------------
+void TabControl::ReassignPageId(sal_uInt16 nOldId, sal_uInt16 nNewId)
+{
+    for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
+    {
+        if( it->mnId == nOldId )
+            it->mnId = nNewId;
+    }
 
+    if (mnActPageId == nOldId)
+        mnActPageId = nNewId;
+
+    if (mnCurPageId == nOldId)
+        mnCurPageId = nOldId;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

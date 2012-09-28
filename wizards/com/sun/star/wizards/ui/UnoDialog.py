@@ -15,12 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import uno
 import traceback
-import wizards.ui.UIConsts
-from wizards.common.PropertyNames import PropertyNames
-from wizards.common.Helper import Helper
-from wizards.ui.PeerConfig import PeerConfig
+from .PeerConfig import PeerConfig
+from ..common.PropertyNames import PropertyNames
+from ..common.Helper import Helper
 
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.PosSize import POS

@@ -43,7 +43,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #define MAX_TOGGLEAREA_WIDTH        20
@@ -175,15 +175,12 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
                           uno::UNO_QUERY );
             }
 
-            static uno::WeakReference< frame::XModuleManager >  m_xModuleManager;
+            static uno::WeakReference< frame::XModuleManager2 >  m_xModuleManager;
 
-            uno::Reference< frame::XModuleManager > xModuleManager( m_xModuleManager );
+            uno::Reference< frame::XModuleManager2 > xModuleManager( m_xModuleManager );
             if ( !xModuleManager.is() )
             {
-                xModuleManager = uno::Reference< frame::XModuleManager >(
-                                    xServiceManager->createInstance(
-                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
-                                    uno::UNO_QUERY );
+                xModuleManager = frame::ModuleManager::create(comphelper::getComponentContext(xServiceManager));
                 m_xModuleManager = xModuleManager;
             }
 

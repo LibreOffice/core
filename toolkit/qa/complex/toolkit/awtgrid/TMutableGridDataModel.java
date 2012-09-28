@@ -26,7 +26,6 @@
 
 package complex.toolkit.awtgrid;
 
-import java.lang.reflect.Method;
 import com.sun.star.awt.grid.GridDataEvent;
 import com.sun.star.awt.grid.XMutableGridDataModel;
 import com.sun.star.lang.IllegalArgumentException;
@@ -53,14 +52,14 @@ public class TMutableGridDataModel
      */
     public void testAddRow() throws IndexOutOfBoundsException
     {
-        m_dataModel.addRow( 1, m_rowValues[0] );
+        m_dataModel.addRow( m_rowHeadings[0], m_rowValues[0] );
         GridDataEvent event = m_listener.assertSingleRowInsertionEvent();
         m_listener.reset();
         assertEquals( "row insertion: wrong FirstRow (1)", 0, event.FirstRow );
         assertEquals( "row insertion: wrong LastRow (1)", 0, event.LastRow );
         impl_assertRowData( 0 );
 
-        m_dataModel.addRow( 2, m_rowValues[1] );
+        m_dataModel.addRow( m_rowHeadings[1], m_rowValues[1] );
         event = m_listener.assertSingleRowInsertionEvent();
         m_listener.reset();
         assertEquals( "row insertion: wrong FirstRow (2)", 1, event.FirstRow );
@@ -75,7 +74,9 @@ public class TMutableGridDataModel
     {
         assertEquals( "precondition not met: call this directly after testAddRow, please!", 2, m_dataModel.getRowCount() );
 
-        m_dataModel.addRows( new Object[] { "3", 4.0, "5" }, new Object[][] { m_rowValues[2], m_rowValues[3], m_rowValues[4] } );
+        m_dataModel.addRows(
+                new Object[] { m_rowHeadings[2], m_rowHeadings[3], m_rowHeadings[4] },
+                new Object[][] { m_rowValues[2], m_rowValues[3], m_rowValues[4] } );
         GridDataEvent event = m_listener.assertSingleRowInsertionEvent();
         assertEquals( "row insertion: wrong FirstRow (1)", 2, event.FirstRow );
         assertEquals( "row insertion: wrong LastRow (1)", 4, event.LastRow );
@@ -94,6 +95,145 @@ public class TMutableGridDataModel
 
         assertException( "addRows is expected to throw when invoked with different-sized arrays",
             m_dataModel, "addRows", new Object[] { new Object[0], new Object[1][2] }, IllegalArgumentException.class );
+    }
+
+    /**
+     * tests the XMutableGridDataModel.insertRow method
+     */
+    public void testInsertRow() throws IndexOutOfBoundsException
+    {
+        int expectedRowCount = m_rowValues.length;
+        assertEquals( "precondition not met: call this directly after testAddRows, please!", expectedRowCount, m_dataModel.getRowCount() );
+
+        // inserting some row somewhere between the other rows
+        final Object heading = "inbetweenRow";
+        final Object[] inbetweenRow = new Object[] { "foo", "bar", 3, 4, 5 };
+        final int insertionPos = 2;
+        m_dataModel.insertRow( insertionPos, heading, inbetweenRow );
+        ++expectedRowCount;
+        assertEquals( "inserting a row is expected to increment the row count",
+                expectedRowCount, m_dataModel.getRowCount() );
+
+        final GridDataEvent event = m_listener.assertSingleRowInsertionEvent();
+        assertEquals( "inserting a row results in wrong FirstRow being notified", insertionPos, event.FirstRow );
+        assertEquals( "inserting a row results in wrong LastRow being notified", insertionPos, event.LastRow );
+        m_listener.reset();
+
+        for ( int row=0; row<expectedRowCount; ++row )
+        {
+            final Object[] actualRowData = m_dataModel.getRowData( row );
+            final Object[] expectedRowData =
+                ( row < insertionPos )
+                ?   m_rowValues[ row ]
+                :   ( row == insertionPos )
+                    ?   inbetweenRow
+                    :   m_rowValues[ row - 1 ];
+            assertArrayEquals( "row number " + row + " has wrong content content after inserting a row",
+                    expectedRowData, actualRowData );
+
+            final Object actualHeading = m_dataModel.getRowHeading(row);
+            final Object expectedHeading =
+                ( row < insertionPos )
+                ?   m_rowHeadings[ row ]
+                :   ( row == insertionPos )
+                    ?   heading
+                    :   m_rowHeadings[ row - 1 ];
+            assertEquals( "row " + row + " has a wrong heading after invoking insertRow",
+                    expectedHeading, actualHeading );
+        }
+
+        // exceptions
+        assertException( "inserting a row at a position > rowCount is expected to throw",
+                m_dataModel, "insertRow",
+                new Class[] { Integer.class, Object.class, Object[].class },
+                new Object[] { expectedRowCount + 1, "", new Object[] { "1", 2, 3 } },
+                IndexOutOfBoundsException.class );
+        assertException( "inserting a row at a position < 0 is expected to throw",
+                m_dataModel, "insertRow",
+                new Class[] { Integer.class, Object.class, Object[].class },
+                new Object[] { -1, "", new Object[] { "1", 2, 3 } },
+                IndexOutOfBoundsException.class );
+
+        // remove the row, to create the situation expected by the next test
+        m_dataModel.removeRow( insertionPos );
+        m_listener.reset();
+    }
+
+    /**
+     * tests the XMutableGridDataModel.insertRows method
+     */
+    public void testInsertRows() throws IndexOutOfBoundsException, IllegalArgumentException
+    {
+        int expectedRowCount = m_rowValues.length;
+        assertEquals( "precondition not met: call this directly after testInsertRow, please!", expectedRowCount, m_dataModel.getRowCount() );
+
+        // inserting some rows somewhere between the other rows
+        final int insertionPos = 3;
+        final Object[] rowHeadings = new Object[] { "A", "B", "C" };
+        final Object[][] rowData = new Object[][] {
+            new Object[] { "A", "B", "C", "D", "E" },
+            new Object[] { "J", "I", "H", "G", "F" },
+            new Object[] { "K", "L", "M", "N", "O" }
+        };
+        final int insertedRowCount = rowData.length;
+        assertEquals( "invalid test data", rowHeadings.length, insertedRowCount );
+
+        m_dataModel.insertRows( insertionPos, rowHeadings, rowData );
+        expectedRowCount += insertedRowCount;
+
+        final GridDataEvent event = m_listener.assertSingleRowInsertionEvent();
+        assertEquals( "inserting multiple rows results in wrong FirstRow being notified",
+                insertionPos, event.FirstRow );
+        assertEquals( "inserting multiple rows results in wrong LastRow being notified",
+                insertionPos + insertedRowCount - 1, event.LastRow );
+        m_listener.reset();
+
+        for ( int row=0; row<expectedRowCount; ++row )
+        {
+            final Object[] actualRowData = m_dataModel.getRowData( row );
+            final Object[] expectedRowData =
+                ( row < insertionPos )
+                ?   m_rowValues[ row ]
+                :   ( row >= insertionPos ) && ( row < insertionPos + insertedRowCount )
+                    ?   rowData[ row - insertionPos ]
+                    :   m_rowValues[ row - insertedRowCount ];
+            assertArrayEquals( "row number " + row + " has wrong content content after inserting multiple rows",
+                    expectedRowData, actualRowData );
+
+            final Object actualHeading = m_dataModel.getRowHeading(row);
+            final Object expectedHeading =
+                ( row < insertionPos )
+                ?   m_rowHeadings[ row ]
+                :   ( row >= insertionPos ) && ( row < insertionPos + insertedRowCount )
+                    ?   rowHeadings[ row - insertionPos ]
+                    :   m_rowHeadings[ row - insertedRowCount ];
+            assertEquals( "row " + row + " has a wrong heading after invoking insertRows",
+                    expectedHeading, actualHeading );
+        }
+
+        // exceptions
+        assertException( "inserting multiple rows at a position > rowCount is expected to throw an IndexOutOfBoundsException",
+                m_dataModel, "insertRows",
+                new Class[] { Integer.class, Object[].class, Object[][].class },
+                new Object[] { expectedRowCount + 1, new Object[0], new Object[][] { } },
+                IndexOutOfBoundsException.class );
+        assertException( "inserting multiple rows at a position < 0 is expected to throw an IndexOutOfBoundsException",
+                m_dataModel, "insertRows",
+                new Class[] { Integer.class, Object[].class, Object[][].class },
+                new Object[] { -1, new Object[0], new Object[][] { } },
+                IndexOutOfBoundsException.class );
+        assertException( "inserting multiple rows with inconsistent array lengths is expected to throw an IllegalArgumentException",
+                m_dataModel, "insertRows",
+                new Class[] { Integer.class, Object[].class, Object[][].class },
+                new Object[] { 0, new Object[0], new Object[][] { new Object[0] } },
+                IllegalArgumentException.class );
+
+        // remove the row, to create the situation expected by the next test
+        for ( int i=0; i<insertedRowCount; ++i )
+        {
+            m_dataModel.removeRow( insertionPos );
+            m_listener.reset();
+        }
     }
 
     /**
@@ -150,7 +290,7 @@ public class TMutableGridDataModel
     {
         assertEquals( "precondition not met: call this directly after testRemoveAllRows, please!", 0, m_dataModel.getRowCount() );
 
-        m_dataModel.addRows( new Object[] { 1, 2, 3, 4, 5 }, m_rowValues );
+        m_dataModel.addRows( m_rowHeadings, m_rowValues );
         m_listener.assertSingleRowInsertionEvent();
         m_listener.reset();
 
@@ -311,4 +451,8 @@ public class TMutableGridDataModel
             new Object[] { 4, 5, 6, 7, "8" },
             new Object[] { 5, "6", 7, 8, 9 },
         };
+
+    private final static Object[] m_rowHeadings = new Object[] {
+        "1", 2, 3.0, "4", (float)5.0
+    };
 }

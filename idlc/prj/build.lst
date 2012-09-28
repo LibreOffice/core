@@ -1,3 +1,3 @@
-ic	idlc	:	ucpp registry NULL
+ic	idlc	:	UCPP:ucpp registry NULL
 ic	idlc					usr1	-	all	ic_mkout NULL
 ic	idlc\prj				nmake	-	all	ic_prj NULL

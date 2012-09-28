@@ -32,7 +32,6 @@ package com.sun.star.comp.Calc.NLPSolver.dialogs;
  * "Exit" indicates no significant change (for example when the user presses
  * Cancel or simply closes the dialog). "OK" indicates for example, that the
  * user pressed the OK button.
- * @author Andreas Schneider
  */
 public enum ModalState {
     Exit,

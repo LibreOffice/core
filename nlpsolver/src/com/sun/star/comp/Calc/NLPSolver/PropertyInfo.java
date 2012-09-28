@@ -31,10 +31,6 @@ import com.sun.star.beans.Property;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.uno.Type;
 
-/**
- *
- * @author Andreas Schneider
- */
 public class PropertyInfo<PropType> {
 
     private Property m_property;

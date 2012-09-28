@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 //____________________________________________________________________________________________________________
@@ -246,16 +247,7 @@ OUString SAL_CALL BaseControl::getImplementationName() throw( RuntimeException )
 
 sal_Bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    Sequence< OUString >    seqServiceNames =   getSupportedServiceNames();
-    const OUString*         pArray          =   seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
-    {
-        if ( pArray[nCounter] == sServiceName )
-        {
-            return sal_True ;
-        }
-    }
-    return sal_False ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 //____________________________________________________________________________________________________________

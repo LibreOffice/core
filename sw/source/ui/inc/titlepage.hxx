@@ -31,9 +31,9 @@
 #define _SWTITLEPAGE_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <numberingtypelistbox.hxx>
 
@@ -44,34 +44,22 @@ class SwPageDesc;
 class SwTitlePageDlg : public SfxModalDialog
 {
 private:
-    FixedLine   aMakeInsertFL;
-    RadioButton aUseExistingPagesRB;
-    RadioButton aInsertNewPagesRB;
-    FixedText   aPageCountFT;
-    NumericField    aPageCountNF;
-    FixedText   aPagePagesFT;
+    RadioButton* m_pUseExistingPagesRB;
+    NumericField* m_pPageCountNF;
 
-    FixedText   aPageStartFT;
-    RadioButton aDocumentStartRB;
-    RadioButton aPageStartRB;
-    NumericField    aPageStartNF;
+    RadioButton* m_pDocumentStartRB;
+    RadioButton* m_pPageStartRB;
+    NumericField* m_pPageStartNF;
 
-    FixedLine   aNumberingFL;
-    CheckBox    aRestartNumberingCB;
-    FixedText   aRestartNumberingFT;
-    NumericField    aRestartNumberingNF;
-    CheckBox    aSetPageNumberCB;
-    FixedText   aSetPageNumberFT;
-    NumericField    aSetPageNumberNF;
+    CheckBox* m_pRestartNumberingCB;
+    NumericField* m_pRestartNumberingNF;
+    CheckBox* m_pSetPageNumberCB;
+    NumericField* m_pSetPageNumberNF;
 
-    FixedLine   aPagePropertiesFL;
-    ListBox     aPagePropertiesLB;
-    PushButton  aPagePropertiesPB;
+    ListBox* m_pPagePropertiesLB;
+    PushButton* m_pPagePropertiesPB;
 
-    FixedLine   aBottomFL;
-    OKButton    aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton  aHelpPB;
+    OKButton* m_pOkPB;
 
     SwWrtShell *mpSh;
 

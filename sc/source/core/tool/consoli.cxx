@@ -101,7 +101,6 @@ ScConsData::ScConsData() :
     bReference(false),
     bColByName(false),
     bRowByName(false),
-    bSubTitles(false),
     nColCount(0),
     nRowCount(0),
     ppUsed(NULL),

@@ -617,6 +617,32 @@ void OOXMLFastContextHandler::endParagraphGroup()
     }
 }
 
+void OOXMLFastContextHandler::startSdt()
+{
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->element("contexthandler.startSdt");
+#endif
+
+    OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+    OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(1));
+    OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+    pProps->add(pProp);
+    mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+}
+
+void OOXMLFastContextHandler::endSdt()
+{
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->element("contexthandler.endSdt");
+#endif
+
+    OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
+    OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(1));
+    OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+    pProps->add(pProp);
+    mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+}
+
 void OOXMLFastContextHandler::startSectionGroup()
 {
 #ifdef DEBUG_CONTEXT_HANDLER
@@ -1133,7 +1159,8 @@ void OOXMLFastContextHandler::resolveFooter
     mpParserState->getDocument()->resolveFooter(*mpStream, type, rId);
 }
 
-void OOXMLFastContextHandler::resolveOLE(const OUString & rId)
+// Add the data pointed to by the reference as another property.
+void OOXMLFastContextHandler::resolveData(const OUString & rId)
 {
     uno::Reference<io::XInputStream> xInputStream
         (mpParserState->getDocument()->getInputStreamForId(rId));
@@ -1435,7 +1462,7 @@ void OOXMLFastContextHandlerProperties::handleBreak()
     debug_logger->element("handleBreak");
 #endif
 
-    OOXMLBreakHandler aBreakHandler(*mpStream, this);
+    OOXMLBreakHandler aBreakHandler(*mpStream);
     getPropertySet()->resolve(aBreakHandler);
 }
 
@@ -1447,6 +1474,12 @@ void OOXMLFastContextHandlerProperties::handleOLE()
 
     OOXMLOLEHandler aOLEHandler(this);
     getPropertySet()->resolve(aOLEHandler);
+}
+
+void OOXMLFastContextHandlerProperties::handleFontRel()
+{
+    OOXMLEmbeddedFontHandler handler(this);
+    getPropertySet()->resolve(handler);
 }
 
 void OOXMLFastContextHandlerProperties::setParent

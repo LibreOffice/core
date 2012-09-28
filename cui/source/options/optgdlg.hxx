@@ -70,10 +70,6 @@ private:
 
     String              aStrDateInfo;
 
-    FixedLine           aExperimentalFL;
-    CheckBox            aExperimentalCB;
-    CheckBox            aMacroRecorderCB;
-
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
     DECL_LINK(HelpCheckHdl_Impl, void *);
@@ -140,7 +136,6 @@ private:
 
     sal_uInt16          nSizeLB_InitialSelection;
     sal_uInt16          nStyleLB_InitialSelection;
-    sal_Bool            bSfxSymbolsAuto;
 
     // item ID for the given icon theme
     // might be zero when the theme is not installed and the item is removed
@@ -179,6 +174,9 @@ class OfaLanguagesTabPage : public SfxTabPage
     CheckBox        aDecimalSeparatorCB;
     FixedText       aCurrencyFT;
     ListBox         aCurrencyLB;
+    ReadOnlyImage   aDatePatternsFI;
+    FixedText       aDatePatternsFT;
+    Edit            aDatePatternsED;
 
     FixedLine       aLinguLanguageGB;
     ReadOnlyImage   aWesternLanguageFI;
@@ -207,6 +205,7 @@ class OfaLanguagesTabPage : public SfxTabPage
 
     DECL_LINK(  SupportHdl, CheckBox* ) ;
     DECL_LINK(  LocaleSettingHdl, SvxLanguageBox* ) ;
+    DECL_LINK(  DatePatternsHdl, Edit* ) ;
 
 public:
     OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet );

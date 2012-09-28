@@ -191,7 +191,7 @@ void Mapping::mapInterface(
 
 void Mapping::acquire() SAL_THROW(())
 {
-    if (osl_incrementInterlockedCount(&m_nCount) == 1)
+    if (osl_atomic_increment(&m_nCount) == 1)
     {
         uno_Mapping * pMapping = this;
 
@@ -201,7 +201,7 @@ void Mapping::acquire() SAL_THROW(())
 
 void Mapping::release() SAL_THROW(())
 {
-    if (osl_decrementInterlockedCount(&m_nCount) == 0)
+    if (osl_atomic_decrement(&m_nCount) == 0)
         ::uno_revokeMapping(this);
 }
 

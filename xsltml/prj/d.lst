@@ -1,6 +1,0 @@
-mkdir: %_DEST%\bin\xslt
-mkdir: %_DEST%\bin\xslt\export
-mkdir: %_DEST%\bin\xslt\export\xsltml
-
-..\%__SRC%\misc\build\xsltml_2.1.2\*.xsl %_DEST%\bin\xslt\export\xsltml\*.xsl
-

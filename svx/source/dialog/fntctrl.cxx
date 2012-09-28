@@ -28,6 +28,7 @@
 
 #include <sfx2/viewsh.hxx>      // SfxViewShell
 #include <sfx2/printer.hxx>     // Printer
+#include <vcl/builder.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <unicode/uchar.h>
@@ -338,11 +339,14 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
     nAscent = 0;
     long nCJKAscent = 0;
     long nCTLAscent = 0;
+
     do
     {
         const SvxFont& rFnt = (nScript==com::sun::star::i18n::ScriptType::ASIAN) ? aCJKFont : ((nScript==com::sun::star::i18n::ScriptType::COMPLEX) ? aCTLFont : rFont);
         sal_uIntPtr nWidth = rFnt.GetTxtSize( _pPrinter, aText, nStart, nEnd-nStart ).
                        Width();
+        if (nIdx >= aTextWidth.size())
+            break;
         aTextWidth[ nIdx++ ] = nWidth;
         nTxtWidth += nWidth;
         switch(nScript)
@@ -513,7 +517,20 @@ void SvxFontPrevWindow::Init()
 SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     Window( pParent, rId )
 {
+    m_aInitialSize = GetSizePixel();
     Init();
+}
+
+SvxFontPrevWindow::SvxFontPrevWindow(Window* pParent) :
+    Window(pParent)
+{
+    Init();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontPrevWindow(Window *pParent, VclBuilder::stringmap &)
+{
+    SvxFontPrevWindow *pWindow = new SvxFontPrevWindow(pParent);
+    return pWindow;
 }
 
 SvxFontPrevWindow::~SvxFontPrevWindow()
@@ -1480,6 +1497,14 @@ void SvxFontPrevWindow::SetFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, 
     setFontEscapement(GetCJKFont(),nProp,nEscProp,nEsc);
     setFontEscapement(GetCTLFont(),nProp,nEscProp,nEsc);
     Invalidate();
+}
+
+Size SvxFontPrevWindow::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return Window::GetOptimalSize(eType);
+
+    return m_aInitialSize;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

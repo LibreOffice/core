@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include "oox/vml/vmlshape.hxx"
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -37,7 +40,6 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/oustringostreaminserter.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -172,8 +174,13 @@ Rectangle ShapeType::getAbsRectangle() const
     if ( nHeight == 0 )
         nHeight = 1;
 
+    sal_Int32 nLeft = ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maLeft, 0, true, true )
+        + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true );
+    if (nLeft == 0 && maTypeModel.maPosition == "absolute")
+        nLeft = 1;
+
     return Rectangle(
-        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maLeft, 0, true, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true ),
+        nLeft,
         ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginTop, 0, false, true ),
         nWidth, nHeight );
 }
@@ -374,6 +381,15 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 
 void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 {
+    if ( rTypeModel.maPositionHorizontal == "center" )
+        rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
+
+    if ( rTypeModel.maPositionHorizontalRelative == "page" )
+        rPropSet.setAnyProperty(PROP_HoriOrientRelation, makeAny(text::RelOrientation::PAGE_FRAME));
+
+    if ( rTypeModel.maPositionVertical == "center" )
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::CENTER));
+
     if ( rTypeModel.maPosition == "absolute" )
     {
         if (rTypeModel.moWrapAnchorX.get() == "page" && rTypeModel.moWrapAnchorY.get() == "page")
@@ -384,8 +400,20 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
             rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PAGE);
         }
         else
+        {
             // Map to as-character by default, that fixes vertical position of some textframes.
             rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_CHARACTER);
+        }
+
+        if ( rTypeModel.maPositionVerticalRelative == "page" )
+        {
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
+        }
+        else
+        {
+            // Vertical placement relative to margin, because parent style must not modify vertical position
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
+        }
     }
     else if( rTypeModel.maPosition == "relative" )
     {   // I'm not very sure this is correct either.
@@ -421,8 +449,32 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
-        if (maTypeModel.maPositionHorizontal == "center")
-            PropertySet(xShape).setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
+    }
+    else
+    {
+        // FIXME Setting the relative width/heigh only for everything but text frames as
+        // TextFrames already have relative widht/heigh feature... but currently not working
+        // in the way we need.
+
+        // Set the relative width / height if any
+        if ( !maTypeModel.maWidthPercent.isEmpty( ) )
+        {
+            // Only page-relative width is supported ATM
+            if ( maTypeModel.maWidthRelative.isEmpty() || maTypeModel.maWidthRelative == "page" )
+            {
+                sal_Int16 nWidth = maTypeModel.maWidthPercent.toInt32() / 10;
+                PropertySet( xShape ).setAnyProperty(PROP_RelativeWidth, makeAny( nWidth ) );
+            }
+        }
+        if ( !maTypeModel.maHeightPercent.isEmpty( ) )
+        {
+            // Only page-relative height is supported ATM
+            if ( maTypeModel.maHeightRelative.isEmpty() || maTypeModel.maHeightRelative == "page" )
+            {
+                sal_Int16 nHeight = maTypeModel.maHeightPercent.toInt32() / 10;
+                PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
+            }
+        }
     }
 
     // Import Legacy Fragments (if any)
@@ -447,11 +499,63 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
+Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect, OUString& rGraphicPath ) const
+{
+    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect );
+    if( xShape.is() )
+    {
+        XmlFilterBase& rFilter = mrDrawing.getFilter();
+        OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( rGraphicPath );
+        PropertySet aPropSet( xShape );
+        if( !aGraphicUrl.isEmpty() )
+        {
+            aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
+        }
+        // If the shape has an absolute position, set the properties accordingly.
+        if ( maTypeModel.maPosition == "absolute" )
+        {
+            aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
+            aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
+            aPropSet.setProperty(PROP_Opaque, sal_False);
+        }
+
+        lcl_SetAnchorType(aPropSet, maTypeModel);
+    }
+    return xShape;
+}
+
 // ============================================================================
 
 RectangleShape::RectangleShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.RectangleShape" ) )
 {
+}
+
+Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const Rectangle& rShapeRect) const
+{
+    OUString aGraphicPath = getGraphicPath();
+
+    // try to create a picture object
+    if(!aGraphicPath.isEmpty())
+        return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
+
+    // default: try to create a rectangle shape
+    Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
+    rtl::OUString sArcsize = maTypeModel.maArcsize;
+    if ( !sArcsize.isEmpty( ) )
+    {
+        sal_Unicode cLastChar = sArcsize[sArcsize.getLength() - 1];
+        sal_Int32 nValue = sArcsize.copy( 0, sArcsize.getLength() - 1 ).toInt32( );
+        // Get the smallest half-side
+        double size = std::min( rShapeRect.Height, rShapeRect.Width ) / 2.0;
+        sal_Int32 nRadius = 0;
+        if ( cLastChar == 'f' )
+            nRadius = size * nValue / 65536;
+        else if ( cLastChar == '%' )
+            nRadius = size * nValue / 100;
+        PropertySet( xShape ).setAnyProperty( PROP_CornerRadius, makeAny( nRadius ) );
+    }
+    return xShape;
 }
 
 // ============================================================================
@@ -504,6 +608,89 @@ Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxSh
     aShapeRect.Height = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, false, true) - aShapeRect.Y;
 
     return SimpleShape::implConvertAndInsert(rxShapes, aShapeRect);
+}
+
+// ============================================================================
+
+BezierShape::BezierShape(Drawing& rDrawing)
+    : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape")
+{
+}
+
+Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
+    Rectangle aCoordSys = getCoordSystem();
+
+    if( (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
+    {
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+
+        // Bezier paths may consist of one or more sub-paths
+        typedef ::std::vector< ::std::vector< Point > > SubPathList;
+        typedef ::std::vector< ::std::vector< PolygonFlags > > FlagsList;
+        SubPathList aCoordLists;
+        FlagsList aFlagLists;
+        sal_Int32 nIndex = 0;
+
+        // Curve defined by to, from, control1 and control2 attributes
+        if ( maShapeModel.maVmlPath.isEmpty() )
+        {
+            aCoordLists.push_back( ::std::vector< Point >() );
+            aFlagLists.push_back( ::std::vector< PolygonFlags >() );
+
+            // Start point
+            aCoordLists[ 0 ].push_back(
+                Point(ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maFrom.getToken( 0, ',', nIndex ), 0, true, true ),
+                  ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maFrom.getToken( 0, ',', nIndex ), 0, false, true ) ) );
+            // Control point 1
+            aCoordLists[ 0 ].push_back(
+                Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl1.getToken( 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl1.getToken( 0, ',', nIndex ), 0, false, true ) ) );
+            // Control point 2
+            aCoordLists[ 0 ].push_back(
+                Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl2.getToken( 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl2.getToken( 0, ',', nIndex ), 0, false, true ) ) );
+            // End point
+            aCoordLists[ 0 ].push_back(
+                Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maTo.getToken( 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maTo.getToken( 0, ',', nIndex ), 0, false, true ) ) );
+
+            // First and last points are normals, points 2 and 4 are controls
+            aFlagLists[ 0 ].resize( aCoordLists[ 0 ].size(), PolygonFlags_CONTROL );
+            aFlagLists[ 0 ][ 0 ] = PolygonFlags_NORMAL;
+            aFlagLists[ 0 ].back() = PolygonFlags_NORMAL;
+        }
+        // Curve defined by path attribute
+        else
+        {
+            // Parse VML path string and convert to absolute coordinates
+            ConversionHelper::decodeVmlPath( aCoordLists, aFlagLists, maShapeModel.maVmlPath );
+
+            for ( SubPathList::iterator aListIt = aCoordLists.begin(); aListIt != aCoordLists.end(); aListIt++ )
+                for ( ::std::vector< Point >::iterator aPointIt = (*aListIt).begin(); aPointIt != (*aListIt).end(); aPointIt++)
+                {
+                    (*aPointIt) = lclGetAbsPoint( (*aPointIt), rShapeRect, aCoordSys );
+                }
+        }
+
+        PolyPolygonBezierCoords aBezierCoords;
+        aBezierCoords.Coordinates.realloc( aCoordLists.size() );
+        for ( unsigned int i = 0; i < aCoordLists.size(); i++ )
+            aBezierCoords.Coordinates[i] = ContainerHelper::vectorToSequence( aCoordLists[i] );
+
+        aBezierCoords.Flags.realloc( aFlagLists.size() );
+        for ( unsigned int i = 0; i < aFlagLists.size(); i++ )
+            aBezierCoords.Flags[i] = ContainerHelper::vectorToSequence( aFlagLists[i] );
+
+        PropertySet aPropSet( xShape );
+        aPropSet.setProperty( PROP_PolyPolygonBezier, aBezierCoords );
+    }
+
+    // Hacky way of ensuring the shape is correctly sized/positioned
+    xShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
+    xShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+    return xShape;
 }
 
 // ============================================================================
@@ -610,33 +797,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
-    {
-        Reference< XShape > xShape = mrDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.GraphicObjectShape" ), rxShapes, rShapeRect );
-        if( xShape.is() )
-        {
-            OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( aGraphicPath );
-            PropertySet aPropSet( xShape );
-            if( !aGraphicUrl.isEmpty() )
-            {
-                aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
-            }
-            // If the shape has an absolute position, set the properties accordingly.
-            if ( maTypeModel.maPosition == "absolute" )
-            {
-                aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
-                aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
-                aPropSet.setProperty(PROP_Opaque, sal_False);
-            }
-
-            lcl_SetAnchorType(aPropSet, maTypeModel);
-
-            if ( maTypeModel.maPositionVerticalRelative == "page" )
-            {
-                aPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
-            }
-        }
-        return xShape;
-    }
+        return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
 
     // default: try to create a custom shape
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );

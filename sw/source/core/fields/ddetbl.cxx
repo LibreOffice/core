@@ -49,7 +49,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
     : SwTable( rTable ), aDepend( this, pDDEType )
 {
     // Kopiere/move die Daten der Tabelle
-    aSortCntBoxes.insert( rTable.GetTabSortBoxes()  ); // move die Inh. Boxen
+    m_TabSortContentBoxes.insert(rTable.GetTabSortBoxes());
     rTable.GetTabSortBoxes().clear();
 
     aLines.insert( aLines.begin(),

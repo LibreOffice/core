@@ -27,8 +27,8 @@ class AccessibleActionHandler
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleAction xEComponent =
-            (XAccessibleAction) UnoRuntime.queryInterface (
-                XAccessibleAction.class, xContext);
+            UnoRuntime.queryInterface (
+            XAccessibleAction.class, xContext);
         if (xEComponent != null)
             return new AccessibleActionHandler (xEComponent);
         else
@@ -47,7 +47,7 @@ class AccessibleActionHandler
 
     protected static XAccessibleAction getAction (AccTreeNode aParent)
     {
-        return (XAccessibleAction) UnoRuntime.queryInterface (
+        return UnoRuntime.queryInterface (
             XAccessibleAction.class, aParent.getContext());
     }
 

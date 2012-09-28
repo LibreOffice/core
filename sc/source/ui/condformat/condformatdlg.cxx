@@ -845,7 +845,7 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
     boost::scoped_ptr<ScTokenArray> mpCode(aComp.CompileString(aFormula));
     if(mpCode->GetCodeError())
     {
-        pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        pEdit->SetControlBackground(COL_LIGHTRED);
     }
     else
     {
@@ -996,7 +996,6 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
     Control(pParent, rResId),
     mbHasScrollBar(false),
     mpScrollBar(new ScrollBar(this, WB_VERT )),
-    mnTopIndex(0),
     mpDoc(pDoc),
     maPos(rPos),
     maRanges(rRanges)
@@ -1094,8 +1093,6 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
     maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos ),
-    mpDoc(pDoc),
-    mpFormat(pFormat),
     maPos(rPos)
 {
 

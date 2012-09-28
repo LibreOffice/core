@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include "file/FConnection.hxx"
 #include "file/FDatabaseMetaData.hxx"
@@ -93,7 +96,7 @@ sal_Bool OConnection::matchesExtension( const String& _rExt ) const
 //-----------------------------------------------------------------------------
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     ::rtl::OUString aExt;
     const PropertyValue *pIter  = info.getConstArray();
@@ -157,7 +160,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         ::ucbhelper::Content aFile;
         try
         {
-            aFile = ::ucbhelper::Content(getURL(),Reference< XCommandEnvironment >());
+            aFile = ::ucbhelper::Content(getURL(), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
         }
         catch(ContentCreationException& e)
         {
@@ -182,7 +185,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
                 Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
                 m_xContent = xParent;
 
-                ::ucbhelper::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+                ::ucbhelper::Content aParent(xIdent->getContentIdentifier(), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
                 m_xDir = aParent.createDynamicCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
             }
             else
@@ -203,11 +206,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     catch(const Exception&)
     {
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
         throw;
     }
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // XServiceInfo
 // --------------------------------------------------------------------------------
@@ -398,7 +401,7 @@ Reference< XDynamicResultSet > OConnection::getDir() const
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
-        ::ucbhelper::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+        ::ucbhelper::Content aParent(xIdent->getContentIdentifier(), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
         xContent = aParent.createDynamicCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
     }
     catch(Exception&)

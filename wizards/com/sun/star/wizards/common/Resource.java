@@ -21,10 +21,7 @@ package com.sun.star.wizards.common;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.script.XInvocation;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 

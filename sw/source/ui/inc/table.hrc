@@ -18,18 +18,19 @@
 
 #include "rcid.hrc"
 
-#define DLG_INSERT_TABLE        RC_TABLE_BEGIN
 #define DLG_FORMAT_TABLE        (RC_TABLE_BEGIN + 1)
-#define DLG_CONV_TEXT_TABLE     (RC_TABLE_BEGIN + 2)
+
 #define DLG_ROW_HEIGHT          (RC_TABLE_BEGIN + 4)
-#define DLG_COL_WIDTH           (RC_TABLE_BEGIN + 6)
+
+
 #define MSG_ERR_TABLE_MERGE     (RC_TABLE_BEGIN + 7)
-#define DLG_AUTOFMT_TABLE       (RC_TABLE_BEGIN + 9)
-#define DLG_SWDLG_STRINPUT      (RC_TABLE_BEGIN + 10)
+
+
+
 #define TP_TABLE_COLUMN         (RC_TABLE_BEGIN + 11)
 #define DLG_INSERT_CHART        (RC_TABLE_BEGIN + 12)
 #define MSG_WRONG_TABLENAME     (RC_TABLE_BEGIN + 13)
-#define DLG_SPLIT_TABLE         (RC_TABLE_BEGIN + 14)
+
 #define DLG_MERGE_TABLE         (RC_TABLE_BEGIN + 15)
 
 #define TABLE_ACT_END           DLG_MERGE_TABLE

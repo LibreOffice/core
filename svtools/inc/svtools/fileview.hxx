@@ -103,7 +103,6 @@ public:
     void                    SetHelpId( const rtl::OString& rHelpId );
     const rtl::OString&     GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize );
-    using Window::SetPosSizePixel;
     virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
     void                    SetSortColumn( sal_Bool bValue ) { bSortColumn = bValue; }
     sal_Bool                GetSortColumn() { return bSortColumn; }

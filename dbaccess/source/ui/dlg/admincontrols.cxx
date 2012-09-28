@@ -69,7 +69,6 @@ namespace dbaui
     private:
         const String    m_sDisabledText;
               String    m_sUserText;
-              sal_Bool      m_bLastKnownEnabledState;
     };
 
     //--------------------------------------------------------------------

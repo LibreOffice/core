@@ -65,7 +65,7 @@
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
 #include "com/sun/star/task/XJob.hpp"
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
@@ -1414,12 +1414,9 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
     try
     {
         uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-            m_context->getServiceManager()->createInstanceWithContext(
-                OUSTR( "com.sun.star.system.SystemShellExecute" ),
-                m_context), uno::UNO_QUERY_THROW);
+            com::sun::star::system::SystemShellExecute::create(m_context) );
         //throws lang::IllegalArgumentException, system::SystemShellExecuteException
-        xSystemShellExecute->execute(
-                                     sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+        xSystemShellExecute->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
     }
     catch ( const uno::Exception& )
     {

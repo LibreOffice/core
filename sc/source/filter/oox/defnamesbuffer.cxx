@@ -382,9 +382,9 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
     if (maModel.mnSheet >= 0)
-        mpScRangeData = createLocalNamedRangeObject( maCalcName, getTokens(), nIndex, nNameFlags, maModel.mnSheet );
+        mpScRangeData = createLocalNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags, maModel.mnSheet );
     else
-        mpScRangeData = createNamedRangeObject( maCalcName, getTokens(), nIndex, nNameFlags );
+        mpScRangeData = createNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags );
     mnTokenIndex = nIndex;
 }
 
@@ -426,6 +426,15 @@ DefinedName::getTokens()
 
 void DefinedName::convertFormula()
 {
+    // convert and set formula of the defined name
+    if ( getFilterType() == FILTER_OOXML )
+    {
+        ApiTokenSequence aTokens = getTokens();
+        ScTokenArray aTokenArray;
+        (void)ScTokenConversion::ConvertToTokenArray( this->getScDocument(), aTokenArray, aTokens );
+        mpScRangeData->SetCode( aTokenArray );
+    }
+
     ScTokenArray* pTokenArray = mpScRangeData->GetCode();
     Sequence< FormulaToken > aFTokenSeq;
     (void)ScTokenConversion::ConvertToTokenSequence( this->getScDocument(), aFTokenSeq, *pTokenArray );
@@ -485,8 +494,7 @@ bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
 // ============================================================================
 
 DefinedNamesBuffer::DefinedNamesBuffer( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper ),
-    mnCalcSheet( -1 )
+    WorkbookHelper( rHelper )
 {
 }
 

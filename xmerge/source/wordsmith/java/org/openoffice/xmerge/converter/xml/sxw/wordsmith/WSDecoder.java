@@ -21,11 +21,9 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
-import org.openoffice.xmerge.util.Debug;
 
-import org.openoffice.xmerge.converter.palm.*;
+import org.openoffice.xmerge.converter.palm.Record;
+import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.Resources;
 
 /**
@@ -34,7 +32,6 @@ import org.openoffice.xmerge.util.Resources;
  *  DocumentDeserializerImpl} to decode a WordSmith format.  It currently
  *  decodes the text content into a single <code>String</code> object.
  *
- *  @author   Herbie Ong, David Proulx
  */
 final class WSDecoder implements DOCConstants {
 
@@ -142,7 +139,7 @@ final class WSDecoder implements DOCConstants {
         while (curIndex < rawData.length) {
             if (WsePara.isValid(rawData, curIndex)) {
                 v.add(new WsePara(rawData, curIndex));
-                curIndex = WsePara.computeNewIndex(rawData, curIndex);
+                curIndex = WsePara.computeNewIndex(curIndex);
             } else if (WseTextRun.isValid(rawData, curIndex)) {
                 v.add(new WseTextRun(rawData, curIndex, fontTable, colorTable));
                 curIndex = WseTextRun.computeNewIndex(rawData, curIndex);

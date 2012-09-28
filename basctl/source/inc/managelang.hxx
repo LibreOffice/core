@@ -17,16 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_MANAGELANG_HXX
-#define _BASCTL_MANAGELANG_HXX
+#ifndef BASCTL_MANAGELANG_HXX
+#define BASCTL_MANAGELANG_HXX
 
 #include <svx/checklbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 
-class LocalizationMgr;
 class SvxLanguageBox;
+
+namespace basctl
+{
+
+class LocalizationMgr;
 
 struct LanguageEntry
 {
@@ -93,7 +97,6 @@ private:
     CancelButton        m_aCancelBtn;
     HelpButton          m_aHelpBtn;
 
-    bool                m_bIsDefaultMode;
     boost::shared_ptr<LocalizationMgr> m_pLocalizationMgr;
 
     void                FillLanguageBox();
@@ -106,6 +109,8 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >   GetLocales() const;
 };
 
-#endif //_BASCTL_MANAGELANG_HXX
+} // namespace basctl
+
+#endif // BASCTL_MANAGELANG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

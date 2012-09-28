@@ -88,7 +88,7 @@ public class SdXShape extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xDrawDoc");
-        util.DesktopTools.closeDoc(xDrawDoc);;
+        util.DesktopTools.closeDoc(xDrawDoc);
     }
 
     /**

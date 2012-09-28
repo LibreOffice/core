@@ -58,7 +58,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
 
 /**
    A helper mixin to implement certain UNO interfaces related to property set

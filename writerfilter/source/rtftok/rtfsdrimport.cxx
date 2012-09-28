@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 
 #include <ooxml/resourceids.hxx> // NS_ooxml namespace
@@ -224,6 +225,13 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 }
                 else
                 {
+                    sal_Int32 nPoints = 1;
+                    if (nSeg >= 0x2000 && nSeg < 0x20FF)
+                    {
+                        nPoints = nSeg & 0x0FFF;
+                        nSeg &= 0xFF00;
+                    }
+
                     switch (nSeg)
                     {
                         case 0x0001: // lineto
@@ -234,9 +242,9 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
                             aSegments[nIndex].Count = sal_Int32(1);
                             break;
-                        case 0x2001: // curveto
+                        case 0x2000: // curveto
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
-                            aSegments[nIndex].Count = sal_Int32(1);
+                            aSegments[nIndex].Count = sal_Int32(nPoints);
                             break;
                         case 0xb300: // arcto
                             aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
@@ -311,6 +319,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     std::vector<beans::PropertyValue> aGeomPropVec;
     if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
     {
+        aViewBox.Width -= aViewBox.X;
+        aViewBox.Height -= aViewBox.Y;
         aPropertyValue.Name = "ViewBox";
         aPropertyValue.Value <<= aViewBox;
         aGeomPropVec.push_back(aPropertyValue);
@@ -337,6 +347,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             xPropertySet->setPropertyValue("HoriOrientRelation", uno::makeAny(rShape.nHoriOrientRelation));
         if (rShape.nVertOrientRelation != 0)
             xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
+        if (rShape.nWrap != -1)
+            xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode(rShape.nWrap)));
     }
 
     // Send it to dmapper

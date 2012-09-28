@@ -17,11 +17,7 @@
  */
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.AccessibleRelation;
-import com.sun.star.accessibility.XAccessibleRelationSet;
-import com.sun.star.accessibility.AccessibleRelationType;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
@@ -54,7 +50,7 @@ class AccessibleUNOHandler
     {
         XServiceInfo xServiceInfo = null;
         if (aNode instanceof AccTreeNode)
-            xServiceInfo = (XServiceInfo)UnoRuntime.queryInterface(
+            xServiceInfo = UnoRuntime.queryInterface(
                 XServiceInfo.class, ((AccTreeNode)aNode).getContext());
         return xServiceInfo;
     }
@@ -62,7 +58,7 @@ class AccessibleUNOHandler
     {
         XTypeProvider xTypeProvider = null;
         if (aNode instanceof AccTreeNode)
-            xTypeProvider = (XTypeProvider)UnoRuntime.queryInterface(
+            xTypeProvider = UnoRuntime.queryInterface(
                 XTypeProvider.class, ((AccTreeNode)aNode).getContext());
         return xTypeProvider;
     }

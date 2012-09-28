@@ -16,21 +16,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.storage;
+package ifc.scripting;
 
 import drafts.com.sun.star.script.framework.storage.XScriptStorageRefresh;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
-import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.Exception;
-import com.sun.star.beans.XPropertySet;
-
-import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Parameters;

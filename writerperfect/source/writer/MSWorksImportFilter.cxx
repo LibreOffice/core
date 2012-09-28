@@ -151,7 +151,7 @@ throw( com::sun::star::uno::RuntimeException )
     {
         try
         {
-            ::ucbhelper::Content aContent(sURL, xEnv);
+            ::ucbhelper::Content aContent(sURL, xEnv, mxContext);
             xInputStream = aContent.openStream();
         }
         catch ( ... )
@@ -171,14 +171,14 @@ throw( com::sun::star::uno::RuntimeException )
     confidence = WPSDocument::isFileFormatSupported(&input);
 
     if ((confidence == WPS_CONFIDENCE_EXCELLENT) || (confidence == WPS_CONFIDENCE_GOOD))
-        sTypeName = OUString(  "writer_MS_Works_Document"  );
+        sTypeName = "writer_MS_Works_Document";
 
     if (!sTypeName.isEmpty())
     {
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString("TypeName");
+            Descriptor[location].Name = "TypeName";
         }
 
         Descriptor[location].Value <<=sTypeName;

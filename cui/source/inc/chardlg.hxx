@@ -34,6 +34,7 @@
 #include <svx/fntctrl.hxx>
 #include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/layout.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -55,13 +56,13 @@ class FontList;
 class SvxCharBasePage : public SfxTabPage
 {
 protected:
-    SvxFontPrevWindow   m_aPreviewWin;
-    FixedInfo           m_aFontTypeFT;
+    SvxFontPrevWindow*  m_pPreviewWin;
 
     sal_Bool                m_bPreviewBackgroundToCharacter;
 
-                        SvxCharBasePage( Window* pParent, const ResId& rResIdTabPage, const SfxItemSet&,
-                                            sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT );
+    SvxCharBasePage(Window* pParent, const ResId& rResIdTabPage, const SfxItemSet&);
+    SvxCharBasePage(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet& rItemset);
+
     virtual             ~SvxCharBasePage();
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
@@ -87,7 +88,7 @@ class SvxCharNamePage : public SvxCharBasePage
 {
 
 private:
-    FixedLine*          m_pWestLine;
+    VclContainer*       m_pWestFrame;
     FixedText*          m_pWestFontNameFT;
     FontNameBox*        m_pWestFontNameLB;
     FixedText*          m_pWestFontStyleFT;
@@ -97,7 +98,7 @@ private:
     FixedText*          m_pWestFontLanguageFT;
     SvxLanguageBox*     m_pWestFontLanguageLB;
 
-    FixedLine*          m_pEastLine;
+    VclContainer*       m_pEastFrame;
     FixedText*          m_pEastFontNameFT;
     FontNameBox*        m_pEastFontNameLB;
     FixedText*          m_pEastFontStyleFT;
@@ -107,7 +108,7 @@ private:
     FixedText*          m_pEastFontLanguageFT;
     SvxLanguageBox*     m_pEastFontLanguageLB;
 
-    FixedLine*          m_pCTLLine;
+    VclContainer*       m_pCTLFrame;
     FixedText*          m_pCTLFontNameFT;
     FontNameBox*        m_pCTLFontNameLB;
     FixedText*          m_pCTLFontStyleFT;
@@ -116,10 +117,6 @@ private:
     FontSizeBox*        m_pCTLFontSizeLB;
     FixedText*          m_pCTLFontLanguageFT;
     SvxLanguageBox*     m_pCTLFontLanguageLB;
-
-    FixedLine*          m_pColorFL;
-    FixedText*          m_pColorFT;
-    ColorListBox*       m_pColorLB;
 
     SvxCharNamePage_Impl*   m_pImpl;
 
@@ -147,12 +144,10 @@ private:
     };
 
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
-    sal_Bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
-    void                ResetColor_Impl( const SfxItemSet& rSet );
+    sal_Bool            FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
     DECL_LINK(UpdateHdl_Impl, void *);
     DECL_LINK(          FontModifyHdl_Impl, void* );
-    DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
 public:
     using SfxTabPage::ActivatePage;
@@ -186,52 +181,46 @@ class SvxCharEffectsPage : public SvxCharBasePage
 {
 
 private:
-    FixedText           m_aFontColorFT;
-    ColorListBox        m_aFontColorLB;
+    FixedText*          m_pFontColorFT;
+    ColorListBox*       m_pFontColorLB;
 
-    FixedText           m_aEffectsFT;
-    SvxCheckListBox     m_aEffectsLB;
+    FixedText*          m_pEffectsFT;
+    ListBox*            m_pEffectsLB;
 
-    ListBox             m_aEffects2LB;
+    FixedText*          m_pReliefFT;
+    ListBox*            m_pReliefLB;
 
-    FixedText           m_aReliefFT;
-    ListBox             m_aReliefLB;
+    TriStateBox*        m_pOutlineBtn;
+    TriStateBox*        m_pShadowBtn;
+    TriStateBox*        m_pBlinkingBtn;
+    TriStateBox*        m_pHiddenBtn;
 
-    TriStateBox         m_aOutlineBtn;
-    TriStateBox         m_aShadowBtn;
-    TriStateBox         m_aBlinkingBtn;
-    TriStateBox         m_aHiddenBtn;
+    ListBox*            m_pOverlineLB;
+    FixedText*          m_pOverlineColorFT;
+    ColorListBox*       m_pOverlineColorLB;
 
-    FixedLine           m_aVerticalLine;
+    ListBox*            m_pStrikeoutLB;
 
-    FixedText           m_aOverlineFT;
-    ListBox             m_aOverlineLB;
-    FixedText           m_aOverlineColorFT;
-    ColorListBox        m_aOverlineColorLB;
+    ListBox*            m_pUnderlineLB;
+    FixedText*          m_pUnderlineColorFT;
+    ColorListBox*       m_pUnderlineColorLB;
 
-    FixedText           m_aStrikeoutFT;
-    ListBox             m_aStrikeoutLB;
+    CheckBox*           m_pIndividualWordsBtn;
 
-    FixedText           m_aUnderlineFT;
-    ListBox             m_aUnderlineLB;
-    FixedText           m_aUnderlineColorFT;
-    ColorListBox        m_aUnderlineColorLB;
+    FixedLine*          m_pAsianLine;
 
-    CheckBox            m_aIndividualWordsBtn;
+    FixedText*          m_pEmphasisFT;
+    ListBox*            m_pEmphasisLB;
 
-    FixedLine           m_aAsianLine;
-
-    FixedText           m_aEmphasisFT;
-    ListBox             m_aEmphasisLB;
-
-    FixedText           m_aPositionFT;
-    ListBox             m_aPositionLB;
+    FixedText*          m_pPositionFT;
+    ListBox*            m_pPositionLB;
 
     sal_uInt16              m_nHtmlMode;
 
     String              m_aTransparentColorName;
 
                         SvxCharEffectsPage( Window* pParent, const SfxItemSet& rSet );
+                        ~SvxCharEffectsPage();
 
     void                Initialize();
     void                UpdatePreview_Impl();
@@ -270,29 +259,30 @@ class SvxCharPositionPage : public SvxCharBasePage
 {
 
 private:
-    FixedLine           m_aPositionLine;
-    RadioButton         m_aHighPosBtn;
-    RadioButton         m_aNormalPosBtn;
-    RadioButton         m_aLowPosBtn;
-    FixedText           m_aHighLowFT;
-    MetricField         m_aHighLowEdit;
-    CheckBox            m_aHighLowRB;
-    FixedText           m_aFontSizeFT;
-    MetricField         m_aFontSizeEdit;
-    FixedLine           m_aRotationScalingFL;
-    FixedLine           m_aScalingFL;
-    RadioButton         m_a0degRB;
-    RadioButton         m_a90degRB;
-    RadioButton         m_a270degRB;
-    CheckBox            m_aFitToLineCB;
-    FixedText           m_aScaleWidthFT;
-    MetricField         m_aScaleWidthMF;
+    RadioButton*        m_pHighPosBtn;
+    RadioButton*        m_pNormalPosBtn;
+    RadioButton*        m_pLowPosBtn;
+    FixedText*          m_pHighLowFT;
+    MetricField*        m_pHighLowMF;
+    CheckBox*           m_pHighLowRB;
+    FixedText*          m_pFontSizeFT;
+    MetricField*        m_pFontSizeMF;
 
-    FixedLine           m_aKerningLine;
-    ListBox             m_aKerningLB;
-    FixedText           m_aKerningFT;
-    MetricField         m_aKerningEdit;
-    CheckBox            m_aPairKerningBtn;
+    VclContainer*       m_pRotationContainer;
+
+    FixedText*          m_pScalingFT;
+    FixedText*          m_pScalingAndRotationFT;
+    RadioButton*        m_p0degRB;
+    RadioButton*        m_p90degRB;
+    RadioButton*        m_p270degRB;
+    CheckBox*           m_pFitToLineCB;
+
+    MetricField*        m_pScaleWidthMF;
+
+    ListBox*            m_pKerningLB;
+    FixedText*          m_pKerningFT;
+    MetricField*        m_pKerningMF;
+    CheckBox*           m_pPairKerningBtn;
 
     short               m_nSuperEsc;
     short               m_nSubEsc;
@@ -304,6 +294,7 @@ private:
     sal_uInt8                m_nSubProp;
 
                         SvxCharPositionPage( Window* pParent, const SfxItemSet& rSet );
+                        ~SvxCharPositionPage();
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -344,19 +335,16 @@ public:
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {
 private:
-    FixedLine           m_aSwitchOnLine;
-    CheckBox            m_aTwoLinesBtn;
-
-    FixedLine           m_aEncloseLine;
-    FixedText           m_aStartBracketFT;
-    ListBox             m_aStartBracketLB;
-    FixedText           m_aEndBracketFT;
-    ListBox             m_aEndBracketLB;
+    CheckBox*           m_pTwoLinesBtn;
+    VclContainer*       m_pEnclosingFrame;
+    ListBox*            m_pStartBracketLB;
+    ListBox*            m_pEndBracketLB;
 
     sal_uInt16              m_nStartBracketPosition;
     sal_uInt16              m_nEndBracketPosition;
 
-                        SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rSet );
+    SvxCharTwoLinesPage(Window* pParent, const SfxItemSet& rSet);
+    ~SvxCharTwoLinesPage();
 
     void                UpdatePreview_Impl();
     void                Initialize();

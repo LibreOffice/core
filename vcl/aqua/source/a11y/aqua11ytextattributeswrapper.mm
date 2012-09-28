@@ -107,7 +107,7 @@ using namespace ::rtl;
 
 +(void)addColor:(sal_Int32)salColor forAttribute:(NSString *)attribute andRange:(NSRange)range toString:(NSMutableAttributedString *)string {
     if ( salColor != -1 ) {
-        float elements[] = { salColor & 0x00ff0000, salColor & 0x0000ff00, salColor & 0x000000ff };
+        CGFloat elements[] = { salColor & 0x00ff0000, salColor & 0x0000ff00, salColor & 0x000000ff };
         CGColorRef color = CGColorCreate ( CGColorSpaceCreateWithName ( kCGColorSpaceGenericRGB ), elements );
         [ string addAttribute: attribute value: (id) color range: range ];
         CGColorRelease ( color );

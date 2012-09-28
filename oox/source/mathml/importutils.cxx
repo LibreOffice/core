@@ -35,8 +35,7 @@
 #include <oox/token/tokenmap.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
-#include <rtl/oustringostreaminserter.hxx>
-#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
 // *sigh*
 #define STR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ))

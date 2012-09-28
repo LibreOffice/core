@@ -254,6 +254,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     pFtn->GetFtnText( sTxt );
                     sTxt.Insert( SW_RESSTR( pFtn->IsEndNote()
                                     ? STR_ENDNOTE : STR_FTNNOTE ), 0 );
+                    bBalloon = sal_True;
                     if( aCntntAtPos.IsInRTLText() )
                         nStyle |= QUICKHELP_BIDI_RTL;
                 }

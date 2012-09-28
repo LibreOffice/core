@@ -18,14 +18,8 @@
 
 import com.sun.star.uno.UnoRuntime;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.table.XCellRange;
-import com.sun.star.table.XCell;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextTable;
-import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextRange;
 import com.sun.star.form.binding.XValueBinding;
 import com.sun.star.form.binding.XBindableValue;

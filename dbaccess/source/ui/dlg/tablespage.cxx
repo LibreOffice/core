@@ -79,7 +79,6 @@ DBG_NAME(OTableSubscriptionPage)
         ,m_aTables              (this, ModuleRes(FL_SEPARATOR1))
         ,m_aTablesList          (this, NULL,ModuleRes(CTL_TABLESUBSCRIPTION),sal_True)
         ,m_aExplanation         (this, ModuleRes(FT_FILTER_EXPLANATION))
-        ,m_bCheckedAll          ( sal_False )
         ,m_bCatalogAtStart      ( sal_True )
         ,m_pTablesDlg(_pTablesDlg)
     {

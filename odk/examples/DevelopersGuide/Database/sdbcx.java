@@ -32,8 +32,6 @@
  *
  *************************************************************************/
 
-import java.io.*;
-
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.*;
 import com.sun.star.bridge.XUnoUrlResolver;

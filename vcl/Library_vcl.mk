@@ -56,7 +56,6 @@ $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(OUTDIR)/inc/external/wine) \
-	$(if $(filter NO,$(SYSTEM_LCMS2)),-I$(OUTDIR)/inc/lcms2) \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -84,6 +83,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     i18nutil \
     cppu \
     sal \
+    xmlreader \
     $(gb_STDLIBS) \
 ))
 
@@ -234,6 +234,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/salmisc \
     vcl/source/gdi/salnativewidgets-none \
     vcl/source/gdi/svgread \
+    vcl/source/gdi/temporaryfonts \
     vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \
     vcl/source/gdi/wall \
@@ -250,6 +251,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/arrange \
     vcl/source/window/brdwin \
     vcl/source/window/btndlg \
+    vcl/source/window/builder \
     vcl/source/window/cmdevt \
     vcl/source/window/cursor \
     vcl/source/window/decoview \
@@ -264,6 +266,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/introwin \
     vcl/source/window/keycod \
     vcl/source/window/keyevent \
+    vcl/source/window/layout \
     vcl/source/window/menu \
     vcl/source/window/mnemonic \
     vcl/source/window/mnemonicengine \
@@ -309,7 +312,13 @@ ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/glyphs/graphite_serverfont \
 ))
-else
+endif
+ifeq ($(GUIBASE),headless)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/generic/glyphs/graphite_serverfont \
+))
+endif
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_libraries,vcl,\
     version \
 ))
@@ -439,7 +448,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     AppleRemote \
 ))
 $(eval $(call gb_Library_use_externals,vcl,\
-    quicktime \
+    $(if $(filter 64,$(BITNESS_OVERRIDE)),,quicktime) \
     cocoa \
     carbon \
     corefoundation \
@@ -492,12 +501,6 @@ $(eval $(call gb_Library_add_defs,vcl,\
     ) \
 ))
 
-ifeq ($(ENABLE_CUPS),YES)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DENABLE_CUPS\
-))
-endif
-
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
@@ -509,15 +512,16 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/plugadapt/salplug \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
-    $(if $(filter YES,$(ENABLE_CUPS)),\
+    $(if $(filter TRUE,$(ENABLE_CUPS)),\
         vcl/unx/generic/printer/cupsmgr \
         vcl/unx/generic/printer/printerinfomanager \
-    ) \
-    $(if $(filter NO,$(ENABLE_CUPS)),\
+		, \
         vcl/null/printerinfomanager \
     ) \
 ))
 $(eval $(call gb_Library_use_externals,vcl,\
+	cups \
+	dbus \
 	fontconfig \
 	freetype \
 ))

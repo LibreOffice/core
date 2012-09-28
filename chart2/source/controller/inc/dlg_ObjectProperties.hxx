@@ -105,7 +105,6 @@ class SchAttribTabDlg : public SfxTabDialog
 {
 private:
     ObjectType               eObjectType;
-    bool                     bAffectsMultipleObjects;//is true if more than one object of the given type will be changed (e.g. all axes or all titles)
     sal_uInt16                   nDlgType;
     sal_uInt16                   nPageType;
 

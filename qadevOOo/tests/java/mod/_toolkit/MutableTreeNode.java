@@ -34,7 +34,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.PropertyName;
 import util.utils;
 
 

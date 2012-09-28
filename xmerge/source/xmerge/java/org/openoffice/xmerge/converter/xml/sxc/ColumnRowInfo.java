@@ -22,7 +22,6 @@ package org.openoffice.xmerge.converter.xml.sxc;
  * This is a class to define a table-column structure. This can then be
  * used by plugins to write or read their own column types.
  *
- * @author Martin Maher
  */
 public class ColumnRowInfo {
 

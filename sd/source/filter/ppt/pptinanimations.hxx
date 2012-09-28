@@ -47,12 +47,12 @@ class AnimationImporter
 public:
     AnimationImporter( ImplSdPPTImport* pPPTImport, SvStream& rStCtrl );
 
-    void import( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd );
+    int  import( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd );
 
 private:
-    void importAnimationContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xParent );
-    void importTimeContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void importAnimationNodeContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    int  importAnimationContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xParent );
+    int  importTimeContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    int  importAnimationNodeContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
     void importAnimateSetContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void importAnimateFilterContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
@@ -62,7 +62,7 @@ private:
     void importAnimateRotationContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void importAnimateMotionContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void importCommandContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void importAudioContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    int  importAudioContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
     void importAnimationEvents( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void importAnimationValues( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
@@ -112,6 +112,7 @@ private:
     void dump( const AnimationNode& rNode );
     void dump( const char * pText );
     void dump( const char * pText, sal_Int32 nInt );
+    void dump( const char * pText, sal_Int64 nInt );
     void dump( const char * pText, double fDouble );
     void dump( const char * pText, const char * pText2 );
     void dump( const char * pText, const rtl::OUString& rString );

@@ -29,7 +29,7 @@ struct SvtAcceleratorConfigItem
 {
     sal_uInt16      nCode;
     sal_uInt16      nModifier;
-    ::rtl::OUString aCommand;
+    OUString        aCommand;
 };
 
 #include <list>

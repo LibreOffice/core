@@ -26,8 +26,6 @@ import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 
 /** Description of {@link ParcelFolderDataLoader}.
- *
- * @author tomaso
  */
 public class ParcelFolderDataLoaderBeanInfo extends SimpleBeanInfo {
 

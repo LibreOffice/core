@@ -47,7 +47,7 @@ static void SAL_CALL s_acquire(uno_Mapping * pMapping) SAL_THROW(())
 {
     static rtl::OUString s_purpose;
 
-    if (1 == ::osl_incrementInterlockedCount(&static_cast<IdentityMapping *>(pMapping)->m_nRef))
+    if (1 == osl_atomic_increment(&static_cast<IdentityMapping *>(pMapping)->m_nRef))
     {
         uno_registerMapping(
             &pMapping,
@@ -60,7 +60,7 @@ static void SAL_CALL s_acquire(uno_Mapping * pMapping) SAL_THROW(())
 
 static void SAL_CALL s_release(uno_Mapping * pMapping) SAL_THROW(())
 {
-    if (!::osl_decrementInterlockedCount(&static_cast<IdentityMapping *>(pMapping )->m_nRef))
+    if (!osl_atomic_decrement(&static_cast<IdentityMapping *>(pMapping )->m_nRef))
         uno_revokeMapping(pMapping);
 }
 

@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework.runtime;
+package ifc.scripting;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -183,7 +183,7 @@ public class _XScriptInvocation extends MultiMethodTest {
         XSimpleFileAccess access = null;
 
         try {
-            Object fa = tParam.getMSF().createInstance(
+            Object fa = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                 "com.sun.star.ucb.SimpleFileAccess");
 
             access = (XSimpleFileAccess)
@@ -197,7 +197,7 @@ public class _XScriptInvocation extends MultiMethodTest {
 
     private XModel loadDocument(String name) {
         XModel model = null;
-        SOfficeFactory factory = SOfficeFactory.getFactory(tParam.getMSF());
+        SOfficeFactory factory = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
 
         String fullname = util.utils.getFullTestURL(name);
 

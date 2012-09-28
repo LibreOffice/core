@@ -62,8 +62,6 @@ private:
 
     SCTAB                       mnScTab;    // table number SC document
     sal_uInt16                      nExcTab;    // table number Excel document
-    sal_uInt16                      nAktRow;    // fuer'n Iterator
-    sal_uInt16                      nAktCol;
 
     NameBuffer*                 pTabNames;
 

@@ -248,7 +248,7 @@ public:
                     TYPEINFO();
                     ScUndoSort( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScSortParam& rParam,
-                            sal_Bool bQuery, ScDocument* pNewUndoDoc,
+                            ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pDest = NULL );
     virtual         ~ScUndoSort();
 
@@ -262,7 +262,6 @@ public:
 private:
     SCTAB           nTab;
     ScSortParam     aSortParam;
-    sal_Bool            bRepeatQuery;
     ScDocument*     pUndoDoc;
     ScDBCollection* pUndoDB;                // due to source and target range
     sal_Bool            bDestArea;

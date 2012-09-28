@@ -38,6 +38,7 @@
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -48,12 +49,12 @@
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <rtl/logfile.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -705,8 +706,8 @@ namespace
         // the solution is only active for Unix systems
 #ifndef WNT
         uno::Reference <beans::XPropertySet> xNativeTempFile(
-            xFactory->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile"))), uno::UNO_QUERY_THROW);
+            io::TempFile::create(comphelper::getComponentContext(xFactory)),
+            uno::UNO_QUERY_THROW);
         uno::Reference < io::XStream > xStream(xNativeTempFile, uno::UNO_QUERY_THROW);
 
         uno::Sequence< uno::Any > aArgs( 2 );
@@ -739,7 +740,7 @@ namespace
             xNativeTempFile = uno::Reference<beans::XPropertySet>();
 
             uno::Reference < ucb::XSimpleFileAccess2 > xSimpleFileAccess(
-                    ucb::SimpleFileAccess::create( comphelper::ComponentContext(xFactory).getUNOContext() ) );
+                    ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
             xSimpleFileAccess->setReadOnly(sUrl, sal_True);
         }
@@ -877,9 +878,8 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
                 if (!m_aTempDumpURL.isEmpty())
                 {
-                    uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( m_xFactory->createInstance(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),
-                        uno::UNO_QUERY_THROW);
+                    uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                        ::com::sun::star::system::SystemShellExecute::create(comphelper::getComponentContext(m_xFactory)) );
                     xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }
                 else

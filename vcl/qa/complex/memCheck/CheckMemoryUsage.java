@@ -17,25 +17,19 @@
  */
 package complex.memCheck;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.XStorable;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XCloseable;
-// import complexlib.ComplexTestCase;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import helper.ProcessHandler;
+
 import java.io.File;
-// import java.io.FilePermission;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import lib.*;
-import util.DesktopTools;
-// import util.WriterTools;
+
+import lib.TestParameters;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -43,7 +37,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
+
+import util.DesktopTools;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XStorable;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XCloseable;
 
 /**
  * Documents are opened and exported with StarOffice. The memory usage of
@@ -153,11 +155,11 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
         m_aTempDir = new TempDir(util.utils.getOfficeTemp/*Dir*/(xMsf));
 
         // get the file extension, export filter connection
-        Enumeration keys = param.keys();
+        Iterator<String> keys = param.keySet().iterator();
         Vector<String> v = new Vector<String>();
-        while (keys.hasMoreElements())
+        while (keys.hasNext())
         {
-            String key = (String) keys.nextElement();
+            String key = keys.next();
             if (key.startsWith("FileExportFilter"))
             {
                 v.add((String) param.get(key));

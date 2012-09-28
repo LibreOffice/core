@@ -41,47 +41,38 @@ void SAL_CALL
 ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException)
 {
     // booleans are converted to uppercase strings
-    rtl::OUString sVal = extractStringFromAny( _value, true );
+    OUString sVal = extractStringFromAny( _value, true );
     setText( sVal );
 }
 
 //getString() will cause some imfo lose.
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaTextBox::getText() throw (css::uno::RuntimeException)
 {
     uno::Any aValue;
-    aValue = m_xProps->getPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) ) );
-    rtl::OUString sString;
+    aValue = m_xProps->getPropertyValue( "Text" );
+    OUString sString;
     aValue >>= sString;
     return sString;
 }
 
 void SAL_CALL
-ScVbaTextBox::setText( const rtl::OUString& _text ) throw (css::uno::RuntimeException)
+ScVbaTextBox::setText( const OUString& _text ) throw (css::uno::RuntimeException)
 {
-    rtl::OUString sOldText = getText();
-
     if ( !mbDialog )
     {
         uno::Reference< text::XTextRange > xTextRange( m_xProps, uno::UNO_QUERY_THROW );
         xTextRange->setString( _text );
     }
     else
-        m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ), uno::makeAny( _text ) );
-
-    if ( _text != sOldText )
-    {
-        fireChangeEvent();
-    }
+        m_xProps->setPropertyValue( "Text" , uno::makeAny( _text ) );
 }
 
 sal_Int32 SAL_CALL
 ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
 {
     uno::Any aValue;
-    aValue = m_xProps->getPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxTextLen" ) ) );
+    aValue = m_xProps->getPropertyValue( "MaxTextLen" );
     sal_Int32 nMaxLength = 0;
     aValue >>= nMaxLength;
     return nMaxLength;
@@ -90,18 +81,15 @@ ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException)
 {
-    sal_Int16 _maxlength16 = static_cast<sal_Int16> (_maxlength);
-    uno::Any aValue( _maxlength16 );
-    m_xProps->setPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxTextLen" ) ), aValue);
+    uno::Any aValue( _maxlength );
+    m_xProps->setPropertyValue( "MaxTextLen" , aValue);
 }
 
 sal_Bool SAL_CALL
 ScVbaTextBox::getMultiline() throw (css::uno::RuntimeException)
 {
     uno::Any aValue;
-    aValue = m_xProps->getPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ) );
+    aValue = m_xProps->getPropertyValue( "MultiLine" );
     sal_Bool bRet = false;
     aValue >>= bRet;
     return bRet;
@@ -111,8 +99,7 @@ void SAL_CALL
 ScVbaTextBox::setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeException)
 {
     uno::Any aValue( _multiline );
-    m_xProps->setPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ), aValue);
+    m_xProps->setPropertyValue( "MultiLine" , aValue);
 }
 
 sal_Int32 SAL_CALL ScVbaTextBox::getSpecialEffect() throw (uno::RuntimeException)
@@ -175,20 +162,20 @@ void SAL_CALL ScVbaTextBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeExc
     ScVbaControl::setLocked( bLocked );
 }
 
-rtl::OUString
+OUString
 ScVbaTextBox::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaTextBox"));
+    return OUString( "ScVbaTextBox" );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaTextBox::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.TextBox" ) );
+        aServiceNames[ 0 ] = "ooo.vba.msforms.TextBox";
     }
     return aServiceNames;
 }

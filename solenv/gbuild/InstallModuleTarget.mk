@@ -48,7 +48,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	export COMPLETELANGISO_VAR='$(gb_ScpTemplateTarget_LANGS)' && \
 	$(gb_ScpTemplateTarget_COMMAND) \
 		$(call gb_ScpTemplateTarget__if_silent,,-verbose) \
-		-i $(3) \
+		-i $(SCP_TEMPLATE) \
 		-o $(1) \
 )
 endef
@@ -56,8 +56,8 @@ endef
 $(dir $(call gb_ScpTemplateTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpTemplateTarget_get_target,%) :
-	$(call gb_ScpTemplateTarget__command,$@,$*,$<)
+$(call gb_ScpTemplateTarget_get_target,%) : $(gb_ScpTemplateTarget_TARGET)
+	$(call gb_ScpTemplateTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpTemplateTarget_get_clean_target,%)
 $(call gb_ScpTemplateTarget_get_clean_target,%) :
@@ -68,29 +68,35 @@ $(call gb_ScpTemplateTarget_get_clean_target,%) :
 define gb_ScpTemplateTarget_ScpTemplateTarget
 $(call gb_ScpTemplateTarget_get_target,$(1)) : $(call gb_ScpTemplateTarget_get_source,$(1))
 $(call gb_ScpTemplateTarget_get_target,$(1)) :| $(dir $(call gb_ScpTemplateTarget_get_target,$(1))).dir
+$(call gb_ScpTemplateTarget_get_target,$(1)) : SCP_TEMPLATE := $(call gb_ScpTemplateTarget_get_source,$(1))
 
 endef
 
 # ScpPreprocessTarget class
+
+# TODO change to gb_Executable_get_target_for_build after soltools has
+# been gbuildified
+gb_ScpPreprocessTarget_TARGET := $(OUTDIR_FOR_BUILD)/bin/cpp.lcc
+gb_ScpPreprocessTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpPreprocessTarget_TARGET)
 
 gb_ScpPreprocessTarget_get_source = $(SRCDIR)/$(1).scp
 
 define gb_ScpPreprocessTarget__command
 $(call gb_Output_announce,$(2),$(true),SPP,2)
 $(call gb_Helper_abbreviate_dirs,\
-	$(call gb_Helper_execute,cpp.lcc) \
+	$(gb_ScpPreprocessTarget_COMMAND) \
 		-+ -P \
 		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
 		$(SCP_INCLUDE) $(SCP_TEMPLATE_INCLUDE) \
-		$(3) > $(1) \
+		$(SCP_SOURCE) > $(1) \
 )
 endef
 
 $(dir $(call gb_ScpPreprocessTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpPreprocessTarget_get_target,%) :
-	$(call gb_ScpPreprocessTarget__command,$@,$*,$<)
+$(call gb_ScpPreprocessTarget_get_target,%) : $(gb_ScpPreprocessTarget_TARGET)
+	$(call gb_ScpPreprocessTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpPreprocessTarget_get_clean_target,%)
 $(call gb_ScpPreprocessTarget_get_clean_target,%) :
@@ -99,6 +105,7 @@ $(call gb_ScpPreprocessTarget_get_clean_target,%) :
 
 # gb_ScpPreprocessTarget_ScpPreprocessTarget(<target>)
 define gb_ScpPreprocessTarget_ScpPreprocessTarget
+$(call gb_ScpPreprocessTarget_get_target,$(1)) : SCP_SOURCE := $(call gb_ScpPreprocessTarget_get_source,$(1))
 $(call gb_ScpPreprocessTarget_get_target,$(1)) : $(call gb_ScpPreprocessTarget_get_source,$(1))
 $(call gb_ScpPreprocessTarget_get_target,$(1)) :| $(dir $(call gb_ScpPreprocessTarget_get_target,$(1))).dir
 
@@ -124,8 +131,8 @@ endef
 $(dir $(call gb_ScpMergeTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpMergeTarget_get_target,%) :
-	$(call gb_ScpMergeTarget__command,$@,$*,$<)
+$(call gb_ScpMergeTarget_get_target,%) : $(gb_ScpMergeTarget_TARGET)
+	$(call gb_ScpMergeTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpMergeTarget_get_clean_target,%)
 $(call gb_ScpMergeTarget_get_clean_target,%) :
@@ -134,6 +141,7 @@ $(call gb_ScpMergeTarget_get_clean_target,%) :
 
 # gb_ScpMergeTarget_ScpMergeTarget(<target>)
 define gb_ScpMergeTarget_ScpMergeTarget
+$(call gb_ScpMergeTarget_get_target,$(1)) : SCP_SOURCE := $(call gb_ScpMergeTarget_get_source,$(1))
 $(call gb_ScpMergeTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_source,$(1))
 $(call gb_ScpMergeTarget_get_target,$(1)) :| $(dir $(call gb_ScpMergeTarget_get_target,$(1))).dir
 $(call gb_ScpMergeTarget_get_target,$(1)) : \
@@ -154,15 +162,15 @@ gb_ScpConvertTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_ScpConvertTarget_TA
 define gb_ScpConvertTarget__command
 $(call gb_Output_announce,$(2),$(true),SCC,1)
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpConvertTarget_COMMAND) $(SCP_FLAGS) -o $(1) $(3) \
+	$(gb_ScpConvertTarget_COMMAND) $(SCP_FLAGS) -o $(1) $(SCP_CONVERT_ULF) \
 )
 endef
 
 $(dir $(call gb_ScpConvertTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpConvertTarget_get_target,%) :
-	$(call gb_ScpConvertTarget__command,$@,$*,$<)
+$(call gb_ScpConvertTarget_get_target,%) : $(gb_ScpConvertTarget_TARGET)
+	$(call gb_ScpConvertTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpConvertTarget_get_clean_target,%)
 $(call gb_ScpConvertTarget_get_clean_target,%) :
@@ -173,6 +181,7 @@ $(call gb_ScpConvertTarget_get_clean_target,%) :
 define gb_ScpConvertTarget_ScpConvertTarget
 $(call gb_ScpConvertTarget_get_target,$(1)) : $(2)
 $(call gb_ScpConvertTarget_get_target,$(1)) :| $(dir $(call gb_ScpConvertTarget_get_target,$(1))).dir
+$(call gb_ScpConvertTarget_get_target,$(1)) : SCP_CONVERT_ULF := $(2)
 $(call gb_ScpConvertTarget_get_target,$(1)) : SCP_FLAGS :=
 
 $(call gb_ScpConvertTarget_ScpConvertTarget_platform,$(1))
@@ -183,21 +192,19 @@ endef
 
 gb_ScpTarget_TARGET := $(SOLARENV)/bin/pre2par.pl
 gb_ScpTarget_COMMAND := $(PERL) $(gb_ScpTarget_TARGET)
-gb_ScpTarget_DEPTARGET := $(call gb_Executable_get_target_for_build,makedepend)
-gb_ScpTarget_DEPCOMMAND := $(gb_Helper_set_ld_path) $(gb_ScpTarget_DEPTARGET)
 
 define gb_ScpTarget__command
 $(call gb_Output_announce,$(2),$(true),SCP,2)
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpTarget_COMMAND) -l $(SCP_ULF) -s $(3) -o $(1) \
+	$(gb_ScpTarget_COMMAND) -l $(SCP_ULF) -s $(SCP_SOURCE) -o $(1) \
 )
 endef
 
 $(dir $(call gb_ScpTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpTarget_get_target,%) :
-	$(call gb_ScpTarget__command,$@,$*,$<)
+$(call gb_ScpTarget_get_target,%) : $(gb_ScpTarget_TARGET)
+	$(call gb_ScpTarget__command,$@,$*)
 
 $(call gb_ScpTarget_get_external_target,%) :
 	touch $@
@@ -207,29 +214,7 @@ $(call gb_ScpTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),SCP,2)
 	rm -f \
 		$(call gb_ScpTarget_get_target,$*) \
-		$(call gb_ScpTarget_get_external_target,$*) \
-		$(call gb_ScpTarget_get_dep_target,$*)
-
-ifneq ($(gb_FULLDEPS),)
-
-define gb_ScpTarget__command_dep
-$(call gb_Output_announce,SCP:$(2),$(true),DEP,2)
-$(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpTarget_DEPCOMMAND) \
-		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
-		$(SCP_INCLUDE) $(SCP_TEMPLATE_INCLUDE) \
-		-f $(1) \
-		-p \
-)
-endef
-
-$(dir $(call gb_ScpTarget_get_dep_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_ScpTarget_get_dep_target,%) :
-	$(call gb_ScpTarget__command_dep,$@,$*)
-
-endif
+		$(call gb_ScpTarget_get_external_target,$*)
 
 # gb_ScpTarget_ScpTarget(<target>)
 define gb_ScpTarget_ScpTarget
@@ -240,11 +225,8 @@ $(call gb_ScpTarget_get_target,$(1)) :| $(call gb_ScpTarget_get_external_target,
 $(call gb_ScpTarget_get_external_target,$(1)) :| $(dir $(call gb_ScpTarget_get_target,$(1))).dir
 $(call gb_ScpPreprocessTarget_get_target,$(1)) :| $(call gb_ScpTarget_get_external_target,$(1))
 $(call gb_ScpTarget_get_clean_target,$(1)) : $(call gb_ScpPreprocessTarget_get_clean_target,$(1))
+$(call gb_ScpTarget_get_target,$(1)) : SCP_SOURCE := $(call gb_ScpPreprocessTarget_get_target,$(1))
 $(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(gb_Helper_PHONY)
-
-ifneq ($(gb_FULLDEPS),)
-$(call gb_ScpTarget_get_dep_target,$(1)) :| $(dir $(call gb_ScpTarget_get_dep_target,$(1))).dir
-endif
 
 endef
 
@@ -300,15 +282,11 @@ $(call gb_InstallModuleTarget_get_external_target,$(1)) :| \
 
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_FILES :=
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_DEFS :=
-$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE :=
+$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE := -I$(SRCDIR)/scp2/inc
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_TEMPLATE_INCLUDE :=
+$(call gb_InstallModuleTarget_use_custom_headers,$(1),scp2/macros)
 
 $(call gb_InstallModuleTarget_InstallModuleTarget_platform,$(1))
-
-endef
-
-define gb_InstallModuleTarget_set_include
-$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE := $(2)
 
 endef
 
@@ -338,13 +316,14 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 
 endef
 
-define gb_InstallModuleTarget_use_package
-$(call gb_InstallModuleTarget_get_external_target,$(1)) :| $(call gb_Package_get_target,$(2))
+define gb_InstallModuleTarget_use_custom_header
+$(call gb_InstallModuleTarget_get_external_target,$(1)) :| $(call gb_CustomTarget_get_target,$(2))
+$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2)) \
 
 endef
 
-define gb_InstallModuleTarget_use_packages
-$(foreach package,$(2),$(call gb_InstallModuleTarget_use_package,$(1),$(package)))
+define gb_InstallModuleTarget_use_custom_headers
+$(foreach customtarget,$(2),$(call gb_InstallModuleTarget_use_custom_header,$(1),$(customtarget)))
 
 endef
 

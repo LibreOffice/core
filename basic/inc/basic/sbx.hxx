@@ -46,9 +46,6 @@ class SbxFactory;
 
 class SfxBroadcaster;
 
-#ifndef __SBX_SBXPARAMINFO
-#define __SBX_SBXPARAMINFO
-
 // Parameter information
 struct SbxParamInfo
 {
@@ -63,11 +60,6 @@ struct SbxParamInfo
 };
 
 typedef boost::ptr_vector<SbxParamInfo> SbxParams;
-
-#endif
-
-#ifndef __SBX_SBXINFO
-#define __SBX_SBXINFO
 
 class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
 {
@@ -98,11 +90,6 @@ public:
     void                SetHelpId( sal_uInt32 nId )         { nHelpId = nId; }
 };
 
-#endif
-
-#ifndef __SBX_SBXHINT_HXX
-#define __SBX_SBXHINT_HXX
-
 class BASIC_DLLPUBLIC SbxHint : public SfxSimpleHint
 {
     SbxVariable* pVar;
@@ -111,11 +98,6 @@ public:
     SbxHint( sal_uIntPtr n, SbxVariable* v ) : SfxSimpleHint( n ), pVar( v ) {}
     SbxVariable* GetVar() const { return pVar; }
 };
-
-#endif
-
-#ifndef __SBX_SBXALIAS_HXX
-#define __SBX_SBXALIAS_HXX
 
 // SbxAlias is an alias for a var or object
 class BASIC_DLLPUBLIC SbxAlias : public SbxVariable, public SfxListener
@@ -130,19 +112,12 @@ public:
     SbxAlias& operator=( const SbxAlias& );
 };
 
-#endif
-
-#ifndef __SBX_SBXARRAY
-#define __SBX_SBXARRAY
-
 // SbxArray is an unidimensional, dynamic Array
 // The variables convert from SbxVariablen. Put()/Insert() into the
 // declared datatype, if they are not SbxVARIANT.
 
 class SbxVarRefs;
 class SbxVariableRef;
-
-class SbxArrayImpl;
 
 class BASIC_DLLPUBLIC SbxArray : public SbxBase
 {
@@ -152,7 +127,6 @@ class BASIC_DLLPUBLIC SbxArray : public SbxBase
     friend SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
     BASIC_DLLPRIVATE void PutDirect( SbxVariable* pVar, sal_uInt32 nIdx );
 
-    SbxArrayImpl* mpSbxArrayImpl; // Impl data
     SbxVarRefs*   pData;          // The variables
 
 protected:
@@ -191,11 +165,6 @@ public:
     void Insert32( SbxVariable*, sal_uInt32 );
     void Remove32( sal_uInt32 );
 };
-
-#endif
-
-#ifndef __SBX_SBXDIMARRAY_HXX
-#define __SBX_SBXDIMARRAY_HXX
 
 // SbxDimArray is an array that can dimensioned using BASIC conventions.
 struct SbxDim;
@@ -244,11 +213,6 @@ public:
         void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };
 
-#endif
-
-#ifndef __SBX_SBXCOLLECTION_HXX
-#define __SBX_SBXCOLLECTION_HXX
-
 class BASIC_DLLPUBLIC SbxCollection : public SbxObject
 {
     BASIC_DLLPRIVATE void Initialize();
@@ -273,11 +237,6 @@ public:
     virtual void Clear();
 };
 
-#endif
-
-#ifndef __SBX_SBXSTDCOLLECTION_HXX
-#define __SBX_SBXSTDCOLLECTION_HXX
-
 class BASIC_DLLPUBLIC SbxStdCollection : public SbxCollection
 {
 protected:
@@ -299,11 +258,6 @@ public:
     const String& GetElementClass() const { return aElemClass; }
 };
 
-#endif
-
-#ifndef __SBX_SBXREFS_HXX
-#define __SBX_SBXREFS_HXX
-
 SV_IMPL_REF(SbxBase)
 
 SV_IMPL_REF(SbxVariable)
@@ -312,27 +266,16 @@ SV_IMPL_REF(SbxVariable)
 #define SBX_ARRAY_DECL_DEFINED
 SV_DECL_REF(SbxArray)
 #endif
-#ifndef SBX_ARRAY_IMPL_DEFINED
-#define SBX_ARRAY_IMPL_DEFINED
 SV_IMPL_REF(SbxArray)
-#endif
 
 #ifndef SBX_INFO_DECL_DEFINED
 #define SBX_INFO_DECL_DEFINED
 SV_DECL_REF(SbxInfo)
 #endif
-#ifndef SBX_INFO_IMPL_DEFINED
-#define SBX_INFO_IMPL_DEFINED
 SV_IMPL_REF(SbxInfo)
-#endif
 
-#ifndef SBX_DIMARRAY_DECL_DEFINED
-#define SBX_DIMARRAY_DECL_DEFINED
 SV_DECL_REF(SbxDimArray)
-#endif
 SV_IMPL_REF(SbxDimArray)
-
-#endif
 
 #endif
 

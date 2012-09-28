@@ -31,13 +31,14 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18npool/mslangid.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
@@ -77,21 +78,6 @@ void test::BootstrapFixture::setUp()
     lang::Locale aLocale(aLang, aCountry, OUString());
     ResMgr::SetDefaultLocale( aLocale );
 
-    if (m_bNeedUCB)
-    {
-        // initialise UCB-Broker
-        uno::Sequence<uno::Any> aUcbInitSequence(2);
-        aUcbInitSequence[0] <<= OUString("Local");
-        aUcbInitSequence[1] <<= OUString("Office");
-        bool bInitUcb = ucbhelper::ContentBroker::initialize(m_xSFactory, aUcbInitSequence);
-        CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
-
-        uno::Reference<ucb::XContentProviderManager> xUcb =
-            ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
-        uno::Reference<ucb::XContentProvider> xFileProvider(m_xSFactory->createInstance("com.sun.star.ucb.FileContentProvider"), uno::UNO_QUERY);
-        xUcb->registerContentProvider(xFileProvider, "file", sal_True);
-    }
-
     SvtSysLocaleOptions aLocalOptions;
     OUString aLangISO = MsLangId::convertLanguageToIsoString( LANGUAGE_ENGLISH_US );
     aLocalOptions.SetLocaleConfigString( aLangISO );
@@ -106,11 +92,23 @@ void test::BootstrapFixture::setUp()
 
     // Make GraphicConverter work, normally done in desktop::Desktop::Main()
     Application::SetFilterHdl( LINK( this, test::BootstrapFixture, ImplInitFilterHdl ) );
+
+    if (m_bNeedUCB)
+    {
+        // initialise unconfigured UCB:
+        uno::Reference<ucb::XUniversalContentBroker> xUcb(m_xSFactory->createInstance("com.sun.star.ucb.UniversalContentBroker"), uno::UNO_QUERY_THROW);
+        uno::Reference<ucb::XContentProvider> xFileProvider(m_xSFactory->createInstance("com.sun.star.ucb.FileContentProvider"), uno::UNO_QUERY_THROW);
+        xUcb->registerContentProvider(xFileProvider, "file", sal_True);
+        uno::Reference<ucb::XContentProvider> xTdocProvider(m_xSFactory->createInstance("com.sun.star.ucb.TransientDocumentsContentProvider"), uno::UNO_QUERY);
+        if (xTdocProvider.is())
+        {
+            xUcb->registerContentProvider(xTdocProvider, "vnd.sun.star.tdoc", sal_True);
+        }
+    }
 }
 
 void test::BootstrapFixture::tearDown()
 {
-    ucbhelper::ContentBroker::deinitialize();
     test::BootstrapFixtureBase::tearDown();
 }
 

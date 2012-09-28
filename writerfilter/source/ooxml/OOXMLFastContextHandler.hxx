@@ -149,7 +149,7 @@ public:
                                 const OUString & rId);
     void resolveFooter(const sal_Int32 type,
                                 const OUString & rId);
-    void resolveOLE(const OUString & rId);
+    void resolveData(const OUString & rId);
 
     OUString getTargetForId(const OUString & rId);
 
@@ -184,6 +184,8 @@ public:
     void endParagraphGroup();
     void startCharacterGroup();
     void endCharacterGroup();
+    void startSdt();
+    void endSdt();
 
     void startField();
     void fieldSeparator();
@@ -332,6 +334,7 @@ public:
     void handlePicture();
     void handleBreak();
     void handleOLE();
+    void handleFontRel();
 
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const;

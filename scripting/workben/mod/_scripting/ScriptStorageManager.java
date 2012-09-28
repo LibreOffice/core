@@ -28,7 +28,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.utils;
 
 public class ScriptStorageManager extends TestCase {
 
@@ -42,7 +41,7 @@ public class ScriptStorageManager extends TestCase {
     Object oInterface = null;
 
     try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
             XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
                                                 XPropertySet.class, xMSF);
             // get context

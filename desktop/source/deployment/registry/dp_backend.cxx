@@ -29,10 +29,9 @@
 
 #include "dp_backend.h"
 #include "dp_ucb.h"
-#include "rtl/oustringostreaminserter.hxx"
+#include "rtl/ustring.hxx"
 #include "rtl/uri.hxx"
 #include "rtl/bootstrap.hxx"
-#include "sal/log.hxx"
 #include "osl/file.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/servicedecl.hxx"
@@ -270,7 +269,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
     {
         const OUString sDataFolder = makeURL(getCachePath(), relUrl);
         ::ucbhelper::Content tempFolder(
-            sDataFolder, Reference<ucb::XCommandEnvironment>());
+            sDataFolder, Reference<ucb::XCommandEnvironment>(), m_xComponentContext);
 
         Reference<sdbc::XResultSet> xResultSet(
                  StrTitle::createCursor( tempFolder, ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
@@ -578,8 +577,8 @@ void Package::exportTo(
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
 
-    ::ucbhelper::Content destFolder( destFolderURL, xCmdEnv );
-    ::ucbhelper::Content sourceContent( getURL(), xCmdEnv );
+    ::ucbhelper::Content destFolder( destFolderURL, xCmdEnv, getMyBackend()->getComponentContext() );
+    ::ucbhelper::Content sourceContent( getURL(), xCmdEnv, getMyBackend()->getComponentContext() );
     if (! destFolder.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
             newTitle, nameClashAction ))

@@ -38,7 +38,6 @@ namespace accessibility
     {
     private:
         TriState m_eState;
-        sal_Bool m_bEnabled;
         sal_Bool m_bIsTriState;
 
     protected:
@@ -53,8 +52,7 @@ namespace accessibility
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos,
                                 const TriState& _eState,
-                                sal_Bool _bEnabled,
-                                sal_Bool _bIsTriState = sal_True);
+                                sal_Bool _bIsTriState);
 
         // XInterface
         DECLARE_XINTERFACE( )
@@ -67,7 +65,7 @@ namespace accessibility
         // XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException );
         virtual ::sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
 
 

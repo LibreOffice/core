@@ -17,8 +17,6 @@
  */
 package integration.forms;
 
-import com.sun.star.form.binding.*;
-
 public class TextValidator extends integration.forms.ControlValidator
 {
 

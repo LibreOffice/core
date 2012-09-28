@@ -29,7 +29,6 @@ import com.sun.star.frame.*;
 import com.sun.star.sheet.*;
 import com.sun.star.container.*;
 
-import integration.forms.DocumentViewHelper;
 import integration.forms.DocumentHelper;
 
 /**

@@ -26,8 +26,6 @@ import org.w3c.dom.NamedNodeMap;
 
 /**
  *  Class containing static util methods for handling XML trees.
- *
- *  @author     smak
  */
 public final class XmlUtil {
 

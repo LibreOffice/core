@@ -127,7 +127,13 @@ bool isInternalContext(librdf_node *i_pNode) throw ()
 //       so they need to be wrapped to be usable with boost::shared_ptr.
 static void safe_librdf_free_world(librdf_world *const world)
 {
+#if 1
+    (void)world; // leak it
+#else
+    // disable this for now: it calls xmlCleanupParser, which now aborts
+    // (see desktop/source/app/main.c)
     if (world) { librdf_free_world(world); }
+#endif
 }
 static void safe_librdf_free_model(librdf_model *const model)
 {

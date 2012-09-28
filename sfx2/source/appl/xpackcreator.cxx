@@ -23,6 +23,7 @@
 
 #include "xpackcreator.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <sot/stg.hxx>
 #include <sot/storage.hxx>
 #include <tools/stream.hxx>
@@ -79,7 +80,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
 
     sal_Bool bSuccess = sal_False;
     ::ucbhelper::Content aContent;
-    if( ::ucbhelper::Content::create( aFolderUrl, xComEnv, aContent ) )
+    if( ::ucbhelper::Content::create( aFolderUrl, xComEnv, comphelper::getProcessComponentContext(), aContent ) )
     {
         SvStream* pTempStream = NULL;
 

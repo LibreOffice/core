@@ -35,14 +35,11 @@
 // __________ Imports __________
 
 
-// base classes
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Any;
 
 // factory for creating components
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
 import com.sun.star.beans.XPropertySet;
 
 // application specific classes
@@ -54,19 +51,9 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XText;
-//import com.sun.star.text.VertOrientation;
-//import com.sun.star.text.HoriOrientation;
-import com.sun.star.document.XEmbeddedObjectSupplier;
-
 // base graphics things
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
-
-// Exceptions
-import com.sun.star.uno.RuntimeException;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.IndexOutOfBoundsException;
 
 // __________ Implementation __________
 

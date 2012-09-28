@@ -16,25 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define FT_COL              1
-#define FT_ROW              2
-#define ED_COL              4
-#define ED_ROW              5
-#define FL_TABLE                        10
-#define ED_NAME             11
-#define FT_NAME                         12
-#define CB_HEADER           13
-#define CB_REPEAT_HEADER    14
-#define CB_DONT_SPLIT       15
-#define CB_BORDER           16
-#define FL_OPTIONS                      17
 #define FT_REPEAT_HEADER    18
 #define NF_REPEAT_HEADER    19
 
-#define BT_OK               20
-#define BT_CANCEL           21
-#define BT_HELP             22
-#define BT_AUTOFORMAT       23
-
 #define WIN_REPEAT_HEADER           25
-

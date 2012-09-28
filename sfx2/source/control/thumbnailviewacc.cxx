@@ -668,20 +668,6 @@ const uno::Sequence< sal_Int8 >& ThumbnailViewItemAcc::getUnoTunnelId()
     return theValueItemAccUnoTunnelId::get().getSeq();
 }
 
-ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    throw()
-{
-    try
-    {
-        uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
-        return( xUnoTunnel.is() ? reinterpret_cast<ThumbnailViewItemAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ThumbnailViewItemAcc::getUnoTunnelId() ))) : NULL );
-    }
-    catch(const ::com::sun::star::uno::Exception&)
-    {
-        return NULL;
-    }
-}
-
 uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewItemAcc::getAccessibleContext()
     throw (uno::RuntimeException)
 {

@@ -21,6 +21,7 @@
 #define _STGSTRMS_HXX
 
 #include <tools/stream.hxx>
+#include <rtl/ref.hxx>
 #include <vector>
 
 class StgIo;
@@ -41,7 +42,7 @@ class StgFAT
     short nOffset;                      // current offset within page
     sal_Int32 nLimit;                       // search limit recommendation
     sal_Bool  bPhys;                        // sal_True: physical FAT
-    StgPage* GetPhysPage( sal_Int32 nPage );
+    rtl::Reference< StgPage > GetPhysPage( sal_Int32 nPage );
     sal_Bool  MakeChain( sal_Int32 nStart, sal_Int32 nPages );
     sal_Bool  InitNew( sal_Int32 nPage1 );
 public:
@@ -88,7 +89,7 @@ public:
     virtual sal_Bool Pos2Page( sal_Int32 nBytePos );
     virtual sal_Int32 Read( void*, sal_Int32 )        { return 0; }
     virtual sal_Int32 Write( const void*, sal_Int32 ) { return 0; }
-    virtual StgPage* GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
+    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
     virtual sal_Bool IsSmallStrm() const { return sal_False; }
 };
 
@@ -105,7 +106,7 @@ public:
     using StgStrm::GetPage;
     sal_Int32 GetPage( short, sal_Bool, sal_uInt16 *pnMasterAlloc = 0);
     virtual sal_Bool SetSize( sal_Int32 );
-    virtual StgPage* GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
+    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
 };
 
 // The stream has a size increment which normally is 1, but which can be

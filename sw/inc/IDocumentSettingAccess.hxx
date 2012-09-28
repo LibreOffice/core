@@ -84,6 +84,8 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          SMALL_CAPS_PERCENTAGE_66,
          TAB_OVERFLOW,
          UNBREAKABLE_NUMBERINGS,
+         CLIPPED_PICTURES,
+         BACKGROUND_PARA_OVER_DRAWINGS,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,
@@ -95,7 +97,9 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          KERN_ASIAN_PUNCTUATION,
          MATH_BASELINE_ALIGNMENT,
          STYLES_NODEFAULT,
-         FLOATTABLE_NOMARGINS
+         FLOATTABLE_NOMARGINS,
+         EMBED_FONTS,
+         EMBED_SYSTEM_FONTS
      };
 
  public:

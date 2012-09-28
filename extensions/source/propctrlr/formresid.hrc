@@ -262,6 +262,10 @@
 #define RID_STR_FONTSTYLE_ITALIC            ( RID_FORMBROWSER_START + 253 )
 #define RID_STR_FONTSTYLE_BOLD              ( RID_FORMBROWSER_START + 254 )
 #define RID_STR_FONT_DEFAULT                ( RID_FORMBROWSER_START + 255 )
+#define RID_STR_SCROLL_WIDTH                ( RID_FORMBROWSER_START + 256 )
+#define RID_STR_SCROLL_HEIGHT               ( RID_FORMBROWSER_START + 257 )
+#define RID_STR_SCROLL_TOP                  ( RID_FORMBROWSER_START + 258 )
+#define RID_STR_SCROLL_LEFT                 ( RID_FORMBROWSER_START + 259 )
 
 
 // -----------------------------------------------------------------------

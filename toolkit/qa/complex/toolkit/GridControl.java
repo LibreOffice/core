@@ -33,6 +33,7 @@ import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.grid.DefaultGridDataModel;
 import com.sun.star.awt.grid.XGridColumn;
 import com.sun.star.awt.grid.XGridColumnModel;
+import com.sun.star.awt.grid.XGridControl;
 import com.sun.star.awt.grid.XGridDataModel;
 import com.sun.star.awt.grid.XMutableGridDataModel;
 import com.sun.star.awt.grid.XSortableMutableGridDataModel;
@@ -59,6 +60,8 @@ import java.util.List;
 import java.util.Random;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.openoffice.test.OfficeConnection;
@@ -205,6 +208,8 @@ public class GridControl
         TMutableGridDataModel test = new TMutableGridDataModel( m_dataModel );
         test.testAddRow();
         test.testAddRows();
+        test.testInsertRow();
+        test.testInsertRows();
         test.testRemoveRow();
         test.testRemoveAllRows();
         test.testUpdateCellData();
@@ -326,6 +331,33 @@ public class GridControl
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
+    public void testDataModel() throws Exception
+    {
+        impl_recreateGridModel();
+
+        // ensure that getCellData and getRowData have the same opinion on the data they deliver
+        final Object[][] data = new Object[][] {
+            new Object[] { 15, 17, 0 },
+            new Object[] { 9, 8, 14 },
+            new Object[] { 17, 2, 16 },
+            new Object[] { 0, 7, 14 },
+            new Object[] { 10, 16, 16 },
+        };
+        m_dataModel.addRows( new Object[ data.length ], data );
+
+        for ( int row = 0; row < data.length; ++row )
+        {
+            assertArrayEquals( "getRowData delivers wrong data in row " + row, data[row], m_dataModel.getRowData( row ) );
+            for ( int col = 0; col < data[row].length; ++col )
+            {
+                assertEquals( "getCellData delivers wrong data at position (" + col + ", " + row + ")",
+                        data[row][col], m_dataModel.getCellData( col, row ) );
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
     public void testSortableDataModel() throws Exception
     {
         impl_recreateGridModel();
@@ -403,63 +435,88 @@ public class GridControl
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void testModelViewInteraction() throws Exception
+    public void testView() throws Exception
     {
-        final List< Object > disposables = new ArrayList< Object >();
-        try
-        {
-            // create a siple dialog model/control/peer trinity
-            final XControlModel dialogModel = createInstance( XControlModel.class, "com.sun.star.awt.UnoControlDialogModel" );
-            disposables.add( dialogModel );
-            final XPropertySet dialogProps = UnoRuntime.queryInterface( XPropertySet.class, dialogModel );
-            dialogProps.setPropertyValue( "Width", 200 );
-            dialogProps.setPropertyValue( "Height", 100 );
-            dialogProps.setPropertyValue( "Title", "Grid Control Unit Test" );
-            final XControl dialogControl = createInstance( XControl.class, "com.sun.star.awt.UnoControlDialog" );
-            disposables.add( dialogControl );
-            dialogControl.setModel( dialogModel );
-            dialogControl.createPeer( createInstance( XToolkit.class, "com.sun.star.awt.Toolkit" ), null );
+        final XControl control = impl_createDialogWithGridControl();
+        final XPropertySet gridModelProps =
+            UnoRuntime.queryInterface( XPropertySet.class, control.getModel() );
 
-            // insert a grid control model
-            final XMultiServiceFactory controlModelFactory = UnoRuntime.queryInterface( XMultiServiceFactory.class,
-                dialogModel );
-            XPropertySet gridModelProps = UnoRuntime.queryInterface( XPropertySet.class,
-                controlModelFactory.createInstance( "com.sun.star.awt.grid.UnoControlGridModel" ) );
-            disposables.add( gridModelProps );
-            gridModelProps.setPropertyValue( "PositionX", 6 );
-            gridModelProps.setPropertyValue( "PositionY", 6 );
-            gridModelProps.setPropertyValue( "Width", 188 );
-            gridModelProps.setPropertyValue( "Height", 88 );
-            final XNameContainer modelContainer = UnoRuntime.queryInterface( XNameContainer.class, dialogModel );
-            modelContainer.insertByName( "grid", gridModelProps );
+        // in the current implementation (not sure this is a good idea at all), the control (more precise: the peer)
+        // ensures that if there are no columns in the column model, but in the data model, then the column model
+        // will implicitly have the needed columns added.
+        // To ensure that clients which rely on this do not break in the future, check this here.
+        final XMutableGridDataModel dataModel = UnoRuntime.queryInterface( XMutableGridDataModel.class,
+            gridModelProps.getPropertyValue( "GridDataModel" ) );
+        assertNotNull( dataModel );
+        assertEquals( 0, dataModel.getColumnCount() );
 
-            // check the respective control has been created
-            final XControlContainer controlContainer = UnoRuntime.queryInterface( XControlContainer.class, dialogControl );
-            final XControl gridControl = controlContainer.getControl( "grid" );
-            assertNotNull( "no grid control created in the dialog", gridControl );
+        final XGridColumnModel columnModel = UnoRuntime.queryInterface( XGridColumnModel.class,
+            gridModelProps.getPropertyValue( "ColumnModel" ) );
+        assertNotNull( columnModel );
+        assertEquals( 0, columnModel.getColumnCount() );
 
-            // in the current implementation (not sure this is a good idea at all), the control (more precise: the peer)
-            // ensures that if there are no columns in the column model, but in the data model, then the column model
-            // will implicitly have the needed columns added.
-            // To ensure that clients which rely on this do not break in the future, check this here.
-            final XMutableGridDataModel dataModel = UnoRuntime.queryInterface( XMutableGridDataModel.class,
-                gridModelProps.getPropertyValue( "GridDataModel" ) );
-            assertNotNull( dataModel );
-            assertEquals( 0, dataModel.getColumnCount() );
+        final int columnCount = 3;
+        final int rowCount = 2;
+        dataModel.addRow( null, new Object[] { 1, 2, 3 } );
+        dataModel.addRow( null, new Object[] { 6, 5, 4 } );
 
-            final XGridColumnModel columnModel = UnoRuntime.queryInterface( XGridColumnModel.class,
-                gridModelProps.getPropertyValue( "ColumnModel" ) );
-            assertNotNull( columnModel );
-            assertEquals( 0, columnModel.getColumnCount() );
+        assertEquals( columnCount, dataModel.getColumnCount() );
+        assertEquals( columnCount, columnModel.getColumnCount() );
 
-            dataModel.addRow( null, new Object[] { 1, 2, 3 } );
-            assertEquals( 3, dataModel.getColumnCount() );
-            assertEquals( 3, columnModel.getColumnCount() );
-        }
-        finally
-        {
-            impl_dispose( disposables.toArray());
-        }
+        // some cursor traveling
+        final XGridControl gridControl = UnoRuntime.queryInterface( XGridControl.class, control );
+        gridControl.goToCell( 0, 0 );
+        assertEquals( "wrong 'current column' (1)", 0, gridControl.getCurrentColumn() );
+        assertEquals( "wrong 'current row' (1)", 0, gridControl.getCurrentRow() );
+        gridControl.goToCell( columnCount - 1, rowCount - 1 );
+        assertEquals( "wrong 'current column' (2)", dataModel.getColumnCount() - 1, gridControl.getCurrentColumn() );
+        assertEquals( "wrong 'current row' (2)", dataModel.getRowCount() - 1, gridControl.getCurrentRow() );
+
+        // removing the last column, while the active cell is in this very last column, is expected to adjust
+        // the active cell
+        columnModel.removeColumn( columnCount - 1 );
+        assertEquals( "removed the last and active column, active column was not adjusted!",
+            columnCount - 2, gridControl.getCurrentColumn() );
+        // same holds for rows
+        dataModel.removeRow( rowCount - 1 );
+        assertEquals( "removed the last and active row, active row was not adjusted!",
+            rowCount - 2, gridControl.getCurrentRow() );
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private XControl impl_createDialogWithGridControl() throws Exception
+    {
+        // create a simple dialog model/control/peer trinity
+        final XControlModel dialogModel = createInstance( XControlModel.class, "com.sun.star.awt.UnoControlDialogModel" );
+        m_disposables.add( dialogModel );
+        final XPropertySet dialogProps = UnoRuntime.queryInterface( XPropertySet.class, dialogModel );
+        dialogProps.setPropertyValue( "Width", 200 );
+        dialogProps.setPropertyValue( "Height", 100 );
+        dialogProps.setPropertyValue( "Title", "Grid Control Unit Test" );
+        final XControl dialogControl = createInstance( XControl.class, "com.sun.star.awt.UnoControlDialog" );
+        m_disposables.add( dialogControl );
+        dialogControl.setModel( dialogModel );
+        dialogControl.createPeer( createInstance( XToolkit.class, "com.sun.star.awt.Toolkit" ), null );
+
+        // insert a grid control model
+        final XMultiServiceFactory controlModelFactory = UnoRuntime.queryInterface( XMultiServiceFactory.class,
+            dialogModel );
+        final XPropertySet gridModelProps = UnoRuntime.queryInterface( XPropertySet.class,
+            controlModelFactory.createInstance( "com.sun.star.awt.grid.UnoControlGridModel" ) );
+        m_disposables.add( gridModelProps );
+        gridModelProps.setPropertyValue( "PositionX", 6 );
+        gridModelProps.setPropertyValue( "PositionY", 6 );
+        gridModelProps.setPropertyValue( "Width", 188 );
+        gridModelProps.setPropertyValue( "Height", 88 );
+        final XNameContainer modelContainer = UnoRuntime.queryInterface( XNameContainer.class, dialogModel );
+        modelContainer.insertByName( "grid", gridModelProps );
+
+        // check the respective control has been created
+        final XControlContainer controlContainer = UnoRuntime.queryInterface( XControlContainer.class, dialogControl );
+        final XControl gridControl = controlContainer.getControl( "grid" );
+        assertNotNull( "no grid control created in the dialog", gridControl );
+
+        return gridControl;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -551,6 +608,20 @@ public class GridControl
         final XInterface lhs = UnoRuntime.queryInterface( XInterface.class, i_lhs );
         final XInterface rhs = UnoRuntime.queryInterface( XInterface.class, i_rhs );
         return UnoRuntime.areSame( lhs, rhs );
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Before
+    public void initTestCase()
+    {
+        m_disposables.clear();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @After
+    public void cleanupTestCase()
+    {
+        impl_dispose( m_disposables.toArray() );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -680,4 +751,5 @@ public class GridControl
     private XPropertySet                    m_gridControlModel;
     private XGridColumnModel                m_columnModel;
     private XSortableMutableGridDataModel   m_dataModel;
+    private final List< Object >            m_disposables = new ArrayList< Object >();
 }

@@ -20,6 +20,6 @@
 #ifndef _RTL_USTRING_
 #include  <rtl/ustring>
 #endif
-ostream& operator<<( ostream& out,const rtl::OUString& bla );
+ostream& operator<<( ostream& out,const OUString& bla );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

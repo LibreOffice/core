@@ -58,6 +58,32 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResI
     Reload(nTypeFlags);
 }
 
+SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, WinBits nStyle ) :
+    ListBox(pWin, nStyle),
+    pImpl(new SwNumberingTypeListBox_Impl)
+{
+    uno::Reference<uno::XComponentContext>          xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
+
+    pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
+}
+
+bool SwNumberingTypeListBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("type")))
+        Reload(rValue.toInt32());
+    else
+        return ListBox::set_property(rKey, rValue);
+    return true;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwNumberingTypeListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    SwNumberingTypeListBox *pListBox = new SwNumberingTypeListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+    pListBox->SetBestDropDownLineCount();
+    return pListBox;
+}
+
 SwNumberingTypeListBox::~SwNumberingTypeListBox()
 {
     delete pImpl;

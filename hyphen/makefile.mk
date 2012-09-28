@@ -45,7 +45,8 @@ PATCH_FILES= \
     hyphen-build.patch \
     hyphen-android.patch \
     hyphen-fdo43931.patch \
-    hyphen-lenwaswrong.patch
+    hyphen-lenwaswrong.patch \
+    hyphen-rhmin.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)

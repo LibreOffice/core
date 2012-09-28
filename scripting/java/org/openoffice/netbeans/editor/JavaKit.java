@@ -43,7 +43,6 @@ import org.netbeans.editor.ext.java.*;
 /**
 * Java editor kit with appropriate document
 *
-* @author Miloslav Metelka
 * @version 1.00
 */
 
@@ -117,8 +116,6 @@ public class JavaKit extends ExtKit {
 
     /**
      *   DataAccessor for parser DB files via URL streams
-     *
-     *   @author  Petr Nejedly
      */
     public static class URLAccessor implements DataAccessor {
 

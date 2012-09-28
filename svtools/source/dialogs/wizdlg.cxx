@@ -184,7 +184,7 @@ void WizardDialog::ImplPosCtrls()
     if ( mpFixedLine && mpFixedLine->IsVisible() )
     {
         nOffY -= mpFixedLine->GetSizePixel().Height();
-        mpFixedLine->SetPosSizePixel( 0, nOffY, aDlgSize.Width(), 0,
+        mpFixedLine->setPosSizePixel( 0, nOffY, aDlgSize.Width(), 0,
                                       WINDOW_POSSIZE_POS | WINDOW_POSSIZE_WIDTH );
     }
 
@@ -233,7 +233,7 @@ void WizardDialog::ImplPosCtrls()
             nViewHeight     = nDlgHeight-(WIZARDDIALOG_VIEW_DLGOFFSET_Y*2);
             nViewPosFlags  |= WINDOW_POSSIZE_HEIGHT;
         }
-        mpViewWindow->SetPosSizePixel( nViewOffX, nViewOffY,
+        mpViewWindow->setPosSizePixel( nViewOffX, nViewOffY,
                                        nViewWidth, nViewHeight,
                                        nViewPosFlags );
     }

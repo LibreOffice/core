@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -1285,7 +1286,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         s_pGarbageCollector = new OSQLParseNodesGarbageCollector();
 
         if(!s_xLocaleData.is())
-            s_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString("com.sun.star.i18n.LocaleData")),UNO_QUERY);
+            s_xLocaleData = LocaleData::create(comphelper::getComponentContext(m_xServiceFactory));
 
         // reset to 0
         memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs[0]) * (OSQLParseNode::rule_count+1));

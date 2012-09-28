@@ -26,11 +26,12 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>
-#include <ucbhelper/contentbroker.hxx>
 #include <unotools/datetime.hxx>
 #include <svx/svdotext.hxx>
 #include "svx/svditext.hxx"
@@ -175,30 +176,24 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 
     if( pData )
     {
-        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
         DateTime                    aFileDT( DateTime::EMPTY );
-        sal_Bool                        bExists = sal_False, bLoad = sal_False;
+        sal_Bool                        bExists = sal_True, bLoad = sal_False;
 
-        if( pBroker )
+        try
         {
-            bExists = sal_True;
+            INetURLObject aURL( pData->aFileName );
+            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-            try
-            {
-                INetURLObject aURL( pData->aFileName );
-                DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+            ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
+            ::com::sun::star::util::DateTime aDateTime;
 
-                ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-                ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
-                ::com::sun::star::util::DateTime aDateTime;
-
-                aAny >>= aDateTime;
-                ::utl::typeConvert( aDateTime, aFileDT );
-            }
-            catch( ... )
-            {
-                bExists = sal_False;
-            }
+            aAny >>= aDateTime;
+            ::utl::typeConvert( aDateTime, aFileDT );
+        }
+        catch( ... )
+        {
+            bExists = sal_False;
         }
 
         if( bExists )

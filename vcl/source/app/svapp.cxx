@@ -1716,7 +1716,7 @@ void Application::ShowNativeErrorBox(const String& sTitle  ,
             sTitle,
             sMessage,
             SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
-            SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
+            SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK, false);
     if (btn != SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK) {
         OSL_TRACE("ShowNativeMessageBox returned %d", btn);
     }
@@ -1763,9 +1763,9 @@ void Application::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
     pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType);
 }
 
-sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
+bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
 {
-    sal_Bool bRet = true;
+    bool bRet = true;
 
 // Disable Java bridge on UNIX
 #if defined UNX

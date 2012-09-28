@@ -22,17 +22,9 @@ import javax.swing.tree.TreePath;
 
 
 import java.util.Vector;
-import java.util.HashMap;
-import java.util.Enumeration;
-
 import com.sun.star.accessibility.*;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Any;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XServiceName;
 
 public class AccessibilityTreeModel
     extends AccessibilityTreeModelBase
@@ -108,7 +100,7 @@ public class AccessibilityTreeModel
                     {
                         if (maCanvas != null)
                             maCanvas.removeNode (aNode);
-                        removeAccListener ((AccTreeNode)aNode);
+                        removeAccListener (aNode);
                     }
                 });
             maNodeMap.Clear ();
@@ -302,7 +294,7 @@ public class AccessibilityTreeModel
      */
     protected Object[] createPath (AccessibleTreeNode aNode)
     {
-        Vector aPath = new Vector();
+        Vector<AccessibleTreeNode> aPath = new Vector<AccessibleTreeNode>();
         aNode.createPath (aPath);
         return aPath.toArray();
     }
@@ -318,7 +310,7 @@ public class AccessibilityTreeModel
     {
         for(int i = 0; i < maTMListeners.size(); i++)
         {
-            ((TreeModelListener)maTMListeners.get(i)).treeNodesChanged(e);
+            maTMListeners.get(i).treeNodesChanged(e);
         }
     }
 
@@ -326,7 +318,7 @@ public class AccessibilityTreeModel
     {
         for(int i = 0; i < maTMListeners.size(); i++)
         {
-            ((TreeModelListener)maTMListeners.get(i)).treeNodesInserted(e);
+            maTMListeners.get(i).treeNodesInserted(e);
         }
     }
 
@@ -334,7 +326,7 @@ public class AccessibilityTreeModel
     {
         for(int i = 0; i < maTMListeners.size(); i++)
         {
-            ((TreeModelListener)maTMListeners.get(i)).treeNodesRemoved(e);
+            maTMListeners.get(i).treeNodesRemoved(e);
         }
     }
 
@@ -342,7 +334,7 @@ public class AccessibilityTreeModel
     {
         for(int i = 0; i < maTMListeners.size(); i++)
         {
-            ((TreeModelListener)maTMListeners.get(i)).treeStructureChanged(e);
+            maTMListeners.get(i).treeStructureChanged(e);
         }
     }
 
@@ -401,7 +393,7 @@ public class AccessibilityTreeModel
     /** Create a TreeModelEvent that indicates changes at those children of
         the specified node with the specified indices.
     */
-    protected TreeModelEvent createChangeEvent (AccTreeNode aNode, Vector aChildIndices)
+    protected TreeModelEvent createChangeEvent (AccTreeNode aNode, Vector<Integer> aChildIndices)
     {
         // Build a list of child objects that are indicated by the given indices.
         int nCount = aChildIndices.size();
@@ -409,7 +401,7 @@ public class AccessibilityTreeModel
         int nChildIndices[] = new int[nCount];
         for (int i=0; i<nCount; i++)
         {
-            int nIndex = ((Integer)aChildIndices.elementAt(i)).intValue();
+            int nIndex = aChildIndices.elementAt(i);
             aChildObjects[i] = aNode.getChild (nIndex);
             nChildIndices[i] = nIndex;
         }
@@ -432,7 +424,7 @@ public class AccessibilityTreeModel
         {
             for(int i = 0; i < maTMListeners.size(); i++)
             {
-                fire( (TreeModelListener)maTMListeners.get(i) );
+                fire( maTMListeners.get(i) );
             }
         }
 
@@ -444,7 +436,7 @@ public class AccessibilityTreeModel
     protected XAccessibleEventBroadcaster getBroadcaster (Object aObject)
     {
         if (aObject instanceof AccTreeNode)
-            return (XAccessibleEventBroadcaster) UnoRuntime.queryInterface (
+            return UnoRuntime.queryInterface (
                 XAccessibleEventBroadcaster.class, ((AccTreeNode)aObject).getContext());
         else
             return null;
@@ -493,7 +485,7 @@ public class AccessibilityTreeModel
         xSource.
     */
     public AccTreeNode updateNode (XAccessibleContext xSource,
-        java.lang.Class class1, java.lang.Class class2)
+        java.lang.Class class1, java.lang.Class<AccessibleExtendedComponentHandler> class2)
     {
         AccessibleTreeNode aTreeNode = maNodeMap.GetNode (xSource);
         AccTreeNode aNode = null;
@@ -503,7 +495,7 @@ public class AccessibilityTreeModel
         {
             aNode = (AccTreeNode) aTreeNode;
             // Get list of affected children.
-            Vector aChildIndices = (aNode).updateChildren (
+            Vector<Integer> aChildIndices = (aNode).updateChildren (
                 class1, class2);
             // Fire events that these children may have changed.
             fireTreeNodesChanged (

@@ -20,7 +20,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include "OOXMLTestService.hxx"
 #include <stdio.h>
@@ -31,7 +30,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <ucbhelper/contentbroker.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <osl/process.h>
@@ -47,9 +45,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/seqstream.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <ooxml/OOXMLDocument.hxx>
@@ -74,52 +69,37 @@ xContext( xContext_ )
 
 sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< OUString >& aArguments ) throw (uno::RuntimeException)
 {
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= OUString("Local");
-    aUcbInitSequence[1] <<= OUString("Office");
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
-    {
 #ifdef DEBUG_ELEMENT
-        writerfilter::TagLogger::Pointer_t debugLogger
+    writerfilter::TagLogger::Pointer_t debugLogger
         (writerfilter::TagLogger::getInstance("DEBUG"));
-        debugLogger->startDocument();
+    debugLogger->startDocument();
 #endif
 
-        OUString arg=aArguments[0];
+    OUString arg=aArguments[0];
 
-        ::comphelper::setProcessServiceFactory(xServiceFactory);
+    uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
-        uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
+    rtl_uString *dir=NULL;
+    osl_getProcessWorkingDir(&dir);
+    OUString absFileUrl;
+    osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
+    rtl_uString_release(dir);
 
-        rtl_uString *dir=NULL;
-        osl_getProcessWorkingDir(&dir);
-        OUString absFileUrl;
-        osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
-        rtl_uString_release(dir);
+    uno::Reference<io::XInputStream> xInputStream =
+        xFileAccess->openFileRead(absFileUrl);
+    ooxml::OOXMLStream::Pointer_t pDocStream =
+        ooxml::OOXMLDocumentFactory::createStream(xContext, xInputStream, false);
 
-        uno::Reference<io::XInputStream> xInputStream =
-            xFileAccess->openFileRead(absFileUrl);
-        ooxml::OOXMLStream::Pointer_t pDocStream =
-            ooxml::OOXMLDocumentFactory::createStream(xContext, xInputStream);
+    ooxml::OOXMLDocument::Pointer_t pDocument
+        (ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
 
-        ooxml::OOXMLDocument::Pointer_t pDocument
-            (ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
-
-        Stream::Pointer_t pStream = createStreamHandler();
-        pDocument->resolve(*pStream);
+    Stream::Pointer_t pStream = createStreamHandler();
+    pDocument->resolve(*pStream);
 
 #ifdef DEBUG_ELEMENT
-        debugLogger->endDocument();
+    debugLogger->endDocument();
 #endif
 
-        ::ucbhelper::ContentBroker::deinitialize();
-    }
-    else
-    {
-        fprintf(stderr, "can't initialize UCB");
-    }
     return 0;
 }
 

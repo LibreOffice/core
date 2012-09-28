@@ -29,7 +29,6 @@ import com.sun.star.frame.XDispatchRecorderSupplier;
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import lib.MultiMethodTest;
 import lib.StatusException;

@@ -38,12 +38,12 @@ class SW_DLLPUBLIC SwFmtRuby : public SfxPoolItem
 {
     friend class SwTxtRuby;
 
-    String sRubyTxt;                    // The ruby txt.
-    String sCharFmtName;                // Name of the charformat.
-    SwTxtRuby* pTxtAttr;                // The TextAttribute.
-    sal_uInt16 nCharFmtId;                  // PoolId of the charformat.
-    sal_uInt16 nPosition;                   // Position of the Ruby-character.
-    sal_uInt16 nAdjustment;                 // Specific adjustment of the Ruby-ch.
+    String sRubyTxt;                        ///< The ruby txt.
+    String sCharFmtName;                    ///< Name of the charformat.
+    SwTxtRuby* pTxtAttr;                    ///< The TextAttribute.
+    sal_uInt16 nCharFmtId;                  ///< PoolId of the charformat.
+    sal_uInt16 nPosition;                   ///< Position of the Ruby-character.
+    sal_uInt16 nAdjustment;                 ///< Specific adjustment of the Ruby-ch.
 
 public:
     SwFmtRuby( const String& rRubyTxt );

@@ -32,7 +32,7 @@ namespace oox { namespace drawingml {
         : ContextHandler( rParent )
         , maSpacing( aSpacing )
     {
-        maSpacing.bHasValue = sal_True;
+        maSpacing.bHasValue = true;
     }
 
     void TextSpacingContext::endFastElement( sal_Int32 /*nElement*/ )

@@ -36,7 +36,9 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <osl/file.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
+#include <com/sun/star/io/Pipe.hpp>
 
 using namespace CSS::uno;
 using namespace CSS::ucb;
@@ -96,9 +98,8 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
             aUTF8QueryURL.append(aQueryString.makeStringAndClear());
         }
         OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
-        ucbhelper::Content aContent(aQueryURL, aEnvironment);
-        CSS::uno::Reference< XOutputStream > aPipe(m_aFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe"))), UNO_QUERY_THROW);
+        ucbhelper::Content aContent(aQueryURL, aEnvironment, comphelper::getComponentContext(m_aFactory));
+        CSS::uno::Reference< XOutputStream > aPipe( CSS::io::Pipe::create(comphelper::getComponentContext(m_aFactory)), UNO_QUERY_THROW );
         aContent.openStream(aPipe);
         // get reply
         try {

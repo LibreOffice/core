@@ -22,8 +22,6 @@ package com.sun.star.script.framework.provider.java;
  * The Resolver interface is an interface common to all classes which
  * want to implement an algorithm for obtaining a ScriptProxy object
  * for a particular ScriptDescriptor and Class
- *
- * @author     Tomas O'Connor
  */
 
 public interface Resolver {

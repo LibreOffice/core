@@ -63,7 +63,7 @@ public class _XLinguServiceManager extends MultiMethodTest {
             listenerCalled = true;
             log.println("Listener called");
         }
-    };
+    }
 
     XLinguServiceEventListener listener = new MyLinguServiceEventListener();
 

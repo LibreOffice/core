@@ -34,10 +34,10 @@ namespace xmlscript
 // functionality from xmlscript
 struct XMLSCRIPT_DLLPUBLIC ModuleDescriptor
 {
-    ::rtl::OUString aName;
-    ::rtl::OUString aLanguage;
-    ::rtl::OUString aCode;
-    ::rtl::OUString aModuleType; // VBA
+    OUString aName;
+    OUString aLanguage;
+    OUString aCode;
+    OUString aModuleType; // VBA
 };
 
 XMLSCRIPT_DLLPUBLIC void

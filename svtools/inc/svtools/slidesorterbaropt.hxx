@@ -34,7 +34,6 @@
     is faster and smaller then a complete implementation!
 */
 class SvtSlideSorterBarOptions_Impl;
-class Link;
 
 /** collect informations about sidebar group
 
@@ -55,9 +54,6 @@ class SVT_DLLPUBLIC SvtSlideSorterBarOptions: public utl::detail::Options
         */
         SvtSlideSorterBarOptions();
         virtual ~SvtSlideSorterBarOptions();
-
-        void AddListenerLink( const Link& rLink );
-        void RemoveListenerLink( const Link& rLink );
 
         bool GetVisibleImpressView() const;
         void SetVisibleImpressView( bool bVisible );

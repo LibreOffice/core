@@ -134,7 +134,10 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
             pRegisterReturn[0] = r0;
 #else
             register float fret asm("s0");
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuninitialized"
             *(float*)pRegisterReturn = fret;
+#pragma GCC diagnostic pop
 #endif
         break;
         case typelib_TypeClass_DOUBLE:
@@ -143,7 +146,10 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
             pRegisterReturn[0] = r0;
 #else
             register double dret asm("d0");
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuninitialized"
             *(double*)pRegisterReturn = dret;
+#pragma GCC diagnostic pop
 #endif
             break;
         case typelib_TypeClass_STRUCT:

@@ -90,8 +90,7 @@ SwXMLBlockContext::SwXMLBlockContext(
    const OUString& rLocalName,
    const uno::Reference<
    xml::sax::XAttributeList > & xAttrList ) :
-    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
-    rLocalRef(rImport)
+    SvXMLImportContext ( rImport, nPrefix, rLocalName )
 {
     static const CharClass & rCC = GetAppCharClass();
     String aShort, aLong, aPackageName;

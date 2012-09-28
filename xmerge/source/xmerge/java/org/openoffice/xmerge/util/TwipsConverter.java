@@ -23,7 +23,6 @@ package org.openoffice.xmerge.util;
  * <p>Helper class providing static methods to convert data to/from
  *    twips</p>
  *
- * @author  Martin Maher
  */
 public class TwipsConverter {
 

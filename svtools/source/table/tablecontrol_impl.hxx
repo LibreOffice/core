@@ -223,10 +223,10 @@ namespace svt { namespace table
         /** returns the position of the current row in the selection vector */
         int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
-        /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
-        void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
+        /** ??? */
+        void    invalidateSelectedRegion( RowPos _nPrevRow, RowPos _nCurRow );
 
-        /** invalidates the part of the data window which is covered by the given row
+        /** invalidates the part of the data window which is covered by the given rows
             @param i_firstRow
                 the index of the first row to include in the invalidation
             @param i_lastRow
@@ -234,6 +234,14 @@ namespace svt { namespace table
                 should happen down to the bottom of the data window.
         */
         void    invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow );
+
+        /** invalidates the part of the data window which is covered by the given row
+        */
+        void    invalidateRow( RowPos const i_row ) { invalidateRowRange( i_row, i_row ); }
+
+        /** invalidates all selected rows
+        */
+        void    invalidateSelectedRows();
 
         void    checkCursorPosition();
 
@@ -269,6 +277,10 @@ namespace svt { namespace table
         void        setSelectHandler( Link const & i_selectHandler ) { m_aSelectHdl = i_selectHandler; }
         Link const& getSelectHandler() const { return m_aSelectHdl; }
 
+        void commitAccessibleEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
+        void commitCellEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
+        void commitTableEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
+
         // ITableControl
         virtual void                hideCursor();
         virtual void                showCursor();
@@ -293,18 +305,24 @@ namespace svt { namespace table
         virtual bool                isRowSelected( RowPos i_row ) const;
 
 
+        long                        appFontWidthToPixel( long const i_appFontUnits ) const;
+
         TableDataWindow&        getDataWindow()       { return *m_pDataWindow; }
         const TableDataWindow&  getDataWindow() const { return *m_pDataWindow; }
         ScrollBar* getHorzScrollbar();
         ScrollBar* getVertScrollbar();
 
-        Rectangle calcHeaderRect(bool bColHeader);
+        Rectangle calcHeaderRect( bool bColHeader );
+        Rectangle calcHeaderCellRect( bool bColHeader, sal_Int32 nPos );
         Rectangle calcTableRect();
+        Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol );
 
         // A11Y
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         getAccessible( Window& i_parentWindow );
         void            disposeAccessible();
+
+        inline bool     isAccessibleAlive() const { return impl_isAccessibleAlive(); }
 
         // ITableModelListener
         virtual void    rowsInserted( RowPos first, RowPos last );
@@ -368,26 +386,45 @@ namespace svt { namespace table
         */
         void        impl_ni_updateCachedTableMetrics();
 
-        /** updates ->m_aColumnWidthsPixel with the current pixel widths of all model columns
+        /** does a relayout of the table control
 
-            The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
+            Column widths, and consequently the availability of the vertical and horizontal scrollbar, are updated
+            with a call to this method.
 
             @param i_assumeInflexibleColumnsUpToIncluding
                 the index of a column up to which all columns should be considered as inflexible, or
                 <code>COL_INVALID</code>.
         */
-        void        impl_ni_updateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding = COL_INVALID );
+        void        impl_ni_relayout( ColPos const i_assumeInflexibleColumnsUpToIncluding = COL_INVALID );
 
-        /** updates the scrollbars of the control
+        /** calculates the new width of our columns, taking into account their min and max widths, and their relative
+            flexibility.
 
-            The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
+            @param i_assumeInflexibleColumnsUpToIncluding
+                the index of a column up to which all columns should be considered as inflexible, or
+                <code>COL_INVALID</code>.
 
-            This includes both the existence of the scrollbars, and their
-            state.
+            @param i_assumeVerticalScrollbar
+                controls whether or not we should assume the presence of a vertical scrollbar. If <true/>, and
+                if the model has a VerticalScrollbarVisibility != ScrollbarShowNever, the method will leave
+                space for a vertical scrollbar.
+
+            @return
+                the overall width of the grid, which is available for columns
         */
-        void        impl_ni_updateScrollbars();
+        long        impl_ni_calculateColumnWidths(
+                        ColPos const i_assumeInflexibleColumnsUpToIncluding,
+                        bool const i_assumeVerticalScrollbar,
+                        ::std::vector< long >& o_newColWidthsPixel
+                    ) const;
+
+        /** positions all child windows, e.g. the both scrollbars, the corner window, and the data window
+        */
+        void        impl_ni_positionChildWindows(
+                        Rectangle const & i_dataCellPlayground,
+                        bool const i_verticalScrollbar,
+                        bool const i_horizontalScrollbar
+                    );
 
         /** scrolls the view by the given number of rows
 

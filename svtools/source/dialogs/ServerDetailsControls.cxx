@@ -384,7 +384,7 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
     }
 
     // Get the Content
-    ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv );
+    ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
     Sequence< rtl::OUString > aProps( 1 );
     aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
 

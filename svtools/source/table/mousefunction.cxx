@@ -43,13 +43,13 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     oslInterlockedCount MouseFunction::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     oslInterlockedCount MouseFunction::release()
     {
-        oslInterlockedCount newCount = osl_decrementInterlockedCount( &m_refCount );
+        oslInterlockedCount newCount = osl_atomic_decrement( &m_refCount );
         if ( newCount == 0 )
         {
             delete this;
@@ -207,27 +207,14 @@ namespace svt { namespace table
         TableCell const tableCell( i_tableControl.hitTest( i_event.GetPosPixel() ) );
         if ( tableCell.nRow >= 0 )
         {
-            bool bSetCursor = false;
             if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
-            {
-                bSetCursor = true;
-            }
-            else
-            {
-                if ( !i_tableControl.isRowSelected( tableCell.nRow ) )
-                {
-                    handled = i_tableControl.getSelEngine()->SelMouseButtonDown( i_event );
-                }
-                else
-                {
-                    bSetCursor = true;
-                }
-            }
-
-            if ( bSetCursor )
             {
                 i_tableControl.activateCell( tableCell.nColumn, tableCell.nRow );
                 handled = true;
+            }
+            else
+            {
+                handled = i_tableControl.getSelEngine()->SelMouseButtonDown( i_event );
             }
         }
 

@@ -62,7 +62,7 @@ typedef std::map< rtl::OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 struct SdStyleFamilyImpl
 {
     SdrPageWeakRef mxMasterPage;
-    String maLayoutName;
+    OUString maLayoutName;
 
     PresStyleMap& getStyleSheets();
     rtl::Reference< SfxStyleSheetPool > mxPool;

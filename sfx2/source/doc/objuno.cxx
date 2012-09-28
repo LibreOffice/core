@@ -34,7 +34,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XCompatWriterDocProperties.hpp>
 
 #include <unotools/configmgr.hxx>
@@ -46,6 +46,7 @@
 
 #include <tools/errcode.hxx>
 #include <svl/cntwids.hrc>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -1182,8 +1183,8 @@ SfxStandaloneDocumentInfoObject::SfxStandaloneDocumentInfoObject( const ::com::s
     , _xFactory( xFactory )
 {
     uno::Reference< lang::XInitialization > xDocProps(
-        _xFactory->createInstance( ::rtl::OUString(
-            "com.sun.star.document.DocumentProperties")), uno::UNO_QUERY_THROW);
+        document::DocumentProperties::create(comphelper::getComponentContext(_xFactory)),
+        uno::UNO_QUERY_THROW);
     uno::Any a;
     a <<= xDocProps;
     uno::Sequence<uno::Any> args(1);
@@ -1261,8 +1262,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
 
     ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
     uno::Reference< document::XDocumentProperties > xDocProps(
-        _xFactory->createInstance( ::rtl::OUString(
-            "com.sun.star.document.DocumentProperties")), uno::UNO_QUERY_THROW);
+        document::DocumentProperties::create(comphelper::getComponentContext(_xFactory)) );
     _pImp->Reset(xDocProps);
     aGuard.clear();
 

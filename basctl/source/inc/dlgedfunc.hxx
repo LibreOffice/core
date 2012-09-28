@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASCTL_DLGEDFUNC_HXX
-#define _BASCTL_DLGEDFUNC_HXX
+#ifndef BASCTL_DLGEDFUNC_HXX
+#define BASCTL_DLGEDFUNC_HXX
+
+namespace basctl
+{
 
 class DlgEditor;
 
@@ -29,14 +32,14 @@ class DlgEditor;
 class DlgEdFunc /* : public LinkHdl */
 {
 protected:
-    DlgEditor* pParent;
-    Timer        aScrollTimer;
+    DlgEditor& rParent;
+    Timer      aScrollTimer;
 
     DECL_LINK( ScrollTimeout, Timer * );
     void    ForceScroll( const Point& rPos );
 
 public:
-    DlgEdFunc( DlgEditor* pParent );
+    explicit DlgEdFunc (DlgEditor& rParent);
     virtual ~DlgEdFunc();
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt );
@@ -52,8 +55,8 @@ public:
 class DlgEdFuncInsert : public DlgEdFunc
 {
 public:
-    DlgEdFuncInsert( DlgEditor* pParent );
-    ~DlgEdFuncInsert();
+    explicit DlgEdFuncInsert (DlgEditor& rParent);
+    virtual ~DlgEdFuncInsert ();
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt );
     virtual bool MouseButtonUp( const MouseEvent& rMEvt );
@@ -70,8 +73,8 @@ protected:
     bool    bMarkAction;
 
 public:
-    DlgEdFuncSelect( DlgEditor* pParent );
-    ~DlgEdFuncSelect();
+    explicit DlgEdFuncSelect (DlgEditor& rParent);
+    virtual ~DlgEdFuncSelect ();
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt );
     virtual bool MouseButtonUp( const MouseEvent& rMEvt );
@@ -79,6 +82,8 @@ public:
 };
 
 
-#endif //_BASCTL_DLGEDFUNC_HXX
+} // namespace basctl
+
+#endif // BASCTL_DLGEDFUNC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

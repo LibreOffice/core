@@ -20,7 +20,6 @@
 #ifndef _CONNECTIVITY_KAB_RESULTSETMETADATA_HXX_
 #define _CONNECTIVITY_KAB_RESULTSETMETADATA_HXX_
 
-#include "KConnection.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -37,7 +36,6 @@ namespace connectivity
 
         class KabResultSetMetaData : public KabResultSetMetaData_BASE
         {
-            KabConnection*              m_pConnection;
             ::std::vector<sal_Int32>    m_aKabFields;   // for each selected column, contains the number
                                                         //  of the corresponding KAddressBook field
 
@@ -45,7 +43,7 @@ namespace connectivity
             virtual ~KabResultSetMetaData();
 
         public:
-            KabResultSetMetaData(KabConnection* _pConnection);
+            KabResultSetMetaData();
 
             // avoid ambigous cast error from the compiler
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()

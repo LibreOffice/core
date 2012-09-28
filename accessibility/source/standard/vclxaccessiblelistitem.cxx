@@ -38,6 +38,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/unohelp2.hxx>
@@ -50,7 +51,7 @@
 
 namespace
 {
-    void checkIndex_Impl( sal_Int32 _nIndex, const ::rtl::OUString& _sText ) throw (::com::sun::star::lang::IndexOutOfBoundsException)
+    void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (::com::sun::star::lang::IndexOutOfBoundsException)
     {
         if ( _nIndex < 0 || _nIndex > _sText.getLength() )
             throw ::com::sun::star::lang::IndexOutOfBoundsException();
@@ -135,7 +136,7 @@ void VCLXAccessibleListItem::NotifyAccessibleEvent( sal_Int16 _nEventId,
 // -----------------------------------------------------------------------------
 // OCommonAccessibleText
 // -----------------------------------------------------------------------------
-::rtl::OUString VCLXAccessibleListItem::implGetText()
+OUString VCLXAccessibleListItem::implGetText()
 {
     return m_sEntryText;
 }
@@ -202,7 +203,7 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
         ::osl::MutexGuard aGuard( m_aMutex );
 
         VCLXAccessibleListItem_BASE::disposing();
-        m_sEntryText        = ::rtl::OUString();
+        m_sEntryText        = OUString();
         m_pListBoxHelper    = NULL;
         m_xParent           = NULL;
         m_xParentContext    = NULL;
@@ -220,28 +221,22 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
 // -----------------------------------------------------------------------------
 // XServiceInfo
 // -----------------------------------------------------------------------------
-::rtl::OUString VCLXAccessibleListItem::getImplementationName() throw (RuntimeException)
+OUString VCLXAccessibleListItem::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleListItem" ));
+    return OUString( "com.sun.star.comp.toolkit.AccessibleListItem" );
 }
 // -----------------------------------------------------------------------------
-sal_Bool VCLXAccessibleListItem::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 // -----------------------------------------------------------------------------
-Sequence< ::rtl::OUString > VCLXAccessibleListItem::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames() throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames(3);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ));
-    aNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleComponent" ));
-    aNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleListItem" ));
+    Sequence< OUString > aNames(3);
+    aNames[0] = "com.sun.star.accessibility.AccessibleContext";
+    aNames[1] = "com.sun.star.accessibility.AccessibleComponent";
+    aNames[2] = "com.sun.star.accessibility.AccessibleListItem";
     return aNames;
 }
 // -----------------------------------------------------------------------------
@@ -283,13 +278,13 @@ sal_Int16 SAL_CALL VCLXAccessibleListItem::getAccessibleRole(  ) throw (RuntimeE
     //  return AccessibleRole::LABEL;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL VCLXAccessibleListItem::getAccessibleDescription(  ) throw (RuntimeException)
+OUString SAL_CALL VCLXAccessibleListItem::getAccessibleDescription(  ) throw (RuntimeException)
 {
     // no description for every item
-    return ::rtl::OUString();
+    return OUString();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  ) throw (RuntimeException)
+OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -445,12 +440,12 @@ sal_Unicode SAL_CALL VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex ) th
     return OCommonAccessibleText::getCharacter( nIndex );
 }
 // -----------------------------------------------------------------------------
-Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< ::rtl::OUString >& ) throw (IndexOutOfBoundsException, RuntimeException)
+Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::rtl::OUString sText( implGetText() );
+    OUString sText( implGetText() );
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
 
@@ -462,7 +457,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::rtl::OUString sText( implGetText() );
+    OUString sText( implGetText() );
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
 
@@ -505,7 +500,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aP
     return nIndex;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL VCLXAccessibleListItem::getSelectedText() throw (RuntimeException)
+OUString SAL_CALL VCLXAccessibleListItem::getSelectedText() throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -540,7 +535,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, s
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL VCLXAccessibleListItem::getText() throw (RuntimeException)
+OUString SAL_CALL VCLXAccessibleListItem::getText() throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -548,7 +543,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, s
     return OCommonAccessibleText::getText();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -594,7 +589,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
         Reference< datatransfer::clipboard::XClipboard > xClipboard = m_pListBoxHelper->GetClipboard();
         if ( xClipboard.is() )
         {
-            ::rtl::OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
 
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();

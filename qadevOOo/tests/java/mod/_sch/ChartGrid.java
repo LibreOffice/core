@@ -29,7 +29,6 @@ import util.SOfficeFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.chart.XAxisXSupplier;
 import com.sun.star.chart.XChartDocument;
-import com.sun.star.chart.XDiagram;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -60,7 +59,7 @@ public class ChartGrid extends TestCase {
 
         try {
             log.println( "creating a chartdocument" );
-            xChartDoc = SOF.createChartDoc(null);;
+            xChartDoc = SOF.createChartDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

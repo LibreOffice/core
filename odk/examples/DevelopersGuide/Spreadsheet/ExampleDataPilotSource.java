@@ -50,8 +50,8 @@ class ExampleSettings
     }
 
     public int nMemberCount = 3;
-    public java.util.List aColDimensions = new java.util.ArrayList();
-    public java.util.List aRowDimensions = new java.util.ArrayList();
+    public java.util.List<Integer> aColDimensions = new java.util.ArrayList<Integer>();
+    public java.util.List<Integer> aRowDimensions = new java.util.ArrayList<Integer>();
 }
 
 //  XPropertySetInfo implementation for getPropertySetInfo
@@ -839,7 +839,7 @@ public class ExampleDataPilotSource
                 int nRowResult = 0;
                 for (int nRowDim=0; nRowDim<nRowDimCount; nRowDim++)
                 {
-                    int nDim = ((Integer)aSettings.aRowDimensions.get(nRowDimCount-nRowDim-1)).intValue();
+                    int nDim = aSettings.aRowDimensions.get(nRowDimCount-nRowDim-1).intValue();
                     nRowResult += ( nRowVal % nMemberCount ) * nDigits[nDim];
                     nRowVal /= nMemberCount;
                 }
@@ -851,7 +851,7 @@ public class ExampleDataPilotSource
                     int nResult = nRowResult;
                     for (int nColDim=0; nColDim<nColDimCount; nColDim++)
                     {
-                        int nDim = ((Integer)aSettings.aColDimensions.get(nColDimCount-nColDim-1)).intValue();
+                        int nDim = aSettings.aColDimensions.get(nColDimCount-nColDim-1).intValue();
                         nResult += ( nColVal % nMemberCount ) * nDigits[nDim];
                         nColVal /= nMemberCount;
                     }

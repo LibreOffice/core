@@ -25,7 +25,6 @@
 
 #include <com/sun/star/frame/Controller.idl>
 
-#include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/drawing/XDrawPage.idl>
 
 #include <com/sun/star/awt/XWindow.idl>

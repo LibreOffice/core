@@ -26,10 +26,6 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
 
-/**
- *
- * @author  sg128468
- */
 public class UICommandDescription extends TestCase {
     XInterface oObj = null;
 

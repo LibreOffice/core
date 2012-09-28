@@ -32,13 +32,10 @@
  *
  *************************************************************************/
 
-import com.sun.star.uno.UnoRuntime;
-
 import java.awt.*;
 import javax.swing.*;
 import java.lang.String;
 import java.awt.event.*;
-import java.awt.*;
 
 /**
  * Makes it possible to change some states of currently loaded

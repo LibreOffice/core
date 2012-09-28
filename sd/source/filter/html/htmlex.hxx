@@ -113,7 +113,6 @@ class HtmlExport
     bool mbHeader;
     bool mbNotes;
     bool mbFrames;
-    bool mbKiosk;
     String maIndex;
     String maEMail;
     String maAuthor;

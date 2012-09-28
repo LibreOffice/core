@@ -22,9 +22,6 @@
 
 #include "com/sun/star/uno/Any.hxx"
 
-#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
-
 namespace xmlscript
 {
 
@@ -35,7 +32,7 @@ inline void extract_throw( T * p, ::com::sun::star::uno::Any const & a )
     if (! (a >>= *p))
     {
         throw ::com::sun::star::uno::RuntimeException(
-            OUSTR("expected ") + ::getCppuType( p ).getTypeName(),
+            "expected " + ::getCppuType( p ).getTypeName(),
             ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface>() );
     }

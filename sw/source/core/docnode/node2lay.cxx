@@ -204,7 +204,7 @@ SwFrm* SwNode2LayImpl::NextFrm()
 {
     SwFrm* pRet;
     if( !pIter )
-        return sal_False;
+        return NULL;
     if( !bInit )
     {
          pRet = pIter->First();

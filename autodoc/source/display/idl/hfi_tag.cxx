@@ -98,7 +98,7 @@ HF_IdlTag::Produce_byData( Xml::Element &      o_rTitle,
             o_rText << ", ";
         }
         HF_IdlTypeText
-            aLinkText(Env(), o_rText, true, &aTextOut.ScopeGivingCe());
+            aLinkText(Env(), o_rText, &aTextOut.ScopeGivingCe());
         aLinkText.Produce_byData( (*it)->LinkText() );
     }
 }
@@ -123,7 +123,7 @@ HF_IdlTag::Display_SeeAlsoAtTag( const csi::dsapi::DT_SeeAlsoAtTag & i_rTag )
     csv_assert( pTitleOut != 0 );
     *pTitleOut << "See also";
 
-    HF_IdlTypeText aLinkText(Env(),aTextOut.CurOut(),true, &aTextOut.ScopeGivingCe());
+    HF_IdlTypeText aLinkText(Env(),aTextOut.CurOut(), &aTextOut.ScopeGivingCe());
     aLinkText.Produce_byData( i_rTag.LinkText() );
 
     aTextOut.CurOut() << new Html::LineBreak;
@@ -316,7 +316,7 @@ HF_IdlDocuTextDisplay::CreateTypeLink()
         CurOut() << sLinkToken;
         return;
     }
-    HF_IdlTypeText aLink(Env(), CurOut(), true, &ScopeGivingCe());
+    HF_IdlTypeText aLink(Env(), CurOut(), &ScopeGivingCe());
     aLink.Produce_LinkInDocu(sScope, sLinkToken, String::Null_());
 }
 
@@ -324,7 +324,7 @@ void
 HF_IdlDocuTextDisplay::CreateMemberLink()
 {
 
-    HF_IdlTypeText aLink(Env(), CurOut(), true, &ScopeGivingCe());
+    HF_IdlTypeText aLink(Env(), CurOut(), &ScopeGivingCe());
 
     const char *
         sSplit = strchr(sLinkToken,':');

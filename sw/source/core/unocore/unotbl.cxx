@@ -740,7 +740,7 @@ void lcl_setValue( SwXCell &rCell, double nVal )
  ******************************************************************/
 TYPEINIT1(SwXCell, SwClient);
 
-SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, sal_uInt16 nPos ) :
+SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, size_t const nPos) :
     SwXText(pTblFmt->GetDoc(), CURSOR_TBLTEXT),
     SwClient(pTblFmt),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
@@ -756,7 +756,7 @@ SwXCell::SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
     pBox(0),
     pStartNode(&rStartNode),
-    nFndPos(USHRT_MAX)
+    nFndPos(NOTFOUND)
 {
 }
 
@@ -1214,7 +1214,7 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
         //wenn es die Box gibt, dann wird auch eine Zelle zurueckgegeben
         if( it != pTable->GetTabSortBoxes().end() )
         {
-            sal_uInt16 nPos = it - pTable->GetTabSortBoxes().begin();
+            size_t const nPos = it - pTable->GetTabSortBoxes().begin();
             SwIterator<SwXCell,SwFmt> aIter( *pTblFmt );
             SwXCell* pXCell = aIter.First();
             while( pXCell )
@@ -1226,7 +1226,9 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
             }
             //sonst anlegen
             if(!pXCell)
-                pXCell = new SwXCell(pTblFmt, pBox, nPos );
+            {
+                pXCell = new SwXCell(pTblFmt, pBox, nPos);
+            }
             pRet = pXCell;
         }
     }
@@ -1250,7 +1252,7 @@ SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
     }
 
     // box not found: reset nFndPos pointer
-    nFndPos = USHRT_MAX;
+    nFndPos = NOTFOUND;
     return 0;
 }
 
@@ -1515,10 +1517,12 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
         pUnoCrsr->SetMark();
         *pUnoCrsr->GetMark() = *pTableSelection->GetMark();
     }
-    const SwSelBoxes& rBoxes = pTableSelection->GetBoxes();
+    const SwSelBoxes& rBoxes = pTableSelection->GetSelectedBoxes();
     SwTableCursor* pTableCrsr = dynamic_cast<SwTableCursor*>(pUnoCrsr);
-    for(sal_uInt16 i = 0; i < rBoxes.size(); i++)
+    for (size_t i = 0; i < rBoxes.size(); i++)
+    {
         pTableCrsr->InsertBox( *rBoxes[i] );
+    }
 
     pUnoCrsr->Add(&aCrsrDepend);
     SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
@@ -1687,9 +1691,11 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
             bRet = TBLMERGE_OK == pTblCrsr->GetDoc()->MergeTbl(*pTblCrsr);
             if(bRet)
             {
-                sal_uInt16 nCount = pTblCrsr->GetBoxesCount();
-                while(nCount--)
+                size_t nCount = pTblCrsr->GetSelectedBoxesCount();
+                while (--nCount)
+                {
                     pTblCrsr->DeleteBox(nCount);
+                }
             }
         }
         pTblCrsr->MakeBoxSels();
@@ -1714,7 +1720,8 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal) th
         pTblCrsr->MakeBoxSels();
         {
             UnoActionContext aContext(pUnoCrsr->GetDoc());
-            bRet = pTblCrsr->GetDoc()->SplitTbl( pTblCrsr->GetBoxes(), !Horizontal, Count );
+            bRet = pTblCrsr->GetDoc()->SplitTbl(
+                    pTblCrsr->GetSelectedBoxes(), !Horizontal, Count);
         }
         pTblCrsr->MakeBoxSels();
     }
@@ -2931,7 +2938,7 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor
         SwTable* pTable = SwTable::FindTable( pFmt );
         SwSelBoxes aBoxes;
         const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
-        for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
+        for (size_t n = 0; n < rTBoxes.size(); ++n)
         {
             SwTableBox* pBox = rTBoxes[ n ];
             aBoxes.insert( pBox );
@@ -2959,7 +2966,7 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
                 {
                     SwSelBoxes aBoxes;
                     const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
-                    for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
+                    for (size_t n = 0; n < rTBoxes.size(); ++n)
                     {
                         SwTableBox* pBox = rTBoxes[ n ];
                         aBoxes.insert( pBox );
@@ -4593,7 +4600,7 @@ void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rD
         SwUnoTableCrsr* pTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
         pTableCrsr->MakeBoxSels();
         UnoActionContext aContext( pFmt->GetDoc() );
-        pFmt->GetDoc()->SortTbl(pTableCrsr->GetBoxes(), aSortOpt);
+        pFmt->GetDoc()->SortTbl(pTableCrsr->GetSelectedBoxes(), aSortOpt);
     }
 }
 

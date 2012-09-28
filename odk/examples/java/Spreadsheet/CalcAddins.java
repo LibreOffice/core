@@ -42,17 +42,11 @@ import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XServiceName;
 import com.sun.star.sheet.XAddIn;
 import com.sun.star.lang.Locale;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
-
 import org.openoffice.sheet.addin.XCalcAddins;
 
 /** This outer class provides an inner class to implement the service

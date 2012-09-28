@@ -20,6 +20,7 @@
 #include "oox/drawingml/transform2dcontext.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/shape.hxx"
+#include "oox/drawingml/textbody.hxx"
 
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::awt::Size;
@@ -36,17 +37,45 @@ namespace drawingml {
 // ============================================================================
 
 /** context to import a CT_Transform2D */
-Transform2DContext::Transform2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, Shape& rShape ) throw()
+Transform2DContext::Transform2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, Shape& rShape, bool btxXfrm ) throw()
 : ContextHandler( rParent )
 , mrShape( rShape )
+, mbtxXfrm ( btxXfrm )
 {
     AttributeList aAttributeList( xAttribs );
-    mrShape.setRotation( aAttributeList.getInteger( XML_rot, 0 ) ); // 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
-    mrShape.setFlip( aAttributeList.getBool( XML_flipH, sal_False ), aAttributeList.getBool( XML_flipV, sal_False ) );
+    if( !btxXfrm )
+    {
+        mrShape.setRotation( aAttributeList.getInteger( XML_rot, 0 ) ); // 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
+        mrShape.setFlip( aAttributeList.getBool( XML_flipH, sal_False ), aAttributeList.getBool( XML_flipV, sal_False ) );
+    }
+    else
+    {
+        mrShape.getTextBody()->getTextProperties().moRotation = aAttributeList.getInteger( XML_rot );
+    }
 }
 
 Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
+    if( mbtxXfrm )
+    {
+        switch( aElementToken )
+        {
+            case A_TOKEN( off ):
+                {
+                    OUString sXValue = xAttribs->getOptionalValue( XML_x );
+                    OUString sYValue = xAttribs->getOptionalValue( XML_y );
+                    if( !sXValue.isEmpty() )
+                        mrShape.getTextBody()->getTextProperties().moTextOffX = GetCoordinate( sXValue.toInt32() - mrShape.getPosition().X );
+                    if( !sYValue.isEmpty() )
+                        mrShape.getTextBody()->getTextProperties().moTextOffY = GetCoordinate( sYValue.toInt32() - mrShape.getPosition().Y );
+                }
+                break;
+            case A_TOKEN( ext ):
+                break;
+        }
+        return 0;
+    }
+
     switch( aElementToken )
     {
     case A_TOKEN( off ):        // horz/vert translation

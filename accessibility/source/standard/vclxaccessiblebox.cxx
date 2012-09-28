@@ -155,7 +155,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                 Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
                 if ( xText.is() )
                 {
-                    ::rtl::OUString sText = xText->getSelectedText();
+                    OUString sText = xText->getSelectedText();
                     if ( sText.isEmpty() )
                         sText = xText->getText();
                     pList->UpdateSelection (sText);
@@ -340,7 +340,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
     return bNotify;
 }
 
-::rtl::OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 nIndex)
+OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 nIndex)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

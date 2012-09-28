@@ -69,7 +69,7 @@ public final class Test extends ComplexTestCase {
                 }
 
                 public XMultiComponentFactory getServiceManager() {
-                    return null;
+                    throw new DeploymentException();
                 }
             };
         try {

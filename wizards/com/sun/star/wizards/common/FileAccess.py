@@ -18,7 +18,7 @@
 import traceback
 import types
 from os import path as osPath
-from wizards.common.NoValidPathException import *
+from .NoValidPathException import NoValidPathException
 
 from com.sun.star.ucb import CommandAbortedException
 from com.sun.star.awt.VclWindowPeerAttribute import OK, YES_NO

@@ -55,7 +55,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/customize/macropg.src \
     cui/source/customize/selector.src \
     cui/source/dialogs/about.src \
-    cui/source/dialogs/charmap.src \
     cui/source/dialogs/colorpicker.src \
     cui/source/dialogs/commonlingui.src \
     cui/source/dialogs/cuiimapdlg.src \
@@ -82,7 +81,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/svuidlg.src \
     cui/source/dialogs/tbxform.src \
     cui/source/dialogs/thesdlg.src \
-    cui/source/dialogs/zoom.src \
     cui/source/options/certpath.src \
     cui/source/options/connpooloptions.src \
     cui/source/options/dbregister.src \
@@ -116,7 +114,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/tabpages/backgrnd.src \
     cui/source/tabpages/bbdlg.src \
     cui/source/tabpages/border.src \
-    cui/source/tabpages/chardlg.src \
     cui/source/tabpages/connect.src \
     cui/source/tabpages/dstribut.src \
     cui/source/tabpages/frmdirlbox.src \

@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package testtools.servicetests;
+package servicetests;
 
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
@@ -28,7 +28,6 @@ import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import complexlib.ComplexTestCase;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;

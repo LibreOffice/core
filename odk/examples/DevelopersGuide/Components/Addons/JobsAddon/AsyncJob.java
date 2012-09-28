@@ -36,12 +36,8 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.awt.*;
-import com.sun.star.beans.*;
 import com.sun.star.task.*;
 import com.sun.star.uno.*;
-import java.lang.*;
-import javax.swing.*;
 
 /** it implements a simple job component.
  *

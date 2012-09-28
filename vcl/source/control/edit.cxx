@@ -200,14 +200,16 @@ Edit::Edit( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
-
 Edit::Edit( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_EDIT )
 {
-    ImplInitEditData();
     rResId.SetRT( RSC_EDIT );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
+    ImplInitEditData();
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
@@ -215,6 +217,56 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
     // ctor has already started:
     if ( !(nStyle & WB_HIDE) && rResId.GetRT() != RSC_MULTILINEEDIT )
         Show();
+}
+
+void Edit::SetMaxWidthInChars(sal_Int32 nMinWidthInChars)
+{
+    if (mnMinWidthInChars != nMinWidthInChars)
+    {
+        mnMinWidthInChars = nMinWidthInChars;
+        queue_resize();
+    }
+}
+
+bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width-chars")))
+        SetMaxWidthInChars(rValue.toInt32());
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
+}
+
+void Edit::take_properties(Window &rOther)
+{
+    if (!GetParent())
+    {
+        ImplInitEditData();
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+    }
+
+    Control::take_properties(rOther);
+
+    Edit &rOtherEdit = static_cast<Edit&>(rOther);
+    maText = rOtherEdit.maText;
+    maSaveValue = rOtherEdit.maSaveValue;
+    maUndoText = rOtherEdit.maUndoText;
+    maRedoText = rOtherEdit.maRedoText;
+    mnXOffset = rOtherEdit.mnXOffset;
+    maSelection = rOtherEdit.maSelection;
+    mnAlign = rOtherEdit.mnAlign;
+    mnMaxTextLen = rOtherEdit.mnMaxTextLen;
+    mnMinWidthInChars = rOtherEdit.mnMinWidthInChars;
+    meAutocompleteAction = rOtherEdit.meAutocompleteAction;
+    mcEchoChar = rOtherEdit.mcEchoChar;
+    mbModified = rOtherEdit.mbModified;
+    mbInternModified = rOtherEdit.mbInternModified;
+    mbReadOnly = rOtherEdit.mbReadOnly;
+    mbInsertMode = rOtherEdit.mbInsertMode;
+    mbClickedInSelection = rOtherEdit.mbClickedInSelection;
+    mbIsSubEdit = rOtherEdit.mbIsSubEdit;
+    mbInMBDown = rOtherEdit.mbInMBDown;
+    mbActivePopup = rOtherEdit.mbActivePopup;
 }
 
 // -----------------------------------------------------------------------
@@ -279,6 +331,7 @@ void Edit::ImplInitEditData()
     mnXOffset               = 0;
     mnAlign                 = EDIT_ALIGN_LEFT;
     mnMaxTextLen            = EDIT_NOLIMIT;
+    mnMinWidthInChars       = 3;
     meAutocompleteAction    = AUTOCOMPLETE_KEYINPUT;
     mbModified              = sal_False;
     mbInternModified        = sal_False;
@@ -2835,14 +2888,13 @@ void Edit::SetSubEdit( Edit* pEdit )
     }
 }
 
-// -----------------------------------------------------------------------
-
-Size Edit::CalcMinimumSize() const
+Size Edit::CalcMinimumSizeForText(const rtl::OUString &rString) const
 {
-    Size aSize ( GetTextWidth( GetText() ), GetTextHeight() );
+    Size aSize ( GetTextWidth( rString ), GetTextHeight() );
+    aSize.Width() += ImplGetExtraOffset() * 2;
     // do not create edit fields in which one cannot enter anything
     // a default minimum width should exist for at least 3 characters
-    Size aMinSize ( CalcSize( 3 ) );
+    Size aMinSize ( CalcSize( mnMinWidthInChars ) );
     if( aSize.Width() < aMinSize.Width() )
         aSize.Width() = aMinSize.Width();
     // add some space between text entry and border
@@ -2862,6 +2914,11 @@ Size Edit::CalcMinimumSize() const
             aSize.Height() = aBound.GetHeight();
     }
     return aSize;
+}
+
+Size Edit::CalcMinimumSize() const
+{
+    return CalcMinimumSizeForText(GetText());
 }
 
 Size Edit::GetMinimumEditSize()
@@ -2892,6 +2949,7 @@ Size Edit::CalcSize( xub_StrLen nChars ) const
     // works only correct for fixed fonts, average otherwise
     Size aSz( GetTextWidth( rtl::OUString('x') ), GetTextHeight() );
     aSz.Width() *= nChars;
+    aSz.Width() += ImplGetExtraOffset() * 2;
     aSz = CalcWindowSize( aSz );
     return aSz;
 }

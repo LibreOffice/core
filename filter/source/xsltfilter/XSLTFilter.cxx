@@ -41,8 +41,8 @@
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -62,6 +62,7 @@
 
 #include <com/sun/star/util/XMacroExpander.hpp>
 
+#include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -246,7 +247,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     XSLTFilter::rel2abs(const OUString& s)
     {
 
-        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::ComponentContext(m_rServiceFactory).getUNOContext() );
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getComponentContext(m_rServiceFactory) );
         css::uno::Reference<XStringSubstitution>
                 subs(css::util::PathSubstitution::create(xContext));
         OUString aWorkingDir(subs->getSubstituteVariableValue(OUString( "$(progurl)")));
@@ -342,11 +343,8 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                         tsink->setInputStream(xInputStream);
 
                         // create pipe
-                        css::uno::Reference<XOutputStream>
-                                pipeout(
-                                        m_rServiceFactory->createInstance(
-                                                OUString(
-                                                         "com.sun.star.io.Pipe" )),
+                        css::uno::Reference<XOutputStream> pipeout(
+                                        Pipe::create(comphelper::getComponentContext(m_rServiceFactory)),
                                         UNO_QUERY);
                         css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
@@ -498,11 +496,8 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 m_tcontrol->addListener(css::uno::Reference<XStreamListener> (this));
 
                 // create pipe
-                css::uno::Reference<XOutputStream>
-                        pipeout(
-                                m_rServiceFactory->createInstance(
-                                        OUString(
-                                                 "com.sun.star.io.Pipe" )),
+                css::uno::Reference<XOutputStream> pipeout(
+                                Pipe::create(comphelper::getComponentContext(m_rServiceFactory)),
                                 UNO_QUERY);
                 css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 

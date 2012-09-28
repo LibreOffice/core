@@ -67,8 +67,6 @@ OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
     ,sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")))
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
-    ,bConditionalFormatCreated(sal_False)
-    ,bParentSet(sal_False)
 {
     DBG_CTOR(OTableStyleContext,NULL);
 

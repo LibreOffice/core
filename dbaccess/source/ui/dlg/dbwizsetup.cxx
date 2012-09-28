@@ -50,10 +50,10 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -76,9 +76,9 @@
 
 
 #include <svl/filenotation.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
@@ -841,7 +841,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
         else if ( m_pCollection->isFileSystemBased(eType) )
         {
-            Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::ComponentContext(getORB()).getUNOContext()));
+            Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
@@ -858,8 +858,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const ::rtl::OUString& _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-        Reference< XNamingService > xDatabaseContext(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-        Reference< XNameAccess > xNameAccessDatabaseContext(xDatabaseContext, UNO_QUERY);
+        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(comphelper::getComponentContext(getORB())) );
+        Reference< XNameAccess > xNameAccessDatabaseContext(xDatabaseContext, UNO_QUERY_THROW );
         INetURLObject aURL( _sPath );
         ::rtl::OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
         ::rtl::OUString sDatabaseName = ::dbtools::createUniqueName(xNameAccessDatabaseContext, sFilename,sal_False);
@@ -909,7 +909,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
-        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::ComponentContext(getORB()).getUNOContext()));
+        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
         :: rtl::OUString sLastSegmentName = pURL->getName();
         sal_Bool bFolderExists = sal_True;
         sal_Int32 i = 1;
@@ -927,7 +927,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
-        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::ComponentContext(getORB()).getUNOContext()));
+        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
         :: rtl::OUString sFilename = _rURL.getName();
         ::rtl::OUString BaseName = _rURL.getBase();
         ::rtl::OUString sExtension = _rURL.getExtension();

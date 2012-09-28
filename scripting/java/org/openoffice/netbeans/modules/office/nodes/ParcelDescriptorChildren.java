@@ -30,8 +30,6 @@ import org.openoffice.netbeans.modules.office.actions.ParcelDescriptorParserCook
 
 /** List of children of a containing node.
  * Remember to document what your permitted keys are!
- *
- * @author tomaso
  */
 public class ParcelDescriptorChildren extends Children.Keys implements ChangeListener {
 

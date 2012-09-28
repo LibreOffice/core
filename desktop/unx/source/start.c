@@ -512,6 +512,17 @@ send_args( int fd, rtl_uString *pCwdPath )
     nLen = rtl_string_getLength( pOut ) + 1;
     bResult = ( write( fd, rtl_string_getStr( pOut ), nLen ) == (ssize_t) nLen );
 
+    if ( bResult )
+    {
+        char resp[ strlen( "InternalIPC::ProcessingDone" ) ];
+        ssize_t n = read( fd, resp, SAL_N_ELEMENTS( resp ) );
+        bResult = n == (ssize_t) SAL_N_ELEMENTS( resp )
+            && (memcmp(
+                    resp, "InternalIPC::ProcessingDone",
+                    SAL_N_ELEMENTS( resp ) )
+                == 0);
+    }
+
     /* cleanup */
     rtl_uString_release( pEscapedCwdPath );
     rtl_uString_release( pBuffer );
@@ -820,21 +831,24 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     if ( pUsePlugin && !strcmp(pUsePlugin, "svp") )
         args->bInhibitSplash = sal_True;
 
-    pPipePath = get_pipe_path( args->pAppPath );
-
-    if ( ( fd = connect_pipe( pPipePath ) ) >= 0 )
+    if ( !args->bInhibitPipe )
     {
-        rtl_uString *pCwdPath = NULL;
-        osl_getProcessWorkingDir( &pCwdPath );
+        pPipePath = get_pipe_path( args->pAppPath );
 
-        bSentArgs = send_args( fd, pCwdPath );
+        if ( ( fd = connect_pipe( pPipePath ) ) >= 0 )
+        {
+            rtl_uString *pCwdPath = NULL;
+            osl_getProcessWorkingDir( &pCwdPath );
 
-        close( fd );
-    }
+            bSentArgs = send_args( fd, pCwdPath );
+
+            close( fd );
+        }
 #if OSL_DEBUG_LEVEL > 1
-    else
-        ustr_debug( "Failed to connect to pipe", pPipePath );
+        else
+            ustr_debug( "Failed to connect to pipe", pPipePath );
 #endif
+    }
 
     if ( !bSentArgs )
     {
@@ -924,7 +938,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     }
 
     /* cleanup */
-    rtl_uString_release( pPipePath );
+    if ( pPipePath )
+        rtl_uString_release( pPipePath );
     args_free (args);
 
     return status;

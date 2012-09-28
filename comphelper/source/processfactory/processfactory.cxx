@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "com/sun/star/beans/XPropertySet.hpp"
-
+#include "com/sun/star/uno/DeploymentException.hpp"
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -59,30 +59,12 @@ Reference< XMultiServiceFactory > getProcessServiceFactory()
 {
     Reference< XMultiServiceFactory> xReturn;
     xReturn = localProcessFactory( xReturn, sal_False );
+    if ( !xReturn.is() )
+    {
+        throw DeploymentException(
+            "null process service factory", Reference< XInterface >() );
+    }
     return xReturn;
-}
-
-Reference< XInterface > createProcessComponent( const ::rtl::OUString& _rServiceSpecifier ) SAL_THROW( ( RuntimeException ) )
-{
-    Reference< XInterface > xComponent;
-
-    Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
-    if ( xFactory.is() )
-        xComponent = xFactory->createInstance( _rServiceSpecifier );
-
-    return xComponent;
-}
-
-Reference< XInterface > createProcessComponentWithArguments( const ::rtl::OUString& _rServiceSpecifier,
-        const Sequence< Any >& _rArgs ) SAL_THROW( ( RuntimeException ) )
-{
-    Reference< XInterface > xComponent;
-
-    Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
-    if ( xFactory.is() )
-        xComponent = xFactory->createInstanceWithArguments( _rServiceSpecifier, _rArgs );
-
-    return xComponent;
 }
 
 Reference< XComponentContext > getComponentContext(
@@ -96,8 +78,17 @@ Reference< XComponentContext > getComponentContext(
                               RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ),
                       uno::UNO_QUERY );
         }
-        catch (beans::UnknownPropertyException const&) {
+        catch (beans::UnknownPropertyException & e) {
+            throw DeploymentException(
+                "unknown service factory DefaultContext property: " + e.Message,
+                Reference< XInterface >( factory, UNO_QUERY ) );
         }
+    }
+    if ( !xRet.is() )
+    {
+        throw DeploymentException(
+            "no service factory DefaultContext",
+            Reference< XInterface >( factory, UNO_QUERY ) );
     }
     return xRet;
 }

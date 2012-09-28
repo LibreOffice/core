@@ -56,7 +56,6 @@ import java.io.IOException;
  *  <a href="converter/xml/sxc/package-summary.html">
  *  org.openoffice.xmerge.util.registry</a>.</p>
  *
- *  @author  Herbie Ong
  *  @see     Document
  *  @see     DocumentSerializer
  *  @see     DocumentSerializerFactory

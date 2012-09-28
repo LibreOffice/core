@@ -36,7 +36,7 @@
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 #include <iostream>
-#include <rtl/oustringostreaminserter.hxx>
+#include <rtl/ustring.hxx>
 
 #define DEBUG_DUMPER 0
 

@@ -34,7 +34,6 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.XNamingService;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.lang.Locale;
 import com.sun.star.uno.XInterface;

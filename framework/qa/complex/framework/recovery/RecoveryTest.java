@@ -18,51 +18,22 @@
 
 package complex.framework.recovery;
 
-import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XDialog;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XEnumeration;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameContainer;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.drawing.XDrawPages;
-import com.sun.star.drawing.XDrawPagesSupplier;
-import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapes;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.presentation.XCustomPresentationSupplier;
-import com.sun.star.presentation.XPresentationSupplier;
-import com.sun.star.sheet.XSheetCellRange;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.style.XStyle;
-import com.sun.star.table.XCellRange;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.view.XSelectionSupplier;
 import complexlib.ComplexTestCase;
 import helper.OfficeProvider;
-import helper.OfficeWatcher;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -74,16 +45,6 @@ import util.PropertyName;
 import util.SOfficeFactory;
 import util.UITools;
 import util.utils;
-
-// ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
-// ------------------------------------------
 
 public class RecoveryTest extends ComplexTestCase {
 

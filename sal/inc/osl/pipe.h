@@ -30,10 +30,11 @@
 #ifndef _OSL_PIPE_H_
 #define _OSL_PIPE_H_
 
-#   include <rtl/ustring.h>
+#include "sal/config.h"
 
-
-#   include <osl/security.h>
+#include "osl/security.h"
+#include "rtl/ustring.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

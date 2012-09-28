@@ -20,7 +20,6 @@
 #define _SWUI_CCOLL_HXX
 
 #include <tools/resary.hxx>
-#include "ccoll.hxx"
 
 class SwWrtShell;
 class SwFmt;
@@ -47,8 +46,6 @@ class SwCondCollPage : public SfxTabPage
     SwWrtShell          &rSh;
     const CommandStruct*pCmds;
     SwFmt*              pFmt;
-
-    CollName*           pNms;
 
     sal_Bool                bNewTemplate;
 

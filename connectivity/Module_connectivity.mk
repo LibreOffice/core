@@ -115,26 +115,27 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA)),$(filter MACOSX,$(OS))),YES),YES)
+ifeq ($(OS),WNT)
+
+ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA))),YES),YES)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mozbootstrap \
 ))
 else
-
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_mozab \
 	Library_mozab \
 	Library_mozabdrv \
 ))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mozab \
-))
-else
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mozab2 \
-))
 endif
+
+else ifneq ($(filter-out ANDROID IOS,$(OS)),)
+
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_mork \
+	Executable_mork_helper \
+	Library_mork \
+))
 
 endif
 

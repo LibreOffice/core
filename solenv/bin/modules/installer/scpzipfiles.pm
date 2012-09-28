@@ -33,66 +33,35 @@ use installer::logger;
 use installer::pathanalyzer;
 use installer::systemactions;
 
-########################################################################################
-# Replacing all zip list variables in setup script and files with flag scpzip_replace
-########################################################################################
+# Replacing all zip list variables.
+# Called for setup script as well as files with flag scpzip_replace.
 
 sub replace_all_ziplistvariables_in_file
 {
-    my ( $fileref, $variableshashref ) = @_;
+    my ( $fileref, $variablesref ) = @_;
 
-    for ( my $i = 0; $i <= $#{$fileref}; $i++ )
+    for my $line ( @{$fileref} )
     {
-        my $line = ${$fileref}[$i];
-
-        if ( $line =~ /^.*\$\{\w+\}.*$/ )   # only occurrence of ${abc}
-        {
-            my $key;
-
-            foreach $key (keys %{$variableshashref})
-            {
-                my $value = $variableshashref->{$key};
-                $key = '${' . $key . '}';
-                $line =~ s/\Q$key\E/$value/g;
-                ${$fileref}[$i] = $line;
-            }
-        }
+        # Avoid removing variables we do not recognise.
+        $line =~ s/\$\{(\w+)\}/defined $variablesref->{$1}
+                                     ? $variablesref->{$1}
+                                     : $&/eg;
     }
 }
 
-########################################################################################
-# Replacing all zip list variables in rtf files. In rtf files
-# the brackets are masked.
-########################################################################################
+# Replacing all zip list variables in rtf files.
 
 sub replace_all_ziplistvariables_in_rtffile
 {
-    my ( $fileref, $variablesref, $onelanguage, $loggingdir ) = @_;
+    my ( $fileref, $variablesref ) = @_;
 
-    for ( my $i = 0; $i <= $#{$fileref}; $i++ )
+    for my $line ( @{$fileref} )
     {
-        my $line = ${$fileref}[$i];
-
-        if ( $line =~ /^.*\$\\\{\w+\\\}.*$/ )   # only occurrence of $\{abc\}
-        {
-            for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
-            {
-                my $variableline = ${$variablesref}[$j];
-
-                my ($key, $value);
-
-                if ( $variableline =~ /^\s*([\w-]+?)\s+(.*?)\s*$/ )
-                {
-                    $key = $1;
-                    $value = $2;
-                    $key = '$\{' . $key . '\}';
-                }
-
-                $line =~ s/\Q$key\E/$value/g;
-
-                ${$fileref}[$i] = $line;
-            }
-        }
+        # In rtf files the braces are backslash-escaped.
+        # Avoid removing variables we do not recognise.
+        $line =~ s/\$\\\{(\w+)\\\}/defined $variablesref->{$1}
+                                         ? $variablesref->{$1}
+                                         : $&/eg;
     }
 }
 

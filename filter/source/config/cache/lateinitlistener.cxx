@@ -34,6 +34,8 @@
 #include "lateinitlistener.hxx"
 #include "lateinitthread.hxx"
 
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+
 
 namespace filter{
     namespace config{
@@ -43,22 +45,21 @@ namespace css = ::com::sun::star;
 
 
 
-LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+LateInitListener::LateInitListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : BaseLock(     )
-    , m_xSMGR (xSMGR)
 {
     // important to do so ...
     // Otherwise the temp. reference to ourselves
     // will kill us at releasing time!
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
 
     m_xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(
-        m_xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" ))),
+        css::frame::GlobalEventBroadcaster::create(rxContext),
         css::uno::UNO_QUERY_THROW);
 
     m_xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
 
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 

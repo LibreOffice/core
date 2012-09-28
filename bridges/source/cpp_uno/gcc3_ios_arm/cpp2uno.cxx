@@ -462,7 +462,8 @@ sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
 #ifdef __arm
-    ???
+    // ???
+    return (slotCount + 2) * sizeof (Slot);
 #else
     return (slotCount + 2) * sizeof (Slot);
 #endif
@@ -491,6 +492,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         OSL_ASSERT(member != 0);
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
+        {
 #ifdef __arm
             typelib_InterfaceAttributeTypeDescription *pAttrTD =
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( member );
@@ -520,8 +522,9 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                                         );
             }
             break;
-
+        }
         case typelib_TypeClass_INTERFACE_METHOD:
+        {
 #ifdef __arm
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<
@@ -537,7 +540,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 #endif
                                     );
             break;
-
+        }
         default:
             OSL_ASSERT(false);
             break;

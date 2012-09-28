@@ -20,22 +20,11 @@ package org.openoffice.idesupport.ui;
 
 import java.io.File;
 import java.util.Vector;
-import java.util.ArrayList;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.MalformedURLException;
-
 import com.sun.star.script.framework.container.ScriptEntry;
 import org.openoffice.idesupport.MethodFinder;
 import org.openoffice.idesupport.ExtensionFinder;
@@ -44,7 +33,7 @@ import org.openoffice.idesupport.JavaFinder;
 public class MethodPanel extends JPanel {
 
     private File basedir;
-    private Vector classpath;
+    private Vector<String> classpath;
     private final static String FIRST_PARAM =
         "drafts.com.sun.star.script.framework.runtime.XScriptContext";
 
@@ -53,7 +42,7 @@ public class MethodPanel extends JPanel {
     private JList list;
     private ScriptEntry[] values;
 
-    public MethodPanel(File basedir, Vector classpath, String language) {
+    public MethodPanel(File basedir, Vector<String> classpath, String language) {
         this.basedir = basedir;
         this.classpath = classpath;
 
@@ -61,7 +50,7 @@ public class MethodPanel extends JPanel {
         initUI();
     }
 
-    public void reload(File basedir, Vector classpath, String language) {
+    public void reload(File basedir, Vector<String> classpath, String language) {
         this.basedir = basedir;
         this.classpath = classpath;
 

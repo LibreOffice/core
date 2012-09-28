@@ -63,8 +63,6 @@ class FileParsePerformers
                         aDistributor;
     Dyn<csi::uidl::PE_File>
                         pFileParseEnvironment;
-    ary::Repository &
-                        rRepository;
     ParserInfo &        rParserInfo;
 };
 
@@ -121,7 +119,6 @@ FileParsePerformers::FileParsePerformers( ary::Repository & io_rRepository,
                                           ParserInfo &           io_rParserInfo )
     :   pTokens(0),
         aDistributor(io_rRepository, io_rParserInfo),
-        rRepository( io_rRepository ),
         rParserInfo(io_rParserInfo)
 {
     DYN csi::dsapi::Context_Docu *

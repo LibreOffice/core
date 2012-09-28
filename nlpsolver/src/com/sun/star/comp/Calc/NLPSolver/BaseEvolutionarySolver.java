@@ -41,10 +41,6 @@ import net.adaptivebox.knowledge.Library;
 import net.adaptivebox.knowledge.SearchPoint;
 import net.adaptivebox.problem.ProblemEncoder;
 
-/**
- *
- * @author Andreas Schneider <Andreas.Schneider@Sun.COM>
- */
 public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
 
     public BaseEvolutionarySolver(XComponentContext xContext, String name) {
@@ -126,7 +122,6 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
                 for (int i = 0; i < m_variables.size(); i++) {
                     CellMap variableMap = m_variables.get(i).CellMap;
                     m_variableData[variableMap.Range][variableMap.Row][variableMap.Col] = VX[i];
-                    //m_variableCells[i].setValue(VX[i]);
                 }
                 for (int i = 0; i < m_cellRangeCount; i++)
                     m_cellRangeData[i].setData(m_variableData[i]);

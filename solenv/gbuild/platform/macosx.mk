@@ -49,7 +49,6 @@ gb_OSDEFS := \
 
 
 gb_CFLAGS := \
-	-isysroot $(gb_SDKDIR) \
 	$(gb_CFLAGS_COMMON) \
 	-fPIC \
 	-fno-strict-aliasing \
@@ -59,7 +58,6 @@ gb_CFLAGS := \
 # "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
 # Feb 1, 2006:
 gb_CXXFLAGS := \
-	-isysroot $(gb_SDKDIR) \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
 	-Wno-ctor-dtor-privacy \
@@ -70,24 +68,6 @@ gb_CXXFLAGS := \
 	#-Wshadow \ break in compiler headers already
 	#-fsigned-char \ might be removed?
 	#-malign-natural \ might be removed?
-
-ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
-gb_COMPILERDEFS += \
-	-DHAVE_GCC_VISIBILITY_FEATURE \
-
-gb_CFLAGS += \
-    -fvisibility=hidden
-
-gb_CXXFLAGS += \
-	-fvisibility=hidden \
-
-ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
-gb_CXXFLAGS += \
-    -fvisibility-inlines-hidden \
-
-endif
-
-endif
 
 ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
 gb_COMPILERDEFS += \
@@ -121,11 +101,12 @@ gb_COMPILERNOOPTFLAGS := -O0
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command
-$(call gb_Output_announce,$(2),$(true),OCX,3)
+$(call gb_Output_announce,$(2).mm,$(true),OCX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
 		$(DEFS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		$(T_OBJCXXFLAGS) \
 		-c $(3) \
@@ -139,11 +120,12 @@ endef
 # ObjCObject class
 
 define gb_ObjCObject__command
-$(call gb_Output_announce,$(2),$(true),OCC,3)
+$(call gb_Output_announce,$(2).m,$(true),OCC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(T_OBJCFLAGS) \
 		-c $(3) \
@@ -222,6 +204,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
@@ -248,6 +231,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
@@ -340,13 +324,10 @@ endef
 
 # StaticLibrary class
 
-gb_StaticLibrary_DEFS :=
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
-gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
 
 gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
 	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
 gb_StaticLibrary_StaticLibrary_platform =
@@ -398,7 +379,7 @@ endef
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS/soffice}" \
-	-Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH \
+	-Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH"$$$${DYLD_LIBRARY_PATH+=$$$$DYLD_LIBRARY_PATH}" \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
 
@@ -416,11 +397,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
-$(call gb_InstallModuleTarget_set_include,$(1),\
-	$(SOLARINC) \
-	$(SCP_INCLUDE) \
-)
-
 endef
 
 # ScpConvertTarget class
@@ -430,6 +406,11 @@ gb_ScpConvertTarget_ScpConvertTarget_platform :=
 # InstallScript class
 
 gb_InstallScript_EXT := .ins
+
+# CliAssemblyTarget class
+
+gb_CliAssemblyTarget_POLICYEXT :=
+gb_CliAssemblyTarget_get_dll :=
 
 # ExtensionTarget class
 

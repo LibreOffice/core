@@ -440,7 +440,7 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
         $oneline = "s38\tS38\tL64\tL255\tI2\ti2\tS72\ti2\n";
         push(@{$idtref}, $oneline);
-        $oneline = "WINDOWSENCODINGTEMPLATE\tFeature\tFeature\n";
+        $oneline = "65001\tFeature\tFeature\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -480,7 +480,7 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
         $oneline = "s72\ts72\tl128\ts72\ts72\tS255\tL255\tI2\tS72\tI2\tI2\tS72\n";
         push(@{$idtref}, $oneline);
-        $oneline = "WINDOWSENCODINGTEMPLATE\tShortcut\tShortcut\n";
+        $oneline = "65001\tShortcut\tShortcut\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -541,16 +541,6 @@ sub write_idt_header
         $oneline = "s72\tl255\tS72\tl96\tl128\tl255\ti2\ts72\n";
         push(@{$idtref}, $oneline);
         $oneline = "IniFile\tIniFile\n";
-        push(@{$idtref}, $oneline);
-    }
-
-    if ( $definestring eq "selfreg" )
-    {
-        $oneline = "File_\tCost\n";
-        push(@{$idtref}, $oneline);
-        $oneline = "s72\tI2\n";
-        push(@{$idtref}, $oneline);
-        $oneline = "SelfReg\tFile_\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -1271,59 +1261,6 @@ sub get_free_number_in_uisequence_table
     return $newnumber;
 }
 
-##################################################################
-# Searching for a specified string in the feature table
-##################################################################
-
-sub get_feature_name
-{
-    my ( $string, $featuretable ) = @_;
-
-    my $featurename = "";
-
-    for ( my $i = 0; $i <= $#{$featuretable}; $i++ )
-    {
-        if ( ${$featuretable}[$i] =~ /^\s*(\w+$string)\t/ )
-        {
-            $featurename = $1;
-            last;
-        }
-    }
-
-    return $featurename;
-}
-
-######################################################################
-# Returning the toplevel directory name of one specific file
-######################################################################
-
-sub get_directory_name_from_file
-{
-    my ($onefile) = @_;
-
-    my $destination = $onefile->{'destination'};
-    my $name = $onefile->{'Name'};
-
-    $destination =~ s/\Q$name\E\s*$//;
-    $destination =~ s/\Q$installer::globals::separator\E\s*$//;
-
-    my $path = "";
-
-    if ( $destination =~ /\Q$installer::globals::separator\E/ )
-    {
-        if ( $destination =~ /^\s*(\S.*\S\Q$installer::globals::separator\E)(\S.+\S?)/ )
-        {
-            $path = $2;
-        }
-    }
-    else
-    {
-        $path = $destination;
-    }
-
-    return $path;
-}
-
 #############################################################
 # Including the new subdir into the directory table
 #############################################################
@@ -1417,169 +1354,6 @@ sub include_subdir_into_componenttable
 
     if ( ! $changeddirectory ) { installer::exiter::exit_program("ERROR: Could not change directory for component: $onefile->{'Name'}!", "include_subdir_into_componenttable"); }
 
-}
-
-################################################################################################
-# Including the content for the child installations
-# into the tables:
-# CustomAc.idt, InstallU.idt, Feature.idt
-################################################################################################
-
-sub add_childprojects
-{
-    my ($languageidtdir, $filesref, $allvariables) = @_;
-
-    my $customactiontablename = $languageidtdir . $installer::globals::separator . "CustomAc.idt";
-    my $customactiontable = installer::files::read_file($customactiontablename);
-    my $installuitablename = $languageidtdir . $installer::globals::separator . "InstallU.idt";
-    my $installuitable = installer::files::read_file($installuitablename);
-    my $featuretablename = $languageidtdir . $installer::globals::separator . "Feature.idt";
-    my $featuretable = installer::files::read_file($featuretablename);
-    my $directorytablename = $languageidtdir . $installer::globals::separator . "Director.idt";
-    my $directorytable = installer::files::read_file($directorytablename);
-    my $componenttablename = $languageidtdir . $installer::globals::separator . "Componen.idt";
-    my $componenttable = installer::files::read_file($componenttablename);
-
-    my $infoline = "";
-    my $line = "";
-
-    $installer::globals::urefile = installer::worker::return_first_item_with_special_flag($filesref ,"UREFILE");
-
-    if (( $installer::globals::urefile eq "" ) && ( $allvariables->{'UREPRODUCT'} )) { installer::exiter::exit_program("ERROR: No UREFILE found in files collector!", "add_childprojects"); }
-
-    # Content for Directory table
-    # SystemFolder TARGETDIR .
-
-    my $contains_systemfolder = 0;
-
-    for ( my $i = 0; $i <= $#{$directorytable}; $i++ )
-    {
-        if ( ${$directorytable}[$i] =~ /^\s*SystemFolder\t/ )
-        {
-            $contains_systemfolder = 1;
-            last;
-        }
-    }
-
-    if ( ! $contains_systemfolder )
-    {
-        $line = "SystemFolder\tTARGETDIR\t\.\n";
-        push(@{$directorytable}, $line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $directorytablename\n";
-    }
-    else
-    {
-        $infoline = "SystemFolder already exists in table $directorytablename\n";
-    }
-
-    push(@installer::globals::logfileinfo, $infoline);
-
-    # Additional content for the directory table
-    # subjava   INSTALLLOCATION program:java
-    # subure    INSTALLLOCATION program:ure
-
-    my $dirname = "";
-    my $subjavadir = "";
-    my $suburedir = "";
-
-    if ( $allvariables->{'UREPRODUCT'} )
-    {
-        $dirname = get_directory_name_from_file($installer::globals::urefile);
-        $suburedir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::urefile);
-    }
-
-    # Content for the Component table
-    # The Java and Ada components have new directories
-
-    if ( $allvariables->{'UREPRODUCT'} ) { include_subdir_into_componenttable($suburedir, $installer::globals::urefile, $componenttable); }
-
-    # Content for CustomAction table
-
-    if ( $allvariables->{'UREPRODUCT'} )
-    {
-        $line = "InstallUre\t98\tSystemFolder\t$installer::globals::urefile->{'Subdir'}\\$installer::globals::urefile->{'Name'} /S\n";
-        push(@{$customactiontable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    if ( $allvariables->{'UREPRODUCT'} )
-    {
-        $line = "MaintenanceUre\t82\t$installer::globals::urefile->{'uniquename'}\t\/S\n";
-        push(@{$customactiontable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    # Content for InstallUISequence table
-
-    my $number = "";
-    my $featurename = "";
-
-    if ( $allvariables->{'UREPRODUCT'} )
-    {
-        $number = get_free_number_in_uisequence_table($installuitable) + 8;
-        $featurename = get_feature_name("_Ure", $featuretable);
-        if ( $featurename ) { $line = "InstallUre\t\&$featurename\=3 And Not Installed\t$number\n"; }
-        else { $line = "InstallUre\tNot Installed\t$number\n"; } # feature belongs to root
-        push(@{$installuitable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    if ( $allvariables->{'UREPRODUCT'} )
-    {
-        $number = get_free_number_in_uisequence_table($installuitable) + 10;
-        $featurename = get_feature_name("_Ure", $featuretable);
-        if ( $featurename ) { $line = "MaintenanceUre\t\&$featurename\=3 And Installed\t$number\n"; }
-        else { $line = "MaintenanceUre\tInstalled\t$number\n"; } # feature belongs to root
-        push(@{$installuitable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    # Content for Feature table, better from scp (translation)
-    # gm_o_java gm_optional Java 1.4.2 Description 2 200
-
-    installer::files::save_file($customactiontablename, $customactiontable);
-    installer::files::save_file($installuitablename, $installuitable);
-    installer::files::save_file($featuretablename, $featuretable);
-    installer::files::save_file($directorytablename, $directorytable);
-    installer::files::save_file($componenttablename, $componenttable);
-}
-
-##################################################################
-# Setting the encoding in all idt files. Replacing the
-# variable WINDOWSENCODINGTEMPLATE
-##################################################################
-
-sub setencoding
-{
-    my ( $languageidtdir, $onelanguage ) = @_;
-
-    my $encoding = installer::windows::language::get_windows_encoding($onelanguage);
-
-    # collecting all idt files in the directory $languageidtdir and substituting the string
-
-    my $idtfiles = installer::systemactions::find_file_with_file_extension("idt", $languageidtdir);
-
-    for ( my $i = 0; $i <= $#{$idtfiles}; $i++ )
-    {
-        my $onefilename = $languageidtdir . $installer::globals::separator . ${$idtfiles}[$i];
-        my $onefile = installer::files::read_file($onefilename);
-
-        for ( my $j = 0; $j <= $#{$onefile}; $j++ )
-        {
-            ${$onefile}[$j] =~ s/WINDOWSENCODINGTEMPLATE/$encoding/g;
-        }
-
-        installer::files::save_file($onefilename, $onefile);
-    }
 }
 
 ##################################################################

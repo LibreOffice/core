@@ -81,7 +81,6 @@ ClientBox::ClientBox( Dialog* pParent, RemoteServer *pServer,
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
     m_bNeedsRecalc( true ),
-    m_bHasNew( false ),
     m_bInCheckMode( false ),
     m_bAdjustActive( false ),
     m_bInDelete( false ),
@@ -147,17 +146,6 @@ ClientBox::~ClientBox()
     m_xRemoveListener.clear();
 }
 
-
-//------------------------------------------------------------------------------
-void ClientBox::checkIndex( sal_Int32 nIndex ) const
-{
-    if ( nIndex < 0 )
-        throw lang::IllegalArgumentException( "The list index starts with 0",0, 0 );
-    if ( static_cast< sal_uInt32 >( nIndex ) >= m_vEntries.size())
-        throw lang::IllegalArgumentException( "There is no element at the provided position."
-        "The position exceeds the number of available list entries",0, 0 );
-}
-
 //------------------------------------------------------------------------------
 // Title + description
 void ClientBox::CalcActiveHeight( const long nPos )
@@ -189,12 +177,6 @@ void ClientBox::CalcActiveHeight( const long nPos )
         aTextHeight = m_nStdHeight;
 
     m_nActiveHeight = aTextHeight + 2;
-}
-
-//------------------------------------------------------------------------------
-const Size ClientBox::GetMinOutputSizePixel() const
-{
-    return Size( 200, 80 );
 }
 
 //------------------------------------------------------------------------------
@@ -718,183 +700,6 @@ long ClientBox::addEntry( ClientInfo* pClientInfo )
     m_bNeedsRecalc = true;
 
     return nPos;
-}
-
-//------------------------------------------------------------------------------
-void ClientBox::updateEntry( const ClientInfo* pClientInfo )
-{
-    (void) pClientInfo;
-//     typedef std::vector< TClientBoxEntry >::iterator ITER;
-//     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-//     {
-//         if ( (*iIndex)->m_xPackage == xPackage )
-//         {
-//             PackageState eState = m_pManager->getPackageState( xPackage );
-//             (*iIndex)->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-//             (*iIndex)->m_eState = eState;
-//             (*iIndex)->m_sTitle = xPackage->getDisplayName();
-//             (*iIndex)->m_sVersion = xPackage->getVersion();
-//             (*iIndex)->m_sDescription = xPackage->getDescription();
-//
-//             if ( eState == REGISTERED )
-//                 (*iIndex)->m_bMissingLic = false;
-//
-//             if ( eState == AMBIGUOUS )
-//                 (*iIndex)->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
-//             else if ( ! (*iIndex)->m_bMissingLic )
-//                 (*iIndex)->m_sErrorText = String();
-//
-//             if ( IsReallyVisible() )
-//                 Invalidate();
-//             break;
-//         }
-//     }
-}
-
-//------------------------------------------------------------------------------
-void ClientBox::removeEntry( const ClientInfo* pClientInfo )
-{
-    (void) pClientInfo;
-//     if ( ! m_bInDelete )
-//     {
-//         ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
-//
-//         typedef std::vector< TClientBoxEntry >::iterator ITER;
-//
-//         for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-//         {
-//             if ( (*iIndex)->m_xPackage == xPackage )
-//             {
-//                 long nPos = iIndex - m_vEntries.begin();
-//
-//                 // Entries mustn't removed here, because they contain a hyperlink control
-//                 // which can only be deleted when the thread has the solar mutex. Therefor
-//                 // the entry will be moved into the m_vRemovedEntries list which will be
-//                 // cleared on the next paint event
-//                 m_vRemovedEntries.push_back( *iIndex );
-//                 m_vEntries.erase( iIndex );
-//
-//                 m_bNeedsRecalc = true;
-//
-//                 if ( IsReallyVisible() )
-//                     Invalidate();
-//
-//                 if ( m_bHasActive )
-//                 {
-//                     if ( nPos < m_nActive )
-//                         m_nActive -= 1;
-//                     else if ( ( nPos == m_nActive ) &&
-//                               ( nPos == (long) m_vEntries.size() ) )
-//                         m_nActive -= 1;
-//
-//                     m_bHasActive = false;
-//                     //clear before calling out of this method
-//                     aGuard.clear();
-//                     selectEntry( m_nActive );
-//                 }
-//                 break;
-//             }
-//         }
-//     }
-}
-
-//------------------------------------------------------------------------------
-void ClientBox::RemoveUnlocked()
-{
-//     bool bAllRemoved = false;
-//
-//     while ( ! bAllRemoved )
-//     {
-//         bAllRemoved = true;
-//
-//         ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
-//
-//         typedef std::vector< TClientBoxEntry >::iterator ITER;
-//
-//         for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-//         {
-//             if ( !(*iIndex)->m_bLocked )
-//             {
-//                 bAllRemoved = false;
-//                 uno::Reference< deployment::XPackage> xPackage = (*iIndex)->m_xPackage;
-//                 aGuard.clear();
-//                 removeEntry( xPackage );
-//                 break;
-//             }
-//         }
-//     }
-}
-
-//------------------------------------------------------------------------------
-void ClientBox::prepareChecking()
-{
-    m_bInCheckMode = true;
-    typedef std::vector< TClientBoxEntry >::iterator ITER;
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-    {
-//         (*iIndex)->m_bChecked = false;
-//         (*iIndex)->m_bNew = false;
-    }
-}
-
-//------------------------------------------------------------------------------
-void ClientBox::checkEntries()
-{
-    long nNewPos = -1;
-//     long nPos = 0;
-    bool bNeedsUpdate = false;
-
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
-    typedef std::vector< TClientBoxEntry >::iterator ITER;
-    ITER iIndex = m_vEntries.begin();
-    while ( iIndex < m_vEntries.end() )
-    {
-//         if ( (*iIndex)->m_bChecked == false )
-//         {
-//             (*iIndex)->m_bChecked = true;
-//             bNeedsUpdate = true;
-//             nPos = iIndex-m_vEntries.begin();
-//             if ( (*iIndex)->m_bNew )
-//             { // add entry to list and correct active pos
-//                 if ( nNewPos == - 1)
-//                     nNewPos = nPos;
-//                 if ( nPos <= m_nActive )
-//                     m_nActive += 1;
-//                 ++iIndex;
-//             }
-//             else
-//             {   // remove entry from list
-//                 if ( nPos < m_nActive )
-//                     m_nActive -= 1;
-//                 else if ( ( nPos == m_nActive ) && ( nPos == (long) m_vEntries.size() - 1 ) )
-//                     m_nActive -= 1;
-//                 m_vRemovedEntries.push_back( *iIndex );
-//                 m_vEntries.erase( iIndex );
-//                 iIndex = m_vEntries.begin() + nPos;
-//             }
-//         }
-//         else
-            ++iIndex;
-    }
-    guard.clear();
-
-    m_bInCheckMode = false;
-
-    if ( nNewPos != - 1)
-        selectEntry( nNewPos );
-
-    if ( bNeedsUpdate )
-    {
-        m_bNeedsRecalc = true;
-        if ( IsReallyVisible() )
-            Invalidate();
-    }
-}
-
-//------------------------------------------------------------------------------
-void ClientBox::SetScrollHdl( const Link& rLink )
-{
-    m_pScrollBar->SetScrollHdl( rLink );
 }
 
 // -----------------------------------------------------------------------

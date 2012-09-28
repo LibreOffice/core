@@ -28,8 +28,6 @@ import org.openide.WizardDescriptor;
 import org.openide.util.NbBundle;
 
 /** A wizard descriptor.
- *
- * @author tomaso
  */
 public class InstallationPathDescriptor extends WizardDescriptor {
 

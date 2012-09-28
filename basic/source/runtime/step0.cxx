@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/fsys.hxx>
 
@@ -351,7 +352,13 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
 
     SbUnoObject* pUnoVal =  PTR_CAST(SbUnoObject,(SbxObject*)xValObj);
     SbUnoStructRefObject* pUnoStructVal = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xValObj);
-    Any aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
+    Any aAny;
+    // make doubly sure value is either an Uno object or
+    // an uno struct
+    if ( pUnoVal || pUnoStructVal )
+        aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
+    else
+        return false;
     if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
     {
         refVar->SetType( SbxOBJECT );
@@ -1299,13 +1306,13 @@ void SbiRuntime::StepPRINT()        // print TOS
 void SbiRuntime::StepPRINTF()       // print TOS in field
 {
     SbxVariableRef p = PopVar();
-    String s1 = p->GetString();
-    String s;
+    OUString s1 = p->GetString();
+    OUStringBuffer s;
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
-        s = ' ';
-    s += s1;
-    s.Expand( 14, ' ' );
-    rtl::OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
+        s.append(' ');
+    s.append(s1);
+    comphelper::string::padToLength(s, 14, ' ');
+    OString aByteStr(OUStringToOString(s.makeStringAndClear(), osl_getThreadTextEncoding()));
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }

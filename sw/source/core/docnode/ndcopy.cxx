@@ -473,7 +473,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // does not seem to be used, because the table does not have any contents yet
     // (see IsUsed). Therefore the inner table gets the same name as the outer table.
     // We have to make sure that the table node of the SwTable is accessible, even
-    // without any content in aSortCntBoxes. #i26629#
+    // without any content in m_TabSortContentBoxes. #i26629#
     pTblNd->GetTable().SetTableNode( pTblNd );
     rNds._Copy( aRg, aInsPos, sal_False );
     pTblNd->GetTable().SetTableNode( 0 );

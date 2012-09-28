@@ -29,12 +29,12 @@
 
 #include <stdio.h>
 
-inline sal_Bool ascii_isDigit( sal_Unicode ch )
+inline bool ascii_isDigit( sal_Unicode ch )
 {
     return ((ch >= 0x0030) && (ch <= 0x0039));
 }
 
-inline sal_Bool ascii_isLetter( sal_Unicode ch )
+inline bool ascii_isLetter( sal_Unicode ch )
 {
     return (( (ch >= 0x0041) && (ch <= 0x005A)) || ((ch >= 0x0061) && (ch <= 0x007A)));
 }
@@ -82,9 +82,9 @@ void INetMessage::ListCopy (const INetMessage &rMsg)
 
 void INetMessage::SetHeaderField_Impl (
     INetMIME::HeaderFieldType  eType,
-    const rtl::OString        &rName,
-    const rtl::OUString       &rValue,
-    sal_uIntPtr               &rnIndex)
+    const OString &rName,
+    const OUString &rValue,
+    sal_uIntPtr &rnIndex)
 {
     INetMIMEStringOutputSink aSink (0, STRING_MAXLEN);
     INetMIME::writeHeaderFieldBody (
@@ -148,33 +148,33 @@ namespace
 {
     struct ImplINetRFC822MessageHeaderDataImpl
     {
-        const rtl::OString* operator()()
+        const OString* operator()()
         {
-            static const rtl::OString _ImplINetRFC822MessageHeaderData[] =
+            static const OString _ImplINetRFC822MessageHeaderData[] =
             {
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("BCC")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("CC")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Comments")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Date")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("From")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("In-Reply-To")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Keywords")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Message-ID")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("References")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Reply-To")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Return-Path")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Subject")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Sender")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("To")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("X-Mailer")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Return-Receipt-To"))
+                OString(RTL_CONSTASCII_STRINGPARAM("BCC")),
+                OString(RTL_CONSTASCII_STRINGPARAM("CC")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Comments")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Date")),
+                OString(RTL_CONSTASCII_STRINGPARAM("From")),
+                OString(RTL_CONSTASCII_STRINGPARAM("In-Reply-To")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Keywords")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Message-ID")),
+                OString(RTL_CONSTASCII_STRINGPARAM("References")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Reply-To")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Return-Path")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Subject")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Sender")),
+                OString(RTL_CONSTASCII_STRINGPARAM("To")),
+                OString(RTL_CONSTASCII_STRINGPARAM("X-Mailer")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Return-Receipt-To"))
             };
             return &_ImplINetRFC822MessageHeaderData[0];
         }
     };
 
     struct ImplINetRFC822MessageHeaderData
-        : public rtl::StaticAggregate< const rtl::OString, ImplINetRFC822MessageHeaderDataImpl > {};
+        : public rtl::StaticAggregate< const OString, ImplINetRFC822MessageHeaderDataImpl > {};
 }
 
 #define HDR(n) ImplINetRFC822MessageHeaderData::get()[(n)]
@@ -241,23 +241,23 @@ static const sal_Char *months[12] =
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 };
 
-static sal_uInt16 ParseNumber(const rtl::OString& rStr, sal_uInt16& nIndex)
+static sal_uInt16 ParseNumber(const OString& rStr, sal_uInt16& nIndex)
 {
     sal_uInt16 n = nIndex;
     while ((n < rStr.getLength()) && ascii_isDigit(rStr[n])) n++;
 
-    rtl::OString aNum(rStr.copy(nIndex, (n - nIndex)));
+    OString aNum(rStr.copy(nIndex, (n - nIndex)));
     nIndex = n;
 
     return (sal_uInt16)(aNum.toInt32());
 }
 
-static sal_uInt16 ParseMonth(const rtl::OString& rStr, sal_uInt16& nIndex)
+static sal_uInt16 ParseMonth(const OString& rStr, sal_uInt16& nIndex)
 {
     sal_uInt16 n = nIndex;
     while ((n < rStr.getLength()) && ascii_isLetter(rStr[n])) n++;
 
-    rtl::OString aMonth(rStr.copy(nIndex, 3));
+    OString aMonth(rStr.copy(nIndex, 3));
     nIndex = n;
 
     sal_uInt16 i;
@@ -266,13 +266,13 @@ static sal_uInt16 ParseMonth(const rtl::OString& rStr, sal_uInt16& nIndex)
     return (i + 1);
 }
 
-sal_Bool INetRFC822Message::ParseDateField (
-    const rtl::OUString& rDateFieldW, DateTime& rDateTime)
+bool INetRFC822Message::ParseDateField (
+    const OUString& rDateFieldW, DateTime& rDateTime)
 {
-    rtl::OString aDateField(rtl::OUStringToOString(rDateFieldW,
+    OString aDateField(OUStringToOString(rDateFieldW,
         RTL_TEXTENCODING_ASCII_US));
 
-    if (aDateField.isEmpty()) return sal_False;
+    if (aDateField.isEmpty()) return false;
 
     if (aDateField.indexOf(':') != -1)
     {
@@ -297,7 +297,7 @@ sal_Bool INetRFC822Message::ParseDateField (
         if (ascii_isLetter (aDateField[nIndex]))
         {
             // Format: ctime().
-            if ((aDateField.getLength() - nIndex) < 20) return sal_False;
+            if ((aDateField.getLength() - nIndex) < 20) return false;
 
             rDateTime.SetMonth  (ParseMonth  (aDateField, nIndex)); nIndex++;
             rDateTime.SetDay    (ParseNumber (aDateField, nIndex)); nIndex++;
@@ -314,7 +314,7 @@ sal_Bool INetRFC822Message::ParseDateField (
         else
         {
             // Format: RFC1036 or RFC1123.
-            if ((aDateField.getLength() - nIndex) < 17) return sal_False;
+            if ((aDateField.getLength() - nIndex) < 17) return false;
 
             rDateTime.SetDay    (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.SetMonth  (ParseMonth  (aDateField, nIndex)); nIndex++;
@@ -332,7 +332,7 @@ sal_Bool INetRFC822Message::ParseDateField (
                 (aDateField[nIndex] == '-')    )
             {
                 // Offset from GMT: "(+|-)HHMM".
-                sal_Bool   bEast   = (aDateField[nIndex++] == '+');
+                bool bEast   = (aDateField[nIndex++] == '+');
                 sal_uInt16 nOffset = ParseNumber (aDateField, nIndex);
                 if (nOffset > 0)
                 {
@@ -366,7 +366,7 @@ sal_Bool INetRFC822Message::ParseDateField (
     else
     {
         // Junk.
-        return sal_False;
+        return false;
     }
 
     return (rDateTime.IsValidAndGregorian() &&
@@ -379,7 +379,7 @@ sal_Bool INetRFC822Message::ParseDateField (
 sal_uIntPtr INetRFC822Message::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
-    rtl::OString aName (rHeader.GetName());
+    OString aName (rHeader.GetName());
     const sal_Char *pData = aName.getStr();
     const sal_Char *pStop = pData + aName.getLength() + 1;
     const sal_Char *check = "";
@@ -635,23 +635,23 @@ namespace
 {
     struct ImplINetMIMEMessageHeaderDataImpl
     {
-        const rtl::OString* operator()()
+        const OString* operator()()
         {
-            static const rtl::OString _ImplINetMIMEMessageHeaderData[] =
+            static const OString _ImplINetMIMEMessageHeaderData[] =
             {
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("MIME-Version")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Content-Description")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Content-Disposition")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Content-ID")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Content-Type")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Content-Transfer-Encoding"))
+                OString(RTL_CONSTASCII_STRINGPARAM("MIME-Version")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Content-Description")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Content-Disposition")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Content-ID")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Content-Type")),
+                OString(RTL_CONSTASCII_STRINGPARAM("Content-Transfer-Encoding"))
             };
             return &_ImplINetMIMEMessageHeaderData[0];
         }
     };
 
     struct ImplINetMIMEMessageHeaderData
-        : public rtl::StaticAggregate< const rtl::OString, ImplINetMIMEMessageHeaderDataImpl > {};
+        : public rtl::StaticAggregate< const OString, ImplINetMIMEMessageHeaderDataImpl > {};
 }
 
 #define MIMEHDR(n) ImplINetMIMEMessageHeaderData::get()[(n)]
@@ -671,7 +671,7 @@ enum _ImplINetMIMEMessageHeaderState
 INetMIMEMessage::INetMIMEMessage()
     : INetRFC822Message (),
       pParent       (NULL),
-      bHeaderParsed (sal_False)
+      bHeaderParsed (false)
 {
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
         m_nIndex[i] = CONTAINER_ENTRY_NOTFOUND;
@@ -743,7 +743,7 @@ INetMIMEMessage *INetMIMEMessage::CreateMessage (
 sal_uIntPtr INetMIMEMessage::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
-    rtl::OString aName (rHeader.GetName());
+    OString aName (rHeader.GetName());
     const sal_Char *pData = aName.getStr();
     const sal_Char *pStop = pData + aName.getLength() + 1;
     const sal_Char *check = "";
@@ -886,7 +886,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
     return nNewIndex;
 }
 
-void INetMIMEMessage::SetMIMEVersion (const UniString& rVersion)
+void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
@@ -894,7 +894,7 @@ void INetMIMEMessage::SetMIMEVersion (const UniString& rVersion)
         m_nIndex[INETMSG_MIME_VERSION]);
 }
 
-void INetMIMEMessage::SetContentDisposition (const String& rDisposition)
+void INetMIMEMessage::SetContentDisposition (const OUString& rDisposition)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
@@ -902,7 +902,7 @@ void INetMIMEMessage::SetContentDisposition (const String& rDisposition)
         m_nIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
 }
 
-void INetMIMEMessage::SetContentType (const String& rType)
+void INetMIMEMessage::SetContentType (const OUString& rType)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
@@ -911,7 +911,7 @@ void INetMIMEMessage::SetContentType (const String& rType)
 }
 
 void INetMIMEMessage::SetContentTransferEncoding (
-    const rtl::OUString& rEncoding)
+    const OUString& rEncoding)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
@@ -919,28 +919,28 @@ void INetMIMEMessage::SetContentTransferEncoding (
         m_nIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
 }
 
-rtl::OUString INetMIMEMessage::GetDefaultContentType()
+OUString INetMIMEMessage::GetDefaultContentType()
 {
     if (pParent != NULL)
     {
-        rtl::OUString aParentCT (pParent->GetContentType());
+        OUString aParentCT (pParent->GetContentType());
         if (aParentCT.isEmpty())
             aParentCT = pParent->GetDefaultContentType();
 
         if (aParentCT.equalsIgnoreAsciiCase("multipart/digest"))
-            return rtl::OUString("message/rfc822");
+            return OUString("message/rfc822");
     }
-    return rtl::OUString("text/plain; charset=us-ascii");
+    return OUString("text/plain; charset=us-ascii");
 }
 
-sal_Bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
+bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
 {
     // Check context.
     if (IsContainer())
-        return sal_False;
+        return false;
 
     // Setup Content-Type header field.
-    rtl::OStringBuffer aContentType;
+    OStringBuffer aContentType;
     switch (eType)
     {
         case INETMSG_MESSAGE_RFC822:
@@ -992,25 +992,24 @@ sal_Bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
     }
 
     // Set header fields.
-    SetMIMEVersion (String (CONSTASCII_STRINGPARAM("1.0")));
-    SetContentType (rtl::OStringToOUString(aContentType.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
-    SetContentTransferEncoding (String (CONSTASCII_STRINGPARAM("7bit")));
+    SetMIMEVersion(OUString("1.0"));
+    SetContentType(OStringToOUString(aContentType.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
+    SetContentTransferEncoding(OUString("7bit"));
 
     // Done.
-    return sal_True;
+    return true;
 }
 
-sal_Bool INetMIMEMessage::AttachChild (
-    INetMIMEMessage& rChildMsg, sal_Bool bOwner)
+bool INetMIMEMessage::AttachChild(INetMIMEMessage& rChildMsg, bool bOwner)
 {
-    if (IsContainer() /*&& rChildMsg.GetContentType().Len() */)
+    if (IsContainer())
     {
         if (bOwner) rChildMsg.pParent = this;
         aChildren.push_back( &rChildMsg );
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const

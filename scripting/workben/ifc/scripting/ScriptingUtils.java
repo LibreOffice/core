@@ -16,9 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package ifc.script.framework;
+package ifc.scripting;
 
-import java.io.File;
 import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 
 import com.sun.star.uno.UnoRuntime;

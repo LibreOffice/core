@@ -448,7 +448,7 @@ void BackendImpl::initServiceRdbFiles()
 {
     const Reference<XCommandEnvironment> xCmdEnv;
 
-    ::ucbhelper::Content cacheDir( getCachePath(), xCmdEnv );
+    ::ucbhelper::Content cacheDir( getCachePath(), xCmdEnv, m_xComponentContext );
     ::ucbhelper::Content oldRDB;
     // switch common rdb:
     if (!m_commonRDB_orig.isEmpty())
@@ -697,7 +697,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             OUString name;
             if (!bRemoved)
             {
-                ::ucbhelper::Content ucbContent( url, xCmdEnv );
+                ::ucbhelper::Content ucbContent( url, xCmdEnv, m_xComponentContext );
                 name = StrTitle::getTitle( ucbContent );
             }
 
@@ -1004,7 +1004,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
                         buf2.getLength() ) ) );
             ::ucbhelper::Content ucb_content(
                 makeURL( getCachePath(), getPlatformString() + OUSTR("rc") ),
-                xCmdEnv );
+                xCmdEnv, m_xComponentContext );
             ucb_content.writeStream( xData, true /* replace existing */ );
         }
         for (t_stringlist::iterator i(m_components.begin());
@@ -1035,7 +1035,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
                 reinterpret_cast<sal_Int8 const *>(buf.getStr()),
                 buf.getLength() ) ) );
     ::ucbhelper::Content ucb_content(
-        makeURL( getCachePath(), OUSTR("unorc") ), xCmdEnv );
+        makeURL( getCachePath(), OUSTR("unorc") ), xCmdEnv, m_xComponentContext );
     ucb_content.writeStream( xData, true /* replace existing */ );
 
     m_unorc_modified = false;

@@ -62,7 +62,7 @@
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/system/XSystemShellExecute.hpp"
+#include "com/sun/star/system/SystemShellExecute.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 #include "com/sun/star/util/XStringWidth.hpp"
@@ -193,6 +193,10 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // clean up resource stack
     FreeResource();
 
+    // fdo#34392: we do the layout dynamically, the layout depends on the font,
+    // so we should handle data changed events (font changing) of the last child
+    // control, at this point all the controls have updated settings (i.e. font).
+    maToolbox.AddEventListener( LINK( this, BackingWindow, WindowEventListener ) );
     EnableChildTransparentMode();
 
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
@@ -249,6 +253,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
 BackingWindow::~BackingWindow()
 {
+    maToolbox.RemoveEventListener( LINK( this, BackingWindow, WindowEventListener ) );
     delete mpRecentMenu;
     delete mpAccExec;
 }
@@ -267,17 +272,22 @@ class ImageContainerRes : public Resource
     ~ImageContainerRes() { FreeResource(); }
 };
 
-void BackingWindow::DataChanged( const DataChangedEvent& rDCEvt )
+IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    Window::DataChanged( rDCEvt );
-
-    if ( rDCEvt.GetFlags() & SETTINGS_STYLE )
+    VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>( pEvent );
+    if ( pWinEvent && pWinEvent->GetId() == VCLEVENT_WINDOW_DATACHANGED )
     {
-        initBackground();
-        Invalidate();
-        // fdo#34392: Resize buttons to match the new text size.
-        Resize();
+        DataChangedEvent* pDCEvt =
+            static_cast<DataChangedEvent*>( pWinEvent->GetData() );
+        if ( pDCEvt->GetFlags() & SETTINGS_STYLE )
+        {
+            initBackground();
+            Invalidate();
+            // fdo#34392: Resize buttons to match the new text size.
+            Resize();
+        }
     }
+    return 0;
 }
 
 void BackingWindow::prepareRecentFileMenu()
@@ -395,13 +405,21 @@ void BackingWindow::prepareRecentFileMenu()
     maOpenButton.SetPopupMenu( mpRecentMenu );
 }
 
+namespace
+{
+static void lcl_SetBlackButtonTextColor( PushButton& rButton )
+{
+    AllSettings aSettings = rButton.GetSettings();
+    StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+    aStyleSettings.SetButtonTextColor( Color(COL_BLACK) );
+    aSettings.SetStyleSettings( aStyleSettings );
+    rButton.SetSettings( aSettings );
+}
+}
+
 void BackingWindow::initBackground()
 {
     SetBackground();
-
-    bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
     // select image set
     ImageContainerRes aRes( FwkResId( RES_BACKING_IMAGES ) );
@@ -446,6 +464,16 @@ void BackingWindow::initBackground()
     maOpenButton.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     maOpenButton.SetSelectHdl( LINK( this, BackingWindow, SelectHdl ) );
     maOpenButton.SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
+
+    // fdo#41440: force black text color, since the background image is white.
+    lcl_SetBlackButtonTextColor( maWriterButton );
+    lcl_SetBlackButtonTextColor( maCalcButton );
+    lcl_SetBlackButtonTextColor( maImpressButton );
+    lcl_SetBlackButtonTextColor( maOpenButton );
+    lcl_SetBlackButtonTextColor( maDrawButton );
+    lcl_SetBlackButtonTextColor( maDBButton );
+    lcl_SetBlackButtonTextColor( maMathButton );
+    lcl_SetBlackButtonTextColor( maTemplateButton );
 }
 
 void BackingWindow::initControls()
@@ -878,9 +906,7 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
                     localizeWebserviceURI(sURL);
 
                     Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                        comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString( "com.sun.star.system.SystemShellExecute"  ) ),
-                        UNO_QUERY_THROW);
+                        com::sun::star::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
                     //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
                     xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }

@@ -42,6 +42,7 @@
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -68,6 +69,7 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/interactionrequest.hxx>
@@ -1444,12 +1446,11 @@ Content::createTempStream(
     GnomeVFSHandle *handle = NULL;
     ::rtl::OString aURI = getOURI();
 
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     // Something badly wrong happened - can't seek => stream to a temporary file
-    const rtl::OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
     uno::Reference < io::XOutputStream > xTempOut =
         uno::Reference < io::XOutputStream >
-            ( m_xSMgr->createInstance( sServiceName ), uno::UNO_QUERY );
+            ( io::TempFile::create(comphelper::getComponentContext(m_xSMgr)), uno::UNO_QUERY );
 
     if ( !xTempOut.is() )
         cancelCommandExecution( GNOME_VFS_ERROR_IO, xEnv );

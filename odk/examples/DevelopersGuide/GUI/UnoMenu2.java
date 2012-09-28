@@ -20,7 +20,6 @@ import com.sun.star.awt.MouseEvent;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XMouseListener;
-import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XMultiPropertySet;
 import com.sun.star.lang.EventObject;

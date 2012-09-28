@@ -173,104 +173,7 @@ sub generate_cab_file_list
 
     if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_paths($filesref); }
 
-    if ( $installer::globals::use_packages_for_cabs )
-    {
-        my $sequenceorder = get_sequenceorder($filesref);
-
-        my $counter = 1;
-        my $currentcabfile = "";
-
-        while ( ( exists($sequenceorder->{$counter}) ) || ( exists($installer::globals::allmergemodulefilesequences{$counter}) ) ) # Taking care of files from merge modules
-        {
-            if ( exists($installer::globals::allmergemodulefilesequences{$counter}) )
-            {
-                # Skipping this sequence, it is not included in $filesref, because it is assigned to a file from a merge module.\n";
-                $counter++;
-                next;
-            }
-
-            # Files with increasing sequencerorder are included in one cab file
-            my $onefile = ${$filesref}[$sequenceorder->{$counter}];
-            my $cabinetfile = $onefile->{'assignedcabinetfile'};
-            my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
-            my $uniquename =  $onefile->{'uniquename'};
-
-            my $styles = "";
-            my $doinclude = 1;
-            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
-            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
-
-            # to avoid lines with more than 256 characters, it can be useful to use relative paths
-            $sourcepath = make_relative_ddf_path($sourcepath);
-
-            # all files with the same cabinetfile have increasing sequencenumbers
-
-            my @ddffile = ();
-
-            write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
-
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            if ( $doinclude ) { push(@ddffile, $ddfline); }
-
-            $counter++; # increasing the counter
-            my $nextfile = "";
-            my $nextcabinetfile = "";
-            if ( exists($sequenceorder->{$counter}) ) { $nextfile = ${$filesref}[$sequenceorder->{$counter}]; }
-            if ( $nextfile->{'assignedcabinetfile'} ) { $nextcabinetfile = $nextfile->{'assignedcabinetfile'}; }
-
-            while ( $nextcabinetfile eq $cabinetfile )
-            {
-                $sourcepath =  $nextfile->{'sourcepath'};
-                if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
-                # to avoid lines with more than 256 characters, it can be useful to use relative paths
-                $sourcepath = make_relative_ddf_path($sourcepath);
-                $uniquename =  $nextfile->{'uniquename'};
-                my $localdoinclude = 1;
-                my $nextfilestyles = "";
-                if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
-                if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-                if ( $localdoinclude ) { push(@ddffile, $ddfline); }
-
-                $counter++; # increasing the counter!
-                $nextcabinetfile = "_lastfile_";
-                if ( exists($sequenceorder->{$counter}) )
-                {
-                    $nextfile = ${$filesref}[$sequenceorder->{$counter}];
-                    $nextcabinetfile = $nextfile->{'assignedcabinetfile'};
-                }
-            }
-
-            # creating the DDF file
-
-            my $ddffilename = $cabinetfile;
-            $ddffilename =~ s/.cab/.ddf/;
-            $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
-            $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
-
-            installer::files::save_file($ddffilename ,\@ddffile);
-            my $infoline = "Created ddf file: $ddffilename\n";
-            push(@installer::globals::logfileinfo, $infoline);
-
-            # lines in ddf files must not be longer than 256 characters
-            check_ddf_file(\@ddffile, $ddffilename);
-
-            # Writing the makecab system call
-
-            my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-            if ( $installer::globals::isunix )
-            {
-                $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-            }
-
-            push(@cabfilelist, $oneline);
-
-            # collecting all ddf files
-            push(@installer::globals::allddffiles, $ddffilename);
-        }
-    }
-    elsif ((( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files )) && ( $installer::globals::updatedatabase ))
+    if (( $installer::globals::fix_number_of_cab_files ) && ( $installer::globals::updatedatabase ))
     {
         my $sequenceorder = get_sequenceorder($filesref);
 
@@ -306,7 +209,7 @@ sub generate_cab_file_list
 
             write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
 
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            my $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
             if ( $doinclude ) { push(@ddffile, $ddfline); }
 
             my $nextfile = "";
@@ -327,7 +230,7 @@ sub generate_cab_file_list
                 my $nextfilestyles = "";
                 if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
                 if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+                $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
                 if ( $localdoinclude ) { push(@ddffile, $ddfline); }
                 $counter++;
                 $nextfile = "";
@@ -367,7 +270,7 @@ sub generate_cab_file_list
             push(@installer::globals::allddffiles, $ddffilename);
         }
     }
-    elsif (( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files ))
+    elsif ( $installer::globals::fix_number_of_cab_files )
     {
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
@@ -392,7 +295,7 @@ sub generate_cab_file_list
 
             write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
 
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            my $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
             if ( $doinclude ) { push(@ddffile, $ddfline); }
 
             my $nextfile = ${$filesref}[$i+1];
@@ -411,7 +314,7 @@ sub generate_cab_file_list
                 my $nextfilestyles = "";
                 if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
                 if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+                $ddfline = "\"" . $sourcepath . "\" \"" . $uniquename . "\"\n";
                 if ( $localdoinclude ) { push(@ddffile, $ddfline); }
                 $i++;                                           # increasing the counter!
                 $nextfile = ${$filesref}[$i+1];
@@ -447,131 +350,9 @@ sub generate_cab_file_list
             push(@installer::globals::allddffiles, $ddffilename);
         }
     }
-    elsif (( $installer::globals::one_cab_file ) && ( $installer::globals::updatedatabase ))
-    {
-        my $sequenceorder = get_sequenceorder($filesref);
-
-        my $counter = 1;
-        my $currentcabfile = "";
-
-        while ( ( exists($sequenceorder->{$counter}) ) || ( exists($installer::globals::allmergemodulefilesequences{$counter}) ) ) # Taking care of files from merge modules
-        {
-            if ( exists($installer::globals::allmergemodulefilesequences{$counter}) )
-            {
-                # Skipping this sequence, it is not included in $filesref, because it is assigned to a file from a merge module.\n";
-                $counter++;
-                next;
-            }
-
-            my $onefile = ${$filesref}[$sequenceorder->{$counter}];
-
-            $cabinetfile = $onefile->{'cabinet'};
-            my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
-            my $uniquename =  $onefile->{'uniquename'};
-
-            # to avoid lines with more than 256 characters, it can be useful to use relative paths
-            $sourcepath = make_relative_ddf_path($sourcepath);
-
-            if ( $counter == 1 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
-
-            my $styles = "";
-            my $doinclude = 1;
-            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
-            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
-
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            if ( $doinclude ) { push(@ddffile, $ddfline); }
-
-            $counter++; # increasing the counter
-        }
-
-        # creating the DDF file
-
-        my $ddffilename = $cabinetfile;
-        $ddffilename =~ s/.cab/.ddf/;
-        $ddfdir =~ s/[\/\\]\s*$//;
-        $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
-
-        installer::files::save_file($ddffilename ,\@ddffile);
-        my $infoline = "Created ddf file: $ddffilename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        # lines in ddf files must not be longer than 256 characters
-        check_ddf_file(\@ddffile, $ddffilename);
-
-        # Writing the makecab system call
-
-        # my $oneline = "makecab.exe /F " . $ddffilename . "\n";
-        my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-        if ( $installer::globals::isunix )
-        {
-            $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-        }
-
-        push(@cabfilelist, $oneline);
-
-        # collecting all ddf files
-        push(@installer::globals::allddffiles, $ddffilename);
-    }
-    elsif ( $installer::globals::one_cab_file )
-    {
-        my @ddffile = ();
-
-        my $cabinetfile = "";
-
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-        {
-            my $onefile = ${$filesref}[$i];
-            $cabinetfile = $onefile->{'cabinet'};
-            my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
-            my $uniquename =  $onefile->{'uniquename'};
-
-            # to avoid lines with more than 256 characters, it can be useful to use relative paths
-            $sourcepath = make_relative_ddf_path($sourcepath);
-
-            if ( $i == 0 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
-
-            my $styles = "";
-            my $doinclude = 1;
-            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
-            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
-
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            if ( $doinclude ) { push(@ddffile, $ddfline); }
-        }
-
-        # creating the DDF file
-
-        my $ddffilename = $cabinetfile;
-        $ddffilename =~ s/.cab/.ddf/;
-        $ddfdir =~ s/[\/\\]\s*$//;
-        $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
-
-        installer::files::save_file($ddffilename ,\@ddffile);
-        my $infoline = "Created ddf file: $ddffilename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        # lines in ddf files must not be longer than 256 characters
-        check_ddf_file(\@ddffile, $ddffilename);
-
-        # Writing the makecab system call
-
-        my $oneline = "makecab.exe /F " . $ddffilename . "\n";
-        if ( $installer::globals::isunix )
-        {
-            $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /F " . $ddffilename . "\n";
-        }
-
-        push(@cabfilelist, $oneline);
-
-        # collecting all ddf files
-        push(@installer::globals::allddffiles, $ddffilename);
-    }
     else
     {
-        installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "create_media_table");
+        installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "generate_cab_file_list");
     }
 
     installer::logger::include_timestamp_into_logfile("Performance Info: ddf file generation end");
@@ -616,7 +397,7 @@ sub save_packorder
             if ( $oneline =~ /^\s*\.Set\s+CabinetName.*\=(.*?)\s*$/ ) { $cabinetfile = $1; }
             if ( $oneline =~ /^\s*\.Set\s+/ ) { next; }
 
-            if ( $oneline =~ /^\s*\"(.*?)\"\s+(.*?)\s*$/ )
+            if ( $oneline =~ /^\s*\"(.*?)\"\s+\"(.*?)\"\s*$/ )
             {
                 my $sourcefile = $1;
                 my $uniquefilename = $2;
@@ -727,21 +508,6 @@ sub create_msi_database
     }
 }
 
-#####################################################################
-# Returning the value from sis.mlf for Summary Information Stream
-#####################################################################
-
-sub get_value_from_sis_lng
-{
-    my ($language, $languagefile, $searchstring) = @_;
-
-    my $language_block = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $languagefile);
-    my $newstring = installer::windows::idtglobal::get_language_string_from_language_block($language_block, $language, $searchstring);
-    $newstring = "\"" . $newstring . "\"";
-
-    return $newstring;
-}
-
 #################################################################
 # Returning the msi version for the Summary Information Stream
 #################################################################
@@ -760,24 +526,6 @@ sub get_wordcount_for_sis
 {
     my $wordcount = "0";
     return $wordcount;
-}
-
-#################################################################
-# Returning the codepage for the Summary Information Stream
-#################################################################
-
-sub get_codepage_for_sis
-{
-    my ( $language ) = @_;
-
-    my $codepage = installer::windows::language::get_windows_encoding($language);
-
-    # Codepage 65001 does not work in Summary Information Stream
-    if ( $codepage == 65001 ) { $codepage = 0; }
-
-    # my $codepage = "1252";    # determine dynamically in a function
-    # my $codepage = "65001";       # UTF-8
-    return $codepage;
 }
 
 #################################################################
@@ -822,19 +570,6 @@ sub get_packagecode_for_sis
 }
 
 #################################################################
-# Returning the title for the Summary Information Stream
-#################################################################
-
-sub get_title_for_sis
-{
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    my $title = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    return $title;
-}
-
-#################################################################
 # Returning the author for the Summary Information Stream
 #################################################################
 
@@ -860,45 +595,6 @@ sub get_subject_for_sis
     $subject = "\"" . $subject . "\"";
 
     return $subject;
-}
-
-#################################################################
-# Returning the comment for the Summary Information Stream
-#################################################################
-
-sub get_comment_for_sis
-{
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    my $comment = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    return $comment;
-}
-
-#################################################################
-# Returning the keywords for the Summary Information Stream
-#################################################################
-
-sub get_keywords_for_sis
-{
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    my $keywords = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    return $keywords;
-}
-
-######################################################################
-# Returning the application name for the Summary Information Stream
-######################################################################
-
-sub get_appname_for_sis
-{
-    my ( $language, $languagefile, $searchstring ) = @_;
-
-    my $appname = get_value_from_sis_lng($language, $languagefile, $searchstring );
-
-    return $appname;
 }
 
 ######################################################################
@@ -932,19 +628,16 @@ sub write_summary_into_msi_database
         $msiinfo = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msiinfo.exe";
     }
 
-    my $sislanguage = "en-US";  # title, comment, keyword, and appname are always in English
-
     my $msiversion = get_msiversion_for_sis();
-    my $codepage = get_codepage_for_sis($language);
+    my $codepage = 0; # PID_CODEPAGE summary property in a signed short, therefore it is impossible to set 65001 here.
     my $template = get_template_for_sis($language, $allvariableshashref);
     my $guid = get_packagecode_for_sis();
-    my $title = get_title_for_sis($sislanguage,$languagefile, "OOO_SIS_TITLE");
+    my $title = "\"Installation database\"";
     my $author = get_author_for_sis();
     my $subject = get_subject_for_sis($allvariableshashref);
-    my $comment = get_comment_for_sis($sislanguage,$languagefile, "OOO_SIS_COMMENT");
-    $comment =~ s/\[ProductName\]/$allvariableshashref->{'PRODUCTNAME'}/;
-    my $keywords = get_keywords_for_sis($sislanguage,$languagefile, "OOO_SIS_KEYWORDS");
-    my $appname = get_appname_for_sis($sislanguage,$languagefile, "OOO_SIS_APPNAME");
+    my $comment = $allvariableshashref->{'PRODUCTNAME'};
+    my $keywords = "\"Install,MSI\"";
+    my $appname = "\"Windows Installer\"";
     my $security = get_security_for_sis();
     my $wordcount = get_wordcount_for_sis();
 
@@ -1208,27 +901,6 @@ sub copy_merge_modules_into_installset
         my $destfile = $installdir . $installer::globals::separator . $cabfile;
 
         installer::systemactions::copy_one_file($sourcefile, $destfile);
-    }
-}
-
-#################################################################
-# Copying the child projects into the
-# installation set
-#################################################################
-
-sub copy_child_projects_into_installset
-{
-    my ($installdir, $allvariables) = @_;
-
-    my $sourcefile = "";
-    my $destdir = "";
-
-    if ( $allvariables->{'UREPRODUCT'} )
-    {
-        $sourcefile = $installer::globals::urefile->{'sourcepath'};
-        $destdir = $installdir . $installer::globals::separator . $installer::globals::urefile->{'Subdir'};
-        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
     }
 }
 

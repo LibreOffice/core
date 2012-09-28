@@ -47,27 +47,4 @@ sub get_windows_language
     return $windowslanguage;
 }
 
-####################################################
-# Determining the Windows language ANSI-Codepage
-# English: 1252
-####################################################
-
-sub get_windows_encoding
-{
-    my ($language) = @_;
-
-    my $windowsencoding = "";
-
-    if ( $installer::globals::msiencoding->{$language} ) { $windowsencoding = $installer::globals::msiencoding->{$language}; }
-
-    if ( $windowsencoding eq "" ) { $windowsencoding = "0"; }   # setting value, if the language is not listed in the encodinglist
-
-    if ( $windowsencoding eq "0" ) { $windowsencoding = "65001"; }  # languages with "0" have to be available in UTF-8 (65001)
-
-    # Asian multilingual installation sets need a code neutral Windows Installer database -> $windowsencoding = 0
-    if (( $language eq "en-US" ) && (( $installer::globals::product =~ /suitemulti/i ) || ( $installer::globals::product =~ /officemulti/i ) || ( $installer::globals::product =~ /c05office/i ) || ( $installer::globals::added_english ))) { $windowsencoding = "0"; }
-
-    return $windowsencoding;
-}
-
 1;

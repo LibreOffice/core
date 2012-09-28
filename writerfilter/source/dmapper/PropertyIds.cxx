@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include "PropertyIds.hxx"
 #include <map>
@@ -316,6 +317,9 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_IS_VISIBLE: sName = "IsVisible"; break;
             case PROP_PAGE_STYLE_LAYOUT: sName = "PageStyleLayout"; break;
             case PROP_Z_ORDER: sName = "ZOrder"; break;
+            case PROP_EMBED_FONTS: sName = "EmbedFonts"; break;
+            case PROP_EMBED_SYSTEM_FONTS: sName = "EmbedSystemFonts"; break;
+            case PROP_SHADOW_FORMAT: sName = "ShadowFormat"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
@@ -324,10 +328,15 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
     }
     return aIt->second;
 }
+
+namespace
+{
+    class thePropertyNameSupplier : public rtl::Static<PropertyNameSupplier, PropertyNameSupplier> {};
+}
+
 PropertyNameSupplier& PropertyNameSupplier::GetPropertyNameSupplier()
 {
-    static PropertyNameSupplier aNameSupplier;
-    return aNameSupplier;
+    return thePropertyNameSupplier::get();
 }
 
 } //namespace dmapper

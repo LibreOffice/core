@@ -47,7 +47,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -115,13 +114,13 @@ public:
     /** @return
             The description of this object.
     */
-    virtual ::rtl::OUString SAL_CALL getAccessibleDescription()
+    virtual OUString SAL_CALL getAccessibleDescription()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return
             The name of this object.
     */
-    virtual ::rtl::OUString SAL_CALL getAccessibleName()
+    virtual OUString SAL_CALL getAccessibleName()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return
@@ -240,11 +239,11 @@ public:
     // XServiceInfo -----------------------------------------------------------
 
     /** @return  Whether the specified service is supported by this class. */
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return  A list of all supported services. */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -305,10 +304,10 @@ protected:
 
     /** Changes the name of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
-    inline void implSetName( const ::rtl::OUString& rName );
+    inline void implSetName( const OUString& rName );
     /** Changes the description of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
-    inline void implSetDescription( const ::rtl::OUString& rDescription );
+    inline void implSetDescription( const OUString& rDescription );
 
     /** Locks all mutex's and calculates the bounding box relative to the
         parent window.
@@ -344,9 +343,9 @@ protected:
 
 private:
     /** Localized name. */
-    ::rtl::OUString m_aName;
+    OUString m_aName;
     /** Localized description text. */
-    ::rtl::OUString m_aDescription;
+    OUString m_aDescription;
     ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
 
@@ -434,13 +433,13 @@ inline ::osl::Mutex* AccessibleGridControlBase::getOslGlobalMutex()
 }
 
 inline void AccessibleGridControlBase::implSetName(
-        const ::rtl::OUString& rName )
+        const OUString& rName )
 {
     m_aName = rName;
 }
 
 inline void AccessibleGridControlBase::implSetDescription(
-        const ::rtl::OUString& rDescription )
+        const OUString& rDescription )
 {
     m_aDescription = rDescription;
 }

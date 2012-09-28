@@ -28,10 +28,10 @@
 
 #include <svtools/acceleratorexecute.hxx>
 
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -388,9 +388,8 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
-    css::uno::Reference< css::frame::XModuleManager > xModuleDetection(
-        xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleDetection(
+        css::frame::ModuleManager::create(comphelper::getComponentContext(xSMGR)));
 
     ::rtl::OUString sModule;
     try
@@ -403,8 +402,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
-        xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
-        css::uno::UNO_QUERY_THROW);
+        css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(xSMGR)) );
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg;
     try
@@ -444,7 +442,7 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XURLTransformer > xParser(
-                css::util::URLTransformer::create( ::comphelper::ComponentContext(xSMGR).getUNOContext() ) );
+                css::util::URLTransformer::create( ::comphelper::getComponentContext(xSMGR) ) );
 
     // SAFE -> ----------------------------------
     aLock.reset();

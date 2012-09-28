@@ -63,6 +63,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     else if (m_xDstDoc.is())
     {
         MediaDescriptor aMediaDesc( aDescriptor );
+        bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
         OUString sFilterName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FILTERNAME(), OUString() );
 
         uno::Reference< io::XInputStream > xInputStream;
@@ -77,9 +78,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         }
 
         if ( !xInputStream.is() )
-        {
             return sal_False;
-        }
 
 #ifdef DEBUG_IMPORT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
@@ -101,11 +100,11 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
          m_sFilterName == "writer_OOXML" || m_sFilterName == "writer_OOXML_Text_Template" ) ?
             writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
 
-    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, eType));
+    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType));
     //create the tokenizer and domain mapper
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
-        writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream);
+        writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
         writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
 
         uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);
@@ -172,12 +171,29 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    uno::Reference< lang::XMultiServiceFactory > xFactory( xDoc, uno::UNO_QUERY );
    uno::Reference< beans::XPropertySet > xSettings( xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
 
+   xSettings->setPropertyValue( "AddFrameOffsets", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "UseOldNumbering", uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( "IgnoreFirstLineIndentInNumbering", uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( "DoNotResetParaAttrsForNumFont", uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( "UseFormerLineSpacing", uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( "AddParaSpacingToTableCells", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "UseFormerObjectPositioning", uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( "ConsiderTextWrapOnObjPos", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "UseFormerTextWrapping", uno::makeAny( sal_False ) );
+   xSettings->setPropertyValue( "TableRowKeep", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "IgnoreTabsAndBlanksForLineCalculation", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "InvertBorderSpacing", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "CollapseEmptyCellPara", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "TabOverflow", uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( "UnbreakableNumberings", uno::makeAny( sal_True ) );
 
    // Don't load the default style definitions to avoid weird mix
    xSettings->setPropertyValue( "StylesNoDefault", uno::makeAny( sal_True ) );
 
    xSettings->setPropertyValue("FloattableNomargins", uno::makeAny( sal_True ));
+   xSettings->setPropertyValue( "ClippedPictures", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "BackgroundParaOverDrawings", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "AddParaTableSpacing", uno::makeAny( sal_True ) );
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )

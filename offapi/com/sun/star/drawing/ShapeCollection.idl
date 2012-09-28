@@ -20,7 +20,6 @@
 #define __com_sun_star_drawing_ShapeCollection_idl__
 
 #include <com/sun/star/drawing/Shapes.idl>
-#include <com/sun/star/lang/XComponent.idl>
 
 
 module com { module sun { module star { module drawing {
@@ -32,17 +31,7 @@ module com { module sun { module star { module drawing {
     This service is used by the view f.e. to return a collection of
     <type>Shape</type> that are selected at the ui.
 */
-published service ShapeCollection
-{
-    /** gives access to the shapes
-     */
-    interface com::sun::star::drawing::XShapes;
-
-    /** allows controlling or observing the lifetime of this collection
-     */
-    interface com::sun::star::lang::XComponent;
-
-};
+published service ShapeCollection : com::sun::star::drawing::XShapes;
 
 
 }; }; }; };

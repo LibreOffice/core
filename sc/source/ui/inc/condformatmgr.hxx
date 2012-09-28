@@ -35,7 +35,6 @@
 #include <svtools/headbar.hxx>
 
 #include "conditio.hxx"
-#include "rangelst.hxx"
 #include "document.hxx"
 
 #include <map>
@@ -80,7 +79,7 @@ private:
 class ScCondFormatManagerDlg : public ModalDialog
 {
 public:
-    ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScRangeList& rList, const ScAddress& rPos);
+    ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos);
     ~ScCondFormatManagerDlg();
 
     ScConditionalFormatList* GetConditionalFormatList();
@@ -100,7 +99,6 @@ private:
     ScCondFormatManagerCtrl maCtrlManager;
 
     ScDocument* mpDoc;
-    const ScRangeList& mrRangeList;
     ScAddress maPos;
 
     DECL_LINK(RemoveBtnHdl, void*);

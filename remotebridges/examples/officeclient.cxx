@@ -24,7 +24,7 @@
 
 #include <com/sun/star/uno/XNamingService.hpp>
 
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/registry/ImplementationRegistration.hpp>
 
 #include <com/sun/star/connection/XConnector.hpp>
 
@@ -94,10 +94,7 @@ void OfficeClientMain::registerServices( )
     // register services.
     // Note : this needs to be done only once and is in general done by the setup
     Reference < XImplementationRegistration > rImplementationRegistration(
-
-        m_xSMgr->createInstance(
-            OUString("com.sun.star.registry.ImplementationRegistration")),
-        UNO_QUERY );
+        ImplementationRegistration::create(m_xSMgr) );
 
     if( ! rImplementationRegistration.is() )
     {

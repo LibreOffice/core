@@ -128,6 +128,8 @@ sub create_removefile_table
         $removefile{'Component_'} = get_removefile_component($onelink);
         $removefile{'FileName'} = get_removefile_filename($onelink);
         $removefile{'DirProperty'} = get_removefile_dirproperty($onelink);
+        # fdo#44565 do not remove empty Desktop folder
+        if ( $removefile{'DirProperty'} eq $installer::globals::desktopfolder ) { next; }
         $removefile{'InstallMode'} = get_removefile_installmode($onelink);
 
         my $oneline = $removefile{'FileKey'} . "\t" . $removefile{'Component_'} . "\t" . $removefile{'FileName'} . "\t"

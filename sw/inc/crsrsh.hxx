@@ -137,7 +137,7 @@ struct SwContentAtPos
         nDist = 0; // #i23726#
     }
 
-    sal_Bool IsInProtectSect() const;
+    bool IsInProtectSect() const;
     bool     IsInRTLText()const;
 };
 
@@ -295,9 +295,9 @@ protected:
     void PaMCorrAbs(const SwNodeIndex &rOldNode, const SwPosition &rNewPos,
                     const xub_StrLen nOffset = 0 );
 
-    sal_Bool _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
+    bool _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
 
-    bool SetInFrontOfLabel( sal_Bool bNew );
+    bool SetInFrontOfLabel( bool bNew );
 
     void RefreshBlockCursor();
 
@@ -321,7 +321,7 @@ public:
 
     SwPaM * CreateCrsr();
     ///< delete the current cursor and make the following into the current
-    sal_Bool DestroyCrsr();
+    bool DestroyCrsr();
     ///< transform TableCursor to normal cursor, nullify Tablemode
     void TblCrsrToCursor();
     ///< enter block mode, change normal cursor into block cursor
@@ -525,7 +525,7 @@ public:
     // Check if selection is within one paragraph.
 
     //Should WaitPtr be activated for Clipboard.
-    sal_Bool ShouldWait() const;
+    bool ShouldWait() const;
 
     // Check if selection is within one paragraph.
     inline sal_Bool IsSelOnePara() const;
@@ -655,7 +655,7 @@ public:
 
     const SwShellTableCrsr* GetTableCrsr() const { return pTblCrsr; }
     SwShellTableCrsr* GetTableCrsr() { return pTblCrsr; }
-    sal_uInt16 UpdateTblSelBoxes();
+    size_t UpdateTblSelBoxes();
 
     sal_Bool GotoFtnTxt();      ///< jump from content to footnote
     sal_Bool GotoFtnAnchor();   ///< jump from footnote to anchor
@@ -728,11 +728,11 @@ public:
     sal_Bool IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
     sal_Bool IsStartSentence() const;
     sal_Bool IsEndSentence() const;
-    sal_Bool IsSttPara() const;
-    sal_Bool IsEndPara() const;
+    bool IsSttPara() const;
+    bool IsEndPara() const;
     sal_Bool IsStartOfDoc() const;
     sal_Bool IsEndOfDoc() const;
-    sal_Bool IsInFrontOfLabel() const;
+    bool IsInFrontOfLabel() const;
     sal_Bool IsAtLeftMargin()   const       { return IsAtLRMargin( sal_True ); }
     sal_Bool IsAtRightMargin(sal_Bool bAPI = sal_False) const   { return IsAtLRMargin( sal_False, bAPI ); }
 

@@ -104,7 +104,7 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ en-US ] = "Property";
+        Text [ en-US ] = "~Property";
     };
 
     ListBox LB_PROPERTY

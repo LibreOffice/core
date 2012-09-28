@@ -62,6 +62,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
     ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 >                            xDefaultCalendar;
     ::com::sun::star::i18n::LocaleDataItem                                              aLocaleDataItem;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  aReservedWordSeq;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  aDateAcceptancePatterns;
     ::com::sun::star::uno::Sequence< sal_Int32 >                                        aGrouping;
     // cached items
     rtl::OUString               aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
@@ -147,6 +148,11 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getReservedWord() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getAllInstalledLocaleNames() const;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getDateAcceptancePatterns() const;
+
+    /** Override locale's date acceptance patterns.
+        An empty sequence resets the patterns to the locale's pattern sequence.
+     */
+    void setDateAcceptancePatterns( const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPatterns );
 
     /// same as the wrapper implementation but static
     static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getInstalledLocaleNames();

@@ -43,7 +43,7 @@ namespace connectivity
         if (m_pConnectionPool)
             m_pConnectionPool->acquire();
 
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         if (_rxAggregateDriver.is())
         {
             // transfer the (one and only) real ref to the aggregate to our member
@@ -57,7 +57,7 @@ namespace connectivity
             // set ourself as delegator
             m_xDriverAggregate->setDelegator( static_cast< XWeak* >( this ) );
         }
-        osl_decrementInterlockedCount( &m_refCount );
+        osl_atomic_decrement( &m_refCount );
     }
 
     //--------------------------------------------------------------------

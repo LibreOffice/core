@@ -163,7 +163,7 @@ void ScCondFormatManagerCtrl::Update()
     maWdManager.Update();
 }
 
-ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScRangeList& rList, const ScAddress& rPos):
+ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos):
     ModalDialog(pParent, ScResId(RID_SCDLG_COND_FORMAT_MANAGER)),
     maBtnAdd(this, ScResId(BTN_ADD)),
     maBtnRemove(this, ScResId(BTN_REMOVE)),
@@ -174,7 +174,6 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc
     mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : NULL),
     maCtrlManager(this, pDoc, mpFormatList, rPos),
     mpDoc(pDoc),
-    mrRangeList(rList),
     maPos(rPos)
 {
     FreeResource();

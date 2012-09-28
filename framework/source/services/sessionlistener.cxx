@@ -56,7 +56,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <osl/time.h>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/internaloptions.hxx>
@@ -146,7 +145,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         // in case of synchronous call the caller should do saveDone() call himself!
 
         css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
-        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionSave");
         xURLTransformer->parseStrict(aURL);
@@ -179,7 +178,7 @@ void SessionListener::QuitSessionQuietly()
         // it is done synchronously to avoid conflict with normal quit process
 
         css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
-        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionQuietQuit");
         xURLTransformer->parseStrict(aURL);
@@ -262,7 +261,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionRestore");
-        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
+        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
         xURLTransformer->parseStrict(aURL);
         Sequence< PropertyValue > args;
         xDispatch->addStatusListener(this, aURL);

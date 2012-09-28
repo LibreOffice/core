@@ -25,8 +25,6 @@ import org.openoffice.xmerge.merger.Iterator;
  *  It is based upon a simple <code>Object</code> array.</p>
  *
  * <p>Note: this class is not thread safe for performance reasons.</p>
- *
- *  @author smak
  */
 public final class ObjectArrayIterator implements Iterator {
 

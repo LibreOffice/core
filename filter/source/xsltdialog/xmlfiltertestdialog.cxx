@@ -26,27 +26,28 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/frame/XConfigManager.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#include <com/sun/star/xml/XImportFilter.hpp>
-#include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/XConfigManager.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <comphelper/oslfile2streamwrap.hxx>
-#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/xml/XImportFilter.hpp>
+#include <com/sun/star/xml/XExportFilter.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-#include "com/sun/star/system/XSystemShellExecute.hpp"
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <comphelper/oslfile2streamwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -72,6 +73,7 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
+using namespace com::sun::star::system;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 
@@ -146,7 +148,6 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
 XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF ) :
     ModalDialog( pParent, ResId( DLG_XML_FILTER_TEST_DIALOG, rResMgr ) ),
     mxMSF( rxMSF ),
-    mrResMgr( rResMgr ),
 
     maFLExport( this, ResId( FL_EXPORT, rResMgr ) ),
     maFTExportXSLT( this, ResId( FT_EXPORT_XSLT, rResMgr ) ),
@@ -186,12 +187,9 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
         if( xCfgMgr.is() )
             sDTDPath = xCfgMgr->substituteVariables( sDTDPath );
 
-        mxGlobalBroadcaster = Reference < XEventBroadcaster >::query( mxMSF->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" )) ) );
-        if ( mxGlobalBroadcaster.is() )
-        {
-            mxGlobalEventListener = new GlobalEventListenerImpl( this );
-            mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
-        }
+        mxGlobalBroadcaster = Reference < XEventBroadcaster >( GlobalEventBroadcaster::create(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+        mxGlobalEventListener = new GlobalEventListenerImpl( this );
+        mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
     }
     catch( const Exception& )
     {
@@ -567,8 +565,9 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
 
 void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
 {
-    ::com::sun::star::uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(comphelper::getProcessServiceFactory()->createInstance(DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), com::sun::star::uno::UNO_QUERY_THROW );
-    xSystemShellExecute->execute( rURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+    Reference< XSystemShellExecute > xSystemShellExecute(
+          SystemShellExecute::create(comphelper::getProcessComponentContext()) );
+    xSystemShellExecute->execute( rURL, rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
 }
 
 void XMLFilterTestDialog::onImportBrowse()

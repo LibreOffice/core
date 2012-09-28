@@ -48,7 +48,16 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 
 .DELETE_ON_ERROR:
 
+# by default gbuild use /bin/sh
+# if you want to use a particular shell
+# you can export gb_SHELL=<path_to_shell>
+#
+ifdef gb_SHELL
+SHELL := $(gb_SHELL)
+else
 SHELL := /bin/sh
+endif
+
 true := T
 false :=
 define NEWLINE
@@ -74,12 +83,6 @@ ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
 else
 gb_PRODUCT := $(false)
-endif
-
-ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
-gb_SYMBOL := $(true)
-else
-gb_SYMBOL := $(false)
 endif
 
 gb_TIMELOG := 0
@@ -117,8 +120,18 @@ ENABLE_DEBUG_FOR := all
 endif
 endif
 
+ifeq ($(or $(ENABLE_SYMBOLS),$(enable_symbols)),FALSE)
+gb_SYMBOL := $(false)
+else
+ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
+gb_SYMBOL := $(true)
+else
 ifneq ($(gb_DEBUGLEVEL),0)
 gb_SYMBOL := $(true)
+else
+gb_SYMBOL := $(false)
+endif
+endif
 endif
 
 ifneq ($(nodep),)
@@ -146,7 +159,8 @@ include $(GBUILDDIR)/Helper.mk
 include $(GBUILDDIR)/TargetLocations.mk
 
 $(eval $(call gb_Helper_init_registries))
-$(eval $(call gb_Helper_add_repositories,$(SRCDIR)))
+include $(SRCDIR)/Repository.mk
+include $(SRCDIR)/RepositoryExternal.mk
 $(eval $(call gb_Helper_collect_libtargets))
 
 gb_Library_DLLPOSTFIX := lo
@@ -210,7 +224,12 @@ endif
 ifeq ($(gb_DEBUGLEVEL),0)
 gb_GLOBALDEFS += \
 	-DOPTIMIZE \
+
+ifeq ($(strip $(ASSERT_ALWAYS_ABORT)),FALSE)
+gb_GLOBALDEFS += \
 	-DNDEBUG \
+
+endif
 
 else
 gb_GLOBALDEFS += \
@@ -268,6 +287,10 @@ ifeq ($(HAVE_THREADSAFE_STATICS),TRUE)
 gb_GLOBALDEFS += -DHAVE_THREADSAFE_STATICS
 endif
 
+ifeq ($(ENABLE_TELEPATHY),TRUE)
+gb_GLOBALDEFS += -DENABLE_TELEPATHY
+endif
+
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
 include $(GBUILDDIR)/Deliver.mk
@@ -304,6 +327,7 @@ include $(foreach class, \
 	Executable \
 	SdiTarget \
 	Package \
+	ExternalPackage \
 	CustomTarget \
 	ExternalProject \
 	Pagein \
@@ -314,11 +338,16 @@ include $(foreach class, \
 	JavaClassSet \
 	JunitTest \
 	Module \
+	UI \
 	UnoApiTarget \
 	UnoApi \
 	UnoApiMerge \
 	UnpackedTarball \
 	InternalUnoApi \
+	CliAssembly \
+	CliLibrary \
+	CliNativeLibrary \
+	CliUnoApi \
 	Zip \
 	AllLangZip \
 	Configuration \
@@ -374,6 +403,12 @@ gb_PYTHON := python
 else
 gb_PYTHONTARGET := $(call gb_Executable_get_target_for_build,python)
 gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
+endif
+
+ifneq (,$(SYSTEM_UCPP))
+gb_UCPPTARGET :=
+else
+gb_UCPPTARGET := $(call gb_Executable_get_target_for_build,ucpp)
 endif
 
 .PHONY: help

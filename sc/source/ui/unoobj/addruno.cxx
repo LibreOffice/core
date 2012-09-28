@@ -192,8 +192,8 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
     }
     else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
     {
-        ::formula::FormulaGrammar::AddressConvention aConv = aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) ?
-            ::formula::FormulaGrammar::CONV_OOO : ::formula::FormulaGrammar::CONV_XL_A1;
+        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) ?
+            ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  parse the file format string
         rtl::OUString sRepresentation;
@@ -215,7 +215,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
             }
 
             //  parse the rest like a UI string
-            bSuccess = ParseUIString( aUIString, aConv );
+            bSuccess = ParseUIString( aUIString, eConv );
         }
     }
     else
@@ -270,8 +270,8 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
     }
     else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
     {
-        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) ?
-            ::formula::FormulaGrammar::CONV_OOO : ::formula::FormulaGrammar::CONV_XL_A1;
+        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) ?
+            ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  generate file format string - always include sheet
         String aFormatStr;
@@ -284,7 +284,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
             sal_uInt16 nFlags = SCA_VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
                 nFlags |= SCA_TAB_3D;
-            aRange.aEnd.Format( aSecond, SCA_VALID | SCA_TAB_3D, pDoc, eConv );
+            aRange.aEnd.Format( aSecond, nFlags, pDoc, eConv );
             aFormatStr.Append( aSecond );
         }
         aRet <<= rtl::OUString( aFormatStr );

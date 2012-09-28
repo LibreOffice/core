@@ -130,7 +130,6 @@ class ExtMgrDialog : public ModelessDialog,
     bool                 m_bProgressChanged;
     bool                 m_bStartProgress;
     bool                 m_bStopProgress;
-    bool                 m_bUpdateWarning;
     bool                 m_bEnableWarning;
     bool                 m_bDisableWarning;
     bool                 m_bDeleteWarning;

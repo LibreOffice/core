@@ -29,7 +29,10 @@
 #ifndef _OSL_INTERLOCK_H_
 #define _OSL_INTERLOCK_H_
 
-#include <sal/types.h>
+#include "sal/config.h"
+
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,20 +41,63 @@ extern "C" {
 typedef sal_Int32 oslInterlockedCount;
 
 /** Increments the count variable addressed by pCount.
-    @param pCount Address of counter variable
-    @return The result of the operation is zero, the value of the count variable.
+    @param pCount Address of count variable
+    @return The adjusted value of the count variable.
 */
 SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount);
 
 /** Decrement the count variable addressed by pCount.
-    @param pCount Address of counter variable
-    @return The result of the operation is the new value is of the count variable.
+    @param pCount Address of count variable
+    @return The adjusted value of the count variable.
 */
 SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount);
+
+
+/// @cond INTERNAL
+
+/** Increments the count variable addressed by p.
+
+    @attention This functionality should only be used internally within
+    LibreOffice.
+
+    @param p Address of count variable
+    @return The adjusted value of the count variable.
+
+    @since LibreOffice 3.7
+*/
+#if defined( HAVE_GCC_BUILTIN_ATOMIC )
+#    define osl_atomic_increment(p)  __sync_add_and_fetch((p), 1)
+#elif defined( _MSC_VER )
+#    define osl_atomic_increment(p) _InterlockedIncrement((p))
+#else
+#    define osl_atomic_increment(p) osl_incrementInterlockedCount((p))
+#endif
+
+
+/** Decrement the count variable addressed by p.
+
+    @attention This functionality should only be used internally within
+    LibreOffice.
+
+    @param p Address of count variable
+    @return The adjusted value of the count variable.
+
+    @since LibreOffice 3.7
+*/
+#if defined( HAVE_GCC_BUILTIN_ATOMIC )
+#    define osl_atomic_decrement(p) __sync_sub_and_fetch((p), 1)
+#elif defined( _MSC_VER )
+#    define osl_atomic_decrement(p) _InterlockedDecrement((p))
+#else
+#    define osl_atomic_decrement(p) osl_decrementInterlockedCount((p))
+#endif
+
+/// @endcond
 
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif  /* _OSL_INTERLOCK_H_ */
 

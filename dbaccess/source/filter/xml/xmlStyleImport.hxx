@@ -44,8 +44,6 @@ namespace dbaxml
         SvXMLStylesContext*         pStyles;
         com::sun::star::uno::Any    aConditionalFormat;
         sal_Int32                   m_nNumberFormat;
-        sal_Bool                    bConditionalFormatCreated : 1;
-        sal_Bool                    bParentSet : 1;
 
         ODBFilter& GetOwnImport();
 

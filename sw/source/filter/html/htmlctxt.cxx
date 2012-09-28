@@ -67,8 +67,6 @@ class _HTMLAttrContext_SaveDoc
 
     sal_Bool bStripTrailingPara : 1;    // letzen Absatz entfernen?
     sal_Bool bKeepNumRules : 1;         // Numerierung beibehalten?
-    sal_Bool bPopStack : 1;             // Stack-Elemente oberhalb des
-                                    // zu schliessenden entfernen?
     sal_Bool bFixHeaderDist : 1;
     sal_Bool bFixFooterDist : 1;
 
@@ -78,7 +76,6 @@ public:
         pPos( 0 ), pAttrTab( 0 ),
         nContextStMin( USHRT_MAX ), nContextStAttrMin( USHRT_MAX ),
         bStripTrailingPara( sal_False ), bKeepNumRules( sal_False ),
-        bPopStack( sal_False ),
         bFixHeaderDist( sal_False ), bFixFooterDist( sal_False )
     {}
 

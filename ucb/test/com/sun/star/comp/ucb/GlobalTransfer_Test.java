@@ -21,7 +21,6 @@ package com.sun.star.comp.ucb;
 import complexlib.ComplexTestCase;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.task.XInteractionAbort;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.task.XInteractionContinuation;
@@ -32,7 +31,6 @@ import com.sun.star.ucb.NameClashResolveRequest;
 import com.sun.star.ucb.TransferCommandOperation;
 import com.sun.star.ucb.XCommandEnvironment;
 import com.sun.star.ucb.XCommandProcessor;
-import com.sun.star.ucb.XInteractionReplaceExistingData;
 import com.sun.star.ucb.XInteractionSupplyName;
 import com.sun.star.ucb.XProgressHandler;
 import com.sun.star.uno.AnyConverter;
@@ -66,6 +64,7 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
            XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
            oObj
             = xMSF.createInstance( "com.sun.star.ucb.UniversalContentBroker" );
+               // unconfigured instance
         }
         catch(com.sun.star.uno.Exception e) {
             e.printStackTrace((PrintWriter)log);

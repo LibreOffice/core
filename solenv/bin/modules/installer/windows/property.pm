@@ -399,15 +399,8 @@ sub set_important_properties
     }
 
     # Setting .NET requirements
-    if ( $installer::globals::required_dotnet_version ne "" )
-    {
-        my $onepropertyline = "REQUIRED_DOTNET_VERSION" . "\t" . $installer::globals::required_dotnet_version . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-
-        $onepropertyline = "DOTNET_SUFFICIENT" . "\t" . "1" . "\n"; # default value for found .NET
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
+    push @{$propertyfile}, "REQUIRED_DOTNET_VERSION" . "\t" . "2.0.0.0" . "\n";
+    push @{$propertyfile}, "DOTNET_SUFFICIENT" . "\t" . "1" . "\n"; # default value for found .NET
 }
 
 #######################################################
@@ -418,10 +411,14 @@ sub set_ms_file_types_properties
 {
     my ($propertyfile) = @_;
 
+# we do not register PPSM, PPAM, and XLAM file types in
+# setup_native\source\win32\customactions\reg4allmsdoc\reg4allmsi.cxx
+# (probably because LibreOffice can't deal with them properly (?)
+
     push(@{$propertyfile}, "REGISTER_PPS"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_PPSX" . "\t" . "0" . "\n");
-    push(@{$propertyfile}, "REGISTER_PPSM" . "\t" . "0" . "\n");
-    push(@{$propertyfile}, "REGISTER_PPAM" . "\t" . "0" . "\n");
+#    push(@{$propertyfile}, "REGISTER_PPSM" . "\t" . "0" . "\n");
+#    push(@{$propertyfile}, "REGISTER_PPAM" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_PPT"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_PPTX" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_PPTM" . "\t" . "0" . "\n");
@@ -441,7 +438,7 @@ sub set_ms_file_types_properties
     push(@{$propertyfile}, "REGISTER_XLSX" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLSM" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLSB" . "\t" . "0" . "\n");
-    push(@{$propertyfile}, "REGISTER_XLAM" . "\t" . "0" . "\n");
+#    push(@{$propertyfile}, "REGISTER_XLAM" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLT"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLTX" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLTM" . "\t" . "0" . "\n");
@@ -523,7 +520,6 @@ sub update_property_table
 ####################################################################################
 # Setting language specific Properties in file Property.idt dynamically
 # Adding:
-# is1033 = 1
 # isMulti = 1
 ####################################################################################
 
@@ -533,13 +529,6 @@ sub set_languages_in_property_table
 
     my $properyfilename = $basedir . $installer::globals::separator . "Property.idt";
     my $propertyfile = installer::files::read_file($properyfilename);
-
-    # Setting the component properties saved in %installer::globals::languageproperties
-    foreach my $localproperty ( keys %installer::globals::languageproperties )
-    {
-        $onepropertyline =  $localproperty . "\t" . $installer::globals::languageproperties{$localproperty} . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
 
     # Setting the info about multilingual installation in property "isMulti"
 

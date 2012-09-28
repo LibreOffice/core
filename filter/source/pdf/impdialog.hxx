@@ -419,8 +419,6 @@ class ImpPDFTabLinksPage : public SfxTabPage
     RadioButton                 maRbOpnLnksBrowser;
     sal_Bool                    mbOpnLnksBrowserUserState;
 
-    long nWidth;
-
     DECL_LINK( ClickRbOpnLnksDefaultHdl, void* );
     DECL_LINK( ClickRbOpnLnksBrowserHdl, void* );
 

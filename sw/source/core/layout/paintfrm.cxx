@@ -345,8 +345,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
 //To be able to save the statics so the paint is more or lees reentrant.
 class SwSavePaintStatics
 {
-    sal_Bool            bSFlyMetafile,
-                        bSPageOnly;
+    sal_Bool            bSFlyMetafile;
     ViewShell          *pSGlobalShell;
     OutputDevice       *pSFlyMetafileOut;
     SwFlyFrm           *pSRetoucheFly,
@@ -3122,13 +3121,16 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
                                             pPrintData,
-                                            aPaintRect,
+                                            pPage->Frm(),
                                             &aPageBackgrdColor,
                                             (pPage->IsRightToLeft() ? true : false),
                                             &aSwRedirector );
                     pLines->PaintLines( pSh->GetOut() );
                     pLines->LockLines( sal_False );
                 }
+
+                if ( pSh->GetDoc()->get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS ) )
+                pPage->PaintBaBo( aPaintRect, pPage, sal_True, /*bOnlyTxtBackground=*/true );
 
                 if( pSh->GetWin() )
                 {
@@ -3166,7 +3168,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                     pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(),
                                             pPrintData,
-                                            aPaintRect,
+                                            pPage->Frm(),
                                             &aPageBackgrdColor,
                                             (pPage->IsRightToLeft() ? true : false),
                                             &aSwRedirector );
@@ -4614,6 +4616,15 @@ lcl_MakeBorderLine(SwRect const& rRect,
         aEnd.setY(fStartY);
     }
 
+    // WHen rendering to very small (virtual) devices, like when producing
+    // page thumbnails in a mobile device app, the line geometry can end up
+    // bogus (negative width or height), so just ignore such border lines.
+    // Otherwise we will run into assertions later in lcl_TryMergeBorderLine()
+    // at least.
+    if (aEnd.getX() < aStart.getX() ||
+        aEnd.getY() < aStart.getY())
+        return;
+
     double const nExtentLeftStart = (isLeftOrTopBorder == isVertical)
         ?   lcl_GetExtent(pStartNeighbour, 0)
         :   lcl_GetExtent(0, pStartNeighbour);
@@ -5997,7 +6008,7 @@ SwRect SwPageFrm::GetBoundRect() const
 |*************************************************************************/
 
 void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
-                       const sal_Bool bLowerBorder ) const
+                       const sal_Bool bLowerBorder, const bool bOnlyTxtBackground ) const
 {
     if ( !pPage )
         pPage = FindPageFrm();
@@ -6017,18 +6028,19 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     // OD 20.11.2002 #104598# - take care of page margin area
     // Note: code move from <SwFrm::PaintBackground(..)> to new method
     // <SwPageFrm::Paintmargin(..)>.
-    if ( IsPageFrm() )
+    if ( IsPageFrm() && !bOnlyTxtBackground)
     {
         static_cast<const SwPageFrm*>(this)->PaintMarginArea( rRect, pGlobalShell );
     }
 
     // paint background
     {
-        PaintBackground( rRect, pPage, rAttrs, sal_False, bLowerBorder );
+        PaintBackground( rRect, pPage, rAttrs, sal_False, bLowerBorder, bOnlyTxtBackground );
     }
 
     // OD 06.08.2002 #99657# - paint border before painting background
     // paint grid for page frame and paint border
+    if (!bOnlyTxtBackground)
     {
         SwRect aRect( rRect );
         if( IsPageFrm() )
@@ -6050,7 +6062,8 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
 void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                               const SwBorderAttrs & rAttrs,
                              const sal_Bool bLowerMode,
-                             const sal_Bool bLowerBorder ) const
+                             const sal_Bool bLowerBorder,
+                             const bool bOnlyTxtBackground ) const
 {
     // OD 20.01.2003 #i1837# - no paint of table background, if corresponding
     // option is *not* set.
@@ -6075,7 +6088,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     SvxBrushItem* pTmpBackBrush = 0;
     const Color* pCol;
     SwRect aOrigBackRect;
-    const sal_Bool bPageFrm = IsPageFrm();
+    const bool bPageFrm = IsPageFrm();
     sal_Bool bLowMode = sal_True;
 
     sal_Bool bBack = GetBackgroundBrush( pItem, pCol, aOrigBackRect, bLowerMode );
@@ -6178,8 +6191,9 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                         ///     background transparency have to be considered
                         ///     Set missing 5th parameter to the default value GRFNUM_NO
                         ///         - see declaration in /core/inc/frmtool.hxx.
-                        ::DrawGraphic( pItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
-                                bConsiderBackgroundTransparency );
+                        if (IsTxtFrm() || !bOnlyTxtBackground)
+                            ::DrawGraphic( pItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
+                                    bConsiderBackgroundTransparency );
                     }
                 }
                 if( pCol )
@@ -6598,7 +6612,7 @@ void SwColumnFrm::PaintSubsidiaryLines( const SwPageFrm *,
 void SwSectionFrm::PaintSubsidiaryLines( const SwPageFrm * pPage,
                                         const SwRect & rRect ) const
 {
-    const sal_Bool bNoLowerColumn = !Lower() || !Lower()->IsColumnFrm();
+    const bool bNoLowerColumn = !Lower() || !Lower()->IsColumnFrm();
     if ( bNoLowerColumn )
     {
         SwLayoutFrm::PaintSubsidiaryLines( pPage, rRect );
@@ -6667,7 +6681,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 
     const bool bFlys = pPage->GetSortedObjs() ? true : false;
 
-    const bool bCell = IsCellFrm() ? true : false;
+    const bool bCell = IsCellFrm();
     // use frame area for cells
     // OD 13.02.2003 #i3662# - for section use also frame area
     const bool bUseFrmArea = bCell || IsSctFrm();

@@ -221,7 +221,7 @@ public:
 
     LanguageType GetLanguage() const            { return maLocale.meLanguage;}
 
-    const String& GetFormatstring() const   { return sFormatstring; }
+    const OUString& GetFormatstring() const   { return sFormatstring; }
 
     // Build a format string of application defined keywords
     String GetMappedFormatstring( const NfKeywordTable& rKeywords,
@@ -458,7 +458,7 @@ public:
 
 private:
     ImpSvNumFor NumFor[4];          // Array for the 4 subformats
-    String sFormatstring;           // The format code string
+    OUString sFormatstring;         // The format code string
     String sComment;                // Comment, since number formatter version 6
     double fLimit1;                 // Value for first condition
     double fLimit2;                 // Value for second condition

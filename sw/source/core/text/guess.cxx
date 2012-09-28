@@ -192,7 +192,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         nBreakWidth = nMinSize;
 
         // The following comparison should always give sal_True, otherwise
-        // a pixel rounding error in GetTxtBreak will appear
+        // there likely has been a pixel rounding error in GetTxtBreak
         if ( nBreakWidth <= nLineWidth )
         {
             if( nItalic && ( nBreakPos + 1 ) >= rInf.GetTxt().Len() )

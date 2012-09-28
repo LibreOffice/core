@@ -79,8 +79,7 @@ IconChoicePage::IconChoicePage( Window *pParent, const ResId &rResId,
 :   TabPage                   ( pParent, rResId ),
     pSet                      ( &rAttrSet ),
     bHasExchangeSupport       ( sal_False ),
-    pDialog                   ( NULL ),
-    bStandard                 ( sal_False )
+    pDialog                   ( NULL )
 {
     SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
 }

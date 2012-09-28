@@ -79,7 +79,21 @@ public:
 
     void CheckChangedList(const editeng::SortedAutoCompleteStrings& rNewLst);
 
-    bool GetWordsMatching(String aMatch, std::vector<String>& aWords) const;
+    // Resets the current position within the tree to its root node.
+    void returnToRoot();
+
+    // Advances to a given node within the AutoComplete tree.
+    void gotoNode(OUString sNode);
+
+    // Advances from the current position towards the node keyed with cKey.
+    void advance(const sal_Unicode cKey);
+
+    // Goes back one char within the tree, except if the current node is already the root node.
+    void goBack();
+
+    // Returns all words matching a given prefix aMatch. If bIgnoreCurrentPos is set, the current
+    // position within the tree is ignored and replaced by aMatch.
+    bool GetWordsMatching(String aMatch, std::vector<String>& aWords, sal_Bool bIgnoreCurrentPos) const;
 };
 
 

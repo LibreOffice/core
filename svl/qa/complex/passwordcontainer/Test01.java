@@ -23,8 +23,6 @@ import com.sun.star.task.XInteractionHandler;
 import com.sun.star.task.XPasswordContainer;
 import com.sun.star.task.UrlRecord;
 import com.sun.star.task.UserRecord;
-import com.sun.star.task.XMasterPasswordHandling;
-
 import com.sun.star.uno.UnoRuntime;
 
 // import share.LogWriter;

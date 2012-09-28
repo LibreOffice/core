@@ -27,15 +27,6 @@
 #include "hi_factory.hxx"
     // PARAMETERS
 
-namespace ary
-{
-namespace idl
-{
-class CodeEntity;
-}
-}
-
-
 class HF_NaviSubRow;
 
 /** @resp
@@ -62,10 +53,6 @@ class HF_IdlNavigationBar : public HtmlFactory_Idl
     /** Adds the subrow to the o_rOut argument of the constructor.
     */
     DYN HF_NaviSubRow & Add_SubRow();
-
-  private:
-    const ary::idl::CodeEntity *
-                        pCe;
 };
 
 extern const String

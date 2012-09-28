@@ -22,8 +22,6 @@ import org.openoffice.xmerge.converter.palm.PdbUtil;
 
 /**
  *  Constants used for encoding and decoding the MiniCalc format.
- *
- *  @author   Herbie Ong
  */
 interface MinicalcConstants {
 

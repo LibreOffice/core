@@ -155,9 +155,9 @@ gb_GenCObject_get_source = $(WORKDIR)/$(1).c
 # defined by platform
 #  gb_CObject__command
 
-$(call gb_GenCObject_get_target,%) : $(call gb_GenCObject_get_source,%)
-	test -f $< || (echo "Missing generated source file $<" && false)
-	$(call gb_CObject__command,$@,$*,$<,$(call gb_GenCObject_get_dep_target,$*))
+$(call gb_GenCObject_get_target,%) :
+	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
+	$(call gb_CObject__command,$@,$*,$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCObject_get_dep_target,%) :
@@ -169,13 +169,13 @@ endif
 
 # GenCxxObject class
 
-gb_GenCxxObject_get_source = $(WORKDIR)/$(1).cxx
+gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(2))
 # defined by platform
 #  gb_CxxObject__command
 
-$(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
-	test -f $< || (echo "Missing generated source file $<" && false)
-	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_GenCxxObject_get_dep_target,$*))
+$(call gb_GenCxxObject_get_target,%) :
+	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
+	$(call gb_CxxObject__command,$@,$*,$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) :
@@ -493,7 +493,10 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
+$(call gb_LinkTarget_get_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSION :=
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_LinkTarget_get_dep_target,$(1))
@@ -516,8 +519,21 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCL
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSION :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSIONSCRIPT :=
 endif
+
+gb_LinkTarget_CXX_SUFFIX_$(1) := cxx
+
+endef
+
+define gb_LinkTarget_set_soversion_script
+$(call gb_LinkTarget_get_target,$(1)) : $(3)
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
+$(call gb_LinkTarget_add_auxtargets,$(1),$(call gb_LinkTarget_get_target,$(1)).$(2))
 
 endef
 
@@ -729,32 +745,18 @@ $$(call gb_Output_error,\
  gb_LinkTarget_add_linked_static_libs: use gb_LinkTarget_use_static_libraries instead.)
 endef
 
+# for a StaticLibrary, dependent libraries are not actually linked in
 define gb_LinkTarget_use_static_libraries
 ifneq (,$$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info, currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Cannot link against static library/libraries $$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)). Static libraries must be registered in Repository.mk))
 endif
 
-$(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $(2)
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2))
 
-$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_target,$$(lib)))
+$(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
-$$(foreach lib,$(2),$$(call gb_StaticLibrary_get_headers_target,$$(lib)))
-
-endef
-
-define gb_LinkTarget_add_linked_static_external_libs
-$$(call gb_Output_error,\
- gb_LinkTarget_add_linked_static_external_libs: use gb_LinkTarget_use_static_external_libraries instead.)
-endef
-
-# TODO: why do we need this?
-define gb_LinkTarget_use_static_external_libraries
-
-$(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $(2)
-
-$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_ExternalLibs_get_target,$$(lib)))
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : $$(foreach lib,$(2),$$(call gb_ExternalLibs_get_target,$$(lib)))
+	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
 
 endef
 
@@ -851,10 +853,11 @@ define gb_LinkTarget_add_generated_c_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 
-# Make just needs to know gb_GenCObject_get_source is a real target.
-# Then it can use implicit rule for gb_GenCObject_get_target.
-$(call gb_GenCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCObject_get_target,$(2))
+$(call gb_GenCObject_get_target,$(2)) : $(call gb_GenCObject_get_source,$(2))
+# Often gb_GenCObject_get_source does not have its own rule and is only a byproduct.
+# That's why we need this order-only dependency on gb_Helper_MISCDUMMY
+$(call gb_GenCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(4)) $(3)
 $(call gb_GenCObject_get_target,$(2)) : \
@@ -871,14 +874,16 @@ define gb_LinkTarget_add_generated_cxx_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
-# Make just needs to know gb_GenCxxObject_get_source is a real target.
-# Then it can use implicit rule for gb_GenCxxObject_get_target.
-$(call gb_GenCxxObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
+$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_GenCxxObject_get_source,$(2),$(1))
+# Often gb_GenCxxObject_get_source does not have its own rule and is only a byproduct.
+# That's why we need this order-only dependency on gb_Helper_MISCDUMMY
+$(call gb_GenCxxObject_get_source,$(2),$(1)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
+$(call gb_GenCxxObject_get_target,$(2)) : GEN_CXX_SOURCE := $(call gb_GenCxxObject_get_source,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -1096,7 +1101,7 @@ endef
 
 # Use sources from unpacked tarball of an external project
 define gb_LinkTarget_use_unpacked
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_target,$(2))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,$(2))
 
 endef
 
@@ -1112,11 +1117,29 @@ endef
 gb_LinkTarget_use_externals = \
  $(foreach external,$(2),$(call gb_LinkTarget_use_external,$(1),$(external)))
 
+define gb_LinkTarget_set_visibility_default
+$(call gb_LinkTarget_get_target,$(1)) : VISIBILITY := default
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : VISIBILITY := default
+endif
+
+endef
+
 define gb_LinkTarget_set_warnings_not_errors
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
 endif
+
+endef
+
+# Set suffix of C++ files, if different from 'cxx'
+#
+# This is useful for external libraries.
+#
+# gb_LinkTarget_set_generated_cxx_suffix linktarget used-suffix
+define gb_LinkTarget_set_generated_cxx_suffix
+gb_LinkTarget_CXX_SUFFIX_$(1) := $(2)
 
 endef
 

@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "comphelper/processfactory.hxx"
 #include "cppuhelper/factory.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/task/NoMasterException.hpp"
+#include "com/sun/star/task/PasswordContainer.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
-#include "com/sun/star/task/XMasterPasswordHandling.hpp"
-#include "com/sun/star/task/XPasswordContainer.hpp"
-#include "com/sun/star/task/XUrlContainer.hpp"
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
 #include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
@@ -111,26 +110,9 @@ namespace uui {
 
 //=========================================================================
 PasswordContainerHelper::PasswordContainerHelper(
-    uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory )
-{
-    OSL_ENSURE(xServiceFactory.is(), "no service factory given!");
-    if (xServiceFactory.is())
-        try
-        {
-            m_xPasswordContainer
-                = uno::Reference< task::XPasswordContainer >(
-                      xServiceFactory->
-                          createInstance(
-                              rtl::OUString(
-                                  RTL_CONSTASCII_USTRINGPARAM(
-                                     "com.sun.star.task.PasswordContainer"))),
-                      uno::UNO_QUERY);
-        }
-        catch (uno::Exception const &)
-        {}
-    OSL_ENSURE(m_xPasswordContainer.is(),
-               "unable to instanciate password container service");
-}
+    uno::Reference< uno::XComponentContext > const & xContext ):
+    m_xPasswordContainer(task::PasswordContainer::create(xContext))
+{}
 
 //=========================================================================
 bool PasswordContainerHelper::handleAuthenticationRequest(
@@ -155,20 +137,11 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
                 bDefaultUseSystemCredentials );
     }
 
-    uno::Reference< task::XPasswordContainer > xContainer(
-        m_xPasswordContainer );
-    uno::Reference< task::XUrlContainer > xUrlContainer(
-        m_xPasswordContainer, uno::UNO_QUERY );
-    OSL_ENSURE( xUrlContainer.is(), "Got no XUrlContainer!" );
-
-    if ( !xContainer.is() || !xUrlContainer.is() )
-        return false;
-
     if ( bCanUseSystemCredentials )
     {
         // Runtime / Persistent info avail for current auth request?
 
-        rtl::OUString aResult = xUrlContainer->findUrl(
+        rtl::OUString aResult = m_xPasswordContainer->findUrl(
             rURL.isEmpty() ? rRequest.ServerName : rURL );
         if ( !aResult.isEmpty() )
         {
@@ -185,7 +158,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
         }
     }
 
-    // xContainer works with userName passwdSequences pairs:
+    // m_xPasswordContainer works with userName passwdSequences pairs:
     if (rRequest.HasUserName && rRequest.HasPassword)
     {
         try
@@ -194,12 +167,12 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
             {
                 task::UrlRecord aRec;
                 if ( !rURL.isEmpty() )
-                    aRec = xContainer->find(rURL, xIH);
+                    aRec = m_xPasswordContainer->find(rURL, xIH);
 
                 if ( aRec.UserList.getLength() == 0 )
                 {
                     // compat: try server name.
-                    aRec = xContainer->find(rRequest.ServerName, xIH);
+                    aRec = m_xPasswordContainer->find(rRequest.ServerName, xIH);
                 }
 
                 if ( fillContinuation( false,
@@ -217,13 +190,13 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
             {
                 task::UrlRecord aRec;
                 if ( !rURL.isEmpty() )
-                    aRec = xContainer->findForName(
+                    aRec = m_xPasswordContainer->findForName(
                         rURL, rRequest.UserName, xIH);
 
                 if ( aRec.UserList.getLength() == 0 )
                 {
                     // compat: try server name.
-                    aRec = xContainer->findForName(
+                    aRec = m_xPasswordContainer->findForName(
                         rRequest.ServerName, rRequest.UserName, xIH);
                 }
 
@@ -265,13 +238,10 @@ bool PasswordContainerHelper::addRecord(
 
             if ( bPersist )
             {
-                uno::Reference< task::XMasterPasswordHandling > xMPH(
-                    m_xPasswordContainer, uno::UNO_QUERY_THROW );
-
                 // If persistent storing of passwords is not yet
                 // allowed, enable it.
-                if ( !xMPH->isPersistentStoringAllowed() )
-                    xMPH->allowPersistentStoring( sal_True );
+                if ( !m_xPasswordContainer->isPersistentStoringAllowed() )
+                    m_xPasswordContainer->allowPersistentStoring( sal_True );
 
                 m_xPasswordContainer->addPersistent( rURL,
                                                      rUsername,
@@ -286,13 +256,7 @@ bool PasswordContainerHelper::addRecord(
         }
         else
         {
-            uno::Reference< task::XUrlContainer >
-                xContainer( m_xPasswordContainer, uno::UNO_QUERY );
-            OSL_ENSURE( xContainer.is(), "Got no XUrlContainer!" );
-            if ( !xContainer.is() )
-                return false;
-
-            xContainer->addUrl( rURL, bPersist );
+            m_xPasswordContainer->addUrl( rURL, bPersist );
         }
     }
     catch ( task::NoMasterException const & )
@@ -308,8 +272,8 @@ bool PasswordContainerHelper::addRecord(
 //=========================================================================
 
 PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
-    const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
-: m_aPwContainerHelper( xSMgr )
+    const uno::Reference< uno::XComponentContext >& xContext )
+: m_aPwContainerHelper( xContext )
 {
 }
 
@@ -452,7 +416,7 @@ PasswordContainerInteractionHandler_CreateInstance(
     throw( uno::Exception )
 {
     lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new PasswordContainerInteractionHandler( rSMgr ) );
+        new PasswordContainerInteractionHandler( comphelper::getComponentContext(rSMgr) ) );
     return uno::Reference< uno::XInterface >::query( pX );
 }
 

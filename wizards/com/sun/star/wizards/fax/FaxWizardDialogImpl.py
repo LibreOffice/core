@@ -15,17 +15,25 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.fax.FaxWizardDialog import *
-from wizards.fax.FaxWizardDialog import *
-from wizards.fax.CGFaxWizard import *
-from wizards.fax.FaxDocument import *
-from wizards.ui.PathSelection import PathSelection
-from wizards.common.FileAccess import FileAccess
-from wizards.ui.event.UnoDataAware import UnoDataAware
-from wizards.ui.event.RadioDataAware import RadioDataAware
-from wizards.text.TextFieldHandler import TextFieldHandler
-from wizards.common.SystemDialog import SystemDialog
-from wizards.common.NoValidPathException import NoValidPathException
+import traceback
+from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno
+from .CGFaxWizard import CGFaxWizard
+from .FaxDocument import FaxDocument
+from .FaxWizardDialogConst import HID
+from ..ui.PathSelection import PathSelection
+from ..ui.event.UnoDataAware import UnoDataAware
+from ..ui.event.RadioDataAware import RadioDataAware
+from ..text.TextFieldHandler import TextFieldHandler
+from ..text.TextDocument import TextDocument
+from ..text.ViewHandler import ViewHandler
+from ..common.Configuration import Configuration
+from ..common.SystemDialog import SystemDialog
+from ..common.NoValidPathException import NoValidPathException
+from ..common.HelpIds import HelpIds
+from ..common.FileAccess import FileAccess
+from ..common.Desktop import Desktop
+from ..common.TextElement import TextElement
+from ..document.OfficeDocument import OfficeDocument
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.uno import RuntimeException
@@ -60,19 +68,17 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     @classmethod
     def main(self, args):
-        #only being called when starting wizard remotely
+        #Call the wizard remotely
         try:
             ConnectStr = \
                 "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
             xLocMSF = Desktop.connect(ConnectStr)
             lw = FaxWizardDialogImpl(xLocMSF)
-            lw.startWizard(xLocMSF, None)
-        except RuntimeException, e:
-            # TODO Auto-generated catch block
-            traceback.print_exc()
-        except Exception, e:
-            # TODO Auto-generated catch blocksetMaxStep
-            traceback.print_exc()
+            lw.startWizard(xLocMSF)
+        except Exception as e:
+			print ("Wizard failure exception " + str(type(e)) +
+				   " message " + str(e) + " args " + str(e.args) +
+				   traceback.format_exc())
 
     def startWizard(self, xMSF):
         self.running = True
@@ -178,8 +184,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.myFaxDoc.keepTypeFrame = \
                 (self.chkUseCommunicationType.State is not 0)
             self.myFaxDoc.killEmptyFrames()
-            self.bSaveSuccess = OfficeDocument.store(self.xMSF, TextDocument.xTextDocument,
-                self.sPath, "writer8_template")
+            self.bSaveSuccess = OfficeDocument.store(self.xMSF,
+                TextDocument.xTextDocument, self.sPath, "writer8_template")
             if self.bSaveSuccess:
                 self.saveConfiguration()
                 xIH = self.xMSF.createInstance( \
@@ -228,6 +234,30 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.myFaxDoc.xFrame.close(False)
         except CloseVetoException, e:
             traceback.print_exc()
+
+    def drawConstants(self):
+        '''Localise the template'''
+        constRangeList = self.searchFillInItems(1)
+        
+        for i in xrange(constRangeList.Count):
+            item = constRangeList.getByIndex(i)
+            text = item.String.lower()
+            aux = TextElement(item, self.resources.dictConstants[text],
+                "hint", self.xMSF)
+            aux.write()
+            
+    def searchFillInItems(self, typeSearch):
+        sd = TextDocument.xTextDocument.createSearchDescriptor()
+        
+        if typeSearch == 0:
+            sd.setSearchString("<[^>]+>")
+        elif typeSearch == 1:
+            sd.setSearchString("#[^#]+#")
+            
+        sd.setPropertyValue("SearchRegularExpression", True)
+        sd.setPropertyValue("SearchWords", True)
+        
+        return TextDocument.xTextDocument.findAll(sd)
 
     def insertRoadmap(self):
         self.addRoadmap()
@@ -427,6 +457,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.BusinessFiles[1][selectedItemPos], False)
             self.initializeElements()
             self.setElements()
+            self.drawConstants()
 
     def optPrivateFaxItemChanged(self):
         FaxWizardDialogImpl.lstBusinessStylePos = None

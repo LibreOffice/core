@@ -95,7 +95,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
 // -----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
 {
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     disposing();
     delete m_pSQLAnalyzer;
 

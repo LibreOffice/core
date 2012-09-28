@@ -76,15 +76,17 @@ private:
     rtl::OUString          m_sObjectPath;
     rtl::OUString          m_sObjectId;
     rtl::OUString          m_sURL;
-    rtl::OUString          m_sBindingUrl;
+    cmis::URL              m_aURL;
 
     // Members to be set for non-persistent content
     bool                   m_bTransient;
+    bool                   m_bIsFolder;
     libcmis::ObjectTypePtr m_pObjectType;
     std::map< std::string, libcmis::PropertyPtr > m_pObjectProps;
 
-    bool isFolder(const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv);
-    void setCmisProperty( std::string sName, std::string sValue );
+    bool isFolder( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+    void setCmisProperty( std::string sName, std::string sValue,
+            const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
     com::sun::star::uno::Any getBadArgExcept();
 
@@ -93,7 +95,10 @@ private:
             const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& rProperties,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-    bool exists( );
+    libcmis::Session* getSession( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+    libcmis::ObjectTypePtr getObjectType( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+
+    bool exists( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
 private:
     typedef rtl::Reference< Content > ContentRef;
@@ -124,8 +129,6 @@ private:
 
     sal_Bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
-
-    void resetAuthProvider( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
 public:
     Content( const com::sun::star::uno::Reference<
@@ -191,7 +194,7 @@ public:
 
     virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( );
 
-    libcmis::ObjectPtr getObject( ) throw ( libcmis::Exception );
+    libcmis::ObjectPtr getObject( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw ( libcmis::Exception );
 };
 
 }

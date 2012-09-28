@@ -2154,7 +2154,7 @@ inline bool lcl_FormatHasNegColor( const SvNumberformat* pFormat )
 
 inline bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
 {
-    return pFormat && (pFormat->GetFormatstring().Search( '(' ) != STRING_NOTFOUND);
+    return pFormat && (pFormat->GetFormatstring().indexOf('(') != -1);
 }
 
 namespace {
@@ -6578,10 +6578,20 @@ void ScInterpreter::ScSubTotal()
         const FormulaToken* p = pStack[ sp - nParamCount ];
         PushTempToken( *p );
         int nFunc = (int) ::rtl::math::approxFloor( GetDouble() );
-        if( nFunc < 1 || nFunc > 11 )
+        bool bIncludeHidden = true;
+        if (nFunc > 100)
+        {
+            // For opcodes 101 through 111, we need to skip hidden cells.
+            // Other than that these opcodes are identical to 1 through 11.
+            bIncludeHidden = false;
+            nFunc -= 100;
+        }
+
+        if (nFunc < 1 || nFunc > 11 || !bIncludeHidden)
             PushIllegalArgument();  // simulate return on stack, not SetError(...)
         else
         {
+            // TODO: Make use of bIncludeHidden flag. Then it's false, we do need to skip hidden cells.
             cPar = nParamCount - 1;
             glSubTotal = true;
             switch( nFunc )

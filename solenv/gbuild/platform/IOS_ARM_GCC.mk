@@ -88,7 +88,7 @@ gb_DEBUG_CFLAGS := -g -fno-inline
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command
-$(call gb_Output_announce,$(2),$(true),OCX,3)
+$(call gb_Output_announce,$(2).mm,$(true),OCX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
@@ -106,7 +106,7 @@ endef
 # ObjCObject class
 
 define gb_ObjCObject__command
-$(call gb_Output_announce,$(2),$(true),OCC,3)
+$(call gb_Output_announce,$(2).m,$(true),OCC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	mkdir -p $(dir $(call gb_ObjCObject_get_dep_target,$(2))) && \
@@ -248,13 +248,10 @@ endef
 
 # StaticLibrary class
 
-gb_StaticLibrary_DEFS :=
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
-gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
 
 gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
 	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
 gb_StaticLibrary_StaticLibrary_platform =
@@ -304,11 +301,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
-$(call gb_InstallModuleTarget_set_include,$(1),\
-	$(SOLARINC) \
-	$(SCP_INCLUDE) \
-)
-
 endef
 
 # ScpConvertTarget class
@@ -318,6 +310,11 @@ gb_ScpConvertTarget_ScpConvertTarget_platform :=
 # InstallScript class
 
 gb_InstallScript_EXT := .ins
+
+# CliAssemblyTarget class
+
+gb_CliAssemblyTarget_POLICYEXT :=
+gb_CliAssemblyTarget_get_dll :=
 
 # ExtensionTarget class
 

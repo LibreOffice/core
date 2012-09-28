@@ -17,6 +17,8 @@
  */
 package org.openoffice.accessibility;
 
+import javax.accessibility.AccessibleContext;
+
 import org.openoffice.java.accessibility.*;
 
 
@@ -103,7 +105,7 @@ public class PopupWindow extends java.awt.Window {
             javax.accessibility.AccessibleContext ac = layeredPane.getAccessibleContext();
 
             if (ac != null) {
-                ac.firePropertyChange(ac.ACCESSIBLE_CHILD_PROPERTY, null,
+                ac.firePropertyChange(AccessibleContext.ACCESSIBLE_CHILD_PROPERTY, null,
                     popupLayer.getAccessibleContext());
             }
         }
@@ -118,7 +120,7 @@ public class PopupWindow extends java.awt.Window {
             javax.accessibility.AccessibleContext ac = layeredPane.getAccessibleContext();
 
             if (ac != null) {
-                ac.firePropertyChange(ac.ACCESSIBLE_CHILD_PROPERTY,
+                ac.firePropertyChange(AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
                     popupLayer.getAccessibleContext(), null);
             }
         }

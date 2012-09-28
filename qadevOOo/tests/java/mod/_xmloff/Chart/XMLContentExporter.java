@@ -73,7 +73,7 @@ public class XMLContentExporter extends TestCase {
 
         try {
             log.println( "creating a chartdocument" );
-            xChartDoc = SOF.createChartDoc(null);;
+            xChartDoc = SOF.createChartDoc(null);
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

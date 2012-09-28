@@ -23,7 +23,6 @@ import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.ui.XImageManager;
 import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
 import com.sun.star.ui.XUIConfiguration;
@@ -33,7 +32,6 @@ import com.sun.star.ui.XUIConfigurationPersistence;
 
 // ---------- junit imports -----------------
 import lib.TestParameters;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

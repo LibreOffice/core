@@ -81,19 +81,19 @@ public:
         return m_aComboListBox.GetWindowExtentsRelative( pRelativeWindow );
     }
     // -----------------------------------------------------------------------------
-    virtual sal_Bool            IsActive() const
+    virtual bool            IsActive() const
     {
         return m_aComboListBox.IsActive();
     }
     // -----------------------------------------------------------------------------
-    virtual sal_Bool            IsEntryVisible( sal_uInt16 nPos ) const
+    virtual bool            IsEntryVisible( sal_uInt16 nPos ) const
     {
         sal_uInt16 nTopEntry = m_aComboListBox.GetTopEntry();
         sal_uInt16 nLines = m_aComboListBox.GetDisplayLineCount();
         return ( nPos >= nTopEntry && nPos < ( nTopEntry + nLines ) );
     }
     // -----------------------------------------------------------------------------
-    virtual sal_uInt16          GetDisplayLineCount() const
+    virtual sal_uInt16      GetDisplayLineCount() const
     {
         return m_aComboListBox.GetDisplayLineCount();
     }
@@ -108,37 +108,37 @@ public:
         return m_aComboListBox.GetStyle();
     }
     // -----------------------------------------------------------------------------
-    virtual sal_Bool            IsMultiSelectionEnabled() const
+    virtual bool            IsMultiSelectionEnabled() const
     {
         return m_aComboListBox.IsMultiSelectionEnabled();
     }
     // -----------------------------------------------------------------------------
-    virtual sal_uInt16          GetTopEntry() const
+    virtual sal_uInt16      GetTopEntry() const
     {
         return m_aComboListBox.GetTopEntry();
     }
     // -----------------------------------------------------------------------------
-    virtual sal_Bool            IsEntryPosSelected( sal_uInt16 nPos ) const
+    virtual bool            IsEntryPosSelected( sal_uInt16 nPos ) const
     {
         return m_aComboListBox.IsEntryPosSelected(nPos);
     }
     // -----------------------------------------------------------------------------
-    virtual sal_uInt16          GetEntryCount() const
+    virtual sal_uInt16      GetEntryCount() const
     {
         return m_aComboListBox.GetEntryCount();
     }
     // -----------------------------------------------------------------------------
-    virtual void    Select()
+    virtual void            Select()
     {
         m_aComboListBox.Select();
     }
     // -----------------------------------------------------------------------------
-    virtual void    SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect = sal_True )
+    virtual void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = sal_True )
     {
         m_aComboListBox.SelectEntryPos(nPos,bSelect);
     }
     // -----------------------------------------------------------------------------
-    virtual sal_uInt16          GetSelectEntryCount() const
+    virtual sal_uInt16      GetSelectEntryCount() const
     {
         return m_aComboListBox.GetSelectEntryCount();
     }
@@ -148,12 +148,12 @@ public:
         m_aComboListBox.SetNoSelection();
     }
     // -----------------------------------------------------------------------------
-    virtual sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const
+    virtual sal_uInt16      GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const
     {
         return m_aComboListBox.GetSelectEntryPos(nSelIndex);
     }
     // -----------------------------------------------------------------------------
-    virtual sal_Bool            IsInDropDown() const
+    virtual bool            IsInDropDown() const
     {
         return m_aComboListBox.IsInDropDown();
     }

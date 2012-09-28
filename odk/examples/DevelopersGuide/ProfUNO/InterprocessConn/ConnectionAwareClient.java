@@ -39,14 +39,11 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.io.IOException;
 import com.sun.star.connection.XConnector;
 import com.sun.star.connection.XConnection;
 
 import com.sun.star.beans.XPropertySet;
 
-import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XComponent;
 
 import com.sun.star.bridge.XBridgeFactory;

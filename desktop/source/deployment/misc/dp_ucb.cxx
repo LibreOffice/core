@@ -38,7 +38,7 @@
 #include "com/sun/star/ucb/CommandFailedException.hpp"
 #include "com/sun/star/ucb/ContentInfo.hpp"
 #include "com/sun/star/ucb/ContentInfoAttribute.hpp"
-
+#include "comphelper/processfactory.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -63,7 +63,8 @@ bool create_ucb_content(
         //          raise no such file dialogs, else no interaction for
         //          passwords, ...? xxx todo
         ::ucbhelper::Content ucbContent(
-            url, Reference<XCommandEnvironment>() );
+            url, Reference<XCommandEnvironment>(),
+            comphelper::getProcessComponentContext() );
 
         ucbContent.isFolder();
 

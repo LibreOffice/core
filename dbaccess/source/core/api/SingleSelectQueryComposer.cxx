@@ -28,8 +28,9 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -40,7 +41,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -257,8 +258,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
     m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
     m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getLegacyServiceFactory() );
-    Reference< XLocaleData > xLocaleData;
-    m_aContext.createComponent( "com.sun.star.i18n.LocaleData", xLocaleData );
+    Reference< XLocaleData4 > xLocaleData( LocaleData::create(m_aContext.getUNOContext()) );
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
     m_sDecimalSep = aData.decimalSeparator;
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OSingleSelectQueryComposer::OSingleSelectQueryComposer decimal separator is not 1 length");
@@ -1594,7 +1594,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     if ( aValue.hasValue() )
     {
         if(  !m_xTypeConverter.is() )
-            m_aContext.createComponent( "com.sun.star.script.Converter", m_xTypeConverter );
+            m_xTypeConverter.set( Converter::create(m_aContext.getUNOContext()) );
         OSL_ENSURE(m_xTypeConverter.is(),"NO typeconverter!");
 
         if ( nType != DataType::BOOLEAN && DataType::BIT != nType )
@@ -1754,8 +1754,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
             if ( pCondition )
             {
                 ::std::vector< ::std::vector < PropertyValue > > aFilters;
-                Reference< XNumberFormatter > xFormatter;
-                m_aContext.createComponent( "com.sun.star.util.NumberFormatter", xFormatter );
+                Reference< XNumberFormatter > xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
                 xFormatter->attachNumberFormatsSupplier( m_xNumberFormatsSupplier );
 
                 if (setORCriteria(pCondition, m_aAdditiveIterator, aFilters, xFormatter))

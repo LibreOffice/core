@@ -19,7 +19,6 @@
 package org.openoffice.java.accessibility.logging;
 
 import com.sun.star.accessibility.*;
-import com.sun.star.uno.*;
 
 /** The AccessibleHypertextImpl mapps all calls to the java AccessibleHypertext
  *  interface to the corresponding methods of the UNO XAccessibleHypertext

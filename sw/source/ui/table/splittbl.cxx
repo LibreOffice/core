@@ -19,39 +19,31 @@
 
 #include <wrtsh.hxx>
 #include <splittbl.hxx>
-#include <splittbl.hrc>
 #include <table.hrc>
 #include <tblenum.hxx>
 
-SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
-    SvxStandardDialog(pParent, SW_RES(DLG_SPLIT_TABLE)),
-    aOKPB(                  this, SW_RES(PB_OK      )),
-    aCancelPB(              this, SW_RES(PB_CANCEL  )),
-    aHelpPB(                this, SW_RES(PB_HELP        )),
-    aSplitFL(               this, SW_RES(FL_SPLIT    )),
-    aCntntCopyRB(           this, SW_RES(RB_CNTNT   )),
-    aBoxAttrCopyWithParaRB( this, SW_RES(RB_BOX_PARA    )),
-    aBoxAttrCopyNoParaRB(   this, SW_RES(RB_BOX_NOPARA)),
-    aBorderCopyRB(          this, SW_RES(RB_BORDER  )),
-    rShell(rSh),
-    m_nSplit( HEADLINE_CNTNTCOPY )
+SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh )
+    : SvxStandardDialog( pParent, "SplitTableDialog", "modules/swriter/ui/splittable.ui" )
+    , rShell(rSh)
+    , m_nSplit(HEADLINE_CNTNTCOPY)
 {
-    FreeResource();
-    aCntntCopyRB.Check();
+    get(mpCntntCopyRB, "copyheading");
+    get(mpBoxAttrCopyWithParaRB, "customheadingapplystyle");
+    get(mpBoxAttrCopyNoParaRB, "customheading");
+    get(mpBorderCopyRB, "customheading");
 }
 
 void SwSplitTblDlg::Apply()
 {
     m_nSplit = HEADLINE_CNTNTCOPY;
-    if(aBoxAttrCopyWithParaRB.IsChecked())
+    if(mpBoxAttrCopyWithParaRB->IsChecked())
         m_nSplit = HEADLINE_BOXATRCOLLCOPY;
-    if(aBoxAttrCopyNoParaRB.IsChecked())
+    if(mpBoxAttrCopyNoParaRB->IsChecked())
         m_nSplit = HEADLINE_BOXATTRCOPY;
-    else if(aBorderCopyRB.IsChecked())
+    else if(mpBorderCopyRB->IsChecked())
         m_nSplit = HEADLINE_BORDERCOPY;
 
-    rShell.SplitTable( m_nSplit );
-
+    rShell.SplitTable(m_nSplit);
 }
 
 

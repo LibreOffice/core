@@ -1,0 +1,62 @@
+--- src/liborcus/pstring.cpp	2012-09-07 06:00:35.000000000 +0200
++++ src/liborcus/pstring.cpp	2012-09-07 16:56:14.000000000 +0200
+@@ -57,25 +57,25 @@
+ 
+ pstring pstring::intern(const char* str, size_t n)
+ {
+-    ::boost::mutex::scoped_lock(interned_strings.mtx);
++    ::boost::mutex::scoped_lock lock(interned_strings.mtx);
+     return interned_strings.store.intern(str, n);
+ }
+ 
+ void pstring::intern::dispose()
+ {
+-    ::boost::mutex::scoped_lock(interned_strings.mtx);
++    ::boost::mutex::scoped_lock lock(interned_strings.mtx);
+     interned_strings.store.clear();
+ }
+ 
+ size_t pstring::intern::size()
+ {
+-    ::boost::mutex::scoped_lock(interned_strings.mtx);
++    ::boost::mutex::scoped_lock lock(interned_strings.mtx);
+     return interned_strings.store.size();
+ }
+ 
+ void pstring::intern::dump()
+ {
+-    ::boost::mutex::scoped_lock(interned_strings.mtx);
++    ::boost::mutex::scoped_lock lock(interned_strings.mtx);
+     interned_strings.store.dump();
+ }
+ 
+--- src/liborcus/xml_map_tree.cpp	2012-09-07 06:00:35.000000000 +0200
++++ src/liborcus/xml_map_tree.cpp	2012-09-07 16:59:23.000000000 +0200
+@@ -55,15 +55,14 @@
+ {
+     const char* mp_char;
+     const char* mp_end;
+-    size_t m_size;
+ public:
+-    xpath_parser(const char* p, size_t n) : mp_char(p), mp_end(p+n), m_size(n)
++    xpath_parser(const char* p, size_t n) : mp_char(p), mp_end(p+n)
+     {
+         if (!n)
+-            xml_map_tree::xpath_error("empty path");
++            throw xml_map_tree::xpath_error("empty path");
+ 
+         if (*p != '/')
+-            xml_map_tree::xpath_error("first character must be '/'.");
++            throw xml_map_tree::xpath_error("first character must be '/'.");
+ 
+         ++mp_char;
+     }
+@@ -414,7 +413,7 @@
+     {
+         // Make sure the root element's names are the same.
+         if (mp_root->name != name)
+-            xpath_error("path begins with inconsistent root level name.");
++            throw xpath_error("path begins with inconsistent root level name.");
+     }
+     else
+     {

@@ -25,7 +25,6 @@ import java.io.ByteArrayOutputStream;
 /**
  *  This class represents a WordSmith document header.
  *
- *  @author   David Proulx
  */
 class WseHeader extends Wse {
 
@@ -84,12 +83,11 @@ class WseHeader extends Wse {
      *  following this element.  It is assumed that the element
      *  starting at <code>dataArray[startIndex]</code> is valid.
      *
-     *  @param  dataArray   <code>byte</code> array.
      *  @param  startIndex  The start index.
      *
      *  @return  The first <code>byte</code> following this element.
      */
-    static int computeNewIndex(byte dataArray[], int startIndex) {
+    static int computeNewIndex(int startIndex) {
         return startIndex + 18;
     }
 
@@ -110,12 +108,10 @@ class WseHeader extends Wse {
      *  @return  A <code>byte</code> array representing this element.
      */
     byte[] getBytes() {
-        DataOutputStream os;  // Used for storing the data
-        ByteArrayOutputStream bs = null;  // Used for storing the data
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        DataOutputStream os = new DataOutputStream(bs);
 
         try {
-            bs = new ByteArrayOutputStream();
-            os = new DataOutputStream(bs);
             os.write(2);  // binary doc indicator
             os.write(4);  // binary header indicator
 
@@ -128,9 +124,7 @@ class WseHeader extends Wse {
             e.printStackTrace();
         }
 
-        if (bs != null) {
-            return bs.toByteArray();
-        } else return null;
+        return bs.toByteArray();
     }
 }
 

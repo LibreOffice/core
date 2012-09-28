@@ -67,7 +67,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -1967,10 +1967,8 @@ sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToA
         catch( uno::Exception& )
         {
         }
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[0] <<= aVersion;
 
-        uno::Reference< security::XDocumentDigitalSignatures > xSigner( comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures"  ), aArgs ), uno::UNO_QUERY_THROW );
+        uno::Reference< security::XDocumentDigitalSignatures > xSigner( security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion) );
 
         if ( nScriptingSignatureState == SIGNATURESTATE_UNKNOWN
           || nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK

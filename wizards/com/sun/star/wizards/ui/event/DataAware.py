@@ -17,8 +17,8 @@
 #
 import traceback
 from abc import ABCMeta, abstractmethod
-from wizards.common.PropertyNames import *
-from wizards.ui.event.CommonListener import *
+from .CommonListener import *
+from ...common.PropertyNames import *
 
 '''
 @author rpiterman

@@ -28,9 +28,13 @@
 
 $(eval $(call gb_Module_Module,sccomp))
 
+ifneq ($(OS),IOS)
+
 $(eval $(call gb_Module_add_targets,sccomp,\
 	AllLangResTarget_solver \
 	Library_solver \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -39,8 +39,6 @@
 #include <ooo/vba/excel/XlOrder.hpp>
 #include <ooo/vba/excel/Constants.hpp>
 #include <i18nutil/paper.hxx>
-#include <editeng/paperinf.hxx>
-#include <ooo/vba/excel/XlPaperSize.hpp>
 #include <sal/macros.h>
 
 using namespace ::com::sun::star;
@@ -629,103 +627,4 @@ ScVbaPageSetup::getServiceNames()
     return aServiceNames;
 }
 
-struct PaperSizeMap
-{
-    Paper ePaper;
-    sal_Int32 xlPaper;
-};
-
-static PaperSizeMap paperSizeMappings[] =
-{
-    { PAPER_A3, ooo::vba::excel::XlPaperSize::xlPaperA3 },
-    { PAPER_A4, ooo::vba::excel::XlPaperSize::xlPaperA4 },
-    { PAPER_A5, ooo::vba::excel::XlPaperSize::xlPaperA5 },
-    { PAPER_B4_ISO, ooo::vba::excel::XlPaperSize::xlPaperB4 },
-    { PAPER_B5_ISO, ooo::vba::excel::XlPaperSize::xlPaperB5 },
-    { PAPER_LETTER, ooo::vba::excel::XlPaperSize::xlPaperLetter },
-    { PAPER_LEGAL, ooo::vba::excel::XlPaperSize::xlPaperLegal },
-    { PAPER_TABLOID, ooo::vba::excel::XlPaperSize::xlPaperTabloid },
-    { PAPER_USER, ooo::vba::excel::XlPaperSize::xlPaperUser },
-    { PAPER_B6_ISO, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeB6 },
-    { PAPER_ENV_C4, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeC4 },
-    { PAPER_ENV_C5, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeC5 },
-    { PAPER_ENV_C6, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeC6 },
-    { PAPER_ENV_C65, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeC65 },
-    { PAPER_ENV_DL, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeDL },
-    { PAPER_C, ooo::vba::excel::XlPaperSize::xlPaperCsheet },
-    { PAPER_D, ooo::vba::excel::XlPaperSize::xlPaperDsheet },
-    { PAPER_E, ooo::vba::excel::XlPaperSize::xlPaperEsheet },
-    { PAPER_ENV_MONARCH, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeMonarch },
-    { PAPER_ENV_PERSONAL, ooo::vba::excel::XlPaperSize::xlPaperEnvelopePersonal },
-    { PAPER_ENV_9, ooo::vba::excel::XlPaperSize::xlPaperEnvelope9 },
-    { PAPER_ENV_10, ooo::vba::excel::XlPaperSize::xlPaperEnvelope10 },
-    { PAPER_ENV_11, ooo::vba::excel::XlPaperSize::xlPaperEnvelope11 },
-    { PAPER_ENV_12, ooo::vba::excel::XlPaperSize::xlPaperEnvelope12 }
-};
-
-static const int nMapSize = SAL_N_ELEMENTS(paperSizeMappings);
-
-sal_Int32 PaperSizeOOoToExcel(Paper ePaper)
-{
-    sal_Int32 nPaperSize = ooo::vba::excel::XlPaperSize::xlPaperUser;
-
-    for (int i = 0; i < nMapSize; i++)
-    {
-        if (ePaper == paperSizeMappings[i].ePaper)
-        {
-            nPaperSize = paperSizeMappings[i].xlPaper;
-            break;
-        }
-    }
-
-    return nPaperSize;
-}
-
-sal_Int32 SAL_CALL ScVbaPageSetup::getPaperSize() throw (css::uno::RuntimeException)
-{
-    com::sun::star::awt::Size size;
-    Paper ePaper = PAPER_USER;
-
-    try
-    {
-        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( "Size"));
-        aValue >>= size;
-        ePaper = SvxPaperInfo::GetSvxPaper( Size(size.Width, size.Height), MAP_100TH_MM, true);
-    }
-    catch( uno::Exception& )
-    {
-    }
-
-    return PaperSizeOOoToExcel(ePaper);
-}
-
-Paper PaperSizeExcelToOOo( sal_Int32 xlPaper)
-{
-    Paper ePaper = PAPER_USER;
-
-    for (int i = 0; i < nMapSize; i++)
-    {
-        if (xlPaper == paperSizeMappings[i].xlPaper)
-        {
-            ePaper = paperSizeMappings[i].ePaper;
-            break;
-        }
-    }
-
-    return ePaper;
-}
-void SAL_CALL ScVbaPageSetup::setPaperSize( sal_Int32 paperSize) throw (css::uno::RuntimeException)
-{
-    Paper ePaper = PaperSizeExcelToOOo( paperSize );
-
-    try
-    {
-        Size size1 = SvxPaperInfo::GetPaperSize( ePaper, MAP_100TH_MM );
-        com::sun::star::awt::Size size(size1.Width(), size1.Height());
-        mxPageProps->setPropertyValue( rtl::OUString( "Size"), uno::makeAny( size ));
-    }
-    catch( uno::Exception& )
-    {
-    }
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,9 +34,6 @@
 
 // __________ Imports __________
 
-import com.sun.star.uno.UnoRuntime;
-
-import java.lang.*;
 import java.util.*;
 
 // __________ Implementation __________
@@ -78,8 +75,8 @@ public class ViewContainer extends Thread
      */
     private ViewContainer()
     {
-        mlViews          = new Vector();
-        mlListener       = new Vector();
+        mlViews          = new Vector<Object>();
+        mlListener       = new Vector<IShutdownListener>();
         mbShutdownActive = false       ;
         Runtime.getRuntime().addShutdownHook(this);
     }
@@ -262,7 +259,7 @@ public class ViewContainer extends Thread
      */
     public  static boolean       mbInplace   = false ;
     private static ViewContainer maSingleton = null  ;
-    private        Vector        mlViews             ;
-    private        Vector        mlListener          ;
+    private        Vector<Object>        mlViews             ;
+    private        Vector<IShutdownListener>        mlListener          ;
     private        boolean       mbShutdownActive    ;
 }

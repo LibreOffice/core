@@ -107,13 +107,13 @@ namespace pcr
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL XSDDataType::acquire()
     {
-        return osl_incrementInterlockedCount( &m_refCount );
+        return osl_atomic_increment( &m_refCount );
     }
 
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL XSDDataType::release()
     {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        if ( 0 == osl_atomic_decrement( &m_refCount ) )
         {
            delete this;
            return 0;

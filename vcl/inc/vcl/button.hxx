@@ -37,6 +37,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/salnativewidgets.hxx>
 
+#include <set>
 #include <vector>
 
 class UserDrawEvent;
@@ -95,6 +96,7 @@ public:
 
     void                SetFocusRect( const Rectangle& rFocusRect );
     bool IsSmallSymbol () const;
+    virtual void take_properties(Window &rOther);
 };
 
 // --------------------
@@ -199,6 +201,8 @@ public:
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual void take_properties(Window &rOther);
 };
 
 inline void PushButton::Check( sal_Bool bCheck )
@@ -231,6 +235,7 @@ public:
                     OKButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
+    virtual void take_properties(Window &rOther);
 };
 
 // ----------------
@@ -253,6 +258,7 @@ public:
                     CancelButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
+    virtual void take_properties(Window &rOther);
 };
 
 // --------------
@@ -275,6 +281,7 @@ public:
                     HelpButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
+    virtual void take_properties(Window &rOther);
 };
 
 // ---------------
@@ -284,13 +291,14 @@ public:
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
+    boost::shared_ptr< std::set<RadioButton*> > m_xGroup;
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
-    sal_Bool            mbChecked;
-    sal_Bool            mbSaveValue;
-    sal_Bool            mbRadioCheck;
-    sal_Bool            mbStateChanged;
+    sal_Bool        mbChecked;
+    sal_Bool        mbSaveValue;
+    sal_Bool        mbRadioCheck;
+    sal_Bool        mbStateChanged;
     Link            maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
@@ -390,14 +398,22 @@ public:
     or giving up the SolarMutex may mean events get executed that lead to the pointers getting
     invalid.
 
-    @param io_rGroup
-    gets cleared on entering the function. on return contains the <code>RadioButton</code>s
-    in the same group as this <code>RadioButton</code>.
-
     @param bIncludeThis
     defines whether <code>this</code> is contained in the returned list
+
+    @return
+    on return contains the <code>RadioButton</code>s
+    in the same group as this <code>RadioButton</code>.
     */
-    void            GetRadioButtonGroup( std::vector<RadioButton*>& io_rGroup, bool bIncludeThis ) const;
+    std::vector<RadioButton*> GetRadioButtonGroup(bool bIncludeThis = true) const;
+
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+
+    /*
+     * Group this RadioButton with another
+     */
+    void group(RadioButton &rOther);
+    virtual void take_properties(Window &rOther);
 };
 
 // ------------
@@ -448,6 +464,8 @@ protected:
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
     SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
+
+    virtual void take_properties(Window &rOther);
 public:
     SAL_DLLPRIVATE void         ImplCheck();
     SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();
@@ -491,6 +509,8 @@ public:
     const Link&     GetToggleHdl() const { return maToggleHdl; }
     bool            IsLegacyNoTextAlign() { return mbLegacyNoTextAlign; }
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
+
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 inline void CheckBox::Check( sal_Bool bCheck )
@@ -553,6 +573,7 @@ class VCL_DLLPUBLIC DisclosureButton : public CheckBox
 protected:
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
 public:
+    DisclosureButton( Window* pParent, WinBits nStyle = 0 );
     DisclosureButton( Window* pParent, const ResId& rResId );
 
     virtual void    KeyInput( const KeyEvent& rKEvt );

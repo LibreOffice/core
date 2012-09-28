@@ -23,7 +23,8 @@
 #include <sslwarndlg.hrc>
 #include <sslwarndlg.hxx>
 
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 // -----------------------------------------------------------------------
 
@@ -39,8 +40,7 @@ IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl_Impl)
 {
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
-    xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
-                    getServiceFactory().get()->createInstance( rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" )), uno::UNO_QUERY );
+    xDocumentDigitalSignatures = ::com::sun::star::security::DocumentDigitalSignatures::createDefault( comphelper::getComponentContext(getServiceFactory()) );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 
@@ -65,8 +65,7 @@ SSLWarnDialog::SSLWarnDialog
     m_aLine ( this, ResId( FL_LINE, *pResMgr ) ),
     m_aWarnImage ( this, ResId( IMG_WARN, *pResMgr ) ),
     m_xServiceFactory ( xServiceFactory ),
-    m_rXCert ( rXCert ),
-    pResourceMgr    ( pResMgr )
+    m_rXCert ( rXCert )
 {
     FreeResource();
     m_aWarnImage.SetImage( WarningBox::GetStandardImage() );

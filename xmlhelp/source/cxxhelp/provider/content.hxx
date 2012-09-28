@@ -49,13 +49,10 @@ namespace chelp
 
     struct ContentProperties
     {
-        ::rtl::OUString aTitle;         // Title
-        ::rtl::OUString aContentType;   // ContentType
-        sal_Bool        bIsDocument;    // IsDocument
-        sal_Bool        bIsFolder;      // IsFolder
+        OUString aTitle;         // Title
+        OUString aContentType;   // ContentType
 
-        ContentProperties()
-            : bIsDocument( sal_True ), bIsFolder( sal_False ) {}
+        ContentProperties() {}
     };
 
 //=========================================================================
@@ -80,11 +77,11 @@ namespace chelp
         XTYPEPROVIDER_DECL()
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getImplementationName()
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
             throw( ::com::sun::star::uno::RuntimeException );
 
@@ -126,7 +123,7 @@ namespace chelp
         getCommands( const com::sun::star::uno::Reference<
                      com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
-        virtual ::rtl::OUString getParentURL() { return ::rtl::OUString(); }
+        virtual OUString getParentURL() { return OUString(); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
         getPropertyValues( const ::com::sun::star::uno::Sequence<

@@ -51,7 +51,6 @@ namespace framework{
 #define SERVICENAME_CFGREADACCESS                               DECLARE_ASCII("com.sun.star.configuration.ConfigurationAccess"      )   // provides readonly access to the configuration
 #define SERVICENAME_CONTENTHANDLER                              DECLARE_ASCII("com.sun.star.frame.ContentHandler"                   )
 #define SERVICENAME_CONTENTHANDLERFACTORY                       DECLARE_ASCII("com.sun.star.frame.ContentHandlerFactory"            )
-#define SERVICENAME_UCBCONTENTBROKER                            DECLARE_ASCII("com.sun.star.ucb.UniversalContentBroker"             )
 #define SERVICENAME_STATUSINDICATORFACTORY                      DECLARE_ASCII("com.sun.star.task.StatusIndicatorFactory"            )
 #define SERVICENAME_UIINTERACTIONHANDLER                        DECLARE_ASCII("com.sun.star.task.InteractionHandler"                )
 #define SERVICENAME_JOBEXECUTOR                                 DECLARE_ASCII("com.sun.star.task.JobExecutor"                       )

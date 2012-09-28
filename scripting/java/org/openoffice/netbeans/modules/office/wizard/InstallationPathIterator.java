@@ -33,8 +33,6 @@ import org.openide.util.NbBundle;
 /** A wizard iterator (sequence of panels).
  * Used to create a wizard. Create one or more
  * panels from template as needed too.
- *
- * @author tomaso
  */
 public class InstallationPathIterator implements WizardDescriptor.Iterator {
 

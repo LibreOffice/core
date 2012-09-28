@@ -33,74 +33,6 @@ package installer::globals;
 
 BEGIN
 {
-    $prog="make_installer.pl";
-
-    @noMSLocaleLangs = (
-        "br",
-        "bs",
-        "dz",
-        "gu",
-        "km",
-        "nr",
-        "ns",
-        "nso",
-        "rw",
-        "ss",
-        "st",
-        "tg",
-        "ts",
-        "tn",
-        "ve",
-        "xh",
-        "zu",
-        "ne",
-        "bn",
-        "bn-BD",
-        "bn-IN",
-        "lo",
-        "cy",
-        "ku",
-        "as-IN",
-        "te-IN",
-        "ml-IN",
-        "mr-IN",
-        "ur-IN",
-        "ta-IN",
-        "or-IN",
-        "ti-ER",
-        "eo",
-        "ka",
-        "ga",
-        "uk",
-        "gd",
-        "my",
-        "mai",
-        "brx",
-        "dgo",
-        "kok",
-        "mni",
-        "ca-XV",
-        "sat",
-        "ug",
-        "om",
-        "si",
-        "or",
-        "oc",
-        "ml",
-        "as",
-        "ast",
-        "ht",
-        "jbo",
-        "fur",
-        "ny",
-        "so",
-        "kab",
-        "tk",
-        "ky-CN"
-    );
-    @items_at_modules = ("Files", "Dirs", "Unixlinks");
-    @rtllanguages = ("ar", "fa", "he", "ug", "ky-CN");
-
     $ziplistname = "";
     $pathfilename = "";
     $setupscriptname = "";
@@ -112,7 +44,6 @@ BEGIN
     $destdir = "";
     $rootpath = "";
 
-    $required_dotnet_version = "2.0.0.0";
     $productextension = "";
     @languageproducts = ();
     $build = "";
@@ -156,12 +87,10 @@ BEGIN
     $templatefoldername = "Templates";
     $programmenufolder = "ProgramMenuFolder";
     $systemfolder = "SystemFolder";
-    $encodinglistname = "msi-encodinglist.txt";
-    $msiencoding = "";  # hash reference for msi encodings
+    $lcidlistname = "msi-encodinglist.txt";
     $msilanguage = "";  # hash reference for msi languages LCID
     $sofficeiconadded = 0;
     $temppath = "";
-    $globaltempdirname = "ooopackaging";
     $cyg_temppath = "";
     $temppathdefined = 0;
     $packageversion = 1;
@@ -255,14 +184,12 @@ BEGIN
     $ooodownloadfilename = "";
     $downloadfilename = "";
     $downloadfileextension = "";
-    $shellnewfilesadded = 0;
     %multilingual_only_modules = ();
     %application_modules = ();
 
     $is_copy_only_project = 0;
     $is_simple_packager_project = 0;
     $patch_user_dir = 0;
-    $addchildprojects = 0;
     $languagepack = 0;
     $helppack = 0;
     $patch = 0;
@@ -302,13 +229,10 @@ BEGIN
     %usedtreeconditions = ();
     %moduledestination = ();
 
-    $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
-    $cab_file_per_component = 0;
     $cabfilecompressionlevel = 21; # Using LZX compression, possible values are: 15 | 16 | ... | 21 (best compression)
     $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 1;
-    $use_packages_for_cabs = 0;
     $msidatabasename = "";
     $prepare_winpatch = 0;
     $previous_idt_dir = "";
@@ -335,7 +259,6 @@ BEGIN
     @solarispatchscripts = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall", "postinstall", "preinstall", "i.none");
     @solarispatchscriptsforextensions = ("checkinstall", "copyright", "patch_checkinstall", "patch_postinstall_extensions", "postinstall_extensions", "preinstall", "i.none");
     @solarispatchfiles = (".diPatch", "patchinfo");
-    @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @languagepackfeature =();
     @helppackfeature =();
@@ -348,7 +271,6 @@ BEGIN
     %componentcondition = ();
     %componentid = ();
     %comparecomponentname = ();
-    %languageproperties = ();
     %allcabinets = ();
     %allcabinetassigns = ();
     %cabfilecounter = ();
@@ -360,14 +282,10 @@ BEGIN
     %all_english_languagestrings = ();
     %all_required_english_languagestrings = ();
 
-    @forced_properties = ("SERVICETAG_PRODUCTNAME", "SERVICETAG_PRODUCTVERSION", "SERVICETAG_PARENTNAME", "SERVICETAG_SOURCE", "SERVICETAG_URN");
-
     @removedirs = ();
     @removefiletable = ();
 
-    $plat = $^O;
-
-    if ( $plat =~ /cygwin/i )
+    if ( $^O =~ /cygwin/i )
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $separator = "/";

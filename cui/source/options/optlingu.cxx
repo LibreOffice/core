@@ -53,7 +53,7 @@
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/svlbox.hxx>
@@ -148,14 +148,11 @@ static void lcl_OpenURL( ::rtl::OUString sURL )
         localizeWebserviceURI(sURL);
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
+            uno::Reference< uno::XComponentContext > xContext =
+                ::comphelper::getProcessComponentContext();
             uno::Reference< css::system::XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    "com.sun.star.system.SystemShellExecute") ),
-                uno::UNO_QUERY_THROW );
-            if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+                css::system::SystemShellExecute::create(xContext) );
+            xSystemShell->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
         }
         catch( const uno::Exception& e )
         {
@@ -177,7 +174,7 @@ sal_Bool KillFile_Impl( const String& rURL )
     sal_Bool bRet = sal_True;
     try
     {
-        Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         aCnt.executeCommand( OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )

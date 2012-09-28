@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
@@ -99,13 +98,13 @@ class SelectionDialog extends JDialog
 
     /** Get a list of all children
     */
-    private Vector GetChildrenList ()
+    private Vector<String> GetChildrenList ()
     {
         mxSelection = maNode.getSelection();
 
         XAccessibleContext xContext = maNode.getContext();
         int nCount = xContext.getAccessibleChildCount();
-        Vector aChildVector = new Vector();
+        Vector<String> aChildVector = new Vector<String>();
         for(int i = 0; i < nCount; i++)
         {
             try

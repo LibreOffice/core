@@ -250,6 +250,22 @@
 	<span class="emph"><xsl:apply-templates /></span>
 </xsl:template>
 
+<!-- SUB -->
+<xsl:template match="sub">
+	<sub><xsl:apply-templates /></sub>
+</xsl:template>
+<xsl:template match="sub" mode="embedded">
+	<sub><xsl:apply-templates /></sub>
+</xsl:template>
+
+<!-- SUP -->
+<xsl:template match="sup">
+	<sup><xsl:apply-templates /></sup>
+</xsl:template>
+<xsl:template match="sup" mode="embedded">
+	<sup><xsl:apply-templates /></sup>
+</xsl:template>
+
 <!-- FILENAME -->
 <xsl:template match="filename" />
 
@@ -355,6 +371,10 @@
 			<xsl:apply-templates />
 		</xsl:when>		
 		
+		<xsl:when test="@role='bascode'">
+			<xsl:call-template name="insertbascode" />
+		</xsl:when>
+
 		<xsl:otherwise>
 			<xsl:call-template name="insertpara" />
 		</xsl:otherwise>
@@ -576,6 +596,11 @@
 		</xsl:choose>
 	</xsl:variable>
 	<p class="{$role}"><xsl:apply-templates /></p>
+</xsl:template>
+
+<!-- Insert Basic code snippet  -->
+<xsl:template name="insertbascode">
+	<pre><xsl:apply-templates /></pre>
 </xsl:template>
 
 <!-- Insert "How to get Link" -->

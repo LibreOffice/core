@@ -94,14 +94,14 @@ public class ObjectInspectorModelImpl implements XObjectInspectorModel{
     */
     public int getMinHelpTextLines() {
         return 3;
-    };
+    }
 
     /** returns maximum number of lines in the help text section.
         @return 8
     */
     public int getMaxHelpTextLines() {
         return 8;
-    };
+    }
 
     /** returns whether or not the inspector's UI should be read-only
     */

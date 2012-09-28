@@ -29,7 +29,10 @@
 #ifndef _RTL_STRBUF_H_
 #define _RTL_STRBUF_H_
 
-#include <rtl/string.h>
+#include "sal/config.h"
+
+#include "rtl/string.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

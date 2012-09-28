@@ -131,6 +131,7 @@ $(eval $(foreach method,\
 	add_sdi_headers \
 	add_nativeres \
 	set_warnings_not_errors \
+	set_generated_cxx_suffix \
 ,\
 	$(call gb_Executable_forward_to_Linktarget,$(method))\
 ))

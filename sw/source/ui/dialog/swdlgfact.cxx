@@ -571,6 +571,10 @@ void AbstractSwWordCountFloatDlg_Impl::UpdateCounts()
     pDlg->UpdateCounts();
 }
 
+void AbstractSwWordCountFloatDlg_Impl::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)
+{
+    pDlg->SetCounts(rCurrCnt, rDocStat);
+}
 
 AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
 {
@@ -768,22 +772,10 @@ SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pP
 
 }
 
-AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg (
-                                    SwView& rView,int nResId, bool bToTable )
+AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg(SwView& rView, bool bToTable)
 {
-    SwConvertTableDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_CONV_TEXT_TABLE :
-            pDlg = new SwConvertTableDlg( rView, bToTable );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwConvertTableDlg_Impl( pDlg );
-    return 0;
+    SwConvertTableDlg* pDlg = new SwConvertTableDlg(rView, bToTable);
+    return new AbstractSwConvertTableDlg_Impl(pDlg);
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId)
@@ -981,25 +973,11 @@ AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg 
     return 0;
 }
 
-AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
-                                                                                    int nResId,
-                                                                                    sal_Bool bSetAutoFmt,
-                                                                                    const SwTableAutoFmt* pSelFmt )
+AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(Window* pParent,
+    SwWrtShell* pShell, sal_Bool bSetAutoFmt, const SwTableAutoFmt* pSelFmt)
 {
-    SwAutoFormatDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_AUTOFMT_TABLE :
-            pDlg = new SwAutoFormatDlg( pParent, pShell,bSetAutoFmt,pSelFmt);
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwAutoFormatDlg_Impl( pDlg );
-    return 0;
+    SwAutoFormatDlg* pDlg = new SwAutoFormatDlg(pParent, pShell, bSetAutoFmt, pSelFmt);
+    return new AbstractSwAutoFormatDlg_Impl(pDlg);
 }
 
 SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType,int nResId )
@@ -1036,22 +1014,10 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pPare
     return 0;
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg ( Window *pParent, SwTableFUNC &rFnc , int nResId )
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc)
 {
-    Dialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_COL_WIDTH :
-            pDlg = new SwTableWidthDlg( pParent, rFnc);
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    Dialog* pDlg = new SwTableWidthDlg(pParent, rFnc);
+    return new VclAbstractDialog_Impl( pDlg );
 }
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,
@@ -1308,21 +1274,10 @@ AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDl
     return 0;
 }
 
-AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg( int nResId,
-                                            SwView& rView ) //add for SwInsTableDlg
+AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView) //add for SwInsTableDlg
 {
-    SwInsTableDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSERT_TABLE :
-            pDlg = new SwInsTableDlg( rView );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractInsTableDlg_Impl( pDlg );
-    return 0;
+    SwInsTableDlg* pDlg = new SwInsTableDlg(rView);
+    return new AbstractInsTableDlg_Impl( pDlg );
 }
 
 AbstractJavaEditDialog * SwAbstractDialogFactory_Impl::CreateJavaEditDialog( int nResId,
@@ -1535,24 +1490,14 @@ AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg( int
     return 0;
 }
 
-AbstractSwWordCountFloatDlg * SwAbstractDialogFactory_Impl::CreateSwWordCountDialog( int nResId,
+AbstractSwWordCountFloatDlg * SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(
                                                                               SfxBindings* pBindings,
                                                                               SfxChildWindow* pChild,
                                                                               Window *pParent,
-                                                                              SfxChildWinInfo* pInfo )
+                                                                              SfxChildWinInfo* pInfo)
 {
-    SwWordCountFloatDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_WORDCOUNT :
-            pDlg = new SwWordCountFloatDlg( pBindings, pChild, pParent, pInfo );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractSwWordCountFloatDlg_Impl( pDlg );
-    return 0;
+    SwWordCountFloatDlg* pDlg = new SwWordCountFloatDlg( pBindings, pChild, pParent, pInfo );
+    return new AbstractSwWordCountFloatDlg_Impl( pDlg );
 }
 
 //add for SwIndexMarkModalDlg begin

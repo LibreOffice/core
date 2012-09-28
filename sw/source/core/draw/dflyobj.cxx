@@ -923,7 +923,7 @@ void SwVirtFlyDrawObj::Move(const Size& rSiz)
 
 
 void SwVirtFlyDrawObj::Resize(const Point& rRef,
-                    const Fraction& xFact, const Fraction& yFact)
+                    const Fraction& xFact, const Fraction& yFact, bool /*bUnsetRelative*/)
 {
     NbcResize( rRef, xFact, yFact );
     SetChanged();

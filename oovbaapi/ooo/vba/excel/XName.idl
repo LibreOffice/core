@@ -45,7 +45,7 @@ interface XName
     [attribute] string Name;
     [attribute] string NameLocal;
     [attribute] boolean Visible;
-    [attribute] string Value;
+    [attribute, readonly] string Value;
     [attribute, readonly] string RefersTo;
     [attribute, readonly] string RefersToLocal;
     [attribute, readonly] string RefersToR1C1;

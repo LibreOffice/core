@@ -29,10 +29,11 @@
 #ifndef _RTL_TENCINFO_H
 #define _RTL_TENCINFO_H
 
-#ifndef _SAL_TYPES_H
-#include <sal/types.h>
-#endif
-#include <rtl/textenc.h>
+#include "sal/config.h"
+
+#include "rtl/textenc.h"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C" {

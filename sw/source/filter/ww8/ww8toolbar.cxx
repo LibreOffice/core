@@ -33,7 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -240,8 +240,8 @@ bool CTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( xMSF->createInstance( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::ModuleUIConfigurationManagerSupplier::create(xContext) );
             CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( "com.sun.star.text.TextDocument" ) );
             helper.setMSOCommandMap( new MSOWordCommandConvertor() );
 

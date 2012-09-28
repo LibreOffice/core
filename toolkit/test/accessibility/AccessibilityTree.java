@@ -17,10 +17,6 @@
  */
 
 import com.sun.star.accessibility.*;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.uno.UnoRuntime;
-
 import java.util.Vector;
 import java.awt.*;
 import java.awt.event.*;
@@ -256,7 +252,7 @@ public class AccessibilityTree
                     {
                         AccTreeNode aNode = (AccTreeNode)aObject;
 
-                        Vector aActions = new Vector();
+                        Vector<String> aActions = new Vector<String>();
                         aMenu.add (new AccessibilityTree.ShapeExpandAction(maTree, aNode));
                         aMenu.add (new AccessibilityTree.SubtreeExpandAction(maTree, aNode));
 

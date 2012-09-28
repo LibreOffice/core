@@ -20,14 +20,17 @@
 #include "dlgedlist.hxx"
 #include "dlgedobj.hxx"
 
+namespace basctl
+{
+
 //============================================================================
 // DlgEdPropListenerImpl
 //============================================================================
 
 //----------------------------------------------------------------------------
 
-DlgEdPropListenerImpl::DlgEdPropListenerImpl(DlgEdObj* pObj)
-          :pDlgEdObj(pObj)
+DlgEdPropListenerImpl::DlgEdPropListenerImpl (DlgEdObj& rObj) :
+    rDlgEdObj(rObj)
 {
 }
 
@@ -49,7 +52,7 @@ void SAL_CALL DlgEdPropListenerImpl::disposing( const ::com::sun::star::lang::Ev
 
 void SAL_CALL DlgEdPropListenerImpl::propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    pDlgEdObj->_propertyChange( evt );
+    rDlgEdObj._propertyChange( evt );
 }
 
 //----------------------------------------------------------------------------
@@ -60,8 +63,8 @@ void SAL_CALL DlgEdPropListenerImpl::propertyChange( const  ::com::sun::star::be
 
 //----------------------------------------------------------------------------
 
-DlgEdEvtContListenerImpl::DlgEdEvtContListenerImpl(DlgEdObj* pObj)
-          :pDlgEdObj(pObj)
+DlgEdEvtContListenerImpl::DlgEdEvtContListenerImpl (DlgEdObj& rObj) :
+    rDlgEdObj(rObj)
 {
 }
 
@@ -83,23 +86,25 @@ void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  ::com::sun::star::lang
 
 void SAL_CALL DlgEdEvtContListenerImpl::elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
 {
-    pDlgEdObj->_elementInserted( Event );
+    rDlgEdObj._elementInserted( Event );
 }
 
 //----------------------------------------------------------------------------
 
 void SAL_CALL DlgEdEvtContListenerImpl::elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
 {
-    pDlgEdObj->_elementReplaced( Event );
+    rDlgEdObj._elementReplaced( Event );
 }
 
 //----------------------------------------------------------------------------
 
 void SAL_CALL DlgEdEvtContListenerImpl::elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException)
 {
-    pDlgEdObj->_elementRemoved( Event );
+    rDlgEdObj._elementRemoved( Event );
 }
 
 //----------------------------------------------------------------------------
+
+} // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

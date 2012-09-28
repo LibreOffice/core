@@ -30,6 +30,7 @@
 #include "tools/rc.h"
 
 #include "vcl/decoview.hxx"
+#include "vcl/dialog.hxx"
 #include "vcl/event.hxx"
 #include "vcl/fixed.hxx"
 
@@ -166,11 +167,23 @@ FixedText::FixedText( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void FixedText::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+
+    Control::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -582,11 +595,23 @@ FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_FIXEDLINE );
     WinBits nStyle = ImplInitRes( rResId );
+
+    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
+        return;
+
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+void FixedLine::take_properties(Window &rOther)
+{
+    if (!GetParent())
+        ImplInit(rOther.GetParent(), rOther.GetStyle());
+
+    Control::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -897,6 +922,7 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 {
     maBitmap = rBitmap;
     StateChanged( STATE_CHANGE_DATA );
+    queue_resize();
 }
 
 // =======================================================================
@@ -1120,6 +1146,7 @@ void FixedImage::SetImage( const Image& rImage )
     {
         maImage = rImage;
         StateChanged( STATE_CHANGE_DATA );
+        queue_resize();
     }
 }
 

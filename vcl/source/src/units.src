@@ -31,7 +31,7 @@ StringArray SV_FUNIT_STRINGS
 {
     ItemList [ en-US ] =
     {
-         < "mm" ; FUNIT_MM ; > ;
+        < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
         < "m" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;

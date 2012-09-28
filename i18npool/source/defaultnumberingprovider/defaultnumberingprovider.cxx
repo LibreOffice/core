@@ -25,6 +25,7 @@
 #include <nativenumbersupplier.hxx>
 #include <stdio.h>
 #include <string.h>
+#include <comphelper/processfactory.hxx>
 
 // Cyrillic upper case
 #define C_CYR_A "\xD0\x90"
@@ -271,7 +272,7 @@ DefaultNumberingProvider::~DefaultNumberingProvider()
 void DefaultNumberingProvider::impl_loadTranslit()
 {
     if ( !translit )
-        translit = new TransliterationImpl(xSMgr);
+        translit = new TransliterationImpl(comphelper::getComponentContext(xSMgr));
 }
 
 Sequence< Reference<container::XIndexAccess> >

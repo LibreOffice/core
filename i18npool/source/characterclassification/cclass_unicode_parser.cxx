@@ -25,8 +25,9 @@
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
+#include <comphelper/processfactory.hxx>
 
 #include <string.h>     // memcpy()
 
@@ -398,17 +399,9 @@ sal_Bool cclass_Unicode::setupInternational( const Locale& rLocale )
         aParserLocale.Country = rLocale.Country;
         aParserLocale.Variant = rLocale.Variant;
     }
-    if ( !xLocaleData.is() && xMSF.is() )
+    if ( !mxLocaleData.is() )
     {
-        Reference <
-            XInterface > xI =
-            xMSF->createInstance( OUString(
-            RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.LocaleData" ) ) );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( getCppuType((const Reference< XLocaleData>*)0) );
-            x >>= xLocaleData;
-        }
+        mxLocaleData.set( LocaleData::create(comphelper::getComponentContext(xMSF)) );
     }
     return bChanged;
 }
@@ -458,10 +451,10 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
     aContChars = userDefinedCharactersCont;
 
     // specials
-    if( xLocaleData.is() )
+    if( mxLocaleData.is() )
     {
         LocaleDataItem aItem =
-            xLocaleData->getLocaleItem( aParserLocale );
+            mxLocaleData->getLocaleItem( aParserLocale );
 //!TODO: theoretically separators may be a string, adjustment would have to be
 //! done here and in parsing and in ::rtl::math::stringToDouble()
         cGroupSep = aItem.thousandSeparator.getStr()[0];

@@ -22,14 +22,11 @@ import org.w3c.dom.Node;
 
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
-import org.openoffice.xmerge.util.Resources;
 
 
 /**
  *  This is an implementation of the <code>Iterator</code> interface and extends
  *  <code>NodeIterator</code>.  It will traverse the tree and find row sequences.
- *
- * @author smak
  */
 public final class RowIterator extends NodeIterator {
 

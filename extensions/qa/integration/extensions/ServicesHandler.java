@@ -18,19 +18,12 @@
 
 package integration.extensions;
 
-import com.sun.star.lang.ClassNotFoundException;
 import com.sun.star.uno.*;
 import com.sun.star.beans.*;
 import com.sun.star.inspection.*;
 import com.sun.star.frame.*;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleComponentFactory;
 
-/**
- *
- * @author fs93730
- */
 public class ServicesHandler implements XPropertyHandler
 {
     private XComponentContext   m_context;

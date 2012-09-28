@@ -528,12 +528,14 @@ File gid_File_Lib_MacOSXSpell
 	Dir = SCP2_OOO_BIN_DIR;
 End
 
+#if !defined(BITNESS_OVERRIDE) || BITNESS_OVERRIDE==32
 File gid_File_Lib_avmediaQuickTime
 	LIB_FILE_BODY;
 	Styles = (PACKED);
 	Name = LIBNAME(avmediaQuickTime);
 	Dir = SCP2_OOO_BIN_DIR;
 End
+#endif
 #endif
 
 #ifdef WNT
@@ -569,7 +571,10 @@ End
 
 #ifndef LIBO_HEADLESS
 
-#ifndef SYSTEM_CAIRO
+#if !defined SYSTEM_CAIRO \
+    && (defined ENABLE_CAIRO_CANVAS \
+        || (ENABLE_LIBRSVG && !defined SYSTEM_LIBRSVG) \
+        || (defined WNT && !defined ENABLE_DIRECTX))
 
 File gid_File_Lib_Cairo
     LIB_FILE_BODY;
@@ -887,8 +892,10 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
-                                                                // #i91209#
+#if defined(WNT)
+
+#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)
+
 STD_LIB_FILE(gid_File_Lib_Mozab,mozab2)
 STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
 
@@ -898,12 +905,14 @@ File gid_File_Lib_Mozbootstrap
     LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmozbootstrap,UNXSUFFIX));
-  #else
     Name = "mozbootstrap.dll";
-  #endif
 End
+
+#endif
+
+#else
+
+STD_LIB_FILE(gid_File_Lib_Mork,mork)
 
 #endif
 
@@ -1467,6 +1476,24 @@ File gid_File_Lib_Xslt
    #endif
   #endif
 End
+File gid_File_Lib_eXslt
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT4(libexslt,.,0,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT4(libexslt,UNXSUFFIX,.,0));
+    #endif
+  #else
+   #ifdef _gcc3
+    Name = "libexslt-0.dll";
+   #else
+    Name = "libexslt.dll";
+   #endif
+  #endif
+End
 #endif
 
 
@@ -1521,6 +1548,18 @@ File gid_File_Lib_LibXMLSec_xmlseccore
     Styles = (PACKED);
 End
 
+#ifdef CROSS_COMPILING
+File gid_File_Lib_LibXMLSec_xmlsecnss
+    LIB_FILE_BODY;
+  #ifdef _gcc3
+    Name = "libxmlsec1-nss.dll";
+  #else
+    Name = "libxmlsec-nss.dll";
+  #endif
+    Dir = SCP2_OOO_BIN_DIR;
+    Styles = (PACKED);
+End
+#else
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     LIB_FILE_BODY;
   #ifdef _gcc3
@@ -1531,6 +1570,7 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
+#endif
 #endif
 
 File gid_File_Lib_Migrationoo2
@@ -1692,22 +1732,9 @@ STD_LIB_FILE(gid_File_Lib_Unordf, unordf)
 STD_LIB_FILE( gid_File_Lib_For, for)
 STD_LIB_FILE( gid_File_Lib_Forui, forui)
 
-// RSVG and dependencies
-#if ENABLE_LIBRSVG
-#if ! defined (SYSTEM_GETTEXT)
-File gid_File_Lib_Intl
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    #ifdef MACOSX
-    Name = "libintl.8.dylib";
-    #elif defined WNT
-    Name = "intl.dll";
-    #endif
-End
-#endif
-
-#if ! defined SYSTEM_GLIB
+#if !defined SYSTEM_GLIB \
+    && ((defined ENABLE_LIBLANGTAG && !defined SYSTEM_LIBLANGTAG) \
+        || (ENABLE_LIBRSVG && !defined SYSTEM_LIBRSVG))
 File gid_File_Lib_Glib
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -1756,6 +1783,21 @@ File gid_File_Lib_Gmodule
     Name = "libgmodule-2.0.0.dylib";
     #elif defined WNT
     Name = "gmodulelo.dll";
+    #endif
+End
+#endif
+
+// RSVG and dependencies
+#if ENABLE_LIBRSVG
+#if ! defined (SYSTEM_GETTEXT)
+File gid_File_Lib_Intl
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libintl.8.dylib";
+    #elif defined WNT
+    Name = "intl.dll";
     #endif
 End
 #endif
@@ -1863,3 +1905,4 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Lomenubar, lomenubar.uno )
 #ifdef ENABLE_TELEPATHY
 STD_LIB_FILE( gid_File_Lib_Tubes , tubes)
 #endif
+

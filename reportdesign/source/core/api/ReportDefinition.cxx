@@ -48,6 +48,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -657,14 +658,14 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
 {
     DBG_CTOR( rpt_OReportDefinition,NULL);
     m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT,m_aProps->m_xContext->getServiceManager());
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         init();
         m_pImpl->m_xGroups = new OGroups(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL,m_aProps->m_xContext->getServiceManager()));
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > const & _xContext
@@ -677,7 +678,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
 {
     m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT,m_aProps->m_xContext->getServiceManager());
     m_aProps->m_xFactory = _xFactory;
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         m_aProps->setShape(_xShape,this,m_refCount);
         init();
@@ -685,7 +686,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
         m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL,m_aProps->m_xContext->getServiceManager()));
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OReportDefinition::OReportDefinition(const OReportDefinition& _rCopy)
@@ -697,7 +698,7 @@ OReportDefinition::OReportDefinition(const OReportDefinition& _rCopy)
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex,*_rCopy.m_pImpl))
 {
     DBG_CTOR( rpt_OReportDefinition,NULL);
-    osl_incrementInterlockedCount(&m_refCount);
+    osl_atomic_increment(&m_refCount);
     {
         init();
         OGroups* pGroups = new OGroups(this,m_aProps->m_xContext);
@@ -715,7 +716,7 @@ OReportDefinition::OReportDefinition(const OReportDefinition& _rCopy)
         OSection::lcl_copySection(_rCopy.m_pImpl->m_xReportHeader,m_pImpl->m_xReportHeader);
         OSection::lcl_copySection(_rCopy.m_pImpl->m_xReportFooter,m_pImpl->m_xReportFooter);
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OReportDefinition::~OReportDefinition()
@@ -2845,11 +2846,7 @@ uno::Reference< document::XDocumentProperties > SAL_CALL OReportDefinition::getD
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     if ( !m_pImpl->m_xDocumentProperties.is() )
     {
-        uno::Reference< lang::XInitialization > xDocProps(
-            m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.DocumentProperties")) ,m_aProps->m_xContext),
-                uno::UNO_QUERY_THROW);
-        m_pImpl->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
+        m_pImpl->m_xDocumentProperties.set(document::DocumentProperties::create(m_aProps->m_xContext));
     }
     return m_pImpl->m_xDocumentProperties;
 }

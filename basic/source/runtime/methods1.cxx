@@ -384,7 +384,7 @@ RTLFUNC(CSng)  // JSM
             // #41690
             double dVal = 0.0;
             String aScanStr = pSbxVariable->GetString();
-            SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/sal_True );
+            SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
             if( SbxBase::GetError() == SbxERR_OK && Error != SbxERR_OK )
                 StarBASIC::Error( Error );
             nVal = (float)dVal;

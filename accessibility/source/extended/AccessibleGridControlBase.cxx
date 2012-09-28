@@ -29,14 +29,13 @@
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
 #include <svtools/accessibletable.hxx>
 #include <comphelper/servicehelper.hxx>
-//
+#include <cppuhelper/supportsservice.hxx>
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
 // ============================================================================
-
-using ::rtl::OUString;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -75,7 +74,7 @@ AccessibleGridControlBase::~AccessibleGridControlBase()
     if( isAlive() )
     {
         // increment ref count to prevent double call of Dtor
-        osl_incrementInterlockedCount( &m_refCount );
+        osl_atomic_increment( &m_refCount );
         dispose();
     }
 }
@@ -83,7 +82,16 @@ AccessibleGridControlBase::~AccessibleGridControlBase()
 void SAL_CALL AccessibleGridControlBase::disposing()
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
+
+    if ( getClientId( ) )
+    {
+        AccessibleEventNotifier::TClientId nId( getClientId( ) );
+        setClientId( 0 );
+        AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
+    }
+
     m_xParent = NULL;
+    //m_aTable = NULL;
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -293,22 +301,13 @@ sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
         const OUString& rServiceName )
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
-
-    Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
-    const OUString* pArrBegin = aSupportedServices.getConstArray();
-    const OUString* pArrEnd = pArrBegin + aSupportedServices.getLength();
-    const OUString* pString = pArrBegin;
-
-    for( ; ( pString != pArrEnd ) && ( rServiceName != *pString ); ++pString )
-        ;
-    return pString != pArrEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
+    const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
     return Sequence< OUString >( &aServiceName, 1 );
 }
 // internal virtual methods ---------------------------------------------------

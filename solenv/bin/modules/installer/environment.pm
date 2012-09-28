@@ -27,7 +27,6 @@
 
 package installer::environment;
 
-use installer::exiter;
 use installer::globals;
 
 ######################################################
@@ -94,7 +93,7 @@ sub check_tilde_in_directory
         # exit, because "~" is not allowed, if HOME is not set
         my $infoline = "ERROR: If \"~\" is used in \"LOCALINSTALLDIR\", environment variable \"HOME\" needs to be defined!\n";
         push(@installer::globals::logfileinfo, $infoline);
-        installer::exiter::exit_program("ERROR: If \"~\" is used in \"LOCALINSTALLDIR\", environment variable \"HOME\" needs to be defined!", "check_tilde_in_directory");
+        die 'If "~" is used in "LOCALINSTALLDIR", environment variable "HOME" needs to be defined!';
     }
 }
 

@@ -411,12 +411,8 @@
 
 #define STRING_DRAG_AND_DROP_PAGES          (RID_APP_START+726)
 #define STRING_DRAG_AND_DROP_SLIDES         (RID_APP_START+727)
-#define STRING_START_SLIDESHOW              (RID_APP_START+728)
-#define STRING_HIDE_SLIDE               (RID_APP_START+729)
-#define STRING_SHOW_SLIDE               (RID_APP_START+730)
-#define STRING_DUPLICATE_SLIDE              (RID_APP_START+731)
 
-#define STR_ACC_DIALOG_DESC                     (RID_APP_START+732)
+#define STR_ACC_DIALOG_DESC                             (RID_APP_START+728)
 
 /******************************************************************************
 * The ids in glob.hrc start at RID_APP_START+750!

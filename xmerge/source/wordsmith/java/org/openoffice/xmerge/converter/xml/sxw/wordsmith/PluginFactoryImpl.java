@@ -60,7 +60,6 @@ import java.io.IOException;
  *  org.openoffice.xmerge.converter.xml.sxw.wordsmith.DocumentMergerImpl
  *  DocumentMergerImpl} which this class derives the functionality.</p>
  *
- *  @author   Herbie Ong, Dave Proulx
  */
 public final class PluginFactoryImpl extends SxwPluginFactory
     implements DocumentDeserializerFactory, DocumentSerializerFactory,

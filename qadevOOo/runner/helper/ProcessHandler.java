@@ -25,12 +25,7 @@ import java.io.PrintStream;
 import java.io.LineNumberReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import lib.TestParameters;
-import share.LogWriter;
 import util.PropertyName;
 import util.utils;
 

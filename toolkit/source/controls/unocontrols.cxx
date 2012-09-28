@@ -648,13 +648,13 @@ UnoControlButtonModel::UnoControlButtonModel( const Reference< XMultiServiceFact
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXButton );
 
-    osl_incrementInterlockedCount( &m_refCount );
+    osl_atomic_increment( &m_refCount );
     {
         setFastPropertyValue_NoBroadcast( BASEPROPERTY_IMAGEPOSITION, ImplGetDefaultValue( BASEPROPERTY_IMAGEPOSITION ) );
         // this ensures that our ImagePosition is consistent with our ImageAlign property (since both
         // defaults are not per se consistent), since both are coupled in setFastPropertyValue_NoBroadcast
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_atomic_decrement( &m_refCount );
 }
 
 ::rtl::OUString UnoControlButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)

@@ -24,6 +24,7 @@
 #include <memory>
 #include <vector>
 
+#include "boost/scoped_ptr.hpp"
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -36,10 +37,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
 #include "rtl/byteseq.h"
-#include "rtl/oustringostreaminserter.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/log.hxx"
 #include "sal/types.h"
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
@@ -54,8 +52,6 @@
 #include "specialfunctionids.hxx"
 #include "unmarshal.hxx"
 
-#include <boost/scoped_ptr.hpp>
-
 namespace binaryurp {
 
 namespace {
@@ -69,9 +65,7 @@ css::uno::Sequence< sal_Int8 > read(
     assert(connection.is());
     if (size > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "binaryurp::Reader: block size too large")),
+            "binaryurp::Reader: block size too large",
             css::uno::Reference< css::uno::XInterface >());
     }
     css::uno::Sequence< sal_Int8 > buf;
@@ -81,9 +75,7 @@ css::uno::Sequence< sal_Int8 > read(
     }
     if (n != static_cast< sal_Int32 >(size)) {
         throw css::io::IOException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "binaryurp::Reader: premature end of input")),
+            "binaryurp::Reader: premature end of input",
             css::uno::Reference< css::uno::XInterface >());
     }
     assert(buf.getLength() == static_cast< sal_Int32 >(size));
@@ -123,10 +115,7 @@ void Reader::execute() {
             header.done();
             if (count == 0) {
                 throw css::io::IOException(
-                    OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "binaryurp::Reader: block with zero message count"
-                            " received")),
+                    "binaryurp::Reader: block with zero message count received",
                     css::uno::Reference< css::uno::XInterface >());
             }
             Unmarshal block(bridge_, state_, read(con, size, false));
@@ -164,10 +153,8 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             if (((flags2 & 0x40) != 0) != forceSynchronous) {
                     // bit 6: SYNCHRONOUS
                 throw css::uno::RuntimeException(
-                    OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "URP: request message with MUSTREPLY != SYNCHRONOUS"
-                            " received")),
+                    ("URP: request message with MUSTREPLY != SYNCHRONOUS"
+                     " received"),
                     css::uno::Reference< css::uno::XInterface >());
             }
         } else {
@@ -190,10 +177,8 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     } else {
         if (!lastType_.is()) {
             throw css::uno::RuntimeException(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "URP: request message with NEWTYPE received when last"
-                        " interface type has not yet been set")),
+                ("URP: request message with NEWTYPE received when last"
+                 " interface type has not yet been set"),
                 css::uno::Reference< css::uno::XInterface >());
         }
         type = lastType_;
@@ -203,19 +188,15 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         oid = unmarshal.readOid();
         if (oid.isEmpty()) {
             throw css::io::IOException(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "binaryurp::Unmarshal: emtpy OID")),
+                "binaryurp::Unmarshal: emtpy OID",
                 css::uno::Reference< css::uno::XInterface >());
         }
         lastOid_ = oid;
     } else {
         if (lastOid_.isEmpty()) {
             throw css::uno::RuntimeException(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "URP: request message with NEWOID received when last"
-                        " OID has not yet been set")),
+                ("URP: request message with NEWOID received when last OID has"
+                 " not yet been set"),
                 css::uno::Reference< css::uno::XInterface >());
         }
         oid = lastOid_;
@@ -225,19 +206,14 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     type.makeComplete();
     if (type.get()->eTypeClass != typelib_TypeClass_INTERFACE) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "URP: request message with non-interface interface type"
-                    " received")),
+            "URP: request message with non-interface interface type received",
             css::uno::Reference< css::uno::XInterface >());
     }
     typelib_InterfaceTypeDescription * itd =
         reinterpret_cast< typelib_InterfaceTypeDescription * >(type.get());
     if (functionId >= itd->nMapFunctionIndexToMemberIndex) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "URP: request message with unknown function ID received")),
+            "URP: request message with unknown function ID received",
             css::uno::Reference< css::uno::XInterface >());
     }
     sal_Int32 memberId = itd->pMapFunctionIndexToMemberIndex[functionId];
@@ -266,10 +242,8 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     } else {
         if (forceSynchronous) {
             throw css::uno::RuntimeException(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "URP: synchronous request message with non-oneway"
-                        " function ID received")),
+                ("URP: synchronous request message with non-oneway function ID"
+                 " received"),
                 css::uno::Reference< css::uno::XInterface >());
         }
         synchronous = true;
@@ -322,10 +296,8 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             break;
         default:
             throw css::uno::RuntimeException(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "URP: request message with UrpProtocolProperties OID"
-                        " and unknown function ID received")),
+                ("URP: request message with UrpProtocolProperties OID and"
+                 " unknown function ID received"),
                 css::uno::Reference< css::uno::XInterface >());
         }
     } else {
@@ -355,20 +327,15 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                                           css::uno::XInterface > >::get())))))
                 {
                     throw css::uno::RuntimeException(
-                        OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "URP: queryInterface request message with"
-                                " unknown OID received")),
+                        ("URP: queryInterface request message with unknown OID"
+                         " received"),
                         css::uno::Reference< css::uno::XInterface >());
                 }
             }
             break;
         case SPECIAL_FUNCTION_ID_RESERVED:
             throw css::uno::RuntimeException(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "URP: request message with unknown function ID 1"
-                        " received")),
+                "URP: request message with unknown function ID 1 received",
                 css::uno::Reference< css::uno::XInterface >());
         case SPECIAL_FUNCTION_ID_RELEASE:
             break;
@@ -376,9 +343,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             obj = bridge_->findStub(oid, type);
             if (!obj.is()) {
                 throw css::uno::RuntimeException(
-                    OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "URP: request message with unknown OID received")),
+                    "URP: request message with unknown OID received",
                     css::uno::Reference< css::uno::XInterface >());
             }
             break;
@@ -457,10 +422,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
             }
             if (!ok) {
                 throw css::uno::RuntimeException(
-                    OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "URP: reply message with bad exception type"
-                            " received")),
+                    "URP: reply message with bad exception type received",
                     css::uno::Reference< css::uno::XInterface >());
             }
         }
@@ -532,10 +494,8 @@ rtl::ByteSequence Reader::getTid(Unmarshal & unmarshal, bool newTid) const {
     }
     if (lastTid_.getLength() == 0) {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "URP: message with NEWTID received when last TID has not"
-                    " yet been set")),
+            ("URP: message with NEWTID received when last TID has not yet been"
+             " set"),
             css::uno::Reference< css::uno::XInterface >());
     }
     return lastTid_;

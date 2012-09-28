@@ -245,106 +245,7 @@ sub create_media_table
 
     installer::windows::idtglobal::write_idt_header(\@mediatable, "media");
 
-    if ( $allvariables->{'INCLUDE_CAB_IN_MSI'} ) { $installer::globals::include_cab_in_msi = 1; }
-
-    if ( $installer::globals::use_packages_for_cabs )
-    {
-        my $cabfile;
-        foreach $cabfile ( sort keys %installer::globals::lastsequence )
-        {
-            my %media = ();
-            $diskid++;
-
-            $media{'DiskId'} = get_media_diskid($diskid);
-            $media{'LastSequence'} = get_last_sequence($cabfile, $alludpatelastsequences);
-            $media{'DiskPrompt'} = get_media_diskprompt();
-            $media{'Cabinet'} = get_cabfilename($cabfile);
-            $media{'VolumeLabel'} = get_media_volumelabel();
-            $media{'Source'} = get_media_source();
-
-            my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                        . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
-
-            push(@mediatable, $oneline);
-
-            # Comparing the disk id with the disk id from update database. Both have to be identical. New files have to be added
-            # to the new pff cabinet file. And existing cab files must not be removed.
-            if ( $installer::globals::updatedatabase )
-            {
-                # Comparing lines in new media table with line from media table in udpate database.
-                if ( exists($allupdatediskids->{$media{'Cabinet'}}) )
-                {
-                    if ( $media{'DiskId'} != $allupdatediskids->{$media{'Cabinet'}} )
-                    {
-                        installer::exiter::exit_program("ERROR: Different DiskIDs for cab file \"$media{'Cabinet'}\".\nCurrent installation set: \"$media{'DiskId'}\", but update database used \"$allupdatediskids->{$media{'Cabinet'}}\".\nWere cabinet files removed or added?", "create_media_table");
-                    }
-                }
-                else
-                {
-                    my $localinfoline = "Warning: Could not find cabinet file \"$media{'Cabinet'}}\" in update database. This seems to be an new cabinet file!?\n";
-                    push(@installer::globals::logfileinfo, $localinfoline);
-                }
-            }
-        }
-
-        # one new cabinet file for all files added after the final release
-        if (( $installer::globals::updatedatabase ) && ( $installer::globals::pfffileexists ))
-        {
-            my %media = ();
-            $diskid++;
-
-            $media{'DiskId'} = get_media_diskid($diskid) + $installer::globals::mergemodulenumber;  # Adding mergemodulenumber, because this files are included later
-            $media{'LastSequence'} = $installer::globals::updatesequencecounter;
-            $media{'DiskPrompt'} = get_media_diskprompt();
-            $media{'Cabinet'} = get_cabfilename($installer::globals::pffcabfilename);
-            $media{'VolumeLabel'} = get_media_volumelabel();
-            $media{'Source'} = get_media_source();
-
-            my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                        . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
-
-            push(@mediatable, $oneline);
-        }
-
-    }
-    elsif ( $installer::globals::cab_file_per_component )
-    {
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-        {
-            my $onefile = ${$filesref}[$i];
-            my $nextfile = ${$filesref}[$i+1];
-
-            my $filecomponent = "";
-            my $nextcomponent = "";
-
-            if ( $onefile->{'componentname'} ) { $filecomponent = $onefile->{'componentname'}; }
-            if ( $nextfile->{'componentname'} ) { $nextcomponent = $nextfile->{'componentname'}; }
-
-            if ( $filecomponent eq $nextcomponent )
-            {
-                next;       # nothing to do, this is not the last file of a component
-            }
-
-            my %media = ();
-            $diskid++;
-
-            $media{'DiskId'} = get_media_diskid($diskid);
-            $media{'LastSequence'} = get_media_lastsequence($onefile);
-            $media{'DiskPrompt'} = get_media_diskprompt();
-            $media{'Cabinet'} = get_media_cabinet($diskid);
-            $media{'VolumeLabel'} = get_media_volumelabel();
-            $media{'Source'} = get_media_source();
-
-            my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                    . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
-
-            push(@mediatable, $oneline);
-
-            $media{'Cabinet'} =~ s/^\s*\#//;    # removing leading hash
-            set_cabinetfilename_for_component_in_file_collector($media{'Cabinet'}, $filesref, $filecomponent, $i);
-        }
-    }
-    elsif ( $installer::globals::fix_number_of_cab_files )
+    if ( $installer::globals::fix_number_of_cab_files )
     {
         # number of cabfiles
         my $maxcabfilenumber = $installer::globals::number_of_cabfiles;
@@ -408,35 +309,6 @@ sub create_media_table
                 $cabfull = 0;
                 $counter = 0;
             }
-        }
-    }
-    elsif ( $installer::globals::one_cab_file )
-    {
-        my %media = ();
-        $diskid++;
-
-        my $maximumfile = $#{$filesref};
-
-        $media{'DiskId'} = get_media_diskid($diskid);
-        $media{'LastSequence'} = $maximumfile + 1; # This works also for unsorted file collector
-        $media{'DiskPrompt'} = get_media_diskprompt();
-        $media{'Cabinet'} = generate_cab_filename($allvariables);
-        $media{'VolumeLabel'} = get_media_volumelabel();
-        $media{'Source'} = get_media_source();
-
-        my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                    . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
-
-        push(@mediatable, $oneline);
-
-        # Saving the cabinet file name in the file collector
-
-        $media{'Cabinet'} =~ s/^\s*\#//;    # removing leading hash
-
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-        {
-            my $onefile = ${$filesref}[$i];
-            $onefile->{'cabinet'} = $media{'Cabinet'};
         }
     }
     else

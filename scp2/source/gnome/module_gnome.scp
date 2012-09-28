@@ -32,23 +32,21 @@ Module gid_Module_Optional_Gnome
     Default = YES;
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_GNOME);
-#ifdef UNX
     Styles = ();
-#else
-    Styles = (DONTSHOWINUSERINSTALL);
-#endif
 #ifdef ENABLE_GNOMEVFS
     XpdCheckSolaris = "SUNWgnome-vfs";
 #endif
     Files = (
+#ifdef ENABLE_EVOAB2
       gid_File_Lib_Evoab,
+#endif
+#ifdef ENABLE_GTK
       gid_File_Lib_Fps_Gnome,
       gid_File_Lib_Vclplug_Gtk,
+#endif
 #ifdef ENABLE_GTK3
       gid_File_Lib_Vclplug_Gtk3,
 #endif
-      gid_File_Bin_Gnome_Open_Url,
-      gid_File_Bin_Gnome_Open_Url_Bin,
 #ifdef ENABLE_SYSTRAY_GTK
       gid_File_Lib_QStart_Gtk,
 #endif
@@ -59,11 +57,13 @@ Module gid_Module_Optional_Gnome
       gid_File_Lib_GIO,
 #endif
 #ifdef ENABLE_GCONF
-      gid_File_Lib_Gconfbe
+      gid_File_Lib_Gconfbe,
 #endif
 #if (defined ENABLE_GNOMEVFS && defined ENABLE_LOCKDOWN) || defined ENABLE_GIO
-      gid_File_Share_Registry_Gnome_Xcd
+      gid_File_Share_Registry_Gnome_Xcd,
 #endif
+      gid_File_Bin_Gnome_Open_Url,
+      gid_File_Bin_Gnome_Open_Url_Bin
     );
 End
 

@@ -32,6 +32,8 @@
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
@@ -120,11 +122,14 @@ namespace svt { namespace table
         RowPos              nCurrentRow;
         bool                bUseGridLines;
         CachedSortIndicator aSortIndicator;
+        CellValueConversion aStringConverter;
 
         GridTableRenderer_Impl( ITableModel& _rModel )
             :rModel( _rModel )
             ,nCurrentRow( ROW_INVALID )
             ,bUseGridLines( true )
+            ,aSortIndicator( )
+            ,aStringConverter( ::comphelper::ComponentContext( ::comphelper::getProcessServiceFactory() ) )
         {
         }
     };
@@ -165,7 +170,9 @@ namespace svt { namespace table
             }
 
             sal_uLong nHorzFlag = TEXT_DRAW_LEFT;
-            HorizontalAlignment const eHorzAlign = i_impl.rModel.getColumnModel( i_columnPos )->getHorizontalAlign();
+            HorizontalAlignment const eHorzAlign = i_impl.rModel.getColumnCount() > 0
+                                                ?  i_impl.rModel.getColumnModel( i_columnPos )->getHorizontalAlign()
+                                                :  HorizontalAlignment_CENTER;
             switch ( eHorzAlign )
             {
             case HorizontalAlignment_CENTER:    nHorzFlag = TEXT_DRAW_CENTER;   break;
@@ -315,7 +322,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridTableRenderer::PrepareRow( RowPos _nRow, bool _bActive, bool _bSelected,
+    void GridTableRenderer::PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
         OutputDevice& _rDevice, const Rectangle& _rRowArea, const StyleSettings& _rStyle )
     {
         // remember the row for subsequent calls to the other ->ITableRenderer methods
@@ -325,13 +332,17 @@ namespace svt { namespace table
 
         ::Color backgroundColor = _rStyle.GetFieldColor();
 
-        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+        ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
         ::Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
 
+        ::Color const activeSelectionBackColor =
+            lcl_getEffectiveColor( m_pImpl->rModel.getActiveSelectionBackColor(), _rStyle, &StyleSettings::GetHighlightColor );
         if ( _bSelected )
         {
             // selected rows use the background color from the style
-            backgroundColor = _rStyle.GetHighlightColor();
+            backgroundColor = i_hasControlFocus
+                ?   activeSelectionBackColor
+                :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionBackColor(), _rStyle, &StyleSettings::GetDeactiveColor );
             if ( !aLineColor )
                 lineColor = backgroundColor;
         }
@@ -348,7 +359,7 @@ namespace svt { namespace table
                 }
                 else
                 {
-                    Color hilightColor = _rStyle.GetHighlightColor();
+                    Color hilightColor = activeSelectionBackColor;
                     hilightColor.SetRed( 9 * ( fieldColor.GetRed() - hilightColor.GetRed() ) / 10 + hilightColor.GetRed() );
                     hilightColor.SetGreen( 9 * ( fieldColor.GetGreen() - hilightColor.GetGreen() ) / 10 + hilightColor.GetGreen() );
                     hilightColor.SetBlue( 9 * ( fieldColor.GetBlue() - hilightColor.GetBlue() ) / 10 + hilightColor.GetBlue() );
@@ -375,13 +386,10 @@ namespace svt { namespace table
         _rDevice.DrawRect( _rRowArea );
 
         _rDevice.Pop();
-
-        (void)_bActive;
-        // row containing the active cell not rendered any special at the moment
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridTableRenderer::PaintRowHeader( bool _bActive, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
+    void GridTableRenderer::PaintRowHeader( bool i_hasControlFocus, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
         const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_TEXTCOLOR );
@@ -392,7 +400,7 @@ namespace svt { namespace table
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
 
         Any const rowHeading( m_pImpl->rModel.getRowHeading( m_pImpl->nCurrentRow ) );
-        ::rtl::OUString const rowTitle( CellValueConversion::convertToString( rowHeading ) );
+        ::rtl::OUString const rowTitle( m_pImpl->aStringConverter.convertToString( rowHeading ) );
         if ( !rowTitle.isEmpty() )
         {
             ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
@@ -404,8 +412,7 @@ namespace svt { namespace table
             _rDevice.DrawText( aTextRect, rowTitle, nDrawTextFlags );
         }
 
-        // TODO: active? selected?
-        (void)_bActive;
+        (void)i_hasControlFocus;
         (void)_bSelected;
         _rDevice.Pop();
     }
@@ -418,26 +425,28 @@ namespace svt { namespace table
         StyleSettings const &   rStyle;
         ColPos const            nColumn;
         bool const              bSelected;
+        bool const              bHasControlFocus;
 
         CellRenderContext( OutputDevice& i_device, Rectangle const & i_contentArea,
-            StyleSettings const & i_style, ColPos const i_column, bool const i_selected )
+            StyleSettings const & i_style, ColPos const i_column, bool const i_selected, bool const i_hasControlFocus )
             :rDevice( i_device )
             ,aContentArea( i_contentArea )
             ,rStyle( i_style )
             ,nColumn( i_column )
             ,bSelected( i_selected )
+            ,bHasControlFocus( i_hasControlFocus )
         {
         }
     };
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool _bActive,
+    void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
     {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
         Rectangle const aContentArea( lcl_getContentArea( *m_pImpl, _rArea ) );
-        CellRenderContext const aRenderContext( _rDevice, aContentArea, _rStyle, i_column, _bSelected );
+        CellRenderContext const aRenderContext( _rDevice, aContentArea, _rStyle, i_column, _bSelected, i_hasControlFocus );
         impl_paintCellContent( aRenderContext );
 
         if ( m_pImpl->bUseGridLines )
@@ -448,7 +457,9 @@ namespace svt { namespace table
             if ( _bSelected && !aLineColor )
             {
                 // if no line color is specified by the model, use the usual selection color for lines in selected cells
-                lineColor = _rStyle.GetHighlightColor();
+                lineColor = i_hasControlFocus
+                    ?   lcl_getEffectiveColor( m_pImpl->rModel.getActiveSelectionBackColor(), _rStyle, &StyleSettings::GetHighlightColor )
+                    :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionBackColor(), _rStyle, &StyleSettings::GetDeactiveColor );
             }
 
             _rDevice.SetLineColor( lineColor );
@@ -457,9 +468,6 @@ namespace svt { namespace table
         }
 
         _rDevice.Pop();
-
-        (void)_bActive;
-        // no special painting for the active cell at the moment
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -528,7 +536,7 @@ namespace svt { namespace table
             return;
         }
 
-        const ::rtl::OUString sText( CellValueConversion::convertToString( aCellContent ) );
+        const ::rtl::OUString sText( m_pImpl->aStringConverter.convertToString( aCellContent ) );
         impl_paintCellText( i_context, sText );
     }
 
@@ -536,7 +544,12 @@ namespace svt { namespace table
     void GridTableRenderer::impl_paintCellText( CellRenderContext const & i_context, ::rtl::OUString const & i_text )
     {
         if ( i_context.bSelected )
-            i_context.rDevice.SetTextColor( i_context.rStyle.GetHighlightTextColor() );
+        {
+            ::Color const textColor = i_context.bHasControlFocus
+                ?   lcl_getEffectiveColor( m_pImpl->rModel.getActiveSelectionTextColor(), i_context.rStyle, &StyleSettings::GetHighlightTextColor )
+                :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionTextColor(), i_context.rStyle, &StyleSettings::GetDeactiveTextColor );
+            i_context.rDevice.SetTextColor( textColor );
+        }
         else
         {
             ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), i_context.rStyle, &StyleSettings::GetFieldTextColor );
@@ -563,7 +576,7 @@ namespace svt { namespace table
 
     //------------------------------------------------------------------------------------------------------------------
     bool GridTableRenderer::FitsIntoCell( Any const & i_cellContent, ColPos const i_colPos, RowPos const i_rowPos,
-        bool const i_active, bool const i_selected, OutputDevice& i_targetDevice, Rectangle const & i_targetArea )
+        bool const i_active, bool const i_selected, OutputDevice& i_targetDevice, Rectangle const & i_targetArea ) const
     {
         if ( !i_cellContent.hasValue() )
             return true;
@@ -583,7 +596,7 @@ namespace svt { namespace table
             return true;
         }
 
-        ::rtl::OUString const sText( CellValueConversion::convertToString( i_cellContent ) );
+        ::rtl::OUString const sText( m_pImpl->aStringConverter.convertToString( i_cellContent ) );
         if ( sText.isEmpty() )
             return true;
 
@@ -601,6 +614,16 @@ namespace svt { namespace table
         OSL_UNUSED( i_selected );
         OSL_UNUSED( i_rowPos );
         OSL_UNUSED( i_colPos );
+        return true;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool GridTableRenderer::GetFormattedCellString( Any const & i_cellValue, ColPos const i_colPos, RowPos const i_rowPos, ::rtl::OUString & o_cellString ) const
+    {
+        o_cellString = m_pImpl->aStringConverter.convertToString( i_cellValue );
+
+        OSL_UNUSED( i_colPos );
+        OSL_UNUSED( i_rowPos );
         return true;
     }
 

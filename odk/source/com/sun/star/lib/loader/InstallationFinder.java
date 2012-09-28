@@ -350,12 +350,10 @@ final class InstallationFinder {
                                 "reading which command output failed: " + e );
             return null;
         } finally {
-            if ( br != null ) {
-                try {
-                    br.close();
-                } catch ( IOException e ) {
-                    // closing standard input stream failed, ignore
-                }
+            try {
+                br.close();
+            } catch ( IOException e ) {
+                // closing standard input stream failed, ignore
             }
         }
 

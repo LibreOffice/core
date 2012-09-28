@@ -40,6 +40,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -154,14 +155,7 @@ Sequence< OUString > ServiceImpl0::getSupportedServiceNames()
 sal_Bool ServiceImpl0::supportsService( const OUString & rServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    const Sequence< OUString > & rSNL = getSupportedServiceNames();
-    const OUString * pArray = rSNL.getConstArray();
-    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-    {
-        if (pArray[nPos] == rServiceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 
 //==================================================================================================

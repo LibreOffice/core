@@ -24,7 +24,6 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.utils;
 import java.net.URLEncoder;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -67,7 +66,7 @@ public class ScriptStorage extends TestCase {
         XInterface oObj = null;
         XSimpleFileAccess access = null;
         try {
-            XMultiServiceFactory xMSF = tParam.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
             Object xInterface =
                 xMSF.createInstance( "com.sun.star.ucb.SimpleFileAccess" );
             access = ( XSimpleFileAccess )

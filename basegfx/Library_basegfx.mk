@@ -11,6 +11,7 @@ $(eval $(call gb_Library_Library,basegfx))
 
 $(eval $(call gb_Library_use_packages,basegfx,\
     basegfx_inc \
+    comphelper_inc \
     o3tl_inc \
 ))
 

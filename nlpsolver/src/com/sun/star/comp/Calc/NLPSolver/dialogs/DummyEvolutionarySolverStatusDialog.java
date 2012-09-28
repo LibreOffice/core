@@ -27,10 +27,6 @@
 
 package com.sun.star.comp.Calc.NLPSolver.dialogs;
 
-/**
- *
- * @author Andreas Schneider <andreas.schneider@sun.com>
- */
 public class DummyEvolutionarySolverStatusDialog
   implements IEvolutionarySolverStatusDialog {
 

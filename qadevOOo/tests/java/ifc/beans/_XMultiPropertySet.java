@@ -18,7 +18,6 @@
 
 package ifc.beans;
 
-import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -93,7 +92,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
              propertiesChanged = true;
          }
          public void disposing (EventObject obj) {}
-    };
+    }
 
     private XPropertiesChangeListener PClistener =
         new MyChangeListener();

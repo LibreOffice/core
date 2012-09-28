@@ -39,6 +39,7 @@ class ScAddress;
 class ScDocument;
 class ScRange;
 class SvNumberFormatter;
+class ScOrcusFilters;
 
 // return values im-/export filter  (sal_uLong)
 
@@ -118,6 +119,8 @@ class ScFormatFilterPlugin {
     virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, bool bAll,
                   const String& rStreamPath, String& rNonConvertibleChars ) = 0;
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest ) = 0;
+
+    virtual ScOrcusFilters* GetOrcusFilters() = 0;
 
 protected:
     ~ScFormatFilterPlugin() {}

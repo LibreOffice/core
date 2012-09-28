@@ -22,9 +22,15 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     ModalDialog( pWindow, SdResId( DLG_PAIR_REMOTE ) ),
     mButtonConnect(     this, SdResId( BTN_CONNECT ) ),
     mButtonCancel(      this, SdResId( BTN_CANCEL ) ),
-    mClientBox(         this, NULL, SdResId( LB_SERVERS ) )
+    mClientBox(         this, NULL, SdResId( LB_SERVERS ) ),
+    mPreviouslyDiscoverable()
 {
+#ifdef ENABLE_SDREMOTE
     FreeResource();
+
+    mPreviouslyDiscoverable = RemoteServer::isBluetoothDiscoverable();
+    if ( !mPreviouslyDiscoverable )
+        RemoteServer::setBluetoothDiscoverable( true );
 
     vector<ClientInfo*> aClients( RemoteServer::getClients() );
 
@@ -35,6 +41,11 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     }
 
     mButtonConnect.SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
+    SetCloseHdl( LINK( this, RemoteDialog, CloseHdl ) );
+    mButtonCancel.SetClickHdl( LINK( this, RemoteDialog, CloseHdl ) );
+#else
+    (void) mPreviouslyDiscoverable; // avoid warnings about unused member
+#endif
 }
 
 RemoteDialog::~RemoteDialog()
@@ -46,6 +57,7 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 {
 //     setBusy( true );
     // Fixme: Try and connect
+#ifdef ENABLE_SDREMOTE
     long aSelected = mClientBox.GetActiveEntryIndex();
     if ( aSelected < 0 )
         return 1;
@@ -53,11 +65,24 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
     OUString aPin ( mClientBox.getPin() );
     if ( RemoteServer::connectClient( aEntry->m_pClientInfo, aPin ) )
     {
-        Close();
-        return 0;
+        return CloseHdl( 0 );
     }
     else
         return 1;
+#endif
+        return 0;
+}
+
+IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
+{
+#ifdef ENABLE_SDREMOTE
+    if ( !mPreviouslyDiscoverable )
+    {
+        RemoteServer::setBluetoothDiscoverable( false );
+    }
+    Close();
+#endif
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

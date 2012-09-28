@@ -18,7 +18,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxc;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,8 +46,6 @@ import org.w3c.dom.NodeList;
  *  It uses a <code>DocEncoder</code> object for the actual conversion
  *  of contents to the device spreadsheet format.</p>
  *
- * @author      Paul Rank
- * @author      Mark Murnane
  */
 public abstract class SxcDocumentSerializer implements OfficeConstants,
     DocumentSerializer {

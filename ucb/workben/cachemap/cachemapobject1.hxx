@@ -58,7 +58,7 @@ class Object1
 {
 public:
     inline void acquire() SAL_THROW(())
-    { osl_incrementInterlockedCount(&m_nRefCount); }
+    { osl_atomic_increment(&m_nRefCount); }
 
     inline void release() SAL_THROW(())
     { m_xContainer->releaseElement(this); }

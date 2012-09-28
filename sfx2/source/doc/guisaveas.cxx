@@ -35,6 +35,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -45,7 +46,6 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/io/IOException.hpp>
 
 #include "guisaveas.hxx"
@@ -60,7 +60,6 @@
 #include <svtools/miscopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -416,7 +415,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
     if ( !m_pModulePropsHM )
     {
         uno::Sequence< beans::PropertyValue > aModuleProps;
-        m_pOwner->GetNamedModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
+        m_pOwner->GetModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
         if ( !aModuleProps.getLength() )
             throw uno::RuntimeException(); // TODO;
         m_pModulePropsHM = new ::comphelper::SequenceAsHashMap( aModuleProps );
@@ -1113,7 +1112,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
                 util::URL aURL;
                 aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SetDocumentProperties"));
 
-                uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( ::comphelper::ComponentContext(m_pOwner->GetServiceFactory()).getUNOContext() ) );
+                uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( ::comphelper::getComponentContext(m_pOwner->GetServiceFactory()) ) );
                 if ( xTransformer->parseStrict( aURL ) )
                 {
                     uno::Reference< frame::XDispatch > xDispatch = xFrameDispatch->queryDispatch(
@@ -1275,33 +1274,15 @@ uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
 }
 
 //-------------------------------------------------------------------------
-uno::Reference< ::com::sun::star::frame::XModuleManager > SfxStoringHelper::GetModuleManager()
+uno::Reference< ::com::sun::star::frame::XModuleManager2 > SfxStoringHelper::GetModuleManager()
 {
     if ( !m_xModuleManager.is() )
     {
-        m_xModuleManager = uno::Reference< ::com::sun::star::frame::XModuleManager >(
-            GetServiceFactory()->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")) ),
-            uno::UNO_QUERY );
-
-        if ( !m_xModuleManager.is() )
-            throw uno::RuntimeException();
+        m_xModuleManager = frame::ModuleManager::create(
+            comphelper::getComponentContext(GetServiceFactory()));
     }
 
     return m_xModuleManager;
-}
-
-//-------------------------------------------------------------------------
-uno::Reference< container::XNameAccess > SfxStoringHelper::GetNamedModuleManager()
-{
-    if ( !m_xNamedModManager.is() )
-    {
-        m_xNamedModManager = uno::Reference< container::XNameAccess >( GetModuleManager(), uno::UNO_QUERY );
-        if ( !m_xNamedModManager.is() )
-            throw uno::RuntimeException();
-    }
-
-    return m_xNamedModManager;
 }
 
 //-------------------------------------------------------------------------

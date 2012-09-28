@@ -62,13 +62,13 @@ TabPage RID_SVXPAGE_OPTIONS_JAVA
     Control LB_JAVA
     {
         Pos = MAP_APPFONT ( 21 , 38 ) ;
-        Size = MAP_APPFONT ( 177 , 130 ) ;
+        Size = MAP_APPFONT ( 177 , 60 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     FixedText FT_JAVA_PATH
     {
-        Pos = MAP_APPFONT ( 21 , 171 ) ;
+        Pos = MAP_APPFONT ( 21 , 100 ) ;
         Size = MAP_APPFONT ( 233 , 8 ) ;
         NoLabel = TRUE ;
     };
@@ -92,6 +92,24 @@ TabPage RID_SVXPAGE_OPTIONS_JAVA
         Pos = MAP_APPFONT ( 204 , 72 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Class Path..." ;
+    };
+    FixedLine FL_EXPERIMENTAL
+    {
+        Pos = MAP_APPFONT ( 6 , 120 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Optional (unstable) options" ;
+    };
+    CheckBox CB_EXPERIMENTAL
+    {
+        Pos = MAP_APPFONT( 12, 130 );
+        Size = MAP_APPFONT ( 242 , 10 );
+        Text [ en-US ] = "Enable experimental features";
+    };
+    CheckBox CB_MACRO
+    {
+        Pos = MAP_APPFONT( 12, 140 );
+        Size = MAP_APPFONT ( 242 , 10 );
+        Text [ en-US ] = "Enable macro recording";
     };
     String STR_INSTALLED_IN
     {

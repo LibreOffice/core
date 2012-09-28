@@ -387,8 +387,6 @@ ReserveCost	ReserveFolder	Y					Identifier		Name of a property whose value is as
 ReserveCost	ReserveKey	N					Identifier		Primary key that uniquely identifies a particular ReserveCost record
 ReserveCost	ReserveLocal	N	0	2147483647					Disk space to reserve if linked component is installed locally.
 ReserveCost	ReserveSource	N	0	2147483647					Disk space to reserve if linked component is installed to run from the source location.
-SelfReg	Cost	Y	0	32767					The cost of registering the module.
-SelfReg	File_	N			File	1	Identifier		Foreign key into the File table denoting the module that needs to be registered.
 ServiceControl	Arguments	Y					Formatted		Arguments for the service.  Separate by [~].
 ServiceControl	Component_	N			Component	1	Identifier		Required foreign key into the Component Table that controls the startup of the service
 ServiceControl	Event	N	0	187					Bit field:  Install:  0x1 = Start, 0x2 = Stop, 0x8 = Delete, Uninstall: 0x10 = Start, 0x20 = Stop, 0x80 = Delete

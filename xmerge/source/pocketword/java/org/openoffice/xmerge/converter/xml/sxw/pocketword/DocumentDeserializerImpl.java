@@ -20,7 +20,6 @@ package org.openoffice.xmerge.converter.xml.sxw.pocketword;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.openoffice.xmerge.ConvertData;
@@ -46,7 +45,6 @@ import org.w3c.dom.NodeList;
  *
  * <p>This converts a Pocket Word file to an OpenOffice Writer XML DOM.</p>
  *
- * @author  Mark Murnane
  * @version 1.1
  */
 public final class DocumentDeserializerImpl

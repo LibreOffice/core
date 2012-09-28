@@ -28,9 +28,6 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 // ============================================================================
 
 VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& /*xContext*/ ) :
@@ -96,7 +93,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
         const EventHandlerInfo& rInfo = getEventHandlerInfo( aEventQueue.front().mnEventId );
         uno::Sequence< uno::Any > aEventArgs = aEventQueue.front().maArgs;
         aEventQueue.pop_front();
-        OSL_TRACE( "VbaEventsHelperBase::processVbaEvent( \"%s\" )", ::rtl::OUStringToOString( rInfo.maMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_TRACE( "VbaEventsHelperBase::processVbaEvent( \"%s\" )", OUStringToOString( rInfo.maMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
         /*  Let derived classes prepare the event, they may add new events for
             next iteration. If false is returned, the event handler must not be
@@ -143,7 +140,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
 
 void SAL_CALL VbaEventsHelperBase::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException)
 {
-    OSL_TRACE( "VbaEventsHelperBase::notifyEvent( \"%s\" )", ::rtl::OUStringToOString( rEvent.EventName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE( "VbaEventsHelperBase::notifyEvent( \"%s\" )", OUStringToOString( rEvent.EventName, RTL_TEXTENCODING_UTF8 ).getStr() );
     if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ) )
         stopListening();
 }
@@ -290,7 +287,7 @@ void VbaEventsHelperBase::ensureVBALibrary() throw (uno::RuntimeException)
             throw uno::RuntimeException();
         uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xBasicLibs( xModelProps->getPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY_THROW );
+            "BasicLibraries" ), uno::UNO_QUERY_THROW );
         mxModuleInfos.set( xBasicLibs->getByName( maLibraryName ), uno::UNO_QUERY_THROW );
         // listen to changes in the VBA source code
         uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModuleInfos, uno::UNO_QUERY_THROW );
@@ -324,7 +321,7 @@ sal_Int32 VbaEventsHelperBase::getModuleType( const OUString& rModuleName ) thro
     throw uno::RuntimeException();
 }
 
-VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( const ::rtl::OUString& rModuleName ) throw (uno::RuntimeException)
+VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( const OUString& rModuleName ) throw (uno::RuntimeException)
 {
     // get type of the specified module (throws on error)
     sal_Int32 nModuleType = getModuleType( rModuleName );

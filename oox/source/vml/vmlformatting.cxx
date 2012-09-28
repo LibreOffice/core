@@ -42,6 +42,10 @@ using ::oox::drawingml::LineProperties;
 using ::oox::drawingml::ShapePropertyMap;
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::drawing::PolygonFlags;
+using ::com::sun::star::drawing::PolygonFlags_NORMAL;
+using ::com::sun::star::drawing::PolygonFlags_CONTROL;
 
 // ============================================================================
 
@@ -262,6 +266,126 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
         append( OUStringToOString( roVmlColor.get(), RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
     aDmlColor.setSrgbClr( nDefaultRgb );
     return aDmlColor;
+}
+
+/*static*/ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& rPointLists, ::std::vector< ::std::vector< PolygonFlags > >& rFlagLists, const OUString& rPath )
+{
+    ::std::vector< sal_Int32 > aCoordList;
+    Point aCurrentPoint;
+    sal_Int32 nTokenStart = 0;
+    sal_Int32 nTokenLen = 0;
+    enum VML_State { START, MOVE_REL, MOVE_ABS, BEZIER_REL, BEZIER_ABS,
+                     LINE_REL, LINE_ABS, CLOSE, END };
+    VML_State state = START;
+
+    rPointLists.push_back( ::std::vector< Point>() );
+    rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+
+    for ( sal_Int32 i = 0; i < rPath.getLength(); i++ )
+    {
+        // Keep track of current integer token
+        if ( ( rPath[ i ] >= '0' && rPath[ i ] <= '9' ) || rPath[ i ] == '-' )
+            nTokenLen++;
+        else if ( rPath[ i ] != ' ' )
+        {
+            // Store coordinate from current token
+            if ( state != START )
+            {
+                if ( nTokenLen > 0 )
+                    aCoordList.push_back( rPath.copy( nTokenStart, nTokenLen ).toInt32() );
+                else
+                    aCoordList.push_back( 0 );
+                nTokenLen = 0;
+            }
+
+            // Upon finding the next command code, deal with stored
+            // coordinates for previous command
+            if ( rPath[ i ] != ',' )
+            {
+                switch ( state )
+                {
+                case MOVE_REL:
+                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
+                    rFlagLists.back().push_back( PolygonFlags_NORMAL );
+                    aCurrentPoint = rPointLists.back().back();
+                    break;
+
+                case MOVE_ABS:
+                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
+                    rFlagLists.back().push_back( PolygonFlags_NORMAL );
+                    aCurrentPoint = rPointLists.back().back();
+                    break;
+
+                case BEZIER_REL:
+                    rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 0 ],
+                                            aCurrentPoint.Y + aCoordList[ 1 ] ) );
+                    rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 2 ],
+                                            aCurrentPoint.Y + aCoordList[ 3 ] ) );
+                    rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 4 ],
+                                            aCurrentPoint.Y + aCoordList[ 5 ] ) );
+                    rFlagLists.back().push_back( PolygonFlags_CONTROL );
+                    rFlagLists.back().push_back( PolygonFlags_CONTROL );
+                    rFlagLists.back().push_back( PolygonFlags_NORMAL );
+                    aCurrentPoint = rPointLists.back().back();
+                    break;
+
+                case BEZIER_ABS:
+                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
+                    rPointLists.back().push_back( Point( aCoordList[ 2 ], aCoordList[ 3 ] ) );
+                    rPointLists.back().push_back( Point( aCoordList[ 4 ], aCoordList[ 5 ] ) );
+                    rFlagLists.back().push_back( PolygonFlags_CONTROL );
+                    rFlagLists.back().push_back( PolygonFlags_CONTROL );
+                    rFlagLists.back().push_back( PolygonFlags_NORMAL );
+                    aCurrentPoint = rPointLists.back().back();
+                    break;
+
+                case LINE_REL:
+                    rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 0 ],
+                                            aCurrentPoint.Y + aCoordList[ 1 ] ) );
+                    rFlagLists.back().push_back( PolygonFlags_NORMAL );
+                    aCurrentPoint = rPointLists.back().back();
+                    break;
+
+                case LINE_ABS:
+                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
+                    rFlagLists.back().push_back( PolygonFlags_NORMAL );
+                    aCurrentPoint = rPointLists.back().back();
+                    break;
+
+                case CLOSE:
+                    rPointLists.back().push_back( rPointLists.back()[ 0 ] );
+                    rFlagLists.back().push_back( rFlagLists.back()[ 0 ] );
+                    aCurrentPoint = rPointLists.back().back();
+                    break;
+
+                case END:
+                    rPointLists.push_back( ::std::vector< Point >() );
+                    rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                    break;
+
+                case START:
+                    break;
+                }
+
+                aCoordList.clear();
+            }
+
+            // Move on to current command state
+            switch ( rPath[ i ] )
+            {
+            case 't': state = MOVE_REL; nTokenLen = 0; break;
+            case 'm': state = MOVE_ABS; nTokenLen = 0; break;
+            case 'v': state = BEZIER_REL; nTokenLen = 0; break;
+            case 'c': state = BEZIER_ABS; nTokenLen = 0; break;
+            case 'r': state = LINE_REL; nTokenLen = 0; break;
+            case 'l': state = LINE_ABS; nTokenLen = 0; break;
+            case 'x': state = CLOSE; nTokenLen = 0; break;
+            case 'e': state = END; break;
+            }
+
+            nTokenStart = i+1;
+        }
+    }
 }
 
 // ============================================================================

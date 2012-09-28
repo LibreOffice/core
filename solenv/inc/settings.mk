@@ -116,7 +116,7 @@ JAVAI:=$(JAVAINTERPRETER)
 .IF "$(JAVACISGCJ)" == "yes"
 JAVAC+=--encoding=UTF-8 -O2 -fno-assert -Wno-deprecated -C
 .ENDIF
-.IF "$(JDK)" != "gcj" && $(JAVACISKAFFE) != "yes"
+.IF $(JAVACISKAFFE) != "yes"
 JAVAC+=-source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER)
 .ENDIF
 
@@ -1040,7 +1040,7 @@ CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
 CDEFS+= -DSUPD=$(UPD)
 
 # flags to enable build with symbols; required for crashdump feature
-.IF ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_SYMBOLS)"!=""
+.IF ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || ("$(ENABLE_SYMBOLS)"!="" && "$(ENABLE_SYMBOLS)"!="FALSE")
 # if debug is enabled, this may enable less debug info than debug, so rely just on debug
 .IF "$(debug)" == ""
 CFLAGSENABLESYMBOLS_CC_ONLY*=$(CFLAGSENABLESYMBOLS)
@@ -1074,9 +1074,12 @@ RSCDEFS+=-DDBG_UTIL
 .ENDIF
 
 .IF "$(product)"!=""
-CDEFS+= -DPRODUCT -DNDEBUG
-RSCDEFS+= -DPRODUCT 
+CDEFS+= -DPRODUCT
+RSCDEFS+= -DPRODUCT
+.IF "$(ASSERT_ALWAYS_ABORT)"=="FALSE"
+CDEFS+=-DNDEBUG
 RSCDEFS+= -DNDEBUG
+.ENDIF
 .ENDIF
 
 .IF "$(DBG_LEVEL)"!=""
@@ -1118,6 +1121,8 @@ CDEFS += -DHAVE_THREADSAFE_STATICS
 .IF "$(DISABLE_DYNLOADING)" == "TRUE"
 CDEFS += -DDISABLE_DYNLOADING
 .ENDIF
+
+CDEFS += -DRTL_USING
 
 # compose flags and defines for GUI
 .IF "$(TARGETTYPE)"=="GUI"

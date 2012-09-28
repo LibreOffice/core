@@ -62,9 +62,7 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    ScViewData*     pViewData;
     ScDocument*     pDoc;
-    sal_Bool            bRefInputMode;
 
     ScRange         theCurArea;
     sal_Bool            bCloseFlag;

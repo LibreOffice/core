@@ -17,17 +17,11 @@
  */
 
 import java.awt.*;
-import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.geom.Rectangle2D;
 
-import com.sun.star.beans.XPropertyChangeListener;
-import com.sun.star.beans.PropertyChangeEvent;
-
-import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleExtendedComponent;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.accessibility.AccessibleStateType;

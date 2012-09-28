@@ -34,6 +34,7 @@
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
@@ -178,7 +179,7 @@ namespace ucb { namespace ucp { namespace ext
             case E_EXTENSION_CONTENT:
             {
                 const ::rtl::OUString sPackageLocation( m_pImpl->m_xContent->getPhysicalURL() );
-                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment() );
+                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), comphelper::getComponentContext(m_pImpl->m_xSMgr) );
 
                 // obtain the properties which our result set is set up for from the wrapped content
                 Sequence< ::rtl::OUString > aPropertyNames(1);

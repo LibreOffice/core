@@ -76,12 +76,11 @@ void SAL_CALL OInterceptor::dispose()
 
 DBG_NAME(OInterceptor)
 
-OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder,sal_Bool _bAllowEditDoc )
+OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     :m_pContentHolder( _pContentHolder )
     ,m_aInterceptedURL(7)
     ,m_pDisposeEventListeners(0)
     ,m_pStatCL(0)
-    ,m_bAllowEditDoc(_bAllowEditDoc)
 {
     DBG_CTOR(OInterceptor,NULL);
 

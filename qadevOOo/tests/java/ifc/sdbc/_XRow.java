@@ -23,7 +23,6 @@ import java.util.List;
 import lib.MultiMethodTest;
 
 import com.sun.star.io.XDataInputStream;
-import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTextInputStream;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XArray;

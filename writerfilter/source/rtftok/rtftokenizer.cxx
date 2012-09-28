@@ -46,7 +46,8 @@ RTFTokenizer::RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream, uno::R
     : m_rImport(rImport),
     m_pInStream(pInStream),
     m_xStatusIndicator(xStatusIndicator),
-    m_aRTFControlWords(std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords))
+    m_aRTFControlWords(std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords)),
+    m_nGroup(0)
 {
     std::sort(m_aRTFControlWords.begin(), m_aRTFControlWords.end());
 }
@@ -93,9 +94,9 @@ int RTFTokenizer::resolveParse()
         if (m_xStatusIndicator.is() && (nCurrentPos = Strm().Tell()) > (nLastPos + nPercentSize))
             m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
 
-        if (m_rImport.getGroup() < 0)
+        if (m_nGroup < 0)
             return ERROR_GROUP_UNDER;
-        if (m_rImport.getGroup() > 0 && m_rImport.getState().nInternalState == INTERNAL_BIN)
+        if (m_nGroup > 0 && m_rImport.getState().nInternalState == INTERNAL_BIN)
         {
             ret = m_rImport.resolveChars(ch);
             if (ret)
@@ -114,7 +115,7 @@ int RTFTokenizer::resolveParse()
                     ret = m_rImport.popState();
                     if (ret)
                         return ret;
-                    if (m_rImport.getGroup() == 0)
+                    if (m_nGroup == 0)
                     {
                         if (m_rImport.isSubstream())
                             m_rImport.finishSubstream();
@@ -130,7 +131,7 @@ int RTFTokenizer::resolveParse()
                 case 0x0a:
                     break; // ignore these
                 default:
-                    if (m_rImport.getGroup() == 0)
+                    if (m_nGroup == 0)
                         return ERROR_CHAR_OVER;
                     if (m_rImport.getState().nInternalState == INTERNAL_NORMAL)
                     {
@@ -162,9 +163,9 @@ int RTFTokenizer::resolveParse()
         }
     }
 
-    if (m_rImport.getGroup() < 0)
+    if (m_nGroup < 0)
         return ERROR_GROUP_UNDER;
-    else if (m_rImport.getGroup() > 0)
+    else if (m_nGroup > 0)
         return ERROR_GROUP_OVER;
     return 0;
 }
@@ -191,6 +192,21 @@ int RTFTokenizer::asHex(char ch)
         ret += 10;
     }
     return ret;
+}
+
+int RTFTokenizer::getGroup() const
+{
+    return m_nGroup;
+}
+
+void RTFTokenizer::pushGroup()
+{
+    m_nGroup++;
+}
+
+void RTFTokenizer::popGroup()
+{
+    m_nGroup--;
 }
 
 int RTFTokenizer::resolveKeyword()

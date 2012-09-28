@@ -49,7 +49,6 @@ namespace cmis
         public:
             URL( rtl::OUString const & urlStr );
 
-            std::map< int, std::string > getSessionParams( );
             rtl::OUString& getObjectPath( );
             rtl::OUString& getObjectId( );
             rtl::OUString& getBindingUrl( );

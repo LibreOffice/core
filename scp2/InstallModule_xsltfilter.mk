@@ -27,11 +27,6 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/xsltfilter))
 
-$(eval $(call gb_InstallModule_use_packages,scp2/xsltfilter,\
-	scp2_inc \
-	scp2_langmacros \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/xsltfilter,\
     scp2/source/xsltfilter/file_xsltfilter \
 ))

@@ -545,7 +545,7 @@ Point calcHintWindowPosition(
     {
         // Right margin is good enough.
         Point aPos = rCellPos;
-        aPos.X() += nMargin;
+        aPos.X() += nMargin + rCellSize.Width();
         aPos.Y() = 0;
         return aPos;
     }

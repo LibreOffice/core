@@ -1035,7 +1035,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         out( " log=" );
         if (stream == stderr)
             out( "stderr" );
-        else if (stream == stderr)
+        else if (stream == stdout)
             out( "stdout loop=" );
         else
             out( aLogStr );

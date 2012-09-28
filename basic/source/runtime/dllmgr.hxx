@@ -22,10 +22,10 @@
 
 #include "sal/config.h"
 
-#include <memory>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include "basic/sberrors.hxx"
-#include "boost/noncopyable.hpp"
 
 namespace rtl { class OUString; }
 class SbxArray;
@@ -46,7 +46,7 @@ public:
 private:
     struct Impl;
 
-    std::auto_ptr< Impl > impl_;
+    boost::scoped_ptr< Impl > impl_;
 };
 
 #endif

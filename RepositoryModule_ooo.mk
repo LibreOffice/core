@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     bean \
     binaryurp \
     bluez_bluetooth \
+	boost \
     canvas \
     chart2 \
     clucene \
@@ -81,11 +82,22 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     jvmaccess \
     jvmfwk \
     l10ntools \
+	libcdr \
+	libcmis \
+	libmspub \
+	liborcus \
+	libpng \
+	libvisio \
+	libwpd \
+	libwpg \
+	libwps \
     lingucomponent \
     linguistic \
     lotuswordpro \
     MathMLDTD \
+	mdds \
     Mesa \
+	neon \
     nlpsolver \
     np_sdk \
     o3tl \
@@ -171,6 +183,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     xmlreader \
     xmlscript \
     xmlsecurity \
+	xsltml \
 ))
 
 # vim: set noet ts=4 sw=4:

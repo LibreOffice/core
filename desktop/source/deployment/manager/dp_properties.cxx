@@ -55,8 +55,9 @@ namespace dp_manager {
 //Reading the file
 ExtensionProperties::ExtensionProperties(
     OUString const & urlExtension,
-    Reference<ucb::XCommandEnvironment> const & xCmdEnv) :
-    m_xCmdEnv(xCmdEnv)
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv,
+    Reference<uno::XComponentContext> const & xContext) :
+    m_xCmdEnv(xCmdEnv), m_xContext(xContext)
 {
     m_propFileUrl = urlExtension + OUSTR("properties");
 
@@ -64,7 +65,7 @@ ExtensionProperties::ExtensionProperties(
     if (! dp_misc::create_ucb_content(NULL, m_propFileUrl, 0, false))
         return;
 
-    ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv);
+    ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv, m_xContext);
     dp_misc::readProperties(props, contentProps);
 
     typedef ::std::list< ::std::pair< OUString, OUString> >::const_iterator CI;
@@ -79,8 +80,9 @@ ExtensionProperties::ExtensionProperties(
 ExtensionProperties::ExtensionProperties(
     OUString const & urlExtension,
     uno::Sequence<css::beans::NamedValue> const & properties,
-    Reference<ucb::XCommandEnvironment> const & xCmdEnv) :
-    m_xCmdEnv(xCmdEnv)
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv,
+    Reference<uno::XComponentContext> const & xContext) :
+    m_xCmdEnv(xCmdEnv), m_xContext(xContext)
 {
     m_propFileUrl = urlExtension + OUSTR("properties");
 
@@ -120,7 +122,7 @@ OUString ExtensionProperties::getPropertyValue(css::beans::NamedValue const & v)
 }
 void ExtensionProperties::write()
 {
-    ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv);
+    ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv, m_xContext);
     ::rtl::OUStringBuffer buf;
 
     if (m_prop_suppress_license)

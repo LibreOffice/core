@@ -40,9 +40,6 @@
 #include "com/sun/star/animations/TransitionType.hpp"
 #include "com/sun/star/animations/TransitionSubType.hpp"
 
-#include <ucbhelper/contentbroker.hxx>
-#include <ucbhelper/configurationkeys.hxx>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -550,17 +547,8 @@ void DemoApp::Main()
         exit( 1 );
     }
 
-    // Create UCB.
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= rtl::OUString(UCB_CONFIGURATION_KEY2_OFFICE );
-    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
-
     DemoWindow pWindow;
     pWindow.Execute();
-
-    // clean up UCB
-    ::ucbhelper::ContentBroker::deinitialize();
 }
 }
 

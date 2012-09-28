@@ -302,7 +302,9 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maFieldFont( rData.maFieldFont ),
     maIconFont( rData.maIconFont ),
     maGroupFont( rData.maGroupFont ),
-    maWorkspaceGradient( rData.maWorkspaceGradient )
+    maWorkspaceGradient( rData.maWorkspaceGradient ),
+    maDialogStyle( rData.maDialogStyle ),
+    maFrameStyle( rData.maFrameStyle )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -508,6 +510,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
         case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString("oxygen");
         case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString("classic");
         case STYLE_SYMBOLS_HUMAN:      return ::rtl::OUString("human");
+        case STYLE_SYMBOLS_TANGO_TESTING: return ::rtl::OUString("tango_testing");
     }
 
     return ::rtl::OUString("auto");
@@ -533,6 +536,8 @@ sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) 
         return STYLE_SYMBOLS_CLASSIC;
     else if ( rName == ::rtl::OUString("human") )
         return STYLE_SYMBOLS_HUMAN;
+    else if ( rName == ::rtl::OUString("tango_testing") )
+        return STYLE_SYMBOLS_TANGO_TESTING;
 
     return STYLE_SYMBOLS_AUTO;
 }
@@ -1033,7 +1038,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
 {
     if ( bEnable != mpData->mnEnableATT )
     {
-        sal_Bool bDummy;
+        bool bDummy;
         if( bEnable && !ImplInitAccessBridge(false, bDummy) )
             return;
 

@@ -19,26 +19,19 @@
 package ov;
 
 import java.awt.Color;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.AffineTransform;
 
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-
 import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.accessibility.AccessibleEventId;
 import com.sun.star.accessibility.AccessibleStateType;
@@ -90,7 +83,7 @@ public class StateSetView
                     StateSetAllView.class);
                 break;
         }
-        aContainer.SetObject (mxContext);
+        maContainer.SetObject (mxContext);
     }
 
 
@@ -123,13 +116,13 @@ public class StateSetView
     public void mousePressed (MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
 
-    private static int mnViewMode = SHOW_ALL_STATES;
     private final static int SHOW_SET_STATES = 0;
     private final static int SHOW_ALL_STATES = 1;
+    private static int mnViewMode = SHOW_ALL_STATES;
 
 
 
-public class StateSetAllView
+public static class StateSetAllView
     extends StateSetView
 {
     /** Create a FocusView when the given object supports the
@@ -222,7 +215,7 @@ public class StateSetAllView
 }
 
 
-public class StateSetSetView
+public static class StateSetSetView
     extends StateSetView
 {
     static public ObjectView Create (

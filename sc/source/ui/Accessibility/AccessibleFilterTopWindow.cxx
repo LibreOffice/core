@@ -41,10 +41,8 @@ using ::com::sun::star::uno::RuntimeException;
 using ::rtl::OUString;
 
 ScAccessibleFilterTopWindow::ScAccessibleFilterTopWindow(
-    const Reference<XAccessible>& rxParent, ScCheckListMenuWindow* pWin, const OUString& rName, ScDocument* pDoc) :
-    ScAccessibleFilterMenu(rxParent, pWin, rName, ScMenuFloatingWindow::MENU_NOT_SELECTED, pDoc),
-    mpWindow(pWin),
-    mpDoc(pDoc)
+    const Reference<XAccessible>& rxParent, ScCheckListMenuWindow* pWin, const OUString& rName) :
+    ScAccessibleFilterMenu(rxParent, pWin, rName, ScMenuFloatingWindow::MENU_NOT_SELECTED)
 {
     SetName(rName);
 }

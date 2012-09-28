@@ -20,16 +20,9 @@ package installer;
 
 import java.io.*;
 import java.util.*;
-import java.util.jar.*;
 import java.net.URL;
-import java.net.JarURLConnection;
 import javax.swing.*;
 
-/**
- *
- *
- *  @author  Aidan Butler
- */
 public class XmlUpdater extends Thread {
 
     private String classesPath = null;
@@ -40,7 +33,7 @@ public class XmlUpdater extends Thread {
 
     private JLabel statusLabel;
 
-    private Vector listeners;
+    private Vector<InstallListener> listeners;
     private Thread internalThread;
     private boolean threadSuspended;
     private JProgressBar progressBar;
@@ -109,7 +102,7 @@ public class XmlUpdater extends Thread {
         this.statusLabel = statusLabel;
         this.netInstall = netInstall;
         this.bindingsInstall = bindingsInstall;
-        listeners = new Vector();
+        listeners = new Vector<InstallListener>();
         threadSuspended = false;
         progressBar=pBar;
         progressBar.setStringPainted(true);
@@ -434,10 +427,10 @@ public class XmlUpdater extends Thread {
 
     private void onInstallComplete()
     {
-        Enumeration e = listeners.elements();
+        Enumeration<InstallListener> e = listeners.elements();
         while (e.hasMoreElements())
         {
-            InstallListener listener = (InstallListener)e.nextElement();
+            InstallListener listener = e.nextElement();
             listener.installationComplete(null);
         }
     }// onInstallComplete

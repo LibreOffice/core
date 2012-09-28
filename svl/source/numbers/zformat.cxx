@@ -2774,9 +2774,11 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     sSecStr = comphelper::string::stripStart(sSecStr, '.');
     if ( bInputLine )
     {
-        sSecStr = comphelper::string::stripEnd(sSecStr, '0');
-        if ( sSecStr.Len() < xub_StrLen(rInfo.nCntPost) )
-            sSecStr.Expand( xub_StrLen(rInfo.nCntPost), '0' );
+        using namespace comphelper::string;
+        OUStringBuffer aBuf(stripEnd(sSecStr, '0'));
+        if (aBuf.getLength() < rInfo.nCntPost)
+            padToLength(aBuf, rInfo.nCntPost, '0');
+        sSecStr = aBuf.makeStringAndClear();
         ImpTransliterate( sSecStr, NumFor[nIx].GetNatNum() );
         nCntPost = sSecStr.Len();
     }
@@ -3491,9 +3493,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     sSecStr = comphelper::string::stripStart(sSecStr, '.');
     if ( bInputLine )
     {
-        sSecStr = comphelper::string::stripEnd(sSecStr, '0');
-        if ( sSecStr.Len() < xub_StrLen(rInfo.nCntPost) )
-            sSecStr.Expand( xub_StrLen(rInfo.nCntPost), '0' );
+        using namespace comphelper::string;
+        OUStringBuffer aBuf(stripEnd(sSecStr, '0'));
+        if (aBuf.getLength() < rInfo.nCntPost)
+            padToLength(aBuf, rInfo.nCntPost, '0');
+        sSecStr = aBuf.makeStringAndClear();
         ImpTransliterate( sSecStr, NumFor[nIx].GetNatNum() );
         nCntPost = sSecStr.Len();
     }
@@ -3881,8 +3885,8 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 case NF_SYMBOLTYPE_STAR:
                     if( bStarFlag )
                     {
-                        sStr.Insert( (sal_Unicode) 0x1B, k /*++*/ );
                         sStr.Insert(rInfo.sStrArray[j].GetChar(1),k);
+                        sStr.Insert( (sal_Unicode) 0x1B, k );
                         bRes = true;
                     }
                     break;
@@ -4001,8 +4005,8 @@ bool SvNumberformat::ImpNumberFillWithThousands(
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
-                    sStr.Insert( (sal_Unicode) 0x1B, k/*++*/ );
                     sStr.Insert(rInfo.sStrArray[j].GetChar(1),k);
+                    sStr.Insert( (sal_Unicode) 0x1B, k );
                     bRes = true;
                 }
                 break;
@@ -4165,8 +4169,8 @@ bool SvNumberformat::ImpNumberFill( String& sStr,       // number string
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
-                    sStr.Insert( sal_Unicode(0x1B), k++ );
                     sStr.Insert(rInfo.sStrArray[j].GetChar(1),k);
+                    sStr.Insert( sal_Unicode(0x1B), k );
                     bRes = true;
                 }
                 break;

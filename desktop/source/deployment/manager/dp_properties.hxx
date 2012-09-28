@@ -41,6 +41,7 @@ class ExtensionProperties
 protected:
     ::rtl::OUString m_propFileUrl;
     const css::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
+    const css::uno::Reference<css::uno::XComponentContext> m_xContext;
     ::boost::optional< ::rtl::OUString> m_prop_suppress_license;
     ::boost::optional< ::rtl::OUString> m_prop_extension_update;
 
@@ -49,11 +50,13 @@ public:
 
     virtual ~ExtensionProperties() {};
     ExtensionProperties(::rtl::OUString const & urlExtension,
-                        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+                        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+                        css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
     ExtensionProperties(::rtl::OUString const & urlExtension,
                         css::uno::Sequence<css::beans::NamedValue> const & properties,
-                        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+                        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+                        css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
     void write();
 

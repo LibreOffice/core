@@ -63,11 +63,9 @@ using namespace ::com::sun::star::drawing;
 namespace sd {
 
 SdUnoDrawView::SdUnoDrawView(
-    DrawController& rController,
     DrawViewShell& rViewShell,
     View& rView) throw()
     :   DrawSubControllerInterfaceBase(m_aMutex),
-        mrController(rController),
         mrDrawViewShell(rViewShell),
         mrView(rView)
 {

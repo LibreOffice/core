@@ -1358,8 +1358,7 @@ void ScDocument::UpdateAreaLinks()
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        for (sal_uInt16 i=0; i<rLinks.size(); i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))

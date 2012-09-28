@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XText.hpp>
@@ -49,8 +50,7 @@ using namespace CSS::xml::dom;
 
 CSerializationURLEncoded::CSerializationURLEncoded()
     : m_aFactory(comphelper::getProcessServiceFactory())
-    , m_aPipe(Reference< XOutputStream > (m_aFactory->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ), UNO_QUERY))
+    , m_aPipe(Pipe::create(comphelper::getProcessComponentContext()))
 {
 }
 

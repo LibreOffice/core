@@ -33,6 +33,7 @@
 #include <unotools/syslocale.hxx>
 #include <algorithm>
 #include <comphelper/servicehelper.hxx>
+#include <string.h>
 
 #ifdef DBG_UTIL
 class DbgStyleSheetReferences
@@ -739,7 +740,10 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 {
     if( p )
     {
-        SfxStyles::iterator aIter( std::find( aStyles.begin(), aStyles.end(), rtl::Reference< SfxStyleSheetBase >( p ) ) );
+        // Reference to keep p alive until after Broadcast call!
+        rtl::Reference<SfxStyleSheetBase> xP(p);
+        SfxStyles::iterator const aIter(
+                std::find(aStyles.begin(), aStyles.end(), xP));
         if( aIter != aStyles.end() )
         {
             // Alle Styles umsetzen, deren Parent dieser hier ist
@@ -942,7 +946,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const ::com::sun::star::un
 
 ::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getIdentifier().getConstArray(), rId.getConstArray(), 16 ) )
+    if( rId.getLength() == 16 && 0 == memcmp( getIdentifier().getConstArray(), rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }

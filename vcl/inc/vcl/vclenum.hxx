@@ -192,6 +192,20 @@ inline bool operator !=(const ItalicMatrix& a, const ItalicMatrix& b)
     return a.xx != b.xx || a.xy != b.xy || a.yx != b.yx || a.yy != b.yy;
 }
 
+enum VclAlign
+{
+    VCL_ALIGN_FILL,
+    VCL_ALIGN_START,
+    VCL_ALIGN_END,
+    VCL_ALIGN_CENTER
+};
+
+enum VclPackType
+{
+    VCL_PACK_START = 0,
+    VCL_PACK_END = 1
+};
+
 #endif  // _VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

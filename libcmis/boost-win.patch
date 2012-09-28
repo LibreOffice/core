@@ -1,7 +1,9 @@
---- misc/libcmis-0.2.3/src/libcmis/atom-object.cxx	2012-06-01 07:44:26.000000000 -0600
-+++ misc/build/libcmis-0.2.3/src/libcmis/atom-object.cxx	2012-06-04 07:52:24.131190200 -0600
-@@ -29,6 +29,9 @@
- #include <algorithm>
+diff --git src/libcmis/atom-object.cxx src/libcmis/atom-object.cxx
+index ce21384..eef8102 100644
+--- src/libcmis/atom-object.cxx
++++ src/libcmis/atom-object.cxx
+@@ -30,6 +30,9 @@
+ #include <locale>
  #include <sstream>
  
 +#ifndef BOOST_DATE_TIME_NO_LIB
@@ -9,21 +11,25 @@
 +#endif
  #include <boost/date_time/posix_time/posix_time.hpp>
  
- #include "atom-object.hxx"
---- misc/libcmis-0.2.3/src/libcmis/object.hxx	2012-06-01 07:38:36.000000000 -0600
-+++ misc/build/libcmis-0.2.3/src/libcmis/object.hxx	2012-06-04 07:52:21.900386200 -0600
-@@ -32,6 +32,9 @@
- #include <map>
- #include <string>
+ #include "atom-document.hxx"
+diff --git src/libcmis/object.hxx src/libcmis/object.hxx
+index 449bb22..c320f06 100644
+--- src/libcmis/object.hxx
++++ src/libcmis/object.hxx
+@@ -36,6 +36,9 @@
+ #include <stdbool.h>
+ #endif
  
 +#ifndef BOOST_DATE_TIME_NO_LIB
 +#define BOOST_DATE_TIME_NO_LIB
 +#endif
  #include <boost/date_time.hpp>
  #include <boost/shared_ptr.hpp>
- 
---- misc/libcmis-0.2.3/src/libcmis/property-type.hxx	2012-02-17 08:00:50.000000000 -0700
-+++ misc/build/libcmis-0.2.3/src/libcmis/property-type.hxx	2012-06-04 07:52:17.157977900 -0600
+ #include <libxml/tree.h>
+diff --git src/libcmis/property-type.hxx src/libcmis/property-type.hxx
+index 1a8bee9..6ac946c 100644
+--- src/libcmis/property-type.hxx
++++ src/libcmis/property-type.hxx
 @@ -28,6 +28,9 @@
  #ifndef _PROPERTY_TYPE_HXX_
  #define _PROPERTY_TYPE_HXX_
@@ -34,8 +40,10 @@
  #include <boost/date_time.hpp>
  #include <libxml/tree.h>
  
---- misc/libcmis-0.2.3/src/libcmis/property.hxx	2012-02-17 06:38:33.000000000 -0700
-+++ misc/build/libcmis-0.2.3/src/libcmis/property.hxx	2012-06-04 07:52:19.388781800 -0600
+diff --git src/libcmis/property.hxx src/libcmis/property.hxx
+index f9be04a..2977fb3 100644
+--- src/libcmis/property.hxx
++++ src/libcmis/property.hxx
 @@ -31,6 +31,9 @@
  #include <libxml/tree.h>
  #include <libxml/xmlwriter.h>
@@ -46,10 +54,26 @@
  #include <boost/date_time.hpp>
  #include <boost/shared_ptr.hpp>
  
---- misc/libcmis-0.2.3/src/libcmis/xml-utils.hxx	2012-05-30 06:17:12.000000000 -0600
-+++ misc/build/libcmis-0.2.3/src/libcmis/xml-utils.hxx	2012-06-04 07:52:10.621566400 -0600
-@@ -30,6 +30,9 @@
+diff --git src/libcmis/ws-session.cxx src/libcmis/ws-session.cxx
+index b906a5a..bf50644 100644
+--- src/libcmis/ws-session.cxx
++++ src/libcmis/ws-session.cxx
+@@ -28,6 +28,9 @@
  
+ #include <sstream>
+ 
++#ifndef BOOST_DATE_TIME_NO_LIB
++#define BOOST_DATE_TIME_NO_LIB
++#endif
+ #include <boost/date_time.hpp>
+ #include <libxml/parser.h>
+ #include <libxml/tree.h>
+diff --git src/libcmis/xml-utils.hxx src/libcmis/xml-utils.hxx
+index 52853e2..2f80b91 100644
+--- src/libcmis/xml-utils.hxx
++++ src/libcmis/xml-utils.hxx
+@@ -33,6 +33,9 @@
+ #include <sstream>
  #include <string>
  
 +#ifndef BOOST_DATE_TIME_NO_LIB
@@ -57,3 +81,4 @@
 +#endif
  #include <boost/date_time.hpp>
  #include <libxml/tree.h>
+ #include <libxml/xpathInternals.h>

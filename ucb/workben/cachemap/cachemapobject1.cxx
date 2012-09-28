@@ -46,7 +46,7 @@ void ObjectContainer1::releaseElement(Object1 * pElement) SAL_THROW(())
     bool bDelete = false;
     {
         osl::MutexGuard aGuard(m_aMutex);
-        if (osl_decrementInterlockedCount(&pElement->m_nRefCount) == 0)
+        if (osl_atomic_decrement(&pElement->m_nRefCount) == 0)
         {
             m_aMap.erase(pElement->m_aContainerIt);
             bDelete = true;

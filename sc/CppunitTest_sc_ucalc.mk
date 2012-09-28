@@ -37,9 +37,15 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
 
 $(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc,sc))
 
+$(eval $(call gb_CppunitTest_use_external,sc_ucalc,mdds_headers))
+
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc,tubes))
 endif
+
+$(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
+	orcus \
+))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     avmedia \

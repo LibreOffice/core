@@ -2058,7 +2058,7 @@ KSHORT SwTxtFrm::GetParHeight() const
         KSHORT nRet = (KSHORT)Prt().SSize().Height();
         if( IsUndersized() )
         {
-            if( IsEmpty() )
+            if( IsEmpty() || GetTxt().Len() == 0 )
                 nRet = (KSHORT)EmptyHeight();
             else
                 ++nRet;
@@ -2323,13 +2323,10 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
         else
         {
             bool bCalcHeightOfLastLine = true;
-            if ( !HasPara() )
+            if ( ( !HasPara() && IsEmpty( ) ) || GetTxt().Len( ) == 0 )
             {
-                if ( IsEmpty() )
-                {
-                    mnHeightOfLastLine = EmptyHeight();
-                    bCalcHeightOfLastLine = false;
-                }
+                mnHeightOfLastLine = EmptyHeight();
+                bCalcHeightOfLastLine = false;
             }
 
             if ( bCalcHeightOfLastLine )

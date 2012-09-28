@@ -909,7 +909,7 @@ void SAL_CALL CliProxy::uno_DispatchMethod(
 }
 inline void CliProxy::acquire() const
 {
-    if (1 == osl_incrementInterlockedCount( &m_ref ))
+    if (1 == osl_atomic_increment( &m_ref ))
     {
         // rebirth of proxy zombie
         void * that = const_cast< CliProxy * >( this );
@@ -926,7 +926,7 @@ inline void CliProxy::acquire() const
 //---------------------------------------------------------------------------
 inline void CliProxy::release() const
 {
-    if (0 == osl_decrementInterlockedCount( &m_ref ))
+    if (0 == osl_atomic_decrement( &m_ref ))
     {
         // revoke from uno env on last release,
         // The proxy can be resurrected if acquire is called before the uno

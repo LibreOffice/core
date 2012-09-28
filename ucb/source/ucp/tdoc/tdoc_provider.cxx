@@ -38,6 +38,7 @@
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/embed/XStorage.hpp"
 
+#include "comphelper/processfactory.hxx"
 #include "ucbhelper/contentidentifier.hxx"
 
 #include "tdoc_provider.hxx"
@@ -60,7 +61,7 @@ using namespace tdoc_ucp;
 ContentProvider::ContentProvider(
             const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
 : ::ucbhelper::ContentProviderImplHelper( xSMgr ),
-  m_xDocsMgr( new OfficeDocumentsManager( xSMgr, this ) ),
+  m_xDocsMgr( new OfficeDocumentsManager( comphelper::getComponentContext(xSMgr), this ) ),
   m_xStgElemFac( new StorageElementFactory( xSMgr, m_xDocsMgr ) )
 {
 }

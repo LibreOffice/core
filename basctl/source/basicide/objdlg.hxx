@@ -36,20 +36,20 @@ namespace basctl
 // ObjectCatalog -- a docking window that contains the currently loaded macros
 // in a tree structure.
 //
-class ObjectCatalog : public BasicDockingWindow
+class ObjectCatalog : public DockingWindow
 {
 public:
     ObjectCatalog (Window* pParent);
     virtual ~ObjectCatalog ();
 public:
     void UpdateEntries () { aTree.UpdateEntries(); }
-    void SetCurrentEntry (IDEBaseWindow* pCurWin);
+    void SetCurrentEntry (BaseWindow* pCurWin);
 
 private:
     // title: "Object Catalog"
     FixedText aTitle;
     // the tree-list of the objects
-    BasicTreeListBox aTree;
+    TreeListBox aTree;
 
 private:
     virtual void Resize (); // Window

@@ -62,7 +62,12 @@ public class SlideShow {
     }
 
     public String getNotes(int aSlide) {
-        return mNotes.get(aSlide);
+        String aNote = mNotes.get(aSlide);
+        if (aNote != null) {
+            return aNote;
+        } else {
+            return "";
+        }
     }
 
     // ---------------------------------------------------- TIMER --------------

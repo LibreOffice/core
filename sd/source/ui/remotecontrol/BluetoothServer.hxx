@@ -21,16 +21,17 @@ namespace sd
     {
     public:
         static void setup( std::vector<Communicator*>* pCommunicators );
+
+        static bool isDiscoverable();
+        static void setDiscoverable( bool aDiscoverable );
     private:
         BluetoothServer( std::vector<Communicator*>* pCommunicators );
         ~BluetoothServer();
         static BluetoothServer *spServer;
 
-
-    public:
-    private:
-        void execute();
+        void execute(); // salhelper::Thread
         std::vector<Communicator*>* mpCommunicators;
+
     };
 }
 

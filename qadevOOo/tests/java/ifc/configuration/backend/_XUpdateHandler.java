@@ -26,11 +26,6 @@ import lib.MultiMethodTest;
 import util.XLayerHandlerImpl;
 import util.XLayerImpl;
 
-
-/**
- *
- * @author  sw93809
- */
 public class _XUpdateHandler extends MultiMethodTest {
     public XUpdateHandler oObj;
     protected XLayerHandlerImpl xLayerHandler = null;

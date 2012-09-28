@@ -45,7 +45,7 @@
 
 // ============================================================================
 
-class SC_DLLPUBLIC ScAsciiOptions
+class ScAsciiOptions
 {
 private:
     sal_Bool        bFixedLen;

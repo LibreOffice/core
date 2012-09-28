@@ -28,7 +28,10 @@
 #ifndef _RTL_BOOTSTRAP_H_
 #define _RTL_BOOTSTRAP_H_
 
-#include <rtl/ustring.h>
+#include "sal/config.h"
+
+#include "rtl/ustring.h"
+#include "sal/saldllapi.h"
 
 #ifdef __cplusplus
 extern "C" {

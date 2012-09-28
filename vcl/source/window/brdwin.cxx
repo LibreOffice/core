@@ -904,10 +904,10 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
                 {
                     // no move (only resize) if position did not change
                     if( aOldPos != aNewRect.TopLeft() )
-                        pBorderWindow->SetPosSizePixel( aNewRect.Left(), aNewRect.Top(),
+                        pBorderWindow->setPosSizePixel( aNewRect.Left(), aNewRect.Top(),
                                                     aNewRect.GetWidth(), aNewRect.GetHeight(), WINDOW_POSSIZE_POSSIZE );
                     else
-                        pBorderWindow->SetPosSizePixel( aNewRect.Left(), aNewRect.Top(),
+                        pBorderWindow->setPosSizePixel( aNewRect.Left(), aNewRect.Top(),
                                                     aNewRect.GetWidth(), aNewRect.GetHeight(), WINDOW_POSSIZE_SIZE );
 
                     pBorderWindow->ImplUpdateAll();
@@ -2049,7 +2049,7 @@ void ImplBorderWindow::Resize()
                     nMenuHeight = mnOrgMenuHeight;
             }
             mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
-            mpMenuBarWindow->SetPosSizePixel( nLeftBorder,
+            mpMenuBarWindow->setPosSizePixel( nLeftBorder,
                                               nTopBorder,
                                               aSize.Width()-nLeftBorder-nRightBorder,
                                               nMenuHeight,
@@ -2340,6 +2340,18 @@ long ImplBorderWindow::CalcTitleWidth() const
 Rectangle ImplBorderWindow::GetMenuRect() const
 {
     return mpBorderView->GetMenuRect();
+}
+
+Size ImplBorderWindow::GetOptimalSize(WindowSizeType eType) const
+{
+    if (eType == WINDOWSIZE_MAXIMUM)
+        return Size(mnMaxWidth, mnMaxHeight);
+    if (eType == WINDOWSIZE_MINIMUM)
+        return Size(mnMinWidth, mnMinHeight);
+    Window* pClientWindow = ImplGetClientWindow();
+    if (pClientWindow)
+        return pClientWindow->GetOptimalSize(eType);
+    return Size(0, 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

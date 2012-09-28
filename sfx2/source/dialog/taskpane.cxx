@@ -27,7 +27,7 @@
 #include "sfxlocal.hrc"
 #include "helpid.hrc"
 
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
@@ -71,13 +71,13 @@ namespace sfx2
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
-    using ::com::sun::star::frame::XModuleManager;
+    using ::com::sun::star::frame::ModuleManager;
+    using ::com::sun::star::frame::XModuleManager2;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::ui::XToolPanel;
     using ::com::sun::star::ui::XUIElementFactory;
     using ::com::sun::star::ui::XUIElement;
     using ::com::sun::star::awt::XWindow;
-    using ::com::sun::star::frame::XModuleManager;
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::graphic::XGraphicProvider;
@@ -100,7 +100,7 @@ namespace sfx2
             ::rtl::OUStringBuffer aPathComposer;
             try
             {
-                const Reference< XNameAccess > xModuleAccess( aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+                const Reference< XModuleManager2 > xModuleAccess( ModuleManager::create(aContext.getUNOContext()) );
                 const ::comphelper::NamedValueCollection aModuleProps( xModuleAccess->getByName( i_rModuleIdentifier ) );
 
                 const ::rtl::OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", ::rtl::OUString() ) );
@@ -127,8 +127,8 @@ namespace sfx2
             ::rtl::OUString sModuleName;
             try
             {
-                const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                const Reference< XModuleManager > xModuleManager( aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+                const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const Reference< XModuleManager2 > xModuleManager( ModuleManager::create(xContext) );
                 sModuleName = xModuleManager->identify( i_rDocumentFrame );
             }
             catch( const Exception& )

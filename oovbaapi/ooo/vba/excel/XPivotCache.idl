@@ -40,7 +40,6 @@ interface XPivotCache
 {
     interface ::ooo::vba::XHelperInterface;
 
-    [attribute] long MissingItemsLimit;
     void Refresh();
 };
 

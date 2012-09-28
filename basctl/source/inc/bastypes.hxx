@@ -32,13 +32,19 @@ class SbModule;
 class SfxItemSet;
 class SfxRequest;
 class SvxSearchItem;
+class Printer;
+
+namespace svl
+{
+    class IUndoManager;
+}
 
 namespace basctl
 {
-    class Layout;
-    class ModulWindow;
-    class DialogWindow;
-}
+
+class Layout;
+class ModulWindow;
+class DialogWindow;
 
 #define LINE_SEP_CR     0x0D
 #define LINE_SEP        0x0A
@@ -65,14 +71,20 @@ struct BasicStatus
         nBasicFlags(0) { }
 };
 
-class BasicDockingWindow : public DockingWindow
+//
+// basctl::DockingWindow -- special docking window for the Basic IDE
+// Not to be confused with ::DockingWindow from vcl.
+//
+class DockingWindow : public ::DockingWindow
 {
 public:
-    BasicDockingWindow (Window* pParent);
-    BasicDockingWindow (basctl::Layout* pParent);
+    DockingWindow (Window* pParent);
+    DockingWindow (Layout* pParent);
 public:
     void ResizeIfDocking (Point const&, Size const&);
-    void SetLayoutWindow (basctl::Layout*);
+    void ResizeIfDocking (Size const&);
+    Size GetDockingSize () const { return aDockingRect.GetSize(); }
+    void SetLayoutWindow (Layout*);
 public:
     void Show (bool = true);
     void Hide ();
@@ -90,7 +102,7 @@ private:
     // the position and the size of the docking window
     Rectangle aDockingRect;
     // the parent layout window (only when docking)
-    basctl::Layout* pLayout;
+    Layout* pLayout;
     // > 0: shown, <= 0: hidden, ++ by Show() and -- by Hide()
     int nShowCount;
 
@@ -100,7 +112,11 @@ private:
     void DockThis ();
 };
 
-class BasicIDETabBar : public TabBar
+//
+// basctl::TabBar
+// Not to be confused with ::TabBar from svtools.
+//
+class TabBar : public ::TabBar
 {
 protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -110,7 +126,7 @@ protected:
     virtual void    EndRenaming();
 
 public:
-                    BasicIDETabBar( Window* pParent );
+    TabBar (Window* pParent);
 
     void            Sort();
 };
@@ -124,18 +140,12 @@ enum BasicWindowStatus
     BASWIN_INRESCHEDULE = 0x08
 };
 
-class Printer;
-class BasicEntryDescriptor;
-
-namespace svl
-{
-    class IUndoManager;
-}
+class EntryDescriptor;
 
 //
-// IDEBaseWindow -- the base of both ModulWindow and DialogWindow.
+// BaseWindow -- the base of both ModulWindow and DialogWindow.
 //
-class IDEBaseWindow : public Window
+class BaseWindow : public Window
 {
 private:
     ScrollBar*      pShellHScrollBar;
@@ -145,19 +155,19 @@ private:
     int nStatus;
 
     ScriptDocument      m_aDocument;
-    ::rtl::OUString     m_aLibName;
-    ::rtl::OUString     m_aName;
+    rtl::OUString     m_aLibName;
+    rtl::OUString     m_aName;
 
-    friend class basctl::ModulWindow;
-    friend class basctl::DialogWindow;
+    friend class ModulWindow;
+    friend class DialogWindow;
 
 protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
 
 public:
                     TYPEINFO();
-    IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName );
-    virtual         ~IDEBaseWindow();
+    BaseWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName );
+    virtual         ~BaseWindow();
 
     void            Init();
     virtual void    DoInit();
@@ -184,7 +194,7 @@ public:
 
     virtual ::rtl::OUString  GetTitle();
     ::rtl::OUString          CreateQualifiedName();
-    virtual BasicEntryDescriptor CreateEntryDescriptor() = 0;
+    virtual EntryDescriptor  CreateEntryDescriptor() = 0;
 
     virtual bool    IsModified();
     virtual bool    IsPasteAllowed();
@@ -199,8 +209,7 @@ public:
     void AddStatus(int n) { nStatus |= n; }
     void ClearStatus(int n) { nStatus &= ~n; }
 
-    virtual ::svl::IUndoManager*
-                    GetUndoManager();
+    virtual svl::IUndoManager* GetUndoManager ();
 
     virtual sal_uInt16  GetSearchOptions();
     virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false);
@@ -221,75 +230,65 @@ public:
 
     virtual void OnNewDocument ();
     virtual char const* GetHid () const = 0;
-    virtual BasicIDEType GetType () const = 0;
+    virtual ItemType GetType () const = 0;
     void InsertLibInfo () const;
-    bool Is (ScriptDocument const&, rtl::OUString const&, rtl::OUString const&, BasicIDEType, bool bFindSuspended);
+    bool Is (ScriptDocument const&, rtl::OUString const&, rtl::OUString const&, ItemType, bool bFindSuspended);
     virtual bool HasActiveEditor () const;
-};
-
-class LibInfoKey
-{
-private:
-    ScriptDocument  m_aDocument;
-    ::rtl::OUString m_aLibName;
-
-public:
-    LibInfoKey( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
-    ~LibInfoKey();
-
-    bool operator==( const LibInfoKey& rKey ) const;
-
-    const ScriptDocument&
-                    GetDocument() const { return m_aDocument; }
-    const ::rtl::OUString& GetLibName() const { return m_aLibName; }
-};
-
-class LibInfoItem
-{
-private:
-    ScriptDocument  m_aDocument;
-    ::rtl::OUString m_aLibName;
-    ::rtl::OUString m_aCurrentName;
-    sal_uInt16      m_nCurrentType;
-
-public:
-    LibInfoItem( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rCurrentName, sal_uInt16 nCurrentType );
-    ~LibInfoItem();
-
-    LibInfoItem( const LibInfoItem& rItem );
-    LibInfoItem& operator=( const LibInfoItem& rItem );
-
-    const ScriptDocument&  GetDocument()    const { return m_aDocument; }
-    const ::rtl::OUString& GetLibName()     const { return m_aLibName; }
-    const ::rtl::OUString& GetCurrentName() const { return m_aCurrentName; }
-    sal_uInt16             GetCurrentType() const { return m_nCurrentType; }
 };
 
 class LibInfos
 {
-private:
-
-    struct LibInfoKeyHash
-    {
-        size_t operator()( const LibInfoKey& rKey ) const
-        {
-            size_t nHash = (size_t) rKey.GetDocument().hashCode();
-            nHash += (size_t) ::rtl::OUString( rKey.GetLibName() ).hashCode();
-            return nHash;
-        }
-    };
-
-    typedef ::boost::unordered_map< LibInfoKey, LibInfoItem*, LibInfoKeyHash, ::std::equal_to< LibInfoKey > > LibInfoMap;
-    LibInfoMap  m_aLibInfoMap;
-
 public:
-                    LibInfos();
-                    ~LibInfos();
+    class Item;
+public:
+    LibInfos ();
+    ~LibInfos ();
+public:
+    void InsertInfo (ScriptDocument const&, rtl::OUString const& rLibName, rtl::OUString const& rCurrentName, ItemType eCurrentType);
+    void RemoveInfoFor (ScriptDocument const&);
+    Item const* GetInfo (ScriptDocument const&, rtl::OUString const& rLibName);
 
-    void            InsertInfo( LibInfoItem* pItem );
-    void            RemoveInfoFor( const ScriptDocument& _rDocument );
+private:
+    class Key
+    {
+    private:
+        ScriptDocument  m_aDocument;
+        ::rtl::OUString m_aLibName;
 
-    LibInfoItem*    GetInfo( const LibInfoKey& rKey );
+    public:
+        Key (ScriptDocument const&, rtl::OUString const& rLibName);
+        ~Key ();
+    public:
+        bool operator == (Key const&) const;
+        struct Hash
+        {
+            size_t operator () (Key const&) const;
+        };
+    public:
+        const ScriptDocument& GetDocument() const { return m_aDocument; }
+        const ::rtl::OUString& GetLibName() const { return m_aLibName; }
+    };
+public:
+    class Item
+    {
+    private:
+        ScriptDocument  m_aDocument;
+        ::rtl::OUString m_aLibName;
+        ::rtl::OUString m_aCurrentName;
+        ItemType        m_eCurrentType;
+
+    public:
+        Item (ScriptDocument const&, rtl::OUString const& rLibName, rtl::OUString const& rCurrentName, ItemType eCurrentType);
+        ~Item ();
+    public:
+        const ScriptDocument&  GetDocument()    const { return m_aDocument; }
+        const ::rtl::OUString& GetLibName()     const { return m_aLibName; }
+        const ::rtl::OUString& GetCurrentName() const { return m_aCurrentName; }
+        ItemType               GetCurrentType() const { return m_eCurrentType; }
+    };
+private:
+    typedef boost::unordered_map<Key, Item, Key::Hash> Map;
+    Map m_aMap;
 };
 
 void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines = false );
@@ -305,14 +304,17 @@ bool QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::sc
 
 class ModuleInfoHelper
 {
-ModuleInfoHelper();
-ModuleInfoHelper(const ModuleInfoHelper&);
-ModuleInfoHelper& operator = (const ModuleInfoHelper&);
+    // non-constructible class
+    ModuleInfoHelper ();
+    ModuleInfoHelper (const ModuleInfoHelper&);
+    ModuleInfoHelper& operator = (const ModuleInfoHelper&);
 public:
     static void getObjectName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const ::rtl::OUString& rModName, ::rtl::OUString& rObjName );
     static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const ::rtl::OUString& rModName );
 };
 
-#endif  // BASCTL_BASTYPES_HXX
+} // namespace basctl
+
+#endif // BASCTL_BASTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

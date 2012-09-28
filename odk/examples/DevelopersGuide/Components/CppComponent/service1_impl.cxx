@@ -150,14 +150,14 @@ void MyService1Impl::acquire()
     throw ()
 {
     // thread-safe incrementation of reference count
-    ::osl_incrementInterlockedCount( &m_refcount );
+    ::osl_atomic_increment( &m_refcount );
 }
 
 void MyService1Impl::release()
     throw ()
 {
     // thread-safe decrementation of reference count
-    if (0 == ::osl_decrementInterlockedCount( &m_refcount ))
+    if (0 == ::osl_atomic_decrement( &m_refcount ))
     {
         delete this; // shutdown this object
     }

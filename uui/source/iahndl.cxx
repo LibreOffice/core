@@ -60,6 +60,7 @@
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
 #include "com/sun/star/loader/CannotActivateFactoryException.hpp"
 
+#include <rtl/strbuf.hxx>
 #include "osl/conditn.hxx"
 #include "tools/rcid.h" // RSC_STRING
 #include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
