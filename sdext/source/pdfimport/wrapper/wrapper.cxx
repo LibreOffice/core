@@ -927,38 +927,50 @@ static bool checkEncryption( const rtl::OUString&                               
             o_rIsEncrypted = pPDFFile->isEncrypted();
             if( o_rIsEncrypted )
             {
-                bool bAuthenticated = false;
-                if( !io_rPwd.isEmpty() )
+                if( pPDFFile->usesSupportedEncryptionFormat() )
                 {
-                    rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
-                                                                   RTL_TEXTENCODING_ISO_8859_1 );
-                    bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                }
-                if( bAuthenticated )
-                    bSuccess = true;
-                else
-                {
-                    if( i_xIHdl.is() )
+                    bool bAuthenticated = false;
+                    if( !io_rPwd.isEmpty() )
                     {
-                        bool bEntered = false;
-                        do
-                        {
-                            bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
-                            rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
-                                                                           RTL_TEXTENCODING_ISO_8859_1 );
-                            bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                        } while( bEntered && ! bAuthenticated );
+                        rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
+                                                                       RTL_TEXTENCODING_ISO_8859_1 );
+                        bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
                     }
+                    if( bAuthenticated )
+                        bSuccess = true;
+                    else
+                    {
+                        if( i_xIHdl.is() )
+                        {
+                            bool bEntered = false;
+                            do
+                            {
+                                bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
+                                rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
+                                                                               RTL_TEXTENCODING_ISO_8859_1 );
+                                bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                            } while( bEntered && ! bAuthenticated );
+                        }
 
-                    OSL_TRACE( "password: %s", bAuthenticated ? "matches" : "does not match" );
-                    bSuccess = bAuthenticated;
+                        OSL_TRACE( "password: %s", bAuthenticated ? "matches" : "does not match" );
+                        bSuccess = bAuthenticated;
+                    }
+                    if( bAuthenticated )
+                    {
+                        rtl::OUStringBuffer aBuf( 128 );
+                        aBuf.appendAscii( "_OOO_pdfi_Credentials_" );
+                        aBuf.append( pPDFFile->getDecryptionKey() );
+                        io_rPwd = aBuf.makeStringAndClear();
+                    }
                 }
-                if( bAuthenticated )
+                else if( i_xIHdl.is() )
                 {
-                    rtl::OUStringBuffer aBuf( 128 );
-                    aBuf.appendAscii( "_OOO_pdfi_Credentials_" );
-                    aBuf.append( pPDFFile->getDecryptionKey() );
-                    io_rPwd = aBuf.makeStringAndClear();
+                    reportUnsupportedEncryptionFormat( i_xIHdl );
+                        //TODO: this should either be handled further down the
+                        // call stack, or else information that this has already
+                        // been handled should be passed down the call stack, so
+                        // that SfxBaseModel::load does not show an additional
+                        // "General Error" message box
                 }
             }
             else

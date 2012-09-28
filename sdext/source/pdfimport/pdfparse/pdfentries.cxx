@@ -1224,17 +1224,22 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
     return bValid;
 }
 
+bool PDFFile::usesSupportedEncryptionFormat() const
+{
+    return m_pData->m_bStandardHandler &&
+        m_pData->m_nAlgoVersion >= 1 &&
+        m_pData->m_nAlgoVersion <= 2 &&
+        m_pData->m_nStandardRevision >= 2 &&
+        m_pData->m_nStandardRevision <= 3;
+}
+
 bool PDFFile::setupDecryptionData( const OString& rPwd ) const
 {
     if( !impl_getData()->m_bIsEncrypted )
         return rPwd.isEmpty();
 
     // check if we can handle this encryption at all
-    if( ! m_pData->m_bStandardHandler ||
-        m_pData->m_nAlgoVersion < 1 ||
-        m_pData->m_nAlgoVersion > 2 ||
-        m_pData->m_nStandardRevision < 2 ||
-        m_pData->m_nStandardRevision > 3 )
+    if( ! usesSupportedEncryptionFormat() )
         return false;
 
     if( ! m_pData->m_aCipher )
