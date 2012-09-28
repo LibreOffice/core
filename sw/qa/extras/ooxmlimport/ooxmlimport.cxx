@@ -96,6 +96,7 @@ public:
     void testN780853();
     void testN780843();
     void testShadow();
+    void testN782061();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -138,6 +139,7 @@ public:
     CPPUNIT_TEST(testN780853);
     CPPUNIT_TEST(testN780843);
     CPPUNIT_TEST(testShadow);
+    CPPUNIT_TEST(testN782061);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -979,6 +981,16 @@ void Test::testShadow()
     table::ShadowFormat aShadow;
     xPropertySet->getPropertyValue("ShadowFormat") >>= aShadow;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(273), sal_Int32(aShadow.ShadowWidth));
+}
+
+void Test::testN782061()
+{
+    /*
+     * The problem was that the character escapement in the second run was -58.
+     */
+    load("n782061.docx");
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-9), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapement"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
