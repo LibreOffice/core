@@ -52,6 +52,9 @@ AC_ARG_ENABLE(graphite,
 AC_ARG_WITH(system-graphite,
 [  --with-system-graphite    use graphite library already installed on system
 ],,)
+AC_ARG_WITH(system-apache-commons,
+[  --with-system-apache-commons    use apache-commons jar files already installed on system
+],,)
 AC_ARG_ENABLE(online-update,
 [  --disable-online-update Disables the Online Update feature.
 ],,enable_online_update=yes)
