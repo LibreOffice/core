@@ -241,20 +241,6 @@ gb_STDLIBS := \
 	-lnsl \
 	-lsocket \
 
-gb_Library_PLAINLIBS_NONE += \
-	dl \
-	GL \
-	GLU \
-	ICE \
-	m \
-	nsl \
-	pthread \
-	socket \
-	SM \
-	ICE \
-	X11 \
-	Xext \
-
 gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \

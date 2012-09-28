@@ -55,10 +55,6 @@ $(eval $(call gb_Library_use_libraries,desktop_detector,\
     jvmaccess \
     cppu \
     sal \
-    X11 \
-    Xext \
-    SM \
-    ICE \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,desktop_detector))
@@ -66,6 +62,13 @@ $(eval $(call gb_Library_add_standard_system_libs,desktop_detector))
 $(eval $(call gb_Library_use_externals,desktop_detector,\
 	icule \
 	icuuc \
+))
+
+$(eval $(call gb_Library_add_libs,desktop_detector,\
+	-lX11 \
+	-lXext \
+	-lSM \
+	-lICE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,desktop_detector,\

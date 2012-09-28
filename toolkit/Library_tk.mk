@@ -142,8 +142,8 @@ endif
 
 ifneq ($(GUIBASE),headless)
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Library_use_libraries,tk,\
-    X11 \
+$(eval $(call gb_Library_add_libs,tk,\
+    -lX11 \
 ))
 endif
 endif

@@ -181,8 +181,8 @@ $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 endif # ifeq ($(SYSTEM_NSS),YES)
 
 ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
-	dl \
+$(eval $(call gb_Library_add_libs,xsec_xmlsec,\
+	-ldl \
 ))
 endif
 

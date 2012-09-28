@@ -28,8 +28,8 @@
 $(eval $(call gb_Executable_Executable,gnome-open-url.bin))
 
 ifeq ($(filter DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
-$(eval $(call gb_Executable_use_libraries,gnome-open-url.bin,\
-	dl \
+$(eval $(call gb_Executable_add_libs,gnome-open-url.bin,\
+	-ldl \
 ))
 endif
 

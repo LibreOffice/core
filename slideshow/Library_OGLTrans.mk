@@ -100,10 +100,10 @@ $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
     slideshow/source/engine/OGLTrans/unx/OGLTrans_TransitionImpl \
 ))
 
-$(eval $(call gb_Library_use_libraries,OGLTrans,\
-    GL \
-    GLU \
-    X11 \
+$(eval $(call gb_Library_add_libs,OGLTrans,\
+	-lGL \
+	-lGLU \
+	-lX11 \
 ))
 endif
 

@@ -43,7 +43,10 @@ $(eval $(call gb_Library_use_libraries,lomenubar,\
 	cppu \
 	cppuhelper \
     comphelper \
-	X11 \
+))
+
+$(eval $(call gb_Library_add_libs,lomenubar,\
+	-lX11 \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,lomenubar))

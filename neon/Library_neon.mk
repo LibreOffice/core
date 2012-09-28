@@ -69,8 +69,8 @@ $(eval $(call gb_Library_add_generated_cobjects,neon,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,neon,\
-	dl \
+$(eval $(call gb_Library_add_libs,neon,\
+	-ldl \
 ))
 endif
 

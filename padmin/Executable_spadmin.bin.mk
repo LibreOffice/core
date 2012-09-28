@@ -57,8 +57,8 @@ $(eval $(call gb_Executable_add_libs,spadmin.bin,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_use_libraries,spadmin.bin,\
-    dl \
+$(eval $(call gb_Executable_add_libs,spadmin.bin,\
+    -ldl \
 ))
 endif
 

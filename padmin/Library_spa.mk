@@ -60,8 +60,8 @@ $(eval $(call gb_Library_add_libs,spa,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_use_libraries,spa,\
-    dl \
+$(eval $(call gb_Library_add_libs,spa,\
+    -ldl \
 ))
 endif
 

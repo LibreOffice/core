@@ -57,13 +57,6 @@ $(eval $(call gb_Library_add_defs,sal,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sal,\
-	$(if $(filter $(OS),LINUX), \
-		dl \
-	) \
-	$(if $(filter $(OS),SOLARIS), \
-		nsl \
-		socket \
-	) \
 	$(if $(filter $(OS),WNT), \
 		advapi32 \
 		comdlg32 \
@@ -84,6 +77,13 @@ $(eval $(call gb_Library_add_libs,sal,\
 		$(if $(filter $(OS),ANDROID),, \
 			-lpthread \
 		) \
+	) \
+	$(if $(filter $(OS),LINUX), \
+		-ldl \
+	) \
+	$(if $(filter $(OS),SOLARIS), \
+		-lnsl \
+		-lsocket \
 	) \
 ))
 
