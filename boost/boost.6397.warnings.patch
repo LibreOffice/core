@@ -255,3 +255,18 @@
  
  };
  
+--- misc/boost_1_44_0/boost/multi_array.hpp	2012-09-28 13:06:44.796521371 +0100
++++ misc/build/boost_1_44_0/boost/multi_array.hpp	2012-09-28 13:07:25.119002500 +0100
+@@ -423,9 +423,9 @@
+     // Build index_gen objects to create views with the same shape
+ 
+     // these need to be separate to handle non-zero index bases
+-    typedef detail::multi_array::index_gen<NumDims,NumDims> index_gen;
+-    index_gen old_idxes;
+-    index_gen new_idxes;
++    typedef detail::multi_array::index_gen<NumDims,NumDims> lcl_index_gen;
++    lcl_index_gen old_idxes;
++    lcl_index_gen new_idxes;
+ 
+     std::transform(new_array.index_base_list_.begin(),
+                    new_array.index_base_list_.end(),
