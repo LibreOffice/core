@@ -29,6 +29,7 @@ $(eval $(call gb_Executable_add_exception_objects,uiex,\
 $(eval $(call gb_Executable_use_externals,uiex,\
     libexslt \
     libxml2 \
+    libxslt \
 ))
 
 # vim: set noet sw=4 ts=4:
