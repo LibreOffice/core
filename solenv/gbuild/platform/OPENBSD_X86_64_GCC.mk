@@ -32,29 +32,6 @@ gb_STDLIBS := $(PTHREAD_LIBS)
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-define gb_LinkTarget__command_dynamiclink
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	$(gb_CXX) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1)).$(SOVERSION)) \
-		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT))\
-		$(subst \d,$$,$(RPATH)) \
-		$(T_LDFLAGS) \
-		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
-		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
-		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
-		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
-		$(LIBS) \
-		$(subst -lpthread,$(PTHREAD_LIBS),$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
-		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)))
-	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1))
-endef
-
 gb_LinkTarget_NOEXCEPTIONFLAGS += -DBOOST_NO_EXCEPTIONS
 
 # vim: set noet sw=4:
