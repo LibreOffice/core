@@ -166,9 +166,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	$(if $(filter-out YES,$(WITH_MYSPELL_DICTS)),\
 		-DWITHOUT_MYSPELL_DICTS \
 	) \
-	$(if $(BITNESS_OVERRIDE),\
-		-DBITNESS_OVERRIDE=$(BITNESS_OVERRIDE) \
-	) \
 ))
 
 ifeq ($(DISABLE_PYTHON),TRUE)

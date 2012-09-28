@@ -328,7 +328,7 @@ my_components += \
 .END
 
 .IF "$(GUIBASE)" == "aqua"
-.IF "$(BITNESS_OVERRIDE)" != "64"
+.IF "$(CPUNAME)" != "X86_64"
 my_components += \
     component/avmedia/source/quicktime/avmediaQuickTime
 .ENDIF
