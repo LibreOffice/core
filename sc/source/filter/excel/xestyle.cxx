@@ -2235,7 +2235,10 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
     }
     else
         sName = XclXmlUtils::ToOString( maName );
-    sal_Int32 nXFId = rStrm.GetRoot().GetXFBuffer().GetXmlStyleIndex( maXFId.mnXFId );
+    // get the index in sortedlist associated with the mnXId
+    sal_Int32 nXFId = rStrm.GetRoot().GetXFBuffer().GetXFIndex( maXFId.mnXFId );
+    // get the style index associated with index into sortedlist
+    nXFId = rStrm.GetRoot().GetXFBuffer().GetXmlStyleIndex( nXFId );
     rStrm.GetCurrentStream()->singleElement( XML_cellStyle,
             XML_name,           sName.getStr(),
             XML_xfId,           OString::valueOf( nXFId ).getStr(),
