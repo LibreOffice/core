@@ -199,19 +199,9 @@ void Test::testFdo45553()
             uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
             OUString aStr = xRange->getString();
             if ( aStr == "space-before" )
-            {
-                sal_Int32 nMargin = 0;
-                uno::Reference<beans::XPropertySet> xPropertySet(xRange, uno::UNO_QUERY);
-                xPropertySet->getPropertyValue("ParaTopMargin") >>= nMargin;
-                CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(120)), nMargin);
-            }
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(120)), getProperty<sal_Int32>(xRange, "ParaTopMargin"));
             else if ( aStr == "space-after" )
-            {
-                sal_Int32 nMargin = 0;
-                uno::Reference<beans::XPropertySet> xPropertySet(xRange, uno::UNO_QUERY);
-                xPropertySet->getPropertyValue("ParaBottomMargin") >>= nMargin;
-                CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(240)), nMargin);
-            }
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(240)), getProperty<sal_Int32>(xRange, "ParaBottomMargin"));
         }
     }
 }
@@ -249,12 +239,8 @@ void Test::testN695479()
     uno::Reference<beans::XPropertySet> xPropertySet(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
 
     // Negative ABSH should mean fixed size.
-    sal_Int16 nSizeType = 0;
-    xPropertySet->getPropertyValue("SizeType") >>= nSizeType;
-    CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, nSizeType);
-    sal_Int32 nHeight = 0;
-    xPropertySet->getPropertyValue("Height") >>= nHeight;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(300)), nHeight);
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xPropertySet, "SizeType"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(300)), getProperty<sal_Int32>(xPropertySet, "Height"));
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
@@ -272,24 +258,16 @@ void Test::testN695479()
             CPPUNIT_ASSERT_EQUAL(OUString("plain"), xText->getString());
 
             if (i == 0)
-            {
                 // Additonally, the frist frame should have double border at the bottom.
-                table::BorderLine2 aBorder;
-                xPropertySet->getPropertyValue("BottomBorder") >>= aBorder;
-                CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::DOUBLE, aBorder.LineStyle);
-            }
+                CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::DOUBLE, getProperty<table::BorderLine2>(xPropertySet, "BottomBorder").LineStyle);
         }
         else if (xServiceInfo->supportsService("com.sun.star.drawing.LineShape"))
         {
             // The older "drawing objects" syntax should be recognized.
             bDrawFound = true;
             xPropertySet.set(xServiceInfo, uno::UNO_QUERY);
-            sal_Int16 nHori = 0;
-            xPropertySet->getPropertyValue("HoriOrientRelation") >>= nHori;
-            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, nHori);
-            sal_Int16 nVert = 0;
-            xPropertySet->getPropertyValue("VertOrientRelation") >>= nVert;
-            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nVert);
+            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, getProperty<sal_Int16>(xPropertySet, "HoriOrientRelation"));
+            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xPropertySet, "VertOrientRelation"));
         }
     }
     CPPUNIT_ASSERT(bFrameFound);
@@ -311,13 +289,7 @@ void Test::testFdo45187()
     // There should be two shapes.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
     // They should be anchored to different paragraphs.
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
-    awt::Point aFirstPoint;
-    xPropertySet->getPropertyValue("AnchorPosition") >>= aFirstPoint;
-    xPropertySet.set(xDraws->getByIndex(1), uno::UNO_QUERY);
-    awt::Point aSecondPoint;
-    xPropertySet->getPropertyValue("AnchorPosition") >>= aSecondPoint;
-    CPPUNIT_ASSERT(aFirstPoint.Y != aSecondPoint.Y);
+    CPPUNIT_ASSERT(getProperty<awt::Point>(xDraws->getByIndex(0), "AnchorPosition").Y != getProperty<awt::Point>(xDraws->getByIndex(1), "AnchorPosition").Y);
 }
 
 void Test::testFdo46662()
@@ -334,17 +306,9 @@ void Test::testFdo46662()
         const beans::PropertyValue& rProp = aProps[i];
 
         if ( rProp.Name == "ParentNumbering" )
-        {
-            sal_Int16 nValue;
-            rProp.Value >>= nValue;
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nValue);
-        }
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(2), rProp.Value.get<sal_Int16>());
         else if ( rProp.Name == "Suffix" )
-        {
-            OUString sValue;
-            rProp.Value >>= sValue;
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
-        }
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rProp.Value.get<OUString>().getLength());
     }
 }
 
