@@ -48,8 +48,6 @@ $(eval $(call gb_Library_use_libraries,avmediawin,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,avmediawin))
-
 $(eval $(call gb_Library_use_system_win32_libs,avmediawin,\
 	gdi32 \
 	ole32 \

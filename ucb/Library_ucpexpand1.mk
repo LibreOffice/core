@@ -39,8 +39,6 @@ $(eval $(call gb_Library_use_libraries,ucpexpand1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ucpexpand1))
-
 $(eval $(call gb_Library_add_exception_objects,ucpexpand1,\
 	ucb/source/ucp/expand/ucpexpand \
 ))

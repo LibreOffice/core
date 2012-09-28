@@ -57,8 +57,6 @@ $(eval $(call gb_Library_use_system_win32_libs,sysdtrans,\
 	uuid \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sysdtrans))
-
 $(eval $(call gb_Library_use_static_libraries,sysdtrans,\
 	dtobj \
 ))

@@ -23,8 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_languagetag,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,i18npool_test_languagetag))
-
 ifeq ($(ENABLE_LIBLANGTAG),YES)
 $(eval $(call gb_CppunitTest_use_externals,i18npool_test_languagetag,\
 	liblangtag \

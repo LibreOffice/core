@@ -49,8 +49,6 @@ $(eval $(call gb_Library_use_system_win32_libs,ftransl,\
 	ole32 \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ftransl))
-
 $(eval $(call gb_Library_use_static_libraries,ftransl,\
 	dtobj \
 ))

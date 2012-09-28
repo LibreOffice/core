@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,dbpool2,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,dbpool2))
-
 $(eval $(call gb_Library_add_exception_objects,dbpool2,\
 	connectivity/source/cpool/ZConnectionWrapper \
 	connectivity/source/cpool/ZDriverWrapper \

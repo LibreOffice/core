@@ -32,8 +32,6 @@ $(eval $(call gb_Library_use_libraries,collator_data,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,collator_data))
-
 $(eval $(call gb_Library_add_generated_exception_objects,collator_data,\
 	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/collator/data/*.txt),\
 		CustomTarget/i18npool/collator/collator_$(notdir $(basename $(txt)))) \

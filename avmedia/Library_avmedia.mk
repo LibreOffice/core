@@ -59,8 +59,6 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,avmedia))
-
 $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/framework/mediacontrol \
 	avmedia/source/framework/mediaitem \

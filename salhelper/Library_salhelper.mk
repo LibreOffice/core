@@ -38,8 +38,6 @@ $(eval $(call gb_Library_use_libraries,salhelper,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,salhelper))
-
 $(eval $(call gb_Library_add_exception_objects,salhelper,\
     salhelper/source/condition \
     salhelper/source/dynload \

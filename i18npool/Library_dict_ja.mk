@@ -32,8 +32,6 @@ $(eval $(call gb_Library_use_libraries,dict_ja,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,dict_ja))
-
 $(eval $(call gb_Library_add_generated_exception_objects,dict_ja,\
 	CustomTarget/i18npool/breakiterator/dict_ja \
 ))

@@ -56,8 +56,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sdext_pdfimport))
-
 $(eval $(call gb_CppunitTest_use_static_libraries,sdext_pdfimport,\
     pdfimport_s \
 ))

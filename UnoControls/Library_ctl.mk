@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,ctl,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ctl))
-
 $(eval $(call gb_Library_set_componentfile,ctl,UnoControls/util/ctl))
 
 $(eval $(call gb_Library_add_exception_objects,ctl,\

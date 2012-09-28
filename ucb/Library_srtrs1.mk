@@ -38,8 +38,6 @@ $(eval $(call gb_Library_use_libraries,srtrs1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,srtrs1))
-
 $(eval $(call gb_Library_add_exception_objects,srtrs1,\
 	ucb/source/sorter/sortdynres \
 	ucb/source/sorter/sortmain \

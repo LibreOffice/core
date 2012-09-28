@@ -38,8 +38,6 @@ $(eval $(call gb_Executable_use_libraries,uno,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,uno))
-
 $(eval $(call gb_Executable_use_externals,uno,\
     libxml2 \
 ))

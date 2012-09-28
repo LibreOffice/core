@@ -70,8 +70,6 @@ $(eval $(call gb_Library_use_libraries,swui,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,swui))
-
 $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/chrdlg/break \
     sw/source/ui/chrdlg/chardlg \

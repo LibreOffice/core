@@ -34,8 +34,6 @@ $(eval $(call gb_Library_use_libraries,eps,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,eps))
-
 $(eval $(call gb_Library_add_exception_objects,eps,\
 	filter/source/graphicfilter/eps/eps \
 ))

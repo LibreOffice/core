@@ -65,8 +65,6 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,slideshow))
-
 $(eval $(call gb_Library_set_componentfile,slideshow,slideshow/util/slideshow))
 
 $(eval $(call gb_Library_add_exception_objects,slideshow,\

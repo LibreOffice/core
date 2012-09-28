@@ -46,6 +46,4 @@ $(eval $(call gb_Executable_add_exception_objects,xml2cmp,\
 	xml2cmp/source/xcd/dependy \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,xml2cmp))
-
 # vim: set noet sw=4 ts=4:

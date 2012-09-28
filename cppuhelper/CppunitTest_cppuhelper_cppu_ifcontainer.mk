@@ -42,6 +42,4 @@ $(eval $(call gb_CppunitTest_use_libraries,cppuhelper_cppu_ifcontainer,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,cppuhelper_cppu_ifcontainer))
-
 # vim: set noet sw=4 ts=4:

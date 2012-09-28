@@ -55,8 +55,6 @@ $(eval $(call gb_Library_use_libraries,kabdrv1,\
 	comphelper \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,kabdrv1))
-
 $(eval $(call gb_Library_add_exception_objects,kabdrv1,\
 	connectivity/source/drivers/kab/KColumns \
 	connectivity/source/drivers/kab/KTable \

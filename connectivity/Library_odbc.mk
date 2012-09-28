@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,odbc,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,odbc))
-
 $(eval $(call gb_Library_add_exception_objects,odbc,\
 	connectivity/source/drivers/odbc/oservices \
 	connectivity/source/drivers/odbc/ORealDriver \

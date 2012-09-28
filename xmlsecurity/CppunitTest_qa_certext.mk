@@ -47,8 +47,6 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_qa_certext,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,xmlsecurity_qa_certext))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,xmlsecurity_qa_certext,\
 	xmlsecurity/qa/certext/SanCertExt \
 ))

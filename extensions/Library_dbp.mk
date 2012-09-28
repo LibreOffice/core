@@ -72,6 +72,4 @@ $(eval $(call gb_Library_use_libraries,dbp,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,dbp))
-
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

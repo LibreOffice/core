@@ -41,8 +41,6 @@ $(eval $(call gb_Executable_use_libraries,lngconvex,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,lngconvex))
-
 $(eval $(call gb_Executable_add_exception_objects,lngconvex,\
     shell/source/tools/lngconvex/cmdline \
     shell/source/tools/lngconvex/lngconvex \

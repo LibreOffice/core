@@ -39,8 +39,6 @@ $(eval $(call gb_Library_use_libraries,ucpgio1,\
 	ucbhelper \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ucpgio1))
-
 $(eval $(call gb_Library_use_externals,ucpgio1,\
 	gio \
 ))

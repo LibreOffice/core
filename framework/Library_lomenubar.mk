@@ -49,8 +49,6 @@ $(eval $(call gb_Library_add_libs,lomenubar,\
 	-lX11 \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,lomenubar))
-
 $(eval $(call gb_Library_add_exception_objects,lomenubar,\
 	framework/source/lomenubar/MenuItemInfo \
 	framework/source/lomenubar/AwtKeyToDbusmenuString \

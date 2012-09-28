@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,textfd,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,textfd))
-
 $(eval $(call gb_Library_add_exception_objects,textfd,\
 	filter/source/textfilterdetect/fdcomp \
 	filter/source/textfilterdetect/filterdetect \

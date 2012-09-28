@@ -71,8 +71,6 @@ $(eval $(call gb_Library_use_libraries,cairocanvas,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,cairocanvas))
-
 $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_cachedbitmap \
 	canvas/source/cairo/cairo_cairo \

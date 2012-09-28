@@ -68,8 +68,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_macros_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sc_macros_test))
-
 $(eval $(call gb_CppunitTest_set_include,sc_macros_test,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \

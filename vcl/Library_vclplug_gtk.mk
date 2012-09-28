@@ -59,8 +59,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk,\
     sal \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,vclplug_gtk))
-
 $(eval $(call gb_Library_use_externals,vclplug_gtk,\
 	dbus \
 	gtk \

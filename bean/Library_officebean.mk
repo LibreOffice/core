@@ -53,6 +53,4 @@ $(eval $(call gb_Library_add_libs,officebean,\
 	$(AWTLIB) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,officebean))
-
 # vim: set noet sw=4 ts=4:

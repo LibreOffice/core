@@ -31,8 +31,6 @@ $(eval $(call gb_Executable_use_libraries,bestreversemap,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,bestreversemap))
-
 $(eval $(call gb_Executable_add_exception_objects,bestreversemap,\
 	tools/source/reversemap/bestreversemap \
 ))

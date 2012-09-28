@@ -45,8 +45,6 @@ $(eval $(call gb_Library_use_libraries,ucb1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ucb1))
-
 $(eval $(call gb_Library_add_exception_objects,ucb1,\
 	ucb/source/core/cmdenv \
 	ucb/source/core/identify \

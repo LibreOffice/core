@@ -40,8 +40,6 @@ $(eval $(call gb_Library_use_libraries,ucpftp1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ucpftp1))
-
 $(eval $(call gb_Library_use_externals,ucpftp1,\
 	curl \
 	zlib \

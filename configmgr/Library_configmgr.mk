@@ -75,6 +75,4 @@ $(eval $(call gb_Library_use_libraries,configmgr, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,configmgr))
-
 $(eval $(call gb_Library_set_componentfile,configmgr,configmgr/source/configmgr))

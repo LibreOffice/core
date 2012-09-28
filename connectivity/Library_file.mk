@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,file,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,file))
-
 $(eval $(call gb_Library_add_exception_objects,file,\
 	connectivity/source/drivers/file/FCatalog \
 	connectivity/source/drivers/file/FColumns \

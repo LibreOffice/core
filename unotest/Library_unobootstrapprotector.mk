@@ -39,8 +39,6 @@ $(eval $(call gb_Library_use_libraries,unobootstrapprotector,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,unobootstrapprotector))
-
 $(eval $(call gb_Library_use_externals,unobootstrapprotector,\
 	cppunit \
 ))

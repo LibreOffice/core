@@ -32,8 +32,6 @@ $(eval $(call gb_Executable_use_libraries,rscdep,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,rscdep))
-
 $(eval $(call gb_Executable_use_sdk_api,rscdep))
 
 $(eval $(call gb_Executable_add_exception_objects,rscdep,\

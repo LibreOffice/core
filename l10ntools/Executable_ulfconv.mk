@@ -14,8 +14,6 @@ $(eval $(call gb_Executable_use_libraries,ulfconv,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,ulfconv))
-
 $(eval $(call gb_Executable_add_exception_objects,ulfconv,\
     l10ntools/source/ulfconv/ulfconv \
 ))

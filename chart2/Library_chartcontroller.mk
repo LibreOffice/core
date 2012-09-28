@@ -58,8 +58,6 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,chartcontroller))
-
 $(eval $(call gb_Library_set_componentfile,chartcontroller,chart2/source/controller/chartcontroller))
 
 $(eval $(call gb_Library_add_exception_objects,chartcontroller,\

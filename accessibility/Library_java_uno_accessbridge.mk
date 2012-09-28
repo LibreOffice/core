@@ -41,8 +41,6 @@ $(eval $(call gb_Library_use_libraries,java_uno_accessbridge,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,java_uno_accessbridge))
-
 $(eval $(call gb_Library_add_exception_objects,java_uno_accessbridge,\
     accessibility/bridge/source/java/WindowsAccessBridgeAdapter \
 ))

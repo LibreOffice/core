@@ -51,8 +51,6 @@ $(eval $(call gb_Executable_use_libraries,langsupport,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,langsupport))
-
 $(eval $(call gb_Executable_add_exception_objects,langsupport,\
     svtools/langsupport/langsupport \
 ))

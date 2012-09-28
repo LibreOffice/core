@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,sot,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sot))
-
 $(eval $(call gb_Library_add_exception_objects,sot,\
     sot/source/unoolestorage/xolesimplestorage \
     sot/source/unoolestorage/register \

@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,i18npool,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,i18npool))
-
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Library_use_externals,i18npool,\
 	icuin \

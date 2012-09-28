@@ -41,8 +41,6 @@ $(eval $(call gb_Library_use_system_win32_libs,syssh,\
 	shell32 \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,syssh))
-
 $(eval $(call gb_Library_set_componentfile,syssh,shell/source/win32/syssh))
 
 $(eval $(call gb_Library_add_exception_objects,syssh,\

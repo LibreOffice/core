@@ -37,8 +37,6 @@ $(eval $(call gb_Executable_use_libraries,gendict,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,gendict))
-
 $(eval $(call gb_Executable_add_exception_objects,gendict,\
 	i18npool/source/breakiterator/gendict \
 ))

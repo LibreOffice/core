@@ -41,8 +41,6 @@ $(eval $(call gb_Library_use_libraries,ucpext,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ucpext))
-
 $(eval $(call gb_Library_add_exception_objects,ucpext,\
 	ucb/source/ucp/ext/ucpext_content \
 	ucb/source/ucp/ext/ucpext_datasupplier \

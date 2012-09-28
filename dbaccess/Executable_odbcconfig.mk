@@ -40,8 +40,6 @@ $(eval $(call gb_Executable_use_libraries,odbcconfig,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,odbcconfig))
-
 $(eval $(call gb_Executable_add_exception_objects,odbcconfig,\
     dbaccess/win32/source/odbcconfig/odbcconfig \
 ))

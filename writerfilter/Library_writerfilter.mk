@@ -83,8 +83,6 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,writerfilter))
-
 $(eval $(call gb_Library_use_external,writerfilter,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,writerfilter,\

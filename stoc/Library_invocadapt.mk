@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_libraries,invocadapt,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,invocadapt))
-
 $(eval $(call gb_Library_set_componentfile,invocadapt,stoc/source/invocation_adapterfactory/invocadapt))
 
 $(eval $(call gb_Library_add_exception_objects,invocadapt,\

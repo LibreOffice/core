@@ -51,8 +51,6 @@ $(eval $(call gb_Library_use_libraries,sdbt,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sdbt))
-
 $(eval $(call gb_Library_set_componentfile,sdbt,dbaccess/util/sdbt))
 
 $(eval $(call gb_Library_add_exception_objects,sdbt,\

@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,acc,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,acc))
-
 $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/extended/AccessibleBrowseBox \
     accessibility/source/extended/AccessibleBrowseBoxBase \

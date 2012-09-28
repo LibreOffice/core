@@ -79,8 +79,6 @@ $(eval $(call gb_Library_use_libraries,sw,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sw))
-
 $(eval $(call gb_Library_use_externals,sw,\
 	icuuc \
 	libxml2 \

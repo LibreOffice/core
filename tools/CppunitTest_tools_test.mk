@@ -49,8 +49,6 @@ $(eval $(call gb_CppunitTest_use_libraries,tools_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,tools_test))
-
 $(eval $(call gb_CppunitTest_use_static_libraries,tools_test, \
     ooopathutils \
 ))

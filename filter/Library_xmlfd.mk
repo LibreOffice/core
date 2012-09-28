@@ -34,8 +34,6 @@ $(eval $(call gb_Library_use_libraries,xmlfd,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,xmlfd))
-
 $(eval $(call gb_Library_add_exception_objects,xmlfd,\
 	filter/source/xmlfilterdetect/fdcomp \
 	filter/source/xmlfilterdetect/filterdetect \

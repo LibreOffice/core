@@ -42,8 +42,6 @@ $(eval $(call gb_Library_use_libraries,postgresql-sdbc,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,postgresql-sdbc))
-
 $(eval $(call gb_Library_set_componentfile,postgresql-sdbc,connectivity/source/drivers/postgresql/postgresql-sdbc))
 
 $(eval $(call gb_Library_add_exception_objects,postgresql-sdbc,\

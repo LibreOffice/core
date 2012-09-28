@@ -48,8 +48,6 @@ $(eval $(call gb_Library_use_libraries,nullcanvas,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,nullcanvas))
-
 $(eval $(call gb_Library_add_exception_objects,nullcanvas,\
 	canvas/source/null/null_canvasbitmap \
 	canvas/source/null/null_canvascustomsprite \

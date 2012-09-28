@@ -106,8 +106,6 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sd))
-
 $(eval $(call gb_Library_use_externals,sd,\
  libxml2 \
  dbus \

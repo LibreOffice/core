@@ -79,8 +79,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sc_ucalc))
-
 $(eval $(call gb_CppunitTest_set_include,sc_ucalc,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/source/core/inc \

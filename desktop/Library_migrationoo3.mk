@@ -42,8 +42,6 @@ $(eval $(call gb_Library_use_libraries,migrationoo3,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,migrationoo3))
-
 $(eval $(call gb_Library_use_externals,migrationoo3,\
     berkeleydb \
 ))

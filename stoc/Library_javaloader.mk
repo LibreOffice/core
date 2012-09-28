@@ -38,8 +38,6 @@ $(eval $(call gb_Library_use_libraries,javaloader,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,javaloader))
-
 $(eval $(call gb_Library_set_componentfile,javaloader,stoc/source/javaloader/javaloader))
 
 $(eval $(call gb_Library_add_exception_objects,javaloader,\

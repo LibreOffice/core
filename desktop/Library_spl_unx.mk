@@ -35,8 +35,6 @@ $(eval $(call gb_Library_use_libraries,spl_unx,\
     sal \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,spl_unx))
-
 $(eval $(call gb_Library_set_componentfile,spl_unx,desktop/unx/splash/splash))
 
 $(eval $(call gb_Library_add_exception_objects,spl_unx,\

@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,merged))
-
 $(eval $(call gb_Library_use_externals,merged,\
 	cups \
 	icui18n \

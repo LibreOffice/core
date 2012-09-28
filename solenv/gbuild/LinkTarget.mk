@@ -648,11 +648,11 @@ define gb_LinkTarget_add_libs
 $(call gb_LinkTarget_get_target,$(1)) : LIBS += $(2)
 endef
 
-# add platform specific standard libraries to linker command for linktarget $(1)
-# there are currently 94 Libraries/Executables/CppunitTests not using
-# gb_STDLIBS... probably this should need to be added explicitly
-define gb_LinkTarget_add_standard_system_libs
-$(call gb_LinkTarget_get_target,$(1)) : LIBS += $(gb_STDLIBS)
+# remove platform specific standard libraries for linktarget $(1)
+# assumption is that adding these standard libs is always useful, but in very
+# exceptional cases this disable method may be used
+define gb_LinkTarget_disable_standard_system_libs
+$(call gb_LinkTarget_get_target,$(1)) : LIBS := $$(filter-out $$(gb_STDLIBS),$$(LIBS))
 endef
 
 define gb_LinkTarget_add_api

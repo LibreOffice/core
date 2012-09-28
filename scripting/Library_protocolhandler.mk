@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,protocolhandler,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,protocolhandler))
-
 $(eval $(call gb_Library_add_exception_objects,protocolhandler,\
 	scripting/source/protocolhandler/scripthandler \
 ))

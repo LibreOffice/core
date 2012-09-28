@@ -37,8 +37,6 @@ $(eval $(call gb_CppunitTest_use_libraries,cppu_qa_recursion, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,cppu_qa_recursion))
-
 $(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_qa_recursion, \
 	cppu \
 	udkapi \

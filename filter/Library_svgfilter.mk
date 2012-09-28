@@ -52,8 +52,6 @@ $(eval $(call gb_Library_use_libraries,svgfilter,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,svgfilter))
-
 $(eval $(call gb_Library_use_externals,svgfilter,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,svgfilter,\

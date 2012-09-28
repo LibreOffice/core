@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,deployment,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,deployment))
-
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Library_use_externals,deployment,\
     berkeleydb \

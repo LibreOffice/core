@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_libraries,connector,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,connector))
-
 $(eval $(call gb_Library_set_componentfile,connector,io/source/connector/connector))
 
 $(eval $(call gb_Library_add_exception_objects,connector,\

@@ -63,8 +63,6 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,starmath_qa_cppunit))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,starmath_qa_cppunit,\
     starmath/qa/cppunit/test_nodetotextvisitors \
     starmath/qa/cppunit/test_starmath \

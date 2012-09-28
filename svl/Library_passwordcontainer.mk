@@ -49,8 +49,6 @@ $(eval $(call gb_Library_use_libraries,passwordcontainer,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,passwordcontainer))
-
 $(eval $(call gb_Library_add_exception_objects,passwordcontainer,\
     svl/source/passwordcontainer/passwordcontainer \
     svl/source/passwordcontainer/syscreds \

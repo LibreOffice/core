@@ -69,8 +69,6 @@ $(eval $(call gb_CppunitTest_use_libraries,slideshow,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,slideshow))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,slideshow,\
     slideshow/test/slidetest \
     slideshow/test/testshape \

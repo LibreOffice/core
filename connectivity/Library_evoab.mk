@@ -56,8 +56,6 @@ $(eval $(call gb_Library_use_libraries,evoab,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,evoab))
-
 $(eval $(call gb_Library_add_exception_objects,evoab,\
 	connectivity/source/drivers/evoab2/NDriver \
 	connectivity/source/drivers/evoab2/NTable \

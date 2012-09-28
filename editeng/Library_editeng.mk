@@ -154,8 +154,6 @@ $(eval $(call gb_Library_use_libraries,editeng,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,editeng))
-
 $(eval $(call gb_Library_use_external,editeng,icuuc))
 
 # Runtime dependency for unit-tests

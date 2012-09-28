@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,fileacc,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,fileacc))
-
 $(eval $(call gb_Library_set_componentfile,fileacc,fileaccess/source/fileacc))
 
 $(eval $(call gb_Library_add_exception_objects,fileacc,fileaccess/source/FileAccess))

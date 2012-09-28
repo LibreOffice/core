@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,animcore,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,animcore))
-
 $(eval $(call gb_Library_add_exception_objects,animcore,\
     animations/source/animcore/animcore \
 	animations/source/animcore/factreg \

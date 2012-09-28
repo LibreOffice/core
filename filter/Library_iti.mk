@@ -31,8 +31,6 @@ $(eval $(call gb_Library_use_libraries,iti,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,iti))
-
 $(eval $(call gb_Library_add_exception_objects,iti,\
 	filter/source/graphicfilter/itiff/ccidecom \
 	filter/source/graphicfilter/itiff/itiff \

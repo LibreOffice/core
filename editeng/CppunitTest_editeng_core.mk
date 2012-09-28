@@ -60,8 +60,6 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,editeng_core))
-
 $(eval $(call gb_CppunitTest_use_externals,editeng_core,\
     icuuc \
 ))

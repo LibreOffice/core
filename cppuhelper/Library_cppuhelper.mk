@@ -51,8 +51,6 @@ $(eval $(call gb_Library_use_libraries,cppuhelper,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,cppuhelper))
-
 $(eval $(call gb_Library_add_cobjects,cppuhelper,\
 	cppuhelper/source/findsofficepath \
 ))

@@ -45,8 +45,6 @@ $(eval $(call gb_Library_use_libraries,gconfbe1,\
 	sal \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,gconfbe1))
-
 $(eval $(call gb_Library_set_componentfile,gconfbe1,shell/source/backends/gconfbe/gconfbe1))
 
 $(eval $(call gb_Library_add_exception_objects,gconfbe1,\

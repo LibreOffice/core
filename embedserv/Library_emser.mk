@@ -56,8 +56,6 @@ $(eval $(call gb_Library_use_system_win32_libs,emser,\
 	uuid \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,emser))
-
 ifeq ($(USE_DEBUG_RUNTIME),)
 $(eval $(call gb_Library_add_libs,emser,\
 	$(ATL_LIB)/atls.lib \

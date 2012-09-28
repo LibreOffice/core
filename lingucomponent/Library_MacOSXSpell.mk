@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
 	utl \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,MacOSXSpell))
-
 $(eval $(call gb_Library_use_system_darwin_frameworks,MacOSXSpell,\
 	Cocoa \
 ))

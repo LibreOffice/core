@@ -54,8 +54,6 @@ $(eval $(call gb_Library_use_libraries,avmediagst_0_10,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,avmediagst_0_10))
-
 $(eval $(call gb_Library_add_libs,avmediagst_0_10,\
 	$(GSTREAMER_0_10_LIBS) \
 	-lgstinterfaces-0.10 \

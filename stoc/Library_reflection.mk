@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_libraries,reflection,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,reflection))
-
 $(eval $(call gb_Library_set_componentfile,reflection,stoc/source/corereflection/reflection))
 
 $(eval $(call gb_Library_add_exception_objects,reflection,\

@@ -54,6 +54,7 @@ endef
 define gb_Executable__Executable_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),Executable)
+$(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_Executable_get_target,$(1))).dir
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
@@ -105,7 +106,7 @@ $(eval $(foreach method,\
 	add_ldflags \
 	set_ldflags \
 	add_libs \
-	add_standard_system_libs \
+	disable_standard_system_libs \
 	use_system_darwin_frameworks \
 	use_system_win32_libs \
 	set_library_path_flags \

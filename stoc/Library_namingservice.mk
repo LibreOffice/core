@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_libraries,namingservice,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,namingservice))
-
 $(eval $(call gb_Library_set_componentfile,namingservice,stoc/source/namingservice/namingservice))
 
 $(eval $(call gb_Library_add_exception_objects,namingservice,\

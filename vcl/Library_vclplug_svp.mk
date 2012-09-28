@@ -60,8 +60,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_svp,\
     sal \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,vclplug_svp))
-
 $(eval $(call gb_Library_use_externals,vclplug_svp,\
 	icule \
 	icuuc \

@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,mozab2,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,mozab2))
-
 $(eval $(call gb_Library_add_exception_objects,mozab2,\
 	connectivity/source/drivers/mozab/MDriver \
 	connectivity/source/drivers/mozab/MServices \

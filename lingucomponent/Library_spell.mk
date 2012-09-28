@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,spell,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,spell))
-
 $(eval $(call gb_Library_use_static_libraries,spell,\
 	ulingu \
 ))

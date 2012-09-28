@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,unotest,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,unotest))
-
 $(eval $(call gb_Library_use_externals,unotest,\
 	cppunit \
 ))

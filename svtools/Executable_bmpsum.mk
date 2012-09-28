@@ -44,8 +44,6 @@ $(eval $(call gb_Executable_use_libraries,bmpsum,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,bmpsum))
-
 $(eval $(call gb_Executable_add_exception_objects,bmpsum,\
     svtools/bmpmaker/bmpsum \
 ))

@@ -104,6 +104,7 @@ endef
 define gb_CppunitTest__CppunitTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
+$(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_CppunitTest_DEFS) \
 )
@@ -341,7 +342,7 @@ $(eval $(foreach method,\
 	add_ldflags \
 	set_ldflags \
 	add_libs \
-	add_standard_system_libs \
+	disable_standard_system_libs \
 	use_system_darwin_frameworks \
 	use_system_win32_libs \
 	use_sdk_api \

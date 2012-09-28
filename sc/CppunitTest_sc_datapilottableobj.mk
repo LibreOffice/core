@@ -72,8 +72,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_datapilottableobj, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sc_datapilottableobj))
-
 $(eval $(call gb_CppunitTest_set_include,sc_datapilottableobj,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \

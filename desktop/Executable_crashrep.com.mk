@@ -41,8 +41,6 @@ $(eval $(call gb_Executable_use_libraries,crashrep_com,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,crashrep_com))
-
 $(eval $(call gb_Executable_add_exception_objects,crashrep_com,\
     desktop/win32/source/guistdio/guistdio \
 ))

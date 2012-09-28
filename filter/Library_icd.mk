@@ -32,8 +32,6 @@ $(eval $(call gb_Library_use_libraries,icd,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,icd))
-
 $(eval $(call gb_Library_add_exception_objects,icd,\
 	filter/source/graphicfilter/ipcd/ipcd \
 ))

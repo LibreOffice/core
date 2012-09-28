@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_libraries,wininetbe1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,wininetbe1))
-
 $(eval $(call gb_Library_set_componentfile,wininetbe1,shell/source/backends/wininetbe/wininetbe1))
 
 $(eval $(call gb_Library_add_exception_objects,wininetbe1,\

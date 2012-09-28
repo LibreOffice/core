@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,localebe1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,localebe1))
-
 $(eval $(call gb_Library_set_componentfile,localebe1,shell/source/backends/localebe/localebe1))
 
 $(eval $(call gb_Library_add_exception_objects,localebe1,\

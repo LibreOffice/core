@@ -41,8 +41,6 @@ $(eval $(call gb_Executable_use_libraries,svidl,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,svidl))
-
 $(eval $(call gb_Executable_add_exception_objects,svidl,\
 	idl/source/cmptools/hash \
 	idl/source/cmptools/lex \

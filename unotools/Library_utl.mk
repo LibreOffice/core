@@ -63,8 +63,6 @@ $(eval $(call gb_Library_use_libraries,utl,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,utl))
-
 # add all source files that shall be compiled with exceptions enabled
 # the name is relative to $(SRCROOT) and must not contain an extension
 $(eval $(call gb_Library_add_exception_objects,utl,\

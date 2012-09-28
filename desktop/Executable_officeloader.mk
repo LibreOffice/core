@@ -36,8 +36,6 @@ $(eval $(call gb_Executable_use_libraries,officeloader,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,officeloader))
-
 # I'm not suer wht was the intent, but that break the link
 #$(eval $(call gb_Executable_set_ldflags,officeloader,\
 #    $(filter -bind_at_load,$$(LDFLAGS)) \

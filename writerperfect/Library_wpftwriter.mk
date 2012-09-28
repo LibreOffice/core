@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,wpftwriter,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,wpftwriter))
-
 $(eval $(call gb_Library_use_static_libraries,wpftwriter,\
 	writerperfect \
 ))

@@ -51,8 +51,6 @@ $(eval $(call gb_Library_use_libraries,flat,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,flat))
-
 $(eval $(call gb_Library_add_exception_objects,flat,\
 	connectivity/source/drivers/flat/EResultSet \
 	connectivity/source/drivers/flat/EStatement \

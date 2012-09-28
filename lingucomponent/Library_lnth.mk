@@ -48,8 +48,6 @@ $(eval $(call gb_Library_use_libraries,lnth,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,lnth))
-
 $(eval $(call gb_Library_use_static_libraries,lnth,\
 	ulingu \
 ))
