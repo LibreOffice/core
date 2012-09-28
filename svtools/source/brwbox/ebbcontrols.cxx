@@ -253,28 +253,6 @@ namespace svt
     //= CheckBoxControl
     //==================================================================
     //------------------------------------------------------------------
-
-    class CBCntrlTriState : public TriStateBox
-    {
-        CBCntrlTriState( const CBCntrlTriState & );
-        CBCntrlTriState& operator= ( const CBCntrlTriState & );
-    protected:
-        virtual void ImplHandleHoriAlign( const Point& rPos, const Size& rSize,
-                                    const Size& rImageSize, Rectangle& rStateRect )
-        {
-            WinBits nWinStyle = GetStyle();
-            if ( nWinStyle & WB_CENTER )
-                rStateRect.Left() = rPos.X()+((rSize.Width()-rImageSize.Width())/2);
-            else if ( nWinStyle & WB_RIGHT )
-                rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width();
-            else
-                rStateRect.Left() = rPos.X();
-        }
-    public:
-        CBCntrlTriState( Window* pParent, WinBits nStyle = 0 ) : TriStateBox( pParent, nStyle ) {}
-        CBCntrlTriState( Window* pParent, const ResId& rResId ) : TriStateBox( pParent, rResId ) {}
-    };
-
     CheckBoxControl::CheckBoxControl(Window* pParent, WinBits nWinStyle)
                    :Control(pParent, nWinStyle)
     {
@@ -289,7 +267,7 @@ namespace svt
 
         EnableChildTransparentMode();
 
-        pBox = new CBCntrlTriState(this,WB_CENTER|WB_VCENTER);
+        pBox = new TriStateBox(this,WB_CENTER|WB_VCENTER);
         pBox->EnableChildTransparentMode();
         pBox->SetPaintTransparent( sal_True );
         pBox->SetClickHdl( LINK( this, CheckBoxControl, OnClick ) );
