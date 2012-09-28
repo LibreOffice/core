@@ -26,9 +26,14 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cassert>
 
 #include "pdfihelper.hxx"
 
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionPassword.hpp>
@@ -36,8 +41,9 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
-
+#include <tools/errcode.hxx>
 
 using namespace com::sun::star;
 
@@ -125,6 +131,32 @@ void SAL_CALL PDFPasswordRequest::select() throw (uno::RuntimeException)
     m_bSelected = true;
 }
 
+class UnsupportedEncryptionFormatRequest:
+    public cppu::WeakImplHelper1< task::XInteractionRequest >,
+    private boost::noncopyable
+{
+public:
+    UnsupportedEncryptionFormatRequest() {}
+
+private:
+    virtual ~UnsupportedEncryptionFormatRequest() {}
+
+    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException) {
+        return uno::makeAny(
+            task::ErrorCodeRequest(
+                OUString(), uno::Reference< uno::XInterface >(),
+                ERRCODE_IO_WRONGVERSION));
+            //TODO: should be something more informative than crudely reused
+            // ERRCODE_IO_WRONGVERSION
+    }
+
+    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > >
+    SAL_CALL getContinuations() throw (uno::RuntimeException) {
+        return
+            uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
+    }
+};
+
 } // namespace
 
 namespace pdfi
@@ -157,6 +189,13 @@ bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
     }
 
     return bSuccess;
+}
+
+void reportUnsupportedEncryptionFormat(
+    uno::Reference< task::XInteractionHandler > const & handler)
+{
+    assert(handler.is());
+    handler->handle(new UnsupportedEncryptionFormatRequest);
 }
 
 }
