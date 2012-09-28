@@ -50,10 +50,10 @@ ALLTAR: $(COMP) ANTBUILD
 
 fix_system_commons:
     @echo "Fix Java Class-Path entry for Apache Commons libraries from system."
-    @$(SED) -r -e "s#(name=\"Class-Path\" value=\").*\"#\1file://$(COMMONS_CODEC_JAR) file://$(COMMONS_LANG_JAR) \
-file://$(COMMONS_HTTPCLIENT_JAR) file://$(COMMONS_LOGGING_JAR)\"#" -i build.xml
+    @$(SED) -i.bak -r -e "s#(name=\"Class-Path\" value=\").*\"#\1file://$(COMMONS_CODEC_JAR) file://$(COMMONS_LANG_JAR) \
+file://$(COMMONS_HTTPCLIENT_JAR) file://$(COMMONS_LOGGING_JAR)\"#" build.xml
     @echo "Unbundle Apache Commons libraries from Mediawiki Presentation extension."
-    @$(SED) '/file="..commons/d' -i build.xml
+    @$(SED) -i.bak '/file="..commons/d' build.xml
 
 .ELSE
 @all:
