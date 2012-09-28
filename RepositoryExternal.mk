@@ -1371,6 +1371,7 @@ define gb_LinkTarget__use_png
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	png \
 )
+$(call gb_LinkTarget__use_zlib,$(1))
 
 endef
 
