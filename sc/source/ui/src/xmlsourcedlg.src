@@ -12,8 +12,66 @@ ModalDialog RID_SCDLG_XML_SOURCE
 {
     HelpID = "sc:ModalDialog:RID_SCDLG_XML_SOURCE";
     Text [ en-US ] = "XML Source" ;
-    Size = MAP_APPFONT ( 250 , 135 ) ;
+    Size = MAP_APPFONT ( 250 , 200 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
+
+    FixedLine FL_SOURCE_FILE
+    {
+        Pos = MAP_APPFONT ( 6 , 5 ) ;
+        Size = MAP_APPFONT ( 238 , 8 ) ;
+
+        Text [ en-US ] = "Source file";
+    };
+
+    ImageButton BTN_SELECT_SOURCE_FILE
+    {
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+
+        QuickHelpText [ en-US ] = "Browse to set source file.";
+    };
+
+    FixedText FT_SOURCE_FILE
+    {
+        Pos = MAP_APPFONT ( 25 , 21 ) ;
+        Size = MAP_APPFONT ( 225 , 8 ) ;
+
+        Text [ en-US ] = "- not set -";
+    };
+
+    FixedLine FL_MAP_XML_TO_DOCUMENT
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 238 , 8 ) ;
+
+        Text [ en-US ] = "Map to document";
+    };
+
+    Control LB_SOURCE_TREE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 114 , 50 ) ;
+        Size = MAP_APPFONT ( 130 , 120 ) ;
+        TabStop = TRUE ;
+    };
+
+    Image IMG_ELEMENT_DEFAULT
+    {
+        ImageBitmap = Bitmap { File = "page.png" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    Image IMG_FILE_OPEN
+    {
+        ImageBitmap = Bitmap { File = "file.png" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 194 , 181 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
 };
 

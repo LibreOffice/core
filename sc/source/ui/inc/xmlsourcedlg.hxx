@@ -10,10 +10,33 @@
 #ifndef __SC_XMLSOURCEDLG_HXX__
 #define __SC_XMLSOURCEDLG_HXX__
 
+#include "vcl/button.hxx"
 #include "vcl/dialog.hxx"
+#include "vcl/fixed.hxx"
+#include "svtools/svtreebx.hxx"
+
+class ScXMLSourceTree : public SvTreeListBox
+{
+    Image maImgElemDefault;
+    Image maImgElemRepeat;
+public:
+    ScXMLSourceTree(Window* pParent, const ResId& rResId);
+};
 
 class ScXMLSourceDlg : public ModalDialog
 {
+    FixedLine maFlSourceFile;
+    ImageButton maBtnSelectSource;
+    FixedText maFtSourceFile;
+
+    FixedLine maFtMapXmlDoc;
+
+    ScXMLSourceTree maLbTree;
+
+    CancelButton maBtnCancel;
+
+    Image maImgFileOpen;
+
 public:
     ScXMLSourceDlg(Window* pParent);
     virtual ~ScXMLSourceDlg();

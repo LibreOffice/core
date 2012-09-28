@@ -12,4 +12,15 @@
 #define BTN_OK 0
 #define BTN_CANCEL 1
 
+#define FL_SOURCE_FILE 10
+#define BTN_SELECT_SOURCE_FILE 11
+#define FT_SOURCE_FILE 12
+
+#define FL_MAP_XML_TO_DOCUMENT 20
+#define LB_SOURCE_TREE 21
+
+#define IMG_ELEMENT_DEFAULT 50
+#define IMG_ELEMENT_REPEAT  51
+#define IMG_FILE_OPEN 52
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
