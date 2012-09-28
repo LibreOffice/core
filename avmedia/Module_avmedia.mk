@@ -47,7 +47,7 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 endif
 
 ifeq ($(GUIBASE),aqua)
-ifneq ($(BITNESS_OVERRIDE),64)
+ifneq ($(CPUNAME),X86_64)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaQuickTime \
 ))

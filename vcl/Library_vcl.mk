@@ -437,7 +437,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     AppleRemote \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
-    $(if $(filter 64,$(BITNESS_OVERRIDE)),,QuickTime) \
+    $(if $(filter X86_64,$(CPUNAME)),,QuickTime) \
     Cocoa \
     Carbon \
     CoreFoundation \
