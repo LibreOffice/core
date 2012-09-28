@@ -54,6 +54,8 @@ typedef XLIB_Window GdkNativeWindow;
 #define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
 #endif
 
+static sal_Bool bDBusIsAvailable = sal_False;
+
 class GtkSalFrame : public SalFrame
 {
     static const int nMaxGraphics = 2;
@@ -342,7 +344,7 @@ public:
     virtual void                SetMenu( SalMenu *pSalMenu );
     virtual SalMenu*            GetMenu( void );
     virtual void                DrawMenuBar();
-    void                        SetWatcherId( sal_uInt32 watcherId );
+    void                        EnsureAppMenuWatch();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     // Before the window is visible, a resize event

@@ -38,6 +38,7 @@
 class MenuItemList;
 class GtkSalMenuItem;
 
+
 class GtkSalMenu : public SalMenu
 {
 private:
@@ -103,6 +104,11 @@ public:
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        Activate( const gchar* aMenuCommand );
     void                        Deactivate( const gchar* aMenuCommand );
+    inline void DisconnectFrame()
+    {
+        mpMenuModel = NULL;
+        mpActionGroup = NULL;
+    };
 };
 
 class GtkSalMenuItem : public SalMenuItem

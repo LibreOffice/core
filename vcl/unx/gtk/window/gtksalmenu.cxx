@@ -50,6 +50,31 @@ static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
     return aCommand;
 }
 
+// FIXME: Check for missing keys. Maybe translating keycodes would be safer...
+rtl::OUString GetGtkKeyName( rtl::OUString keyName )
+{
+    rtl::OUString aGtkKeyName("");
+
+    sal_Int32 nIndex = 0;
+
+    do
+    {
+        rtl::OUString token = keyName.getToken( 0, '+', nIndex );
+
+        if ( token == "Ctrl" ) {
+            aGtkKeyName += "<Control>";
+        } else if ( token == "Alt" ) {
+            aGtkKeyName += "<Alt>";
+        } else if ( token == "Shift" ) {
+            aGtkKeyName += "<Shift>";
+        } else {
+            aGtkKeyName += token;
+        }
+    } while ( nIndex >= 0 );
+
+    return aGtkKeyName;
+}
+
 static void UpdateNativeMenu2( GtkSalMenu *pMenu )
 {
     if ( pMenu == NULL )
@@ -276,141 +301,7 @@ void ObjectDestroyedNotify( gpointer data )
     }
 }
 
-void
-gdk_x11_window_set_utf8_property  (GdkWindow *window,
-                                   const gchar *name,
-                                   const gchar *value)
-{
-  GdkDisplay *display;
 
-  //if (!WINDOW_IS_TOPLEVEL (window))
-    //return;
-
-  display = gdk_window_get_display (window);
-
-  if (value != NULL)
-    {
-      XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_WINDOW_XID (window),
-                       gdk_x11_get_xatom_by_name_for_display (display, name),
-                       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-                       PropModeReplace, (guchar *)value, strlen (value));
-    }
-  else
-    {
-      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_WINDOW_XID (window),
-                       gdk_x11_get_xatom_by_name_for_display (display, name));
-    }
-}
-
-// FIXME: Check for missing keys. Maybe translating keycodes would be safer...
-rtl::OUString GetGtkKeyName( rtl::OUString keyName )
-{
-    rtl::OUString aGtkKeyName("");
-
-    sal_Int32 nIndex = 0;
-
-    do
-    {
-        rtl::OUString token = keyName.getToken( 0, '+', nIndex );
-
-        if ( token == "Ctrl" ) {
-            aGtkKeyName += "<Control>";
-        } else if ( token == "Alt" ) {
-            aGtkKeyName += "<Alt>";
-        } else if ( token == "Shift" ) {
-            aGtkKeyName += "<Shift>";
-        } else {
-            aGtkKeyName += token;
-        }
-    } while ( nIndex >= 0 );
-
-    return aGtkKeyName;
-}
-
-// AppMenu watch functions.
-
-static sal_Bool bDBusIsAvailable = sal_False;
-
-static void
-on_registrar_available (GDBusConnection * /*connection*/,
-                        const gchar     * /*name*/,
-                        const gchar     * /*name_owner*/,
-                        gpointer         user_data)
-{
-    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
-    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
-
-    if ( pSalMenu != NULL )
-    {
-        MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
-
-        GtkWidget *pWidget = pSalFrame->getWindow();
-        GdkWindow *gdkWindow = gtk_widget_get_window( pWidget );
-
-        if ( gdkWindow != NULL )
-        {
-            GMenuModel* pMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
-            GActionGroup* pActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
-
-            XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
-
-            gchar* aDBusPath = g_strdup_printf("/window/%lu", windowId);
-            gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
-            gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
-
-            // Get a DBus session connection.
-            GDBusConnection* pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-
-            if( pSessionBus == NULL )
-                return;
-
-            // Publish the menu.
-            if ( aDBusMenubarPath != NULL && pMenuModel != NULL )
-                g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
-
-            if ( aDBusPath != NULL && pActionGroup != NULL )
-                g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
-
-            // Set window properties.
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
-
-            g_free( aDBusPath );
-            g_free( aDBusWindowPath );
-            g_free( aDBusMenubarPath );
-
-            bDBusIsAvailable = sal_True;
-
-            if ( pMenuBar )
-                pMenuBar->SetDisplayable( sal_False );
-        }
-    }
-
-    return;
-}
-
-//This is called when the registrar becomes unavailable. It shows the menubar.
-static void
-on_registrar_unavailable (GDBusConnection * /*connection*/,
-                          const gchar     * /*name*/,
-                          gpointer         user_data)
-{
-    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
-    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
-
-    if ( pSalMenu ) {
-        MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
-
-        bDBusIsAvailable = sal_False;
-        pMenuBar->SetDisplayable( sal_True );
-    }
-
-    return;
-}
 
 /*
  * GtkSalMenu
@@ -424,7 +315,10 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpFrame( NULL ),
     mWatcherId( 0 ),
     mpMenuModel( NULL ),
-    mpActionGroup( NULL )
+    mpActionGroup( NULL ),
+    mnMenuExportId( 0 ),
+    mnAGExportId( 0 ),
+    mbGdkDisposed( false )
 {
 }
 
@@ -434,14 +328,6 @@ GtkSalMenu::~GtkSalMenu()
 //        g_source_remove_by_user_data( this );
 
         ((GtkSalFrame*) mpFrame)->SetMenu( NULL );
-
-        if ( mpActionGroup ) {
-            g_lo_action_group_clear( G_LO_ACTION_GROUP( mpActionGroup ) );
-        }
-
-        if ( mpMenuModel ) {
-            g_lo_menu_remove( G_LO_MENU( mpMenuModel ), 0 );
-        }
     }
 
     maItems.clear();
@@ -483,45 +369,31 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
+    SolarMutexGuard aGuard;
     mpFrame = static_cast< const GtkSalFrame* >( pFrame );
-
-    ( ( GtkSalFrame* ) mpFrame )->SetMenu( this );
-
-    GtkWidget *widget = GTK_WIDGET( mpFrame->getWindow() );
-
-    GdkWindow *gdkWindow = gtk_widget_get_window( widget );
-
-    if ( gdkWindow != NULL ) {
-        mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
-        mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
-
-        if ( mpMenuModel == NULL && mpActionGroup == NULL ) {
-            mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-            mpActionGroup = G_ACTION_GROUP( g_lo_action_group_new( ( gpointer ) mpFrame ) );
-
-            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", mpMenuModel, ObjectDestroyedNotify );
-            g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", mpActionGroup, ObjectDestroyedNotify );
-
-            // Publish the menu only if AppMenu registrar is available.
-            guint nWatcherId = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                                                 "com.canonical.AppMenu.Registrar",
-                                                 G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                                 on_registrar_available,
-                                                 on_registrar_unavailable,
-                                                 (gpointer) mpFrame,
-                                                 NULL);
-
-            ( ( GtkSalFrame* ) mpFrame )->SetWatcherId( nWatcherId );
-        }
-
-        // Generate the main menu structure.
-        GenerateMenu( this );
-//        UpdateNativeMenu2( this );
-
-        // Refresh the menu every second.
-        // This code is a workaround until required modifications in Gtk+ are available.
-//        g_timeout_add_seconds( 1, GenerateMenu, this );
+    GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(mpFrame);
+    if(pFrameNonConst->GetMenu())
+    {
+        GtkSalMenu* pOldMenu = static_cast< GtkSalMenu*>(pFrameNonConst->GetMenu());
+        pOldMenu->DisconnectFrame();
     }
+    pFrameNonConst->SetMenu( this );
+    GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pFrameNonConst->getWindow()) ));
+    if ( !pWindow )
+        return;
+
+    // if we had a menu on the GtkSalMenu we have to free it as we generate a
+    // full menu anyway and we might need to reuse an existing model and
+    // actiongroup
+    if(mpMenuModel)
+        g_lo_menu_remove(G_LO_MENU(mpMenuModel), 0);
+    if(mpActionGroup)
+        g_lo_action_group_clear( G_LO_ACTION_GROUP(mpActionGroup) );
+    pFrameNonConst->EnsureAppMenuWatch();
+    mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( pWindow ), "g-lo-menubar" ) );
+    mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( pWindow ), "g-lo-action-group" ) );
+    // Generate the main menu structure.
+    GenerateMenu( this );
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
@@ -534,6 +406,7 @@ const GtkSalFrame* GtkSalMenu::GetFrame() const
 
 void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck )
 {
+    SolarMutexGuard aGuard;
     if ( mpActionGroup == NULL )
         return;
 
@@ -568,6 +441,7 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
 
 void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
 {
+    SolarMutexGuard aGuard;
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
     if ( g_action_group_get_action_enabled( G_ACTION_GROUP( pActionGroup ), aCommand ) != bEnable )
@@ -576,6 +450,7 @@ void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
 
 void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText )
 {
+    SolarMutexGuard aGuard;
     // Replace the '~' character with '_'.
     rtl::OUString aText = rText.replace( '~', '_' );
     rtl::OString aConvertedText = OUStringToOString( aText, RTL_TEXTENCODING_UTF8 );
@@ -592,6 +467,7 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
 
 void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
 {
+    SolarMutexGuard aGuard;
     if ( rKeyName.isEmpty() )
         return;
 
@@ -614,6 +490,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
                                        gboolean bChecked,
                                        gboolean bIsSubmenu )
 {
+    SolarMutexGuard aGuard;
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
     GVariant *pTarget = NULL;
@@ -669,6 +546,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
 GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu )
 {
+    SolarMutexGuard aGuard;
     GtkSalMenu* pMenu = NULL;
 
     for ( sal_uInt16 nPos = 0; nPos < maItems.size(); nPos++ )
@@ -698,6 +576,7 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
 
 void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
 {
+    SolarMutexGuard aGuard;
     // Only the menubar is allowed to dispatch commands.
     if ( mbMenuBar != TRUE )
         return;
@@ -712,6 +591,7 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
 
 void GtkSalMenu::Activate( const gchar* aMenuCommand )
 {
+    SolarMutexGuard aGuard;
     if ( mbMenuBar != TRUE )
         return;
 
@@ -725,6 +605,7 @@ void GtkSalMenu::Activate( const gchar* aMenuCommand )
 
 void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
 {
+    SolarMutexGuard aGuard;
     if ( mbMenuBar != TRUE )
         return;
 
