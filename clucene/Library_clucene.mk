@@ -50,6 +50,12 @@ $(eval $(call gb_Library_add_defs,clucene,\
     $(LFS_CFLAGS) \
 ))
 
+# clucene is riddled with warnings... let's spare use
+# the pointless spamming
+$(eval $(call gb_Library_add_cxxflags,clucene,\
+	-w \
+))
+
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,clucene,\
 	-lm \
