@@ -390,12 +390,15 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
     nNumberFormat(-1),
     nLastSheet(-1),
     bParentSet(false),
-    mpCondFormat(NULL)
+    mpCondFormat(NULL),
+    mbDeleteCondFormat(true)
 {
 }
 
 XMLTableStyleContext::~XMLTableStyleContext()
 {
+    if(mbDeleteCondFormat)
+        delete mpCondFormat;
 }
 
 SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
@@ -442,11 +445,6 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
     {
         if(itr->EqualEntries(*mpCondFormat))
         {
-            // we don't need the new cond format entry now
-            // the found one is the same and we just need to add the range to it
-            delete mpCondFormat;
-            mpCondFormat = NULL;
-
             ScRangeList& rRangeList = itr->GetRangeList();
             sal_uInt32 nCondId = itr->GetKey();
             size_t n = rRange.size();
@@ -468,6 +466,7 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
 
     if(mpCondFormat)
     {
+        mbDeleteCondFormat = false;
         sal_uLong nIndex = pDoc->AddCondFormat(mpCondFormat, nTab );
         mpCondFormat->SetKey(nIndex);
         mpCondFormat->AddRange(rRange);
