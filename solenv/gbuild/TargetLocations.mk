@@ -67,11 +67,11 @@ gb_XcuModuleTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 
 
 define gb_Library_get_target
-$(patsubst $(1):%,$(gb_Library_OUTDIRLOCATION)/%,$(filter $(filter $(1),$(gb_Library_TARGETS)):%,$(gb_Library_FILENAMES)))
+$(patsubst $(1):%,$(gb_Library_OUTDIRLOCATION)/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef
 
 define gb_StaticLibrary_get_target
-$(patsubst $(1):%,$(gb_StaticLibrary_OUTDIRLOCATION)/%,$(filter $(filter $(1),$(gb_StaticLibrary_TARGETS)):%,$(gb_StaticLibrary_FILENAMES)))
+$(patsubst $(1):%,$(gb_StaticLibrary_OUTDIRLOCATION)/%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
 
