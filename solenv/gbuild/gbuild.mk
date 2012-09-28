@@ -165,16 +165,19 @@ endif
 
 include $(GBUILDDIR)/Helper.mk
 include $(GBUILDDIR)/TargetLocations.mk
+include $(GBUILDDIR)/Tempfile.mk
 
 $(eval $(call gb_Helper_init_registries))
 include $(SRCDIR)/Repository.mk
 include $(SRCDIR)/RepositoryExternal.mk
-$(eval $(call gb_Helper_collect_libtargets))
+$(eval $(call gb_Helper_collect_knownlibs))
 
 gb_Library_DLLPOSTFIX := lo
 
 # Include platform/cpu/compiler specific config/definitions
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
+
+include $(SRCDIR)/RepositoryFixes.mk
 
 ifeq ($(CROSS_COMPILING),YES)
 # We can safely Assume all cross-compilation is from Unix systems.
@@ -228,12 +231,6 @@ gb_UCPPTARGET :=
 else
 gb_UCPPTARGET := $(call gb_Executable_get_target_for_build,ucpp)
 endif
-
-include $(GBUILDDIR)/Tempfile.mk
-
-include $(SRCDIR)/RepositoryFixes.mk
-
-$(eval $(call gb_Helper_collect_knownlibs))
 
 # add user-supplied flags
 ifneq ($(strip gb__ENV_CFLAGS),)
