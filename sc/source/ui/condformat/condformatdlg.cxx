@@ -511,30 +511,25 @@ void ScCondFrmtEntry::HideColorScaleElements()
 
 void ScCondFrmtEntry::SetHeight()
 {
-    if(mbActive)
+    long nPad = LogicToPixel(Size(42,2), MapMode(MAP_APPFONT)).getHeight();
+
+    // Calculate maximum height we need from visible widgets
+    sal_uInt16 nChildren = GetChildCount();
+
+    long nMaxHeight = 0;
+    for(sal_uInt16 i = 0; i < nChildren; i++)
     {
-        Size aSize = GetSizePixel();
-        switch (meType)
-        {
-            case CONDITION:
-            case FORMULA:
-                aSize.Height() = 120;
-                break;
-            case COLORSCALE:
-                aSize.Height() = 200;
-                break;
-            case DATABAR:
-                aSize.Height() = 200;
-                break;
-            default:
-                break;
-        }
-        SetSizePixel(aSize);
+        Window *pChild  = GetChild(i);
+        if(!pChild || !pChild->IsVisible())
+            continue;
+        Point aPos = pChild->GetPosPixel();
+        Size aSize = pChild->GetSizePixel();
+        nMaxHeight = std::max(aPos.Y() + aSize.Height(), nMaxHeight);
     }
-    else
+    Size aSize = GetSizePixel();
+    if(nMaxHeight > 0)
     {
-        Size aSize = GetSizePixel();
-        aSize.Height() = 40;
+        aSize.Height() = nMaxHeight + nPad;
         SetSizePixel(aSize);
     }
 }
