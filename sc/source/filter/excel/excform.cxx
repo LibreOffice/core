@@ -1551,8 +1551,8 @@ static DefTokenId missArgForZeroList[] = {
 
 sal_Bool lcl_isInMissArgForZeroList(DefTokenId id)
 {
-    for(short index = 0; index < missArgForZeroCount; index++)
-        if(missArgForZeroList[index] == id)
+    for (sal_uInt32 nIndex = 0; nIndex < missArgForZeroCount; nIndex++)
+        if(missArgForZeroList[nIndex] == id)
             return sal_True;
     return sal_False;
 
