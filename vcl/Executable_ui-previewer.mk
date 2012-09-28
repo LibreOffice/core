@@ -48,7 +48,6 @@ $(eval $(call gb_Executable_use_libraries,ui-previewer,\
     tl \
     ucbhelper \
     vcl \
-    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
