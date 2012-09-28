@@ -43,8 +43,6 @@ $(eval $(call gb_Executable_use_libraries,spadmin.bin,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,spadmin.bin))
-
 $(eval $(call gb_Executable_add_exception_objects,spadmin.bin,\
     padmin/source/desktopcontext \
     padmin/source/pamain \

@@ -39,8 +39,6 @@ $(eval $(call gb_Library_use_libraries,textconv_dict,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,textconv_dict))
-
 $(eval $(call gb_Library_add_generated_exception_objects,textconv_dict,\
 	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/textconversion/data/*.dic),\
 		CustomTarget/i18npool/textconversion/$(notdir $(basename $(txt)))) \

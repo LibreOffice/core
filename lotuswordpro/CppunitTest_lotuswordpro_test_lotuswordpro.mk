@@ -45,8 +45,6 @@ $(eval $(call gb_CppunitTest_use_libraries,lotuswordpro_test_lotuswordpro, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,lotuswordpro_test_lotuswordpro))
-
 $(eval $(call gb_CppunitTest_use_api,lotuswordpro_test_lotuswordpro,\
     offapi \
     udkapi \

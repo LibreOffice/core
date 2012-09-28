@@ -39,8 +39,6 @@ $(eval $(call gb_Library_use_libraries,cached1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,cached1))
-
 $(eval $(call gb_Library_add_exception_objects,cached1,\
 	ucb/source/cacher/cachedcontentresultset \
 	ucb/source/cacher/cachedcontentresultsetstub \

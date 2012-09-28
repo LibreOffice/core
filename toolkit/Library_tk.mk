@@ -55,8 +55,6 @@ $(eval $(call gb_Library_use_libraries,tk,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,tk))
-
 $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/asynccallback \
     toolkit/source/awt/stylesettings \

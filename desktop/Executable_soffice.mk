@@ -39,8 +39,6 @@ $(eval $(call gb_Executable_use_system_win32_libs,soffice,\
     shlwapi \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,soffice))
-
 $(eval $(call gb_Executable_use_static_libraries,soffice,\
     ooopathutils \
     winextendloaderenv \

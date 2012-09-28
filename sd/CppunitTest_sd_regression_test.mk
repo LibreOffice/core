@@ -68,8 +68,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_regression_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sd_regression_test))
-
 $(eval $(call gb_CppunitTest_set_include,sd_regression_test,\
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/inc \

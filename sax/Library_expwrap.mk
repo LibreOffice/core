@@ -29,8 +29,6 @@ $(eval $(call gb_Library_use_libraries,expwrap,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,expwrap))
-
 $(eval $(call gb_Library_use_static_libraries,expwrap,\
 	sax_shared \
 ))

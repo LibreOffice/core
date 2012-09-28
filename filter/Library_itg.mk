@@ -31,8 +31,6 @@ $(eval $(call gb_Library_use_libraries,itg,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,itg))
-
 $(eval $(call gb_Library_add_exception_objects,itg,\
 	filter/source/graphicfilter/itga/itga \
 ))

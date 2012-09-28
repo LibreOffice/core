@@ -37,8 +37,6 @@ $(eval $(call gb_Executable_use_libraries,genconv_dict,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,genconv_dict))
-
 $(eval $(call gb_Executable_add_exception_objects,genconv_dict,\
 	i18npool/source/textconversion/genconv_dict \
 ))

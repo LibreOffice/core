@@ -69,8 +69,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_layout_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sw_layout_test))
-
 $(eval $(call gb_CppunitTest_set_include,sw_layout_test,\
     -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/inc \

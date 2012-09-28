@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,tl,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,tl))
-
 
 $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/datetime/datetime \

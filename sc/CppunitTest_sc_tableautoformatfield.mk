@@ -72,8 +72,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tableautoformatfield, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sc_tableautoformatfield))
-
 $(eval $(call gb_CppunitTest_set_include,sc_tableautoformatfield,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \

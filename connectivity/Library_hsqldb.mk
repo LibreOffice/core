@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,hsqldb,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,hsqldb))
-
 $(eval $(call gb_Library_set_componentfile,hsqldb,connectivity/source/drivers/hsqldb/hsqldb))
 
 $(eval $(call gb_Library_add_exception_objects,hsqldb,\

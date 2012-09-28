@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,kab1,\
 	salhelper \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,kab1))
-
 $(eval $(call gb_Library_add_exception_objects,kab1,\
 	connectivity/source/drivers/kab/KDriver \
 	connectivity/source/drivers/kab/KServices \

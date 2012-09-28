@@ -32,8 +32,6 @@ $(eval $(call gb_Executable_use_libraries,mkunroll,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,mkunroll))
-
 $(eval $(call gb_Executable_add_exception_objects,mkunroll,\
     tools/bootstrp/mkunroll/mkunroll \
 ))

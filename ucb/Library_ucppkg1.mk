@@ -41,8 +41,6 @@ $(eval $(call gb_Library_use_libraries,ucppkg1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ucppkg1))
-
 $(eval $(call gb_Library_add_exception_objects,ucppkg1,\
 	ucb/source/ucp/package/pkgcontentcaps \
 	ucb/source/ucp/package/pkgcontent \

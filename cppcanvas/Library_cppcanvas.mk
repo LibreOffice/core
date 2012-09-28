@@ -55,8 +55,6 @@ $(eval $(call gb_Library_use_libraries,cppcanvas,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,cppcanvas))
-
 $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/mtfrenderer/bitmapaction \
 	cppcanvas/source/mtfrenderer/cachedprimitivebase \

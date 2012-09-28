@@ -33,8 +33,6 @@ $(eval $(call gb_Library_use_libraries,epg,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,epg))
-
 $(eval $(call gb_Library_add_exception_objects,epg,\
 	filter/source/graphicfilter/epgm/epgm \
 ))

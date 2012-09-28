@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,canvasfactory,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,canvasfactory))
-
 $(eval $(call gb_Library_add_exception_objects,canvasfactory,\
 	canvas/source/factory/cf_service \
 ))

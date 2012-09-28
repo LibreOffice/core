@@ -33,8 +33,6 @@ $(eval $(call gb_Library_use_libraries,localedata_euro,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,localedata_euro))
-
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_euro,\
 	CustomTarget/i18npool/localedata/localedata_an_ES \
 	CustomTarget/i18npool/localedata/localedata_ast_ES \

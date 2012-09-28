@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,xsec_fw,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,xsec_fw))
-
 $(eval $(call gb_Library_add_exception_objects,xsec_fw,\
 	xmlsecurity/source/framework/buffernode \
 	xmlsecurity/source/framework/decryptorimpl \

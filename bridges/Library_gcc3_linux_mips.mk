@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 	sal \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,gcc3_uno))
-
 $(eval $(call gb_Library_add_exception_objects,gcc3_uno,\
 	bridges/source/cpp_uno/gcc3_linux_mips/except \
 	bridges/source/cpp_uno/shared/bridge \

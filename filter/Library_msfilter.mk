@@ -54,8 +54,6 @@ $(eval $(call gb_Library_use_libraries,msfilter,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,msfilter))
-
 $(eval $(call gb_Library_add_exception_objects,msfilter,\
 	filter/source/msfilter/countryid \
 	filter/source/msfilter/escherex \

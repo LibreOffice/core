@@ -73,8 +73,6 @@ $(eval $(call gb_Library_use_libraries,dbu,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,dbu))
-
 ifeq ($(GUI),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,dbu,\
     ole32 \

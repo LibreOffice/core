@@ -45,8 +45,6 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,chartcore))
-
 $(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/chartcore))
 
 # view pieces ...

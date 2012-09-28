@@ -28,8 +28,6 @@ $(eval $(call gb_Library_use_libraries,sax,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sax))
-
 $(eval $(call gb_Library_add_defs,sax,\
     -DSAX_DLLIMPLEMENTATION \
 ))

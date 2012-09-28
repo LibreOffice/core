@@ -42,8 +42,6 @@ $(eval $(call gb_Library_use_libraries,i18nregexp,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,i18nregexp))
-
 $(eval $(call gb_Library_add_exception_objects,i18nregexp,\
 	regexp/source/reclass \
 ))

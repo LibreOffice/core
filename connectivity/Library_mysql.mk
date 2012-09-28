@@ -45,8 +45,6 @@ $(eval $(call gb_Library_use_libraries,mysql,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,mysql))
-
 $(eval $(call gb_Library_add_exception_objects,mysql,\
 	connectivity/source/drivers/mysql/YDriver \
 	connectivity/source/drivers/mysql/YTables \

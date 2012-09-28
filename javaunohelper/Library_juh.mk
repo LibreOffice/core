@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_libraries,juh,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,juh))
-
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Library_add_exception_objects,juh,\
     javaunohelper/source/preload \

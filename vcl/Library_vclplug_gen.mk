@@ -51,8 +51,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_gen,\
     sal \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,vclplug_gen))
-
 $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	cairo \
 	icule \

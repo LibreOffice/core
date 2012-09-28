@@ -35,8 +35,6 @@ $(eval $(call gb_Library_use_libraries,t602filter,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,t602filter))
-
 $(eval $(call gb_Library_add_exception_objects,t602filter,\
 	filter/source/t602/filterenv \
 	filter/source/t602/t602filter \

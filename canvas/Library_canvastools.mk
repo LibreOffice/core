@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,canvastools,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,canvastools))
-
 $(eval $(call gb_Library_add_exception_objects,canvastools,\
 	canvas/source/tools/cachedprimitivebase \
 	canvas/source/tools/canvascustomspritehelper \

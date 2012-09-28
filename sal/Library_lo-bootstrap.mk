@@ -28,6 +28,8 @@
 $(eval $(call gb_Library_Library,lo-bootstrap))
 
 # We explicitly *don't* want gb_STDLIBS to be linked here
+$(eval $(call gb_Library_disable_standard_system_libs,lo-bootstrap))
+
 $(eval $(call gb_Library_add_libs,lo-bootstrap,\
 	-llog \
 	-landroid \

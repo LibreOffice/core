@@ -22,8 +22,6 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_ordinalsuffix,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,i18npool_test_ordinalsuffix))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_ordinalsuffix,\
     i18npool/qa/cppunit/test_ordinalsuffix \
 ))

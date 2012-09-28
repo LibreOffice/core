@@ -56,8 +56,6 @@ $(eval $(call gb_Library_use_libraries,dlgprov,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,dlgprov))
-
 $(eval $(call gb_Library_add_exception_objects,dlgprov,\
 	scripting/source/dlgprov/DialogModelProvider \
 	scripting/source/dlgprov/dlgevtatt  \

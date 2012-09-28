@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_libraries,invocation,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,invocation))
-
 $(eval $(call gb_Library_set_componentfile,invocation,stoc/source/invocation/invocation))
 
 $(eval $(call gb_Library_add_exception_objects,invocation,\

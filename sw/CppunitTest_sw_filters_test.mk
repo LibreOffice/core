@@ -58,8 +58,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_filters_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sw_filters_test))
-
 $(eval $(call gb_CppunitTest_set_include,sw_filters_test,\
     -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/inc \

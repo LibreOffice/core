@@ -45,8 +45,6 @@ $(eval $(call gb_CppunitTest_use_libraries,hwpfilter_test_hwpfilter, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,hwpfilter_test_hwpfilter))
-
 $(eval $(call gb_CppunitTest_use_api,hwpfilter_test_hwpfilter,\
     offapi \
     udkapi \

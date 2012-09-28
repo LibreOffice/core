@@ -78,8 +78,6 @@ $(eval $(call gb_Library_use_libraries,oox,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,oox))
-
 $(eval $(call gb_Library_use_external,oox,openssl))
 
 $(eval $(call gb_Library_set_componentfile,oox,oox/util/oox))

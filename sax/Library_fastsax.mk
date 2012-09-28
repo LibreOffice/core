@@ -31,8 +31,6 @@ $(eval $(call gb_Library_use_libraries,fastsax,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,fastsax))
-
 $(eval $(call gb_Library_use_static_libraries,fastsax,\
 	sax_shared \
 ))

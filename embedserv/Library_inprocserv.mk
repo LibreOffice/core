@@ -42,8 +42,6 @@ $(eval $(call gb_Library_use_libraries,inprocserv,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,inprocserv))
-
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,inprocserv,\
 	/EXPORT:DllCanUnloadNow \

@@ -54,8 +54,6 @@ $(eval $(call gb_Library_use_libraries,forui,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,forui))
-
 $(eval $(call gb_Library_add_exception_objects,forui,\
     formula/source/ui/dlg/formula \
     formula/source/ui/dlg/FormulaHelper \

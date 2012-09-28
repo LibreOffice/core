@@ -41,8 +41,6 @@ $(eval $(call gb_Library_use_libraries,ucptdoc1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ucptdoc1))
-
 $(eval $(call gb_Library_add_exception_objects,ucptdoc1,\
 	ucb/source/ucp/tdoc/tdoc_contentcaps \
 	ucb/source/ucp/tdoc/tdoc_content \

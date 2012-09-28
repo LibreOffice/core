@@ -36,6 +36,4 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_osl_condition,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sal_osl_condition))
-
 # vim: set noet sw=4 ts=4:

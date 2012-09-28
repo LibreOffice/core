@@ -56,8 +56,6 @@ $(eval $(call gb_Library_use_libraries,rptxml,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,rptxml))
-
 $(eval $(call gb_Library_set_componentfile,rptxml,reportdesign/util/rptxml))
 
 $(eval $(call gb_Library_add_exception_objects,rptxml,\

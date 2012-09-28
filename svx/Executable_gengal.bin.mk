@@ -60,8 +60,6 @@ $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,$(svx_GENGALBIN)))
-
 $(eval $(call gb_Executable_add_exception_objects,$(svx_GENGALBIN),\
     svx/source/gengal/gengal \
 ))

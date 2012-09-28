@@ -41,8 +41,6 @@ $(eval $(call gb_Library_use_libraries,hwp,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,hwp))
-
 $(eval $(call gb_Library_use_external,hwp,zlib))
 
 ifeq ($(OS),WNT)

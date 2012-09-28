@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,test,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,test))
-
 ifeq ($(GUIBASE),unx)
 $(call gb_Library_get_target,test) : \
     $(call gb_Library_get_target,desktop_detector) \

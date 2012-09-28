@@ -37,8 +37,6 @@ $(eval $(call gb_Library_use_libraries,introspection,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,introspection))
-
 $(eval $(call gb_Library_set_componentfile,introspection,stoc/source/inspect/introspection))
 
 $(eval $(call gb_Library_add_exception_objects,introspection,\

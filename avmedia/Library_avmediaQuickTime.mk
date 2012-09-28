@@ -47,8 +47,6 @@ $(eval $(call gb_Library_use_libraries,avmediaQuickTime,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,avmediaQuickTime))
-
 $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaQuickTime,\
 	Cocoa \
 	QTKit \

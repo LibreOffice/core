@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,fwm,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,fwm))
-
 $(eval $(call gb_Library_add_exception_objects,fwm,\
     framework/source/dispatch/systemexec \
     framework/source/jobs/helponstartup \

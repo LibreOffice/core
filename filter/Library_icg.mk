@@ -35,8 +35,6 @@ $(eval $(call gb_Library_use_libraries,icg,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,icg))
-
 $(eval $(call gb_Library_add_exception_objects,icg,\
 	filter/source/graphicfilter/icgm/actimpr \
 	filter/source/graphicfilter/icgm/bitmap \

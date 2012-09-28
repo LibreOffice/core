@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,mcnttype,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,mcnttype))
-
 $(eval $(call gb_Library_add_exception_objects,mcnttype,\
 	dtrans/source/cnttype/mcnttfactory \
 	dtrans/source/cnttype/mcnttype \

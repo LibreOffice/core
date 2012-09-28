@@ -133,8 +133,6 @@ $(eval $(call gb_Library_use_libraries,pl,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,pl))
-
 $(eval $(call gb_Library_add_exception_objects,pl,\
 	extensions/source/plugin/base/context \
 	extensions/source/plugin/base/evtlstnr \

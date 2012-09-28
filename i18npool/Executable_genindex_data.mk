@@ -37,8 +37,6 @@ $(eval $(call gb_Executable_use_libraries,genindex_data,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,genindex_data))
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_use_externals,gencoll_rule,\
 	icudt \

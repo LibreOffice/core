@@ -52,8 +52,6 @@ $(eval $(call gb_Library_use_system_win32_libs,dnd,\
 	uuid \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,dnd))
-
 $(eval $(call gb_Library_use_static_libraries,dnd,\
 	dtobj \
 ))

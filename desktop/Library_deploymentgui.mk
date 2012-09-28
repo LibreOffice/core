@@ -56,8 +56,6 @@ $(eval $(call gb_Library_use_libraries,deploymentgui,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,deploymentgui))
-
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_use_system_win32_libs,deploymentgui,\

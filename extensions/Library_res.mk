@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,res,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,res))
-
 $(eval $(call gb_Library_add_exception_objects,res,\
 	extensions/source/resource/ResourceIndexAccess \
 	extensions/source/resource/oooresourceloader \

@@ -38,8 +38,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_osl_process,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sal_osl_process))
-
 # Depend on to be tested executable
 $(call gb_CppunitTest_get_target,sal_osl_process) : \
 	$(call gb_Executable_get_target,osl_process_child)

@@ -40,8 +40,6 @@ $(eval $(call gb_Library_use_libraries,binaryurp,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,binaryurp))
-
 $(eval $(call gb_Library_add_exception_objects,binaryurp,\
 	binaryurp/source/binaryany \
 	binaryurp/source/bridge \

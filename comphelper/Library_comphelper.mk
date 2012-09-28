@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,comphelper,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,comphelper))
-
 $(eval $(call gb_Library_use_sdk_api,comphelper))
 
 $(eval $(call gb_Library_add_exception_objects,comphelper,\

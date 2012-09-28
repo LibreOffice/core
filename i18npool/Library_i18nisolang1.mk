@@ -46,8 +46,6 @@ $(eval $(call gb_Library_use_libraries,i18nisolang1,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,i18nisolang1))
-
 $(eval $(call gb_Library_add_exception_objects,i18nisolang1,\
 	i18npool/source/isolang/insys \
 	i18npool/source/isolang/isolang \

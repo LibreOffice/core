@@ -33,8 +33,6 @@ $(eval $(call gb_Library_use_libraries,eti,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,eti))
-
 $(eval $(call gb_Library_add_exception_objects,eti,\
 	filter/source/graphicfilter/etiff/etiff \
 ))

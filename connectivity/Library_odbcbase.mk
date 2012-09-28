@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,odbcbase,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,odbcbase))
-
 $(eval $(call gb_Library_add_exception_objects,odbcbase,\
 	connectivity/source/drivers/odbcbase/OPreparedStatement \
 	connectivity/source/drivers/odbcbase/OStatement \

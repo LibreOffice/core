@@ -65,8 +65,6 @@ $(eval $(call gb_Library_use_libraries,svt,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,svt))
-
 $(eval $(call gb_Library_use_externals,svt,\
     icuuc \
     jpeg \

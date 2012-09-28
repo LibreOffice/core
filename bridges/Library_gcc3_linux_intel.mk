@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,gcc3_uno,\
 	sal \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,gcc3_uno))
-
 $(eval $(call gb_Library_add_asmobjects,gcc3_uno,\
 	bridges/source/cpp_uno/gcc3_linux_intel/call \
 ))

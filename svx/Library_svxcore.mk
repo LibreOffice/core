@@ -85,8 +85,6 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,svxcore))
-
 $(eval $(call gb_Library_use_external,svxcore,icuuc))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\

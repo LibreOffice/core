@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,sunjavaplugin,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sunjavaplugin))
-
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_use_libraries,sunjavaplugin,\
     lo-bootstrap \

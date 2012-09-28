@@ -33,8 +33,6 @@ $(eval $(call gb_Library_use_libraries,i18nutil,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,i18nutil))
-
 $(eval $(call gb_Library_add_exception_objects,i18nutil,\
 	i18nutil/source/utility/casefolding \
 	i18nutil/source/utility/oneToOneMapping \

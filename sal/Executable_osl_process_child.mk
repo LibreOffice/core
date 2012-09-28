@@ -34,8 +34,6 @@ $(eval $(call gb_Executable_use_libraries,osl_process_child,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,osl_process_child))
-
 $(eval $(call gb_Executable_add_exception_objects,osl_process_child,\
 	sal/qa/osl/process/osl_process_child \
 ))

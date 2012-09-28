@@ -36,8 +36,6 @@ $(eval $(call gb_Library_use_libraries,streams,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,streams))
-
 $(eval $(call gb_Library_set_componentfile,streams,io/source/stm/streams))
 
 $(eval $(call gb_Library_add_exception_objects,streams,\

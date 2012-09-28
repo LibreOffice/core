@@ -46,8 +46,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,writerfilter_rtftok))
-
 $(eval $(call gb_CppunitTest_use_api,writerfilter_rtftok,\
 	offapi \
 	udkapi \

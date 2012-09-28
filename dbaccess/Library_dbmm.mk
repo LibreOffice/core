@@ -55,8 +55,6 @@ $(eval $(call gb_Library_use_libraries,dbmm,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,dbmm))
-
 $(eval $(call gb_Library_set_componentfile,dbmm,dbaccess/source/ext/macromigration/dbmm))
 
 $(eval $(call gb_Library_add_exception_objects,dbmm,\

@@ -41,8 +41,6 @@ $(eval $(call gb_Executable_use_libraries,saxparser,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,saxparser))
-
 $(eval $(call gb_Executable_add_exception_objects,saxparser,\
 	i18npool/source/localedata/LocaleNode \
 	i18npool/source/localedata/filewriter \

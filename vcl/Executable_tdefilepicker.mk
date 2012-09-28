@@ -44,8 +44,6 @@ $(eval $(call gb_Executable_use_libraries,tdefilepicker,\
 	sal \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,tdefilepicker))
-
 $(eval $(call gb_Executable_add_libs,tdefilepicker,\
 	$(TDE_LIBS) \
 	-lkio -lX11 \

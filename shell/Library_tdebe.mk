@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,tdebe1,\
 	sal \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,tdebe1))
-
 $(eval $(call gb_Library_set_componentfile,tdebe1,shell/source/backends/kdebe/tdebe1))
 
 $(eval $(call gb_Library_add_exception_objects,tdebe1,\

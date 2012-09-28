@@ -63,8 +63,6 @@ $(eval $(call gb_Executable_use_libraries,demoshow,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,demoshow))
-
 $(eval $(call gb_Executable_add_exception_objects,demoshow,\
     slideshow/test/demoshow \
 ))

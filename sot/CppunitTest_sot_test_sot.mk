@@ -47,8 +47,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sot_test_sot, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sot_test_sot))
-
 $(eval $(call gb_CppunitTest_use_api,sot_test_sot,\
     offapi \
     udkapi \

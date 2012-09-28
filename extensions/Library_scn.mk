@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,scn,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,scn))
-
 $(eval $(call gb_Library_add_exception_objects,scn,\
 	extensions/source/scanner/scnserv \
 	extensions/source/scanner/scanner \

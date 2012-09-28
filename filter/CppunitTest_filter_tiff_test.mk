@@ -41,8 +41,6 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_tiff_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,filter_tiff_test))
-
 $(eval $(call gb_CppunitTest_use_api,filter_tiff_test,\
     udkapi \
     offapi \

@@ -31,8 +31,6 @@ $(eval $(call gb_Library_use_libraries,ipb,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,ipb))
-
 $(eval $(call gb_Library_add_exception_objects,ipb,\
 	filter/source/graphicfilter/ipbm/ipbm \
 ))

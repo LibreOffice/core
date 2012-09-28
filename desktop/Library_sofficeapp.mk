@@ -63,8 +63,6 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sofficeapp))
-
 ifeq ($(GUIBASE),cocoatouch)
 $(eval $(call gb_Library_add_cflags,sofficeapp,\
     $(gb_OBJCFLAGS) \

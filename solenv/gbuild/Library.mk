@@ -69,6 +69,7 @@ endef
 define gb_Library__Library_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),Library)
+$(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_Library_DEFS) \
 )
@@ -185,7 +186,7 @@ $(eval $(foreach method,\
 	set_ldflags \
 	set_x64 \
 	add_libs \
-	add_standard_system_libs \
+	disable_standard_system_libs \
 	use_system_darwin_frameworks \
 	use_system_win32_libs \
 	set_library_path_flags \

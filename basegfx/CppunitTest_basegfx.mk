@@ -22,8 +22,6 @@ $(eval $(call gb_CppunitTest_use_libraries,basegfx_cpputest,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,basegfx_cpputest))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,basegfx_cpputest,\
     basegfx/test/basegfx1d \
     basegfx/test/basegfx2d \

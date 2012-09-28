@@ -35,8 +35,6 @@ $(eval $(call gb_Executable_use_libraries,kdefilepicker,\
 	sal \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,kdefilepicker))
-
 $(eval $(call gb_Executable_add_libs,kdefilepicker,\
 	$(KDE_LIBS) \
 	-lkio -lX11 \

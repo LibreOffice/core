@@ -47,8 +47,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_odfexport, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_standard_system_libs,sw_subsequent_odfexport))
-
 $(eval $(call gb_CppunitTest_use_externals,sw_subsequent_odfexport,\
     libxml2 \
 ))

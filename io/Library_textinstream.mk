@@ -38,8 +38,6 @@ $(eval $(call gb_Library_use_libraries,textinstream,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,textinstream))
-
 $(eval $(call gb_Library_set_componentfile,textinstream,io/source/TextInputStream/textinstream))
 
 $(eval $(call gb_Library_add_exception_objects,textinstream,\

@@ -32,8 +32,6 @@ $(eval $(call gb_Library_use_libraries,sal_textenc,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sal_textenc))
-
 $(eval $(call gb_Library_add_defs,sal_textenc,\
 	$(LFS_CFLAGS) \
 ))

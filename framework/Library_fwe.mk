@@ -54,8 +54,6 @@ $(eval $(call gb_Library_use_libraries,fwe,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,fwe))
-
 $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/classes/actiontriggercontainer \
     framework/source/fwe/classes/actiontriggerpropertyset \

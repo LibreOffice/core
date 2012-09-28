@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,package2,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,package2))
-
 $(eval $(call gb_Library_use_externals,package2,\
 	zlib \
 ))

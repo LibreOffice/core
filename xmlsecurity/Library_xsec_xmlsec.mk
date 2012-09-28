@@ -68,8 +68,6 @@ $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,xsec_xmlsec))
-
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	libxml2 \
 ))

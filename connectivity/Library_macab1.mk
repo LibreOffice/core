@@ -39,8 +39,6 @@ $(eval $(call gb_Library_use_libraries,macab1,\
 	salhelper \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,macab1))
-
 $(eval $(call gb_Library_set_include,macab1,\
         $$(INCLUDE) \
         -I$(SRCDIR)/connectivity/inc \

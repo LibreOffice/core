@@ -44,8 +44,6 @@ $(eval $(call gb_Library_use_libraries,fps_odma,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,fps_odma))
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_static_libraries,fps_odma,\
 	odma_lib \

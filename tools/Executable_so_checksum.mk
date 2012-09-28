@@ -32,8 +32,6 @@ $(eval $(call gb_Executable_use_libraries,so_checksum,\
 ))
 # used to link against basegfxlx comphelp4gcc3 i18nisolang1gcc3 ucbhelper4gcc3 uno_cppu uno_cppuhelpergcc3 uno_salhelpergcc3 vos3gcc3 - seems to be superficial
 
-$(eval $(call gb_Executable_add_standard_system_libs,so_checksum))
-
 $(eval $(call gb_Executable_add_exception_objects,so_checksum,\
     tools/bootstrp/md5 \
     tools/bootstrp/so_checksum \

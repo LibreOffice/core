@@ -51,8 +51,6 @@ $(eval $(call gb_Library_use_libraries,calc,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,calc))
-
 $(eval $(call gb_Library_add_exception_objects,calc,\
 	connectivity/source/drivers/calc/CResultSet \
 	connectivity/source/drivers/calc/CStatement \

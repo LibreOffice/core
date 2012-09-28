@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_libraries,cppu,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,cppu))
-
 $(eval $(call gb_Library_add_cobjects,cppu,\
 	cppu/source/uno/EnvDcp \
 ))

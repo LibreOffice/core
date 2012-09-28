@@ -37,8 +37,6 @@ $(eval $(call gb_Executable_use_libraries,oosplash,\
     sal \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,oosplash))
-
 $(eval $(call gb_Executable_add_cobjects,oosplash,\
     desktop/unx/source/args \
     desktop/unx/source/file_image_unx \

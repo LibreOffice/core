@@ -48,8 +48,6 @@ $(eval $(call gb_Library_use_libraries,xof,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,xof))
-
 $(eval $(call gb_Library_add_exception_objects,xof,\
     xmloff/source/transform/ChartOASISTContext \
     xmloff/source/transform/ChartOOoTContext \

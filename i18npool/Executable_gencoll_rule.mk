@@ -38,8 +38,6 @@ $(eval $(call gb_Executable_use_libraries,gencoll_rule,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,gencoll_rule))
-
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Executable_use_externals,gencoll_rule,\
 	icudt \

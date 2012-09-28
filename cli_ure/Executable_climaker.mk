@@ -36,8 +36,6 @@ $(eval $(call gb_Executable_use_system_win32_libs,climaker,\
 	) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,climaker))
-
 $(eval $(call gb_Executable_add_exception_objects,climaker,\
 	cli_ure/source/climaker/climaker_app \
 	cli_ure/source/climaker/climaker_emit \

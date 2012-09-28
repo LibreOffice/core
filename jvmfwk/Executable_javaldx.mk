@@ -33,8 +33,6 @@ $(eval $(call gb_Executable_use_libraries,javaldx,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,javaldx))
-
 $(eval $(call gb_Executable_add_exception_objects,javaldx,\
     jvmfwk/plugins/sunmajor/javaenvsetup/javaldx \
 ))

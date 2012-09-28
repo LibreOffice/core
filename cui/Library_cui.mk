@@ -71,8 +71,6 @@ $(eval $(call gb_Library_use_libraries,cui,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,cui))
-
 $(eval $(call gb_Library_use_externals,cui,\
     icuuc \
 ))

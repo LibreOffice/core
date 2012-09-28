@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,sdd,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,sdd))
-
 $(eval $(call gb_Library_set_componentfile,sdd,sd/util/sdd))
 
 $(eval $(call gb_Library_add_exception_objects,sdd,\

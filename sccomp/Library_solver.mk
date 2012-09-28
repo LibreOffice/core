@@ -41,8 +41,6 @@ $(eval $(call gb_Library_use_libraries,solver,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,solver))
-
 $(eval $(call gb_Library_use_external,solver,lpsolve55))
 
 $(eval $(call gb_Library_add_exception_objects,solver,\

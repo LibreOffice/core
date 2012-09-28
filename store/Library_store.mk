@@ -42,8 +42,6 @@ $(eval $(call gb_Library_use_libraries,store,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,store))
-
 $(eval $(call gb_Library_add_exception_objects,store,\
 	store/source/object \
 	store/source/lockbyte \

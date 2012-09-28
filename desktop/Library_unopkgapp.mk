@@ -53,8 +53,6 @@ $(eval $(call gb_Library_use_libraries,unopkgapp,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,unopkgapp))
-
 $(eval $(call gb_Library_add_exception_objects,unopkgapp,\
     desktop/source/pkgchk/unopkg/unopkg_app \
     desktop/source/pkgchk/unopkg/unopkg_cmdenv \

@@ -37,8 +37,6 @@ $(eval $(call gb_Executable_use_libraries,swriter,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_standard_system_libs,swriter))
-
 $(eval $(call gb_Executable_add_libs,swriter,\
     $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
 ))

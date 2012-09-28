@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,jdbc,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,jdbc))
-
 $(eval $(call gb_Library_add_exception_objects,jdbc,\
 	connectivity/source/drivers/jdbc/Array \
 	connectivity/source/drivers/jdbc/Blob \

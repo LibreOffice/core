@@ -50,8 +50,6 @@ $(eval $(call gb_Library_use_libraries,fsstorage,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,fsstorage))
-
 $(eval $(call gb_Library_add_exception_objects,fsstorage,\
     svl/source/fsstor/fsfactory \
     svl/source/fsstor/fsstorage \

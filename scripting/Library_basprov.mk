@@ -51,8 +51,6 @@ $(eval $(call gb_Library_use_libraries,basprov,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,basprov))
-
 $(eval $(call gb_Library_add_exception_objects,basprov,\
 	scripting/source/basprov/baslibnode \
 	scripting/source/basprov/basmethnode \

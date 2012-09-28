@@ -56,8 +56,6 @@ $(eval $(call gb_Library_use_libraries,bootstrap,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_standard_system_libs,bootstrap))
-
 $(eval $(call gb_Library_set_componentfile,bootstrap,stoc/util/bootstrap))
 
 $(eval $(call gb_Library_add_exception_objects,bootstrap,\
