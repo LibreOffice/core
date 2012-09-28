@@ -2932,8 +2932,9 @@ static void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rP
 void ScPrintFunc::CalcPages()               // calculates aPageRect and pages from nZoom
 {
     if (!pPageEndX) pPageEndX = new SCCOL[MAXCOL+1];
-    if (!pPageEndY) pPageEndY = new SCROW[MAXROW+1];
-    if (!pPageRows) pPageRows = new ScPageRowEntry[MAXROW+1];   //! count before !!!!
+    //performance impact
+//  if (!pPageEndY) pPageEndY = new SCROW[MAXROW+1];
+//  if (!pPageRows) pPageRows = new ScPageRowEntry[MAXROW+1];   //! count before !!!!
 
     pDoc->SetPageSize( nPrintTab, GetDocPageSize() );
     if (aAreaParam.bPrintArea)
@@ -2943,7 +2944,9 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
     }
     else
         pDoc->UpdatePageBreaks( nPrintTab, NULL );      // else, end is marked
-
+    SCROW nRealCnt = nEndRow-nStartRow+1;
+    if (!pPageEndY) pPageEndY = new SCROW[nRealCnt+1];
+    if (!pPageRows) pPageRows = new ScPageRowEntry[nRealCnt+1]; //! vorher zaehlen !!!!
     //
     //  Page alignment/splitting after breaks in Col/RowFlags
     //  Of several breaks in a hidden area, only one counts.
