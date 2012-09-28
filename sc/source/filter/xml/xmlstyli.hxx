@@ -101,6 +101,7 @@ class XMLTableStyleContext : public XMLPropStyleContext
     SCTAB                       nLastSheet;
     bool                        bParentSet;
     ScConditionalFormat*        mpCondFormat;
+    bool                        mbDeleteCondFormat;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
