@@ -12,10 +12,15 @@
 
 #include <fstream>
 #include <rtl/string.hxx>
+#include <boost/noncopyable.hpp>
+
+class PoOfstream;
+class PoIfstream;
 
 class GenPoEntry
 {
 private:
+
     OString    m_sWhiteSpace;
     OString    m_sExtractCom;
     OString    m_sReference;
@@ -27,8 +32,10 @@ private:
     OString    m_sKeyId;
 
 public:
+
                         GenPoEntry();
     virtual             ~GenPoEntry();
+                        //Default copy constructor and copy operator work well
 
     virtual OString     getWhiteSpace() const   { return m_sWhiteSpace; }
     virtual OString     getExtractCom() const   { return m_sExtractCom; }
@@ -49,25 +56,33 @@ public:
     virtual void        setFuzzy(const bool bFuzzy);
     virtual void        genKeyId();
 
-    virtual void        writeToFile(std::ofstream& rOFStream);
+    virtual void        writeToFile(std::ofstream& rOFStream) const;
     virtual void        readFromFile(std::ifstream& rIFStream);
 };
 
 class PoEntry
 {
 private:
+
     GenPoEntry m_aGenPo;
+    bool m_bIsInitialized;
 
 public:
-    enum SDFPARTS { PROJECT, SOURCEFILE, DUMMY, RESOURCETYPE, GROUPID,
+
+    friend class PoOfstream;
+    friend class PoIfstream;
+
+    enum SDFPART { PROJECT, SOURCEFILE, DUMMY, RESOURCETYPE, GROUPID,
                     LOCALID, HELPID, PLATFORM, WIDTH, LANGUAGEID,
                     TEXT, HELPTEXT, QUICKHELPTEXT, TITLE, TIMESTAMP };
     enum TYPE { TTEXT=TEXT, TQUICKHELPTEXT=QUICKHELPTEXT, TTITLE=TITLE };
+    enum Exception { INVALIDSDFLINE };
 
                     PoEntry();
                     PoEntry(const OString& rSDFLine,
                             const TYPE eType = TTEXT);
                     ~PoEntry();
+                    //Default copy constructor and copy operator work well
 
     OString         getSourceFile() const;
     OString         getGroupId() const;
@@ -77,14 +92,10 @@ public:
     OString         getUnTransStr() const;
     OString         getTransStr() const;
     bool            getFuzzy() const;
-    bool            isNull() const;
     OString         getKeyId() const;
     void            setUnTransStr(const OString& rUnTransStr);
     void            setTransStr(const OString& rTransStr);
     void            setFuzzy(const bool bFuzzy);
-
-    void            writeToFile(std::ofstream& rOFStream);
-    void            readFromFile(std::ifstream& rIFStream);
 
     static bool     IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2);
 
@@ -93,16 +104,63 @@ public:
 class PoHeader
 {
 private:
+
     GenPoEntry m_aGenPo;
+    bool m_bIsInitialized;
 
 public:
+
+    friend class PoOfstream;
+    friend class PoIfstream;
+
                     PoHeader();
                     PoHeader( const OString& rExtSrc );
+                    PoHeader( std::ifstream& rOldPo );
                     ~PoHeader();
+                    //Default copy constructor and copy operator work well
 
     OString         getLanguage() const;
-    void            writeToFile(std::ofstream& rOFStream);
-    void            readFromFile(std::ifstream& rIFStream);
+};
+
+class PoOfstream: private boost::noncopyable
+{
+private:
+
+    std::ofstream   m_aOutPut;
+    bool            m_bIsAfterHeader;
+
+public:
+            PoOfstream();
+            ~PoOfstream();
+    bool    isOpen() const  { return m_aOutPut.is_open(); }
+
+    void    open(const OString& rFileName);
+    void    close();
+    void    writeHeader(const PoHeader& rHeader);
+    void    writeEntry(const PoEntry& rPo);
+};
+
+class PoIfstream: private boost::noncopyable
+{
+private:
+
+    std::ifstream   m_aInPut;
+    bool            m_bIsAfterHeader;
+    bool            m_bEof;
+
+public:
+
+    enum Exception { INVALIDENTRY, INVALIDHEADER };
+
+            PoIfstream();
+            ~PoIfstream();
+    bool    isOpen() const  { return m_aInPut.is_open(); }
+    bool    eof() const     { return m_bEof; }
+
+    void    open(const OString& rFileName);
+    void    close();
+    void    readHeader(PoHeader& rHeader);
+    void    readEntry(PoEntry& rPo);
 };
 
 #endif // _PO_INCLUDED

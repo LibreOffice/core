@@ -45,6 +45,27 @@ namespace
                 rFilename.lastIndexOf( '\\' ),
                 rFilename.lastIndexOf( '/' ))+1);
     };
+
+    static bool lcl_ReadPoChecked(
+        PoEntry& o_rPoEntry, PoIfstream& rPoFile,
+        const std::string& rFileName)
+    {
+        try
+        {
+            rPoFile.readEntry( o_rPoEntry );
+        }
+        catch( PoIfstream::Exception& aException )
+        {
+            if( aException == PoIfstream::INVALIDENTRY )
+            {
+                printf(
+                    "Warning : %s contains invalid entry\n",
+                    rFileName.c_str() );
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 //
@@ -142,8 +163,8 @@ MergeDataFile::MergeDataFile(
     const rtl::OString &rFile,
     bool bCaseSensitive)
 {
-    std::ifstream aInputStream(rFileName.getStr());
-    if (!aInputStream.is_open())
+    std::ifstream aInputStream( rFileName.getStr() );
+    if ( !aInputStream.is_open() )
     {
         printf("Warning : Can't open po path container file");
         return;
@@ -151,30 +172,45 @@ MergeDataFile::MergeDataFile(
     std::string sPoFileName;
     aInputStream >> sPoFileName;
     bool bFirstLang = true;
-    while(!aInputStream.eof())
+    while( !aInputStream.eof() )
     {
-        std::ifstream aPoFile(sPoFileName.c_str());
         const OString sHACK("HACK");
-        const OString sFileName(lcl_NormalizeFilename(rFile));
-
-        if (!aPoFile.is_open())
+        const OString sFileName( lcl_NormalizeFilename(rFile) );
+        PoIfstream aPoInput;
+        aPoInput.open( OString(sPoFileName.data(), sPoFileName.length()) );
+        if ( !aPoInput.isOpen() )
         {
-            printf("Warning : Can't open %s\n", sPoFileName.c_str());
+            printf( "Warning : Can't open %s\n", sPoFileName.c_str() );
             return;
         }
-
         PoHeader aPoHeader;
-        aPoHeader.readFromFile(aPoFile);
+        try
+        {
+            aPoInput.readHeader( aPoHeader );
+        }
+        catch( PoIfstream::Exception& aException )
+        {
+            if( aException == PoIfstream::INVALIDHEADER )
+            {
+                printf(
+                    "Warning : %s has invalid header\n",
+                    sPoFileName.c_str() );
+                return;
+            }
+        }
         const OString nLANG = aPoHeader.getLanguage();
-        aLanguageSet.insert(nLANG);
+        aLanguageSet.insert( nLANG );
         PoEntry aNextPo;
         do
         {
-            aNextPo.readFromFile(aPoFile);
-        } while( !aNextPo.isNull() && aNextPo.getSourceFile() != sFileName );
-        while( !aNextPo.isNull() && aNextPo.getSourceFile() == sFileName )
+            if( !lcl_ReadPoChecked(aNextPo, aPoInput, sPoFileName) )
+            {
+                return;
+            }
+        } while( !aPoInput.eof() && aNextPo.getSourceFile() != sFileName );
+        while( !aPoInput.eof() && aNextPo.getSourceFile() == sFileName )
         {
-            PoEntry aActPo(aNextPo);
+            PoEntry aActPo( aNextPo );
 
             bool bInSameComp = false;
             OString sText;
@@ -189,7 +225,7 @@ MergeDataFile::MergeDataFile(
             do
             {
                 if( bInSameComp )
-                    aActPo = PoEntry(aNextPo);
+                    aActPo = aNextPo;
                 OString sTemp = aActPo.getTransStr();
                 if( aActPo.getFuzzy() || sTemp.isEmpty() )
                     sTemp = aActPo.getUnTransStr();
@@ -211,25 +247,29 @@ MergeDataFile::MergeDataFile(
                         sQTZTitle = aActPo.getKeyId();
                         break;
                 }
-                aNextPo.readFromFile(aPoFile);
-            } while(!aNextPo.isNull() &&
-                    (bInSameComp = PoEntry::IsInSameComp(aActPo,aNextPo)));
+                if( !lcl_ReadPoChecked(aNextPo, aPoInput, sPoFileName) )
+                {
+                    return;
+                }
+            } while( !aPoInput.eof() &&
+                ( bInSameComp = PoEntry::IsInSameComp(aActPo, aNextPo) ) );
 
-            InsertEntry( aActPo.getResourceType(), aActPo.getGroupId(),
-                         aActPo.getLocalId(), sHACK, nLANG, sText,
-                         sQHText, sTitle, sFileName, bCaseSensitive );
+            InsertEntry(
+                aActPo.getResourceType(), aActPo.getGroupId(),
+                aActPo.getLocalId(), sHACK, nLANG, sText,
+                sQHText, sTitle, sFileName, bCaseSensitive );
+
             if( bFirstLang )
             {
                 aLanguageSet.insert("qtz");
-                InsertEntry( aActPo.getResourceType(), aActPo.getGroupId(),
-                             aActPo.getLocalId(), sHACK, "qtz",
-                             sQTZText + "‖" + sExText,
-                             sQTZQHText + "‖" + sExQHText,
-                             sQTZTitle + "‖" + sExTitle,
-                             sFileName, bCaseSensitive );
+                InsertEntry(
+                    aActPo.getResourceType(), aActPo.getGroupId(),
+                    aActPo.getLocalId(), sHACK, "qtz",
+                    sQTZText + "‖" + sExText, sQTZQHText + "‖" + sExQHText,
+                    sQTZTitle + "‖" + sExTitle, sFileName, bCaseSensitive );
             }
         }
-        aPoFile.close();
+        aPoInput.close();
         aInputStream >> sPoFileName;
         bFirstLang = false;
     }
