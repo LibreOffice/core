@@ -2464,7 +2464,7 @@ void SfxMedium::Init_Impl()
     SFX_ITEMSET_ARG( pImp->m_pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, false);
     if( pOutStreamItem
      && ( !( pOutStreamItem->GetValue() >>= rOutStream )
-          || (pImp->m_aLogicName.compareToAscii("private:stream", 14) == 0)) )
+          || (pImp->m_aLogicName.compareToAscii("private:stream", 14) != 0)) )
     {
         pImp->m_pSet->ClearItem( SID_OUTPUTSTREAM );
         OSL_FAIL( "Unexpected Output stream parameter!\n" );
