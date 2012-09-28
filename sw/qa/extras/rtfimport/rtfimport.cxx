@@ -108,6 +108,7 @@ public:
     void testInk();
     void testFdo52389();
     void testFdo49655();
+    void testFdo52475();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -159,6 +160,7 @@ public:
     CPPUNIT_TEST(testInk);
     CPPUNIT_TEST(testFdo52389);
     CPPUNIT_TEST(testFdo49655);
+    CPPUNIT_TEST(testFdo52475);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -841,6 +843,13 @@ void Test::testFdo49655()
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
+void Test::testFdo52475()
+{
+    // The problem was that \chcbpat0 resulted in no color, instead of COL_AUTO.
+    load("fdo52475.rtf");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(getRun(getParagraph(1), 3), "CharBackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
