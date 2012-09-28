@@ -1813,12 +1813,11 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     TableBidi( pTableTextNodeInfoInner );
 
-    // Table indent
-    if ( nIndent != 0 )
-        m_pSerializer->singleElementNS( XML_w, XML_tblInd,
-                FSNS( XML_w, XML_w ), OString::valueOf( nIndent ).getStr( ),
-                FSNS( XML_w, XML_type ), "dxa",
-                FSEND );
+    // Table indent (need to get written even if == 0)
+    m_pSerializer->singleElementNS( XML_w, XML_tblInd,
+            FSNS( XML_w, XML_w ), OString::valueOf( nIndent ).getStr( ),
+            FSNS( XML_w, XML_type ), "dxa",
+            FSEND );
 
     // Merge the marks for the ordered elements
     m_pSerializer->mergeTopMarks( );
