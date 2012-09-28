@@ -196,6 +196,10 @@ namespace pdfi
                       bool                                                 bFirstTry,
                       const rtl::OUString&                                 rDocName
                       );
+
+    void reportUnsupportedEncryptionFormat(
+        com::sun::star::uno::Reference<
+            com::sun::star::task::XInteractionHandler > const & handler);
 }
 
 #define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )

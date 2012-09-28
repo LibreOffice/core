@@ -253,6 +253,9 @@ struct PDFFile : public PDFContainer
     virtual PDFEntry* clone() const;
 
     bool isEncrypted() const;
+
+    bool usesSupportedEncryptionFormat() const;
+
     // this method checks whether rPwd is compatible with
     // either user or owner password and sets up decrypt data in that case
     // returns true if decryption can be done
