@@ -62,10 +62,8 @@ SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
         return CreateChildContext( nPrefix, rLocalName, xAttrList,
                                    rItemSet, *pEntry, rUnitConv );
     }
-    else
-    {
-        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
+
+    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
 /** This method is called from this instance implementation of
