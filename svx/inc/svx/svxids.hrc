@@ -232,19 +232,6 @@
 #define ID_VAL_USEBANDINGCOLUMNSTYLE        (SID_SD_START+328)
 
 // --------------------------------------------------------------------------
-// Calc-Id's
-// --------------------------------------------------------------------------
-
-#define SID_OUTLINE_HIDE        (SID_SC_START + 329)
-#define SID_OUTLINE_SHOW        (SID_SC_START + 330)
-#define SID_OUTLINE_MAKE        (SID_SC_START + 331)
-#define SID_OUTLINE_REMOVE      (SID_SC_START + 332)
-#define SID_FRAME_UP            (SID_SC_START + 407)
-#define SID_FRAME_DOWN          (SID_SC_START + 408)
-#define SID_ENTER_STRING        (SID_SC_START + 476)
-#define SID_ATTR_SPECIALCHAR    (SID_SC_START + 581)
-
-// --------------------------------------------------------------------------
 // Writer-Id's
 // --------------------------------------------------------------------------
 #define FN_EDIT                 (SID_SW_START +  100)
@@ -937,6 +924,9 @@
 #define SID_ATTR_PAGE_SHARED_FIRST                      (SID_SVX_START+1114)
 #define SID_SAVE_GRAPHIC                                (SID_SVX_START+1115)
 #define SID_COMPRESS_GRAPHIC                            (SID_SVX_START+1116)
+#define SID_FRAME_UP                                    (SID_SVX_START+1117)
+#define SID_FRAME_DOWN                                  (SID_SVX_START+1118)
+#define SID_ATTR_SPECIALCHAR                            (SID_SVX_START+1119)
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               (SID_COMPRESS_GRAPHIC + 1)

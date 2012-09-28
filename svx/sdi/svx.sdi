@@ -5575,31 +5575,6 @@ SfxBoolItem GridVisible SID_GRID_VISIBLE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Group SID_OUTLINE_MAKE
-(SfxStringItem RowOrCol SID_OUTLINE_MAKE)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DATA;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem GroupBox SID_FM_GROUPBOX
 
 [
@@ -5732,31 +5707,6 @@ SfxBoolItem HFixedLine SID_INSERT_HFIXEDLINE
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem HideDetail SID_OUTLINE_HIDE
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_DATA;
 ]
 
 //--------------------------------------------------------------------------
@@ -6070,31 +6020,6 @@ SfxVoidItem InPlaceObjectResize SID_OBJECTRESIZE
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_DOCUMENT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem EnterString SID_ENTER_STRING
-(SfxStringItem StringName SID_ENTER_STRING)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
 ]
 
 //--------------------------------------------------------------------------
@@ -10138,31 +10063,6 @@ SvxShadowedItem Shadowed SID_ATTR_CHAR_SHADOWED
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ShowDetail SID_OUTLINE_SHOW
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_DATA;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem ShowFmExplorer SID_FM_SHOW_FMEXPLORER
 
 [
@@ -11505,31 +11405,6 @@ SvxTextLineItem Overline SID_ATTR_CHAR_OVERLINE
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem Ungroup SID_OUTLINE_REMOVE
-(SfxStringItem RowOrCol SID_OUTLINE_REMOVE)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DATA;
 ]
 
 //--------------------------------------------------------------------------
