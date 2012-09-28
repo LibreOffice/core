@@ -2132,7 +2132,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 if (xCharStyle.is())
                     xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT), aVal);
             }
-            m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
+            // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
+            if (!m_pImpl->IsStyleSheetImport())
+                m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
         }
         break;
     case NS_sprm::LN_CHpsInc:
@@ -3300,11 +3302,21 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
             else
             {
                 std::map< sal_Int32, uno::Any >::const_iterator font = deferredCharacterProperties.find( NS_sprm::LN_CHps );
+                PropertyMapPtr pDefaultCharProps = m_pImpl->GetStyleSheetTable()->GetDefaultCharProps();
+                PropertyMap::iterator aDefaultFont = pDefaultCharProps->find(PropertyDefinition( PROP_CHAR_HEIGHT, false ));
                 if( font != deferredCharacterProperties.end())
                 {
                     double fontSize = 0;
                     font->second >>= fontSize;
                     nEscapement = nIntValue * 100 / fontSize;
+                }
+                // TODO if not direct formatting, check the style first, not directly the default char props.
+                else if (aDefaultFont != pDefaultCharProps->end())
+                {
+                    double fHeight = 0;
+                    aDefaultFont->second >>= fHeight;
+                    // fHeight is in points, nIntValue is in half points, nEscapement is in percents.
+                    nEscapement = nIntValue * 100 / fHeight / 2;
                 }
                 else
                 { // TODO: Find out the font size. The 58/-58 values were here previous, but I have

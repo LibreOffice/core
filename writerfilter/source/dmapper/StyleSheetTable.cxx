@@ -360,6 +360,10 @@ StyleSheetTable::~StyleSheetTable()
     delete m_pImpl;
 }
 
+PropertyMapPtr StyleSheetTable::GetDefaultCharProps()
+{
+    return m_pImpl->m_pDefaultCharProps;
+}
 
 void StyleSheetTable::lcl_attribute(Id Name, Value & val)
 {

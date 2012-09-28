@@ -96,6 +96,9 @@ public:
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
 
+    /// Returns the default character properties.
+    PropertyMapPtr GetDefaultCharProps();
+
 private:
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
