@@ -2025,7 +2025,6 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
         GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong ) : nForceScNumFmt;
     mnXclNumFmt = GetNumFmtBuffer().Insert( mnScNumFmt );
     mbFmtUsed = ScfTools::CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
-
     // alignment
     mbAlignUsed = maAlignment.FillFromItemSet( rItemSet, bForceLineBreak, GetBiff(), IsStyleXF() );
 
@@ -2112,10 +2111,12 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
 
     sal_Int32 nXfId = 0;
+    const XclExpXF* pStyleXF = NULL;
     if( IsCellXF() )
     {
         sal_uInt16 nXFIndex = rStrm.GetRoot().GetXFBuffer().GetXFIndex( mnParentXFId );
         nXfId = rStrm.GetRoot().GetXFBuffer().GetXmlStyleIndex( nXFIndex );
+        pStyleXF = rStrm.GetRoot().GetXFBuffer().GetXFById( mnParentXFId );
     }
 
     rStyleSheet->startElement( XML_xf,
@@ -2135,8 +2136,13 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
     if( mbAlignUsed )
         maAlignment.SaveXml( rStrm );
+    else if ( pStyleXF )
+        pStyleXF->GetAlignmentData().SaveXml( rStrm );
     if( mbProtUsed )
         maProtection.SaveXml( rStrm );
+    else if ( pStyleXF )
+        pStyleXF->GetProtectionData().SaveXml( rStrm );
+
     // OOXTODO: XML_extLst
     rStyleSheet->endElement( XML_xf );
 }
