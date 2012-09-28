@@ -426,6 +426,10 @@ DefinedName::getTokens()
 
 void DefinedName::convertFormula()
 {
+    // macro function or vba procedure
+    if(!mpScRangeData)
+        return;
+
     // convert and set formula of the defined name
     if ( getFilterType() == FILTER_OOXML )
     {
