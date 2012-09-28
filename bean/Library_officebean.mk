@@ -44,28 +44,14 @@ $(eval $(call gb_Library_add_cobjects,officebean,\
 ))
 endif
 
-ifeq ($(GUI),WNT)
-
 $(eval $(call gb_Library_use_libraries,officebean,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_system_win32_libs,officebean,\
-    jawt \
-))
-
-else
-
 $(eval $(call gb_Library_add_libs,officebean,\
+	$(JAVALIB) \
 	$(AWTLIB) \
 ))
-
-$(eval $(call gb_Library_add_ldflags,officebean,\
-	$(JAVALIB) \
-))
-
-
-endif
 
 $(eval $(call gb_Library_add_standard_system_libs,officebean))
 

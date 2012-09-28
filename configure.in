@@ -5982,7 +5982,11 @@ if test "$SOLAR_JAVA" != ""; then
         LD_LIBRARY_PATH=$save_LD_LIBRARY_PATH
     fi
     if test -z "$AWTLIB"; then
-        AWTLIB=-ljawt
+        if test $_os = WINNT -a "$WITH_MINGW" != yes; then
+            AWTLIB=jawt.lib
+        else
+            AWTLIB=-ljawt
+        fi
     fi
     AC_MSG_RESULT([$AWTLIB])
     AC_SUBST(AWTLIB)
