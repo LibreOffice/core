@@ -399,7 +399,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     // needed in windowed mode only ?
     if( (aCanvasArea.X != 0) && (aCanvasArea.Y != 0) )
-        pWindow->SetPosSizePixel(aCanvasArea.X, aCanvasArea.Y, aCanvasArea.Width, aCanvasArea.Height);
+        pWindow->setPosSizePixel(aCanvasArea.X, aCanvasArea.Y, aCanvasArea.Width, aCanvasArea.Height);
 
     GLWin.Width = aCanvasArea.Width;
     GLWin.Height = aCanvasArea.Height;
