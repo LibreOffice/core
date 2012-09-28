@@ -78,7 +78,7 @@ $(eval $(call gb_Library_use_externals,cui,\
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_use_libraries,cui,\
+$(eval $(call gb_Library_use_system_win32_libs,cui,\
     advapi32 \
     shlwapi \
 ))

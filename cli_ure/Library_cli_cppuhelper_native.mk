@@ -33,16 +33,19 @@ $(eval $(call gb_Library_use_packages,cli_cppuhelper_native,\
 ))
 
 $(eval $(call gb_Library_use_libraries,cli_cppuhelper_native,\
-	advapi32 \
 	cppu \
 	cppuhelper \
+	sal \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,cli_cppuhelper_native,\
+	advapi32 \
 	delayimp \
 	mscoree \
 	$(if $(USE_DEBUG_RUNTIME)\
 		,msvcmrtd \
 		,msvcmrt \
 	) \
-	sal \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cli_cppuhelper_native,\

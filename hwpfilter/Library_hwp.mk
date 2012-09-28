@@ -47,7 +47,7 @@ $(eval $(call gb_Library_use_external,hwp,zlib))
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Library_use_libraries,hwp,\
+$(eval $(call gb_Library_use_system_win32_libs,hwp,\
     ole32 \
     uuid \
 ))

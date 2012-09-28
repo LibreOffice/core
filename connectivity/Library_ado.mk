@@ -42,14 +42,17 @@ $(eval $(call gb_Library_add_cxxflags,ado,\
 ))
 endif
 
+$(eval $(call gb_Library_use_system_win32_libs,ado,\
+	ole32 \
+	oleaut32 \
+	uuid \
+))
+
 $(eval $(call gb_Library_use_libraries,ado,\
 	cppu \
 	cppuhelper \
 	sal \
 	salhelper \
-	ole32 \
-	oleaut32 \
-	uuid \
 	dbtools \
 	comphelper \
 	$(gb_UWINAPI) \

@@ -271,7 +271,7 @@ $(eval $(call gb_Library_add_cobjects,svt,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,svt,\
+$(eval $(call gb_Library_use_system_win32_libs,svt,\
     advapi32 \
     gdi32 \
     ole32 \

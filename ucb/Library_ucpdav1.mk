@@ -74,7 +74,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,ucpdav1,\
+$(eval $(call gb_Library_use_system_win32_libs,ucpdav1,\
 	ws2_32 \
 ))
 endif

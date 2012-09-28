@@ -59,7 +59,7 @@ $(eval $(call gb_Library_use_externals,shlxthdl_x64,\
 	zlib \
 ))
 
-$(eval $(call gb_Library_use_libraries,shlxthdl_x64,\
+$(eval $(call gb_Library_use_system_win32_libs,shlxthdl_x64,\
 	advapi32 \
 	comctl32 \
 	gdi32 \
@@ -67,13 +67,13 @@ $(eval $(call gb_Library_use_libraries,shlxthdl_x64,\
 	kernel32 \
 	msvcprt \
 	msvcrt \
+	oldnames \
 	ole32 \
 	oleaut32 \
 	shell32 \
 	shlwapi \
 	user32 \
 	uuid \
-	$(gb_Library_win32_OLDNAMES) \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,shlxthdl_x64,\

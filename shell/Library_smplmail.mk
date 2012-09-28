@@ -29,8 +29,11 @@ $(eval $(call gb_Library_Library,smplmail))
 
 $(eval $(call gb_Library_use_sdk_api,smplmail))
 
-$(eval $(call gb_Library_use_libraries,smplmail,\
+$(eval $(call gb_Library_use_system_win32_libs,smplmail,\
 	advapi32 \
+))
+
+$(eval $(call gb_Library_use_libraries,smplmail,\
 	cppu \
 	cppuhelper \
 	sal \

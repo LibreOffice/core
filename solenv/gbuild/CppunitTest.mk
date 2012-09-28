@@ -343,6 +343,7 @@ $(eval $(foreach method,\
 	add_libs \
 	add_standard_system_libs \
 	use_system_darwin_frameworks \
+	use_system_win32_libs \
 	use_sdk_api \
 	use_udk_api \
 	use_internal_api \

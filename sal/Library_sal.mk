@@ -57,19 +57,20 @@ $(eval $(call gb_Library_add_defs,sal,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sal,\
-	$(if $(filter $(OS),WNT), \
-		advapi32 \
-		comdlg32 \
-		mpr \
-		ole32 \
-		shell32 \
-		user32 \
-		ws2_32 \
-	) \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
 	) \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,sal,\
+	advapi32 \
+	comdlg32 \
+	mpr \
+	ole32 \
+	shell32 \
+	user32 \
+	ws2_32 \
 ))
 
 $(eval $(call gb_Library_add_libs,sal,\

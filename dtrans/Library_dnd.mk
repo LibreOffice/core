@@ -37,17 +37,19 @@ $(eval $(call gb_Library_set_include,dnd,\
 $(eval $(call gb_Library_use_sdk_api,dnd))
 
 $(eval $(call gb_Library_use_libraries,dnd,\
-	advapi32 \
 	cppu \
 	cppuhelper \
+	sal \
+	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,dnd,\
+	advapi32 \
 	gdi32 \
 	ole32 \
 	oleaut32 \
-	sal \
 	shell32 \
 	uuid \
-	uwinapi \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,dnd))

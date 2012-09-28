@@ -314,11 +314,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/glyphs/graphite_serverfont \
 ))
 endif
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,vcl,\
-    version \
-))
-endif
 
 $(eval $(call gb_Library_use_external,vcl,graphite))
 
@@ -640,21 +635,20 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/window/salobj \
 ))
 
-$(eval $(call gb_Library_use_libraries,vcl,\
-    advapi32 \
-    gdi32 \
-    gdiplus \
-    imm32 \
-    mpr \
-    msimg32 \
-    $(gb_Library_win32_OLDNAMES) \
-    ole32 \
-    shell32 \
-    uuid \
+$(eval $(call gb_Library_use_system_win32_libs,vcl,\
+	advapi32 \
+	gdi32 \
+	gdiplus \
+	imm32 \
+	mpr \
+	msimg32 \
+	oldnames \
+	ole32 \
+	shell32 \
 	usp10 \
-    uwinapi \
-    winspool \
-    version \
+	uuid \
+	version \
+	winspool \
 ))
 
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/src))

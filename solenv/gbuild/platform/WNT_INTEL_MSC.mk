@@ -374,6 +374,9 @@ $(call gb_Helper_abbreviate_dirs,\
 	; exit $$RC)
 endef
 
+define gb_LinkTarget_use_system_win32_libs
+$(call gb_LinkTarget_add_libs,$(1),$(foreach lib,$(2),$(lib).lib))
+endef
 
 # Flags common for PE executables (EXEs and DLLs) 
 gb_Windows_PE_TARGETTYPEFLAGS := \
@@ -400,50 +403,6 @@ gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
 gb_Library_PLAINEXT := .lib
-
-gb_Library_win32_OLDNAMES := oldnames
-
-gb_Library_PLAINLIBS_NONE += \
-	advapi32 \
-	comctl32 \
-	comdlg32 \
-	crypt32 \
-	d3d9 \
-	d3dx \
-	ddraw \
-	delayimp \
-	gdi32 \
-	gdiplus \
-	imm32\
-	kernel32 \
-	jawt \
-	libcmt \
-	libcmtd \
-	mpr \
-	mscoree \
-	msi \
-	msimg32 \
-	msvcmrt \
-	msvcmrtd \
-	msvcrt \
-	msvcprt \
-	$(gb_Library_win32_OLDNAMES) \
-	ole32 \
-	oleaut32 \
-	propsys \
-	secur32 \
-	shell32 \
-	shlwapi \
-	urlmon \
-	user32 \
-	usp10 \
-	uuid \
-	version \
-	wininet \
-	winmm \
-	winspool \
-	wldap32 \
-	ws2_32 \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \

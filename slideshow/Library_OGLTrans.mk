@@ -81,7 +81,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,OGLTrans,\
 ))
 
 else ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_Library_use_libraries,OGLTrans,\
+$(eval $(call gb_Library_use_system_win32_libs,OGLTrans,\
     gdi32 \
     glu32 \
     opengl32 \

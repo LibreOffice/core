@@ -45,7 +45,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_lngmisc, \
 $(eval $(call gb_CppunitTest_add_standard_system_libs,svl_lngmisc))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_CppunitTest_use_libraries,svl_lngmisc, \
+$(eval $(call gb_CppunitTest_use_system_win32_libs,svl_lngmisc, \
 	oleaut32 \
 ))
 endif

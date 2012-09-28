@@ -47,8 +47,11 @@ endif
 ifeq ($(GUI),WNT)
 
 $(eval $(call gb_Library_use_libraries,officebean,\
-    jawt \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,officebean,\
+    jawt \
 ))
 
 else

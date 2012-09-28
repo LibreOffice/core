@@ -66,7 +66,7 @@ $(eval $(call gb_Library_use_libraries,gdipluscanvas,\
 
 $(eval $(call gb_Library_add_standard_system_libs,gdipluscanvas))
 
-$(eval $(call gb_Library_use_libraries,gdipluscanvas,\
+$(eval $(call gb_Library_use_system_win32_libs,gdipluscanvas,\
 	gdi32 \
 	gdiplus \
 ))

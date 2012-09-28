@@ -67,18 +67,18 @@ $(eval $(call gb_Executable_use_static_libraries,nsplugin,\
 	ooopathutils \
 ))
 
-$(eval $(call gb_Executable_use_libraries,nsplugin,\
-	ws2_32 \
-	shell32 \
-	ole32 \
-	kernel32 \
-	user32 \
-	gdi32 \
-	winspool \
-	comdlg32 \
+$(eval $(call gb_Executable_use_system_win32_libs,nsplugin,\
 	advapi32 \
+	comdlg32 \
+	gdi32 \
+	kernel32 \
+	ole32 \
 	oleaut32 \
+	shell32 \
+	user32 \
 	uuid \
+	winspool \
+	ws2_32 \
 ))
 endif # WNT
 

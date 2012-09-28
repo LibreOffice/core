@@ -132,21 +132,17 @@ gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 
 
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema
-gb_Library_NOILIBFILENAMES := $(gb_Library_PLAINLIBS_NONE)
-gb_Library_NOILIBFILENAMES += \
+gb_Library_NOILIBFILENAMES := \
     glib-2.0 \
     gmodule-2.0 \
     graphite2_off \
     icudt icuin icule icuuc \
     langtag \
     lcms2 \
-    msvcprt \
     nspr4 \
     nss3 \
-    shlwapi \
     smime3 \
     uwinapi \
-    version \
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT))

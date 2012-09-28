@@ -32,10 +32,13 @@ $(eval $(call gb_Library_use_sdk_api,syssh))
 $(eval $(call gb_Library_use_libraries,syssh,\
 	cppu \
 	cppuhelper \
-	ole32 \
 	sal \
-	shell32 \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,syssh,\
+	ole32 \
+	shell32 \
 ))
 
 $(eval $(call gb_Library_add_standard_system_libs,syssh))

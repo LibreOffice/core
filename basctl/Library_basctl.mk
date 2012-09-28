@@ -124,7 +124,7 @@ $(eval $(call gb_SdiTarget_set_include,basctl/sdi/basslots,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,basctl,\
+$(eval $(call gb_Library_use_system_win32_libs,basctl,\
 	advapi32 \
 	gdi32 \
 	shell32 \

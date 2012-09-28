@@ -32,10 +32,13 @@ $(eval $(call gb_Library_set_include,inprocserv,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_libraries,inprocserv,\
+$(eval $(call gb_Library_use_system_win32_libs,inprocserv,\
 	gdi32 \
 	ole32 \
 	uuid \
+))
+
+$(eval $(call gb_Library_use_libraries,inprocserv,\
 	$(gb_UWINAPI) \
 ))
 
