@@ -2340,6 +2340,16 @@ void ScTable::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewH
     mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
 }
 
+void ScTable::SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth )
+{
+    if (!VALIDCOL(nCol) || !pColWidth)
+        return;
+
+    if (!nNewWidth)
+        nNewWidth = STD_COL_WIDTH;
+
+    pColWidth[nCol] = nNewWidth;
+}
 void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, sal_Bool bManual )
 {
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowFlags)

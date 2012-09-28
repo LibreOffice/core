@@ -199,7 +199,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
             ::set_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN );
             nWidth = mnDefWidth;
         }
-        rDoc.SetColWidth( nScCol, nScTab, nWidth );
+        rDoc.SetColWidthOnly( nScCol, nScTab, nWidth );
     }
 
     // row heights ------------------------------------------------------------

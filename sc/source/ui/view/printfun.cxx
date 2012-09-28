@@ -2991,8 +2991,9 @@ void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowE
 void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten aus nZoom
 {
     if (!pPageEndX) pPageEndX = new SCCOL[MAXCOL+1];
-    if (!pPageEndY) pPageEndY = new SCROW[MAXROW+1];
-    if (!pPageRows) pPageRows = new ScPageRowEntry[MAXROW+1];   //! vorher zaehlen !!!!
+    //performance impact
+//  if (!pPageEndY) pPageEndY = new SCROW[MAXROW+1];
+//  if (!pPageRows) pPageRows = new ScPageRowEntry[MAXROW+1];   //! vorher zaehlen !!!!
 
     pDoc->SetPageSize( nPrintTab, GetDocPageSize() );
     if (aAreaParam.bPrintArea)
@@ -3002,7 +3003,9 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
     }
     else
         pDoc->UpdatePageBreaks( nPrintTab, NULL );      // sonst wird das Ende markiert
-
+    SCROW nRealCnt = nEndRow-nStartRow+1;
+        if (!pPageEndY) pPageEndY = new SCROW[nRealCnt+1];
+    if (!pPageRows) pPageRows = new ScPageRowEntry[nRealCnt+1]; //! vorher zaehlen !!!!
     //
     //  Seiteneinteilung nach Umbruechen in Col/RowFlags
     //  Von mehreren Umbruechen in einem ausgeblendeten Bereich zaehlt nur einer.

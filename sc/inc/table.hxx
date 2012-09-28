@@ -628,6 +628,7 @@ public:
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     sal_Bool bWidth, sal_Bool bTotalSize );
     void        SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth );
+    void        SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth );
     void        SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight );
     sal_Bool        SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight,
                                     double nPPTX, double nPPTY );
