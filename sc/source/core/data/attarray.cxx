@@ -1920,6 +1920,30 @@ sal_Bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) con
     return bFound;
 }
 
+sal_Bool ScAttrArray::GetLastAttr( SCROW& rLastRow, SCROW nLastData ) const
+{
+    if ( nLastData == MAXROW )
+    {
+        rLastRow = MAXROW;
+        return sal_True;
+    }
+    sal_Bool bFound = sal_False;
+    SCSIZE nEndPos = nCount - 1;
+    SCSIZE nStartPos = nEndPos;
+    while ( nStartPos > 0 && pData[nStartPos-1].nRow > nLastData &&
+            !pData[nStartPos].pPattern->IsVisible() )
+        --nStartPos;
+
+    if(nStartPos >= 0 && pData[nStartPos].nRow > nLastData)
+    {
+        bFound = sal_True;
+        rLastRow = pData[nStartPos].nRow;
+    }
+    else
+        rLastRow = nLastData;
+    return bFound;
+}
+
 
 sal_Bool ScAttrArray::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
 {

@@ -432,6 +432,24 @@ sal_Bool ScTable::GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     return bRet;
 }
 
+void ScTable::GetLastAttrCell( SCCOL& rEndCol, SCROW& rEndRow ) const
+{
+    SCCOL nMaxX = 0;
+    SCROW nMaxY = 0;
+    SCCOL i;
+    for ( i = 0; i <= MAXCOL; i++ )
+    {
+        SCROW nLastRow;
+        aCol[i].GetLastAttr( nLastRow );
+        if ( nLastRow > nMaxY && nLastRow > 0 && nLastRow <= MAXROW )
+        {
+            nMaxY = nLastRow;
+            nMaxX = i;
+        }
+    }
+    rEndCol = nMaxX;
+    rEndRow = nMaxY;
+}
 /*      vorher:
 
     sal_Bool bFound = sal_False;

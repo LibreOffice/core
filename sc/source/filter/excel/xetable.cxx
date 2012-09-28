@@ -2358,6 +2358,16 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     // range for cell iterator
     SCCOL nLastIterScCol = nMaxScCol;
     SCROW nLastIterScRow = ulimit_cast< SCROW >( nLastUsedScRow + 128, nMaxScRow );
+    // modified for 119707 by zhanglu
+    SCCOL rEndColAtt = 0;
+    SCROW rEndRowAtt = 0;
+    rDoc.GetLastAttrCell( nScTab, rEndColAtt,rEndRowAtt ); // To get the real last cell's row number, which has visual data or attribute.
+    if( rEndRowAtt > nLastIterScRow )
+        nLastIterScRow = rEndRowAtt;
+
+    if (nLastIterScRow > nMaxScRow)
+        nLastIterScRow = nMaxScRow;
+    // modified for 119707 end
     ScUsedAreaIterator aIt( &rDoc, nScTab, 0, 0, nLastIterScCol, nLastIterScRow );
 
     // activate the correct segment and sub segment at the progress bar

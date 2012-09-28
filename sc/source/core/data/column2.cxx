@@ -1564,6 +1564,19 @@ sal_Bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
         return sal_False;
 }
 
+sal_Bool ScColumn::GetLastAttr( SCROW& rLastRow ) const
+{
+    if ( pAttrArray )
+    {
+        // Row of last cell is needed, always including notes, 0 if none.
+        SCROW nLastData = GetLastVisDataPos( sal_True );
+        return pAttrArray->GetLastAttr( rLastRow, nLastData );
+    }
+    else
+    {
+        return sal_False;
+    }
+}
 sal_Bool ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
 {
     if (pAttrArray)

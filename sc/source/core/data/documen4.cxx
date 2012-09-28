@@ -417,6 +417,14 @@ void ScDocument::InvalidateTableArea()
     }
 }
 
+void ScDocument::GetLastAttrCell( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
+{
+    if ( ValidTab( nTab ) && pTab[nTab] )
+    {
+        pTab[nTab]->GetLastAttrCell( rEndCol, rEndRow );
+    }
+}
+
 sal_Int32 ScDocument::GetMaxStringLen( SCTAB nTab, SCCOL nCol,
         SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const
 {

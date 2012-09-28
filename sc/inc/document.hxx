@@ -956,6 +956,10 @@ public:
                                         SCROW& rEndRow, sal_Bool bNotes = sal_True ) const;
     void            InvalidateTableArea();
 
+    /*
+    Get the last cell's row number , which have visual atribute or visual data in specific table
+    */
+    SC_DLLPUBLIC void           GetLastAttrCell( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
 
     SC_DLLPUBLIC sal_Bool           GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const;
 
