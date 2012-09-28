@@ -221,7 +221,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
 ))
 else
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,svx,\
+$(eval $(call gb_Library_use_system_win32_libs,svx,\
     advapi32 \
 ))
 $(eval $(call gb_Library_add_exception_objects,svx,\
