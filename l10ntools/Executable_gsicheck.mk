@@ -34,12 +34,10 @@ $(eval $(call gb_Executable_set_include,gsicheck,\
 $(eval $(call gb_Executable_use_libraries,gsicheck,\
     sal \
 ))
-$(eval $(call gb_Executable_use_static_libraries,gsicheck,\
-    transex \
-))
 
 $(eval $(call gb_Executable_add_exception_objects,gsicheck,\
-    l10ntools/source/gsimain \
+    l10ntools/source/gsicheck \
+    l10ntools/source/tagtest \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

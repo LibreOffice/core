@@ -33,7 +33,6 @@
 
 #include <cstddef>
 #include <vector>
-#include <fstream>
 
 #include "tagtest.hxx"
 
@@ -131,39 +130,6 @@ public:
     void WriteCorrect( LazyStream &aOkOut, sal_Bool bRequireSourceLine );
     void WriteFixed( LazyStream &aFixOut );
 };
-
-sal_Bool check(rtl::OString s,std::size_t nLine);
-
-void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::OString const & aPrefix,
-                   rtl::OString const & aContext, sal_Bool bPrintContext, std::size_t nLine, rtl::OString aUniqueId = rtl::OString() );
-
-void PrintError( rtl::OString const & aMsg, rtl::OString const & aPrefix,
-                 rtl::OString const & aContext, sal_Bool bPrintContext, std::size_t nLine, rtl::OString const & aUniqueId = rtl::OString() );
-
-bool LanguageOK( rtl::OString const & aLang );
-
-class LazyStream: public std::ofstream
-{
-
-private:
-    rtl::OString aFileName;
-    bool bOpened;
-
-public:
-    LazyStream()
-    : aFileName()
-    , bOpened(false)
-    {};
-
-    void SetFileName( const rtl::OString& rFileName )
-    {
-        aFileName = rFileName;
-    };
-
-    void LazyOpen();
-};
-
-sal_Int32 const MAX_GID_LID_LEN = 250;
 
 #endif
 

@@ -151,7 +151,6 @@ MergeDataFile::MergeDataFile(
         printf("Warning : Can't open %s\n", rFileName.getStr());
         return;
     }
-    std::size_t nLine=0;
     while (!aInputStream.eof())
     {
         std::string buf;
@@ -172,12 +171,11 @@ MergeDataFile::MergeDataFile(
             const rtl::OString sTEXT = sLine.getToken( 0, '\t', n ); // token 10
             const rtl::OString sQHTEXT = sLine.getToken( 1, '\t', n ); // token 12
             const rtl::OString sTITLE = sLine.getToken( 0, '\t', n ); // token 13
-            const rtl::OString sSDF(buf.data(),buf.length());
 
             if (!nLANG.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
             {
                 aLanguageSet.insert(nLANG);
-                InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE, filename, bCaseSensitive, sSDF, ++nLine);
+                InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE, filename, bCaseSensitive );
             }
         }
     }
@@ -245,8 +243,7 @@ void MergeDataFile::InsertEntry(
     const rtl::OString &rLID, const rtl::OString &rPFO,
     const rtl::OString &nLANG, const rtl::OString &rTEXT,
     const rtl::OString &rQHTEXT, const rtl::OString &rTITLE ,
-    const rtl::OString &rInFilename , bool bCaseSensitive,
-    const rtl::OString &rSDFLine, const std::size_t nLine
+    const rtl::OString &rInFilename , bool bCaseSensitive
     )
 {
     MergeData *pData;
@@ -277,7 +274,7 @@ void MergeDataFile::InsertEntry(
     }
 
     // finaly insert the cur string
-    pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE, rSDFLine, nLine );
+    pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
 }
 
 rtl::OString MergeDataFile::CreateKey(const rtl::OString& rTYP, const rtl::OString& rGID,
