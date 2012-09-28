@@ -428,13 +428,13 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
     if(!mpCondFormat || GetScImport().HasNewCondFormatData())
         return;
 
-    ScRangeList rRange;
+    ScRangeList aRangeList;
     sal_Int32 nRanges = xCellRanges.getLength();
     for(sal_Int32 i = 0; i < nRanges; ++i)
     {
         table::CellRangeAddress aAddress = xCellRanges[i];
         ScRange aRange( aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet, aAddress.EndColumn, aAddress.EndRow, aAddress.Sheet );
-        rRange.Join( aRange, false );
+        aRangeList.Join( aRange, false );
     }
 
     ScDocument* pDoc = GetScImport().GetDocument();
@@ -447,17 +447,17 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
         {
             ScRangeList& rRangeList = itr->GetRangeList();
             sal_uInt32 nCondId = itr->GetKey();
-            size_t n = rRange.size();
+            size_t n = aRangeList.size();
             for(size_t i = 0; i < n; ++i)
             {
-                const ScRange* pRange = rRange[i];
+                const ScRange* pRange = aRangeList[i];
                 rRangeList.Join(*pRange);
             }
 
             ScPatternAttr aPattern( pDoc->GetPool() );
             aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nCondId ) );
             ScMarkData aMarkData;
-            aMarkData.MarkFromRangeList(rRange, true);
+            aMarkData.MarkFromRangeList(aRangeList, true);
             pDoc->ApplySelectionPattern( aPattern , aMarkData);
 
             break;
@@ -469,12 +469,12 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
         mbDeleteCondFormat = false;
         sal_uLong nIndex = pDoc->AddCondFormat(mpCondFormat, nTab );
         mpCondFormat->SetKey(nIndex);
-        mpCondFormat->AddRange(rRange);
+        mpCondFormat->AddRange(aRangeList);
 
         ScPatternAttr aPattern( pDoc->GetPool() );
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
         ScMarkData aMarkData;
-        aMarkData.MarkFromRangeList(rRange, true);
+        aMarkData.MarkFromRangeList(aRangeList, true);
         pDoc->ApplySelectionPattern( aPattern , aMarkData);
     }
 
