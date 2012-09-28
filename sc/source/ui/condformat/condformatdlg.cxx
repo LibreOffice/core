@@ -1005,6 +1005,8 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
         {
             maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, pFormat->GetEntry(nIndex), maPos ));
         }
+        if (nCount > 0)
+            maEntries.begin()->Select();
     }
 
     RecalcAll();
