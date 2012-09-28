@@ -50,8 +50,12 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk3,\
 $(eval $(call gb_Library_use_sdk_api,vclplug_gtk3))
 
 $(eval $(call gb_Library_add_libs,vclplug_gtk3,\
-    $$(GTK3_LIBS) \
-    $$(GTHREAD_LIBS) \
+	$(GTK3_LIBS) \
+	$(GTHREAD_LIBS) \
+	-lX11 \
+	-lXext \
+	-lSM \
+	-lICE \
 ))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
@@ -73,13 +77,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
 
 $(eval $(call gb_Library_use_externals,vclplug_gtk3,\
 	dbus \
-))
-
-$(eval $(call gb_Library_use_libraries,vclplug_gtk3,\
-	-lX11 \
-	-lXext \
-	-lSM \
-	-lICE \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
