@@ -20,14 +20,6 @@ ifeq ($(GUI),UNX)
 $(eval $(call gb_Module_add_targets,soltools,\
     Executable_checkdll \
 ))
-#
-# the same as the condition outside of ifneq ($(CROSS_COMPILING),YES)
-# ifeq ($(GUI)$(COM),WNTMSC)
-#
-else
-$(eval $(call gb_Module_add_targets,soltools,\
-    Package_inc \
-))
 endif # UNX
 
 ifeq ($(OS)$(COM),SOLARISC52)
@@ -37,5 +29,11 @@ $(eval $(call gb_Module_add_targets,soltools,\
 endif # SOLARISC52
 
 endif # CROSS_COMPILING
+
+ifeq ($(GUI)$(COM),WNTMSC)
+$(eval $(call gb_Module_add_targets,soltools,\
+    Package_inc \
+))
+endif # WNTMSC
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
