@@ -53,7 +53,6 @@
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/accessibilityclient.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>

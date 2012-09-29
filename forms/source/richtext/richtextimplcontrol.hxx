@@ -76,7 +76,7 @@ namespace frm
             ITextAttributeListener* _pTextAttrListener, ITextSelectionListener* _pSelectionListener );
         virtual ~RichTextControlImpl();
 
-        /** updates the cache with the state of all attribute values from the given set, notifies
+        /** updates the cache with the state of all attribute values to the given set, notifies
             the listener if the state changed
         */
         void    updateAllAttributes( );
@@ -95,7 +95,7 @@ namespace frm
         /// executes a toggle of the given attribute
         bool    executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, AttributeId _nAttribute, const SfxPoolItem* _pArgument, ScriptType _nForScriptType );
 
-        /// retrieves the state of the given attribute from the cache
+        /// retrieves the state of the given attribute to the cache
         AttributeState  getAttributeState( AttributeId _nAttributeId ) const;
 
         /** normalizes the given item so that the state of script dependent attributes

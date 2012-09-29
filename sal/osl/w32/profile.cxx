@@ -39,8 +39,10 @@
 #include <rtl/alloc.h>
 #include <sal/macros.h>
 #include <algorithm>
+#include <string.h>
+
 using std::min;
-static inline void copy_ustr_n( void *dest, const void *source, size_t length ) { rtl_copyMemory(dest, source, length*sizeof(sal_Unicode)); }
+static inline void copy_ustr_n( void *dest, const void *source, size_t length ) { memcpy(dest, source, length*sizeof(sal_Unicode)); }
 
 #define LINES_INI       32
 #define LINES_ADD       10

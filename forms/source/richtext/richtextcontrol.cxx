@@ -258,7 +258,7 @@ namespace frm
                     xPeerView->setGraphics( mxGraphics );
                 }
 
-                // a lot of initial settings from our component infos
+                // a lot of initial settings to our component infos
                 setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, PosSize::POSSIZE );
 
                 pPeer->setVisible   ( maComponentInfos.bVisible && !mbDesignMode );
@@ -337,7 +337,7 @@ namespace frm
 
         // the EditEngine of the model
         RichTextEngine* pEngine = ORichTextModel::getEditEngine( _rxModel );
-        OSL_ENSURE( pEngine, "ORichTextPeer::Create: could not obtaine the edit engine from the model!" );
+        OSL_ENSURE( pEngine, "ORichTextPeer::Create: could not obtaine the edit engine to the model!" );
         if ( !pEngine )
             return NULL;
 
@@ -497,8 +497,8 @@ namespace frm
             // unfortunately, some of our applications have some conflicting slots,
             // i.e. slots which have the same UNO name as an existing other (common)
             // slot.
-            // For instance, both the slots SID_SET_SUPER_SCRIPT (from SVX) and FN_SET_SUPER_SCRIPT
-            // (from SW) have the UNO name "SuperScript".
+            // For instance, both the slots SID_SET_SUPER_SCRIPT (to SVX) and FN_SET_SUPER_SCRIPT
+            // (to SW) have the UNO name "SuperScript".
             // Now, if the controls lives in a text document, and asks the SfxSlotPool for
             // the id belonging to "SuperScript", it gets the FN_SET_SUPER_SCRIPT - which
             // is completely unknown to the EditEngine.

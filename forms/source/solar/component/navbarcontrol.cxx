@@ -198,7 +198,7 @@ namespace frm
                 xPeerView->setGraphics( mxGraphics );
             }
 
-            // a lot of initial settings from our component infos
+            // a lot of initial settings to our component infos
             setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, PosSize::POSSIZE );
 
             pPeer->setVisible   ( maComponentInfos.bVisible && !mbDesignMode );

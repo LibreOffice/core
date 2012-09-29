@@ -20,7 +20,6 @@
 #define EQ_HXX
 
 #include <math.h>
-#include <rtl/memory.h>
 
 #include "prim.hxx"
 #include "destr.hxx"

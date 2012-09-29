@@ -30,7 +30,6 @@
 #define _BGFX_RASTER_BZPIXELRASTER_HXX
 
 #include <basegfx/raster/bpixelraster.hxx>
-#include <rtl/memory.h>
 #include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -51,7 +50,7 @@ namespace basegfx
         void resetZ()
         {
             reset();
-            rtl_zeroMemory(mpZBuffer, sizeof(sal_uInt16) * mnCount);
+            memset(mpZBuffer, 0, sizeof(sal_uInt16) * mnCount);
         }
 
         // constructor/destructor
@@ -59,7 +58,7 @@ namespace basegfx
         :   BPixelRaster(nWidth, nHeight),
             mpZBuffer(new sal_uInt16[mnCount])
         {
-            rtl_zeroMemory(mpZBuffer, sizeof(sal_uInt16) * mnCount);
+            memset(mpZBuffer, 0, sizeof(sal_uInt16) * mnCount);
         }
 
         ~BZPixelRaster()

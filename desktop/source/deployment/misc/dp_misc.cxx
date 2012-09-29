@@ -526,7 +526,7 @@ OUString readConsole()
     }
 #else
     char buf[1024];
-    rtl_zeroMemory(buf, 1024);
+    memset(buf, 0, 1024);
     // read one char less so that the last char in buf is always zero
     if (fgets(buf, 1024, stdin) != NULL)
     {

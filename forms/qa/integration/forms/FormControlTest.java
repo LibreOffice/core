@@ -171,7 +171,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         moveToNext();
         if ( !verifyReferenceImage( new byte[0] ) )
         {
-            failed( "image control failed to display empty image, after coming from a non-empty image" );
+            failed( "image control failed to display empty image, after coming to a non-empty image" );
             return;
         }
 

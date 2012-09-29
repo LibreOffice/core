@@ -21,7 +21,6 @@
 #include "store/store.h"
 
 #include <sal/types.h>
-#include <rtl/memory.h>
 #include <rtl/string.hxx>
 #include <rtl/ref.hxx>
 
@@ -353,7 +352,7 @@ storeError SAL_CALL store_findFirst (
         return store_E_InvalidParameter;
 
     // Initialize FindData.
-    rtl_zeroMemory (pFindData, sizeof (storeFindData));
+    memset (pFindData, 0, sizeof (storeFindData));
 
     // Find first.
     pFindData->m_nReserved = (sal_uInt32)(~0);

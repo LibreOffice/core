@@ -1204,7 +1204,7 @@ JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
           (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
     if (newInfo)
     {
-        rtl_copyMemory(newInfo, pInfo, sizeof(JavaInfo));
+        memcpy(newInfo, pInfo, sizeof(JavaInfo));
         rtl_uString_acquire(pInfo->sVendor);
         rtl_uString_acquire(pInfo->sLocation);
         rtl_uString_acquire(pInfo->sVersion);

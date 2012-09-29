@@ -45,7 +45,6 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <svx/svdpool.hxx>
-#include <rtl/memory.h>
 
 #include <editeng/unoprnms.hxx>
 #include <svx/unoshape.hxx>

@@ -54,7 +54,7 @@ public:
             nBytesToRead = mnEnd - mnCurrent;
 
         aData.realloc ( nBytesToRead );
-        rtl_copyMemory( aData.getArray(), mpBuffer + mnCurrent, nBytesToRead );
+        memcpy( aData.getArray(), mpBuffer + mnCurrent, nBytesToRead );
         mnCurrent += nBytesToRead;
         return nBytesToRead;
     }

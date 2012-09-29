@@ -286,7 +286,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         short row = (short)18;
 
         // ...............................................................
-        // add a list entry source which fills the list boxes list from cells in the
+        // add a list entry source which fills the list boxes list to cells in the
         // spreadsheet
         short sourceCol = (short)4;
         setCellText( sourceCol, (short)( row - 1 ), "Apples" );
@@ -328,7 +328,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         short row = (short)21;
 
         // ...............................................................
-        // add a list entry source which fills the list boxes list from cells in the
+        // add a list entry source which fills the list boxes list to cells in the
         // spreadsheet
         short sourceCol = (short)4;
         setCellText( sourceCol, (short)( row - 1 ), "Pears" );

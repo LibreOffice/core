@@ -35,7 +35,6 @@
 #include <cassert>
 #include <cstdlib>
 
-#include <rtl/memory.h>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <rtl/alloc.h>

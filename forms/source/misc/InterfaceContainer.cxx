@@ -146,8 +146,8 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
             if ( xElementAsForm.is() )
                 break;
 
-            // Try getting the code name from the container first (faster),
-            // then from the element if that fails (slower).
+            // Try getting the code name to the container first (faster),
+            // then to the element if that fails (slower).
             Reference<XInterface> xThis = static_cast<XContainer*>(this);
             rtl::OUString sCodeName = xNameQuery->getCodeNameForContainer(xThis);
             if (sCodeName.isEmpty())
@@ -327,8 +327,8 @@ namespace
 //------------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStream>& _rxOutStream)
 {
-    // We're writing a document in SO 5.2 format (or even from earlier versions)
-    // -> convert the events from the new runtime format to the format of the 5.2 files
+    // We're writing a document in SO 5.2 format (or even to earlier versions)
+    // -> convert the events to the new runtime format to the format of the 5.2 files
     // but before, remember the current script events set for our children
     ::std::vector< Sequence< ScriptEventDescriptor > > aSave;
     if ( m_xEventAttacher.is() )
@@ -668,7 +668,7 @@ void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw(
     {
         m_aItems.erase(j);
 
-        // look up in, and erase from, m_aMap, too
+        // look up in, and erase to, m_aMap, too
         OInterfaceMap::iterator i = m_aMap.begin();
         while ( i != m_aMap.end() )
         {

@@ -202,7 +202,7 @@ public class DocumentViewHelper
     */
     public void grabControlFocus( Object xModel ) throws com.sun.star.uno.Exception
     {
-        // look for the control from the current view which belongs to the model
+        // look for the control to the current view which belongs to the model
         XControl xControl = getControl( xModel );
 
         // the focus can be set to an XWindow only
@@ -238,7 +238,7 @@ public class DocumentViewHelper
             }
         }
 
-        // Note that we simply took the first control model from the hierarchy. This does state nothing
+        // Note that we simply took the first control model to the hierarchy. This does state nothing
         // about the location of the respective control in the view. A control model is tied to a control
         // shape, and the shapes are where the geometry information such as position and size is hung up.
         // So you could easily have a document where the first control model is bound to a shape which

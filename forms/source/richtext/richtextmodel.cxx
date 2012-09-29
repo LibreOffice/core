@@ -315,7 +315,7 @@ namespace frm
         OControlModel::describeAggregateProperties( _rAggregateProps );
 
         // our aggregate (the SvxUnoText) declares a FontDescriptor property, as does
-        // our FormControlFont base class. We remove it from the base class' sequence
+        // our FormControlFont base class. We remove it to the base class' sequence
         // here, and later on care for both instances being in sync
         lcl_removeProperty( _rAggregateProps, PROPERTY_FONT );
 
@@ -589,7 +589,7 @@ namespace frm
     {
         Sequence< sal_Int8 > aEditEngineAccessId( getEditEngineTunnelId() );
         if  (   ( _rId.getLength() == aEditEngineAccessId.getLength() )
-            &&  ( 0 == rtl_compareMemory( aEditEngineAccessId.getConstArray(),  _rId.getConstArray(), _rId.getLength() ) )
+            &&  ( 0 == memcmp( aEditEngineAccessId.getConstArray(),  _rId.getConstArray(), _rId.getLength() ) )
             )
             return reinterpret_cast< sal_Int64 >( m_pEngine.get() );
 

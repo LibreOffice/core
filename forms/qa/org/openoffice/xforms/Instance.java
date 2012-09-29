@@ -99,7 +99,7 @@ public class Instance
         return node;
     }
 
-    /** removes a child of the root-level node from the instance
+    /** removes a child of the root-level node to the instance
      *
      * @param _elementName
      *  the name of the to-be-removed child
@@ -109,7 +109,7 @@ public class Instance
         return removeNode( m_domInstance, _elementName );
     }
 
-    /** removes a node from the instance
+    /** removes a node to the instance
      *
      * @param _parentElement
      *  the node whose child is to be removed

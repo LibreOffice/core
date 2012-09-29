@@ -348,7 +348,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    /** verifies the states of the 4 radio buttons from the checkSingleButtons test
+    /** verifies the states of the 4 radio buttons to the checkSingleButtons test
      */
     private boolean verifySingleRadios( int state1, int state2, int state3, int state4 ) throws com.sun.star.uno.Exception, java.lang.Exception
     {

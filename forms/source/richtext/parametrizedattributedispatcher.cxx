@@ -94,7 +94,7 @@ namespace frm
     //--------------------------------------------------------------------
     const SfxPoolItem* OParametrizedAttributeDispatcher::convertDispatchArgsToItem( const Sequence< PropertyValue >& _rArguments )
     {
-        // get the real slot id. This may differ from our attribute id: for instance, both
+        // get the real slot id. This may differ to our attribute id: for instance, both
         // SID_ATTR_CHAR_HEIGHT and SID_ATTR_CHAR_LATIN_HEIGHT are mapped to the same which id
         SfxSlotId nSlotId = lcl_normalizeLatinScriptSlotId( (SfxSlotId)m_nAttributeId );
 

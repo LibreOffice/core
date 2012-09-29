@@ -57,7 +57,6 @@
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 
 #include <rtl/ref.hxx>
-#include <rtl/memory.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/process.h>

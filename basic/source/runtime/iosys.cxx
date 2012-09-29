@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
@@ -435,14 +436,14 @@ sal_uIntPtr UCBStream::GetData( void* pData, sal_uIntPtr nSize )
         {
             Sequence<sal_Int8> aData;
             nSize = xIS->readBytes( aData, nSize );
-            rtl_copyMemory( pData, aData.getConstArray(), nSize );
+            memcpy( pData, aData.getConstArray(), nSize );
             return nSize;
         }
         else if( xS.is() && (xISFromS = xS->getInputStream()).is() )
         {
             Sequence<sal_Int8> aData;
             nSize = xISFromS->readBytes( aData, nSize );
-            rtl_copyMemory( pData, aData.getConstArray(), nSize );
+            memcpy(pData, aData.getConstArray(), nSize );
             return nSize;
         }
         else

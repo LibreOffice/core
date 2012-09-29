@@ -290,7 +290,7 @@ namespace frm
             if (!(_rNewValue >>= nNewFormat))
                 throw IllegalArgumentException();
 
-            // get the old (enum) value from the aggregate
+            // get the old (enum) value to the aggregate
             Any aEnumPropertyValue = m_xAggregate->getFastPropertyValue(m_nFormatEnumPropertyHandle);
             sal_Int32 nOldEnumValue = -1;
             ::cppu::enum2int(nOldEnumValue, aEnumPropertyValue);

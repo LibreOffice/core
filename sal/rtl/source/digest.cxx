@@ -32,7 +32,6 @@
 #include <sal/macros.h>
 #include <osl/endian.h>
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 #include <rtl/digest.h>
 
 /*========================================================================

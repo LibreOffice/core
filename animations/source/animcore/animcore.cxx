@@ -52,6 +52,7 @@
 #include <osl/mutex.hxx>
 #include <list>
 #include <algorithm>
+#include <string.h>
 
 using ::osl::Mutex;
 using ::osl::Guard;
@@ -2018,7 +2019,7 @@ void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesLis
 // XUnoTunnel
 ::sal_Int64 SAL_CALL AnimationNode::getSomething( const Sequence< ::sal_Int8 >& rId ) throw (RuntimeException)
 {
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
+    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
 

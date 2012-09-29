@@ -30,7 +30,6 @@
 
 #include <sal/types.h>
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 #include <rtl/cipher.h>
 
 /*========================================================================

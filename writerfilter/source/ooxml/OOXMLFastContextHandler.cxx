@@ -340,7 +340,7 @@ sal_Int64 SAL_CALL OOXMLFastContextHandler::getSomething( const uno::Sequence< s
     throw(uno::RuntimeException)
 {
     if( rId.getLength() == 16
-        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+        && 0 == memcmp( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>

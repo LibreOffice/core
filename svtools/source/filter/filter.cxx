@@ -1959,7 +1959,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                                                 if ( nChunkLen )
                                                 {
                                                     aChunkData.aData.resize( nChunkLen );
-                                                    rtl_copyMemory( &aChunkData.aData[ 0 ], aByteSeq.getConstArray(), nChunkLen );
+                                                    memcpy( &aChunkData.aData[ 0 ], aByteSeq.getConstArray(), nChunkLen );
                                                 }
                                                 std::vector< vcl::PNGWriter::ChunkData >::iterator aIter = rChunkData.end() - 1;
                                                 rChunkData.insert( aIter, aChunkData );

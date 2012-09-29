@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
 
 #include "dx_surfacebitmap.hxx"
 #include "dx_impltools.hxx"
@@ -83,7 +84,7 @@ namespace dxcanvas
         sal_uInt8* DXColorBuffer::lock() const
         {
 #if DIRECTX_VERSION < 0x0900
-            rtl_zeroMemory((void *)&aSurfaceDesc,sizeof(DDSURFACEDESC));
+            memset((void *)&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
             if(SUCCEEDED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
@@ -344,7 +345,7 @@ namespace dxcanvas
 
 #if DIRECTX_VERSION < 0x0900
         DDSURFACEDESC aSurfaceDesc;
-        rtl_zeroMemory(&aSurfaceDesc,sizeof(DDSURFACEDESC));
+        memset(&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
         aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
         const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
 
@@ -468,7 +469,7 @@ namespace dxcanvas
     {
 #if DIRECTX_VERSION < 0x0900
         DDSURFACEDESC aSurfaceDesc;
-        rtl_zeroMemory( &aSurfaceDesc,sizeof(DDSURFACEDESC) );
+        memset( &aSurfaceDesc, 0, sizeof(DDSURFACEDESC) );
         aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
 
         if( FAILED(mpSurface->Lock( NULL,
@@ -541,7 +542,7 @@ namespace dxcanvas
 
 #if DIRECTX_VERSION < 0x0900
             DDSURFACEDESC aSurfaceDesc;
-            rtl_zeroMemory(&aSurfaceDesc,sizeof(DDSURFACEDESC));
+            memset(&aSurfaceDesc,0, sizeof(DDSURFACEDESC));
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
 
@@ -554,7 +555,7 @@ namespace dxcanvas
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
-                rtl_copyMemory(pDst,pSrc,nSegmentSizeInBytes);
+                memcpy(pDst,pSrc,nSegmentSizeInBytes);
                 pDst += nSegmentSizeInBytes;
                 pSrc += aSurfaceDesc.lPitch;
             }
@@ -570,7 +571,7 @@ namespace dxcanvas
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
-                rtl_copyMemory(pDst,pSrc,nSegmentSizeInBytes);
+                memcpy(pDst,pSrc,nSegmentSizeInBytes);
                 pDst += nSegmentSizeInBytes;
                 pSrc += aLockedRect.Pitch;
             }
@@ -623,7 +624,7 @@ namespace dxcanvas
 
 #if DIRECTX_VERSION < 0x0900
             DDSURFACEDESC aSurfaceDesc;
-            rtl_zeroMemory(&aSurfaceDesc,sizeof(DDSURFACEDESC));
+            memset(&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_WRITEONLY;
 
@@ -636,7 +637,7 @@ namespace dxcanvas
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
-                rtl_copyMemory(pDst,pSrc,nSegmentSizeInBytes);
+                memcpy(pDst,pSrc,nSegmentSizeInBytes);
                 pSrc += nSegmentSizeInBytes;
                 pDst += aSurfaceDesc.lPitch;
             }
@@ -653,7 +654,7 @@ namespace dxcanvas
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
-                rtl_copyMemory(pDst,pSrc,nSegmentSizeInBytes);
+                memcpy(pDst,pSrc,nSegmentSizeInBytes);
                 pSrc += nSegmentSizeInBytes;
                 pDst += aLockedRect.Pitch;
             }
@@ -703,7 +704,7 @@ namespace dxcanvas
 
 #if DIRECTX_VERSION < 0x0900
             DDSURFACEDESC aSurfaceDesc;
-            rtl_zeroMemory(&aSurfaceDesc,sizeof(DDSURFACEDESC));
+            memset(&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_WRITEONLY;
 
@@ -761,7 +762,7 @@ namespace dxcanvas
 
 #if DIRECTX_VERSION < 0x0900
             DDSURFACEDESC aSurfaceDesc;
-            rtl_zeroMemory(&aSurfaceDesc,sizeof(DDSURFACEDESC));
+            memset(&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
 

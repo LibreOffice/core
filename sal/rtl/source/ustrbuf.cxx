@@ -31,7 +31,6 @@
 #include <osl/interlck.h>
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/memory.h>
 #include <strimp.hxx>
 
 void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
@@ -142,7 +141,7 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
                             /* optimized for 1 character */
             pBuf[offset + len] = pBuf[offset];
         else if( n > 1 )
-            rtl_moveMemory( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
+            memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
 
         /* insert the new characters */
         if( len == 1 )
@@ -197,7 +196,7 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
             /* optimized for 1 character */
             pBuf[offset + len] = pBuf[offset];
         else if( n > 1 )
-            rtl_moveMemory( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
+            memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
 
         /* insert the new characters */
         for( n = 0; n < len; n++ )
@@ -236,7 +235,7 @@ void SAL_CALL rtl_uStringbuffer_remove( rtl_uString ** This,
     if (nTailLen)
     {
         /* move the tail */
-        rtl_moveMemory(pBuf + start, pBuf + start + len, nTailLen * sizeof(sal_Unicode));
+        memmove(pBuf + start, pBuf + start + len, nTailLen * sizeof(sal_Unicode));
     }
 
     (*This)->length-=len;

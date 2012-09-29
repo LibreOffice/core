@@ -22,7 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <vector>
-
+#include <string.h>
 
 namespace xmlsearch {
 
@@ -40,7 +40,7 @@ namespace xmlsearch {
                     matches_( new sal_Int32[ 2*nColumns ] ),
                   penalty_( penalty )
             {
-                rtl_zeroMemory( matches_,sizeof( sal_Int32 ) * matchesL_ );
+                memset( matches_, 0, sizeof( sal_Int32 ) * matchesL_ );
             }
 
             ~QueryHit() { delete[] matches_; }

@@ -57,7 +57,8 @@
  * @file
  * Base64 tool.
  ************************************************************************/
-#include    "xfbase64.hxx"
+#include <string.h>
+#include "xfbase64.hxx"
 
 const  sal_Char aBase64EncodeTable[] =
 { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -105,7 +106,7 @@ rtl::OUString XFBase64::Encode(sal_uInt8 *buf, sal_Int32 len)
         nNeeded = (cycles+1)*4;
     buffer = new sal_Char[nNeeded+1];
 
-    rtl_zeroMemory(buffer,nNeeded+1);
+    memset(buffer, 0, nNeeded+1);
 
     for( sal_Int32 i=0; i<cycles; i++ )
         Encode_(buf+i*3,buffer+i*4);

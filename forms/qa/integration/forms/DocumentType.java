@@ -37,7 +37,7 @@ public class DocumentType extends com.sun.star.uno.Enum
     public static final DocumentType XMLFORM = new DocumentType(3);
     public static final DocumentType UNKNOWN = new DocumentType(-1);
 
-    public static DocumentType fromInt(int value)
+    public static DocumentType toInt(int value)
     {
         switch(value)
         {

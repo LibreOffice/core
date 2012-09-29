@@ -29,7 +29,6 @@
 #include <toolkit/awt/vclxprinter.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/memory.h>
 #include <rtl/uuid.h>
 
 
