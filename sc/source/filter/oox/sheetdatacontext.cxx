@@ -184,7 +184,13 @@ void SheetDataContext::onEndElement()
             case XML_normal:
                 setCellFormula( maCellData.maCellAddr, maFormulaStr );
                 mrSheetData.setCellFormat( maCellData );
+
+                // If a number cell has some preloaded value, stick it into the buffer
+                // but do this only for real cell formulas (not array, shared etc.)
+                if( !( maCellValue.isEmpty() ) && ( maCellData.mnCellType == XML_n ) )
+                    setCellFormulaValue( maCellData.maCellAddr, maCellValue.toDouble() );
                 break;
+
             case XML_shared:
                 if( maFmlaData.mnSharedId >= 0 )
                 {
@@ -248,13 +254,6 @@ void SheetDataContext::onEndElement()
                 maCellData.mnCellType = XML_TOKEN_INVALID;
                 mrSheetData.setBlankCell( maCellData );
             }
-        }
-        else if( !maCellValue.isEmpty() ) switch( maCellData.mnCellType )
-        {
-            case XML_n:
-                /* Set the pre-loaded value */
-                setCellFormulaValue( maCellData.maCellAddr, maCellValue.toDouble() );
-                break;
         }
     }
 }
