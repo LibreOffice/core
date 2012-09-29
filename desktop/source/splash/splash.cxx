@@ -86,6 +86,7 @@ private:
     BitmapEx        _aIntroBmp;
     Color           _cProgressFrameColor;
     Color           _cProgressBarColor;
+    Color           _cProgressTextColor;
     bool            _bNativeProgress;
     OUString        _sAppName;
     OUString        _sProgressText;
@@ -101,7 +102,7 @@ private:
     sal_Bool    _bFullScreenSplash;
     sal_Bool    _bProgressEnd;
     long _height, _width, _tlx, _tly, _barwidth;
-    long _barheight, _barspace;
+    long _barheight, _barspace, _textBaseline;
     double _fXPos, _fYPos;
     double _fWidth, _fHeight;
     const long _xoffset, _yoffset;
@@ -130,6 +131,7 @@ SplashScreen::SplashScreen()
     , _vdev(*((IntroWindow*)this))
     , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _cProgressBarColor(sal::static_int_cast< ColorData >(NOT_LOADED))
+    , _cProgressTextColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _bNativeProgress(true)
     , _iMax(100)
     , _iProgress(0)
@@ -144,6 +146,7 @@ SplashScreen::SplashScreen()
     , _barwidth(NOT_LOADED)
     , _barheight(NOT_LOADED)
     , _barspace(2)
+    , _textBaseline(NOT_LOADED)
     , _fXPos(-1.0)
     , _fYPos(-1.0)
     , _fWidth(-1.0)
@@ -297,6 +300,9 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
             }
         }
 
+        if ( NOT_LOADED == _textBaseline )
+            _textBaseline = _height;
+
         if ( sal::static_int_cast< ColorData >(NOT_LOADED) ==
              _cProgressFrameColor.GetColor() )
             _cProgressFrameColor = Color( COL_LIGHTGRAY );
@@ -310,6 +316,10 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
             else
                 _cProgressBarColor = Color( COL_BLUE );
         }
+
+        if ( sal::static_int_cast< ColorData >(NOT_LOADED) ==
+             _cProgressTextColor.GetColor() )
+            _cProgressTextColor = Color( COL_BLACK );
 
         Application::AddEventListener(
             LINK( this, SplashScreen, AppEventListenerHdl ) );
@@ -363,6 +373,10 @@ void SplashScreen::loadConfig()
         OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressFrameColor" ) ) );
     OUString sProgressBarColor = implReadBootstrapKey(
         OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressBarColor" ) ) );
+    OUString sProgressTextColor = implReadBootstrapKey(
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressTextColor" ) ) );
+    OUString sProgressTextBaseline = implReadBootstrapKey(
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressTextBaseline" ) ) );
     OUString sSize = implReadBootstrapKey(
         OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressSize" ) ) );
     OUString sPosition = implReadBootstrapKey(
@@ -416,6 +430,29 @@ void SplashScreen::loadConfig()
             sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
+    }
+
+    if ( !sProgressTextColor.isEmpty() )
+    {
+        sal_uInt8 nRed = 0;
+        sal_Int32 idx = 0;
+        sal_Int32 temp = sProgressTextColor.getToken( 0, ',', idx ).toInt32();
+        if ( idx != -1 )
+        {
+            nRed = static_cast< sal_uInt8 >( temp );
+            temp = sProgressTextColor.getToken( 0, ',', idx ).toInt32();
+        }
+        if ( idx != -1 )
+        {
+            sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
+            sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressTextColor.getToken( 0, ',', idx ).toInt32() );
+            _cProgressTextColor = Color( nRed, nGreen, nBlue );
+        }
+    }
+
+    if ( !sProgressTextBaseline.isEmpty() )
+    {
+        _textBaseline = sProgressTextBaseline.toInt32();
     }
 
     if( !sNativeProgress.isEmpty() )
@@ -608,7 +645,12 @@ void SplashScreen::Paint( const Rectangle&)
         _vdev.SetFillColor( _cProgressBarColor );
         _vdev.SetLineColor();
         _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
-        _vdev.DrawText( Rectangle(_tlx, _tly+_barheight+5, _tlx+_barwidth, _tly+_barheight+5+20), _sProgressText, TEXT_DRAW_CENTER );
+        Font aFont;
+        aFont.SetSize(Size(0, 12));
+        aFont.SetAlign(ALIGN_BASELINE);
+        _vdev.SetFont(aFont);
+        _vdev.SetTextColor(_cProgressTextColor);
+        _vdev.DrawText(Point(_tlx, _textBaseline), _sProgressText);
     }
     DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev.GetOutputSizePixel(), _vdev );
 }

@@ -12053,6 +12053,28 @@ else
 fi
 AC_SUBST(PROGRESSFRAMECOLOR)
 
+AC_MSG_CHECKING([for custom 'intro' progress text color])
+PROGRESSTEXTCOLOR=
+if test -z "$with_intro_progressbar_text_color"; then
+   PROGRESSTEXTCOLOR="255,255,255"
+   AC_MSG_RESULT([none])
+else
+   PROGRESSTEXTCOLOR="$with_intro_progressbar_text_color"
+   AC_MSG_RESULT([$PROGRESSTEXTCOLOR])
+fi
+AC_SUBST(PROGRESSTEXTCOLOR)
+
+AC_MSG_CHECKING([for custom 'intro' progress text baseline])
+PROGRESSTEXTBASELINE=
+if test -z "$with_intro_progressbar_text_baseline"; then
+   PROGRESSTEXTBASELINE="287"
+   AC_MSG_RESULT([none])
+else
+   PROGRESSTEXTBASELINE="$with_intro_progressbar_text_baseline"
+   AC_MSG_RESULT([$PROGRESSTEXTBASELINE])
+fi
+AC_SUBST(PROGRESSTEXTBASELINE)
+
 AC_MSG_CHECKING([for alternative branding images directory])
 INTRO_BITMAP=
 ABOUT_BACKGROUND_SVG=

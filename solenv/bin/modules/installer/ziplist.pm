@@ -828,6 +828,8 @@ sub overwrite_branding
     $variableshashref->{'PROGRESSSIZE'} = $ENV{'PROGRESSSIZE'} , if( defined $ENV{'PROGRESSSIZE'}  && $ENV{'PROGRESSSIZE'} ne "" );
     $variableshashref->{'PROGRESSPOSITION'} = $ENV{'PROGRESSPOSITION'} , if( defined $ENV{'PROGRESSPOSITION'}  && $ENV{'PROGRESSPOSITION'} ne "" );
     $variableshashref->{'PROGRESSFRAMECOLOR'} = $ENV{'PROGRESSFRAMECOLOR'} , if( defined $ENV{'PROGRESSFRAMECOLOR'}  && $ENV{'PROGRESSFRAMECOLOR'} ne "" );
+    $variableshashref->{'PROGRESSTEXTCOLOR'} = $ENV{'PROGRESSTEXTCOLOR'} , if( defined $ENV{'PROGRESSTEXTCOLOR'}  && $ENV{'PROGRESSTEXTCOLOR'} ne "" );
+    $variableshashref->{'PROGRESSTEXTBASELINE'} = $ENV{'PROGRESSTEXTBASELINE'} , if( defined $ENV{'PROGRESSTEXTBASELINE'}  && $ENV{'PROGRESSTEXTBASELINE'} ne "" );
 }
 
 ###########################################################

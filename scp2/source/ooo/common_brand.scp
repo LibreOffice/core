@@ -932,6 +932,24 @@ ProfileItem gid_Brand_Profileitem_Soffice_NativeProgress_So
     Value = "${NATIVEPROGRESS}";
 End
 
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressTextColor_So
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 7;
+    Key = "ProgressTextColor";
+    Value = "${PROGRESSTEXTCOLOR}";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressTextBaseline_So
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 8;
+    Key = "ProgressTextBaseline";
+    Value = "${PROGRESSTEXTBASELINE}";
+End
+
 ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     ProfileID = gid_Brand_Profile_Soffice_Ini;
     ModuleID = gid_Module_Root_Brand;
