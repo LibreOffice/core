@@ -19,6 +19,12 @@ $(eval $(call gb_Library_use_externals,neon,\
 
 $(eval $(call gb_Library_set_visibility_default,neon))
 
+# neon has its share of warning... let's spare use
+# the pointless spamming
+$(eval $(call gb_Library_add_cflags,neon,\
+	-w \
+))
+
 $(eval $(call gb_Library_set_warnings_not_errors,neon))
 
 $(eval $(call gb_Library_add_generated_cobjects,neon,\
