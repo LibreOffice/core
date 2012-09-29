@@ -146,6 +146,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	swext \
 	test \
 	testtools \
+	$(call gb_Helper_optional,TOMCAT,tomcat) \
 	toolkit \
 	tools \
 	touch \
