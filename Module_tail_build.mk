@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	accessibility \
 	$(call gb_Helper_optional,AFMS,afms) \
 	animations \
+	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	apple_remote \
 	autodoc \
 	avmedia \

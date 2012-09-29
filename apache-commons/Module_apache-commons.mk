@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,apache_commons))
 
 ifneq ($(SOLAR_JAVA),)
-$(info "f:$(filter APACHE_COMMONS,$(BUILD_TYPE))")
 ifneq ($(filter APACHE_COMMONS,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,apache_commons,\
 	ExternalProject_apache_commons_codec \
