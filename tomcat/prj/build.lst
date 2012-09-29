@@ -1,2 +1,2 @@
 to	tomcat	:	solenv NULL
-to	tomcat			nmake	-	all	to_mkout NULL
+to	tomcat/prj	nmake	-	all	to_prj NULL

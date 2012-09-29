@@ -1,0 +1,31 @@
+<project name="jsr152 and jsr154 in Debian" default="debuild" basedir=".">
+
+  <target name="debuild"
+   description="Build jsr154 and jsr152 for Debian (Default)">
+    <echo message="Building Servlet 2.4 API"/>
+    <ant antfile="jsr154/build.xml"
+         target="dist"
+         inheritAll="false"
+    />
+    <echo message="Building JSP 2.0 API"/>
+    <ant antfile="jsr152/build.xml"
+         target="dist"
+         inheritAll="false"
+    />
+  </target>
+
+  <target name="clean" description="Clean">
+    <echo message="Cleaning JSP 2.0 API"/>
+    <ant antfile="jsr152/build.xml"
+         target="clean"
+         inheritAll="false"
+    />
+    <echo message="Cleaning Servlet 2.4 API"/>
+    <ant antfile="jsr154/build.xml"
+         target="clean"
+         inheritAll="false"
+    />
+    <delete dir="tmp"/>
+  </target>
+
+</project>

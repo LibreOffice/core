@@ -9702,6 +9702,7 @@ if test "$ENABLE_MEDIAWIKI" = "YES"; then
         AC_MSG_RESULT([internal])
         SYSTEM_SERVLETAPI=NO
         BUILD_TYPE="$BUILD_TYPE TOMCAT"
+        TOMCAT_TARBALL="2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz"
     fi
 fi
 AC_SUBST(SYSTEM_SERVLETAPI)
@@ -9972,6 +9973,7 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
         APACHE_COMMONS_HTTPCLIENT_TARBALL=2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
         APACHE_COMMONS_LANG_TARBALL=2ae988b339daec234019a7066f96733e-commons-lang-2.3-src.tar.gz
         APACHE_COMMONS_LOGGING_TARBALL=3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
+        TOMCAT_TARBALL="2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz"
         BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
     fi
 fi
@@ -9984,6 +9986,7 @@ AC_SUBST(COMMONS_CODEC_JAR)
 AC_SUBST(COMMONS_LANG_JAR)
 AC_SUBST(COMMONS_HTTPCLIENT_JAR)
 AC_SUBST(COMMONS_LOGGING_JAR)
+AC_SUBST(TOMCAT_TARBALL)
 
 # scripting provider for BeanShell extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in BeanShell])
