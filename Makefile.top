@@ -157,6 +157,7 @@ swext\
 tail_build\
 test\
 testtools\
+tomcat\
 toolkit\
 tools\
 touch\
@@ -249,7 +250,6 @@ soltools\
 stax\
 stlport\
 sysui\
-tomcat\
 xpdf\
 zlib\
 
