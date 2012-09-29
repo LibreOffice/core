@@ -34,7 +34,7 @@
 #define IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
 sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException) \
 { \
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
+    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
     { \
         return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this)); \
     } \
@@ -60,7 +60,7 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
 #define IMPL_XUNOTUNNEL2( ClassName, BaseClass ) \
 sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException) \
 { \
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
+    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
     { \
         return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this)); \
     } \

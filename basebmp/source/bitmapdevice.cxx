@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
+
 #include "basebmp/bitmapdevice.hxx"
 
 #include "basebmp/compositeiterator.hxx"
@@ -47,7 +49,6 @@
 #include "intconversion.hxx"
 
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 #include <osl/diagnose.h>
 
 #include <basegfx/tools/tools.hxx>
@@ -1892,7 +1893,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
             &rtl_freeMemory );
         if (pMem.get() == 0 && nMemSize != 0)
             return BitmapDeviceSharedPtr();
-        rtl_zeroMemory(pMem.get(),nMemSize);
+        memset(pMem.get(), 0, nMemSize);
     }
 
     sal_uInt8* pFirstScanline = nScanlineStride < 0 ?

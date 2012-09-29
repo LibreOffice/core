@@ -1435,7 +1435,7 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
         return ERRCODE_IO_CANTREAD;
     }
 
-    rtl_copyMemory (pBuffer, aData.getConstArray(), nSize);
+    memcpy (pBuffer, aData.getConstArray(), nSize);
     if (pRead)
         *pRead = sal_uLong(nSize);
 

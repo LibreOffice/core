@@ -45,7 +45,6 @@
 
 #include    <osl/thread.h>
 #include    <rtl/alloc.h>
-#include    <rtl/memory.h>
 #include    <rtl/ustring.hxx>
 #include    <rtl/ustrbuf.hxx>
 #include    <osl/file.hxx>

@@ -140,7 +140,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
 ::sal_Int64 SAL_CALL ChartRenderer::getSomething( const Sequence< ::sal_Int8 >& aIdentifier )
         throw( uno::RuntimeException)
 {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(
+    if( aIdentifier.getLength() == 16 && 0 == memcmp(
             ChartPrettyPainter::getUnoTunnelId().getConstArray(),
                 aIdentifier.getConstArray(), 16 ) )
     {

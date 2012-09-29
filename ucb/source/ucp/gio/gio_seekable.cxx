@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/memory.h>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <string.h>
