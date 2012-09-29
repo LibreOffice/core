@@ -149,6 +149,10 @@ gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
+# Executable class
+
+gb_Executable_EXT_for_build :=
+
 # Helper class
 
 ifeq ($(OS_FOR_BUILD),MACOSX)

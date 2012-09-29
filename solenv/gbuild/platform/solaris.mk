@@ -26,8 +26,6 @@
 #
 #*************************************************************************
 
-gb_Executable_EXT:=
-
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX

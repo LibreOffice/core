@@ -521,6 +521,7 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
+gb_Executable_EXT_for_build := .exe
 gb_Executable_TARGETTYPEFLAGS := $(gb_Windows_PE_TARGETTYPEFLAGS)
 
 gb_Executable_get_rpath :=
