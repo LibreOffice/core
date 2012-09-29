@@ -175,7 +175,7 @@ clean :
 check : unitcheck slowcheck
 	$(call gb_Output_announce_title,all tests checked.)
 	$(call gb_Output_announce_bell)
-	
+
 debugrun :
 	$(call gb_Module_DEBUGRUNCOMMAND)
 
@@ -236,7 +236,7 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
-ifeq ($(strip $(NOCPPUNIT)),)
+ifeq ($(strip $(SKIP_TESTS)),)
 define gb_Module_add_check_target
 $(call gb_Module__read_targetfile,$(1),$(2),check target)
 
@@ -244,7 +244,6 @@ $(call gb_Module_get_check_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
-endif # NOCPPUNIT
 
 define gb_Module_add_slowcheck_target
 $(call gb_Module__read_targetfile,$(1),$(2),slowcheck target)
@@ -253,6 +252,7 @@ $(call gb_Module_get_slowcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
+endif # SKIP_TESTS
 
 define gb_Module_add_subsequentcheck_target
 $(call gb_Module__read_targetfile,$(1),$(2),subsequentcheck target)
