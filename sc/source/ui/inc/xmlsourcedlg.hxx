@@ -15,6 +15,10 @@
 #include "vcl/fixed.hxx"
 #include "svtools/svtreebx.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
+class ScDocument;
+
 class ScXMLSourceTree : public SvTreeListBox
 {
     Image maImgElemDefault;
@@ -37,9 +41,17 @@ class ScXMLSourceDlg : public ModalDialog
 
     Image maImgFileOpen;
 
+    ScDocument* mpDoc;
+
 public:
-    ScXMLSourceDlg(Window* pParent);
+    ScXMLSourceDlg(Window* pParent, ScDocument* pDoc);
     virtual ~ScXMLSourceDlg();
+
+private:
+
+    void SelectSourceFile();
+
+    DECL_LINK(BtnPressedHdl, Button*);
 };
 
 #endif

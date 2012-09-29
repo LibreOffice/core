@@ -1550,9 +1550,9 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*   
     return 0;
 }
 
-AbstractScXMLSourceDlg* ScAbstractDialogFactory_Impl::CreateScXMLSourceDlg(Window* pParent, int nId)
+AbstractScXMLSourceDlg* ScAbstractDialogFactory_Impl::CreateScXMLSourceDlg(Window* pParent, ScDocument* pDoc, int nId)
 {
-    ScXMLSourceDlg* pDlg = (nId == RID_SCDLG_XML_SOURCE) ? new ScXMLSourceDlg(pParent) : NULL;
+    ScXMLSourceDlg* pDlg = (nId == RID_SCDLG_XML_SOURCE) ? new ScXMLSourceDlg(pParent, pDoc) : NULL;
 
     return pDlg ? new AbstractScXMLSourceDlg_Impl(pDlg) : NULL;
 }

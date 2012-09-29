@@ -593,7 +593,7 @@ public:
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
                                                     const SfxItemSet* pArgSet,int nId );
 
-    virtual AbstractScXMLSourceDlg* CreateScXMLSourceDlg(Window* pParent, int nId);
+    virtual AbstractScXMLSourceDlg* CreateScXMLSourceDlg(Window* pParent, ScDocument* pDoc, int nId);
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId );

@@ -2405,7 +2405,7 @@ void ScCellShell::ExecuteXMLSourceDialog()
 
     boost::scoped_ptr<AbstractScXMLSourceDlg> pDlg(
         pFact->CreateScXMLSourceDlg(
-            pTabViewShell->GetDialogParent(), RID_SCDLG_XML_SOURCE));
+            pTabViewShell->GetDialogParent(), GetViewData()->GetDocument(), RID_SCDLG_XML_SOURCE));
 
     if (!pDlg)
         return;
