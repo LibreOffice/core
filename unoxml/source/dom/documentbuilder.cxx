@@ -29,7 +29,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -210,7 +209,7 @@ namespace DOM
             int nread = pctx->rInputStream->readBytes(chunk, len);
 
             // copy bytes to the provided buffer
-            rtl_copyMemory(buffer, chunk.getConstArray(), nread);
+            memcpy(buffer, chunk.getConstArray(), nread);
             return nread;
         } catch (const com::sun::star::uno::Exception& ex) {
             (void) ex;

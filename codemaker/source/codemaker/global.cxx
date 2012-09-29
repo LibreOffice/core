@@ -194,7 +194,7 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
             if ( n1 != n2 )
                 bFindChanges = sal_True;
             else
-                if ( rtl_compareMemory(buffer1, buffer2, n2) != 0 )
+                if ( memcmp(buffer1, buffer2, n2) != 0 )
                     bFindChanges =  sal_True;
         }
     }

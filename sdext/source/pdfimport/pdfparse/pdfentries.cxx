@@ -35,7 +35,6 @@
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/cipher.h>
-#include <rtl/memory.h>
 #ifdef SYSTEM_ZLIB
 #include "zlib.h"
 #else
@@ -728,7 +727,7 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
         // get the compressed length
         *pBytes = m_pStream->getDictLength( pObjectContainer );
         if( pStream != *ppStream )
-            rtl_moveMemory( *ppStream, pStream, *pBytes );
+            memmove( *ppStream, pStream, *pBytes );
         if( rContext.m_bDecrypt )
         {
             EmitImplData* pEData = getEmitData( rContext );

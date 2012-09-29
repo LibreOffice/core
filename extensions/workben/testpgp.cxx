@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <sal/types.h>
-#include <rtl/memory.h>
 #ifndef _RTL_WSTRING_
 #include <rtl/wstring>
 #endif
@@ -220,7 +219,7 @@ void DataSource_Impl::setBuffer (const Sequence<sal_Int8> &rBuffer)
     {
         // Fill buffer from file descriptor.
         char buffer[1024];
-        rtl_zeroMemory (buffer, sizeof(buffer));
+        memset (buffer, 0, sizeof(buffer));
 
         int k = read (m_fd, buffer, sizeof(buffer));
         while (k > 0)
@@ -228,10 +227,10 @@ void DataSource_Impl::setBuffer (const Sequence<sal_Int8> &rBuffer)
             sal_Int32 n = m_buffer.getLength();
             m_buffer.realloc (n + k);
 
-            rtl_copyMemory (m_buffer.getArray() + n, buffer, k);
+            memcpy (m_buffer.getArray() + n, buffer, k);
             n += k;
 
-            rtl_zeroMemory (buffer, k);
+            memset (buffer, 0, k);
             k = read (m_fd, buffer, sizeof(buffer));
         }
     }
@@ -283,7 +282,7 @@ sal_Int32 SAL_CALL DataSource_Impl::readBytes (
     if (k > 0)
     {
         rData.realloc(k);
-        rtl_copyMemory (
+        memcpy (
             rData.getArray(), m_buffer.getConstArray() + m_position, k);
         m_position += k;
     }
@@ -390,7 +389,7 @@ void SAL_CALL DataSink_Impl::writeBytes (const Sequence<sal_Int8> &rBuffer)
         sal_Int32 n = m_buffer.getLength();
         m_buffer.realloc (n + rBuffer.getLength());
 
-        rtl_copyMemory (
+        memcpy (
             m_buffer.getArray() + n,
             rBuffer.getConstArray(),
             rBuffer.getLength());

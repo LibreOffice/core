@@ -19,7 +19,6 @@
 
 
 #include <stdio.h>
-#include <rtl/memory.h>
 #include "osl/file.h"
 
 #include <rtl/ustrbuf.hxx>
@@ -138,7 +137,7 @@ void exportToFile(
 
         sal_Int32 nPos = bytes.getLength();
         bytes.realloc( nPos + nRead );
-        ::rtl_copyMemory( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
+        memcpy( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
     }
 
     FILE * f = ::fopen( fname, "w" );

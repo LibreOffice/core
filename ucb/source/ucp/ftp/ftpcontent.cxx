@@ -47,7 +47,7 @@
 
 #include <memory>
 #include <vector>
-#include <rtl/memory.h>
+#include <string.h>
 #include "curl.hxx"
 #include <curl/easy.h>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -730,7 +730,7 @@ sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
     if(m_xInputStream.is()) {
             Sequence<sal_Int8> seq(nBytesRequested);
         m = m_xInputStream->readBytes(seq,nBytesRequested);
-        rtl_copyMemory(dest,seq.getConstArray(),m);
+        memcpy(dest,seq.getConstArray(),m);
     }
     return m;
 }

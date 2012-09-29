@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
+
 #include "FmtFilter.hxx"
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
@@ -199,7 +201,7 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
     BITMAPFILEHEADER        *pBmpFileHdr = reinterpret_cast< BITMAPFILEHEADER* >( ooBmpStream.getArray() );
     DWORD                   nOffset      = sizeof( BITMAPFILEHEADER ) + sizeof( BITMAPINFOHEADER );
 
-    rtl_copyMemory( pBmpFileHdr + 1, pBmpInfoHdr, aWinDIB.getLength( ) );
+    memcpy( pBmpFileHdr + 1, pBmpInfoHdr, aWinDIB.getLength( ) );
 
     if( pBmpInfoHdr->biBitCount <= 8 )
         nOffset += ( pBmpInfoHdr->biClrUsed ? pBmpInfoHdr->biClrUsed : ( 1 << pBmpInfoHdr->biBitCount ) ) << 2;
@@ -226,7 +228,7 @@ Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
 
     Sequence< sal_Int8 > winDIBStream( aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
 
-    rtl_copyMemory( winDIBStream.getArray( ),
+    memcpy( winDIBStream.getArray( ),
                     aOOBmp.getArray( )  + sizeof( BITMAPFILEHEADER ),
                     aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
 
@@ -328,12 +330,12 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
         rtl_zeroMemory( aHTMLFmtSequence.getArray( ), aHTMLFmtSequence.getLength( ) );
 
         // copy the HTML Format header
-        rtl_copyMemory(
+        memcpy(
             static_cast< LPVOID >( aHTMLFmtSequence.getArray( ) ),
             static_cast< LPVOID >( aHTMLFmtHdr ), lHTMLFmtHdr );
 
         // concat the text/html
-        rtl_copyMemory(
+        memcpy(
             static_cast< LPVOID >( aHTMLFmtSequence.getArray( ) + lHTMLFmtHdr ),
             static_cast< LPVOID >( aTextHtml.getArray( ) ),
             aTextHtml.getLength( ) );
@@ -391,9 +393,9 @@ Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
     htmlFormat += textHtml;
 
     Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); // space the trailing '\0'
-    rtl_zeroMemory(byteSequence.getArray(), byteSequence.getLength());
+    memset(byteSequence.getArray(), 0, byteSequence.getLength());
 
-    rtl_copyMemory(
+    memcpy(
         static_cast<void*>(byteSequence.getArray()),
         static_cast<const void*>(htmlFormat.c_str()),
         htmlFormat.length());

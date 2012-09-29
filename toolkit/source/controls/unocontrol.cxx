@@ -36,7 +36,6 @@
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <tools/date.hxx>

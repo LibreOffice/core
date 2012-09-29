@@ -38,6 +38,7 @@
                                    // vertex buffer (must be divisable
                                    // by 3, as each triangle primitive
                                    // has 3 vertices)
+#include <string.h>
 
 #include <vcl/syschild.hxx>
 #include <vcl/window.hxx>
@@ -439,7 +440,7 @@ namespace dxcanvas
 
                             for(sal_uInt32 i=0; i<nNumLines; ++i)
                             {
-                                rtl_copyMemory(pDst,pImage,nNumBytesToCopy);
+                                memcpy(pDst,pImage,nNumBytesToCopy);
 
                                 if( bClearRightColumn )
                                 {
@@ -458,7 +459,7 @@ namespace dxcanvas
                             }
 
                             if( bClearBottomRow )
-                                rtl_zeroMemory(pDst,nNumBytesToCopy+4);
+                                memset(pDst, 0, nNumBytesToCopy+4);
                         }
                         break;
 
@@ -498,7 +499,7 @@ namespace dxcanvas
                             }
 
                             if( bClearBottomRow )
-                                rtl_zeroMemory(pDst,4*(nNumColumns+1));
+                                memset(pDst, 0, 4*(nNumColumns+1));
                         }
                         break;
 
@@ -531,7 +532,7 @@ namespace dxcanvas
                             }
 
                             if( bClearBottomRow )
-                                rtl_zeroMemory(pDst,4*(nNumColumns+1));
+                                memset(pDst, 0, 4*(nNumColumns+1));
                         }
                         break;
 

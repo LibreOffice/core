@@ -736,8 +736,8 @@ void ICEWatchProc(
             {
                 if( i < pThis->m_nConnections-1 )
                 {
-                    rtl_moveMemory( pThis->m_pConnections+i, pThis->m_pConnections+i+1, sizeof( IceConn )*(pThis->m_nConnections-i-1) );
-                    rtl_moveMemory( pThis->m_pFilehandles+i+1, pThis->m_pFilehandles+i+2, sizeof( struct pollfd )*(pThis->m_nConnections-i-1) );
+                    memmove( pThis->m_pConnections+i, pThis->m_pConnections+i+1, sizeof( IceConn )*(pThis->m_nConnections-i-1) );
+                    memmove( pThis->m_pFilehandles+i+1, pThis->m_pFilehandles+i+2, sizeof( struct pollfd )*(pThis->m_nConnections-i-1) );
                 }
                 pThis->m_nConnections--;
                 pThis->m_pConnections = (IceConn*)rtl_reallocateMemory( pThis->m_pConnections, sizeof( IceConn )*pThis->m_nConnections );

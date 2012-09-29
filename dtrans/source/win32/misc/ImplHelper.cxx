@@ -20,9 +20,9 @@
 #include <osl/diagnose.h>
 #include "ImplHelper.hxx"
 #include <rtl/tencinfo.h>
-#include <rtl/memory.h>
-
+#include <string.h>
 #include <memory>
+
 #if defined _MSC_VER
 #pragma warning(push,1)
 #endif
@@ -259,7 +259,7 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
         if ( NULL != ptdSrc )
         {
             ptdDest = static_cast< DVTARGETDEVICE* >( CoTaskMemAlloc( ptdSrc->tdSize ) );
-            rtl_copyMemory( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );
+            memcpy( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );
         }
     }
 #ifdef __MINGW32__
@@ -450,7 +450,7 @@ sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* 
 
         if ( ptdLeft->tdSize == ptdRight->tdSize )
 
-        if ( rtl_compareMemory( ptdLeft, ptdRight, ptdLeft->tdSize ) == 0 )
+        if ( memcmp( ptdLeft, ptdRight, ptdLeft->tdSize ) == 0 )
             bRet = sal_True;
     }
 #ifdef __MINGW32__

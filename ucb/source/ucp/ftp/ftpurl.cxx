@@ -94,7 +94,7 @@ int MemoryContainer::append(
         m_pBuffer = rtl_reallocateMemory(m_pBuffer,m_nLen);
     }
 
-    rtl_copyMemory(static_cast<sal_Int8*>(m_pBuffer)+m_nWritePos,
+    memcpy(static_cast<sal_Int8*>(m_pBuffer)+m_nWritePos,
                    pBuffer,nLen);
     m_nWritePos = tmp;
     return nLen;
