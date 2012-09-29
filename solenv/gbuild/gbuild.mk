@@ -179,13 +179,6 @@ include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
 
 include $(SRCDIR)/RepositoryFixes.mk
 
-ifeq ($(CROSS_COMPILING),YES)
-# We can safely Assume all cross-compilation is from Unix systems.
-gb_Executable_EXT_for_build :=
-else
-gb_Executable_EXT_for_build := $(gb_Executable_EXT)
-endif
-
 # Set up build tools that can be either internal or system. It is
 # necessary to do it before we start including gbuild class makefiles,
 # so the classes can add dependencies on them.

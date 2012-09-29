@@ -26,8 +26,6 @@
 #
 #*************************************************************************
 
-gb_Executable_EXT:=
-
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
