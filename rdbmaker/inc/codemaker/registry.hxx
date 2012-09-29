@@ -20,6 +20,8 @@
 #ifndef _CODEMAKER_REGISTRY_HXX_
 #define _CODEMAKER_REGISTRY_HXX_
 
+#include <string.h>
+
 #include <rtl/alloc.h>
 #include <osl/interlck.h>
 #include    <registry/registry.hxx>
@@ -40,7 +42,7 @@ struct TypeReader_Impl
             if (copyData)
             {
                 m_pBlop = (sal_uInt8*)rtl_allocateMemory(bufferLen);
-                rtl_copyMemory((void*)m_pBlop, buffer, bufferLen);
+                memcpy(const_cast<sal_uInt8*>(m_pBlop), buffer, bufferLen);
             } else
             {
                 m_blopSize = bufferLen;

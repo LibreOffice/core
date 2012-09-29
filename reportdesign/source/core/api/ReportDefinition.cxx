@@ -2168,7 +2168,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OReportDefinition::getAvailableMimeTyp
 sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw(uno::RuntimeException)
 {
     sal_Int64 nRet = 0;
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         nRet = reinterpret_cast<sal_Int64>(this);
     else
     {

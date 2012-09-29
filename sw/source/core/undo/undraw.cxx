@@ -30,7 +30,6 @@
 #include <UndoDraw.hxx>
 
 #include <rtl/string.h>
-#include <rtl/memory.h>
 
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>

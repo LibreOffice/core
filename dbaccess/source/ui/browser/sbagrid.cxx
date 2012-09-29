@@ -69,7 +69,6 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/memory.h>
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -588,7 +587,7 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException)
 //------------------------------------------------------------------
 sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast< sal_Int64 >( this );
 
     return FmXGridPeer::getSomething(rId);

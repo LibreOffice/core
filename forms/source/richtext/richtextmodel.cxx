@@ -589,7 +589,7 @@ namespace frm
     {
         Sequence< sal_Int8 > aEditEngineAccessId( getEditEngineTunnelId() );
         if  (   ( _rId.getLength() == aEditEngineAccessId.getLength() )
-            &&  ( 0 == rtl_compareMemory( aEditEngineAccessId.getConstArray(),  _rId.getConstArray(), _rId.getLength() ) )
+            &&  ( 0 == memcmp( aEditEngineAccessId.getConstArray(),  _rId.getConstArray(), _rId.getLength() ) )
             )
             return reinterpret_cast< sal_Int64 >( m_pEngine.get() );
 

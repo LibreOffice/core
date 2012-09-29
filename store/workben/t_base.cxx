@@ -18,10 +18,10 @@
  */
 
 
+#include <string.h>
 #include "sal/types.h"
 #include "osl/diagnose.h"
 #include "osl/thread.h"
-#include "rtl/memory.h"
 #include "rtl/ustring.hxx"
 
 #include "object.hxx"
@@ -242,15 +242,15 @@ static void __store_testUnicode (const sal_Char *pszFilename)
     hConvert = rtl_createTextToUnicodeConverter (RTL_TEXTENCODING_UTF8);
 
     MyFindData it;
-    rtl_zeroMemory (&it, sizeof(it));
+    memset (&it, 0, sizeof(it));
 
     sal_Int32 n = rtl_str_getLength (pszFilename);
     n = __store_convertTextToUnicode (
         hConvert, pszFilename, n,
         it.m_pszName, STORE_MAXIMUM_NAMESIZE - 1);
     if (it.m_nLength > n)
-        rtl_zeroMemory (
-            &it.m_pszName[n], ((it.m_nLength - n) * sizeof(sal_Unicode)));
+        memset (
+            &it.m_pszName[n], 0, ((it.m_nLength - n) * sizeof(sal_Unicode)));
     it.m_nLength = n;
 
     rtl_destroyTextToUnicodeConverter (hConvert);
@@ -340,8 +340,8 @@ int SAL_CALL main (int argc, char **argv)
     xLockBytes.clear();
 
     sal_Char pBuffer[TEST_PAGESIZE];
-    rtl_zeroMemory (pBuffer, sizeof (pBuffer));
-    rtl_copyMemory (pBuffer, argv[0], rtl_str_getLength(argv[0]) + 1);
+    memset (pBuffer, 0, sizeof (pBuffer));
+    memcpy (pBuffer, argv[0], rtl_str_getLength(argv[0]) + 1);
 
     eErrCode = xBIOS->write (TEST_PAGESIZE, pBuffer, sizeof (pBuffer));
     if (eErrCode != store_E_None)

@@ -57,12 +57,13 @@
  * @file
  * Date field with date style.
  ************************************************************************/
+#include <string.h>
 #include    "xfdate.hxx"
 
 XFDate::XFDate()
 {
     m_bFixed = 0;
-    rtl_zeroMemory(&m_aDateTime,sizeof(m_aDateTime));
+    memset(&m_aDateTime, 0, sizeof(m_aDateTime));
     m_bValued = sal_False;
 }
 

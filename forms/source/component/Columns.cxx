@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include "Columns.hxx"
 #include "property.hrc"
 #include "property.hxx"
@@ -49,7 +51,6 @@
 #include "services.hxx"
 #include "frm_resource.hrc"
 #include <tools/debug.hxx>
-#include <rtl/memory.h>
 
 //.........................................................................
 namespace frm
@@ -138,7 +139,7 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
     sal_Int64 nReturn(0);
 
     if  (   (_rIdentifier.getLength() == 16)
-        &&  (0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
+        &&  (0 == memcmp( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
         )
     {
         nReturn = reinterpret_cast<sal_Int64>(this);
