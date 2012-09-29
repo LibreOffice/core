@@ -116,9 +116,10 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
         {
             sActTrans ="";
         }
-        const vector<PoEntry::TYPE> vTypes = { PoEntry::TTEXT,
-                                               PoEntry::TQUICKHELPTEXT,
-                                               PoEntry::TTITLE };
+        const PoEntry::TYPE vInitializer[] =
+            { PoEntry::TTEXT, PoEntry::TQUICKHELPTEXT, PoEntry::TTITLE };
+        const vector<PoEntry::TYPE> vTypes( vInitializer,
+            vInitializer + sizeof(vInitializer) / sizeof(vInitializer[0]) );
         unsigned short nDummyBit = 0;
         for( unsigned nIndex=0; nIndex<vTypes.size(); ++nIndex)
         {
