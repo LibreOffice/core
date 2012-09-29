@@ -176,6 +176,10 @@ gb_Jar_$(1) += $(2)
 
 endef
 
+define gb_Helper_define_if_set
+$(foreach def,$(1),$(if $(filter TRUE YES,$($(def))),-D$(def)))
+endef
+
 define gb_Helper_execute
 $(gb_Helper_set_ld_path) $(OUTDIR_FOR_BUILD)/bin/$(1)
 endef

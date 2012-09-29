@@ -245,12 +245,10 @@ gb_GLOBALDEFS := \
 
 
 ifeq ($(gb_PRODUCT),$(false))
-gb_GLOBALDEFS += \
-	-DDBG_UTIL \
+gb_GLOBALDEFS += -DDBG_UTIL \
 
 ifneq ($(COM),MSC)
-gb_GLOBALDEFS += \
-	-D_DEBUG \
+gb_GLOBALDEFS += -D_DEBUG \
 
 endif
 endif
@@ -260,80 +258,47 @@ gb_GLOBALDEFS += -DSOLAR_JAVA
 endif
 
 ifeq ($(gb_TIMELOG),1)
-gb_GLOBALDEFS += \
-	-DTIMELOG \
+gb_GLOBALDEFS += -DTIMELOG \
 
 endif
 
 ifeq ($(gb_DEBUGLEVEL),0)
-gb_GLOBALDEFS += \
-	-DOPTIMIZE \
+gb_GLOBALDEFS += -DOPTIMIZE \
 
 ifeq ($(strip $(ASSERT_ALWAYS_ABORT)),FALSE)
-gb_GLOBALDEFS += \
-	-DNDEBUG \
+gb_GLOBALDEFS += -DNDEBUG \
 
 endif
 
 else
-gb_GLOBALDEFS += \
-    -DSAL_LOG_INFO \
-    -DSAL_LOG_WARN \
+gb_GLOBALDEFS += -DSAL_LOG_INFO \
+				 -DSAL_LOG_WARN \
 
 ifneq ($(gb_DEBUGLEVEL),1) # 2 or more
+gb_GLOBALDEFS += -DDEBUG \
+
+endif
+endif
+
+ifeq ($(ENABLE_HEADLESS),TRUE)
+gb_GLOBALDEFS += -DLIBO_HEADLESS \
+
+endif
+
 gb_GLOBALDEFS += \
-	-DDEBUG \
-
-endif
-endif
-
-ifneq ($(strip $(ENABLE_GTK)),)
-gb_GLOBALDEFS += -DENABLE_GTK
-endif
-
-ifneq ($(strip $(ENABLE_TDE)),)
-gb_GLOBALDEFS += -DENABLE_TDE
-endif
-
-ifneq ($(strip $(ENABLE_KDE)),)
-gb_GLOBALDEFS += -DENABLE_KDE
-endif
-
-ifneq ($(strip $(ENABLE_KDE4)),)
-gb_GLOBALDEFS += -DENABLE_KDE4
-endif
-
-ifeq ($(strip $(ENABLE_GRAPHITE)),TRUE)
-gb_GLOBALDEFS += -DENABLE_GRAPHITE
-endif
-
-ifeq ($(strip $(ENABLE_HEADLESS)),TRUE)
-gb_GLOBALDEFS += -DLIBO_HEADLESS
-endif
-
-ifeq ($(strip $(DISABLE_DBCONNECTIVITY)),TRUE)
-gb_GLOBALDEFS += -DDISABLE_DBCONNECTIVITY
-endif
-
-ifeq ($(strip $(DISABLE_EXTENSIONS)),TRUE)
-gb_GLOBALDEFS += -DDISABLE_EXTENSIONS
-endif
-
-ifeq ($(strip $(DISABLE_SCRIPTING)),TRUE)
-gb_GLOBALDEFS += -DDISABLE_SCRIPTING
-endif
-
-ifeq ($(strip $(DISABLE_DYNLOADING)),TRUE)
-gb_GLOBALDEFS += -DDISABLE_DYNLOADING
-endif
-
-ifeq ($(HAVE_THREADSAFE_STATICS),TRUE)
-gb_GLOBALDEFS += -DHAVE_THREADSAFE_STATICS
-endif
-
-ifeq ($(ENABLE_TELEPATHY),TRUE)
-gb_GLOBALDEFS += -DENABLE_TELEPATHY
-endif
+	$(call gb_Helper_define_if_set,\
+		DISABLE_DBCONNECTIVITY \
+		DISABLE_DYNLOADING \
+		DISABLE_EXTENSIONS \
+		DISABLE_SCRIPTING \
+		ENABLE_GRAPHITE \
+		ENABLE_GTK \
+		ENABLE_KDE \
+		ENABLE_KDE4 \
+		ENABLE_TDE \
+		ENABLE_TELEPATHY \
+		HAVE_THREADSAFE_STATICS \
+	)
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
