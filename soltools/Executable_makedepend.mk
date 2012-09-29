@@ -25,10 +25,6 @@ $(eval $(call gb_Executable_add_defs,makedepend,\
     -wd4131 \
     -wd4706 \
 ))
-
-$(eval $(call gb_Executable_use_libraries,makedepend,\
-    msvcprt \
-))
 endif
 
 $(eval $(call gb_Executable_add_cobjects,makedepend,\
