@@ -338,10 +338,12 @@ void ImplFindAllTag(const OString& rText,std::vector<OString>& o_vFoundTags)
 OString ImplEscapeTags(const OString& rText)
 {
     typedef std::vector<OString> StrVec;
-    const StrVec vTagsForEscape =
-                  { "ahelp", "link", "item", "emph", "defaultinline",
-                    "switchinline", "caseinline", "variable",
-                    "bookmark_value", "image", "embedvar", "alt" };
+    const OString vInitializer[] = {
+        "ahelp", "link", "item", "emph", "defaultinline",
+        "switchinline", "caseinline", "variable",
+        "bookmark_value", "image", "embedvar", "alt" };
+    const StrVec vTagsForEscape( vInitializer,
+        vInitializer + sizeof(vInitializer) / sizeof(vInitializer[0]) );
     StrVec vFoundTags;
     ImplFindAllTag(rText,vFoundTags);
     OString sResult = rText;
