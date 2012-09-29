@@ -144,8 +144,6 @@ class Desktop : public Application
         void                    RegisterServices();
         void                    DeregisterServices();
 
-        void                    DestroyApplicationServiceManager( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
-
         void                    CreateTemporaryDirectory();
         void                    RemoveTemporaryDirectory();
 

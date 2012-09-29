@@ -24,7 +24,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -117,22 +116,11 @@ bool SAL_CALL SfxDialogLibraryContainer::isLibraryElementValid( Any aElement ) c
 bool writeOasis2OOoLibraryElement(
     Reference< XInputStream > xInput, Reference< XOutputStream > xOutput )
 {
-    Reference< XMultiServiceFactory > xMSF(
-        comphelper::getProcessServiceFactory() );
-
-    Reference< XComponentContext > xContext;
-    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
-    OSL_VERIFY( xProps->getPropertyValue(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+    Reference< XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
 
     Reference< lang::XMultiComponentFactory > xSMgr(
         xContext->getServiceManager() );
-
-    if (! xSMgr.is())
-    {
-        return sal_False;
-    }
 
     Reference< xml::sax::XParser > xParser(
         xSMgr->createInstanceWithContext(
@@ -267,10 +255,8 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                     Reference< io::XInputStream > xInput( xISP->createInputStream() );
                     Reference< XNameContainer > xDialogModel( mxMSF->createInstance
                         ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
-                    Reference< XComponentContext > xContext;
-                    Reference< beans::XPropertySet > xProps( mxMSF, UNO_QUERY );
-                    OSL_ASSERT( xProps.is() );
-                    OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+                    Reference< XComponentContext > xContext(
+                        comphelper::getComponentContext( mxMSF ) );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, mxOwnerDocument );
                     std::vector< rtl::OUString > vEmbeddedImageURLs;
                     GraphicObject::InspectForGraphicObjectImageURL( Reference< XInterface >( xDialogModel, UNO_QUERY ),  vEmbeddedImageURLs );
@@ -351,10 +337,8 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     if( !xInput.is() )
         return aRetAny;
 
-    Reference< XComponentContext > xContext;
-    Reference< beans::XPropertySet > xProps( mxMSF, UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
-    OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+    Reference< XComponentContext > xContext(
+        comphelper::getComponentContext( mxMSF ) );
 
     InputSource source;
     source.aInputStream = xInput;

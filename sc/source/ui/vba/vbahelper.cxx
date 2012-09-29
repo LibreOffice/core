@@ -124,10 +124,10 @@ private:
     bool bInitialWarningState;
     static uno::Reference< beans::XPropertySet > getGlobalSheetSettings() throw ( uno::RuntimeException )
     {
-        static uno::Reference< beans::XPropertySet > xTmpProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        static uno::Reference<uno::XComponentContext > xContext( xTmpProps->getPropertyValue( rtl::OUString(  "DefaultContext" )), uno::UNO_QUERY_THROW );
+        static uno::Reference<uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
         static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-                xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+            xContext->getServiceManager() );
         static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString(  "com.sun.star.sheet.GlobalSheetSettings"  ) ,xContext ), uno::UNO_QUERY_THROW );
         return xProps;
     }
@@ -279,11 +279,10 @@ getCurrentDocument() throw (uno::RuntimeException)
         if ( false == ( aModel >>= xModel ) ||
             !xModel.is() )
         {
-            // trying last gasp try the current component
-            uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-            // test if vba service is present
-            uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString(  "DefaultContext" )), uno::UNO_QUERY_THROW );
-            uno::Reference<lang::XMultiComponentFactory > xSMgr( xCtx->getServiceManager(), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xCtx(
+                comphelper::getProcessComponentContext() );
+            uno::Reference<lang::XMultiComponentFactory > xSMgr(
+                xCtx->getServiceManager() );
             uno::Reference< frame::XDesktop > xDesktop (xSMgr->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Desktop"), xCtx), uno::UNO_QUERY_THROW );
             xModel.set( xDesktop->getCurrentComponent(), uno::UNO_QUERY );
             if ( !xModel.is() )

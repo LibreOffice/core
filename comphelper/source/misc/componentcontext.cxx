@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/componentcontext.hxx>
-
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -53,8 +53,6 @@ namespace comphelper
     {
         if ( m_xContext.is() )
             m_xORB = m_xContext->getServiceManager();
-        if ( !m_xORB.is() )
-            throw NullPointerException();
     }
 
     //------------------------------------------------------------------------
@@ -63,23 +61,8 @@ namespace comphelper
         if ( !_rxLegacyFactory.is() )
             throw NullPointerException();
 
-        try
-        {
-            Reference< XPropertySet > xFactoryProperties( _rxLegacyFactory, UNO_QUERY_THROW );
-            m_xContext = Reference< XComponentContext >(
-                xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
-                UNO_QUERY );
-        }
-        catch( const RuntimeException& ) { throw; }
-        catch( const Exception& )
-        {
-            throw RuntimeException();
-        }
-
-        if ( m_xContext.is() )
-            m_xORB = m_xContext->getServiceManager();
-        if ( !m_xORB.is() )
-            throw NullPointerException();
+        m_xContext = comphelper::getComponentContext( _rxLegacyFactory );
+        m_xORB = m_xContext->getServiceManager();
     }
 
     //------------------------------------------------------------------------

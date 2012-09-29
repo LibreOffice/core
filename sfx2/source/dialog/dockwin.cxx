@@ -163,17 +163,12 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
         uno::Reference< awt::XWindow > xWindow;
         try
         {
-            uno::Reference< beans::XPropertySet >    xProps( xServiceManager, uno::UNO_QUERY );
-            uno::Reference< uno::XComponentContext > xContext;
+            uno::Reference< uno::XComponentContext > xContext(
+                comphelper::getComponentContext( xServiceManager ) );
 
-            if ( xProps.is() )
-                xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
-            if ( xContext.is() )
-            {
-                xWindow = uno::Reference< awt::XWindow>(
-                            xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
-                          uno::UNO_QUERY );
-            }
+            xWindow = uno::Reference< awt::XWindow>(
+                xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
+                uno::UNO_QUERY );
 
             static uno::WeakReference< frame::XModuleManager2 >  m_xModuleManager;
 

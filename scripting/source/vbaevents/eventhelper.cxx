@@ -368,14 +368,10 @@ eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescrip
 
 }
 
-ScriptEventHelper::ScriptEventHelper( const Reference< XInterface >& xControl ) : m_xControl( xControl )
-{
-    Reference < beans::XPropertySet > xProps(
-        ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-    m_xCtx.set( xProps->getPropertyValue( rtl::OUString(
-        "DefaultContext" )),
-        uno::UNO_QUERY_THROW );
-}
+ScriptEventHelper::ScriptEventHelper( const Reference< XInterface >& xControl ):
+    m_xCtx( comphelper::getProcessComponentContext() ),
+    m_xControl( xControl )
+{}
 
 Sequence< rtl::OUString >
 ScriptEventHelper::getEventListeners()

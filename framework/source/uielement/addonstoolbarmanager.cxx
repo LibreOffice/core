@@ -50,12 +50,11 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/unohlp.hxx>
@@ -235,11 +234,8 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     }
 
     Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
-    Reference< XComponentContext > xComponentContext;
-    Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
-
-    if ( xProps.is() )
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
+    Reference< XComponentContext > xComponentContext(
+        comphelper::getComponentContext( m_xServiceManager ) );
 
     sal_uInt32  nElements( 0 );
     sal_Bool    bAppendSeparator( sal_False );

@@ -32,6 +32,7 @@ $(eval $(call gb_Library_set_componentfile,ucphier1,ucb/source/ucp/hierarchy/ucp
 $(eval $(call gb_Library_use_sdk_api,ucphier1))
 
 $(eval $(call gb_Library_use_libraries,ucphier1,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

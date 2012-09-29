@@ -835,13 +835,10 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
 
         if ( bMustExpand )
         {
-            Reference< XComponentContext > xContext;
-            Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-            xProps->getPropertyValue(
-                ::rtl::OUString( "DefaultContext"  ) ) >>= xContext;
-            if ( xContext.is() )
-                m_xMacroExpander = Reference< com::sun::star::util::XMacroExpander >(
-                    xContext->getValueByName( ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) ), UNO_QUERY );
+            Reference< XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
+            m_xMacroExpander = Reference< com::sun::star::util::XMacroExpander >(
+                xContext->getValueByName( ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) ), UNO_QUERY );
         }
 
         SvLBoxEntry* pTemp = aTreeLB.First();

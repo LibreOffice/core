@@ -118,10 +118,10 @@ private:
     bool bInitialWarningState;
     static uno::Reference< beans::XPropertySet > getGlobalSheetSettings() throw ( uno::RuntimeException )
     {
-        static uno::Reference< beans::XPropertySet > xTmpProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        static uno::Reference<uno::XComponentContext > xContext( xTmpProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
+        static uno::Reference<uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
         static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-                xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+                xContext->getServiceManager() );
         static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.GlobalSheetSettings" ) ) ,xContext ), uno::UNO_QUERY_THROW );
         return xProps;
     }

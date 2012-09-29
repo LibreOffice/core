@@ -41,7 +41,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/io/Pipe.hpp>
@@ -1705,12 +1704,8 @@ void UniversalContentBroker::globalTransfer(
     uno::Reference< ucb::XCommandEnvironment > xLocalEnv;
     if (xEnv.is())
     {
-        uno::Reference< beans::XPropertySet > const xProps(
-            m_xSMgr, uno::UNO_QUERY_THROW );
-        uno::Reference< uno::XComponentContext > xCtx;
-            xCtx.set( xProps->getPropertyValue(
-                rtl::OUString( "DefaultContext"  ) ),
-                uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XComponentContext > xCtx(
+            comphelper::getComponentContext( m_xSMgr ) );
 
             xLocalEnv.set( ucb::CommandEnvironment::create(
                xCtx,

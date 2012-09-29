@@ -38,7 +38,6 @@
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>
@@ -81,16 +80,12 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
 
         if ( !xMacroExpander.is() )
         {
-            uno::Reference< uno::XComponentContext > xContext;
-            uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
-            if ( xContext.is() )
-            {
-                m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
+            uno::Reference< uno::XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
+            m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
                                         UNO_QUERY );
-                xMacroExpander = m_xMacroExpander;
-            }
+            xMacroExpander = m_xMacroExpander;
         }
     }
 

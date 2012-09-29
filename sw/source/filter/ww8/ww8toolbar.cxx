@@ -370,8 +370,8 @@ bool Customization::ImportMenu( CTBWrapper& rWrapper, CustomToolBarImportHelper&
                     }
 
                     uno::Reference< lang::XSingleComponentFactory > xSCF( xIndexContainer, uno::UNO_QUERY_THROW );
-                    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-                    uno::Reference< uno::XComponentContext > xContext(  xProps->getPropertyValue( "DefaultContext" ), uno::UNO_QUERY_THROW );
+                    uno::Reference< uno::XComponentContext > xContext(
+                        comphelper::getProcessComponentContext() );
                     // create the popup menu
                     uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
                     aPopupMenu[0].Name = "CommandURL";

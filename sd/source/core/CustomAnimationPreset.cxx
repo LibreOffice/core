@@ -34,7 +34,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unotools/streamwrap.hxx>
@@ -316,19 +315,14 @@ void CustomAnimationPresets::importEffects()
 {
     try
     {
-        // Get service factory
-        Reference< XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
-        DBG_ASSERT( xServiceFactory.is(), "sd::CustomAnimationPresets::import(), got no service manager" );
-        if( !xServiceFactory.is() )
-            return;
+        uno::Reference< uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
+        Reference< XMultiServiceFactory > xServiceFactory(
+            xContext->getServiceManager(), UNO_QUERY_THROW );
 
-        uno::Reference< beans::XPropertySet > xProps( xServiceFactory, UNO_QUERY );
-        uno::Reference< uno::XComponentContext > xContext;
-        xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
-
-        uno::Reference< util::XMacroExpander > xMacroExpander;
-        if( xContext.is() )
-            xMacroExpander.set( xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"), UNO_QUERY );
+        uno::Reference< util::XMacroExpander > xMacroExpander(
+            xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"),
+            UNO_QUERY );
 
         Reference< XMultiServiceFactory > xConfigProvider(
             xServiceFactory->createInstance("com.sun.star.configuration.ConfigurationProvider" ),

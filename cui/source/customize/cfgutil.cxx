@@ -596,12 +596,10 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     OSL_TRACE("** ** About to initialise SF Scripts");
     // Add Scripting Framework entries
     Reference< browse::XBrowseNode > rootNode;
-    Reference< XComponentContext > xCtx;
+    Reference< XComponentContext > xCtx(
+        comphelper::getProcessComponentContext() );
     try
     {
-        Reference < beans::XPropertySet > xProps(
-            ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-        xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
         Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ) ), UNO_QUERY_THROW );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );

@@ -72,20 +72,6 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-Reference< uno::XComponentContext > lcl_getComponentContext()
-{
-    Reference< uno::XComponentContext > xContext;
-    try
-    {
-        Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-        if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString( "DefaultContext" )) >>= xContext;
-    }
-    catch( uno::Exception& )
-    {}
-
-    return xContext;
-}
 
 rtl::OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& xChartModel )
 {
@@ -375,13 +361,12 @@ XMLTokenEnum getTokenByChartType(
 
 Reference< chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence()
 {
-    Reference< chart2::data::XLabeledDataSequence >  xResult;
-    Reference< uno::XComponentContext > xContext( lcl_getComponentContext());
-    if( xContext.is() )
-        xResult.set(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUString( "com.sun.star.chart2.data.LabeledDataSequence" ),
-                xContext ), uno::UNO_QUERY_THROW );
+    Reference< uno::XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
+    Reference< chart2::data::XLabeledDataSequence > xResult(
+        xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.chart2.data.LabeledDataSequence", xContext ),
+        uno::UNO_QUERY_THROW );
     return xResult;
 }
 

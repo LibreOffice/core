@@ -53,6 +53,7 @@ $(eval $(call gb_Executable_add_libs,nsplugin,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,nsplugin,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

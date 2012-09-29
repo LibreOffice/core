@@ -897,16 +897,13 @@ void ToolBarManager::CreateControllers()
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::CreateControllers" );
 
     Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
-    Reference< XComponentContext > xComponentContext;
-    Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
+    Reference< XComponentContext > xComponentContext(
+        comphelper::getComponentContext( m_xServiceManager ) );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
 
     css::util::URL      aURL;
     sal_Bool            bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
     SvtCommandOptions   aCmdOptions;
-
-    if ( xProps.is() )
-        xProps->getPropertyValue( rtl::OUString( "DefaultContext" )) >>= xComponentContext;
 
     for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {

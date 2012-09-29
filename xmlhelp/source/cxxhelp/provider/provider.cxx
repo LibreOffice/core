@@ -44,7 +44,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <rtl/bootstrap.hxx>
 
@@ -345,15 +345,8 @@ void ContentProvider::init()
     rtl::Bootstrap::expandMacros(aPath);
     aImagesZipPaths[ 1 ] = aPath;
 
-    uno::Reference< uno::XComponentContext > xContext;
-    uno::Reference< beans::XPropertySet > xProps( m_xSMgr, uno::UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
-    if (xProps.is())
-    {
-        xProps->getPropertyValue(
-            ::rtl::OUString( "DefaultContext" ) ) >>= xContext;
-        OSL_ASSERT( xContext.is() );
-    }
+    uno::Reference< uno::XComponentContext > xContext(
+        comphelper::getComponentContext( m_xSMgr ) );
 
     sal_Bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
     m_pDatabases = new Databases( showBasic,

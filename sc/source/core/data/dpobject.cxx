@@ -2628,9 +2628,6 @@ uno::Sequence<rtl::OUString> ScDPObject::GetRegisteredSources()
     return aSeq;
 }
 
-// use getContext from addincol.cxx
-uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiServiceFactory> xMSF);
-
 uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPServiceDesc& rDesc )
 {
     rtl::OUString aImplName = rDesc.aServiceName;
@@ -2664,9 +2661,10 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
             // passing the context to the component (see ScUnoAddInCollection::Initialize)
 
             uno::Reference<uno::XInterface> xInterface;
-            uno::Reference<uno::XComponentContext> xCtx = getContext(xManager);
+            uno::Reference<uno::XComponentContext> xCtx(
+                comphelper::getComponentContext(xManager));
             uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
-            if (xCtx.is() && xCFac.is())
+            if (xCFac.is())
                 xInterface = xCFac->createInstanceWithContext(xCtx);
 
             if (!xInterface.is())

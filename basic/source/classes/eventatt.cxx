@@ -94,23 +94,18 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
             }
             else
             {
-                Reference< XComponentContext > xContext;
-                Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-                OSL_ASSERT( xProps.is() );
-                OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-                if ( xContext.is() )
-                {
-                    Reference< provider::XScriptProviderFactory > xFactory(
-                        xContext->getValueByName(
+                Reference< XComponentContext > xContext(
+                    comphelper::getProcessComponentContext() );
+                Reference< provider::XScriptProviderFactory > xFactory(
+                    xContext->getValueByName(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory")) ),
-                        UNO_QUERY );
-                    OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
-                    if ( xFactory.is() )
-                    {
-                        Any aCtx;
-                        aCtx <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
-                        xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
-                    }
+                    UNO_QUERY );
+                OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
+                if ( xFactory.is() )
+                {
+                    Any aCtx;
+                    aCtx <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
+                    xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
                 }
             }
 
@@ -469,10 +464,8 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     if( !xISP.is() )
         return;
 
-    Reference< XComponentContext > xContext;
-    Reference< XPropertySet > xProps( xMSF, UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
-    OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+    Reference< XComponentContext > xContext(
+        comphelper::getComponentContext( xMSF ) );
 
     // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );

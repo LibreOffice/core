@@ -281,19 +281,6 @@ void ScUnoAddInCollection::Clear()
     bInitialized = false;
 }
 
-uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiServiceFactory> xMSF)
-{
-    uno::Reference<uno::XComponentContext> xCtx;
-    try {
-        uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
-        xPropset->getPropertyValue(
-            ::rtl::OUString("DefaultContext")) >>= xCtx;
-    }
-    catch ( uno::Exception & ) {
-    }
-    return xCtx;
-}
-
 void ScUnoAddInCollection::Initialize()
 {
     OSL_ENSURE( !bInitialized, "Initialize twice?" );
@@ -321,9 +308,10 @@ void ScUnoAddInCollection::Initialize()
                         // passing the context to the component
 
                         uno::Reference<uno::XInterface> xInterface;
-                        uno::Reference<uno::XComponentContext> xCtx = getContext(xManager);
+                        uno::Reference<uno::XComponentContext> xCtx(
+                            comphelper::getComponentContext(xManager));
                         uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
-                        if (xCtx.is() && xCFac.is())
+                        if (xCFac.is())
                         {
                             xInterface = xCFac->createInstanceWithContext(xCtx);
                             if (xInterface.is())

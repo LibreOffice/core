@@ -127,10 +127,8 @@ void PropBrw::ImplReCreateController()
 
     try
     {
-        Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
         Reference< XComponentContext > xOwnContext(
-            xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
-            UNO_QUERY_THROW );
+            comphelper::getComponentContext( m_xORB ) );
 
         // a ComponentContext for the
         ::cppu::ContextEntry_Init aHandlerContextInfo[] =

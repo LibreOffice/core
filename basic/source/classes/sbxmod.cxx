@@ -139,7 +139,6 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
     {
         if ( pMod->GetModuleType() == ModuleType::DOCUMENT )
         {
-            Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
             // Use proxy factory service to create aggregatable proxy.
             SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pMod->GetObject() );
             Reference< XInterface > xIf;
@@ -157,11 +156,10 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
             {
                 try
                 {
-                    Reference< XMultiComponentFactory > xMFac( xFactory, UNO_QUERY_THROW );
-                    Reference< XPropertySet> xPSMPropertySet( xMFac, UNO_QUERY_THROW );
-                    Reference< XComponentContext >  xCtx;
-                    xPSMPropertySet->getPropertyValue(
-                    String( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xCtx;
+                    Reference< XComponentContext > xCtx(
+                        comphelper::getProcessComponentContext() );
+                    Reference< XMultiComponentFactory > xMFac(
+                        xCtx->getServiceManager() );
                     Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( rtl::OUString( "com.sun.star.reflection.ProxyFactory"  ), xCtx  ), UNO_QUERY_THROW );
                     m_xAggProxy = xProxyFac->createProxy( xIf );
                 }

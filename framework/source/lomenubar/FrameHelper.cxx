@@ -591,9 +591,8 @@ FrameHelper::rebuildMenu (Reference < XMenu >  xMenu,
         //we need to access that info through a special XPopupMenuController
         if (isSpecialSubmenu (oUCommand))
         {
-            Reference < XPropertySet > xMSFProps (m_xMSF, UNO_QUERY);
-            Reference <XComponentContext> xContext (xMSFProps->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))),
-                                                    UNO_QUERY);
+            Reference <XComponentContext> xContext(
+                comphelper::getComponentContext(m_xMSF));
 
             Reference < XPopupMenuController > xRFC (m_xPCF->createInstanceWithArgumentsAndContext(oUCommand,
                                                                                                  m_args,
@@ -736,9 +735,8 @@ FrameHelper::dispatchCommand (OUString command)
     {
         target = OUString(RTL_CONSTASCII_USTRINGPARAM("_default"));
 
-        Reference < XPropertySet > xMSFProps (m_xMSF, UNO_QUERY);
-        Reference <XComponentContext> xContext (xMSFProps->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))),
-                                                UNO_QUERY);
+        Reference <XComponentContext> xContext(
+            comphelper::getComponentContext(m_xMSF));
         Reference < XPopupMenuController > xRFC (m_xPCF->createInstanceWithArgumentsAndContext(OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RecentFileList")),
                                                                                              m_args,
                                                                                              xContext),

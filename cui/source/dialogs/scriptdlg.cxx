@@ -164,7 +164,8 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
     deleteAllTree();
 
     Reference< browse::XBrowseNode > rootNode;
-    Reference< XComponentContext > xCtx;
+    Reference< XComponentContext > xCtx(
+        comphelper::getProcessComponentContext() );
 
     Sequence< Reference< browse::XBrowseNode > > children;
 
@@ -175,12 +176,6 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
     try
     {
-        Reference < beans::XPropertySet > xProps(
-            ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-
-        xCtx.set( xProps->getPropertyValue( rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("DefaultContext" ))), UNO_QUERY_THROW );
-
         Reference< browse::XBrowseNodeFactory > xFac(
             xCtx->getValueByName( singleton ), UNO_QUERY_THROW );
 

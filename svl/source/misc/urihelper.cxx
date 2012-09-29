@@ -18,8 +18,6 @@
  */
 
 #include <svl/urihelper.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/ucb/Command.hpp"
 #include "com/sun/star/ucb/IllegalIdentifierException.hpp"
 #include "com/sun/star/ucb/UniversalContentBroker.hpp"
@@ -291,15 +289,8 @@ rtl::OUString URIHelper::simpleNormalizedMakeRelative(
 {
     com::sun::star::uno::Reference< com::sun::star::uri::XUriReference > rel(
         URIHelper::normalizedMakeRelative(
-            com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext >(
-                (com::sun::star::uno::Reference<
-                 com::sun::star::beans::XPropertySet >(
-                    comphelper::getProcessServiceFactory(),
-                    com::sun::star::uno::UNO_QUERY_THROW)->
-                 getPropertyValue("DefaultContext")),
-                com::sun::star::uno::UNO_QUERY_THROW),
-            baseUriReference, uriReference));
+            comphelper::getProcessComponentContext(), baseUriReference,
+            uriReference));
     return rel.is() ? rel->getUriReference() : uriReference;
 }
 

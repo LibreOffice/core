@@ -41,6 +41,7 @@
 #include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <util/util.hxx>
@@ -50,7 +51,6 @@
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "com/sun/star/uri/XUriReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarScriptUrl.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -383,13 +383,8 @@ void ScriptProtocolHandler::createScriptProvider()
         // if nothing of this is successful, use the master script provider
         if ( !m_xScriptProvider.is() )
         {
-            Reference< XPropertySet > xProps( m_xFactory, UNO_QUERY_THROW );
-
-            ::rtl::OUString dc(
-                "DefaultContext"  );
-
             Reference< XComponentContext > xCtx(
-                xProps->getPropertyValue( dc ), UNO_QUERY_THROW );
+                comphelper::getComponentContext( m_xFactory ) );
 
             ::rtl::OUString tmspf(
                 "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory");

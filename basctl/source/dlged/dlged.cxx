@@ -742,10 +742,8 @@ void DlgEditor::Copy()
     }
 
     // export clipboard dialog model to xml
-    Reference< XComponentContext > xContext;
-    Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
-    OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+    Reference< XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel, xContext, m_xDocument );
     Reference< XInputStream > xStream( xISP->createInputStream() );
     Sequence< sal_Int8 > DialogModelBytes;
@@ -920,10 +918,8 @@ void DlgEditor::Paste()
 
                 if ( xClipDialogModel.is() )
                 {
-                    Reference< XComponentContext > xContext;
-                    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
-                    OSL_ASSERT( xProps.is() );
-                    OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+                    Reference< XComponentContext > xContext(
+                        comphelper::getComponentContext( xMSF ) );
                     ::xmlscript::importDialogModel( ::xmlscript::createInputStream( rtl::ByteSequence(DialogModelBytes.getArray(), DialogModelBytes.getLength()) ) , xClipDialogModel, xContext, m_xDocument );
                 }
 

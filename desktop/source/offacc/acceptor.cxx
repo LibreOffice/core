@@ -31,10 +31,9 @@
 #include <unotools/bootstrap.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 
 namespace desktop
@@ -43,15 +42,6 @@ namespace desktop
 extern "C" void workerfunc (void * acc)
 {
     ((Acceptor*)acc)->run();
-}
-
-static Reference<XComponentContext> getComponentContext( const Reference<XMultiServiceFactory>& rFactory)
-{
-    Reference<XComponentContext> rContext;
-    Reference< XPropertySet > rPropSet( rFactory, UNO_QUERY );
-    Any a = rPropSet->getPropertyValue( ::rtl::OUString( "DefaultContext"  ) );
-    a >>= rContext;
-    return rContext;
 }
 
 Mutex Acceptor::m_aMutex;
@@ -66,7 +56,7 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
 {
     m_rSMgr = rFactory;
     // get component context
-    m_rContext = getComponentContext(m_rSMgr);
+    m_rContext = comphelper::getComponentContext(m_rSMgr);
     m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
         rtl::OUString("com.sun.star.connection.Acceptor" )),
         UNO_QUERY );
@@ -266,7 +256,7 @@ Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString&
     }
     else if(aName.compareToAscii( "StarOffice.ComponentContext" ) == 0 )
     {
-        rInstance = getComponentContext( m_rSMgr );
+        rInstance = comphelper::getComponentContext( m_rSMgr );
     }
     else if ( aName.compareToAscii("StarOffice.NamingService" ) == 0 )
     {
@@ -278,7 +268,7 @@ Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString&
             rNamingService->registerObject(
                 OUString("StarOffice.ServiceManager" ), m_rSMgr );
             rNamingService->registerObject(
-                OUString("StarOffice.ComponentContext" ), getComponentContext( m_rSMgr ));
+                OUString("StarOffice.ComponentContext" ), comphelper::getComponentContext( m_rSMgr ));
             rInstance = rNamingService;
         }
     }

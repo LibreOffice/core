@@ -22,7 +22,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/officeresourcebundle.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/diagnose_ex.h>
@@ -35,8 +34,6 @@ namespace connectivity
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Exception;
     /** === end UNO using === **/
@@ -82,12 +79,8 @@ namespace connectivity
     {
         try
         {
-            Reference< XPropertySet > xFactoryProps(
-                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             Reference< XComponentContext > xContext(
-                xFactoryProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
-                UNO_QUERY_THROW
-            );
+                comphelper::getProcessComponentContext() );
             m_pResourceBundle.reset( new ::comphelper::OfficeResourceBundle( xContext, "cnr" ) );
         }
         catch( const Exception& )

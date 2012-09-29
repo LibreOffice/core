@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -635,15 +634,9 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
 
     uno::Reference< lang::XSingleComponentFactory > xIndAccessFact( xContMenu, uno::UNO_QUERY_THROW );
 
-    uno::Reference< uno::XComponentContext > xComponentContext;
-
-    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-    if ( xProps.is() )
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>=
-            xComponentContext;
-
     uno::Reference< container::XIndexContainer > xMergedMenu(
-            xIndAccessFact->createInstanceWithContext( xComponentContext ),
+            xIndAccessFact->createInstanceWithContext(
+                comphelper::getProcessComponentContext() ),
             uno::UNO_QUERY_THROW );
 
     FindConnectPoints( xContMenu, nContPoints );

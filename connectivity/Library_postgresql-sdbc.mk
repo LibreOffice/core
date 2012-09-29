@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_defs,postgresql-sdbc,\
 $(eval $(call gb_Library_use_sdk_api,postgresql-sdbc))
 
 $(eval $(call gb_Library_use_libraries,postgresql-sdbc,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

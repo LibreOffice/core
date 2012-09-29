@@ -43,7 +43,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -1217,11 +1216,8 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
         aPropValue.Value      <<= m_xFrame;
         aSeq[1] <<= aPropValue;
 
-        Reference< XComponentContext > xComponentContext;
-        Reference< XPropertySet >      xProps( getServiceFactory(), UNO_QUERY );
-
-        xProps->getPropertyValue( rtl::OUString( "DefaultContext" )) >>=
-            xComponentContext;
+        Reference< XComponentContext > xComponentContext(
+            comphelper::getComponentContext( getServiceFactory() ) );
 
         Reference< XPopupMenuController > xPopupMenuController(
                                                 xPopupMenuControllerFactory->createInstanceWithArgumentsAndContext(
