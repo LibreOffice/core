@@ -355,6 +355,8 @@ void ScFiltersTest::testRangeNameXLSX()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     testRangeNameImpl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testHardRecalcODS()
