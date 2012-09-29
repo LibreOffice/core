@@ -40,9 +40,10 @@
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <tools/errcode.hxx>
 
 using namespace com::sun::star;
@@ -50,15 +51,14 @@ using namespace com::sun::star;
 namespace
 {
 
-typedef ::cppu::WeakComponentImplHelper2<
-    com::sun::star::task::XInteractionRequest,
-    com::sun::star::task::XInteractionPassword > PDFPasswordRequestBase;
-
-class PDFPasswordRequest : private cppu::BaseMutex,
-                           public PDFPasswordRequestBase
+class PDFPasswordRequest:
+    public cppu::WeakImplHelper2<
+        task::XInteractionRequest, task::XInteractionPassword >,
+    private boost::noncopyable
 {
 private:
-    task::DocumentPasswordRequest m_aRequest;
+    mutable osl::Mutex            m_aMutex;
+    uno::Any                      m_aRequest;
     rtl::OUString                 m_aPassword;
     bool                          m_bSelected;
 
@@ -77,54 +77,51 @@ public:
     virtual void SAL_CALL select() throw (uno::RuntimeException);
 
     bool isSelected() const { osl::MutexGuard const guard( m_aMutex ); return m_bSelected; }
+
+private:
+    virtual ~PDFPasswordRequest() {}
 };
 
 PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const rtl::OUString& rName ) :
-    PDFPasswordRequestBase( m_aMutex ),
-    m_aRequest(),
-    m_aPassword(),
+    m_aRequest(
+        uno::makeAny(
+            task::DocumentPasswordRequest(
+                OUString(), uno::Reference< uno::XInterface >(),
+                task::InteractionClassification_QUERY,
+                (bFirstTry
+                 ? task::PasswordRequestMode_PASSWORD_ENTER
+                 : task::PasswordRequestMode_PASSWORD_REENTER),
+                rName))),
     m_bSelected(false)
+{}
+
+uno::Any PDFPasswordRequest::getRequest() throw (uno::RuntimeException)
 {
-    m_aRequest.Mode = bFirstTry ?
-        task::PasswordRequestMode_PASSWORD_ENTER :
-        task::PasswordRequestMode_PASSWORD_REENTER;
-    m_aRequest.Classification = task::InteractionClassification_QUERY;
-    m_aRequest.Name = rName;
+    return m_aRequest;
 }
 
-uno::Any SAL_CALL PDFPasswordRequest::getRequest() throw (uno::RuntimeException)
+uno::Sequence< uno::Reference< task::XInteractionContinuation > > PDFPasswordRequest::getContinuations() throw (uno::RuntimeException)
 {
-    osl::MutexGuard const guard( m_aMutex );
-
-    uno::Any aRet;
-    aRet <<= m_aRequest;
-    return aRet;
-}
-
-uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFPasswordRequest::getContinuations() throw (uno::RuntimeException)
-{
-    osl::MutexGuard const guard( m_aMutex );
-
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > aRet( 1 );
-    aRet.getArray()[0] = static_cast<task::XInteractionContinuation*>(this);
+    aRet[0] = this;
     return aRet;
 }
 
-void SAL_CALL PDFPasswordRequest::setPassword( const rtl::OUString& rPwd ) throw (uno::RuntimeException)
+void PDFPasswordRequest::setPassword( const rtl::OUString& rPwd ) throw (uno::RuntimeException)
 {
     osl::MutexGuard const guard( m_aMutex );
 
     m_aPassword = rPwd;
 }
 
-rtl::OUString SAL_CALL PDFPasswordRequest::getPassword() throw (uno::RuntimeException)
+rtl::OUString PDFPasswordRequest::getPassword() throw (uno::RuntimeException)
 {
     osl::MutexGuard const guard( m_aMutex );
 
     return m_aPassword;
 }
 
-void SAL_CALL PDFPasswordRequest::select() throw (uno::RuntimeException)
+void PDFPasswordRequest::select() throw (uno::RuntimeException)
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -170,22 +167,21 @@ bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
 {
     bool bSuccess = false;
 
-    PDFPasswordRequest* pRequest;
-    uno::Reference< task::XInteractionRequest > xReq(
-        pRequest = new PDFPasswordRequest( bFirstTry, rDocName ) );
+    rtl::Reference< PDFPasswordRequest > xReq(
+        new PDFPasswordRequest( bFirstTry, rDocName ) );
     try
     {
-        xHandler->handle( xReq );
+        xHandler->handle( xReq.get() );
     }
     catch( uno::Exception& )
     {
     }
 
-    OSL_TRACE( "request %s selected", pRequest->isSelected() ? "was" : "was not" );
-    if( pRequest->isSelected() )
+    OSL_TRACE( "request %s selected", xReq->isSelected() ? "was" : "was not" );
+    if( xReq->isSelected() )
     {
         bSuccess = true;
-        rOutPwd = pRequest->getPassword();
+        rOutPwd = xReq->getPassword();
     }
 
     return bSuccess;
