@@ -9519,7 +9519,7 @@ ENABLE_GSTREAMER=""
 
 if test "$build_gstreamer" = "yes"; then
 
-    AC_MSG_CHECKING([whether to enable the GStreamer avmedia backend])
+    AC_MSG_CHECKING([whether to enable the new GStreamer 1.0 avmedia backend])
     if test "x$enable_gstreamer" != "xno"; then
         ENABLE_GSTREAMER="TRUE"
         AC_MSG_RESULT([yes])
