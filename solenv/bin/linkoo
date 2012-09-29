@@ -446,8 +446,6 @@ if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
 
 evilness ('do');
 
-print "\nlinkoo finished";
-print ", please don't forget to source ooenv before ./soffice." if (!$windows);
-print "\n";
+print "\nlinkoo finished\n";
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
