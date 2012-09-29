@@ -216,7 +216,7 @@ else ifeq ($(DISABLE_PYTHON),TRUE)
 gb_PYTHON := python
 else
 gb_PYTHONTARGET := $(call gb_Executable_get_target_for_build,python)
-gb_PYTHON = $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
+gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
 endif
 
 ifneq (,$(SYSTEM_UCPP))
