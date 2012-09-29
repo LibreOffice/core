@@ -36,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
+#include <cassert>
 #include <string.h>
 
 #include <helpcompiler/HelpIndexer.hxx>
@@ -44,7 +45,6 @@
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/Optional.hpp>
@@ -1406,12 +1406,14 @@ ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > xCo
         , m_aInitialModule( aInitialModule )
         , m_aLanguage( aLanguage )
 {
+    assert( m_xContext.is() );
     init();
 }
 
 ExtensionIteratorBase::ExtensionIteratorBase( Databases& rDatabases,
     const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage )
-        : m_rDatabases( rDatabases )
+        : m_xContext( comphelper::getProcessComponentContext() )
+        , m_rDatabases( rDatabases )
         , m_eState( INITIAL_MODULE )
         , m_aInitialModule( aInitialModule )
         , m_aLanguage( aLanguage )
@@ -1421,25 +1423,6 @@ ExtensionIteratorBase::ExtensionIteratorBase( Databases& rDatabases,
 
 void ExtensionIteratorBase::init()
 {
-    if( !m_xContext.is() )
-    {
-        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-        Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
-        OSL_ASSERT( xProps.is() );
-        if (xProps.is())
-        {
-            xProps->getPropertyValue(
-                ::rtl::OUString( "DefaultContext" ) ) >>= m_xContext;
-            OSL_ASSERT( m_xContext.is() );
-        }
-    }
-    if( !m_xContext.is() )
-    {
-        throw RuntimeException(
-            ::rtl::OUString( "ExtensionIteratorBase::init(), no XComponentContext" ),
-            Reference< XInterface >() );
-    }
-
     m_xSFA = ucb::SimpleFileAccess::create(m_xContext);
 
     m_bUserPackagesLoaded = false;

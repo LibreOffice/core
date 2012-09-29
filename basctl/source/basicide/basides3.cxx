@@ -81,10 +81,8 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl:
                 Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
                     ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
                 Reference< XInputStream > xInput( xISP->createInputStream() );
-                Reference< XComponentContext > xContext;
-                Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
-                OSL_ASSERT( xProps.is() );
-                OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+                Reference< XComponentContext > xContext(
+                    comphelper::getComponentContext( xMSF ) );
                 ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
                 LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );
 

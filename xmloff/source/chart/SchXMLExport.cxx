@@ -296,21 +296,6 @@ public:
 
 namespace
 {
-Reference< uno::XComponentContext > lcl_getComponentContext()
-{
-    Reference< uno::XComponentContext > xContext;
-    try
-    {
-        Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-        if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString( "DefaultContext" )) >>= xContext;
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    return xContext;
-}
 
 class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
@@ -400,15 +385,13 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
 Reference< chart2::data::XDataSource > lcl_createDataSource(
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aData )
 {
-    Reference< chart2::data::XDataSink > xSink;
-    Reference< uno::XComponentContext > xContext( lcl_getComponentContext());
-    if( xContext.is() )
-        xSink.set(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUString( "com.sun.star.chart2.data.DataSource" ),
-                xContext ), uno::UNO_QUERY_THROW );
-    if( xSink.is())
-        xSink->setData( aData );
+    Reference< uno::XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
+    Reference< chart2::data::XDataSink > xSink(
+        xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.chart2.data.DataSource", xContext ),
+        uno::UNO_QUERY_THROW );
+    xSink->setData( aData );
 
     return Reference< chart2::data::XDataSource >( xSink, uno::UNO_QUERY );
 }

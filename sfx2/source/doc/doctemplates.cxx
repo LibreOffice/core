@@ -581,29 +581,18 @@ void SfxDocTplService_Impl::getDirList()
 
     maTemplateDirs = Sequence< OUString >( nCount );
 
-    uno::Reference< XComponentContext > xCtx;
+    uno::Reference< XComponentContext > xCtx(
+        comphelper::getComponentContext( mxFactory ) );
     uno::Reference< util::XMacroExpander > xExpander;
-    uno::Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
     const rtl::OUString aPrefix(
         "vnd.sun.star.expand:"  );
 
-    if ( xPropSet.is() )
-    {
-        xPropSet->getPropertyValue(
-            rtl::OUString(
-                "DefaultContext"  ) )
-            >>= xCtx;
-    }
+    xCtx->getValueByName(
+        rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) )
+        >>= xExpander;
 
-    if ( xCtx.is() )
-    {
-        xCtx->getValueByName(
-            rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) )
-            >>= xExpander;
-
-        OSL_ENSURE( xExpander.is(),
-                    "Unable to obtain macro expander singleton!" );
-    }
+    OSL_ENSURE( xExpander.is(),
+                "Unable to obtain macro expander singleton!" );
 
     for ( sal_uInt16 i=0; i<nCount; i++ )
     {
@@ -2861,28 +2850,14 @@ void SfxURLRelocator_Impl::initOfficeInstDirs()
         {
             OSL_ENSURE( mxFactory.is(), "No service manager!" );
 
-            uno::Reference< XComponentContext > xCtx;
-            uno::Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
-            if ( xPropSet.is() )
-            {
-                xPropSet->getPropertyValue(
-                    rtl::OUString(
-                        "DefaultContext"  ) )
-                >>= xCtx;
-            }
+            uno::Reference< XComponentContext > xCtx(
+                comphelper::getComponentContext( mxFactory ) );
 
-            OSL_ENSURE( xCtx.is(),
-                        "Unable to obtain component context from "
-                        "service manager!" );
-
-            if ( xCtx.is() )
-            {
-                xCtx->getValueByName(
-                    rtl::OUString(
-                        "/singletons/"
-                        "com.sun.star.util.theOfficeInstallationDirectories"  ) )
+            xCtx->getValueByName(
+                rtl::OUString(
+                    "/singletons/"
+                    "com.sun.star.util.theOfficeInstallationDirectories"  ) )
                 >>= mxOfficeInstDirs;
-            }
 
             OSL_ENSURE( mxOfficeInstDirs.is(),
                         "Unable to obtain office installation directory "

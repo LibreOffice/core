@@ -41,8 +41,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/factory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
@@ -143,10 +143,8 @@ ________________________________________________________________________________
         throw( css::uno::Exception )                                                                                                                                \
     {                                                                                                                                                               \
         /* retrieve component context from the given service manager */                                                                                             \
-        static const ::rtl::OUString PROP_DEFAULTCONTEXT("DefaultContext");                                                        \
-        css::uno::Reference< css::beans::XPropertySet >    xSMGRProps(xServiceManager, css::uno::UNO_QUERY_THROW);                                                  \
-        css::uno::Reference< css::uno::XComponentContext > xComponentContext;                                                                                       \
-        xSMGRProps->getPropertyValue( PROP_DEFAULTCONTEXT ) >>= xComponentContext;                                                                                  \
+        css::uno::Reference< css::uno::XComponentContext > xComponentContext(                                                                                       \
+            comphelper::getComponentContext( xServiceManager ) );                                                                                                   \
         /* create new instance of service */                                                                                                                        \
         CLASS* pClass = new CLASS( xComponentContext );                                                                                                             \
         /* hold it alive by increasing his ref count!!! */                                                                                                          \

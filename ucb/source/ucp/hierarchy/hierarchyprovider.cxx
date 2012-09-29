@@ -36,9 +36,9 @@
  *************************************************************************/
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include "hierarchyprovider.hxx"
 #include "hierarchycontent.hxx"
@@ -279,30 +279,16 @@ HierarchyContentProvider::getOfficeInstallationDirectories()
         {
             OSL_ENSURE( m_xSMgr.is(), "No service manager!" );
 
-            uno::Reference< uno::XComponentContext > xCtx;
-            uno::Reference< beans::XPropertySet > xPropSet(
-                m_xSMgr, uno::UNO_QUERY );
-            if ( xPropSet.is() )
-            {
-                xPropSet->getPropertyValue(
-                    rtl::OUString( "DefaultContext"  ) )
-                >>= xCtx;
-            }
+            uno::Reference< uno::XComponentContext > xCtx(
+                comphelper::getComponentContext( m_xSMgr ) );
 
-            OSL_ENSURE( xCtx.is(),
-                        "Unable to obtain component context from "
-                        "service manager!" );
-
-            if ( xCtx.is() )
-            {
-                xCtx->getValueByName(
-                    rtl::OUString( "/singletons/com.sun.star.util.theOfficeInstallationDirectories"  ) )
+            xCtx->getValueByName(
+                rtl::OUString( "/singletons/com.sun.star.util.theOfficeInstallationDirectories"  ) )
                 >>= m_xOfficeInstDirs;
 
 // Be silent. singleton only available in an Office environment.
-//                OSL_ENSURE( m_xOfficeInstDirs.is(),
-//                            "Unable to obtain office directories singleton!" );
-            }
+//          OSL_ENSURE( m_xOfficeInstDirs.is(),
+//                      "Unable to obtain office directories singleton!" );
         }
     }
     return m_xOfficeInstDirs;

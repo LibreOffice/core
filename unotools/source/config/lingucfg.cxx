@@ -24,7 +24,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include "com/sun/star/util/XMacroExpander.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
 #include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
@@ -939,16 +938,12 @@ static uno::Reference< util::XMacroExpander > lcl_GetMacroExpander()
     {
         if ( !xMacroExpander.is() )
         {
-            uno::Reference< uno::XComponentContext > xContext;
-            uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-            xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))) >>= xContext;
-            if ( xContext.is() )
-            {
-                aG_xMacroExpander =  uno::Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
+            uno::Reference< uno::XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
+            aG_xMacroExpander =  uno::Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
                                         OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.util.theMacroExpander"))),
                                         uno::UNO_QUERY );
-                xMacroExpander = aG_xMacroExpander;
-            }
+            xMacroExpander = aG_xMacroExpander;
         }
     }
 

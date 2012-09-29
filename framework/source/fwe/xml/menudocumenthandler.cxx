@@ -39,7 +39,6 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/logfile.hxx>
@@ -376,10 +375,8 @@ throw( SAXException, RuntimeException )
         m_bMenuMode = sal_True;
 
         // Container must be factory to create sub container
-        Reference< XComponentContext > xComponentContext;
-        Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>=
-            xComponentContext;
+        Reference< XComponentContext > xComponentContext(
+            comphelper::getProcessComponentContext() );
 
         Reference< XIndexContainer > xSubItemContainer;
         if ( m_xContainerFactory.is() )
@@ -573,6 +570,7 @@ OReadMenuPopupHandler::OReadMenuPopupHandler(
     m_bMenuMode( sal_False ),
     m_xMenuContainer( rMenuContainer ),
     m_xContainerFactory( rFactory ),
+    m_xComponentContext( comphelper::getProcessComponentContext() ),
     m_nNextElementExpected( ELEM_CLOSE_NONE )
 {
 }
@@ -612,12 +610,6 @@ throw( SAXException, RuntimeException )
         m_bMenuMode = sal_True;
 
         // Container must be factory to create sub container
-        if ( !m_xComponentContext.is() )
-        {
-            const Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            m_xComponentContext.set(xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
-        }
-
         Reference< XIndexContainer > xSubItemContainer;
         if ( m_xContainerFactory.is() )
             xSubItemContainer = Reference< XIndexContainer >( m_xContainerFactory->createInstanceWithContext( m_xComponentContext ), UNO_QUERY );

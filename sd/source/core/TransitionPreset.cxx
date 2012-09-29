@@ -31,7 +31,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <vcl/svapp.hxx>
@@ -152,19 +151,14 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
     try
     {
-        // Get service factory
-        Reference< XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
-        DBG_ASSERT( xServiceFactory.is(), "sd::CustomAnimationPresets::import(), got no service manager" );
-        if( !xServiceFactory.is() )
-            return false;
+        uno::Reference< uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
+        Reference< XMultiServiceFactory > xServiceFactory(
+            xContext->getServiceManager(), UNO_QUERY_THROW );
 
-        uno::Reference< beans::XPropertySet > xProps( xServiceFactory, UNO_QUERY );
-        uno::Reference< uno::XComponentContext > xContext;
-        xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
-
-        uno::Reference< util::XMacroExpander > xMacroExpander;
-        if( xContext.is() )
-            xMacroExpander.set( xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"), UNO_QUERY );
+        uno::Reference< util::XMacroExpander > xMacroExpander(
+            xContext->getValueByName("/singletons/com.sun.star.util.theMacroExpander"),
+            UNO_QUERY );
 
         // import ui strings
         Reference< XMultiServiceFactory > xConfigProvider(

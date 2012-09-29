@@ -162,26 +162,6 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
     }
 }
 
-Reference< XComponentContext > getComponentContext_Impl( void )
-{
-    static Reference< XComponentContext > xContext;
-
-    // Do we have already CoreReflection; if not obtain it
-    if( !xContext.is() )
-    {
-        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-        Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
-        OSL_ASSERT( xProps.is() );
-        if (xProps.is())
-        {
-            xProps->getPropertyValue(
-                ::rtl::OUString( "DefaultContext" ) ) >>= xContext;
-            OSL_ASSERT( xContext.is() );
-        }
-    }
-    return xContext;
-}
-
 // save CoreReflection statically
 Reference< XIdlReflection > getCoreReflection_Impl( void )
 {
@@ -190,7 +170,8 @@ Reference< XIdlReflection > getCoreReflection_Impl( void )
     // Do we have already CoreReflection; if not obtain it
     if( !xCoreReflection.is() )
     {
-        Reference< XComponentContext > xContext = getComponentContext_Impl();
+        Reference< XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
             xContext->getValueByName(
@@ -233,7 +214,8 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl( void )
     // Do we have already CoreReflection; if not obtain it
     if( !xAccess.is() )
     {
-        Reference< XComponentContext > xContext = getComponentContext_Impl();
+        Reference< XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
             xContext->getValueByName(
@@ -260,7 +242,8 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
     // Do we have already CoreReflection; if not obtain it
     if( !xTypeConverter.is() )
     {
-        Reference< XComponentContext > xContext = getComponentContext_Impl();
+        Reference< XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
             xTypeConverter = Converter::create(xContext);
@@ -287,7 +270,8 @@ SbUnoObject* createOLEObject_Impl( const ::rtl::OUString& aType )
     {
         bNeedsInit = false;
 
-        Reference< XComponentContext > xContext = getComponentContext_Impl();
+        Reference< XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
             Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
@@ -3694,33 +3678,24 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 }
 
                 // "Call" ctor using createInstanceWithArgumentsAndContext
-                Reference < XComponentContext > xContext;
-                if( xFirstParamContext.is() )
-                {
-                    xContext = xFirstParamContext;
-                }
-                else
-                {
-                    Reference < XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-                    xContext.set( xProps->getPropertyValue( rtl::OUString( "DefaultContext" ) ), UNO_QUERY_THROW );
-                }
+                Reference < XComponentContext > xContext(
+                    xFirstParamContext.is()
+                    ? xFirstParamContext
+                    : comphelper::getProcessComponentContext() );
                 Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
 
                 Any aRetAny;
-                if( xServiceMgr.is() )
+                ::rtl::OUString aServiceName = GetName();
+                Reference < XInterface > xRet;
+                try
                 {
-                    ::rtl::OUString aServiceName = GetName();
-                    Reference < XInterface > xRet;
-                    try
-                    {
-                        xRet = xServiceMgr->createInstanceWithArgumentsAndContext( aServiceName, args, xContext );
-                    }
-                    catch( const Exception& )
-                    {
-                        implHandleAnyException( ::cppu::getCaughtException() );
-                    }
-                    aRetAny <<= xRet;
+                    xRet = xServiceMgr->createInstanceWithArgumentsAndContext( aServiceName, args, xContext );
                 }
+                catch( const Exception& )
+                {
+                    implHandleAnyException( ::cppu::getCaughtException() );
+                }
+                aRetAny <<= xRet;
                 unoToSbxValue( pVar, aRetAny );
 
                 // Copy back out parameters?
@@ -3835,8 +3810,7 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
         if( !xContextToUse.is() )
         {
-            Reference < XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-            xContextToUse.set( xProps->getPropertyValue( rtl::OUString( "DefaultContext" ) ), UNO_QUERY_THROW );
+            xContextToUse = comphelper::getProcessComponentContext();
             --nAllowedParamCount;
         }
 
@@ -4205,22 +4179,12 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
 
     SbxVariableRef refVar = rPar.Get(0);
 
-    Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    Reference< XPropertySet> xPSMPropertySet( xFactory, UNO_QUERY );
-    if( xPSMPropertySet.is() )
-    {
-        Any aContextAny = xPSMPropertySet->getPropertyValue(
-            ::rtl::OUString( "DefaultContext" ) );
+    Any aContextAny( comphelper::getProcessComponentContext() );
 
-        SbUnoObjectRef xUnoObj = new SbUnoObject
-            ( ::rtl::OUString( "DefaultContext" ),
-              aContextAny );
-        refVar->PutObject( (SbUnoObject*)xUnoObj );
-    }
-    else
-    {
-        refVar->PutObject( NULL );
-    }
+    SbUnoObjectRef xUnoObj = new SbUnoObject
+        ( ::rtl::OUString( "DefaultContext" ),
+          aContextAny );
+    refVar->PutObject( (SbUnoObject*)xUnoObj );
 }
 
 //========================================================================
@@ -4544,7 +4508,8 @@ Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::
 {
     Reference< XInterface > xRet;
 
-    Reference< XComponentContext > xContext = getComponentContext_Impl();
+    Reference< XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
     Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
 
     Reference< XInvocation > xProxy = new ModuleInvocationProxy( aPrefix, xScopeObj );
@@ -4665,7 +4630,8 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
     // For now: Take first interface that allows to instantiate COM wrapper
     // TODO: Check if support for multiple interfaces is needed
 
-    Reference< XComponentContext > xContext = getComponentContext_Impl();
+    Reference< XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
     Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
     Reference< XSingleServiceFactory > xComImplementsFactory
     (

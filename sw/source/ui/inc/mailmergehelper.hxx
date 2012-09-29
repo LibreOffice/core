@@ -45,18 +45,10 @@
 
 class SwMailMergeConfigItem;
 
-namespace com{ namespace sun{ namespace star{
-    namespace uno{
-        class XComponentContext;
-    }
-    namespace lang{
-        class XMultiServiceFactory;
-    }
-    namespace mail{
-        class XSmtpService;
-        class XMailService;
-    }
-}}}
+namespace com { namespace sun { namespace star { namespace mail {
+    class XMailService;
+    class XSmtpService;
+} } } }
 
 namespace SwMailMergeHelper
 {
@@ -317,10 +309,6 @@ public:
                                                 {m_sSenderAddress = rSenderAddress;}
 };
 
-SW_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>
-        getCurrentCmpCtx(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory> rSrvMgr);
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

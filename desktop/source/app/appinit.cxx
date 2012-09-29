@@ -128,25 +128,6 @@ void Desktop::InitApplicationServiceManager()
     comphelper::setProcessServiceFactory(sm);
 }
 
-void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )
-{
-    Reference< XPropertySet > xProps( xSMgr, UNO_QUERY );
-    if ( xProps.is() )
-    {
-        try
-        {
-            Reference< XComponent > xComp;
-            if (xProps->getPropertyValue( OUString( "DefaultContext" )) >>= xComp )
-            {
-                xComp->dispose();
-            }
-        }
-        catch (const UnknownPropertyException&)
-        {
-        }
-    }
-}
-
 void Desktop::RegisterServices()
 {
     if( !m_bServicesRegistered )

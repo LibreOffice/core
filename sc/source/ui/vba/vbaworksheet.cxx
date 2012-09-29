@@ -167,10 +167,10 @@ openNewDoc(rtl::OUString aSheetName )
     uno::Reference<frame::XModel> xModel;
     try
     {
-        uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< uno::XComponentContext > xContext(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
+        uno::Reference< uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
         uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-                                        xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+            xContext->getServiceManager() );
 
         uno::Reference <frame::XComponentLoader > xComponentLoader(
                         xServiceManager->createInstanceWithContext(

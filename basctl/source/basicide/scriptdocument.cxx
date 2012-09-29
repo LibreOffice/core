@@ -960,9 +960,8 @@ namespace basctl
                 {
                     ::rtl::OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
                     aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                    Reference< XComponentContext > xContext;
-                    Reference< XPropertySet > xProps( xMSF, UNO_QUERY_THROW );
-                    xContext.set( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ), UNO_QUERY_THROW );
+                    Reference< XComponentContext > xContext(
+                        comphelper::getComponentContext( xMSF ) );
                     Reference< XMacroExpander > xMacroExpander(
                         xContext->getValueByName(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" )) ),

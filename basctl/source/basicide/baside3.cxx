@@ -724,10 +724,7 @@ bool DialogWindow::SaveDialog()
 
         // export dialog model to xml
         Reference< container::XNameContainer > xDialogModel = GetDialog();
-        Reference< XComponentContext > xContext;
-        Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-        OSL_ASSERT( xProps.is() );
-        OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
         Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
@@ -1002,10 +999,8 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
             if( xSFI->exists( aCurPath ) )
                 xInput = xSFI->openFileRead( aCurPath );
 
-            Reference< XComponentContext > xContext;
-            Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
-            OSL_ASSERT( xProps.is() );
-            OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+            Reference< XComponentContext > xContext(
+                comphelper::getComponentContext( xMSF ) );
             ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 
             ::rtl::OUString aXmlDlgName;
@@ -1327,10 +1322,8 @@ void DialogWindow::StoreData()
 
                 if( xDialogModel.is() )
                 {
-                    Reference< XComponentContext > xContext;
-                    Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-                    OSL_ASSERT( xProps.is() );
-                    OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+                    Reference< XComponentContext > xContext(
+                        comphelper::getProcessComponentContext() );
                     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
                     xLib->replaceByName( ::rtl::OUString( GetName() ), makeAny( xISP ) );
                 }

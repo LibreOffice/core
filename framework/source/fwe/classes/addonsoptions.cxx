@@ -35,7 +35,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <comphelper/processfactory.hxx>
@@ -415,15 +414,11 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT          ] = PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT;
     m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS          ] = PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS;
 
-    Reference< XComponentContext > xContext;
-    Reference< com::sun::star::beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-    xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
-    if ( xContext.is() )
-    {
-        m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
+    Reference< XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
+    m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
                                 UNO_QUERY );
-    }
 
     ReadConfigurationData();
 

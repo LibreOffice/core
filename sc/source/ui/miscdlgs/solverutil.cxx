@@ -29,6 +29,7 @@
 #include "solverutil.hxx"
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -84,19 +85,13 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
     rImplNames.realloc(0);      // clear
     rDescriptions.realloc(0);
 
-    uno::Reference<uno::XComponentContext> xCtx;
-    uno::Reference<lang::XMultiServiceFactory> xMSF = comphelper::getProcessServiceFactory();
-    uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
-    try
-    {
-        xPropset->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xCtx;
-    }
-    catch ( uno::Exception & )
-    {
-    }
+    uno::Reference<uno::XComponentContext> xCtx(
+        comphelper::getProcessComponentContext() );
+    uno::Reference<lang::XMultiServiceFactory> xMSF(
+        xCtx->getServiceManager(), uno::UNO_QUERY_THROW );
 
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xMSF, uno::UNO_QUERY );
-    if ( xCtx.is() && xEnAc.is() )
+    if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
                         xEnAc->createContentEnumeration( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
@@ -140,19 +135,13 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rIm
 {
     uno::Reference<sheet::XSolver> xSolver;
 
-    uno::Reference<uno::XComponentContext> xCtx;
-    uno::Reference<lang::XMultiServiceFactory> xMSF = comphelper::getProcessServiceFactory();
-    uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
-    try
-    {
-        xPropset->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xCtx;
-    }
-    catch ( uno::Exception & )
-    {
-    }
+    uno::Reference<uno::XComponentContext> xCtx(
+        comphelper::getProcessComponentContext() );
+    uno::Reference<lang::XMultiServiceFactory> xMSF(
+        xCtx->getServiceManager(), uno::UNO_QUERY_THROW );
 
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xMSF, uno::UNO_QUERY );
-    if ( xCtx.is() && xEnAc.is() )
+    if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
                         xEnAc->createContentEnumeration( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );

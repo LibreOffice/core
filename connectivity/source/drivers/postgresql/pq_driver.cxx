@@ -57,12 +57,11 @@
 
 #include <stdio.h>
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
-
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "pq_driver.hxx"
 
@@ -86,7 +85,6 @@ using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::Any;
 
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::sdbc::XConnection;
 using com::sun::star::sdbc::SQLException;
@@ -352,26 +350,17 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     // XSingleComponentFactory interface ...
     void * pRet = 0;
     Reference< XSingleComponentFactory > xFactory;
-    Reference< XInterface > xSmgr( (XInterface * ) pServiceManager );
+    Reference< com::sun::star::lang::XMultiServiceFactory > xSmgr(
+        static_cast< XInterface * >(pServiceManager),
+        com::sun::star::uno::UNO_QUERY_THROW );
 
     for( sal_Int32 i = 0 ; g_entries[i].create ; i ++ )
     {
         OUString implName = g_entries[i].getImplementationName();
         if( 0 == implName.compareToAscii( pImplName ) )
         {
-            Reference< XComponentContext > defaultContext;
-            Reference< XPropertySet > propSet( xSmgr, UNO_QUERY );
-            if( propSet.is() )
-            {
-                try
-                {
-                    propSet->getPropertyValue( ASCII_STR( "DefaultContext" ) ) >>= defaultContext;
-                }
-                catch( com::sun::star::uno::Exception & )
-                {
-                    // if there is no default context, ignore it
-                }
-            }
+            Reference< XComponentContext > defaultContext(
+                comphelper::getComponentContext( xSmgr ) );
             xFactory = new pq_sdbc_driver::OOneInstanceComponentFactory(
                 implName,
                 g_entries[i].create,

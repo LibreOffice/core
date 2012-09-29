@@ -53,7 +53,6 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "urlparameter.hxx"
 #include "databases.hxx"
@@ -993,21 +992,8 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         if( bAddExtensionPath )
         {
-            Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-            Reference< XPropertySet > xProps( xFactory, UNO_QUERY );
-            OSL_ASSERT( xProps.is() );
-            Reference< XComponentContext > xContext;
-            if (xProps.is())
-            {
-                xProps->getPropertyValue(
-                    ::rtl::OUString( "DefaultContext" ) ) >>= xContext;
-            }
-            if( !xContext.is() )
-            {
-                throw RuntimeException(
-                    ::rtl::OUString( "InputStreamTransformer::InputStreamTransformer(), no XComponentContext" ),
-                    Reference< XInterface >() );
-            }
+            Reference< XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
 
             rtl::OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionRegistryPath, xContext );
             rtl::OString aExpandedExtensionPath = rtl::OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );

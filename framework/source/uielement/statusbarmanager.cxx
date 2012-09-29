@@ -50,7 +50,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Command.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <toolkit/unohlp.hxx>
 #include <svtools/statusbarcontroller.hxx>
 
@@ -335,12 +335,9 @@ void StatusBarManager::CreateControllers()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::CreateControllers" );
     uno::Reference< lang::XMultiComponentFactory > xStatusbarControllerFactory( m_xStatusbarControllerRegistration, uno::UNO_QUERY );
-    uno::Reference< uno::XComponentContext > xComponentContext;
-    uno::Reference< beans::XPropertySet > xProps( m_xServiceManager, uno::UNO_QUERY );
+    uno::Reference< uno::XComponentContext > xComponentContext(
+        comphelper::getComponentContext( m_xServiceManager ) );
     uno::Reference< awt::XWindow > xStatusbarWindow = VCLUnoHelper::GetInterface( m_pStatusBar );
-
-    if ( xProps.is() )
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
 
     for ( sal_uInt16 i = 0; i < m_pStatusBar->GetItemCount(); i++ )
     {

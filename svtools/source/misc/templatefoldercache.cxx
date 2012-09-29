@@ -29,7 +29,6 @@
 #include <svtools/templatefoldercache.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -837,36 +836,15 @@ namespace svt
             osl::MutexGuard aGuard( m_aMutex );
             if ( !m_xOfficeInstDirs.is() )
             {
-                // @@@ This is bad!
-                uno::Reference< lang::XMultiServiceFactory > xSMgr
-                    = comphelper::getProcessServiceFactory();
-                OSL_ENSURE( xSMgr.is(), "No service manager!" );
-
-                uno::Reference< beans::XPropertySet > xPropSet(
-                    xSMgr, uno::UNO_QUERY );
-                if ( xPropSet.is() )
-                {
-                    uno::Reference< uno::XComponentContext > xCtx;
-                    xPropSet->getPropertyValue(
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
-                    >>= xCtx;
-
-                    OSL_ENSURE( xCtx.is(),
-                                "Unable to obtain component context from service manager!" );
-
-                    if ( xCtx.is() )
-                    {
-                        xCtx->getValueByName(
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                uno::Reference< uno::XComponentContext > xCtx(
+                    comphelper::getProcessComponentContext() );
+                xCtx->getValueByName(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                 "/singletons/com.sun.star.util.theOfficeInstallationDirectories" ) ) )
-                        >>= m_xOfficeInstDirs;
-                    }
+                    >>= m_xOfficeInstDirs;
 
-                    OSL_ENSURE( m_xOfficeInstDirs.is(),
-                                "Unable to obtain office directories singleton!" );
-
-                }
+                OSL_ENSURE( m_xOfficeInstDirs.is(),
+                            "Unable to obtain office directories singleton!" );
             }
         }
         return m_xOfficeInstDirs;

@@ -38,6 +38,7 @@ $(eval $(call gb_Library_set_include,protocolhandler,\
 $(eval $(call gb_Library_use_sdk_api,protocolhandler))
 
 $(eval $(call gb_Library_use_libraries,protocolhandler,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	fwe \

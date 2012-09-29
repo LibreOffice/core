@@ -33,6 +33,7 @@
 
  *************************************************************************/
 
+#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include "osl/doublecheckedlocking.h"
 #include <rtl/uri.hxx>
@@ -199,12 +200,8 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     {
         try
         {
-            uno::Reference< beans::XPropertySet > const xProps(
-                m_xSMgr, uno::UNO_QUERY_THROW );
-            uno::Reference< uno::XComponentContext > xCtx;
-            xCtx.set( xProps->getPropertyValue(
-                rtl::OUString( "DefaultContext"  ) ),
-                uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xCtx(
+                comphelper::getComponentContext( m_xSMgr ) );
 
             uno::Reference< task::XInteractionHandler > xIH(
                 task::PasswordContainerInteractionHandler::create( xCtx ) );

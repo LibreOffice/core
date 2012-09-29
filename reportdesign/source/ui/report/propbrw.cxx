@@ -132,16 +132,10 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
 
     if (m_xMeAsFrame.is())
     {
-        Reference< XComponentContext > xOwnContext;
+        Reference< XComponentContext > xOwnContext(
+            comphelper::getComponentContext( m_xORB ) );
         try
         {
-            // our own component context
-            Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
-            xOwnContext.set(
-                xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
-                UNO_QUERY_THROW );
-
-            // a ComponentContext for the
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
                 ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_pDesignView->getController().getModel() )),

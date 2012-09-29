@@ -34,6 +34,7 @@
 #include <uiconfiguration/windowstateconfiguration.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

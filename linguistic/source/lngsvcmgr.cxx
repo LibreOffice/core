@@ -1088,10 +1088,8 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                     {
                         try
                         {
-                            uno::Reference < uno::XComponentContext > xContext;
-                            uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
-
-                            xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
+                            uno::Reference < uno::XComponentContext > xContext(
+                                comphelper::getComponentContext( xFac ) );
                             xSvc = uno::Reference< linguistic2::XSpellChecker >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)
@@ -1152,10 +1150,8 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                     {
                         try
                         {
-                            uno::Reference < uno::XComponentContext > xContext;
-                            uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
-
-                            xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
+                            uno::Reference < uno::XComponentContext > xContext(
+                                comphelper::getComponentContext( xFac ) );
                             xSvc = uno::Reference< linguistic2::XProofreader >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)
@@ -1215,10 +1211,8 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                     {
                         try
                         {
-                            uno::Reference < uno::XComponentContext > xContext;
-                            uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
-
-                            xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
+                            uno::Reference < uno::XComponentContext > xContext(
+                                comphelper::getComponentContext( xFac ) );
                             xSvc = uno::Reference< linguistic2::XHyphenator >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
 
                         }
@@ -1281,10 +1275,8 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                     {
                         try
                         {
-                            uno::Reference < uno::XComponentContext > xContext;
-                            uno::Reference< beans::XPropertySet > xProps( xFac, uno::UNO_QUERY );
-
-                            xProps->getPropertyValue( "DefaultContext" ) >>= xContext;
+                            uno::Reference < uno::XComponentContext > xContext(
+                                comphelper::getComponentContext( xFac ) );
                             xSvc = uno::Reference< linguistic2::XThesaurus >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
                         catch (const uno::Exception &)

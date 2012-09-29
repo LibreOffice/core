@@ -59,8 +59,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -1083,23 +1081,9 @@ void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rRetur
 // to UTF-8 before encoding non ascii characters, which is not what other apps expect.
 static rtl::OUString translateToExternalUrl(const rtl::OUString& internalUrl)
 {
-    rtl::OUString extUrl;
-
-    uno::Reference< lang::XMultiServiceFactory > sm = comphelper::getProcessServiceFactory();
-    if (sm.is())
-    {
-        uno::Reference< beans::XPropertySet > pset;
-        sm->queryInterface( getCppuType( &pset )) >>= pset;
-        if (pset.is())
-        {
-            uno::Reference< uno::XComponentContext > context;
-            static const rtl::OUString DEFAULT_CONTEXT( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) );
-            pset->getPropertyValue(DEFAULT_CONTEXT) >>= context;
-            if (context.is())
-                extUrl = uri::ExternalUriReferenceTranslator::create(context)->translateToExternal(internalUrl);
-        }
-    }
-    return extUrl;
+    uno::Reference< uno::XComponentContext > context(
+        comphelper::getProcessComponentContext());
+    return uri::ExternalUriReferenceTranslator::create(context)->translateToExternal(internalUrl);
 }
 
 // #i104525# many versions of OSX have problems with some URLs:

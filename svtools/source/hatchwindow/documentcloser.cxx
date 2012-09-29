@@ -22,9 +22,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
@@ -267,18 +266,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ODocumentCloser::impl_staticGetSupport
 uno::Reference< uno::XInterface > SAL_CALL ODocumentCloser::impl_staticCreateSelfInstance(
                                 const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    uno::Reference< uno::XComponentContext > xContext;
-    uno::Reference< beans::XPropertySet > xPropSet( xServiceManager, uno::UNO_QUERY );
-    if ( xPropSet.is() )
-        xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ) >>= xContext;
-
-    if ( !xContext.is() )
-    {
-        throw uno::RuntimeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unable to obtain component context from service manager!" ) ),
-            uno::Reference< uno::XInterface >() );
-    }
-
+    uno::Reference< uno::XComponentContext > xContext(
+        comphelper::getComponentContext( xServiceManager ) );
     return static_cast< cppu::OWeakObject * >( new ODocumentCloser( xContext ) );
 }
 

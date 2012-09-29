@@ -665,8 +665,9 @@ void Desktop::DeInit()
 
         // close splashscreen if it's still open
         CloseSplashScreen();
-        Reference<XMultiServiceFactory> xXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-        DestroyApplicationServiceManager( xXMultiServiceFactory );
+        Reference< XComponent >(
+            comphelper::getProcessComponentContext(), UNO_QUERY_THROW )->
+            dispose();
         // nobody should get a destroyd service factory...
         ::comphelper::setProcessServiceFactory( NULL );
 

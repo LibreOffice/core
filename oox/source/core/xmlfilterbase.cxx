@@ -44,7 +44,6 @@
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <oox/core/filterdetect.hxx>
@@ -56,7 +55,6 @@ using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
 using ::com::sun::star::xml::dom::XDocumentBuilder;
 using ::com::sun::star::xml::sax::XFastSAXSerializable;
-using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XComponent;
 
 namespace oox {
@@ -194,26 +192,6 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
         maFastParser.registerNamespace( ids[i].Second );
 }
 
-
-static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiServiceFactory > aFactory)
-{
-    Reference< XComponentContext > xContext;
-    try
-    {
-        Reference< XPropertySet > xFactProp( aFactory, UNO_QUERY );
-        if( xFactProp.is() )
-            xFactProp->getPropertyValue( "DefaultContext")  >>= xContext;
-    }
-    catch( Exception& )
-    {}
-
-    return xContext;
-}
-
-// ============================================================================
-
-// ============================================================================
-
 XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     FilterBase( rxContext ),
     mxImpl( new XmlFilterBaseImpl( rxContext ) ),
@@ -233,7 +211,7 @@ void XmlFilterBase::importDocumentProperties() throw()
     Reference< XMultiServiceFactory > xFactory( getServiceFactory(), UNO_QUERY );
     MediaDescriptor aMediaDesc( getMediaDescriptor() );
     Reference< XInputStream > xInputStream;
-    Reference< XComponentContext > xContext = lcl_getComponentContext(getServiceFactory());
+    Reference< XComponentContext > xContext = comphelper::getComponentContext(getServiceFactory());
     ::oox::core::FilterDetect aDetector( xContext );
     xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
     Reference< XComponent > xModel( getModel(), UNO_QUERY );
@@ -357,7 +335,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const ::rtl::OUString& aFrag
     {
         // create the dom parser
         Reference< XComponentContext > xContext =
-            lcl_getComponentContext(getServiceFactory());
+            comphelper::getComponentContext(getServiceFactory());
         Reference<XDocumentBuilder> xDomBuilder( DocumentBuilder::create(xContext) );
 
         // create DOM from fragment

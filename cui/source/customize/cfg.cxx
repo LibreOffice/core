@@ -888,15 +888,9 @@ SaveInData::SaveInData(
             bDocConfig( isDocConfig ),
             bReadOnly( sal_False ),
             m_xCfgMgr( xCfgMgr ),
-            m_xParentCfgMgr( xParentCfgMgr )
+            m_xParentCfgMgr( xParentCfgMgr ),
+            m_xComponentContext( comphelper::getProcessComponentContext() )
 {
-    uno::Reference< beans::XPropertySet > xProps(
-        ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-
-    xProps->getPropertyValue(
-        OUString("DefaultContext" ))
-            >>= m_xComponentContext;
-
     m_aSeparatorSeq.realloc( 1 );
     m_aSeparatorSeq[0].Name  = OUString( ITEM_DESCRIPTOR_TYPE  );
     m_aSeparatorSeq[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;

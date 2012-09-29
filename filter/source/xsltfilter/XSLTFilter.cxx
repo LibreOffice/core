@@ -58,7 +58,6 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <com/sun/star/util/XMacroExpander.hpp>
 
@@ -190,12 +189,8 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         ::rtl::OUString sExpandedUrl;
         try
             {
-                css::uno::Reference<XComponentContext> xContext;
-                css::uno::Reference<XPropertySet> xProps(m_rServiceFactory,
-                        UNO_QUERY_THROW);
-                xContext.set(xProps->getPropertyValue(::rtl::OUString(
-                         "DefaultContext" )),
-                        UNO_QUERY_THROW);
+                css::uno::Reference<XComponentContext> xContext(
+                    comphelper::getComponentContext(m_rServiceFactory));
                 css::uno::Reference<XMacroExpander>
                         xMacroExpander(
                                 xContext->getValueByName(

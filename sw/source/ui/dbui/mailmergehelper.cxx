@@ -110,8 +110,9 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
     if (rMgr.is())
         try
         {
-            uno::Reference< mail::XMailServiceProvider > xMailServiceProvider =
-                    mail::MailServiceProvider::create(getCurrentCmpCtx(rMgr));
+            uno::Reference< mail::XMailServiceProvider > xMailServiceProvider(
+                mail::MailServiceProvider::create(
+                    comphelper::getComponentContext(rMgr)));
             xSmtpServer = uno::Reference< mail::XSmtpService > (
                             xMailServiceProvider->create(
                             mail::MailServiceType_SMTP
@@ -671,17 +672,6 @@ void SwConnectionListener::disconnected(const lang::EventObject& /*aEvent*/)
 void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
     throw(uno::RuntimeException)
 {
-}
-
-uno::Reference< uno::XComponentContext> getCurrentCmpCtx(
-                        uno::Reference<lang::XMultiServiceFactory> rSrvMgr)
-{
-    uno::Reference< beans::XPropertySet > xPropSet =
-                uno::Reference< beans::XPropertySet>(rSrvMgr, uno::UNO_QUERY);
-    Any aAny = xPropSet->getPropertyValue( ::rtl::OUString("DefaultContext"));
-    uno::Reference< uno::XComponentContext> rCmpCtx;
-    aAny >>= rCmpCtx;
-    return rCmpCtx;
 }
 
 SwMailTransferable::SwMailTransferable(const rtl::OUString& rBody, const rtl::OUString& rMimeType) :

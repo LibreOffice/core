@@ -339,8 +339,9 @@ void SwTestAccountSettingsDialog::Test()
         try
         {
             uno::Reference< mail::XMailService > xInMailService;
-            uno::Reference< mail::XMailServiceProvider > xMailServiceProvider =
-                    mail::MailServiceProvider::create(getCurrentCmpCtx(rMgr));
+            uno::Reference< mail::XMailServiceProvider > xMailServiceProvider(
+                mail::MailServiceProvider::create(
+                    comphelper::getComponentContext(rMgr)));
             uno::Reference< mail::XMailService > xMailService =
                     xMailServiceProvider->create(
                     mail::MailServiceType_SMTP);

@@ -38,6 +38,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <comphelper/processfactory.hxx>
 #include <vcl/window.hxx>
 #include <rtl/textenc.h>
 #include <rtl/locale.h>
@@ -239,8 +240,8 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         }
 
         //create stream for the document
-        Reference< beans::XPropertySet > xFactoryProperties( mxRemoteMSF, uno::UNO_QUERY );
-        Reference< uno::XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY );
+        Reference< uno::XComponentContext > xContext(
+            comphelper::getComponentContext( mxRemoteMSF ) );
         Reference< ucb::XSimpleFileAccess2 > xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
         Reference<io::XInputStream> xInputStream = xSimpleFileAccess->openFileRead( m_sURL );
 

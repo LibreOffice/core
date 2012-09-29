@@ -70,21 +70,6 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-Reference< uno::XComponentContext > lcl_getComponentContext()
-{
-    Reference< uno::XComponentContext > xContext;
-    try
-    {
-        Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-        if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString( "DefaultContext" )) >>= xContext;
-    }
-    catch( uno::Exception& )
-    {}
-
-    return xContext;
-}
-
 class lcl_MatchesChartType : public ::std::unary_function< Reference< chart2::XChartType >, bool >
 {
 public:
@@ -489,7 +474,8 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
             xDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        Reference< uno::XComponentContext > xContext( lcl_getComponentContext());
+        Reference< uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
 
         if( nCoordinateSystemIndex < aCooSysSeq.getLength())
         {

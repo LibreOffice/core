@@ -28,7 +28,6 @@
 #include "iderdll.hxx"
 
 #include <basic/basmgr.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
@@ -288,10 +287,8 @@ void Shell::CopyDialogResources(
     Reference< container::XNameContainer > xDialogModel = Reference< container::XNameContainer >( xMSF->createInstance
         ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
     Reference< io::XInputStream > xInput( io_xISP->createInputStream() );
-    Reference< XComponentContext > xContext;
-    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
-    OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+    Reference< XComponentContext > xContext(
+        comphelper::getComponentContext( xMSF ) );
     ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rSourceDoc.isDocument() ? rSourceDoc.getDocument() : Reference< frame::XModel >() );
 
     if( xDialogModel.is() )

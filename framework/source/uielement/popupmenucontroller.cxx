@@ -177,8 +177,8 @@ bool PopupMenuController::CreatePopupMenuController() throw (Exception)
     aPropValue.Value <<= m_xFrame;
     aSeq[1] <<= aPropValue;
 
-    Reference< XPropertySet >      xProps( getServiceManager(), UNO_QUERY_THROW );
-    Reference< XComponentContext > xComponentContext( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+    Reference< XComponentContext > xComponentContext(
+        comphelper::getComponentContext( getServiceManager() ) );
 
     Reference< XPopupMenuController > xPopupMenuController( xPopupMenuControllerRegistration->createInstanceWithArgumentsAndContext( getCommandURL(), aSeq, xComponentContext ), UNO_QUERY );
     if ( xPopupMenuController.is() )

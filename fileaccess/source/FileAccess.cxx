@@ -31,7 +31,6 @@
 #include <tools/stream.hxx>
 
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -253,15 +252,8 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
 
             try
             {
-                Reference< XComponentContext > xCtx;
-                Reference< XPropertySet > xPropSet( mxSMgr, UNO_QUERY_THROW );
-                if ( xPropSet.is() )
-                {
-                    xPropSet->getPropertyValue(
-                        rtl::OUString(
-                            "DefaultContext"  ) )
-                                >>= xCtx;
-                }
+                Reference< XComponentContext > xCtx(
+                    comphelper::getComponentContext( mxSMgr ) );
 
                 Reference< XMacroExpander > xExpander;
 

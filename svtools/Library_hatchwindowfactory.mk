@@ -38,6 +38,7 @@ $(eval $(call gb_Library_set_include,hatchwindowfactory,\
 $(eval $(call gb_Library_use_sdk_api,hatchwindowfactory))
 
 $(eval $(call gb_Library_use_libraries,hatchwindowfactory,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \

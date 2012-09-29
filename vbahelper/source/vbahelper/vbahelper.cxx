@@ -29,7 +29,6 @@
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -155,15 +154,8 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
     uno::Reference<frame::XDispatchProvider> xDispatchProvider (xFrame,uno::UNO_QUERY_THROW);
     try
     {
-        uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference<uno::XComponentContext > xContext( xProps->getPropertyValue( "DefaultContext" ), uno::UNO_QUERY_THROW  );
-        if ( !xContext.is() )
-            return;
-
-        uno::Reference<lang::XMultiComponentFactory > xServiceManager = xContext->getServiceManager();
-        if ( !xServiceManager.is() )
-            return;
-
+        uno::Reference<uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
         uno::Reference<util::XURLTransformer> xParser( util::URLTransformer::create(xContext) );
         xParser->parseStrict (url);
     }

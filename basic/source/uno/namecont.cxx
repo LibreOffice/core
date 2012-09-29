@@ -2725,29 +2725,20 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     {
         if( !mxMacroExpander.is() )
         {
-            Reference< XPropertySet > xProps( mxMSF, UNO_QUERY_THROW );
-            if( xProps.is() )
+            Reference< XComponentContext > xContext(
+                comphelper::getComponentContext( mxMSF ) );
+            Reference< util::XMacroExpander > xExpander;
+            xContext->getValueByName(
+                OUSTR("/singletons/com.sun.star.util.theMacroExpander") ) >>= xExpander;
+            if(! xExpander.is())
             {
-                Reference< XComponentContext > xContext;
-                xProps->getPropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
-                SAL_WARN_IF(!xContext.is(), "basic", "no DefaultContext");
-                if( xContext.is() )
-                {
-                    Reference< util::XMacroExpander > xExpander;
-                    xContext->getValueByName(
-                        OUSTR("/singletons/com.sun.star.util.theMacroExpander") ) >>= xExpander;
-                    if(! xExpander.is())
-                    {
-                        throw uno::DeploymentException(
-                            OUSTR("no macro expander singleton available!"), Reference< XInterface >() );
-                    }
-                    MutexGuard guard( Mutex::getGlobalMutex() );
-                    if( !mxMacroExpander.is() )
-                    {
-                        mxMacroExpander = xExpander;
-                    }
-                }
+                throw uno::DeploymentException(
+                    OUSTR("no macro expander singleton available!"), Reference< XInterface >() );
+            }
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if( !mxMacroExpander.is() )
+            {
+                mxMacroExpander = xExpander;
             }
         }
 
@@ -3172,7 +3163,8 @@ void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListen
 #define sDialogLibMediaType "application/vnd.sun.star.dialog-library"
 
 ScriptExtensionIterator::ScriptExtensionIterator( void )
-    : m_eState( USER_EXTENSIONS )
+    : m_xContext( comphelper::getProcessComponentContext() )
+    , m_eState( USER_EXTENSIONS )
     , m_bUserPackagesLoaded( false )
     , m_bSharedPackagesLoaded( false )
     , m_bBundledPackagesLoaded( false )
@@ -3180,22 +3172,7 @@ ScriptExtensionIterator::ScriptExtensionIterator( void )
     , m_iSharedPackage( 0 )
        , m_iBundledPackage( 0 )
     , m_pScriptSubPackageIterator( NULL )
-{
-    Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    Reference< XPropertySet > xProps( xFactory, UNO_QUERY_THROW );
-    if (xProps.is())
-    {
-        xProps->getPropertyValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= m_xContext;
-        SAL_WARN_IF(!m_xContext.is(), "basic", "no DefaultContext");
-    }
-    if( !m_xContext.is() )
-    {
-        throw RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptExtensionIterator::init(), no XComponentContext")),
-            Reference< XInterface >() );
-    }
-}
+{}
 
 rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDialogLib )
 {
