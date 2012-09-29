@@ -171,6 +171,18 @@ include $(SRCDIR)/Repository.mk
 include $(SRCDIR)/RepositoryExternal.mk
 $(eval $(call gb_Helper_collect_libtargets))
 
+gb_Library_DLLPOSTFIX := lo
+
+# Include platform/cpu/compiler specific config/definitions
+include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
+
+ifeq ($(CROSS_COMPILING),YES)
+# We can safely Assume all cross-compilation is from Unix systems.
+gb_Executable_EXT_for_build :=
+else
+gb_Executable_EXT_for_build := $(gb_Executable_EXT)
+endif
+
 # Set up build tools that can be either internal or system. It is
 # necessary to do it before we start including gbuild class makefiles,
 # so the classes can add dependencies on them.
@@ -215,18 +227,6 @@ ifneq (,$(SYSTEM_UCPP))
 gb_UCPPTARGET :=
 else
 gb_UCPPTARGET := $(call gb_Executable_get_target_for_build,ucpp)
-endif
-
-gb_Library_DLLPOSTFIX := lo
-
-# Include platform/cpu/compiler specific config/definitions
-include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
-
-ifeq ($(CROSS_COMPILING),YES)
-# We can safely Assume all cross-compilation is from Unix systems.
-gb_Executable_EXT_for_build :=
-else
-gb_Executable_EXT_for_build := $(gb_Executable_EXT)
 endif
 
 include $(GBUILDDIR)/Tempfile.mk
