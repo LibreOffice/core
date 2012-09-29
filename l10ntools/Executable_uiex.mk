@@ -16,6 +16,7 @@ $(eval $(call gb_Executable_set_include,uiex,\
 
 $(eval $(call gb_Executable_use_libraries,uiex,\
     sal \
+    i18nregexp \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,uiex,\
