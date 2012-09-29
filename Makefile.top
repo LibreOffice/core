@@ -421,6 +421,9 @@ ifeq ($(OS),ANDROID)
 	cd android && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
 endif
 
+build-nocheck : export SKIP_TESTS := YES
+build-nocheck : build
+
 cross-toolset: bootstrap fetch
 	cd cross_toolset && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
 
@@ -459,6 +462,9 @@ else
 endif
 endif
 	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
+
+dev-install-nocheck : export SKIP_TESTS := YES
+dev-install-nocheck : dev-install
 
 install-tb:
 	@rm -rf $(DEVINSTALLDIR)
