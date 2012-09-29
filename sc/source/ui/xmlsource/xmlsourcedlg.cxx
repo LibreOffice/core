@@ -12,6 +12,8 @@
 
 #include "scresid.hxx"
 #include "document.hxx"
+#include "orcusfilters.hxx"
+#include "filter.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -81,6 +83,17 @@ void ScXMLSourceDlg::SelectSourceFile()
 
     // There should only be one file returned from the file picker.
     maFtSourceFile.SetText(aFiles[0]);
+
+    LoadSourceFileStructure(aFiles[0]);
+}
+
+void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
+{
+    ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+    if (!pOrcus)
+        return;
+
+    pOrcus->loadXMLStructure(rPath, maLbTree);
 }
 
 IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)

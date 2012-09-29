@@ -13,6 +13,7 @@
 #include "rtl/ustring.hxx"
 
 class ScDocument;
+class SvTreeListBox;
 
 /**
  * Collection of orcus filter wrappers.
@@ -23,6 +24,8 @@ public:
     virtual ~ScOrcusFilters() {}
 
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
+
+    virtual bool loadXMLStructure(const rtl::OUString& rPath, SvTreeListBox& rTree) const = 0;
 };
 
 #endif

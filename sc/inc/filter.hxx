@@ -32,6 +32,8 @@
 #include <tools/string.hxx>
 #include <rtl/textenc.h>
 
+#include "scdllapi.h"
+
 class SfxMedium;
 class SvStream;
 
@@ -133,7 +135,7 @@ extern "C" {
 
 class ScFormatFilter {
     public:
-    static ScFormatFilterPlugin &Get();
+    SC_DLLPUBLIC static ScFormatFilterPlugin &Get();
 };
 
 #endif

@@ -50,6 +50,7 @@ public:
 private:
 
     void SelectSourceFile();
+    void LoadSourceFileStructure(const OUString& rPath);
 
     DECL_LINK(BtnPressedHdl, Button*);
 };

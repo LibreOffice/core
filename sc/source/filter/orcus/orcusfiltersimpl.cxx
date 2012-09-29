@@ -7,11 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "orcusfiltersimpl.hxx"
+
 #include "document.hxx"
 
 #include "tools/urlobj.hxx"
-
-#include "orcusfiltersimpl.hxx"
+#include "svtools/svtreebx.hxx"
 
 #define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>
@@ -152,7 +153,8 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 {
     ScOrcusFactory aFactory(rDoc);
     INetURLObject aURL(rPath);
-    const char* path = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8).getStr();
+    OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
+    const char* path = aSysPath.getStr();
 
     try
     {
@@ -165,6 +167,17 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
         rDoc.SetString(0, 0, 0, "Failed to load!!!");
         return false;
     }
+    return true;
+}
+
+bool ScOrcusFiltersImpl::loadXMLStructure(const OUString& rPath, SvTreeListBox& /*rTree*/) const
+{
+    INetURLObject aURL(rPath);
+    OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
+    const char* path = aSysPath.getStr();
+    fprintf(stdout, "ScOrcusFiltersImpl::loadXMLStructure:   path = '%s'\n", path);
+
+    // TODO: Load the tree box.
     return true;
 }
 
