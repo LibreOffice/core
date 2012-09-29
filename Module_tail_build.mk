@@ -25,74 +25,58 @@
 $(eval $(call gb_Module_Module,tail_end))
 
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
-    accessibility \
-	$(if $(filter AFMS,$(BUILD_TYPE)),\
-		afms \
-	) \
-    animations \
-    apple_remote \
+	accessibility \
+	$(call gb_Helper_optional,AFMS,afms) \
+	animations \
+	apple_remote \
 	autodoc \
-    avmedia \
-    basctl \
-    basebmp \
+	avmedia \
+	basctl \
+	basebmp \
 	basegfx \
-    basic \
-    bean \
+	basic \
+	bean \
 	binaryurp \
-	$(if $(filter BLUEZ,$(BUILD_TYPE)),\
-		bluez_bluetooth \
-	) \
+	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
 	bridges \
-    canvas \
-    chart2 \
+	canvas \
+	chart2 \
 	cli_ure \
-	$(if $(filter CLUCENE,$(BUILD_TYPE)),\
-		clucene \
-	) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		codemaker \
-	) \
-    comphelper \
-    configmgr \
-    connectivity \
+	$(call gb_Helper_optional,CLUCENE,clucene) \
+	$(call gb_Helper_optional,DESKTOP,codemaker) \
+	comphelper \
+	configmgr \
+	connectivity \
 	cosv \
-    cppcanvas \
+	cppcanvas \
 	cppu \
 	cppuhelper \
 	cpputools \
-    cui \
-    dbaccess \
-    desktop \
-	$(if $(filter DICTIONARIES,$(BUILD_TYPE)),\
-		dictionaries \
-	) \
-    dtrans \
-    drawinglayer \
-    editeng \
-    embeddedobj \
+	cui \
+	dbaccess \
+	desktop \
+	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
+	dtrans \
+	drawinglayer \
+	editeng \
+	embeddedobj \
 	embedserv \
-    eventattacher \
-    extensions \
+	eventattacher \
+	extensions \
 	extras \
-    fileaccess \
-    filter \
-    forms \
-    formula \
-    fpicker \
-    framework \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
-	    helpcompiler \
-	) \
-	$(if $(filter HSQLDB,$(BUILD_TYPE)),\
-		hsqldb \
-	) \
-    hwpfilter \
+	fileaccess \
+	filter \
+	forms \
+	formula \
+	fpicker \
+	framework \
+	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
+	$(call gb_Helper_optional,HSQLDB,hsqldb) \
+	hwpfilter \
 	i18npool \
 	i18nutil \
-    idl \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		idlc \
-	) \
+	idl \
+	$(call gb_Helper_optional,DESKTOP,idlc) \
 	io \
 	javaunohelper \
 	jurt \
@@ -106,118 +90,94 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	libwpd \
 	libwpg \
 	libwps \
-    lingucomponent \
-    linguistic \
-    lotuswordpro \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		l10ntools \
-	) \
-    MathMLDTD \
+	lingucomponent \
+	linguistic \
+	lotuswordpro \
+	$(call gb_Helper_optional,DESKTOP,l10ntools) \
+	MathMLDTD \
 	mdds \
-    Mesa \
-	$(if $(filter MORE_FONTS,$(BUILD_TYPE)),\
-		more_fonts \
-	) \
-	$(if $(filter NEON,$(BUILD_TYPE)),\
-		neon \
-	) \
-	$(if $(filter NLPSOLVER,$(BUILD_TYPE)),\
-		nlpsolver \
-	) \
-    np_sdk \
+	Mesa \
+	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
+	$(call gb_Helper_optional,NEON,neon) \
+	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
+	np_sdk \
 	o3tl \
 	offapi \
 	officecfg \
-    oovbaapi \
-    oox \
-    package \
-    padmin \
-    psprint_config \
-    $(if $(filter PYUNO,$(BUILD_TYPE)),\
-		pyuno \
-	) \
-	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
-		qadevOOo \
-	) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		rdbmaker \
-	) \
-    readlicense_oo \
-    regexp \
-    registry \
-    remotebridges \
-    reportbuilder \
-    reportdesign \
+	oovbaapi \
+	oox \
+	package \
+	padmin \
+	psprint_config \
+	$(call gb_Helper_optional,PYUNO,pyuno) \
+	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
+	$(call gb_Helper_optional,DESKTOP,rdbmaker) \
+	readlicense_oo \
+	regexp \
+	registry \
+	remotebridges \
+	reportbuilder \
+	reportdesign \
 	ridljar \
-    rsc \
+	rsc \
 	salhelper \
-    sane \
+	sane \
 	sax \
-    sc \
-    scaddins \
-    sccomp \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
-		scp2 \
-	) \
-    scripting \
-    sd \
-    sdext \
-    sfx2 \
-    shell \
-    slideshow \
-    smoketest \
-    sot \
-    starmath \
+	sc \
+	scaddins \
+	sccomp \
+	$(call gb_Helper_optional,DESKTOP,scp2) \
+	scripting \
+	sd \
+	sdext \
+	sfx2 \
+	shell \
+	slideshow \
+	smoketest \
+	sot \
+	starmath \
 	stoc \
 	store \
-    svl \
-    svtools \
-    svx \
-    sw \
-    swext \
-    test \
-    testtools \
-    toolkit \
+	svl \
+	svtools \
+	svx \
+	sw \
+	swext \
+	test \
+	testtools \
+	toolkit \
 	tools \
 	touch \
-	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
-		translations \
-	) \
-    tubes \
-    twain \
-    ucb \
+	$(call gb_Helper_optional,TRANSLATIONS,translations) \
+	tubes \
+	twain \
+	ucb \
 	ucbhelper \
-	$(if $(filter UCPP,$(BUILD_TYPE)),\
-		ucpp \
-	) \
+	$(call gb_Helper_optional,UCPP,ucpp) \
 	udkapi \
 	udm \
-    unixODBC \
-    UnoControls \
-    unodevtools \
+	unixODBC \
+	UnoControls \
+	unodevtools \
 	unoil \
 	unotest \
-    unotools \
-    unoxml \
+	unotools \
+	unoxml \
 	ure \
-    uui \
-    vbahelper \
-    vcl \
+	uui \
+	vbahelper \
+	vcl \
 	vigra \
-    wizards \
-    writerfilter \
-    writerperfect \
-	$(if $(filter X11_EXTENSIONS,$(BUILD_TYPE)), \
-		x11_extensions \
-	) \
-    xmerge \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
-	    xmlhelp \
-	) \
-    xmloff \
+	wizards \
+	writerfilter \
+	writerperfect \
+	$(call gb_Helper_optional,EXTENSIONS,x11_extensions) \
+	xmerge \
+	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
+	xmloff \
 	xmlreader \
-    xmlscript \
-    xmlsecurity \
+	xmlscript \
+	xmlsecurity \
 	xsltml \
 ))
 
@@ -228,7 +188,7 @@ $(eval $(call gb_Module_add_targets,tail_end,\
 endif
 
 # Especially when building everything with symbols, the linking of the largest
-# libraries takes enormous amounts of RAM.  To prevent annoying OOM situations
+# libraries takes enormous amounts of RAM.	To prevent annoying OOM situations
 # etc., try to prevent linking these in parallel by adding artificial build
 # order dependencies here.
 define tailbuild_serialize1
