@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/memory.h>
+#include <string.h>
 
 #include <cppuhelper/implbase1.hxx>
 #include <xmlscript/xml_helper.hxx>
@@ -129,7 +129,7 @@ void BSeqOutputStream::writeBytes( Sequence< sal_Int8 > const & rData )
 {
     sal_Int32 nPos = _seq->getLength();
     _seq->realloc( nPos + rData.getLength() );
-    ::rtl_copyMemory( (char *)_seq->getArray() + nPos,
+    memcpy( (char *)_seq->getArray() + nPos,
                       (char const *)rData.getConstArray(),
                       rData.getLength() );
 }

@@ -90,7 +90,7 @@ ImgProdLockBytes::ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun
             {
                 const sal_uInt32 nOldLength = maSeq.getLength();
                 maSeq.realloc( nOldLength + nRead );
-                rtl_copyMemory( maSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
+                memcpy( maSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
             }
         }
         while( nBytesToRead == nRead );

@@ -552,7 +552,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8
 {
     sal_Int64 nRet;
 
-    if( ( rId.getLength() == 16 ) && ( 0 == rtl_compareMemory( ThumbnailViewAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( ( rId.getLength() == 16 ) && ( 0 == memcmp( ThumbnailViewAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;
@@ -983,7 +983,7 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getSomething( const uno::Sequence< sal_
 {
     sal_Int64 nRet;
 
-    if( ( rId.getLength() == 16 ) && ( 0 == rtl_compareMemory( ThumbnailViewItemAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    if( ( rId.getLength() == 16 ) && ( 0 == memcmp( ThumbnailViewItemAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;

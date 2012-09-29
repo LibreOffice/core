@@ -19,7 +19,6 @@
 
 #include <comphelper/string.hxx>
 #include <sal/types.h>
-#include <rtl/memory.h>
 #include <rtl/strbuf.hxx>
 #include <tools/cachestr.hxx>
 #include <tools/inetmsg.hxx>
@@ -1284,7 +1283,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                             aDelim.append(pMsg->GetMultipartBoundary());
                             aDelim.append(RTL_CONSTASCII_STRINGPARAM("\r\n"));
 
-                            rtl_copyMemory(pData, aDelim.getStr(),
+                            memcpy(pData, aDelim.getStr(),
                                 aDelim.getLength());
                             return aDelim.getLength();
                         }
@@ -1303,7 +1302,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                             aDelim.append(pMsg->GetMultipartBoundary());
                             aDelim.append(RTL_CONSTASCII_STRINGPARAM("--\r\n"));
 
-                            rtl_copyMemory (pData, aDelim.getStr(),
+                            memcpy (pData, aDelim.getStr(),
                                 aDelim.getLength());
                             return aDelim.getLength();
                         }

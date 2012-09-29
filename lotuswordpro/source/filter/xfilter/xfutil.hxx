@@ -63,7 +63,6 @@
 
 #include    "xfdefs.hxx"
 #include    <rtl/ustring.hxx>
-#include    <rtl/memory.h>
 #include    <string>
 
 

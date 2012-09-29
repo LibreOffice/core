@@ -735,7 +735,7 @@ SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumb
 
     nSquares = nLines * nLines;
     pPixel = new sal_uInt16[ nSquares ];
-    rtl_zeroMemory(pPixel, nSquares * sizeof(sal_uInt16));
+    memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
 }
 
 // Destructor dealocating the dynamic array
@@ -852,7 +852,7 @@ void SvxPixelCtl::SetXBitmap( const XOBitmap& rXBmp )
 void SvxPixelCtl::Reset()
 {
     // clear pixel area
-    rtl_zeroMemory(pPixel, nSquares * sizeof(sal_uInt16));
+    memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
     Invalidate();
 }
 

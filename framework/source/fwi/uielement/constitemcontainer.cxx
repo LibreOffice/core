@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/itemcontainer.hxx>
@@ -266,7 +268,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
 // XUnoTunnel
 sal_Int64 ConstItemContainer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ConstItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
+    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ConstItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
     {
         return reinterpret_cast< sal_Int64 >( this );
     }

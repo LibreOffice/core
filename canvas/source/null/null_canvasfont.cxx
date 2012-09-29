@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "null_canvasfont.hxx"
 #include "null_textlayout.hxx"
 #include "null_spritecanvas.hxx"

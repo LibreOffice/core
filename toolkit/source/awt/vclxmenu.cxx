@@ -32,7 +32,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 

@@ -28,7 +28,6 @@
 
 #include <string.h>
 
-#include <rtl/memory.h>
 #include "bufferedinputstream.hxx"
 
 

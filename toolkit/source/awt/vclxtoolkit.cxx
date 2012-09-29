@@ -53,7 +53,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/conditn.hxx>
-#include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <rtl/process.h>
 

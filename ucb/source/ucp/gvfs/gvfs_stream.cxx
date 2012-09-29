@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include "gvfs_stream.hxx"
-#include <rtl/memory.h>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 #include <libgnomevfs/gnome-vfs-ops.h>

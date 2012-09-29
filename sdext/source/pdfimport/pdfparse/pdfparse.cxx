@@ -44,7 +44,6 @@
 #include <string.h>
 
 #include <rtl/strbuf.hxx>
-#include <rtl/memory.h>
 #include <rtl/alloc.h>
 
 // disable warnings again because someone along the line has enabled them

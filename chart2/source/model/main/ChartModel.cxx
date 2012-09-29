@@ -1286,7 +1286,7 @@ Reference< util::XNumberFormatsSupplier > ChartModel::impl_getNumberFormatsSuppl
 ::sal_Int64 SAL_CALL ChartModel::getSomething( const Sequence< ::sal_Int8 >& aIdentifier )
         throw( uno::RuntimeException)
 {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( SvNumberFormatsSupplierObj::getUnoTunnelId().getConstArray(),
+    if( aIdentifier.getLength() == 16 && 0 == memcmp( SvNumberFormatsSupplierObj::getUnoTunnelId().getConstArray(),
                                                          aIdentifier.getConstArray(), 16 ) )
     {
         Reference< lang::XUnoTunnel > xTunnel( impl_getNumberFormatsSupplier(), uno::UNO_QUERY );

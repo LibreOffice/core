@@ -60,6 +60,8 @@
 #ifndef     _XFLINEHEIGHT_HXX
 #define     _XFLINEHEIGHT_HXX
 
+#include <string.h>
+
 class XFLineHeight
 {
 public:
@@ -117,7 +119,7 @@ inline void XFLineHeight::SetSpace(double value)
 inline void XFLineHeight::Reset()
 {
     m_eType = enumLHNone;
-    rtl_zeroMemory(&m_Value,sizeof(m_Value));
+    memset(&m_Value, 0, sizeof(m_Value));
 }
 
 inline enumLHType XFLineHeight::GetType()
