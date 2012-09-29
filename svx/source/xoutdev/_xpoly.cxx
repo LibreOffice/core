@@ -261,6 +261,32 @@ XPolygon::XPolygon( const XPolygon& rXPoly )
 }
 
 /*************************************************************************
+ * |*
+ * |*    XPolygon::XPolygon()
+ * |*
+ * |*    XPolygon aus einem Standardpolygon erstellen
+ * |*    Ersterstellung    18.01.95 ESO
+ * |*    Letzte Aenderung  18.01.95 ESO
+ * |*
+ * *************************************************************************/
+
+XPolygon::XPolygon( const Polygon& rPoly )
+{
+    DBG_CTOR(XPolygon,NULL);
+
+    sal_uInt16 nSize = rPoly.GetSize();
+    pImpXPolygon = new ImpXPolygon( nSize );
+    pImpXPolygon->nPoints = nSize;
+
+    for( sal_uInt16 i = 0; i < nSize;  i++ )
+    {
+        pImpXPolygon->pPointAry[i] = rPoly[i];
+        pImpXPolygon->pFlagAry[i] = (sal_uInt8) rPoly.GetFlags( i );
+    }
+}
+
+
+/*************************************************************************
 |*
 |*    XPolygon::XPolygon()
 |*
@@ -430,6 +456,18 @@ void XPolygon::SetPointCount( sal_uInt16 nPoints )
         memset( &pImpXPolygon->pFlagAry [nPoints], 0, nSize );
     }
     pImpXPolygon->nPoints = nPoints;
+}
+
+/*************************************************************************
+|*
+|*    XPolygon::GetSize()
+|*
+*************************************************************************/
+
+sal_uInt16 XPolygon::GetSize() const
+{
+    pImpXPolygon->CheckPointDelete();
+    return pImpXPolygon->nSize;
 }
 
 /*************************************************************************

@@ -2067,6 +2067,156 @@ sal_Bool EscherPropertyContainer::CreatePolygonProperties(
     return bRetValue;
 }
 
+
+/*
+in MS,the connector including 9 types :
+"straightConnector1",
+"bentConnector2","bentConnector3","bentConnector4","bentConnector5"
+"curvedConnector2","curvedConnector3","curvedConnector4","curvedConnector5"
+in AOO,including 4 types:"standard","lines","line","curve"
+when save as MS file, the connector must be convert to corresponding type.
+"line" and "lines" <-> "straightConnector1"
+"standard" <->  "bentConnector2-5"
+"curve" <-> "curvedConnector2-5"
+*/
+sal_Int32 lcl_GetAdjustValueCount( const XPolygon& rPoly )
+{
+    int nRet = 0;
+    switch (  rPoly.GetSize() )
+    {
+    case 2 :
+    case 3:
+        nRet =  0;
+        break;
+    case 4:
+        nRet = 1;
+        break;
+    case 5:
+        nRet = 2;
+        break;
+    default:
+        if ( rPoly.GetSize()>=6 )
+            nRet = 3;
+        break;
+    }
+    return nRet;
+}
+/*
+ Adjust value decide the position which connector should turn a corner
+*/
+sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16 nIndex )
+{
+    sal_uInt16 k =  rPoly.GetSize();
+    OSL_ASSERT ( k >= ( 3 + nIndex ) );
+
+    Point aPt;
+    Point aStart = rPoly[0];
+    Point aEnd = rPoly[k-1];
+    if ( aEnd.Y() == aStart.Y() )
+        aEnd.Y() = aStart.Y() +4;
+    if ( aEnd.X() == aStart.X() )
+        aEnd.X() = aStart.X() +4;
+
+    sal_Bool bVertical = ( rPoly[1].X()-aStart.X() ) == 0 ;
+    //vertical and horizon alternate
+    if ( nIndex%2 == 1 ) bVertical = !bVertical;
+    aPt = rPoly[ nIndex + 1];
+
+    sal_Int32 nAdjustValue;
+    if ( bVertical )
+        nAdjustValue = ( aPt.Y()-aStart.Y())* 21600 /(aEnd.Y()-aStart.Y());
+    else
+        nAdjustValue = ( aPt.X()-aStart.X() )* 21600 /(aEnd.X()-aStart.X());
+
+    return nAdjustValue;
+}
+
+
+void lcl_Rotate(sal_Int32 nAngle, Point center, Point& pt)
+{
+    while ( nAngle<0)
+        nAngle +=36000;
+    while (nAngle>=36000)
+        nAngle -=36000;
+
+    int cs, sn;
+    switch (nAngle)
+    {
+    case 0:
+        cs =1;
+        sn =0;
+        break;
+    case 9000:
+        cs =0;
+        sn =1;
+        break;
+    case 18000:
+        cs = -1;
+        sn = 0;
+        break;
+    case 27000:
+        cs = 0;
+        sn = -1;
+        break;
+    default:
+        return;
+        break;
+    }
+    sal_Int32 x0 =pt.X()-center.X();
+    sal_Int32 y0 =pt.Y()-center.Y();
+    pt.X()=center.X()+ x0*cs-y0*sn;
+    pt.Y()=center.Y()+ y0*cs+x0*sn;
+}
+/*
+ FlipV defines that the shape will be flipped vertically about the center of its bounding box.
+Generally, draw the connector from top to bottom, from left to right when meet the adjust value,
+but when (X1>X2 or Y1>Y2),the draw director must be reverse, FlipV or FlipH should be set to true.
+*/
+sal_Bool lcl_GetAngle(Polygon &rPoly,sal_uInt16& rShapeFlags,sal_Int32& nAngle )
+{
+    Point aStart = rPoly[0];
+    Point aEnd = rPoly[rPoly.GetSize()-1];
+    nAngle = ( rPoly[1].X() == aStart.X() ) ? 9000: 0 ;
+    Point p1(aStart.X(),aStart.Y());
+    Point p2(aEnd.X(),aEnd.Y());
+    if ( nAngle )
+    {
+        Point center((aEnd.X()+aStart.X())>>1,(aEnd.Y()+aStart.Y())>>1);
+        lcl_Rotate(-nAngle, center,p1);
+        lcl_Rotate(-nAngle, center,p2);
+    }
+    if (  p1.X() > p2.X() )
+    {
+        if ( nAngle )
+            rShapeFlags |= SHAPEFLAG_FLIPV;
+        else
+            rShapeFlags |= SHAPEFLAG_FLIPH;
+
+    }
+    if (  p1.Y() > p2.Y()  )
+    {
+        if ( nAngle )
+            rShapeFlags |= SHAPEFLAG_FLIPH;
+        else
+            rShapeFlags |= SHAPEFLAG_FLIPV;
+    }
+
+    if ( (rShapeFlags&SHAPEFLAG_FLIPH) && (rShapeFlags&SHAPEFLAG_FLIPV) )
+    {
+        rShapeFlags  &= ~( SHAPEFLAG_FLIPH | SHAPEFLAG_FLIPV );
+        nAngle +=18000;
+    }
+
+    if ( nAngle )
+    {
+        // Set angle properties
+        nAngle *= 655;
+        nAngle += 0x8000;
+        nAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
+        return sal_True;
+    }
+    return sal_False;
+}
 sal_Bool EscherPropertyContainer::CreateConnectorProperties(
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
     EscherSolverContainer& rSolverContainer, ::com::sun::star::awt::Rectangle& rGeoRect,
@@ -2077,6 +2227,7 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
     static OUString sEdgeEndPoint         ( "EdgeEndPoint" );
     static OUString sEdgeStartConnection  ( "EdgeStartConnection" );
     static OUString sEdgeEndConnection    ( "EdgeEndConnection" );
+    static OUString sEdgePath             ( "PolyPolygonBezier" );
 
     sal_Bool bRetValue = sal_False;
     rShapeType = rShapeFlags = 0;
@@ -2103,17 +2254,21 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                         rShapeFlags = SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT | SHAPEFLAG_CONNECTOR;
                         rGeoRect = ::com::sun::star::awt::Rectangle( aStartPoint.X, aStartPoint.Y,
                                                             ( aEndPoint.X - aStartPoint.X ) + 1, ( aEndPoint.Y - aStartPoint.Y ) + 1 );
-                        if ( rGeoRect.Height < 0 )          // justify
+                        //set standard's FLIP in below code
+                        if ( eCt != ::com::sun::star::drawing::ConnectorType_STANDARD)
                         {
-                            rShapeFlags |= SHAPEFLAG_FLIPV;
-                            rGeoRect.Y = aEndPoint.Y;
-                            rGeoRect.Height = -rGeoRect.Height;
-                        }
-                        if ( rGeoRect.Width < 0 )
-                        {
-                            rShapeFlags |= SHAPEFLAG_FLIPH;
-                            rGeoRect.X = aEndPoint.X;
-                            rGeoRect.Width = -rGeoRect.Width;
+                            if ( rGeoRect.Height < 0 )          // justify
+                            {
+                                rShapeFlags |= SHAPEFLAG_FLIPV;
+                                rGeoRect.Y = aEndPoint.Y;
+                                rGeoRect.Height = -rGeoRect.Height;
+                            }
+                            if ( rGeoRect.Width < 0 )
+                            {
+                                rShapeFlags |= SHAPEFLAG_FLIPH;
+                                rGeoRect.X = aEndPoint.X;
+                                rGeoRect.Width = -rGeoRect.Width;
+                            }
                         }
                         sal_uInt32 nAdjustValue1, nAdjustValue2, nAdjustValue3;
                         nAdjustValue1 = nAdjustValue2 = nAdjustValue3 = 0x2a30;
@@ -2135,12 +2290,34 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                             break;
 
                             case ::com::sun::star::drawing::ConnectorType_STANDARD :// Connector 2->5
-                            {
-                                rShapeType = ESCHER_ShpInst_BentConnector3;
-                                AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
-                            }
-                            break;
-
+                                {
+                                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgePath ) )
+                                    {
+                                        PolyPolygon aPolyPolygon = GetPolyPolygon( aAny );
+                                        Polygon aPoly;
+                                        if ( aPolyPolygon.Count() > 0 )
+                                        {
+                                            AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
+                                            aPoly = aPolyPolygon[ 0 ];
+                                            sal_Int32 nAdjCount = lcl_GetAdjustValueCount( aPoly );
+                                            rShapeType = ( sal_uInt16 )( ESCHER_ShpInst_BentConnector2 + nAdjCount);
+                                            for ( sal_Int32 i = 0 ; i < nAdjCount; ++ i)
+                                                AddOpt( (sal_uInt16) ( ESCHER_Prop_adjustValue+i) , lcl_GetConnectorAdjustValue( aPoly, i ) );
+                                            bRetValue = sal_True;
+                                        }
+                                        sal_Int32 nAngle=0;
+                                        if (lcl_GetAngle(aPoly,rShapeFlags,nAngle ))
+                                        {
+                                            AddOpt( ESCHER_Prop_Rotation, nAngle );
+                                        }
+                                    }
+                                    else
+                                    {
+                                        rShapeType = ESCHER_ShpInst_BentConnector3;
+                                        AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
+                                    }
+                                }
+                                break;
                             default:
                             case ::com::sun::star::drawing::ConnectorType_LINE :
                             case ::com::sun::star::drawing::ConnectorType_LINES :   // Connector 2->5
@@ -2151,7 +2328,8 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                             break;
                         }
                         CreateLineProperties( aXPropSet, sal_False );
-                        bRetValue = bSuppressRotation = sal_True;
+                        bRetValue = sal_True;
+                        bSuppressRotation = sal_False;
                     }
                 }
             }
