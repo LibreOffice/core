@@ -30,7 +30,6 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/stream.hxx>
-#include <rtl/memory.h>
 #include <rtl/uuid.h>
 
 //  ----------------------------------------------------

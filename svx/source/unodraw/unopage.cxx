@@ -33,7 +33,6 @@
 #include <sot/clsids.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
-#include <rtl/memory.h>
 #include <sfx2/objsh.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>

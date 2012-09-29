@@ -1033,7 +1033,7 @@ namespace DOM
         throw (RuntimeException)
     {
         if ((rId.getLength() == 16) &&
-            (0 == rtl_compareMemory(theCNodeUnoTunnelId::get().getSeq().getConstArray(),
+            (0 == memcmp(theCNodeUnoTunnelId::get().getSeq().getConstArray(),
                                     rId.getConstArray(), 16)))
         {
             return ::sal::static_int_cast< sal_Int64 >(

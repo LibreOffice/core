@@ -1210,7 +1210,7 @@ sal_Int64 SAL_CALL FmXGridPeer::getSomething( const Sequence< sal_Int8 >& _rIden
     sal_Int64 nReturn(0);
 
     if  (   (_rIdentifier.getLength() == 16)
-        &&  (0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
+        &&  (0 == memcmp( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
         )
     {
         nReturn = reinterpret_cast<sal_Int64>(this);

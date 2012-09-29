@@ -359,7 +359,7 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
 ::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
         throw( uno::RuntimeException)
 {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( ExplicitValueProvider::getUnoTunnelId().getConstArray(),
+    if( aIdentifier.getLength() == 16 && 0 == memcmp( ExplicitValueProvider::getUnoTunnelId().getConstArray(),
                                                          aIdentifier.getConstArray(), 16 ) )
     {
         ExplicitValueProvider* pProvider = this;

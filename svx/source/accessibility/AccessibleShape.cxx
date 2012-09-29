@@ -944,7 +944,7 @@ sal_Int64 SAL_CALL
 {
     sal_Int64 nReturn( 0 );
 
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
+    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
         nReturn = reinterpret_cast< sal_Int64 >( this );
 
     return( nReturn );

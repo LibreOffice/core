@@ -31,7 +31,6 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <rtl/memory.h>
 #include <rtl/uuid.h>
 
 #include <toolkit/controls/unocontrolcontainer.hxx>

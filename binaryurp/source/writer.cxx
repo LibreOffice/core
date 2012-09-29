@@ -21,13 +21,13 @@
 
 #include <exception>
 #include <vector>
+#include <string.h>
 
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "cppuhelper/exc_hlp.hxx"
 #include "osl/mutex.hxx"
-#include "rtl/memory.h"
 #include "uno/dispatcher.hxx"
 
 #include "binaryany.hxx"
@@ -421,10 +421,10 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     css::uno::Sequence< sal_Int8 > s(
         static_cast< sal_Int32 >(header.size() + k));
     OSL_ASSERT(!header.empty());
-    rtl_copyMemory(
+    memcpy(
         s.getArray(), &header[0], static_cast< sal_Size >(header.size()));
     for (;;) {
-        rtl_copyMemory(s.getArray() + s.getLength() - k, p, k);
+        memcpy(s.getArray() + s.getLength() - k, p, k);
         try {
             bridge_->getConnection()->write(s);
         } catch (const css::io::IOException & e) {

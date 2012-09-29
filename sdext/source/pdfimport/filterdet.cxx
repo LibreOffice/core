@@ -590,7 +590,7 @@ bool checkDocChecksum( const rtl::OUString& rInPDFFileURL,
     rtl_digest_destroyMD5( aActualDigest );
 
     // compare the contents
-    bRet = (0 == rtl_compareMemory( nActualChecksum, nTestChecksum, sizeof( nActualChecksum ) ));
+    bRet = (0 == memcmp( nActualChecksum, nTestChecksum, sizeof( nActualChecksum ) ));
 #if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "test checksum: " );
     for( unsigned int i = 0; i < sizeof(nTestChecksum); i++ )

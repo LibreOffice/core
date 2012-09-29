@@ -274,7 +274,7 @@ const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterfa
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {
-	return( ( rId.getLength() == 16 && 0 == rtl_compareMemory( ::Graphic::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) ?
+    return( ( rId.getLength() == 16 && 0 == memcmp( ::Graphic::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) ?
             reinterpret_cast< sal_Int64 >( mpGraphic ) :
             0 );
 }

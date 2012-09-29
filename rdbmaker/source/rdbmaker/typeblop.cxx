@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
+
 #include <rtl/alloc.h>
 #include <registry/reflwrit.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -287,7 +289,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
                     length = writer.getBlopSize();
                     *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
-                    rtl_copyMemory(*pBlop, writer.getBlop(), length);
+                    memcpy(*pBlop, writer.getBlop(), length);
                 }
                 break;
             case TypeClass_MODULE:
@@ -329,7 +331,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
                     length = writer.getBlopSize();
                     *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
-                    rtl_copyMemory(*pBlop, writer.getBlop(), length);
+                    memcpy(*pBlop, writer.getBlop(), length);
                 }
                 break;
             case TypeClass_INTERFACE:
@@ -404,7 +406,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
                     length = writer.getBlopSize();
                     *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
-                    rtl_copyMemory(*pBlop, writer.getBlop(), length);
+                    memcpy(*pBlop, writer.getBlop(), length);
                 }
                 break;
             case TypeClass_STRUCT:
@@ -444,7 +446,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
                     length = writer.getBlopSize();
                     *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
-                    rtl_copyMemory(*pBlop, writer.getBlop(), length);
+                    memcpy(*pBlop, writer.getBlop(), length);
                 }
                 break;
             case TypeClass_ENUM:
@@ -473,7 +475,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
                     length = writer.getBlopSize();
                     *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
-                    rtl_copyMemory(*pBlop, writer.getBlop(), length);
+                    memcpy(*pBlop, writer.getBlop(), length);
                 }
                 break;
             case TypeClass_TYPEDEF:
@@ -488,7 +490,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                                               0, 0, 0);
                     length = writer.getBlopSize();
                     *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
-                    rtl_copyMemory(*pBlop, writer.getBlop(), length);
+                    memcpy(*pBlop, writer.getBlop(), length);
                 }
                 break;
             default:

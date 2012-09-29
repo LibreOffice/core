@@ -55,7 +55,6 @@
 
 #include <typelib/typedescription.hxx>
 #include <rtl/uuid.h>
-#include <rtl/memory.h>
 #include <rtl/ustring.hxx>
 
 #include "jscriptclasses.hxx"

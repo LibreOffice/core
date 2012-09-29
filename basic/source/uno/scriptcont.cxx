@@ -639,7 +639,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
                     Sequence< sal_Int8 > aBinSeq( nSize );
                     sal_Int8* pData = aBinSeq.getArray();
-                    ::rtl_copyMemory( pData, aMemStream.GetData(), nSize );
+                    memcpy( pData, aMemStream.GetData(), nSize );
 
                        Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
                     if ( !xOut.is() )
@@ -775,7 +775,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
                         Sequence< sal_Int8 > aBinSeq( nSize );
                         sal_Int8* pData = aBinSeq.getArray();
-                        ::rtl_copyMemory( pData, aMemStream.GetData(), nSize );
+                        memcpy( pData, aMemStream.GetData(), nSize );
 
                         Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
                         if ( xOut.is() )

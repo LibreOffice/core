@@ -24,6 +24,7 @@
 
 #include "lockbyte.hxx"
 
+#include <string.h>
 #include <stdio.h>
 
 #include "osl/file.h"
@@ -91,7 +92,7 @@ int SAL_CALL main (int argc, char **argv)
     }
 
     sal_Char buffer[TEST_PAGESIZE];
-    rtl_fillMemory (buffer, sizeof(buffer), sal_uInt8('B'));
+    memset (buffer, sal_uInt8('B'), sizeof(buffer));
 
     sal_uInt32 i, k;
     for (k = 0; k < 4; k++)
@@ -173,14 +174,14 @@ int SAL_CALL main (int argc, char **argv)
         if (offset == 0)
         {
             sal_uInt32 magic = 256 * 4;
-            if (rtl_compareMemory (&verify[index], &magic, sizeof(magic)))
+            if (memcmp (&verify[index], &magic, sizeof(magic)))
             {
                 // Failure.
                 fprintf (stderr, "t_file: Unexpected value at 0x00000000\n");
             }
             index += 4;
         }
-        if (rtl_compareMemory (
+        if (memcmp (
             &verify[index], &buffer[index], TEST_PAGESIZE - index))
         {
             // Failure.

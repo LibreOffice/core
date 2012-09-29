@@ -33,7 +33,6 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/property.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/memory.h>
 #include <rtl/uuid.h>
 
 #include <tools/debug.hxx>

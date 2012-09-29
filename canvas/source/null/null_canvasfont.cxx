@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <string.h>
 
 #include "null_canvasfont.hxx"
 #include "null_textlayout.hxx"

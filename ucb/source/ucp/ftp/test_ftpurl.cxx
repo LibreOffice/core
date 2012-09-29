@@ -32,7 +32,6 @@
 #include "ftploaderthread.hxx"
 #include "ftphandleprovider.hxx"
 #include "debughelper.hxx"
-#include <rtl/memory.h>
 #include <vector>
 
 #define TESTEVAL \
@@ -252,7 +251,7 @@ int test_ftpopen(void)
         char *dest = (char*) malloc(sizeof(char));
         dest[0] = 0;
         do {
-            rtl_zeroMemory((void*)buff,bffsz);
+            memset((void*)buff, 0, bffsz);
             fread(buff,bffsz-1,1,file);
             nbuf = strlen(buff);
             ndest = strlen(dest);

@@ -677,7 +677,7 @@ void implCopyStreamToByteSequence( Reference< XInputStream > xStream,
 
         sal_Int32 nPos = bytes.getLength();
         bytes.realloc( nPos + nRead );
-        ::rtl_copyMemory( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
+        memcpy( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
     }
 }
 
@@ -810,8 +810,8 @@ void DlgEditor::Copy()
                 pCombinedData[i] = sal_Int8( n & 0xff );
                 n >>= 8;
             }
-            ::rtl_copyMemory( pCombinedData + 4, DialogModelBytes.getConstArray(), nDialogDataLen );
-            ::rtl_copyMemory( pCombinedData + nResOffset, aResData.getConstArray(), nResDataLen );
+            memcpy( pCombinedData + 4, DialogModelBytes.getConstArray(), nDialogDataLen );
+            memcpy( pCombinedData + nResOffset, aResData.getConstArray(), nResDataLen );
 
             Any aCombinedDataAny;
             aCombinedDataAny <<= aCombinedData;
@@ -905,10 +905,10 @@ void DlgEditor::Paste()
                     sal_Int32 nDialogDataLen = nTotalLen - nResDataLen - 4;
 
                     DialogModelBytes.realloc( nDialogDataLen );
-                    ::rtl_copyMemory( DialogModelBytes.getArray(), pCombinedData + 4, nDialogDataLen );
+                    memcpy( DialogModelBytes.getArray(), pCombinedData + 4, nDialogDataLen );
 
                     aResData.realloc( nResDataLen );
-                    ::rtl_copyMemory( aResData.getArray(), pCombinedData + nResOffset, nResDataLen );
+                    memcpy( aResData.getArray(), pCombinedData + nResOffset, nResDataLen );
                 }
                 else
                 {

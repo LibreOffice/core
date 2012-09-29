@@ -27,7 +27,6 @@
 #include <osl/interlck.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/memory.h>
 #include <rtl/instance.hxx>
 
 #include <typelib/typedescription.h>

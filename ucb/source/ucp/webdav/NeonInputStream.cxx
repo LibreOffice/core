@@ -26,8 +26,9 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include "NeonInputStream.hxx"
-#include <rtl/memory.h>
 
 using namespace cppu;
 using namespace com::sun::star::io;
@@ -57,7 +58,7 @@ NeonInputStream::~NeonInputStream( void )
 void NeonInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )
 {
     mInputBuffer.realloc( sal::static_int_cast<sal_Int32>(mLen) + inLen );
-    rtl_copyMemory( mInputBuffer.getArray() + mLen, inBuf, inLen );
+    memcpy( mInputBuffer.getArray() + mLen, inBuf, inLen );
     mLen += inLen;
 }
 
@@ -94,7 +95,7 @@ sal_Int32 SAL_CALL NeonInputStream::readBytes(
     aData.realloc( theBytes2Read );
 
     // Write the data
-    rtl_copyMemory(
+    memcpy(
         aData.getArray(), mInputBuffer.getConstArray() + mPos, theBytes2Read );
 
     // Update our stream position for next time

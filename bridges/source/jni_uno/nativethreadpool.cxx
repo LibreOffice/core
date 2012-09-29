@@ -27,10 +27,10 @@
  ************************************************************************/
 
 
+#include <string.h>
 #include "jvmaccess/virtualmachine.hxx"
 #include "rtl/byteseq.h"
 #include "rtl/byteseq.hxx"
-#include "rtl/memory.h"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 #include "uno/threadpool.h"
@@ -111,7 +111,7 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_threadId(
     if (p == 0) {
         return 0;
     }
-    rtl_copyMemory(p, seq.getConstArray(), n);
+    memcpy(p, seq.getConstArray(), n);
         // sal_Int8 and jbyte ought to be compatible
     env->ReleasePrimitiveArrayCritical(a, p, 0);
     return a;
