@@ -189,4 +189,8 @@ endef
 # gb_Helper_OUTDIRLIBDIR is set by the platform to the path the dynamic linker need to use
 # for libraries from the OUTDIR
 
+define gb_Helper_optional
+$(if $(filter $(1),$(BUILD_TYPE)),$(2))
+endef
+
 # vim: set noet sw=4 ts=4:
