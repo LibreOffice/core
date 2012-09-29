@@ -35,7 +35,7 @@ ModalDialog RID_SCDLG_XML_SOURCE
     FixedText FT_SOURCE_FILE
     {
         Pos = MAP_APPFONT ( 25 , 21 ) ;
-        Size = MAP_APPFONT ( 225 , 8 ) ;
+        Size = MAP_APPFONT ( 219 , 8 ) ;
 
         Text [ en-US ] = "- not set -";
     };

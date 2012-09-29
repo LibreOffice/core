@@ -15,6 +15,8 @@
 #include "vcl/fixed.hxx"
 #include "svtools/svtreebx.hxx"
 
+#include "expftext.hxx"
+
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
@@ -31,7 +33,7 @@ class ScXMLSourceDlg : public ModalDialog
 {
     FixedLine maFlSourceFile;
     ImageButton maBtnSelectSource;
-    FixedText maFtSourceFile;
+    ScExpandedFixedText maFtSourceFile;
 
     FixedLine maFtMapXmlDoc;
 
