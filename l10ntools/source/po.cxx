@@ -330,7 +330,9 @@ void ImplFindAllTag(const OString& rText,std::vector<OString>& o_vFoundTags)
     {
         ImplMinimize(sTemp,aRegExp,aRegs);
         o_vFoundTags.push_back(
-                rText.copy(aRegs.start[0],aRegs.end[0]-aRegs.start[0]));
+            OUStringToOString(
+                sTemp.copy(aRegs.start[0],aRegs.end[0]-aRegs.start[0]),
+                RTL_TEXTENCODING_UTF8));
         nStart = aRegs.end[0];
         memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
         aRegExp.re_search(&aRegs,nStart);
