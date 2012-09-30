@@ -132,7 +132,7 @@ $(dir $(call gb_ScpMergeTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_ScpMergeTarget_get_target,%) : $(gb_ScpMergeTarget_TARGET)
-	$(call gb_ScpMergeTarget__command,$@,$*)
+	$(call gb_ScpMergeTarget__command,$@,$*,$(SCP_SOURCE))
 
 .PHONY : $(call gb_ScpMergeTarget_get_clean_target,%)
 $(call gb_ScpMergeTarget_get_clean_target,%) :

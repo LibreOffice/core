@@ -136,9 +136,9 @@ $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : \
-	POFILES := $(foreach lang,$(gb_ExtensionTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+	POFILES := $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
-	$(foreach lang,$(gb_ExtensionTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+	$(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
 endif
 
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
@@ -225,9 +225,9 @@ $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_ExtensionTarget_TRANS_LANGS)),$(subst en_US,$(lang),$(2)))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
-	POFILES := $(foreach lang,$(gb_ExtensionTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po)
+	POFILES := $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
-	$(foreach lang,$(gb_ExtensionTarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po)
+	$(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po)
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
