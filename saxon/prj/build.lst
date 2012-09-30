@@ -1,2 +1,2 @@
 xx	saxon	:	solenv stax NULL
-xx	saxon	nmake	-	all	xx_saxon NULL
+xx	saxon\prj	nmake	-	all	xx_saxon NULL
