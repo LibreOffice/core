@@ -28,6 +28,19 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,headless))
 
+$(eval $(call gb_StaticLibrary_use_packages,headless,\
+	basebmp_inc \
+	basegfx_inc \
+	comphelper_inc \
+	cppu_inc \
+	cppuhelper_inc \
+	i18npool_inc \
+	i18nutil_inc \
+	o3tl_inc \
+	tools_inc \
+	unotools_inc \
+))
+
 $(eval $(call gb_StaticLibrary_use_api,headless,\
     offapi \
     udkapi \

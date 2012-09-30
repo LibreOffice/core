@@ -19,6 +19,16 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,writerperfect))
 
+$(eval $(call gb_StaticLibrary_use_packages,writerperfect,\
+	comphelper_inc \
+	cppu_inc \
+	cppuhelper_inc \
+	sot_inc \
+	tools_inc \
+	unotools_inc \
+	xmloff_inc \
+))
+
 $(eval $(call gb_StaticLibrary_set_include,writerperfect,\
 	$$(INCLUDE) \
     -I$(SRCDIR)/writerperfect/source \

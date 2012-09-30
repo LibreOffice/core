@@ -30,6 +30,11 @@ include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
 $(eval $(call gb_StaticLibrary_StaticLibrary,pdfimport_s))
 
 $(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
+    basegfx_inc \
+    comphelper_inc \
+    cppu_inc \
+    cppuhelper_inc \
+    o3tl_inc \
     tools_inc \
 ))
 
