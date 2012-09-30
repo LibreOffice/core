@@ -481,7 +481,7 @@ OString PoEntry::getResourceType() const
 PoEntry::TYPE PoEntry::getType() const
 {
     const OString sContext = m_aGenPo.getContext();
-    const OString sType = sContext.copy( sContext.indexOf('.') + 1 );
+    const OString sType = sContext.copy( sContext.lastIndexOf('.') + 1 );
     assert( m_bIsInitialized &&
         (sType == "text" || sType == "quickhelptext" || sType == "title") );
     if ( sType == "text" )
