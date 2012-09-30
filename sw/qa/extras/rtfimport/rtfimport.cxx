@@ -605,19 +605,12 @@ void Test::testFdo49501()
 
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
 
-    sal_Bool bIsLandscape = sal_False;
-    xStyle->getPropertyValue("IsLandscape") >>= bIsLandscape;
-    CPPUNIT_ASSERT_EQUAL(sal_True, bIsLandscape);
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStyle, "IsLandscape"));
     sal_Int32 nExpected(TWIP_TO_MM100(567));
-    sal_Int32 nValue = 0;
-    xStyle->getPropertyValue("LeftMargin") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
-    xStyle->getPropertyValue("RightMargin") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
-    xStyle->getPropertyValue("TopMargin") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
-    xStyle->getPropertyValue("BottomMargin") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(nExpected, nValue);
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "RightMargin"));
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "TopMargin"));
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int32>(xStyle, "BottomMargin"));
 }
 
 void Test::testFdo49271()
