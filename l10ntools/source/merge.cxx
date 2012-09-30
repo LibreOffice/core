@@ -265,8 +265,8 @@ MergeDataFile::MergeDataFile(
                 InsertEntry(
                     aActPo.getResourceType(), aActPo.getGroupId(),
                     aActPo.getLocalId(), sHACK, "qtz",
-                    sQTZText + "‖" + sExText, sQTZQHText + "‖" + sExQHText,
-                    sQTZTitle + "‖" + sExTitle, sFileName, bCaseSensitive );
+                    sQTZText + "||" + sExText, sQTZQHText + "||" + sExQHText,
+                    sQTZTitle + "||" + sExTitle, sFileName, bCaseSensitive );
             }
         }
         aPoInput.close();
