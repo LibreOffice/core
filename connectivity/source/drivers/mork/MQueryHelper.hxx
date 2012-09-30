@@ -185,6 +185,9 @@ namespace connectivity
             void            getCardValues(nsIAbCard  *card,sal_uInt32 rowIndex=0);
 */
 
+            sal_Int32 doQueryDefaultTable(OConnection* xConnection);
+            sal_Int32 doQueryListTable(OConnection* xConnection, rtl::OString& ouStringTable);
+
         public:
                                        MQueryHelper(const OColumnAlias& _ca);
             virtual                    ~MQueryHelper();

@@ -145,9 +145,13 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 	Jar_ConnectivityTools \
 ))
 # FIXME: Does not work. Convert to JUnit.
-	# JunitTest_complex \
+# JunitTest_complex \
 
 endif
+
+$(eval $(call gb_Module_add_check_targets,connectivity,\
+	CppunitTest_connectivity_mork \
+))
 
 endif
 

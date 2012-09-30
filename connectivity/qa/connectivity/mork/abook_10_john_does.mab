@@ -1,0 +1,159 @@
+// <!-- <mdb:mork:z v="1.4"/> -->
+< <(a=c)> // (f=iso-8859-1)
+  (B8=LastModifiedDate)(B9=RecordKey)(BA=AddrCharSet)(BB=LastRecordKey)
+  (BC=ns:addrbk:db:table:kind:pab)(BD=ListName)(BE=ListNickName)
+  (BF=ListDescription)(C0=ListTotalAddresses)(C1=LowercaseListName)
+  (C2=ns:addrbk:db:table:kind:deleted)(C3=_Yahoo)(C4=_MSN)
+  (C5=_GoogleTalk)(C6=_Skype)(C7=_JabberId)(C8=PreferDisplayName)
+  (C9=PhotoURI)(CA=PhotoType)(CB=PhotoName)(CC=DbRowID)(CD=_QQ)(CE=_ICQ)
+  (80=ns:addrbk:db:row:scope:card:all)
+  (81=ns:addrbk:db:row:scope:list:all)
+  (82=ns:addrbk:db:row:scope:data:all)(83=FirstName)(84=LastName)
+  (85=PhoneticFirstName)(86=PhoneticLastName)(87=DisplayName)
+  (88=NickName)(89=PrimaryEmail)(8A=LowercasePrimaryEmail)
+  (8B=SecondEmail)(8C=PreferMailFormat)(8D=PopularityIndex)
+  (8E=AllowRemoteContent)(8F=WorkPhone)(90=HomePhone)(91=FaxNumber)
+  (92=PagerNumber)(93=CellularNumber)(94=WorkPhoneType)(95=HomePhoneType)
+  (96=FaxNumberType)(97=PagerNumberType)(98=CellularNumberType)
+  (99=HomeAddress)(9A=HomeAddress2)(9B=HomeCity)(9C=HomeState)
+  (9D=HomeZipCode)(9E=HomeCountry)(9F=WorkAddress)(A0=WorkAddress2)
+  (A1=WorkCity)(A2=WorkState)(A3=WorkZipCode)(A4=WorkCountry)
+  (A5=JobTitle)(A6=Department)(A7=Company)(A8=_AimScreenName)
+  (A9=AnniversaryYear)(AA=AnniversaryMonth)(AB=AnniversaryDay)
+  (AC=SpouseName)(AD=FamilyName)(AE=WebPage1)(AF=WebPage2)(B0=BirthYear)
+  (B1=BirthMonth)(B2=BirthDay)(B3=Custom1)(B4=Custom2)(B5=Custom3)
+  (B6=Custom4)(B7=Notes)>
+
+<(AF=b)(81=John Doe)(82=)(80=0)(83=John)(84=1)(85=Doe)(86=john@doe.org)
+  (87=generic)(88=John Doe2)(89=Doe2)(8A=john@doe2.org)(8B=2)(8C=John Doe3)
+  (8D=Doe3)(8E=john@doe3.org)(8F=3)(90=John Doe4)(91=Doe4)(92
+    =john@doe4.org)(93=4)(94=John Doe5)(95=Doe5)(96=john@doe5.org)(97=5)
+  (98=John Doe6)(99=Doe6)(9A=john@doe6.org)(9B=6)(9C=John Doe7)(9D=Doe7)
+  (9E=john@doe7.org)(9F=7)(A0=John Doe8)(A1=Doe8)(A2=john@doe8.org)
+  (A3=8)(A4=John Doe9)(A5=Doe9)(A6=john@doe9.org)(A7=9)(A8=John Doe10)
+  (A9=Doe10)(AA=john@doe10.org)(AB=10)(AC=a)(AD=Does_5)(AE=does_5)>
+{1:^80 {(k^BC:c)(s=9)}
+  [1:^82(^BB=b)]
+  [1(^87^81)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^85)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^86)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=1)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^86)(^B9=1)]
+  [2(^87^88)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^89)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^8A)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=2)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^8A)(^B9=2)]
+  [3(^87^8C)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^8D)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^8E)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=3)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^8E)(^B9=3)]
+  [4(^87^90)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^91)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^92)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=4)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^92)(^B9=4)]
+  [5(^87^94)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^95)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^96)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=5)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^96)(^B9=5)]
+  [6(^87^98)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^99)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^9A)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=6)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^9A)(^B9=6)]
+  [7(^87^9C)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^9D)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^9E)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=7)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^9E)(^B9=7)]
+  [8(^87^A0)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^A1)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^A2)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=8)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^A2)(^B9=8)]
+  [9(^87^A4)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^A5)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^A6)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=9)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^A6)(^B9=9)]
+  [A(^87^A8)(^86=)(^C3=)(^A1=)(^AE=)(^C4=)(^C5=)(^B2=)(^A7=)(^9A=)(^B3=)
+    (^C6=)(^A6=)(^A4=)(^A5=)(^A3=)(^9E=)(^85=)(^B0=)(^8D=0)(^C7=)(^A0=)
+    (^A2=)(^B7=)(^8C=0)(^B8=0)(^83^83)(^A8=)(^C8=1)(^84^A9)(^92=)(^C9=)
+    (^B6=)(^9D=)(^89^AA)(^8E=0)(^AF=)(^CA^87)(^8F=)(^CB=)(^8B=)(^93=)
+    (^90=)(^CC=10)(^B1=)(^CD=)(^9B=)(^9C=)(^91=)(^B4=)(^9F=)(^99=)(^88=)
+    (^CE=)(^B5=)(^8A^AA)(^B9=a)]
+  [1:^81(^BD^AD)(^C1^AE)(^BE=)(^BF=)(^C0=0)(^B9=b)]}
+
+@$${9{@
+
+<(B2=c)(B0=Does_10)(B1=does_10)>
+{1:^80 {(k^BC:c)(s=9)}
+  [-2:^81(^BD^B0)(^C1^B1)(^BE=)(^BF=)(^C0=0)(^B9=c)]}
+[1:^82(^BB=c)]
+@$$}9}@
+
+@$${A{@
+< <(a=c)> // (f=iso-8859-1)
+  (CF=Address1)>
+[-1:^81(^BD^AD)(^C1^AE)(^BE=)(^BF=)(^C0=1)(^B9=b)(^CF=1)]
+@$$}A}@
+
+@$${B{@
+< <(a=c)> // (f=iso-8859-1)
+  (D0=Address2)>
+[-1:^81(^BD^AD)(^C1^AE)(^BE=)(^BF=)(^C0=2)(^B9=b)(^CF=1)(^D0=2)]
+@$$}B}@
+
+@$${C{@
+< <(a=c)> // (f=iso-8859-1)
+  (D1=Address3)>
+[-1:^81(^BD^AD)(^C1^AE)(^BE=)(^BF=)(^C0=3)(^B9=b)(^CF=1)(^D0=2)(^D1=3)]
+@$$}C}@
+
+@$${D{@
+< <(a=c)> // (f=iso-8859-1)
+  (D2=Address4)>
+[-1:^81(^BD^AD)(^C1^AE)(^BE=)(^BF=)(^C0=4)(^B9=b)(^CF=1)(^D0=2)(^D1=3)
+    (^D2=4)]
+@$$}D}@
+
+@$${E{@
+< <(a=c)> // (f=iso-8859-1)
+  (D3=Address5)>
+[-1:^81(^BD^AD)(^C1^AE)(^BE=)(^BF=)(^C0=5)(^B9=b)(^CF=1)(^D0=2)(^D1=3)
+    (^D2=4)(^D3=5)]
+@$$}E}@
+
+@$${F{@
+[-2:^81(^BD^B0)(^C1^B1)(^BE=)(^BF=)(^C0=1)(^B9=c)(^CF=a)]
+@$$}F}@
+
+@$${10{@
+[-2:^81(^BD^B0)(^C1^B1)(^BE=)(^BF=)(^C0=2)(^B9=c)(^CF=a)(^D0=6)]
+@$$}10}@
+
+@$${11{@
+[-2:^81(^BD^B0)(^C1^B1)(^BE=)(^BF=)(^C0=3)(^B9=c)(^CF=a)(^D0=6)(^D1=7)]
+@$$}11}@
+
+@$${12{@
+[-2:^81(^BD^B0)(^C1^B1)(^BE=)(^BF=)(^C0=4)(^B9=c)(^CF=a)(^D0=6)(^D1=7)
+    (^D2=8)]
+@$$}12}@
+
+@$${13{@
+[-2:^81(^BD^B0)(^C1^B1)(^BE=)(^BF=)(^C0=5)(^B9=c)(^CF=a)(^D0=6)(^D1=7)
+    (^D2=8)(^D3=9)]
+@$$}13}@

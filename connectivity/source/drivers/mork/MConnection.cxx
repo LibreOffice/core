@@ -85,11 +85,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     nLen = url.indexOf(':',nLen+1);
     OSL_ENSURE( url.copy( 0, nLen ) == "sdbc:address", "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
 
-    ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
+    OUString aAddrbookURI(url.copy(nLen+1));
     // Get Scheme
     nLen = aAddrbookURI.indexOf(':');
-    ::rtl::OUString aAddrbookScheme;
-    ::rtl::OUString sAdditionalInfo;
+    OUString aAddrbookScheme;
+    OUString sAdditionalInfo;
     if ( nLen == -1 )
     {
         // There isn't any subschema: - but could be just subschema
@@ -112,13 +112,23 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     SAL_INFO("connectivity.mork", "URI = " << aAddrbookURI );
     SAL_INFO("connectivity.mork", "Scheme = " << aAddrbookScheme );
 
-    ::rtl::OUString defaultProfile = m_pProfileAccess->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
-    SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
+    OUString path;
+    const OUString UNITTEST_URL = "thunderbird:unittest:";
+    sal_Int32 unittestIndex = url.indexOf(UNITTEST_URL);
 
-    ::rtl::OUString path = m_pProfileAccess->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
-    SAL_INFO("connectivity.mork", "ProfilePath: " << path);
-
-    path += rtl::OUString( "/abook.mab" );
+    // production?
+    if (unittestIndex == -1)
+    {
+        OUString defaultProfile = m_pProfileAccess->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
+        path = m_pProfileAccess->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
+        SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
+        SAL_INFO("connectivity.mork", "ProfilePath: " << path);
+        path += rtl::OUString( "/abook.mab" );
+    }
+    else
+    {
+        path = aAddrbookURI.replaceFirst(UNITTEST_URL, "");
+    }
 
     SAL_INFO("connectivity.mork", "AdressbookPath: " << path);
 
