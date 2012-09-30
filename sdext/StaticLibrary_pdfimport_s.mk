@@ -29,6 +29,10 @@ include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,pdfimport_s))
 
+$(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
+    tools_inc \
+))
+
 $(eval $(call gb_StaticLibrary_use_api,pdfimport_s,\
     offapi \
     udkapi \
