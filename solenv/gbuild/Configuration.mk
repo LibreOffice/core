@@ -54,6 +54,8 @@
 #
 gb_Configuration__get_source = $(SRCDIR)/$(2)
 
+# The main LibreOffice registry
+gb_Configuration_PRIMARY_REGISTRY_NAME := registry
 
 # XcsTarget class
 
@@ -77,7 +79,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		--noout \
 		--stringparam componentName $(subst /,.,$(basename $(XCSFILE))) \
 		--stringparam root $(subst $(XCSFILE),,$(3)) \
-		$(if $(SCHEMA_ROOT),--stringparam schemaRoot $(SCHEMA_ROOT)) \
+		$(if $(PRIMARY_REGISTRY),,--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,)) \
 		$(gb_XcsTarget_XSLT_SchemaVal) \
 		$(3) && \
 	$(gb_XSLTPROC) --nonet \
@@ -359,8 +361,6 @@ $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Configuration_get_clean_target,$(1)) : \
 	 $(call gb_Zip_get_clean_target,$(1)_$(lang))))
 
-$(call gb_Configuration_get_target,$(1)) : SCHEMA_ROOT :=
-
 $$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
 
 endef
@@ -374,6 +374,7 @@ $(call gb_Configuration_get_clean_target,$(1)) : \
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : \
 	$(call gb_Configuration__get_source,$(1),$(2)/$(3)) \
 	$(call gb_Configuration_get_preparation_target,$(1))
+$(call gb_XcsTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : XCSFILE := $(3)
 $(call gb_XcsTarget_get_clean_target,$(2)/$(3)) : XCSFILE := $(3)
 $(call gb_Configuration_get_target,$(1)) : \
@@ -514,7 +515,6 @@ endef
 # $(eval $(call gb_Configuration_use_configuration,foo,registry))
 define gb_Configuration_use_configuration
 $(call gb_Configuration_get_preparation_target,$(1)) : $(call gb_Configuration_get_target,$(2))
-$(call gb_Configuration_get_target,$(1)) : SCHEMA_ROOT := $(gb_Configuration_registry)/schema
 
 endef
 
