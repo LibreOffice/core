@@ -27,6 +27,11 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,testtools_bridgetest_s))
 
+$(eval $(call gb_StaticLibrary_use_packages,testtools_bridgetest_s,\
+	cppu_inc \
+	cppuhelper_inc \
+))
+
 $(eval $(call gb_StaticLibrary_use_internal_api,testtools_bridgetest_s,\
     bridgetest \
 ))

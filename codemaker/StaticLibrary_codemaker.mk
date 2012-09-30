@@ -29,6 +29,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,codemaker))
 
 $(eval $(call gb_StaticLibrary_use_packages,codemaker,\
 	codemaker_inc \
+	registry_inc \
 	sal_generated \
 ))
 
