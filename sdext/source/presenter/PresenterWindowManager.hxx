@@ -47,7 +47,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase4.hxx>
-#include <tools/gen.hxx>
 #include <rtl/ref.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
