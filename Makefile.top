@@ -133,6 +133,7 @@ sal\
 salhelper\
 sane\
 sax\
+saxon\
 sc\
 scaddins\
 sccomp\
@@ -245,7 +246,6 @@ postprocess\
 python\
 redland\
 rhino\
-saxon\
 setup_native\
 stax\
 stlport\
