@@ -91,7 +91,7 @@ inline interface_type * Reference< interface_type >::iset_throw(
 {
     if (pInterface)
     {
-        pInterface->acquire();
+        castToXInterface(pInterface)->acquire();
         return pInterface;
     }
     throw RuntimeException(
@@ -184,13 +184,13 @@ inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Qu
 template< class interface_type >
 inline Reference< interface_type >::Reference( const Reference< interface_type > & rRef, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) )
 {
-    _pInterface = iset_throw( rRef.get() );
+    _pInterface = castToXInterface( iset_throw( rRef.get() ) );
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline Reference< interface_type >::Reference( interface_type * pInterface, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) )
 {
-    _pInterface = iset_throw( pInterface );
+    _pInterface = castToXInterface( iset_throw( pInterface ) );
 }
 #endif
 
