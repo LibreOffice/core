@@ -54,12 +54,9 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include <rtl/ustring.hxx>
-#include <tools/color.hxx>
 #include <CellColorHandler.hxx>
 #include <SectionColumnHandler.hxx>
 #include <GraphicHelpers.hxx>
