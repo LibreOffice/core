@@ -1082,13 +1082,21 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
 
 namespace {
 
+rtl::OString createHexStringFromDigit(sal_uInt8 nDigit)
+{
+    rtl::OString aString = rtl::OString::valueOf( static_cast<sal_Int32>(nDigit), 16 );
+    if(aString.getLength() == 1)
+        aString = aString + rtl::OString::valueOf(static_cast<sal_Int32>(0));
+    return aString;
+}
+
 rtl::OString createGuidStringFromInt(sal_uInt8 nGuid[16])
 {
     rtl::OStringBuffer aBuffer;
     aBuffer.append('{');
     for(size_t i = 0; i < 16; ++i)
     {
-        aBuffer.append(static_cast<sal_Int32>(nGuid[i]), 16);
+        aBuffer.append(createHexStringFromDigit(nGuid[i]));
         if(i == 3|| i == 5 || i == 7 || i == 9 )
             aBuffer.append('-');
     }
