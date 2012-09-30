@@ -701,13 +701,3 @@ $(COMMONMISC)/$(TARGET)/%.uulf : $$(@:b).ulf
     @$(COPY) $< $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
     @-$(RM) $@.$(INPATH)
-
-POLOCATION:=$(SRCDIR)$/translations/source
-PORELPATH:=$(PRJNAME)$/$(PATH_IN_MODULE).po
-
-$(COMMONMISC)/$(TARGET)/%.xrm : %.xrm
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
-    $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(mktmp $(foreach,lang,$(subst,en-US, $(WITH_LANG)) $(POLOCATION)/$(lang)/$(PORELPATH))) -l all
-    $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
-    $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
