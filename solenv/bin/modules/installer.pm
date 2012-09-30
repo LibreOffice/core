@@ -82,7 +82,7 @@ use installer::windows::strip;
 use installer::windows::update;
 use installer::windows::upgrade;
 use installer::worker;
-use installer::ziplist;
+use installer::ziplist qw(read_ziplist);
 
 our @EXPORT_OK = qw(main);
 
@@ -163,75 +163,7 @@ sub run {
     # Analyzing the settings and variables in zip.lst
     ###################################################
 
-    installer::logger::globallog("zip list file: $installer::globals::ziplistname");
-
-    my $ziplistref = installer::files::read_file($installer::globals::ziplistname);
-
-    installer::logger::print_message( "... analyzing $installer::globals::ziplistname ... \n" );
-
-    my ($productblockref, $parent) = installer::ziplist::getproductblock($ziplistref, $installer::globals::product, 1);     # product block from zip.lst
-
-    my ($settingsblockref, undef) = installer::ziplist::getproductblock($productblockref, "Settings", 0);       # settings block from zip.lst
-
-    $settingsblockref = installer::ziplist::analyze_settings_block($settingsblockref);              # select data from settings block in zip.lst
-
-    my $allsettingsarrayref = installer::ziplist::get_settings_from_ziplist($settingsblockref);
-
-    my $allvariablesarrayref = installer::ziplist::get_variables_from_ziplist($settingsblockref);
-
-    my ($globalproductblockref, undef) = installer::ziplist::getproductblock($ziplistref, $installer::globals::globalblock, 0);     # global product block from zip.lst
-
-    while (defined $parent)
-    {
-        my $parentproductblockref;
-        ($parentproductblockref, $parent) = installer::ziplist::getproductblock(
-            $ziplistref, $parent, 1);
-        my ($parentsettingsblockref, undef) = installer::ziplist::getproductblock(
-            $parentproductblockref, "Settings", 0);
-        $parentsettingsblockref = installer::ziplist::analyze_settings_block(
-            $parentsettingsblockref);
-        my $allparentsettingsarrayref =
-            installer::ziplist::get_settings_from_ziplist($parentsettingsblockref);
-        my $allparentvariablesarrayref =
-            installer::ziplist::get_variables_from_ziplist($parentsettingsblockref);
-        $allsettingsarrayref =
-            installer::converter::combine_arrays_from_references_first_win(
-                $allsettingsarrayref, $allparentsettingsarrayref)
-            if $#{$allparentsettingsarrayref} > -1;
-        $allvariablesarrayref =
-            installer::converter::combine_arrays_from_references_first_win(
-                $allvariablesarrayref, $allparentvariablesarrayref)
-            if $#{$allparentvariablesarrayref} > -1;
-    }
-
-    if ( $#{$globalproductblockref} > -1 )
-    {
-        my ($globalsettingsblockref, undef) = installer::ziplist::getproductblock($globalproductblockref, "Settings", 0);       # settings block from zip.lst
-
-        $globalsettingsblockref = installer::ziplist::analyze_settings_block($globalsettingsblockref);              # select data from settings block in zip.lst
-
-        my $allglobalsettingsarrayref = installer::ziplist::get_settings_from_ziplist($globalsettingsblockref);
-
-        my $allglobalvariablesarrayref = installer::ziplist::get_variables_from_ziplist($globalsettingsblockref);
-
-        if ( $#{$allglobalsettingsarrayref} > -1 ) { $allsettingsarrayref = installer::converter::combine_arrays_from_references_first_win($allsettingsarrayref, $allglobalsettingsarrayref); }
-        if ( $#{$allglobalvariablesarrayref} > -1 ) { $allvariablesarrayref = installer::converter::combine_arrays_from_references_first_win($allvariablesarrayref, $allglobalvariablesarrayref); }
-    }
-
-    $allsettingsarrayref = installer::ziplist::remove_multiples_from_ziplist($allsettingsarrayref); # the settings from the zip.lst
-
-    $allvariablesarrayref = installer::ziplist::remove_multiples_from_ziplist($allvariablesarrayref);
-
-    installer::ziplist::replace_variables_in_ziplist_variables($allvariablesarrayref);
-
-    my $allvariableshashref = installer::converter::convert_array_to_hash($allvariablesarrayref);   # the variables from the zip.lst
-
-    installer::ziplist::set_default_productversion_if_required($allvariableshashref);
-
-    installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
-
-    installer::ziplist::overwrite_branding( $allvariableshashref );
-
+    my ($allsettingsarrayref, $allvariableshashref) = read_ziplist($installer::globals::ziplistname);
 
     ########################################################
     # Check if this is simple packaging mechanism

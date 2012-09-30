@@ -27,13 +27,86 @@
 
 package installer::ziplist;
 
+use base 'Exporter';
+
 use File::Spec::Functions qw(rel2abs);
 
+use installer::converter;
 use installer::exiter;
+use installer::files;
 use installer::globals;
 use installer::logger;
 use installer::remover;
 use installer::systemactions;
+
+our @EXPORT_OK = qw(read_ziplist);
+
+sub read_ziplist {
+    my $ziplistname = shift;
+
+    installer::logger::globallog("zip list file: $ziplistname");
+
+    my $ziplistref = installer::files::read_file($ziplistname);
+
+    installer::logger::print_message( "... analyzing $ziplistname ... \n" );
+
+    my ($productblockref, $parent) = getproductblock($ziplistref, $installer::globals::product, 1);     # product block from zip.lst
+
+    my ($settingsblockref, undef) = getproductblock($productblockref, "Settings", 0);       # settings block from zip.lst
+    $settingsblockref = analyze_settings_block($settingsblockref);              # select data from settings block in zip.lst
+
+    my $allsettingsarrayref = get_settings_from_ziplist($settingsblockref);
+    my $allvariablesarrayref = get_variables_from_ziplist($settingsblockref);
+
+    my ($globalproductblockref, undef) = getproductblock($ziplistref, $installer::globals::globalblock, 0);     # global product block from zip.lst
+
+    while (defined $parent) {
+        my $parentproductblockref;
+        ($parentproductblockref, $parent) = getproductblock($ziplistref, $parent, 1);
+        my ($parentsettingsblockref, undef) = getproductblock($parentproductblockref, "Settings", 0);
+        $parentsettingsblockref = analyze_settings_block($parentsettingsblockref);
+        my $allparentsettingsarrayref = get_settings_from_ziplist($parentsettingsblockref);
+        my $allparentvariablesarrayref = get_variables_from_ziplist($parentsettingsblockref);
+        $allsettingsarrayref =
+            installer::converter::combine_arrays_from_references_first_win(
+                $allsettingsarrayref, $allparentsettingsarrayref)
+            if $#{$allparentsettingsarrayref} > -1;
+        $allvariablesarrayref =
+            installer::converter::combine_arrays_from_references_first_win(
+                $allvariablesarrayref, $allparentvariablesarrayref)
+            if $#{$allparentvariablesarrayref} > -1;
+    }
+
+    if ( @{$globalproductblockref} ) {
+        my ($globalsettingsblockref, undef) = getproductblock($globalproductblockref, "Settings", 0);       # settings block from zip.lst
+
+        $globalsettingsblockref = analyze_settings_block($globalsettingsblockref);              # select data from settings block in zip.lst
+
+        my $allglobalsettingsarrayref = get_settings_from_ziplist($globalsettingsblockref);
+
+        my $allglobalvariablesarrayref = get_variables_from_ziplist($globalsettingsblockref);
+
+        if ( @{$allglobalsettingsarrayref} ) {
+            $allsettingsarrayref = installer::converter::combine_arrays_from_references_first_win($allsettingsarrayref, $allglobalsettingsarrayref);
+        }
+        if ( @{$allglobalvariablesarrayref} ) {
+            $allvariablesarrayref = installer::converter::combine_arrays_from_references_first_win($allvariablesarrayref, $allglobalvariablesarrayref);
+        }
+    }
+
+    $allsettingsarrayref = remove_multiples_from_ziplist($allsettingsarrayref);
+    $allvariablesarrayref = remove_multiples_from_ziplist($allvariablesarrayref);
+
+    replace_variables_in_ziplist_variables($allvariablesarrayref);
+
+    my $allvariableshashref = installer::converter::convert_array_to_hash($allvariablesarrayref);
+
+    set_default_productversion_if_required($allvariableshashref);
+    add_variables_to_allvariableshashref($allvariableshashref);
+    overwrite_branding( $allvariableshashref );
+
+    return $allsettingsarrayref, $allvariableshashref;
+}
 
 #################################################
 # Getting data from path file and zip list file
