@@ -427,7 +427,9 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
       only three element*/
     }
     m_aGenPo.setContext(sContext);
-    setUnTransStr(vParts[eType]);
+    m_aGenPo.setUnTransStr(
+        ImplUnEscapeSDFText(
+            vParts[eType],vParts[SOURCEFILE].endsWith(".xhp")));
     m_aGenPo.genKeyId();
     m_bIsInitialized = true;
 }
@@ -520,14 +522,6 @@ OString PoEntry::getTransStr() const
         ImplEscapeSDFText(
             m_aGenPo.getTransStr(), getSourceFile().endsWith(".xhp") );
 
-}
-
-//Set translation string when input is in sdf format
-void PoEntry::setUnTransStr(const OString& rUnTransStr)
-{
-    m_aGenPo.setUnTransStr(
-                ImplUnEscapeSDFText(
-                    rUnTransStr,getSourceFile().endsWith(".xhp")));
 }
 
 //Set translated string when input is in sdf format
