@@ -299,7 +299,11 @@ void handleCommand(
             {
                 if(aException == PoEntry::INVALIDSDFLINE)
                 {
-                    std::cerr << executable << "'s input is invalid\n";
+                    std::cerr
+                        << executable
+                        << "'s output is invalid:\n"
+                        << sLine.replaceAll("\t","\\t").getStr()
+                        << std::endl;
                     throw false; //TODO
                 }
             }
