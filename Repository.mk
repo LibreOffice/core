@@ -47,6 +47,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     helpex \
     idxdict \
     javadepend \
+	ldump4 \
     lngconvex \
     localize \
     makedepend \

@@ -32,6 +32,7 @@ endif # CROSS_COMPILING
 
 ifeq ($(GUI)$(COM),WNTMSC)
 $(eval $(call gb_Module_add_targets,soltools,\
+    Executable_ldump4 \
     Package_inc \
 ))
 endif # WNTMSC
