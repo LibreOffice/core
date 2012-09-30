@@ -39,7 +39,7 @@
 #include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vcl/window.hxx>
+#include <tools/color.hxx>
 #include <rtl/textenc.h>
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>

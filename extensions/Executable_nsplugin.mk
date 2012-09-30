@@ -30,6 +30,12 @@
 
 $(eval $(call gb_Executable_Executable,nsplugin))
 
+$(eval $(call gb_Executable_use_packages,nsplugin,\
+    basegfx_inc \
+    comphelper_inc \
+    tools_inc \
+))
+
 $(eval $(call gb_Executable_use_sdk_api,nsplugin))
 
 $(eval $(call gb_Executable_add_exception_objects,nsplugin,\
