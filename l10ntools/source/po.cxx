@@ -110,12 +110,6 @@ OString ImplGenNormString(const OString& rString)
     return ImplUnEscapeText(rString.copy(1,rString.getLength()-2));
 }
 
-//Decide whether a string starts with an other string
-bool ImplStartsWith(const OString& rString,const OString& rStart)
-{
-    return rString.match(rStart);
-}
-
 //Default constructor
 GenPoEntry::GenPoEntry()
     : m_sWhiteSpace( OString() )
@@ -215,37 +209,37 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
     while(!rIFStream.eof())
     {
         OString sLine = OString(sTemp.data(),sTemp.length());
-        if (ImplStartsWith(sLine,"#. "))
+        if (sLine.startsWith("#. "))
         {
             if (sLine.getLength()==7)
                 m_sKeyId = sLine.copy(3);
             else
                 m_sExtractCom = sLine.copy(3);
         }
-        else if (ImplStartsWith(sLine,"#: "))
+        else if (sLine.startsWith("#: "))
         {
             m_sReference = sLine.copy(3);
         }
-        else if (ImplStartsWith(sLine,"#, fuzzy"))
+        else if (sLine.startsWith("#, fuzzy"))
         {
             m_bFuzzy = true;
         }
-        else if (ImplStartsWith(sLine,"msgctxt "))
+        else if (sLine.startsWith("msgctxt "))
         {
             m_sContext = ImplGenNormString(sLine.copy(8));
             pLastMsg = &m_sContext;
         }
-        else if (ImplStartsWith(sLine,"msgid "))
+        else if (sLine.startsWith("msgid "))
         {
             m_sUnTransStr = ImplGenNormString(sLine.copy(6));
             pLastMsg = &m_sUnTransStr;
         }
-        else if (ImplStartsWith(sLine,"msgstr "))
+        else if (sLine.startsWith("msgstr "))
         {
             m_sTransStr = ImplGenNormString(sLine.copy(7));
             pLastMsg = &m_sTransStr;
         }
-        else if (ImplStartsWith(sLine,"\"") && pLastMsg)
+        else if (sLine.startsWith("\"") && pLastMsg)
         {
             *pLastMsg += ImplGenNormString(sLine);
         }
@@ -359,7 +353,7 @@ OString ImplEscapeTags(const OString& rText)
         for(StrVec::const_iterator pEscape = vTagsForEscape.begin();
             pEscape != vTagsForEscape.end(); ++pEscape)
         {
-            if (ImplStartsWith(*pFound,"<" + *pEscape) ||
+            if (pFound->startsWith("<" + *pEscape) ||
                 *pFound == "</" + *pEscape + ">")
             {
                 bEscapeThis = true;
