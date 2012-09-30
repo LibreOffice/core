@@ -2381,13 +2381,13 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     rtl::OUString sDataSource, sDataTableOrQuery;
     Sequence<Any> aSelection;
 
-    sal_Int16 nCmdType = CommandType::TABLE;
+    sal_Int32 nCmdType = CommandType::TABLE;
     uno::Reference< XConnection> xConnection;
 
     ODataAccessDescriptor aDescriptor(rProperties);
     sDataSource = aDescriptor.getDataSource();
-    aDescriptor[daCommand]      >>= sDataTableOrQuery;
-    aDescriptor[daCommandType]  >>= nCmdType;
+    OSL_VERIFY(aDescriptor[daCommand]      >>= sDataTableOrQuery);
+    OSL_VERIFY(aDescriptor[daCommandType]  >>= nCmdType);
 
     if ( aDescriptor.has(daSelection) )
         aDescriptor[daSelection] >>= aSelection;
