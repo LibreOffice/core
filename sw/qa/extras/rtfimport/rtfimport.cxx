@@ -319,14 +319,8 @@ void Test::testN750757()
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
-    sal_Bool bValue;
-    xPropertySet->getPropertyValue("ParaContextMargin") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Bool(false), bValue);
-
-    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    xPropertySet->getPropertyValue("ParaContextMargin") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(false), getProperty<sal_Bool>(xParaEnum->nextElement(), "ParaContextMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), getProperty<sal_Bool>(xParaEnum->nextElement(), "ParaContextMargin"));
 }
 
 void Test::testFdo45563()
@@ -355,17 +349,11 @@ void Test::testFdo43965()
     uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
     uno::Reference<beans::XPropertySet> xPropertySet(xRangeEnum->nextElement(), uno::UNO_QUERY);
-    sal_Int32 nValue;
-    xPropertySet->getPropertyValue("CharEscapement") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(36), nValue);
-    xPropertySet->getPropertyValue("CharEscapementHeight") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(36), getProperty<sal_Int32>(xPropertySet, "CharEscapement"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xPropertySet, "CharEscapementHeight"));
 
     // Second paragraph: Word vs Writer border default problem
-    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    table::BorderLine2 aBorder;
-    xPropertySet->getPropertyValue("TopBorder") >>= aBorder;
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), aBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<table::BorderLine2>(xParaEnum->nextElement(), "TopBorder").LineWidth);
 
     // Finally, make sure that we have two pages
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -378,10 +366,7 @@ void Test::testN751020()
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
-    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
-    sal_Int32 nValue = 0;
-    xPropertySet->getPropertyValue("ParaBottomMargin") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(200)), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(200)), getProperty<sal_Int32>(xParaEnum->nextElement(), "ParaBottomMargin"));
 }
 
 void Test::testFdo47326()
@@ -400,10 +385,7 @@ void Test::testFdo47036()
     int nAtCharacter = 0;
     for (int i = 0; i < xDraws->getCount(); ++i)
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(i), uno::UNO_QUERY);
-        text::TextContentAnchorType eValue;
-        xPropertySet->getPropertyValue("AnchorType") >>= eValue;
-        if (eValue == text::TextContentAnchorType_AT_CHARACTER)
+        if (getProperty<text::TextContentAnchorType>(xDraws->getByIndex(i), "AnchorType") == text::TextContentAnchorType_AT_CHARACTER)
             nAtCharacter++;
     }
     // The image at the document start was ignored.
@@ -427,12 +409,7 @@ void Test::testFdo46955()
         uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
         while (xRangeEnum->hasMoreElements())
-        {
-            uno::Reference<beans::XPropertySet> xPropertySet(xRangeEnum->nextElement(), uno::UNO_QUERY);
-            sal_Int16 nValue;
-            xPropertySet->getPropertyValue("CharCaseMap") >>= nValue;
-            CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, nValue);
-        }
+            CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, getProperty<sal_Int16>(xRangeEnum->nextElement(), "CharCaseMap"));
     }
 }
 
@@ -440,8 +417,7 @@ void Test::testFdo45394()
 {
     load("fdo45394.rtf");
 
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
-    uno::Reference<text::XText> xHeaderText(xPropertySet->getPropertyValue("HeaderText"), uno::UNO_QUERY);
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Default"), "HeaderText");
     OUString aActual = xHeaderText->getString();
     // Encoding in the header was wrong.
     OUString aExpected("ПК РИК", 11, RTL_TEXTENCODING_UTF8);
@@ -502,13 +478,8 @@ void Test::testFdo39053()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     int nAsCharacter = 0;
     for (int i = 0; i < xDraws->getCount(); ++i)
-    {
-        uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(i), uno::UNO_QUERY);
-        text::TextContentAnchorType eValue;
-        xPropertySet->getPropertyValue("AnchorType") >>= eValue;
-        if (eValue == text::TextContentAnchorType_AS_CHARACTER)
+        if (getProperty<text::TextContentAnchorType>(xDraws->getByIndex(i), "AnchorType") == text::TextContentAnchorType_AS_CHARACTER)
             nAsCharacter++;
-    }
     // The image in binary format was ignored.
     CPPUNIT_ASSERT_EQUAL(1, nAsCharacter);
 }
@@ -541,13 +512,7 @@ void Test::testFdo48023()
     Application::SetSettings(aSettings);
     load("fdo48023.rtf");
     Application::SetSettings(aSavedSettings);
-
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> xTextRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
     // Implicit encoding detection based on locale was missing
     OUString aExpected("Программист", 22, RTL_TEXTENCODING_UTF8);
@@ -561,10 +526,7 @@ void Test::testFdo48876()
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
-    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
-    style::LineSpacing aSpacing;
-    xPropertySet->getPropertyValue("ParaLineSpacing") >>= aSpacing;
-    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::MINIMUM, aSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::MINIMUM, getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing").Mode);
 }
 
 void Test::testFdo48193()
@@ -583,13 +545,7 @@ void Test::testFdo44211()
     Application::SetSettings(aSettings);
     load("fdo44211.rtf");
     Application::SetSettings(aSavedSettings);
-
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> xTextRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
     OUString aExpected("ąčę", 6, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
