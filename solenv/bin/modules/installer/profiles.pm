@@ -42,40 +42,33 @@ use installer::systemactions;
 # Sorting the content of a profile
 #######################################################
 
-sub sorting_profile
-{
+sub sorting_profile {
     my ($profilesref) = @_;
 
-    my @profile = ();
-    my @definedsections = ();
+    my @sections;
+    my %section_content;
 
-    for ( my $i = 0; $i <= $#{$profilesref}; $i++ )
-    {
+    for ( my $i = 0; $i < @{$profilesref}; $i++ ) {
         my $line = ${$profilesref}[$i];
 
-        if ( $line =~ /^\s*(\[.*\])\s*$/ )  # this is a section (every second line)
-        {
-            my $section = $1;
+        # Skip unless this is a section (every second line)
+        next unless ( $line =~ /^\s*(\[.*\])\s*$/ );
 
-            if (! grep {$_ eq $section} @definedsections)
-            {
-                my $sectionline = $section . "\n";
-                push(@definedsections, $section);
-                push(@profile, $sectionline);
+        my $section = $1;
+        my $next_line = ${$profilesref}[$i+1];
 
-                for ( my $j = 0; $j <= $#{$profilesref}; $j++ )
-                {
-                    my $oneline = ${$profilesref}[$j];
-                    installer::remover::remove_leading_and_ending_whitespaces(\$oneline);
-
-                    if ( $oneline eq $section )
-                    {
-                        my $nextline = ${$profilesref}[$j+1];
-                        push(@profile, $nextline);
-                    }
-                }
-            }
+        if ( ! exists $section_content{$section} ) {
+            push @sections, $section;
         }
+
+        push @{ $section_content{$section} }, $next_line;
+    }
+
+    my @profile;
+
+    for my $section (@sections) {
+        push @profile, "$section\n";
+        push @profile, @{ $section_content{$section} };
     }
 
     return \@profile;
